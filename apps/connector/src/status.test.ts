@@ -20,6 +20,7 @@ function makeEnv(doc: unknown) {
 
 const sampleDoc = {
   docId: "doc-1",
+  expiresAt: new Date(Date.now() + 99999999).toISOString(),
   status: "pending",
   signers: [
     { order: 2, name: "Max", status: "pending", signedAt: null },
@@ -83,5 +84,15 @@ describe("checkStatus", () => {
 
     expect(result.found).toBe(false);
     expect(result.error).toMatch(/expired|no longer exists/i);
+  });
+
+  it("reports not-found once expiresAt has passed, even though the worker's KV entry is kept a while longer for cleanup", async () => {
+    const expiredDoc = { ...sampleDoc, expiresAt: new Date(Date.now() - 1000).toISOString() };
+    const env = makeEnv(expiredDoc);
+    const token = await signToken("doc-1", 1, TOKEN_SECRET);
+
+    const result = await checkStatus(env, token);
+
+    expect(result.found).toBe(false);
   });
 });

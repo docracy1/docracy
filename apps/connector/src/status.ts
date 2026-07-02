@@ -8,15 +8,19 @@ import type { ConnectorEnv as Env } from "./types";
  * verifyToken itself IS shared (see @docracy/shared) since HMAC verification drifting between
  * two copies would be a real security bug, not just a maintenance nuisance.
  */
+// apps/worker's KV entries deliberately outlive their expiresAt (worker's kv.ts putDoc keeps a
+// grace period so its cleanup sweep can delete R2 blobs before KV drops the key) — so this must
+// re-check expiresAt itself rather than trusting a non-null KV read, or an expired doc would
+// keep reporting as "pending" here during that grace window.
 async function getDoc(env: Env, docId: string) {
-  return env.DOCRACY_KV.get(`doc:${docId}`, "json") as Promise<
-    | {
-        docId: string;
-        status: "pending" | "completed";
-        signers: Array<{ order: number; name: string; status: "pending" | "signed"; signedAt: string | null }>;
-      }
-    | null
-  >;
+  const doc = (await env.DOCRACY_KV.get(`doc:${docId}`, "json")) as {
+    docId: string;
+    expiresAt: string;
+    status: "pending" | "completed";
+    signers: Array<{ order: number; name: string; status: "pending" | "signed"; signedAt: string | null }>;
+  } | null;
+  if (doc && new Date(doc.expiresAt).getTime() <= Date.now()) return null;
+  return doc;
 }
 
 export interface StatusResult {

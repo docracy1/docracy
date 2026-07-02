@@ -1,6 +1,8 @@
 import type { DocState, Env } from "@docracy/shared";
 
-const FROM = "Docracy <noreply@docracy.io>";
+// Using Resend's shared testing domain until docracy.io is connected and verified in Resend
+// (Domains → Add Domain → DNS records). Switch back to noreply@docracy.io once that's done.
+const FROM = "Docracy <onboarding@resend.dev>";
 
 async function send(env: Env, to: string, subject: string, html: string): Promise<void> {
   if (!env.RESEND_API_KEY) {

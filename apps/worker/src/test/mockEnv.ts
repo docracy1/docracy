@@ -22,6 +22,9 @@ function createMockKV() {
         .map((name) => ({ name }));
       return { keys, list_complete: true, cursor: cursor ?? "" };
     },
+    async delete(key: string) {
+      store.delete(key);
+    },
     _store: store,
   };
 }
@@ -36,6 +39,15 @@ function createMockR2() {
       const bytes = store.get(key);
       if (!bytes) return null;
       return { arrayBuffer: async () => bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) };
+    },
+    async list({ prefix }: { prefix?: string; cursor?: string } = {}) {
+      const objects = [...store.keys()]
+        .filter((k) => !prefix || k.startsWith(prefix))
+        .map((key) => ({ key }));
+      return { objects, truncated: false, cursor: "" };
+    },
+    async delete(keys: string | string[]) {
+      for (const key of Array.isArray(keys) ? keys : [keys]) store.delete(key);
     },
     _store: store,
   };

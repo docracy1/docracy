@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { currentTurnOrder, isSignerOnTurn } from "./kv";
+import { currentTurnOrder, isSignerOnTurn, getDoc } from "./kv";
+import { makeMockEnv } from "../test/mockEnv";
 import type { DocState, Signer } from "@docracy/shared";
 
 function makeSigner(order: number, status: Signer["status"]): Signer {
@@ -50,5 +51,26 @@ describe("isSignerOnTurn", () => {
     expect(isSignerOnTurn(doc, 1)).toBe(false);
     expect(isSignerOnTurn(doc, 2)).toBe(true);
     expect(isSignerOnTurn(doc, 3)).toBe(false);
+  });
+});
+
+describe("getDoc", () => {
+  it("returns null once expiresAt has passed, even though the KV entry itself is kept around longer for cleanup", async () => {
+    // putDoc deliberately sets the raw KV TTL past expiresAt (see its CLEANUP_GRACE_SECONDS
+    // comment) so the daily sweep has time to delete R2 blobs before KV purges the key. getDoc
+    // must not let that grace period leak into "is this document still usable?".
+    const { env, kv } = makeMockEnv();
+    const doc = makeDoc([makeSigner(1, "pending")]);
+    doc.expiresAt = new Date(Date.now() - 1000).toISOString();
+    await kv._store.set(`doc:${doc.docId}`, JSON.stringify(doc));
+    expect(await getDoc(env, doc.docId)).toBeNull();
+  });
+
+  it("returns the document while expiresAt is still in the future", async () => {
+    const { env, kv } = makeMockEnv();
+    const doc = makeDoc([makeSigner(1, "pending")]);
+    doc.expiresAt = new Date(Date.now() + 99999999).toISOString();
+    await kv._store.set(`doc:${doc.docId}`, JSON.stringify(doc));
+    expect(await getDoc(env, doc.docId)).not.toBeNull();
   });
 });
