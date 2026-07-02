@@ -80,6 +80,13 @@ sign.post("/sign/:token", async (c) => {
   const body = await c.req.json<{ values: FieldValue[] }>();
   const myFields = doc.fields.filter((f) => f.signerOrder === verified.order);
 
+  // Defense in depth: creation already requires every signer to have a field, but if that were
+  // ever bypassed, a signer with zero fields would otherwise trivially "complete" their turn
+  // without signing anything at all — an empty array vacuously passes an every()/some() check.
+  if (myFields.length === 0) {
+    return c.json({ error: "This signer has no signature field to sign — contact whoever prepared this document" }, 400);
+  }
+
   const valueById = new Map(body.values?.map((v) => [v.fieldId, v.value]) ?? []);
   const missing = myFields.some((f) => !valueById.get(f.id)?.trim());
   if (missing) {

@@ -17,7 +17,10 @@ const validMeta = {
     { order: 1, name: "Anna", email: "anna@example.com" },
     { order: 2, name: "Max", email: "max@example.com" },
   ],
-  fields: [{ id: "f1", signerOrder: 1, page: 0, xFrac: 0.1, yFrac: 0.1, wFrac: 0.2, hFrac: 0.05 }],
+  fields: [
+    { id: "f1", signerOrder: 1, page: 0, xFrac: 0.1, yFrac: 0.1, wFrac: 0.2, hFrac: 0.05 },
+    { id: "f2", signerOrder: 2, page: 0, xFrac: 0.1, yFrac: 0.5, wFrac: 0.2, hFrac: 0.05 },
+  ],
 };
 
 describe("POST /api/documents", () => {
@@ -80,6 +83,17 @@ describe("POST /api/documents", () => {
     const meta = { ...validMeta, fields: [{ ...validMeta.fields[0], signerOrder: 99 }] };
     const res = await documents.request("/", { method: "POST", body: buildForm(pdf, meta) }, env, MOCK_CTX);
     expect(res.status).toBe(400);
+  });
+
+  it("rejects a document where a signer has no field at all", async () => {
+    const { env } = makeMockEnv();
+    const pdf = await makeValidPdfBytes();
+    // Only signer 1 gets a field — signer 2 (Max) has nothing to sign.
+    const meta = { ...validMeta, fields: [validMeta.fields[0]] };
+    const res = await documents.request("/", { method: "POST", body: buildForm(pdf, meta) }, env, MOCK_CTX);
+    expect(res.status).toBe(400);
+    const body: { error: string } = await res.json();
+    expect(body.error).toMatch(/Max/);
   });
 
   it("rejects more signers than the free tier allows", async () => {

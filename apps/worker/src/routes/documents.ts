@@ -74,6 +74,11 @@ documents.post("/", async (c) => {
   if (!meta.fields?.every((f) => f.signerOrder >= 1 && f.signerOrder <= meta.signers.length)) {
     return c.json({ error: "A field is assigned to a signer that doesn't exist" }, 400);
   }
+  const signerOrdersWithFields = new Set(meta.fields.map((f) => f.signerOrder));
+  const unassignedSigner = meta.signers.find((_, i) => !signerOrdersWithFields.has(i + 1));
+  if (unassignedSigner) {
+    return c.json({ error: `${unassignedSigner.name || "A signer"} doesn't have a signature field placed yet` }, 400);
+  }
   if (meta.preparerEmail && !EMAIL_RE.test(meta.preparerEmail.trim())) {
     return c.json({ error: "That doesn't look like a valid email address" }, 400);
   }

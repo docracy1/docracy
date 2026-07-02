@@ -84,9 +84,14 @@ export default function Prepare() {
     return s?.name || `Signer ${order}`;
   };
 
+  const signersWithoutFields = useMemo(
+    () => signers.filter((s) => !fields.some((f) => f.signerOrder === s.order)),
+    [signers, fields]
+  );
+
   const canSubmit = useMemo(
-    () => file && signers.every((s) => s.name.trim() && s.email.trim()) && fields.length > 0,
-    [file, signers, fields]
+    () => file && signers.every((s) => s.name.trim() && s.email.trim()) && signersWithoutFields.length === 0,
+    [file, signers, signersWithoutFields]
   );
 
   const onSubmit = async () => {
@@ -256,6 +261,12 @@ export default function Prepare() {
                 The signer's email and the date get stamped in automatically — no need for separate fields.
               </p>
             </div>
+
+            {signersWithoutFields.length > 0 && fields.length > 0 && (
+              <p style={{ fontSize: 12, color: "var(--danger)" }}>
+                Still needs a signature field: {signersWithoutFields.map((s) => signerLabel(s.order)).join(", ")}
+              </p>
+            )}
 
             {error && <p style={{ color: "var(--danger)" }}>{error}</p>}
 
