@@ -101,41 +101,55 @@ sign.post("/sign/:token", async (c) => {
   const signedAt = new Date().toISOString();
 
   const updatedBytes = await burnFields(workingBytes, myFields, body.values, signer.email, signedAt);
-  await c.env.DOCRACY_DOCS.put(`docs/${doc.docId}/working.pdf`, updatedBytes);
 
-  signer.status = "signed";
-  signer.signedAt = signedAt;
-
-  if (doc.accountId) {
-    const ip = c.req.header("CF-Connecting-IP") ?? null;
-    indexNonFatal(c.executionCtx, doc.docId, "signed", indexSignerSigned(c.env, doc, verified.order, updatedBytes, ip));
+  // Re-fetch and re-check right before committing: burnFields above is the slowest step in this
+  // handler, so a near-simultaneous duplicate submission (double-click, a retried request) could
+  // otherwise slip through the earlier isSignerOnTurn check too and double-advance the chain —
+  // double-sending the next signer's invite, or on the last signer, double-sending completion
+  // emails with the signed PDF attached to everyone. This doesn't fully eliminate the race (KV
+  // has no compare-and-swap), but it collapses the window from "the whole PDF burn" to "one KV
+  // read plus a couple of writes," which is enough for the double-click/retry case this guards.
+  const freshDoc = await getDoc(c.env, verified.docId);
+  if (!freshDoc || !isSignerOnTurn(freshDoc, verified.order)) {
+    return c.json({ error: "This submission was already received" }, 409);
   }
 
-  const nextOrder = currentTurnOrder(doc);
+  await c.env.DOCRACY_DOCS.put(`docs/${freshDoc.docId}/working.pdf`, updatedBytes);
+
+  const freshSigner = freshDoc.signers.find((s) => s.order === verified.order)!;
+  freshSigner.status = "signed";
+  freshSigner.signedAt = signedAt;
+
+  if (freshDoc.accountId) {
+    const ip = c.req.header("CF-Connecting-IP") ?? null;
+    indexNonFatal(c.executionCtx, freshDoc.docId, "signed", indexSignerSigned(c.env, freshDoc, verified.order, updatedBytes, ip));
+  }
+
+  const nextOrder = currentTurnOrder(freshDoc);
   if (nextOrder !== null) {
-    const nextSigner = doc.signers.find((s) => s.order === nextOrder)!;
+    const nextSigner = freshDoc.signers.find((s) => s.order === nextOrder)!;
     nextSigner.linkSentAt = new Date().toISOString();
-    await putDoc(c.env, doc);
+    await putDoc(c.env, freshDoc);
 
-    const nextToken = await signToken(doc.docId, nextOrder, c.env.TOKEN_SECRET);
-    await sendSigningInvite(c.env, doc, nextOrder, nextToken);
+    const nextToken = await signToken(freshDoc.docId, nextOrder, c.env.TOKEN_SECRET);
+    await sendSigningInvite(c.env, freshDoc, nextOrder, nextToken);
 
-    if (doc.accountId) {
-      indexNonFatal(c.executionCtx, doc.docId, "invite_sent", indexInviteSent(c.env, doc, nextOrder));
+    if (freshDoc.accountId) {
+      indexNonFatal(c.executionCtx, freshDoc.docId, "invite_sent", indexInviteSent(c.env, freshDoc, nextOrder));
     }
   } else {
-    doc.status = "completed";
-    doc.completedAt = new Date().toISOString();
-    await c.env.DOCRACY_DOCS.put(`docs/${doc.docId}/final.pdf`, updatedBytes);
-    await putDoc(c.env, doc);
-    await sendCompletionEmails(c.env, doc, updatedBytes);
+    freshDoc.status = "completed";
+    freshDoc.completedAt = new Date().toISOString();
+    await c.env.DOCRACY_DOCS.put(`docs/${freshDoc.docId}/final.pdf`, updatedBytes);
+    await putDoc(c.env, freshDoc);
+    await sendCompletionEmails(c.env, freshDoc, updatedBytes);
 
-    if (doc.accountId) {
-      indexNonFatal(c.executionCtx, doc.docId, "completed", indexCompleted(c.env, doc));
+    if (freshDoc.accountId) {
+      indexNonFatal(c.executionCtx, freshDoc.docId, "completed", indexCompleted(c.env, freshDoc));
     }
   }
 
-  return c.json({ ok: true, status: statusPayload(doc) });
+  return c.json({ ok: true, status: statusPayload(freshDoc) });
 });
 
 function arrayBufferToBase64(buf: ArrayBuffer): string {

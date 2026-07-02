@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { PDFDocument } from "pdf-lib";
 import { createDocumentCore } from "../lib/documentCreation";
 import { checkRateLimit } from "../lib/ratelimit";
 import type { DocField, Env } from "@docracy/shared";
@@ -40,6 +41,17 @@ documents.post("/", async (c) => {
     return c.json({ error: "That file doesn't look like a valid PDF" }, 400);
   }
 
+  // A real parse, not just the header sniff above — the header check alone lets a corrupt or
+  // (previously) an encrypted PDF through, which would then only fail once someone actually
+  // tries to sign it, deadlocking the chain with no useful error days into a signing round.
+  let pageCount: number;
+  try {
+    const probe = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
+    pageCount = probe.getPageCount();
+  } catch {
+    return c.json({ error: "That PDF couldn't be read — it may be corrupted" }, 400);
+  }
+
   let meta: CreateDocumentBody;
   try {
     meta = JSON.parse(metaRaw);
@@ -73,6 +85,22 @@ documents.post("/", async (c) => {
   }
   if (!meta.fields?.every((f) => f.signerOrder >= 1 && f.signerOrder <= meta.signers.length)) {
     return c.json({ error: "A field is assigned to a signer that doesn't exist" }, 400);
+  }
+  const isFrac = (n: unknown): n is number => typeof n === "number" && n >= 0 && n <= 1;
+  const geometryOk = meta.fields?.every(
+    (f) =>
+      Number.isInteger(f.page) &&
+      f.page >= 0 &&
+      f.page < pageCount &&
+      isFrac(f.xFrac) &&
+      isFrac(f.yFrac) &&
+      isFrac(f.wFrac) &&
+      isFrac(f.hFrac) &&
+      f.xFrac + f.wFrac <= 1 &&
+      f.yFrac + f.hFrac <= 1
+  );
+  if (!geometryOk) {
+    return c.json({ error: "A signature field is positioned outside the document" }, 400);
   }
   const signerOrdersWithFields = new Set(meta.fields.map((f) => f.signerOrder));
   const unassignedSigner = meta.signers.find((_, i) => !signerOrdersWithFields.has(i + 1));

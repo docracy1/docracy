@@ -58,10 +58,9 @@ export async function sendPreparerStatusLink(env: Env, preparerEmail: string, st
   );
 }
 
-export async function sendReminder(env: Env, doc: DocState, order: number, token: string, daysWaiting: number): Promise<void> {
+export async function sendReminder(env: Env, doc: DocState, order: number, token: string, urgent: boolean): Promise<void> {
   const signer = doc.signers.find((s) => s.order === order)!;
   const link = `${env.PUBLIC_APP_URL}/sign/${token}`;
-  const urgent = daysWaiting >= 6;
   const subject = urgent ? "Reminder: this signing link expires soon" : "Reminder: you have a document waiting to be signed";
   const tone = urgent
     ? `<p><strong>This link expires soon.</strong> Please sign before it does, or the document will be deleted.</p>`

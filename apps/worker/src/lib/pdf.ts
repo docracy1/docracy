@@ -22,7 +22,10 @@ export async function burnFields(
   signerEmail: string,
   signedAtIso: string
 ): Promise<Uint8Array> {
-  const pdfDoc = await PDFDocument.load(pdfBytes);
+  // ignoreEncryption: many "protected" PDF exports (banks, government forms, Adobe's own
+  // restrict-printing/copying option) set an /Encrypt dictionary with an empty user password —
+  // every viewer opens them fine, but pdf-lib throws EncryptedPDFError by default.
+  const pdfDoc = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
   const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
   const valueById = new Map(values.map((v) => [v.fieldId, v.value]));
   const caption = `${signerEmail} · ${new Date(signedAtIso).toLocaleDateString()}`;

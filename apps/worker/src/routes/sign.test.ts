@@ -5,6 +5,10 @@ import { makeMockEnv, makeValidPdfBytes } from "../test/mockEnv";
 import { signToken } from "@docracy/shared";
 import type { DocState } from "@docracy/shared";
 
+// A real minimal 1x1 PNG — needed because pdf-lib's embedPng actually decodes the image.
+const TINY_PNG =
+  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=";
+
 async function seedDoc(env: Awaited<ReturnType<typeof makeMockEnv>>["env"], r2: ReturnType<typeof makeMockEnv>["r2"]) {
   const pdf = await makeValidPdfBytes();
   const docId = "doc-1";
@@ -88,10 +92,6 @@ describe("sign routes", () => {
     expect(res.status).toBe(409);
   });
 
-  // A real minimal 1x1 PNG — needed because pdf-lib's embedPng actually decodes the image.
-  const TINY_PNG =
-    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=";
-
   it("advances to the next signer once the current one submits complete fields", async () => {
     const token1 = await signToken(docId, 1, env.TOKEN_SECRET);
     const res = await sign.request(
@@ -131,5 +131,32 @@ describe("sign routes", () => {
     const body: any = await res.json();
     expect(body.status.status).toBe("completed");
     expect(r2._store.has(`docs/${docId}/final.pdf`)).toBe(true);
+  });
+
+  it("rejects a duplicate submission that wins the initial turn check but loses the pre-commit re-check", async () => {
+    // Simulates a concurrent duplicate request: by the time this request re-checks the doc right
+    // before committing (after the slow PDF burn), another in-flight request has already
+    // advanced signer 1 past their turn — this one must back off instead of double-processing.
+    const token1 = await signToken(docId, 1, env.TOKEN_SECRET);
+    let getCalls = 0;
+    const rawGet = (env.DOCRACY_KV.get as (key: string, type?: string) => Promise<unknown>).bind(env.DOCRACY_KV);
+    (env.DOCRACY_KV as any).get = async (key: string, type?: string) => {
+      getCalls++;
+      const result = (await rawGet(key, type)) as DocState | null;
+      if (getCalls === 2 && result) {
+        const stored: DocState = JSON.parse(JSON.stringify(result));
+        stored.signers[0].status = "signed";
+        stored.signers[0].signedAt = new Date().toISOString();
+        return stored;
+      }
+      return result;
+    };
+
+    const res = await sign.request(
+      `/sign/${token1}`,
+      { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ values: [{ fieldId: "f1", value: TINY_PNG }] }) },
+      env
+    );
+    expect(res.status).toBe(409);
   });
 });
