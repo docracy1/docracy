@@ -1,0 +1,36 @@
+name = "docracy-worker"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Daily reminder sweep. Cron syntax is UTC.
+[triggers]
+crons = ["0 8 * * *"]
+
+[[kv_namespaces]]
+binding = "DOCRACY_KV"
+id = "981eb8f0eace4d29bedb6b664a546c74"
+preview_id = "704f39e4556644cf91ca4f49b551fab1"
+
+[[r2_buckets]]
+binding = "DOCRACY_DOCS"
+bucket_name = "docracy-docs"
+
+# Create with: wrangler d1 create docracy-index, then run migrations:
+# wrangler d1 migrations apply docracy-index --remote (and --local for dev)
+[[d1_databases]]
+binding = "DOCRACY_DB"
+database_name = "docracy-index"
+database_id = "498b3b25-111e-435e-baca-5fb4af9c0e38"
+
+# --- Non-secret config ---
+# This is the deployed (production) value. Local `wrangler dev` overrides it back to localhost
+# via apps/worker/.dev.vars, which takes precedence over [vars] when running locally.
+[vars]
+PUBLIC_APP_URL = "https://docracy.pages.dev"
+FREE_TIER_MAX_SIGNERS = "2"
+DOC_TTL_DAYS = "9"
+
+# --- Secrets (never stored in this file) ---
+# Set with: wrangler secret put TOKEN_SECRET
+# Set with: wrangler secret put RESEND_API_KEY   (optional locally — omit to log emails to console instead of sending)

@@ -1,0 +1,9 @@
+# Copy to .dev.vars for local `wrangler dev` (this file is gitignored, .dev.vars.example is not).
+# Any random string works locally — it just needs to stay the same across a signing chain's lifetime.
+TOKEN_SECRET=dev-secret-change-me
+
+# Overrides the production value in wrangler.toml [vars] for local dev only.
+PUBLIC_APP_URL=http://localhost:5173
+
+# Leave unset locally to have emails printed to the wrangler dev console instead of actually sent.
+# RESEND_API_KEY=re_xxxxxxxx

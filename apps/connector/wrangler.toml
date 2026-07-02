@@ -1,0 +1,16 @@
+name = "docracy-connector"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Same KV namespace as docracy-worker — the connector only ever reads it (status lookups),
+# never writes. A bug here can't corrupt signing state, only misreport it.
+[[kv_namespaces]]
+binding = "DOCRACY_KV"
+id = "981eb8f0eace4d29bedb6b664a546c74"
+preview_id = "704f39e4556644cf91ca4f49b551fab1"
+
+# --- Secrets (never stored in this file) ---
+# Must be the SAME value as docracy-worker's TOKEN_SECRET, or every check_status call will
+# report "not a valid Docracy link" even for real ones.
+# Set with: wrangler secret put TOKEN_SECRET
