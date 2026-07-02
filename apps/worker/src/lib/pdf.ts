@@ -3,23 +3,29 @@ import type { DocField } from "@docracy/shared";
 
 export interface FieldValue {
   fieldId: string;
-  /** data: URL (image/png) for signature fields, plain string for text/date fields */
+  /** data: URL (image/png) of the drawn signature. */
   value: string;
 }
 
 /**
- * Burns one signer's submitted field values into the given PDF bytes and returns the new PDF bytes.
+ * Burns one signer's submitted signatures into the given PDF bytes and returns the new PDF bytes.
+ * Every field is a signature — the drawn image goes in the top of the box, with the signer's
+ * email and the signing date automatically printed in a caption strip underneath, so nobody has
+ * to place a separate date/text field for that.
  * Coordinates are fractions of page width/height, origin top-left (matches how the browser places
  * fields over a rendered canvas), converted here to pdf-lib's bottom-left origin.
  */
 export async function burnFields(
   pdfBytes: Uint8Array,
   fields: DocField[],
-  values: FieldValue[]
+  values: FieldValue[],
+  signerEmail: string,
+  signedAtIso: string
 ): Promise<Uint8Array> {
   const pdfDoc = await PDFDocument.load(pdfBytes);
   const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
   const valueById = new Map(values.map((v) => [v.fieldId, v.value]));
+  const caption = `${signerEmail} · ${new Date(signedAtIso).toLocaleDateString()}`;
 
   for (const field of fields) {
     const raw = valueById.get(field.id);
@@ -34,26 +40,27 @@ export async function burnFields(
     const yTop = field.yFrac * pageH;
     const y = pageH - yTop - h;
 
-    if (field.type === "signature") {
-      const pngBytes = dataUrlToBytes(raw);
-      const png = await pdfDoc.embedPng(pngBytes);
-      const scaled = png.scaleToFit(w, h);
-      page.drawImage(png, {
-        x: x + (w - scaled.width) / 2,
-        y: y + (h - scaled.height) / 2,
-        width: scaled.width,
-        height: scaled.height,
-      });
-    } else {
-      const fontSize = Math.min(12, h * 0.7);
-      page.drawText(raw, {
-        x: x + 2,
-        y: y + (h - fontSize) / 2,
-        size: fontSize,
-        font,
-        color: rgb(0.07, 0.07, 0.09),
-      });
-    }
+    const captionSize = Math.min(7, h * 0.3);
+    const captionHeight = captionSize + 2;
+    const imageAreaHeight = Math.max(h - captionHeight, h * 0.5);
+
+    const pngBytes = dataUrlToBytes(raw);
+    const png = await pdfDoc.embedPng(pngBytes);
+    const scaled = png.scaleToFit(w, imageAreaHeight);
+    page.drawImage(png, {
+      x: x + (w - scaled.width) / 2,
+      y: y + captionHeight + (imageAreaHeight - scaled.height) / 2,
+      width: scaled.width,
+      height: scaled.height,
+    });
+
+    page.drawText(caption, {
+      x,
+      y: y + (captionHeight - captionSize) / 2,
+      size: captionSize,
+      font,
+      color: rgb(0.35, 0.35, 0.38),
+    });
   }
 
   return pdfDoc.save();

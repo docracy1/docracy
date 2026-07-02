@@ -1,5 +1,7 @@
-export type FieldType = "signature" | "text" | "date";
-
+/**
+ * Every field is a signature field — signing it burns in the drawn signature plus the signer's
+ * email and the date automatically (see pdf.ts's burnFields), so there's nothing else to place.
+ */
 export interface DocField {
   id: string;
   signerOrder: number;
@@ -8,8 +10,6 @@ export interface DocField {
   yFrac: number;
   wFrac: number;
   hFrac: number;
-  type: FieldType;
-  label?: string;
 }
 
 export interface Signer {

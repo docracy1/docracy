@@ -152,42 +152,24 @@ export default function Sign() {
                       height: `${f.hFrac * 100}%`,
                     }}
                   >
-                    {f.type === "signature" ? (
-                      <button
-                        onClick={() => setSigningFieldId(f.id)}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          border: values[f.id] ? "2px solid #2f8f5b" : "2px dashed #3b6fd8",
-                          borderRadius: 3,
-                          background: values[f.id] ? "white" : "rgba(59,111,216,0.08)",
-                          cursor: "pointer",
-                          padding: 0,
-                        }}
-                      >
-                        {values[f.id] ? (
-                          <img src={values[f.id]} alt="signature" style={{ maxWidth: "100%", maxHeight: "100%" }} />
-                        ) : (
-                          <span style={{ fontSize: 11, color: "#3b6fd8", fontWeight: 600 }}>Click to sign</span>
-                        )}
-                      </button>
-                    ) : (
-                      <input
-                        type={f.type === "date" ? "date" : "text"}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          fontSize: 12,
-                          border: "2px dashed #3b6fd8",
-                          borderRadius: 3,
-                          background: "rgba(59,111,216,0.08)",
-                          color: "#111318",
-                          padding: "0 4px",
-                        }}
-                        value={values[f.id] ?? ""}
-                        onChange={(e) => setValues((prev) => ({ ...prev, [f.id]: e.target.value }))}
-                      />
-                    )}
+                    <button
+                      onClick={() => setSigningFieldId(f.id)}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        border: values[f.id] ? "2px solid #2f8f5b" : "2px dashed #3b6fd8",
+                        borderRadius: 3,
+                        background: values[f.id] ? "white" : "rgba(59,111,216,0.08)",
+                        cursor: "pointer",
+                        padding: 0,
+                      }}
+                    >
+                      {values[f.id] ? (
+                        <img src={values[f.id]} alt="signature" style={{ maxWidth: "100%", maxHeight: "100%" }} />
+                      ) : (
+                        <span style={{ fontSize: 11, color: "#3b6fd8", fontWeight: 600 }}>Click to sign</span>
+                      )}
+                    </button>
                   </div>
                 ))}
             </>

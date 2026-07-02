@@ -90,12 +90,14 @@ sign.post("/sign/:token", async (c) => {
   if (!workingObj) return c.json({ error: "Document blob missing" }, 404);
   const workingBytes = new Uint8Array(await workingObj.arrayBuffer());
 
-  const updatedBytes = await burnFields(workingBytes, myFields, body.values);
+  const signer = doc.signers.find((s) => s.order === verified.order)!;
+  const signedAt = new Date().toISOString();
+
+  const updatedBytes = await burnFields(workingBytes, myFields, body.values, signer.email, signedAt);
   await c.env.DOCRACY_DOCS.put(`docs/${doc.docId}/working.pdf`, updatedBytes);
 
-  const signer = doc.signers.find((s) => s.order === verified.order)!;
   signer.status = "signed";
-  signer.signedAt = new Date().toISOString();
+  signer.signedAt = signedAt;
 
   if (doc.accountId) {
     const ip = c.req.header("CF-Connecting-IP") ?? null;

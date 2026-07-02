@@ -17,7 +17,7 @@ const validMeta = {
     { order: 1, name: "Anna", email: "anna@example.com" },
     { order: 2, name: "Max", email: "max@example.com" },
   ],
-  fields: [{ id: "f1", signerOrder: 1, page: 0, xFrac: 0.1, yFrac: 0.1, wFrac: 0.2, hFrac: 0.05, type: "signature" }],
+  fields: [{ id: "f1", signerOrder: 1, page: 0, xFrac: 0.1, yFrac: 0.1, wFrac: 0.2, hFrac: 0.05 }],
 };
 
 describe("POST /api/documents", () => {

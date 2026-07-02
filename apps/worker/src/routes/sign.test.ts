@@ -23,8 +23,8 @@ async function seedDoc(env: Awaited<ReturnType<typeof makeMockEnv>>["env"], r2: 
       { order: 2, name: "Max", email: "max@example.com", status: "pending", signedAt: null, linkSentAt: null, remindersSent: [] },
     ],
     fields: [
-      { id: "f1", signerOrder: 1, page: 0, xFrac: 0.1, yFrac: 0.1, wFrac: 0.2, hFrac: 0.05, type: "signature" },
-      { id: "f2", signerOrder: 2, page: 0, xFrac: 0.1, yFrac: 0.5, wFrac: 0.2, hFrac: 0.05, type: "text" },
+      { id: "f1", signerOrder: 1, page: 0, xFrac: 0.1, yFrac: 0.1, wFrac: 0.2, hFrac: 0.05 },
+      { id: "f2", signerOrder: 2, page: 0, xFrac: 0.1, yFrac: 0.5, wFrac: 0.2, hFrac: 0.05 },
     ],
   };
   await putDoc(env, doc);
@@ -124,7 +124,7 @@ describe("sign routes", () => {
     const token2 = await signToken(docId, 2, env.TOKEN_SECRET);
     const res = await sign.request(
       `/sign/${token2}`,
-      { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ values: [{ fieldId: "f2", value: "Max Signer" }] }) },
+      { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ values: [{ fieldId: "f2", value: TINY_PNG }] }) },
       env
     );
     expect(res.status).toBe(200);

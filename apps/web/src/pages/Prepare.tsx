@@ -2,14 +2,11 @@ import { useCallback, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PdfViewer from "../components/PdfViewer";
 import { createDocument } from "../lib/api";
-import type { DocField, FieldType, SignerInput } from "../lib/types";
+import type { DocField, SignerInput } from "../lib/types";
 
 const FREE_TIER_MAX_SIGNERS = 2;
-const FIELD_SIZE: Record<FieldType, { w: number; h: number }> = {
-  signature: { w: 0.26, h: 0.05 },
-  text: { w: 0.22, h: 0.035 },
-  date: { w: 0.16, h: 0.035 },
-};
+// Taller than a bare signature image to leave room for the auto-printed "email · date" caption.
+const SIGNATURE_FIELD_SIZE = { w: 0.26, h: 0.07 };
 
 let fieldIdCounter = 0;
 
@@ -24,7 +21,7 @@ export default function Prepare() {
     { order: 2, name: "", email: "" },
   ]);
   const [fields, setFields] = useState<DocField[]>([]);
-  const [placingType, setPlacingType] = useState<FieldType | null>(null);
+  const [placing, setPlacing] = useState(false);
   const [placingSignerOrder, setPlacingSignerOrder] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -63,8 +60,8 @@ export default function Prepare() {
 
   const onPageClick = useCallback(
     (page: { index: number }, xFrac: number, yFrac: number) => {
-      if (!placingType) return;
-      const size = FIELD_SIZE[placingType];
+      if (!placing) return;
+      const size = SIGNATURE_FIELD_SIZE;
       const field: DocField = {
         id: `f${fieldIdCounter++}`,
         signerOrder: placingSignerOrder,
@@ -73,12 +70,11 @@ export default function Prepare() {
         yFrac: Math.min(yFrac, 1 - size.h),
         wFrac: size.w,
         hFrac: size.h,
-        type: placingType,
       };
       setFields((prev) => [...prev, field]);
-      setPlacingType(null);
+      setPlacing(false);
     },
-    [placingType, placingSignerOrder]
+    [placing, placingSignerOrder]
   );
 
   const removeField = (id: string) => setFields((prev) => prev.filter((f) => f.id !== id));
@@ -154,9 +150,7 @@ export default function Prepare() {
                           color: "var(--primary)",
                         }}
                       >
-                        <span>
-                          {f.type} · {signerLabel(f.signerOrder)}
-                        </span>
+                        <span>Sign here · {signerLabel(f.signerOrder)}</span>
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
@@ -238,7 +232,7 @@ export default function Prepare() {
             </div>
 
             <div className="card">
-              <h3 style={{ marginBottom: 12 }}>Place a field</h3>
+              <h3 style={{ marginBottom: 12 }}>Place a signature</h3>
               <select
                 className="form-input"
                 style={{ width: "100%", marginBottom: 8 }}
@@ -251,21 +245,16 @@ export default function Prepare() {
                   </option>
                 ))}
               </select>
-              <div style={{ display: "flex", gap: 6 }}>
-                {(["signature", "text", "date"] as FieldType[]).map((t) => (
-                  <button
-                    key={t}
-                    className={placingType === t ? "btn-primary" : "btn-secondary"}
-                    style={{ flex: 1, fontSize: 12, padding: "6px 8px" }}
-                    onClick={() => setPlacingType(placingType === t ? null : t)}
-                  >
-                    {t}
-                  </button>
-                ))}
-              </div>
-              {placingType && (
-                <p style={{ fontSize: 12, marginTop: 8 }}>Click on the document to place the {placingType} field.</p>
-              )}
+              <button
+                className={placing ? "btn-primary" : "btn-secondary"}
+                style={{ width: "100%" }}
+                onClick={() => setPlacing((p) => !p)}
+              >
+                {placing ? "Click on the document…" : "+ Place signature field"}
+              </button>
+              <p style={{ fontSize: 11, marginTop: 8, marginBottom: 0 }}>
+                The signer's email and the date get stamped in automatically — no need for separate fields.
+              </p>
             </div>
 
             {error && <p style={{ color: "var(--danger)" }}>{error}</p>}

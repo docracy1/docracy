@@ -19,7 +19,7 @@ const baseParams = {
     { name: "Anna", email: "anna@example.com" },
     { name: "Max", email: "max@example.com" },
   ],
-  fields: [{ id: "f1", signerOrder: 1, page: 0, xFrac: 0.1, yFrac: 0.1, wFrac: 0.2, hFrac: 0.05, type: "signature" as const }],
+  fields: [{ id: "f1", signerOrder: 1, page: 0, xFrac: 0.1, yFrac: 0.1, wFrac: 0.2, hFrac: 0.05 }],
 };
 
 describe("createDocumentCore — anonymous path (accountId: null)", () => {
