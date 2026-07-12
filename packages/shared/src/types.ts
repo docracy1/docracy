@@ -24,6 +24,27 @@ export interface Signer {
   remindersSent: number[];
 }
 
+export type AuditEventType = "created" | "invite_sent" | "consented" | "signed" | "completed";
+
+/**
+ * One entry in a document's append-only event log — this is what gives an anonymous, no-account
+ * signature real evidentiary weight (who did what, from where, when). Stored directly on the
+ * KV-resident DocState rather than in D1, since anonymous docs (100% of traffic today) never
+ * touch D1 at all.
+ */
+export interface AuditEvent {
+  type: AuditEventType;
+  signerOrder: number | null;
+  ip: string | null;
+  userAgent: string | null;
+  timestamp: string;
+  /** SHA-256 hex digest of the PDF at this point in the chain — present only for "created" |
+   *  "signed" | "completed", the three events where the PDF bytes actually changed. Lets anyone
+   *  verify later that a given PDF matches what was actually signed, without trusting Docracy's
+   *  servers to still be running. */
+  pdfSha256: string | null;
+}
+
 export interface DocState {
   docId: string;
   /** null for every anonymous document (the entire product today). Only set when a logged-in
@@ -38,6 +59,9 @@ export interface DocState {
   completedAt: string | null;
   signers: Signer[];
   fields: DocField[];
+  /** Optional so any doc written before this field existed still deserializes — always read via
+   *  `doc.events ?? []`, never assume it's present. */
+  events?: AuditEvent[];
 }
 
 export interface Env {
@@ -50,4 +74,5 @@ export interface Env {
   PUBLIC_APP_URL: string;
   FREE_TIER_MAX_SIGNERS: string;
   DOC_TTL_DAYS: string;
+  FEEDBACK_EMAIL: string;
 }

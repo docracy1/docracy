@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { PDFDocument } from "pdf-lib";
 import { createDocumentCore } from "../lib/documentCreation";
-import { checkRateLimit } from "../lib/ratelimit";
+import { checkRateLimit, checkInviteRateLimit } from "../lib/ratelimit";
 import type { DocField, Env } from "@docracy/shared";
 
 interface CreateDocumentBody {
@@ -111,6 +111,20 @@ documents.post("/", async (c) => {
     return c.json({ error: "That doesn't look like a valid email address" }, 400);
   }
 
+  // Per-recipient cap, independent of the per-IP creation limit above: without this, one IP could
+  // fan invite emails out across many separate documents that all name the same victim address —
+  // each document creation still passes the IP limit since it's a distinct "creation" event.
+  const recipientEmails = new Set(seenEmails);
+  if (meta.preparerEmail) recipientEmails.add(meta.preparerEmail.trim().toLowerCase());
+  for (const email of recipientEmails) {
+    if (!(await checkInviteRateLimit(c.env, email))) {
+      return c.json(
+        { error: "Too many documents have recently been sent to one of these email addresses. Please try again later." },
+        429
+      );
+    }
+  }
+
   const { docId, statusToken } = await createDocumentCore({
     env: c.env,
     ctx: c.executionCtx,
@@ -121,6 +135,7 @@ documents.post("/", async (c) => {
     signers: meta.signers,
     fields: meta.fields,
     accountId: null, // the free-tier /prepare flow is always anonymous
+    creatorIp: ip,
   });
 
   return c.json({ docId, statusToken });

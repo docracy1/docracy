@@ -1,10 +1,18 @@
-import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
-import type { DocField } from "@docracy/shared";
+import { PDFDocument, StandardFonts, rgb, type PDFFont } from "pdf-lib";
+import type { DocField, DocState } from "@docracy/shared";
 
 export interface FieldValue {
   fieldId: string;
   /** data: URL (image/png) of the drawn signature. */
   value: string;
+}
+
+export const MAX_SIGNATURE_IMAGE_BYTES = 2 * 1024 * 1024; // 2MB decoded, per field
+
+/** Estimated decoded byte size of a base64 data: URL, without actually decoding it. */
+export function decodedByteLength(dataUrl: string): number {
+  const base64 = dataUrl.split(",")[1] ?? dataUrl;
+  return Math.floor((base64.length * 3) / 4);
 }
 
 /**
@@ -73,4 +81,67 @@ function dataUrlToBytes(dataUrl: string): Uint8Array {
   const base64 = dataUrl.split(",")[1] ?? dataUrl;
   const binary = atob(base64);
   return Uint8Array.from(binary, (c) => c.charCodeAt(0));
+}
+
+const MUTED = rgb(0.4, 0.4, 0.42);
+const INK = rgb(0.1, 0.1, 0.12);
+
+/**
+ * A standalone one-page PDF documenting who signed, from where, when, and a hash of the final
+ * signed document — deliberately separate from the signed PDF itself (not appended to it), so
+ * hashing the delivered document and hashing "what this certificate attests to" refer to the
+ * same, unambiguous bytes. Bounded to one page: the free tier caps signers at 2, so the signer
+ * list + event log always fits comfortably on US Letter.
+ */
+export async function generateCertificate(doc: DocState, finalPdfSha256: string): Promise<Uint8Array> {
+  const cert = await PDFDocument.create();
+  const page = cert.addPage([612, 792]); // US Letter, points
+  const font = await cert.embedFont(StandardFonts.Helvetica);
+  const bold = await cert.embedFont(StandardFonts.HelveticaBold);
+
+  const left = 56;
+  let y = 740;
+
+  const write = (text: string, size: number, f: PDFFont, color = INK) => {
+    page.drawText(text, { x: left, y, size, font: f, color });
+    y -= size + 8;
+  };
+
+  write("Certificate of Completion", 20, bold);
+  y -= 4;
+  write(`Document ID: ${doc.docId}`, 10, font, MUTED);
+  write(`Completed: ${doc.completedAt ? new Date(doc.completedAt).toLocaleString() : "-"}`, 10, font, MUTED);
+  y -= 8;
+
+  write("Signers", 13, bold);
+  const events = doc.events ?? [];
+  for (const signer of [...doc.signers].sort((a, b) => a.order - b.order)) {
+    const signedEvent = events.find((e) => e.type === "signed" && e.signerOrder === signer.order);
+    write(`${signer.order}. ${signer.name} <${signer.email}>`, 11, font);
+    write(
+      `   Signed ${signer.signedAt ? new Date(signer.signedAt).toLocaleString() : "-"} from IP ${signedEvent?.ip ?? "unknown"}`,
+      9,
+      font,
+      MUTED
+    );
+  }
+  y -= 8;
+
+  write("Each signer explicitly confirmed their consent to sign electronically", 9, font, MUTED);
+  write("before submitting a signature — see the event log below.", 9, font, MUTED);
+  y -= 8;
+
+  write("Integrity", 13, bold);
+  write("SHA-256 of the final signed document:", 9, font, MUTED);
+  write(finalPdfSha256, 9, font, INK);
+  y -= 8;
+
+  write("Event log", 13, bold);
+  for (const e of events) {
+    const who = e.signerOrder != null ? doc.signers.find((s) => s.order === e.signerOrder)?.name ?? `signer ${e.signerOrder}` : "system";
+    const ipSuffix = e.ip ? ` from ${e.ip}` : "";
+    write(`${new Date(e.timestamp).toLocaleString()} — ${e.type} (${who})${ipSuffix}`, 8, font, MUTED);
+  }
+
+  return cert.save();
 }

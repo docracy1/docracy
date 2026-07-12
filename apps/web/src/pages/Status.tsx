@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { fetchStatus } from "../lib/api";
+import { useNoIndex } from "../lib/useNoIndex";
 import type { StatusPayload } from "../lib/types";
 
 export default function Status() {
   const { token } = useParams<{ token: string }>();
   const [status, setStatus] = useState<StatusPayload | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  useNoIndex();
 
   useEffect(() => {
     if (!token) return;

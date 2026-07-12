@@ -1,10 +1,12 @@
 import { Hono } from "hono";
 import { getDoc, putDoc, isSignerOnTurn, currentTurnOrder } from "../lib/kv";
-import { burnFields, type FieldValue } from "../lib/pdf";
+import { burnFields, decodedByteLength, generateCertificate, MAX_SIGNATURE_IMAGE_BYTES, type FieldValue } from "../lib/pdf";
 import { sendSigningInvite, sendCompletionEmails } from "../lib/email";
 import { recordViewedOnce, indexSignerSigned, indexInviteSent, indexCompleted } from "../lib/index-d1";
+import { checkTokenAccessRateLimit } from "../lib/ratelimit";
+import { sha256Hex } from "../lib/hash";
 import { verifyToken, signToken } from "@docracy/shared";
-import type { Env } from "@docracy/shared";
+import type { AuditEvent, Env } from "@docracy/shared";
 
 function indexNonFatal(
   ctx: { waitUntil(promise: Promise<unknown>): void },
@@ -29,7 +31,12 @@ function statusPayload(doc: Awaited<ReturnType<typeof getDoc>>) {
 }
 
 sign.get("/status/:token", async (c) => {
-  const verified = await verifyToken(c.req.param("token"), c.env.TOKEN_SECRET);
+  const token = c.req.param("token");
+  if (!(await checkTokenAccessRateLimit(c.env, token))) {
+    return c.json({ error: "Too many requests. Please try again shortly." }, 429);
+  }
+
+  const verified = await verifyToken(token, c.env.TOKEN_SECRET);
   if (!verified) return c.json({ error: "Invalid or tampered link" }, 403);
 
   const doc = await getDoc(c.env, verified.docId);
@@ -39,7 +46,12 @@ sign.get("/status/:token", async (c) => {
 });
 
 sign.get("/sign/:token", async (c) => {
-  const verified = await verifyToken(c.req.param("token"), c.env.TOKEN_SECRET);
+  const token = c.req.param("token");
+  if (!(await checkTokenAccessRateLimit(c.env, token))) {
+    return c.json({ error: "Too many requests. Please try again shortly." }, 429);
+  }
+
+  const verified = await verifyToken(token, c.env.TOKEN_SECRET);
   if (!verified) return c.json({ error: "Invalid or tampered link" }, 403);
 
   const doc = await getDoc(c.env, verified.docId);
@@ -67,7 +79,12 @@ sign.get("/sign/:token", async (c) => {
 });
 
 sign.post("/sign/:token", async (c) => {
-  const verified = await verifyToken(c.req.param("token"), c.env.TOKEN_SECRET);
+  const token = c.req.param("token");
+  if (!(await checkTokenAccessRateLimit(c.env, token))) {
+    return c.json({ error: "Too many requests. Please try again shortly." }, 429);
+  }
+
+  const verified = await verifyToken(token, c.env.TOKEN_SECRET);
   if (!verified) return c.json({ error: "Invalid or tampered link" }, 403);
 
   const doc = await getDoc(c.env, verified.docId);
@@ -77,7 +94,20 @@ sign.post("/sign/:token", async (c) => {
     return c.json({ error: "It's not your turn to sign yet" }, 409);
   }
 
-  const body = await c.req.json<{ values: FieldValue[] }>();
+  let body: { values: FieldValue[]; consent?: boolean };
+  try {
+    body = await c.req.json<{ values: FieldValue[]; consent?: boolean }>();
+  } catch {
+    return c.json({ error: "Invalid request body" }, 400);
+  }
+
+  // The legal weight of an electronic signature rests on the signer affirmatively agreeing to
+  // sign electronically — the web UI's checkbox is the primary control, this is defense in depth
+  // (and the source of truth recorded in the "consented" audit event below).
+  if (body.consent !== true) {
+    return c.json({ error: "You must confirm you agree to sign electronically before submitting" }, 400);
+  }
+
   const myFields = doc.fields.filter((f) => f.signerOrder === verified.order);
 
   // Defense in depth: creation already requires every signer to have a field, but if that were
@@ -93,6 +123,14 @@ sign.post("/sign/:token", async (c) => {
     return c.json({ error: "Please fill in every field before submitting" }, 400);
   }
 
+  const oversized = myFields.some((f) => decodedByteLength(valueById.get(f.id)!) > MAX_SIGNATURE_IMAGE_BYTES);
+  if (oversized) {
+    return c.json({ error: "Signature image is too large" }, 400);
+  }
+
+  const ip = c.req.header("CF-Connecting-IP") ?? null;
+  const userAgent = c.req.header("User-Agent") ?? null;
+
   const workingObj = await c.env.DOCRACY_DOCS.get(`docs/${doc.docId}/working.pdf`);
   if (!workingObj) return c.json({ error: "Document blob missing" }, 404);
   const workingBytes = new Uint8Array(await workingObj.arrayBuffer());
@@ -101,6 +139,7 @@ sign.post("/sign/:token", async (c) => {
   const signedAt = new Date().toISOString();
 
   const updatedBytes = await burnFields(workingBytes, myFields, body.values, signer.email, signedAt);
+  const signedHash = await sha256Hex(updatedBytes);
 
   // Re-fetch and re-check right before committing: burnFields above is the slowest step in this
   // handler, so a near-simultaneous duplicate submission (double-click, a retried request) could
@@ -120,8 +159,13 @@ sign.post("/sign/:token", async (c) => {
   freshSigner.status = "signed";
   freshSigner.signedAt = signedAt;
 
+  const events: AuditEvent[] = [
+    ...(freshDoc.events ?? []),
+    { type: "consented", signerOrder: verified.order, ip, userAgent, timestamp: signedAt, pdfSha256: null },
+    { type: "signed", signerOrder: verified.order, ip, userAgent, timestamp: signedAt, pdfSha256: signedHash },
+  ];
+
   if (freshDoc.accountId) {
-    const ip = c.req.header("CF-Connecting-IP") ?? null;
     indexNonFatal(c.executionCtx, freshDoc.docId, "signed", indexSignerSigned(c.env, freshDoc, verified.order, updatedBytes, ip));
   }
 
@@ -129,6 +173,15 @@ sign.post("/sign/:token", async (c) => {
   if (nextOrder !== null) {
     const nextSigner = freshDoc.signers.find((s) => s.order === nextOrder)!;
     nextSigner.linkSentAt = new Date().toISOString();
+    events.push({
+      type: "invite_sent",
+      signerOrder: nextOrder,
+      ip: null,
+      userAgent: null,
+      timestamp: nextSigner.linkSentAt,
+      pdfSha256: null,
+    });
+    freshDoc.events = events;
     await putDoc(c.env, freshDoc);
 
     const nextToken = await signToken(freshDoc.docId, nextOrder, c.env.TOKEN_SECRET);
@@ -140,9 +193,22 @@ sign.post("/sign/:token", async (c) => {
   } else {
     freshDoc.status = "completed";
     freshDoc.completedAt = new Date().toISOString();
+    events.push({
+      type: "completed",
+      signerOrder: null,
+      ip: null,
+      userAgent: null,
+      timestamp: freshDoc.completedAt,
+      pdfSha256: signedHash,
+    });
+    freshDoc.events = events;
+
     await c.env.DOCRACY_DOCS.put(`docs/${freshDoc.docId}/final.pdf`, updatedBytes);
+    const certificateBytes = await generateCertificate(freshDoc, signedHash);
+    await c.env.DOCRACY_DOCS.put(`docs/${freshDoc.docId}/certificate.pdf`, certificateBytes);
+
     await putDoc(c.env, freshDoc);
-    await sendCompletionEmails(c.env, freshDoc, updatedBytes);
+    await sendCompletionEmails(c.env, freshDoc, updatedBytes, certificateBytes);
 
     if (freshDoc.accountId) {
       indexNonFatal(c.executionCtx, freshDoc.docId, "completed", indexCompleted(c.env, freshDoc));

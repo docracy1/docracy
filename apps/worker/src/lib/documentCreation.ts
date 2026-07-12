@@ -1,8 +1,9 @@
 import { putDoc } from "./kv";
 import { sendSigningInvite, sendPreparerStatusLink } from "./email";
 import { indexDocumentCreated } from "./index-d1";
+import { sha256Hex } from "./hash";
 import { signToken } from "@docracy/shared";
-import type { DocField, DocState, Env, Signer } from "@docracy/shared";
+import type { AuditEvent, DocField, DocState, Env, Signer } from "@docracy/shared";
 
 export interface CreateDocumentCoreParams {
   env: Env;
@@ -20,6 +21,9 @@ export interface CreateDocumentCoreParams {
    *  to before this helper existed. Only set for a logged-in paid account's connector upload. */
   accountId: string | null;
   title?: string;
+  /** IP of whoever submitted the /api/documents request, for the "created" audit event. Optional
+   *  (defaults to null) so existing callers/tests that don't pass it keep compiling unchanged. */
+  creatorIp?: string | null;
 }
 
 export async function createDocumentCore(
@@ -46,6 +50,27 @@ export async function createDocumentCore(
     remindersSent: [],
   }));
 
+  const firstSigner = signers[0];
+  const createdHash = await sha256Hex(pdfBytes);
+  const events: AuditEvent[] = [
+    {
+      type: "created",
+      signerOrder: null,
+      ip: params.creatorIp ?? null,
+      userAgent: null,
+      timestamp: now.toISOString(),
+      pdfSha256: createdHash,
+    },
+    {
+      type: "invite_sent",
+      signerOrder: firstSigner.order,
+      ip: null,
+      userAgent: null,
+      timestamp: now.toISOString(),
+      pdfSha256: null,
+    },
+  ];
+
   const doc: DocState = {
     docId,
     accountId,
@@ -57,9 +82,9 @@ export async function createDocumentCore(
     completedAt: null,
     signers,
     fields,
+    events,
   };
 
-  const firstSigner = signers[0];
   firstSigner.linkSentAt = now.toISOString();
   await putDoc(env, doc);
 

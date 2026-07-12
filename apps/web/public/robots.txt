@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /$
+Allow: /prepare$
+Allow: /privacy$
+Allow: /terms$
+Disallow: /
+Disallow: /sign/
+Disallow: /status/
+Disallow: /prepare/sent
+
+Sitemap: https://docracy.pages.dev/sitemap.xml

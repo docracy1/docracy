@@ -30,7 +30,41 @@ database_id = "498b3b25-111e-435e-baca-5fb4af9c0e38"
 PUBLIC_APP_URL = "https://docracy.pages.dev"
 FREE_TIER_MAX_SIGNERS = "2"
 DOC_TTL_DAYS = "9"
+FEEDBACK_EMAIL = "rl@relacon.at"
 
 # --- Secrets (never stored in this file) ---
 # Set with: wrangler secret put TOKEN_SECRET
 # Set with: wrangler secret put RESEND_API_KEY   (optional locally — omit to log emails to console instead of sending)
+
+# --- Staging: isolated KV/D1/R2 so testing never touches production data ---
+# Deploy with: wrangler deploy --env staging
+# Secrets: wrangler secret put TOKEN_SECRET --env staging (RESEND_API_KEY intentionally left
+# unset here — emails just log to the console instead of actually sending during testing)
+[env.staging]
+name = "docracy-worker-staging"
+
+[env.staging.triggers]
+crons = ["0 8 * * *"]
+
+[[env.staging.kv_namespaces]]
+binding = "DOCRACY_KV"
+id = "d2478fb8d7624291b832b5a8249dfa3c"
+
+[[env.staging.r2_buckets]]
+binding = "DOCRACY_DOCS"
+bucket_name = "docracy-docs-staging"
+
+[[env.staging.d1_databases]]
+binding = "DOCRACY_DB"
+database_name = "docracy-index-staging"
+database_id = "2e0a9181-6bd6-4e79-9646-cdca7d1d8aba"
+
+[env.staging.vars]
+# The worker itself has no frontend routes — this must point to wherever the web app that
+# renders /sign/:token actually lives. No staging Pages site exists yet, so this points at the
+# local web dev server for now (matches how .dev.vars overrides this for local `wrangler dev`).
+# Update this (and redeploy) once/if a staging Pages deployment exists.
+PUBLIC_APP_URL = "http://localhost:5173"
+FREE_TIER_MAX_SIGNERS = "2"
+DOC_TTL_DAYS = "9"
+FEEDBACK_EMAIL = "rl@relacon.at"

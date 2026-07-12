@@ -14,3 +14,13 @@ preview_id = "704f39e4556644cf91ca4f49b551fab1"
 # Must be the SAME value as docracy-worker's TOKEN_SECRET, or every check_status call will
 # report "not a valid Docracy link" even for real ones.
 # Set with: wrangler secret put TOKEN_SECRET
+
+# --- Staging: reads the same staging KV as docracy-worker-staging, never production ---
+# Deploy with: wrangler deploy --env staging
+# Secret: wrangler secret put TOKEN_SECRET --env staging (must match docracy-worker's staging value)
+[env.staging]
+name = "docracy-connector-staging"
+
+[[env.staging.kv_namespaces]]
+binding = "DOCRACY_KV"
+id = "d2478fb8d7624291b832b5a8249dfa3c"

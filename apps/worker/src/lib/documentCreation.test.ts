@@ -1,6 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { createDocumentCore } from "./documentCreation";
+import { sha256Hex } from "./hash";
 import { makeMockEnv, makeValidPdfBytes } from "../test/mockEnv";
+import type { DocState } from "@docracy/shared";
 
 function makeCtx() {
   const promises: Promise<unknown>[] = [];
@@ -47,6 +49,28 @@ describe("createDocumentCore — anonymous path (accountId: null)", () => {
     expect((docsRow as { n: number }).n).toBe(0);
     expect((signersRow as { n: number }).n).toBe(0);
     expect((auditRow as { n: number }).n).toBe(0);
+  });
+
+  it("records a KV-resident 'created' + 'invite_sent' event even with no account/D1 involved", async () => {
+    const { env, kv } = makeMockEnv();
+    const ctx = makeCtx();
+    const pdfBytes = await makeValidPdfBytes();
+    const expectedHash = await sha256Hex(pdfBytes);
+
+    const { docId } = await createDocumentCore({
+      env,
+      ctx,
+      pdfBytes,
+      accountId: null,
+      creatorIp: "9.9.9.9",
+      ...baseParams,
+    });
+    await ctx.flush();
+
+    const stored = JSON.parse(kv._store.get(`doc:${docId}`)!) as DocState;
+    expect(stored.events).toHaveLength(2);
+    expect(stored.events![0]).toMatchObject({ type: "created", ip: "9.9.9.9", pdfSha256: expectedHash });
+    expect(stored.events![1]).toMatchObject({ type: "invite_sent", signerOrder: 1 });
   });
 });
 

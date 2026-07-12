@@ -4,9 +4,9 @@ import type { DocState, Env } from "@docracy/shared";
 // (Domains → Add Domain → DNS records). Switch back to noreply@docracy.io once that's done.
 const FROM = "Docracy <onboarding@resend.dev>";
 
-async function send(env: Env, to: string, subject: string, html: string): Promise<void> {
+async function send(env: Env, to: string, subject: string, html: string, replyTo?: string): Promise<void> {
   if (!env.RESEND_API_KEY) {
-    console.log(`[email:dev] to=${to} subject="${subject}"\n${html}\n`);
+    console.log(`[email:dev] to=${to} subject="${subject}"${replyTo ? ` reply-to=${replyTo}` : ""}\n${html}\n`);
     return;
   }
   const res = await fetch("https://api.resend.com/emails", {
@@ -15,11 +15,20 @@ async function send(env: Env, to: string, subject: string, html: string): Promis
       Authorization: `Bearer ${env.RESEND_API_KEY}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ from: FROM, to, subject, html }),
+    body: JSON.stringify({ from: FROM, to, subject, html, ...(replyTo ? { reply_to: replyTo } : {}) }),
   });
   if (!res.ok) {
     console.error(`Resend send failed (${res.status}): ${await res.text()}`);
   }
+}
+
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 function statusLines(doc: DocState): string {
@@ -27,8 +36,8 @@ function statusLines(doc: DocState): string {
     .sort((a, b) => a.order - b.order)
     .map((s) =>
       s.status === "signed"
-        ? `Signed by: ${s.name} ✓ (${formatDate(s.signedAt!)})`
-        : `Pending: ${s.name}`
+        ? `Signed by: ${escapeHtml(s.name)} ✓ (${formatDate(s.signedAt!)})`
+        : `Pending: ${escapeHtml(s.name)}`
     )
     .join("<br>");
 }
@@ -44,7 +53,7 @@ export async function sendSigningInvite(env: Env, doc: DocState, order: number, 
     env,
     signer.email,
     "You have a document to sign",
-    `<p>Hi ${signer.name},</p><p>Please review and sign the document: <a href="${link}">${link}</a></p><p>${statusLines(doc)}</p>`
+    `<p>Hi ${escapeHtml(signer.name)},</p><p>Please review and sign the document: <a href="${link}">${link}</a></p><p>${statusLines(doc)}</p>`
   );
 }
 
@@ -69,15 +78,28 @@ export async function sendReminder(env: Env, doc: DocState, order: number, token
     env,
     signer.email,
     subject,
-    `<p>Hi ${signer.name},</p><p>You still need to sign: <a href="${link}">${link}</a></p>${tone}`
+    `<p>Hi ${escapeHtml(signer.name)},</p><p>You still need to sign: <a href="${link}">${link}</a></p>${tone}`
   );
 }
 
-export async function sendCompletionEmails(env: Env, doc: DocState, finalPdf: Uint8Array): Promise<void> {
+export async function sendCompletionEmails(
+  env: Env,
+  doc: DocState,
+  finalPdf: Uint8Array,
+  certificatePdf?: Uint8Array
+): Promise<void> {
   const attachmentBase64 = bytesToBase64(finalPdf);
+  const attachments = [{ filename: "signed-document.pdf", content: attachmentBase64 }];
+  if (certificatePdf) {
+    attachments.push({ filename: "certificate-of-completion.pdf", content: bytesToBase64(certificatePdf) });
+  }
+
   for (const signer of doc.signers) {
     if (!env.RESEND_API_KEY) {
-      console.log(`[email:dev] to=${signer.email} subject="Signed document" (final PDF attached, ${finalPdf.byteLength} bytes)\n${statusLines(doc)}\n`);
+      console.log(
+        `[email:dev] to=${signer.email} subject="Signed document" (final PDF attached, ${finalPdf.byteLength} bytes` +
+          `${certificatePdf ? `; certificate attached, ${certificatePdf.byteLength} bytes` : ""})\n${statusLines(doc)}\n`
+      );
       continue;
     }
     const res = await fetch("https://api.resend.com/emails", {
@@ -90,14 +112,25 @@ export async function sendCompletionEmails(env: Env, doc: DocState, finalPdf: Ui
         from: FROM,
         to: signer.email,
         subject: "Your document is fully signed",
-        html: `<p>Everyone has signed. Final document attached.</p><p>${statusLines(doc)}</p>`,
-        attachments: [{ filename: "signed-document.pdf", content: attachmentBase64 }],
+        html: `<p>Everyone has signed. Final document and certificate of completion attached.</p><p>${statusLines(doc)}</p>`,
+        attachments,
       }),
     });
     if (!res.ok) {
       console.error(`Resend send failed (${res.status}): ${await res.text()}`);
     }
   }
+}
+
+export async function sendFeedback(env: Env, fromEmail: string, message: string): Promise<void> {
+  const body = escapeHtml(message).replace(/\n/g, "<br>");
+  await send(
+    env,
+    env.FEEDBACK_EMAIL,
+    "Docracy feedback",
+    `<p>From: ${escapeHtml(fromEmail)}</p><p>${body}</p>`,
+    fromEmail
+  );
 }
 
 function bytesToBase64(bytes: Uint8Array): string {

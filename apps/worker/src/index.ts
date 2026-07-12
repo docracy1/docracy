@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import documents from "./routes/documents";
 import sign from "./routes/sign";
+import feedback from "./routes/feedback";
 import { runReminderSweep } from "./lib/reminders";
 import { reconcileD1Index } from "./lib/index-d1";
 import { runExpiredDocCleanup } from "./lib/cleanup";
@@ -23,6 +24,7 @@ app.use("/api/*", async (c, next) => {
 
 app.route("/api/documents", documents);
 app.route("/api", sign);
+app.route("/api/feedback", feedback);
 
 export default {
   fetch: app.fetch,

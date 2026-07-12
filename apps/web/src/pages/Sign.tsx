@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import SignatureCanvas from "react-signature-canvas";
 import PdfViewer from "../components/PdfViewer";
 import { fetchSignView, submitSignature } from "../lib/api";
+import { useNoIndex } from "../lib/useNoIndex";
 import type { SignPayload } from "../lib/api";
 
 function base64ToBytes(base64: string): Uint8Array {
@@ -16,9 +17,12 @@ export default function Sign() {
   const [error, setError] = useState<string | null>(null);
   const [values, setValues] = useState<Record<string, string>>({});
   const [signingFieldId, setSigningFieldId] = useState<string | null>(null);
+  const [consented, setConsented] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const sigPadRef = useRef<SignatureCanvas>(null);
+
+  useNoIndex();
 
   useEffect(() => {
     if (!token) return;
@@ -67,13 +71,14 @@ export default function Sign() {
   };
 
   const onSubmit = async () => {
-    if (!token || !payload?.fields) return;
+    if (!token || !payload?.fields || !consented) return;
     setSubmitting(true);
     setError(null);
     try {
       await submitSignature(
         token,
-        payload.fields.map((f) => ({ fieldId: f.id, value: values[f.id] }))
+        payload.fields.map((f) => ({ fieldId: f.id, value: values[f.id] })),
+        consented
       );
       setDone(true);
     } catch (err) {
@@ -218,8 +223,21 @@ export default function Sign() {
 
       {error && <p style={{ color: "var(--danger)" }}>{error}</p>}
 
+      <label style={{ display: "flex", gap: 8, alignItems: "flex-start", marginTop: 16, fontSize: 13 }}>
+        <input
+          type="checkbox"
+          checked={consented}
+          onChange={(e) => setConsented(e.target.checked)}
+          style={{ marginTop: 2 }}
+        />
+        <span>
+          I agree that clicking "Complete signing" constitutes my legally binding electronic signature on this
+          document.
+        </span>
+      </label>
+
       <div style={{ marginTop: 16 }}>
-        <button className="btn-primary" disabled={!allFilled || submitting} onClick={onSubmit}>
+        <button className="btn-primary" disabled={!allFilled || !consented || submitting} onClick={onSubmit}>
           {submitting ? "Submitting…" : "Complete signing"}
         </button>
       </div>

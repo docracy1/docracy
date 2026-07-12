@@ -131,10 +131,20 @@ describe("POST /api/documents", () => {
   it("enforces a per-IP rate limit", async () => {
     const { env } = makeMockEnv();
     const pdf = await makeValidPdfBytes();
+    // Distinct signer emails per iteration so this only exercises the per-IP limit, not the
+    // separate per-recipient-email invite limit (which caps at a lower number — see
+    // "enforces a per-recipient-email invite limit" below).
+    const metaFor = (i: number) => ({
+      ...validMeta,
+      signers: [
+        { order: 1, name: "Anna", email: `anna${i}@example.com` },
+        { order: 2, name: "Max", email: `max${i}@example.com` },
+      ],
+    });
     for (let i = 0; i < 10; i++) {
       const res = await documents.request(
         "/",
-        { method: "POST", headers: { "CF-Connecting-IP": "1.2.3.4" }, body: buildForm(pdf, validMeta) },
+        { method: "POST", headers: { "CF-Connecting-IP": "1.2.3.4" }, body: buildForm(pdf, metaFor(i)) },
         env,
         MOCK_CTX
       );
@@ -142,7 +152,30 @@ describe("POST /api/documents", () => {
     }
     const blocked = await documents.request(
       "/",
-      { method: "POST", headers: { "CF-Connecting-IP": "1.2.3.4" }, body: buildForm(pdf, validMeta) },
+      { method: "POST", headers: { "CF-Connecting-IP": "1.2.3.4" }, body: buildForm(pdf, metaFor(10)) },
+      env,
+      MOCK_CTX
+    );
+    expect(blocked.status).toBe(429);
+  });
+
+  it("enforces a per-recipient-email invite limit", async () => {
+    const { env } = makeMockEnv();
+    const pdf = await makeValidPdfBytes();
+    // Distinct IPs per iteration so this only exercises the per-recipient-email limit, not the
+    // per-IP creation limit above.
+    for (let i = 0; i < 5; i++) {
+      const res = await documents.request(
+        "/",
+        { method: "POST", headers: { "CF-Connecting-IP": `10.0.0.${i}` }, body: buildForm(pdf, validMeta) },
+        env,
+        MOCK_CTX
+      );
+      expect(res.status).toBe(200);
+    }
+    const blocked = await documents.request(
+      "/",
+      { method: "POST", headers: { "CF-Connecting-IP": "10.0.0.99" }, body: buildForm(pdf, validMeta) },
       env,
       MOCK_CTX
     );

@@ -46,12 +46,22 @@ export async function fetchSignView(token: string): Promise<SignPayload> {
 
 export async function submitSignature(
   token: string,
-  values: Array<{ fieldId: string; value: string }>
+  values: Array<{ fieldId: string; value: string }>,
+  consent: boolean
 ): Promise<{ ok: true; status: StatusPayload }> {
   const res = await fetch(`${API_BASE}/api/sign/${token}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ values }),
+    body: JSON.stringify({ values, consent }),
+  });
+  return asJson(res);
+}
+
+export async function submitFeedback(email: string, message: string): Promise<{ ok: true }> {
+  const res = await fetch(`${API_BASE}/api/feedback`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, message }),
   });
   return asJson(res);
 }

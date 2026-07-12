@@ -132,6 +132,7 @@ export function makeMockEnv(overrides: Partial<Env> = {}) {
     PUBLIC_APP_URL: "http://localhost:5173",
     FREE_TIER_MAX_SIGNERS: "2",
     DOC_TTL_DAYS: "9",
+    FEEDBACK_EMAIL: "feedback-test@example.com",
     ...overrides,
   } as Env;
   return { env, kv, r2, d1 };
