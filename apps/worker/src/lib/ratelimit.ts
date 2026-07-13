@@ -55,3 +55,12 @@ const FEEDBACK_MAX_PER_WINDOW = 5;
 export async function checkFeedbackRateLimit(env: Env, ip: string): Promise<boolean> {
   return checkLimit(env, `feedback:${ip}`, FEEDBACK_MAX_PER_WINDOW, FEEDBACK_WINDOW_SECONDS);
 }
+
+const MAGIC_LINK_WINDOW_SECONDS = 60 * 60; // 1 hour
+const MAGIC_LINK_MAX_PER_WINDOW = 5;
+
+/** Per-recipient-email cap on magic-link requests, so the login form can't be used to mail-bomb
+ *  an arbitrary address (same rationale as checkInviteRateLimit). */
+export async function checkMagicLinkRateLimit(env: Env, email: string): Promise<boolean> {
+  return checkLimit(env, `magiclink:${email.toLowerCase()}`, MAGIC_LINK_MAX_PER_WINDOW, MAGIC_LINK_WINDOW_SECONDS);
+}

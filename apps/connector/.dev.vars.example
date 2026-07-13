@@ -1,0 +1,4 @@
+# Copy to .dev.vars for local `wrangler dev` (this file is gitignored, .dev.vars.example is not).
+# Must be the SAME value as docracy-worker's local TOKEN_SECRET (see apps/worker/.dev.vars),
+# or every check_status call — and every paid API token — will fail to verify.
+TOKEN_SECRET=dev-secret-change-me

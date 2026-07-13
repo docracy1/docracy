@@ -1,6 +1,19 @@
 import { describe, it, expect } from "vitest";
 import documents from "./documents";
+import { createSession, SESSION_COOKIE_NAME } from "../lib/auth";
 import { makeMockEnv, makeValidPdfBytes } from "../test/mockEnv";
+
+function makeCtx() {
+  const promises: Promise<unknown>[] = [];
+  const ctx = {
+    waitUntil: (p: Promise<unknown>) => {
+      promises.push(p);
+    },
+    passThroughOnException: () => {},
+    flush: () => Promise.all(promises),
+  };
+  return ctx as unknown as ExecutionContext & { flush: () => Promise<unknown[]> };
+}
 
 const MOCK_CTX = { waitUntil: () => {}, passThroughOnException: () => {} } as unknown as ExecutionContext;
 
@@ -180,5 +193,85 @@ describe("POST /api/documents", () => {
       MOCK_CTX
     );
     expect(blocked.status).toBe(429);
+  });
+
+  it("lets a paid account exceed the free-tier signer limit and attaches its accountId", async () => {
+    const { env, kv } = makeMockEnv();
+    const ctx = makeCtx();
+    const sessionToken = await createSession(env, ctx, "acct-1", "paid@example.com", true, null, null);
+    await ctx.flush();
+
+    const pdf = await makeValidPdfBytes();
+    const meta = {
+      ...validMeta,
+      signers: [
+        { order: 1, name: "A", email: "a@example.com" },
+        { order: 2, name: "B", email: "b@example.com" },
+        { order: 3, name: "C", email: "c@example.com" },
+      ],
+      fields: [
+        ...validMeta.fields,
+        { id: "f3", signerOrder: 3, page: 0, xFrac: 0.1, yFrac: 0.7, wFrac: 0.2, hFrac: 0.05 },
+      ],
+    };
+    const res = await documents.request(
+      "/",
+      {
+        method: "POST",
+        headers: { Cookie: `${SESSION_COOKIE_NAME}=${sessionToken}` },
+        body: buildForm(pdf, meta),
+      },
+      env,
+      ctx
+    );
+    expect(res.status).toBe(200);
+
+    const [, docValue] = [...kv._store.entries()].find(([k]) => k.startsWith("doc:"))!;
+    const stored = JSON.parse(docValue);
+    expect(stored.accountId).toBe("acct-1");
+  });
+
+  it("still applies the free-tier cap and leaves accountId null for a logged-in but unpaid account", async () => {
+    const { env, kv } = makeMockEnv();
+    const ctx = makeCtx();
+    const sessionToken = await createSession(env, ctx, "acct-2", "unpaid@example.com", false, null, null);
+    await ctx.flush();
+
+    const pdf = await makeValidPdfBytes();
+    const overLimitMeta = {
+      ...validMeta,
+      signers: [
+        { order: 1, name: "A", email: "a@example.com" },
+        { order: 2, name: "B", email: "b@example.com" },
+        { order: 3, name: "C", email: "c@example.com" },
+      ],
+    };
+    const blocked = await documents.request(
+      "/",
+      {
+        method: "POST",
+        headers: { Cookie: `${SESSION_COOKIE_NAME}=${sessionToken}` },
+        body: buildForm(pdf, overLimitMeta),
+      },
+      env,
+      ctx
+    );
+    expect(blocked.status).toBe(402);
+
+    const withinLimit = await documents.request(
+      "/",
+      {
+        method: "POST",
+        headers: { Cookie: `${SESSION_COOKIE_NAME}=${sessionToken}` },
+        body: buildForm(pdf, validMeta),
+      },
+      env,
+      ctx
+    );
+    expect(withinLimit.status).toBe(200);
+
+    const [, docValue] = [...kv._store.entries()].find(([k]) => k.startsWith("doc:"))!;
+    const stored = JSON.parse(docValue);
+    expect(stored.accountId).toBeNull();
   });
 });

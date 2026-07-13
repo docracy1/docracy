@@ -72,7 +72,16 @@ export interface Env {
   TOKEN_SECRET: string;
   RESEND_API_KEY?: string;
   PUBLIC_APP_URL: string;
+  /** Base URL of the deployed MCP connector (apps/connector) — used only to build the ready-to-
+   *  paste connector URL returned by the API-token endpoints. */
+  PUBLIC_CONNECTOR_URL: string;
   FREE_TIER_MAX_SIGNERS: string;
   DOC_TTL_DAYS: string;
   FEEDBACK_EMAIL: string;
+  /** Absent until a real Stripe account exists — billing routes must degrade gracefully (501),
+   *  never throw, when these are unset. See lib/billing.ts. */
+  STRIPE_SECRET_KEY?: string;
+  STRIPE_WEBHOOK_SECRET?: string;
+  /** The Stripe Price ID for the paid subscription (created in the Stripe dashboard). */
+  STRIPE_PRICE_ID?: string;
 }

@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { PDFDocument } from "pdf-lib";
 import { createDocumentCore } from "../lib/documentCreation";
 import { checkRateLimit, checkInviteRateLimit } from "../lib/ratelimit";
+import { optionalAccount, type AccountContext } from "../lib/auth";
 import type { DocField, Env } from "@docracy/shared";
 
 interface CreateDocumentBody {
@@ -14,9 +15,11 @@ interface CreateDocumentBody {
 const MAX_PDF_BYTES = 15 * 1024 * 1024; // 15MB
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const documents = new Hono<{ Bindings: Env }>();
+type Variables = { account: AccountContext | null };
+const documents = new Hono<{ Bindings: Env; Variables: Variables }>();
 
-documents.post("/", async (c) => {
+documents.post("/", optionalAccount, async (c) => {
+  const account = c.get("account");
   const ip = c.req.header("CF-Connecting-IP") ?? "unknown";
   const allowed = await checkRateLimit(c.env, ip);
   if (!allowed) {
@@ -59,13 +62,14 @@ documents.post("/", async (c) => {
     return c.json({ error: "Invalid 'meta' JSON" }, 400);
   }
 
-  const maxSigners = Number(c.env.FREE_TIER_MAX_SIGNERS);
+  // Paid accounts have no signer cap at all; anonymous/free stays exactly as it was.
+  const maxSigners = account?.isPaid ? Infinity : Number(c.env.FREE_TIER_MAX_SIGNERS);
   if (meta.signers.length === 0) {
     return c.json({ error: "At least one signer is required" }, 400);
   }
   if (meta.signers.length > maxSigners) {
     return c.json(
-      { error: `Free plan supports up to ${maxSigners} signers. Paid plan (unlimited signers) is coming soon.` },
+      { error: `Free plan supports up to ${maxSigners} signers. Sign in with a paid account for unlimited signers.` },
       402
     );
   }
@@ -125,6 +129,11 @@ documents.post("/", async (c) => {
     }
   }
 
+  // Only a *paid* account attaches to the document — a signed-in-but-unpaid visitor still gets
+  // the anonymous, no-D1-indexing free-tier path (accountId stays null), identical to before this
+  // middleware existed.
+  const accountId = account?.isPaid ? account.id : null;
+
   const { docId, statusToken } = await createDocumentCore({
     env: c.env,
     ctx: c.executionCtx,
@@ -134,7 +143,7 @@ documents.post("/", async (c) => {
     preparerEmail: meta.preparerEmail,
     signers: meta.signers,
     fields: meta.fields,
-    accountId: null, // the free-tier /prepare flow is always anonymous
+    accountId,
     creatorIp: ip,
   });
 

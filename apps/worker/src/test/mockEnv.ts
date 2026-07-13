@@ -57,15 +57,20 @@ const MIGRATION_SQL = readFileSync(
   fileURLToPath(new URL("../../migrations/0001_init.sql", import.meta.url).toString()),
   "utf-8"
 );
+const API_TOKENS_MIGRATION_SQL = readFileSync(
+  fileURLToPath(new URL("../../migrations/0002_api_tokens.sql", import.meta.url).toString()),
+  "utf-8"
+);
 
 // sql.js's default WASM build doesn't compile in the FTS5 extension. It's swapped for a plain
 // table here — full-text MATCH queries aren't exercised by anything built in this pass anyway
 // (find_documents, the one feature that needs FTS5, is explicitly deferred to a follow-up plan)
 // and the INSERT/DELETE statements our code issues against it are identical either way.
-const TEST_MIGRATION_SQL = MIGRATION_SQL.replace(
-  /CREATE VIRTUAL TABLE documents_fts USING fts5\([^)]*\);/,
-  "CREATE TABLE documents_fts (doc_id TEXT, title TEXT);"
-);
+const TEST_MIGRATION_SQL =
+  MIGRATION_SQL.replace(
+    /CREATE VIRTUAL TABLE documents_fts USING fts5\([^)]*\);/,
+    "CREATE TABLE documents_fts (doc_id TEXT, title TEXT);"
+  ) + API_TOKENS_MIGRATION_SQL;
 
 // sql.js's WASM module only needs loading once per test run; each test still gets its own
 // fresh in-memory `SQL.Database()` instance below.
@@ -130,6 +135,7 @@ export function makeMockEnv(overrides: Partial<Env> = {}) {
     DOCRACY_DB: d1 as unknown as Env["DOCRACY_DB"],
     TOKEN_SECRET: "test-secret",
     PUBLIC_APP_URL: "http://localhost:5173",
+    PUBLIC_CONNECTOR_URL: "http://localhost:8788",
     FREE_TIER_MAX_SIGNERS: "2",
     DOC_TTL_DAYS: "9",
     FEEDBACK_EMAIL: "feedback-test@example.com",

@@ -122,6 +122,15 @@ export async function sendCompletionEmails(
   }
 }
 
+export async function sendMagicLink(env: Env, email: string, link: string): Promise<void> {
+  await send(
+    env,
+    email,
+    "Your Docracy sign-in link",
+    `<p>Click to sign in — this link expires in 15 minutes and can only be used once: <a href="${link}">${link}</a></p><p>If you didn't request this, you can ignore this email.</p>`
+  );
+}
+
 export async function sendFeedback(env: Env, fromEmail: string, message: string): Promise<void> {
   const body = escapeHtml(message).replace(/\n/g, "<br>");
   await send(

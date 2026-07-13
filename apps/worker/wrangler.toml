@@ -28,6 +28,7 @@ database_id = "498b3b25-111e-435e-baca-5fb4af9c0e38"
 # via apps/worker/.dev.vars, which takes precedence over [vars] when running locally.
 [vars]
 PUBLIC_APP_URL = "https://docracy.pages.dev"
+PUBLIC_CONNECTOR_URL = "https://docracy-connector.rl-d77.workers.dev"
 FREE_TIER_MAX_SIGNERS = "2"
 DOC_TTL_DAYS = "9"
 FEEDBACK_EMAIL = "rl@relacon.at"
@@ -35,6 +36,12 @@ FEEDBACK_EMAIL = "rl@relacon.at"
 # --- Secrets (never stored in this file) ---
 # Set with: wrangler secret put TOKEN_SECRET
 # Set with: wrangler secret put RESEND_API_KEY   (optional locally — omit to log emails to console instead of sending)
+#
+# --- Billing (Stripe) — all optional; billing routes 501 gracefully until these are set ---
+# Set with: wrangler secret put STRIPE_SECRET_KEY
+# Set with: wrangler secret put STRIPE_WEBHOOK_SECRET   (from the Stripe Dashboard's webhook config)
+# STRIPE_PRICE_ID is not secret (just an identifier) — once a Price exists in the Stripe
+# Dashboard, add it to [vars] above as STRIPE_PRICE_ID = "price_xxxxx".
 
 # --- Staging: isolated KV/D1/R2 so testing never touches production data ---
 # Deploy with: wrangler deploy --env staging
@@ -65,6 +72,7 @@ database_id = "2e0a9181-6bd6-4e79-9646-cdca7d1d8aba"
 # local web dev server for now (matches how .dev.vars overrides this for local `wrangler dev`).
 # Update this (and redeploy) once/if a staging Pages deployment exists.
 PUBLIC_APP_URL = "http://localhost:5173"
+PUBLIC_CONNECTOR_URL = "https://docracy-connector-staging.rl-d77.workers.dev"
 FREE_TIER_MAX_SIGNERS = "2"
 DOC_TTL_DAYS = "9"
 FEEDBACK_EMAIL = "rl@relacon.at"

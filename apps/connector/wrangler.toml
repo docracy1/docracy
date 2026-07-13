@@ -10,6 +10,12 @@ binding = "DOCRACY_KV"
 id = "981eb8f0eace4d29bedb6b664a546c74"
 preview_id = "704f39e4556644cf91ca4f49b551fab1"
 
+# Same D1 index docracy-worker writes to — read-only here too (find_documents, paid tier only).
+[[d1_databases]]
+binding = "DOCRACY_DB"
+database_name = "docracy-index"
+database_id = "498b3b25-111e-435e-baca-5fb4af9c0e38"
+
 # --- Secrets (never stored in this file) ---
 # Must be the SAME value as docracy-worker's TOKEN_SECRET, or every check_status call will
 # report "not a valid Docracy link" even for real ones.
@@ -24,3 +30,8 @@ name = "docracy-connector-staging"
 [[env.staging.kv_namespaces]]
 binding = "DOCRACY_KV"
 id = "d2478fb8d7624291b832b5a8249dfa3c"
+
+[[env.staging.d1_databases]]
+binding = "DOCRACY_DB"
+database_name = "docracy-index-staging"
+database_id = "2e0a9181-6bd6-4e79-9646-cdca7d1d8aba"

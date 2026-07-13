@@ -11,6 +11,9 @@ import Sign from "./pages/Sign";
 import Status from "./pages/Status";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
+import Login from "./pages/Login";
+import AuthVerify from "./pages/AuthVerify";
+import Dashboard from "./pages/Dashboard";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -24,6 +27,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/status/:token" element={<Status />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/terms" element={<Terms />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/auth/verify" element={<AuthVerify />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
       <Footer />
     </BrowserRouter>

@@ -12,6 +12,12 @@ async function asJson<T>(res: Response): Promise<T> {
   return res.json();
 }
 
+/** Every call needs `credentials: "include"` once session cookies exist — dev is same-origin via
+ *  the Vite proxy, but production is cross-origin (Pages domain vs Workers domain). */
+function apiFetch(path: string, init: RequestInit = {}): Promise<Response> {
+  return fetch(`${API_BASE}${path}`, { ...init, credentials: "include" });
+}
+
 export async function createDocument(
   pdf: File,
   preparerSigns: boolean,
@@ -22,12 +28,12 @@ export async function createDocument(
   const form = new FormData();
   form.set("pdf", pdf);
   form.set("meta", JSON.stringify({ preparerSigns, preparerEmail, signers, fields }));
-  const res = await fetch(`${API_BASE}/api/documents`, { method: "POST", body: form });
+  const res = await apiFetch("/api/documents", { method: "POST", body: form });
   return asJson(res);
 }
 
 export async function fetchStatus(token: string): Promise<StatusPayload> {
-  const res = await fetch(`${API_BASE}/api/status/${token}`);
+  const res = await apiFetch(`/api/status/${token}`);
   return asJson(res);
 }
 
@@ -40,7 +46,7 @@ export interface SignPayload {
 }
 
 export async function fetchSignView(token: string): Promise<SignPayload> {
-  const res = await fetch(`${API_BASE}/api/sign/${token}`);
+  const res = await apiFetch(`/api/sign/${token}`);
   return asJson(res);
 }
 
@@ -49,7 +55,7 @@ export async function submitSignature(
   values: Array<{ fieldId: string; value: string }>,
   consent: boolean
 ): Promise<{ ok: true; status: StatusPayload }> {
-  const res = await fetch(`${API_BASE}/api/sign/${token}`, {
+  const res = await apiFetch(`/api/sign/${token}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ values, consent }),
@@ -58,10 +64,76 @@ export async function submitSignature(
 }
 
 export async function submitFeedback(email: string, message: string): Promise<{ ok: true }> {
-  const res = await fetch(`${API_BASE}/api/feedback`, {
+  const res = await apiFetch("/api/feedback", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, message }),
   });
+  return asJson(res);
+}
+
+export async function requestMagicLink(email: string): Promise<{ ok: true }> {
+  const res = await apiFetch("/api/auth/request-link", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+  });
+  return asJson(res);
+}
+
+export async function consumeMagicLinkToken(token: string): Promise<{ ok: true }> {
+  const res = await apiFetch("/api/auth/consume", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token }),
+  });
+  return asJson(res);
+}
+
+export async function logout(): Promise<{ ok: true }> {
+  const res = await apiFetch("/api/auth/logout", { method: "POST" });
+  return asJson(res);
+}
+
+export interface Account {
+  id: string;
+  email: string;
+  isPaid: boolean;
+}
+
+export async function fetchMe(): Promise<{ account: Account | null }> {
+  const res = await apiFetch("/api/auth/me");
+  return asJson(res);
+}
+
+/** Returns the Stripe-hosted checkout URL to redirect the browser to. */
+export async function startCheckout(): Promise<{ url: string }> {
+  const res = await apiFetch("/api/billing/checkout", { method: "POST" });
+  return asJson(res);
+}
+
+export interface DocumentSummary {
+  docId: string;
+  title: string;
+  status: "pending" | "completed";
+  createdAt: string;
+  completedAt: string | null;
+  statusToken: string;
+}
+
+export async function fetchMyDocuments(): Promise<{ documents: DocumentSummary[] }> {
+  const res = await apiFetch("/api/account/documents");
+  return asJson(res);
+}
+
+export async function fetchTokenStatus(): Promise<{ hasToken: boolean }> {
+  const res = await apiFetch("/api/account/token");
+  return asJson(res);
+}
+
+/** Returns the raw token exactly once — the caller must show/copy it immediately, since it's
+ *  never re-exposed after this. */
+export async function regenerateApiToken(): Promise<{ token: string; connectorUrl: string }> {
+  const res = await apiFetch("/api/account/token/regenerate", { method: "POST" });
   return asJson(res);
 }
