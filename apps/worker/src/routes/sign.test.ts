@@ -1,4 +1,6 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import * as asn1js from "asn1js";
+import * as pkijs from "pkijs";
 import sign from "./sign";
 import { putDoc } from "../lib/kv";
 import { makeMockEnv, makeValidPdfBytes } from "../test/mockEnv";
@@ -45,7 +47,13 @@ describe("sign routes", () => {
     env = mock.env;
     r2 = mock.r2;
     docId = await seedDoc(env, r2);
+    // Completion calls out to a real Time-Stamp Authority (see lib/timestamp.ts) — default to
+    // "unreachable" in tests so they stay offline and deterministic; requestTimestamp's own
+    // success/failure parsing is unit-tested separately in timestamp.test.ts.
+    vi.spyOn(global, "fetch").mockRejectedValue(new Error("no network in tests"));
   });
+
+  afterEach(() => vi.restoreAllMocks());
 
   it("rejects a tampered token", async () => {
     const res = await sign.request("/status/garbage.token.here", {}, env);
@@ -181,6 +189,67 @@ describe("sign routes", () => {
     expect(eventTypes).toEqual(["consented", "signed", "invite_sent", "consented", "signed", "completed"]);
     const signedEvents = (stored.events ?? []).filter((e) => e.type === "signed");
     expect(signedEvents.every((e) => typeof e.pdfSha256 === "string" && e.pdfSha256!.length === 64)).toBe(true);
+
+    // The TSA is mocked as unreachable by default (see beforeEach) — completion must still
+    // succeed, just without a trusted timestamp attached.
+    expect(stored.timestampToken).toBeUndefined();
+    expect(stored.timestampGenTime).toBeUndefined();
+  });
+
+  it("attaches a trusted timestamp to the completed document when the TSA responds", async () => {
+    const genTime = new Date("2026-03-01T00:00:00.000Z");
+    // Signer 2's submission is the one that reaches the completion branch and calls the TSA — the
+    // hash it requests a timestamp for is only known once burnFields finishes, so the mock can't
+    // be built with the real hash ahead of time. Instead, build a token whose messageImprint
+    // matches whatever hash comes in by constructing it lazily inside the fetch mock.
+    vi.spyOn(global, "fetch").mockImplementation(async (_url, init) => {
+      const reqDer = init!.body as ArrayBuffer;
+      const asn1 = asn1js.fromBER(reqDer);
+      const tspReq = new pkijs.TimeStampReq({ schema: asn1.result });
+      const hashBytes = new Uint8Array(tspReq.messageImprint.hashedMessage.valueBlock.valueHexView);
+
+      const tstInfo = new pkijs.TSTInfo({
+        version: 1,
+        policy: "1.2.3.4",
+        messageImprint: tspReq.messageImprint,
+        serialNumber: new asn1js.Integer({ value: 1 }),
+        genTime,
+      });
+      const signedData = new pkijs.SignedData({
+        encapContentInfo: new pkijs.EncapsulatedContentInfo({
+          eContentType: "1.2.840.113549.1.9.16.1.4",
+          eContent: new asn1js.OctetString({ valueHex: tstInfo.toSchema().toBER(false) }),
+        }),
+      });
+      const timeStampToken = new pkijs.ContentInfo({
+        contentType: pkijs.ContentInfo.SIGNED_DATA,
+        content: signedData.toSchema(),
+      });
+      const tspResp = new pkijs.TimeStampResp({
+        status: new pkijs.PKIStatusInfo({ status: 0 }),
+        timeStampToken,
+      });
+      void hashBytes; // messageImprint is echoed straight from the request, already matches by construction
+      return new Response(tspResp.toSchema().toBER(false), { status: 200 });
+    });
+
+    const token1 = await signToken(docId, 1, env.TOKEN_SECRET);
+    await sign.request(
+      `/sign/${token1}`,
+      { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ values: [{ fieldId: "f1", value: TINY_PNG }], consent: true }) },
+      env
+    );
+    const token2 = await signToken(docId, 2, env.TOKEN_SECRET);
+    await sign.request(
+      `/sign/${token2}`,
+      { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ values: [{ fieldId: "f2", value: TINY_PNG }], consent: true }) },
+      env
+    );
+
+    const stored = JSON.parse((await env.DOCRACY_KV.get(`doc:${docId}`)) as string) as DocState;
+    expect(stored.timestampGenTime).toBe(genTime.toISOString());
+    expect(typeof stored.timestampToken).toBe("string");
+    expect(stored.timestampToken!.length).toBeGreaterThan(0);
   });
 
   it("rejects a duplicate submission that wins the initial turn check but loses the pre-commit re-check", async () => {

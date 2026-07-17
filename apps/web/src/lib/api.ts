@@ -112,6 +112,13 @@ export async function startCheckout(): Promise<{ url: string }> {
   return asJson(res);
 }
 
+/** Returns the Stripe-hosted Customer Portal URL, where a paid account can cancel or manage
+ *  their own subscription. */
+export async function openBillingPortal(): Promise<{ url: string }> {
+  const res = await apiFetch("/api/billing/portal", { method: "POST" });
+  return asJson(res);
+}
+
 export interface DocumentSummary {
   docId: string;
   title: string;
@@ -119,6 +126,8 @@ export interface DocumentSummary {
   createdAt: string;
   completedAt: string | null;
   statusToken: string;
+  awaitingYou: boolean;
+  signToken: string | null;
 }
 
 export async function fetchMyDocuments(): Promise<{ documents: DocumentSummary[] }> {

@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { registerCheckStatus } from "./checkStatusTool";
+import { SERVER_INFO } from "./serverInfo";
 import type { ConnectorEnv as Env } from "./types";
 
 export interface DocumentSearchResult {
@@ -45,7 +46,7 @@ export async function findDocuments(env: Env, accountId: string, query: string):
 /** Paid tool set, scoped to a single already-resolved account (see index.ts) — everything the
  *  free tier gets, plus find_documents. Upgrading never takes a tool away. */
 export function buildPaidServer(env: Env, accountId: string) {
-  const server = new McpServer({ name: "docracy", version: "0.1.0" });
+  const server = new McpServer(SERVER_INFO);
   registerCheckStatus(server, env);
 
   server.registerTool(

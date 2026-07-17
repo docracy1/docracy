@@ -63,4 +63,19 @@ describe("generateCertificate", () => {
     const loaded = await PDFDocument.load(bytes);
     expect(loaded.getPageCount()).toBe(1);
   });
+
+  it("still produces a valid certificate when no trusted timestamp was obtained", async () => {
+    const bytes = await generateCertificate(doc, "bbb");
+    const loaded = await PDFDocument.load(bytes);
+    expect(loaded.getPageCount()).toBe(1);
+  });
+
+  it("produces a valid, larger certificate when a trusted timestamp is present", async () => {
+    const docWithTimestamp: DocState = { ...doc, timestampGenTime: "2026-01-02T12:00:01Z", timestampToken: "dGVzdA==" };
+    const withTimestamp = await generateCertificate(docWithTimestamp, "bbb");
+    const without = await generateCertificate(doc, "bbb");
+    const loaded = await PDFDocument.load(withTimestamp);
+    expect(loaded.getPageCount()).toBe(1);
+    expect(withTimestamp.byteLength).toBeGreaterThan(without.byteLength);
+  });
 });

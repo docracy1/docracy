@@ -44,3 +44,19 @@ export async function hasApiToken(env: Env, accountId: string): Promise<boolean>
   const row = await env.DOCRACY_DB.prepare(`SELECT 1 FROM api_tokens WHERE account_id = ?`).bind(accountId).first();
   return !!row;
 }
+
+/**
+ * Deletes an account's API token (KV + D1) outright, rather than leaving it valid and relying
+ * solely on a live is_paid check — called the moment an account stops being paid (subscription
+ * cancelled/deleted), so a cancelled account's MCP connector URL stops working immediately, not
+ * just next time someone happens to re-check its billing status.
+ */
+export async function revokeApiToken(env: Env, accountId: string): Promise<void> {
+  if (!env.DOCRACY_DB) return;
+  const existing = await env.DOCRACY_DB.prepare(`SELECT token_hash FROM api_tokens WHERE account_id = ?`)
+    .bind(accountId)
+    .first<{ token_hash: string }>();
+  if (!existing) return;
+  await env.DOCRACY_KV.delete(`apitoken:${existing.token_hash}`);
+  await env.DOCRACY_DB.prepare(`DELETE FROM api_tokens WHERE account_id = ?`).bind(accountId).run();
+}

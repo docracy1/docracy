@@ -88,6 +88,7 @@ export default function PdfViewer({ pdfBytes, maxScale = 1.3, renderPageOverlay,
       {pages.map((page) => (
         <div
           key={page.index}
+          data-page-index={page.index}
           onClick={(e) => {
             if (!onPageClick) return;
             const rect = e.currentTarget.getBoundingClientRect();

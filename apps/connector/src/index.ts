@@ -2,6 +2,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createMcpHandler } from "agents/mcp";
 import { registerCheckStatus } from "./checkStatusTool";
 import { buildPaidServer } from "./paidTools";
+import { SERVER_INFO } from "./serverInfo";
 import { resolvePaidAccountId } from "./tokenAuth";
 import type { ConnectorEnv as Env } from "./types";
 
@@ -10,7 +11,7 @@ import type { ConnectorEnv as Env } from "./types";
 // token (see tokenAuth.ts) unlocks the paid tool set instead (see paidTools.ts), which keeps this
 // tool and adds find_documents on top of it.
 function buildServer(env: Env) {
-  const server = new McpServer({ name: "docracy", version: "0.1.0" });
+  const server = new McpServer(SERVER_INFO);
   registerCheckStatus(server, env);
   return server;
 }

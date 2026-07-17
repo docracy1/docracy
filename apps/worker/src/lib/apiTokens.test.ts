@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { issueApiToken, hasApiToken } from "./apiTokens";
+import { issueApiToken, hasApiToken, revokeApiToken } from "./apiTokens";
 import { hashOpaqueToken } from "@docracy/shared";
 import { makeMockEnv } from "../test/mockEnv";
 
@@ -56,5 +56,42 @@ describe("hasApiToken", () => {
   it("returns false when DOCRACY_DB isn't bound", async () => {
     const { env } = makeMockEnv({ DOCRACY_DB: undefined });
     expect(await hasApiToken(env, "acct-1")).toBe(false);
+  });
+});
+
+describe("revokeApiToken", () => {
+  it("deletes the token from both D1 and KV", async () => {
+    const { env, d1, kv } = makeMockEnv();
+    const token = await issueApiToken(env, "acct-1");
+    const hash = await hashOpaqueToken(token, env.TOKEN_SECRET);
+    expect(kv._store.has(`apitoken:${hash}`)).toBe(true);
+
+    await revokeApiToken(env, "acct-1");
+
+    expect(kv._store.has(`apitoken:${hash}`)).toBe(false);
+    expect(await hasApiToken(env, "acct-1")).toBe(false);
+    const rows = (await d1.prepare("SELECT * FROM api_tokens WHERE account_id = ?").bind("acct-1").all()).results;
+    expect(rows).toHaveLength(0);
+  });
+
+  it("does nothing (doesn't throw) when the account has no token", async () => {
+    const { env } = makeMockEnv();
+    await expect(revokeApiToken(env, "acct-with-no-token")).resolves.toBeUndefined();
+  });
+
+  it("does nothing (doesn't throw) when DOCRACY_DB isn't bound", async () => {
+    const { env } = makeMockEnv({ DOCRACY_DB: undefined });
+    await expect(revokeApiToken(env, "acct-1")).resolves.toBeUndefined();
+  });
+
+  it("only revokes the target account's token, leaving others untouched", async () => {
+    const { env } = makeMockEnv();
+    await issueApiToken(env, "acct-1");
+    await issueApiToken(env, "acct-2");
+
+    await revokeApiToken(env, "acct-1");
+
+    expect(await hasApiToken(env, "acct-1")).toBe(false);
+    expect(await hasApiToken(env, "acct-2")).toBe(true);
   });
 });

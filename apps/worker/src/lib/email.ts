@@ -46,15 +46,70 @@ function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
+const WORDMARK_URL = "https://docracy.pages.dev/docracy-wordmark.png";
+const PRIMARY = "#2f7ed8";
+const INK = "#1a2b3c";
+const MUTED = "#6b7785";
+
+/** Shared branded shell for Docracy's outbound email — a plain white card on a light gray
+ *  background, table-based layout since email clients don't reliably support flexbox/grid. */
+function emailShell(bodyHtml: string): string {
+  return `
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f5f7fa;padding:32px 16px;font-family:Arial,Helvetica,sans-serif;">
+  <tr>
+    <td align="center">
+      <table role="presentation" width="480" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:8px;border:1px solid #e6e9ee;max-width:480px;width:100%;">
+        <tr>
+          <td style="padding:28px 32px 8px 32px;">
+            <img src="${WORDMARK_URL}" alt="Docracy" height="26" style="display:block;" />
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:8px 32px 28px 32px;">
+            ${bodyHtml}
+          </td>
+        </tr>
+      </table>
+      <table role="presentation" width="480" cellpadding="0" cellspacing="0" style="max-width:480px;width:100%;">
+        <tr>
+          <td style="padding:20px 32px 0 32px;text-align:center;font-size:12px;color:${MUTED};line-height:1.6;">
+            docracy.pages.dev<br />
+            Free, no-signup electronic signatures that disappear when the chain is done.
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>`.trim();
+}
+
+function ctaButton(url: string, label: string): string {
+  return `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:24px 0;"><tr><td style="border-radius:6px;background:${PRIMARY};">
+    <a href="${url}" style="display:inline-block;padding:12px 28px;font-size:15px;font-weight:bold;color:#ffffff;text-decoration:none;border-radius:6px;">${label}</a>
+  </td></tr></table>`;
+}
+
 export async function sendSigningInvite(env: Env, doc: DocState, order: number, token: string): Promise<void> {
   const signer = doc.signers.find((s) => s.order === order)!;
   const link = `${env.PUBLIC_APP_URL}/sign/${token}`;
-  await send(
-    env,
-    signer.email,
-    "You have a document to sign",
-    `<p>Hi ${escapeHtml(signer.name)},</p><p>Please review and sign the document: <a href="${link}">${link}</a></p><p>${statusLines(doc)}</p>`
-  );
+  // doc.title is only ever set for paid, account-linked documents — anonymous docs (the entire
+  // free tier) never get a title, so this can't assume one exists.
+  const docLabel = doc.title ? `"${escapeHtml(doc.title)}"` : "a document";
+
+  const body = `
+    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">Ready to sign</p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};">Hi ${escapeHtml(signer.name)},</p>
+    <p style="margin:8px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      You've been invited to sign ${docLabel} through Docracy.
+    </p>
+    ${ctaButton(link, "Sign here")}
+    <p style="margin:0;font-size:13px;color:${MUTED};line-height:1.5;">${statusLines(doc)}</p>
+    <p style="margin:24px 0 0 0;font-size:14px;color:${INK};">
+      We'll let you know once everyone's signed,<br />The Docracy team
+    </p>
+  `;
+
+  await send(env, signer.email, "Ready to sign — you have a document waiting", emailShell(body));
 }
 
 export async function sendPreparerStatusLink(env: Env, preparerEmail: string, statusToken: string): Promise<void> {
@@ -123,12 +178,17 @@ export async function sendCompletionEmails(
 }
 
 export async function sendMagicLink(env: Env, email: string, link: string): Promise<void> {
-  await send(
-    env,
-    email,
-    "Your Docracy sign-in link",
-    `<p>Click to sign in — this link expires in 15 minutes and can only be used once: <a href="${link}">${link}</a></p><p>If you didn't request this, you can ignore this email.</p>`
-  );
+  const body = `
+    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">Sign in to Docracy</p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      Click the button below to sign in. This link expires in 15 minutes and can only be used once.
+    </p>
+    ${ctaButton(link, "Sign in")}
+    <p style="margin:0;font-size:13px;color:${MUTED};line-height:1.5;">
+      If you didn't request this, you can safely ignore this email — no account changes were made.
+    </p>
+  `;
+  await send(env, email, "Your Docracy sign-in link", emailShell(body));
 }
 
 export async function sendFeedback(env: Env, fromEmail: string, message: string): Promise<void> {

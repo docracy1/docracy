@@ -5,6 +5,7 @@ import { sendSigningInvite, sendCompletionEmails } from "../lib/email";
 import { recordViewedOnce, indexSignerSigned, indexInviteSent, indexCompleted } from "../lib/index-d1";
 import { checkTokenAccessRateLimit } from "../lib/ratelimit";
 import { sha256Hex } from "../lib/hash";
+import { requestTimestamp } from "../lib/timestamp";
 import { verifyToken, signToken } from "@docracy/shared";
 import type { AuditEvent, Env } from "@docracy/shared";
 
@@ -202,6 +203,12 @@ sign.post("/sign/:token", async (c) => {
       pdfSha256: signedHash,
     });
     freshDoc.events = events;
+
+    const timestamp = await requestTimestamp(signedHash);
+    if (timestamp) {
+      freshDoc.timestampToken = timestamp.tokenBase64;
+      freshDoc.timestampGenTime = timestamp.genTime;
+    }
 
     await c.env.DOCRACY_DOCS.put(`docs/${freshDoc.docId}/final.pdf`, updatedBytes);
     const certificateBytes = await generateCertificate(freshDoc, signedHash);

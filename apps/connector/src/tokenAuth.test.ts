@@ -30,7 +30,7 @@ describe("extractApiToken", () => {
 describe("resolvePaidAccountId", () => {
   const TOKEN_SECRET = "test-secret";
 
-  function makeEnv(kvData: Record<string, unknown>): ConnectorEnv {
+  function makeEnv(kvData: Record<string, unknown>, isPaidByAccountId?: Record<string, boolean>): ConnectorEnv {
     return {
       DOCRACY_KV: {
         get: async (key: string, type?: "json") => {
@@ -40,6 +40,18 @@ describe("resolvePaidAccountId", () => {
         },
       } as unknown as ConnectorEnv["DOCRACY_KV"],
       TOKEN_SECRET,
+      ...(isPaidByAccountId
+        ? {
+            DOCRACY_DB: {
+              prepare: (_sql: string) => ({
+                bind: (accountId: string) => ({
+                  first: async () =>
+                    accountId in isPaidByAccountId ? { is_paid: isPaidByAccountId[accountId] ? 1 : 0 } : null,
+                }),
+              }),
+            } as unknown as ConnectorEnv["DOCRACY_DB"],
+          }
+        : {}),
     };
   }
 
@@ -71,5 +83,31 @@ describe("resolvePaidAccountId", () => {
     const req = new Request("https://example.com/mcp?token=dk_valid");
 
     expect(await resolvePaidAccountId(req, env)).toBe("acct-1");
+  });
+
+  describe("when DOCRACY_DB is bound (defense in depth against a stale/leaked token)", () => {
+    it("still resolves for an account that is currently paid", async () => {
+      const hash = await hashOpaqueToken("dk_valid", TOKEN_SECRET);
+      const env = makeEnv({ [`apitoken:${hash}`]: { accountId: "acct-1" } }, { "acct-1": true });
+      const req = new Request("https://example.com/mcp", { headers: { Authorization: "Bearer dk_valid" } });
+
+      expect(await resolvePaidAccountId(req, env)).toBe("acct-1");
+    });
+
+    it("refuses a token whose account is no longer paid (cancelled/refunded)", async () => {
+      const hash = await hashOpaqueToken("dk_valid", TOKEN_SECRET);
+      const env = makeEnv({ [`apitoken:${hash}`]: { accountId: "acct-1" } }, { "acct-1": false });
+      const req = new Request("https://example.com/mcp", { headers: { Authorization: "Bearer dk_valid" } });
+
+      expect(await resolvePaidAccountId(req, env)).toBeNull();
+    });
+
+    it("refuses a token whose account no longer exists in D1", async () => {
+      const hash = await hashOpaqueToken("dk_valid", TOKEN_SECRET);
+      const env = makeEnv({ [`apitoken:${hash}`]: { accountId: "acct-deleted" } }, {});
+      const req = new Request("https://example.com/mcp", { headers: { Authorization: "Bearer dk_valid" } });
+
+      expect(await resolvePaidAccountId(req, env)).toBeNull();
+    });
   });
 });

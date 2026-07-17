@@ -1,10 +1,9 @@
 import { hmacKey } from "@docracy/shared";
 import type { Env } from "@docracy/shared";
 
-export interface StripeWebhookResult {
-  accountId: string;
-  paid: boolean;
-}
+export type StripeWebhookResult =
+  | { type: "checkout_completed"; accountId: string; customerId: string | null }
+  | { type: "subscription_deleted"; customerId: string };
 
 const REPLAY_TOLERANCE_SECONDS = 300; // same window Stripe's own libraries default to
 
@@ -33,15 +32,17 @@ function parseSignatureHeader(header: string): { timestamp: string; signatures: 
 /**
  * Verifies a Stripe webhook's signature (crypto.subtle.verify does the HMAC + constant-time
  * comparison in one call, same as packages/shared/src/token.ts's verifyToken) and extracts the
- * paid transition it represents. Returns null for: no webhook secret configured, a missing/
- * malformed/invalid signature, a stale (replayed) event, or an event type we don't act on yet —
- * the webhook route itself always responds 200 regardless, since Stripe only needs to know we
- * received it, not which of these applies.
+ * event. Returns null for: no webhook secret configured, a missing/malformed/invalid signature, a
+ * stale (replayed) event, or an event type we don't act on — the webhook route itself always
+ * responds 200 regardless, since Stripe only needs to know we received it, not which of these
+ * applies.
  *
- * Only "checkout.session.completed" is handled today — that's what actually unlocks the paid
- * tier. Subscription cancellation (customer.subscription.deleted) is a deliberate follow-up: it
- * needs a stored Stripe customer ID to map back to an account, which isn't worth adding until
- * there's a real Stripe account to test the full lifecycle against.
+ * Two event types are handled: "checkout.session.completed" unlocks the paid tier and records the
+ * Stripe customer ID; "customer.subscription.deleted" (cancellation, or Stripe giving up after
+ * failed-payment retries) is the one signal that a subscription actually ended, so it's what
+ * revokes paid status — the caller resolves customerId back to an account via
+ * billing.ts's findAccountIdByStripeCustomerId, since the subscription payload has no
+ * client_reference_id of its own.
  */
 export async function verifyAndExtract(
   rawBody: string,
@@ -73,7 +74,14 @@ export async function verifyAndExtract(
   if (event.type === "checkout.session.completed") {
     const accountId = event.data?.object?.client_reference_id;
     if (typeof accountId !== "string" || !accountId) return null;
-    return { accountId, paid: true };
+    const customer = event.data?.object?.customer;
+    return { type: "checkout_completed", accountId, customerId: typeof customer === "string" ? customer : null };
+  }
+
+  if (event.type === "customer.subscription.deleted") {
+    const customerId = event.data?.object?.customer;
+    if (typeof customerId !== "string" || !customerId) return null;
+    return { type: "subscription_deleted", customerId };
   }
 
   return null;

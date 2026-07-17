@@ -231,8 +231,8 @@ export default function Sign() {
           style={{ marginTop: 2 }}
         />
         <span>
-          I agree that clicking "Complete signing" constitutes my legally binding electronic signature on this
-          document.
+          I confirm that I'm the person this link was sent to, and that clicking "Complete signing" is my
+          signature on this document.
         </span>
       </label>
 

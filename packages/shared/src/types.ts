@@ -62,6 +62,12 @@ export interface DocState {
   /** Optional so any doc written before this field existed still deserializes — always read via
    *  `doc.events ?? []`, never assume it's present. */
   events?: AuditEvent[];
+  /** RFC 3161 trusted timestamp over the final signed PDF's hash, from a third-party Time-Stamp
+   *  Authority (see lib/timestamp.ts) — proves the document existed at this time independent of
+   *  Docracy's own clock/servers. Best-effort: absent if the TSA was unreachable when the last
+   *  signer completed, never blocks completion. */
+  timestampToken?: string;
+  timestampGenTime?: string;
 }
 
 export interface Env {

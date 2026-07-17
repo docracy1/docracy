@@ -64,14 +64,69 @@ describe("GET /api/account/documents", () => {
     const res = await account.request("/documents", { headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } }, env, ctx);
     expect(res.status).toBe(200);
     const body: {
-      documents: Array<{ docId: string; title: string; status: string; statusToken: string }>;
+      documents: Array<{ docId: string; title: string; status: string; statusToken: string; awaitingYou: boolean }>;
     } = await res.json();
 
     expect(body.documents.map((d) => d.docId)).toEqual(["doc-new", "doc-old"]);
     expect(body.documents[0].title).toBe("New Contract");
+    expect(body.documents[0].awaitingYou).toBe(false);
 
     const verified = await verifyToken(body.documents[0].statusToken, env.TOKEN_SECRET);
     expect(verified).toEqual({ docId: "doc-new", order: 0 });
+  });
+
+  it("flags awaitingYou only when the preparer signs and it's currently their turn", async () => {
+    const { env, d1 } = makeMockEnv();
+    const ctx = makeCtx();
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", true, null, null);
+
+    // Waiting on you: preparer signs, and their own (order 1) turn is still pending.
+    await d1
+      .prepare(
+        `INSERT INTO documents (doc_id, account_id, title, status, preparer_signs, created_at, expires_at) VALUES (?, ?, ?, 'pending', 1, ?, ?)`
+      )
+      .bind("doc-you", "acct-1", "Waiting On You", "2026-02-01T00:00:00Z", "2026-02-10T00:00:00Z")
+      .run();
+    await d1
+      .prepare(`INSERT INTO signers (id, doc_id, "order", name, email, status) VALUES (?, ?, 1, ?, ?, 'pending')`)
+      .bind("s-you", "doc-you", "Anna", "anna@example.com")
+      .run();
+
+    // Waiting on someone else: preparer signs, but has already signed (order 1 no longer pending).
+    await d1
+      .prepare(
+        `INSERT INTO documents (doc_id, account_id, title, status, preparer_signs, created_at, expires_at) VALUES (?, ?, ?, 'pending', 1, ?, ?)`
+      )
+      .bind("doc-others", "acct-1", "Waiting On Others", "2026-02-02T00:00:00Z", "2026-02-10T00:00:00Z")
+      .run();
+    await d1
+      .prepare(`INSERT INTO signers (id, doc_id, "order", name, email, status) VALUES (?, ?, 1, ?, ?, 'signed')`)
+      .bind("s-others", "doc-others", "Anna", "anna@example.com")
+      .run();
+
+    // Preparer never signs at all.
+    await d1
+      .prepare(
+        `INSERT INTO documents (doc_id, account_id, title, status, preparer_signs, created_at, expires_at) VALUES (?, ?, ?, 'pending', 0, ?, ?)`
+      )
+      .bind("doc-not-signer", "acct-1", "Not A Signer", "2026-02-03T00:00:00Z", "2026-02-10T00:00:00Z")
+      .run();
+
+    const res = await account.request("/documents", { headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } }, env, ctx);
+    const body: {
+      documents: Array<{ docId: string; awaitingYou: boolean; signToken: string | null }>;
+    } = await res.json();
+
+    const byId = Object.fromEntries(body.documents.map((d) => [d.docId, d]));
+    expect(byId["doc-you"].awaitingYou).toBe(true);
+    expect(byId["doc-you"].signToken).not.toBeNull();
+    expect(byId["doc-others"].awaitingYou).toBe(false);
+    expect(byId["doc-others"].signToken).toBeNull();
+    expect(byId["doc-not-signer"].awaitingYou).toBe(false);
+    expect(byId["doc-not-signer"].signToken).toBeNull();
+
+    const verifiedSignToken = await verifyToken(byId["doc-you"].signToken!, env.TOKEN_SECRET);
+    expect(verifiedSignToken).toEqual({ docId: "doc-you", order: 1 });
   });
 });
 

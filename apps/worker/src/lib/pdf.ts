@@ -134,6 +134,10 @@ export async function generateCertificate(doc: DocState, finalPdfSha256: string)
   write("Integrity", 13, bold);
   write("SHA-256 of the final signed document:", 9, font, MUTED);
   write(finalPdfSha256, 9, font, INK);
+  if (doc.timestampGenTime) {
+    write("Trusted timestamp (RFC 3161, FreeTSA.org):", 9, font, MUTED);
+    write(new Date(doc.timestampGenTime).toLocaleString(), 9, font, INK);
+  }
   y -= 8;
 
   write("Event log", 13, bold);
