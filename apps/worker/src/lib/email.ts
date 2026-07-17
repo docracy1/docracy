@@ -191,6 +191,14 @@ export async function sendMagicLink(env: Env, email: string, link: string): Prom
   await send(env, email, "Your Docracy sign-in link", emailShell(body));
 }
 
+export async function sendHealthAlert(
+  env: Env,
+  failures: { name: string; detail?: string }[]
+): Promise<void> {
+  const lines = failures.map((f) => `${escapeHtml(f.name)}: ${escapeHtml(f.detail ?? "failed")}`).join("<br>");
+  await send(env, env.FEEDBACK_EMAIL, "Docracy healthcheck failure", `<p>${lines}</p>`);
+}
+
 export async function sendFeedback(env: Env, fromEmail: string, message: string): Promise<void> {
   const body = escapeHtml(message).replace(/\n/g, "<br>");
   await send(
