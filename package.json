@@ -15,6 +15,11 @@
     "test:worker": "npm run test --workspace apps/worker",
     "test:connector": "npm run test --workspace apps/connector",
     "test:shared": "npm run test --workspace packages/shared",
-    "test": "npm run test:shared && npm run test:worker && npm run test:connector"
+    "test": "npm run test:shared && npm run test:worker && npm run test:connector",
+    "typecheck:worker": "npm run typecheck --workspace apps/worker",
+    "typecheck:connector": "npm run typecheck --workspace apps/connector",
+    "typecheck:shared": "npm run typecheck --workspace packages/shared",
+    "typecheck:web": "npm run build --workspace apps/web",
+    "typecheck": "npm run typecheck:shared && npm run typecheck:worker && npm run typecheck:connector && npm run typecheck:web"
   }
 }
