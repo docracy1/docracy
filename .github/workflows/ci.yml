@@ -17,3 +17,32 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: npm run test
+
+  # Only runs after `test` passes, and only for pushes to main (never for PRs from forks, which
+  # wouldn't have the secret anyway). Requires a CLOUDFLARE_API_TOKEN repo secret (Settings →
+  # Secrets and variables → Actions) with Workers Scripts:Edit + Cloudflare Pages:Edit permissions.
+  deploy:
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Deploy worker
+        run: npx wrangler deploy
+        working-directory: apps/worker
+      - name: Deploy connector
+        run: npx wrangler deploy
+        working-directory: apps/connector
+      - name: Build web
+        run: npm run build
+        working-directory: apps/web
+      - name: Deploy web (Cloudflare Pages)
+        run: npx wrangler pages deploy dist --project-name=docracy
+        working-directory: apps/web
