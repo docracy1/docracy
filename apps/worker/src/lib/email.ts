@@ -4,22 +4,42 @@ import type { DocState, Env } from "@docracy/shared";
 // (Domains → Add Domain → DNS records). Switch back to noreply@docracy.io once that's done.
 const FROM = "Docracy <onboarding@resend.dev>";
 
+// Every caller of this already runs non-blocking (ctx.waitUntil) or is itself best-effort, but a
+// stalled connection to Resend should still give up in bounded time rather than hang forever —
+// same reasoning as the FreeTSA client's timeout.
+const RESEND_TIMEOUT_MS = 8000;
+
+/** POSTs to Resend's API with a timeout, logging (never throwing) on failure — a broken outbound
+ *  email call must never surface as an error to whatever triggered the send. */
+async function resendFetch(env: Env, body: unknown): Promise<void> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), RESEND_TIMEOUT_MS);
+  try {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${env.RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+      signal: controller.signal,
+    });
+    if (!res.ok) {
+      console.error(`Resend send failed (${res.status}): ${await res.text()}`);
+    }
+  } catch (err) {
+    console.error("Resend request failed:", err);
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 async function send(env: Env, to: string, subject: string, html: string, replyTo?: string): Promise<void> {
   if (!env.RESEND_API_KEY) {
     console.log(`[email:dev] to=${to} subject="${subject}"${replyTo ? ` reply-to=${replyTo}` : ""}\n${html}\n`);
     return;
   }
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${env.RESEND_API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ from: FROM, to, subject, html, ...(replyTo ? { reply_to: replyTo } : {}) }),
-  });
-  if (!res.ok) {
-    console.error(`Resend send failed (${res.status}): ${await res.text()}`);
-  }
+  await resendFetch(env, { from: FROM, to, subject, html, ...(replyTo ? { reply_to: replyTo } : {}) });
 }
 
 function escapeHtml(str: string): string {
@@ -157,23 +177,13 @@ export async function sendCompletionEmails(
       );
       continue;
     }
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${env.RESEND_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: FROM,
-        to: signer.email,
-        subject: "Your document is fully signed",
-        html: `<p>Everyone has signed. Final document and certificate of completion attached.</p><p>${statusLines(doc)}</p>`,
-        attachments,
-      }),
+    await resendFetch(env, {
+      from: FROM,
+      to: signer.email,
+      subject: "Your document is fully signed",
+      html: `<p>Everyone has signed. Final document and certificate of completion attached.</p><p>${statusLines(doc)}</p>`,
+      attachments,
     });
-    if (!res.ok) {
-      console.error(`Resend send failed (${res.status}): ${await res.text()}`);
-    }
   }
 }
 

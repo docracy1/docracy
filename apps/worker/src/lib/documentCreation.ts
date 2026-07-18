@@ -89,14 +89,25 @@ export async function createDocumentCore(
   await putDoc(env, doc);
 
   const firstToken = await signToken(docId, firstSigner.order, env.TOKEN_SECRET);
-  await sendSigningInvite(env, doc, firstSigner.order, firstToken);
+  // Fire-and-forget, like the D1 indexing below — a stalled or failing outbound email call must
+  // never block (or hang) the response to the person who just created the document.
+  ctx.waitUntil(
+    sendSigningInvite(env, doc, firstSigner.order, firstToken).catch((err) =>
+      console.error(`Signing invite email failed for doc ${docId} (non-fatal):`, err)
+    )
+  );
 
   // A generic viewer token (order 0, no matching signer) so the preparer can bookmark a status page
   // even if they opted not to sign themselves.
   const statusToken = await signToken(docId, 0, env.TOKEN_SECRET);
 
   if (preparerEmail) {
-    await sendPreparerStatusLink(env, preparerEmail.trim(), statusToken);
+    const trimmedPreparerEmail = preparerEmail.trim();
+    ctx.waitUntil(
+      sendPreparerStatusLink(env, trimmedPreparerEmail, statusToken).catch((err) =>
+        console.error(`Preparer status-link email failed for doc ${docId} (non-fatal):`, err)
+      )
+    );
   }
 
   if (accountId) {

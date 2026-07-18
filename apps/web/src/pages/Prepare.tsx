@@ -5,6 +5,7 @@ import { createDocument } from "../lib/api";
 import type { DocField, SignerInput } from "../lib/types";
 
 const FREE_TIER_MAX_SIGNERS = 2;
+const MAX_PDF_BYTES = 15 * 1024 * 1024;
 // Taller than a bare signature image to leave room for the auto-printed "email · date" caption.
 const SIGNATURE_FIELD_SIZE = { w: 0.26, h: 0.07 };
 
@@ -30,6 +31,12 @@ export default function Prepare() {
   const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
     if (!f) return;
+    if (f.size > MAX_PDF_BYTES) {
+      setError(`PDF must be under ${MAX_PDF_BYTES / (1024 * 1024)}MB — this one is ${(f.size / (1024 * 1024)).toFixed(1)}MB.`);
+      e.target.value = "";
+      return;
+    }
+    setError(null);
     setFile(f);
     setPdfBytes(new Uint8Array(await f.arrayBuffer()));
     setFields([]);
@@ -121,8 +128,15 @@ export default function Prepare() {
   /** Real drag-and-drop for creating a field: mousedown on the sidebar chip picks it up, a
    *  floating preview follows the cursor, and releasing over the document drops a new field at
    *  that exact spot — releasing anywhere else cancels instead of placing one blind. */
+  const creatingDragActive = useRef(false);
   const onCreateDragStart = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
+    // Without this guard, a second mousedown before the first drag's mouseup (e.g. a duplicate
+    // event from the input device, or React StrictMode double-invoking effects) stacks another
+    // window-level mousemove/mouseup listener pair on top of the first. One real mouseup then
+    // fires every accumulated onUp closure, each independently placing an identical field.
+    if (creatingDragActive.current) return;
+    creatingDragActive.current = true;
     setCreatingDrag({ x: e.clientX, y: e.clientY, overPage: !!pageAt(e.clientX, e.clientY) });
 
     const onMove = (moveEvent: MouseEvent) => {
@@ -131,6 +145,7 @@ export default function Prepare() {
     const onUp = (upEvent: MouseEvent) => {
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseup", onUp);
+      creatingDragActive.current = false;
       setCreatingDrag(null);
 
       const target = pageAt(upEvent.clientX, upEvent.clientY);
@@ -196,6 +211,8 @@ export default function Prepare() {
         <div className="card">
           <p>Upload the PDF you want signed.</p>
           <input type="file" accept="application/pdf" onChange={onFileChange} />
+          <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 6, marginBottom: 0 }}>Max file size: 15MB.</p>
+          {error && <p style={{ color: "var(--danger)", marginTop: 8 }}>{error}</p>}
         </div>
       )}
 

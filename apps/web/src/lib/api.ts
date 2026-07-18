@@ -12,10 +12,25 @@ async function asJson<T>(res: Response): Promise<T> {
   return res.json();
 }
 
+const REQUEST_TIMEOUT_MS = 30_000;
+
 /** Every call needs `credentials: "include"` once session cookies exist — dev is same-origin via
- *  the Vite proxy, but production is cross-origin (Pages domain vs Workers domain). */
-function apiFetch(path: string, init: RequestInit = {}): Promise<Response> {
-  return fetch(`${API_BASE}${path}`, { ...init, credentials: "include" });
+ *  the Vite proxy, but production is cross-origin (Pages domain vs Workers domain). A timeout is
+ *  applied so a stalled network request can't leave a caller's loading state stuck forever with
+ *  no error ever surfacing — plain `fetch()` has no default timeout of its own. */
+async function apiFetch(path: string, init: RequestInit = {}): Promise<Response> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+  try {
+    return await fetch(`${API_BASE}${path}`, { ...init, credentials: "include", signal: controller.signal });
+  } catch (err) {
+    if (err instanceof Error && err.name === "AbortError") {
+      throw new Error("The request took too long — check your connection and try again.");
+    }
+    throw err;
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 export async function createDocument(

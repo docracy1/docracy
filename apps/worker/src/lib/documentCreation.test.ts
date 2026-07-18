@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { createDocumentCore } from "./documentCreation";
 import { sha256Hex } from "./hash";
 import { makeMockEnv, makeValidPdfBytes } from "../test/mockEnv";
@@ -25,6 +25,10 @@ const baseParams = {
 };
 
 describe("createDocumentCore — anonymous path (accountId: null)", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it("writes KV/R2 exactly as before and touches no D1 tables", async () => {
     const { env, kv, d1 } = makeMockEnv();
     const ctx = makeCtx();
@@ -49,6 +53,28 @@ describe("createDocumentCore — anonymous path (accountId: null)", () => {
     expect((docsRow as { n: number }).n).toBe(0);
     expect((signersRow as { n: number }).n).toBe(0);
     expect((auditRow as { n: number }).n).toBe(0);
+  });
+
+  it("resolves without waiting for a stalled signing-invite email (fire-and-forget via ctx.waitUntil)", async () => {
+    const { env } = makeMockEnv({ RESEND_API_KEY: "test-key" });
+    let resolveFetch: (() => void) | undefined;
+    const hangingFetch = new Promise<Response>((resolve) => {
+      resolveFetch = () => resolve(new Response("{}", { status: 200 }));
+    });
+    vi.spyOn(global, "fetch").mockReturnValue(hangingFetch);
+    const ctx = makeCtx();
+    const pdfBytes = await makeValidPdfBytes();
+
+    const result = await Promise.race([
+      createDocumentCore({ env, ctx, pdfBytes, accountId: null, ...baseParams }),
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error("createDocumentCore did not resolve promptly — it's blocking on the email send")), 200)
+      ),
+    ]);
+
+    expect(result.docId).toBeTruthy();
+    resolveFetch?.();
+    await ctx.flush();
   });
 
   it("records a KV-resident 'created' + 'invite_sent' event even with no account/D1 involved", async () => {
