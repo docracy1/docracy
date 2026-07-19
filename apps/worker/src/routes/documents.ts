@@ -80,6 +80,11 @@ documents.post("/", optionalAccount, async (c) => {
       402
     );
   }
+  // PIN-protected signing links are a paid-tier feature — same 402 pattern as the signer cap above.
+  if (meta.signers.some((s) => s.pin) && !account?.isPaid) {
+    return c.json({ error: "PIN-protected signing links require a paid account." }, 402);
+  }
+
   const seenEmails = new Set<string>();
   for (const s of meta.signers) {
     if (!s.name?.trim()) {

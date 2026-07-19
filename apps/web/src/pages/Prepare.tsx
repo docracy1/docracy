@@ -434,15 +434,17 @@ export default function Prepare() {
                     value={s.email}
                     onChange={(e) => updateSigner(s.order, { email: e.target.value })}
                   />
-                  <input
-                    className="form-input"
-                    style={{ width: "100%" }}
-                    placeholder="PIN (optional) — 4-8 digits, extra protection for this link"
-                    inputMode="numeric"
-                    maxLength={8}
-                    value={s.pin ?? ""}
-                    onChange={(e) => updateSigner(s.order, { pin: e.target.value.replace(/\D/g, "") })}
-                  />
+                  {account?.isPaid && (
+                    <input
+                      className="form-input"
+                      style={{ width: "100%" }}
+                      placeholder="PIN (optional) — 4-8 digits, extra protection for this link"
+                      inputMode="numeric"
+                      maxLength={8}
+                      value={s.pin ?? ""}
+                      onChange={(e) => updateSigner(s.order, { pin: e.target.value.replace(/\D/g, "") })}
+                    />
+                  )}
                   {signers.length > 1 && (
                     <button
                       className="btn-secondary"
@@ -475,6 +477,11 @@ export default function Prepare() {
                 <p style={{ fontSize: 12, marginTop: 8, color: "var(--body)" }}>
                   Free plan supports up to {FREE_TIER_MAX_SIGNERS} signers.{" "}
                   <Link to="/login">Sign in for unlimited signers</Link>.
+                </p>
+              )}
+              {!account?.isPaid && (
+                <p style={{ fontSize: 12, marginTop: 8, color: "var(--body)" }}>
+                  <Link to="/login">Sign in with a paid account</Link> to add a PIN to a signer's link.
                 </p>
               )}
             </div>

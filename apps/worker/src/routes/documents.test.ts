@@ -98,19 +98,41 @@ describe("POST /api/documents", () => {
     expect(res.status).toBe(400);
   });
 
-  it("rejects a signer PIN that isn't 4-8 digits", async () => {
+  it("rejects a signer PIN when the account isn't paid", async () => {
     const { env } = makeMockEnv();
-    const pdf = await makeValidPdfBytes();
-    const meta = { ...validMeta, signers: [{ ...validMeta.signers[0], pin: "12" }, validMeta.signers[1]] };
-    const res = await documents.request("/", { method: "POST", body: buildForm(pdf, meta) }, env, MOCK_CTX);
-    expect(res.status).toBe(400);
-  });
-
-  it("hashes a valid signer PIN and never stores it raw", async () => {
-    const { env, kv } = makeMockEnv();
     const pdf = await makeValidPdfBytes();
     const meta = { ...validMeta, signers: [{ ...validMeta.signers[0], pin: "1234" }, validMeta.signers[1]] };
     const res = await documents.request("/", { method: "POST", body: buildForm(pdf, meta) }, env, MOCK_CTX);
+    expect(res.status).toBe(402);
+  });
+
+  it("rejects a signer PIN that isn't 4-8 digits, for a paid account", async () => {
+    const { env } = makeMockEnv();
+    const ctx = makeCtx();
+    const token = await createSession(env, ctx, "acct-1", "preparer@example.com", true, null, null);
+    const pdf = await makeValidPdfBytes();
+    const meta = { ...validMeta, signers: [{ ...validMeta.signers[0], pin: "12" }, validMeta.signers[1]] };
+    const res = await documents.request(
+      "/",
+      { method: "POST", body: buildForm(pdf, meta), headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } },
+      env,
+      ctx
+    );
+    expect(res.status).toBe(400);
+  });
+
+  it("hashes a valid signer PIN and never stores it raw, for a paid account", async () => {
+    const { env, kv } = makeMockEnv();
+    const ctx = makeCtx();
+    const token = await createSession(env, ctx, "acct-1", "preparer@example.com", true, null, null);
+    const pdf = await makeValidPdfBytes();
+    const meta = { ...validMeta, signers: [{ ...validMeta.signers[0], pin: "1234" }, validMeta.signers[1]] };
+    const res = await documents.request(
+      "/",
+      { method: "POST", body: buildForm(pdf, meta), headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } },
+      env,
+      ctx
+    );
     expect(res.status).toBe(200);
     const [, docValue] = [...kv._store.entries()].find(([k]) => k.startsWith("doc:"))!;
     const stored = JSON.parse(docValue);

@@ -25,7 +25,7 @@ const STEPS = [
 const PLAN_ROWS: Array<{ label: string; free: boolean | string; paid: boolean | string }> = [
   { label: "Signers per document", free: "Up to 2", paid: "Unlimited" },
   { label: "Sequential or all-at-once signing", free: true, paid: true },
-  { label: "PIN-protected signing links", free: true, paid: true },
+  { label: "PIN-protected signing links", free: false, paid: true },
   { label: "Text, date, and initials fields", free: true, paid: true },
   { label: "Audit trail + completion certificate", free: true, paid: true },
   { label: "Dashboard with document history", free: false, paid: true },
@@ -88,7 +88,8 @@ export default function Landing() {
           <h2 style={{ fontSize: 20 }}>Free vs. paid</h2>
           <p>
             Everything above works on the free plan. A paid account adds a dashboard, reusable templates,
-            webhooks, and an MCP connector for AI assistants — plus unlimited signers per document.
+            webhooks, an MCP connector for AI assistants, and PIN-protected signing links — plus unlimited
+            signers per document.
           </p>
           <div className="card" style={{ padding: 0, overflow: "hidden" }}>
             <div className="plan-table-scroll">
