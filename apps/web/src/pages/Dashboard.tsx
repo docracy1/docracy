@@ -245,11 +245,13 @@ export default function Dashboard() {
                 padding: "8px 0",
                 borderBottom: "1px solid var(--hairline)",
                 display: "flex",
+                flexWrap: "wrap",
                 justifyContent: "space-between",
                 alignItems: "center",
+                gap: 8,
               }}
             >
-              <span>{doc.title}</span>
+              <span style={{ overflowWrap: "anywhere" }}>{doc.title}</span>
               <Link to={`/sign/${doc.signToken}`} className="btn-primary" style={{ textDecoration: "none", padding: "4px 10px", fontSize: 13 }}>
                 Sign now
               </Link>
@@ -395,11 +397,13 @@ export default function Dashboard() {
                   padding: "8px 0",
                   borderBottom: "1px solid var(--hairline)",
                   display: "flex",
+                  flexWrap: "wrap",
                   justifyContent: "space-between",
                   alignItems: "center",
+                  gap: 8,
                 }}
               >
-                <span>
+                <span style={{ overflowWrap: "anywhere" }}>
                   {t.name}{" "}
                   <span style={{ fontSize: 12, color: "var(--mute)" }}>
                     ({t.signerCount} signer{t.signerCount === 1 ? "" : "s"}, {t.pageCount} page
@@ -443,11 +447,13 @@ export default function Dashboard() {
                   padding: "8px 0",
                   borderBottom: "1px solid var(--hairline)",
                   display: "flex",
+                  flexWrap: "wrap",
                   justifyContent: "space-between",
                   alignItems: "center",
+                  gap: 8,
                 }}
               >
-                <span>
+                <span style={{ overflowWrap: "anywhere" }}>
                   {w.url} <span style={{ fontSize: 12, color: "var(--mute)" }}>({w.events.join(", ")})</span>
                 </span>
                 <button
@@ -522,10 +528,14 @@ export default function Dashboard() {
                 padding: "8px 0",
                 borderBottom: "1px solid var(--hairline)",
                 display: "flex",
+                flexWrap: "wrap",
                 justifyContent: "space-between",
+                gap: 8,
               }}
             >
-              <Link to={`/status/${doc.statusToken}`}>{doc.title}</Link>
+              <Link to={`/status/${doc.statusToken}`} style={{ overflowWrap: "anywhere" }}>
+                {doc.title}
+              </Link>
               <span style={{ color: doc.status === "completed" ? "var(--success)" : "var(--body)" }}>
                 {doc.status === "completed" ? "Signed" : "Pending"}
               </span>

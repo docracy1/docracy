@@ -22,6 +22,23 @@ const STEPS = [
   { icon: ICONS.order, title: "Sign, in order", body: "Each signer gets their turn automatically once the one before them is done." },
 ];
 
+const PLAN_ROWS: Array<{ label: string; free: boolean | string; paid: boolean | string }> = [
+  { label: "Signers per document", free: "Up to 2", paid: "Unlimited" },
+  { label: "Sequential or all-at-once signing", free: true, paid: true },
+  { label: "PIN-protected signing links", free: true, paid: true },
+  { label: "Text, date, and initials fields", free: true, paid: true },
+  { label: "Audit trail + completion certificate", free: true, paid: true },
+  { label: "Dashboard with document history", free: false, paid: true },
+  { label: "Reusable templates", free: false, paid: true },
+  { label: "Webhooks for your own systems", free: false, paid: true },
+  { label: "MCP connector (Claude, ChatGPT, Grok, Perplexity)", free: false, paid: true },
+];
+
+function PlanCell({ value }: { value: boolean | string }) {
+  if (typeof value === "string") return <>{value}</>;
+  return value ? <span className="plan-check">✓</span> : <span className="plan-dash">—</span>;
+}
+
 export default function Landing() {
   return (
     <div>
@@ -65,6 +82,48 @@ export default function Landing() {
             timestamp, and a cryptographic hash of the document at every step, and generates a certificate of
             completion once everyone's signed.
           </p>
+        </div>
+
+        <div style={{ marginTop: 40 }}>
+          <h2 style={{ fontSize: 20 }}>Free vs. paid</h2>
+          <p>
+            Everything above works on the free plan. A paid account adds a dashboard, reusable templates,
+            webhooks, and an MCP connector for AI assistants — plus unlimited signers per document.
+          </p>
+          <div className="card" style={{ padding: 0, overflow: "hidden" }}>
+            <div className="plan-table-scroll">
+              <table className="plan-table">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Free</th>
+                    <th className="plan-col-paid">Paid</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {PLAN_ROWS.map((row) => (
+                    <tr key={row.label}>
+                      <td>{row.label}</td>
+                      <td>
+                        <PlanCell value={row.free} />
+                      </td>
+                      <td className="plan-col-paid">
+                        <PlanCell value={row.paid} />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div style={{ display: "flex", gap: 12, marginTop: 16, flexWrap: "wrap" }}>
+            <Link to="/prepare" className="btn-secondary" style={{ textDecoration: "none" }}>
+              Start free
+            </Link>
+            <Link to="/login" className="btn-primary" style={{ textDecoration: "none" }}>
+              Sign in to upgrade
+            </Link>
+          </div>
         </div>
 
         <div style={{ marginTop: 40 }}>

@@ -286,7 +286,7 @@ export default function Sign() {
                 canvasProps={{ width: 360, height: 150, style: { maxWidth: "100%", height: "auto", display: "block" } }}
               />
             </div>
-            <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+            <div className="sign-modal-actions">
               <button className="btn-secondary" onClick={() => sigPadRef.current?.clear()}>
                 Clear
               </button>

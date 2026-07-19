@@ -252,7 +252,7 @@ export default function Prepare() {
   );
 
   const onSaveAsTemplate = async () => {
-    if (!file || fields.length === 0 || !templateNameInput.trim()) return;
+    if (!file || fields.length === 0 || !templateNameInput.trim() || signersWithoutFields.length > 0) return;
     setSavingTemplate(true);
     setTemplateSaveError(null);
     try {
@@ -544,10 +544,16 @@ export default function Prepare() {
                     {templateSaveError && (
                       <p style={{ color: "var(--danger)", fontSize: 13 }}>{templateSaveError}</p>
                     )}
+                    {signersWithoutFields.length > 0 && (
+                      <p style={{ color: "var(--danger)", fontSize: 13 }}>
+                        Every signer needs a field before this can be saved — still needs one:{" "}
+                        {signersWithoutFields.map((s) => signerLabel(s.order)).join(", ")}
+                      </p>
+                    )}
                     <button
                       className="btn-secondary"
                       style={{ width: "100%" }}
-                      disabled={savingTemplate || !templateNameInput.trim()}
+                      disabled={savingTemplate || !templateNameInput.trim() || signersWithoutFields.length > 0}
                       onClick={onSaveAsTemplate}
                     >
                       {savingTemplate ? "Saving…" : "Save"}

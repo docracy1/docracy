@@ -265,3 +265,81 @@ select {
   justify-content: center;
   margin-bottom: 16px;
 }
+
+/* Free vs. paid plan comparison table */
+
+.plan-table-scroll {
+  overflow-x: auto;
+}
+
+.plan-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 420px;
+}
+
+.plan-table th,
+.plan-table td {
+  padding: 12px 10px;
+  text-align: center;
+  border-bottom: 1px solid var(--hairline);
+  font-size: 14px;
+}
+
+.plan-table th:first-child,
+.plan-table td:first-child {
+  text-align: left;
+  color: var(--body-strong);
+  position: sticky;
+  left: 0;
+  background: var(--canvas);
+}
+
+.plan-table thead th {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  padding-top: 20px;
+  padding-bottom: 16px;
+}
+
+.plan-table thead th:not(:first-child) {
+  border-radius: var(--r-sm) var(--r-sm) 0 0;
+}
+
+.plan-table .plan-col-paid {
+  background: var(--primary-soft);
+}
+
+.plan-check {
+  color: var(--success);
+  font-weight: 700;
+}
+
+.plan-dash {
+  color: var(--mute);
+}
+
+@media (max-width: 520px) {
+  .plan-table th,
+  .plan-table td {
+    font-size: 13px;
+    padding: 10px 8px;
+  }
+}
+
+.sign-modal-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.sign-modal-actions button {
+  flex: 1 1 0;
+}
+
+@media (max-width: 420px) {
+  .sign-modal-actions {
+    flex-direction: column;
+  }
+}
