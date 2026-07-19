@@ -15,11 +15,18 @@ export function decodedByteLength(dataUrl: string): number {
   return Math.floor((base64.length * 3) / 4);
 }
 
+/** Signature and initials are drawn as an image (the signer's hand-drawn mark); text and date are
+ *  drawn as plain text. A missing `type` means "signature" — see the doc comment on DocField. */
+function isImageField(type: DocField["type"]): boolean {
+  return type === undefined || type === "signature" || type === "initials";
+}
+
 /**
- * Burns one signer's submitted signatures into the given PDF bytes and returns the new PDF bytes.
- * Every field is a signature — the drawn image goes in the top of the box, with the signer's
- * email and the signing date automatically printed in a caption strip underneath, so nobody has
- * to place a separate date/text field for that.
+ * Burns one signer's submitted values into the given PDF bytes and returns the new PDF bytes.
+ * Signature/initials fields draw the submitted image with the signer's email and the signing
+ * date automatically printed in a caption strip underneath, so nobody has to place a separate
+ * date/text field just to record that. Text/date fields draw the submitted string directly, sized
+ * to fit the box, with no caption (it would just repeat information already visible in the field).
  * Coordinates are fractions of page width/height, origin top-left (matches how the browser places
  * fields over a rendered canvas), converted here to pdf-lib's bottom-left origin.
  */
@@ -51,27 +58,43 @@ export async function burnFields(
     const yTop = field.yFrac * pageH;
     const y = pageH - yTop - h;
 
-    const captionSize = Math.min(7, h * 0.3);
-    const captionHeight = captionSize + 2;
-    const imageAreaHeight = Math.max(h - captionHeight, h * 0.5);
+    if (isImageField(field.type)) {
+      const captionSize = Math.min(7, h * 0.3);
+      const captionHeight = captionSize + 2;
+      const imageAreaHeight = Math.max(h - captionHeight, h * 0.5);
 
-    const pngBytes = dataUrlToBytes(raw);
-    const png = await pdfDoc.embedPng(pngBytes);
-    const scaled = png.scaleToFit(w, imageAreaHeight);
-    page.drawImage(png, {
-      x: x + (w - scaled.width) / 2,
-      y: y + captionHeight + (imageAreaHeight - scaled.height) / 2,
-      width: scaled.width,
-      height: scaled.height,
-    });
+      const pngBytes = dataUrlToBytes(raw);
+      const png = await pdfDoc.embedPng(pngBytes);
+      const scaled = png.scaleToFit(w, imageAreaHeight);
+      page.drawImage(png, {
+        x: x + (w - scaled.width) / 2,
+        y: y + captionHeight + (imageAreaHeight - scaled.height) / 2,
+        width: scaled.width,
+        height: scaled.height,
+      });
 
-    page.drawText(caption, {
-      x,
-      y: y + (captionHeight - captionSize) / 2,
-      size: captionSize,
-      font,
-      color: rgb(0.35, 0.35, 0.38),
-    });
+      page.drawText(caption, {
+        x,
+        y: y + (captionHeight - captionSize) / 2,
+        size: captionSize,
+        font,
+        color: rgb(0.35, 0.35, 0.38),
+      });
+    } else {
+      // Text/date: size the font to fit the box height, cap it so a tall-but-narrow field doesn't
+      // produce oversized text, and clip to the field's width by truncating (there's no PDF text
+      // auto-wrap primitive worth the complexity here — fields are single-line by design).
+      const textSize = Math.min(h * 0.6, 12);
+      const maxChars = Math.max(Math.floor(w / (textSize * 0.55)), 1);
+      const text = raw.length > maxChars ? `${raw.slice(0, maxChars - 1)}…` : raw;
+      page.drawText(text, {
+        x: x + 2,
+        y: y + (h - textSize) / 2,
+        size: textSize,
+        font,
+        color: INK,
+      });
+    }
   }
 
   return pdfDoc.save();

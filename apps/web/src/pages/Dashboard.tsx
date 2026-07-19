@@ -1,17 +1,22 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import {
+  createWebhook,
   deleteTemplate,
+  deleteWebhook,
   fetchMe,
   fetchMyDocuments,
   fetchTemplates,
   fetchTokenStatus,
+  fetchWebhooks,
   openBillingPortal,
   regenerateApiToken,
   startCheckout,
   type Account,
   type DocumentSummary,
   type TemplateSummary,
+  type WebhookEventType,
+  type WebhookSummary,
 } from "../lib/api";
 import { useNoIndex } from "../lib/useNoIndex";
 
@@ -31,6 +36,14 @@ export default function Dashboard() {
   const [templates, setTemplates] = useState<TemplateSummary[]>([]);
   const [deletingTemplateId, setDeletingTemplateId] = useState<string | null>(null);
   const [templateError, setTemplateError] = useState<string | null>(null);
+  const [webhooks, setWebhooks] = useState<WebhookSummary[]>([]);
+  const [deletingWebhookId, setDeletingWebhookId] = useState<string | null>(null);
+  const [webhookError, setWebhookError] = useState<string | null>(null);
+  const [showAddWebhook, setShowAddWebhook] = useState(false);
+  const [newWebhookUrl, setNewWebhookUrl] = useState("");
+  const [newWebhookEvents, setNewWebhookEvents] = useState<WebhookEventType[]>([]);
+  const [creatingWebhook, setCreatingWebhook] = useState(false);
+  const [newWebhookSecret, setNewWebhookSecret] = useState<string | null>(null);
 
   useNoIndex();
 
@@ -46,6 +59,42 @@ export default function Dashboard() {
       setTemplateError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
       setDeletingTemplateId(null);
+    }
+  };
+
+  const refreshWebhooks = () => fetchWebhooks().then((res) => setWebhooks(res.webhooks));
+
+  const toggleNewWebhookEvent = (event: WebhookEventType) => {
+    setNewWebhookEvents((prev) => (prev.includes(event) ? prev.filter((e) => e !== event) : [...prev, event]));
+  };
+
+  const onCreateWebhook = async () => {
+    if (!newWebhookUrl.trim() || newWebhookEvents.length === 0) return;
+    setCreatingWebhook(true);
+    setWebhookError(null);
+    try {
+      const { secret } = await createWebhook(newWebhookUrl.trim(), newWebhookEvents);
+      setNewWebhookSecret(secret);
+      setNewWebhookUrl("");
+      setNewWebhookEvents([]);
+      await refreshWebhooks();
+    } catch (err) {
+      setWebhookError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setCreatingWebhook(false);
+    }
+  };
+
+  const onDeleteWebhook = async (id: string) => {
+    setDeletingWebhookId(id);
+    setWebhookError(null);
+    try {
+      await deleteWebhook(id);
+      await refreshWebhooks();
+    } catch (err) {
+      setWebhookError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setDeletingWebhookId(null);
     }
   };
 
@@ -114,6 +163,8 @@ export default function Dashboard() {
           setHasToken(hasToken);
           const { templates } = await fetchTemplates();
           setTemplates(templates);
+          const { webhooks } = await fetchWebhooks();
+          setWebhooks(webhooks);
         }
       })
       .catch((err) => setError(err instanceof Error ? err.message : "Something went wrong"))
@@ -370,6 +421,91 @@ export default function Dashboard() {
                 </span>
               </div>
             ))
+          )}
+        </div>
+      )}
+
+      {account.isPaid && (
+        <div className="card" style={{ marginTop: 24 }}>
+          <h3 style={{ fontSize: 15 }}>Webhooks</h3>
+          <p style={{ fontSize: 12, color: "var(--mute)" }}>
+            Get notified at a URL you control when a document is created, a signer signs, or a document
+            completes.
+          </p>
+          {webhookError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{webhookError}</p>}
+          {webhooks.length === 0 ? (
+            <p style={{ marginBottom: 12 }}>No webhooks yet.</p>
+          ) : (
+            webhooks.map((w) => (
+              <div
+                key={w.id}
+                style={{
+                  padding: "8px 0",
+                  borderBottom: "1px solid var(--hairline)",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <span>
+                  {w.url} <span style={{ fontSize: 12, color: "var(--mute)" }}>({w.events.join(", ")})</span>
+                </span>
+                <button
+                  className="btn-secondary"
+                  style={{ fontSize: 13, padding: "4px 10px" }}
+                  disabled={deletingWebhookId === w.id}
+                  onClick={() => onDeleteWebhook(w.id)}
+                >
+                  {deletingWebhookId === w.id ? "Deleting…" : "Delete"}
+                </button>
+              </div>
+            ))
+          )}
+
+          {newWebhookSecret && (
+            <div style={{ marginTop: 12, marginBottom: 12 }}>
+              <p style={{ marginBottom: 4 }}>
+                Signing secret — copy it now, it won't be shown again:
+              </p>
+              <input className="form-input" readOnly value={newWebhookSecret} style={{ width: "100%" }} />
+            </div>
+          )}
+
+          {showAddWebhook ? (
+            <div style={{ marginTop: 12 }}>
+              <input
+                className="form-input"
+                style={{ width: "100%", marginBottom: 8 }}
+                placeholder="https://your-server.com/webhook"
+                value={newWebhookUrl}
+                onChange={(e) => setNewWebhookUrl(e.target.value)}
+              />
+              <div style={{ display: "flex", gap: 12, marginBottom: 8, fontSize: 13 }}>
+                {(["document.created", "document.signer.signed", "document.completed"] as WebhookEventType[]).map(
+                  (event) => (
+                    <label key={event} style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                      <input
+                        type="checkbox"
+                        checked={newWebhookEvents.includes(event)}
+                        onChange={() => toggleNewWebhookEvent(event)}
+                      />
+                      {event}
+                    </label>
+                  )
+                )}
+              </div>
+              <button
+                className="btn-secondary"
+                disabled={creatingWebhook || !newWebhookUrl.trim() || newWebhookEvents.length === 0}
+                onClick={onCreateWebhook}
+              >
+                {creatingWebhook ? "Adding…" : "Add webhook"}
+              </button>
+            </div>
+          ) : (
+            <button className="btn-secondary" style={{ marginTop: 8 }} onClick={() => setShowAddWebhook(true)}>
+              + Add webhook
+            </button>
           )}
         </div>
       )}

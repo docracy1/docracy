@@ -33,16 +33,23 @@ async function apiFetch(path: string, init: RequestInit = {}): Promise<Response>
   }
 }
 
+export interface CreateDocumentOptions {
+  preparerEmail?: string;
+  customSubject?: string;
+  customMessage?: string;
+  signingMode?: "sequential" | "parallel";
+}
+
 export async function createDocument(
   pdf: File,
   preparerSigns: boolean,
   signers: SignerInput[],
   fields: DocField[],
-  preparerEmail?: string
+  options: CreateDocumentOptions = {}
 ): Promise<{ docId: string; statusToken: string }> {
   const form = new FormData();
   form.set("pdf", pdf);
-  form.set("meta", JSON.stringify({ preparerSigns, preparerEmail, signers, fields }));
+  form.set("meta", JSON.stringify({ preparerSigns, signers, fields, ...options }));
   const res = await apiFetch("/api/documents", { method: "POST", body: form });
   return asJson(res);
 }
@@ -54,25 +61,38 @@ export async function fetchStatus(token: string): Promise<StatusPayload> {
 
 export interface SignPayload {
   onTurn: boolean;
+  needsPin?: boolean;
   docId?: string;
   pdfBase64?: string;
   fields?: DocField[];
   status: StatusPayload;
 }
 
-export async function fetchSignView(token: string): Promise<SignPayload> {
-  const res = await apiFetch(`/api/sign/${token}`);
+export async function fetchSignView(token: string, unlockToken?: string): Promise<SignPayload> {
+  const res = await apiFetch(`/api/sign/${token}`, {
+    headers: unlockToken ? { "X-Sign-Unlock": unlockToken } : undefined,
+  });
+  return asJson(res);
+}
+
+export async function unlockSign(token: string, pin: string): Promise<{ unlockToken: string }> {
+  const res = await apiFetch(`/api/sign/${token}/unlock`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ pin }),
+  });
   return asJson(res);
 }
 
 export async function submitSignature(
   token: string,
   values: Array<{ fieldId: string; value: string }>,
-  consent: boolean
+  consent: boolean,
+  unlockToken?: string
 ): Promise<{ ok: true; status: StatusPayload }> {
   const res = await apiFetch(`/api/sign/${token}`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...(unlockToken ? { "X-Sign-Unlock": unlockToken } : {}) },
     body: JSON.stringify({ values, consent }),
   });
   return asJson(res);
@@ -197,5 +217,38 @@ export async function createTemplate(
 
 export async function deleteTemplate(id: string): Promise<{ ok: true }> {
   const res = await apiFetch(`/api/account/templates/${id}`, { method: "DELETE" });
+  return asJson(res);
+}
+
+export type WebhookEventType = "document.created" | "document.signer.signed" | "document.completed";
+
+export interface WebhookSummary {
+  id: string;
+  url: string;
+  events: WebhookEventType[];
+  createdAt: string;
+}
+
+export async function fetchWebhooks(): Promise<{ webhooks: WebhookSummary[] }> {
+  const res = await apiFetch("/api/account/webhooks");
+  return asJson(res);
+}
+
+/** Returns the raw secret exactly once — the caller must show/copy it immediately, since it's
+ *  never re-exposed by fetchWebhooks afterward. */
+export async function createWebhook(
+  url: string,
+  events: WebhookEventType[]
+): Promise<{ webhookId: string; secret: string }> {
+  const res = await apiFetch("/api/account/webhooks", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ url, events }),
+  });
+  return asJson(res);
+}
+
+export async function deleteWebhook(id: string): Promise<{ ok: true }> {
+  const res = await apiFetch(`/api/account/webhooks/${id}`, { method: "DELETE" });
   return asJson(res);
 }

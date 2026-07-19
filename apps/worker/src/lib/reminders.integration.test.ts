@@ -86,4 +86,33 @@ describe("runReminderSweep", () => {
     const doc = await getDoc(env, "doc-1");
     expect(doc!.signers[0].remindersSent).toEqual([URGENT_SENTINEL]);
   });
+
+  it("in parallel mode, reminds every still-pending signer independently, not just one", async () => {
+    // Both signers were invited at creation (linkSentAt set for both) and are both still
+    // pending 2 days later — sequential mode would only ever look at the current-turn signer,
+    // but parallel mode has no "current turn," so both must be checked independently.
+    const doc = makeDoc(2);
+    doc.signingMode = "parallel";
+    doc.signers[1].linkSentAt = doc.signers[0].linkSentAt;
+    const { env } = makeMockEnv();
+    await putDoc(env, doc);
+    await runReminderSweep(env);
+    const stored = await getDoc(env, "doc-1");
+    expect(stored!.signers[0].remindersSent).toEqual([2]);
+    expect(stored!.signers[1].remindersSent).toEqual([2]);
+  });
+
+  it("in parallel mode, a signer who already signed is not reminded", async () => {
+    const doc = makeDoc(2);
+    doc.signingMode = "parallel";
+    doc.signers[1].linkSentAt = doc.signers[0].linkSentAt;
+    doc.signers[1].status = "signed";
+    doc.signers[1].signedAt = new Date().toISOString();
+    const { env } = makeMockEnv();
+    await putDoc(env, doc);
+    await runReminderSweep(env);
+    const stored = await getDoc(env, "doc-1");
+    expect(stored!.signers[0].remindersSent).toEqual([2]);
+    expect(stored!.signers[1].remindersSent).toEqual([]);
+  });
 });

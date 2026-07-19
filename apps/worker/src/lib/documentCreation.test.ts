@@ -100,6 +100,74 @@ describe("createDocumentCore — anonymous path (accountId: null)", () => {
   });
 });
 
+describe("createDocumentCore — parallel signing mode", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("invites every signer at once, rather than just the first", async () => {
+    const { env, kv } = makeMockEnv();
+    const ctx = makeCtx();
+    const pdfBytes = await makeValidPdfBytes();
+
+    const { docId } = await createDocumentCore({
+      env,
+      ctx,
+      pdfBytes,
+      accountId: null,
+      signingMode: "parallel",
+      ...baseParams,
+    });
+    await ctx.flush();
+
+    const stored = JSON.parse(kv._store.get(`doc:${docId}`)!) as DocState;
+    expect(stored.signingMode).toBe("parallel");
+    expect(stored.signers.every((s) => s.linkSentAt !== null)).toBe(true);
+
+    const inviteEvents = stored.events!.filter((e) => e.type === "invite_sent");
+    expect(inviteEvents.map((e) => e.signerOrder).sort()).toEqual([1, 2]);
+  });
+
+  it("sends a signing-invite email to every signer, not just the first", async () => {
+    const { env } = makeMockEnv({ RESEND_API_KEY: "test-key" });
+    const fetchMock = vi.spyOn(global, "fetch").mockResolvedValue(new Response("{}", { status: 200 }));
+    const ctx = makeCtx();
+    const pdfBytes = await makeValidPdfBytes();
+
+    await createDocumentCore({
+      env,
+      ctx,
+      pdfBytes,
+      accountId: null,
+      signingMode: "parallel",
+      ...baseParams,
+    });
+    await ctx.flush();
+
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it("defaults to sequential (only the first signer invited) when signingMode is omitted", async () => {
+    const { env, kv } = makeMockEnv();
+    const ctx = makeCtx();
+    const pdfBytes = await makeValidPdfBytes();
+
+    const { docId } = await createDocumentCore({
+      env,
+      ctx,
+      pdfBytes,
+      accountId: null,
+      ...baseParams,
+    });
+    await ctx.flush();
+
+    const stored = JSON.parse(kv._store.get(`doc:${docId}`)!) as DocState;
+    expect(stored.signingMode).toBe("sequential");
+    expect(stored.signers[0].linkSentAt).not.toBeNull();
+    expect(stored.signers[1].linkSentAt).toBeNull();
+  });
+});
+
 describe("createDocumentCore — account-linked path", () => {
   it("indexes the document, signers, initial version, and audit events in D1", async () => {
     const { env, d1 } = makeMockEnv();

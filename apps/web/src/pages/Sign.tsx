@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import SignatureCanvas from "react-signature-canvas";
 import PdfViewer from "../components/PdfViewer";
-import { fetchSignView, submitSignature } from "../lib/api";
+import { fetchSignView, submitSignature, unlockSign } from "../lib/api";
 import { useNoIndex } from "../lib/useNoIndex";
 import type { SignPayload } from "../lib/api";
 
@@ -20,16 +20,37 @@ export default function Sign() {
   const [consented, setConsented] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
+  const [unlockToken, setUnlockToken] = useState<string | null>(() =>
+    token ? sessionStorage.getItem(`sign-unlock:${token}`) : null
+  );
+  const [pinInput, setPinInput] = useState("");
+  const [unlocking, setUnlocking] = useState(false);
+  const [pinError, setPinError] = useState<string | null>(null);
   const sigPadRef = useRef<SignatureCanvas>(null);
 
   useNoIndex();
 
   useEffect(() => {
     if (!token) return;
-    fetchSignView(token)
+    fetchSignView(token, unlockToken ?? undefined)
       .then(setPayload)
       .catch((err) => setError(err.message));
-  }, [token]);
+  }, [token, unlockToken]);
+
+  const onUnlock = async () => {
+    if (!token || !pinInput.trim()) return;
+    setUnlocking(true);
+    setPinError(null);
+    try {
+      const { unlockToken: newToken } = await unlockSign(token, pinInput.trim());
+      sessionStorage.setItem(`sign-unlock:${token}`, newToken);
+      setUnlockToken(newToken);
+    } catch (err) {
+      setPinError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setUnlocking(false);
+    }
+  };
 
   const pdfBytes = useMemo(
     () => (payload?.pdfBase64 ? base64ToBytes(payload.pdfBase64) : null),
@@ -77,8 +98,14 @@ export default function Sign() {
     try {
       await submitSignature(
         token,
-        payload.fields.map((f) => ({ fieldId: f.id, value: values[f.id] })),
-        consented
+        payload.fields.map((f) => ({
+          fieldId: f.id,
+          // Stored as the raw yyyy-mm-dd from <input type="date"> — reformatted here, once, at
+          // submission time, into what actually gets burned into the PDF and the wire payload.
+          value: f.type === "date" && values[f.id] ? new Date(`${values[f.id]}T00:00:00`).toLocaleDateString() : values[f.id],
+        })),
+        consented,
+        unlockToken ?? undefined
       );
       setDone(true);
     } catch (err) {
@@ -136,6 +163,31 @@ export default function Sign() {
     );
   }
 
+  if (payload.needsPin) {
+    return (
+      <div className="container">
+        <h1>Enter your PIN</h1>
+        <p>This document has an extra PIN set on your signing link. Enter it to continue.</p>
+        <div className="card" style={{ maxWidth: 320 }}>
+          <input
+            className="form-input"
+            style={{ width: "100%", marginBottom: 8 }}
+            placeholder="PIN"
+            inputMode="numeric"
+            maxLength={8}
+            value={pinInput}
+            onChange={(e) => setPinInput(e.target.value.replace(/\D/g, ""))}
+            onKeyDown={(e) => e.key === "Enter" && onUnlock()}
+          />
+          {pinError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{pinError}</p>}
+          <button className="btn-primary" style={{ width: "100%" }} disabled={!pinInput.trim() || unlocking} onClick={onUnlock}>
+            {unlocking ? "Checking…" : "Continue"}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container">
       <h1>Review &amp; sign</h1>
@@ -146,37 +198,65 @@ export default function Sign() {
             <>
               {(payload.fields ?? [])
                 .filter((f) => f.page === page.index)
-                .map((f) => (
-                  <div
-                    key={f.id}
-                    style={{
-                      position: "absolute",
-                      left: `${f.xFrac * 100}%`,
-                      top: `${f.yFrac * 100}%`,
-                      width: `${f.wFrac * 100}%`,
-                      height: `${f.hFrac * 100}%`,
-                    }}
-                  >
-                    <button
-                      onClick={() => setSigningFieldId(f.id)}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        border: values[f.id] ? "2px solid var(--success)" : "2px dashed var(--primary)",
-                        borderRadius: "var(--r-sm)",
-                        background: values[f.id] ? "var(--canvas)" : "var(--primary-soft)",
-                        cursor: "pointer",
-                        padding: 0,
-                      }}
-                    >
-                      {values[f.id] ? (
-                        <img src={values[f.id]} alt="signature" style={{ maxWidth: "100%", maxHeight: "100%" }} />
-                      ) : (
-                        <span style={{ fontSize: 11, color: "var(--primary)", fontWeight: 600 }}>Click to sign</span>
-                      )}
-                    </button>
-                  </div>
-                ))}
+                .map((f) => {
+                  const type = f.type ?? "signature";
+                  const boxStyle: React.CSSProperties = {
+                    position: "absolute",
+                    left: `${f.xFrac * 100}%`,
+                    top: `${f.yFrac * 100}%`,
+                    width: `${f.wFrac * 100}%`,
+                    height: `${f.hFrac * 100}%`,
+                  };
+
+                  if (type === "text" || type === "date") {
+                    return (
+                      <div key={f.id} style={boxStyle}>
+                        <input
+                          type={type === "date" ? "date" : "text"}
+                          value={values[f.id] ?? ""}
+                          onChange={(e) => setValues((prev) => ({ ...prev, [f.id]: e.target.value }))}
+                          placeholder={type === "date" ? undefined : "Type here"}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            border: values[f.id] ? "2px solid var(--success)" : "2px dashed var(--primary)",
+                            borderRadius: "var(--r-sm)",
+                            background: "var(--canvas)",
+                            padding: "0 6px",
+                            fontSize: 12,
+                            fontFamily: "inherit",
+                            color: "var(--ink)",
+                          }}
+                        />
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <div key={f.id} style={boxStyle}>
+                      <button
+                        onClick={() => setSigningFieldId(f.id)}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          border: values[f.id] ? "2px solid var(--success)" : "2px dashed var(--primary)",
+                          borderRadius: "var(--r-sm)",
+                          background: values[f.id] ? "var(--canvas)" : "var(--primary-soft)",
+                          cursor: "pointer",
+                          padding: 0,
+                        }}
+                      >
+                        {values[f.id] ? (
+                          <img src={values[f.id]} alt="signature" style={{ maxWidth: "100%", maxHeight: "100%" }} />
+                        ) : (
+                          <span style={{ fontSize: 11, color: "var(--primary)", fontWeight: 600 }}>
+                            {type === "initials" ? "Click to initial" : "Click to sign"}
+                          </span>
+                        )}
+                      </button>
+                    </div>
+                  );
+                })}
             </>
           )}
         />
@@ -198,7 +278,7 @@ export default function Sign() {
             className="card"
             style={{ background: "var(--canvas)", boxShadow: "var(--shadow-lg)", maxWidth: "92vw" }}
           >
-            <p>Draw your signature</p>
+            <p>{payload.fields?.find((f) => f.id === signingFieldId)?.type === "initials" ? "Draw your initials" : "Draw your signature"}</p>
             <div style={{ background: "var(--canvas)", borderRadius: "var(--r-sm)", width: 360, maxWidth: "100%" }}>
               <SignatureCanvas
                 ref={sigPadRef}

@@ -1,7 +1,17 @@
 import { describe, it, expect } from "vitest";
 import { PDFDocument } from "pdf-lib";
-import { decodedByteLength, generateCertificate, MAX_SIGNATURE_IMAGE_BYTES } from "./pdf";
-import type { DocState } from "@docracy/shared";
+import { burnFields, decodedByteLength, generateCertificate, MAX_SIGNATURE_IMAGE_BYTES } from "./pdf";
+import type { DocField, DocState } from "@docracy/shared";
+
+// A real minimal 1x1 PNG — needed because pdf-lib's embedPng actually decodes the image.
+const TINY_PNG =
+  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=";
+
+async function makeBlankPdfBytes(): Promise<Uint8Array> {
+  const doc = await PDFDocument.create();
+  doc.addPage([400, 500]);
+  return doc.save();
+}
 
 describe("decodedByteLength", () => {
   it("estimates decoded byte size from a base64 data: URL", () => {
@@ -16,6 +26,51 @@ describe("decodedByteLength", () => {
   it("flags a string over the signature size cap", () => {
     const big = "A".repeat(3_000_000);
     expect(decodedByteLength(big)).toBeGreaterThan(MAX_SIGNATURE_IMAGE_BYTES);
+  });
+});
+
+describe("burnFields", () => {
+  const baseField = { id: "f1", signerOrder: 1, page: 0, xFrac: 0.1, yFrac: 0.1, wFrac: 0.3, hFrac: 0.08 };
+
+  it("draws an image for a signature field (type omitted, defaults to signature)", async () => {
+    const pdfBytes = await makeBlankPdfBytes();
+    const result = await burnFields(pdfBytes, [baseField], [{ fieldId: "f1", value: TINY_PNG }], "anna@example.com", new Date().toISOString());
+    const loaded = await PDFDocument.load(result);
+    expect(loaded.getPageCount()).toBe(1);
+  });
+
+  it("draws an image for an explicit initials field", async () => {
+    const pdfBytes = await makeBlankPdfBytes();
+    const field: DocField = { ...baseField, type: "initials" };
+    const result = await burnFields(pdfBytes, [field], [{ fieldId: "f1", value: TINY_PNG }], "anna@example.com", new Date().toISOString());
+    const loaded = await PDFDocument.load(result);
+    expect(loaded.getPageCount()).toBe(1);
+  });
+
+  it("draws plain text for a text field without attempting to decode it as an image", async () => {
+    const pdfBytes = await makeBlankPdfBytes();
+    const field: DocField = { ...baseField, type: "text" };
+    const result = await burnFields(pdfBytes, [field], [{ fieldId: "f1", value: "Freelance Contract LLC" }], "anna@example.com", new Date().toISOString());
+    const loaded = await PDFDocument.load(result);
+    expect(loaded.getPageCount()).toBe(1);
+    expect(result.byteLength).toBeGreaterThan(pdfBytes.byteLength);
+  });
+
+  it("draws plain text for a date field", async () => {
+    const pdfBytes = await makeBlankPdfBytes();
+    const field: DocField = { ...baseField, type: "date" };
+    const result = await burnFields(pdfBytes, [field], [{ fieldId: "f1", value: "Jul 19, 2026" }], "anna@example.com", new Date().toISOString());
+    const loaded = await PDFDocument.load(result);
+    expect(loaded.getPageCount()).toBe(1);
+  });
+
+  it("truncates a text value too long to fit the field's width instead of throwing", async () => {
+    const pdfBytes = await makeBlankPdfBytes();
+    const field: DocField = { ...baseField, type: "text" };
+    const longValue = "This is a very long piece of text that will not fit in a narrow field box at all";
+    await expect(
+      burnFields(pdfBytes, [field], [{ fieldId: "f1", value: longValue }], "anna@example.com", new Date().toISOString())
+    ).resolves.toBeInstanceOf(Uint8Array);
   });
 });
 

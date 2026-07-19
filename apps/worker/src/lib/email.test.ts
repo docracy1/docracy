@@ -73,6 +73,32 @@ describe("email HTML escaping", () => {
   });
 });
 
+describe("sendSigningInvite — custom subject/message", () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  it("uses the default subject/message when none is set on the doc", async () => {
+    const { env } = makeMockEnv();
+    const capture = captureDevEmailLog();
+
+    await sendSigningInvite(env, makeDoc("Anna"), 1, "tok");
+
+    expect(capture.logged()).toContain('subject="Ready to sign — you have a document waiting"');
+    expect(capture.logged()).toContain("You've been invited to sign a document through Docracy.");
+  });
+
+  it("uses the preparer's custom subject and message when set, and escapes the message", async () => {
+    const { env } = makeMockEnv();
+    const doc = { ...makeDoc("Anna"), customSubject: "Please sign the lease", customMessage: "Sign by <Friday>!" };
+    const capture = captureDevEmailLog();
+
+    await sendSigningInvite(env, doc, 1, "tok");
+
+    expect(capture.logged()).toContain('subject="Please sign the lease"');
+    expect(capture.logged()).toContain("Sign by &lt;Friday&gt;!");
+    expect(capture.logged()).not.toContain("You've been invited to sign");
+  });
+});
+
 describe("sendCompletionEmails", () => {
   afterEach(() => vi.restoreAllMocks());
 

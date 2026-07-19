@@ -1,7 +1,7 @@
-/**
- * Every field is a signature field — signing it burns in the drawn signature plus the signer's
- * email and the date automatically, so there's nothing else to place.
- */
+export type DocFieldType = "signature" | "initials" | "text" | "date";
+
+/** `type` is optional and always read via `field.type ?? "signature"` — see the matching comment
+ *  in packages/shared/src/types.ts (this is a deliberate frontend-only duplicate of that type). */
 export interface DocField {
   id: string;
   signerOrder: number;
@@ -10,12 +10,15 @@ export interface DocField {
   yFrac: number;
   wFrac: number;
   hFrac: number;
+  type?: DocFieldType;
 }
 
 export interface SignerInput {
   order: number;
   name: string;
   email: string;
+  /** Optional 4-8 digit PIN gating this signer's link — never sent back to the client once set. */
+  pin?: string;
 }
 
 export interface StatusSigner {

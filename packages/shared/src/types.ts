@@ -1,6 +1,9 @@
+export type DocFieldType = "signature" | "initials" | "text" | "date";
+
 /**
- * Every field is a signature field — signing it burns in the drawn signature plus the signer's
- * email and the date automatically (see pdf.ts's burnFields), so there's nothing else to place.
+ * `type` is optional and always read via `field.type ?? "signature"` — every field placed before
+ * this property existed is a signature field, and treating a missing type as anything else would
+ * silently reinterpret already-created, in-flight documents.
  */
 export interface DocField {
   id: string;
@@ -10,6 +13,7 @@ export interface DocField {
   yFrac: number;
   wFrac: number;
   hFrac: number;
+  type?: DocFieldType;
 }
 
 export interface Signer {
@@ -22,6 +26,9 @@ export interface Signer {
   signedAt: string | null;
   linkSentAt: string | null;
   remindersSent: number[];
+  /** HMAC-SHA256 hex digest of an optional PIN the preparer set for this signer, never the raw
+   *  PIN — see lib/signUnlock.ts. Absent entirely for the (default) no-PIN case. */
+  pinHash?: string;
 }
 
 export type AuditEventType = "created" | "invite_sent" | "consented" | "signed" | "completed";
@@ -57,6 +64,12 @@ export interface DocState {
   preparerSigns: boolean;
   status: "pending" | "completed";
   completedAt: string | null;
+  /** "sequential" (default) means only the current signer in order may act — the flow this app
+   *  started with. "parallel" means every signer gets their invite at once and any of them may
+   *  act in any order; completion still just means "no signer remains pending." Optional and
+   *  always read via `doc.signingMode ?? "sequential"` so every document created before this
+   *  field existed keeps behaving exactly as before. */
+  signingMode?: "sequential" | "parallel";
   signers: Signer[];
   fields: DocField[];
   /** Optional so any doc written before this field existed still deserializes — always read via
@@ -68,6 +81,12 @@ export interface DocState {
    *  signer completed, never blocks completion. */
   timestampToken?: string;
   timestampGenTime?: string;
+  /** Preparer-supplied overrides for the signing-invite email, applied to every invite in the
+   *  chain (not just the first) — read fresh off the doc at each send, since sequential mode sends
+   *  invites one at a time as the chain advances. Falls back to the default subject/copy when
+   *  absent. Length-capped at creation (see routes/documents.ts). */
+  customSubject?: string;
+  customMessage?: string;
 }
 
 export interface Env {

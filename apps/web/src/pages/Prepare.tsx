@@ -4,12 +4,26 @@ import PdfViewer from "../components/PdfViewer";
 import { createDocument, createTemplate, fetchMe, fetchTemplate, fetchTemplates } from "../lib/api";
 import type { Account, TemplateSummary } from "../lib/api";
 import { base64ToBytes } from "../lib/base64";
-import type { DocField, SignerInput } from "../lib/types";
+import type { DocField, DocFieldType, SignerInput } from "../lib/types";
 
 const FREE_TIER_MAX_SIGNERS = 2;
 const MAX_PDF_BYTES = 15 * 1024 * 1024;
-// Taller than a bare signature image to leave room for the auto-printed "email · date" caption.
-const SIGNATURE_FIELD_SIZE = { w: 0.26, h: 0.07 };
+
+// Signature/initials are taller to leave room for the auto-printed "email · date" caption text/date
+// fields don't get; text/date are narrower single-line boxes.
+const FIELD_SIZE_BY_TYPE: Record<DocFieldType, { w: number; h: number }> = {
+  signature: { w: 0.26, h: 0.07 },
+  initials: { w: 0.1, h: 0.06 },
+  text: { w: 0.22, h: 0.04 },
+  date: { w: 0.16, h: 0.04 },
+};
+
+const FIELD_TYPE_LABEL: Record<DocFieldType, string> = {
+  signature: "Sign here",
+  initials: "Initial here",
+  text: "Text",
+  date: "Date",
+};
 
 let fieldIdCounter = 0;
 
@@ -21,12 +35,17 @@ export default function Prepare() {
   const [pdfBytes, setPdfBytes] = useState<Uint8Array | null>(null);
   const [preparerSigns, setPreparerSigns] = useState(false);
   const [preparerEmail, setPreparerEmail] = useState("");
+  const [showCustomMessage, setShowCustomMessage] = useState(false);
+  const [customSubject, setCustomSubject] = useState("");
+  const [customMessage, setCustomMessage] = useState("");
+  const [signingMode, setSigningMode] = useState<"sequential" | "parallel">("sequential");
   const [signers, setSigners] = useState<SignerInput[]>([
     { order: 1, name: "", email: "" },
     { order: 2, name: "", email: "" },
   ]);
   const [fields, setFields] = useState<DocField[]>([]);
   const [placingSignerOrder, setPlacingSignerOrder] = useState(1);
+  const [placingFieldType, setPlacingFieldType] = useState<DocFieldType>("signature");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [draggingFieldId, setDraggingFieldId] = useState<string | null>(null);
@@ -198,7 +217,7 @@ export default function Prepare() {
 
       const target = pageAt(upEvent.clientX, upEvent.clientY);
       if (!target) return; // dropped outside the document — cancel, don't place blind
-      const size = SIGNATURE_FIELD_SIZE;
+      const size = FIELD_SIZE_BY_TYPE[placingFieldType];
       const xFrac = Math.min(Math.max((upEvent.clientX - target.rect.left) / target.rect.width - size.w / 2, 0), 1 - size.w);
       const yFrac = Math.min(Math.max((upEvent.clientY - target.rect.top) / target.rect.height - size.h / 2, 0), 1 - size.h);
       const field: DocField = {
@@ -209,6 +228,7 @@ export default function Prepare() {
         yFrac,
         wFrac: size.w,
         hFrac: size.h,
+        type: placingFieldType,
       };
       setFields((prev) => [...prev, field]);
     };
@@ -252,14 +272,14 @@ export default function Prepare() {
     setSubmitting(true);
     setError(null);
     try {
-      const { docId, statusToken } = await createDocument(
-        file,
-        preparerSigns,
-        signers,
-        fields,
-        !preparerSigns && preparerEmail.trim() ? preparerEmail.trim() : undefined
-      );
-      navigate("/prepare/sent", { state: { docId, statusToken } });
+      const effectiveSigningMode = signers.length > 1 ? signingMode : undefined;
+      const { docId, statusToken } = await createDocument(file, preparerSigns, signers, fields, {
+        preparerEmail: !preparerSigns && preparerEmail.trim() ? preparerEmail.trim() : undefined,
+        customSubject: customSubject.trim() || undefined,
+        customMessage: customMessage.trim() || undefined,
+        signingMode: effectiveSigningMode,
+      });
+      navigate("/prepare/sent", { state: { docId, statusToken, signingMode: effectiveSigningMode } });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
@@ -342,7 +362,9 @@ export default function Prepare() {
                           }}
                         >
                           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-                            <span>Sign here · {signerLabel(f.signerOrder)}</span>
+                            <span>
+                              {FIELD_TYPE_LABEL[f.type ?? "signature"]} · {signerLabel(f.signerOrder)}
+                            </span>
                             <button
                               onMouseDown={(e) => e.stopPropagation()}
                               onClick={(e) => {
@@ -354,12 +376,14 @@ export default function Prepare() {
                               ×
                             </button>
                           </div>
-                          <img
-                            src="/docracy-wordmark.png"
-                            alt=""
-                            draggable={false}
-                            style={{ height: "40%", width: "auto", marginTop: 2, opacity: 0.85 }}
-                          />
+                          {(f.type ?? "signature") !== "text" && (f.type ?? "signature") !== "date" && (
+                            <img
+                              src="/docracy-wordmark.png"
+                              alt=""
+                              draggable={false}
+                              style={{ height: "40%", width: "auto", marginTop: 2, opacity: 0.85 }}
+                            />
+                          )}
                         </div>
                       );
                     })}
@@ -404,11 +428,20 @@ export default function Prepare() {
                   />
                   <input
                     className="form-input"
-                    style={{ width: "100%" }}
+                    style={{ width: "100%", marginBottom: 6 }}
                     placeholder="Email"
                     type="email"
                     value={s.email}
                     onChange={(e) => updateSigner(s.order, { email: e.target.value })}
+                  />
+                  <input
+                    className="form-input"
+                    style={{ width: "100%" }}
+                    placeholder="PIN (optional) — 4-8 digits, extra protection for this link"
+                    inputMode="numeric"
+                    maxLength={8}
+                    value={s.pin ?? ""}
+                    onChange={(e) => updateSigner(s.order, { pin: e.target.value.replace(/\D/g, "") })}
                   />
                   {signers.length > 1 && (
                     <button
@@ -424,6 +457,20 @@ export default function Prepare() {
               <button className="btn-secondary" onClick={addSigner} style={{ width: "100%" }}>
                 + Add signer
               </button>
+              {signers.length > 1 && (
+                <div style={{ marginTop: 12, paddingTop: 12, borderTop: "1px solid var(--hairline)" }}>
+                  <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 0, marginBottom: 6 }}>Signing order</p>
+                  <select
+                    className="form-input"
+                    style={{ width: "100%" }}
+                    value={signingMode}
+                    onChange={(e) => setSigningMode(e.target.value as "sequential" | "parallel")}
+                  >
+                    <option value="sequential">Sequential (default) — one signer at a time, in order</option>
+                    <option value="parallel">All at once — every signer can sign as soon as they're invited</option>
+                  </select>
+                </div>
+              )}
               {signers.length > FREE_TIER_MAX_SIGNERS && (
                 <p style={{ fontSize: 12, marginTop: 8, color: "var(--body)" }}>
                   Free plan supports up to {FREE_TIER_MAX_SIGNERS} signers.{" "}
@@ -433,7 +480,18 @@ export default function Prepare() {
             </div>
 
             <div className="card">
-              <h3 style={{ marginBottom: 12 }}>Place a signature</h3>
+              <h3 style={{ marginBottom: 12 }}>Add a field</h3>
+              <select
+                className="form-input"
+                style={{ width: "100%", marginBottom: 8 }}
+                value={placingFieldType}
+                onChange={(e) => setPlacingFieldType(e.target.value as DocFieldType)}
+              >
+                <option value="signature">Signature</option>
+                <option value="initials">Initials</option>
+                <option value="text">Text</option>
+                <option value="date">Date</option>
+              </select>
               <select
                 className="form-input"
                 style={{ width: "100%", marginBottom: 8 }}
@@ -509,9 +567,37 @@ export default function Prepare() {
 
             {signersWithoutFields.length > 0 && fields.length > 0 && (
               <p style={{ fontSize: 12, color: "var(--danger)" }}>
-                Still needs a signature field: {signersWithoutFields.map((s) => signerLabel(s.order)).join(", ")}
+                Still needs a field: {signersWithoutFields.map((s) => signerLabel(s.order)).join(", ")}
               </p>
             )}
+
+            <div className="card">
+              {showCustomMessage ? (
+                <>
+                  <h3 style={{ marginBottom: 12 }}>Customize the invite email</h3>
+                  <input
+                    className="form-input"
+                    style={{ width: "100%", marginBottom: 8 }}
+                    placeholder="Subject (optional)"
+                    maxLength={150}
+                    value={customSubject}
+                    onChange={(e) => setCustomSubject(e.target.value)}
+                  />
+                  <textarea
+                    className="form-textarea"
+                    style={{ width: "100%", minHeight: 80, resize: "vertical" }}
+                    placeholder="Message to signers (optional) — replaces the default invite text"
+                    maxLength={1000}
+                    value={customMessage}
+                    onChange={(e) => setCustomMessage(e.target.value)}
+                  />
+                </>
+              ) : (
+                <button className="btn-secondary" style={{ width: "100%" }} onClick={() => setShowCustomMessage(true)}>
+                  Customize the invite email
+                </button>
+              )}
+            </div>
 
             {error && <p style={{ color: "var(--danger)" }}>{error}</p>}
 
@@ -546,7 +632,7 @@ export default function Prepare() {
             boxShadow: "0 6px 16px rgba(0,0,0,0.2)",
           }}
         >
-          {creatingDrag.overPage ? "Drop to place" : "Sign here · " + signerLabel(placingSignerOrder)}
+          {creatingDrag.overPage ? "Drop to place" : `${FIELD_TYPE_LABEL[placingFieldType]} · ${signerLabel(placingSignerOrder)}`}
         </div>
       )}
     </div>

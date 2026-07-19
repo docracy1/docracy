@@ -47,6 +47,14 @@ export function currentTurnOrder(doc: DocState): number | null {
   return null;
 }
 
+/** In sequential mode (the default), only the current signer in order may act. In parallel mode,
+ *  every signer was invited at once — any signer who hasn't signed yet may act, regardless of
+ *  order. Every existing caller (sign.ts, reminders.ts) keeps calling this exactly the same way;
+ *  only this one function needs to know which mode a given doc is in. */
 export function isSignerOnTurn(doc: DocState, order: number): boolean {
+  if (doc.signingMode === "parallel") {
+    const signer = doc.signers.find((s) => s.order === order);
+    return signer?.status === "pending";
+  }
   return currentTurnOrder(doc) === order;
 }

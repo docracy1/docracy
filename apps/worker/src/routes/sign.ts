@@ -3,11 +3,15 @@ import { getDoc, putDoc, isSignerOnTurn, currentTurnOrder } from "../lib/kv";
 import { burnFields, decodedByteLength, generateCertificate, MAX_SIGNATURE_IMAGE_BYTES, type FieldValue } from "../lib/pdf";
 import { sendSigningInvite, sendCompletionEmails } from "../lib/email";
 import { recordViewedOnce, indexSignerSigned, indexInviteSent, indexCompleted } from "../lib/index-d1";
-import { checkTokenAccessRateLimit } from "../lib/ratelimit";
+import { checkTokenAccessRateLimit, checkPinAttemptRateLimit } from "../lib/ratelimit";
 import { sha256Hex } from "../lib/hash";
 import { requestTimestamp } from "../lib/timestamp";
+import { verifyPin, issueUnlockToken, verifyUnlockToken } from "../lib/signUnlock";
+import { deliverWebhookEvent } from "../lib/webhooks";
 import { verifyToken, signToken } from "@docracy/shared";
-import type { AuditEvent, Env } from "@docracy/shared";
+import type { AuditEvent, DocField, Env } from "@docracy/shared";
+
+const MAX_TEXT_FIELD_LENGTH = 500;
 
 function indexNonFatal(
   ctx: { waitUntil(promise: Promise<unknown>): void },
@@ -16,6 +20,15 @@ function indexNonFatal(
   work: Promise<void>
 ) {
   ctx.waitUntil(work.catch((err) => console.error(`D1 indexing (${label}) failed for doc ${docId} (non-fatal):`, err)));
+}
+
+function webhookNonFatal(
+  ctx: { waitUntil(promise: Promise<unknown>): void },
+  docId: string,
+  eventType: string,
+  work: Promise<void>
+) {
+  ctx.waitUntil(work.catch((err) => console.error(`Webhook delivery (${eventType}) failed for doc ${docId} (non-fatal):`, err)));
 }
 
 const sign = new Hono<{ Bindings: Env }>();
@@ -62,6 +75,14 @@ sign.get("/sign/:token", async (c) => {
     return c.json({ onTurn: false, status: statusPayload(doc) });
   }
 
+  const signerForPinCheck = doc.signers.find((s) => s.order === verified.order);
+  if (signerForPinCheck?.pinHash) {
+    const unlockToken = c.req.header("X-Sign-Unlock");
+    if (!(await verifyUnlockToken(c.env, unlockToken, doc.docId, verified.order))) {
+      return c.json({ onTurn: true, needsPin: true, status: statusPayload(doc) });
+    }
+  }
+
   if (doc.accountId) {
     indexNonFatal(c.executionCtx, doc.docId, "viewed", recordViewedOnce(c.env, doc, verified.order));
   }
@@ -79,6 +100,40 @@ sign.get("/sign/:token", async (c) => {
   });
 });
 
+sign.post("/sign/:token/unlock", async (c) => {
+  const token = c.req.param("token");
+  // Deliberately much tighter than checkTokenAccessRateLimit — this endpoint exists specifically
+  // to check a brute-forceable 4-8 digit secret, so the number of guesses matters, not just reads.
+  if (!(await checkPinAttemptRateLimit(c.env, token))) {
+    return c.json({ error: "Too many attempts. Please try again later." }, 429);
+  }
+
+  const verified = await verifyToken(token, c.env.TOKEN_SECRET);
+  if (!verified) return c.json({ error: "Invalid or tampered link" }, 403);
+
+  const doc = await getDoc(c.env, verified.docId);
+  if (!doc) return c.json({ error: "This document has expired or doesn't exist" }, 404);
+
+  const signer = doc.signers.find((s) => s.order === verified.order);
+  if (!signer?.pinHash) {
+    return c.json({ error: "No PIN is set for this signer" }, 400);
+  }
+
+  let body: { pin?: string };
+  try {
+    body = await c.req.json<{ pin?: string }>();
+  } catch {
+    return c.json({ error: "Invalid request body" }, 400);
+  }
+
+  if (!body.pin || !(await verifyPin(c.env, body.pin, signer.pinHash))) {
+    return c.json({ error: "Incorrect PIN" }, 401);
+  }
+
+  const unlockToken = await issueUnlockToken(c.env, doc.docId, verified.order);
+  return c.json({ unlockToken });
+});
+
 sign.post("/sign/:token", async (c) => {
   const token = c.req.param("token");
   if (!(await checkTokenAccessRateLimit(c.env, token))) {
@@ -93,6 +148,14 @@ sign.post("/sign/:token", async (c) => {
 
   if (!isSignerOnTurn(doc, verified.order)) {
     return c.json({ error: "It's not your turn to sign yet" }, 409);
+  }
+
+  const signerForPinCheck = doc.signers.find((s) => s.order === verified.order);
+  if (signerForPinCheck?.pinHash) {
+    const unlockToken = c.req.header("X-Sign-Unlock");
+    if (!(await verifyUnlockToken(c.env, unlockToken, doc.docId, verified.order))) {
+      return c.json({ needsPin: true, error: "PIN required" }, 401);
+    }
   }
 
   let body: { values: FieldValue[]; consent?: boolean };
@@ -124,9 +187,13 @@ sign.post("/sign/:token", async (c) => {
     return c.json({ error: "Please fill in every field before submitting" }, 400);
   }
 
-  const oversized = myFields.some((f) => decodedByteLength(valueById.get(f.id)!) > MAX_SIGNATURE_IMAGE_BYTES);
+  const isImageField = (type: DocField["type"]) => type === undefined || type === "signature" || type === "initials";
+  const oversized = myFields.some((f) => {
+    const value = valueById.get(f.id)!;
+    return isImageField(f.type) ? decodedByteLength(value) > MAX_SIGNATURE_IMAGE_BYTES : value.length > MAX_TEXT_FIELD_LENGTH;
+  });
   if (oversized) {
-    return c.json({ error: "Signature image is too large" }, 400);
+    return c.json({ error: "One of the submitted values is too large" }, 400);
   }
 
   const ip = c.req.header("CF-Connecting-IP") ?? null;
@@ -168,10 +235,24 @@ sign.post("/sign/:token", async (c) => {
 
   if (freshDoc.accountId) {
     indexNonFatal(c.executionCtx, freshDoc.docId, "signed", indexSignerSigned(c.env, freshDoc, verified.order, updatedBytes, ip));
+    webhookNonFatal(
+      c.executionCtx,
+      freshDoc.docId,
+      "document.signer.signed",
+      deliverWebhookEvent(c.env, freshDoc.accountId, "document.signer.signed", {
+        docId: freshDoc.docId,
+        signerOrder: verified.order,
+      })
+    );
   }
 
-  const nextOrder = currentTurnOrder(freshDoc);
-  if (nextOrder !== null) {
+  // "Is anyone still pending" is mode-agnostic — true in both sequential and parallel mode
+  // whenever the chain/batch isn't done yet. What differs is what happens next: sequential mode
+  // invites exactly one new signer (the next one in order); parallel mode already invited every
+  // signer at creation, so there's no one new to notify — just record this signer's completion.
+  const remainingPending = freshDoc.signers.some((s) => s.status === "pending");
+  if (remainingPending && (freshDoc.signingMode ?? "sequential") === "sequential") {
+    const nextOrder = currentTurnOrder(freshDoc)!;
     const nextSigner = freshDoc.signers.find((s) => s.order === nextOrder)!;
     nextSigner.linkSentAt = new Date().toISOString();
     events.push({
@@ -191,6 +272,10 @@ sign.post("/sign/:token", async (c) => {
     if (freshDoc.accountId) {
       indexNonFatal(c.executionCtx, freshDoc.docId, "invite_sent", indexInviteSent(c.env, freshDoc, nextOrder));
     }
+  } else if (remainingPending) {
+    // Parallel mode, not yet complete: just persist this signer's "signed" status and events.
+    freshDoc.events = events;
+    await putDoc(c.env, freshDoc);
   } else {
     freshDoc.status = "completed";
     freshDoc.completedAt = new Date().toISOString();
@@ -219,6 +304,12 @@ sign.post("/sign/:token", async (c) => {
 
     if (freshDoc.accountId) {
       indexNonFatal(c.executionCtx, freshDoc.docId, "completed", indexCompleted(c.env, freshDoc));
+      webhookNonFatal(
+        c.executionCtx,
+        freshDoc.docId,
+        "document.completed",
+        deliverWebhookEvent(c.env, freshDoc.accountId, "document.completed", { docId: freshDoc.docId })
+      );
     }
   }
 

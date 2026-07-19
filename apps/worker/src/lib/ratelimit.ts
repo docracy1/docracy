@@ -64,3 +64,12 @@ const MAGIC_LINK_MAX_PER_WINDOW = 5;
 export async function checkMagicLinkRateLimit(env: Env, email: string): Promise<boolean> {
   return checkLimit(env, `magiclink:${email.toLowerCase()}`, MAGIC_LINK_MAX_PER_WINDOW, MAGIC_LINK_WINDOW_SECONDS);
 }
+
+const PIN_ATTEMPT_WINDOW_SECONDS = 60 * 60; // 1 hour
+const PIN_ATTEMPT_MAX_PER_WINDOW = 10;
+
+/** Much tighter than checkTokenAccessRateLimit: a PIN is a short, brute-forceable secret (4-8
+ *  digits), so the number of *guesses* against one signing token matters, not just read volume. */
+export async function checkPinAttemptRateLimit(env: Env, token: string): Promise<boolean> {
+  return checkLimit(env, `pinattempt:${token}`, PIN_ATTEMPT_MAX_PER_WINDOW, PIN_ATTEMPT_WINDOW_SECONDS);
+}

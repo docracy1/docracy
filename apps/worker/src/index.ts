@@ -7,6 +7,7 @@ import auth from "./routes/auth";
 import billing from "./routes/billing";
 import account from "./routes/account";
 import templates from "./routes/templates";
+import webhooksRoute from "./routes/webhooks";
 import { runReminderSweep } from "./lib/reminders";
 import { reconcileD1Index } from "./lib/index-d1";
 import { runExpiredDocCleanup } from "./lib/cleanup";
@@ -42,6 +43,7 @@ app.route("/api/auth", auth);
 app.route("/api/billing", billing);
 app.route("/api/account", account);
 app.route("/api/account/templates", templates);
+app.route("/api/account/webhooks", webhooksRoute);
 
 export default {
   fetch: app.fetch,

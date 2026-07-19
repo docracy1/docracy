@@ -98,6 +98,52 @@ describe("POST /api/documents", () => {
     expect(res.status).toBe(400);
   });
 
+  it("rejects a signer PIN that isn't 4-8 digits", async () => {
+    const { env } = makeMockEnv();
+    const pdf = await makeValidPdfBytes();
+    const meta = { ...validMeta, signers: [{ ...validMeta.signers[0], pin: "12" }, validMeta.signers[1]] };
+    const res = await documents.request("/", { method: "POST", body: buildForm(pdf, meta) }, env, MOCK_CTX);
+    expect(res.status).toBe(400);
+  });
+
+  it("hashes a valid signer PIN and never stores it raw", async () => {
+    const { env, kv } = makeMockEnv();
+    const pdf = await makeValidPdfBytes();
+    const meta = { ...validMeta, signers: [{ ...validMeta.signers[0], pin: "1234" }, validMeta.signers[1]] };
+    const res = await documents.request("/", { method: "POST", body: buildForm(pdf, meta) }, env, MOCK_CTX);
+    expect(res.status).toBe(200);
+    const [, docValue] = [...kv._store.entries()].find(([k]) => k.startsWith("doc:"))!;
+    const stored = JSON.parse(docValue);
+    expect(stored.signers[0].pinHash).toBeTruthy();
+    expect(stored.signers[0].pinHash).not.toBe("1234");
+    expect(docValue).not.toContain("1234");
+  });
+
+  it("rejects a field with an unrecognized type", async () => {
+    const { env } = makeMockEnv();
+    const pdf = await makeValidPdfBytes();
+    const meta = { ...validMeta, fields: [{ ...validMeta.fields[0], type: "checkbox" }] };
+    const res = await documents.request("/", { method: "POST", body: buildForm(pdf, meta) }, env, MOCK_CTX);
+    expect(res.status).toBe(400);
+  });
+
+  it("accepts text/date/initials field types alongside signature", async () => {
+    const { env, kv } = makeMockEnv();
+    const pdf = await makeValidPdfBytes();
+    const meta = {
+      ...validMeta,
+      fields: [
+        { ...validMeta.fields[0], type: "text" },
+        { ...validMeta.fields[1], type: "date" },
+      ],
+    };
+    const res = await documents.request("/", { method: "POST", body: buildForm(pdf, meta) }, env, MOCK_CTX);
+    expect(res.status).toBe(200);
+    const [, docValue] = [...kv._store.entries()].find(([k]) => k.startsWith("doc:"))!;
+    const stored = JSON.parse(docValue);
+    expect(stored.fields.map((f: { type: string }) => f.type)).toEqual(["text", "date"]);
+  });
+
   it("rejects a document where a signer has no field at all", async () => {
     const { env } = makeMockEnv();
     const pdf = await makeValidPdfBytes();
@@ -107,6 +153,34 @@ describe("POST /api/documents", () => {
     expect(res.status).toBe(400);
     const body: { error: string } = await res.json();
     expect(body.error).toMatch(/Max/);
+  });
+
+  it("rejects a custom subject over the length cap", async () => {
+    const { env } = makeMockEnv();
+    const pdf = await makeValidPdfBytes();
+    const meta = { ...validMeta, customSubject: "x".repeat(151) };
+    const res = await documents.request("/", { method: "POST", body: buildForm(pdf, meta) }, env, MOCK_CTX);
+    expect(res.status).toBe(400);
+  });
+
+  it("rejects a custom message over the length cap", async () => {
+    const { env } = makeMockEnv();
+    const pdf = await makeValidPdfBytes();
+    const meta = { ...validMeta, customMessage: "x".repeat(1001) };
+    const res = await documents.request("/", { method: "POST", body: buildForm(pdf, meta) }, env, MOCK_CTX);
+    expect(res.status).toBe(400);
+  });
+
+  it("stores a valid custom subject/message on the doc", async () => {
+    const { env, kv } = makeMockEnv();
+    const pdf = await makeValidPdfBytes();
+    const meta = { ...validMeta, customSubject: "Please sign", customMessage: "Sign by Friday" };
+    const res = await documents.request("/", { method: "POST", body: buildForm(pdf, meta) }, env, MOCK_CTX);
+    expect(res.status).toBe(200);
+    const [, docValue] = [...kv._store.entries()].find(([k]) => k.startsWith("doc:"))!;
+    const stored = JSON.parse(docValue);
+    expect(stored.customSubject).toBe("Please sign");
+    expect(stored.customMessage).toBe("Sign by Friday");
   });
 
   it("rejects more signers than the free tier allows", async () => {

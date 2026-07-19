@@ -115,12 +115,15 @@ export async function sendSigningInvite(env: Env, doc: DocState, order: number, 
   // doc.title is only ever set for paid, account-linked documents — anonymous docs (the entire
   // free tier) never get a title, so this can't assume one exists.
   const docLabel = doc.title ? `"${escapeHtml(doc.title)}"` : "a document";
+  const messageLine = doc.customMessage
+    ? escapeHtml(doc.customMessage).replace(/\n/g, "<br>")
+    : `You've been invited to sign ${docLabel} through Docracy.`;
 
   const body = `
     <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">Ready to sign</p>
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};">Hi ${escapeHtml(signer.name)},</p>
     <p style="margin:8px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
-      You've been invited to sign ${docLabel} through Docracy.
+      ${messageLine}
     </p>
     ${ctaButton(link, "Sign here")}
     <p style="margin:0;font-size:13px;color:${MUTED};line-height:1.5;">${statusLines(doc)}</p>
@@ -129,7 +132,8 @@ export async function sendSigningInvite(env: Env, doc: DocState, order: number, 
     </p>
   `;
 
-  await send(env, signer.email, "Ready to sign — you have a document waiting", emailShell(body));
+  const subject = doc.customSubject?.trim() || "Ready to sign — you have a document waiting";
+  await send(env, signer.email, subject, emailShell(body));
 }
 
 export async function sendPreparerStatusLink(env: Env, preparerEmail: string, statusToken: string): Promise<void> {

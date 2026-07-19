@@ -8,12 +8,19 @@ import type { DocField, Env } from "@docracy/shared";
 interface CreateDocumentBody {
   preparerSigns: boolean;
   preparerEmail?: string;
-  signers: Array<{ order: number; name: string; email: string }>;
+  signers: Array<{ order: number; name: string; email: string; pin?: string }>;
   fields: DocField[];
+  customSubject?: string;
+  customMessage?: string;
+  signingMode?: "sequential" | "parallel";
 }
 
 const MAX_PDF_BYTES = 15 * 1024 * 1024; // 15MB
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MAX_SUBJECT_LENGTH = 150;
+const MAX_MESSAGE_LENGTH = 1000;
+const FIELD_TYPES = new Set(["signature", "initials", "text", "date"]);
+const PIN_RE = /^\d{4,8}$/;
 
 type Variables = { account: AccountContext | null };
 const documents = new Hono<{ Bindings: Env; Variables: Variables }>();
@@ -86,6 +93,9 @@ documents.post("/", optionalAccount, async (c) => {
       return c.json({ error: `${s.email} is used for more than one signer` }, 400);
     }
     seenEmails.add(email);
+    if (s.pin && !PIN_RE.test(s.pin)) {
+      return c.json({ error: "A signer's PIN must be 4-8 digits" }, 400);
+    }
   }
   if (!meta.fields?.every((f) => f.signerOrder >= 1 && f.signerOrder <= meta.signers.length)) {
     return c.json({ error: "A field is assigned to a signer that doesn't exist" }, 400);
@@ -104,15 +114,28 @@ documents.post("/", optionalAccount, async (c) => {
       f.yFrac + f.hFrac <= 1
   );
   if (!geometryOk) {
-    return c.json({ error: "A signature field is positioned outside the document" }, 400);
+    return c.json({ error: "A field is positioned outside the document" }, 400);
+  }
+  const typeOk = meta.fields?.every((f) => f.type === undefined || FIELD_TYPES.has(f.type));
+  if (!typeOk) {
+    return c.json({ error: "A field has an unrecognized type" }, 400);
   }
   const signerOrdersWithFields = new Set(meta.fields.map((f) => f.signerOrder));
   const unassignedSigner = meta.signers.find((_, i) => !signerOrdersWithFields.has(i + 1));
   if (unassignedSigner) {
-    return c.json({ error: `${unassignedSigner.name || "A signer"} doesn't have a signature field placed yet` }, 400);
+    return c.json({ error: `${unassignedSigner.name || "A signer"} doesn't have a field placed yet` }, 400);
   }
   if (meta.preparerEmail && !EMAIL_RE.test(meta.preparerEmail.trim())) {
     return c.json({ error: "That doesn't look like a valid email address" }, 400);
+  }
+  if (meta.customSubject && meta.customSubject.length > MAX_SUBJECT_LENGTH) {
+    return c.json({ error: `Custom subject must be under ${MAX_SUBJECT_LENGTH} characters` }, 400);
+  }
+  if (meta.customMessage && meta.customMessage.length > MAX_MESSAGE_LENGTH) {
+    return c.json({ error: `Custom message must be under ${MAX_MESSAGE_LENGTH} characters` }, 400);
+  }
+  if (meta.signingMode !== undefined && meta.signingMode !== "sequential" && meta.signingMode !== "parallel") {
+    return c.json({ error: "signingMode must be 'sequential' or 'parallel'" }, 400);
   }
 
   // Per-recipient cap, independent of the per-IP creation limit above: without this, one IP could
@@ -145,6 +168,9 @@ documents.post("/", optionalAccount, async (c) => {
     fields: meta.fields,
     accountId,
     creatorIp: ip,
+    customSubject: meta.customSubject?.trim() || undefined,
+    customMessage: meta.customMessage?.trim() || undefined,
+    signingMode: meta.signingMode,
   });
 
   return c.json({ docId, statusToken });
