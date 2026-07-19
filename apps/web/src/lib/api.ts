@@ -161,3 +161,41 @@ export async function regenerateApiToken(): Promise<{ token: string; connectorUr
   const res = await apiFetch("/api/account/token/regenerate", { method: "POST" });
   return asJson(res);
 }
+
+export interface TemplateSummary {
+  id: string;
+  name: string;
+  signerCount: number;
+  pageCount: number;
+  createdAt: string;
+}
+
+export async function fetchTemplates(): Promise<{ templates: TemplateSummary[] }> {
+  const res = await apiFetch("/api/account/templates");
+  return asJson(res);
+}
+
+export async function fetchTemplate(
+  id: string
+): Promise<{ name: string; signerCount: number; fields: DocField[]; pdfBase64: string }> {
+  const res = await apiFetch(`/api/account/templates/${id}`);
+  return asJson(res);
+}
+
+export async function createTemplate(
+  pdf: File,
+  name: string,
+  signerCount: number,
+  fields: DocField[]
+): Promise<{ templateId: string }> {
+  const form = new FormData();
+  form.set("pdf", pdf);
+  form.set("meta", JSON.stringify({ name, signerCount, fields }));
+  const res = await apiFetch("/api/account/templates", { method: "POST", body: form });
+  return asJson(res);
+}
+
+export async function deleteTemplate(id: string): Promise<{ ok: true }> {
+  const res = await apiFetch(`/api/account/templates/${id}`, { method: "DELETE" });
+  return asJson(res);
+}

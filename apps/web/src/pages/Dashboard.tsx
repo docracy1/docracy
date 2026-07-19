@@ -1,14 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import {
+  deleteTemplate,
   fetchMe,
   fetchMyDocuments,
+  fetchTemplates,
   fetchTokenStatus,
   openBillingPortal,
   regenerateApiToken,
   startCheckout,
   type Account,
   type DocumentSummary,
+  type TemplateSummary,
 } from "../lib/api";
 import { useNoIndex } from "../lib/useNoIndex";
 
@@ -25,8 +28,26 @@ export default function Dashboard() {
   const [regenerating, setRegenerating] = useState(false);
   const [regenerateError, setRegenerateError] = useState<string | null>(null);
   const [newConnectorUrl, setNewConnectorUrl] = useState<string | null>(null);
+  const [templates, setTemplates] = useState<TemplateSummary[]>([]);
+  const [deletingTemplateId, setDeletingTemplateId] = useState<string | null>(null);
+  const [templateError, setTemplateError] = useState<string | null>(null);
 
   useNoIndex();
+
+  const refreshTemplates = () => fetchTemplates().then((res) => setTemplates(res.templates));
+
+  const onDeleteTemplate = async (id: string) => {
+    setDeletingTemplateId(id);
+    setTemplateError(null);
+    try {
+      await deleteTemplate(id);
+      await refreshTemplates();
+    } catch (err) {
+      setTemplateError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setDeletingTemplateId(null);
+    }
+  };
 
   const onUpgrade = async () => {
     setUpgrading(true);
@@ -91,6 +112,8 @@ export default function Dashboard() {
         if (res.account?.isPaid) {
           const { hasToken } = await fetchTokenStatus();
           setHasToken(hasToken);
+          const { templates } = await fetchTemplates();
+          setTemplates(templates);
         }
       })
       .catch((err) => setError(err instanceof Error ? err.message : "Something went wrong"))
@@ -301,6 +324,53 @@ export default function Dashboard() {
               </p>
             </div>
           </details>
+        </div>
+      )}
+
+      {account.isPaid && (
+        <div className="card" style={{ marginTop: 24 }}>
+          <h3 style={{ fontSize: 15 }}>Templates</h3>
+          {templateError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{templateError}</p>}
+          {templates.length === 0 ? (
+            <p style={{ marginBottom: 0 }}>
+              No templates yet — save one from the "Prepare a document" page once you've placed your signature
+              fields.
+            </p>
+          ) : (
+            templates.map((t) => (
+              <div
+                key={t.id}
+                style={{
+                  padding: "8px 0",
+                  borderBottom: "1px solid var(--hairline)",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <span>
+                  {t.name}{" "}
+                  <span style={{ fontSize: 12, color: "var(--mute)" }}>
+                    ({t.signerCount} signer{t.signerCount === 1 ? "" : "s"}, {t.pageCount} page
+                    {t.pageCount === 1 ? "" : "s"})
+                  </span>
+                </span>
+                <span style={{ display: "flex", gap: 8 }}>
+                  <Link to={`/prepare?template=${t.id}`} className="btn-secondary" style={{ textDecoration: "none", padding: "4px 10px", fontSize: 13 }}>
+                    Use
+                  </Link>
+                  <button
+                    className="btn-secondary"
+                    style={{ fontSize: 13, padding: "4px 10px" }}
+                    disabled={deletingTemplateId === t.id}
+                    onClick={() => onDeleteTemplate(t.id)}
+                  >
+                    {deletingTemplateId === t.id ? "Deleting…" : "Delete"}
+                  </button>
+                </span>
+              </div>
+            ))
+          )}
         </div>
       )}
 

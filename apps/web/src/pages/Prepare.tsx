@@ -1,7 +1,9 @@
-import { useMemo, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import PdfViewer from "../components/PdfViewer";
-import { createDocument } from "../lib/api";
+import { createDocument, createTemplate, fetchMe, fetchTemplate, fetchTemplates } from "../lib/api";
+import type { Account, TemplateSummary } from "../lib/api";
+import { base64ToBytes } from "../lib/base64";
 import type { DocField, SignerInput } from "../lib/types";
 
 const FREE_TIER_MAX_SIGNERS = 2;
@@ -13,6 +15,8 @@ let fieldIdCounter = 0;
 
 export default function Prepare() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const templateId = searchParams.get("template");
   const [file, setFile] = useState<File | null>(null);
   const [pdfBytes, setPdfBytes] = useState<Uint8Array | null>(null);
   const [preparerSigns, setPreparerSigns] = useState(false);
@@ -27,6 +31,50 @@ export default function Prepare() {
   const [error, setError] = useState<string | null>(null);
   const [draggingFieldId, setDraggingFieldId] = useState<string | null>(null);
   const [creatingDrag, setCreatingDrag] = useState<{ x: number; y: number; overPage: boolean } | null>(null);
+
+  const [account, setAccount] = useState<Account | null>(null);
+  const [availableTemplates, setAvailableTemplates] = useState<TemplateSummary[]>([]);
+  const [loadingTemplate, setLoadingTemplate] = useState(false);
+  const [templateLoadError, setTemplateLoadError] = useState<string | null>(null);
+  const [showTemplateNameInput, setShowTemplateNameInput] = useState(false);
+  const [templateNameInput, setTemplateNameInput] = useState("");
+  const [savingTemplate, setSavingTemplate] = useState(false);
+  const [templateSaveError, setTemplateSaveError] = useState<string | null>(null);
+  const [templateSavedName, setTemplateSavedName] = useState<string | null>(null);
+
+  // Only used to gate the (paid-only) template UI — anonymous/free usage of this page is
+  // otherwise completely unaffected by this call.
+  useEffect(() => {
+    fetchMe()
+      .then((res) => setAccount(res.account))
+      .catch(() => setAccount(null));
+  }, []);
+
+  useEffect(() => {
+    if (account?.isPaid && !pdfBytes) {
+      fetchTemplates()
+        .then((res) => setAvailableTemplates(res.templates))
+        .catch(() => setAvailableTemplates([]));
+    }
+  }, [account, pdfBytes]);
+
+  useEffect(() => {
+    if (!templateId) return;
+    setLoadingTemplate(true);
+    setTemplateLoadError(null);
+    fetchTemplate(templateId)
+      .then((tpl) => {
+        const bytes = base64ToBytes(tpl.pdfBase64);
+        setPdfBytes(bytes);
+        setFields(tpl.fields);
+        // Uint8Array's `.buffer` is typed ArrayBufferLike (could be a SharedArrayBuffer) which
+        // BlobPart rejects — base64ToBytes's output is always backed by a plain ArrayBuffer.
+        setFile(new File([bytes as unknown as BlobPart], `${tpl.name || "template"}.pdf`, { type: "application/pdf" }));
+        setSigners(Array.from({ length: tpl.signerCount }, (_, i) => ({ order: i + 1, name: "", email: "" })));
+      })
+      .catch((err) => setTemplateLoadError(err instanceof Error ? err.message : "Couldn't load that template"))
+      .finally(() => setLoadingTemplate(false));
+  }, [templateId]);
 
   const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
@@ -183,6 +231,22 @@ export default function Prepare() {
     [file, signers, signersWithoutFields]
   );
 
+  const onSaveAsTemplate = async () => {
+    if (!file || fields.length === 0 || !templateNameInput.trim()) return;
+    setSavingTemplate(true);
+    setTemplateSaveError(null);
+    try {
+      await createTemplate(file, templateNameInput.trim(), signers.length, fields);
+      setTemplateSavedName(templateNameInput.trim());
+      setShowTemplateNameInput(false);
+      setTemplateNameInput("");
+    } catch (err) {
+      setTemplateSaveError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setSavingTemplate(false);
+    }
+  };
+
   const onSubmit = async () => {
     if (!file || !canSubmit) return;
     setSubmitting(true);
@@ -209,10 +273,32 @@ export default function Prepare() {
 
       {!pdfBytes && (
         <div className="card">
-          <p>Upload the PDF you want signed.</p>
-          <input type="file" accept="application/pdf" onChange={onFileChange} />
-          <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 6, marginBottom: 0 }}>Max file size: 15MB.</p>
-          {error && <p style={{ color: "var(--danger)", marginTop: 8 }}>{error}</p>}
+          {loadingTemplate && <p>Loading template…</p>}
+          {templateLoadError && <p style={{ color: "var(--danger)" }}>{templateLoadError}</p>}
+          {!loadingTemplate && (
+            <>
+              {account?.isPaid && availableTemplates.length > 0 && (
+                <div style={{ marginBottom: 16, paddingBottom: 16, borderBottom: "1px solid var(--hairline)" }}>
+                  <p style={{ marginTop: 0, marginBottom: 6, fontSize: 13, color: "var(--mute)" }}>
+                    Start from a template
+                  </p>
+                  {availableTemplates.map((t) => (
+                    <Link
+                      key={t.id}
+                      to={`/prepare?template=${t.id}`}
+                      style={{ display: "block", marginBottom: 4 }}
+                    >
+                      {t.name} ({t.signerCount} signer{t.signerCount === 1 ? "" : "s"})
+                    </Link>
+                  ))}
+                </div>
+              )}
+              <p>Upload the PDF you want signed.</p>
+              <input type="file" accept="application/pdf" onChange={onFileChange} />
+              <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 6, marginBottom: 0 }}>Max file size: 15MB.</p>
+              {error && <p style={{ color: "var(--danger)", marginTop: 8 }}>{error}</p>}
+            </>
+          )}
         </div>
       )}
 
@@ -382,6 +468,44 @@ export default function Prepare() {
                 The signer's email and the date get stamped in automatically — no need for separate fields.
               </p>
             </div>
+
+            {account?.isPaid && fields.length > 0 && (
+              <div className="card">
+                <h3 style={{ marginBottom: 12 }}>Save as template</h3>
+                {templateSavedName ? (
+                  <p style={{ marginBottom: 0 }}>Saved "{templateSavedName}" — find it on your Dashboard.</p>
+                ) : showTemplateNameInput ? (
+                  <>
+                    <input
+                      className="form-input"
+                      style={{ width: "100%", marginBottom: 8 }}
+                      placeholder="Template name"
+                      value={templateNameInput}
+                      onChange={(e) => setTemplateNameInput(e.target.value)}
+                    />
+                    {templateSaveError && (
+                      <p style={{ color: "var(--danger)", fontSize: 13 }}>{templateSaveError}</p>
+                    )}
+                    <button
+                      className="btn-secondary"
+                      style={{ width: "100%" }}
+                      disabled={savingTemplate || !templateNameInput.trim()}
+                      onClick={onSaveAsTemplate}
+                    >
+                      {savingTemplate ? "Saving…" : "Save"}
+                    </button>
+                  </>
+                ) : (
+                  <button className="btn-secondary" style={{ width: "100%" }} onClick={() => setShowTemplateNameInput(true)}>
+                    Save as template
+                  </button>
+                )}
+                <p style={{ fontSize: 11, marginTop: 8, marginBottom: 0 }}>
+                  Saves this PDF and field layout for reuse — signer names and emails aren't stored, just how many
+                  signers there are and where their fields go.
+                </p>
+              </div>
+            )}
 
             {signersWithoutFields.length > 0 && fields.length > 0 && (
               <p style={{ fontSize: 12, color: "var(--danger)" }}>

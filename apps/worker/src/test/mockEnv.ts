@@ -65,6 +65,10 @@ const STRIPE_CUSTOMER_MIGRATION_SQL = readFileSync(
   fileURLToPath(new URL("../../migrations/0003_stripe_customer.sql", import.meta.url).toString()),
   "utf-8"
 );
+const TEMPLATES_MIGRATION_SQL = readFileSync(
+  fileURLToPath(new URL("../../migrations/0004_templates.sql", import.meta.url).toString()),
+  "utf-8"
+);
 
 // sql.js's default WASM build doesn't compile in the FTS5 extension. It's swapped for a plain
 // table here — full-text MATCH queries aren't exercised by anything built in this pass anyway
@@ -76,7 +80,8 @@ const TEST_MIGRATION_SQL =
     "CREATE TABLE documents_fts (doc_id TEXT, title TEXT);"
   ) +
   API_TOKENS_MIGRATION_SQL +
-  STRIPE_CUSTOMER_MIGRATION_SQL;
+  STRIPE_CUSTOMER_MIGRATION_SQL +
+  TEMPLATES_MIGRATION_SQL;
 
 // sql.js's WASM module only needs loading once per test run; each test still gets its own
 // fresh in-memory `SQL.Database()` instance below.
