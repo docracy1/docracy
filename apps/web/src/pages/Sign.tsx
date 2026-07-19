@@ -162,9 +162,9 @@ export default function Sign() {
                       style={{
                         width: "100%",
                         height: "100%",
-                        border: values[f.id] ? "2px solid #2f8f5b" : "2px dashed #3b6fd8",
-                        borderRadius: 3,
-                        background: values[f.id] ? "white" : "rgba(59,111,216,0.08)",
+                        border: values[f.id] ? "2px solid var(--success)" : "2px dashed var(--primary)",
+                        borderRadius: "var(--r-sm)",
+                        background: values[f.id] ? "var(--canvas)" : "var(--primary-soft)",
                         cursor: "pointer",
                         padding: 0,
                       }}
@@ -172,7 +172,7 @@ export default function Sign() {
                       {values[f.id] ? (
                         <img src={values[f.id]} alt="signature" style={{ maxWidth: "100%", maxHeight: "100%" }} />
                       ) : (
-                        <span style={{ fontSize: 11, color: "#3b6fd8", fontWeight: 600 }}>Click to sign</span>
+                        <span style={{ fontSize: 11, color: "var(--primary)", fontWeight: 600 }}>Click to sign</span>
                       )}
                     </button>
                   </div>
@@ -196,10 +196,10 @@ export default function Sign() {
         >
           <div
             className="card"
-            style={{ background: "var(--canvas)", boxShadow: "0 8px 24px rgba(0,0,0,0.2)", maxWidth: "92vw" }}
+            style={{ background: "var(--canvas)", boxShadow: "var(--shadow-lg)", maxWidth: "92vw" }}
           >
             <p>Draw your signature</p>
-            <div style={{ background: "white", borderRadius: 3, width: 360, maxWidth: "100%" }}>
+            <div style={{ background: "var(--canvas)", borderRadius: "var(--r-sm)", width: 360, maxWidth: "100%" }}>
               <SignatureCanvas
                 ref={sigPadRef}
                 penColor="black"

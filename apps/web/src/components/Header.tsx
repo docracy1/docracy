@@ -29,30 +29,27 @@ export default function Header() {
     <header
       style={{
         borderBottom: "1px solid var(--hairline)",
-        padding: "16px 24px",
+        padding: "18px 24px",
+        position: "sticky",
+        top: 0,
+        background: "rgba(255,255,255,0.9)",
+        backdropFilter: "blur(8px)",
+        zIndex: 100,
       }}
     >
       <div className="container" style={{ padding: 0, display: "flex", alignItems: "center", gap: 16 }}>
         <Link to="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
           <img src="/docracy-wordmark.png" alt="Docracy" style={{ height: 28, width: "auto" }} />
         </Link>
-        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 16 }}>
-          <Link to={signedIn ? "/dashboard" : "/login"} style={{ fontSize: 14, color: "var(--primary)", textDecoration: "none" }}>
+        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 20 }}>
+          <Link
+            to={signedIn ? "/dashboard" : "/login"}
+            style={{ fontSize: 14, fontWeight: 600, color: "var(--primary)", textDecoration: "none" }}
+          >
             {signedIn ? "Dashboard" : "Sign in"}
           </Link>
           {signedIn && (
-            <button
-              onClick={onLogout}
-              style={{
-                background: "none",
-                border: "none",
-                padding: 0,
-                fontSize: 14,
-                color: "var(--mute)",
-                cursor: "pointer",
-                fontFamily: "inherit",
-              }}
-            >
+            <button onClick={onLogout} className="header-logout-btn">
               Log out
             </button>
           )}
