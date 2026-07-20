@@ -420,6 +420,79 @@ describe("parallel signing mode", () => {
   });
 });
 
+describe("workspace branding", () => {
+  const MOCK_CTX = { waitUntil: () => {}, passThroughOnException: () => {} } as unknown as ExecutionContext;
+  const TINY_PNG_BYTES = Uint8Array.from(atob(TINY_PNG.split(",")[1]), (c) => c.charCodeAt(0));
+
+  async function seedAccountDoc(
+    env: Awaited<ReturnType<typeof makeMockEnv>>["env"],
+    r2: ReturnType<typeof makeMockEnv>["r2"],
+    accountId: string | null
+  ) {
+    const pdf = await makeValidPdfBytes();
+    const docId = "doc-branded-1";
+    await r2.put(`docs/${docId}/working.pdf`, pdf);
+    const doc: DocState = {
+      docId,
+      accountId,
+      title: null,
+      createdAt: new Date().toISOString(),
+      expiresAt: new Date(Date.now() + 99999999).toISOString(),
+      preparerSigns: false,
+      status: "pending",
+      completedAt: null,
+      signers: [
+        { order: 1, name: "Anna", email: "anna@example.com", status: "pending", signedAt: null, linkSentAt: new Date().toISOString(), remindersSent: [] },
+      ],
+      fields: [{ id: "f1", signerOrder: 1, page: 0, xFrac: 0.1, yFrac: 0.1, wFrac: 0.2, hFrac: 0.05 }],
+    };
+    await putDoc(env, doc);
+    return docId;
+  }
+
+  it("omits brandLogoPath for an anonymous document", async () => {
+    const { env, r2 } = makeMockEnv();
+    const docId = await seedAccountDoc(env, r2, null);
+    const token = await signToken(docId, 1, env.TOKEN_SECRET);
+
+    const statusBody: any = await (await sign.request(`/status/${token}`, {}, env)).json();
+    expect(statusBody.brandLogoPath).toBeNull();
+
+    const signBody: any = await (await sign.request(`/sign/${token}`, {}, env)).json();
+    expect(signBody.brandLogoPath).toBeNull();
+  });
+
+  it("omits brandLogoPath for a paid workspace that hasn't uploaded a logo", async () => {
+    const { env, r2 } = makeMockEnv();
+    await env.DOCRACY_DB!.prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 1)`)
+      .bind("acct-1", "owner@example.com", new Date().toISOString())
+      .run();
+    const docId = await seedAccountDoc(env, r2, "acct-1");
+    const token = await signToken(docId, 1, env.TOKEN_SECRET);
+
+    const body: any = await (await sign.request(`/sign/${token}`, {}, env, MOCK_CTX)).json();
+    expect(body.brandLogoPath).toBeNull();
+  });
+
+  it("includes brandLogoPath once the workspace uploads a logo", async () => {
+    const { env, r2 } = makeMockEnv();
+    await env.DOCRACY_DB!.prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 1)`)
+      .bind("acct-1", "owner@example.com", new Date().toISOString())
+      .run();
+    await env.DOCRACY_DOCS.put("branding/acct-1/logo", TINY_PNG_BYTES, { httpMetadata: { contentType: "image/png" } });
+    await env.DOCRACY_DB!.prepare(`UPDATE accounts SET logo_r2_key = ? WHERE id = ?`).bind("branding/acct-1/logo", "acct-1").run();
+
+    const docId = await seedAccountDoc(env, r2, "acct-1");
+    const token = await signToken(docId, 1, env.TOKEN_SECRET);
+
+    const statusBody: any = await (await sign.request(`/status/${token}`, {}, env)).json();
+    expect(statusBody.brandLogoPath).toBe("/api/branding/acct-1/logo");
+
+    const signBody: any = await (await sign.request(`/sign/${token}`, {}, env, MOCK_CTX)).json();
+    expect(signBody.brandLogoPath).toBe("/api/branding/acct-1/logo");
+  });
+});
+
 describe("PIN-gated signing links", () => {
   let env: Awaited<ReturnType<typeof makeMockEnv>>["env"];
   let r2: ReturnType<typeof makeMockEnv>["r2"];

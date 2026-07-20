@@ -12,6 +12,11 @@ billing.post("/checkout", requireAccount, async (c) => {
     return c.json({ error: "Billing isn't set up on this deployment yet." }, 501);
   }
   const account = c.get("account")!;
+  // A team member's paid status is inherited from the workspace owner's subscription — starting
+  // their own would just create an unrelated, unused second subscription.
+  if (account.id !== account.workspaceId) {
+    return c.json({ error: "Ask your workspace owner to manage the subscription." }, 403);
+  }
 
   const params = new URLSearchParams({
     mode: "subscription",
@@ -70,6 +75,9 @@ billing.post("/portal", requirePaidAccount, async (c) => {
     return c.json({ error: "Billing isn't set up on this deployment yet." }, 501);
   }
   const account = c.get("account")!;
+  if (account.id !== account.workspaceId) {
+    return c.json({ error: "Ask your workspace owner to manage the subscription." }, 403);
+  }
   const customerId = await getStripeCustomerId(c.env, account.id);
   if (!customerId) {
     return c.json({ error: "No billing account on file yet." }, 404);

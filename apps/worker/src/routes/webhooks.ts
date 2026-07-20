@@ -43,12 +43,12 @@ webhooks.post("/", requirePaidAccount, async (c) => {
     return c.json({ error: `events must be one of: ${WEBHOOK_EVENT_TYPES.join(", ")}` }, 400);
   }
 
-  const existing = await listWebhooks(c.env, account.id);
+  const existing = await listWebhooks(c.env, account.workspaceId);
   if (existing.length >= MAX_WEBHOOKS_PER_ACCOUNT) {
     return c.json({ error: `You can have up to ${MAX_WEBHOOKS_PER_ACCOUNT} webhooks` }, 400);
   }
 
-  const { webhookId, secret } = await createWebhook(c.env, account.id, url.toString(), body.events as WebhookEventType[]);
+  const { webhookId, secret } = await createWebhook(c.env, account.workspaceId, url.toString(), body.events as WebhookEventType[]);
   return c.json({ webhookId, secret });
 });
 
@@ -57,7 +57,7 @@ webhooks.get("/", requirePaidAccount, async (c) => {
     return c.json({ webhooks: [] });
   }
   const account = c.get("account")!;
-  const list = await listWebhooks(c.env, account.id);
+  const list = await listWebhooks(c.env, account.workspaceId);
   return c.json({ webhooks: list });
 });
 
@@ -66,7 +66,7 @@ webhooks.delete("/:id", requirePaidAccount, async (c) => {
     return c.json({ error: "Not available on this deployment yet." }, 501);
   }
   const account = c.get("account")!;
-  const deleted = await deleteWebhook(c.env, account.id, c.req.param("id"));
+  const deleted = await deleteWebhook(c.env, account.workspaceId, c.req.param("id"));
   if (!deleted) {
     return c.json({ error: "Webhook not found" }, 404);
   }

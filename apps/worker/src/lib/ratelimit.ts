@@ -73,3 +73,11 @@ const PIN_ATTEMPT_MAX_PER_WINDOW = 10;
 export async function checkPinAttemptRateLimit(env: Env, token: string): Promise<boolean> {
   return checkLimit(env, `pinattempt:${token}`, PIN_ATTEMPT_MAX_PER_WINDOW, PIN_ATTEMPT_WINDOW_SECONDS);
 }
+
+const TEAM_INVITE_WINDOW_SECONDS = 60 * 60; // 1 hour
+const TEAM_INVITE_MAX_PER_WINDOW = 5;
+
+/** Per-recipient-email cap on team invites, same rationale as checkInviteRateLimit/checkMagicLinkRateLimit. */
+export async function checkTeamInviteRateLimit(env: Env, email: string): Promise<boolean> {
+  return checkLimit(env, `teaminvite:${email.toLowerCase()}`, TEAM_INVITE_MAX_PER_WINDOW, TEAM_INVITE_WINDOW_SECONDS);
+}

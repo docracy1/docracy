@@ -31,14 +31,23 @@ function createMockKV() {
 
 function createMockR2() {
   const store = new Map<string, Uint8Array>();
+  // Kept separate from `store` (rather than wrapping stored values in a {bytes, httpMetadata}
+  // shape) so tests that write directly into `_store` with raw bytes — see cleanup.test.ts —
+  // keep working unchanged; they just never set/read metadata, which they don't need anyway.
+  const metaStore = new Map<string, { contentType?: string }>();
   return {
-    async put(key: string, value: Uint8Array) {
+    async put(key: string, value: Uint8Array, options?: { httpMetadata?: { contentType?: string } }) {
       store.set(key, value);
+      if (options?.httpMetadata) metaStore.set(key, options.httpMetadata);
+      else metaStore.delete(key);
     },
     async get(key: string) {
       const bytes = store.get(key);
       if (!bytes) return null;
-      return { arrayBuffer: async () => bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) };
+      return {
+        arrayBuffer: async () => bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength),
+        httpMetadata: metaStore.get(key),
+      };
     },
     async list({ prefix }: { prefix?: string; cursor?: string } = {}) {
       const objects = [...store.keys()]
@@ -47,7 +56,10 @@ function createMockR2() {
       return { objects, truncated: false, cursor: "" };
     },
     async delete(keys: string | string[]) {
-      for (const key of Array.isArray(keys) ? keys : [keys]) store.delete(key);
+      for (const key of Array.isArray(keys) ? keys : [keys]) {
+        store.delete(key);
+        metaStore.delete(key);
+      }
     },
     _store: store,
   };
@@ -73,6 +85,10 @@ const WEBHOOKS_MIGRATION_SQL = readFileSync(
   fileURLToPath(new URL("../../migrations/0005_webhooks.sql", import.meta.url).toString()),
   "utf-8"
 );
+const TEAM_AND_BRANDING_MIGRATION_SQL = readFileSync(
+  fileURLToPath(new URL("../../migrations/0006_team_and_branding.sql", import.meta.url).toString()),
+  "utf-8"
+);
 
 // sql.js's default WASM build doesn't compile in the FTS5 extension. It's swapped for a plain
 // table here — full-text MATCH queries aren't exercised by anything built in this pass anyway
@@ -86,7 +102,8 @@ const TEST_MIGRATION_SQL =
   API_TOKENS_MIGRATION_SQL +
   STRIPE_CUSTOMER_MIGRATION_SQL +
   TEMPLATES_MIGRATION_SQL +
-  WEBHOOKS_MIGRATION_SQL;
+  WEBHOOKS_MIGRATION_SQL +
+  TEAM_AND_BRANDING_MIGRATION_SQL;
 
 // sql.js's WASM module only needs loading once per test run; each test still gets its own
 // fresh in-memory `SQL.Database()` instance below.
@@ -152,6 +169,7 @@ export function makeMockEnv(overrides: Partial<Env> = {}) {
     TOKEN_SECRET: "test-secret",
     PUBLIC_APP_URL: "http://localhost:5173",
     PUBLIC_CONNECTOR_URL: "http://localhost:8788",
+    PUBLIC_WORKER_URL: "http://localhost:8787",
     FREE_TIER_MAX_SIGNERS: "2",
     DOC_TTL_DAYS: "9",
     FEEDBACK_EMAIL: "feedback-test@example.com",

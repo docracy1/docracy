@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchStatus } from "../lib/api";
+import { apiUrl, fetchStatus } from "../lib/api";
 import { useNoIndex } from "../lib/useNoIndex";
 import type { StatusPayload } from "../lib/types";
 
@@ -37,6 +37,13 @@ export default function Status() {
 
   return (
     <div className="container">
+      {status.brandLogoPath && (
+        <img
+          src={apiUrl(status.brandLogoPath)}
+          alt=""
+          style={{ maxHeight: 48, maxWidth: 220, marginBottom: 16, display: "block" }}
+        />
+      )}
       <h1>{status.status === "completed" ? "Fully signed" : "Signing in progress"}</h1>
       <div className="card">
         {[...status.signers]

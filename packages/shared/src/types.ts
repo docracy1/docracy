@@ -109,4 +109,9 @@ export interface Env {
   STRIPE_WEBHOOK_SECRET?: string;
   /** The Stripe Price ID for the paid subscription (created in the Stripe dashboard). */
   STRIPE_PRICE_ID?: string;
+  /** This worker's own public origin (e.g. https://docracy-worker.rl-d77.workers.dev) — used only
+   *  to build absolute URLs to this worker's own routes for contexts that can't use a relative
+   *  path, like a custom workspace logo embedded in an outbound email. Optional: emails just fall
+   *  back to the default Docracy wordmark until this is set. */
+  PUBLIC_WORKER_URL?: string;
 }

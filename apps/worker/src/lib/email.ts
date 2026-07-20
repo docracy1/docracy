@@ -1,3 +1,4 @@
+import { resolveEmailLogoUrl } from "./branding";
 import type { DocState, Env } from "@docracy/shared";
 
 // Using Resend's shared testing domain until docracy.io is connected and verified in Resend
@@ -72,8 +73,11 @@ const INK = "#1a2b3c";
 const MUTED = "#6b7785";
 
 /** Shared branded shell for Docracy's outbound email — a plain white card on a light gray
- *  background, table-based layout since email clients don't reliably support flexbox/grid. */
-function emailShell(bodyHtml: string): string {
+ *  background, table-based layout since email clients don't reliably support flexbox/grid.
+ *  `customLogoUrl` replaces the Docracy wordmark with a workspace's own logo — only ever passed
+ *  by sendSigningInvite, since that's the one email a document's actual signer sees; Docracy's
+ *  own transactional emails (magic link, team invite) always keep Docracy's own branding. */
+function emailShell(bodyHtml: string, customLogoUrl?: string | null): string {
   return `
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f5f7fa;padding:32px 16px;font-family:Arial,Helvetica,sans-serif;">
   <tr>
@@ -81,7 +85,7 @@ function emailShell(bodyHtml: string): string {
       <table role="presentation" width="480" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:8px;border:1px solid #e6e9ee;max-width:480px;width:100%;">
         <tr>
           <td style="padding:28px 32px 8px 32px;">
-            <img src="${WORDMARK_URL}" alt="Docracy" height="26" style="display:block;" />
+            <img src="${customLogoUrl ?? WORDMARK_URL}" alt="${customLogoUrl ? "" : "Docracy"}" height="26" style="display:block;" />
           </td>
         </tr>
         <tr>
@@ -133,7 +137,8 @@ export async function sendSigningInvite(env: Env, doc: DocState, order: number, 
   `;
 
   const subject = doc.customSubject?.trim() || "Ready to sign — you have a document waiting";
-  await send(env, signer.email, subject, emailShell(body));
+  const customLogoUrl = await resolveEmailLogoUrl(env, doc.accountId);
+  await send(env, signer.email, subject, emailShell(body, customLogoUrl));
 }
 
 export async function sendPreparerStatusLink(env: Env, preparerEmail: string, statusToken: string): Promise<void> {
@@ -203,6 +208,22 @@ export async function sendMagicLink(env: Env, email: string, link: string): Prom
     </p>
   `;
   await send(env, email, "Your Docracy sign-in link", emailShell(body));
+}
+
+export async function sendTeamInvite(env: Env, email: string, ownerEmail: string, link: string): Promise<void> {
+  const body = `
+    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">You're invited to a Docracy workspace</p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      ${escapeHtml(ownerEmail)} invited you to join their Docracy workspace — once you accept, you'll
+      see the same documents, templates, and webhooks they do. This link expires in 7 days and can
+      only be used once.
+    </p>
+    ${ctaButton(link, "Accept invite")}
+    <p style="margin:0;font-size:13px;color:${MUTED};line-height:1.5;">
+      If you weren't expecting this, you can safely ignore this email — no account changes were made.
+    </p>
+  `;
+  await send(env, email, "You're invited to a Docracy workspace", emailShell(body));
 }
 
 export async function sendHealthAlert(

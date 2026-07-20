@@ -159,8 +159,9 @@ documents.post("/", optionalAccount, async (c) => {
 
   // Only a *paid* account attaches to the document — a signed-in-but-unpaid visitor still gets
   // the anonymous, no-D1-indexing free-tier path (accountId stays null), identical to before this
-  // middleware existed.
-  const accountId = account?.isPaid ? account.id : null;
+  // middleware existed. workspaceId (not id) so a document created by any team member is indexed
+  // under the shared workspace every teammate's dashboard queries against.
+  const accountId = account?.isPaid ? account.workspaceId : null;
 
   const { docId, statusToken } = await createDocumentCore({
     env: c.env,

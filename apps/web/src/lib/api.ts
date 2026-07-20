@@ -4,6 +4,12 @@ import type { DocField, SignerInput, StatusPayload } from "./types";
 // URL for production builds, since the frontend (Pages) and worker live on different domains.
 const API_BASE = import.meta.env.VITE_API_URL ?? "";
 
+/** Makes a worker-relative path (e.g. a `brandLogoPath` from a sign/status payload) absolute,
+ *  the same way every other API call already resolves against this environment's worker. */
+export function apiUrl(path: string): string {
+  return `${API_BASE}${path}`;
+}
+
 async function asJson<T>(res: Response): Promise<T> {
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
@@ -66,6 +72,7 @@ export interface SignPayload {
   pdfBase64?: string;
   fields?: DocField[];
   status: StatusPayload;
+  brandLogoPath?: string | null;
 }
 
 export async function fetchSignView(token: string, unlockToken?: string): Promise<SignPayload> {
@@ -250,5 +257,68 @@ export async function createWebhook(
 
 export async function deleteWebhook(id: string): Promise<{ ok: true }> {
   const res = await apiFetch(`/api/account/webhooks/${id}`, { method: "DELETE" });
+  return asJson(res);
+}
+
+export interface TeamMemberSummary {
+  accountId: string;
+  email: string;
+  role: "owner" | "member";
+  joinedAt: string;
+}
+
+export interface PendingInviteSummary {
+  id: string;
+  email: string;
+  expiresAt: string;
+}
+
+export async function fetchTeam(): Promise<{ members: TeamMemberSummary[]; pendingInvites: PendingInviteSummary[] }> {
+  const res = await apiFetch("/api/account/team");
+  return asJson(res);
+}
+
+export async function inviteTeammate(email: string): Promise<{ ok: true }> {
+  const res = await apiFetch("/api/account/team/invite", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+  });
+  return asJson(res);
+}
+
+export async function cancelTeamInvite(id: string): Promise<{ ok: true }> {
+  const res = await apiFetch(`/api/account/team/invites/${id}`, { method: "DELETE" });
+  return asJson(res);
+}
+
+export async function removeTeamMember(memberAccountId: string): Promise<{ ok: true }> {
+  const res = await apiFetch(`/api/account/team/${memberAccountId}`, { method: "DELETE" });
+  return asJson(res);
+}
+
+export async function acceptTeamInvite(token: string): Promise<{ ok: true }> {
+  const res = await apiFetch("/api/account/team/accept", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token }),
+  });
+  return asJson(res);
+}
+
+export async function fetchBranding(): Promise<{ hasLogo: boolean; logoPath: string | null }> {
+  const res = await apiFetch("/api/account/branding/logo");
+  return asJson(res);
+}
+
+export async function uploadBrandLogo(file: File): Promise<{ ok: true; logoPath: string }> {
+  const form = new FormData();
+  form.set("logo", file);
+  const res = await apiFetch("/api/account/branding/logo", { method: "POST", body: form });
+  return asJson(res);
+}
+
+export async function deleteBrandLogo(): Promise<{ ok: true }> {
+  const res = await apiFetch("/api/account/branding/logo", { method: "DELETE" });
   return asJson(res);
 }

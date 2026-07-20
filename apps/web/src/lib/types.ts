@@ -32,4 +32,7 @@ export interface StatusPayload {
   docId: string;
   status: "pending" | "completed";
   signers: StatusSigner[];
+  /** Path (not a full URL — see apiUrl in lib/api.ts) to the workspace's custom logo, in place of
+   *  the default Docracy wordmark. Null/absent for anonymous documents or workspaces with none. */
+  brandLogoPath?: string | null;
 }

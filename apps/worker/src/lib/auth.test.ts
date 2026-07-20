@@ -145,7 +145,7 @@ describe("resolveAccount", () => {
     await ctx.flush();
 
     const account = await resolveAccount(env, token);
-    expect(account).toEqual({ id: "acct-1", email: "anna@example.com", isPaid: false });
+    expect(account).toEqual({ id: "acct-1", email: "anna@example.com", isPaid: false, workspaceId: "acct-1" });
   });
 
   it("refreshes a stale isPaid flag from D1", async () => {
@@ -168,6 +168,48 @@ describe("resolveAccount", () => {
 
     const account = await resolveAccount(env, token);
     expect(account?.isPaid).toBe(true);
+  });
+
+  it("resolves a team member's workspaceId to the owner's account, and inherits the owner's isPaid", async () => {
+    const { env, d1 } = makeMockEnv();
+    const ctx = makeCtx();
+    const now = new Date().toISOString();
+
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 1)`)
+      .bind("owner-1", "owner@example.com", now)
+      .run();
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 0)`)
+      .bind("member-1", "member@example.com", now)
+      .run();
+    await d1
+      .prepare(`INSERT INTO team_members (id, owner_account_id, member_account_id, joined_at) VALUES (?, ?, ?, ?)`)
+      .bind("tm-1", "owner-1", "member-1", now)
+      .run();
+
+    // isPaid is deliberately false here — the member's own account row is unpaid; resolveAccount
+    // should still surface isPaid: true because a missing workspaceId always forces a fresh
+    // lookup, and that lookup follows team_members to the owner's paid status.
+    const token = await createSession(env, ctx, "member-1", "member@example.com", false, null, null);
+    await ctx.flush();
+
+    const account = await resolveAccount(env, token);
+    expect(account).toMatchObject({ id: "member-1", workspaceId: "owner-1", isPaid: true });
+  });
+
+  it("does not treat a workspace owner as their own team member", async () => {
+    const { env, d1 } = makeMockEnv();
+    const ctx = makeCtx();
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 1)`)
+      .bind("owner-2", "owner2@example.com", new Date().toISOString())
+      .run();
+    const token = await createSession(env, ctx, "owner-2", "owner2@example.com", true, null, null);
+    await ctx.flush();
+
+    const account = await resolveAccount(env, token);
+    expect(account).toMatchObject({ id: "owner-2", workspaceId: "owner-2", isPaid: true });
   });
 });
 

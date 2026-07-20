@@ -14,6 +14,7 @@ import Terms from "./pages/Terms";
 import Login from "./pages/Login";
 import AuthVerify from "./pages/AuthVerify";
 import Dashboard from "./pages/Dashboard";
+import TeamAccept from "./pages/TeamAccept";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -29,6 +30,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/terms" element={<Terms />} />
         <Route path="/login" element={<Login />} />
         <Route path="/auth/verify" element={<AuthVerify />} />
+        <Route path="/team/accept" element={<TeamAccept />} />
         <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
       <Footer />

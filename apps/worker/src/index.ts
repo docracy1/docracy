@@ -8,6 +8,9 @@ import billing from "./routes/billing";
 import account from "./routes/account";
 import templates from "./routes/templates";
 import webhooksRoute from "./routes/webhooks";
+import teamRoute from "./routes/team";
+import brandingRoute from "./routes/branding";
+import brandingPublicRoute from "./routes/brandingPublic";
 import { runReminderSweep } from "./lib/reminders";
 import { reconcileD1Index } from "./lib/index-d1";
 import { runExpiredDocCleanup } from "./lib/cleanup";
@@ -44,6 +47,9 @@ app.route("/api/billing", billing);
 app.route("/api/account", account);
 app.route("/api/account/templates", templates);
 app.route("/api/account/webhooks", webhooksRoute);
+app.route("/api/account/team", teamRoute);
+app.route("/api/account/branding", brandingRoute);
+app.route("/api/branding", brandingPublicRoute);
 
 export default {
   fetch: app.fetch,

@@ -2,13 +2,20 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import SignatureCanvas from "react-signature-canvas";
 import PdfViewer from "../components/PdfViewer";
-import { fetchSignView, submitSignature, unlockSign } from "../lib/api";
+import { apiUrl, fetchSignView, submitSignature, unlockSign } from "../lib/api";
 import { useNoIndex } from "../lib/useNoIndex";
 import type { SignPayload } from "../lib/api";
 
 function base64ToBytes(base64: string): Uint8Array {
   const binary = atob(base64);
   return Uint8Array.from(binary, (c) => c.charCodeAt(0));
+}
+
+/** Replaces the generic Docracy branding with the sending workspace's own logo, when they've set
+ *  one — this is the one surface a signer who's never heard of Docracy actually looks at. */
+function BrandLogo({ path }: { path?: string | null }) {
+  if (!path) return null;
+  return <img src={apiUrl(path)} alt="" style={{ maxHeight: 48, maxWidth: 220, marginBottom: 16, display: "block" }} />;
 }
 
 export default function Sign() {
@@ -135,6 +142,7 @@ export default function Sign() {
   if (done) {
     return (
       <div className="container">
+        <BrandLogo path={payload.brandLogoPath} />
         <h1>Signed</h1>
         <p>Thanks — you're done. Everyone in the chain will be notified as the document moves forward.</p>
       </div>
@@ -144,6 +152,7 @@ export default function Sign() {
   if (!payload.onTurn) {
     return (
       <div className="container">
+        <BrandLogo path={payload.brandLogoPath} />
         <h1>Not your turn yet</h1>
         <p>Someone earlier in the signing order hasn't signed yet. Here's where things stand:</p>
         <div className="card">
@@ -166,6 +175,7 @@ export default function Sign() {
   if (payload.needsPin) {
     return (
       <div className="container">
+        <BrandLogo path={payload.brandLogoPath} />
         <h1>Enter your PIN</h1>
         <p>This document has an extra PIN set on your signing link. Enter it to continue.</p>
         <div className="card" style={{ maxWidth: 320 }}>
@@ -190,6 +200,7 @@ export default function Sign() {
 
   return (
     <div className="container">
+      <BrandLogo path={payload.brandLogoPath} />
       <h1>Review &amp; sign</h1>
       {pdfBytes && (
         <PdfViewer

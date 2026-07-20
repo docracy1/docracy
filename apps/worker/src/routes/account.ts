@@ -33,7 +33,7 @@ account.get("/documents", requireAccount, async (c) => {
      WHERE d.account_id = ?
      ORDER BY d.created_at DESC`
   )
-    .bind(acct.id)
+    .bind(acct.workspaceId)
     .all<DocumentRow>();
 
   // A viewer token (order 0) recomputed on the fly — same deterministic HMAC used when the
@@ -62,7 +62,7 @@ account.get("/documents", requireAccount, async (c) => {
 
 account.get("/token", requirePaidAccount, async (c) => {
   const acct = c.get("account")!;
-  const hasToken = await hasApiToken(c.env, acct.id);
+  const hasToken = await hasApiToken(c.env, acct.workspaceId);
   return c.json({ hasToken });
 });
 
@@ -71,7 +71,9 @@ account.post("/token/regenerate", requirePaidAccount, async (c) => {
     return c.json({ error: "Not available on this deployment yet." }, 501);
   }
   const acct = c.get("account")!;
-  const token = await issueApiToken(c.env, acct.id);
+  // Workspace-scoped, not per-login — any teammate regenerating replaces the one shared connector
+  // URL for the whole workspace, consistent with everyone seeing the same documents through it.
+  const token = await issueApiToken(c.env, acct.workspaceId);
   return c.json({ token, connectorUrl: `${c.env.PUBLIC_CONNECTOR_URL}/mcp?token=${token}` });
 });
 

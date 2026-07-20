@@ -1,19 +1,29 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import {
+  apiUrl,
+  cancelTeamInvite,
   createWebhook,
+  deleteBrandLogo,
   deleteTemplate,
   deleteWebhook,
+  fetchBranding,
   fetchMe,
   fetchMyDocuments,
+  fetchTeam,
   fetchTemplates,
   fetchTokenStatus,
   fetchWebhooks,
+  inviteTeammate,
   openBillingPortal,
   regenerateApiToken,
+  removeTeamMember,
   startCheckout,
+  uploadBrandLogo,
   type Account,
   type DocumentSummary,
+  type PendingInviteSummary,
+  type TeamMemberSummary,
   type TemplateSummary,
   type WebhookEventType,
   type WebhookSummary,
@@ -44,6 +54,18 @@ export default function Dashboard() {
   const [newWebhookEvents, setNewWebhookEvents] = useState<WebhookEventType[]>([]);
   const [creatingWebhook, setCreatingWebhook] = useState(false);
   const [newWebhookSecret, setNewWebhookSecret] = useState<string | null>(null);
+  const [teamMembers, setTeamMembers] = useState<TeamMemberSummary[]>([]);
+  const [pendingInvites, setPendingInvites] = useState<PendingInviteSummary[]>([]);
+  const [teamError, setTeamError] = useState<string | null>(null);
+  const [showInviteInput, setShowInviteInput] = useState(false);
+  const [newInviteEmail, setNewInviteEmail] = useState("");
+  const [invitingTeammate, setInvitingTeammate] = useState(false);
+  const [removingMemberId, setRemovingMemberId] = useState<string | null>(null);
+  const [cancelingInviteId, setCancelingInviteId] = useState<string | null>(null);
+  const [brandLogoPath, setBrandLogoPath] = useState<string | null>(null);
+  const [brandingError, setBrandingError] = useState<string | null>(null);
+  const [uploadingLogo, setUploadingLogo] = useState(false);
+  const [deletingLogo, setDeletingLogo] = useState(false);
 
   useNoIndex();
 
@@ -98,6 +120,79 @@ export default function Dashboard() {
     }
   };
 
+  const refreshTeam = () => fetchTeam().then((res) => {
+    setTeamMembers(res.members);
+    setPendingInvites(res.pendingInvites);
+  });
+
+  const onInviteTeammate = async () => {
+    if (!newInviteEmail.trim()) return;
+    setInvitingTeammate(true);
+    setTeamError(null);
+    try {
+      await inviteTeammate(newInviteEmail.trim());
+      setNewInviteEmail("");
+      setShowInviteInput(false);
+      await refreshTeam();
+    } catch (err) {
+      setTeamError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setInvitingTeammate(false);
+    }
+  };
+
+  const onCancelInvite = async (id: string) => {
+    setCancelingInviteId(id);
+    setTeamError(null);
+    try {
+      await cancelTeamInvite(id);
+      await refreshTeam();
+    } catch (err) {
+      setTeamError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setCancelingInviteId(null);
+    }
+  };
+
+  const onRemoveTeamMember = async (accountId: string) => {
+    setRemovingMemberId(accountId);
+    setTeamError(null);
+    try {
+      await removeTeamMember(accountId);
+      await refreshTeam();
+    } catch (err) {
+      setTeamError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setRemovingMemberId(null);
+    }
+  };
+
+  const onUploadLogo = async (file: File) => {
+    setUploadingLogo(true);
+    setBrandingError(null);
+    try {
+      const { logoPath } = await uploadBrandLogo(file);
+      setBrandLogoPath(logoPath);
+    } catch (err) {
+      setBrandingError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setUploadingLogo(false);
+    }
+  };
+
+  const onDeleteLogo = async () => {
+    setDeletingLogo(true);
+    setBrandingError(null);
+    try {
+      await deleteBrandLogo();
+      setBrandLogoPath(null);
+    } catch (err) {
+      setBrandingError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setDeletingLogo(false);
+    }
+  };
+
   const onUpgrade = async () => {
     setUpgrading(true);
     setUpgradeError(null);
@@ -136,6 +231,11 @@ export default function Dashboard() {
     }
   };
 
+  const isWorkspaceOwner = useMemo(
+    () => teamMembers.find((m) => m.role === "owner")?.accountId === account?.id,
+    [teamMembers, account]
+  );
+
   const awaitingYouDocs = useMemo(() => documents.filter((d) => d.awaitingYou), [documents]);
   const waitingOnOthersCount = useMemo(
     () => documents.filter((d) => d.status === "pending" && !d.awaitingYou).length,
@@ -165,6 +265,11 @@ export default function Dashboard() {
           setTemplates(templates);
           const { webhooks } = await fetchWebhooks();
           setWebhooks(webhooks);
+          const { members, pendingInvites } = await fetchTeam();
+          setTeamMembers(members);
+          setPendingInvites(pendingInvites);
+          const { logoPath } = await fetchBranding();
+          setBrandLogoPath(logoPath);
         }
       })
       .catch((err) => setError(err instanceof Error ? err.message : "Something went wrong"))
@@ -278,7 +383,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      {account.isPaid && (
+      {account.isPaid && isWorkspaceOwner && (
         <div className="card" style={{ marginTop: 24 }}>
           <h3 style={{ fontSize: 15 }}>Subscription</h3>
           <p>Manage your payment method, invoices, or cancel your subscription.</p>
@@ -512,6 +617,141 @@ export default function Dashboard() {
             <button className="btn-secondary" style={{ marginTop: 8 }} onClick={() => setShowAddWebhook(true)}>
               + Add webhook
             </button>
+          )}
+        </div>
+      )}
+
+      {account.isPaid && (
+        <div className="card" style={{ marginTop: 24 }}>
+          <h3 style={{ fontSize: 15 }}>Branding</h3>
+          <p style={{ fontSize: 12, color: "var(--mute)" }}>
+            Replace the Docracy logo with your own on the signing page and invite emails your signers see.
+          </p>
+          {brandingError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{brandingError}</p>}
+          {brandLogoPath ? (
+            <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+              <img
+                src={apiUrl(brandLogoPath)}
+                alt="Your logo"
+                style={{ maxHeight: 48, maxWidth: 220, display: "block" }}
+              />
+              <button className="btn-secondary" style={{ fontSize: 13, padding: "4px 10px" }} disabled={deletingLogo} onClick={onDeleteLogo}>
+                {deletingLogo ? "Removing…" : "Remove logo"}
+              </button>
+            </div>
+          ) : (
+            <div>
+              <input
+                type="file"
+                accept="image/png,image/jpeg,image/webp"
+                disabled={uploadingLogo}
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) onUploadLogo(file);
+                  e.target.value = "";
+                }}
+              />
+              <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 6, marginBottom: 0 }}>
+                PNG, JPEG, or WebP, up to 2MB. {uploadingLogo && "Uploading…"}
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {account.isPaid && (
+        <div className="card" style={{ marginTop: 24 }}>
+          <h3 style={{ fontSize: 15 }}>Team</h3>
+          <p style={{ fontSize: 12, color: "var(--mute)" }}>
+            Invite teammates to share this workspace — same documents, templates, and webhooks, one
+            subscription.
+          </p>
+          {teamError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{teamError}</p>}
+          {teamMembers.map((m) => (
+            <div
+              key={m.accountId}
+              style={{
+                padding: "8px 0",
+                borderBottom: "1px solid var(--hairline)",
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "space-between",
+                alignItems: "center",
+                gap: 8,
+              }}
+            >
+              <span style={{ overflowWrap: "anywhere" }}>
+                {m.email} <span style={{ fontSize: 12, color: "var(--mute)" }}>({m.role})</span>
+              </span>
+              {isWorkspaceOwner && m.role === "member" && (
+                <button
+                  className="btn-secondary"
+                  style={{ fontSize: 13, padding: "4px 10px" }}
+                  disabled={removingMemberId === m.accountId}
+                  onClick={() => onRemoveTeamMember(m.accountId)}
+                >
+                  {removingMemberId === m.accountId ? "Removing…" : "Remove"}
+                </button>
+              )}
+            </div>
+          ))}
+
+          {isWorkspaceOwner &&
+            pendingInvites.map((invite) => (
+              <div
+                key={invite.id}
+                style={{
+                  padding: "8px 0",
+                  borderBottom: "1px solid var(--hairline)",
+                  display: "flex",
+                  flexWrap: "wrap",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  gap: 8,
+                }}
+              >
+                <span style={{ overflowWrap: "anywhere" }}>
+                  {invite.email} <span style={{ fontSize: 12, color: "var(--mute)" }}>(invited, not yet joined)</span>
+                </span>
+                <button
+                  className="btn-secondary"
+                  style={{ fontSize: 13, padding: "4px 10px" }}
+                  disabled={cancelingInviteId === invite.id}
+                  onClick={() => onCancelInvite(invite.id)}
+                >
+                  {cancelingInviteId === invite.id ? "Cancelling…" : "Cancel invite"}
+                </button>
+              </div>
+            ))}
+
+          {isWorkspaceOwner ? (
+            showInviteInput ? (
+              <div style={{ marginTop: 12 }}>
+                <input
+                  className="form-input"
+                  style={{ width: "100%", marginBottom: 8 }}
+                  placeholder="teammate@example.com"
+                  type="email"
+                  value={newInviteEmail}
+                  onChange={(e) => setNewInviteEmail(e.target.value)}
+                />
+                <button
+                  className="btn-secondary"
+                  disabled={invitingTeammate || !newInviteEmail.trim()}
+                  onClick={onInviteTeammate}
+                >
+                  {invitingTeammate ? "Inviting…" : "Send invite"}
+                </button>
+              </div>
+            ) : (
+              <button className="btn-secondary" style={{ marginTop: 8 }} onClick={() => setShowInviteInput(true)}>
+                + Invite teammate
+              </button>
+            )
+          ) : (
+            <p style={{ fontSize: 12, color: "var(--mute)", marginBottom: 0, marginTop: 8 }}>
+              Only the workspace owner can invite or remove teammates.
+            </p>
           )}
         </div>
       )}

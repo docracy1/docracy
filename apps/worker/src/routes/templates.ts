@@ -90,7 +90,7 @@ templates.post("/", requirePaidAccount, async (c) => {
     }
   }
 
-  const { templateId } = await createTemplate(c.env, account.id, pdfBytes, name, meta.signerCount, pageCount, meta.fields);
+  const { templateId } = await createTemplate(c.env, account.workspaceId, pdfBytes, name, meta.signerCount, pageCount, meta.fields);
   return c.json({ templateId });
 });
 
@@ -99,7 +99,7 @@ templates.get("/", requirePaidAccount, async (c) => {
     return c.json({ templates: [] });
   }
   const account = c.get("account")!;
-  const templateList = await listTemplates(c.env, account.id);
+  const templateList = await listTemplates(c.env, account.workspaceId);
   return c.json({ templates: templateList });
 });
 
@@ -108,7 +108,7 @@ templates.get("/:id", requirePaidAccount, async (c) => {
     return c.json({ error: "Not available on this deployment yet." }, 501);
   }
   const account = c.get("account")!;
-  const result = await getTemplate(c.env, account.id, c.req.param("id"));
+  const result = await getTemplate(c.env, account.workspaceId, c.req.param("id"));
   if (!result) {
     return c.json({ error: "Template not found" }, 404);
   }
@@ -125,7 +125,7 @@ templates.delete("/:id", requirePaidAccount, async (c) => {
     return c.json({ error: "Not available on this deployment yet." }, 501);
   }
   const account = c.get("account")!;
-  const deleted = await deleteTemplate(c.env, account.id, c.req.param("id"));
+  const deleted = await deleteTemplate(c.env, account.workspaceId, c.req.param("id"));
   if (!deleted) {
     return c.json({ error: "Template not found" }, 404);
   }
