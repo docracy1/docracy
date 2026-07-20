@@ -27,9 +27,9 @@ database_id = "498b3b25-111e-435e-baca-5fb4af9c0e38"
 # This is the deployed (production) value. Local `wrangler dev` overrides it back to localhost
 # via apps/worker/.dev.vars, which takes precedence over [vars] when running locally.
 [vars]
-PUBLIC_APP_URL = "https://docracy.pages.dev"
+PUBLIC_APP_URL = "https://docracy.io"
 PUBLIC_CONNECTOR_URL = "https://docracy-connector.rl-d77.workers.dev"
-PUBLIC_WORKER_URL = "https://docracy-worker.rl-d77.workers.dev"
+PUBLIC_WORKER_URL = "https://api.docracy.io"
 FREE_TIER_MAX_SIGNERS = "2"
 DOC_TTL_DAYS = "9"
 FEEDBACK_EMAIL = "rl@relacon.at"
