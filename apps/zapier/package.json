@@ -12,7 +12,7 @@
     "npm": ">=8.0.0"
   },
   "dependencies": {
-    "zapier-platform-core": "^19.0.0"
+    "zapier-platform-core": "19.0.0"
   },
   "devDependencies": {
     "vitest": "^2.1.8",

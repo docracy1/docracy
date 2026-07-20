@@ -20,6 +20,11 @@ module.exports = {
 
   authentication,
 
+  // Docracy's own routes already validate/shape every field precisely (see
+  // apps/worker/src/routes/zapier.ts) — Zapier's automatic input-cleaning would only make the
+  // actual request shape less predictable to reason about.
+  flags: { cleanInputData: false },
+
   beforeRequest: [includeApiKey],
 
   triggers: {
