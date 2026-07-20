@@ -374,8 +374,11 @@ export default function Dashboard() {
 
       {!account.isPaid && (
         <div className="card" style={{ marginTop: 24 }}>
-          <h3 style={{ fontSize: 15 }}>Upgrade to paid</h3>
-          <p>Unlimited signers, plus a connector so Claude, ChatGPT, Grok, or Perplexity can look up your documents.</p>
+          <h3 style={{ fontSize: 15 }}>Upgrade to paid — $7/month</h3>
+          <p>
+            Unlimited signers, a connector so Claude, ChatGPT, Grok, or Perplexity can look up your documents,
+            team accounts, and white-label branding.
+          </p>
           {upgradeError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{upgradeError}</p>}
           <button className="btn-primary" onClick={onUpgrade} disabled={upgrading}>
             {upgrading ? "Redirecting…" : "Upgrade"}

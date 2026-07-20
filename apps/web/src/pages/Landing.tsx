@@ -32,6 +32,8 @@ const PLAN_ROWS: Array<{ label: string; free: boolean | string; paid: boolean | 
   { label: "Reusable templates", free: false, paid: true },
   { label: "Webhooks for your own systems", free: false, paid: true },
   { label: "MCP connector (Claude, ChatGPT, Grok, Perplexity)", free: false, paid: true },
+  { label: "Team accounts (shared workspace)", free: false, paid: true },
+  { label: "White-label branding (your own logo)", free: false, paid: true },
 ];
 
 function PlanCell({ value }: { value: boolean | string }) {
@@ -87,9 +89,9 @@ export default function Landing() {
         <div style={{ marginTop: 40 }}>
           <h2 style={{ fontSize: 20 }}>Free vs. paid</h2>
           <p>
-            Everything above works on the free plan. A paid account adds a dashboard, reusable templates,
-            webhooks, an MCP connector for AI assistants, and PIN-protected signing links — plus unlimited
-            signers per document.
+            Everything above works on the free plan. A paid account is <strong>$7/month</strong> and adds a
+            dashboard, reusable templates, webhooks, an MCP connector for AI assistants, team accounts,
+            white-label branding, and PIN-protected signing links — plus unlimited signers per document.
           </p>
           <div className="card" style={{ padding: 0, overflow: "hidden" }}>
             <div className="plan-table-scroll">
@@ -98,7 +100,7 @@ export default function Landing() {
                   <tr>
                     <th></th>
                     <th>Free</th>
-                    <th className="plan-col-paid">Paid</th>
+                    <th className="plan-col-paid">Paid — $7/mo</th>
                   </tr>
                 </thead>
                 <tbody>
