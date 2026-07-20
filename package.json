@@ -5,6 +5,9 @@
     "apps/*",
     "packages/*"
   ],
+  "overrides": {
+    "form-data": "^4.0.6"
+  },
   "scripts": {
     "dev:worker": "npm run dev --workspace apps/worker",
     "dev:web": "npm run dev --workspace apps/web",

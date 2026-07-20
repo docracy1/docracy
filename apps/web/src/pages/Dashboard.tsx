@@ -43,6 +43,7 @@ export default function Dashboard() {
   const [regenerating, setRegenerating] = useState(false);
   const [regenerateError, setRegenerateError] = useState<string | null>(null);
   const [newConnectorUrl, setNewConnectorUrl] = useState<string | null>(null);
+  const [newApiKey, setNewApiKey] = useState<string | null>(null);
   const [templates, setTemplates] = useState<TemplateSummary[]>([]);
   const [deletingTemplateId, setDeletingTemplateId] = useState<string | null>(null);
   const [templateError, setTemplateError] = useState<string | null>(null);
@@ -221,8 +222,9 @@ export default function Dashboard() {
     setRegenerating(true);
     setRegenerateError(null);
     try {
-      const { connectorUrl } = await regenerateApiToken();
+      const { token, connectorUrl } = await regenerateApiToken();
       setNewConnectorUrl(connectorUrl);
+      setNewApiKey(token);
       setHasToken(true);
     } catch (err) {
       setRegenerateError(err instanceof Error ? err.message : "Something went wrong");
@@ -399,25 +401,29 @@ export default function Dashboard() {
 
       {account.isPaid && (
         <div className="card" style={{ marginTop: 24 }}>
-          <h3 style={{ fontSize: 15 }}>MCP connector</h3>
+          <h3 style={{ fontSize: 15 }}>MCP connector &amp; API key</h3>
           <p>Status: {hasToken ? "Active" : "None yet"}</p>
           <p style={{ fontSize: 12, color: "var(--mute)" }}>
-            Works with Claude, ChatGPT, Grok, and Perplexity — anything that supports adding a custom MCP
-            connector (each looks for this under Settings → Connectors, or Settings → Plugins on ChatGPT).
+            One key for everything: AI assistants (Claude, ChatGPT, Grok, Perplexity — anything that supports
+            adding a custom MCP connector) and Zapier both use the same credential.
           </p>
-          {newConnectorUrl ? (
+          {newConnectorUrl && newApiKey ? (
             <>
               <p style={{ marginBottom: 4 }}>
-                Paste this URL into your assistant's "Add custom connector" screen. It won't be shown again —
-                regenerate if you lose it.
+                For an AI assistant, paste this full URL into its "Add custom connector" screen:
               </p>
-              <input className="form-input" readOnly value={newConnectorUrl} style={{ width: "100%" }} />
+              <input className="form-input" readOnly value={newConnectorUrl} style={{ width: "100%", marginBottom: 12 }} />
+              <p style={{ marginBottom: 4 }}>For Zapier, paste just the API key into the "API Key" field when connecting:</p>
+              <input className="form-input" readOnly value={newApiKey} style={{ width: "100%" }} />
+              <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 4, marginBottom: 0 }}>
+                Neither is shown again — regenerate if you lose them (regenerating replaces both at once).
+              </p>
             </>
           ) : (
             <p style={{ marginBottom: 0 }}>
               {hasToken
-                ? "Regenerating replaces your existing connector URL — anything using the old one will stop working."
-                : "Generate a URL to connect this account to Claude, ChatGPT, Grok, or Perplexity."}
+                ? "Regenerating replaces your existing key/connector URL — anything using the old one will stop working."
+                : "Generate a key to connect this account to an AI assistant or Zapier."}
             </p>
           )}
           {regenerateError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{regenerateError}</p>}
@@ -482,6 +488,19 @@ export default function Dashboard() {
                 <br />
                 Use it: reference it directly in your question — mentioning "Docracy" or asking something
                 clearly related to your documents is usually enough for it to reach for the tool.
+              </p>
+
+              <p style={{ marginBottom: 4 }}>
+                <strong>Zapier</strong>
+              </p>
+              <p style={{ marginBottom: 0, marginTop: 0 }}>
+                What it does there: triggers on Document Created, Signer Signed, or Document Completed, and
+                an action to send a saved template out for signature — so Docracy can plug into a Zap without
+                either side needing a server. Unlike the assistants above, use just the <strong>API key</strong>{" "}
+                (not the full connector URL) as Zapier's "API Key" field when connecting.
+                <br />
+                Set up: search for "Docracy" when adding a new app to a Zap, or ask whoever prepared this
+                deployment for the integration link if it isn't public yet.
               </p>
             </div>
           </details>

@@ -1,0 +1,21 @@
+{
+  "name": "docracy-zapier",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Docracy integration for the Zapier platform",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest run"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "dependencies": {
+    "zapier-platform-core": "^19.0.0"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.8",
+    "zapier-platform-schema": "^19.0.0"
+  }
+}

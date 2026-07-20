@@ -11,6 +11,7 @@ import webhooksRoute from "./routes/webhooks";
 import teamRoute from "./routes/team";
 import brandingRoute from "./routes/branding";
 import brandingPublicRoute from "./routes/brandingPublic";
+import zapierRoute from "./routes/zapier";
 import { runReminderSweep } from "./lib/reminders";
 import { reconcileD1Index } from "./lib/index-d1";
 import { runExpiredDocCleanup } from "./lib/cleanup";
@@ -50,6 +51,7 @@ app.route("/api/account/webhooks", webhooksRoute);
 app.route("/api/account/team", teamRoute);
 app.route("/api/account/branding", brandingRoute);
 app.route("/api/branding", brandingPublicRoute);
+app.route("/api/zapier", zapierRoute);
 
 export default {
   fetch: app.fetch,
