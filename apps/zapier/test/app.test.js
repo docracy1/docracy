@@ -63,6 +63,14 @@ describe.each([
     const result = trigger.operation.perform(null, {});
     expect(result).toEqual([trigger.operation.sample]);
   });
+
+  it("has a description starting with 'Triggers when' (Zapier's own style requirement)", () => {
+    expect(trigger.display.description).toMatch(/^Triggers when /);
+  });
+
+  it("performList also returns the fallback sample (no genuine polling endpoint exists)", () => {
+    expect(trigger.operation.performList()).toEqual([trigger.operation.sample]);
+  });
 });
 
 describe("documentCompleted trigger perform", () => {
