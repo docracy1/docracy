@@ -512,10 +512,15 @@ export default function Dashboard() {
           <h3 style={{ fontSize: 15 }}>Templates</h3>
           {templateError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{templateError}</p>}
           {templates.length === 0 ? (
-            <p style={{ marginBottom: 0 }}>
-              No templates yet — save one from the "Prepare a document" page once you've placed your signature
-              fields.
-            </p>
+            <>
+              <p style={{ marginBottom: 12 }}>
+                No templates yet — upload a PDF, place a field for every signer, then use the "Save as template"
+                button that appears in the sidebar.
+              </p>
+              <Link to="/prepare" className="btn-secondary" style={{ textDecoration: "none", display: "inline-block" }}>
+                Prepare a document
+              </Link>
+            </>
           ) : (
             templates.map((t) => (
               <div
