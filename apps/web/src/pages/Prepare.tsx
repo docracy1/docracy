@@ -4,6 +4,7 @@ import PdfViewer from "../components/PdfViewer";
 import { createDocument, createTemplate, fetchMe, fetchTemplate, fetchTemplates } from "../lib/api";
 import type { Account, TemplateSummary } from "../lib/api";
 import { base64ToBytes } from "../lib/base64";
+import { addTextAnnotation, getPageCount, rasterizePageAsPng, replacePageWithImage, reorderPages } from "../lib/pdfEdit";
 import type { DocField, DocFieldType, SignerInput } from "../lib/types";
 
 const FREE_TIER_MAX_SIGNERS = 2;
@@ -50,6 +51,23 @@ export default function Prepare() {
   const [error, setError] = useState<string | null>(null);
   const [draggingFieldId, setDraggingFieldId] = useState<string | null>(null);
   const [creatingDrag, setCreatingDrag] = useState<{ x: number; y: number; overPage: boolean } | null>(null);
+
+  // PDF editing (reorder/delete pages, redact, insert text) — a separate mode from field
+  // placement, since the interactions (page-level controls, drag-to-redact, click-to-annotate)
+  // would otherwise collide with the field drag/create handlers above.
+  const [viewMode, setViewMode] = useState<"fields" | "edit">("fields");
+  const [editTool, setEditTool] = useState<"move" | "redact" | "text">("move");
+  const [totalPages, setTotalPages] = useState(0);
+  const [pdfEditBusy, setPdfEditBusy] = useState(false);
+  const [pdfEditError, setPdfEditError] = useState<string | null>(null);
+  const [pdfEditNotice, setPdfEditNotice] = useState<string | null>(null);
+  const [redactDrag, setRedactDrag] = useState<{ page: number; xFrac: number; yFrac: number; wFrac: number; hFrac: number } | null>(null);
+  const [pendingRedaction, setPendingRedaction] = useState<{ page: number; xFrac: number; yFrac: number; wFrac: number; hFrac: number } | null>(
+    null
+  );
+  const [textAnnotationAt, setTextAnnotationAt] = useState<{ page: number; xFrac: number; yFrac: number } | null>(null);
+  const [textAnnotationValue, setTextAnnotationValue] = useState("");
+  const redactStartRef = useRef<{ page: number; rect: DOMRect; xFrac: number; yFrac: number } | null>(null);
 
   const [account, setAccount] = useState<Account | null>(null);
   const [availableTemplates, setAvailableTemplates] = useState<TemplateSummary[]>([]);
@@ -145,6 +163,142 @@ export default function Prepare() {
     if (!el) return null;
     return { index: Number(el.dataset.pageIndex), rect: el.getBoundingClientRect() };
   };
+
+  useEffect(() => {
+    if (!pdfBytes) {
+      setTotalPages(0);
+      return;
+    }
+    let cancelled = false;
+    getPageCount(pdfBytes)
+      .then((n) => {
+        if (!cancelled) setTotalPages(n);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [pdfBytes]);
+
+  const applyPdfBytes = (newBytes: Uint8Array) => {
+    setPdfBytes(newBytes);
+    setFile((prev) => new File([newBytes as unknown as BlobPart], prev?.name ?? "document.pdf", { type: "application/pdf" }));
+  };
+
+  const runPdfEdit = async (mutate: (bytes: Uint8Array) => Promise<Uint8Array>, opts: { resetFields?: boolean } = {}) => {
+    if (!pdfBytes) return;
+    setPdfEditBusy(true);
+    setPdfEditError(null);
+    try {
+      const newBytes = await mutate(pdfBytes);
+      applyPdfBytes(newBytes);
+      if (opts.resetFields && fields.length > 0) {
+        setFields([]);
+        setPdfEditNotice("Fields were cleared because the page layout changed — please re-place them.");
+      }
+    } catch (err) {
+      setPdfEditError(err instanceof Error ? err.message : "Couldn't apply that change");
+    } finally {
+      setPdfEditBusy(false);
+    }
+  };
+
+  const movePage = (index: number, direction: -1 | 1) => {
+    if (!totalPages) return;
+    const target = index + direction;
+    if (target < 0 || target >= totalPages) return;
+    const order = Array.from({ length: totalPages }, (_, i) => i);
+    [order[index], order[target]] = [order[target], order[index]];
+    runPdfEdit((bytes) => reorderPages(bytes, order), { resetFields: true });
+  };
+
+  const deletePage = (index: number) => {
+    if (!totalPages || totalPages <= 1) return;
+    const order = Array.from({ length: totalPages }, (_, i) => i).filter((i) => i !== index);
+    runPdfEdit((bytes) => reorderPages(bytes, order), { resetFields: true });
+  };
+
+  const applyRedaction = () => {
+    if (!pendingRedaction) return;
+    const { page, xFrac, yFrac, wFrac, hFrac } = pendingRedaction;
+    setPendingRedaction(null);
+    runPdfEdit(async (bytes) => {
+      const png = await rasterizePageAsPng(bytes, page, { xFrac, yFrac, wFrac, hFrac });
+      return replacePageWithImage(bytes, page, png);
+    });
+  };
+
+  const submitTextAnnotation = () => {
+    if (!textAnnotationAt || !textAnnotationValue.trim()) return;
+    const { page, xFrac, yFrac } = textAnnotationAt;
+    const text = textAnnotationValue.trim();
+    setTextAnnotationAt(null);
+    setTextAnnotationValue("");
+    runPdfEdit((bytes) => addTextAnnotation(bytes, page, xFrac, yFrac, text));
+  };
+
+  // Drag-to-redact: a plain mousedown/mousemove/mouseup sequence on the page itself (not a field
+  // chip), mirroring onFieldDragStart/onCreateDragStart's technique above. Only active while the
+  // redact tool is selected, so it never competes with field placement.
+  useEffect(() => {
+    if (viewMode !== "edit" || editTool !== "redact") return;
+
+    const isOwnControl = (e: MouseEvent) => (e.target as HTMLElement).closest("button, input, textarea");
+
+    const onDown = (e: MouseEvent) => {
+      if (pdfEditBusy || isOwnControl(e)) return;
+      const target = pageAt(e.clientX, e.clientY);
+      if (!target) return;
+      const xFrac = (e.clientX - target.rect.left) / target.rect.width;
+      const yFrac = (e.clientY - target.rect.top) / target.rect.height;
+      redactStartRef.current = { page: target.index, rect: target.rect, xFrac, yFrac };
+      setRedactDrag({ page: target.index, xFrac, yFrac, wFrac: 0, hFrac: 0 });
+    };
+    const onMove = (e: MouseEvent) => {
+      const start = redactStartRef.current;
+      if (!start) return;
+      const curXFrac = Math.min(Math.max((e.clientX - start.rect.left) / start.rect.width, 0), 1);
+      const curYFrac = Math.min(Math.max((e.clientY - start.rect.top) / start.rect.height, 0), 1);
+      setRedactDrag({
+        page: start.page,
+        xFrac: Math.min(start.xFrac, curXFrac),
+        yFrac: Math.min(start.yFrac, curYFrac),
+        wFrac: Math.abs(curXFrac - start.xFrac),
+        hFrac: Math.abs(curYFrac - start.yFrac),
+      });
+    };
+    const onUp = () => {
+      redactStartRef.current = null;
+      setRedactDrag((prev) => {
+        if (prev && prev.wFrac > 0.01 && prev.hFrac > 0.01) setPendingRedaction(prev);
+        return null;
+      });
+    };
+    window.addEventListener("mousedown", onDown);
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+    return () => {
+      window.removeEventListener("mousedown", onDown);
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    };
+  }, [viewMode, editTool, pdfEditBusy]);
+
+  // Click-to-annotate: only active while the text tool is selected.
+  useEffect(() => {
+    if (viewMode !== "edit" || editTool !== "text") return;
+    const onClick = (e: MouseEvent) => {
+      if (pdfEditBusy || (e.target as HTMLElement).closest("button, input, textarea")) return;
+      const target = pageAt(e.clientX, e.clientY);
+      if (!target) return;
+      const xFrac = (e.clientX - target.rect.left) / target.rect.width;
+      const yFrac = (e.clientY - target.rect.top) / target.rect.height;
+      setTextAnnotationAt({ page: target.index, xFrac, yFrac });
+      setTextAnnotationValue("");
+    };
+    window.addEventListener("click", onClick);
+    return () => window.removeEventListener("click", onClick);
+  }, [viewMode, editTool, pdfEditBusy]);
 
   const dragState = useRef<{
     id: string;
@@ -329,7 +483,8 @@ export default function Prepare() {
               pdfBytes={pdfBytes}
               renderPageOverlay={(page) => (
                 <>
-                  {fields
+                  {viewMode === "fields" &&
+                  fields
                     .filter((f) => f.page === page.index)
                     .map((f) => {
                       const isDragging = draggingFieldId === f.id;
@@ -387,6 +542,159 @@ export default function Prepare() {
                         </div>
                       );
                     })}
+
+                  {viewMode === "edit" && (
+                    <div style={{ position: "absolute", top: 6, left: 6, display: "flex", gap: 4, zIndex: 5 }}>
+                      <button
+                        type="button"
+                        className="btn-secondary"
+                        style={{ padding: "2px 8px", fontSize: 12 }}
+                        disabled={page.index === 0 || pdfEditBusy}
+                        onClick={() => movePage(page.index, -1)}
+                      >
+                        ↑
+                      </button>
+                      <button
+                        type="button"
+                        className="btn-secondary"
+                        style={{ padding: "2px 8px", fontSize: 12 }}
+                        disabled={page.index === totalPages - 1 || pdfEditBusy}
+                        onClick={() => movePage(page.index, 1)}
+                      >
+                        ↓
+                      </button>
+                      <button
+                        type="button"
+                        className="btn-secondary"
+                        style={{ padding: "2px 8px", fontSize: 12, color: "var(--danger)" }}
+                        disabled={totalPages <= 1 || pdfEditBusy}
+                        onClick={() => deletePage(page.index)}
+                      >
+                        🗑 Delete page
+                      </button>
+                    </div>
+                  )}
+
+                  {viewMode === "edit" && redactDrag?.page === page.index && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        left: `${redactDrag.xFrac * 100}%`,
+                        top: `${redactDrag.yFrac * 100}%`,
+                        width: `${redactDrag.wFrac * 100}%`,
+                        height: `${redactDrag.hFrac * 100}%`,
+                        background: "rgba(0,0,0,0.55)",
+                        border: "1.5px dashed #000",
+                        pointerEvents: "none",
+                      }}
+                    />
+                  )}
+
+                  {viewMode === "edit" && pendingRedaction?.page === page.index && (
+                    <>
+                      <div
+                        style={{
+                          position: "absolute",
+                          left: `${pendingRedaction.xFrac * 100}%`,
+                          top: `${pendingRedaction.yFrac * 100}%`,
+                          width: `${pendingRedaction.wFrac * 100}%`,
+                          height: `${pendingRedaction.hFrac * 100}%`,
+                          background: "rgba(0,0,0,0.55)",
+                          border: "1.5px dashed #000",
+                        }}
+                      />
+                      <div
+                        style={{
+                          position: "absolute",
+                          left: `${pendingRedaction.xFrac * 100}%`,
+                          top: `${(pendingRedaction.yFrac + pendingRedaction.hFrac) * 100}%`,
+                          marginTop: 4,
+                          background: "var(--surface)",
+                          border: "1px solid var(--hairline)",
+                          borderRadius: "var(--r-sm)",
+                          padding: 8,
+                          width: 220,
+                          zIndex: 20,
+                          boxShadow: "var(--shadow-md)",
+                        }}
+                      >
+                        <p style={{ fontSize: 12, marginTop: 0, marginBottom: 8 }}>
+                          Redact this area? The page is flattened to an image — text under it won't be selectable or
+                          recoverable afterward.
+                        </p>
+                        <div style={{ display: "flex", gap: 6 }}>
+                          <button
+                            type="button"
+                            className="btn-primary"
+                            style={{ flex: 1, fontSize: 12, padding: "4px 8px" }}
+                            disabled={pdfEditBusy}
+                            onClick={applyRedaction}
+                          >
+                            {pdfEditBusy ? "Applying…" : "Redact"}
+                          </button>
+                          <button
+                            type="button"
+                            className="btn-secondary"
+                            style={{ flex: 1, fontSize: 12, padding: "4px 8px" }}
+                            onClick={() => setPendingRedaction(null)}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  {viewMode === "edit" && textAnnotationAt?.page === page.index && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        left: `${textAnnotationAt.xFrac * 100}%`,
+                        top: `${textAnnotationAt.yFrac * 100}%`,
+                        background: "var(--surface)",
+                        border: "1px solid var(--hairline)",
+                        borderRadius: "var(--r-sm)",
+                        padding: 8,
+                        zIndex: 20,
+                        boxShadow: "var(--shadow-md)",
+                      }}
+                    >
+                      <input
+                        autoFocus
+                        className="form-input"
+                        style={{ width: 180, marginBottom: 6 }}
+                        placeholder="Text to insert"
+                        value={textAnnotationValue}
+                        onChange={(e) => setTextAnnotationValue(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            submitTextAnnotation();
+                          }
+                          if (e.key === "Escape") setTextAnnotationAt(null);
+                        }}
+                      />
+                      <div style={{ display: "flex", gap: 6 }}>
+                        <button
+                          type="button"
+                          className="btn-primary"
+                          style={{ flex: 1, fontSize: 12, padding: "4px 8px" }}
+                          disabled={pdfEditBusy || !textAnnotationValue.trim()}
+                          onClick={submitTextAnnotation}
+                        >
+                          {pdfEditBusy ? "Adding…" : "Add"}
+                        </button>
+                        <button
+                          type="button"
+                          className="btn-secondary"
+                          style={{ flex: 1, fontSize: 12, padding: "4px 8px" }}
+                          onClick={() => setTextAnnotationAt(null)}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </>
               )}
             />
@@ -487,6 +795,64 @@ export default function Prepare() {
             </div>
 
             <div className="card">
+              <h3 style={{ marginBottom: 12 }}>Edit document</h3>
+              {viewMode === "fields" ? (
+                <button
+                  type="button"
+                  className="btn-secondary"
+                  style={{ width: "100%" }}
+                  onClick={() => {
+                    setPdfEditError(null);
+                    setPdfEditNotice(null);
+                    setViewMode("edit");
+                  }}
+                >
+                  Reorder, redact, or insert text
+                </button>
+              ) : (
+                <>
+                  <select
+                    className="form-input"
+                    style={{ width: "100%", marginBottom: 8 }}
+                    value={editTool}
+                    onChange={(e) => {
+                      setEditTool(e.target.value as "move" | "redact" | "text");
+                      setRedactDrag(null);
+                      setPendingRedaction(null);
+                      setTextAnnotationAt(null);
+                    }}
+                  >
+                    <option value="move">Reorder / delete pages</option>
+                    <option value="redact">Redact — drag a box to black out</option>
+                    <option value="text">Add text — click to insert</option>
+                  </select>
+                  <p style={{ fontSize: 11, marginTop: 0, marginBottom: 8 }}>
+                    {editTool === "move" && "Use the ↑ / ↓ / delete controls on each page."}
+                    {editTool === "redact" && "Drag a box over the document to black it out permanently."}
+                    {editTool === "text" && "Click anywhere on the document to insert a short line of text."}
+                  </p>
+                  {pdfEditError && <p style={{ color: "var(--danger)", fontSize: 12 }}>{pdfEditError}</p>}
+                  {pdfEditNotice && <p style={{ color: "var(--body)", fontSize: 12 }}>{pdfEditNotice}</p>}
+                  <button
+                    type="button"
+                    className="btn-secondary"
+                    style={{ width: "100%" }}
+                    onClick={() => {
+                      setViewMode("fields");
+                      setEditTool("move");
+                      setRedactDrag(null);
+                      setPendingRedaction(null);
+                      setTextAnnotationAt(null);
+                    }}
+                  >
+                    Done editing
+                  </button>
+                </>
+              )}
+            </div>
+
+            {viewMode === "fields" && (
+            <div className="card">
               <h3 style={{ marginBottom: 12 }}>Add a field</h3>
               <select
                 className="form-input"
@@ -533,8 +899,9 @@ export default function Prepare() {
                 The signer's email and the date get stamped in automatically — no need for separate fields.
               </p>
             </div>
+            )}
 
-            {account?.isPaid && fields.length > 0 && (
+            {viewMode === "fields" && account?.isPaid && fields.length > 0 && (
               <div className="card">
                 <h3 style={{ marginBottom: 12 }}>Save as template</h3>
                 {templateSavedName ? (
