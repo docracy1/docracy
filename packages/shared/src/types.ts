@@ -96,6 +96,14 @@ export interface Env {
   DOCRACY_DB?: D1Database;
   TOKEN_SECRET: string;
   RESEND_API_KEY?: string;
+  /** BytePlus ModelArk (Doubao) API key for AI-first support triage — see lib/support.ts. Absent
+   *  until a real account exists; the feedback route falls back to emailing FEEDBACK_EMAIL
+   *  directly (today's behavior) whenever this is unset, same degrade-gracefully pattern as the
+   *  Stripe keys below. */
+  DOUBAO_API_KEY?: string;
+  /** Doubao model ID, e.g. "seed-2-0-lite-260228" — left configurable since BytePlus model names
+   *  and availability change; support.ts falls back to a sensible default when unset. */
+  DOUBAO_MODEL?: string;
   PUBLIC_APP_URL: string;
   /** Base URL of the deployed MCP connector (apps/connector) — used only to build the ready-to-
    *  paste connector URL returned by the API-token endpoints. */

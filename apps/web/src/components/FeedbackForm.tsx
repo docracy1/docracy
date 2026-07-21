@@ -7,13 +7,15 @@ export default function FeedbackForm() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sent, setSent] = useState(false);
+  const [aiAnswer, setAiAnswer] = useState<string | null>(null);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
     setError(null);
     try {
-      await submitFeedback(email, message);
+      const res = await submitFeedback(email, message);
+      setAiAnswer(res.aiAnswer ?? null);
       setSent(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
@@ -28,7 +30,25 @@ export default function FeedbackForm() {
       <p>Send it straight to me — no account needed.</p>
 
       {sent ? (
-        <p style={{ color: "var(--success)", marginBottom: 0 }}>Thanks — got it.</p>
+        aiAnswer ? (
+          <div>
+            <p style={{ marginBottom: 8, fontWeight: 600 }}>Here's an instant answer:</p>
+            <p style={{ whiteSpace: "pre-wrap", marginBottom: 12 }}>{aiAnswer}</p>
+            <p style={{ fontSize: 13, color: "var(--mute)", marginBottom: 0 }}>
+              Didn't answer your question?{" "}
+              <a
+                href={`mailto:founder@docracy.io?subject=${encodeURIComponent(
+                  `Follow-up: ${message.slice(0, 60)}`
+                )}&body=${encodeURIComponent(message)}`}
+              >
+                Email us directly
+              </a>
+              .
+            </p>
+          </div>
+        ) : (
+          <p style={{ color: "var(--success)", marginBottom: 0 }}>Thanks — got it.</p>
+        )
       ) : (
         <form onSubmit={onSubmit}>
           <input

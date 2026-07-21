@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { sendFeedback } from "../lib/email";
 import { checkFeedbackRateLimit } from "../lib/ratelimit";
+import { answerSupportQuestion } from "../lib/support";
 import type { Env } from "@docracy/shared";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -32,6 +33,15 @@ feedback.post("/", async (c) => {
   }
   if (message.length > MAX_MESSAGE_LENGTH) {
     return c.json({ error: `Message must be under ${MAX_MESSAGE_LENGTH} characters` }, 400);
+  }
+
+  // AI-first triage: try to answer instantly from known product facts before ever bothering the
+  // founder. answerSupportQuestion never throws and returns null for anything it isn't confident
+  // about (or if no API key is configured), so this always falls back to the original
+  // email-the-founder behavior — nothing here can make a submission go unanswered.
+  const aiAnswer = await answerSupportQuestion(c.env, message);
+  if (aiAnswer) {
+    return c.json({ ok: true, aiAnswer });
   }
 
   await sendFeedback(c.env, email, message);

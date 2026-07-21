@@ -89,4 +89,48 @@ describe("POST /api/feedback", () => {
     );
     expect(blocked.status).toBe(429);
   });
+
+  it("returns the AI's answer and skips emailing the founder when it can answer", async () => {
+    const { env } = makeMockEnv({ DOUBAO_API_KEY: "test-key" });
+    const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+    vi.spyOn(global, "fetch").mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ choices: [{ message: { content: "The free plan supports up to 2 signers." } }] }),
+    } as Response);
+
+    const res = await feedback.request(
+      "/",
+      post({ email: "anna@example.com", message: "How many signers on the free plan?" }),
+      env,
+      MOCK_CTX
+    );
+
+    expect(res.status).toBe(200);
+    const body: { ok: boolean; aiAnswer?: string } = await res.json();
+    expect(body.aiAnswer).toBe("The free plan supports up to 2 signers.");
+    const logged = logSpy.mock.calls.map((c) => c.join(" ")).join("\n");
+    expect(logged).not.toContain(`to=${env.FEEDBACK_EMAIL}`);
+  });
+
+  it("falls back to emailing the founder when the AI can't answer", async () => {
+    const { env } = makeMockEnv({ DOUBAO_API_KEY: "test-key" });
+    const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+    vi.spyOn(global, "fetch").mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ choices: [{ message: { content: "CANNOT_ANSWER" } }] }),
+    } as Response);
+
+    const res = await feedback.request(
+      "/",
+      post({ email: "anna@example.com", message: "Why hasn't my document arrived?" }),
+      env,
+      MOCK_CTX
+    );
+
+    expect(res.status).toBe(200);
+    const body: { ok: boolean; aiAnswer?: string } = await res.json();
+    expect(body.aiAnswer).toBeUndefined();
+    const logged = logSpy.mock.calls.map((c) => c.join(" ")).join("\n");
+    expect(logged).toContain(`to=${env.FEEDBACK_EMAIL}`);
+  });
 });

@@ -37,6 +37,8 @@ FEEDBACK_EMAIL = "founder@docracy.io"
 # --- Secrets (never stored in this file) ---
 # Set with: wrangler secret put TOKEN_SECRET
 # Set with: wrangler secret put RESEND_API_KEY   (optional locally — omit to log emails to console instead of sending)
+# Set with: wrangler secret put DOUBAO_API_KEY   (optional — BytePlus ModelArk key for AI-first
+#   support triage in lib/support.ts; omit to skip straight to emailing FEEDBACK_EMAIL, as before)
 #
 # --- Billing (Stripe) — all optional; billing routes 501 gracefully until these are set ---
 # Set with: wrangler secret put STRIPE_SECRET_KEY

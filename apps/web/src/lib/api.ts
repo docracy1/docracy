@@ -105,7 +105,7 @@ export async function submitSignature(
   return asJson(res);
 }
 
-export async function submitFeedback(email: string, message: string): Promise<{ ok: true }> {
+export async function submitFeedback(email: string, message: string): Promise<{ ok: true; aiAnswer?: string }> {
   const res = await apiFetch("/api/feedback", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
