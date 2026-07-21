@@ -4,7 +4,16 @@ import PdfViewer from "../components/PdfViewer";
 import { createDocument, createTemplate, fetchMe, fetchTemplate, fetchTemplates } from "../lib/api";
 import type { Account, TemplateSummary } from "../lib/api";
 import { base64ToBytes } from "../lib/base64";
-import { addTextAnnotation, getPageCount, rasterizePageAsPng, replacePageWithImage, reorderPages } from "../lib/pdfEdit";
+import {
+  addTextAnnotation,
+  getPageCount,
+  getPageTextSpans,
+  rasterizePageAsPng,
+  replacePageWithImage,
+  replaceTextSpan,
+  reorderPages,
+} from "../lib/pdfEdit";
+import type { TextSpan } from "../lib/pdfEdit";
 import { getFreeTemplate } from "../lib/freeTemplates";
 import type { DocField, DocFieldType, SignerInput } from "../lib/types";
 
@@ -58,7 +67,7 @@ export default function Prepare() {
   // placement, since the interactions (page-level controls, drag-to-redact, click-to-annotate)
   // would otherwise collide with the field drag/create handlers above.
   const [viewMode, setViewMode] = useState<"fields" | "edit">("fields");
-  const [editTool, setEditTool] = useState<"move" | "redact" | "text">("move");
+  const [editTool, setEditTool] = useState<"move" | "redact" | "text" | "editText">("move");
   const [totalPages, setTotalPages] = useState(0);
   const [pdfEditBusy, setPdfEditBusy] = useState(false);
   const [pdfEditError, setPdfEditError] = useState<string | null>(null);
@@ -69,6 +78,10 @@ export default function Prepare() {
   );
   const [textAnnotationAt, setTextAnnotationAt] = useState<{ page: number; xFrac: number; yFrac: number } | null>(null);
   const [textAnnotationValue, setTextAnnotationValue] = useState("");
+  const [pageTextSpans, setPageTextSpans] = useState<TextSpan[]>([]);
+  const [loadingTextSpans, setLoadingTextSpans] = useState(false);
+  const [editingSpan, setEditingSpan] = useState<TextSpan | null>(null);
+  const [editingSpanValue, setEditingSpanValue] = useState("");
   const redactStartRef = useRef<{ page: number; rect: DOMRect; xFrac: number; yFrac: number } | null>(null);
 
   const [account, setAccount] = useState<Account | null>(null);
@@ -264,6 +277,39 @@ export default function Prepare() {
     setTextAnnotationAt(null);
     setTextAnnotationValue("");
     runPdfEdit((bytes) => addTextAnnotation(bytes, page, xFrac, yFrac, text));
+  };
+
+  // Detects the existing text runs on every page once the "edit existing text" tool is active, so
+  // they can be clicked directly — re-runs automatically whenever pdfBytes changes (including
+  // right after an edit is applied below), keeping the clickable regions in sync with reality.
+  useEffect(() => {
+    if (viewMode !== "edit" || editTool !== "editText" || !pdfBytes || !totalPages) {
+      setPageTextSpans([]);
+      return;
+    }
+    let cancelled = false;
+    setLoadingTextSpans(true);
+    Promise.all(Array.from({ length: totalPages }, (_, i) => getPageTextSpans(pdfBytes, i)))
+      .then((results) => {
+        if (!cancelled) setPageTextSpans(results.flat());
+      })
+      .catch(() => {
+        if (!cancelled) setPageTextSpans([]);
+      })
+      .finally(() => {
+        if (!cancelled) setLoadingTextSpans(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [viewMode, editTool, pdfBytes, totalPages]);
+
+  const applyTextSpanEdit = (newText: string) => {
+    if (!editingSpan) return;
+    const span = editingSpan;
+    setEditingSpan(null);
+    setEditingSpanValue("");
+    runPdfEdit((bytes) => replaceTextSpan(bytes, span.page, span, newText));
   };
 
   // Drag-to-redact: a plain mousedown/mousemove/mouseup sequence on the page itself (not a field
@@ -724,6 +770,93 @@ export default function Prepare() {
                       </div>
                     </div>
                   )}
+
+                  {viewMode === "edit" &&
+                    editTool === "editText" &&
+                    pageTextSpans
+                      .filter((s) => s.page === page.index)
+                      .map((s, i) => (
+                        <div
+                          key={`${page.index}-${i}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setEditingSpan(s);
+                            setEditingSpanValue(s.text);
+                          }}
+                          style={{
+                            position: "absolute",
+                            left: `${s.xFrac * 100}%`,
+                            top: `${s.yFrac * 100}%`,
+                            width: `${s.wFrac * 100}%`,
+                            height: `${s.hFrac * 100}%`,
+                            cursor: "pointer",
+                            background: editingSpan === s ? "rgba(59,130,246,0.28)" : "rgba(59,130,246,0.12)",
+                            border: "1px dashed rgba(59,130,246,0.5)",
+                          }}
+                          title={s.text}
+                        />
+                      ))}
+
+                  {viewMode === "edit" && editingSpan?.page === page.index && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        left: `${editingSpan.xFrac * 100}%`,
+                        top: `${(editingSpan.yFrac + editingSpan.hFrac) * 100}%`,
+                        marginTop: 4,
+                        background: "var(--surface)",
+                        border: "1px solid var(--hairline)",
+                        borderRadius: "var(--r-sm)",
+                        padding: 8,
+                        width: 240,
+                        zIndex: 20,
+                        boxShadow: "var(--shadow-md)",
+                      }}
+                    >
+                      <input
+                        autoFocus
+                        className="form-input"
+                        style={{ width: "100%", marginBottom: 6 }}
+                        value={editingSpanValue}
+                        onChange={(e) => setEditingSpanValue(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            applyTextSpanEdit(editingSpanValue);
+                          }
+                          if (e.key === "Escape") setEditingSpan(null);
+                        }}
+                      />
+                      <div style={{ display: "flex", gap: 6, marginBottom: 6 }}>
+                        <button
+                          type="button"
+                          className="btn-primary"
+                          style={{ flex: 1, fontSize: 12, padding: "4px 8px" }}
+                          disabled={pdfEditBusy}
+                          onClick={() => applyTextSpanEdit(editingSpanValue)}
+                        >
+                          {pdfEditBusy ? "Saving…" : "Save"}
+                        </button>
+                        <button
+                          type="button"
+                          className="btn-secondary"
+                          style={{ flex: 1, fontSize: 12, padding: "4px 8px", color: "var(--danger)" }}
+                          disabled={pdfEditBusy}
+                          onClick={() => applyTextSpanEdit("")}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                      <button
+                        type="button"
+                        className="btn-secondary"
+                        style={{ width: "100%", fontSize: 12, padding: "4px 8px" }}
+                        onClick={() => setEditingSpan(null)}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  )}
                 </>
               )}
             />
@@ -845,20 +978,27 @@ export default function Prepare() {
                     style={{ width: "100%", marginBottom: 8 }}
                     value={editTool}
                     onChange={(e) => {
-                      setEditTool(e.target.value as "move" | "redact" | "text");
+                      setEditTool(e.target.value as "move" | "redact" | "text" | "editText");
                       setRedactDrag(null);
                       setPendingRedaction(null);
                       setTextAnnotationAt(null);
+                      setEditingSpan(null);
                     }}
                   >
                     <option value="move">Reorder / delete pages</option>
                     <option value="redact">Redact — drag a box to black out</option>
                     <option value="text">Add text — click to insert</option>
+                    <option value="editText">Edit existing text — click to fix or remove</option>
                   </select>
                   <p style={{ fontSize: 11, marginTop: 0, marginBottom: 8 }}>
                     {editTool === "move" && "Use the ↑ / ↓ / delete controls on each page."}
                     {editTool === "redact" && "Drag a box over the document to black it out permanently."}
                     {editTool === "text" && "Click anywhere on the document to insert a short line of text."}
+                    {editTool === "editText" &&
+                      (loadingTextSpans
+                        ? "Scanning the document for text…"
+                        : "Click any existing line of text to edit or remove it. This covers the original with white and " +
+                          "draws your change in its place — the old text isn't securely destroyed the way Redact is.")}
                   </p>
                   {pdfEditError && <p style={{ color: "var(--danger)", fontSize: 12 }}>{pdfEditError}</p>}
                   {pdfEditNotice && <p style={{ color: "var(--body)", fontSize: 12 }}>{pdfEditNotice}</p>}
@@ -872,6 +1012,7 @@ export default function Prepare() {
                       setRedactDrag(null);
                       setPendingRedaction(null);
                       setTextAnnotationAt(null);
+                      setEditingSpan(null);
                     }}
                   >
                     Done editing

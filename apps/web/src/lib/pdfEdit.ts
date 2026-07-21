@@ -38,6 +38,83 @@ export async function addTextAnnotation(
   return doc.save();
 }
 
+export interface TextSpan {
+  page: number;
+  text: string;
+  xFrac: number;
+  yFrac: number;
+  wFrac: number;
+  hFrac: number;
+}
+
+/** Finds the existing text runs on one page via pdf.js's text layer (the same data its own
+ *  selectable-text overlay is built from), converted into the app's top-left-origin fractions so
+ *  they can be rendered/clicked the same way signer fields already are. Assumes an unrotated page
+ *  and axis-aligned text — true for the overwhelming majority of real-world documents, and the
+ *  only case worth supporting for a "click existing text to fix it" tool rather than a full PDF
+ *  text-layout engine. Boxes are padded generously since this is an approximation (baseline/font
+ *  metrics, not real glyph bounds) — better to whiteout slightly more than to clip a fix short. */
+export async function getPageTextSpans(pdfBytes: Uint8Array, pageIndex: number): Promise<TextSpan[]> {
+  const pdf = await loadPdf(pdfBytes);
+  try {
+    const page = await pdf.getPage(pageIndex + 1);
+    const viewport = page.getViewport({ scale: 1 });
+    const { items } = await page.getTextContent();
+    const spans: TextSpan[] = [];
+    for (const item of items) {
+      if (!("str" in item) || !item.str.trim()) continue;
+      const [, , c, d, e, f] = item.transform;
+      const fontSize = Math.max(Math.hypot(c, d), 1);
+      const totalHeight = Math.max(item.height || fontSize, fontSize) * 1.3;
+      const boxBottom = f - totalHeight * 0.25;
+      const width = item.width * 1.05;
+      if (width <= 0 || totalHeight <= 0) continue;
+      spans.push({
+        page: pageIndex,
+        text: item.str,
+        xFrac: e / viewport.width,
+        yFrac: (viewport.height - (boxBottom + totalHeight)) / viewport.height,
+        wFrac: width / viewport.width,
+        hFrac: totalHeight / viewport.height,
+      });
+    }
+    return spans;
+  } finally {
+    await pdf.destroy();
+  }
+}
+
+/** Covers an existing text run with a solid white box and (optionally) draws replacement text in
+ *  its place — a visual overwrite, not true removal. The original text still exists in the PDF's
+ *  content stream underneath, unlike replacePageWithImage's rasterize-based redaction; use this
+ *  for correcting content, and Redact when what actually matters is that the old text can't be
+ *  recovered. Assumes a white (or near-white) page background. */
+export async function replaceTextSpan(
+  pdfBytes: Uint8Array,
+  pageIndex: number,
+  box: { xFrac: number; yFrac: number; wFrac: number; hFrac: number },
+  newText: string
+): Promise<Uint8Array> {
+  const doc = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
+  const font = await doc.embedFont(StandardFonts.Helvetica);
+  const page = doc.getPage(pageIndex);
+  const { width: pageW, height: pageH } = page.getSize();
+  const x = box.xFrac * pageW;
+  const w = box.wFrac * pageW;
+  const h = box.hFrac * pageH;
+  const yTop = box.yFrac * pageH;
+  const y = pageH - yTop - h;
+
+  page.drawRectangle({ x, y, width: w, height: h, color: rgb(1, 1, 1) });
+
+  if (newText.trim()) {
+    const textSize = Math.min(h * 0.65, 12);
+    page.drawText(newText, { x: x + 1, y: y + (h - textSize) / 2, size: textSize, font, color: INK });
+  }
+
+  return doc.save();
+}
+
 /** Renders one page to a PNG, optionally with a solid black box baked directly into the pixels —
  *  used ahead of replacePageWithImage for redaction, since drawing a box on top of a page that
  *  still has live vector text underneath would leave that text selectable/extractable. Rasterizing
