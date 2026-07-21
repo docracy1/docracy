@@ -5,6 +5,7 @@ import { createDocument, createTemplate, fetchMe, fetchTemplate, fetchTemplates 
 import type { Account, TemplateSummary } from "../lib/api";
 import { base64ToBytes } from "../lib/base64";
 import { addTextAnnotation, getPageCount, rasterizePageAsPng, replacePageWithImage, reorderPages } from "../lib/pdfEdit";
+import { getFreeTemplate } from "../lib/freeTemplates";
 import type { DocField, DocFieldType, SignerInput } from "../lib/types";
 
 const FREE_TIER_MAX_SIGNERS = 2;
@@ -32,6 +33,7 @@ export default function Prepare() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const templateId = searchParams.get("template");
+  const freeTemplateSlug = searchParams.get("freeTemplate");
   const [file, setFile] = useState<File | null>(null);
   const [pdfBytes, setPdfBytes] = useState<Uint8Array | null>(null);
   const [preparerSigns, setPreparerSigns] = useState(false);
@@ -112,6 +114,33 @@ export default function Prepare() {
       .catch((err) => setTemplateLoadError(err instanceof Error ? err.message : "Couldn't load that template"))
       .finally(() => setLoadingTemplate(false));
   }, [templateId]);
+
+  // Free templates are static PDFs shipped with the site — no account, no D1 lookup, unlike the
+  // paid saved-templates flow above.
+  useEffect(() => {
+    if (!freeTemplateSlug) return;
+    const template = getFreeTemplate(freeTemplateSlug);
+    if (!template) {
+      setTemplateLoadError("That free template couldn't be found.");
+      return;
+    }
+    setLoadingTemplate(true);
+    setTemplateLoadError(null);
+    fetch(template.pdfPath)
+      .then((res) => {
+        if (!res.ok) throw new Error("Couldn't load that template's PDF");
+        return res.arrayBuffer();
+      })
+      .then((buf) => {
+        const bytes = new Uint8Array(buf);
+        setPdfBytes(bytes);
+        setFields(template.fields);
+        setFile(new File([bytes as unknown as BlobPart], `${template.name}.pdf`, { type: "application/pdf" }));
+        setSigners(template.signerLabels.map((_, i) => ({ order: i + 1, name: "", email: "" })));
+      })
+      .catch((err) => setTemplateLoadError(err instanceof Error ? err.message : "Couldn't load that template"))
+      .finally(() => setLoadingTemplate(false));
+  }, [freeTemplateSlug]);
 
   const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];

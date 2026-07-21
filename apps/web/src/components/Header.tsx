@@ -42,6 +42,9 @@ export default function Header() {
           <img src="/docracy-wordmark.png" alt="Docracy" style={{ height: 40, width: "auto" }} />
         </Link>
         <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 20 }}>
+          <Link to="/free-templates" style={{ fontSize: 14, color: "var(--body)", textDecoration: "none" }}>
+            Free templates
+          </Link>
           <Link
             to={signedIn ? "/dashboard" : "/login"}
             style={{ fontSize: 14, fontWeight: 600, color: "var(--primary)", textDecoration: "none" }}

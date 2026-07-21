@@ -15,6 +15,8 @@ import Login from "./pages/Login";
 import AuthVerify from "./pages/AuthVerify";
 import Dashboard from "./pages/Dashboard";
 import TeamAccept from "./pages/TeamAccept";
+import FreeTemplates from "./pages/FreeTemplates";
+import FreeTemplateDetail from "./pages/FreeTemplateDetail";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -31,6 +33,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/login" element={<Login />} />
         <Route path="/auth/verify" element={<AuthVerify />} />
         <Route path="/team/accept" element={<TeamAccept />} />
+        <Route path="/free-templates" element={<FreeTemplates />} />
+        <Route path="/free-templates/:slug" element={<FreeTemplateDetail />} />
         <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
       <Footer />

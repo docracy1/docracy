@@ -8,6 +8,7 @@ export default function Footer() {
         style={{ padding: "0 24px", display: "flex", gap: 16, fontSize: 13, color: "var(--mute)" }}
       >
         <span>© {new Date().getFullYear()} Docracy</span>
+        <Link to="/free-templates">Free templates</Link>
         <Link to="/privacy">Privacy</Link>
         <Link to="/terms">Terms</Link>
       </div>
