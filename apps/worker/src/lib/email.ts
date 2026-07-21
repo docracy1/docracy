@@ -67,7 +67,6 @@ function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
-const WORDMARK_URL = "https://docracy.pages.dev/docracy-wordmark.png";
 const PRIMARY = "#2f7ed8";
 const INK = "#1a2b3c";
 const MUTED = "#6b7785";
@@ -77,7 +76,8 @@ const MUTED = "#6b7785";
  *  `customLogoUrl` replaces the Docracy wordmark with a workspace's own logo — only ever passed
  *  by sendSigningInvite, since that's the one email a document's actual signer sees; Docracy's
  *  own transactional emails (magic link, team invite) always keep Docracy's own branding. */
-function emailShell(bodyHtml: string, customLogoUrl?: string | null): string {
+function emailShell(appUrl: string, bodyHtml: string, customLogoUrl?: string | null): string {
+  const displayHost = appUrl.replace(/^https?:\/\//, "");
   return `
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f5f7fa;padding:32px 16px;font-family:Arial,Helvetica,sans-serif;">
   <tr>
@@ -85,7 +85,7 @@ function emailShell(bodyHtml: string, customLogoUrl?: string | null): string {
       <table role="presentation" width="480" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:8px;border:1px solid #e6e9ee;max-width:480px;width:100%;">
         <tr>
           <td style="padding:28px 32px 8px 32px;">
-            <img src="${customLogoUrl ?? WORDMARK_URL}" alt="${customLogoUrl ? "" : "Docracy"}" height="26" style="display:block;" />
+            <img src="${customLogoUrl ?? `${appUrl}/docracy-wordmark.png`}" alt="${customLogoUrl ? "" : "Docracy"}" height="26" style="display:block;" />
           </td>
         </tr>
         <tr>
@@ -97,7 +97,7 @@ function emailShell(bodyHtml: string, customLogoUrl?: string | null): string {
       <table role="presentation" width="480" cellpadding="0" cellspacing="0" style="max-width:480px;width:100%;">
         <tr>
           <td style="padding:20px 32px 0 32px;text-align:center;font-size:12px;color:${MUTED};line-height:1.6;">
-            docracy.pages.dev<br />
+            ${displayHost}<br />
             Free, no-signup electronic signatures that disappear when the chain is done.
           </td>
         </tr>
@@ -138,7 +138,7 @@ export async function sendSigningInvite(env: Env, doc: DocState, order: number, 
 
   const subject = doc.customSubject?.trim() || "Ready to sign — you have a document waiting";
   const customLogoUrl = await resolveEmailLogoUrl(env, doc.accountId);
-  await send(env, signer.email, subject, emailShell(body, customLogoUrl));
+  await send(env, signer.email, subject, emailShell(env.PUBLIC_APP_URL, body, customLogoUrl));
 }
 
 export async function sendPreparerStatusLink(env: Env, preparerEmail: string, statusToken: string): Promise<void> {
@@ -207,7 +207,7 @@ export async function sendMagicLink(env: Env, email: string, link: string): Prom
       If you didn't request this, you can safely ignore this email — no account changes were made.
     </p>
   `;
-  await send(env, email, "Your Docracy sign-in link", emailShell(body));
+  await send(env, email, "Your Docracy sign-in link", emailShell(env.PUBLIC_APP_URL, body));
 }
 
 export async function sendTeamInvite(env: Env, email: string, ownerEmail: string, link: string): Promise<void> {
@@ -223,7 +223,7 @@ export async function sendTeamInvite(env: Env, email: string, ownerEmail: string
       If you weren't expecting this, you can safely ignore this email — no account changes were made.
     </p>
   `;
-  await send(env, email, "You're invited to a Docracy workspace", emailShell(body));
+  await send(env, email, "You're invited to a Docracy workspace", emailShell(env.PUBLIC_APP_URL, body));
 }
 
 export async function sendHealthAlert(

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import SignatureCanvas from "react-signature-canvas";
 import PdfViewer from "../components/PdfViewer";
 import { apiUrl, fetchSignView, submitSignature, unlockSign } from "../lib/api";
@@ -145,6 +145,17 @@ export default function Sign() {
         <BrandLogo path={payload.brandLogoPath} />
         <h1>Signed</h1>
         <p>Thanks — you're done. Everyone in the chain will be notified as the document moves forward.</p>
+        {/* The recipient never needed an account to get here — this is the moment they're most
+         *  likely to become a sender themselves. Skipped entirely for white-labeled workspaces,
+         *  who are paying specifically to keep their signers from seeing Docracy at all. */}
+        {!payload.brandLogoPath && (
+          <div className="card" style={{ marginTop: 24, maxWidth: 420 }}>
+            <p style={{ marginBottom: 12 }}>Created with Docracy — send your own documents for free.</p>
+            <Link to="/prepare" className="btn-primary" style={{ display: "inline-block", textDecoration: "none" }}>
+              Send a document
+            </Link>
+          </div>
+        )}
       </div>
     );
   }
