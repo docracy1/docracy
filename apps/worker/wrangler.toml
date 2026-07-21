@@ -32,7 +32,7 @@ PUBLIC_CONNECTOR_URL = "https://mcp.docracy.io"
 PUBLIC_WORKER_URL = "https://api.docracy.io"
 FREE_TIER_MAX_SIGNERS = "2"
 DOC_TTL_DAYS = "9"
-FEEDBACK_EMAIL = "rl@relacon.at"
+FEEDBACK_EMAIL = "founder@docracy.io"
 
 # --- Secrets (never stored in this file) ---
 # Set with: wrangler secret put TOKEN_SECRET
@@ -77,4 +77,4 @@ PUBLIC_CONNECTOR_URL = "https://docracy-connector-staging.rl-d77.workers.dev"
 PUBLIC_WORKER_URL = "https://docracy-worker-staging.rl-d77.workers.dev"
 FREE_TIER_MAX_SIGNERS = "2"
 DOC_TTL_DAYS = "9"
-FEEDBACK_EMAIL = "rl@relacon.at"
+FEEDBACK_EMAIL = "founder@docracy.io"

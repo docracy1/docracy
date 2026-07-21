@@ -39,8 +39,8 @@ export default function Privacy() {
 
       <h3>Contact</h3>
       <p>
-        Questions about your data? Reach out at <a href="mailto:rl@relacon.at">rl@relacon.at</a>, or use the
-        feedback form on the homepage.
+        Questions about your data? Reach out at <a href="mailto:founder@docracy.io">founder@docracy.io</a>, or use
+        the feedback form on the homepage.
       </p>
     </div>
   );
