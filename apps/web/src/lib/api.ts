@@ -322,3 +322,57 @@ export async function deleteBrandLogo(): Promise<{ ok: true }> {
   const res = await apiFetch("/api/account/branding/logo", { method: "DELETE" });
   return asJson(res);
 }
+
+export interface ContractRisk {
+  issue: string;
+  severity: "low" | "medium" | "high";
+  detail: string;
+}
+
+export async function explainDocument(text: string): Promise<{ explanation: string }> {
+  const res = await apiFetch("/api/account/ai/explain", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text }),
+  });
+  return asJson(res);
+}
+
+export async function analyzeDocumentRisks(text: string): Promise<{ risks: ContractRisk[] }> {
+  const res = await apiFetch("/api/account/ai/risks", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text }),
+  });
+  return asJson(res);
+}
+
+export interface GeneratedAgreement {
+  title: string;
+  signerLabels: string[];
+  pdfBase64: string;
+  fields: DocField[];
+}
+
+export async function generateContract(prompt: string): Promise<GeneratedAgreement> {
+  const res = await apiFetch("/api/account/ai/generate", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ prompt }),
+  });
+  return asJson(res);
+}
+
+export interface FunnelRow {
+  event: "page_view" | "document_created" | "document_completed";
+  route: string;
+  traffic_type: "human" | "bot";
+  bot_name: string;
+  day: string;
+  count: number;
+}
+
+export async function fetchAdminAnalytics(days: number): Promise<{ days: number; rows: FunnelRow[] }> {
+  const res = await apiFetch(`/api/admin/analytics?days=${days}`);
+  return asJson(res);
+}

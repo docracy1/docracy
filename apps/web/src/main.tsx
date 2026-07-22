@@ -18,6 +18,7 @@ import TeamAccept from "./pages/TeamAccept";
 import FreeTemplates from "./pages/FreeTemplates";
 import FreeTemplateDetail from "./pages/FreeTemplateDetail";
 import Mcp from "./pages/Mcp";
+import AdminAnalytics from "./pages/AdminAnalytics";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -37,6 +38,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/free-templates" element={<FreeTemplates />} />
         <Route path="/free-templates/:slug" element={<FreeTemplateDetail />} />
         <Route path="/mcp" element={<Mcp />} />
+        <Route path="/admin/analytics" element={<AdminAnalytics />} />
         <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
       <Footer />
