@@ -96,14 +96,14 @@ export interface Env {
   DOCRACY_DB?: D1Database;
   TOKEN_SECRET: string;
   RESEND_API_KEY?: string;
-  /** BytePlus ModelArk (Doubao) API key for AI-first support triage — see lib/support.ts. Absent
-   *  until a real account exists; the feedback route falls back to emailing FEEDBACK_EMAIL
-   *  directly (today's behavior) whenever this is unset, same degrade-gracefully pattern as the
-   *  Stripe keys below. */
-  DOUBAO_API_KEY?: string;
-  /** Doubao model ID, e.g. "seed-2-0-lite-260228" — left configurable since BytePlus model names
-   *  and availability change; support.ts falls back to a sensible default when unset. */
-  DOUBAO_MODEL?: string;
+  /** Cloudflare Workers AI binding, used for AI-first support triage — see lib/support.ts. Free
+   *  (10k neurons/day), requires no external account or API key, so unlike the optional secrets
+   *  below this is always present. */
+  AI: Ai;
+  /** Workers AI model ID override, e.g. "@cf/meta/llama-3.1-8b-instruct-fp8" — left configurable
+   *  since Cloudflare's model catalog changes; support.ts falls back to a sensible default when
+   *  unset. */
+  WORKERS_AI_MODEL?: string;
   PUBLIC_APP_URL: string;
   /** Base URL of the deployed MCP connector (apps/connector) — used only to build the ready-to-
    *  paste connector URL returned by the API-token endpoints. */
@@ -122,4 +122,16 @@ export interface Env {
    *  path, like a custom workspace logo embedded in an outbound email. Optional: emails just fall
    *  back to the default Docracy wordmark until this is set. */
   PUBLIC_WORKER_URL?: string;
+  /** Bot-aware funnel tracking (apps/worker/src/lib/analytics.ts) — write-only from the binding;
+   *  reading aggregates back requires the separate Analytics Engine SQL HTTP API. */
+  ANALYTICS?: AnalyticsEngineDataset;
+  /** Comma-separated allow-list of account emails permitted to call GET /api/admin/analytics. */
+  ADMIN_EMAILS?: string;
+  /** Cloudflare account id — needed only for the Analytics Engine SQL HTTP API (see
+   *  lib/analyticsQuery.ts). Not secret, just an identifier. */
+  CF_ACCOUNT_ID?: string;
+  /** Scoped API token (Account Analytics:Read) for the Analytics Engine SQL HTTP API — absent
+   *  until manually created in the Cloudflare dashboard; the admin analytics route degrades to a
+   *  clear "not configured" response rather than failing when this is unset. */
+  CF_ANALYTICS_API_TOKEN?: string;
 }

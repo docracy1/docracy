@@ -12,6 +12,9 @@ import teamRoute from "./routes/team";
 import brandingRoute from "./routes/branding";
 import brandingPublicRoute from "./routes/brandingPublic";
 import zapierRoute from "./routes/zapier";
+import aiRoute from "./routes/ai";
+import analyticsRoute from "./routes/analytics";
+import adminRoute from "./routes/admin";
 import { runReminderSweep } from "./lib/reminders";
 import { reconcileD1Index } from "./lib/index-d1";
 import { runExpiredDocCleanup } from "./lib/cleanup";
@@ -52,6 +55,9 @@ app.route("/api/account/team", teamRoute);
 app.route("/api/account/branding", brandingRoute);
 app.route("/api/branding", brandingPublicRoute);
 app.route("/api/zapier", zapierRoute);
+app.route("/api/account/ai", aiRoute);
+app.route("/api/analytics", analyticsRoute);
+app.route("/api/admin", adminRoute);
 
 export default {
   fetch: app.fetch,

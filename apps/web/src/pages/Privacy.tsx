@@ -30,11 +30,20 @@ export default function Privacy() {
         window closes.
       </p>
 
+      <h3>Traffic analytics</h3>
+      <p>
+        We log anonymous, aggregate counts of page views and key actions (e.g. a document being created or
+        completed) on our public pages — which page, and whether the visitor's browser/crawler user-agent
+        matches a known AI crawler (like GPTBot or ClaudeBot) or looks like a regular browser. We don't store
+        IP addresses, cookies, or any other identifier alongside this — it's not linked to you, and it isn't
+        used for advertising or shared with any ad network.
+      </p>
+
       <h3>Third parties</h3>
       <p>
         Signing invitations, reminders, and the final signed document are sent via Resend, our email
-        delivery provider. We don't use analytics or advertising trackers, and we don't sell or share your
-        data with anyone else.
+        delivery provider. Traffic analytics (above) are processed by Cloudflare, our hosting provider. We
+        don't use advertising trackers, and we don't sell or share your data with anyone else.
       </p>
 
       <h3>Contact</h3>

@@ -266,3 +266,18 @@ export const requirePaidAccount: MiddlewareHandler<AuthEnv> = async (c, next) =>
   c.set("account", account);
   await next();
 };
+
+/** Gates internal admin routes (e.g. GET /api/admin/analytics) to a hardcoded allow-list —
+ *  deliberately separate from requirePaidAccount, since this isn't a customer-tier feature and a
+ *  paying customer must never see it just by being a paid account. */
+export const requireAdminAccount: MiddlewareHandler<AuthEnv> = async (c, next) => {
+  const account = await resolveAccount(c.env, getCookie(c, SESSION_COOKIE_NAME));
+  if (!account) return c.json({ error: "Sign in required" }, 401);
+  const adminEmails = (c.env.ADMIN_EMAILS ?? "")
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+  if (!adminEmails.includes(account.email.toLowerCase())) return c.json({ error: "Not authorized" }, 401);
+  c.set("account", account);
+  await next();
+};

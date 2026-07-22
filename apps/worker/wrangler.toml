@@ -23,6 +23,19 @@ binding = "DOCRACY_DB"
 database_name = "docracy-index"
 database_id = "498b3b25-111e-435e-baca-5fb4af9c0e38"
 
+# Free (10k neurons/day, resets daily) — no account or API key needed. Used for AI-first support
+# triage in lib/support.ts.
+[ai]
+binding = "AI"
+
+# Bot-aware funnel tracking (lib/analytics.ts) — write-only from the Worker; the dataset
+# materializes on first write, no separate provisioning step. Reading the data back requires the
+# separate Analytics Engine SQL HTTP API with a scoped API token (Account Analytics:Read) — not
+# accessible via this binding.
+[[analytics_engine_datasets]]
+binding = "ANALYTICS"
+dataset = "docracy_funnel"
+
 # --- Non-secret config ---
 # This is the deployed (production) value. Local `wrangler dev` overrides it back to localhost
 # via apps/worker/.dev.vars, which takes precedence over [vars] when running locally.
@@ -33,12 +46,18 @@ PUBLIC_WORKER_URL = "https://api.docracy.io"
 FREE_TIER_MAX_SIGNERS = "2"
 DOC_TTL_DAYS = "9"
 FEEDBACK_EMAIL = "founder@docracy.io"
+# Comma-separated allow-list for GET /api/admin/analytics — everyone else gets a 401, including
+# paid customers. Not a secret (just email addresses), but keep it to founders/admins only.
+ADMIN_EMAILS = "rl@relacon.at"
+# Not secret (just an identifier) — needed only for the Analytics Engine SQL read API.
+CF_ACCOUNT_ID = "d7764515fd9887154193dc04810d81d8"
 
 # --- Secrets (never stored in this file) ---
 # Set with: wrangler secret put TOKEN_SECRET
 # Set with: wrangler secret put RESEND_API_KEY   (optional locally — omit to log emails to console instead of sending)
-# Set with: wrangler secret put DOUBAO_API_KEY   (optional — BytePlus ModelArk key for AI-first
-#   support triage in lib/support.ts; omit to skip straight to emailing FEEDBACK_EMAIL, as before)
+# Set with: wrangler secret put CF_ANALYTICS_API_TOKEN   (optional — a Cloudflare API token scoped
+#   to Account Analytics:Read; GET /api/admin/analytics returns a "not configured" response until
+#   this is set, rather than failing)
 #
 # --- Billing (Stripe) — all optional; billing routes 501 gracefully until these are set ---
 # Set with: wrangler secret put STRIPE_SECRET_KEY
@@ -69,6 +88,13 @@ binding = "DOCRACY_DB"
 database_name = "docracy-index-staging"
 database_id = "2e0a9181-6bd6-4e79-9646-cdca7d1d8aba"
 
+[env.staging.ai]
+binding = "AI"
+
+[[env.staging.analytics_engine_datasets]]
+binding = "ANALYTICS"
+dataset = "docracy_funnel_staging"
+
 [env.staging.vars]
 # The worker itself has no frontend routes — this must point to wherever the web app that
 # renders /sign/:token actually lives. No staging Pages site exists yet, so this points at the
@@ -80,3 +106,4 @@ PUBLIC_WORKER_URL = "https://docracy-worker-staging.rl-d77.workers.dev"
 FREE_TIER_MAX_SIGNERS = "2"
 DOC_TTL_DAYS = "9"
 FEEDBACK_EMAIL = "founder@docracy.io"
+ADMIN_EMAILS = "rl@relacon.at"

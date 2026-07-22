@@ -3,6 +3,7 @@ import { sendSigningInvite, sendPreparerStatusLink } from "./email";
 import { indexDocumentCreated } from "./index-d1";
 import { sha256Hex } from "./hash";
 import { deliverWebhookEvent } from "./webhooks";
+import { logFunnelEvent } from "./analytics";
 import { signToken, hashOpaqueToken } from "@docracy/shared";
 import type { AuditEvent, DocField, DocState, Env, Signer } from "@docracy/shared";
 
@@ -105,6 +106,9 @@ export async function createDocumentCore(
 
   for (const s of signersToInvite) s.linkSentAt = now.toISOString();
   await putDoc(env, doc);
+  // No user agent here on purpose — filling out and submitting this form isn't something a
+  // non-interactive crawler can do, so this funnel stage is always effectively human.
+  logFunnelEvent(env, "document_created", "prepare", null);
 
   // Fire-and-forget, like the D1 indexing below — a stalled or failing outbound email call must
   // never block (or hang) the response to the person who just created the document.
