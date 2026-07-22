@@ -77,7 +77,39 @@ export default function Mcp() {
         ))}
       </div>
 
-      <div className="card" style={{ marginTop: 32, background: "var(--primary-soft)", border: "1px solid var(--primary-soft-strong)" }}>
+      <div className="card" style={{ marginTop: 24 }}>
+        <h3 style={{ marginTop: 0, fontSize: 16 }}>Cursor, Claude Code, and other IDE/agent clients</h3>
+        <p style={{ marginBottom: 8 }}>
+          These connect via a JSON config file rather than a browser settings screen. Most MCP clients that
+          support remote (HTTP) servers use a <code>mcpServers</code> block like this — add it to your client's MCP
+          config file (e.g. Cursor's <code>.cursor/mcp.json</code>, Claude Code's <code>.mcp.json</code>):
+        </p>
+        <pre
+          style={{
+            background: "var(--canvas-soft)",
+            border: "1px solid var(--hairline)",
+            borderRadius: "var(--r-sm)",
+            padding: 14,
+            fontSize: 12.5,
+            overflowX: "auto",
+          }}
+        >
+{`{
+  "mcpServers": {
+    "docracy": {
+      "url": "${FREE_URL}"
+    }
+  }
+}`}
+        </pre>
+        <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 8, marginBottom: 0 }}>
+          The exact key your client expects can vary (some want a <code>"type": "http"</code> field alongside{" "}
+          <code>"url"</code>) — check your client's own MCP docs if this doesn't connect right away. For the paid
+          tier's personal URL, replace the URL above with the one from your Dashboard.
+        </p>
+      </div>
+
+      <div className="card" style={{ marginTop: 24, background: "var(--primary-soft)", border: "1px solid var(--primary-soft-strong)" }}>
         <h3 style={{ marginTop: 0, fontSize: 16 }}>Upgrade for the rest of the toolset</h3>
         <p style={{ marginBottom: 12 }}>
           A paid account swaps that free URL for a personal one that adds:
