@@ -1,25 +1,73 @@
 import { Link } from "react-router-dom";
 import FeedbackForm from "../components/FeedbackForm";
 
-function Icon({ path }: { path: string }) {
+/** Abstract illustration of the product (a document, either freshly signed or having its fields
+ *  auto-detected) — deliberately not a literal app screenshot, which would need re-cropping every
+ *  time the UI changes, and deliberately not a fabricated review score or client logo. */
+function DocumentMockup({ variant }: { variant: "signed" | "detect" }) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
-      <path d={path} />
+    <svg viewBox="0 0 380 285" width="100%" height="100%">
+      <rect x="0.5" y="0.5" width="379" height="284" rx="16" fill="var(--canvas)" stroke="var(--hairline)" />
+      <rect x="32" y="30" width="150" height="14" rx="4" fill="var(--body-strong)" opacity="0.65" />
+      <rect x="32" y="60" width="316" height="8" rx="4" fill="var(--hairline)" />
+      <rect x="32" y="78" width="316" height="8" rx="4" fill="var(--hairline)" />
+      <rect x="32" y="96" width="230" height="8" rx="4" fill="var(--hairline)" />
+      <rect x="32" y="124" width="316" height="8" rx="4" fill="var(--hairline)" />
+      <rect x="32" y="142" width="316" height="8" rx="4" fill="var(--hairline)" />
+      <rect x="32" y="160" width="170" height="8" rx="4" fill="var(--hairline)" />
+      {variant === "detect" ? (
+        <>
+          <rect x="32" y="200" width="130" height="36" rx="6" fill="var(--primary-soft)" stroke="var(--primary)" strokeDasharray="5 4" strokeWidth="2" />
+          <text x="97" y="222" textAnchor="middle" fontSize="11" fill="var(--primary)" fontFamily="inherit" fontWeight="700">
+            Signature
+          </text>
+          <rect x="178" y="200" width="90" height="36" rx="6" fill="var(--primary-soft)" stroke="var(--primary)" strokeDasharray="5 4" strokeWidth="2" />
+          <text x="223" y="222" textAnchor="middle" fontSize="11" fill="var(--primary)" fontFamily="inherit" fontWeight="700">
+            Date
+          </text>
+          <circle cx="335" cy="40" r="18" fill="var(--primary-soft-strong)" />
+          <path
+            d="M335 30l2.6 7.8L345 40l-7.4 2.2L335 50l-2.6-7.8L325 40l7.4-2.2L335 30Z"
+            fill="var(--primary)"
+          />
+        </>
+      ) : (
+        <>
+          <path
+            d="M38 226c18-26 36 9 55-8 19-17 28-22 50-13s38 22 58 4 42-26 65-4"
+            fill="none"
+            stroke="var(--primary)"
+            strokeWidth="5"
+            strokeLinecap="round"
+          />
+          <circle cx="332" cy="218" r="18" fill="#e3f3e9" />
+          <path d="M324 218l5.5 5.5 11-11" fill="none" stroke="var(--success)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        </>
+      )}
     </svg>
   );
 }
 
-const ICONS = {
-  upload: "M12 3v12 M7 8l5-5 5 5 M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3",
-  send: "M22 2 11 13 M22 2 15 22 11 13 2 9 22 2",
-  order: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z M8 12l3 3 5-6",
-  shield: "M12 3 19 6v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z M9 12l2 2 4-4",
-};
+const AUDIENCES = [
+  {
+    title: "Freelancers & solo businesses",
+    body: "Send a contract, offer letter, or NDA today — no software subscription for something you'll use twice a month.",
+  },
+  {
+    title: "Small teams",
+    body: "Add teammates, save reusable templates, and let AI place fields and draft agreements for you — on the paid plan.",
+  },
+  {
+    title: "One-off agreements",
+    body: "Splitting rent, selling something, settling a favor in writing — free, no account, gone once it's signed.",
+  },
+];
 
-const STEPS = [
-  { icon: ICONS.upload, title: "Upload", body: "Drop in a PDF and place a signature field for each signer." },
-  { icon: ICONS.send, title: "Send", body: "Docracy emails the first signer a link. No account needed on either end." },
-  { icon: ICONS.order, title: "Sign, in order", body: "Each signer gets their turn automatically once the one before them is done." },
+const AI_FEATURES = [
+  { title: "Auto-detect fields", body: "Upload a PDF and it places signature, date, and initial fields for you." },
+  { title: "Plain-English explainer", body: "A 3-bullet summary of what each party is agreeing to, no legal jargon." },
+  { title: "Risk & clause highlighter", body: "Flags one-sided terms — long non-competes, vague payment terms, more." },
+  { title: "Generate with AI", body: "Describe an agreement in a sentence, get a ready-to-sign PDF back." },
 ];
 
 const PLAN_ROWS: Array<{ label: string; free: boolean | string; paid: boolean | string }> = [
@@ -34,6 +82,10 @@ const PLAN_ROWS: Array<{ label: string; free: boolean | string; paid: boolean | 
   { label: "MCP connector (Claude, ChatGPT, Grok, Perplexity)", free: false, paid: true },
   { label: "Team accounts (shared workspace)", free: false, paid: true },
   { label: "White-label branding (your own logo)", free: false, paid: true },
+  { label: "AI auto-detect signature & date fields", free: false, paid: true },
+  { label: "AI plain-English contract explainer", free: false, paid: true },
+  { label: "AI risk & clause highlighter", free: false, paid: true },
+  { label: "AI contract generator (describe it, get a signable PDF)", free: false, paid: true },
 ];
 
 function PlanCell({ value }: { value: boolean | string }) {
@@ -45,53 +97,115 @@ export default function Landing() {
   return (
     <div>
       <div className="hero-band">
-        <div className="hero-inner">
-          <div className="hero-eyebrow">Free · No signup · Sequential e-signatures</div>
-          <h1>Sign it. Send it. It disappears.</h1>
-          <p>
-            Upload a PDF, add signers in order, and each one gets their turn automatically. No accounts,
-            no dashboard — the document is gone once the chain is done.
+        <div className="hero-inner hero-split">
+          <div>
+            <div className="hero-eyebrow">Free · No signup · Sequential e-signatures</div>
+            <h1>Sign it. Send it. It disappears.</h1>
+            <p>
+              Upload a PDF, add signers in order, and each one gets their turn automatically. No accounts,
+              no dashboard — the document is gone once the chain is done.
+            </p>
+            <div className="hero-cta-row">
+              <Link to="/prepare" className="btn-primary btn-lg" style={{ display: "inline-block", textDecoration: "none" }}>
+                Start a signing chain
+              </Link>
+              <Link to="/free-templates" style={{ fontSize: 14, fontWeight: 600, color: "var(--hero-ink)" }}>
+                Browse free templates →
+              </Link>
+            </div>
+            <p className="hero-microcopy">Free for chains of up to 2 signers. No credit card, no account.</p>
+            <p className="hero-microcopy">
+              <Link to="/mcp" style={{ color: "var(--hero-ink)", fontWeight: 600 }}>
+                Connect your AI assistant via MCP
+              </Link>
+              , or automate with Zapier →
+            </p>
+          </div>
+          <div className="doc-mockup-glow">
+            <div className="doc-mockup-card">
+              <DocumentMockup variant="signed" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="spotlight-band">
+        <div className="spotlight-inner">
+          <div className="spotlight-badge">Paid plan</div>
+          <h2 style={{ fontSize: 24, marginBottom: 6 }}>AI tools, and an MCP connector for your AI assistant</h2>
+          <p style={{ marginTop: 0, marginBottom: 0, maxWidth: 640 }}>
+            Beyond the free chain-signing flow above, a paid account adds AI that does the busywork and a
+            connector so Claude, ChatGPT, Grok, or Perplexity can create and send documents for you directly
+            from a chat.
           </p>
-          <Link to="/prepare" className="btn-primary" style={{ display: "inline-block", textDecoration: "none" }}>
+
+          <div className="spotlight-split">
+            <div className="accent-list">
+              {AI_FEATURES.map((f) => (
+                <div key={f.title} className="accent-item">
+                  <h3 style={{ fontSize: 15, marginBottom: 3 }}>{f.title}</h3>
+                  <p style={{ margin: 0, fontSize: 13.5 }}>{f.body}</p>
+                </div>
+              ))}
+              <div className="accent-item is-mcp">
+                <h3 style={{ fontSize: 15, marginBottom: 3 }}>MCP connector</h3>
+                <p style={{ margin: 0, fontSize: 13.5 }}>
+                  Claude, ChatGPT, Grok, and Perplexity can create, send, and check the status of your
+                  documents on your behalf — just ask.
+                </p>
+              </div>
+            </div>
+            <div className="doc-mockup-glow">
+              <div className="doc-mockup-card">
+                <DocumentMockup variant="detect" />
+              </div>
+            </div>
+          </div>
+
+          <div style={{ marginTop: 24 }}>
+            <Link to="/login" className="btn-primary btn-lg" style={{ display: "inline-block", textDecoration: "none" }}>
+              Sign in to try the paid plan
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      <div className="audience-band">
+        <div className="audience-inner">
+          <h2 style={{ fontSize: 22, marginBottom: 0 }}>Built for quick, low-stakes agreements</h2>
+          <div className="accent-grid">
+            {AUDIENCES.map((a) => (
+              <div key={a.title} className="accent-item">
+                <h3 style={{ fontSize: 15, marginBottom: 3 }}>{a.title}</h3>
+                <p style={{ margin: 0, fontSize: 13.5 }}>{a.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="cta-band">
+        <h2 style={{ fontSize: 22, marginBottom: 8 }}>Ready to send your first document?</h2>
+        <p style={{ marginTop: 0, marginBottom: 20 }}>Free to start — no account needed to send or sign.</p>
+        <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+          <Link to="/prepare" className="btn-primary btn-lg" style={{ display: "inline-block", textDecoration: "none" }}>
             Start a signing chain
           </Link>
-          <p style={{ fontSize: 13, color: "var(--hero-body)", marginTop: 14, marginBottom: 0, opacity: 0.85 }}>
-            Free for chains of up to 2 signers.
-          </p>
+          <Link to="/free-templates" className="btn-secondary btn-lg" style={{ display: "inline-block", textDecoration: "none" }}>
+            Browse free templates
+          </Link>
         </div>
       </div>
 
       <div className="container">
-        <div className="feature-grid" style={{ marginTop: 8 }}>
-          {STEPS.map((step) => (
-            <div key={step.title} className="feature-card">
-              <div className="icon-badge">
-                <Icon path={step.icon} />
-              </div>
-              <h3 style={{ fontSize: 16, marginBottom: 6 }}>{step.title}</h3>
-              <p style={{ margin: 0, fontSize: 14 }}>{step.body}</p>
-            </div>
-          ))}
-        </div>
-
-        <div className="feature-card" style={{ marginTop: 24 }}>
-          <div className="icon-badge">
-            <Icon path={ICONS.shield} />
-          </div>
-          <h3 style={{ fontSize: 16, marginBottom: 6 }}>Every signature is backed by an audit trail</h3>
-          <p style={{ marginBottom: 0, fontSize: 14 }}>
-            Each signer explicitly confirms their consent before signing. Docracy records the IP address,
-            timestamp, and a cryptographic hash of the document at every step, and generates a certificate of
-            completion once everyone's signed.
-          </p>
-        </div>
-
         <div style={{ marginTop: 40 }}>
           <h2 style={{ fontSize: 20 }}>Free vs. paid</h2>
           <p>
             Everything above works on the free plan. A paid account is <strong>$7/month</strong> and adds a
             dashboard, reusable templates, webhooks, an MCP connector for AI assistants, team accounts,
-            white-label branding, and PIN-protected signing links — plus unlimited signers per document.
+            white-label branding, and PIN-protected signing links — plus unlimited signers per document and a
+            set of AI tools: auto-detect signature and date fields on any upload, get a plain-English summary
+            with risky clauses flagged, or describe an agreement in a sentence and get a signable PDF back.
           </p>
           <div className="card" style={{ padding: 0, overflow: "hidden" }}>
             <div className="plan-table-scroll">

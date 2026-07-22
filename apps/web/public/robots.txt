@@ -4,6 +4,7 @@ Allow: /prepare$
 Allow: /privacy$
 Allow: /terms$
 Allow: /free-templates
+Allow: /mcp$
 Disallow: /
 Disallow: /sign/
 Disallow: /status/

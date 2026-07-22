@@ -13,7 +13,7 @@ export function registerCheckStatus(server: McpServer, env: Env) {
       description:
         "Look up the status of a Docracy signing chain from a sign or status link — who's signed, who's still pending.",
       inputSchema: {
-        link: z.string().describe("The docracy.pages.dev sign or status link (or just the token) you were emailed."),
+        link: z.string().describe("The docracy.io sign or status link (or just the token) you were emailed."),
       },
     },
     async ({ link }) => {

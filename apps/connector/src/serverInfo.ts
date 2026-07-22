@@ -5,6 +5,6 @@
 export const SERVER_INFO = {
   name: "docracy",
   version: "0.1.0",
-  websiteUrl: "https://docracy.pages.dev",
-  icons: [{ src: "https://docracy.pages.dev/docracy-seal-icon.png", mimeType: "image/png" }],
+  websiteUrl: "https://docracy.io",
+  icons: [{ src: "https://docracy.io/docracy-seal-icon.png", mimeType: "image/png" }],
 };

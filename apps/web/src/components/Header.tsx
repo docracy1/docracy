@@ -41,9 +41,20 @@ export default function Header() {
         <Link to="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
           <img src="/docracy-wordmark.png" alt="Docracy" style={{ height: 40, width: "auto" }} />
         </Link>
-        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 20 }}>
-          <Link to="/free-templates" style={{ fontSize: 14, color: "var(--body)", textDecoration: "none" }}>
+        <div className="header-nav-right">
+          <Link
+            to="/free-templates"
+            className="header-templates-link"
+            style={{ fontSize: 14, color: "var(--body)", textDecoration: "none" }}
+          >
             Free templates
+          </Link>
+          <Link
+            to="/mcp"
+            className="header-templates-link"
+            style={{ fontSize: 14, color: "var(--body)", textDecoration: "none" }}
+          >
+            AI &amp; MCP
           </Link>
           <Link
             to={signedIn ? "/dashboard" : "/login"}
@@ -55,6 +66,11 @@ export default function Header() {
             <button onClick={onLogout} className="header-logout-btn">
               Log out
             </button>
+          )}
+          {!signedIn && (
+            <Link to="/prepare" className="btn-primary" style={{ fontSize: 13, padding: "8px 16px", textDecoration: "none" }}>
+              Start free
+            </Link>
           )}
         </div>
       </div>
