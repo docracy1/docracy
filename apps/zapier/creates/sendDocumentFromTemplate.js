@@ -54,7 +54,7 @@ module.exports = {
     sample: {
       docId: "sample-doc-id",
       statusToken: "sample-status-token",
-      statusUrl: "https://docracy.pages.dev/status/sample-status-token",
+      statusUrl: "https://docracy.io/status/sample-status-token",
     },
   },
 };
