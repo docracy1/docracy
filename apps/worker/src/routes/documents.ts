@@ -1,6 +1,8 @@
 import { Hono } from "hono";
+import { getCookie } from "hono/cookie";
 import { PDFDocument } from "pdf-lib";
 import { createDocumentCore } from "../lib/documentCreation";
+import { NOTRACK_COOKIE_NAME } from "../lib/analytics";
 import { checkRateLimit, checkInviteRateLimit } from "../lib/ratelimit";
 import { optionalAccount, type AccountContext } from "../lib/auth";
 import type { DocField, Env } from "@docracy/shared";
@@ -174,6 +176,8 @@ documents.post("/", optionalAccount, async (c) => {
     fields: meta.fields,
     accountId,
     creatorIp: ip,
+    creatorCountry: c.req.header("CF-IPCountry"),
+    skipFunnelTracking: getCookie(c, NOTRACK_COOKIE_NAME) === "1",
     customSubject: meta.customSubject?.trim() || undefined,
     customMessage: meta.customMessage?.trim() || undefined,
     signingMode: meta.signingMode,

@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { getCookie } from "hono/cookie";
 import { getDoc, putDoc, isSignerOnTurn, currentTurnOrder } from "../lib/kv";
 import { burnFields, decodedByteLength, generateCertificate, MAX_SIGNATURE_IMAGE_BYTES, type FieldValue } from "../lib/pdf";
 import { sendSigningInvite, sendCompletionEmails } from "../lib/email";
@@ -8,7 +9,7 @@ import { sha256Hex } from "../lib/hash";
 import { requestTimestamp } from "../lib/timestamp";
 import { verifyPin, issueUnlockToken, verifyUnlockToken } from "../lib/signUnlock";
 import { deliverWebhookEvent } from "../lib/webhooks";
-import { logFunnelEvent } from "../lib/analytics";
+import { logFunnelEvent, NOTRACK_COOKIE_NAME } from "../lib/analytics";
 import { hasCustomLogo, logoPath } from "../lib/branding";
 import { verifyToken, signToken } from "@docracy/shared";
 import type { AuditEvent, DocField, Env } from "@docracy/shared";
@@ -313,7 +314,9 @@ sign.post("/sign/:token", async (c) => {
 
     await putDoc(c.env, freshDoc);
     await sendCompletionEmails(c.env, freshDoc, updatedBytes, certificateBytes);
-    logFunnelEvent(c.env, "document_completed", "sign", null);
+    if (getCookie(c, NOTRACK_COOKIE_NAME) !== "1") {
+      logFunnelEvent(c.env, "document_completed", "sign", null, c.req.header("CF-IPCountry"));
+    }
 
     if (freshDoc.accountId) {
       indexNonFatal(c.executionCtx, freshDoc.docId, "completed", indexCompleted(c.env, freshDoc));

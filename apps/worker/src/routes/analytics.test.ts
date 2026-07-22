@@ -13,7 +13,7 @@ function post(body: unknown, headers: Record<string, string> = {}) {
 }
 
 describe("POST /api/analytics/pageview", () => {
-  it("logs a page_view event for a tracked route", async () => {
+  it("logs a page_view event for a tracked route, including the CF-IPCountry header", async () => {
     const writeDataPoint = () => {};
     const calls: unknown[] = [];
     const { env } = makeMockEnv({
@@ -22,13 +22,35 @@ describe("POST /api/analytics/pageview", () => {
 
     const res = await analytics.request(
       "/pageview",
-      post({ route: "/free-templates/mutual-nda" }, { "user-agent": "GPTBot/1.1" }),
+      post({ route: "/free-templates/mutual-nda" }, { "user-agent": "GPTBot/1.1", "CF-IPCountry": "US" }),
       env,
       MOCK_CTX
     );
 
     expect(res.status).toBe(200);
-    expect(calls).toEqual([[{ blobs: ["page_view", "/free-templates/mutual-nda", "bot", "GPTBot"], doubles: [1], indexes: ["page_view"] }]]);
+    expect(calls).toEqual([
+      [{ blobs: ["page_view", "/free-templates/mutual-nda", "bot", "GPTBot", "US"], doubles: [1], indexes: ["page_view"] }],
+    ]);
+  });
+
+  it("skips logging (but still returns 200) when the notrack cookie is set", async () => {
+    const writeDataPoint = () => {};
+    const calls: unknown[] = [];
+    const { env } = makeMockEnv({
+      ANALYTICS: { writeDataPoint: (...args: unknown[]) => calls.push(args) } as any,
+    });
+
+    const res = await analytics.request(
+      "/pageview",
+      post({ route: "/mcp" }, { cookie: "docracy_notrack=1" }),
+      env,
+      MOCK_CTX
+    );
+
+    expect(res.status).toBe(200);
+    const body: { ok: boolean; skipped?: boolean } = await res.json();
+    expect(body.skipped).toBe(true);
+    expect(calls).toEqual([]);
   });
 
   it("rejects a route not in the allow-list", async () => {

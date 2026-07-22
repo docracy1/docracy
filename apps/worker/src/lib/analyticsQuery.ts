@@ -14,11 +14,12 @@ export async function queryFunnelSummary(env: Env, days: number): Promise<unknow
       blob2 AS route,
       blob3 AS traffic_type,
       blob4 AS bot_name,
+      blob5 AS country,
       toDate(timestamp) AS day,
       SUM(double1) AS count
     FROM docracy_funnel
     WHERE timestamp > now() - INTERVAL '${days}' DAY
-    GROUP BY event, route, traffic_type, bot_name, day
+    GROUP BY event, route, traffic_type, bot_name, country, day
     ORDER BY day DESC, event, count DESC
   `.trim();
 

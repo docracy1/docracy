@@ -368,11 +368,23 @@ export interface FunnelRow {
   route: string;
   traffic_type: "human" | "bot";
   bot_name: string;
+  country: string;
   day: string;
   count: number;
 }
 
 export async function fetchAdminAnalytics(days: number): Promise<{ days: number; rows: FunnelRow[] }> {
   const res = await apiFetch(`/api/admin/analytics?days=${days}`);
+  return asJson(res);
+}
+
+/** Toggles the notrack cookie (see apps/worker/src/lib/analytics.ts) that opts the caller's own
+ *  browser out of all funnel tracking — page views, document_created, document_completed. */
+export async function setAnalyticsNoTrack(enabled: boolean): Promise<{ ok: true; enabled: boolean }> {
+  const res = await apiFetch("/api/admin/analytics/notrack", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ enabled }),
+  });
   return asJson(res);
 }

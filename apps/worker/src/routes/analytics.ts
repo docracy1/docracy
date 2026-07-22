@@ -1,5 +1,6 @@
 import { Hono } from "hono";
-import { logFunnelEvent } from "../lib/analytics";
+import { getCookie } from "hono/cookie";
+import { logFunnelEvent, NOTRACK_COOKIE_NAME } from "../lib/analytics";
 import type { Env } from "@docracy/shared";
 
 // Only the routes this funnel actually cares about (public marketing pages) — an allow-list, not
@@ -40,7 +41,12 @@ analytics.post("/pageview", async (c) => {
   const route = body.route ?? "";
   if (!TRACKED_ROUTES.has(route)) return c.json({ error: "Unknown route" }, 400);
 
-  logFunnelEvent(c.env, "page_view", route, c.req.header("user-agent"));
+  // Opt-out for whoever's own browser has the cookie set (e.g. the site owner doing QA) — see
+  // POST /api/admin/analytics/notrack. Still returns 200 either way so the caller (the Pages
+  // Function middleware) never sees this as an error.
+  if (getCookie(c, NOTRACK_COOKIE_NAME) === "1") return c.json({ ok: true, skipped: true });
+
+  logFunnelEvent(c.env, "page_view", route, c.req.header("user-agent"), c.req.header("CF-IPCountry"));
   return c.json({ ok: true });
 });
 

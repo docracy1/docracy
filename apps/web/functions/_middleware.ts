@@ -39,6 +39,9 @@ export const onRequest: PagesFunction = async (context) => {
         headers: {
           "content-type": "application/json",
           "user-agent": context.request.headers.get("user-agent") ?? "",
+          // Forwarded so the worker can see the notrack opt-out cookie (see lib/analytics.ts) —
+          // without this, a browser that's opted out would still get counted here.
+          cookie: context.request.headers.get("cookie") ?? "",
         },
         body: JSON.stringify({ route: url.pathname }),
       }).catch(() => {})

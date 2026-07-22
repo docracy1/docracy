@@ -1,6 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
-import { fetchAdminAnalytics, type FunnelRow } from "../lib/api";
+import { fetchAdminAnalytics, setAnalyticsNoTrack, type FunnelRow } from "../lib/api";
 import { usePageMeta } from "../lib/usePageMeta";
+
+const NOTRACK_COOKIE_NAME = "docracy_notrack";
+
+function readNoTrackCookie(): boolean {
+  return document.cookie.split("; ").some((c) => c === `${NOTRACK_COOKIE_NAME}=1`);
+}
 
 const HUMAN_COLOR = "#2f7ed8"; // var(--primary)
 const BOT_COLOR = "#d9822b";
@@ -206,6 +212,40 @@ function BotTable({ rows }: { rows: FunnelRow[] }) {
   );
 }
 
+function CountryTable({ rows }: { rows: FunnelRow[] }) {
+  const byCountry = useMemo(() => {
+    const map = new Map<string, number>();
+    for (const r of rows) {
+      if (r.event !== "page_view" || !r.country) continue;
+      map.set(r.country, (map.get(r.country) ?? 0) + r.count);
+    }
+    return [...map.entries()].sort(([, a], [, b]) => b - a);
+  }, [rows]);
+
+  if (byCountry.length === 0) return <p style={{ color: "var(--mute)", fontSize: 13 }}>No country data yet.</p>;
+
+  return (
+    <div className="plan-table-scroll">
+      <table className="plan-table" style={{ minWidth: 280 }}>
+        <thead>
+          <tr>
+            <th style={{ textAlign: "left" }}>Country</th>
+            <th>Page views</th>
+          </tr>
+        </thead>
+        <tbody>
+          {byCountry.map(([country, count]) => (
+            <tr key={country}>
+              <td style={{ textAlign: "left" }}>{country}</td>
+              <td>{count}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 export default function AdminAnalytics() {
   usePageMeta("Analytics — Docracy", "Internal traffic and funnel analytics.");
 
@@ -213,6 +253,22 @@ export default function AdminAnalytics() {
   const [rows, setRows] = useState<FunnelRow[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [noTrack, setNoTrack] = useState(() => readNoTrackCookie());
+  const [noTrackBusy, setNoTrackBusy] = useState(false);
+
+  const onToggleNoTrack = async () => {
+    setNoTrackBusy(true);
+    try {
+      const next = !noTrack;
+      await setAnalyticsNoTrack(next);
+      setNoTrack(next);
+    } catch {
+      // Leave the toggle in its previous state — the checkbox itself is the only feedback needed
+      // for this low-stakes, easily-retried action.
+    } finally {
+      setNoTrackBusy(false);
+    }
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -256,7 +312,7 @@ export default function AdminAnalytics() {
         Aggregate traffic and funnel counts — no per-visitor tracking, no IPs or cookies stored.
       </p>
 
-      <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
+      <div style={{ display: "flex", gap: 8, marginBottom: 12, flexWrap: "wrap", alignItems: "center" }}>
         {[7, 30, 90].map((d) => (
           <button
             key={d}
@@ -268,6 +324,11 @@ export default function AdminAnalytics() {
           </button>
         ))}
       </div>
+
+      <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "var(--body)", marginBottom: 20 }}>
+        <input type="checkbox" checked={noTrack} disabled={noTrackBusy} onChange={onToggleNoTrack} />
+        Don't count my own visits (this browser only)
+      </label>
 
       {loading && <p style={{ color: "var(--mute)" }}>Loading…</p>}
       {error && (
@@ -293,7 +354,7 @@ export default function AdminAnalytics() {
             <DailyViewsChart rows={rows} />
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: 16 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 16 }}>
             <div className="card">
               <h3 style={{ marginTop: 0, fontSize: 15 }}>By route</h3>
               <RouteTable rows={rows} />
@@ -301,6 +362,10 @@ export default function AdminAnalytics() {
             <div className="card">
               <h3 style={{ marginTop: 0, fontSize: 15 }}>By bot</h3>
               <BotTable rows={rows} />
+            </div>
+            <div className="card">
+              <h3 style={{ marginTop: 0, fontSize: 15 }}>By country</h3>
+              <CountryTable rows={rows} />
             </div>
           </div>
         </>

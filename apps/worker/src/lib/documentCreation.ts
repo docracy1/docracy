@@ -27,6 +27,11 @@ export interface CreateDocumentCoreParams {
   /** IP of whoever submitted the /api/documents request, for the "created" audit event. Optional
    *  (defaults to null) so existing callers/tests that don't pass it keep compiling unchanged. */
   creatorIp?: string | null;
+  /** CF-IPCountry of whoever submitted the request, for funnel analytics. */
+  creatorCountry?: string | null;
+  /** Set when the submitter's browser has the notrack opt-out cookie (see lib/analytics.ts) —
+   *  skips the document_created funnel event entirely, e.g. for the site owner's own QA testing. */
+  skipFunnelTracking?: boolean;
   /** Preparer-supplied overrides for the signing-invite email — stored on the doc (not just used
    *  once here) since sign.ts's chain-advance re-sends sendSigningInvite for later signers too. */
   customSubject?: string;
@@ -108,7 +113,9 @@ export async function createDocumentCore(
   await putDoc(env, doc);
   // No user agent here on purpose — filling out and submitting this form isn't something a
   // non-interactive crawler can do, so this funnel stage is always effectively human.
-  logFunnelEvent(env, "document_created", "prepare", null);
+  if (!params.skipFunnelTracking) {
+    logFunnelEvent(env, "document_created", "prepare", null, params.creatorCountry);
+  }
 
   // Fire-and-forget, like the D1 indexing below — a stalled or failing outbound email call must
   // never block (or hang) the response to the person who just created the document.

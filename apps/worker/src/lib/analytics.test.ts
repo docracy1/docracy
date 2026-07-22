@@ -34,10 +34,10 @@ describe("logFunnelEvent", () => {
     const writeDataPoint = vi.fn();
     const { env } = makeMockEnv({ ANALYTICS: { writeDataPoint } as any });
 
-    logFunnelEvent(env, "page_view", "/free-templates/mutual-nda", "GPTBot/1.1");
+    logFunnelEvent(env, "page_view", "/free-templates/mutual-nda", "GPTBot/1.1", "US");
 
     expect(writeDataPoint).toHaveBeenCalledWith({
-      blobs: ["page_view", "/free-templates/mutual-nda", "bot", "GPTBot"],
+      blobs: ["page_view", "/free-templates/mutual-nda", "bot", "GPTBot", "US"],
       doubles: [1],
       indexes: ["page_view"],
     });
@@ -47,12 +47,25 @@ describe("logFunnelEvent", () => {
     const writeDataPoint = vi.fn();
     const { env } = makeMockEnv({ ANALYTICS: { writeDataPoint } as any });
 
-    logFunnelEvent(env, "document_completed", "/prepare", "Mozilla/5.0");
+    logFunnelEvent(env, "document_completed", "/prepare", "Mozilla/5.0", "AT");
 
     expect(writeDataPoint).toHaveBeenCalledWith({
-      blobs: ["document_completed", "/prepare", "human", ""],
+      blobs: ["document_completed", "/prepare", "human", "", "AT"],
       doubles: [1],
       indexes: ["document_completed"],
+    });
+  });
+
+  it("defaults country to an empty string when omitted", () => {
+    const writeDataPoint = vi.fn();
+    const { env } = makeMockEnv({ ANALYTICS: { writeDataPoint } as any });
+
+    logFunnelEvent(env, "document_created", "/prepare", null);
+
+    expect(writeDataPoint).toHaveBeenCalledWith({
+      blobs: ["document_created", "/prepare", "human", "", ""],
+      doubles: [1],
+      indexes: ["document_created"],
     });
   });
 

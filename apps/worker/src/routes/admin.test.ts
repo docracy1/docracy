@@ -41,3 +41,48 @@ describe("GET /api/admin/analytics", () => {
     expect(res.status).toBe(501); // not 401 — passed the admin check, just no token configured
   });
 });
+
+function postJson(body: unknown, headers: Record<string, string> = {}) {
+  return {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...headers },
+    body: JSON.stringify(body),
+  };
+}
+
+describe("POST /api/admin/analytics/notrack", () => {
+  it("rejects an unauthenticated request", async () => {
+    const { env } = makeMockEnv();
+    const res = await admin.request("/analytics/notrack", postJson({ enabled: true }), env, MOCK_CTX);
+    expect(res.status).toBe(401);
+  });
+
+  it("sets the notrack cookie when enabling", async () => {
+    const { env } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com" });
+    const headers = await sessionCookie(env, "admin@example.com");
+    const res = await admin.request(
+      "/analytics/notrack",
+      postJson({ enabled: true }, headers),
+      env,
+      MOCK_CTX
+    );
+    expect(res.status).toBe(200);
+    const body: { ok: boolean; enabled: boolean } = await res.json();
+    expect(body.enabled).toBe(true);
+    expect(res.headers.get("set-cookie")).toContain("docracy_notrack=1");
+  });
+
+  it("clears the notrack cookie when disabling", async () => {
+    const { env } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com" });
+    const headers = await sessionCookie(env, "admin@example.com");
+    const res = await admin.request(
+      "/analytics/notrack",
+      postJson({ enabled: false }, headers),
+      env,
+      MOCK_CTX
+    );
+    expect(res.status).toBe(200);
+    const setCookie = res.headers.get("set-cookie") ?? "";
+    expect(setCookie).toContain("docracy_notrack=;");
+  });
+});
