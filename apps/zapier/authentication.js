@@ -14,7 +14,7 @@ module.exports = {
       type: "string",
       required: true,
       helpText:
-        'Find this on your [Docracy Dashboard](https://docracy.pages.dev/dashboard) under "MCP connector & API key" — ' +
+        'Find this on your [Docracy Dashboard](https://docracy.io/dashboard) under "MCP connector & API key" — ' +
         "click Generate (or Regenerate) to get one. The same key works for Zapier and for AI assistants like Claude.",
     },
   ],
