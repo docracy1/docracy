@@ -19,6 +19,12 @@ import FreeTemplates from "./pages/FreeTemplates";
 import FreeTemplateDetail from "./pages/FreeTemplateDetail";
 import Mcp from "./pages/Mcp";
 import AdminAnalytics from "./pages/AdminAnalytics";
+import About from "./pages/About";
+import Pricing from "./pages/Pricing";
+import Docs from "./pages/Docs";
+import Imprint from "./pages/Imprint";
+import Uptime from "./pages/Uptime";
+import NotFound from "./pages/NotFound";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -40,6 +46,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/mcp" element={<Mcp />} />
         <Route path="/admin/analytics" element={<AdminAnalytics />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/docs" element={<Docs />} />
+        <Route path="/imprint" element={<Imprint />} />
+        <Route path="/uptime" element={<Uptime />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
     </BrowserRouter>

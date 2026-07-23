@@ -78,6 +78,32 @@ const routes = [
       "Connect Docracy to Claude, ChatGPT, Grok, or Perplexity as an MCP connector — free to try with no signup, " +
       "or upgrade for document search and the full AI toolset. Also automates with Zapier.",
   },
+  {
+    urlPath: "/about",
+    outFile: "about.html",
+    title: "About Docracy",
+    description: "Why Docracy exists: free, no-signup e-signatures for quick, low-stakes agreements — built by RELACON GmbH.",
+  },
+  {
+    urlPath: "/pricing",
+    outFile: "pricing.html",
+    title: "Pricing — Docracy",
+    description:
+      "Free for signing chains of up to 2 signers, no account required. Paid is $7/month and adds AI tools, an " +
+      "MCP connector, unlimited signers, templates, webhooks, and team accounts.",
+  },
+  {
+    urlPath: "/docs",
+    outFile: "docs.html",
+    title: "Documentation — Docracy",
+    description: "How Docracy's free signing flow, paid AI tools, templates, webhooks, and MCP/Zapier automation actually work.",
+  },
+  {
+    urlPath: "/imprint",
+    outFile: "imprint.html",
+    title: "Imprint — Docracy",
+    description: "Legal entity behind Docracy.",
+  },
   ...FREE_TEMPLATES.map((t) => ({
     urlPath: `/free-templates/${t.slug}`,
     outFile: `free-templates/${t.slug}.html`,
@@ -98,7 +124,7 @@ function withMeta(html, { title, description, urlPath }) {
     .replace(/(<meta\s+property="og:description"\s+content=")[^"]*(")/, `$1${description}$2`)
     .replace(/(<meta name="twitter:title" content=")[^"]*(")/, `$1${title}$2`)
     .replace(/(<meta\s+name="twitter:description"\s+content=")[^"]*(")/, `$1${description}$2`)
-    .replace("</head>", `  <link rel="canonical" href="${canonical}" />\n  </head>`);
+    .replace(/(<link rel="canonical" href=")[^"]*(")/, `$1${canonical}$2`);
 }
 
 for (const route of routes) {

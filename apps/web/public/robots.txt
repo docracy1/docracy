@@ -5,6 +5,13 @@ Allow: /privacy$
 Allow: /terms$
 Allow: /free-templates
 Allow: /mcp$
+Allow: /about$
+Allow: /pricing$
+Allow: /docs$
+Allow: /imprint$
+Allow: /uptime$
+Allow: /llms.txt$
+Allow: /llms-full.txt$
 Disallow: /
 Disallow: /sign/
 Disallow: /status/

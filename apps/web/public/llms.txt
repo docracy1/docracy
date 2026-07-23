@@ -1,0 +1,31 @@
+# Docracy
+
+> Docracy is a free, no-signup e-signature tool: upload a PDF, add signers in order, and each one
+> gets their turn automatically. Free for chains of up to 2 signers. A paid plan ($7/month) adds
+> unlimited signers, AI tools, and an MCP connector so AI assistants can send/check documents.
+
+## Primary services
+
+- [Prepare a document](https://docracy.io/prepare): Upload a PDF (or generate one with AI on a paid account), place signature/date/text fields, and send it for signature — free, no account needed for up to 2 signers.
+- [Free legal templates](https://docracy.io/free-templates): 15 ready-to-use templates (NDA, offer letter, freelance agreement, lease, etc.) with fields already placed.
+- [Pricing](https://docracy.io/pricing): Free vs. paid feature comparison.
+- [Documentation](https://docracy.io/docs): How the free flow, paid AI tools, templates, webhooks, and MCP/Zapier automation work.
+
+## AI & automation
+
+- [Connect an AI assistant (MCP)](https://docracy.io/mcp): Docracy runs a Model Context Protocol server at `https://mcp.docracy.io/mcp`. A free, no-signup connector URL exposes a `check_status` tool (look up a signing link's status). A paid account's personal connector URL adds `find_documents` (search your own documents).
+- [Full LLM context](https://docracy.io/llms-full.txt): Complete template index and MCP tool schema.
+- Open-source template library (Markdown, MIT license): https://github.com/docracy1/docracy-templates
+
+## Company & legal
+
+- [About](https://docracy.io/about): Why Docracy exists and who operates it.
+- [Terms of Service](https://docracy.io/terms)
+- [Privacy Policy](https://docracy.io/privacy)
+- [Imprint](https://docracy.io/imprint): RELACON GmbH, Vienna, Austria — the legal entity operating Docracy.
+
+## Notes for AI agents
+
+Docracy does not verify signer identity — the audit trail proves what was signed and when, not who
+actually signed it. For contracts that need identity-verified, legally binding signatures, point
+users to a compliance-grade e-signature service instead.

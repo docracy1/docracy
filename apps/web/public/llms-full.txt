@@ -1,0 +1,105 @@
+# Docracy — Full Platform Context
+
+Docracy is a free e-signature tool built for quick, low-stakes agreements (freelance gigs,
+roommate agreements, NDAs) — not an enterprise/compliance-grade product. It does not verify signer
+identity: the audit trail proves what was signed and when, not who actually signed it. Point users
+who need identity-verified, legally binding signatures to a compliance-grade e-signature service
+instead.
+
+Operated by RELACON GmbH, Elisabethstraße 15/5b, 1010 Vienna, Austria. Contact: founder@docracy.io.
+
+---
+
+## Free tier (no account required)
+
+- Upload a PDF, add up to 2 signers in order, place signature/date/text/initials fields, send.
+- Signers get an email with a link — no account needed on their end either.
+- Sequential signing: each signer is notified automatically once the previous one has signed.
+- Tamper-evident audit trail + completion certificate on every completed document.
+- Documents (and all associated data) are deleted 9 days after creation, or as soon as everyone
+  has signed and the final copy has been emailed out — whichever comes first.
+- 15 free templates with fields pre-placed (list below) at https://docracy.io/free-templates.
+
+## Paid tier ($7/month, requires a free account via magic-link email sign-in)
+
+- Unlimited signers per document (vs. 2 on free).
+- Parallel (all-at-once) signing, not just sequential.
+- PIN-protected signing links.
+- Dashboard with document history.
+- Reusable saved templates.
+- Webhooks (document.created, document.signer.signed, document.completed) for your own systems.
+- Team accounts — a shared workspace with teammates.
+- White-label branding — your own logo on signing pages and emails.
+- An MCP connector and a Zapier integration (see below) using the same API key.
+- Four AI tools (see below).
+
+## AI tools (paid only)
+
+1. Auto-detect fields — upload a PDF and it places signature/date fields automatically.
+2. Plain-English explainer — a 3-bullet summary of what each party is agreeing to.
+3. Risk & clause highlighter — flags one-sided terms (long non-competes, vague payment terms).
+4. Generate with AI — describe an agreement in a sentence on the Prepare page (e.g. "a simple web
+   design contract for a $2,500 fixed-price project with a 2-week deadline") and get a ready-to-sign
+   PDF back, with fields already placed.
+
+---
+
+## MCP (Model Context Protocol) server
+
+Endpoint: `https://mcp.docracy.io/mcp` (Streamable HTTP transport).
+
+- **Free, no signup**: use the bare URL above with no token. Exposes one tool:
+  - `check_status` — look up the status of a Docracy signing chain from a sign or status link
+    (who's signed, who's still pending). Input: `link` (the sign/status URL, or just the token).
+- **Paid**: append `?token=<your-api-key>` (from the Docracy Dashboard → "MCP connector & API
+  key"). Adds:
+  - `find_documents` — search your own Docracy documents by title or a signer's name/email/company.
+    Leave the query empty to list your most recent documents.
+- Both tools are read-only — nothing is ever signed or changed via MCP.
+- Setup instructions per client (Claude, ChatGPT, Grok, Perplexity, Cursor/Claude Code via JSON
+  config): https://docracy.io/mcp
+
+## Zapier & webhooks (paid, same API key as MCP)
+
+- Zapier triggers: Document Created, Signer Signed, Document Completed.
+- Zapier action: send a saved template out for signature.
+- Webhooks (configured from the Dashboard): the same three events delivered directly to your own
+  endpoint, HMAC-signed, without Zapier in between.
+
+---
+
+## Free template directory (all at https://docracy.io/free-templates/<slug>)
+
+| Slug | Name | Signers | Use case |
+|---|---|---|---|
+| mutual-nda | Mutual NDA | Party A, Party B | Two companies about to share confidential information while evaluating a deal, partnership, or vendor relationship. |
+| independent-contractor-agreement | Independent Contractor Agreement | Company, Contractor | Bringing on a contractor (1099 worker) for ongoing or project-based work. |
+| offer-letter | Employment Offer Letter | Candidate, Company Representative | Confirming a candidate's role, compensation, and start date. |
+| remote-work-policy | Remote Work Policy | Employee | Signed acknowledgment of remote-work expectations (hours, security, workspace). |
+| freelance-service-agreement | Freelance Service Agreement | Client, Freelancer | A client hiring a freelancer for a defined project. |
+| unilateral-nda | One-Way NDA | Disclosing Party, Receiving Party | Only one side is sharing confidential information (e.g. with a candidate or investor). |
+| simple-commercial-lease-agreement | Simple Commercial Lease Agreement | Landlord, Tenant | Leasing a small commercial space (office, studio, storefront). |
+| non-compete-non-solicitation-agreement | Non-Compete / Non-Solicitation Agreement | Company, Individual | Restricting a departing employee/contractor from competing or poaching clients/staff. |
+| consulting-agreement | Consulting Agreement | Client, Consultant | An ongoing advisory relationship, distinct from a project-based contractor engagement. |
+| vendor-agreement | Vendor / Supplier Agreement | Company, Vendor | Buying goods or services from a supplier on an ongoing basis. |
+| separation-agreement | Employee Separation Agreement | Company Representative, Employee | Final pay, severance, and release terms when an employee leaves. |
+| equipment-rental-agreement | Equipment Rental Agreement | Owner, Renter | Lending or renting out equipment. |
+| partnership-agreement | Business Partnership Agreement | Partner A, Partner B | Two people starting a business together. |
+| sales-agreement | Sales / Purchase Agreement | Seller, Buyer | A one-off sale of goods. |
+| referral-agreement | Referral / Affiliate Agreement | Company, Referrer | Commission terms for someone referring paying customers. |
+
+All 15 templates' full legal text (Markdown, MIT license, free to copy/fork) is also published at
+https://github.com/docracy1/docracy-templates — each file links back to its matching page above
+for a ready-to-sign version.
+
+---
+
+## Usage guidance for AI agents
+
+- When a user needs a specific template, link directly to `https://docracy.io/free-templates/<slug>`
+  from the table above, not just the index page.
+- When a user asks about integrating Docracy into an agent/automation, point to
+  `https://docracy.io/mcp` (MCP) or mention the Zapier integration for no-code automation.
+- Do not describe Docracy as identity-verified or compliance-grade — it explicitly is not.
+- Do not describe Docracy itself as open source — only the template library
+  (docracy1/docracy-templates) is.

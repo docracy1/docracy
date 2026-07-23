@@ -43,6 +43,13 @@ export default function Header() {
         </Link>
         <div className="header-nav-right">
           <Link
+            to="/pricing"
+            className="header-templates-link"
+            style={{ fontSize: 14, color: "var(--body)", textDecoration: "none" }}
+          >
+            Pricing
+          </Link>
+          <Link
             to="/free-templates"
             className="header-templates-link"
             style={{ fontSize: 14, color: "var(--body)", textDecoration: "none" }}
@@ -55,6 +62,13 @@ export default function Header() {
             style={{ fontSize: 14, color: "var(--body)", textDecoration: "none" }}
           >
             AI &amp; MCP
+          </Link>
+          <Link
+            to="/docs"
+            className="header-templates-link"
+            style={{ fontSize: 14, color: "var(--body)", textDecoration: "none" }}
+          >
+            Docs
           </Link>
           <Link
             to={signedIn ? "/dashboard" : "/login"}

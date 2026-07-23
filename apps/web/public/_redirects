@@ -1,0 +1,8 @@
+# Explicit SPA fallback — Cloudflare Pages checks for an exact static-asset match (including the
+# prerendered .html files under scripts/prerender.mjs) before evaluating this file, so this only
+# ever catches routes with no matching static file: legitimate client-only routes (/dashboard,
+# /login, /sign/:token, /status/:token, /admin/analytics, /prepare, etc.) and genuinely unknown
+# URLs, both of which need React Router to run client-side to render the right thing (including
+# NotFound.tsx's catch-all route for the latter case). Previously relied on Cloudflare Pages'
+# undocumented default behavior for this; this makes it explicit.
+/*  /index.html  200

@@ -5,6 +5,10 @@ import Footer from "../src/components/Footer";
 import FreeTemplates from "../src/pages/FreeTemplates";
 import FreeTemplateDetail from "../src/pages/FreeTemplateDetail";
 import Mcp from "../src/pages/Mcp";
+import About from "../src/pages/About";
+import Pricing from "../src/pages/Pricing";
+import Docs from "../src/pages/Docs";
+import Imprint from "../src/pages/Imprint";
 
 /** Renders the real app components to static markup for a single path — same components a
  *  browser gets, minus effects (which never run during static rendering, so Header's login-check
@@ -17,6 +21,10 @@ function renderPath(targetPath: string): string {
         <Route path="/free-templates" element={<FreeTemplates />} />
         <Route path="/free-templates/:slug" element={<FreeTemplateDetail />} />
         <Route path="/mcp" element={<Mcp />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/docs" element={<Docs />} />
+        <Route path="/imprint" element={<Imprint />} />
       </Routes>
       <Footer />
     </MemoryRouter>
