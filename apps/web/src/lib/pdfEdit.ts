@@ -84,6 +84,14 @@ export async function getPageTextSpans(pdfBytes: Uint8Array, pageIndex: number):
   }
 }
 
+/** Plain reading-order text of the whole document, for handing to an AI endpoint (explain/risk
+ *  analysis) — reuses the same per-page text layer getPageTextSpans already extracts, so there's
+ *  no second pdf.js pass just to get plain text. */
+export async function extractDocumentText(pdfBytes: Uint8Array, totalPages: number): Promise<string> {
+  const pages = await Promise.all(Array.from({ length: totalPages }, (_, i) => getPageTextSpans(pdfBytes, i)));
+  return pages.map((spans) => spans.map((s) => s.text).join(" ")).join("\n\n");
+}
+
 /** Covers an existing text run with a solid white box and (optionally) draws replacement text in
  *  its place — a visual overwrite, not true removal. The original text still exists in the PDF's
  *  content stream underneath, unlike replacePageWithImage's rasterize-based redaction; use this
