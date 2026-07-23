@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import FeedbackForm from "../components/FeedbackForm";
+import { PLAN_ROWS, PlanCell } from "../lib/planRows";
 
 /** Abstract illustration of the product (a document, either freshly signed or having its fields
  *  auto-detected) — deliberately not a literal app screenshot, which would need re-cropping every
@@ -69,29 +70,6 @@ const AI_FEATURES = [
   { title: "Risk & clause highlighter", body: "Flags one-sided terms — long non-competes, vague payment terms, more." },
   { title: "Generate with AI", body: "Describe an agreement in a sentence, get a ready-to-sign PDF back." },
 ];
-
-const PLAN_ROWS: Array<{ label: string; free: boolean | string; paid: boolean | string }> = [
-  { label: "Signers per document", free: "Up to 2", paid: "Unlimited" },
-  { label: "Sequential or all-at-once signing", free: true, paid: true },
-  { label: "PIN-protected signing links", free: false, paid: true },
-  { label: "Text, date, and initials fields", free: true, paid: true },
-  { label: "Audit trail + completion certificate", free: true, paid: true },
-  { label: "Dashboard with document history", free: false, paid: true },
-  { label: "Reusable templates", free: false, paid: true },
-  { label: "Webhooks for your own systems", free: false, paid: true },
-  { label: "MCP connector (Claude, ChatGPT, Grok, Perplexity)", free: false, paid: true },
-  { label: "Team accounts (shared workspace)", free: false, paid: true },
-  { label: "White-label branding (your own logo)", free: false, paid: true },
-  { label: "AI auto-detect signature & date fields", free: false, paid: true },
-  { label: "AI plain-English contract explainer", free: false, paid: true },
-  { label: "AI risk & clause highlighter", free: false, paid: true },
-  { label: "AI contract generator (describe it, get a signable PDF)", free: false, paid: true },
-];
-
-function PlanCell({ value }: { value: boolean | string }) {
-  if (typeof value === "string") return <>{value}</>;
-  return value ? <span className="plan-check">✓</span> : <span className="plan-dash">—</span>;
-}
 
 export default function Landing() {
   return (

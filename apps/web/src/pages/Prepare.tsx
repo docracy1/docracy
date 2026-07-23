@@ -1,11 +1,21 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import PdfViewer from "../components/PdfViewer";
-import { createDocument, createTemplate, fetchMe, fetchTemplate, fetchTemplates } from "../lib/api";
-import type { Account, TemplateSummary } from "../lib/api";
+import {
+  analyzeDocumentRisks,
+  createDocument,
+  createTemplate,
+  explainDocument,
+  fetchMe,
+  fetchTemplate,
+  fetchTemplates,
+  generateContract,
+} from "../lib/api";
+import type { Account, ContractRisk, TemplateSummary } from "../lib/api";
 import { base64ToBytes } from "../lib/base64";
 import {
   addTextAnnotation,
+  extractDocumentText,
   getPageCount,
   getPageTextSpans,
   rasterizePageAsPng,
@@ -15,6 +25,7 @@ import {
 } from "../lib/pdfEdit";
 import type { TextSpan } from "../lib/pdfEdit";
 import { getFreeTemplate } from "../lib/freeTemplates";
+import { assignFieldsToSigners, detectFieldCandidates } from "../lib/fieldDetection";
 import type { DocField, DocFieldType, SignerInput } from "../lib/types";
 
 const FREE_TIER_MAX_SIGNERS = 2;
@@ -83,6 +94,20 @@ export default function Prepare() {
   const [editingSpan, setEditingSpan] = useState<TextSpan | null>(null);
   const [editingSpanValue, setEditingSpanValue] = useState("");
   const redactStartRef = useRef<{ page: number; rect: DOMRect; xFrac: number; yFrac: number } | null>(null);
+
+  const [detectingFields, setDetectingFields] = useState(false);
+  const [detectFieldsError, setDetectFieldsError] = useState<string | null>(null);
+  const [detectFieldsNotice, setDetectFieldsNotice] = useState<string | null>(null);
+  const [explaining, setExplaining] = useState(false);
+  const [explanation, setExplanation] = useState<string | null>(null);
+  const [explainError, setExplainError] = useState<string | null>(null);
+  const [analyzingRisks, setAnalyzingRisks] = useState(false);
+  const [risks, setRisks] = useState<ContractRisk[] | null>(null);
+  const [risksError, setRisksError] = useState<string | null>(null);
+  const [showGenerate, setShowGenerate] = useState(false);
+  const [generatePrompt, setGeneratePrompt] = useState("");
+  const [generating, setGenerating] = useState(false);
+  const [generateError, setGenerateError] = useState<string | null>(null);
 
   const [account, setAccount] = useState<Account | null>(null);
   const [availableTemplates, setAvailableTemplates] = useState<TemplateSummary[]>([]);
@@ -303,6 +328,82 @@ export default function Prepare() {
       cancelled = true;
     };
   }, [viewMode, editTool, pdfBytes, totalPages]);
+
+  const onDetectFields = async () => {
+    if (!pdfBytes || !totalPages) return;
+    setDetectingFields(true);
+    setDetectFieldsError(null);
+    setDetectFieldsNotice(null);
+    try {
+      const candidates = await detectFieldCandidates(pdfBytes, totalPages);
+      if (candidates.length === 0) {
+        setDetectFieldsNotice("Couldn't find any signature, date, or initial blanks to auto-place — add fields manually below.");
+        return;
+      }
+      const detected = assignFieldsToSigners(candidates, signers.length, fieldIdCounter);
+      fieldIdCounter += detected.length;
+      setFields((prev) => [...prev, ...detected]);
+      setDetectFieldsNotice(
+        `Placed ${detected.length} field${detected.length === 1 ? "" : "s"} automatically — review them and adjust or remove any that aren't right.`
+      );
+    } catch (err) {
+      setDetectFieldsError(err instanceof Error ? err.message : "Couldn't scan this document");
+    } finally {
+      setDetectingFields(false);
+    }
+  };
+
+  const onExplain = async () => {
+    if (!pdfBytes || !totalPages) return;
+    setExplaining(true);
+    setExplainError(null);
+    setExplanation(null);
+    try {
+      const text = await extractDocumentText(pdfBytes, totalPages);
+      const { explanation: result } = await explainDocument(text);
+      setExplanation(result);
+    } catch (err) {
+      setExplainError(err instanceof Error ? err.message : "Couldn't explain this document");
+    } finally {
+      setExplaining(false);
+    }
+  };
+
+  const onAnalyzeRisks = async () => {
+    if (!pdfBytes || !totalPages) return;
+    setAnalyzingRisks(true);
+    setRisksError(null);
+    setRisks(null);
+    try {
+      const text = await extractDocumentText(pdfBytes, totalPages);
+      const { risks: result } = await analyzeDocumentRisks(text);
+      setRisks(result);
+    } catch (err) {
+      setRisksError(err instanceof Error ? err.message : "Couldn't analyze this document");
+    } finally {
+      setAnalyzingRisks(false);
+    }
+  };
+
+  const onGenerateContract = async () => {
+    if (!generatePrompt.trim()) return;
+    setGenerating(true);
+    setGenerateError(null);
+    try {
+      const result = await generateContract(generatePrompt.trim());
+      const bytes = base64ToBytes(result.pdfBase64);
+      setPdfBytes(bytes);
+      setFields(result.fields);
+      setFile(new File([bytes as unknown as BlobPart], `${result.title}.pdf`, { type: "application/pdf" }));
+      setSigners(result.signerLabels.map((_, i) => ({ order: i + 1, name: "", email: "" })));
+      setShowGenerate(false);
+      setGeneratePrompt("");
+    } catch (err) {
+      setGenerateError(err instanceof Error ? err.message : "Couldn't generate a contract");
+    } finally {
+      setGenerating(false);
+    }
+  };
 
   const applyTextSpanEdit = (newText: string) => {
     if (!editingSpan) return;
@@ -546,6 +647,60 @@ export default function Prepare() {
               <input type="file" accept="application/pdf" onChange={onFileChange} />
               <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 6, marginBottom: 0 }}>Max file size: 15MB.</p>
               {error && <p style={{ color: "var(--danger)", marginTop: 8 }}>{error}</p>}
+
+              {account?.isPaid ? (
+                <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid var(--hairline)" }}>
+                  {showGenerate ? (
+                    <>
+                      <p style={{ marginTop: 0, marginBottom: 6, fontSize: 13, color: "var(--mute)" }}>
+                        Describe the agreement you need
+                      </p>
+                      <textarea
+                        className="form-textarea"
+                        style={{ width: "100%", minHeight: 80, resize: "vertical", marginBottom: 8 }}
+                        placeholder='e.g. "A simple web design contract for a $2,500 fixed-price project with a 2-week deadline"'
+                        maxLength={2000}
+                        value={generatePrompt}
+                        onChange={(e) => setGeneratePrompt(e.target.value)}
+                      />
+                      {generateError && <p style={{ color: "var(--danger)", fontSize: 12 }}>{generateError}</p>}
+                      <div style={{ display: "flex", gap: 8 }}>
+                        <button
+                          type="button"
+                          className="btn-primary"
+                          style={{ flex: 1 }}
+                          disabled={generating || !generatePrompt.trim()}
+                          onClick={onGenerateContract}
+                        >
+                          {generating ? "Drafting…" : "Generate"}
+                        </button>
+                        <button
+                          type="button"
+                          className="btn-secondary"
+                          onClick={() => {
+                            setShowGenerate(false);
+                            setGenerateError(null);
+                          }}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                      <p style={{ fontSize: 11, marginTop: 8, marginBottom: 0 }}>
+                        AI-drafted — review carefully before sending, this isn't legal advice.
+                      </p>
+                    </>
+                  ) : (
+                    <button type="button" className="btn-secondary" style={{ width: "100%" }} onClick={() => setShowGenerate(true)}>
+                      Or generate one with AI
+                    </button>
+                  )}
+                </div>
+              ) : (
+                <p style={{ fontSize: 12, marginTop: 16, paddingTop: 16, borderTop: "1px solid var(--hairline)" }}>
+                  <Link to="/login">Sign in with a paid account</Link> to generate a contract with AI instead of
+                  uploading one.
+                </p>
+              )}
             </>
           )}
         </div>
@@ -596,6 +751,7 @@ export default function Prepare() {
                               {FIELD_TYPE_LABEL[f.type ?? "signature"]} · {signerLabel(f.signerOrder)}
                             </span>
                             <button
+                              aria-label="Remove field"
                               onMouseDown={(e) => e.stopPropagation()}
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -622,6 +778,7 @@ export default function Prepare() {
                     <div style={{ position: "absolute", top: 6, left: 6, display: "flex", gap: 4, zIndex: 5 }}>
                       <button
                         type="button"
+                        aria-label="Move page up"
                         className="btn-secondary"
                         style={{ padding: "2px 8px", fontSize: 12 }}
                         disabled={page.index === 0 || pdfEditBusy}
@@ -631,6 +788,7 @@ export default function Prepare() {
                       </button>
                       <button
                         type="button"
+                        aria-label="Move page down"
                         className="btn-secondary"
                         style={{ padding: "2px 8px", fontSize: 12 }}
                         disabled={page.index === totalPages - 1 || pdfEditBusy}
@@ -816,6 +974,7 @@ export default function Prepare() {
                       <input
                         autoFocus
                         className="form-input"
+                        aria-label="Replacement text"
                         style={{ width: "100%", marginBottom: 6 }}
                         value={editingSpanValue}
                         onChange={(e) => setEditingSpanValue(e.target.value)}
@@ -875,6 +1034,7 @@ export default function Prepare() {
                     className="form-input"
                     style={{ width: "100%" }}
                     placeholder="Your email (optional) — to get the status link"
+                    aria-label="Your email"
                     type="email"
                     value={preparerEmail}
                     onChange={(e) => setPreparerEmail(e.target.value)}
@@ -893,6 +1053,7 @@ export default function Prepare() {
                     className="form-input"
                     style={{ width: "100%", marginBottom: 6 }}
                     placeholder="Name"
+                    aria-label={`Signer ${s.order} name`}
                     value={s.name}
                     onChange={(e) => updateSigner(s.order, { name: e.target.value })}
                   />
@@ -900,6 +1061,7 @@ export default function Prepare() {
                     className="form-input"
                     style={{ width: "100%", marginBottom: 6 }}
                     placeholder="Email"
+                    aria-label={`Signer ${s.order} email`}
                     type="email"
                     value={s.email}
                     onChange={(e) => updateSigner(s.order, { email: e.target.value })}
@@ -909,6 +1071,7 @@ export default function Prepare() {
                       className="form-input"
                       style={{ width: "100%" }}
                       placeholder="PIN (optional) — 4-8 digits, extra protection for this link"
+                      aria-label={`Signer ${s.order} PIN`}
                       inputMode="numeric"
                       maxLength={8}
                       value={s.pin ?? ""}
@@ -1020,6 +1183,100 @@ export default function Prepare() {
                 </>
               )}
             </div>
+
+            {viewMode === "fields" && account?.isPaid && (
+              <div className="card">
+                <h3 style={{ marginBottom: 12 }}>AI tools</h3>
+
+                <button
+                  type="button"
+                  className="btn-secondary"
+                  style={{ width: "100%", marginBottom: 8 }}
+                  disabled={detectingFields}
+                  onClick={onDetectFields}
+                >
+                  {detectingFields ? "Scanning…" : "Auto-detect signature & date fields"}
+                </button>
+                {detectFieldsError && <p style={{ color: "var(--danger)", fontSize: 12 }}>{detectFieldsError}</p>}
+                {detectFieldsNotice && <p style={{ fontSize: 12 }}>{detectFieldsNotice}</p>}
+
+                <button
+                  type="button"
+                  className="btn-secondary"
+                  style={{ width: "100%", marginBottom: 8 }}
+                  disabled={explaining}
+                  onClick={onExplain}
+                >
+                  {explaining ? "Reading…" : "Explain in plain English"}
+                </button>
+                {explainError && <p style={{ color: "var(--danger)", fontSize: 12 }}>{explainError}</p>}
+                {explanation && (
+                  <div
+                    style={{
+                      fontSize: 12,
+                      whiteSpace: "pre-wrap",
+                      background: "var(--primary-soft)",
+                      borderRadius: "var(--r-sm)",
+                      padding: 10,
+                      marginBottom: 8,
+                    }}
+                  >
+                    {explanation}
+                  </div>
+                )}
+
+                <button
+                  type="button"
+                  className="btn-secondary"
+                  style={{ width: "100%" }}
+                  disabled={analyzingRisks}
+                  onClick={onAnalyzeRisks}
+                >
+                  {analyzingRisks ? "Checking…" : "Check for risky clauses"}
+                </button>
+                {risksError && <p style={{ color: "var(--danger)", fontSize: 12 }}>{risksError}</p>}
+                {risks && risks.length === 0 && (
+                  <p style={{ fontSize: 12, color: "var(--success)" }}>Nothing unusual stood out.</p>
+                )}
+                {risks && risks.length > 0 && (
+                  <ul style={{ fontSize: 12, paddingLeft: 18, marginTop: 8, marginBottom: 0 }}>
+                    {risks.map((r, i) => (
+                      <li key={i} style={{ marginBottom: 6 }}>
+                        <strong
+                          style={{
+                            color:
+                              r.severity === "high"
+                                ? "var(--danger)"
+                                : r.severity === "medium"
+                                ? "var(--warning, #b45309)"
+                                : "var(--mute)",
+                          }}
+                        >
+                          {r.severity === "high" ? "High risk: " : r.severity === "medium" ? "Medium risk: " : "Low risk: "}
+                          {r.issue}
+                        </strong>
+                        <br />
+                        {r.detail}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                <p style={{ fontSize: 11, marginTop: 8, marginBottom: 0 }}>
+                  AI tools are a best guess, not legal advice — always read a contract yourself before sending it.
+                </p>
+              </div>
+            )}
+
+            {viewMode === "fields" && !account?.isPaid && (
+              <div className="card">
+                <h3 style={{ marginBottom: 12 }}>AI tools</h3>
+                <p style={{ fontSize: 12, marginTop: 0, marginBottom: 0 }}>
+                  <Link to="/login">Sign in with a paid account</Link> to auto-detect fields, get a plain-English
+                  explanation, and check for risky clauses.
+                </p>
+              </div>
+            )}
 
             {viewMode === "fields" && (
             <div className="card">

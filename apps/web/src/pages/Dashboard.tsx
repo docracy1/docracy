@@ -379,7 +379,9 @@ export default function Dashboard() {
           <h3 style={{ fontSize: 15 }}>Upgrade to paid — $7/month</h3>
           <p>
             Unlimited signers, a connector so Claude, ChatGPT, Grok, or Perplexity can look up your documents,
-            team accounts, and white-label branding.
+            team accounts, white-label branding, and a set of AI tools — auto-detect signature/date fields,
+            a plain-English explainer with risk highlighting, and a contract generator that turns a one-line
+            description into a signable PDF.
           </p>
           {upgradeError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{upgradeError}</p>}
           <button className="btn-primary" onClick={onUpgrade} disabled={upgrading}>
@@ -615,6 +617,7 @@ export default function Dashboard() {
                 className="form-input"
                 style={{ width: "100%", marginBottom: 8 }}
                 placeholder="https://your-server.com/webhook"
+                aria-label="Webhook URL"
                 value={newWebhookUrl}
                 onChange={(e) => setNewWebhookUrl(e.target.value)}
               />
@@ -670,6 +673,7 @@ export default function Dashboard() {
             <div>
               <input
                 type="file"
+                aria-label="Upload logo"
                 accept="image/png,image/jpeg,image/webp"
                 disabled={uploadingLogo}
                 onChange={(e) => {
@@ -758,6 +762,7 @@ export default function Dashboard() {
                   className="form-input"
                   style={{ width: "100%", marginBottom: 8 }}
                   placeholder="teammate@example.com"
+                  aria-label="Teammate email"
                   type="email"
                   value={newInviteEmail}
                   onChange={(e) => setNewInviteEmail(e.target.value)}
