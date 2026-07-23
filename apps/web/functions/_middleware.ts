@@ -27,6 +27,9 @@ const TRACKED_ROUTES = new Set([
   "/",
   "/free-templates",
   "/mcp",
+  "/about",
+  "/pricing",
+  "/docs",
   ...STATIC_TEMPLATE_SLUGS.map((slug) => `/free-templates/${slug}`),
 ]);
 

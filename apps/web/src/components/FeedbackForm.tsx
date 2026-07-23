@@ -55,6 +55,7 @@ export default function FeedbackForm() {
             className="form-input"
             type="email"
             placeholder="you@email.com"
+            aria-label="Your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -63,6 +64,7 @@ export default function FeedbackForm() {
           <textarea
             className="form-textarea"
             placeholder="What's on your mind"
+            aria-label="Feedback message"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             required

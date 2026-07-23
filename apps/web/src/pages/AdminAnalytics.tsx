@@ -255,16 +255,19 @@ export default function AdminAnalytics() {
   const [loading, setLoading] = useState(true);
   const [noTrack, setNoTrack] = useState(() => readNoTrackCookie());
   const [noTrackBusy, setNoTrackBusy] = useState(false);
+  const [noTrackError, setNoTrackError] = useState<string | null>(null);
 
   const onToggleNoTrack = async () => {
     setNoTrackBusy(true);
+    setNoTrackError(null);
     try {
       const next = !noTrack;
       await setAnalyticsNoTrack(next);
-      setNoTrack(next);
-    } catch {
-      // Leave the toggle in its previous state — the checkbox itself is the only feedback needed
-      // for this low-stakes, easily-retried action.
+      // Read the cookie back rather than trusting the request succeeded — if the browser rejected
+      // the Set-Cookie for any reason, this reflects what's actually true instead of what we hoped.
+      setNoTrack(readNoTrackCookie());
+    } catch (err) {
+      setNoTrackError(err instanceof Error ? err.message : "Failed to update — try again.");
     } finally {
       setNoTrackBusy(false);
     }
@@ -325,10 +328,12 @@ export default function AdminAnalytics() {
         ))}
       </div>
 
-      <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "var(--body)", marginBottom: 20 }}>
+      <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "var(--body)", marginBottom: 4 }}>
         <input type="checkbox" checked={noTrack} disabled={noTrackBusy} onChange={onToggleNoTrack} />
         Don't count my own visits (this browser only)
       </label>
+      {noTrackError && <p style={{ color: "var(--danger)", fontSize: 12, marginTop: 0, marginBottom: 16 }}>{noTrackError}</p>}
+      {!noTrackError && <div style={{ marginBottom: 20 }} />}
 
       {loading && <p style={{ color: "var(--mute)" }}>Loading…</p>}
       {error && (

@@ -15,7 +15,13 @@ function base64ToBytes(base64: string): Uint8Array {
  *  one — this is the one surface a signer who's never heard of Docracy actually looks at. */
 function BrandLogo({ path }: { path?: string | null }) {
   if (!path) return null;
-  return <img src={apiUrl(path)} alt="" style={{ maxHeight: 48, maxWidth: 220, marginBottom: 16, display: "block" }} />;
+  return (
+    <img
+      src={apiUrl(path)}
+      alt="Sender's logo"
+      style={{ maxHeight: 48, maxWidth: 220, marginBottom: 16, display: "block" }}
+    />
+  );
 }
 
 export default function Sign() {
@@ -194,6 +200,7 @@ export default function Sign() {
             className="form-input"
             style={{ width: "100%", marginBottom: 8 }}
             placeholder="PIN"
+            aria-label="PIN"
             inputMode="numeric"
             maxLength={8}
             value={pinInput}
@@ -235,6 +242,7 @@ export default function Sign() {
                       <div key={f.id} style={boxStyle}>
                         <input
                           type={type === "date" ? "date" : "text"}
+                          aria-label={type === "date" ? "Date" : "Text field"}
                           value={values[f.id] ?? ""}
                           onChange={(e) => setValues((prev) => ({ ...prev, [f.id]: e.target.value }))}
                           placeholder={type === "date" ? undefined : "Type here"}
@@ -269,7 +277,7 @@ export default function Sign() {
                         }}
                       >
                         {values[f.id] ? (
-                          <img src={values[f.id]} alt="signature" style={{ maxWidth: "100%", maxHeight: "100%" }} />
+                          <img src={values[f.id]} alt="Your signature" style={{ maxWidth: "100%", maxHeight: "100%" }} />
                         ) : (
                           <span style={{ fontSize: 11, color: "var(--primary)", fontWeight: 600 }}>
                             {type === "initials" ? "Click to initial" : "Click to sign"}

@@ -41,6 +41,7 @@ export default function Login() {
           className="form-input"
           type="email"
           placeholder="you@email.com"
+          aria-label="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
