@@ -7,7 +7,11 @@
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
   Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'
 
-# Vite-built assets are content-hashed (index-<hash>.js) — safe to cache for a year and mark
-# immutable, unlike the HTML shell which must always revalidate.
+# Vite-built assets are content-hashed (index-<hash>.js), but deliberately NOT marked `immutable`
+# with a year-long max-age: Cloudflare Pages' deploy propagation isn't atomic across edge nodes, and
+# a request landing on a not-yet-updated node can transiently get the SPA-fallback HTML (still a 200)
+# for a brand new asset path. `immutable` would make a browser that caught that bad response cache it
+# permanently with no way to self-correct. A moderate max-age bounds the worst case to a few hours
+# instead of a year, while still avoiding a refetch on every load.
 /assets/*
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=14400, must-revalidate
