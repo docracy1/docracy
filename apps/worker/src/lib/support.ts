@@ -1,11 +1,10 @@
 import type { Env } from "@docracy/shared";
 
-// BytePlus ModelArk (Doubao's international offering) — OpenAI-compatible chat completions.
-// Doubao is used here specifically because its free daily quota (unlike Cloudflare Workers AI's
-// shared pool or Qwen's one-time trial credit) resets every day, making it viable as an ongoing,
-// no-cost first line of support rather than a trial that eventually runs out.
-const DOUBAO_ENDPOINT = "https://ark.ap-southeast.bytepluses.com/api/v3/chat/completions";
-const DOUBAO_TIMEOUT_MS = 8000;
+// Cloudflare Workers AI — free (10k neurons/day, resets daily), no external account or API key.
+// A small quantized model is used deliberately: this is a short, fact-grounded FAQ answer, not a
+// task that needs a large model, and smaller models burn far fewer neurons per request out of the
+// shared daily allowance.
+const DEFAULT_MODEL = "@cf/meta/llama-3.1-8b-instruct-fp8";
 
 // Exact sentinel the model is instructed to return verbatim (and only that, nothing else) when it
 // can't answer confidently from the knowledge below — checked for an exact match, not a substring,
@@ -30,8 +29,16 @@ FACTS ABOUT DOCRACY:
 - Paid plan: $7/month. Unlimited signers, PIN-protected signing links, a dashboard with document
   history, reusable templates, webhooks for your own systems, an MCP connector so AI assistants
   (Claude, ChatGPT, Grok, Perplexity) can create documents on your behalf, Zapier integration, team
-  accounts (shared workspace with teammates), and white-label branding (your own logo instead of
-  Docracy's on the signing page and emails).
+  accounts (shared workspace with teammates), white-label branding (your own logo instead of
+  Docracy's on the signing page and emails), and a set of AI tools (below).
+- AI tools (paid plan only, in the "AI tools" card while preparing a document): auto-detect
+  signature/date/initials fields on an uploaded PDF (scans for labels and blank lines and places
+  fields automatically); "Explain in plain English" (a 3-bullet summary of what each party is
+  agreeing to, plus a callout for anything unusual or one-sided); "Check for risky clauses" (flags
+  things like unusually long non-competes, one-sided indemnity, vague payment terms); and "Generate
+  with AI" (describe an agreement in one sentence — e.g. project, price, deadline — and get back a
+  ready-to-sign PDF with a signature block already placed). All AI features are a best guess, not
+  legal advice, and free/anonymous documents skip straight to a human instead of using AI at all.
 - Free document templates: docracy.io/free-templates has ready-to-sign templates (NDA, independent
   contractor agreement, offer letter, remote work policy, freelance service agreement, and more) —
   free for anyone, no account needed, loads straight into the document editor with fields already
@@ -47,46 +54,24 @@ FACTS ABOUT DOCRACY:
 `.trim();
 
 /** Tries to answer a support question using only known product facts, returning null (never
- *  throwing) if the question needs a human — no API key configured, the model couldn't answer
- *  confidently, or the request failed for any reason. Callers should treat null as "email the
- *  founder," exactly like the RESEND_API_KEY-unset fallback in email.ts. */
+ *  throwing) if the question needs a human — the model couldn't answer confidently, or the
+ *  request failed for any reason. Callers should treat null as "email the founder." */
 export async function answerSupportQuestion(env: Env, question: string): Promise<string | null> {
-  if (!env.DOUBAO_API_KEY) return null;
-
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), DOUBAO_TIMEOUT_MS);
   try {
-    const res = await fetch(DOUBAO_ENDPOINT, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${env.DOUBAO_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: env.DOUBAO_MODEL || "seed-2-0-lite-260228",
-        temperature: 0.2,
-        max_tokens: 400,
-        messages: [
-          { role: "system", content: PRODUCT_KNOWLEDGE },
-          { role: "user", content: question },
-        ],
-      }),
-      signal: controller.signal,
+    const result = await env.AI.run((env.WORKERS_AI_MODEL || DEFAULT_MODEL) as keyof AiModels, {
+      temperature: 0.2,
+      max_tokens: 400,
+      messages: [
+        { role: "system", content: PRODUCT_KNOWLEDGE },
+        { role: "user", content: question },
+      ],
     });
 
-    if (!res.ok) {
-      console.error(`Doubao request failed (${res.status}): ${await res.text()}`);
-      return null;
-    }
-
-    const data = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
-    const answer = data.choices?.[0]?.message?.content?.trim();
+    const answer = (result as { response?: string }).response?.trim();
     if (!answer || answer === CANNOT_ANSWER) return null;
     return answer;
   } catch (err) {
-    console.error("Doubao request failed:", err);
+    console.error("Workers AI request failed:", err);
     return null;
-  } finally {
-    clearTimeout(timeout);
   }
 }

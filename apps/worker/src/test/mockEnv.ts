@@ -65,6 +65,16 @@ function createMockR2() {
   };
 }
 
+// Throws by default (answerSupportQuestion treats that as "can't answer" and returns null) —
+// tests exercising a real answer override this with `vi.spyOn(env.AI, "run").mockResolvedValueOnce(...)`.
+function createMockAI() {
+  return {
+    async run() {
+      throw new Error("Mock AI: no response configured for this test");
+    },
+  };
+}
+
 const MIGRATION_SQL = readFileSync(
   fileURLToPath(new URL("../../migrations/0001_init.sql", import.meta.url).toString()),
   "utf-8"
@@ -166,6 +176,7 @@ export function makeMockEnv(overrides: Partial<Env> = {}) {
     DOCRACY_KV: kv as unknown as Env["DOCRACY_KV"],
     DOCRACY_DOCS: r2 as unknown as Env["DOCRACY_DOCS"],
     DOCRACY_DB: d1 as unknown as Env["DOCRACY_DB"],
+    AI: createMockAI() as unknown as Env["AI"],
     TOKEN_SECRET: "test-secret",
     PUBLIC_APP_URL: "http://localhost:5173",
     PUBLIC_CONNECTOR_URL: "http://localhost:8788",

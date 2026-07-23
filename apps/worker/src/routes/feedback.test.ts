@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import feedback from "./feedback";
 import { makeMockEnv } from "../test/mockEnv";
+import { createSession, SESSION_COOKIE_NAME } from "../lib/auth";
+import type { Env } from "@docracy/shared";
 
 const MOCK_CTX = { waitUntil: () => {}, passThroughOnException: () => {} } as unknown as ExecutionContext;
 
@@ -10,6 +12,11 @@ function post(body: unknown, headers: Record<string, string> = {}) {
     headers: { "Content-Type": "application/json", ...headers },
     body: JSON.stringify(body),
   };
+}
+
+async function paidSessionCookie(env: Env) {
+  const token = await createSession(env, MOCK_CTX, "acct-1", "anna@example.com", true, null, null);
+  return { Cookie: `${SESSION_COOKIE_NAME}=${token}` };
 }
 
 describe("POST /api/feedback", () => {
@@ -90,17 +97,14 @@ describe("POST /api/feedback", () => {
     expect(blocked.status).toBe(429);
   });
 
-  it("returns the AI's answer and skips emailing the founder when it can answer", async () => {
-    const { env } = makeMockEnv({ DOUBAO_API_KEY: "test-key" });
+  it("returns the AI's answer and skips emailing the founder for a paid account", async () => {
+    const { env } = makeMockEnv();
     const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
-    vi.spyOn(global, "fetch").mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ choices: [{ message: { content: "The free plan supports up to 2 signers." } }] }),
-    } as Response);
+    vi.spyOn(env.AI, "run").mockResolvedValueOnce({ response: "The free plan supports up to 2 signers." });
 
     const res = await feedback.request(
       "/",
-      post({ email: "anna@example.com", message: "How many signers on the free plan?" }),
+      post({ email: "anna@example.com", message: "How many signers on the free plan?" }, await paidSessionCookie(env)),
       env,
       MOCK_CTX
     );
@@ -112,17 +116,14 @@ describe("POST /api/feedback", () => {
     expect(logged).not.toContain(`to=${env.FEEDBACK_EMAIL}`);
   });
 
-  it("falls back to emailing the founder when the AI can't answer", async () => {
-    const { env } = makeMockEnv({ DOUBAO_API_KEY: "test-key" });
+  it("falls back to emailing the founder when a paid account's AI answer can't answer", async () => {
+    const { env } = makeMockEnv();
     const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
-    vi.spyOn(global, "fetch").mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ choices: [{ message: { content: "CANNOT_ANSWER" } }] }),
-    } as Response);
+    vi.spyOn(env.AI, "run").mockResolvedValueOnce({ response: "CANNOT_ANSWER" });
 
     const res = await feedback.request(
       "/",
-      post({ email: "anna@example.com", message: "Why hasn't my document arrived?" }),
+      post({ email: "anna@example.com", message: "Why hasn't my document arrived?" }, await paidSessionCookie(env)),
       env,
       MOCK_CTX
     );
@@ -132,5 +133,47 @@ describe("POST /api/feedback", () => {
     expect(body.aiAnswer).toBeUndefined();
     const logged = logSpy.mock.calls.map((c) => c.join(" ")).join("\n");
     expect(logged).toContain(`to=${env.FEEDBACK_EMAIL}`);
+  });
+
+  it("skips the AI entirely and emails the founder for a free/anonymous submission", async () => {
+    const { env } = makeMockEnv();
+    const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+    const aiSpy = vi.spyOn(env.AI, "run").mockResolvedValueOnce({ response: "The free plan supports up to 2 signers." });
+
+    const res = await feedback.request(
+      "/",
+      post({ email: "anna@example.com", message: "How many signers on the free plan?" }),
+      env,
+      MOCK_CTX
+    );
+
+    expect(res.status).toBe(200);
+    const body: { ok: boolean; aiAnswer?: string } = await res.json();
+    expect(body.aiAnswer).toBeUndefined();
+    expect(aiSpy).not.toHaveBeenCalled();
+    const logged = logSpy.mock.calls.map((c) => c.join(" ")).join("\n");
+    expect(logged).toContain(`to=${env.FEEDBACK_EMAIL}`);
+  });
+
+  it("skips the AI for a signed-in free (non-paid) account", async () => {
+    const { env } = makeMockEnv();
+    vi.spyOn(console, "log").mockImplementation(() => {});
+    const aiSpy = vi.spyOn(env.AI, "run").mockResolvedValueOnce({ response: "The free plan supports up to 2 signers." });
+    const token = await createSession(env, MOCK_CTX, "acct-2", "bob@example.com", false, null, null);
+
+    const res = await feedback.request(
+      "/",
+      post(
+        { email: "bob@example.com", message: "How many signers on the free plan?" },
+        { Cookie: `${SESSION_COOKIE_NAME}=${token}` }
+      ),
+      env,
+      MOCK_CTX
+    );
+
+    expect(res.status).toBe(200);
+    const body: { ok: boolean; aiAnswer?: string } = await res.json();
+    expect(body.aiAnswer).toBeUndefined();
+    expect(aiSpy).not.toHaveBeenCalled();
   });
 });

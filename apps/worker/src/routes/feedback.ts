@@ -2,14 +2,16 @@ import { Hono } from "hono";
 import { sendFeedback } from "../lib/email";
 import { checkFeedbackRateLimit } from "../lib/ratelimit";
 import { answerSupportQuestion } from "../lib/support";
+import { optionalAccount, type AccountContext } from "../lib/auth";
 import type { Env } from "@docracy/shared";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_MESSAGE_LENGTH = 4000;
 
-const feedback = new Hono<{ Bindings: Env }>();
+type Variables = { account: AccountContext | null };
+const feedback = new Hono<{ Bindings: Env; Variables: Variables }>();
 
-feedback.post("/", async (c) => {
+feedback.post("/", optionalAccount, async (c) => {
   const ip = c.req.header("CF-Connecting-IP") ?? "unknown";
   if (!(await checkFeedbackRateLimit(c.env, ip))) {
     return c.json({ error: "Too many messages sent recently. Please try again later." }, 429);
@@ -35,13 +37,16 @@ feedback.post("/", async (c) => {
     return c.json({ error: `Message must be under ${MAX_MESSAGE_LENGTH} characters` }, 400);
   }
 
-  // AI-first triage: try to answer instantly from known product facts before ever bothering the
-  // founder. answerSupportQuestion never throws and returns null for anything it isn't confident
-  // about (or if no API key is configured), so this always falls back to the original
-  // email-the-founder behavior — nothing here can make a submission go unanswered.
-  const aiAnswer = await answerSupportQuestion(c.env, message);
-  if (aiAnswer) {
-    return c.json({ ok: true, aiAnswer });
+  // AI-first triage is a paid-plan perk: only attempt it for a signed-in paid account. Free and
+  // anonymous submissions (the vast majority of traffic) skip straight to emailing the founder,
+  // exactly as before this feature existed. answerSupportQuestion never throws and returns null
+  // for anything it isn't confident about, so this always falls back safely either way.
+  const account = c.get("account");
+  if (account?.isPaid) {
+    const aiAnswer = await answerSupportQuestion(c.env, message);
+    if (aiAnswer) {
+      return c.json({ ok: true, aiAnswer });
+    }
   }
 
   await sendFeedback(c.env, email, message);
