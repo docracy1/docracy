@@ -20,6 +20,14 @@ interface StatusResponse {
   history: DailyStatusRecord[];
 }
 
+const CHECK_DESCRIPTIONS: Record<string, string> = {
+  FreeTSA: "Document timestamping",
+  Stripe: "Billing & payments",
+  D1: "Account & document lookup",
+  KV: "Document & session storage",
+  "MCP connector": "AI assistant integration",
+};
+
 function Dot({ ok }: { ok: boolean }) {
   return (
     <span
@@ -90,6 +98,8 @@ export default function Uptime() {
       days.push(byDate.get(d.toISOString().slice(0, 10)) ?? null);
     }
   }
+  const incidentDays = data?.history.filter((r) => !r.ok).length ?? 0;
+  const trackedDays = data?.history.length ?? 0;
 
   return (
     <div className="container" style={{ maxWidth: 720 }}>
@@ -115,7 +125,14 @@ export default function Uptime() {
             {data.current.map((check) => (
               <div key={check.name} className="card" style={{ display: "flex", alignItems: "center", gap: 10 }}>
                 <Dot ok={check.ok} />
-                <span style={{ flex: 1 }}>{check.name}</span>
+                <span style={{ flex: 1 }}>
+                  {check.name}
+                  {CHECK_DESCRIPTIONS[check.name] && (
+                    <span style={{ display: "block", fontSize: 12, color: "var(--mute)" }}>
+                      {CHECK_DESCRIPTIONS[check.name]}
+                    </span>
+                  )}
+                </span>
                 {!check.ok && check.detail && (
                   <span style={{ fontSize: 12, color: "var(--danger)" }}>{check.detail}</span>
                 )}
@@ -123,16 +140,24 @@ export default function Uptime() {
             ))}
           </div>
 
-          <h3>Last 90 days</h3>
-          <div style={{ display: "flex", gap: 2, marginBottom: 8 }}>
-            {days.map((record, i) => (
-              <HistoryBar key={i} record={record} />
-            ))}
-          </div>
-          {data.history.length === 0 && (
-            <p style={{ color: "var(--mute)", fontSize: 13 }}>
-              History tracking just started — daily records will build up here over time.
+          <h3>Incident history</h3>
+          {trackedDays === 0 ? (
+            <p style={{ color: "var(--success)", fontWeight: 600 }}>
+              No incidents reported — daily tracking started today.
             </p>
+          ) : (
+            <>
+              <div style={{ display: "flex", gap: 2, marginBottom: 8 }}>
+                {days.map((record, i) => (
+                  <HistoryBar key={i} record={record} />
+                ))}
+              </div>
+              <p style={{ color: incidentDays === 0 ? "var(--success)" : "var(--mute)", fontWeight: incidentDays === 0 ? 600 : undefined, fontSize: 13 }}>
+                {incidentDays === 0
+                  ? `No incidents in the ${trackedDays} day${trackedDays === 1 ? "" : "s"} tracked so far.`
+                  : `${incidentDays} of the last ${trackedDays} tracked day${trackedDays === 1 ? "" : "s"} had an issue.`}
+              </p>
+            </>
           )}
 
           <p style={{ color: "var(--mute)", fontSize: 12, marginTop: 24 }}>
