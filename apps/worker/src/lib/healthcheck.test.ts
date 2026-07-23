@@ -1,12 +1,15 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { makeMockEnv } from "../test/mockEnv";
-import { runHealthCheck, runHealthCheckAndAlert } from "./healthcheck";
+import { runHealthCheck, runHealthCheckAndAlert, readStatusHistory } from "./healthcheck";
 import * as timestamp from "./timestamp";
 import * as email from "./email";
 
 beforeEach(() => {
   vi.spyOn(timestamp, "requestTimestamp").mockResolvedValue({ genTime: "2026-01-01T00:00:00Z", tokenBase64: "abc" });
   vi.spyOn(email, "sendHealthAlert").mockResolvedValue(undefined);
+  // Covers the MCP connector check (and Stripe, unless a test overrides this) with a healthy
+  // default — tests that need a specific failure re-mock fetch themselves.
+  vi.spyOn(global, "fetch").mockResolvedValue(new Response("{}", { status: 200 }));
 });
 
 afterEach(() => {
@@ -18,7 +21,7 @@ describe("runHealthCheck", () => {
     const { env } = makeMockEnv();
     const results = await runHealthCheck(env);
     expect(results.every((r) => r.ok)).toBe(true);
-    expect(results.map((r) => r.name).sort()).toEqual(["D1", "FreeTSA", "KV", "Stripe"]);
+    expect(results.map((r) => r.name).sort()).toEqual(["D1", "FreeTSA", "KV", "MCP connector", "Stripe"]);
   });
 
   it("reports Stripe as ok-but-unconfigured when no key is set", async () => {
@@ -65,5 +68,21 @@ describe("runHealthCheckAndAlert", () => {
     expect(email.sendHealthAlert).toHaveBeenCalledTimes(1);
     const failures = vi.mocked(email.sendHealthAlert).mock.calls[0][1];
     expect(failures).toEqual([{ name: "FreeTSA", ok: false, detail: "requestTimestamp returned null" }]);
+  });
+
+  it("persists today's result to KV so the public status page has real history", async () => {
+    const { env } = makeMockEnv();
+    await runHealthCheckAndAlert(env);
+    const history = await readStatusHistory(env);
+    expect(history).toHaveLength(1);
+    expect(history[0].ok).toBe(true);
+    expect(history[0].date).toBe(new Date().toISOString().slice(0, 10));
+  });
+});
+
+describe("readStatusHistory", () => {
+  it("returns an empty array when no history has been recorded yet", async () => {
+    const { env } = makeMockEnv();
+    expect(await readStatusHistory(env)).toEqual([]);
   });
 });

@@ -15,6 +15,7 @@ import zapierRoute from "./routes/zapier";
 import aiRoute from "./routes/ai";
 import analyticsRoute from "./routes/analytics";
 import adminRoute from "./routes/admin";
+import statusRoute from "./routes/status";
 import { runReminderSweep } from "./lib/reminders";
 import { reconcileD1Index } from "./lib/index-d1";
 import { runExpiredDocCleanup } from "./lib/cleanup";
@@ -58,6 +59,7 @@ app.route("/api/zapier", zapierRoute);
 app.route("/api/account/ai", aiRoute);
 app.route("/api/analytics", analyticsRoute);
 app.route("/api/admin", adminRoute);
+app.route("/api/status", statusRoute);
 
 export default {
   fetch: app.fetch,
