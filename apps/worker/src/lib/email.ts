@@ -1,9 +1,9 @@
 import { resolveEmailLogoUrl } from "./branding";
 import type { DocState, Env } from "@docracy/shared";
 
-// Using Resend's shared testing domain until docracy.io is connected and verified in Resend
-// (Domains → Add Domain → DNS records). Switch back to noreply@docracy.io once that's done.
-const FROM = "Docracy <onboarding@resend.dev>";
+// docracy.io is verified in Resend (DKIM on the root domain, SPF/bounce handling via the
+// send.docracy.io subdomain) — the visible sender address is the root domain itself.
+const FROM = "Docracy <noreply@docracy.io>";
 
 // Every caller of this already runs non-blocking (ctx.waitUntil) or is itself best-effort, but a
 // stalled connection to Resend should still give up in bounded time rather than hang forever —
