@@ -167,9 +167,14 @@ export default function Landing() {
           "Docracy is a great product that I have tested and am using. It is easy to use, has good tools, is
           always up to date, and implements new features. Highly recommended."
         </blockquote>
-        <p style={{ marginTop: 16, marginBottom: 0, fontSize: 14, color: "var(--mute)" }}>
-          — Markus Huber, Managing Director, Vienna Contemporary
+        <p style={{ marginTop: 16, marginBottom: 12, fontSize: 14, color: "var(--mute)" }}>
+          — Markus Huber, Managing Director
         </p>
+        <img
+          src="/vienna-contemporary-logo.png"
+          alt="Vienna Contemporary"
+          style={{ height: 48, width: "auto", borderRadius: "var(--r-sm)" }}
+        />
       </div>
 
       <div className="cta-band">
