@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import FeedbackForm from "../components/FeedbackForm";
-import { PLAN_ROWS, PlanCell } from "../lib/planRows";
 
 /** Abstract illustration of the product (a document, either freshly signed or having its fields
  *  auto-detected) — deliberately not a literal app screenshot, which would need re-cropping every
@@ -203,35 +202,9 @@ export default function Landing() {
             set of AI tools: auto-detect signature and date fields on any upload, get a plain-English summary
             with risky clauses flagged, or describe an agreement in a sentence and get a signable PDF back.
           </p>
-          <div className="card" style={{ padding: 0, overflow: "hidden" }}>
-            <div className="plan-table-scroll">
-              <table className="plan-table">
-                <thead>
-                  <tr>
-                    <th></th>
-                    <th>Free</th>
-                    <th className="plan-col-paid">Paid — $7/mo</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {PLAN_ROWS.map((row) => (
-                    <tr key={row.label}>
-                      <td>{row.label}</td>
-                      <td>
-                        <PlanCell value={row.free} />
-                      </td>
-                      <td className="plan-col-paid">
-                        <PlanCell value={row.paid} />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div style={{ display: "flex", gap: 12, marginTop: 16, flexWrap: "wrap" }}>
-            <Link to="/prepare" className="btn-secondary" style={{ textDecoration: "none" }}>
-              Start free
+          <div style={{ display: "flex", gap: 12, marginTop: 8, flexWrap: "wrap" }}>
+            <Link to="/pricing" className="btn-secondary" style={{ textDecoration: "none" }}>
+              See full pricing
             </Link>
             <Link to="/login" className="btn-primary" style={{ textDecoration: "none" }}>
               Sign in to upgrade
