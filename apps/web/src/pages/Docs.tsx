@@ -91,6 +91,74 @@ export default function Docs() {
         </p>
       </Section>
 
+      <Section id="api" title="REST API reference">
+        <p>
+          Everything Zapier does above is also a plain REST API you can call directly with the same API
+          key (Dashboard → "MCP connector &amp; API key") — useful if you want to integrate without Zapier
+          in the middle.
+        </p>
+        <p>
+          Base URL: <code>https://api.docracy.io</code>. Authenticate with{" "}
+          <code>Authorization: Bearer &lt;your-api-key&gt;</code> (or a <code>?token=</code> query param).
+          All responses are JSON.
+        </p>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14, marginTop: 12 }}>
+          <thead>
+            <tr style={{ textAlign: "left", borderBottom: "1px solid var(--hairline)" }}>
+              <th style={{ padding: "6px 8px 6px 0" }}>Method &amp; path</th>
+              <th style={{ padding: "6px 8px" }}>What it does</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style={{ borderBottom: "1px solid var(--hairline)" }}>
+              <td style={{ padding: "6px 8px 6px 0", whiteSpace: "nowrap" }}>
+                <code>GET /api/zapier/auth-test</code>
+              </td>
+              <td style={{ padding: "6px 8px" }}>Verifies the API key. Returns <code>{`{ email, workspaceId }`}</code>.</td>
+            </tr>
+            <tr style={{ borderBottom: "1px solid var(--hairline)" }}>
+              <td style={{ padding: "6px 8px 6px 0", whiteSpace: "nowrap" }}>
+                <code>GET /api/zapier/templates</code>
+              </td>
+              <td style={{ padding: "6px 8px" }}>
+                Lists your saved templates: <code>{`[{ id, name }]`}</code>.
+              </td>
+            </tr>
+            <tr style={{ borderBottom: "1px solid var(--hairline)" }}>
+              <td style={{ padding: "6px 8px 6px 0", whiteSpace: "nowrap" }}>
+                <code>POST /api/zapier/documents</code>
+              </td>
+              <td style={{ padding: "6px 8px" }}>
+                Sends a saved template for signature. Body: <code>{`{ templateId, signers: [{ name, email }] }`}</code> —
+                the number of signers must match the template. Returns{" "}
+                <code>{`{ docId, statusToken, statusUrl }`}</code>.
+              </td>
+            </tr>
+            <tr style={{ borderBottom: "1px solid var(--hairline)" }}>
+              <td style={{ padding: "6px 8px 6px 0", whiteSpace: "nowrap" }}>
+                <code>POST /api/zapier/hooks/:event</code>
+              </td>
+              <td style={{ padding: "6px 8px" }}>
+                Subscribes a URL to an event. <code>:event</code> is one of{" "}
+                <code>document-created</code>, <code>signer-signed</code>, <code>document-completed</code>. Body:{" "}
+                <code>{`{ target_url }`}</code>. Returns <code>{`{ id }`}</code>.
+              </td>
+            </tr>
+            <tr>
+              <td style={{ padding: "6px 8px 6px 0", whiteSpace: "nowrap" }}>
+                <code>DELETE /api/zapier/hooks/:id</code>
+              </td>
+              <td style={{ padding: "6px 8px" }}>Removes a webhook subscription created above.</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 10, marginBottom: 0 }}>
+          This is the same surface Zapier itself calls — nothing here is Zapier-exclusive. Webhook
+          deliveries are HMAC-signed the same way regardless of whether the subscription came from Zapier,
+          the Dashboard, or this API directly.
+        </p>
+      </Section>
+
       <Section id="privacy" title="Privacy & identity">
         <p style={{ marginBottom: 0 }}>
           Docracy doesn't verify who's actually signing — anyone holding a document's link can sign as the
