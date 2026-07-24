@@ -113,17 +113,6 @@ export default function Landing() {
               <li>Simple workflow setup for teams</li>
               <li>Secure and compliant document storage</li>
             </ul>
-            <div className="hero-cta-row">
-              <Link to="/free-templates" className="hero-link">
-                Browse free templates →
-              </Link>
-            </div>
-            <p className="hero-microcopy">
-              <Link to="/mcp" className="hero-link">
-                Connect your AI assistant via MCP
-              </Link>
-              , or automate with Zapier →
-            </p>
           </div>
           <div className="doc-mockup-glow">
             <div className="doc-mockup-card">
