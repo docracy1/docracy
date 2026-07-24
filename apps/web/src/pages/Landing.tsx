@@ -80,8 +80,9 @@ export default function Landing() {
             <div className="hero-eyebrow">Free · No signup · Sequential e-signatures</div>
             <h1>Sign it. Send it. It disappears.</h1>
             <p>
-              Upload a PDF, add signers in order, and each one gets their turn automatically. No accounts,
-              no dashboard — the document is gone once the chain is done.
+              A free e-signature tool for quick, low-stakes agreements — freelance contracts, NDAs, roommate
+              agreements — not a monthly subscription for something you'll use twice a year. Upload a PDF,
+              add signers in order, and it's gone once everyone's signed.
             </p>
             <div className="hero-cta-row">
               <Link to="/prepare" className="btn-primary btn-lg" style={{ display: "inline-block", textDecoration: "none" }}>
