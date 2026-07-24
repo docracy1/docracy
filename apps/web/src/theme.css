@@ -607,6 +607,77 @@ select {
   }
 }
 
+/* Footer — a dark, multi-column layout bookending the hero band's navy gradient at the top of
+   the page, so the two dark sections read as one deliberate brand color rather than a one-off. */
+
+.site-footer {
+  margin-top: 64px;
+  background: linear-gradient(160deg, var(--hero-from) 0%, var(--hero-to) 100%);
+  color: var(--hero-body);
+  padding: 48px 24px 24px;
+}
+
+.site-footer-inner {
+  display: grid;
+  grid-template-columns: 1.4fr repeat(4, 1fr);
+  gap: 32px;
+  padding: 0;
+}
+
+@media (max-width: 760px) {
+  .site-footer-inner {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .site-footer-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+.site-footer-brand p {
+  color: var(--hero-body);
+  font-size: 13px;
+  margin: 12px 0 0;
+  max-width: 220px;
+  opacity: 0.85;
+}
+
+.site-footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.site-footer-col h4 {
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  margin: 0 0 4px;
+  opacity: 0.7;
+}
+
+.site-footer-col a {
+  color: var(--hero-body);
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.15s var(--ease);
+}
+
+.site-footer-col a:hover {
+  color: #ffffff;
+}
+
+.site-footer-bottom {
+  max-width: 1080px;
+  margin: 40px auto 0;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 12px;
+  color: var(--hero-body);
+  opacity: 0.7;
+}
+
 .sign-modal-actions {
   display: flex;
   gap: 8px;
