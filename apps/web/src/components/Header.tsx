@@ -42,7 +42,6 @@ export default function Header() {
 
   return (
     <header className="site-header">
-      <div className="header-accent-bar" />
       <div className="container" style={{ padding: 0, display: "flex", alignItems: "center", gap: 16 }}>
         <Link to="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
           <img src="/docracy-wordmark.png" alt="Docracy" style={{ height: 40, width: "auto" }} />

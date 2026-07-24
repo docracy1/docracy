@@ -166,28 +166,17 @@ select {
 }
 
 .site-header {
-  border-bottom: 1px solid var(--hairline);
   padding: 16px 24px;
   position: sticky;
   top: 0;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(8px);
+  background: linear-gradient(160deg, var(--hero-from) 0%, var(--hero-to) 100%);
   z-index: 100;
-}
-
-.header-accent-bar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--primary) 0%, var(--hero-to) 100%);
 }
 
 .header-nav-link {
   font-size: 14px;
   font-weight: 500;
-  color: var(--body-strong);
+  color: var(--hero-body);
   text-decoration: none;
   padding: 6px 2px;
   border-bottom: 2px solid transparent;
@@ -195,13 +184,13 @@ select {
 }
 
 .header-nav-link:hover {
-  color: var(--primary);
-  border-bottom-color: var(--primary-soft-strong);
+  color: #ffffff;
+  border-bottom-color: #8fb6e8;
 }
 
 .header-nav-link-strong {
   font-weight: 700;
-  color: var(--primary);
+  color: #8fb6e8;
 }
 
 .header-logout-btn {
@@ -210,13 +199,13 @@ select {
   padding: 0;
   font-size: 14px;
   font-family: inherit;
-  color: var(--mute);
+  color: var(--hero-body);
   cursor: pointer;
   transition: color 0.15s var(--ease);
 }
 
 .header-logout-btn:hover {
-  color: var(--body-strong);
+  color: #ffffff;
 }
 
 .header-nav-right {
@@ -244,14 +233,14 @@ select {
 }
 
 .header-menu-toggle:hover {
-  background: var(--canvas-soft);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .header-menu-toggle span {
   display: block;
   width: 18px;
   height: 2px;
-  background: var(--body-strong);
+  background: #ffffff;
   border-radius: 1px;
 }
 
@@ -262,8 +251,8 @@ select {
   left: 0;
   right: 0;
   flex-direction: column;
-  background: var(--canvas);
-  border-bottom: 1px solid var(--hairline);
+  background: var(--hero-to);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: var(--shadow-md);
   padding: 8px 24px 16px;
 }
@@ -271,9 +260,9 @@ select {
 .header-mobile-menu a {
   padding: 12px 0;
   font-size: 15px;
-  color: var(--body-strong);
+  color: var(--hero-body);
   text-decoration: none;
-  border-bottom: 1px solid var(--hairline);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .header-mobile-menu a:last-child {
