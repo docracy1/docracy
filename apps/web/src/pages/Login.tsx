@@ -35,7 +35,7 @@ export default function Login() {
   return (
     <div className="container">
       <h1>Sign in</h1>
-      <p>No password — we'll email you a link.</p>
+      <p>No password — we'll email you a link. First time here? This creates your account too.</p>
       <form onSubmit={onSubmit}>
         <input
           className="form-input"
