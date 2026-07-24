@@ -1,0 +1,26 @@
+{
+  "serverInfo": {
+    "name": "docracy",
+    "version": "0.1.0",
+    "websiteUrl": "https://docracy.io"
+  },
+  "transport": {
+    "type": "streamable-http",
+    "url": "https://mcp.docracy.io/mcp"
+  },
+  "capabilities": {
+    "tools": true,
+    "resources": false,
+    "prompts": false
+  },
+  "authentication": {
+    "required": false,
+    "note": "No authentication needed for the free tool. A Bearer API key (or ?token= query param), issued from the Docracy Dashboard, unlocks the paid tool.",
+    "schemes": ["none", "bearer"]
+  },
+  "tools": [
+    { "name": "check_status", "tier": "free", "description": "Look up the status of a Docracy signing chain from a sign or status link." },
+    { "name": "find_documents", "tier": "paid", "description": "Search your own Docracy documents by title or a signer's name/email/company." }
+  ],
+  "documentationUrl": "https://docracy.io/mcp"
+}

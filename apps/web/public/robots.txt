@@ -13,6 +13,7 @@ Allow: /uptime$
 Allow: /llms.txt$
 Allow: /llms-full.txt$
 Allow: /auth.md$
+Allow: /.well-known/mcp/server-card.json$
 Disallow: /
 Disallow: /sign/
 Disallow: /status/
