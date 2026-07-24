@@ -78,16 +78,14 @@ export default function Landing() {
         <div className="hero-inner hero-split">
           <div>
             <div className="hero-eyebrow">Free · No signup · Sequential e-signatures</div>
-            <h1>Sign it. Send it. It disappears.</h1>
+            <h1>Simple, secure e-signatures for your business</h1>
             <p>
-              A free e-signature tool for quick, low-stakes agreements — freelance contracts, NDAs, roommate
-              agreements — not a monthly subscription for something you'll use twice a year. Upload a PDF,
-              add signers in order, and it's gone once everyone's signed.
+              Create, send, and sign documents in minutes — with a clean workflow and reliable compliance.
             </p>
             <ul className="hero-benefit-list">
-              <li>Fast document signing — no install, no setup</li>
-              <li>Simple workflow — upload, add signers, send</li>
-              <li>Tamper-evident audit trail on every document</li>
+              <li>Fast and frictionless document signing</li>
+              <li>Simple workflow setup for teams</li>
+              <li>Secure and compliant document storage</li>
             </ul>
             <div className="hero-cta-row">
               <Link to="/prepare" className="btn-primary btn-lg" style={{ display: "inline-block", textDecoration: "none" }}>
