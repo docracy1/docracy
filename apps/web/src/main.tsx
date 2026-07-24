@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./theme.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import ChatWidget from "./components/ChatWidget";
 import Landing from "./pages/Landing";
 import Prepare from "./pages/Prepare";
 import PrepareSent from "./pages/PrepareSent";
@@ -58,6 +59,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
+      <ChatWidget />
     </BrowserRouter>
   </React.StrictMode>
 );
