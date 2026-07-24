@@ -118,12 +118,12 @@ export default function Landing() {
               <Link to="/prepare" className="btn-primary btn-lg" style={{ display: "inline-block", textDecoration: "none" }}>
                 Start free — no account, no credit card
               </Link>
-              <Link to="/free-templates" style={{ fontSize: 14, fontWeight: 600, color: "var(--hero-ink)" }}>
+              <Link to="/free-templates" className="hero-link">
                 Browse free templates →
               </Link>
             </div>
             <p className="hero-microcopy">
-              <Link to="/mcp" style={{ color: "var(--hero-ink)", fontWeight: 600 }}>
+              <Link to="/mcp" className="hero-link">
                 Connect your AI assistant via MCP
               </Link>
               , or automate with Zapier →
@@ -139,7 +139,6 @@ export default function Landing() {
 
       <div className="spotlight-band">
         <div className="spotlight-inner">
-          <div className="spotlight-badge">Paid plan</div>
           <h2 style={{ fontSize: 24, marginBottom: 6 }}>AI tools, and an MCP connector for your AI assistant</h2>
           <p style={{ marginTop: 0, marginBottom: 0, maxWidth: 640 }}>
             Beyond the free chain-signing flow above, a paid account adds AI that does the busywork and a

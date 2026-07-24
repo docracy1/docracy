@@ -402,6 +402,21 @@ select {
   padding: 14px 26px;
 }
 
+.hero-link {
+  font-size: 14px;
+  font-weight: 600;
+  color: #8fb6e8;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(143, 182, 232, 0.4);
+  padding-bottom: 1px;
+  transition: color 0.15s var(--ease), border-color 0.15s var(--ease);
+}
+
+.hero-link:hover {
+  color: #b7d3f2;
+  border-bottom-color: #b7d3f2;
+}
+
 .hero-microcopy {
   font-size: 13px;
   color: var(--hero-body);
