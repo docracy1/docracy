@@ -324,11 +324,36 @@ select {
   margin-bottom: 16px;
 }
 
+.hero-benefit-list {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hero-benefit-list li {
+  font-size: 14px;
+  color: var(--hero-body);
+  padding-left: 22px;
+  position: relative;
+}
+
+.hero-benefit-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #8fb6e8;
+  font-weight: 700;
+}
+
 .hero-cta-row {
   display: flex;
   align-items: center;
   gap: 16px;
   flex-wrap: wrap;
+  margin-top: 20px;
 }
 
 .btn-lg {

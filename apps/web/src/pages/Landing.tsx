@@ -84,15 +84,19 @@ export default function Landing() {
               agreements — not a monthly subscription for something you'll use twice a year. Upload a PDF,
               add signers in order, and it's gone once everyone's signed.
             </p>
+            <ul className="hero-benefit-list">
+              <li>Fast document signing — no install, no setup</li>
+              <li>Simple workflow — upload, add signers, send</li>
+              <li>Tamper-evident audit trail on every document</li>
+            </ul>
             <div className="hero-cta-row">
               <Link to="/prepare" className="btn-primary btn-lg" style={{ display: "inline-block", textDecoration: "none" }}>
-                Start a signing chain
+                Start free — no account, no credit card
               </Link>
               <Link to="/free-templates" style={{ fontSize: 14, fontWeight: 600, color: "var(--hero-ink)" }}>
                 Browse free templates →
               </Link>
             </div>
-            <p className="hero-microcopy">Free for chains of up to 2 signers. No credit card, no account.</p>
             <p className="hero-microcopy">
               <Link to="/mcp" style={{ color: "var(--hero-ink)", fontWeight: 600 }}>
                 Connect your AI assistant via MCP
