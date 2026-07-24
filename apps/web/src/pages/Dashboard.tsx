@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   apiUrl,
   cancelTeamInvite,
@@ -15,6 +15,7 @@ import {
   fetchTokenStatus,
   fetchWebhooks,
   inviteTeammate,
+  logout,
   openBillingPortal,
   regenerateApiToken,
   removeTeamMember,
@@ -67,6 +68,17 @@ export default function Dashboard() {
   const [brandingError, setBrandingError] = useState<string | null>(null);
   const [uploadingLogo, setUploadingLogo] = useState(false);
   const [deletingLogo, setDeletingLogo] = useState(false);
+  const [activeTab, setActiveTab] = useState<"dashboard" | "templates" | "documents" | "tools">("dashboard");
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const onLogout = async () => {
+    try {
+      await logout();
+    } finally {
+      navigate("/");
+    }
+  };
 
   useNoIndex();
 
@@ -253,6 +265,13 @@ export default function Dashboard() {
   }, [documents]);
 
   useEffect(() => {
+    if (!profileMenuOpen) return;
+    const onDocClick = () => setProfileMenuOpen(false);
+    document.addEventListener("click", onDocClick);
+    return () => document.removeEventListener("click", onDocClick);
+  }, [profileMenuOpen]);
+
+  useEffect(() => {
     fetchMe()
       .then(async (res) => {
         setAccount(res.account);
@@ -304,106 +323,223 @@ export default function Dashboard() {
     );
   }
 
+  const NAV_ITEMS: Array<{ key: typeof activeTab; label: string }> = [
+    { key: "dashboard", label: "Dashboard" },
+    { key: "templates", label: "Templates" },
+    { key: "documents", label: "Documents" },
+    { key: "tools", label: "Tools" },
+  ];
+
   return (
-    <div className="container">
-      <h1>Welcome back</h1>
-      <p>Here's what needs your attention today — signed in as {account.email}.</p>
+    <div className="dashboard-shell">
+      <aside className="dashboard-sidebar">
+        <Link to="/prepare" className="btn-primary dashboard-nav-new" style={{ textDecoration: "none", display: "block", textAlign: "center" }}>
+          + New
+        </Link>
+        {NAV_ITEMS.map((item) => (
+          <button
+            key={item.key}
+            className={`dashboard-nav-item${activeTab === item.key ? " active" : ""}`}
+            onClick={() => setActiveTab(item.key)}
+          >
+            {item.label}
+          </button>
+        ))}
+        <div className="dashboard-profile" onClick={() => setProfileMenuOpen((o) => !o)}>
+          {profileMenuOpen && (
+            <div className="dashboard-profile-menu">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveTab("tools");
+                  setProfileMenuOpen(false);
+                }}
+              >
+                Settings
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  window.dispatchEvent(new Event("docracy:open-chat"));
+                  setProfileMenuOpen(false);
+                }}
+              >
+                Support
+              </button>
+              <div className="dashboard-profile-menu-divider" />
+              <button
+                className="dashboard-profile-menu-danger"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onLogout();
+                }}
+              >
+                Log out
+              </button>
+            </div>
+          )}
+          <div className="dashboard-sidebar-footer">
+            <div className="dashboard-avatar">{account.email.slice(0, 2).toUpperCase()}</div>
+            <span style={{ fontSize: 13, color: "var(--body)", overflowWrap: "anywhere" }}>{account.email}</span>
+          </div>
+        </div>
+      </aside>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
-          gap: 12,
-          marginTop: 16,
-        }}
-      >
-        <div
-          className="card"
-          style={awaitingYouDocs.length > 0 ? { background: "rgba(47,126,216,0.08)", borderColor: "var(--primary)" } : undefined}
-        >
-          <div style={{ fontSize: 12, color: "var(--mute)", textTransform: "uppercase", letterSpacing: 0.4 }}>
-            Awaiting your signature
-          </div>
-          <div style={{ fontSize: 28, fontWeight: 700, color: "var(--primary)" }}>{awaitingYouDocs.length}</div>
-        </div>
-        <div className="card">
-          <div style={{ fontSize: 12, color: "var(--mute)", textTransform: "uppercase", letterSpacing: 0.4 }}>
-            Waiting on others
-          </div>
-          <div style={{ fontSize: 28, fontWeight: 700 }}>{waitingOnOthersCount}</div>
-        </div>
-        <div className="card">
-          <div style={{ fontSize: 12, color: "var(--mute)", textTransform: "uppercase", letterSpacing: 0.4 }}>
-            Completed this month
-          </div>
-          <div style={{ fontSize: 28, fontWeight: 700 }}>{completedThisMonthCount}</div>
-        </div>
-      </div>
+      <div className="dashboard-content">
+        {activeTab === "dashboard" && (
+          <>
+            <h1>Welcome back</h1>
+            <p>Here's what needs your attention today — signed in as {account.email}.</p>
 
-      <div className="card" style={{ marginTop: 24 }}>
-        <h3 style={{ fontSize: 15 }}>Awaiting your signature</h3>
-        {awaitingYouDocs.length === 0 ? (
-          <p style={{ marginBottom: 0 }}>You're all caught up — nothing is waiting on your signature right now.</p>
-        ) : (
-          awaitingYouDocs.map((doc) => (
             <div
-              key={doc.docId}
               style={{
-                padding: "8px 0",
-                borderBottom: "1px solid var(--hairline)",
-                display: "flex",
-                flexWrap: "wrap",
-                justifyContent: "space-between",
-                alignItems: "center",
-                gap: 8,
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+                gap: 12,
+                marginTop: 16,
               }}
             >
-              <span style={{ overflowWrap: "anywhere" }}>{doc.title}</span>
-              <Link to={`/sign/${doc.signToken}`} className="btn-primary" style={{ textDecoration: "none", padding: "4px 10px", fontSize: 13 }}>
-                Sign now
+              <div
+                className="card"
+                style={awaitingYouDocs.length > 0 ? { background: "rgba(47,126,216,0.08)", borderColor: "var(--primary)" } : undefined}
+              >
+                <div style={{ fontSize: 12, color: "var(--mute)", textTransform: "uppercase", letterSpacing: 0.4 }}>
+                  Awaiting your signature
+                </div>
+                <div style={{ fontSize: 28, fontWeight: 700, color: "var(--primary)" }}>{awaitingYouDocs.length}</div>
+              </div>
+              <div className="card">
+                <div style={{ fontSize: 12, color: "var(--mute)", textTransform: "uppercase", letterSpacing: 0.4 }}>
+                  Waiting on others
+                </div>
+                <div style={{ fontSize: 28, fontWeight: 700 }}>{waitingOnOthersCount}</div>
+              </div>
+              <div className="card">
+                <div style={{ fontSize: 12, color: "var(--mute)", textTransform: "uppercase", letterSpacing: 0.4 }}>
+                  Completed this month
+                </div>
+                <div style={{ fontSize: 28, fontWeight: 700 }}>{completedThisMonthCount}</div>
+              </div>
+            </div>
+
+            <div className="card" style={{ marginTop: 24 }}>
+              <h3 style={{ fontSize: 15 }}>Awaiting your signature</h3>
+              {awaitingYouDocs.length === 0 ? (
+                <p style={{ marginBottom: 0 }}>You're all caught up — nothing is waiting on your signature right now.</p>
+              ) : (
+                awaitingYouDocs.map((doc) => (
+                  <div
+                    key={doc.docId}
+                    style={{
+                      padding: "8px 0",
+                      borderBottom: "1px solid var(--hairline)",
+                      display: "flex",
+                      flexWrap: "wrap",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      gap: 8,
+                    }}
+                  >
+                    <span style={{ overflowWrap: "anywhere" }}>{doc.title}</span>
+                    <Link to={`/sign/${doc.signToken}`} className="btn-primary" style={{ textDecoration: "none", padding: "4px 10px", fontSize: 13 }}>
+                      Sign now
+                    </Link>
+                  </div>
+                ))
+              )}
+            </div>
+
+            <div className="card" style={{ marginTop: 24 }}>
+              <h3 style={{ fontSize: 15 }}>Start something new</h3>
+              <Link to="/prepare" className="btn-primary" style={{ display: "inline-block", textDecoration: "none" }}>
+                + New document
               </Link>
             </div>
-          ))
+
+            {!account.isPaid && (
+              <div className="card" style={{ marginTop: 24 }}>
+                <h3 style={{ fontSize: 15 }}>Upgrade to paid — $7/month</h3>
+                <p>
+                  Unlimited signers, a connector so Claude, ChatGPT, Grok, or Perplexity can look up your documents,
+                  team accounts, white-label branding, and a set of AI tools — auto-detect signature/date fields,
+                  a plain-English explainer with risk highlighting, and a contract generator that turns a one-line
+                  description into a signable PDF.
+                </p>
+                {upgradeError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{upgradeError}</p>}
+                <button className="btn-primary" onClick={onUpgrade} disabled={upgrading}>
+                  {upgrading ? "Redirecting…" : "Upgrade"}
+                </button>
+              </div>
+            )}
+          </>
         )}
-      </div>
 
-      <div className="card" style={{ marginTop: 24 }}>
-        <h3 style={{ fontSize: 15 }}>Start something new</h3>
-        <Link to="/prepare" className="btn-primary" style={{ display: "inline-block", textDecoration: "none" }}>
-          + New document
-        </Link>
-      </div>
+        {activeTab === "templates" && !account.isPaid && (
+          <div className="card" style={{ marginTop: 24 }}>
+            <h3 style={{ fontSize: 15 }}>Templates are a paid feature</h3>
+            <p>Upgrade to save reusable templates from any document you've prepared.</p>
+            <button className="btn-primary" onClick={onUpgrade} disabled={upgrading}>
+              {upgrading ? "Redirecting…" : "Upgrade — $7/month"}
+            </button>
+          </div>
+        )}
 
-      {!account.isPaid && (
-        <div className="card" style={{ marginTop: 24 }}>
-          <h3 style={{ fontSize: 15 }}>Upgrade to paid — $7/month</h3>
-          <p>
-            Unlimited signers, a connector so Claude, ChatGPT, Grok, or Perplexity can look up your documents,
-            team accounts, white-label branding, and a set of AI tools — auto-detect signature/date fields,
-            a plain-English explainer with risk highlighting, and a contract generator that turns a one-line
-            description into a signable PDF.
-          </p>
-          {upgradeError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{upgradeError}</p>}
-          <button className="btn-primary" onClick={onUpgrade} disabled={upgrading}>
-            {upgrading ? "Redirecting…" : "Upgrade"}
-          </button>
-        </div>
-      )}
+        {activeTab === "documents" && (
+          <div className="card" style={{ marginTop: 24 }}>
+            <h3 style={{ fontSize: 15 }}>All documents</h3>
+            {documents.length === 0 ? (
+              <p style={{ marginBottom: 0 }}>Nothing here yet.</p>
+            ) : (
+              documents.map((doc) => (
+                <div
+                  key={doc.docId}
+                  style={{
+                    padding: "8px 0",
+                    borderBottom: "1px solid var(--hairline)",
+                    display: "flex",
+                    flexWrap: "wrap",
+                    justifyContent: "space-between",
+                    gap: 8,
+                  }}
+                >
+                  <Link to={`/status/${doc.statusToken}`} style={{ overflowWrap: "anywhere" }}>
+                    {doc.title}
+                  </Link>
+                  <span style={{ color: doc.status === "completed" ? "var(--success)" : "var(--body)" }}>
+                    {doc.status === "completed" ? "Signed" : "Pending"}
+                  </span>
+                </div>
+              ))
+            )}
+          </div>
+        )}
 
-      {account.isPaid && isWorkspaceOwner && (
-        <div className="card" style={{ marginTop: 24 }}>
-          <h3 style={{ fontSize: 15 }}>Subscription</h3>
-          <p>Manage your payment method, invoices, or cancel your subscription.</p>
-          {manageBillingError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{manageBillingError}</p>}
-          <button className="btn-secondary" onClick={onManageBilling} disabled={managingBilling}>
-            {managingBilling ? "Redirecting…" : "Manage subscription"}
-          </button>
-        </div>
-      )}
+        {activeTab === "tools" && !account.isPaid && (
+          <div className="card" style={{ marginTop: 24 }}>
+            <h3 style={{ fontSize: 15 }}>Tools are a paid feature</h3>
+            <p>
+              Upgrade for the MCP connector &amp; API key, webhooks, white-label branding, and team accounts.
+            </p>
+            <button className="btn-primary" onClick={onUpgrade} disabled={upgrading}>
+              {upgrading ? "Redirecting…" : "Upgrade — $7/month"}
+            </button>
+          </div>
+        )}
 
-      {account.isPaid && (
-        <div className="card" style={{ marginTop: 24 }}>
-          <h3 style={{ fontSize: 15 }}>MCP connector &amp; API key</h3>
+        {activeTab === "tools" && account.isPaid && isWorkspaceOwner && (
+          <div className="card" style={{ marginTop: 24 }}>
+            <h3 style={{ fontSize: 15 }}>Subscription</h3>
+            <p>Manage your payment method, invoices, or cancel your subscription.</p>
+            {manageBillingError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{manageBillingError}</p>}
+            <button className="btn-secondary" onClick={onManageBilling} disabled={managingBilling}>
+              {managingBilling ? "Redirecting…" : "Manage subscription"}
+            </button>
+          </div>
+        )}
+
+        {activeTab === "tools" && account.isPaid && (
+          <div className="card" style={{ marginTop: 24 }}>
+            <h3 style={{ fontSize: 15 }}>MCP connector &amp; API key</h3>
           <p>Status: {hasToken ? "Active" : "None yet"}</p>
           <p style={{ fontSize: 12, color: "var(--mute)" }}>
             One key for everything: AI assistants (Claude, ChatGPT, Grok, Perplexity — anything that supports
@@ -509,7 +645,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      {account.isPaid && (
+      {activeTab === "templates" && account.isPaid && (
         <div className="card" style={{ marginTop: 24 }}>
           <h3 style={{ fontSize: 15 }}>Templates</h3>
           {templateError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{templateError}</p>}
@@ -563,7 +699,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      {account.isPaid && (
+      {activeTab === "tools" && account.isPaid && (
         <div className="card" style={{ marginTop: 24 }}>
           <h3 style={{ fontSize: 15 }}>Webhooks</h3>
           <p style={{ fontSize: 12, color: "var(--mute)" }}>
@@ -651,7 +787,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      {account.isPaid && (
+      {activeTab === "tools" && account.isPaid && (
         <div className="card" style={{ marginTop: 24 }}>
           <h3 style={{ fontSize: 15 }}>Branding</h3>
           <p style={{ fontSize: 12, color: "var(--mute)" }}>
@@ -690,7 +826,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      {account.isPaid && (
+      {activeTab === "tools" && account.isPaid && (
         <div className="card" style={{ marginTop: 24 }}>
           <h3 style={{ fontSize: 15 }}>Team</h3>
           <p style={{ fontSize: 12, color: "var(--mute)" }}>
@@ -788,32 +924,6 @@ export default function Dashboard() {
         </div>
       )}
 
-      <div className="card" style={{ marginTop: 24 }}>
-        <h3 style={{ fontSize: 15 }}>All documents</h3>
-        {documents.length === 0 ? (
-          <p style={{ marginBottom: 0 }}>Nothing here yet.</p>
-        ) : (
-          documents.map((doc) => (
-            <div
-              key={doc.docId}
-              style={{
-                padding: "8px 0",
-                borderBottom: "1px solid var(--hairline)",
-                display: "flex",
-                flexWrap: "wrap",
-                justifyContent: "space-between",
-                gap: 8,
-              }}
-            >
-              <Link to={`/status/${doc.statusToken}`} style={{ overflowWrap: "anywhere" }}>
-                {doc.title}
-              </Link>
-              <span style={{ color: doc.status === "completed" ? "var(--success)" : "var(--body)" }}>
-                {doc.status === "completed" ? "Signed" : "Pending"}
-              </span>
-            </div>
-          ))
-        )}
       </div>
     </div>
   );

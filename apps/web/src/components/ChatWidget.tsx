@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { submitFeedback } from "../lib/api";
 
@@ -21,6 +21,14 @@ export default function ChatWidget() {
   const [formMessage, setFormMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Lets other parts of the app (e.g. the Dashboard's profile-menu "Support" item) open this
+  // widget without needing shared state — simpler than lifting `open` into a context for one caller.
+  useEffect(() => {
+    const onOpenRequest = () => setOpen(true);
+    window.addEventListener("docracy:open-chat", onOpenRequest);
+    return () => window.removeEventListener("docracy:open-chat", onOpenRequest);
+  }, []);
 
   // Sign/status pages are deep links a document's actual signer follows from an email — floating
   // marketing chrome has no place interrupting that task, same reasoning as their noindex tag.
