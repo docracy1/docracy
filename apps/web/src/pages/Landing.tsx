@@ -194,25 +194,6 @@ export default function Landing() {
 
       <div className="container">
         <div style={{ marginTop: 40 }}>
-          <h2 style={{ fontSize: 20 }}>Free vs. paid</h2>
-          <p>
-            Everything above works on the free plan. A paid account is <strong>$7/month</strong> and adds a
-            dashboard, reusable templates, webhooks, an MCP connector for AI assistants, team accounts,
-            white-label branding, and PIN-protected signing links — plus unlimited signers per document and a
-            set of AI tools: auto-detect signature and date fields on any upload, get a plain-English summary
-            with risky clauses flagged, or describe an agreement in a sentence and get a signable PDF back.
-          </p>
-          <div style={{ display: "flex", gap: 12, marginTop: 8, flexWrap: "wrap" }}>
-            <Link to="/pricing" className="btn-secondary" style={{ textDecoration: "none" }}>
-              See full pricing
-            </Link>
-            <Link to="/login" className="btn-primary" style={{ textDecoration: "none" }}>
-              Sign in to upgrade
-            </Link>
-          </div>
-        </div>
-
-        <div style={{ marginTop: 40 }}>
           <h2 style={{ fontSize: 20 }}>How this compares to DocuSign or HelloSign</h2>
           <p style={{ marginBottom: 0 }}>
             DocuSign and HelloSign are built for identity-verified, enterprise-grade signing — accounts,

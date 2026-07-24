@@ -307,11 +307,13 @@ select {
 .hero-band h1 {
   color: #ffffff;
   font-size: clamp(36px, 4.6vw, 60px);
+  margin: 0 0 20px;
 }
 
 .hero-band p {
   color: var(--hero-body);
   font-size: 18px;
+  margin: 0 0 20px;
 }
 
 .hero-eyebrow {
@@ -326,17 +328,17 @@ select {
 
 .hero-benefit-list {
   list-style: none;
-  margin: 16px 0 0;
+  margin: 24px 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .hero-benefit-list li {
   font-size: 14px;
   color: var(--hero-body);
-  padding-left: 22px;
+  padding-left: 24px;
   position: relative;
 }
 
@@ -353,7 +355,7 @@ select {
   align-items: center;
   gap: 16px;
   flex-wrap: wrap;
-  margin-top: 20px;
+  margin-top: 24px;
 }
 
 .btn-lg {
