@@ -14,10 +14,9 @@
   --success: #2e8b57;
   --danger: #c0392b;
 
-  --hero-from: #16233a;
   --hero-to: #1f3f68;
-  --hero-ink: #eef3f9;
-  --hero-body: #aebdd0;
+  --hero-ink: #ffffff;
+  --hero-body: rgba(255, 255, 255, 0.75);
 
   --r-sm: 8px;
   --r-md: 12px;
@@ -169,28 +168,30 @@ select {
   padding: 16px 24px;
   position: sticky;
   top: 0;
-  background: linear-gradient(160deg, var(--hero-from) 0%, var(--hero-to) 100%);
+  background: var(--hero-to);
   z-index: 100;
 }
 
 .header-nav-link {
   font-size: 14px;
   font-weight: 500;
-  color: var(--hero-body);
+  color: #ffffff;
   text-decoration: none;
   padding: 6px 2px;
   border-bottom: 2px solid transparent;
-  transition: color 0.15s var(--ease), border-color 0.15s var(--ease);
+  opacity: 0.75;
+  transition: opacity 0.15s var(--ease), border-color 0.15s var(--ease);
 }
 
 .header-nav-link:hover {
-  color: #ffffff;
-  border-bottom-color: #8fb6e8;
+  opacity: 1;
+  border-bottom-color: #ffffff;
 }
 
 .header-nav-link-strong {
   font-weight: 700;
-  color: #8fb6e8;
+  color: #ffffff;
+  opacity: 1;
 }
 
 .header-logout-btn {
@@ -199,13 +200,14 @@ select {
   padding: 0;
   font-size: 14px;
   font-family: inherit;
-  color: var(--hero-body);
+  color: #ffffff;
+  opacity: 0.75;
   cursor: pointer;
-  transition: color 0.15s var(--ease);
+  transition: opacity 0.15s var(--ease);
 }
 
 .header-logout-btn:hover {
-  color: #ffffff;
+  opacity: 1;
 }
 
 .header-nav-right {
@@ -308,7 +310,7 @@ select {
 /* Landing page hero + feature primitives */
 
 .hero-band {
-  background: linear-gradient(160deg, var(--hero-from) 0%, var(--hero-to) 100%);
+  background: var(--hero-to);
   color: var(--hero-ink);
   padding: 64px 24px;
   overflow: hidden;
@@ -350,7 +352,7 @@ select {
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: #8fb6e8;
+  color: var(--primary);
   margin-bottom: 16px;
 }
 
@@ -374,7 +376,7 @@ select {
   content: "✓";
   position: absolute;
   left: 0;
-  color: #8fb6e8;
+  color: var(--primary);
   font-weight: 700;
 }
 
@@ -394,16 +396,16 @@ select {
 .hero-link {
   font-size: 14px;
   font-weight: 600;
-  color: #8fb6e8;
+  color: var(--primary);
   text-decoration: none;
-  border-bottom: 1px solid rgba(143, 182, 232, 0.4);
+  border-bottom: 1px solid rgba(47, 126, 216, 0.4);
   padding-bottom: 1px;
   transition: color 0.15s var(--ease), border-color 0.15s var(--ease);
 }
 
 .hero-link:hover {
-  color: #b7d3f2;
-  border-bottom-color: #b7d3f2;
+  color: #ffffff;
+  border-bottom-color: #ffffff;
 }
 
 .hero-microcopy {
@@ -601,7 +603,7 @@ select {
 
 .site-footer {
   margin-top: 64px;
-  background: linear-gradient(160deg, var(--hero-from) 0%, var(--hero-to) 100%);
+  background: var(--hero-to);
   color: var(--hero-body);
   padding: 48px 24px 24px;
 }
@@ -723,7 +725,7 @@ select {
 }
 
 .chat-widget-header {
-  background: linear-gradient(160deg, var(--hero-from) 0%, var(--hero-to) 100%);
+  background: var(--hero-to);
   color: #ffffff;
   font-size: 14px;
   font-weight: 700;
@@ -731,6 +733,19 @@ select {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.chat-widget-header-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chat-widget-avatar {
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  background: #ffffff;
 }
 
 .chat-widget-header button {

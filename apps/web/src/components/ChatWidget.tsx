@@ -67,7 +67,10 @@ export default function ChatWidget() {
       {open && (
         <div className="chat-widget-panel">
           <div className="chat-widget-header">
-            <span>Docracy Assistant</span>
+            <div className="chat-widget-header-title">
+              <img src="/docracy-seal-icon.png" alt="" className="chat-widget-avatar" />
+              <span>Docracy Assistant</span>
+            </div>
             <button aria-label="Close" onClick={() => setOpen(false)}>
               ×
             </button>

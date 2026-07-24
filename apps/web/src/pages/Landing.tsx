@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import FeedbackForm from "../components/FeedbackForm";
 import PricingCalculator from "../components/PricingCalculator";
 
 /** Abstract illustration of the product (a document, either freshly signed or having its fields
@@ -115,9 +114,6 @@ export default function Landing() {
               <li>Secure and compliant document storage</li>
             </ul>
             <div className="hero-cta-row">
-              <Link to="/prepare" className="btn-primary btn-lg" style={{ display: "inline-block", textDecoration: "none" }}>
-                Start free — no account, no credit card
-              </Link>
               <Link to="/free-templates" className="hero-link">
                 Browse free templates →
               </Link>
@@ -240,8 +236,6 @@ export default function Landing() {
           proves what was signed and when, not who actually signed it. For contracts that need
           identity-verified signatures, use a compliance-grade e-signature service instead.
         </p>
-
-        <FeedbackForm />
       </div>
     </div>
   );
