@@ -162,6 +162,16 @@ export default function Landing() {
         </div>
       </div>
 
+      <div className="container" style={{ maxWidth: 640, textAlign: "center", padding: "48px 24px" }}>
+        <blockquote style={{ fontSize: 19, fontStyle: "italic", color: "var(--body-strong)", margin: 0, lineHeight: 1.5 }}>
+          "Docracy is a great product that I have tested and am using. It is easy to use, has good tools, is
+          always up to date, and implements new features. Highly recommended."
+        </blockquote>
+        <p style={{ marginTop: 16, marginBottom: 0, fontSize: 14, color: "var(--mute)" }}>
+          — Markus Huber, Managing Director, Vienna Contemporary
+        </p>
+      </div>
+
       <div className="cta-band">
         <h2 style={{ fontSize: 22, marginBottom: 8 }}>Ready to send your first document?</h2>
         <p style={{ marginTop: 0, marginBottom: 20 }}>Free to start — no account needed to send or sign.</p>
