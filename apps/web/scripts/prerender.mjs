@@ -52,6 +52,18 @@ await build({
 const { FREE_TEMPLATES } = require(dataBundleFile);
 fs.unlinkSync(dataBundleFile);
 
+const blogBundleFile = path.join(__dirname, "_blog.bundle.cjs");
+await build({
+  entryPoints: [path.join(root, "src/lib/blog.ts")],
+  outfile: blogBundleFile,
+  bundle: true,
+  platform: "node",
+  format: "cjs",
+  logLevel: "warning",
+});
+const { BLOG_POSTS } = require(blogBundleFile);
+fs.unlinkSync(blogBundleFile);
+
 // --- 3. Build the list of routes to prerender. Per-template title/description come straight
 //     from FREE_TEMPLATES (the same data FreeTemplateDetail.tsx's usePageMeta call reads) — true
 //     single-sourcing. The two fixed pages' strings are copied verbatim from their own
@@ -105,6 +117,19 @@ const routes = [
     title: "Imprint — Docracy",
     description: "Legal entity behind Docracy.",
   },
+  {
+    urlPath: "/blog",
+    outFile: "blog.html",
+    title: "Blog — Docracy",
+    description:
+      "How Docracy compares to eversign, DocuSign, PandaDoc, and Adobe Acrobat Sign — honest, sourced comparisons on price and features.",
+  },
+  ...BLOG_POSTS.map((p) => ({
+    urlPath: `/blog/${p.slug}`,
+    outFile: `blog/${p.slug}.html`,
+    title: `${p.title} | Docracy`,
+    description: p.description,
+  })),
   ...FREE_TEMPLATES.map((t) => ({
     urlPath: `/free-templates/${t.slug}`,
     outFile: `free-templates/${t.slug}.html`,

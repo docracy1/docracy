@@ -9,6 +9,8 @@ import About from "../src/pages/About";
 import Pricing from "../src/pages/Pricing";
 import Docs from "../src/pages/Docs";
 import Imprint from "../src/pages/Imprint";
+import Blog from "../src/pages/Blog";
+import BlogPostDetail from "../src/pages/BlogPostDetail";
 
 /** Renders the real app components to static markup for a single path — same components a
  *  browser gets, minus effects (which never run during static rendering, so Header's login-check
@@ -25,6 +27,8 @@ function renderPath(targetPath: string): string {
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/docs" element={<Docs />} />
         <Route path="/imprint" element={<Imprint />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:slug" element={<BlogPostDetail />} />
       </Routes>
       <Footer />
     </MemoryRouter>

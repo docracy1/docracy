@@ -24,6 +24,8 @@ import Pricing from "./pages/Pricing";
 import Docs from "./pages/Docs";
 import Imprint from "./pages/Imprint";
 import Uptime from "./pages/Uptime";
+import Blog from "./pages/Blog";
+import BlogPostDetail from "./pages/BlogPostDetail";
 import NotFound from "./pages/NotFound";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -51,6 +53,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/docs" element={<Docs />} />
         <Route path="/imprint" element={<Imprint />} />
         <Route path="/uptime" element={<Uptime />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:slug" element={<BlogPostDetail />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />

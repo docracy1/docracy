@@ -36,6 +36,31 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://docracy.io/blog</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/blog/docracy-vs-eversign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/blog/docracy-vs-docusign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/blog/docracy-vs-pandadoc</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/blog/docracy-vs-adobe-acrobat-sign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://docracy.io/free-templates/mutual-nda</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

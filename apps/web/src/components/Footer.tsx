@@ -11,6 +11,7 @@ export default function Footer() {
         <Link to="/about">About</Link>
         <Link to="/pricing">Pricing</Link>
         <Link to="/docs">Docs</Link>
+        <Link to="/blog">Blog</Link>
         <Link to="/free-templates">Free templates</Link>
         <Link to="/privacy">Privacy</Link>
         <Link to="/terms">Terms</Link>

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import FeedbackForm from "../components/FeedbackForm";
+import PricingCalculator from "../components/PricingCalculator";
 
 /** Abstract illustration of the product (a document, either freshly signed or having its fields
  *  auto-detected) — deliberately not a literal app screenshot, which would need re-cropping every
@@ -47,6 +48,33 @@ function DocumentMockup({ variant }: { variant: "signed" | "detect" }) {
     </svg>
   );
 }
+
+const TESTIMONIALS: Array<{ quote: string; name: string; title: string; company: string | null; logo: string | null }> = [
+  {
+    quote:
+      "Docracy is a great product that I have tested and am using. It is easy to use, has good tools, is always up to date, and implements new features. Highly recommended.",
+    name: "Markus Huber",
+    title: "Managing Director",
+    company: "viennacontemporary",
+    logo: "/vienna-contemporary-logo.png",
+  },
+  {
+    quote:
+      "Docracy is a beautifully simple, privacy-first tool for signing documents without friction. Its no-signup flow and automatic document deletion make it especially valuable for artists, curators, and cultural professionals who need trust, speed, and discretion.",
+    name: "Abaseh Mirvali",
+    title: "Artist director, entrepreneur",
+    company: null,
+    logo: null,
+  },
+  {
+    quote:
+      "Docracy is a smart, frictionless e-signature tool: no signup, no clutter, just secure sequential signing with privacy built in. For culture and tech teams moving fast, it makes agreements simple, professional, and discreet.",
+    name: "Marc Brandsma",
+    title: "CEO of culttech, Investor",
+    company: null,
+    logo: "/culttech-logo.png",
+  },
+];
 
 const AUDIENCES = [
   {
@@ -164,19 +192,30 @@ export default function Landing() {
         </div>
       </div>
 
-      <div className="container" style={{ maxWidth: 640, textAlign: "center", padding: "48px 24px" }}>
-        <blockquote style={{ fontSize: 19, fontStyle: "italic", color: "var(--body-strong)", margin: 0, lineHeight: 1.5 }}>
-          "Docracy is a great product that I have tested and am using. It is easy to use, has good tools, is
-          always up to date, and implements new features. Highly recommended."
-        </blockquote>
-        <p style={{ marginTop: 16, marginBottom: 12, fontSize: 14, color: "var(--mute)" }}>
-          — Markus Huber, Managing Director
-        </p>
-        <img
-          src="/vienna-contemporary-logo.png"
-          alt="Vienna Contemporary"
-          style={{ height: 48, width: "auto", borderRadius: "var(--r-sm)" }}
-        />
+      <div className="container" style={{ maxWidth: 960, padding: "48px 24px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 20 }}>
+          {TESTIMONIALS.map((t) => (
+            <div key={t.name} className="card" style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              <p style={{ fontSize: 15, fontStyle: "italic", color: "var(--body-strong)", margin: 0, flex: 1, lineHeight: 1.5 }}>
+                "{t.quote}"
+              </p>
+              <div>
+                <p style={{ margin: 0, fontSize: 13.5, fontWeight: 600, color: "var(--ink)" }}>{t.name}</p>
+                <p style={{ margin: 0, fontSize: 12.5, color: "var(--mute)" }}>
+                  {t.title}
+                  {t.company ? `, ${t.company}` : ""}
+                </p>
+              </div>
+              {t.logo && (
+                <img
+                  src={t.logo}
+                  alt={t.company ?? t.name}
+                  style={{ height: 36, width: "auto", alignSelf: "flex-start", objectFit: "contain", borderRadius: "var(--r-sm)" }}
+                />
+              )}
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="cta-band">
@@ -194,14 +233,7 @@ export default function Landing() {
 
       <div className="container">
         <div style={{ marginTop: 40 }}>
-          <h2 style={{ fontSize: 20 }}>How this compares to DocuSign or HelloSign</h2>
-          <p style={{ marginBottom: 0 }}>
-            DocuSign and HelloSign are built for identity-verified, enterprise-grade signing — accounts,
-            dashboards, and compliance certifications included, usually for a monthly fee. Docracy is built
-            for the opposite case: quick, low-stakes agreements — freelance gigs, roommate agreements,
-            informal contracts — where nobody wants to create an account just to sign one PDF. Free, no
-            signup, and the document disappears once everyone's signed.
-          </p>
+          <PricingCalculator />
         </div>
 
         <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 32 }}>

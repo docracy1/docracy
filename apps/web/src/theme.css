@@ -165,6 +165,45 @@ select {
   border-color: var(--hairline);
 }
 
+.site-header {
+  border-bottom: 1px solid var(--hairline);
+  padding: 16px 24px;
+  position: sticky;
+  top: 0;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+}
+
+.header-accent-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--hero-to) 100%);
+}
+
+.header-nav-link {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--body-strong);
+  text-decoration: none;
+  padding: 6px 2px;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s var(--ease), border-color 0.15s var(--ease);
+}
+
+.header-nav-link:hover {
+  color: var(--primary);
+  border-bottom-color: var(--primary-soft-strong);
+}
+
+.header-nav-link-strong {
+  font-weight: 700;
+  color: var(--primary);
+}
+
 .header-logout-btn {
   background: none;
   border: none;
