@@ -12,6 +12,7 @@ Allow: /imprint$
 Allow: /uptime$
 Allow: /llms.txt$
 Allow: /llms-full.txt$
+Allow: /auth.md$
 Disallow: /
 Disallow: /sign/
 Disallow: /status/
