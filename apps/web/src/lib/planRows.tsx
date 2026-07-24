@@ -1,6 +1,9 @@
 /** Shared between Landing.tsx's inline comparison table and the standalone /pricing page — single
- *  source of truth so the two never drift out of sync. */
-export const PLAN_ROWS: Array<{ label: string; free: boolean | string; paid: boolean | string }> = [
+ *  source of truth so the two never drift out of sync. `enterprise` is optional and, where
+ *  omitted, falls back to whatever `paid` has (Enterprise is a superset of Paid, not a separate
+ *  feature set) — see Pricing.tsx's `row.enterprise ?? row.paid`. Landing.tsx's table only ever
+ *  reads `free`/`paid`, so adding this field doesn't affect it. */
+export const PLAN_ROWS: Array<{ label: string; free: boolean | string; paid: boolean | string; enterprise?: boolean | string }> = [
   { label: "Signers per document", free: "Up to 2", paid: "Unlimited" },
   { label: "Sequential or all-at-once signing", free: true, paid: true },
   { label: "PIN-protected signing links", free: false, paid: true },
@@ -16,6 +19,7 @@ export const PLAN_ROWS: Array<{ label: string; free: boolean | string; paid: boo
   { label: "AI plain-English contract explainer", free: false, paid: true },
   { label: "AI risk & clause highlighter", free: false, paid: true },
   { label: "AI contract generator (describe it, get a signable PDF)", free: false, paid: true },
+  { label: "Volume discounts & custom onboarding", free: false, paid: false, enterprise: true },
 ];
 
 export function PlanCell({ value }: { value: boolean | string }) {

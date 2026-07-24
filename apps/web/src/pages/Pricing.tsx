@@ -26,6 +26,15 @@ export default function Pricing() {
                 <th></th>
                 <th>Free</th>
                 <th className="plan-col-paid">Paid — $7/mo</th>
+                <th>
+                  Enterprise
+                  <div style={{ fontSize: 12, fontWeight: 400, marginTop: 2 }}>
+                    Custom —{" "}
+                    <a href="mailto:sales@docracy.io" style={{ color: "var(--primary)" }}>
+                      sales@docracy.io
+                    </a>
+                  </div>
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -37,6 +46,9 @@ export default function Pricing() {
                   </td>
                   <td className="plan-col-paid">
                     <PlanCell value={row.paid} />
+                  </td>
+                  <td>
+                    <PlanCell value={row.enterprise ?? row.paid} />
                   </td>
                 </tr>
               ))}
@@ -52,15 +64,6 @@ export default function Pricing() {
         <Link to="/login" className="btn-primary" style={{ textDecoration: "none" }}>
           Sign in to upgrade
         </Link>
-      </div>
-
-      <div className="card" style={{ marginTop: 20 }}>
-        <h3 style={{ fontSize: 16, marginBottom: 4 }}>Enterprise — custom pricing</h3>
-        <p style={{ marginTop: 0, marginBottom: 12 }}>
-          Need more signers or documents per month than the paid plan covers, a specific onboarding or
-          compliance need, or a custom rate for volume? Email{" "}
-          <a href="mailto:sales@docracy.io">sales@docracy.io</a> and we'll work out a fit.
-        </p>
         <a href="mailto:sales@docracy.io" className="btn-secondary" style={{ textDecoration: "none" }}>
           Contact sales
         </a>

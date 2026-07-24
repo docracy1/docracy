@@ -15,3 +15,9 @@
 # instead of a year, while still avoiding a refetch on every load.
 /assets/*
   Cache-Control: public, max-age=14400, must-revalidate
+
+# RFC 8288 Link headers pointing agents/crawlers at real, existing resources — deliberately not an
+# api-catalog link, since there's no /.well-known/api-catalog file behind it yet; /docs now has a
+# genuine REST API reference section (see Docs.tsx), so service-doc is honest.
+/
+  Link: </docs>; rel="service-doc", </privacy>; rel="privacy-policy", </terms>; rel="terms-of-service"
