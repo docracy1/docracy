@@ -54,6 +54,18 @@ export default function Pricing() {
         </Link>
       </div>
 
+      <div className="card" style={{ marginTop: 20 }}>
+        <h3 style={{ fontSize: 16, marginBottom: 4 }}>Enterprise — custom pricing</h3>
+        <p style={{ marginTop: 0, marginBottom: 12 }}>
+          Need more signers or documents per month than the paid plan covers, a specific onboarding or
+          compliance need, or a custom rate for volume? Email{" "}
+          <a href="mailto:sales@docracy.io">sales@docracy.io</a> and we'll work out a fit.
+        </p>
+        <a href="mailto:sales@docracy.io" className="btn-secondary" style={{ textDecoration: "none" }}>
+          Contact sales
+        </a>
+      </div>
+
       <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 32 }}>
         Docracy doesn't verify identity — the audit trail proves what was signed and when, not who actually
         signed it. For contracts that need identity-verified signatures, use a compliance-grade e-signature
