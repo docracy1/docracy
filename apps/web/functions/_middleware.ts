@@ -33,7 +33,7 @@ const TRACKED_ROUTES = new Set([
   ...STATIC_TEMPLATE_SLUGS.map((slug) => `/free-templates/${slug}`),
 ]);
 
-export const onRequest: PagesFunction = async (context) => {
+export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => {
   const url = new URL(context.request.url);
   if (TRACKED_ROUTES.has(url.pathname)) {
     context.waitUntil(
@@ -50,5 +50,32 @@ export const onRequest: PagesFunction = async (context) => {
       }).catch(() => {})
     );
   }
+
+  // "Markdown for agents": a request that prefers text/markdown gets the .md sibling of a
+  // prerendered page (see scripts/prerender.mjs / htmlToMarkdown.mjs) instead of the HTML. Only
+  // prerendered routes have a real .md file — everything else (/, /prepare, /dashboard, etc., which
+  // are fully client-rendered with no static content to convert) has none, and _redirects' SPA
+  // catch-all means fetching a nonexistent "<path>.md" doesn't 404 — it silently returns the
+  // index.html shell as a 200. The only reliable way to tell a *real* .md response (which Cloudflare
+  // serves as content-type text/markdown) apart from that fallback (text/html) is to check the
+  // content-type it actually came back with, not just `.ok`.
+  const acceptsMarkdown = context.request.headers.get("accept")?.includes("text/markdown");
+  if (acceptsMarkdown && context.request.method === "GET" && url.pathname !== "/") {
+    try {
+      const mdUrl = new URL(`${url.pathname}.md`, url);
+      const mdResponse = await context.env.ASSETS.fetch(new Request(mdUrl, context.request));
+      if (mdResponse.ok && mdResponse.headers.get("content-type")?.includes("text/markdown")) {
+        const body = await mdResponse.text();
+        return new Response(body, {
+          status: 200,
+          headers: { "content-type": "text/markdown; charset=utf-8", "x-markdown-tokens": String(Math.ceil(body.length / 4)) },
+        });
+      }
+    } catch {
+      // Falls through to context.next() below — an agent that asked for markdown and can't get it
+      // should still get the normal page, not an error.
+    }
+  }
+
   return context.next();
 };

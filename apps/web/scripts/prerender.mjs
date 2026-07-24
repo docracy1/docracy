@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createRequire } from "node:module";
+import { htmlToMarkdown } from "./htmlToMarkdown.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
@@ -133,7 +134,14 @@ for (const route of routes) {
   const outPath = path.join(distDir, route.outFile);
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
   fs.writeFileSync(outPath, html);
-  console.log(`prerendered ${route.urlPath} -> dist/${route.outFile}`);
+
+  // A Markdown sibling of the same content, served instead of the .html file when a request's
+  // Accept header prefers text/markdown (see functions/_middleware.ts) — built from the identical
+  // renderPath() output, not a separately-maintained copy, so the two can't drift out of sync.
+  const mdOutPath = outPath.replace(/\.html$/, ".md");
+  fs.writeFileSync(mdOutPath, htmlToMarkdown(bodyMarkup));
+
+  console.log(`prerendered ${route.urlPath} -> dist/${route.outFile} (+ .md)`);
 }
 
 console.log(`Done — ${routes.length} routes prerendered.`);
