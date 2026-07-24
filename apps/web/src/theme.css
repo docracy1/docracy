@@ -539,12 +539,30 @@ select {
 /* Free vs. paid plan comparison table */
 
 .plan-table-scroll {
-  overflow-x: auto;
+  /* No overflow set here on purpose: overflow-x alone forces the UA to compute overflow-y as
+     'auto' too (per the CSS Overflow spec's visible/non-visible coercion rule), which turns this
+     wrapper into its own scroll container and breaks the thead's position:sticky (it ends up
+     sticking within this non-scrolling wrapper instead of the page). Horizontal scroll is only
+     actually needed once the table's min-width exceeds a narrow viewport, so it's scoped to that
+     breakpoint below instead of applied unconditionally. */
+}
+
+@media (max-width: 520px) {
+  .plan-table-scroll {
+    overflow-x: auto;
+  }
+
+  .plan-table thead th {
+    position: static;
+  }
 }
 
 .plan-table {
   width: 100%;
-  border-collapse: collapse;
+  /* separate (not collapse) — position:sticky on th/td is unreliable across browsers under
+     border-collapse, which is why the sticky header row was landing at the wrong offset. */
+  border-collapse: separate;
+  border-spacing: 0;
   min-width: 420px;
 }
 
@@ -571,6 +589,27 @@ select {
   color: var(--ink);
   padding-top: 20px;
   padding-bottom: 16px;
+  position: sticky;
+  top: 72px;
+  background: var(--canvas);
+  z-index: 2;
+}
+
+.plan-table thead th:first-child {
+  z-index: 3;
+  border-top-left-radius: var(--r-md);
+}
+
+.plan-table thead th:last-child {
+  border-top-right-radius: var(--r-md);
+}
+
+.plan-table tbody tr:last-child td:first-child {
+  border-bottom-left-radius: var(--r-md);
+}
+
+.plan-table tbody tr:last-child td:last-child {
+  border-bottom-right-radius: var(--r-md);
 }
 
 .plan-table thead th:not(:first-child) {

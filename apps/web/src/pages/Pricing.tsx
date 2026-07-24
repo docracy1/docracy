@@ -46,7 +46,13 @@ const TIERS: Array<{
     tagline: "For higher-volume, custom needs",
     price: "Custom",
     priceNote: "sales@docracy.io",
-    features: ["Everything in Paid", "Volume discounts & custom onboarding", "Dedicated support"],
+    features: [
+      "Everything in Paid",
+      "Invoice billing &amp; annual contracts",
+      "SLA-backed priority support",
+      "SSO or multi-workspace setup, scoped to your needs",
+      "Volume discounts &amp; custom onboarding",
+    ],
     cta: { label: "Contact sales", to: "mailto:sales@docracy.io", external: true },
   },
 ];
@@ -116,7 +122,10 @@ export default function Pricing() {
       </div>
 
       <h2 style={{ fontSize: 18, marginBottom: 12 }}>Full feature comparison</h2>
-      <div className="card" style={{ padding: 0, overflow: "hidden" }}>
+      {/* No overflow:hidden here — any ancestor with a non-visible overflow breaks the sticky
+          thead below (see theme.css's .plan-table-scroll comment); the table's own corner cells
+          are individually rounded instead to match the card's look. */}
+      <div className="card" style={{ padding: 0 }}>
         <div className="plan-table-scroll">
           <table className="plan-table">
             <thead>
