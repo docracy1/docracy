@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import PricingCalculator from "../components/PricingCalculator";
 
@@ -103,31 +104,71 @@ function FeatureIcon({ name }: { name: "bolt" | "workflow" | "shield" | "users" 
   }
 }
 
-const CORE_FEATURES: Array<{ icon: "bolt" | "workflow" | "shield" | "users" | "duplicate"; title: string; body: string }> = [
+const CORE_FEATURES: Array<{
+  icon: "bolt" | "workflow" | "shield" | "users" | "duplicate";
+  title: string;
+  body: string;
+  to: string;
+  linkLabel: string;
+}> = [
   {
     icon: "bolt",
     title: "Fast e-signatures",
     body: "Sign documents in seconds with a clean, distraction-free interface. No complexity, no setup overhead — just reliable, fast signing for you and your clients.",
+    to: "/prepare",
+    linkLabel: "Start a signing chain",
   },
   {
     icon: "workflow",
     title: "Simple workflow setup",
     body: "Create document workflows in minutes. Add steps, assign recipients, and automate basic flows without technical knowledge. Ideal for small teams and growing businesses.",
+    to: "/docs",
+    linkLabel: "Read the docs",
   },
   {
     icon: "shield",
     title: "Secure document storage",
     body: "Store all documents in a compliant, encrypted environment. Every file is versioned, traceable, and protected — giving you full control and audit-ready transparency.",
+    to: "/privacy",
+    linkLabel: "Read our privacy policy",
   },
   {
     icon: "users",
     title: "Team collaboration",
     body: "Invite team members, share templates, and manage signing processes together. Keep everything organized and accessible in one place.",
+    to: "/pricing",
+    linkLabel: "See team plans",
   },
   {
     icon: "duplicate",
     title: "Templates for recurring documents",
     body: "Save time with reusable templates for NDAs, contracts, agreements, onboarding documents, and more. Create once, reuse forever.",
+    to: "/free-templates",
+    linkLabel: "Browse free templates",
+  },
+];
+
+const FAQ_ITEMS: Array<{ question: string; answer: string }> = [
+  {
+    question: "What is Docracy.io?",
+    answer: "A simple, secure e-signature platform for small teams and growing businesses.",
+  },
+  {
+    question: "How do e-signatures work?",
+    answer: "Upload a document, assign recipients, and collect signatures in minutes.",
+  },
+  {
+    question: "Is Docracy.io secure?",
+    answer: "All documents are encrypted, versioned, and stored in a compliant environment.",
+  },
+  {
+    question: "Can I use templates?",
+    answer:
+      "Yes, on a paid account — create templates for recurring documents like NDAs, contracts, and onboarding forms.",
+  },
+  {
+    question: "Does Docracy.io support teams?",
+    answer: "Yes, on a paid account — invite team members, share templates, and collaborate on workflows.",
   },
 ];
 
@@ -181,6 +222,15 @@ const AI_FEATURES = [
 ];
 
 export default function Landing() {
+  // A plain `<a href="#faq">` would work for an in-page click, but the footer's FAQ link is a
+  // react-router <Link> from other routes — client-side navigation to "/#faq" doesn't trigger the
+  // browser's native same-document hash scroll, so this does it manually once Landing has mounted.
+  useEffect(() => {
+    if (window.location.hash === "#faq") {
+      document.getElementById("faq")?.scrollIntoView();
+    }
+  }, []);
+
   return (
     <div>
       <div className="hero-band">
@@ -221,6 +271,9 @@ export default function Landing() {
                 </div>
                 <h3>{f.title}</h3>
                 <p>{f.body}</p>
+                <Link to={f.to} style={{ fontSize: 13, fontWeight: 600 }}>
+                  {f.linkLabel} →
+                </Link>
               </div>
             ))}
           </div>
@@ -307,6 +360,33 @@ export default function Landing() {
           ))}
         </div>
       </div>
+
+      <div className="container" id="faq" style={{ maxWidth: 720, paddingTop: 8, paddingBottom: 8 }}>
+        <h2 style={{ fontSize: 24, marginBottom: 16, textAlign: "center" }}>Frequently asked questions</h2>
+        {FAQ_ITEMS.map((item) => (
+          <details key={item.question} className="faq-item">
+            <summary>{item.question}</summary>
+            <p>{item.answer}</p>
+          </details>
+        ))}
+      </div>
+      <script
+        type="application/ld+json"
+        // Rendered inline (not just in index.html's static schemas) so it appears in the
+        // prerendered homepage markup right alongside the questions it describes — search engines
+        // match FAQPage rich-result eligibility against visible on-page text, not just the schema.
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: FAQ_ITEMS.map((item) => ({
+              "@type": "Question",
+              name: item.question,
+              acceptedAnswer: { "@type": "Answer", text: item.answer },
+            })),
+          }),
+        }}
+      />
 
       <div className="cta-band">
         <h2 style={{ fontSize: 22, marginBottom: 8 }}>Ready to send your first document?</h2>

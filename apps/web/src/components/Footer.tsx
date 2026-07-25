@@ -9,6 +9,7 @@ const COLUMNS: Array<{ heading: string; links: Array<{ label: string; to: string
       { label: "Free templates", to: "/free-templates" },
       { label: "AI & MCP", to: "/mcp" },
       { label: "Docs", to: "/docs" },
+      { label: "FAQ", to: "/#faq" },
     ],
   },
   {
