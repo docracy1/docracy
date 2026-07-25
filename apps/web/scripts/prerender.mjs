@@ -72,6 +72,18 @@ fs.unlinkSync(blogBundleFile);
 //     page's usePageMeta() call changes, update the matching entry here too. ---
 const routes = [
   {
+    // Overwrites the vite-built dist/index.html in place with the same shell plus real rendered
+    // body markup — the homepage was previously the one route search engines saw as an empty
+    // `<div id="root"></div>` shell, unlike every other page here. Title/description are the same
+    // defaults index.html already ships (this route exists to inject body markup + canonical, not
+    // to change copy), so withMeta() below is a no-op on those two fields for this route alone.
+    urlPath: "/",
+    outFile: "index.html",
+    title: "Docracy.io – Simple and secure e-signatures for businesses",
+    description:
+      "Create, send, and sign documents in minutes. Docracy.io offers fast e-signatures, simple workflows, and secure, compliant document storage.",
+  },
+  {
     urlPath: "/free-templates",
     // Flat filename, not free-templates/index.html — Cloudflare Pages resolves /free-templates
     // straight to free-templates.html with no redirect; dir/index.html style instead 308-redirects
@@ -148,6 +160,7 @@ function withMeta(html, { title, description, urlPath }) {
     .replace(/(<meta\s+name="description"\s+content=")[^"]*(")/, `$1${description}$2`)
     .replace(/(<meta property="og:title" content=")[^"]*(")/, `$1${title}$2`)
     .replace(/(<meta\s+property="og:description"\s+content=")[^"]*(")/, `$1${description}$2`)
+    .replace(/(<meta property="og:url" content=")[^"]*(")/, `$1${canonical}$2`)
     .replace(/(<meta name="twitter:title" content=")[^"]*(")/, `$1${title}$2`)
     .replace(/(<meta\s+name="twitter:description"\s+content=")[^"]*(")/, `$1${description}$2`)
     .replace(/(<link rel="canonical" href=")[^"]*(")/, `$1${canonical}$2`);

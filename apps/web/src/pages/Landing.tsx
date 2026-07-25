@@ -299,6 +299,7 @@ export default function Landing() {
                 <img
                   src={t.logo}
                   alt={t.company ?? t.name}
+                  loading="lazy"
                   style={{ height: 36, width: "auto", alignSelf: "flex-start", objectFit: "contain", borderRadius: "var(--r-sm)" }}
                 />
               )}

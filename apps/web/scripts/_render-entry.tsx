@@ -2,6 +2,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import Header from "../src/components/Header";
 import Footer from "../src/components/Footer";
+import Landing from "../src/pages/Landing";
 import FreeTemplates from "../src/pages/FreeTemplates";
 import FreeTemplateDetail from "../src/pages/FreeTemplateDetail";
 import Mcp from "../src/pages/Mcp";
@@ -20,6 +21,7 @@ function renderPath(targetPath: string): string {
     <MemoryRouter initialEntries={[targetPath]}>
       <Header />
       <Routes>
+        <Route path="/" element={<Landing />} />
         <Route path="/free-templates" element={<FreeTemplates />} />
         <Route path="/free-templates/:slug" element={<FreeTemplateDetail />} />
         <Route path="/mcp" element={<Mcp />} />

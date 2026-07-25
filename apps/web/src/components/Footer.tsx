@@ -45,7 +45,7 @@ export default function Footer() {
     <footer className="site-footer">
       <div className="container site-footer-inner">
         <div className="site-footer-brand">
-          <img src="/docracy-wordmark.png" alt="Docracy" style={{ height: 32, width: "auto" }} />
+          <img src="/docracy-wordmark.png" alt="Docracy" loading="lazy" style={{ height: 32, width: "auto" }} />
           <p>Free, no-signup e-signatures that disappear once the chain is done.</p>
         </div>
 
