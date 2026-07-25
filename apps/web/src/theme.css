@@ -714,6 +714,26 @@ select {
   z-index: 2;
 }
 
+/* The sticky thead above is tuned for a table that owns the *page's* scroll (72px = the site
+   header's height, so the row parks just under it) — right for the Pricing page's full
+   comparison table, wrong for a short table boxed inside its own small card (the admin
+   analytics By route/By bot/By country cards): there the row has nowhere near 72px of its own
+   height to scroll past, so it sticks partway down and floats over the first data row or two
+   instead of the card header. This modifier opts a table back out to a plain, non-sticky head. */
+.plan-table-static thead th {
+  position: static;
+}
+
+/* .plan-table th:first-child/td:first-child (further up) pins the first *column* during
+   horizontal scroll and carries higher specificity (a class + a pseudo-class) than the plain
+   rule above, so it was still winning the `position` property for the header's first cell alone
+   — leaving just that one cell floating while its siblings correctly went static. Matching its
+   specificity here (same class + pseudo-class, plus the thead ancestor) settles it back to
+   static too. */
+.plan-table-static thead th:first-child {
+  position: static;
+}
+
 .plan-table thead th:first-child {
   z-index: 3;
   border-top-left-radius: var(--r-md);

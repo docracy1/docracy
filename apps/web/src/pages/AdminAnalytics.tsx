@@ -169,7 +169,7 @@ function RouteTable({ rows }: { rows: FunnelRow[] }) {
 
   return (
     <div className="plan-table-scroll" style={{ overflowX: "auto" }}>
-      <table className="plan-table" style={{ width: "100%", minWidth: "auto", tableLayout: "fixed" }}>
+      <table className="plan-table plan-table-static" style={{ width: "100%", minWidth: "auto", tableLayout: "fixed" }}>
         <thead>
           <tr>
             <th style={{ textAlign: "left" }}>Route</th>
@@ -207,7 +207,7 @@ function BotTable({ rows }: { rows: FunnelRow[] }) {
 
   return (
     <div className="plan-table-scroll" style={{ overflowX: "auto" }}>
-      <table className="plan-table" style={{ width: "100%", minWidth: "auto", tableLayout: "fixed" }}>
+      <table className="plan-table plan-table-static" style={{ width: "100%", minWidth: "auto", tableLayout: "fixed" }}>
         <thead>
           <tr>
             <th style={{ textAlign: "left" }}>Bot</th>
@@ -268,7 +268,7 @@ function CountryTable({ rows }: { rows: FunnelRow[] }) {
         <p style={{ color: "var(--mute)", fontSize: 13 }}>No country data for this range.</p>
       ) : (
         <div className="plan-table-scroll" style={{ overflowX: "auto" }}>
-          <table className="plan-table" style={{ width: "100%", minWidth: "auto", tableLayout: "fixed" }}>
+          <table className="plan-table plan-table-static" style={{ width: "100%", minWidth: "auto", tableLayout: "fixed" }}>
             <thead>
               <tr>
                 <th style={{ textAlign: "left" }}>Country</th>
@@ -556,7 +556,7 @@ function EnterpriseAccountsCard() {
       )}
       {!error && accounts && accounts.length > 0 && (
         <div className="plan-table-scroll">
-          <table className="plan-table" style={{ minWidth: 360 }}>
+          <table className="plan-table plan-table-static" style={{ minWidth: 360 }}>
             <thead>
               <tr>
                 <th style={{ textAlign: "left" }}>Email</th>
