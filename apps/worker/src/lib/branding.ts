@@ -62,3 +62,45 @@ export async function resolveEmailLogoUrl(env: Env, accountId: string | null): P
   const has = await hasCustomLogo(env, accountId);
   return has ? `${env.PUBLIC_WORKER_URL}${logoPath(accountId)}` : null;
 }
+
+const WORKSPACE_SLUG_RE = /^[a-zA-Z0-9]{3,30}$/;
+
+/** Cosmetic workspace label shown alongside the custom logo on branded sign/status pages and in
+ *  emails — plain text, not a subdomain or route (no DNS/routing implications). Letters and
+ *  numbers only, so it never needs escaping wherever it's rendered. */
+export function isValidWorkspaceSlug(slug: string): boolean {
+  return WORKSPACE_SLUG_RE.test(slug);
+}
+
+export async function setWorkspaceSlug(
+  env: Env,
+  workspaceId: string,
+  slug: string
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  if (!isValidWorkspaceSlug(slug)) {
+    return { ok: false, error: "Must be 3-30 letters or numbers, no spaces or symbols" };
+  }
+  const db = requireDb(env);
+  const existing = await db
+    .prepare(`SELECT id FROM accounts WHERE workspace_slug = ? COLLATE NOCASE AND id != ?`)
+    .bind(slug, workspaceId)
+    .first<{ id: string }>();
+  if (existing) {
+    return { ok: false, error: "That name is already taken" };
+  }
+  await db.prepare(`UPDATE accounts SET workspace_slug = ? WHERE id = ?`).bind(slug, workspaceId).run();
+  return { ok: true };
+}
+
+export async function clearWorkspaceSlug(env: Env, workspaceId: string): Promise<void> {
+  const db = requireDb(env);
+  await db.prepare(`UPDATE accounts SET workspace_slug = NULL WHERE id = ?`).bind(workspaceId).run();
+}
+
+export async function getWorkspaceSlug(env: Env, workspaceId: string): Promise<string | null> {
+  if (!env.DOCRACY_DB) return null;
+  const row = await env.DOCRACY_DB.prepare(`SELECT workspace_slug FROM accounts WHERE id = ?`)
+    .bind(workspaceId)
+    .first<{ workspace_slug: string | null }>();
+  return row?.workspace_slug ?? null;
+}

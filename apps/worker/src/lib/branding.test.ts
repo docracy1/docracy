@@ -1,5 +1,16 @@
 import { describe, it, expect } from "vitest";
-import { deleteLogo, getLogoObject, hasCustomLogo, logoPath, resolveEmailLogoUrl, uploadLogo } from "./branding";
+import {
+  clearWorkspaceSlug,
+  deleteLogo,
+  getLogoObject,
+  getWorkspaceSlug,
+  hasCustomLogo,
+  isValidWorkspaceSlug,
+  logoPath,
+  resolveEmailLogoUrl,
+  setWorkspaceSlug,
+  uploadLogo,
+} from "./branding";
 import { makeMockEnv } from "../test/mockEnv";
 
 const TINY_PNG_BYTES = Uint8Array.from(
@@ -105,5 +116,76 @@ describe("resolveEmailLogoUrl", () => {
     await uploadLogo(env, "acct-1", TINY_PNG_BYTES, "image/png");
 
     expect(await resolveEmailLogoUrl(env, "acct-1")).toBeNull();
+  });
+});
+
+describe("isValidWorkspaceSlug", () => {
+  it("accepts letters and numbers, 3-30 characters", () => {
+    expect(isValidWorkspaceSlug("AcmeInc")).toBe(true);
+    expect(isValidWorkspaceSlug("abc")).toBe(true);
+    expect(isValidWorkspaceSlug("a".repeat(30))).toBe(true);
+  });
+
+  it("rejects anything with spaces, symbols, or out-of-range length", () => {
+    expect(isValidWorkspaceSlug("ab")).toBe(false);
+    expect(isValidWorkspaceSlug("a".repeat(31))).toBe(false);
+    expect(isValidWorkspaceSlug("Acme Inc")).toBe(false);
+    expect(isValidWorkspaceSlug("acme-inc")).toBe(false);
+    expect(isValidWorkspaceSlug("acme_inc")).toBe(false);
+    expect(isValidWorkspaceSlug("")).toBe(false);
+  });
+});
+
+describe("setWorkspaceSlug / getWorkspaceSlug / clearWorkspaceSlug", () => {
+  it("sets and reads back a slug", async () => {
+    const { env } = makeMockEnv();
+    await seedAccount(env, "acct-1");
+
+    const result = await setWorkspaceSlug(env, "acct-1", "AcmeInc");
+    expect(result.ok).toBe(true);
+    expect(await getWorkspaceSlug(env, "acct-1")).toBe("AcmeInc");
+  });
+
+  it("rejects an invalid slug without touching D1", async () => {
+    const { env } = makeMockEnv();
+    await seedAccount(env, "acct-1");
+
+    const result = await setWorkspaceSlug(env, "acct-1", "a b");
+    expect(result.ok).toBe(false);
+    expect(await getWorkspaceSlug(env, "acct-1")).toBeNull();
+  });
+
+  it("rejects a slug already taken by another workspace, case-insensitively", async () => {
+    const { env } = makeMockEnv();
+    await seedAccount(env, "acct-1");
+    await seedAccount(env, "acct-2");
+    await setWorkspaceSlug(env, "acct-1", "AcmeInc");
+
+    const result = await setWorkspaceSlug(env, "acct-2", "acmeinc");
+    expect(result.ok).toBe(false);
+  });
+
+  it("allows a workspace to re-save its own already-set slug", async () => {
+    const { env } = makeMockEnv();
+    await seedAccount(env, "acct-1");
+    await setWorkspaceSlug(env, "acct-1", "AcmeInc");
+
+    const result = await setWorkspaceSlug(env, "acct-1", "AcmeInc");
+    expect(result.ok).toBe(true);
+  });
+
+  it("clears a slug", async () => {
+    const { env } = makeMockEnv();
+    await seedAccount(env, "acct-1");
+    await setWorkspaceSlug(env, "acct-1", "AcmeInc");
+
+    await clearWorkspaceSlug(env, "acct-1");
+
+    expect(await getWorkspaceSlug(env, "acct-1")).toBeNull();
+  });
+
+  it("returns null when DOCRACY_DB isn't bound", async () => {
+    const { env } = makeMockEnv({ DOCRACY_DB: undefined });
+    expect(await getWorkspaceSlug(env, "acct-1")).toBeNull();
   });
 });

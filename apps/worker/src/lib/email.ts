@@ -1,4 +1,4 @@
-import { resolveEmailLogoUrl } from "./branding";
+import { getWorkspaceSlug, resolveEmailLogoUrl } from "./branding";
 import { mergePdfs } from "./pdf";
 import type { DocState, Env } from "@docracy/shared";
 
@@ -74,10 +74,11 @@ const MUTED = "#6b7785";
 
 /** Shared branded shell for Docracy's outbound email — a plain white card on a light gray
  *  background, table-based layout since email clients don't reliably support flexbox/grid.
- *  `customLogoUrl` replaces the Docracy wordmark with a workspace's own logo — only ever passed
- *  by sendSigningInvite, since that's the one email a document's actual signer sees; Docracy's
- *  own transactional emails (magic link, team invite) always keep Docracy's own branding. */
-function emailShell(appUrl: string, bodyHtml: string, customLogoUrl?: string | null): string {
+ *  `customLogoUrl`/`workspaceSlug` replace the Docracy wordmark with a workspace's own branding —
+ *  only ever passed by sendSigningInvite, since that's the one email a document's actual signer
+ *  sees; Docracy's own transactional emails (magic link, team invite) always keep Docracy's own
+ *  branding. */
+function emailShell(appUrl: string, bodyHtml: string, customLogoUrl?: string | null, workspaceSlug?: string | null): string {
   const displayHost = appUrl.replace(/^https?:\/\//, "");
   return `
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f5f7fa;padding:32px 16px;font-family:Arial,Helvetica,sans-serif;">
@@ -87,6 +88,7 @@ function emailShell(appUrl: string, bodyHtml: string, customLogoUrl?: string | n
         <tr>
           <td style="padding:28px 32px 8px 32px;">
             <img src="${customLogoUrl ?? `${appUrl}/docracy-wordmark.png`}" alt="${customLogoUrl ? "" : "Docracy"}" height="26" style="display:block;" />
+            ${workspaceSlug ? `<div style="font-size:12px;color:${MUTED};margin-top:4px;">${workspaceSlug}</div>` : ""}
           </td>
         </tr>
         <tr>
@@ -139,7 +141,8 @@ export async function sendSigningInvite(env: Env, doc: DocState, order: number, 
 
   const subject = doc.customSubject?.trim() || "Ready to sign — you have a document waiting";
   const customLogoUrl = await resolveEmailLogoUrl(env, doc.accountId);
-  await send(env, signer.email, subject, emailShell(env.PUBLIC_APP_URL, body, customLogoUrl));
+  const workspaceSlug = doc.accountId ? await getWorkspaceSlug(env, doc.accountId) : null;
+  await send(env, signer.email, subject, emailShell(env.PUBLIC_APP_URL, body, customLogoUrl, workspaceSlug));
 }
 
 export async function sendPreparerStatusLink(env: Env, preparerEmail: string, statusToken: string): Promise<void> {

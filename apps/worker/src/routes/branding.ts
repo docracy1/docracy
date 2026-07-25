@@ -1,6 +1,16 @@
 import { Hono } from "hono";
 import { requirePaidAccount, type AccountContext } from "../lib/auth";
-import { ALLOWED_LOGO_CONTENT_TYPES, MAX_LOGO_BYTES, deleteLogo, hasCustomLogo, logoPath, uploadLogo } from "../lib/branding";
+import {
+  ALLOWED_LOGO_CONTENT_TYPES,
+  MAX_LOGO_BYTES,
+  clearWorkspaceSlug,
+  deleteLogo,
+  getWorkspaceSlug,
+  hasCustomLogo,
+  logoPath,
+  setWorkspaceSlug,
+  uploadLogo,
+} from "../lib/branding";
 import type { Env } from "@docracy/shared";
 
 type Variables = { account: AccountContext | null };
@@ -47,6 +57,45 @@ branding.delete("/logo", requirePaidAccount, async (c) => {
   }
   const account = c.get("account")!;
   await deleteLogo(c.env, account.workspaceId);
+  return c.json({ ok: true });
+});
+
+branding.get("/slug", requirePaidAccount, async (c) => {
+  const account = c.get("account")!;
+  const slug = await getWorkspaceSlug(c.env, account.workspaceId);
+  return c.json({ slug });
+});
+
+interface SetSlugBody {
+  slug?: string;
+}
+
+branding.post("/slug", requirePaidAccount, async (c) => {
+  if (!c.env.DOCRACY_DB) {
+    return c.json({ error: "Not available on this deployment yet." }, 501);
+  }
+  const account = c.get("account")!;
+  let body: SetSlugBody;
+  try {
+    body = await c.req.json<SetSlugBody>();
+  } catch {
+    return c.json({ error: "Invalid request body" }, 400);
+  }
+  if (!body.slug) {
+    return c.json({ error: "Slug is required" }, 400);
+  }
+
+  const result = await setWorkspaceSlug(c.env, account.workspaceId, body.slug);
+  if (!result.ok) return c.json({ error: result.error }, 400);
+  return c.json({ ok: true, slug: body.slug });
+});
+
+branding.delete("/slug", requirePaidAccount, async (c) => {
+  if (!c.env.DOCRACY_DB) {
+    return c.json({ error: "Not available on this deployment yet." }, 501);
+  }
+  const account = c.get("account")!;
+  await clearWorkspaceSlug(c.env, account.workspaceId);
   return c.json({ ok: true });
 });
 

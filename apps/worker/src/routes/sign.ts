@@ -11,7 +11,7 @@ import { verifyPin, issueUnlockToken, verifyUnlockToken } from "../lib/signUnloc
 import { deliverWebhookEvent } from "../lib/webhooks";
 import { uploadCompletedDocument } from "../lib/cloudConnectors";
 import { logFunnelEvent, NOTRACK_COOKIE_NAME } from "../lib/analytics";
-import { hasCustomLogo, logoPath } from "../lib/branding";
+import { getWorkspaceSlug, hasCustomLogo, logoPath } from "../lib/branding";
 import { verifyToken, signToken } from "@docracy/shared";
 import type { AuditEvent, DocField, Env } from "@docracy/shared";
 
@@ -49,6 +49,13 @@ async function brandLogoPathFor(env: Env, accountId: string | null): Promise<str
   return (await hasCustomLogo(env, accountId)) ? logoPath(accountId) : null;
 }
 
+/** Same null-for-anonymous/no-slug-set fallback as brandLogoPathFor above — the cosmetic
+ *  workspace label shown alongside the logo (see lib/branding.ts's setWorkspaceSlug). */
+async function brandWorkspaceSlugFor(env: Env, accountId: string | null): Promise<string | null> {
+  if (!accountId) return null;
+  return getWorkspaceSlug(env, accountId);
+}
+
 function statusPayload(doc: Awaited<ReturnType<typeof getDoc>>) {
   if (!doc) return null;
   return {
@@ -72,7 +79,11 @@ sign.get("/status/:token", async (c) => {
   const doc = await getDoc(c.env, verified.docId);
   if (!doc) return c.json({ error: "This document has expired or doesn't exist" }, 404);
 
-  return c.json({ ...statusPayload(doc), brandLogoPath: await brandLogoPathFor(c.env, doc.accountId) });
+  return c.json({
+    ...statusPayload(doc),
+    brandLogoPath: await brandLogoPathFor(c.env, doc.accountId),
+    brandWorkspaceSlug: await brandWorkspaceSlugFor(c.env, doc.accountId),
+  });
 });
 
 sign.get("/sign/:token", async (c) => {
@@ -87,16 +98,17 @@ sign.get("/sign/:token", async (c) => {
   const doc = await getDoc(c.env, verified.docId);
   if (!doc) return c.json({ error: "This document has expired or doesn't exist" }, 404);
   const brandLogoPath = await brandLogoPathFor(c.env, doc.accountId);
+  const brandWorkspaceSlug = await brandWorkspaceSlugFor(c.env, doc.accountId);
 
   if (!isSignerOnTurn(doc, verified.order)) {
-    return c.json({ onTurn: false, status: statusPayload(doc), brandLogoPath });
+    return c.json({ onTurn: false, status: statusPayload(doc), brandLogoPath, brandWorkspaceSlug });
   }
 
   const signerForPinCheck = doc.signers.find((s) => s.order === verified.order);
   if (signerForPinCheck?.pinHash) {
     const unlockToken = c.req.header("X-Sign-Unlock");
     if (!(await verifyUnlockToken(c.env, unlockToken, doc.docId, verified.order))) {
-      return c.json({ onTurn: true, needsPin: true, status: statusPayload(doc), brandLogoPath });
+      return c.json({ onTurn: true, needsPin: true, status: statusPayload(doc), brandLogoPath, brandWorkspaceSlug });
     }
   }
 
@@ -115,6 +127,7 @@ sign.get("/sign/:token", async (c) => {
     fields: doc.fields.filter((f) => f.signerOrder === verified.order),
     status: statusPayload(doc),
     brandLogoPath,
+    brandWorkspaceSlug,
   });
 });
 

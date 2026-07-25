@@ -35,4 +35,7 @@ export interface StatusPayload {
   /** Path (not a full URL — see apiUrl in lib/api.ts) to the workspace's custom logo, in place of
    *  the default Docracy wordmark. Null/absent for anonymous documents or workspaces with none. */
   brandLogoPath?: string | null;
+  /** Cosmetic workspace label shown alongside the logo — plain text, not a subdomain/route. Null/
+   *  absent for anonymous documents or workspaces that haven't set one. */
+  brandWorkspaceSlug?: string | null;
 }

@@ -491,6 +491,31 @@ describe("workspace branding", () => {
     const signBody: any = await (await sign.request(`/sign/${token}`, {}, env, MOCK_CTX)).json();
     expect(signBody.brandLogoPath).toBe("/api/branding/acct-1/logo");
   });
+
+  it("includes brandWorkspaceSlug once the workspace sets one", async () => {
+    const { env, r2 } = makeMockEnv();
+    await env.DOCRACY_DB!.prepare(`INSERT INTO accounts (id, email, created_at, is_paid, workspace_slug) VALUES (?, ?, ?, 1, ?)`)
+      .bind("acct-1", "owner@example.com", new Date().toISOString(), "AcmeInc")
+      .run();
+
+    const docId = await seedAccountDoc(env, r2, "acct-1");
+    const token = await signToken(docId, 1, env.TOKEN_SECRET);
+
+    const statusBody: any = await (await sign.request(`/status/${token}`, {}, env)).json();
+    expect(statusBody.brandWorkspaceSlug).toBe("AcmeInc");
+
+    const signBody: any = await (await sign.request(`/sign/${token}`, {}, env, MOCK_CTX)).json();
+    expect(signBody.brandWorkspaceSlug).toBe("AcmeInc");
+  });
+
+  it("omits brandWorkspaceSlug for an anonymous document", async () => {
+    const { env, r2 } = makeMockEnv();
+    const docId = await seedAccountDoc(env, r2, null);
+    const token = await signToken(docId, 1, env.TOKEN_SECRET);
+
+    const statusBody: any = await (await sign.request(`/status/${token}`, {}, env)).json();
+    expect(statusBody.brandWorkspaceSlug).toBeNull();
+  });
 });
 
 describe("PIN-gated signing links", () => {

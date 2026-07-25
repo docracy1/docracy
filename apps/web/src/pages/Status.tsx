@@ -37,12 +37,21 @@ export default function Status() {
 
   return (
     <div className="container">
-      {status.brandLogoPath && (
-        <img
-          src={apiUrl(status.brandLogoPath)}
-          alt=""
-          style={{ maxHeight: 48, maxWidth: 220, marginBottom: 16, display: "block" }}
-        />
+      {(status.brandLogoPath || status.brandWorkspaceSlug) && (
+        <div style={{ marginBottom: 16 }}>
+          {status.brandLogoPath && (
+            <img
+              src={apiUrl(status.brandLogoPath)}
+              alt=""
+              style={{ maxHeight: 48, maxWidth: 220, display: "block" }}
+            />
+          )}
+          {status.brandWorkspaceSlug && (
+            <div style={{ fontSize: 13, color: "var(--mute)", marginTop: status.brandLogoPath ? 4 : 0 }}>
+              {status.brandWorkspaceSlug}
+            </div>
+          )}
+        </div>
       )}
       <h1>{status.status === "completed" ? "Fully signed" : "Signing in progress"}</h1>
       <div className="card">

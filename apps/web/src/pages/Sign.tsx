@@ -11,16 +11,16 @@ function base64ToBytes(base64: string): Uint8Array {
   return Uint8Array.from(binary, (c) => c.charCodeAt(0));
 }
 
-/** Replaces the generic Docracy branding with the sending workspace's own logo, when they've set
- *  one — this is the one surface a signer who's never heard of Docracy actually looks at. */
-function BrandLogo({ path }: { path?: string | null }) {
-  if (!path) return null;
+/** Replaces the generic Docracy branding with the sending workspace's own logo and/or cosmetic
+ *  name label, when they've set either — this is the one surface a signer who's never heard of
+ *  Docracy actually looks at. */
+function BrandLogo({ path, slug }: { path?: string | null; slug?: string | null }) {
+  if (!path && !slug) return null;
   return (
-    <img
-      src={apiUrl(path)}
-      alt="Sender's logo"
-      style={{ maxHeight: 48, maxWidth: 220, marginBottom: 16, display: "block" }}
-    />
+    <div style={{ marginBottom: 16 }}>
+      {path && <img src={apiUrl(path)} alt="Sender's logo" style={{ maxHeight: 48, maxWidth: 220, display: "block" }} />}
+      {slug && <div style={{ fontSize: 13, color: "var(--mute)", marginTop: path ? 4 : 0 }}>{slug}</div>}
+    </div>
   );
 }
 
@@ -148,7 +148,7 @@ export default function Sign() {
   if (done) {
     return (
       <div className="container">
-        <BrandLogo path={payload.brandLogoPath} />
+        <BrandLogo path={payload.brandLogoPath} slug={payload.brandWorkspaceSlug} />
         <h1>Signed</h1>
         <p>Thanks — you're done. Everyone in the chain will be notified as the document moves forward.</p>
         {/* The recipient never needed an account to get here — this is the moment they're most
@@ -169,7 +169,7 @@ export default function Sign() {
   if (!payload.onTurn) {
     return (
       <div className="container">
-        <BrandLogo path={payload.brandLogoPath} />
+        <BrandLogo path={payload.brandLogoPath} slug={payload.brandWorkspaceSlug} />
         <h1>Not your turn yet</h1>
         <p>Someone earlier in the signing order hasn't signed yet. Here's where things stand:</p>
         <div className="card">
@@ -192,7 +192,7 @@ export default function Sign() {
   if (payload.needsPin) {
     return (
       <div className="container">
-        <BrandLogo path={payload.brandLogoPath} />
+        <BrandLogo path={payload.brandLogoPath} slug={payload.brandWorkspaceSlug} />
         <h1>Enter your PIN</h1>
         <p>This document has an extra PIN set on your signing link. Enter it to continue.</p>
         <div className="card" style={{ maxWidth: 320 }}>
@@ -218,7 +218,7 @@ export default function Sign() {
 
   return (
     <div className="container">
-      <BrandLogo path={payload.brandLogoPath} />
+      <BrandLogo path={payload.brandLogoPath} slug={payload.brandWorkspaceSlug} />
       <h1>Review &amp; sign</h1>
       {pdfBytes && (
         <PdfViewer

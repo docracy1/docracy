@@ -7,6 +7,7 @@ import {
   deleteBrandLogo,
   deleteTemplate,
   deleteWebhook,
+  deleteWorkspaceSlug,
   disconnectConnector,
   fetchBranding,
   fetchConnectors,
@@ -16,12 +17,14 @@ import {
   fetchTemplates,
   fetchTokenStatus,
   fetchWebhooks,
+  fetchWorkspaceSlug,
   getConnectorAuthorizeUrl,
   inviteTeammate,
   logout,
   openBillingPortal,
   regenerateApiToken,
   removeTeamMember,
+  setWorkspaceSlug,
   startCheckout,
   uploadBrandLogo,
   type Account,
@@ -155,6 +158,10 @@ export default function Dashboard() {
   const [brandingError, setBrandingError] = useState<string | null>(null);
   const [uploadingLogo, setUploadingLogo] = useState(false);
   const [deletingLogo, setDeletingLogo] = useState(false);
+  const [workspaceSlug, setWorkspaceSlugState] = useState<string | null>(null);
+  const [slugInput, setSlugInput] = useState("");
+  const [slugError, setSlugError] = useState<string | null>(null);
+  const [savingSlug, setSavingSlug] = useState(false);
   const [activeTab, setActiveTab] = useState<"dashboard" | "templates" | "documents" | "tools">("dashboard");
   const [docsSubTab, setDocsSubTab] = useState<"all" | "awaiting" | "waiting" | "completed">("all");
   const [toolsSubTab, setToolsSubTab] = useState<
@@ -332,6 +339,34 @@ export default function Dashboard() {
     }
   };
 
+  const onSaveSlug = async () => {
+    if (!slugInput.trim()) return;
+    setSavingSlug(true);
+    setSlugError(null);
+    try {
+      const { slug } = await setWorkspaceSlug(slugInput.trim());
+      setWorkspaceSlugState(slug);
+      setSlugInput("");
+    } catch (err) {
+      setSlugError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setSavingSlug(false);
+    }
+  };
+
+  const onClearSlug = async () => {
+    setSavingSlug(true);
+    setSlugError(null);
+    try {
+      await deleteWorkspaceSlug();
+      setWorkspaceSlugState(null);
+    } catch (err) {
+      setSlugError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setSavingSlug(false);
+    }
+  };
+
   const onUpgrade = async () => {
     setUpgrading(true);
     setUpgradeError(null);
@@ -467,6 +502,8 @@ export default function Dashboard() {
           setPendingInvites(pendingInvites);
           const { logoPath } = await fetchBranding();
           setBrandLogoPath(logoPath);
+          const { slug } = await fetchWorkspaceSlug();
+          setWorkspaceSlugState(slug);
         }
         if (res.account?.isEnterprise) {
           const { connections } = await fetchConnectors();
@@ -1277,6 +1314,42 @@ export default function Dashboard() {
               </p>
             </div>
           )}
+
+          <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid var(--hairline)" }}>
+            <p style={{ fontSize: 13, marginBottom: 4 }}>
+              <strong>Workspace name</strong>
+            </p>
+            <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 0 }}>
+              A short label shown next to your logo on the signing page and invite emails.
+            </p>
+            {slugError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{slugError}</p>}
+            {workspaceSlug ? (
+              <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+                <span style={{ fontSize: 14 }}>{workspaceSlug}</span>
+                <button className="btn-secondary" style={{ fontSize: 13, padding: "4px 10px" }} disabled={savingSlug} onClick={onClearSlug}>
+                  {savingSlug ? "Removing…" : "Remove"}
+                </button>
+              </div>
+            ) : (
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                <input
+                  className="form-input"
+                  style={{ maxWidth: 220 }}
+                  placeholder="e.g. AcmeInc"
+                  aria-label="Workspace name"
+                  value={slugInput}
+                  onChange={(e) => setSlugInput(e.target.value)}
+                  disabled={savingSlug}
+                />
+                <button className="btn-secondary" style={{ fontSize: 13, padding: "4px 10px" }} disabled={savingSlug || !slugInput.trim()} onClick={onSaveSlug}>
+                  {savingSlug ? "Saving…" : "Save"}
+                </button>
+              </div>
+            )}
+            <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 6, marginBottom: 0 }}>
+              Letters and numbers only, 3-30 characters.
+            </p>
+          </div>
         </div>
       )}
 

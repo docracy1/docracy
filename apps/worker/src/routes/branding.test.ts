@@ -187,3 +187,106 @@ describe("DELETE /api/account/branding/logo", () => {
     expect(res.status).toBe(200);
   });
 });
+
+function postJson(body: unknown, headers: Record<string, string> = {}) {
+  return { method: "POST", headers: { "Content-Type": "application/json", ...headers }, body: JSON.stringify(body) };
+}
+
+describe("GET /api/account/branding/slug", () => {
+  it("401s without a session", async () => {
+    const { env } = makeMockEnv();
+    const res = await branding.request("/slug", {}, env, MOCK_CTX);
+    expect(res.status).toBe(401);
+  });
+
+  it("reports no slug initially", async () => {
+    const { env } = makeMockEnv();
+    const ctx = makeCtx();
+    const token = await paidSession(env, ctx);
+    const res = await branding.request("/slug", { headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } }, env, ctx);
+    expect(res.status).toBe(200);
+    expect((await res.json()) as { slug: string | null }).toEqual({ slug: null });
+  });
+});
+
+describe("POST /api/account/branding/slug", () => {
+  it("401s without a session", async () => {
+    const { env } = makeMockEnv();
+    const res = await branding.request("/slug", postJson({ slug: "AcmeInc" }), env, MOCK_CTX);
+    expect(res.status).toBe(401);
+  });
+
+  it("sets a valid slug", async () => {
+    const { env } = makeMockEnv();
+    const ctx = makeCtx();
+    const token = await paidSession(env, ctx);
+    const res = await branding.request(
+      "/slug",
+      postJson({ slug: "AcmeInc" }, { Cookie: `${SESSION_COOKIE_NAME}=${token}` }),
+      env,
+      ctx
+    );
+    expect(res.status).toBe(200);
+
+    const getRes = await branding.request("/slug", { headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } }, env, ctx);
+    expect((await getRes.json()) as { slug: string | null }).toEqual({ slug: "AcmeInc" });
+  });
+
+  it("400s on an invalid slug", async () => {
+    const { env } = makeMockEnv();
+    const ctx = makeCtx();
+    const token = await paidSession(env, ctx);
+    const res = await branding.request(
+      "/slug",
+      postJson({ slug: "a b!" }, { Cookie: `${SESSION_COOKIE_NAME}=${token}` }),
+      env,
+      ctx
+    );
+    expect(res.status).toBe(400);
+  });
+
+  it("400s on a slug already taken by another workspace", async () => {
+    const { env } = makeMockEnv();
+    const ctx = makeCtx();
+    const token = await paidSession(env, ctx);
+    await branding.request("/slug", postJson({ slug: "AcmeInc" }, { Cookie: `${SESSION_COOKIE_NAME}=${token}` }), env, ctx);
+
+    await env.DOCRACY_DB!.prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 1)`)
+      .bind("acct-2", "bob@example.com", new Date().toISOString())
+      .run();
+    const token2 = await createSession(env, ctx, "acct-2", "bob@example.com", true, false, null, null);
+    const res = await branding.request(
+      "/slug",
+      postJson({ slug: "acmeinc" }, { Cookie: `${SESSION_COOKIE_NAME}=${token2}` }),
+      env,
+      ctx
+    );
+    expect(res.status).toBe(400);
+  });
+});
+
+describe("DELETE /api/account/branding/slug", () => {
+  it("401s without a session", async () => {
+    const { env } = makeMockEnv();
+    const res = await branding.request("/slug", { method: "DELETE" }, env, MOCK_CTX);
+    expect(res.status).toBe(401);
+  });
+
+  it("removes a set slug", async () => {
+    const { env } = makeMockEnv();
+    const ctx = makeCtx();
+    const token = await paidSession(env, ctx);
+    await branding.request("/slug", postJson({ slug: "AcmeInc" }, { Cookie: `${SESSION_COOKIE_NAME}=${token}` }), env, ctx);
+
+    const deleteRes = await branding.request(
+      "/slug",
+      { method: "DELETE", headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } },
+      env,
+      ctx
+    );
+    expect(deleteRes.status).toBe(200);
+
+    const getRes = await branding.request("/slug", { headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } }, env, ctx);
+    expect((await getRes.json()) as { slug: string | null }).toEqual({ slug: null });
+  });
+});

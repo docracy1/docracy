@@ -73,6 +73,7 @@ export interface SignPayload {
   fields?: DocField[];
   status: StatusPayload;
   brandLogoPath?: string | null;
+  brandWorkspaceSlug?: string | null;
 }
 
 export async function fetchSignView(token: string, unlockToken?: string): Promise<SignPayload> {
@@ -362,6 +363,25 @@ export async function uploadBrandLogo(file: File): Promise<{ ok: true; logoPath:
 
 export async function deleteBrandLogo(): Promise<{ ok: true }> {
   const res = await apiFetch("/api/account/branding/logo", { method: "DELETE" });
+  return asJson(res);
+}
+
+export async function fetchWorkspaceSlug(): Promise<{ slug: string | null }> {
+  const res = await apiFetch("/api/account/branding/slug");
+  return asJson(res);
+}
+
+export async function setWorkspaceSlug(slug: string): Promise<{ ok: true; slug: string }> {
+  const res = await apiFetch("/api/account/branding/slug", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ slug }),
+  });
+  return asJson(res);
+}
+
+export async function deleteWorkspaceSlug(): Promise<{ ok: true }> {
+  const res = await apiFetch("/api/account/branding/slug", { method: "DELETE" });
   return asJson(res);
 }
 
