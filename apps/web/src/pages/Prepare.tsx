@@ -1256,14 +1256,12 @@ export default function Prepare() {
                 {detectFieldsError && <p style={{ color: "var(--danger)", fontSize: 12 }}>{detectFieldsError}</p>}
                 {detectFieldsNotice && <p style={{ fontSize: 12 }}>{detectFieldsNotice}</p>}
 
-                <button
-                  type="button"
-                  className="btn-secondary"
-                  style={{ width: "100%", marginBottom: 8 }}
-                  disabled={explaining}
-                  onClick={onExplain}
-                >
-                  {explaining ? "Reading…" : "Explain in plain English"}
+                <button type="button" className="prepare-highlight-card" style={{ marginBottom: 8 }} disabled={explaining} onClick={onExplain}>
+                  <span className="prepare-highlight-icon">💬</span>
+                  <span>
+                    <span className="prepare-highlight-title">{explaining ? "Reading…" : "Explain in plain English"}</span>
+                    <span className="prepare-highlight-sub">Turn legal text into a plain-language summary</span>
+                  </span>
                 </button>
                 {explainError && <p style={{ color: "var(--danger)", fontSize: 12 }}>{explainError}</p>}
                 {explanation && (
@@ -1281,14 +1279,12 @@ export default function Prepare() {
                   </div>
                 )}
 
-                <button
-                  type="button"
-                  className="btn-secondary"
-                  style={{ width: "100%" }}
-                  disabled={analyzingRisks}
-                  onClick={onAnalyzeRisks}
-                >
-                  {analyzingRisks ? "Checking…" : "Check for risky clauses"}
+                <button type="button" className="prepare-highlight-card" disabled={analyzingRisks} onClick={onAnalyzeRisks}>
+                  <span className="prepare-highlight-icon">⚠️</span>
+                  <span>
+                    <span className="prepare-highlight-title">{analyzingRisks ? "Checking…" : "Check for risky clauses"}</span>
+                    <span className="prepare-highlight-sub">Flag terms worth a second look before you send</span>
+                  </span>
                 </button>
                 {risksError && <p style={{ color: "var(--danger)", fontSize: 12 }}>{risksError}</p>}
                 {risks && risks.length === 0 && (
