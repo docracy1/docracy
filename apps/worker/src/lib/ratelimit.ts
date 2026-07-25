@@ -81,3 +81,12 @@ const TEAM_INVITE_MAX_PER_WINDOW = 5;
 export async function checkTeamInviteRateLimit(env: Env, email: string): Promise<boolean> {
   return checkLimit(env, `teaminvite:${email.toLowerCase()}`, TEAM_INVITE_MAX_PER_WINDOW, TEAM_INVITE_WINDOW_SECONDS);
 }
+
+const ADMIN_LOGIN_WINDOW_SECONDS = 60 * 60; // 1 hour
+const ADMIN_LOGIN_MAX_PER_WINDOW = 10;
+
+/** Tight per-email cap on POST /api/auth/admin-login attempts — same rationale as
+ *  checkPinAttemptRateLimit: ADMIN_PASSWORD is a single brute-forceable shared secret. */
+export async function checkAdminLoginRateLimit(env: Env, email: string): Promise<boolean> {
+  return checkLimit(env, `adminlogin:${email.toLowerCase()}`, ADMIN_LOGIN_MAX_PER_WINDOW, ADMIN_LOGIN_WINDOW_SECONDS);
+}

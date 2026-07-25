@@ -137,6 +137,10 @@ export interface Env {
   ANALYTICS?: AnalyticsEngineDataset;
   /** Comma-separated allow-list of account emails permitted to call GET /api/admin/analytics. */
   ADMIN_EMAILS?: string;
+  /** Shared password letting any ADMIN_EMAILS address sign in via POST /api/auth/admin-login
+   *  instead of waiting on a magic-link email — set with `wrangler secret put ADMIN_PASSWORD`,
+   *  never committed to wrangler.toml. Absent means that route always 501s. */
+  ADMIN_PASSWORD?: string;
   /** Cloudflare account id — needed only for the Analytics Engine SQL HTTP API (see
    *  lib/analyticsQuery.ts). Not secret, just an identifier. */
   CF_ACCOUNT_ID?: string;

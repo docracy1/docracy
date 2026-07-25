@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { Hono } from "hono";
 import {
+  adminLogin,
   requestMagicLink,
   consumeMagicLink,
   resolveAccount,
@@ -126,6 +127,56 @@ describe("consumeMagicLink", () => {
     expect(first.ok).toBe(true);
     const second = await consumeMagicLink(env, ctx, token, null, null);
     expect(second.ok).toBe(false);
+  });
+});
+
+describe("adminLogin", () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  it("signs in with the correct email + password, creating the account on first login", async () => {
+    const { env, d1 } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com", ADMIN_PASSWORD: "s3cret!" });
+    const ctx = makeCtx();
+
+    const result = await adminLogin(env, ctx, "Admin@Example.com", "s3cret!", "1.2.3.4", "test-agent");
+    await ctx.flush();
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) throw new Error("unreachable");
+    expect(result.sessionToken).toBeTruthy();
+
+    const account = (await d1.prepare("SELECT email FROM accounts").first()) as { email: string } | null;
+    expect(account?.email).toBe("admin@example.com");
+  });
+
+  it("rejects a wrong password", async () => {
+    const { env } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com", ADMIN_PASSWORD: "s3cret!" });
+    const ctx = makeCtx();
+    const result = await adminLogin(env, ctx, "admin@example.com", "wrong", null, null);
+    expect(result.ok).toBe(false);
+  });
+
+  it("rejects an email that isn't on the admin allow-list, even with the correct password", async () => {
+    const { env } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com", ADMIN_PASSWORD: "s3cret!" });
+    const ctx = makeCtx();
+    const result = await adminLogin(env, ctx, "notadmin@example.com", "s3cret!", null, null);
+    expect(result.ok).toBe(false);
+  });
+
+  it("fails gracefully when ADMIN_PASSWORD isn't configured", async () => {
+    const { env } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com", ADMIN_PASSWORD: undefined });
+    const ctx = makeCtx();
+    const result = await adminLogin(env, ctx, "admin@example.com", "anything", null, null);
+    expect(result.ok).toBe(false);
+  });
+
+  it("rate-limits repeated attempts for the same email", async () => {
+    const { env } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com", ADMIN_PASSWORD: "s3cret!" });
+    const ctx = makeCtx();
+    for (let i = 0; i < 10; i++) {
+      await adminLogin(env, ctx, "admin@example.com", "wrong", null, null);
+    }
+    const result = await adminLogin(env, ctx, "admin@example.com", "s3cret!", null, null);
+    expect(result.ok).toBe(false);
   });
 });
 

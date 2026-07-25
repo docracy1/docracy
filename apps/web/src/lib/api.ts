@@ -132,6 +132,15 @@ export async function consumeMagicLinkToken(token: string): Promise<{ ok: true }
   return asJson(res);
 }
 
+export async function adminLogin(email: string, password: string): Promise<{ ok: true }> {
+  const res = await apiFetch("/api/auth/admin-login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+  });
+  return asJson(res);
+}
+
 export async function logout(): Promise<{ ok: true }> {
   const res = await apiFetch("/api/auth/logout", { method: "POST" });
   return asJson(res);

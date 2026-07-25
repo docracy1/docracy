@@ -3,7 +3,7 @@ import { getCookie } from "hono/cookie";
 import { generateOpaqueToken, hashOpaqueToken } from "@docracy/shared";
 import type { Env } from "@docracy/shared";
 import { sendMagicLink } from "./email";
-import { checkMagicLinkRateLimit } from "./ratelimit";
+import { checkAdminLoginRateLimit, checkMagicLinkRateLimit } from "./ratelimit";
 
 const MAGIC_LINK_TTL_SECONDS = 15 * 60; // 15 minutes
 export const SESSION_TTL_SECONDS = 30 * 24 * 60 * 60; // 30 days
@@ -171,6 +171,59 @@ export async function consumeMagicLink(
     ctx,
     account.id,
     record.email,
+    account.isPaid,
+    account.isEnterprise,
+    ip,
+    userAgent
+  );
+  return { ok: true, sessionToken };
+}
+
+/**
+ * Password-based alternative to the magic-link flow, scoped to ADMIN_EMAILS — lets an admin sign
+ * in immediately instead of waiting on an email (e.g. while rate-limited or debugging email
+ * delivery). Deliberately returns the same generic error for "not an admin email" and "wrong
+ * password" so this endpoint can't be used to enumerate the admin allow-list.
+ */
+export async function adminLogin(
+  env: Env,
+  ctx: Ctx,
+  email: string,
+  password: string,
+  ip: string | null,
+  userAgent: string | null
+): Promise<{ ok: true; sessionToken: string } | { ok: false; error: string }> {
+  if (!env.DOCRACY_DB) {
+    return { ok: false, error: "Accounts aren't set up on this deployment yet." };
+  }
+  if (!env.ADMIN_PASSWORD) {
+    return { ok: false, error: "Admin password sign-in isn't configured on this deployment yet." };
+  }
+
+  const normalizedEmail = email.trim().toLowerCase();
+  const adminEmails = (env.ADMIN_EMAILS ?? "")
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+
+  if (!(await checkAdminLoginRateLimit(env, normalizedEmail))) {
+    return { ok: false, error: "Too many sign-in attempts. Please try again later." };
+  }
+
+  const [passwordHash, expectedHash] = await Promise.all([
+    hashOpaqueToken(password, env.TOKEN_SECRET),
+    hashOpaqueToken(env.ADMIN_PASSWORD, env.TOKEN_SECRET),
+  ]);
+  if (!adminEmails.includes(normalizedEmail) || passwordHash !== expectedHash) {
+    return { ok: false, error: "Invalid email or password" };
+  }
+
+  const account = await findOrCreateAccount(env, ctx, normalizedEmail);
+  const sessionToken = await createSession(
+    env,
+    ctx,
+    account.id,
+    normalizedEmail,
     account.isPaid,
     account.isEnterprise,
     ip,

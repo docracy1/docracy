@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { setCookie, deleteCookie } from "hono/cookie";
 import {
+  adminLogin,
   requestMagicLink,
   consumeMagicLink,
   optionalAccount,
@@ -50,6 +51,32 @@ auth.post("/consume", async (c) => {
   const userAgent = c.req.header("User-Agent") ?? null;
   const result = await consumeMagicLink(c.env, c.executionCtx, token, ip, userAgent);
   if (!result.ok) return c.json({ error: result.error }, 400);
+
+  setCookie(c, SESSION_COOKIE_NAME, result.sessionToken, {
+    ...sessionCookieOptions(c.env),
+    maxAge: SESSION_TTL_SECONDS,
+  });
+  return c.json({ ok: true });
+});
+
+auth.post("/admin-login", async (c) => {
+  let body: { email?: string; password?: string };
+  try {
+    body = await c.req.json<{ email?: string; password?: string }>();
+  } catch {
+    return c.json({ error: "Invalid request body" }, 400);
+  }
+
+  const email = body.email?.trim() ?? "";
+  const password = body.password ?? "";
+  if (!EMAIL_RE.test(email) || !password) {
+    return c.json({ error: "Email and password are required" }, 400);
+  }
+
+  const ip = c.req.header("CF-Connecting-IP") ?? null;
+  const userAgent = c.req.header("User-Agent") ?? null;
+  const result = await adminLogin(c.env, c.executionCtx, email, password, ip, userAgent);
+  if (!result.ok) return c.json({ error: result.error }, 401);
 
   setCookie(c, SESSION_COOKIE_NAME, result.sessionToken, {
     ...sessionCookieOptions(c.env),
