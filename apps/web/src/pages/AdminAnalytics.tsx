@@ -1,5 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import { fetchAdminAnalytics, setAnalyticsNoTrack, type FunnelRow } from "../lib/api";
+import {
+  fetchAdminAnalytics,
+  fetchAdminEnterpriseAccounts,
+  setAnalyticsNoTrack,
+  type AdminEnterpriseAccount,
+  type FunnelRow,
+} from "../lib/api";
 import { usePageMeta } from "../lib/usePageMeta";
 
 const NOTRACK_COOKIE_NAME = "docracy_notrack";
@@ -246,6 +252,85 @@ function CountryTable({ rows }: { rows: FunnelRow[] }) {
   );
 }
 
+/** Where you (not the customer) see enterprise accounts and how soon each expires — a customer
+ *  only ever sees their own, in their own Dashboard's Subscription panel. */
+function EnterpriseAccountsCard() {
+  const [accounts, setAccounts] = useState<AdminEnterpriseAccount[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchAdminEnterpriseAccounts()
+      .then((res) => {
+        if (!cancelled) setAccounts(res.accounts);
+      })
+      .catch((err) => {
+        if (!cancelled) setError(err instanceof Error ? err.message : "Failed to load enterprise accounts");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return (
+    <div className="card" style={{ marginBottom: 24 }}>
+      <h3 style={{ marginTop: 0, fontSize: 15 }}>Enterprise accounts</h3>
+      <p style={{ fontSize: 12, color: "var(--mute)", marginTop: -4 }}>
+        Each is a one-time Stripe charge with a fixed one-year term — revoked automatically by the
+        daily sweep once it lapses, not a recurring subscription.
+      </p>
+      {error && <p style={{ color: "var(--danger)", fontSize: 13 }}>{error}</p>}
+      {!error && accounts && accounts.length === 0 && (
+        <p style={{ fontSize: 13, color: "var(--mute)", marginBottom: 0 }}>No enterprise accounts yet.</p>
+      )}
+      {!error && accounts && accounts.length > 0 && (
+        <div className="plan-table-scroll">
+          <table className="plan-table" style={{ minWidth: 360 }}>
+            <thead>
+              <tr>
+                <th style={{ textAlign: "left" }}>Email</th>
+                <th style={{ textAlign: "left" }}>Expires</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {accounts.map((a) => {
+                const daysLeft = a.enterpriseExpiresAt
+                  ? Math.round((new Date(a.enterpriseExpiresAt).getTime() - Date.now()) / (24 * 60 * 60 * 1000))
+                  : null;
+                return (
+                  <tr key={a.email}>
+                    <td style={{ textAlign: "left" }}>{a.email}</td>
+                    <td style={{ textAlign: "left" }}>
+                      {a.enterpriseExpiresAt
+                        ? new Date(a.enterpriseExpiresAt).toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                          })
+                        : "—"}
+                      {daysLeft !== null && (
+                        <span
+                          style={{ marginLeft: 6, fontSize: 12, color: daysLeft < 30 ? "var(--danger)" : "var(--mute)" }}
+                        >
+                          ({daysLeft >= 0 ? `${daysLeft}d left` : "expired"})
+                        </span>
+                      )}
+                    </td>
+                    <td style={{ color: a.isPaid ? "var(--success)" : "var(--danger)" }}>
+                      {a.isPaid ? "Active" : "Lapsed"}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function AdminAnalytics() {
   usePageMeta("Analytics — Docracy", "Internal traffic and funnel analytics.");
 
@@ -314,6 +399,8 @@ export default function AdminAnalytics() {
       <p style={{ color: "var(--mute)", marginTop: -8, marginBottom: 20 }}>
         Aggregate traffic and funnel counts — no per-visitor tracking, no IPs or cookies stored.
       </p>
+
+      <EnterpriseAccountsCard />
 
       <div style={{ display: "flex", gap: 8, marginBottom: 12, flexWrap: "wrap", alignItems: "center" }}>
         {[7, 30, 90].map((d) => (

@@ -142,6 +142,8 @@ export interface Account {
   email: string;
   isPaid: boolean;
   isEnterprise: boolean;
+  /** Only ever present when isEnterprise is true — see routes/auth.ts's GET /me. */
+  enterpriseExpiresAt?: string;
 }
 
 export async function fetchMe(): Promise<{ account: Account | null }> {
@@ -376,6 +378,17 @@ export interface FunnelRow {
 
 export async function fetchAdminAnalytics(days: number): Promise<{ days: number; rows: FunnelRow[] }> {
   const res = await apiFetch(`/api/admin/analytics?days=${days}`);
+  return asJson(res);
+}
+
+export interface AdminEnterpriseAccount {
+  email: string;
+  isPaid: boolean;
+  enterpriseExpiresAt: string | null;
+}
+
+export async function fetchAdminEnterpriseAccounts(): Promise<{ accounts: AdminEnterpriseAccount[] }> {
+  const res = await apiFetch("/api/admin/enterprise-accounts");
   return asJson(res);
 }
 

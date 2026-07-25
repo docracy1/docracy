@@ -42,6 +42,42 @@ describe("GET /api/admin/analytics", () => {
   });
 });
 
+describe("GET /api/admin/enterprise-accounts", () => {
+  it("rejects an unauthenticated request", async () => {
+    const { env } = makeMockEnv();
+    const res = await admin.request("/enterprise-accounts", {}, env, MOCK_CTX);
+    expect(res.status).toBe(401);
+  });
+
+  it("lists enterprise accounts soonest-expiring first, and skips non-enterprise accounts", async () => {
+    const { env, d1 } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com" });
+    await d1
+      .prepare(
+        `INSERT INTO accounts (id, email, created_at, is_paid, is_enterprise, enterprise_expires_at) VALUES (?, ?, ?, 1, 1, ?)`
+      )
+      .bind("acct-soon", "soon@example.com", new Date().toISOString(), "2026-01-01T00:00:00.000Z")
+      .run();
+    await d1
+      .prepare(
+        `INSERT INTO accounts (id, email, created_at, is_paid, is_enterprise, enterprise_expires_at) VALUES (?, ?, ?, 1, 1, ?)`
+      )
+      .bind("acct-later", "later@example.com", new Date().toISOString(), "2027-01-01T00:00:00.000Z")
+      .run();
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 1)`)
+      .bind("acct-plain-paid", "plain@example.com", new Date().toISOString())
+      .run();
+
+    const headers = await sessionCookie(env, "admin@example.com");
+    const res = await admin.request("/enterprise-accounts", { headers }, env, MOCK_CTX);
+    expect(res.status).toBe(200);
+    const body: { accounts: Array<{ email: string; isPaid: boolean; enterpriseExpiresAt: string | null }> } =
+      await res.json();
+    expect(body.accounts.map((a) => a.email)).toEqual(["soon@example.com", "later@example.com"]);
+    expect(body.accounts[0].isPaid).toBe(true);
+  });
+});
+
 function postJson(body: unknown, headers: Record<string, string> = {}) {
   return {
     method: "POST",

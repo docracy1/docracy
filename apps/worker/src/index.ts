@@ -19,6 +19,7 @@ import statusRoute from "./routes/status";
 import { runReminderSweep } from "./lib/reminders";
 import { reconcileD1Index } from "./lib/index-d1";
 import { runExpiredDocCleanup } from "./lib/cleanup";
+import { runEnterpriseExpirySweep } from "./lib/enterpriseExpiry";
 import { runHealthCheckAndAlert } from "./lib/healthcheck";
 import type { Env } from "@docracy/shared";
 
@@ -71,6 +72,7 @@ export default {
     ctx.waitUntil(runReminderSweep(env));
     ctx.waitUntil(reconcileD1Index(env).catch((err) => console.error("D1 reconciliation sweep failed:", err)));
     ctx.waitUntil(runExpiredDocCleanup(env).catch((err) => console.error("Expired doc cleanup sweep failed:", err)));
+    ctx.waitUntil(runEnterpriseExpirySweep(env).catch((err) => console.error("Enterprise expiry sweep failed:", err)));
     ctx.waitUntil(runHealthCheckAndAlert(env).catch((err) => console.error("Healthcheck sweep failed:", err)));
   },
 };

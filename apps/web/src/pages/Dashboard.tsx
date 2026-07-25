@@ -664,6 +664,17 @@ export default function Dashboard() {
               )}
             </h3>
             <p>Manage your payment method, invoices, or cancel your subscription.</p>
+            {account.isEnterprise && account.enterpriseExpiresAt && (
+              <p style={{ fontSize: 12, color: "var(--mute)" }}>
+                Enterprise term active until{" "}
+                {new Date(account.enterpriseExpiresAt).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+                . Contact sales to renew before then.
+              </p>
+            )}
             {manageBillingError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{manageBillingError}</p>}
             <button className="btn-secondary" onClick={onManageBilling} disabled={managingBilling}>
               {managingBilling ? "Redirecting…" : "Manage subscription"}

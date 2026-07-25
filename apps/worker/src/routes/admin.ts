@@ -8,6 +8,18 @@ import type { Env } from "@docracy/shared";
 type Variables = { account: AccountContext | null };
 const admin = new Hono<{ Bindings: Env; Variables: Variables }>();
 
+// Where you (the site admin) can actually see enterprise accounts and their expiry dates — a
+// customer only ever sees their own, in their own Dashboard's Subscription panel.
+admin.get("/enterprise-accounts", requireAdminAccount, async (c) => {
+  if (!c.env.DOCRACY_DB) return c.json({ accounts: [] });
+  const { results } = await c.env.DOCRACY_DB.prepare(
+    `SELECT email, is_paid, enterprise_expires_at FROM accounts WHERE is_enterprise = 1 ORDER BY enterprise_expires_at ASC`
+  ).all<{ email: string; is_paid: number; enterprise_expires_at: string | null }>();
+  return c.json({
+    accounts: results.map((r) => ({ email: r.email, isPaid: !!r.is_paid, enterpriseExpiresAt: r.enterprise_expires_at })),
+  });
+});
+
 admin.get("/analytics", requireAdminAccount, async (c) => {
   const days = Math.min(90, Math.max(1, Number(c.req.query("days")) || 30));
   const rows = await queryFunnelSummary(c.env, days);
