@@ -253,6 +253,33 @@ describe("POST /api/billing/webhook", () => {
     expect(row?.paid_at).toBeNull();
   });
 
+  it("also clears is_enterprise when a cancelled subscription unmarks paid status", async () => {
+    const { env, d1 } = makeMockEnv({ STRIPE_WEBHOOK_SECRET: "whsec_test" });
+    await d1
+      .prepare(
+        `INSERT INTO accounts (id, email, created_at, is_paid, paid_at, is_enterprise, stripe_customer_id) VALUES (?, ?, ?, 1, ?, 1, ?)`
+      )
+      .bind("acct-1", "anna@example.com", new Date().toISOString(), new Date().toISOString(), "cus_1")
+      .run();
+
+    const rawBody = JSON.stringify({ type: "customer.subscription.deleted", data: { object: { customer: "cus_1" } } });
+    const signature = await signWebhook(rawBody, "whsec_test");
+
+    await billing.request(
+      "/webhook",
+      { method: "POST", body: rawBody, headers: { "Stripe-Signature": signature } },
+      env,
+      MOCK_CTX
+    );
+
+    const row = (await d1.prepare("SELECT is_paid, is_enterprise FROM accounts WHERE id = ?").bind("acct-1").first()) as {
+      is_paid: number;
+      is_enterprise: number;
+    } | null;
+    expect(row?.is_paid).toBe(0);
+    expect(row?.is_enterprise).toBe(0);
+  });
+
   it("is a no-op for customer.subscription.deleted when no account matches the customer id", async () => {
     const { env } = makeMockEnv({ STRIPE_WEBHOOK_SECRET: "whsec_test" });
     const rawBody = JSON.stringify({ type: "customer.subscription.deleted", data: { object: { customer: "cus_unknown" } } });

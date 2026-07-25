@@ -13,17 +13,21 @@ import { revokeApiToken } from "./apiTokens";
  */
 export async function markAccountPaid(env: Env, accountId: string, paid: boolean): Promise<void> {
   if (!env.DOCRACY_DB) return;
-  await env.DOCRACY_DB.prepare(`UPDATE accounts SET is_paid = ?, paid_at = ? WHERE id = ?`)
-    .bind(paid ? 1 : 0, paid ? new Date().toISOString() : null, accountId)
+  // Losing paid status always takes enterprise status with it — enterprise is a superset of paid,
+  // never true on its own, so a lapsed/cancelled subscription (customer.subscription.deleted,
+  // below) must clear both in one statement rather than leaving is_enterprise stuck at 1 forever.
+  await env.DOCRACY_DB.prepare(`UPDATE accounts SET is_paid = ?, paid_at = ?, is_enterprise = CASE WHEN ? THEN is_enterprise ELSE 0 END WHERE id = ?`)
+    .bind(paid ? 1 : 0, paid ? new Date().toISOString() : null, paid ? 1 : 0, accountId)
     .run();
   if (!paid) {
     await revokeApiToken(env, accountId);
   }
 }
 
-/** Enterprise deals never revoke this the way markAccountPaid revokes is_paid on cancellation —
- *  there's no "customer.subscription.deleted" equivalent for a hand-invoiced Payment Link, so
- *  turning it off again (a downgrade or an end of contract) is a manual D1 update for now. */
+/** Only ever turns enterprise ON — see markAccountPaid above for the one path that turns it back
+ *  off (losing paid status). If the Enterprise Payment Link is a one-time charge rather than a
+ *  recurring subscription, Stripe never sends a cancellation/expiry event at all, so there's
+ *  nothing to hook — that case still needs a manual D1 update when a contract lapses. */
 export async function markAccountEnterprise(env: Env, accountId: string): Promise<void> {
   if (!env.DOCRACY_DB) return;
   await env.DOCRACY_DB.prepare(`UPDATE accounts SET is_enterprise = 1 WHERE id = ?`).bind(accountId).run();
