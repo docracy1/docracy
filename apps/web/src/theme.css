@@ -313,10 +313,66 @@ select {
   padding: 24px 24px 40px;
 }
 
+/* Independent scroll regions for the document and the sidebar — 72px matches .site-header's
+   rendered height (same constant .plan-table's sticky thead already uses), so both columns sit
+   flush under the nav bar instead of guessing at a magic number. Giving the PDF column its own
+   overflow-y:auto also makes it the containing block for PdfViewer's sticky zoom pill (see that
+   component's own comment), so the pill now sticks to the bottom of *this* scroll area rather
+   than the whole page — exactly the "scroll independently" behavior this is for. */
+.prepare-pdf-col {
+  height: calc(100vh - 72px);
+  overflow-y: auto;
+}
+
+.prepare-sidebar-col {
+  position: sticky;
+  top: 72px;
+  height: calc(100vh - 72px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 @media (max-width: 860px) {
   .prepare-grid {
     grid-template-columns: 1fr;
   }
+
+  /* Independent scroll only makes sense side-by-side — stacked on mobile, both columns should
+     just flow with the page like every other single-column layout. */
+  .prepare-pdf-col,
+  .prepare-sidebar-col {
+    height: auto;
+    overflow-y: visible;
+    position: static;
+  }
+}
+
+.prepare-sidebar-heading {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--mute);
+  margin: 0 0 12px;
+}
+
+.prepare-sidebar-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.prepare-sidebar-summary-row {
+  display: flex;
+  justify-content: space-between;
+  color: var(--body);
+}
+
+.prepare-sidebar-summary-row strong {
+  color: var(--ink);
 }
 
 /* Landing page hero + feature primitives */

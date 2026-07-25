@@ -710,7 +710,7 @@ export default function Prepare() {
 
     {pdfBytes && (
         <div className="prepare-grid">
-          <div>
+          <div className="prepare-pdf-col">
             <PdfViewer
               pdfBytes={pdfBytes}
               renderPageOverlay={(page) => (
@@ -1023,9 +1023,9 @@ export default function Prepare() {
             />
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 16, position: "sticky", top: 24 }}>
+          <div className="prepare-sidebar-col">
             <div className="card">
-              <h3 style={{ marginBottom: 12 }}>Signers &amp; order</h3>
+              <h3 className="prepare-sidebar-heading">Signers &amp; order</h3>
               <label style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12, color: "var(--body)" }}>
                 <input type="checkbox" checked={preparerSigns} onChange={(e) => togglePreparerSigns(e.target.checked)} />
                 I also need to sign this
@@ -1122,7 +1122,7 @@ export default function Prepare() {
             </div>
 
             <div className="card">
-              <h3 style={{ marginBottom: 12 }}>Edit document</h3>
+              <h3 className="prepare-sidebar-heading">Edit document</h3>
               {viewMode === "fields" ? (
                 <button
                   type="button"
@@ -1188,7 +1188,7 @@ export default function Prepare() {
 
             {viewMode === "fields" && account?.isPaid && (
               <div className="card">
-                <h3 style={{ marginBottom: 12 }}>AI tools</h3>
+                <h3 className="prepare-sidebar-heading">AI tools</h3>
 
                 <button
                   type="button"
@@ -1272,7 +1272,7 @@ export default function Prepare() {
 
             {viewMode === "fields" && !account?.isPaid && (
               <div className="card">
-                <h3 style={{ marginBottom: 12 }}>AI tools</h3>
+                <h3 className="prepare-sidebar-heading">AI tools</h3>
                 <p style={{ fontSize: 12, marginTop: 0, marginBottom: 0 }}>
                   <Link to="/login">Sign in with a paid account</Link> to auto-detect fields, get a plain-English
                   explanation, and check for risky clauses.
@@ -1282,7 +1282,7 @@ export default function Prepare() {
 
             {viewMode === "fields" && (
             <div className="card">
-              <h3 style={{ marginBottom: 12 }}>Add a field</h3>
+              <h3 className="prepare-sidebar-heading">Add a field</h3>
               <select
                 className="form-input"
                 style={{ width: "100%", marginBottom: 8 }}
@@ -1332,7 +1332,7 @@ export default function Prepare() {
 
             {viewMode === "fields" && account?.isPaid && fields.length > 0 && (
               <div className="card">
-                <h3 style={{ marginBottom: 12 }}>Save as template</h3>
+                <h3 className="prepare-sidebar-heading">Save as template</h3>
                 {templateSavedName ? (
                   <p style={{ marginBottom: 0 }}>Saved "{templateSavedName}" — find it on your Dashboard.</p>
                 ) : showTemplateNameInput ? (
@@ -1383,7 +1383,7 @@ export default function Prepare() {
             <div className="card">
               {showCustomMessage ? (
                 <>
-                  <h3 style={{ marginBottom: 12 }}>Customize the invite email</h3>
+                  <h3 className="prepare-sidebar-heading">Customize the invite email</h3>
                   <input
                     className="form-input"
                     style={{ width: "100%", marginBottom: 8 }}
@@ -1416,6 +1416,21 @@ export default function Prepare() {
             <p style={{ fontSize: 11, color: "var(--mute)" }}>
               Signer identity isn't verified — only use this for documents where that's acceptable.
             </p>
+
+            <div className="card prepare-sidebar-summary">
+              <div className="prepare-sidebar-summary-row">
+                <span>Files</span>
+                <strong>1</strong>
+              </div>
+              <div className="prepare-sidebar-summary-row">
+                <span>Signers</span>
+                <strong>{signers.length}</strong>
+              </div>
+              <div className="prepare-sidebar-summary-row">
+                <span>Fields placed</span>
+                <strong>{fields.length}</strong>
+              </div>
+            </div>
           </div>
         </div>
       )}
