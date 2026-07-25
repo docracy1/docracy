@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { Component, useEffect, useMemo, useState, type ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   apiUrl,
@@ -36,6 +36,26 @@ import {
 } from "../lib/api";
 import { useNoIndex } from "../lib/useNoIndex";
 import { FREE_TEMPLATES } from "../lib/freeTemplates";
+
+/** Isolates the profile-menu popup so a render error there (e.g. from unexpected account/team
+ *  data shape) shows an inline message instead of silently freezing the whole dashboard — this
+ *  subtree only ever mounts on the first click, so any bug in it would otherwise be invisible. */
+class ProfileMenuBoundary extends Component<{ children: ReactNode }, { error: string | null }> {
+  state: { error: string | null } = { error: null };
+  static getDerivedStateFromError(error: unknown) {
+    return { error: error instanceof Error ? error.message : String(error) };
+  }
+  render() {
+    if (this.state.error) {
+      return (
+        <div className="dashboard-profile-menu" style={{ color: "var(--danger)", fontSize: 12 }}>
+          Menu error: {this.state.error}
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 /** Minimalist monochrome line icons for the profile-menu items — same hand-drawn, Heroicons-
  *  outline-style approach as Landing.tsx's FeatureIcon, kept local since these four are specific
@@ -545,8 +565,20 @@ export default function Dashboard() {
           </div>
         )}
 
-        <div className="dashboard-profile" onClick={() => setProfileMenuOpen((o) => !o)}>
+        <div
+          className="dashboard-profile"
+          role="button"
+          tabIndex={0}
+          onClick={() => setProfileMenuOpen((o) => !o)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              setProfileMenuOpen((o) => !o);
+            }
+          }}
+        >
           {profileMenuOpen && (
+            <ProfileMenuBoundary>
             <div className="dashboard-profile-menu">
               {account.isPaid && (
                 <button
@@ -596,6 +628,7 @@ export default function Dashboard() {
                 Log out
               </button>
             </div>
+            </ProfileMenuBoundary>
           )}
           <div className="dashboard-sidebar-footer">
             <div className="dashboard-avatar">{account.email.slice(0, 2).toUpperCase()}</div>
