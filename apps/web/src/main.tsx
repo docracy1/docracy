@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./theme.css";
+import RootErrorBoundary from "./components/RootErrorBoundary";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ChatWidget from "./components/ChatWidget";
@@ -32,6 +33,7 @@ import NotFound from "./pages/NotFound";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
+      <RootErrorBoundary>
       <Header />
       <Routes>
         <Route path="/" element={<Landing />} />
@@ -60,6 +62,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       </Routes>
       <Footer />
       <ChatWidget />
+      </RootErrorBoundary>
     </BrowserRouter>
   </React.StrictMode>
 );

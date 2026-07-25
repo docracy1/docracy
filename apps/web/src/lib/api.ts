@@ -485,3 +485,71 @@ export async function setAnalyticsNoTrack(enabled: boolean): Promise<{ ok: true;
   });
   return asJson(res);
 }
+
+export interface DynamicBlogPostSummary {
+  id: string;
+  slug: string;
+  title: string;
+  description: string;
+  publishedAt: string | null;
+  createdAt: string;
+}
+
+export interface DynamicBlogPostDetail extends DynamicBlogPostSummary {
+  body: string;
+}
+
+/** Published posts only — what the public /blog index merges in alongside the hand-coded
+ *  competitor-comparison articles (lib/blog.ts). */
+export async function fetchBlogPosts(): Promise<{ posts: DynamicBlogPostSummary[] }> {
+  const res = await apiFetch("/api/blog-posts");
+  return asJson(res);
+}
+
+export async function fetchBlogPost(slug: string): Promise<{ post: DynamicBlogPostDetail }> {
+  const res = await apiFetch(`/api/blog-posts/${encodeURIComponent(slug)}`);
+  return asJson(res);
+}
+
+/** Every post, draft or published — admin-only. */
+export async function fetchAdminBlogPosts(): Promise<{ posts: DynamicBlogPostSummary[] }> {
+  const res = await apiFetch("/api/admin/blog-posts");
+  return asJson(res);
+}
+
+export async function fetchAdminBlogPost(id: string): Promise<{ post: DynamicBlogPostDetail }> {
+  const res = await apiFetch(`/api/admin/blog-posts/${id}`);
+  return asJson(res);
+}
+
+export async function createBlogPost(input: {
+  title: string;
+  slug?: string;
+  description: string;
+  body: string;
+  publish: boolean;
+}): Promise<{ ok: true; id: string; slug: string }> {
+  const res = await apiFetch("/api/admin/blog-posts", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  return asJson(res);
+}
+
+export async function updateBlogPost(
+  id: string,
+  input: { title?: string; description?: string; body?: string; publish?: boolean }
+): Promise<{ ok: true }> {
+  const res = await apiFetch(`/api/admin/blog-posts/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  return asJson(res);
+}
+
+export async function deleteBlogPost(id: string): Promise<{ ok: true }> {
+  const res = await apiFetch(`/api/admin/blog-posts/${id}`, { method: "DELETE" });
+  return asJson(res);
+}

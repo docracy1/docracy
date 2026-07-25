@@ -1,12 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
 import {
+  createBlogPost,
+  deleteBlogPost,
   fetchAdminAccounts,
   fetchAdminAnalytics,
+  fetchAdminBlogPost,
+  fetchAdminBlogPosts,
   fetchAdminEnterpriseAccounts,
   grantEnterprise,
   setAnalyticsNoTrack,
+  updateBlogPost,
   type AdminAccount,
   type AdminEnterpriseAccount,
+  type DynamicBlogPostSummary,
   type FunnelRow,
 } from "../lib/api";
 import { usePageMeta } from "../lib/usePageMeta";
@@ -284,6 +290,204 @@ function CountryTable({ rows }: { rows: FunnelRow[] }) {
   );
 }
 
+const EMPTY_BLOG_FORM = { id: null as string | null, title: "", slug: "", description: "", body: "", publish: false };
+
+/** Self-serve blog publishing — create/edit/publish/delete posts without a code deploy. Merged
+ *  on the public /blog page alongside the 4 hand-coded competitor-comparison articles (see
+ *  apps/web/src/lib/blog.ts), which this card never touches. */
+function BlogPostsCard() {
+  const [posts, setPosts] = useState<DynamicBlogPostSummary[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [form, setForm] = useState(EMPTY_BLOG_FORM);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [busyId, setBusyId] = useState<string | null>(null);
+
+  const refresh = () =>
+    fetchAdminBlogPosts()
+      .then((res) => setPosts(res.posts))
+      .catch((err) => setError(err instanceof Error ? err.message : "Failed to load posts"));
+
+  useEffect(() => {
+    refresh();
+  }, []);
+
+  const onEdit = async (id: string) => {
+    setSaveError(null);
+    try {
+      const { post } = await fetchAdminBlogPost(id);
+      setForm({ id: post.id, title: post.title, slug: post.slug, description: post.description, body: post.body, publish: !!post.publishedAt });
+    } catch (err) {
+      setSaveError(err instanceof Error ? err.message : "Failed to load post");
+    }
+  };
+
+  const onDelete = async (id: string) => {
+    setBusyId(id);
+    try {
+      await deleteBlogPost(id);
+      if (form.id === id) setForm(EMPTY_BLOG_FORM);
+      await refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to delete post");
+    } finally {
+      setBusyId(null);
+    }
+  };
+
+  const onTogglePublish = async (post: DynamicBlogPostSummary) => {
+    setBusyId(post.id);
+    try {
+      await updateBlogPost(post.id, { publish: !post.publishedAt });
+      await refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to update post");
+    } finally {
+      setBusyId(null);
+    }
+  };
+
+  const onSave = async () => {
+    if (!form.title.trim() || !form.body.trim()) return;
+    setSaving(true);
+    setSaveError(null);
+    try {
+      if (form.id) {
+        await updateBlogPost(form.id, {
+          title: form.title,
+          description: form.description,
+          body: form.body,
+          publish: form.publish,
+        });
+      } else {
+        await createBlogPost({
+          title: form.title,
+          slug: form.slug.trim() || undefined,
+          description: form.description,
+          body: form.body,
+          publish: form.publish,
+        });
+      }
+      setForm(EMPTY_BLOG_FORM);
+      await refresh();
+    } catch (err) {
+      setSaveError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="card" style={{ marginBottom: 24 }}>
+      <h3 style={{ marginTop: 0, fontSize: 15 }}>Blog posts</h3>
+      <p style={{ fontSize: 12, color: "var(--mute)", marginTop: -4 }}>
+        Publish articles yourself — no code deploy needed. New posts appear on /blog as soon as
+        you publish them.
+      </p>
+
+      {error && <p style={{ color: "var(--danger)", fontSize: 13 }}>{error}</p>}
+      {posts && posts.length === 0 && <p style={{ fontSize: 13, color: "var(--mute)" }}>No posts yet — write your first one below.</p>}
+      {posts && posts.length > 0 && (
+        <div style={{ marginBottom: 20 }}>
+          {posts.map((p) => (
+            <div
+              key={p.id}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                gap: 8,
+                padding: "8px 0",
+                borderBottom: "1px solid var(--hairline)",
+                flexWrap: "wrap",
+              }}
+            >
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontSize: 13.5, overflowWrap: "anywhere" }}>{p.title}</div>
+                <div style={{ fontSize: 11, color: "var(--mute)" }}>
+                  /blog/{p.slug} · {p.publishedAt ? "Published" : "Draft"}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
+                <button className="btn-secondary" style={{ fontSize: 12, padding: "4px 8px" }} onClick={() => onEdit(p.id)}>
+                  Edit
+                </button>
+                <button
+                  className="btn-secondary"
+                  style={{ fontSize: 12, padding: "4px 8px" }}
+                  disabled={busyId === p.id}
+                  onClick={() => onTogglePublish(p)}
+                >
+                  {p.publishedAt ? "Unpublish" : "Publish"}
+                </button>
+                <button
+                  className="btn-secondary"
+                  style={{ fontSize: 12, padding: "4px 8px", color: "var(--danger)" }}
+                  disabled={busyId === p.id}
+                  onClick={() => onDelete(p.id)}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <h4 style={{ fontSize: 13, marginBottom: 8 }}>{form.id ? "Edit post" : "New post"}</h4>
+      <div style={{ display: "flex", flexDirection: "column", gap: 8, maxWidth: 560 }}>
+        <input
+          className="form-input"
+          placeholder="Title"
+          aria-label="Title"
+          value={form.title}
+          onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
+        />
+        {!form.id && (
+          <input
+            className="form-input"
+            placeholder="Slug (optional — derived from title if left blank)"
+            aria-label="Slug"
+            value={form.slug}
+            onChange={(e) => setForm((f) => ({ ...f, slug: e.target.value }))}
+          />
+        )}
+        <input
+          className="form-input"
+          placeholder="Short description (shown on the blog index and in search results)"
+          aria-label="Description"
+          value={form.description}
+          onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
+        />
+        <textarea
+          className="form-input"
+          placeholder="Body — separate paragraphs with a blank line"
+          aria-label="Body"
+          rows={10}
+          value={form.body}
+          onChange={(e) => setForm((f) => ({ ...f, body: e.target.value }))}
+          style={{ fontFamily: "inherit", resize: "vertical" }}
+        />
+        <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13 }}>
+          <input type="checkbox" checked={form.publish} onChange={(e) => setForm((f) => ({ ...f, publish: e.target.checked }))} />
+          Published (visible on /blog)
+        </label>
+        {saveError && <p style={{ color: "var(--danger)", fontSize: 13, margin: 0 }}>{saveError}</p>}
+        <div style={{ display: "flex", gap: 8 }}>
+          <button className="btn-primary" disabled={saving || !form.title.trim() || !form.body.trim()} onClick={onSave}>
+            {saving ? "Saving…" : form.id ? "Save changes" : "Create post"}
+          </button>
+          {form.id && (
+            <button className="btn-secondary" onClick={() => setForm(EMPTY_BLOG_FORM)}>
+              Cancel
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /** Where you (not the customer) see enterprise accounts and how soon each expires — a customer
  *  only ever sees their own, in their own Dashboard's Subscription panel. */
 function EnterpriseAccountsCard() {
@@ -551,6 +755,7 @@ export default function AdminAnalytics() {
         Aggregate traffic and funnel counts — no per-visitor tracking, no IPs or cookies stored.
       </p>
 
+      <BlogPostsCard />
       <AllAccountsCard />
       <EnterpriseAccountsCard />
 

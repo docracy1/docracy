@@ -7,6 +7,7 @@ const NAV_LINKS = [
   { to: "/free-templates", label: "Free templates" },
   { to: "/mcp", label: "AI & MCP" },
   { to: "/docs", label: "Docs" },
+  { to: "/blog", label: "Blog" },
 ];
 
 export default function Header() {
