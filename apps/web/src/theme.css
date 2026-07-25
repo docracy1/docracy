@@ -293,12 +293,12 @@ select {
 
 .prepare-grid {
   display: grid;
-  grid-template-columns: 1fr 320px;
+  grid-template-columns: 1fr 340px;
   gap: 24px;
   align-items: start;
-  max-width: 1200px;
+  max-width: 1440px;
   margin: 0 auto;
-  padding: 0 24px 40px;
+  padding: 24px 24px 40px;
 }
 
 @media (max-width: 860px) {

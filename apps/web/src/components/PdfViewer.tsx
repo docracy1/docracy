@@ -16,11 +16,18 @@ interface PdfViewerProps {
   onPageClick?: (page: PageInfo, xFrac: number, yFrac: number) => void;
 }
 
-export default function PdfViewer({ pdfBytes, maxScale = 1.3, renderPageOverlay, onPageClick }: PdfViewerProps) {
+const ZOOM_STEP = 0.1;
+const MIN_ZOOM = 0.5;
+const MAX_ZOOM = 2.5;
+
+export default function PdfViewer({ pdfBytes, maxScale = 1.8, renderPageOverlay, onPageClick }: PdfViewerProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [pages, setPages] = useState<PageInfo[]>([]);
   const [containerWidth, setContainerWidth] = useState(0);
+  // 1 = "100%", the container-fit size — matches the reference's default zoom readout, not a
+  // literal 1:1 pixel scale.
+  const [zoom, setZoom] = useState(1);
 
   // Track available width so pages scale down to fit on narrow (e.g. mobile) screens instead of
   // forcing horizontal scroll. Measured directly (not just via ResizeObserver) since some embedded
@@ -52,23 +59,33 @@ export default function PdfViewer({ pdfBytes, maxScale = 1.3, renderPageOverlay,
       if (cancelled || !containerRef.current) return;
       containerRef.current.innerHTML = "";
       const infos: PageInfo[] = [];
+      // Renders at devicePixelRatio× the display size so the bitmap is crisp on Retina/HiDPI
+      // screens — canvas.width/height (the actual pixel buffer) is set from this, while
+      // canvas.style.width/height (and every PageInfo/overlay measurement below) stays at the
+      // plain CSS display size, so field-placement math (all fractional, see Prepare.tsx) never
+      // sees the difference.
+      const dpr = window.devicePixelRatio || 1;
 
       for (let i = 1; i <= pdf.numPages; i++) {
         const page = await pdf.getPage(i);
         const naturalWidth = page.getViewport({ scale: 1 }).width;
         const fitScale = Math.min(maxScale, containerWidth / naturalWidth);
-        const viewport = page.getViewport({ scale: fitScale });
+        const displayScale = fitScale * zoom;
+        const displayViewport = page.getViewport({ scale: displayScale });
+        const renderViewport = page.getViewport({ scale: displayScale * dpr });
         const canvas = document.createElement("canvas");
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
+        canvas.width = renderViewport.width;
+        canvas.height = renderViewport.height;
+        canvas.style.width = `${displayViewport.width}px`;
+        canvas.style.height = `${displayViewport.height}px`;
         canvas.style.display = "block";
         canvas.style.marginBottom = "16px";
         canvas.dataset.pageIndex = String(i - 1);
         const ctx = canvas.getContext("2d")!;
-        await page.render({ canvasContext: ctx, viewport }).promise;
+        await page.render({ canvasContext: ctx, viewport: renderViewport }).promise;
         if (cancelled) return;
         containerRef.current!.appendChild(canvas);
-        infos.push({ index: i - 1, widthPx: viewport.width, heightPx: viewport.height });
+        infos.push({ index: i - 1, widthPx: displayViewport.width, heightPx: displayViewport.height });
       }
       setPages(infos);
     }
@@ -80,34 +97,77 @@ export default function PdfViewer({ pdfBytes, maxScale = 1.3, renderPageOverlay,
       cancelled = true;
       pdfRef?.destroy();
     };
-  }, [pdfBytes, containerWidth, maxScale]);
+  }, [pdfBytes, containerWidth, maxScale, zoom]);
 
   return (
-    <div ref={wrapperRef} style={{ position: "relative", width: "100%" }}>
-      <div ref={containerRef} />
-      {pages.map((page) => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 12, width: "100%" }}>
+      <div ref={wrapperRef} style={{ position: "relative", width: "100%" }}>
+        <div ref={containerRef} />
+        {pages.map((page) => (
+          <div
+            key={page.index}
+            data-page-index={page.index}
+            onClick={(e) => {
+              if (!onPageClick) return;
+              const rect = e.currentTarget.getBoundingClientRect();
+              const xFrac = (e.clientX - rect.left) / rect.width;
+              const yFrac = (e.clientY - rect.top) / rect.height;
+              onPageClick(page, xFrac, yFrac);
+            }}
+            style={{
+              position: "absolute",
+              left: 0,
+              top: pages.slice(0, page.index).reduce((sum, p) => sum + p.heightPx + 16, 0),
+              width: page.widthPx,
+              height: page.heightPx,
+              cursor: onPageClick ? "crosshair" : "default",
+            }}
+          >
+            {renderPageOverlay?.(page)}
+          </div>
+        ))}
+      </div>
+
+      {pages.length > 0 && (
         <div
-          key={page.index}
-          data-page-index={page.index}
-          onClick={(e) => {
-            if (!onPageClick) return;
-            const rect = e.currentTarget.getBoundingClientRect();
-            const xFrac = (e.clientX - rect.left) / rect.width;
-            const yFrac = (e.clientY - rect.top) / rect.height;
-            onPageClick(page, xFrac, yFrac);
-          }}
           style={{
-            position: "absolute",
-            left: 0,
-            top: pages.slice(0, page.index).reduce((sum, p) => sum + p.heightPx + 16, 0),
-            width: page.widthPx,
-            height: page.heightPx,
-            cursor: onPageClick ? "crosshair" : "default",
+            position: "sticky",
+            bottom: 16,
+            alignSelf: "center",
+            display: "flex",
+            alignItems: "center",
+            gap: 4,
+            background: "var(--canvas)",
+            border: "1px solid var(--hairline)",
+            borderRadius: 999,
+            boxShadow: "var(--shadow-md)",
+            padding: "6px 8px",
+            zIndex: 5,
           }}
         >
-          {renderPageOverlay?.(page)}
+          <button
+            type="button"
+            className="btn-secondary"
+            style={{ padding: "4px 10px", borderRadius: 999 }}
+            onClick={() => setZoom((z) => Math.max(MIN_ZOOM, Math.round((z - ZOOM_STEP) * 100) / 100))}
+            aria-label="Zoom out"
+          >
+            −
+          </button>
+          <span style={{ fontSize: 13, color: "var(--mute)", minWidth: 44, textAlign: "center" }}>
+            {Math.round(zoom * 100)}%
+          </span>
+          <button
+            type="button"
+            className="btn-secondary"
+            style={{ padding: "4px 10px", borderRadius: 999 }}
+            onClick={() => setZoom((z) => Math.min(MAX_ZOOM, Math.round((z + ZOOM_STEP) * 100) / 100))}
+            aria-label="Zoom in"
+          >
+            +
+          </button>
         </div>
-      ))}
+      )}
     </div>
   );
 }

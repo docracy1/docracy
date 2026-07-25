@@ -618,6 +618,7 @@ export default function Prepare() {
   };
 
   return (
+    <>
     <div className="container">
       <h1>Prepare a document</h1>
 
@@ -705,8 +706,9 @@ export default function Prepare() {
           )}
         </div>
       )}
+    </div>
 
-      {pdfBytes && (
+    {pdfBytes && (
         <div className="prepare-grid">
           <div>
             <PdfViewer
@@ -1442,6 +1444,6 @@ export default function Prepare() {
           {creatingDrag.overPage ? "Drop to place" : `${FIELD_TYPE_LABEL[placingFieldType]} · ${signerLabel(placingSignerOrder)}`}
         </div>
       )}
-    </div>
+    </>
   );
 }
