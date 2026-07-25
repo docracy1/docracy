@@ -33,6 +33,18 @@
   box-sizing: border-box;
 }
 
+html {
+  /* Reserves the vertical scrollbar's width permanently, even on pages/browsers where it isn't
+     an overlay (Windows, some Linux desktops). Without this, a page whose height straddles the
+     viewport height — e.g. PdfViewer.tsx zoomed past 100% — can flip the scrollbar on/off every
+     time its own width-measuring ResizeObserver fires: scrollbar appears -> width shrinks ->
+     content re-renders narrower -> now fits without a scrollbar -> scrollbar disappears -> width
+     grows again -> repeat, forever, looking like the page rapidly jumping. Ignored harmlessly by
+     browsers that don't support it (currently just older Safari), which already use overlay
+     scrollbars and never had this problem. */
+  scrollbar-gutter: stable;
+}
+
 body {
   margin: 0;
   background: var(--canvas);

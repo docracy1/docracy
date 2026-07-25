@@ -32,18 +32,34 @@ export default function PdfViewer({ pdfBytes, maxScale = 1.8, renderPageOverlay,
   // Track available width so pages scale down to fit on narrow (e.g. mobile) screens instead of
   // forcing horizontal scroll. Measured directly (not just via ResizeObserver) since some embedded
   // browser contexts never fire resize-observer callbacks at all.
+  //
+  // Debounced (not measured synchronously on every callback) as a defense against a resize-loop:
+  // on browsers whose scrollbar takes up layout width (Windows, many Linux desktops — unlike
+  // macOS's overlay scrollbars), zooming past 100% can make the page tall enough to need a
+  // vertical scrollbar, which shrinks this element's width, which re-renders the PDF narrower,
+  // which may no longer need a scrollbar, which grows the width back — flipping forever. The
+  // scrollbar-gutter: stable rule in theme.css is the real fix (reserves that space permanently
+  // so the scrollbar's presence never changes anything), but this debounce keeps any remaining
+  // edge case (e.g. older Safari, which doesn't support scrollbar-gutter yet) to a slow settle
+  // instead of a tight, visible flicker loop.
   useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
     const measure = () => {
       if (!wrapperRef.current) return;
       const width = wrapperRef.current.clientWidth;
       setContainerWidth((prev) => (Math.abs(prev - width) > 10 ? width : prev));
     };
+    const debouncedMeasure = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(measure, 150);
+    };
     measure();
-    window.addEventListener("resize", measure);
-    const observer = new ResizeObserver(measure);
+    window.addEventListener("resize", debouncedMeasure);
+    const observer = new ResizeObserver(debouncedMeasure);
     if (wrapperRef.current) observer.observe(wrapperRef.current);
     return () => {
-      window.removeEventListener("resize", measure);
+      clearTimeout(timeoutId);
+      window.removeEventListener("resize", debouncedMeasure);
       observer.disconnect();
     };
   }, []);
