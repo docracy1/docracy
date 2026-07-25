@@ -1083,6 +1083,10 @@ select {
 }
 
 .dashboard-profile-menu button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
   text-align: left;
   background: none;
   border: none;
@@ -1093,6 +1097,11 @@ select {
   color: var(--body-strong);
   cursor: pointer;
   transition: background-color 0.15s var(--ease);
+}
+
+.dashboard-profile-menu button svg {
+  flex-shrink: 0;
+  color: var(--mute);
 }
 
 .dashboard-profile-menu button:hover {
@@ -1107,6 +1116,10 @@ select {
 
 .dashboard-profile-menu-danger {
   color: var(--danger) !important;
+}
+
+.dashboard-profile-menu button.dashboard-profile-menu-danger svg {
+  color: var(--danger);
 }
 
 .dashboard-content {
