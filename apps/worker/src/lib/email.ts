@@ -1,4 +1,5 @@
 import { resolveEmailLogoUrl } from "./branding";
+import { mergePdfs } from "./pdf";
 import type { DocState, Env } from "@docracy/shared";
 
 // docracy.io is verified in Resend (DKIM on the root domain, SPF/bounce handling via the
@@ -172,17 +173,17 @@ export async function sendCompletionEmails(
   finalPdf: Uint8Array,
   certificatePdf?: Uint8Array
 ): Promise<void> {
-  const attachmentBase64 = bytesToBase64(finalPdf);
-  const attachments = [{ filename: "signed-document.pdf", content: attachmentBase64 }];
-  if (certificatePdf) {
-    attachments.push({ filename: "certificate-of-completion.pdf", content: bytesToBase64(certificatePdf) });
-  }
+  // One combined attachment (final pages + certificate page appended) rather than two separate
+  // files — purely a delivery-format convenience. The certificate is still generated, hashed, and
+  // stored in R2 as its own object beforehand (see generateCertificate's doc comment on why), so
+  // this merge changes nothing about the audit trail, only what the recipient downloads.
+  const combinedPdf = certificatePdf ? await mergePdfs([finalPdf, certificatePdf]) : finalPdf;
+  const attachments = [{ filename: "signed-document.pdf", content: bytesToBase64(combinedPdf) }];
 
   for (const signer of doc.signers) {
     if (!env.RESEND_API_KEY) {
       console.log(
-        `[email:dev] to=${signer.email} subject="Signed document" (final PDF attached, ${finalPdf.byteLength} bytes` +
-          `${certificatePdf ? `; certificate attached, ${certificatePdf.byteLength} bytes` : ""})\n${statusLines(doc)}\n`
+        `[email:dev] to=${signer.email} subject="Signed document" (combined PDF attached, ${combinedPdf.byteLength} bytes)\n${statusLines(doc)}\n`
       );
       continue;
     }
@@ -190,7 +191,7 @@ export async function sendCompletionEmails(
       from: FROM,
       to: signer.email,
       subject: "Your document is fully signed",
-      html: `<p>Everyone has signed. Final document and certificate of completion attached.</p><p>${statusLines(doc)}</p>`,
+      html: `<p>Everyone has signed. The signed document, including a certificate of completion, is attached.</p><p>${statusLines(doc)}</p>`,
       attachments,
     });
   }

@@ -1,7 +1,14 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
+import { PDFDocument } from "pdf-lib";
 import { sendSigningInvite, sendReminder, sendCompletionEmails, sendFeedback } from "./email";
 import { makeMockEnv } from "../test/mockEnv";
 import type { DocState } from "@docracy/shared";
+
+async function makePdfWithPages(pageCount: number): Promise<Uint8Array> {
+  const doc = await PDFDocument.create();
+  for (let i = 0; i < pageCount; i++) doc.addPage([400, 500]);
+  return doc.save();
+}
 
 function makeDoc(signerName: string): DocState {
   return {
@@ -102,25 +109,28 @@ describe("sendSigningInvite — custom subject/message", () => {
 describe("sendCompletionEmails", () => {
   afterEach(() => vi.restoreAllMocks());
 
-  it("mentions the certificate attachment when one is provided", async () => {
+  it("merges the certificate into one combined attachment when a certificate is provided", async () => {
     const { env } = makeMockEnv();
     const capture = captureDevEmailLog();
-    const finalPdf = new Uint8Array([1, 2, 3]);
-    const certificatePdf = new Uint8Array([4, 5, 6]);
+    const finalPdf = await makePdfWithPages(2);
+    const certificatePdf = await makePdfWithPages(1);
 
     await sendCompletionEmails(env, makeDoc("Anna"), finalPdf, certificatePdf);
 
-    expect(capture.logged()).toContain("certificate attached, 3 bytes");
+    const match = capture.logged().match(/combined PDF attached, (\d+) bytes/);
+    expect(match).toBeTruthy();
+    // A merged 3-page PDF is a different (larger) document than the 2-page final PDF alone.
+    expect(Number(match![1])).not.toBe(finalPdf.byteLength);
   });
 
-  it("omits certificate mention when none is provided", async () => {
+  it("attaches the final PDF unmerged when no certificate is provided", async () => {
     const { env } = makeMockEnv();
     const capture = captureDevEmailLog();
-    const finalPdf = new Uint8Array([1, 2, 3]);
+    const finalPdf = await makePdfWithPages(2);
 
     await sendCompletionEmails(env, makeDoc("Anna"), finalPdf);
 
-    expect(capture.logged()).not.toContain("certificate attached");
+    expect(capture.logged()).toContain(`combined PDF attached, ${finalPdf.byteLength} bytes`);
   });
 });
 

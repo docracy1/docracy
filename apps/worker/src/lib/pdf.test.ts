@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { PDFDocument } from "pdf-lib";
-import { burnFields, decodedByteLength, generateCertificate, MAX_SIGNATURE_IMAGE_BYTES } from "./pdf";
+import { burnFields, decodedByteLength, generateCertificate, mergePdfs, MAX_SIGNATURE_IMAGE_BYTES } from "./pdf";
 import type { DocField, DocState } from "@docracy/shared";
 
 // A real minimal 1x1 PNG — needed because pdf-lib's embedPng actually decodes the image.
@@ -132,5 +132,32 @@ describe("generateCertificate", () => {
     const loaded = await PDFDocument.load(withTimestamp);
     expect(loaded.getPageCount()).toBe(1);
     expect(withTimestamp.byteLength).toBeGreaterThan(without.byteLength);
+  });
+});
+
+describe("mergePdfs", () => {
+  async function makePdfWithPages(pageCount: number): Promise<Uint8Array> {
+    const doc = await PDFDocument.create();
+    for (let i = 0; i < pageCount; i++) doc.addPage([400, 500]);
+    return doc.save();
+  }
+
+  it("concatenates every page from every input PDF, in order", async () => {
+    const a = await makePdfWithPages(2);
+    const b = await makePdfWithPages(1);
+
+    const merged = await mergePdfs([a, b]);
+
+    const loaded = await PDFDocument.load(merged);
+    expect(loaded.getPageCount()).toBe(3);
+  });
+
+  it("returns a valid single-input PDF unchanged in page count", async () => {
+    const a = await makePdfWithPages(1);
+
+    const merged = await mergePdfs([a]);
+
+    const loaded = await PDFDocument.load(merged);
+    expect(loaded.getPageCount()).toBe(1);
   });
 });

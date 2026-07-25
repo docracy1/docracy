@@ -172,3 +172,20 @@ export async function generateCertificate(doc: DocState, finalPdfSha256: string)
 
   return cert.save();
 }
+
+/**
+ * Concatenates PDFs into one, in order — used only to give a signer a single combined attachment
+ * (signed document + certificate) in the completion email. The certificate is still generated and
+ * hashed as a separate document beforehand (see generateCertificate's own doc comment on why), and
+ * still stored separately in R2; this merge happens only at the point of email delivery, purely for
+ * the recipient's convenience.
+ */
+export async function mergePdfs(pdfs: Uint8Array[]): Promise<Uint8Array> {
+  const merged = await PDFDocument.create();
+  for (const bytes of pdfs) {
+    const doc = await PDFDocument.load(bytes, { ignoreEncryption: true });
+    const pages = await merged.copyPages(doc, doc.getPageIndices());
+    pages.forEach((page) => merged.addPage(page));
+  }
+  return merged.save();
+}
