@@ -375,6 +375,172 @@ select {
   color: var(--ink);
 }
 
+/* Pinned action bar at the top of the sidebar, so Send is always one click away instead of
+   requiring a scroll past every card — the biggest usability gap vs. the SwipeSign reference
+   this was modeled after. */
+.prepare-sidebar-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--canvas);
+  padding-bottom: 12px;
+}
+
+.prepare-sidebar-filename {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.prepare-sidebar-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.prepare-start-over-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: 1px solid var(--hairline);
+  background: var(--surface, #fff);
+  color: var(--mute);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.prepare-heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.prepare-heading-row .prepare-sidebar-heading {
+  margin-bottom: 0;
+}
+
+.prepare-count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.prepare-accordion-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+}
+
+.prepare-accordion-chevron {
+  display: inline-block;
+  transition: transform 0.15s var(--ease);
+  color: var(--mute);
+  flex-shrink: 0;
+}
+
+.prepare-accordion-chevron.open {
+  transform: rotate(180deg);
+}
+
+/* Mirrors the reference's highlighted "Smart auto-detect" call-to-action — same auto-detect
+   button that already existed, just given the visual weight its usefulness deserves. */
+.prepare-highlight-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--r-sm);
+  border: 1.5px solid var(--primary);
+  background: var(--primary-soft);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.prepare-highlight-card:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.prepare-highlight-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-sm);
+  background: var(--primary);
+  color: #fff;
+  flex-shrink: 0;
+  font-size: 14px;
+}
+
+.prepare-highlight-title {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.prepare-highlight-sub {
+  display: block;
+  font-size: 11px;
+  color: var(--mute);
+  font-weight: 400;
+}
+
+.prepare-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--hairline);
+  background: var(--canvas);
+  color: var(--body);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.prepare-pill-btn.active {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-soft);
+}
+
 /* Landing page hero + feature primitives */
 
 .hero-band {

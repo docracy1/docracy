@@ -49,6 +49,19 @@ const FIELD_TYPE_LABEL: Record<DocFieldType, string> = {
 
 let fieldIdCounter = 0;
 
+// Keep in sync with apps/worker/wrangler.toml's DOC_TTL_DAYS — shown as a cosmetic "expires in"
+// hint in the sidebar summary; not worth a network round-trip to fetch for a single number.
+const DOC_EXPIRY_DAYS = 9;
+
+function SidebarHeading({ label, count }: { label: string; count?: number }) {
+  return (
+    <div className="prepare-heading-row">
+      <h3 className="prepare-sidebar-heading">{label}</h3>
+      {typeof count === "number" && <span className="prepare-count-badge">{count}</span>}
+    </div>
+  );
+}
+
 export default function Prepare() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -597,6 +610,23 @@ export default function Prepare() {
     }
   };
 
+  const onStartOver = () => {
+    if (!window.confirm("Discard this document and start over? Nothing has been sent yet.")) return;
+    setFile(null);
+    setPdfBytes(null);
+    setFields([]);
+    setSigners([
+      { order: 1, name: "", email: "" },
+      { order: 2, name: "", email: "" },
+    ]);
+    setPreparerSigns(false);
+    setPreparerEmail("");
+    setShowCustomMessage(false);
+    setCustomSubject("");
+    setCustomMessage("");
+    setError(null);
+  };
+
   const onSubmit = async () => {
     if (!file || !canSubmit) return;
     setSubmitting(true);
@@ -1024,12 +1054,41 @@ export default function Prepare() {
           </div>
 
           <div className="prepare-sidebar-col">
+            <div className="prepare-sidebar-topbar">
+              <span className="prepare-sidebar-filename" title={file?.name}>
+                {file?.name ?? "Untitled document"}
+              </span>
+              <div className="prepare-sidebar-topbar-actions">
+                <button type="button" className="prepare-start-over-btn" aria-label="Start over" onClick={onStartOver}>
+                  ×
+                </button>
+                <button
+                  type="button"
+                  className="btn-primary"
+                  style={{ padding: "6px 16px", fontSize: 13 }}
+                  disabled={!canSubmit || submitting}
+                  onClick={onSubmit}
+                >
+                  {submitting ? "Sending…" : "Send"}
+                </button>
+              </div>
+            </div>
+            {error && <p style={{ color: "var(--danger)", fontSize: 13 }}>{error}</p>}
+
             <div className="card">
-              <h3 className="prepare-sidebar-heading">Signers &amp; order</h3>
-              <label style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12, color: "var(--body)" }}>
-                <input type="checkbox" checked={preparerSigns} onChange={(e) => togglePreparerSigns(e.target.checked)} />
-                I also need to sign this
-              </label>
+              <SidebarHeading label="Signers & viewers" count={signers.length} />
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
+                <button
+                  type="button"
+                  className={`prepare-pill-btn ${preparerSigns ? "active" : ""}`}
+                  onClick={() => togglePreparerSigns(!preparerSigns)}
+                >
+                  + Myself
+                </button>
+                <button type="button" className="prepare-pill-btn" onClick={addSigner}>
+                  + Signer
+                </button>
+              </div>
               {!preparerSigns && (
                 <div style={{ marginBottom: 12 }}>
                   <input
@@ -1091,9 +1150,6 @@ export default function Prepare() {
                   )}
                 </div>
               ))}
-              <button className="btn-secondary" onClick={addSigner} style={{ width: "100%" }}>
-                + Add signer
-              </button>
               {signers.length > 1 && (
                 <div style={{ marginTop: 12, paddingTop: 12, borderTop: "1px solid var(--hairline)" }}>
                   <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 0, marginBottom: 6 }}>Signing order</p>
@@ -1190,14 +1246,12 @@ export default function Prepare() {
               <div className="card">
                 <h3 className="prepare-sidebar-heading">AI tools</h3>
 
-                <button
-                  type="button"
-                  className="btn-secondary"
-                  style={{ width: "100%", marginBottom: 8 }}
-                  disabled={detectingFields}
-                  onClick={onDetectFields}
-                >
-                  {detectingFields ? "Scanning…" : "Auto-detect signature & date fields"}
+                <button type="button" className="prepare-highlight-card" style={{ marginBottom: 8 }} disabled={detectingFields} onClick={onDetectFields}>
+                  <span className="prepare-highlight-icon">✨</span>
+                  <span>
+                    <span className="prepare-highlight-title">{detectingFields ? "Scanning…" : "Smart auto-detect"}</span>
+                    <span className="prepare-highlight-sub">Automatically find & place signature fields</span>
+                  </span>
                 </button>
                 {detectFieldsError && <p style={{ color: "var(--danger)", fontSize: 12 }}>{detectFieldsError}</p>}
                 {detectFieldsNotice && <p style={{ fontSize: 12 }}>{detectFieldsNotice}</p>}
@@ -1282,7 +1336,7 @@ export default function Prepare() {
 
             {viewMode === "fields" && (
             <div className="card">
-              <h3 className="prepare-sidebar-heading">Add a field</h3>
+              <SidebarHeading label="Fields" count={fields.length} />
               <select
                 className="form-input"
                 style={{ width: "100%", marginBottom: 8 }}
@@ -1381,9 +1435,23 @@ export default function Prepare() {
             )}
 
             <div className="card">
-              {showCustomMessage ? (
-                <>
-                  <h3 className="prepare-sidebar-heading">Customize the invite email</h3>
+              <button
+                type="button"
+                className="prepare-accordion-toggle"
+                onClick={() => setShowCustomMessage((v) => !v)}
+              >
+                <div>
+                  <h3 className="prepare-sidebar-heading" style={{ marginBottom: 2 }}>
+                    Invite email
+                  </h3>
+                  <p style={{ fontSize: 12, color: "var(--mute)", margin: 0 }}>
+                    {customSubject.trim() || customMessage.trim() ? "Customized" : "Default subject & message"}
+                  </p>
+                </div>
+                <span className={`prepare-accordion-chevron ${showCustomMessage ? "open" : ""}`}>⌄</span>
+              </button>
+              {showCustomMessage && (
+                <div style={{ marginTop: 12 }}>
                   <input
                     className="form-input"
                     style={{ width: "100%", marginBottom: 8 }}
@@ -1400,22 +1468,9 @@ export default function Prepare() {
                     value={customMessage}
                     onChange={(e) => setCustomMessage(e.target.value)}
                   />
-                </>
-              ) : (
-                <button className="btn-secondary" style={{ width: "100%" }} onClick={() => setShowCustomMessage(true)}>
-                  Customize the invite email
-                </button>
+                </div>
               )}
             </div>
-
-            {error && <p style={{ color: "var(--danger)" }}>{error}</p>}
-
-            <button className="btn-primary" disabled={!canSubmit || submitting} onClick={onSubmit}>
-              {submitting ? "Sending…" : "Send for signing"}
-            </button>
-            <p style={{ fontSize: 11, color: "var(--mute)" }}>
-              Signer identity isn't verified — only use this for documents where that's acceptable.
-            </p>
 
             <div className="card prepare-sidebar-summary">
               <div className="prepare-sidebar-summary-row">
@@ -1430,6 +1485,13 @@ export default function Prepare() {
                 <span>Fields placed</span>
                 <strong>{fields.length}</strong>
               </div>
+              <div className="prepare-sidebar-summary-row">
+                <span>Expiration</span>
+                <strong>in {DOC_EXPIRY_DAYS} days</strong>
+              </div>
+              <p style={{ fontSize: 11, color: "var(--mute)", margin: "4px 0 0" }}>
+                Signer identity isn't verified — only use this for documents where that's acceptable.
+              </p>
             </div>
           </div>
         </div>
