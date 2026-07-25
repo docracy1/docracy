@@ -222,36 +222,65 @@ function BotTable({ rows }: { rows: FunnelRow[] }) {
 }
 
 function CountryTable({ rows }: { rows: FunnelRow[] }) {
+  const days = useMemo(() => {
+    const set = new Set<string>();
+    for (const r of rows) {
+      if (r.event === "page_view") set.add(r.day);
+    }
+    return [...set].sort((a, b) => b.localeCompare(a)); // most recent first
+  }, [rows]);
+
+  const [selectedDay, setSelectedDay] = useState("all");
+
   const byCountry = useMemo(() => {
     const map = new Map<string, number>();
     for (const r of rows) {
       if (r.event !== "page_view" || !r.country) continue;
+      if (selectedDay !== "all" && r.day !== selectedDay) continue;
       map.set(r.country, (map.get(r.country) ?? 0) + r.count);
     }
     return [...map.entries()].sort(([, a], [, b]) => b - a);
-  }, [rows]);
-
-  if (byCountry.length === 0) return <p style={{ color: "var(--mute)", fontSize: 13 }}>No country data yet.</p>;
+  }, [rows, selectedDay]);
 
   return (
-    <div className="plan-table-scroll">
-      <table className="plan-table" style={{ minWidth: 280 }}>
-        <thead>
-          <tr>
-            <th style={{ textAlign: "left" }}>Country</th>
-            <th>Page views</th>
-          </tr>
-        </thead>
-        <tbody>
-          {byCountry.map(([country, count]) => (
-            <tr key={country}>
-              <td style={{ textAlign: "left" }}>{country}</td>
-              <td>{count}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <>
+      <select
+        className="form-input"
+        aria-label="Filter by day"
+        value={selectedDay}
+        onChange={(e) => setSelectedDay(e.target.value)}
+        style={{ fontSize: 13, padding: "4px 8px", marginBottom: 10, width: "auto" }}
+      >
+        <option value="all">All days</option>
+        {days.map((d) => (
+          <option key={d} value={d}>
+            {d}
+          </option>
+        ))}
+      </select>
+      {byCountry.length === 0 ? (
+        <p style={{ color: "var(--mute)", fontSize: 13 }}>No country data for this range.</p>
+      ) : (
+        <div className="plan-table-scroll">
+          <table className="plan-table" style={{ minWidth: 280 }}>
+            <thead>
+              <tr>
+                <th style={{ textAlign: "left" }}>Country</th>
+                <th>Page views</th>
+              </tr>
+            </thead>
+            <tbody>
+              {byCountry.map(([country, count]) => (
+                <tr key={country}>
+                  <td style={{ textAlign: "left" }}>{country}</td>
+                  <td>{count}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -349,9 +378,46 @@ function EnterpriseAccountsCard() {
 
 /** Every signup, paid or not — a customer only ever sees their own account. Email is the only
  *  identity Docracy collects at signup (magic-link auth, no separate name field). */
+/** A plain (non-`.plan-table`) scrollable list — `.plan-table`'s thead uses `position: sticky;
+ *  top: 72px` tuned for sticking to the *page's* scroll under the fixed nav bar; nesting it
+ *  inside this card's own `overflow-y: auto` box made it stick 72px into a much shorter box
+ *  instead, floating the header over the rows. */
+function AccountMiniList({ title, accounts }: { title: string; accounts: AdminAccount[] }) {
+  return (
+    <div>
+      <h4 style={{ fontSize: 13, color: "var(--mute)", marginTop: 0, marginBottom: 8 }}>
+        {title} ({accounts.length})
+      </h4>
+      {accounts.length === 0 ? (
+        <p style={{ fontSize: 13, color: "var(--mute)" }}>None yet.</p>
+      ) : (
+        <div style={{ maxHeight: 320, overflowY: "auto" }}>
+          {accounts.map((a) => (
+            <div
+              key={a.email}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                gap: 8,
+                padding: "8px 0",
+                borderBottom: "1px solid var(--hairline)",
+                fontSize: 13.5,
+              }}
+            >
+              <span style={{ overflowWrap: "anywhere" }}>{a.email}</span>
+              <span style={{ color: "var(--mute)", flexShrink: 0 }}>{new Date(a.createdAt).toLocaleDateString()}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function AllAccountsCard() {
   const [accounts, setAccounts] = useState<AdminAccount[] | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     fetchAdminAccounts()
@@ -359,38 +425,57 @@ function AllAccountsCard() {
       .catch((err) => setError(err instanceof Error ? err.message : "Failed to load accounts"));
   }, []);
 
+  const free = accounts?.filter((a) => !a.isPaid) ?? [];
+  const paid = accounts?.filter((a) => a.isPaid) ?? [];
+
   return (
     <div className="card" style={{ marginBottom: 24 }}>
-      <h3 style={{ marginTop: 0, fontSize: 15 }}>All signups ({accounts?.length ?? "…"})</h3>
-      <p style={{ fontSize: 12, color: "var(--mute)", marginTop: -4 }}>
-        Every account, including free signups that never pay. Docracy's magic-link sign-in only
-        collects an email address — there's no separate name field to show.
-      </p>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, flexWrap: "wrap" }}>
+        <div>
+          <h3 style={{ marginTop: 0, marginBottom: 4, fontSize: 15 }}>All signups ({accounts?.length ?? "…"})</h3>
+          <p style={{ fontSize: 12, color: "var(--mute)", margin: 0 }}>
+            Every account, including free signups that never pay. Docracy's magic-link sign-in only
+            collects an email address — there's no separate name field to show.
+          </p>
+        </div>
+        {accounts && accounts.length > 0 && (
+          <button className="btn-secondary" style={{ fontSize: 13, padding: "4px 10px", flexShrink: 0 }} onClick={() => setShowAll((v) => !v)}>
+            {showAll ? "Split by plan" : "Show all"}
+          </button>
+        )}
+      </div>
 
       {error && <p style={{ color: "var(--danger)", fontSize: 13 }}>{error}</p>}
       {!error && accounts && accounts.length === 0 && (
         <p style={{ fontSize: 13, color: "var(--mute)", marginBottom: 0 }}>No signups yet.</p>
       )}
-      {!error && accounts && accounts.length > 0 && (
-        <div className="plan-table-scroll" style={{ maxHeight: 360, overflowY: "auto" }}>
-          <table className="plan-table" style={{ minWidth: 420 }}>
-            <thead>
-              <tr>
-                <th style={{ textAlign: "left" }}>Email</th>
-                <th style={{ textAlign: "left" }}>Signed up</th>
-                <th>Plan</th>
-              </tr>
-            </thead>
-            <tbody>
-              {accounts.map((a) => (
-                <tr key={a.email}>
-                  <td style={{ textAlign: "left" }}>{a.email}</td>
-                  <td style={{ textAlign: "left" }}>{new Date(a.createdAt).toLocaleDateString()}</td>
-                  <td>{a.isEnterprise ? "Enterprise" : a.isPaid ? "Paid" : "Free"}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      {!error && accounts && accounts.length > 0 && !showAll && (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 20, marginTop: 16 }}>
+          <AccountMiniList title="Free" accounts={free} />
+          <AccountMiniList title="Paid" accounts={paid} />
+        </div>
+      )}
+      {!error && accounts && accounts.length > 0 && showAll && (
+        <div style={{ maxHeight: 400, overflowY: "auto", marginTop: 16 }}>
+          {accounts.map((a) => (
+            <div
+              key={a.email}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                gap: 8,
+                padding: "8px 0",
+                borderBottom: "1px solid var(--hairline)",
+                fontSize: 13.5,
+              }}
+            >
+              <span style={{ overflowWrap: "anywhere" }}>{a.email}</span>
+              <span style={{ color: "var(--mute)", flexShrink: 0 }}>{new Date(a.createdAt).toLocaleDateString()}</span>
+              <span style={{ flexShrink: 0, minWidth: 70, textAlign: "right" }}>
+                {a.isEnterprise ? "Enterprise" : a.isPaid ? "Paid" : "Free"}
+              </span>
+            </div>
+          ))}
         </div>
       )}
     </div>
