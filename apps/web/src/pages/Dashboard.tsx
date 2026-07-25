@@ -1,4 +1,4 @@
-import { Component, useEffect, useMemo, useState, type ReactNode } from "react";
+import { Component, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   apiUrl,
@@ -159,6 +159,7 @@ export default function Dashboard() {
   const [disconnectingProvider, setDisconnectingProvider] = useState<CloudProvider | null>(null);
   const [connectorBanner, setConnectorBanner] = useState<"connected" | "error" | null>(null);
   const navigate = useNavigate();
+  const profileRef = useRef<HTMLDivElement>(null);
 
   const onLogout = async () => {
     try {
@@ -405,7 +406,10 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!profileMenuOpen) return;
-    const onDocClick = () => setProfileMenuOpen(false);
+    const onDocClick = (e: MouseEvent) => {
+      if (profileRef.current && profileRef.current.contains(e.target as Node)) return;
+      setProfileMenuOpen(false);
+    };
     document.addEventListener("click", onDocClick);
     return () => document.removeEventListener("click", onDocClick);
   }, [profileMenuOpen]);
@@ -565,7 +569,7 @@ export default function Dashboard() {
           </div>
         )}
 
-        <div className="dashboard-profile">
+        <div className="dashboard-profile" ref={profileRef}>
           {profileMenuOpen && (
             <ProfileMenuBoundary>
             <div className="dashboard-profile-menu">
