@@ -162,8 +162,8 @@ function RouteTable({ rows }: { rows: FunnelRow[] }) {
   if (byRoute.length === 0) return <p style={{ color: "var(--mute)", fontSize: 13 }}>No page views yet.</p>;
 
   return (
-    <div className="plan-table-scroll">
-      <table className="plan-table" style={{ minWidth: 360 }}>
+    <div className="plan-table-scroll" style={{ overflowX: "auto" }}>
+      <table className="plan-table" style={{ width: "100%", minWidth: "auto", tableLayout: "fixed" }}>
         <thead>
           <tr>
             <th style={{ textAlign: "left" }}>Route</th>
@@ -175,7 +175,7 @@ function RouteTable({ rows }: { rows: FunnelRow[] }) {
         <tbody>
           {byRoute.map(([route, v]) => (
             <tr key={route}>
-              <td style={{ textAlign: "left" }}>{route}</td>
+              <td style={{ textAlign: "left", overflowWrap: "anywhere" }}>{route}</td>
               <td>{v.total}</td>
               <td>{v.human}</td>
               <td>{v.bot}</td>
@@ -200,8 +200,8 @@ function BotTable({ rows }: { rows: FunnelRow[] }) {
   if (byBot.length === 0) return <p style={{ color: "var(--mute)", fontSize: 13 }}>No known bot traffic yet.</p>;
 
   return (
-    <div className="plan-table-scroll">
-      <table className="plan-table" style={{ minWidth: 280 }}>
+    <div className="plan-table-scroll" style={{ overflowX: "auto" }}>
+      <table className="plan-table" style={{ width: "100%", minWidth: "auto", tableLayout: "fixed" }}>
         <thead>
           <tr>
             <th style={{ textAlign: "left" }}>Bot</th>
@@ -261,8 +261,8 @@ function CountryTable({ rows }: { rows: FunnelRow[] }) {
       {byCountry.length === 0 ? (
         <p style={{ color: "var(--mute)", fontSize: 13 }}>No country data for this range.</p>
       ) : (
-        <div className="plan-table-scroll">
-          <table className="plan-table" style={{ minWidth: 280 }}>
+        <div className="plan-table-scroll" style={{ overflowX: "auto" }}>
+          <table className="plan-table" style={{ width: "100%", minWidth: "auto", tableLayout: "fixed" }}>
             <thead>
               <tr>
                 <th style={{ textAlign: "left" }}>Country</th>
