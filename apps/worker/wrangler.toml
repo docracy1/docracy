@@ -54,6 +54,13 @@ CF_ACCOUNT_ID = "d7764515fd9887154193dc04810d81d8"
 # Reference only (see packages/shared/src/types.ts) — the Enterprise Payment Link's own
 # metadata.plan="enterprise" is what the webhook actually keys off of, not this ID.
 STRIPE_ENTERPRISE_PRODUCT_ID = "prod_UwhdVD23t6zce3"
+# Cloud-storage connectors (Enterprise only, see lib/cloudConnectors.ts) — client IDs are public,
+# not secret. Each provider's routes 501 gracefully until both its ID and secret are set. Register
+# the OAuth app in that provider's own developer console with redirect URI
+# {PUBLIC_WORKER_URL}/api/account/connectors/{provider}/callback, then fill these in:
+# DROPBOX_CLIENT_ID = "..."
+# MS_CLIENT_ID = "..."
+# BOX_CLIENT_ID = "..."
 
 # --- Secrets (never stored in this file) ---
 # Set with: wrangler secret put TOKEN_SECRET
@@ -67,6 +74,11 @@ STRIPE_ENTERPRISE_PRODUCT_ID = "prod_UwhdVD23t6zce3"
 # Set with: wrangler secret put STRIPE_WEBHOOK_SECRET   (from the Stripe Dashboard's webhook config)
 # STRIPE_PRICE_ID is not secret (just an identifier) — once a Price exists in the Stripe
 # Dashboard, add it to [vars] above as STRIPE_PRICE_ID = "price_xxxxx".
+#
+# --- Cloud connectors (Dropbox/OneDrive/Box) — all optional; each 501s until configured ---
+# Set with: wrangler secret put DROPBOX_CLIENT_SECRET
+# Set with: wrangler secret put MS_CLIENT_SECRET
+# Set with: wrangler secret put BOX_CLIENT_SECRET
 
 # --- Staging: isolated KV/D1/R2 so testing never touches production data ---
 # Deploy with: wrangler deploy --env staging

@@ -263,6 +263,29 @@ export async function deleteWebhook(id: string): Promise<{ ok: true }> {
   return asJson(res);
 }
 
+export type CloudProvider = "dropbox" | "onedrive" | "box";
+
+export interface CloudConnectionSummary {
+  provider: CloudProvider;
+  connectedEmail: string | null;
+  createdAt: string;
+}
+
+export async function fetchConnectors(): Promise<{ connections: CloudConnectionSummary[] }> {
+  const res = await apiFetch("/api/account/connectors");
+  return asJson(res);
+}
+
+export async function getConnectorAuthorizeUrl(provider: CloudProvider): Promise<{ url: string }> {
+  const res = await apiFetch(`/api/account/connectors/${provider}/authorize`);
+  return asJson(res);
+}
+
+export async function disconnectConnector(provider: CloudProvider): Promise<{ ok: true }> {
+  const res = await apiFetch(`/api/account/connectors/${provider}`, { method: "DELETE" });
+  return asJson(res);
+}
+
 export interface TeamMemberSummary {
   accountId: string;
   email: string;

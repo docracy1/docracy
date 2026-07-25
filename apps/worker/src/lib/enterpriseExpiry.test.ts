@@ -29,6 +29,23 @@ describe("runEnterpriseExpirySweep", () => {
     expect(row?.enterprise_expires_at).toBeNull();
   });
 
+  it("also deletes any cloud-storage connections for an account past its expiry date", async () => {
+    const { env, d1 } = makeMockEnv();
+    const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+    await seedAccount(d1, "acct-expired", yesterday);
+    await d1
+      .prepare(
+        `INSERT INTO cloud_connections (id, account_id, provider, access_token, created_at) VALUES (?, ?, ?, ?, ?)`
+      )
+      .bind("conn-1", "acct-expired", "dropbox", "at-1", new Date().toISOString())
+      .run();
+
+    await runEnterpriseExpirySweep(env);
+
+    const row = await d1.prepare("SELECT COUNT(*) as n FROM cloud_connections WHERE account_id = ?").bind("acct-expired").first();
+    expect((row as { n: number }).n).toBe(0);
+  });
+
   it("leaves an account with a future expiry date untouched", async () => {
     const { env, d1 } = makeMockEnv();
     const nextYear = new Date(Date.now() + 300 * 24 * 60 * 60 * 1000).toISOString();

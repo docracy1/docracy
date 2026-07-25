@@ -141,4 +141,14 @@ export interface Env {
    *  until manually created in the Cloudflare dashboard; the admin analytics route degrades to a
    *  clear "not configured" response rather than failing when this is unset. */
   CF_ANALYTICS_API_TOKEN?: string;
+  /** Enterprise-only cloud-storage connectors (lib/cloudConnectors.ts). Each provider's OAuth app
+   *  is created in that provider's own developer console; client IDs are public and live here,
+   *  client secrets are set via `wrangler secret put {PROVIDER}_CLIENT_SECRET` and never appear in
+   *  this file. Routes degrade to a graceful 501 for any provider left unconfigured. */
+  DROPBOX_CLIENT_ID?: string;
+  DROPBOX_CLIENT_SECRET?: string;
+  MS_CLIENT_ID?: string;
+  MS_CLIENT_SECRET?: string;
+  BOX_CLIENT_ID?: string;
+  BOX_CLIENT_SECRET?: string;
 }

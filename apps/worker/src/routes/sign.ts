@@ -9,6 +9,7 @@ import { sha256Hex } from "../lib/hash";
 import { requestTimestamp } from "../lib/timestamp";
 import { verifyPin, issueUnlockToken, verifyUnlockToken } from "../lib/signUnlock";
 import { deliverWebhookEvent } from "../lib/webhooks";
+import { uploadCompletedDocument } from "../lib/cloudConnectors";
 import { logFunnelEvent, NOTRACK_COOKIE_NAME } from "../lib/analytics";
 import { hasCustomLogo, logoPath } from "../lib/branding";
 import { verifyToken, signToken } from "@docracy/shared";
@@ -32,6 +33,10 @@ function webhookNonFatal(
   work: Promise<void>
 ) {
   ctx.waitUntil(work.catch((err) => console.error(`Webhook delivery (${eventType}) failed for doc ${docId} (non-fatal):`, err)));
+}
+
+function connectorNonFatal(ctx: { waitUntil(promise: Promise<unknown>): void }, docId: string, work: Promise<void>) {
+  ctx.waitUntil(work.catch((err) => console.error(`Cloud connector upload failed for doc ${docId} (non-fatal):`, err)));
 }
 
 const sign = new Hono<{ Bindings: Env }>();
@@ -325,6 +330,11 @@ sign.post("/sign/:token", async (c) => {
         freshDoc.docId,
         "document.completed",
         deliverWebhookEvent(c.env, freshDoc.accountId, "document.completed", { docId: freshDoc.docId })
+      );
+      connectorNonFatal(
+        c.executionCtx,
+        freshDoc.docId,
+        uploadCompletedDocument(c.env, freshDoc.accountId, freshDoc.docId, `${freshDoc.docId}.pdf`, updatedBytes)
       );
     }
   }

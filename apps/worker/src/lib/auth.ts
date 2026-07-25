@@ -294,6 +294,14 @@ export const requirePaidAccount: MiddlewareHandler<AuthEnv> = async (c, next) =>
   await next();
 };
 
+export const requireEnterpriseAccount: MiddlewareHandler<AuthEnv> = async (c, next) => {
+  const account = await resolveAccount(c.env, getCookie(c, SESSION_COOKIE_NAME));
+  if (!account) return c.json({ error: "Sign in required" }, 401);
+  if (!account.isEnterprise) return c.json({ error: "This requires an Enterprise account" }, 402);
+  c.set("account", account);
+  await next();
+};
+
 /** Gates internal admin routes (e.g. GET /api/admin/analytics) to a hardcoded allow-list —
  *  deliberately separate from requirePaidAccount, since this isn't a customer-tier feature and a
  *  paying customer must never see it just by being a paid account. */

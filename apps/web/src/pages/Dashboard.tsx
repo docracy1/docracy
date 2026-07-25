@@ -7,13 +7,16 @@ import {
   deleteBrandLogo,
   deleteTemplate,
   deleteWebhook,
+  disconnectConnector,
   fetchBranding,
+  fetchConnectors,
   fetchMe,
   fetchMyDocuments,
   fetchTeam,
   fetchTemplates,
   fetchTokenStatus,
   fetchWebhooks,
+  getConnectorAuthorizeUrl,
   inviteTeammate,
   logout,
   openBillingPortal,
@@ -22,6 +25,8 @@ import {
   startCheckout,
   uploadBrandLogo,
   type Account,
+  type CloudConnectionSummary,
+  type CloudProvider,
   type DocumentSummary,
   type PendingInviteSummary,
   type TeamMemberSummary,
@@ -121,12 +126,17 @@ export default function Dashboard() {
   const [deletingLogo, setDeletingLogo] = useState(false);
   const [activeTab, setActiveTab] = useState<"dashboard" | "templates" | "documents" | "tools">("dashboard");
   const [docsSubTab, setDocsSubTab] = useState<"all" | "awaiting" | "waiting" | "completed">("all");
-  const [toolsSubTab, setToolsSubTab] = useState<"connector" | "webhooks" | "branding" | "team" | "subscription">(
-    "connector"
-  );
+  const [toolsSubTab, setToolsSubTab] = useState<
+    "connector" | "webhooks" | "connectors" | "branding" | "team" | "subscription"
+  >("connector");
   const [documentsExpanded, setDocumentsExpanded] = useState(false);
   const [toolsExpanded, setToolsExpanded] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const [connections, setConnections] = useState<CloudConnectionSummary[]>([]);
+  const [connectorError, setConnectorError] = useState<string | null>(null);
+  const [connectingProvider, setConnectingProvider] = useState<CloudProvider | null>(null);
+  const [disconnectingProvider, setDisconnectingProvider] = useState<CloudProvider | null>(null);
+  const [connectorBanner, setConnectorBanner] = useState<"connected" | "error" | null>(null);
   const navigate = useNavigate();
 
   const onLogout = async () => {
@@ -187,6 +197,33 @@ export default function Dashboard() {
       setWebhookError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
       setDeletingWebhookId(null);
+    }
+  };
+
+  const refreshConnectors = () => fetchConnectors().then((res) => setConnections(res.connections));
+
+  const onConnectProvider = async (provider: CloudProvider) => {
+    setConnectingProvider(provider);
+    setConnectorError(null);
+    try {
+      const { url } = await getConnectorAuthorizeUrl(provider);
+      window.location.href = url;
+    } catch (err) {
+      setConnectorError(err instanceof Error ? err.message : "Something went wrong");
+      setConnectingProvider(null);
+    }
+  };
+
+  const onDisconnectProvider = async (provider: CloudProvider) => {
+    setDisconnectingProvider(provider);
+    setConnectorError(null);
+    try {
+      await disconnectConnector(provider);
+      await refreshConnectors();
+    } catch (err) {
+      setConnectorError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setDisconnectingProvider(null);
     }
   };
 
@@ -352,6 +389,16 @@ export default function Dashboard() {
     return () => document.removeEventListener("click", onDocClick);
   }, [profileMenuOpen]);
 
+  // Reads the ?connector=connected|error param the OAuth callback redirects back with (a real
+  // page navigation, not an in-app fetch), shows a one-time banner, then strips it from the URL.
+  useEffect(() => {
+    const value = new URLSearchParams(window.location.search).get("connector");
+    if (value === "connected" || value === "error") {
+      setConnectorBanner(value);
+      navigate("/dashboard", { replace: true });
+    }
+  }, [navigate]);
+
   useEffect(() => {
     fetchMe()
       .then(async (res) => {
@@ -372,6 +419,10 @@ export default function Dashboard() {
           setPendingInvites(pendingInvites);
           const { logoPath } = await fetchBranding();
           setBrandLogoPath(logoPath);
+        }
+        if (res.account?.isEnterprise) {
+          const { connections } = await fetchConnectors();
+          setConnections(connections);
         }
       })
       .catch((err) => setError(err instanceof Error ? err.message : "Something went wrong"))
@@ -413,6 +464,7 @@ export default function Dashboard() {
   const TOOLS_SUBNAV: Array<{ key: typeof toolsSubTab; label: string }> = [
     { key: "connector", label: "Connector & API key" },
     { key: "webhooks", label: "Webhooks" },
+    ...(account.isEnterprise ? [{ key: "connectors" as const, label: "Connectors" }] : []),
     { key: "branding", label: "Branding" },
     { key: "team", label: "Team" },
     ...(isWorkspaceOwner ? [{ key: "subscription" as const, label: "Subscription" }] : []),
@@ -549,6 +601,28 @@ export default function Dashboard() {
       </aside>
 
       <div className="dashboard-content">
+        {connectorBanner && (
+          <div
+            className="card"
+            style={{
+              marginBottom: 16,
+              borderColor: connectorBanner === "connected" ? "var(--primary)" : "var(--danger)",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: 12,
+            }}
+          >
+            <span>
+              {connectorBanner === "connected"
+                ? "Connected — signed documents will now upload there automatically."
+                : "Couldn't connect that provider. Please try again."}
+            </span>
+            <button className="btn-secondary" style={{ fontSize: 13, padding: "4px 10px" }} onClick={() => setConnectorBanner(null)}>
+              Dismiss
+            </button>
+          </div>
+        )}
         {activeTab === "dashboard" && (
           <>
             <h1>Welcome back</h1>
@@ -994,6 +1068,68 @@ export default function Dashboard() {
               + Add webhook
             </button>
           )}
+        </div>
+      )}
+
+      {activeTab === "tools" && account.isEnterprise && toolsSubTab === "connectors" && (
+        <div className="card" style={{ marginTop: 24 }}>
+          <h3 style={{ fontSize: 15 }}>Connectors</h3>
+          <p style={{ fontSize: 12, color: "var(--mute)" }}>
+            Connect your cloud storage and every signed document uploads there automatically once it's complete.
+          </p>
+          {connectorError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{connectorError}</p>}
+          {(
+            [
+              { provider: "dropbox" as const, label: "Dropbox" },
+              { provider: "onedrive" as const, label: "OneDrive" },
+              { provider: "box" as const, label: "Box" },
+            ]
+          ).map(({ provider, label }) => {
+            const connection = connections.find((c) => c.provider === provider);
+            return (
+              <div
+                key={provider}
+                style={{
+                  padding: "10px 0",
+                  borderBottom: "1px solid var(--hairline)",
+                  display: "flex",
+                  flexWrap: "wrap",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  gap: 8,
+                }}
+              >
+                <span>
+                  {label}
+                  {connection && (
+                    <span style={{ fontSize: 12, color: "var(--mute)" }}>
+                      {" "}
+                      — connected{connection.connectedEmail ? ` as ${connection.connectedEmail}` : ""}
+                    </span>
+                  )}
+                </span>
+                {connection ? (
+                  <button
+                    className="btn-secondary"
+                    style={{ fontSize: 13, padding: "4px 10px" }}
+                    disabled={disconnectingProvider === provider}
+                    onClick={() => onDisconnectProvider(provider)}
+                  >
+                    {disconnectingProvider === provider ? "Disconnecting…" : "Disconnect"}
+                  </button>
+                ) : (
+                  <button
+                    className="btn-secondary"
+                    style={{ fontSize: 13, padding: "4px 10px" }}
+                    disabled={connectingProvider === provider}
+                    onClick={() => onConnectProvider(provider)}
+                  >
+                    {connectingProvider === provider ? "Connecting…" : "Connect"}
+                  </button>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
 

@@ -1,4 +1,5 @@
 import { markAccountPaid } from "./billing";
+import { deleteConnectionsForAccount } from "./cloudConnectors";
 import type { Env } from "@docracy/shared";
 
 /**
@@ -20,5 +21,8 @@ export async function runEnterpriseExpirySweep(env: Env): Promise<void> {
 
   for (const row of results) {
     await markAccountPaid(env, row.id, false);
+    // A lapsed Enterprise account keeps no standing OAuth grant to the customer's cloud storage —
+    // same posture as revoking the API token on any other loss of paid status.
+    await deleteConnectionsForAccount(env, row.id);
   }
 }
