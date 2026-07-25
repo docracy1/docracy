@@ -35,6 +35,7 @@ import {
   type WebhookSummary,
 } from "../lib/api";
 import { useNoIndex } from "../lib/useNoIndex";
+import { FREE_TEMPLATES } from "../lib/freeTemplates";
 
 /** Minimalist monochrome line icons for the profile-menu items — same hand-drawn, Heroicons-
  *  outline-style approach as Landing.tsx's FeatureIcon, kept local since these four are specific
@@ -461,13 +462,14 @@ export default function Dashboard() {
     { key: "completed", label: "Completed" },
   ];
 
+  // Team and Subscription are deliberately absent here — they live only in the profile-menu
+  // dropdown (anchored to the account row at the bottom of the sidebar), matching the SwipeSign
+  // reference exactly. Listing them again in the general Tools accordion would duplicate them.
   const TOOLS_SUBNAV: Array<{ key: typeof toolsSubTab; label: string }> = [
     { key: "connector", label: "Connector & API key" },
     { key: "webhooks", label: "Webhooks" },
     ...(account.isEnterprise ? [{ key: "connectors" as const, label: "Connectors" }] : []),
     { key: "branding", label: "Branding" },
-    { key: "team", label: "Team" },
-    ...(isWorkspaceOwner ? [{ key: "subscription" as const, label: "Subscription" }] : []),
   ];
 
   return (
@@ -550,7 +552,8 @@ export default function Dashboard() {
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    openTools("team");
+                    setActiveTab("tools");
+                    setToolsSubTab("team");
                     setProfileMenuOpen(false);
                   }}
                 >
@@ -562,7 +565,8 @@ export default function Dashboard() {
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    openTools("subscription");
+                    setActiveTab("tools");
+                    setToolsSubTab("subscription");
                     setProfileMenuOpen(false);
                   }}
                 >
@@ -709,6 +713,30 @@ export default function Dashboard() {
               </div>
             )}
           </>
+        )}
+
+        {activeTab === "templates" && (
+          <div className="card" style={{ marginTop: 24 }}>
+            <h3 style={{ fontSize: 15 }}>Free templates</h3>
+            <p style={{ fontSize: 12, color: "var(--mute)" }}>
+              Ready-to-use documents, no account needed — pick one to prefill its signature fields automatically.
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 8 }}>
+              {FREE_TEMPLATES.map((t) => (
+                <Link
+                  key={t.slug}
+                  to={`/prepare?freeTemplate=${t.slug}`}
+                  className="btn-secondary"
+                  style={{ textDecoration: "none", textAlign: "left", padding: "8px 10px", fontSize: 13 }}
+                >
+                  {t.name}
+                </Link>
+              ))}
+            </div>
+            <Link to="/free-templates" style={{ fontSize: 13, marginTop: 12, display: "inline-block" }}>
+              Browse all free templates →
+            </Link>
+          </div>
         )}
 
         {activeTab === "templates" && !account.isPaid && (
