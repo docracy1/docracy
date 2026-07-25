@@ -3,7 +3,9 @@ import type { Env } from "@docracy/shared";
 
 export type StripeWebhookResult =
   | { type: "checkout_completed"; accountId: string; customerId: string | null; isEnterprise: boolean }
-  | { type: "subscription_deleted"; customerId: string };
+  | { type: "subscription_deleted"; customerId: string }
+  | { type: "invoice_payment_failed"; customerId: string }
+  | { type: "invoice_payment_succeeded"; customerId: string };
 
 const REPLAY_TOLERANCE_SECONDS = 300; // same window Stripe's own libraries default to
 
@@ -94,6 +96,24 @@ export async function verifyAndExtract(
     const customerId = event.data?.object?.customer;
     if (typeof customerId !== "string" || !customerId) return null;
     return { type: "subscription_deleted", customerId };
+  }
+
+  // Fires on every failed renewal charge, well before Stripe gives up and fires
+  // customer.subscription.deleted — this is what lets the Dashboard show an immediate
+  // "please settle your unpaid invoice" banner (see lib/billing.ts's markPaymentFailed) instead
+  // of waiting out Stripe's own multi-week dunning/retry schedule.
+  if (event.type === "invoice.payment_failed") {
+    const customerId = event.data?.object?.customer;
+    if (typeof customerId !== "string" || !customerId) return null;
+    return { type: "invoice_payment_failed", customerId };
+  }
+
+  // A later retry (or the customer updating their card) succeeding — clears the banner without
+  // waiting for the subscription to either recover on its own or eventually get cancelled.
+  if (event.type === "invoice.payment_succeeded") {
+    const customerId = event.data?.object?.customer;
+    if (typeof customerId !== "string" || !customerId) return null;
+    return { type: "invoice_payment_succeeded", customerId };
   }
 
   return null;

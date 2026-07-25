@@ -28,6 +28,10 @@ interface SessionRecord {
    *  created before team accounts existed are treated as stale and get backfilled on next resolve
    *  (see resolveAccount below), with zero changes needed to createSession's own signature/tests. */
   workspaceId?: string;
+  /** ISO timestamp of the workspace's first unresolved Stripe payment failure, or null — same
+   *  cache/refresh cadence as isPaid below. Optional (missing = "not yet refreshed") so existing
+   *  sessions created before this field existed are treated the same as a stale workspaceId. */
+  paymentFailedAt?: string | null;
   isPaidCachedAt: string;
 }
 
@@ -42,6 +46,10 @@ export interface AccountContext {
   /** Own id unless a team member, in which case the workspace owner's account id — every
    *  account-scoped D1 query (documents, templates, webhooks) should key off this, not `id`. */
   workspaceId: string;
+  /** ISO timestamp of the workspace's first unresolved Stripe payment failure, or null — drives
+   *  the Dashboard's "please settle your unpaid invoice" banner (lib/billing.ts's
+   *  markPaymentFailed/clearPaymentFailed). Workspace-derived, same as isPaid/isEnterprise. */
+  paymentFailedAt: string | null;
 }
 
 type Ctx = { waitUntil(promise: Promise<unknown>): void };
@@ -274,7 +282,7 @@ export async function createSession(
 async function resolveWorkspace(
   env: Env,
   accountId: string
-): Promise<{ workspaceId: string; isPaid: boolean; isEnterprise: boolean } | null> {
+): Promise<{ workspaceId: string; isPaid: boolean; isEnterprise: boolean; paymentFailedAt: string | null } | null> {
   const db = env.DOCRACY_DB!;
   const membership = await db
     .prepare(`SELECT owner_account_id FROM team_members WHERE member_account_id = ?`)
@@ -282,11 +290,11 @@ async function resolveWorkspace(
     .first<{ owner_account_id: string }>();
   const workspaceId = membership?.owner_account_id ?? accountId;
   const row = await db
-    .prepare(`SELECT is_paid, is_enterprise FROM accounts WHERE id = ?`)
+    .prepare(`SELECT is_paid, is_enterprise, payment_failed_at FROM accounts WHERE id = ?`)
     .bind(workspaceId)
-    .first<{ is_paid: number; is_enterprise: number }>();
+    .first<{ is_paid: number; is_enterprise: number; payment_failed_at: string | null }>();
   if (!row) return null;
-  return { workspaceId, isPaid: !!row.is_paid, isEnterprise: !!row.is_enterprise };
+  return { workspaceId, isPaid: !!row.is_paid, isEnterprise: !!row.is_enterprise, paymentFailedAt: row.payment_failed_at };
 }
 
 /**
@@ -305,6 +313,7 @@ export async function resolveAccount(env: Env, sessionToken: string | undefined)
   let isPaid = record.isPaid;
   let isEnterprise = record.isEnterprise ?? false;
   let workspaceId = record.workspaceId ?? record.accountId;
+  let paymentFailedAt = record.paymentFailedAt ?? null;
   const cacheAgeMs = Date.now() - new Date(record.isPaidCachedAt).getTime();
   if (env.DOCRACY_DB && (!record.workspaceId || cacheAgeMs > PAID_STATUS_REFRESH_SECONDS * 1000)) {
     const resolved = await resolveWorkspace(env, record.accountId);
@@ -312,12 +321,20 @@ export async function resolveAccount(env: Env, sessionToken: string | undefined)
       isPaid = resolved.isPaid;
       isEnterprise = resolved.isEnterprise;
       workspaceId = resolved.workspaceId;
-      const refreshed: SessionRecord = { ...record, isPaid, isEnterprise, workspaceId, isPaidCachedAt: nowIso() };
+      paymentFailedAt = resolved.paymentFailedAt;
+      const refreshed: SessionRecord = {
+        ...record,
+        isPaid,
+        isEnterprise,
+        workspaceId,
+        paymentFailedAt,
+        isPaidCachedAt: nowIso(),
+      };
       await env.DOCRACY_KV.put(`session:${hash}`, JSON.stringify(refreshed), { expirationTtl: SESSION_TTL_SECONDS });
     }
   }
 
-  return { id: record.accountId, email: record.email, isPaid, isEnterprise, workspaceId };
+  return { id: record.accountId, email: record.email, isPaid, isEnterprise, workspaceId, paymentFailedAt };
 }
 
 type AuthVariables = { account: AccountContext | null };
@@ -355,17 +372,25 @@ export const requireEnterpriseAccount: MiddlewareHandler<AuthEnv> = async (c, ne
   await next();
 };
 
+/** Same allow-list check used by requireAdminAccount below, extracted so GET /me can also expose
+ *  a plain `isAdmin` hint for the frontend to conditionally show a link to /admin/analytics — a
+ *  UI convenience only, never itself a security boundary (every /api/admin/* route still runs
+ *  requireAdminAccount independently). */
+export function isAdminEmail(env: Env, email: string): boolean {
+  const adminEmails = (env.ADMIN_EMAILS ?? "")
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+  return adminEmails.includes(email.toLowerCase());
+}
+
 /** Gates internal admin routes (e.g. GET /api/admin/analytics) to a hardcoded allow-list —
  *  deliberately separate from requirePaidAccount, since this isn't a customer-tier feature and a
  *  paying customer must never see it just by being a paid account. */
 export const requireAdminAccount: MiddlewareHandler<AuthEnv> = async (c, next) => {
   const account = await resolveAccount(c.env, getCookie(c, SESSION_COOKIE_NAME));
   if (!account) return c.json({ error: "Sign in required" }, 401);
-  const adminEmails = (c.env.ADMIN_EMAILS ?? "")
-    .split(",")
-    .map((e) => e.trim().toLowerCase())
-    .filter(Boolean);
-  if (!adminEmails.includes(account.email.toLowerCase())) return c.json({ error: "Not authorized" }, 401);
+  if (!isAdminEmail(c.env, account.email)) return c.json({ error: "Not authorized" }, 401);
   c.set("account", account);
   await next();
 };

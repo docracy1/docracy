@@ -28,6 +28,7 @@ const TIERS: Array<{
       "Unlimited signers",
       "Unlimited team members",
       "Dashboard with document history",
+      "Customer support",
       "Reusable templates",
       "Webhooks for your own systems",
       "MCP connector (Claude, ChatGPT, Grok, Perplexity)",
@@ -49,7 +50,7 @@ const TIERS: Array<{
     features: [
       "Everything in Paid",
       "Invoice billing &amp; annual contracts",
-      "SLA-backed priority support",
+      "Premium customer support (SLA-backed)",
       "SSO or multi-workspace setup, scoped to your needs",
       "Volume discounts &amp; custom onboarding",
     ],

@@ -20,6 +20,24 @@ admin.get("/enterprise-accounts", requireAdminAccount, async (c) => {
   return c.json({ accounts: results.map((r) => ({ email: r.email, isPaid: !!r.is_paid })) });
 });
 
+// Every signup, paid or not — email is the only identity Docracy ever collects (magic-link auth
+// has no separate name field), so that's all there is to show alongside the signup date and
+// current plan. Most recent first, since this is meant to be read as a signup feed.
+admin.get("/accounts", requireAdminAccount, async (c) => {
+  if (!c.env.DOCRACY_DB) return c.json({ accounts: [] });
+  const { results } = await c.env.DOCRACY_DB.prepare(
+    `SELECT email, created_at, is_paid, is_enterprise FROM accounts ORDER BY created_at DESC`
+  ).all<{ email: string; created_at: string; is_paid: number; is_enterprise: number }>();
+  return c.json({
+    accounts: results.map((r) => ({
+      email: r.email,
+      createdAt: r.created_at,
+      isPaid: !!r.is_paid,
+      isEnterprise: !!r.is_enterprise,
+    })),
+  });
+});
+
 interface GrantEnterpriseBody {
   email?: string;
 }

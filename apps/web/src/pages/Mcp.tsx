@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { usePageMeta } from "../lib/usePageMeta";
 
@@ -31,6 +32,13 @@ const CLIENTS = [
 ];
 
 export default function Mcp() {
+  const [copied, setCopied] = useState(false);
+  const onCopy = async () => {
+    await navigator.clipboard.writeText(FREE_URL);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   usePageMeta(
     "Connect Docracy to Your AI Assistant — MCP Connector | Docracy",
     "Connect Docracy to Claude, ChatGPT, Grok, or Perplexity as an MCP connector — free to try with no signup, " +
@@ -52,10 +60,23 @@ export default function Mcp() {
       <div className="card" style={{ marginTop: 24 }}>
         <h3 style={{ marginTop: 0, fontSize: 16 }}>Try it now — free, no signup</h3>
         <p style={{ marginBottom: 8 }}>
-          This URL works immediately for anyone, no account needed. It gives your assistant one tool:{" "}
+          Copy this URL into your AI assistant's connector settings (see the setup steps below) — it's a
+          server address for your assistant to call, not a page to open in your browser, so visiting it
+          directly won't show anything useful. Once connected, it gives your assistant one tool:{" "}
           <strong>check the status of a signing link</strong> — who's signed, who's still pending.
         </p>
-        <input className="form-input" readOnly value={FREE_URL} style={{ width: "100%", fontFamily: "monospace", fontSize: 13 }} />
+        <div style={{ display: "flex", gap: 8 }}>
+          <input
+            className="form-input"
+            readOnly
+            value={FREE_URL}
+            onFocus={(e) => e.target.select()}
+            style={{ width: "100%", fontFamily: "monospace", fontSize: 13 }}
+          />
+          <button type="button" className="btn-secondary" onClick={onCopy} style={{ flexShrink: 0 }}>
+            {copied ? "Copied!" : "Copy"}
+          </button>
+        </div>
         <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 8, marginBottom: 0 }}>
           Nothing is ever signed or changed through MCP — every tool here is read-only.
         </p>

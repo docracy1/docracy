@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import {
+  fetchAdminAccounts,
   fetchAdminAnalytics,
   fetchAdminEnterpriseAccounts,
   grantEnterprise,
   setAnalyticsNoTrack,
+  type AdminAccount,
   type AdminEnterpriseAccount,
   type FunnelRow,
 } from "../lib/api";
@@ -345,6 +347,56 @@ function EnterpriseAccountsCard() {
   );
 }
 
+/** Every signup, paid or not — a customer only ever sees their own account. Email is the only
+ *  identity Docracy collects at signup (magic-link auth, no separate name field). */
+function AllAccountsCard() {
+  const [accounts, setAccounts] = useState<AdminAccount[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchAdminAccounts()
+      .then((res) => setAccounts(res.accounts))
+      .catch((err) => setError(err instanceof Error ? err.message : "Failed to load accounts"));
+  }, []);
+
+  return (
+    <div className="card" style={{ marginBottom: 24 }}>
+      <h3 style={{ marginTop: 0, fontSize: 15 }}>All signups ({accounts?.length ?? "…"})</h3>
+      <p style={{ fontSize: 12, color: "var(--mute)", marginTop: -4 }}>
+        Every account, including free signups that never pay. Docracy's magic-link sign-in only
+        collects an email address — there's no separate name field to show.
+      </p>
+
+      {error && <p style={{ color: "var(--danger)", fontSize: 13 }}>{error}</p>}
+      {!error && accounts && accounts.length === 0 && (
+        <p style={{ fontSize: 13, color: "var(--mute)", marginBottom: 0 }}>No signups yet.</p>
+      )}
+      {!error && accounts && accounts.length > 0 && (
+        <div className="plan-table-scroll" style={{ maxHeight: 360, overflowY: "auto" }}>
+          <table className="plan-table" style={{ minWidth: 420 }}>
+            <thead>
+              <tr>
+                <th style={{ textAlign: "left" }}>Email</th>
+                <th style={{ textAlign: "left" }}>Signed up</th>
+                <th>Plan</th>
+              </tr>
+            </thead>
+            <tbody>
+              {accounts.map((a) => (
+                <tr key={a.email}>
+                  <td style={{ textAlign: "left" }}>{a.email}</td>
+                  <td style={{ textAlign: "left" }}>{new Date(a.createdAt).toLocaleDateString()}</td>
+                  <td>{a.isEnterprise ? "Enterprise" : a.isPaid ? "Paid" : "Free"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function AdminAnalytics() {
   usePageMeta("Analytics — Docracy", "Internal traffic and funnel analytics.");
 
@@ -414,6 +466,7 @@ export default function AdminAnalytics() {
         Aggregate traffic and funnel counts — no per-visitor tracking, no IPs or cookies stored.
       </p>
 
+      <AllAccountsCard />
       <EnterpriseAccountsCard />
 
       <div style={{ display: "flex", gap: 8, marginBottom: 12, flexWrap: "wrap", alignItems: "center" }}>

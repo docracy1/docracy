@@ -60,7 +60,7 @@ class ProfileMenuBoundary extends Component<{ children: ReactNode }, { error: st
 /** Minimalist monochrome line icons for the profile-menu items — same hand-drawn, Heroicons-
  *  outline-style approach as Landing.tsx's FeatureIcon, kept local since these four are specific
  *  to this one menu. */
-function MenuIcon({ name }: { name: "team" | "subscription" | "support" | "logout" }) {
+function MenuIcon({ name }: { name: "team" | "subscription" | "support" | "logout" | "admin" }) {
   const common = {
     width: 18,
     height: 18,
@@ -105,11 +105,19 @@ function MenuIcon({ name }: { name: "team" | "subscription" | "support" | "logou
           <path d="M21 12H9" />
         </svg>
       );
+    case "admin":
+      return (
+        <svg {...common}>
+          <path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z" />
+          <path d="M9.5 12l1.8 1.8L14.5 10" />
+        </svg>
+      );
   }
 }
 
 export default function Dashboard() {
   const [account, setAccount] = useState<Account | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [documents, setDocuments] = useState<DocumentSummary[]>([]);
   const [hasToken, setHasToken] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -442,6 +450,7 @@ export default function Dashboard() {
     fetchMe()
       .then(async (res) => {
         setAccount(res.account);
+        setIsAdmin(res.isAdmin);
         if (res.account) {
           const { documents } = await fetchMyDocuments();
           setDocuments(documents);
@@ -613,6 +622,12 @@ export default function Dashboard() {
                   Subscription
                 </button>
               )}
+              {isAdmin && (
+                <Link to="/admin/analytics" onClick={() => setProfileMenuOpen(false)}>
+                  <MenuIcon name="admin" />
+                  Admin
+                </Link>
+              )}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -649,6 +664,30 @@ export default function Dashboard() {
       </aside>
 
       <div className="dashboard-content">
+        {account.paymentFailedAt && (
+          <div
+            className="card"
+            style={{
+              marginBottom: 16,
+              borderColor: "var(--danger)",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: 12,
+              flexWrap: "wrap",
+            }}
+          >
+            <span style={{ color: "var(--danger)" }}>
+              Please settle your unpaid invoice to keep your Docracy account active. Thank you for your
+              understanding!
+            </span>
+            {isWorkspaceOwner && (
+              <button className="btn-secondary" style={{ fontSize: 13, padding: "4px 10px" }} onClick={onManageBilling}>
+                Update payment method
+              </button>
+            )}
+          </div>
+        )}
         {connectorBanner && (
           <div
             className="card"
@@ -876,8 +915,8 @@ export default function Dashboard() {
                   <strong>Need more than the Paid plan?</strong>
                 </p>
                 <p style={{ fontSize: 12, color: "var(--mute)", marginBottom: 8 }}>
-                  Enterprise adds invoice billing, SLA-backed support, SSO/multi-workspace setup, and volume
-                  discounts, scoped to your needs.
+                  Enterprise adds invoice billing, premium customer support, SSO/multi-workspace setup, and
+                  volume discounts, scoped to your needs.
                 </p>
                 {upgradeEnterpriseError && (
                   <p style={{ color: "var(--danger)", fontSize: 13 }}>{upgradeEnterpriseError}</p>

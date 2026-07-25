@@ -151,9 +151,12 @@ export interface Account {
   email: string;
   isPaid: boolean;
   isEnterprise: boolean;
+  /** ISO timestamp of the workspace's first unresolved Stripe payment failure, or null — drives
+   *  the Dashboard's "please settle your unpaid invoice" banner. */
+  paymentFailedAt: string | null;
 }
 
-export async function fetchMe(): Promise<{ account: Account | null }> {
+export async function fetchMe(): Promise<{ account: Account | null; isAdmin: boolean }> {
   const res = await apiFetch("/api/auth/me");
   return asJson(res);
 }
@@ -424,6 +427,20 @@ export interface AdminEnterpriseAccount {
 
 export async function fetchAdminEnterpriseAccounts(): Promise<{ accounts: AdminEnterpriseAccount[] }> {
   const res = await apiFetch("/api/admin/enterprise-accounts");
+  return asJson(res);
+}
+
+export interface AdminAccount {
+  email: string;
+  createdAt: string;
+  isPaid: boolean;
+  isEnterprise: boolean;
+}
+
+/** Every signup, paid or not — email is the only identity Docracy collects at signup (magic-link
+ *  auth has no separate name field). Admin-only. */
+export async function fetchAdminAccounts(): Promise<{ accounts: AdminAccount[] }> {
+  const res = await apiFetch("/api/admin/accounts");
   return asJson(res);
 }
 

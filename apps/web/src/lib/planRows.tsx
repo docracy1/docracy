@@ -19,6 +19,7 @@ export const PLAN_ROWS: Array<{ label: string; free: boolean | string; paid: boo
   { label: "AI plain-English contract explainer", free: false, paid: true },
   { label: "AI risk & clause highlighter", free: false, paid: true },
   { label: "AI contract generator (describe it, get a signable PDF)", free: false, paid: true },
+  { label: "Customer support", free: false, paid: true, enterprise: "Premium" },
   { label: "Volume discounts & custom onboarding", free: false, paid: false, enterprise: true },
 ];
 

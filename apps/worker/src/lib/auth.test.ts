@@ -202,6 +202,7 @@ describe("resolveAccount", () => {
       isPaid: false,
       isEnterprise: false,
       workspaceId: "acct-1",
+      paymentFailedAt: null,
     });
   });
 

@@ -4,6 +4,7 @@ import {
   adminLogin,
   requestMagicLink,
   consumeMagicLink,
+  isAdminEmail,
   optionalAccount,
   SESSION_COOKIE_NAME,
   SESSION_TTL_SECONDS,
@@ -91,7 +92,9 @@ auth.post("/logout", async (c) => {
 });
 
 auth.get("/me", optionalAccount, async (c) => {
-  return c.json({ account: c.get("account") });
+  const account = c.get("account");
+  const isAdmin = !!account && isAdminEmail(c.env, account.email);
+  return c.json({ account, isAdmin });
 });
 
 export default auth;

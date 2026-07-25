@@ -42,6 +42,38 @@ describe("GET /api/admin/analytics", () => {
   });
 });
 
+describe("GET /api/admin/accounts", () => {
+  it("rejects an unauthenticated request", async () => {
+    const { env } = makeMockEnv();
+    const res = await admin.request("/accounts", {}, env, MOCK_CTX);
+    expect(res.status).toBe(401);
+  });
+
+  it("lists every signup, paid or not, most recent first", async () => {
+    const { env, d1 } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com" });
+    const older = new Date(Date.now() - 60_000).toISOString();
+    const newer = new Date().toISOString();
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 0)`)
+      .bind("acct-free", "free@example.com", older)
+      .run();
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid, is_enterprise) VALUES (?, ?, ?, 1, 1)`)
+      .bind("acct-enterprise", "enterprise@example.com", newer)
+      .run();
+
+    const headers = await sessionCookie(env, "admin@example.com");
+    const res = await admin.request("/accounts", { headers }, env, MOCK_CTX);
+    expect(res.status).toBe(200);
+    const body: {
+      accounts: Array<{ email: string; createdAt: string; isPaid: boolean; isEnterprise: boolean }>;
+    } = await res.json();
+    expect(body.accounts.map((a) => a.email)).toEqual(["enterprise@example.com", "free@example.com"]);
+    expect(body.accounts[0]).toMatchObject({ isPaid: true, isEnterprise: true });
+    expect(body.accounts[1]).toMatchObject({ isPaid: false, isEnterprise: false });
+  });
+});
+
 describe("GET /api/admin/enterprise-accounts", () => {
   it("rejects an unauthenticated request", async () => {
     const { env } = makeMockEnv();

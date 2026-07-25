@@ -128,10 +128,40 @@ describe("verifyAndExtract (Stripe)", () => {
 
   it("returns null for an event type it doesn't act on, even with a valid signature", async () => {
     const { env } = makeMockEnv({ STRIPE_WEBHOOK_SECRET: WEBHOOK_SECRET });
+    const body = JSON.stringify({ type: "invoice.created", data: { object: {} } });
+    const header = await makeHeader(body, WEBHOOK_SECRET);
+
+    expect(await verifyAndExtract(body, header, env)).toBeNull();
+  });
+
+  it("accepts a validly-signed invoice.payment_failed event", async () => {
+    const { env } = makeMockEnv({ STRIPE_WEBHOOK_SECRET: WEBHOOK_SECRET });
+    const body = JSON.stringify({ type: "invoice.payment_failed", data: { object: { customer: "cus_1" } } });
+    const header = await makeHeader(body, WEBHOOK_SECRET);
+
+    expect(await verifyAndExtract(body, header, env)).toEqual({
+      type: "invoice_payment_failed",
+      customerId: "cus_1",
+    });
+  });
+
+  it("returns null for an invoice.payment_failed event with no customer id", async () => {
+    const { env } = makeMockEnv({ STRIPE_WEBHOOK_SECRET: WEBHOOK_SECRET });
     const body = JSON.stringify({ type: "invoice.payment_failed", data: { object: {} } });
     const header = await makeHeader(body, WEBHOOK_SECRET);
 
     expect(await verifyAndExtract(body, header, env)).toBeNull();
+  });
+
+  it("accepts a validly-signed invoice.payment_succeeded event", async () => {
+    const { env } = makeMockEnv({ STRIPE_WEBHOOK_SECRET: WEBHOOK_SECRET });
+    const body = JSON.stringify({ type: "invoice.payment_succeeded", data: { object: { customer: "cus_1" } } });
+    const header = await makeHeader(body, WEBHOOK_SECRET);
+
+    expect(await verifyAndExtract(body, header, env)).toEqual({
+      type: "invoice_payment_succeeded",
+      customerId: "cus_1",
+    });
   });
 
   it("returns null when client_reference_id is missing", async () => {

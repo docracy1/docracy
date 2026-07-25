@@ -17,8 +17,10 @@ export async function markAccountPaid(env: Env, accountId: string, paid: boolean
   // Losing paid status always takes enterprise status with it — enterprise is a superset of paid,
   // never true on its own, so a lapsed/cancelled subscription (customer.subscription.deleted,
   // below) must clear both in one statement rather than leaving is_enterprise stuck at 1 forever.
+  // payment_failed_at is cleared unconditionally: a fresh paid=true resolves it (payment
+  // succeeded), and a paid=false freeze/downgrade makes the flag moot either way.
   await env.DOCRACY_DB.prepare(
-    `UPDATE accounts SET is_paid = ?, paid_at = ?, is_enterprise = CASE WHEN ? THEN is_enterprise ELSE 0 END, enterprise_expires_at = CASE WHEN ? THEN enterprise_expires_at ELSE NULL END WHERE id = ?`
+    `UPDATE accounts SET is_paid = ?, paid_at = ?, is_enterprise = CASE WHEN ? THEN is_enterprise ELSE 0 END, enterprise_expires_at = CASE WHEN ? THEN enterprise_expires_at ELSE NULL END, payment_failed_at = NULL WHERE id = ?`
   )
     .bind(paid ? 1 : 0, paid ? new Date().toISOString() : null, paid ? 1 : 0, paid ? 1 : 0, accountId)
     .run();
@@ -29,6 +31,43 @@ export async function markAccountPaid(env: Env, accountId: string, paid: boolean
     // Enterprise revocation flows through this same function instead of a separate cron sweep.
     await deleteConnectionsForAccount(env, accountId);
   }
+}
+
+/** Stamped the moment Stripe reports a failed renewal charge (invoice.payment_failed) — lets the
+ *  Dashboard show an immediate "please settle your unpaid invoice" banner. Only set-if-null: a
+ *  subscription in dunning fires this webhook on every retry, and the 7-day freeze grace period
+ *  (see findAccountsPastPaymentFailureGrace below) counts from the *first* failure, not the most
+ *  recent retry. */
+export async function markPaymentFailed(env: Env, accountId: string): Promise<void> {
+  if (!env.DOCRACY_DB) return;
+  await env.DOCRACY_DB.prepare(`UPDATE accounts SET payment_failed_at = ? WHERE id = ? AND payment_failed_at IS NULL`)
+    .bind(new Date().toISOString(), accountId)
+    .run();
+}
+
+/** Stamped when Stripe reports the retried charge succeeded (invoice.payment_succeeded) — clears
+ *  the banner without waiting for the 5-minute session cache refresh to matter, since there's
+ *  nothing else to downgrade here (unlike markAccountPaid, is_paid was never touched). */
+export async function clearPaymentFailed(env: Env, accountId: string): Promise<void> {
+  if (!env.DOCRACY_DB) return;
+  await env.DOCRACY_DB.prepare(`UPDATE accounts SET payment_failed_at = NULL WHERE id = ?`).bind(accountId).run();
+}
+
+const PAYMENT_FAILURE_GRACE_DAYS = 7;
+
+/** Accounts whose first payment failure is more than 7 days old and still unresolved — what the
+ *  daily cron sweep (lib/paymentFreeze.ts) freezes via markAccountPaid(env, id, false), same as a
+ *  manual downgrade. is_paid = 1 filters out accounts already frozen (markAccountPaid clears
+ *  payment_failed_at, so they'd never match anyway, but this keeps the intent explicit). */
+export async function findAccountsPastPaymentFailureGrace(env: Env): Promise<string[]> {
+  if (!env.DOCRACY_DB) return [];
+  const cutoff = new Date(Date.now() - PAYMENT_FAILURE_GRACE_DAYS * 24 * 60 * 60 * 1000).toISOString();
+  const rows = await env.DOCRACY_DB.prepare(
+    `SELECT id FROM accounts WHERE is_paid = 1 AND payment_failed_at IS NOT NULL AND payment_failed_at <= ?`
+  )
+    .bind(cutoff)
+    .all<{ id: string }>();
+  return rows.results.map((r) => r.id);
 }
 
 /** Enterprise is now a real recurring annual Stripe subscription (like the standard paid plan) —

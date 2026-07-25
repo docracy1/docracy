@@ -1,10 +1,13 @@
 import { describe, it, expect } from "vitest";
 import {
+  clearPaymentFailed,
   findAccountIdByEmail,
   findAccountIdByStripeCustomerId,
+  findAccountsPastPaymentFailureGrace,
   getStripeCustomerId,
   markAccountEnterprise,
   markAccountPaid,
+  markPaymentFailed,
   setStripeCustomerId,
 } from "./billing";
 import { issueApiToken, hasApiToken } from "./apiTokens";
@@ -94,6 +97,118 @@ describe("markAccountPaid", () => {
 
     const row = await d1.prepare("SELECT COUNT(*) as n FROM cloud_connections WHERE account_id = ?").bind("acct-1").first();
     expect((row as { n: number }).n).toBe(0);
+  });
+
+  it("clears a pending payment_failed_at when the account is marked paid again", async () => {
+    const { env, d1 } = makeMockEnv();
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid, payment_failed_at) VALUES (?, ?, ?, 1, ?)`)
+      .bind("acct-1", "anna@example.com", new Date().toISOString(), new Date().toISOString())
+      .run();
+
+    await markAccountPaid(env, "acct-1", true);
+
+    const row = (await d1.prepare("SELECT payment_failed_at FROM accounts WHERE id = ?").bind("acct-1").first()) as {
+      payment_failed_at: string | null;
+    } | null;
+    expect(row?.payment_failed_at).toBeNull();
+  });
+
+  it("clears payment_failed_at when the account is frozen/downgraded", async () => {
+    const { env, d1 } = makeMockEnv();
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid, payment_failed_at) VALUES (?, ?, ?, 1, ?)`)
+      .bind("acct-1", "anna@example.com", new Date().toISOString(), new Date().toISOString())
+      .run();
+
+    await markAccountPaid(env, "acct-1", false);
+
+    const row = (await d1.prepare("SELECT payment_failed_at FROM accounts WHERE id = ?").bind("acct-1").first()) as {
+      payment_failed_at: string | null;
+    } | null;
+    expect(row?.payment_failed_at).toBeNull();
+  });
+});
+
+describe("markPaymentFailed", () => {
+  it("stamps payment_failed_at on first failure", async () => {
+    const { env, d1 } = makeMockEnv();
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 1)`)
+      .bind("acct-1", "anna@example.com", new Date().toISOString())
+      .run();
+
+    await markPaymentFailed(env, "acct-1");
+
+    const row = (await d1.prepare("SELECT payment_failed_at FROM accounts WHERE id = ?").bind("acct-1").first()) as {
+      payment_failed_at: string | null;
+    } | null;
+    expect(row?.payment_failed_at).toBeTruthy();
+  });
+
+  it("doesn't reset the timestamp on a repeat failure (dunning retries count from the first)", async () => {
+    const { env, d1 } = makeMockEnv();
+    const firstFailure = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString();
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid, payment_failed_at) VALUES (?, ?, ?, 1, ?)`)
+      .bind("acct-1", "anna@example.com", new Date().toISOString(), firstFailure)
+      .run();
+
+    await markPaymentFailed(env, "acct-1");
+
+    const row = (await d1.prepare("SELECT payment_failed_at FROM accounts WHERE id = ?").bind("acct-1").first()) as {
+      payment_failed_at: string | null;
+    } | null;
+    expect(row?.payment_failed_at).toBe(firstFailure);
+  });
+
+  it("does nothing (doesn't throw) when DOCRACY_DB isn't bound", async () => {
+    const { env } = makeMockEnv({ DOCRACY_DB: undefined });
+    await expect(markPaymentFailed(env, "acct-1")).resolves.toBeUndefined();
+  });
+});
+
+describe("clearPaymentFailed", () => {
+  it("clears payment_failed_at", async () => {
+    const { env, d1 } = makeMockEnv();
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid, payment_failed_at) VALUES (?, ?, ?, 1, ?)`)
+      .bind("acct-1", "anna@example.com", new Date().toISOString(), new Date().toISOString())
+      .run();
+
+    await clearPaymentFailed(env, "acct-1");
+
+    const row = (await d1.prepare("SELECT payment_failed_at FROM accounts WHERE id = ?").bind("acct-1").first()) as {
+      payment_failed_at: string | null;
+    } | null;
+    expect(row?.payment_failed_at).toBeNull();
+  });
+});
+
+describe("findAccountsPastPaymentFailureGrace", () => {
+  it("returns accounts whose payment has been failing for more than 7 days", async () => {
+    const { env, d1 } = makeMockEnv();
+    const eightDaysAgo = new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString();
+    const oneDayAgo = new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString();
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid, payment_failed_at) VALUES (?, ?, ?, 1, ?)`)
+      .bind("acct-overdue", "overdue@example.com", new Date().toISOString(), eightDaysAgo)
+      .run();
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid, payment_failed_at) VALUES (?, ?, ?, 1, ?)`)
+      .bind("acct-recent", "recent@example.com", new Date().toISOString(), oneDayAgo)
+      .run();
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 1)`)
+      .bind("acct-fine", "fine@example.com", new Date().toISOString())
+      .run();
+
+    expect(await findAccountsPastPaymentFailureGrace(env)).toEqual(["acct-overdue"]);
+  });
+
+  it("returns an empty array when DOCRACY_DB isn't bound", async () => {
+    const { env } = makeMockEnv({ DOCRACY_DB: undefined });
+    expect(await findAccountsPastPaymentFailureGrace(env)).toEqual([]);
   });
 });
 

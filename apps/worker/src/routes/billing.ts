@@ -1,10 +1,12 @@
 import { Hono } from "hono";
 import { requireAccount, requirePaidAccount, type AccountContext } from "../lib/auth";
 import {
+  clearPaymentFailed,
   findAccountIdByStripeCustomerId,
   getStripeCustomerId,
   markAccountEnterprise,
   markAccountPaid,
+  markPaymentFailed,
   setStripeCustomerId,
 } from "../lib/billing";
 import { verifyAndExtract } from "../lib/billingProviders/stripe";
@@ -88,6 +90,12 @@ billing.post("/webhook", async (c) => {
   } else if (result?.type === "subscription_deleted") {
     const accountId = await findAccountIdByStripeCustomerId(c.env, result.customerId);
     if (accountId) await markAccountPaid(c.env, accountId, false);
+  } else if (result?.type === "invoice_payment_failed") {
+    const accountId = await findAccountIdByStripeCustomerId(c.env, result.customerId);
+    if (accountId) await markPaymentFailed(c.env, accountId);
+  } else if (result?.type === "invoice_payment_succeeded") {
+    const accountId = await findAccountIdByStripeCustomerId(c.env, result.customerId);
+    if (accountId) await clearPaymentFailed(c.env, accountId);
   }
   // Always 200: Stripe retries (and eventually disables the endpoint) on non-2xx responses, and
   // "signature didn't verify" / "not an event type we act on" aren't retry-worthy conditions.

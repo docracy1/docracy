@@ -342,6 +342,56 @@ describe("POST /api/billing/webhook", () => {
     );
     expect(res.status).toBe(200);
   });
+
+  it("stamps payment_failed_at for a validly-signed invoice.payment_failed event", async () => {
+    const { env, d1 } = makeMockEnv({ STRIPE_WEBHOOK_SECRET: "whsec_test" });
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid, stripe_customer_id) VALUES (?, ?, ?, 1, ?)`)
+      .bind("acct-1", "anna@example.com", new Date().toISOString(), "cus_1")
+      .run();
+
+    const rawBody = JSON.stringify({ type: "invoice.payment_failed", data: { object: { customer: "cus_1" } } });
+    const signature = await signWebhook(rawBody, "whsec_test");
+
+    const res = await billing.request(
+      "/webhook",
+      { method: "POST", body: rawBody, headers: { "Stripe-Signature": signature } },
+      env,
+      MOCK_CTX
+    );
+    expect(res.status).toBe(200);
+
+    const row = (await d1.prepare("SELECT payment_failed_at FROM accounts WHERE id = ?").bind("acct-1").first()) as {
+      payment_failed_at: string | null;
+    } | null;
+    expect(row?.payment_failed_at).toBeTruthy();
+  });
+
+  it("clears payment_failed_at for a validly-signed invoice.payment_succeeded event", async () => {
+    const { env, d1 } = makeMockEnv({ STRIPE_WEBHOOK_SECRET: "whsec_test" });
+    await d1
+      .prepare(
+        `INSERT INTO accounts (id, email, created_at, is_paid, stripe_customer_id, payment_failed_at) VALUES (?, ?, ?, 1, ?, ?)`
+      )
+      .bind("acct-1", "anna@example.com", new Date().toISOString(), "cus_1", new Date().toISOString())
+      .run();
+
+    const rawBody = JSON.stringify({ type: "invoice.payment_succeeded", data: { object: { customer: "cus_1" } } });
+    const signature = await signWebhook(rawBody, "whsec_test");
+
+    const res = await billing.request(
+      "/webhook",
+      { method: "POST", body: rawBody, headers: { "Stripe-Signature": signature } },
+      env,
+      MOCK_CTX
+    );
+    expect(res.status).toBe(200);
+
+    const row = (await d1.prepare("SELECT payment_failed_at FROM accounts WHERE id = ?").bind("acct-1").first()) as {
+      payment_failed_at: string | null;
+    } | null;
+    expect(row?.payment_failed_at).toBeNull();
+  });
 });
 
 describe("POST /api/billing/portal", () => {
