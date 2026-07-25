@@ -644,12 +644,40 @@ export default function Dashboard() {
 
         {activeTab === "tools" && account.isPaid && isWorkspaceOwner && toolsSubTab === "subscription" && (
           <div className="card" style={{ marginTop: 24 }}>
-            <h3 style={{ fontSize: 15 }}>Subscription</h3>
+            <h3 style={{ fontSize: 15 }}>
+              Subscription
+              {account.isEnterprise && (
+                <span
+                  style={{
+                    marginLeft: 8,
+                    fontSize: 11,
+                    fontWeight: 700,
+                    color: "var(--primary)",
+                    background: "var(--primary-soft)",
+                    borderRadius: 999,
+                    padding: "2px 8px",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  Enterprise
+                </span>
+              )}
+            </h3>
             <p>Manage your payment method, invoices, or cancel your subscription.</p>
             {manageBillingError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{manageBillingError}</p>}
             <button className="btn-secondary" onClick={onManageBilling} disabled={managingBilling}>
               {managingBilling ? "Redirecting…" : "Manage subscription"}
             </button>
+
+            {!account.isEnterprise && (
+              <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid var(--hairline)" }}>
+                <p style={{ fontSize: 12, color: "var(--mute)", marginBottom: 4 }}>
+                  Setting up a custom Enterprise deal with sales? Give them this workspace ID — they'll append it
+                  as <code>client_reference_id</code> on the Payment Link before sending it to you.
+                </p>
+                <input className="form-input" readOnly value={account.id} style={{ width: "100%", fontSize: 12 }} />
+              </div>
+            )}
           </div>
         )}
 

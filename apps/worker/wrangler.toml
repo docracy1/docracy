@@ -51,6 +51,9 @@ FEEDBACK_EMAIL = "founder@docracy.io"
 ADMIN_EMAILS = "rl@relacon.at"
 # Not secret (just an identifier) — needed only for the Analytics Engine SQL read API.
 CF_ACCOUNT_ID = "d7764515fd9887154193dc04810d81d8"
+# Reference only (see packages/shared/src/types.ts) — the Enterprise Payment Link's own
+# metadata.plan="enterprise" is what the webhook actually keys off of, not this ID.
+STRIPE_ENTERPRISE_PRODUCT_ID = "prod_UwhdVD23t6zce3"
 
 # --- Secrets (never stored in this file) ---
 # Set with: wrangler secret put TOKEN_SECRET

@@ -14,7 +14,7 @@ function post(body: unknown, headers: Record<string, string> = {}) {
 }
 
 async function paidCookie(env: Parameters<typeof createSession>[0]) {
-  const token = await createSession(env, MOCK_CTX, "acct-1", "anna@example.com", true, null, null);
+  const token = await createSession(env, MOCK_CTX, "acct-1", "anna@example.com", true, false, null, null);
   return { Cookie: `${SESSION_COOKIE_NAME}=${token}` };
 }
 
@@ -29,7 +29,7 @@ describe("POST /explain", () => {
 
   it("402s for a signed-in but non-paid account", async () => {
     const { env } = makeMockEnv();
-    const token = await createSession(env, MOCK_CTX, "acct-2", "bob@example.com", false, null, null);
+    const token = await createSession(env, MOCK_CTX, "acct-2", "bob@example.com", false, false, null, null);
     const res = await ai.request(
       "/explain",
       post({ text: "some contract text" }, { Cookie: `${SESSION_COOKIE_NAME}=${token}` }),

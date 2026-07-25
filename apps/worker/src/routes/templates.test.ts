@@ -31,7 +31,7 @@ const validMeta = {
 };
 
 async function paidSession(env: Awaited<ReturnType<typeof makeMockEnv>>["env"], ctx: ReturnType<typeof makeCtx>) {
-  return createSession(env, ctx, "acct-1", "anna@example.com", true, null, null);
+  return createSession(env, ctx, "acct-1", "anna@example.com", true, false, null, null);
 }
 
 describe("POST /api/account/templates", () => {
@@ -45,7 +45,7 @@ describe("POST /api/account/templates", () => {
   it("402s for a logged-in but unpaid account", async () => {
     const { env } = makeMockEnv();
     const ctx = makeCtx();
-    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, null, null);
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, false, null, null);
     const pdf = await makeValidPdfBytes();
     const res = await templates.request(
       "/",
@@ -175,7 +175,7 @@ describe("GET /api/account/templates", () => {
       env,
       ctx
     );
-    const otherToken = await createSession(env, ctx, "acct-2", "max@example.com", true, null, null);
+    const otherToken = await createSession(env, ctx, "acct-2", "max@example.com", true, false, null, null);
     await templates.request(
       "/",
       { method: "POST", body: buildForm(pdf, { ...validMeta, name: "Not Mine" }), headers: { Cookie: `${SESSION_COOKIE_NAME}=${otherToken}` } },
@@ -248,7 +248,7 @@ describe("GET/DELETE /api/account/templates/:id", () => {
     );
     const { templateId } = (await createRes.json()) as { templateId: string };
 
-    const otherToken = await createSession(env, ctx, "acct-2", "max@example.com", true, null, null);
+    const otherToken = await createSession(env, ctx, "acct-2", "max@example.com", true, false, null, null);
     const getRes = await templates.request(
       `/${templateId}`,
       { headers: { Cookie: `${SESSION_COOKIE_NAME}=${otherToken}` } },

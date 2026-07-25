@@ -109,7 +109,7 @@ describe("POST /api/documents", () => {
   it("rejects a signer PIN that isn't 4-8 digits, for a paid account", async () => {
     const { env } = makeMockEnv();
     const ctx = makeCtx();
-    const token = await createSession(env, ctx, "acct-1", "preparer@example.com", true, null, null);
+    const token = await createSession(env, ctx, "acct-1", "preparer@example.com", true, false, null, null);
     const pdf = await makeValidPdfBytes();
     const meta = { ...validMeta, signers: [{ ...validMeta.signers[0], pin: "12" }, validMeta.signers[1]] };
     const res = await documents.request(
@@ -124,7 +124,7 @@ describe("POST /api/documents", () => {
   it("hashes a valid signer PIN and never stores it raw, for a paid account", async () => {
     const { env, kv } = makeMockEnv();
     const ctx = makeCtx();
-    const token = await createSession(env, ctx, "acct-1", "preparer@example.com", true, null, null);
+    const token = await createSession(env, ctx, "acct-1", "preparer@example.com", true, false, null, null);
     const pdf = await makeValidPdfBytes();
     const meta = { ...validMeta, signers: [{ ...validMeta.signers[0], pin: "1234" }, validMeta.signers[1]] };
     const res = await documents.request(
@@ -294,7 +294,7 @@ describe("POST /api/documents", () => {
   it("lets a paid account exceed the free-tier signer limit and attaches its accountId", async () => {
     const { env, kv } = makeMockEnv();
     const ctx = makeCtx();
-    const sessionToken = await createSession(env, ctx, "acct-1", "paid@example.com", true, null, null);
+    const sessionToken = await createSession(env, ctx, "acct-1", "paid@example.com", true, false, null, null);
     await ctx.flush();
 
     const pdf = await makeValidPdfBytes();
@@ -330,7 +330,7 @@ describe("POST /api/documents", () => {
   it("still applies the free-tier cap and leaves accountId null for a logged-in but unpaid account", async () => {
     const { env, kv } = makeMockEnv();
     const ctx = makeCtx();
-    const sessionToken = await createSession(env, ctx, "acct-2", "unpaid@example.com", false, null, null);
+    const sessionToken = await createSession(env, ctx, "acct-2", "unpaid@example.com", false, false, null, null);
     await ctx.flush();
 
     const pdf = await makeValidPdfBytes();

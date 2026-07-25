@@ -141,6 +141,7 @@ export interface Account {
   id: string;
   email: string;
   isPaid: boolean;
+  isEnterprise: boolean;
 }
 
 export async function fetchMe(): Promise<{ account: Account | null }> {

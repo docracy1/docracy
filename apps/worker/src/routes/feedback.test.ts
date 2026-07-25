@@ -15,7 +15,7 @@ function post(body: unknown, headers: Record<string, string> = {}) {
 }
 
 async function paidSessionCookie(env: Env) {
-  const token = await createSession(env, MOCK_CTX, "acct-1", "anna@example.com", true, null, null);
+  const token = await createSession(env, MOCK_CTX, "acct-1", "anna@example.com", true, false, null, null);
   return { Cookie: `${SESSION_COOKIE_NAME}=${token}` };
 }
 
@@ -159,7 +159,7 @@ describe("POST /api/feedback", () => {
     const { env } = makeMockEnv();
     vi.spyOn(console, "log").mockImplementation(() => {});
     const aiSpy = vi.spyOn(env.AI, "run").mockResolvedValueOnce({ response: "The free plan supports up to 2 signers." });
-    const token = await createSession(env, MOCK_CTX, "acct-2", "bob@example.com", false, null, null);
+    const token = await createSession(env, MOCK_CTX, "acct-2", "bob@example.com", false, false, null, null);
 
     const res = await feedback.request(
       "/",

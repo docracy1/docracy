@@ -29,7 +29,7 @@ describe("POST /api/billing/checkout", () => {
   it("501s when Stripe isn't configured", async () => {
     const { env } = makeMockEnv();
     const ctx = makeCtx();
-    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, null, null);
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, false, null, null);
     const res = await billing.request(
       "/checkout",
       { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } },
@@ -42,7 +42,7 @@ describe("POST /api/billing/checkout", () => {
   it("creates a Stripe checkout session and returns its URL", async () => {
     const { env } = makeMockEnv({ STRIPE_SECRET_KEY: "sk_test_x", STRIPE_PRICE_ID: "price_x" });
     const ctx = makeCtx();
-    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, null, null);
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, false, null, null);
 
     const fetchSpy = vi
       .spyOn(global, "fetch")
@@ -69,7 +69,7 @@ describe("POST /api/billing/checkout", () => {
   it("returns 502 when Stripe's API call fails", async () => {
     const { env } = makeMockEnv({ STRIPE_SECRET_KEY: "sk_test_x", STRIPE_PRICE_ID: "price_x" });
     const ctx = makeCtx();
-    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, null, null);
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, false, null, null);
     vi.spyOn(console, "error").mockImplementation(() => {});
     vi.spyOn(global, "fetch").mockResolvedValue(new Response("nope", { status: 400 }));
 
@@ -170,6 +170,61 @@ describe("POST /api/billing/webhook", () => {
     expect(row?.stripe_customer_id).toBe("cus_1");
   });
 
+  it("marks the account enterprise when checkout.session.completed carries metadata.plan=enterprise", async () => {
+    const { env, d1 } = makeMockEnv({ STRIPE_WEBHOOK_SECRET: "whsec_test" });
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 0)`)
+      .bind("acct-1", "anna@example.com", new Date().toISOString())
+      .run();
+
+    const rawBody = JSON.stringify({
+      type: "checkout.session.completed",
+      data: { object: { client_reference_id: "acct-1", metadata: { plan: "enterprise" } } },
+    });
+    const signature = await signWebhook(rawBody, "whsec_test");
+
+    const res = await billing.request(
+      "/webhook",
+      { method: "POST", body: rawBody, headers: { "Stripe-Signature": signature } },
+      env,
+      MOCK_CTX
+    );
+    expect(res.status).toBe(200);
+
+    const row = (await d1.prepare("SELECT is_paid, is_enterprise FROM accounts WHERE id = ?").bind("acct-1").first()) as {
+      is_paid: number;
+      is_enterprise: number;
+    } | null;
+    expect(row?.is_paid).toBe(1);
+    expect(row?.is_enterprise).toBe(1);
+  });
+
+  it("does not mark enterprise for an ordinary checkout.session.completed event", async () => {
+    const { env, d1 } = makeMockEnv({ STRIPE_WEBHOOK_SECRET: "whsec_test" });
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 0)`)
+      .bind("acct-1", "anna@example.com", new Date().toISOString())
+      .run();
+
+    const rawBody = JSON.stringify({
+      type: "checkout.session.completed",
+      data: { object: { client_reference_id: "acct-1" } },
+    });
+    const signature = await signWebhook(rawBody, "whsec_test");
+
+    await billing.request(
+      "/webhook",
+      { method: "POST", body: rawBody, headers: { "Stripe-Signature": signature } },
+      env,
+      MOCK_CTX
+    );
+
+    const row = (await d1.prepare("SELECT is_enterprise FROM accounts WHERE id = ?").bind("acct-1").first()) as {
+      is_enterprise: number;
+    } | null;
+    expect(row?.is_enterprise).toBe(0);
+  });
+
   it("unmarks the account paid for a validly-signed customer.subscription.deleted event", async () => {
     const { env, d1 } = makeMockEnv({ STRIPE_WEBHOOK_SECRET: "whsec_test" });
     await d1
@@ -225,7 +280,7 @@ describe("POST /api/billing/portal", () => {
   it("402s for a logged-in but unpaid account", async () => {
     const { env } = makeMockEnv();
     const ctx = makeCtx();
-    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, null, null);
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, false, null, null);
     const res = await billing.request(
       "/portal",
       { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } },
@@ -238,7 +293,7 @@ describe("POST /api/billing/portal", () => {
   it("501s when Stripe isn't configured", async () => {
     const { env } = makeMockEnv();
     const ctx = makeCtx();
-    const token = await createSession(env, ctx, "acct-1", "anna@example.com", true, null, null);
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", true, false, null, null);
     const res = await billing.request(
       "/portal",
       { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } },
@@ -251,7 +306,7 @@ describe("POST /api/billing/portal", () => {
   it("404s when the paid account has no Stripe customer id on file", async () => {
     const { env } = makeMockEnv({ STRIPE_SECRET_KEY: "sk_test_x" });
     const ctx = makeCtx();
-    const token = await createSession(env, ctx, "acct-1", "anna@example.com", true, null, null);
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", true, false, null, null);
     const res = await billing.request(
       "/portal",
       { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } },
@@ -268,7 +323,7 @@ describe("POST /api/billing/portal", () => {
       .bind("acct-1", "anna@example.com", new Date().toISOString(), "cus_1")
       .run();
     const ctx = makeCtx();
-    const token = await createSession(env, ctx, "acct-1", "anna@example.com", true, null, null);
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", true, false, null, null);
 
     const fetchSpy = vi
       .spyOn(global, "fetch")

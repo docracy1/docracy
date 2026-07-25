@@ -21,7 +21,7 @@ async function paidSession(env: Awaited<ReturnType<typeof makeMockEnv>>["env"], 
   await env.DOCRACY_DB!.prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 1)`)
     .bind("acct-1", "anna@example.com", new Date().toISOString())
     .run();
-  return createSession(env, ctx, "acct-1", "anna@example.com", true, null, null);
+  return createSession(env, ctx, "acct-1", "anna@example.com", true, false, null, null);
 }
 
 const TINY_PNG_BASE64 = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=";
@@ -64,7 +64,7 @@ describe("POST /api/account/branding/logo", () => {
     await env.DOCRACY_DB!.prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 0)`)
       .bind("acct-2", "unpaid@example.com", new Date().toISOString())
       .run();
-    const token = await createSession(env, ctx, "acct-2", "unpaid@example.com", false, null, null);
+    const token = await createSession(env, ctx, "acct-2", "unpaid@example.com", false, false, null, null);
     const form = new FormData();
     form.set("logo", pngFile());
     const res = await branding.request(

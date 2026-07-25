@@ -7,7 +7,7 @@ import type { Env } from "@docracy/shared";
 const MOCK_CTX = { waitUntil: () => {}, passThroughOnException: () => {} } as unknown as ExecutionContext;
 
 async function sessionCookie(env: Env, email: string) {
-  const token = await createSession(env, MOCK_CTX, "acct-1", email, false, null, null);
+  const token = await createSession(env, MOCK_CTX, "acct-1", email, false, false, null, null);
   return { Cookie: `${SESSION_COOKIE_NAME}=${token}` };
 }
 

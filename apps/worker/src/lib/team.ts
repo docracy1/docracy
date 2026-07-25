@@ -193,6 +193,6 @@ export async function acceptTeamInvite(
 
   await db.prepare(`UPDATE team_invites SET accepted_at = ? WHERE id = ?`).bind(now, invite.id).run();
 
-  const sessionToken = await createSession(env, ctx, accountId, invite.email, false, ip, userAgent);
+  const sessionToken = await createSession(env, ctx, accountId, invite.email, false, false, ip, userAgent);
   return { ok: true, sessionToken };
 }

@@ -2,7 +2,7 @@ import { hmacKey } from "@docracy/shared";
 import type { Env } from "@docracy/shared";
 
 export type StripeWebhookResult =
-  | { type: "checkout_completed"; accountId: string; customerId: string | null }
+  | { type: "checkout_completed"; accountId: string; customerId: string | null; isEnterprise: boolean }
   | { type: "subscription_deleted"; customerId: string };
 
 const REPLAY_TOLERANCE_SECONDS = 300; // same window Stripe's own libraries default to
@@ -75,7 +75,19 @@ export async function verifyAndExtract(
     const accountId = event.data?.object?.client_reference_id;
     if (typeof accountId !== "string" || !accountId) return null;
     const customer = event.data?.object?.customer;
-    return { type: "checkout_completed", accountId, customerId: typeof customer === "string" ? customer : null };
+    // Enterprise deals go through a Payment Link created directly in the Stripe Dashboard (not
+    // the self-serve session in routes/billing.ts's POST /checkout) — that link carries
+    // metadata.plan="enterprise", set once when the link is created, rather than a distinct price
+    // this worker would need to know about.
+    const metadata = event.data?.object?.metadata;
+    const isEnterprise =
+      typeof metadata === "object" && metadata !== null && (metadata as Record<string, unknown>).plan === "enterprise";
+    return {
+      type: "checkout_completed",
+      accountId,
+      customerId: typeof customer === "string" ? customer : null,
+      isEnterprise,
+    };
   }
 
   if (event.type === "customer.subscription.deleted") {

@@ -21,6 +21,14 @@ export async function markAccountPaid(env: Env, accountId: string, paid: boolean
   }
 }
 
+/** Enterprise deals never revoke this the way markAccountPaid revokes is_paid on cancellation —
+ *  there's no "customer.subscription.deleted" equivalent for a hand-invoiced Payment Link, so
+ *  turning it off again (a downgrade or an end of contract) is a manual D1 update for now. */
+export async function markAccountEnterprise(env: Env, accountId: string): Promise<void> {
+  if (!env.DOCRACY_DB) return;
+  await env.DOCRACY_DB.prepare(`UPDATE accounts SET is_enterprise = 1 WHERE id = ?`).bind(accountId).run();
+}
+
 /** Set once, on an account's first completed checkout — lets a later webhook keyed by Stripe
  *  customer ID (e.g. subscription cancelled) resolve back to the right account. */
 export async function setStripeCustomerId(env: Env, accountId: string, customerId: string): Promise<void> {

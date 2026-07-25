@@ -141,11 +141,17 @@ describe("resolveAccount", () => {
   it("resolves a valid session to its account", async () => {
     const { env } = makeMockEnv();
     const ctx = makeCtx();
-    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, null, null);
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, false, null, null);
     await ctx.flush();
 
     const account = await resolveAccount(env, token);
-    expect(account).toEqual({ id: "acct-1", email: "anna@example.com", isPaid: false, workspaceId: "acct-1" });
+    expect(account).toEqual({
+      id: "acct-1",
+      email: "anna@example.com",
+      isPaid: false,
+      isEnterprise: false,
+      workspaceId: "acct-1",
+    });
   });
 
   it("refreshes a stale isPaid flag from D1", async () => {
@@ -157,7 +163,7 @@ describe("resolveAccount", () => {
       .bind("acct-1", "anna@example.com", new Date().toISOString())
       .run();
 
-    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, null, null);
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, false, null, null);
     await ctx.flush();
 
     // Force the cached isPaid to look stale by rewriting the KV record directly.
@@ -191,7 +197,7 @@ describe("resolveAccount", () => {
     // isPaid is deliberately false here — the member's own account row is unpaid; resolveAccount
     // should still surface isPaid: true because a missing workspaceId always forces a fresh
     // lookup, and that lookup follows team_members to the owner's paid status.
-    const token = await createSession(env, ctx, "member-1", "member@example.com", false, null, null);
+    const token = await createSession(env, ctx, "member-1", "member@example.com", false, false, null, null);
     await ctx.flush();
 
     const account = await resolveAccount(env, token);
@@ -205,7 +211,7 @@ describe("resolveAccount", () => {
       .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 1)`)
       .bind("owner-2", "owner2@example.com", new Date().toISOString())
       .run();
-    const token = await createSession(env, ctx, "owner-2", "owner2@example.com", true, null, null);
+    const token = await createSession(env, ctx, "owner-2", "owner2@example.com", true, false, null, null);
     await ctx.flush();
 
     const account = await resolveAccount(env, token);
@@ -241,7 +247,7 @@ describe("auth middlewares", () => {
     const { env } = makeMockEnv();
     const ctx = makeCtx();
     const app = testApp();
-    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, null, null);
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, false, null, null);
 
     const res = await app.request("/required", { headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } }, env);
     expect(res.status).toBe(200);
@@ -251,7 +257,7 @@ describe("auth middlewares", () => {
     const { env } = makeMockEnv();
     const ctx = makeCtx();
     const app = testApp();
-    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, null, null);
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, false, null, null);
 
     const res = await app.request("/paid", { headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } }, env);
     expect(res.status).toBe(402);
@@ -261,7 +267,7 @@ describe("auth middlewares", () => {
     const { env } = makeMockEnv();
     const ctx = makeCtx();
     const app = testApp();
-    const token = await createSession(env, ctx, "acct-1", "anna@example.com", true, null, null);
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", true, false, null, null);
 
     const res = await app.request("/paid", { headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } }, env);
     expect(res.status).toBe(200);

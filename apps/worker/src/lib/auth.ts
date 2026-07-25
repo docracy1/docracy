@@ -22,6 +22,7 @@ interface SessionRecord {
   accountId: string;
   email: string;
   isPaid: boolean;
+  isEnterprise: boolean;
   /** The account whose documents/templates/webhooks this session sees — its own id, unless it's a
    *  team member, in which case this is the workspace owner's account id. Optional so sessions
    *  created before team accounts existed are treated as stale and get backfilled on next resolve
@@ -34,6 +35,10 @@ export interface AccountContext {
   id: string;
   email: string;
   isPaid: boolean;
+  /** Hand-negotiated Enterprise plan (see lib/billing.ts's markAccountEnterprise) — a superset of
+   *  isPaid, never true while isPaid is false. Workspace-derived, same as isPaid: a team member's
+   *  own account row is never itself enterprise-flagged, only the workspace owner's is. */
+  isEnterprise: boolean;
   /** Own id unless a team member, in which case the workspace owner's account id — every
    *  account-scoped D1 query (documents, templates, webhooks) should key off this, not `id`. */
   workspaceId: string;
@@ -99,12 +104,16 @@ export async function requestMagicLink(
   return { ok: true };
 }
 
-async function findOrCreateAccount(env: Env, ctx: Ctx, email: string): Promise<{ id: string; isPaid: boolean }> {
+async function findOrCreateAccount(
+  env: Env,
+  ctx: Ctx,
+  email: string
+): Promise<{ id: string; isPaid: boolean; isEnterprise: boolean }> {
   const db = env.DOCRACY_DB!;
   const existing = await db
-    .prepare(`SELECT id, is_paid FROM accounts WHERE email = ?`)
+    .prepare(`SELECT id, is_paid, is_enterprise FROM accounts WHERE email = ?`)
     .bind(email)
-    .first<{ id: string; is_paid: number }>();
+    .first<{ id: string; is_paid: number; is_enterprise: number }>();
 
   if (existing) {
     ctx.waitUntil(
@@ -114,7 +123,7 @@ async function findOrCreateAccount(env: Env, ctx: Ctx, email: string): Promise<{
         .run()
         .catch((err) => console.error("Auth D1 audit (last_login_at) failed (non-fatal):", err))
     );
-    return { id: existing.id, isPaid: !!existing.is_paid };
+    return { id: existing.id, isPaid: !!existing.is_paid, isEnterprise: !!existing.is_enterprise };
   }
 
   const id = crypto.randomUUID();
@@ -123,7 +132,7 @@ async function findOrCreateAccount(env: Env, ctx: Ctx, email: string): Promise<{
     .prepare(`INSERT INTO accounts (id, email, created_at, is_paid, last_login_at) VALUES (?, ?, ?, 0, ?)`)
     .bind(id, email, now, now)
     .run();
-  return { id, isPaid: false };
+  return { id, isPaid: false, isEnterprise: false };
 }
 
 /**
@@ -157,7 +166,16 @@ export async function consumeMagicLink(
   );
 
   const account = await findOrCreateAccount(env, ctx, record.email);
-  const sessionToken = await createSession(env, ctx, account.id, record.email, account.isPaid, ip, userAgent);
+  const sessionToken = await createSession(
+    env,
+    ctx,
+    account.id,
+    record.email,
+    account.isPaid,
+    account.isEnterprise,
+    ip,
+    userAgent
+  );
   return { ok: true, sessionToken };
 }
 
@@ -167,6 +185,7 @@ export async function createSession(
   accountId: string,
   email: string,
   isPaid: boolean,
+  isEnterprise: boolean,
   ip: string | null,
   userAgent: string | null
 ): Promise<string> {
@@ -176,7 +195,7 @@ export async function createSession(
   // workspaceId is deliberately left unset here — resolveAccount treats a missing workspaceId as
   // stale and resolves/caches it (and the workspace-derived isPaid) on the very next call, so
   // login flows never need to know about team membership themselves.
-  const record: SessionRecord = { accountId, email, isPaid, isPaidCachedAt: now };
+  const record: SessionRecord = { accountId, email, isPaid, isEnterprise, isPaidCachedAt: now };
   await env.DOCRACY_KV.put(`session:${hash}`, JSON.stringify(record), { expirationTtl: SESSION_TTL_SECONDS });
 
   if (env.DOCRACY_DB) {
@@ -199,16 +218,22 @@ export async function createSession(
  *  own accounts.is_paid row stays 0 forever; paid status lives on the workspace owner). Returns
  *  null (refresh a no-op) if the workspace account row doesn't exist, mirroring the original
  *  isPaid-refresh's own "only overwrite if the row was found" guard. */
-async function resolveWorkspace(env: Env, accountId: string): Promise<{ workspaceId: string; isPaid: boolean } | null> {
+async function resolveWorkspace(
+  env: Env,
+  accountId: string
+): Promise<{ workspaceId: string; isPaid: boolean; isEnterprise: boolean } | null> {
   const db = env.DOCRACY_DB!;
   const membership = await db
     .prepare(`SELECT owner_account_id FROM team_members WHERE member_account_id = ?`)
     .bind(accountId)
     .first<{ owner_account_id: string }>();
   const workspaceId = membership?.owner_account_id ?? accountId;
-  const row = await db.prepare(`SELECT is_paid FROM accounts WHERE id = ?`).bind(workspaceId).first<{ is_paid: number }>();
+  const row = await db
+    .prepare(`SELECT is_paid, is_enterprise FROM accounts WHERE id = ?`)
+    .bind(workspaceId)
+    .first<{ is_paid: number; is_enterprise: number }>();
   if (!row) return null;
-  return { workspaceId, isPaid: !!row.is_paid };
+  return { workspaceId, isPaid: !!row.is_paid, isEnterprise: !!row.is_enterprise };
 }
 
 /**
@@ -225,19 +250,21 @@ export async function resolveAccount(env: Env, sessionToken: string | undefined)
   if (!record) return null;
 
   let isPaid = record.isPaid;
+  let isEnterprise = record.isEnterprise ?? false;
   let workspaceId = record.workspaceId ?? record.accountId;
   const cacheAgeMs = Date.now() - new Date(record.isPaidCachedAt).getTime();
   if (env.DOCRACY_DB && (!record.workspaceId || cacheAgeMs > PAID_STATUS_REFRESH_SECONDS * 1000)) {
     const resolved = await resolveWorkspace(env, record.accountId);
     if (resolved) {
       isPaid = resolved.isPaid;
+      isEnterprise = resolved.isEnterprise;
       workspaceId = resolved.workspaceId;
-      const refreshed: SessionRecord = { ...record, isPaid, workspaceId, isPaidCachedAt: nowIso() };
+      const refreshed: SessionRecord = { ...record, isPaid, isEnterprise, workspaceId, isPaidCachedAt: nowIso() };
       await env.DOCRACY_KV.put(`session:${hash}`, JSON.stringify(refreshed), { expirationTtl: SESSION_TTL_SECONDS });
     }
   }
 
-  return { id: record.accountId, email: record.email, isPaid, workspaceId };
+  return { id: record.accountId, email: record.email, isPaid, isEnterprise, workspaceId };
 }
 
 type AuthVariables = { account: AccountContext | null };

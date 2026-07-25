@@ -28,7 +28,7 @@ describe("GET /api/account/documents", () => {
   it("returns an empty list for an account with no documents", async () => {
     const { env } = makeMockEnv();
     const ctx = makeCtx();
-    const token = await createSession(env, ctx, "acct-1", "anna@example.com", true, null, null);
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", true, false, null, null);
 
     const res = await account.request("/documents", { headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } }, env, ctx);
     expect(res.status).toBe(200);
@@ -39,7 +39,7 @@ describe("GET /api/account/documents", () => {
   it("lists only the requesting account's own documents, newest first, with a working status token", async () => {
     const { env, d1 } = makeMockEnv();
     const ctx = makeCtx();
-    const token = await createSession(env, ctx, "acct-1", "anna@example.com", true, null, null);
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", true, false, null, null);
 
     await d1
       .prepare(
@@ -78,7 +78,7 @@ describe("GET /api/account/documents", () => {
   it("flags awaitingYou only when the preparer signs and it's currently their turn", async () => {
     const { env, d1 } = makeMockEnv();
     const ctx = makeCtx();
-    const token = await createSession(env, ctx, "acct-1", "anna@example.com", true, null, null);
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", true, false, null, null);
 
     // Waiting on you: preparer signs, and their own (order 1) turn is still pending.
     await d1
@@ -140,7 +140,7 @@ describe("GET /api/account/token", () => {
   it("402s for a logged-in but unpaid account", async () => {
     const { env } = makeMockEnv();
     const ctx = makeCtx();
-    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, null, null);
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, false, null, null);
     const res = await account.request("/token", { headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } }, env, ctx);
     expect(res.status).toBe(402);
   });
@@ -148,7 +148,7 @@ describe("GET /api/account/token", () => {
   it("reports hasToken: false before any token is issued", async () => {
     const { env } = makeMockEnv();
     const ctx = makeCtx();
-    const token = await createSession(env, ctx, "acct-1", "anna@example.com", true, null, null);
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", true, false, null, null);
     const res = await account.request("/token", { headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } }, env, ctx);
     expect(res.status).toBe(200);
     expect((await res.json()) as { hasToken: boolean }).toEqual({ hasToken: false });
@@ -165,7 +165,7 @@ describe("POST /api/account/token/regenerate", () => {
   it("402s for a logged-in but unpaid account", async () => {
     const { env } = makeMockEnv();
     const ctx = makeCtx();
-    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, null, null);
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, false, null, null);
     const res = await account.request(
       "/token/regenerate",
       { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } },
@@ -178,7 +178,7 @@ describe("POST /api/account/token/regenerate", () => {
   it("issues a token and a matching connector URL, then reports it as active", async () => {
     const { env } = makeMockEnv();
     const ctx = makeCtx();
-    const sessionToken = await createSession(env, ctx, "acct-1", "anna@example.com", true, null, null);
+    const sessionToken = await createSession(env, ctx, "acct-1", "anna@example.com", true, false, null, null);
 
     const res = await account.request(
       "/token/regenerate",

@@ -18,7 +18,7 @@ function makeCtx() {
 }
 
 async function paidSession(env: Awaited<ReturnType<typeof makeMockEnv>>["env"], ctx: ReturnType<typeof makeCtx>) {
-  return createSession(env, ctx, "acct-1", "anna@example.com", true, null, null);
+  return createSession(env, ctx, "acct-1", "anna@example.com", true, false, null, null);
 }
 
 const validBody = { url: "https://example.com/hook", events: ["document.created"] };
@@ -38,7 +38,7 @@ describe("POST /api/account/webhooks", () => {
   it("402s for a logged-in but unpaid account", async () => {
     const { env } = makeMockEnv();
     const ctx = makeCtx();
-    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, null, null);
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, false, null, null);
     const res = await webhooks.request(
       "/",
       {
@@ -150,7 +150,7 @@ describe("GET /api/account/webhooks", () => {
       env,
       ctx
     );
-    const otherToken = await createSession(env, ctx, "acct-2", "max@example.com", true, null, null);
+    const otherToken = await createSession(env, ctx, "acct-2", "max@example.com", true, false, null, null);
     await webhooks.request(
       "/",
       {
@@ -217,7 +217,7 @@ describe("DELETE /api/account/webhooks/:id", () => {
     );
     const { webhookId } = (await createRes.json()) as { webhookId: string };
 
-    const otherToken = await createSession(env, ctx, "acct-2", "max@example.com", true, null, null);
+    const otherToken = await createSession(env, ctx, "acct-2", "max@example.com", true, false, null, null);
     const deleteRes = await webhooks.request(
       `/${webhookId}`,
       { method: "DELETE", headers: { Cookie: `${SESSION_COOKIE_NAME}=${otherToken}` } },

@@ -42,7 +42,12 @@ describe("verifyAndExtract (Stripe)", () => {
     const header = await makeHeader(body, WEBHOOK_SECRET);
 
     const result = await verifyAndExtract(body, header, env);
-    expect(result).toEqual({ type: "checkout_completed", accountId: "acct-1", customerId: "cus_1" });
+    expect(result).toEqual({
+      type: "checkout_completed",
+      accountId: "acct-1",
+      customerId: "cus_1",
+      isEnterprise: false,
+    });
   });
 
   it("accepts a checkout.session.completed event with no customer id yet", async () => {
@@ -51,7 +56,19 @@ describe("verifyAndExtract (Stripe)", () => {
     const header = await makeHeader(body, WEBHOOK_SECRET);
 
     const result = await verifyAndExtract(body, header, env);
-    expect(result).toEqual({ type: "checkout_completed", accountId: "acct-1", customerId: null });
+    expect(result).toEqual({ type: "checkout_completed", accountId: "acct-1", customerId: null, isEnterprise: false });
+  });
+
+  it("accepts a checkout.session.completed event with metadata.plan=enterprise", async () => {
+    const { env } = makeMockEnv({ STRIPE_WEBHOOK_SECRET: WEBHOOK_SECRET });
+    const body = JSON.stringify({
+      type: "checkout.session.completed",
+      data: { object: { client_reference_id: "acct-1", metadata: { plan: "enterprise" } } },
+    });
+    const header = await makeHeader(body, WEBHOOK_SECRET);
+
+    const result = await verifyAndExtract(body, header, env);
+    expect(result).toEqual({ type: "checkout_completed", accountId: "acct-1", customerId: null, isEnterprise: true });
   });
 
   it("accepts a validly-signed customer.subscription.deleted event", async () => {

@@ -1,6 +1,12 @@
 import { Hono } from "hono";
 import { requireAccount, requirePaidAccount, type AccountContext } from "../lib/auth";
-import { findAccountIdByStripeCustomerId, getStripeCustomerId, markAccountPaid, setStripeCustomerId } from "../lib/billing";
+import {
+  findAccountIdByStripeCustomerId,
+  getStripeCustomerId,
+  markAccountEnterprise,
+  markAccountPaid,
+  setStripeCustomerId,
+} from "../lib/billing";
 import { verifyAndExtract } from "../lib/billingProviders/stripe";
 import type { Env } from "@docracy/shared";
 
@@ -58,6 +64,7 @@ billing.post("/webhook", async (c) => {
   if (result?.type === "checkout_completed") {
     await markAccountPaid(c.env, result.accountId, true);
     if (result.customerId) await setStripeCustomerId(c.env, result.accountId, result.customerId);
+    if (result.isEnterprise) await markAccountEnterprise(c.env, result.accountId);
   } else if (result?.type === "subscription_deleted") {
     const accountId = await findAccountIdByStripeCustomerId(c.env, result.customerId);
     if (accountId) await markAccountPaid(c.env, accountId, false);

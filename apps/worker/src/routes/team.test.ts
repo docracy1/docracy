@@ -25,7 +25,7 @@ async function seedAccount(env: Awaited<ReturnType<typeof makeMockEnv>>["env"], 
 
 async function ownerSession(env: Awaited<ReturnType<typeof makeMockEnv>>["env"], ctx: ReturnType<typeof makeCtx>) {
   await seedAccount(env, "owner-1", "owner@example.com", true);
-  return createSession(env, ctx, "owner-1", "owner@example.com", true, null, null);
+  return createSession(env, ctx, "owner-1", "owner@example.com", true, false, null, null);
 }
 
 async function memberSession(env: Awaited<ReturnType<typeof makeMockEnv>>["env"], ctx: ReturnType<typeof makeCtx>) {
@@ -35,7 +35,7 @@ async function memberSession(env: Awaited<ReturnType<typeof makeMockEnv>>["env"]
     .DOCRACY_DB!.prepare(`INSERT INTO team_members (id, owner_account_id, member_account_id, joined_at) VALUES (?, ?, ?, ?)`)
     .bind("tm-1", "owner-1", "member-1", new Date().toISOString())
     .run();
-  return createSession(env, ctx, "member-1", "member@example.com", false, null, null);
+  return createSession(env, ctx, "member-1", "member@example.com", false, false, null, null);
 }
 
 describe("POST /api/account/team/invite", () => {
@@ -54,7 +54,7 @@ describe("POST /api/account/team/invite", () => {
     const { env } = makeMockEnv();
     const ctx = makeCtx();
     await seedAccount(env, "acct-1", "unpaid@example.com", false);
-    const token = await createSession(env, ctx, "acct-1", "unpaid@example.com", false, null, null);
+    const token = await createSession(env, ctx, "acct-1", "unpaid@example.com", false, false, null, null);
     const res = await team.request(
       "/invite",
       {
@@ -208,7 +208,7 @@ describe("DELETE /api/account/team/:memberAccountId", () => {
     const { env } = makeMockEnv();
     const ctx = makeCtx();
     const token = await memberSession(env, ctx); // seeds owner-1 + member-1 + the team_members row
-    const ownerToken = await createSession(env, ctx, "owner-1", "owner@example.com", true, null, null);
+    const ownerToken = await createSession(env, ctx, "owner-1", "owner@example.com", true, false, null, null);
     void token;
 
     const res = await team.request(
