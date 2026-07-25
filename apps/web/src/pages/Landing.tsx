@@ -48,6 +48,89 @@ function DocumentMockup({ variant }: { variant: "signed" | "detect" }) {
   );
 }
 
+/** Minimalist monochrome line icons (hand-drawn, Heroicons-outline style) for the feature-card
+ *  grid below — kept inline rather than pulling in an icon library for five one-off glyphs. */
+function FeatureIcon({ name }: { name: "bolt" | "workflow" | "shield" | "users" | "duplicate" }) {
+  const common = {
+    width: 24,
+    height: 24,
+    viewBox: "0 0 24 24",
+    fill: "none" as const,
+    stroke: "currentColor",
+    strokeWidth: 1.5,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+  };
+  switch (name) {
+    case "bolt":
+      return (
+        <svg {...common}>
+          <path d="M12.5 2.5L4 14h6l-1 7.5L20 10h-6l-1.5-7.5z" />
+        </svg>
+      );
+    case "workflow":
+      return (
+        <svg {...common}>
+          <circle cx="5" cy="6" r="2.25" />
+          <circle cx="12" cy="12" r="2.25" />
+          <circle cx="19" cy="18" r="2.25" />
+          <path d="M6.8 7.6L10.2 10.4M13.8 13.6L17.2 16.4" />
+        </svg>
+      );
+    case "shield":
+      return (
+        <svg {...common}>
+          <path d="M12 3l7 3v5.5c0 5-3.5 8-7 9.5-3.5-1.5-7-4.5-7-9.5V6l7-3z" />
+          <path d="M9 12l2 2 4-4" />
+        </svg>
+      );
+    case "users":
+      return (
+        <svg {...common}>
+          <circle cx="9" cy="8" r="3" />
+          <path d="M3.5 19.5c0-3 2.5-5.5 5.5-5.5s5.5 2.5 5.5 5.5" />
+          <circle cx="17" cy="9" r="2.25" />
+          <path d="M15.5 14.2c2.3.4 4 2.4 4 5.3" />
+        </svg>
+      );
+    case "duplicate":
+      return (
+        <svg {...common}>
+          <rect x="8" y="8" width="12" height="13" rx="1.5" />
+          <path d="M4 15V4.5A1.5 1.5 0 0 1 5.5 3H15" />
+        </svg>
+      );
+  }
+}
+
+const CORE_FEATURES: Array<{ icon: "bolt" | "workflow" | "shield" | "users" | "duplicate"; title: string; body: string }> = [
+  {
+    icon: "bolt",
+    title: "Fast e-signatures",
+    body: "Sign documents in seconds with a clean, distraction-free interface. No complexity, no setup overhead — just reliable, fast signing for you and your clients.",
+  },
+  {
+    icon: "workflow",
+    title: "Simple workflow setup",
+    body: "Create document workflows in minutes. Add steps, assign recipients, and automate basic flows without technical knowledge. Ideal for small teams and growing businesses.",
+  },
+  {
+    icon: "shield",
+    title: "Secure document storage",
+    body: "Store all documents in a compliant, encrypted environment. Every file is versioned, traceable, and protected — giving you full control and audit-ready transparency.",
+  },
+  {
+    icon: "users",
+    title: "Team collaboration",
+    body: "Invite team members, share templates, and manage signing processes together. Keep everything organized and accessible in one place.",
+  },
+  {
+    icon: "duplicate",
+    title: "Templates for recurring documents",
+    body: "Save time with reusable templates for NDAs, contracts, agreements, onboarding documents, and more. Create once, reuse forever.",
+  },
+];
+
 const TESTIMONIALS: Array<{ quote: string; name: string; title: string; company: string | null; logo: string | null }> = [
   {
     quote:
@@ -118,6 +201,28 @@ export default function Landing() {
             <div className="doc-mockup-card">
               <DocumentMockup variant="signed" />
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="core-features-band">
+        <div className="core-features-inner">
+          <h2 style={{ fontSize: 26, marginBottom: 8, textAlign: "center" }}>
+            Everything you need for simple, secure document workflows
+          </h2>
+          <p style={{ textAlign: "center", maxWidth: 560, margin: "0 auto" }}>
+            Docracy.io focuses on clarity, speed, and reliability — without unnecessary complexity.
+          </p>
+          <div className="core-features-grid">
+            {CORE_FEATURES.map((f) => (
+              <div key={f.title} className="core-feature-card">
+                <div className="core-feature-icon">
+                  <FeatureIcon name={f.icon} />
+                </div>
+                <h3>{f.title}</h3>
+                <p>{f.body}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>

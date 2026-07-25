@@ -69,6 +69,12 @@ export default function Dashboard() {
   const [uploadingLogo, setUploadingLogo] = useState(false);
   const [deletingLogo, setDeletingLogo] = useState(false);
   const [activeTab, setActiveTab] = useState<"dashboard" | "templates" | "documents" | "tools">("dashboard");
+  const [docsSubTab, setDocsSubTab] = useState<"all" | "awaiting" | "waiting" | "completed">("all");
+  const [toolsSubTab, setToolsSubTab] = useState<"connector" | "webhooks" | "branding" | "team" | "subscription">(
+    "connector"
+  );
+  const [documentsExpanded, setDocumentsExpanded] = useState(false);
+  const [toolsExpanded, setToolsExpanded] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -264,6 +270,30 @@ export default function Dashboard() {
     }).length;
   }, [documents]);
 
+  const waitingOnOthersDocs = useMemo(
+    () => documents.filter((d) => d.status === "pending" && !d.awaitingYou),
+    [documents]
+  );
+  const completedDocs = useMemo(() => documents.filter((d) => d.status === "completed"), [documents]);
+  const visibleDocs = useMemo(() => {
+    if (docsSubTab === "awaiting") return awaitingYouDocs;
+    if (docsSubTab === "waiting") return waitingOnOthersDocs;
+    if (docsSubTab === "completed") return completedDocs;
+    return documents;
+  }, [docsSubTab, awaitingYouDocs, waitingOnOthersDocs, completedDocs, documents]);
+
+  const openDocuments = (subTab: typeof docsSubTab) => {
+    setActiveTab("documents");
+    setDocsSubTab(subTab);
+    setDocumentsExpanded(true);
+  };
+
+  const openTools = (subTab: typeof toolsSubTab) => {
+    setActiveTab("tools");
+    setToolsSubTab(subTab);
+    setToolsExpanded(true);
+  };
+
   useEffect(() => {
     if (!profileMenuOpen) return;
     const onDocClick = () => setProfileMenuOpen(false);
@@ -323,40 +353,118 @@ export default function Dashboard() {
     );
   }
 
-  const NAV_ITEMS: Array<{ key: typeof activeTab; label: string }> = [
-    { key: "dashboard", label: "Dashboard" },
-    { key: "templates", label: "Templates" },
-    { key: "documents", label: "Documents" },
-    { key: "tools", label: "Tools" },
+  const DOCS_SUBNAV: Array<{ key: typeof docsSubTab; label: string }> = [
+    { key: "awaiting", label: "Awaiting your signature" },
+    { key: "waiting", label: "Waiting on others" },
+    { key: "completed", label: "Completed" },
+  ];
+
+  const TOOLS_SUBNAV: Array<{ key: typeof toolsSubTab; label: string }> = [
+    { key: "connector", label: "Connector & API key" },
+    { key: "webhooks", label: "Webhooks" },
+    { key: "branding", label: "Branding" },
+    { key: "team", label: "Team" },
+    ...(isWorkspaceOwner ? [{ key: "subscription" as const, label: "Subscription" }] : []),
   ];
 
   return (
     <div className="dashboard-shell">
       <aside className="dashboard-sidebar">
-        <Link to="/prepare" className="btn-primary dashboard-nav-new" style={{ textDecoration: "none", display: "block", textAlign: "center" }}>
+        <Link to="/prepare" className="dashboard-nav-new">
           + New
         </Link>
-        {NAV_ITEMS.map((item) => (
+        <button
+          className={`dashboard-nav-item${activeTab === "dashboard" ? " active" : ""}`}
+          onClick={() => setActiveTab("dashboard")}
+        >
+          Dashboard
+        </button>
+        <button
+          className={`dashboard-nav-item${activeTab === "templates" ? " active" : ""}`}
+          onClick={() => setActiveTab("templates")}
+        >
+          Templates
+        </button>
+
+        <div className="dashboard-nav-group">
           <button
-            key={item.key}
-            className={`dashboard-nav-item${activeTab === item.key ? " active" : ""}`}
-            onClick={() => setActiveTab(item.key)}
+            className={`dashboard-nav-item dashboard-nav-group-header${activeTab === "documents" ? " active" : ""}`}
+            onClick={() => {
+              setActiveTab("documents");
+              setDocumentsExpanded((o) => !o);
+            }}
           >
-            {item.label}
+            Documents
+            <span className={`dashboard-nav-chevron${documentsExpanded ? " open" : ""}`}>⌄</span>
           </button>
-        ))}
+          {documentsExpanded && (
+            <div className="dashboard-nav-subitems">
+              {DOCS_SUBNAV.map((item) => (
+                <button
+                  key={item.key}
+                  className={`dashboard-nav-subitem${activeTab === "documents" && docsSubTab === item.key ? " active" : ""}`}
+                  onClick={() => openDocuments(item.key)}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {account.isPaid && (
+          <div className="dashboard-nav-group">
+            <button
+              className={`dashboard-nav-item dashboard-nav-group-header${activeTab === "tools" ? " active" : ""}`}
+              onClick={() => {
+                setActiveTab("tools");
+                setToolsExpanded((o) => !o);
+              }}
+            >
+              Tools
+              <span className={`dashboard-nav-chevron${toolsExpanded ? " open" : ""}`}>⌄</span>
+            </button>
+            {toolsExpanded && (
+              <div className="dashboard-nav-subitems">
+                {TOOLS_SUBNAV.map((item) => (
+                  <button
+                    key={item.key}
+                    className={`dashboard-nav-subitem${activeTab === "tools" && toolsSubTab === item.key ? " active" : ""}`}
+                    onClick={() => openTools(item.key)}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
         <div className="dashboard-profile" onClick={() => setProfileMenuOpen((o) => !o)}>
           {profileMenuOpen && (
             <div className="dashboard-profile-menu">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setActiveTab("tools");
-                  setProfileMenuOpen(false);
-                }}
-              >
-                Settings
-              </button>
+              {account.isPaid && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openTools("team");
+                    setProfileMenuOpen(false);
+                  }}
+                >
+                  Team
+                </button>
+              )}
+              {account.isPaid && isWorkspaceOwner && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openTools("subscription");
+                    setProfileMenuOpen(false);
+                  }}
+                >
+                  Subscription
+                </button>
+              )}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -486,11 +594,19 @@ export default function Dashboard() {
 
         {activeTab === "documents" && (
           <div className="card" style={{ marginTop: 24 }}>
-            <h3 style={{ fontSize: 15 }}>All documents</h3>
-            {documents.length === 0 ? (
+            <h3 style={{ fontSize: 15 }}>
+              {docsSubTab === "awaiting"
+                ? "Awaiting your signature"
+                : docsSubTab === "waiting"
+                ? "Waiting on others"
+                : docsSubTab === "completed"
+                ? "Completed"
+                : "All documents"}
+            </h3>
+            {visibleDocs.length === 0 ? (
               <p style={{ marginBottom: 0 }}>Nothing here yet.</p>
             ) : (
-              documents.map((doc) => (
+              visibleDocs.map((doc) => (
                 <div
                   key={doc.docId}
                   style={{
@@ -526,7 +642,7 @@ export default function Dashboard() {
           </div>
         )}
 
-        {activeTab === "tools" && account.isPaid && isWorkspaceOwner && (
+        {activeTab === "tools" && account.isPaid && isWorkspaceOwner && toolsSubTab === "subscription" && (
           <div className="card" style={{ marginTop: 24 }}>
             <h3 style={{ fontSize: 15 }}>Subscription</h3>
             <p>Manage your payment method, invoices, or cancel your subscription.</p>
@@ -537,7 +653,7 @@ export default function Dashboard() {
           </div>
         )}
 
-        {activeTab === "tools" && account.isPaid && (
+        {activeTab === "tools" && account.isPaid && toolsSubTab === "connector" && (
           <div className="card" style={{ marginTop: 24 }}>
             <h3 style={{ fontSize: 15 }}>MCP connector &amp; API key</h3>
           <p>Status: {hasToken ? "Active" : "None yet"}</p>
@@ -699,7 +815,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      {activeTab === "tools" && account.isPaid && (
+      {activeTab === "tools" && account.isPaid && toolsSubTab === "webhooks" && (
         <div className="card" style={{ marginTop: 24 }}>
           <h3 style={{ fontSize: 15 }}>Webhooks</h3>
           <p style={{ fontSize: 12, color: "var(--mute)" }}>
@@ -787,7 +903,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      {activeTab === "tools" && account.isPaid && (
+      {activeTab === "tools" && account.isPaid && toolsSubTab === "branding" && (
         <div className="card" style={{ marginTop: 24 }}>
           <h3 style={{ fontSize: 15 }}>Branding</h3>
           <p style={{ fontSize: 12, color: "var(--mute)" }}>
@@ -826,7 +942,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      {activeTab === "tools" && account.isPaid && (
+      {activeTab === "tools" && account.isPaid && toolsSubTab === "team" && (
         <div className="card" style={{ marginTop: 24 }}>
           <h3 style={{ fontSize: 15 }}>Team</h3>
           <p style={{ fontSize: 12, color: "var(--mute)" }}>

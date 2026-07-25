@@ -507,6 +507,57 @@ select {
   border-left-color: var(--success);
 }
 
+/* Core feature grid — the main "everything you need" overview right below the hero. */
+
+.core-features-band {
+  padding: 56px 24px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.core-features-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.core-features-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+  margin-top: 40px;
+}
+
+@media (max-width: 700px) {
+  .core-features-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.core-feature-card {
+  padding: 0;
+}
+
+.core-feature-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--r-md);
+  background: var(--primary-soft);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.core-feature-card h3 {
+  font-size: 17px;
+  margin: 0 0 24px;
+}
+
+.core-feature-card p {
+  margin: 0;
+  font-size: 14px;
+}
+
 /* "Who it's for" — a horizontal variant of the same accent-item list used in the AI section, so
    the page reads as one consistent visual language rather than a new card style every section. */
 
@@ -884,10 +935,28 @@ select {
   gap: 4px;
   position: sticky;
   top: 88px;
+  /* Full remaining viewport height so .dashboard-profile's margin-top:auto below can always push
+     it to the bottom of the screen, regardless of how many nav items/sub-items are expanded. */
+  min-height: calc(100vh - 88px - 24px);
 }
 
 .dashboard-nav-new {
-  margin-bottom: 12px;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 10px 14px;
+  border-radius: var(--r-sm);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--body-strong);
+  text-decoration: none;
+  display: block;
+  margin-bottom: 8px;
+  transition: background-color 0.15s var(--ease);
+}
+
+.dashboard-nav-new:hover {
+  background: var(--primary-soft);
 }
 
 .dashboard-nav-item {
@@ -913,9 +982,58 @@ select {
   color: var(--primary);
 }
 
+.dashboard-nav-group-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dashboard-nav-chevron {
+  font-size: 12px;
+  transition: transform 0.15s var(--ease);
+}
+
+.dashboard-nav-chevron.open {
+  transform: rotate(180deg);
+}
+
+.dashboard-nav-subitems {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 2px 0 4px 12px;
+  padding-left: 10px;
+  border-left: 2px solid var(--hairline);
+}
+
+.dashboard-nav-subitem {
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 8px 10px;
+  border-radius: var(--r-sm);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--body);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background-color 0.15s var(--ease), color 0.15s var(--ease);
+}
+
+.dashboard-nav-subitem:hover {
+  background: var(--primary-soft);
+}
+
+.dashboard-nav-subitem.active {
+  background: var(--primary-soft-strong);
+  color: var(--primary);
+  font-weight: 600;
+}
+
 .dashboard-profile {
   position: relative;
-  margin-top: 16px;
+  margin-top: auto;
   padding-top: 16px;
   border-top: 1px solid var(--hairline);
   cursor: pointer;
@@ -1008,6 +1126,7 @@ select {
     align-items: center;
     overflow-x: auto;
     position: static;
+    min-height: auto;
     padding-bottom: 8px;
   }
 
