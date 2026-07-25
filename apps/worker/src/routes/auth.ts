@@ -9,7 +9,6 @@ import {
   sessionCookieOptions,
   type AccountContext,
 } from "../lib/auth";
-import { getEnterpriseExpiresAt } from "../lib/billing";
 import type { Env } from "@docracy/shared";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -65,10 +64,7 @@ auth.post("/logout", async (c) => {
 });
 
 auth.get("/me", optionalAccount, async (c) => {
-  const account = c.get("account");
-  if (!account?.isEnterprise) return c.json({ account });
-  const enterpriseExpiresAt = await getEnterpriseExpiresAt(c.env, account.workspaceId);
-  return c.json({ account: { ...account, enterpriseExpiresAt } });
+  return c.json({ account: c.get("account") });
 });
 
 export default auth;

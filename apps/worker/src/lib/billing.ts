@@ -1,5 +1,6 @@
 import type { Env } from "@docracy/shared";
 import { revokeApiToken } from "./apiTokens";
+import { deleteConnectionsForAccount } from "./cloudConnectors";
 
 /**
  * Provider-agnostic core — a provider's webhook route (see billingProviders/stripe.ts) verifies
@@ -23,31 +24,21 @@ export async function markAccountPaid(env: Env, accountId: string, paid: boolean
     .run();
   if (!paid) {
     await revokeApiToken(env, accountId);
+    // A lapsed account keeps no standing OAuth grant to its cloud storage connectors — same
+    // posture as revoking the API token above, and the only place this needs to happen now that
+    // Enterprise revocation flows through this same function instead of a separate cron sweep.
+    await deleteConnectionsForAccount(env, accountId);
   }
 }
 
-const ENTERPRISE_TERM_DAYS = 365;
-
-/** Enterprise deals are paid as a one-time Stripe charge, not a recurring subscription — Stripe
- *  never sends a follow-up "this lapsed" event for those, so a fixed one-year term is stamped
- *  here at grant time and enforced by the daily sweep in lib/enterpriseExpiry.ts instead. Renewing
- *  a contract just means running this again, which pushes the expiry another year out. */
+/** Enterprise is now a real recurring annual Stripe subscription (like the standard paid plan) —
+ *  Stripe's own billing cycle handles renewal, and customer.subscription.deleted (markAccountPaid
+ *  above) is what revokes it, exactly mirroring the standard plan. No expiry to track here.
+ *  Also used directly by the admin-only manual grant route (routes/admin.ts) for customers who
+ *  pay by bank transfer and never touch Stripe Checkout at all. */
 export async function markAccountEnterprise(env: Env, accountId: string): Promise<void> {
   if (!env.DOCRACY_DB) return;
-  const expiresAt = new Date(Date.now() + ENTERPRISE_TERM_DAYS * 24 * 60 * 60 * 1000).toISOString();
-  await env.DOCRACY_DB.prepare(`UPDATE accounts SET is_enterprise = 1, enterprise_expires_at = ? WHERE id = ?`)
-    .bind(expiresAt, accountId)
-    .run();
-}
-
-/** Display-only lookup for the Dashboard's Subscription panel — not part of the cached session
- *  (see auth.ts), since it's just informational and doesn't gate anything. */
-export async function getEnterpriseExpiresAt(env: Env, workspaceId: string): Promise<string | null> {
-  if (!env.DOCRACY_DB) return null;
-  const row = await env.DOCRACY_DB.prepare(`SELECT enterprise_expires_at FROM accounts WHERE id = ?`)
-    .bind(workspaceId)
-    .first<{ enterprise_expires_at: string | null }>();
-  return row?.enterprise_expires_at ?? null;
+  await env.DOCRACY_DB.prepare(`UPDATE accounts SET is_enterprise = 1 WHERE id = ?`).bind(accountId).run();
 }
 
 /** Set once, on an account's first completed checkout — lets a later webhook keyed by Stripe
@@ -57,6 +48,16 @@ export async function setStripeCustomerId(env: Env, accountId: string, customerI
   await env.DOCRACY_DB.prepare(`UPDATE accounts SET stripe_customer_id = ? WHERE id = ? AND stripe_customer_id IS NULL`)
     .bind(customerId, accountId)
     .run();
+}
+
+/** Used only by the admin-only manual Enterprise grant route (routes/admin.ts), for customers who
+ *  pay by bank transfer and never generate a Stripe customer/checkout session to look up by. */
+export async function findAccountIdByEmail(env: Env, email: string): Promise<string | null> {
+  if (!env.DOCRACY_DB) return null;
+  const row = await env.DOCRACY_DB.prepare(`SELECT id FROM accounts WHERE email = ?`)
+    .bind(email.trim().toLowerCase())
+    .first<{ id: string }>();
+  return row?.id ?? null;
 }
 
 export async function findAccountIdByStripeCustomerId(env: Env, customerId: string): Promise<string | null> {

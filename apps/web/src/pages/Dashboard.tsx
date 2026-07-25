@@ -116,6 +116,8 @@ export default function Dashboard() {
   const [error, setError] = useState<string | null>(null);
   const [upgrading, setUpgrading] = useState(false);
   const [upgradeError, setUpgradeError] = useState<string | null>(null);
+  const [upgradingEnterprise, setUpgradingEnterprise] = useState(false);
+  const [upgradeEnterpriseError, setUpgradeEnterpriseError] = useState<string | null>(null);
   const [managingBilling, setManagingBilling] = useState(false);
   const [manageBillingError, setManageBillingError] = useState<string | null>(null);
   const [regenerating, setRegenerating] = useState(false);
@@ -331,6 +333,18 @@ export default function Dashboard() {
     } catch (err) {
       setUpgradeError(err instanceof Error ? err.message : "Something went wrong");
       setUpgrading(false);
+    }
+  };
+
+  const onUpgradeEnterprise = async () => {
+    setUpgradingEnterprise(true);
+    setUpgradeEnterpriseError(null);
+    try {
+      const { url } = await startCheckout("enterprise");
+      window.location.href = url;
+    } catch (err) {
+      setUpgradeEnterpriseError(err instanceof Error ? err.message : "Something went wrong");
+      setUpgradingEnterprise(false);
     }
   };
 
@@ -851,17 +865,6 @@ export default function Dashboard() {
               )}
             </h3>
             <p>Manage your payment method, invoices, or cancel your subscription.</p>
-            {account.isEnterprise && account.enterpriseExpiresAt && (
-              <p style={{ fontSize: 12, color: "var(--mute)" }}>
-                Enterprise term active until{" "}
-                {new Date(account.enterpriseExpiresAt).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-                . Contact sales to renew before then.
-              </p>
-            )}
             {manageBillingError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{manageBillingError}</p>}
             <button className="btn-secondary" onClick={onManageBilling} disabled={managingBilling}>
               {managingBilling ? "Redirecting…" : "Manage subscription"}
@@ -869,11 +872,19 @@ export default function Dashboard() {
 
             {!account.isEnterprise && (
               <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid var(--hairline)" }}>
-                <p style={{ fontSize: 12, color: "var(--mute)", marginBottom: 4 }}>
-                  Setting up a custom Enterprise deal with sales? Give them this workspace ID — they'll append it
-                  as <code>client_reference_id</code> on the Payment Link before sending it to you.
+                <p style={{ fontSize: 13, marginBottom: 4 }}>
+                  <strong>Need more than the Paid plan?</strong>
                 </p>
-                <input className="form-input" readOnly value={account.id} style={{ width: "100%", fontSize: 12 }} />
+                <p style={{ fontSize: 12, color: "var(--mute)", marginBottom: 8 }}>
+                  Enterprise adds invoice billing, SLA-backed support, SSO/multi-workspace setup, and volume
+                  discounts, scoped to your needs.
+                </p>
+                {upgradeEnterpriseError && (
+                  <p style={{ color: "var(--danger)", fontSize: 13 }}>{upgradeEnterpriseError}</p>
+                )}
+                <button className="btn-secondary" onClick={onUpgradeEnterprise} disabled={upgradingEnterprise}>
+                  {upgradingEnterprise ? "Redirecting…" : "Upgrade to Enterprise"}
+                </button>
               </div>
             )}
           </div>

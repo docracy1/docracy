@@ -117,13 +117,16 @@ export interface Env {
   STRIPE_WEBHOOK_SECRET?: string;
   /** The Stripe Price ID for the paid subscription (created in the Stripe dashboard). */
   STRIPE_PRICE_ID?: string;
-  /** The Stripe Product ID for the hand-negotiated Enterprise plan — recorded here purely for
-   *  reference/documentation. Enterprise deals are paid via a Payment Link created directly in the
-   *  Stripe Dashboard and sent to the customer (not the self-serve checkout above), so there's no
-   *  price to reference for creating a session. The actual signal the webhook acts on is the
-   *  completed session's `metadata.plan === "enterprise"` (set once on the Payment Link itself) —
-   *  see lib/billingProviders/stripe.ts. */
+  /** The Stripe Product ID for the Enterprise plan — recorded here purely for reference/
+   *  documentation; nothing reads it at runtime (STRIPE_ENTERPRISE_PRICE_ID below is what
+   *  actually gets used to create a checkout session). */
   STRIPE_ENTERPRISE_PRODUCT_ID?: string;
+  /** The Stripe Price ID for the Enterprise plan's recurring annual subscription — self-serve via
+   *  POST /api/billing/checkout {plan: "enterprise"}, same flow as the standard plan above. Absent
+   *  until set, in which case that route 501s for enterprise checkouts specifically (the standard
+   *  plan checkout keeps working). Renewal/cancellation both flow through Stripe's own webhooks —
+   *  see lib/billingProviders/stripe.ts's metadata.plan === "enterprise" handling. */
+  STRIPE_ENTERPRISE_PRICE_ID?: string;
   /** This worker's own public origin (e.g. https://docracy-worker.rl-d77.workers.dev) — used only
    *  to build absolute URLs to this worker's own routes for contexts that can't use a relative
    *  path, like a custom workspace logo embedded in an outbound email. Optional: emails just fall

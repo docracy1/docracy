@@ -142,8 +142,6 @@ export interface Account {
   email: string;
   isPaid: boolean;
   isEnterprise: boolean;
-  /** Only ever present when isEnterprise is true — see routes/auth.ts's GET /me. */
-  enterpriseExpiresAt?: string;
 }
 
 export async function fetchMe(): Promise<{ account: Account | null }> {
@@ -151,9 +149,15 @@ export async function fetchMe(): Promise<{ account: Account | null }> {
   return asJson(res);
 }
 
-/** Returns the Stripe-hosted checkout URL to redirect the browser to. */
-export async function startCheckout(): Promise<{ url: string }> {
-  const res = await apiFetch("/api/billing/checkout", { method: "POST" });
+/** Returns the Stripe-hosted checkout URL to redirect the browser to. Omit `plan` (or pass
+ *  "paid") for the standard $7/month subscription; pass "enterprise" for the Enterprise plan's
+ *  recurring annual subscription — same self-serve flow either way. */
+export async function startCheckout(plan?: "paid" | "enterprise"): Promise<{ url: string }> {
+  const res = await apiFetch("/api/billing/checkout", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ plan }),
+  });
   return asJson(res);
 }
 
@@ -407,11 +411,21 @@ export async function fetchAdminAnalytics(days: number): Promise<{ days: number;
 export interface AdminEnterpriseAccount {
   email: string;
   isPaid: boolean;
-  enterpriseExpiresAt: string | null;
 }
 
 export async function fetchAdminEnterpriseAccounts(): Promise<{ accounts: AdminEnterpriseAccount[] }> {
   const res = await apiFetch("/api/admin/enterprise-accounts");
+  return asJson(res);
+}
+
+/** Manually grants Enterprise (and paid) status to an account by email — for customers who pay
+ *  by bank transfer and never touch Stripe Checkout. Admin-only. */
+export async function grantEnterprise(email: string): Promise<{ ok: true }> {
+  const res = await apiFetch("/api/admin/grant-enterprise", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+  });
   return asJson(res);
 }
 

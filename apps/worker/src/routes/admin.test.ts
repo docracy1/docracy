@@ -49,19 +49,15 @@ describe("GET /api/admin/enterprise-accounts", () => {
     expect(res.status).toBe(401);
   });
 
-  it("lists enterprise accounts soonest-expiring first, and skips non-enterprise accounts", async () => {
+  it("lists enterprise accounts alphabetically by email, and skips non-enterprise accounts", async () => {
     const { env, d1 } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com" });
     await d1
-      .prepare(
-        `INSERT INTO accounts (id, email, created_at, is_paid, is_enterprise, enterprise_expires_at) VALUES (?, ?, ?, 1, 1, ?)`
-      )
-      .bind("acct-soon", "soon@example.com", new Date().toISOString(), "2026-01-01T00:00:00.000Z")
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid, is_enterprise) VALUES (?, ?, ?, 1, 1)`)
+      .bind("acct-b", "b-enterprise@example.com", new Date().toISOString())
       .run();
     await d1
-      .prepare(
-        `INSERT INTO accounts (id, email, created_at, is_paid, is_enterprise, enterprise_expires_at) VALUES (?, ?, ?, 1, 1, ?)`
-      )
-      .bind("acct-later", "later@example.com", new Date().toISOString(), "2027-01-01T00:00:00.000Z")
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid, is_enterprise) VALUES (?, ?, ?, 1, 1)`)
+      .bind("acct-a", "a-enterprise@example.com", new Date().toISOString())
       .run();
     await d1
       .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 1)`)
@@ -71,9 +67,8 @@ describe("GET /api/admin/enterprise-accounts", () => {
     const headers = await sessionCookie(env, "admin@example.com");
     const res = await admin.request("/enterprise-accounts", { headers }, env, MOCK_CTX);
     expect(res.status).toBe(200);
-    const body: { accounts: Array<{ email: string; isPaid: boolean; enterpriseExpiresAt: string | null }> } =
-      await res.json();
-    expect(body.accounts.map((a) => a.email)).toEqual(["soon@example.com", "later@example.com"]);
+    const body: { accounts: Array<{ email: string; isPaid: boolean }> } = await res.json();
+    expect(body.accounts.map((a) => a.email)).toEqual(["a-enterprise@example.com", "b-enterprise@example.com"]);
     expect(body.accounts[0].isPaid).toBe(true);
   });
 });
@@ -85,6 +80,50 @@ function postJson(body: unknown, headers: Record<string, string> = {}) {
     body: JSON.stringify(body),
   };
 }
+
+describe("POST /api/admin/grant-enterprise", () => {
+  it("rejects an unauthenticated request", async () => {
+    const { env } = makeMockEnv();
+    const res = await admin.request("/grant-enterprise", postJson({ email: "customer@example.com" }), env, MOCK_CTX);
+    expect(res.status).toBe(401);
+  });
+
+  it("404s when no account exists with that email", async () => {
+    const { env } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com" });
+    const headers = await sessionCookie(env, "admin@example.com");
+    const res = await admin.request(
+      "/grant-enterprise",
+      postJson({ email: "nobody@example.com" }, headers),
+      env,
+      MOCK_CTX
+    );
+    expect(res.status).toBe(404);
+  });
+
+  it("grants paid + enterprise status to the account with that email — for bank transfers or custom deals", async () => {
+    const { env, d1 } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com" });
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 0)`)
+      .bind("acct-customer", "customer@example.com", new Date().toISOString())
+      .run();
+    const headers = await sessionCookie(env, "admin@example.com");
+
+    const res = await admin.request(
+      "/grant-enterprise",
+      postJson({ email: "customer@example.com" }, headers),
+      env,
+      MOCK_CTX
+    );
+    expect(res.status).toBe(200);
+
+    const row = (await d1
+      .prepare("SELECT is_paid, is_enterprise FROM accounts WHERE id = ?")
+      .bind("acct-customer")
+      .first()) as { is_paid: number; is_enterprise: number } | null;
+    expect(row?.is_paid).toBe(1);
+    expect(row?.is_enterprise).toBe(1);
+  });
+});
 
 describe("POST /api/admin/analytics/notrack", () => {
   it("rejects an unauthenticated request", async () => {

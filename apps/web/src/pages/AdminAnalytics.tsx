@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import {
   fetchAdminAnalytics,
   fetchAdminEnterpriseAccounts,
+  grantEnterprise,
   setAnalyticsNoTrack,
   type AdminEnterpriseAccount,
   type FunnelRow,
@@ -257,28 +258,63 @@ function CountryTable({ rows }: { rows: FunnelRow[] }) {
 function EnterpriseAccountsCard() {
   const [accounts, setAccounts] = useState<AdminEnterpriseAccount[] | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [grantEmail, setGrantEmail] = useState("");
+  const [granting, setGranting] = useState(false);
+  const [grantError, setGrantError] = useState<string | null>(null);
+  const [grantSuccess, setGrantSuccess] = useState<string | null>(null);
+
+  const refresh = () =>
+    fetchAdminEnterpriseAccounts()
+      .then((res) => setAccounts(res.accounts))
+      .catch((err) => setError(err instanceof Error ? err.message : "Failed to load enterprise accounts"));
 
   useEffect(() => {
-    let cancelled = false;
-    fetchAdminEnterpriseAccounts()
-      .then((res) => {
-        if (!cancelled) setAccounts(res.accounts);
-      })
-      .catch((err) => {
-        if (!cancelled) setError(err instanceof Error ? err.message : "Failed to load enterprise accounts");
-      });
-    return () => {
-      cancelled = true;
-    };
+    refresh();
   }, []);
+
+  const onGrant = async () => {
+    if (!grantEmail.trim()) return;
+    setGranting(true);
+    setGrantError(null);
+    setGrantSuccess(null);
+    try {
+      await grantEnterprise(grantEmail.trim());
+      setGrantSuccess(`Granted Enterprise to ${grantEmail.trim()}`);
+      setGrantEmail("");
+      await refresh();
+    } catch (err) {
+      setGrantError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setGranting(false);
+    }
+  };
 
   return (
     <div className="card" style={{ marginBottom: 24 }}>
       <h3 style={{ marginTop: 0, fontSize: 15 }}>Enterprise accounts</h3>
       <p style={{ fontSize: 12, color: "var(--mute)", marginTop: -4 }}>
-        Each is a one-time Stripe charge with a fixed one-year term — revoked automatically by the
-        daily sweep once it lapses, not a recurring subscription.
+        Self-serve customers subscribe via the Dashboard (a real recurring annual Stripe
+        subscription — renewal and cancellation both flow through Stripe automatically). For bank
+        transfers or custom Payment Links, grant Enterprise manually here once you've confirmed
+        payment.
       </p>
+
+      <div style={{ display: "flex", gap: 8, marginBottom: 8, flexWrap: "wrap" }}>
+        <input
+          className="form-input"
+          style={{ flex: 1, minWidth: 220 }}
+          placeholder="customer@example.com"
+          aria-label="Customer email"
+          value={grantEmail}
+          onChange={(e) => setGrantEmail(e.target.value)}
+        />
+        <button className="btn-secondary" disabled={granting || !grantEmail.trim()} onClick={onGrant}>
+          {granting ? "Granting…" : "Grant Enterprise"}
+        </button>
+      </div>
+      {grantError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{grantError}</p>}
+      {grantSuccess && <p style={{ color: "var(--success)", fontSize: 13 }}>{grantSuccess}</p>}
+
       {error && <p style={{ color: "var(--danger)", fontSize: 13 }}>{error}</p>}
       {!error && accounts && accounts.length === 0 && (
         <p style={{ fontSize: 13, color: "var(--mute)", marginBottom: 0 }}>No enterprise accounts yet.</p>
@@ -289,40 +325,18 @@ function EnterpriseAccountsCard() {
             <thead>
               <tr>
                 <th style={{ textAlign: "left" }}>Email</th>
-                <th style={{ textAlign: "left" }}>Expires</th>
                 <th>Status</th>
               </tr>
             </thead>
             <tbody>
-              {accounts.map((a) => {
-                const daysLeft = a.enterpriseExpiresAt
-                  ? Math.round((new Date(a.enterpriseExpiresAt).getTime() - Date.now()) / (24 * 60 * 60 * 1000))
-                  : null;
-                return (
-                  <tr key={a.email}>
-                    <td style={{ textAlign: "left" }}>{a.email}</td>
-                    <td style={{ textAlign: "left" }}>
-                      {a.enterpriseExpiresAt
-                        ? new Date(a.enterpriseExpiresAt).toLocaleDateString("en-US", {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                          })
-                        : "—"}
-                      {daysLeft !== null && (
-                        <span
-                          style={{ marginLeft: 6, fontSize: 12, color: daysLeft < 30 ? "var(--danger)" : "var(--mute)" }}
-                        >
-                          ({daysLeft >= 0 ? `${daysLeft}d left` : "expired"})
-                        </span>
-                      )}
-                    </td>
-                    <td style={{ color: a.isPaid ? "var(--success)" : "var(--danger)" }}>
-                      {a.isPaid ? "Active" : "Lapsed"}
-                    </td>
-                  </tr>
-                );
-              })}
+              {accounts.map((a) => (
+                <tr key={a.email}>
+                  <td style={{ textAlign: "left" }}>{a.email}</td>
+                  <td style={{ color: a.isPaid ? "var(--success)" : "var(--danger)" }}>
+                    {a.isPaid ? "Active" : "Lapsed"}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

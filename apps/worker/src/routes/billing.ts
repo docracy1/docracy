@@ -13,8 +13,22 @@ import type { Env } from "@docracy/shared";
 type Variables = { account: AccountContext | null };
 const billing = new Hono<{ Bindings: Env; Variables: Variables }>();
 
+interface CheckoutBody {
+  plan?: "paid" | "enterprise";
+}
+
 billing.post("/checkout", requireAccount, async (c) => {
-  if (!c.env.STRIPE_SECRET_KEY || !c.env.STRIPE_PRICE_ID) {
+  let body: CheckoutBody = {};
+  try {
+    body = await c.req.json<CheckoutBody>();
+  } catch {
+    // No body (or invalid JSON) just means "the standard plan" — the existing frontend call
+    // predates this param and never sends one.
+  }
+  const isEnterprise = body.plan === "enterprise";
+  const priceId = isEnterprise ? c.env.STRIPE_ENTERPRISE_PRICE_ID : c.env.STRIPE_PRICE_ID;
+
+  if (!c.env.STRIPE_SECRET_KEY || !priceId) {
     return c.json({ error: "Billing isn't set up on this deployment yet." }, 501);
   }
   const account = c.get("account")!;
@@ -26,13 +40,19 @@ billing.post("/checkout", requireAccount, async (c) => {
 
   const params = new URLSearchParams({
     mode: "subscription",
-    "line_items[0][price]": c.env.STRIPE_PRICE_ID,
+    "line_items[0][price]": priceId,
     "line_items[0][quantity]": "1",
     success_url: `${c.env.PUBLIC_APP_URL}/dashboard?checkout=success`,
     cancel_url: `${c.env.PUBLIC_APP_URL}/dashboard?checkout=cancelled`,
     client_reference_id: account.id,
     customer_email: account.email,
   });
+  // The webhook (lib/billingProviders/stripe.ts) reads this off the completed session to decide
+  // whether to also call markAccountEnterprise — same metadata shape as the old manually-created
+  // Payment Link used, so no webhook-side changes were needed for this to work.
+  if (isEnterprise) {
+    params.set("metadata[plan]", "enterprise");
+  }
 
   const res = await fetch("https://api.stripe.com/v1/checkout/sessions", {
     method: "POST",

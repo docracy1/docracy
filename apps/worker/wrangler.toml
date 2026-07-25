@@ -51,9 +51,12 @@ FEEDBACK_EMAIL = "founder@docracy.io"
 ADMIN_EMAILS = "rl@relacon.at"
 # Not secret (just an identifier) — needed only for the Analytics Engine SQL read API.
 CF_ACCOUNT_ID = "d7764515fd9887154193dc04810d81d8"
-# Reference only (see packages/shared/src/types.ts) — the Enterprise Payment Link's own
-# metadata.plan="enterprise" is what the webhook actually keys off of, not this ID.
+# Reference only (see packages/shared/src/types.ts) — not read at runtime.
 STRIPE_ENTERPRISE_PRODUCT_ID = "prod_UwhdVD23t6zce3"
+# The actual Price used to create Enterprise checkout sessions (POST /api/billing/checkout
+# {plan: "enterprise"}) — a real recurring annual subscription, same self-serve flow as the
+# standard plan. Not secret (just an identifier).
+STRIPE_ENTERPRISE_PRICE_ID = "price_1TwoDtQvixTOu6qpwfZgfEO5"
 # Cloud-storage connectors (Enterprise only, see lib/cloudConnectors.ts) — client IDs are public,
 # not secret. Each provider's routes 501 gracefully until both its ID and secret are set. Register
 # the OAuth app in that provider's own developer console with redirect URI

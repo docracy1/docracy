@@ -66,6 +66,55 @@ describe("POST /api/billing/checkout", () => {
     expect(callInit.body as string).toContain("client_reference_id=acct-1");
   });
 
+  it("uses the enterprise price and sets metadata.plan when {plan: \"enterprise\"} is requested", async () => {
+    const { env } = makeMockEnv({
+      STRIPE_SECRET_KEY: "sk_test_x",
+      STRIPE_PRICE_ID: "price_standard",
+      STRIPE_ENTERPRISE_PRICE_ID: "price_enterprise",
+    });
+    const ctx = makeCtx();
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, false, null, null);
+    const fetchSpy = vi
+      .spyOn(global, "fetch")
+      .mockResolvedValue(new Response(JSON.stringify({ url: "https://checkout.stripe.com/session/xyz" }), { status: 200 }));
+
+    const res = await billing.request(
+      "/checkout",
+      {
+        method: "POST",
+        headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ plan: "enterprise" }),
+      },
+      env,
+      ctx
+    );
+    expect(res.status).toBe(200);
+
+    const callInit = fetchSpy.mock.calls[0][1] as RequestInit;
+    const sentBody = callInit.body as string;
+    expect(sentBody).toContain("price_enterprise");
+    expect(sentBody).not.toContain("price_standard");
+    expect(sentBody).toContain("metadata%5Bplan%5D=enterprise");
+  });
+
+  it("501s an enterprise checkout when only the standard price is configured", async () => {
+    const { env } = makeMockEnv({ STRIPE_SECRET_KEY: "sk_test_x", STRIPE_PRICE_ID: "price_standard" });
+    const ctx = makeCtx();
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, false, null, null);
+
+    const res = await billing.request(
+      "/checkout",
+      {
+        method: "POST",
+        headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ plan: "enterprise" }),
+      },
+      env,
+      ctx
+    );
+    expect(res.status).toBe(501);
+  });
+
   it("returns 502 when Stripe's API call fails", async () => {
     const { env } = makeMockEnv({ STRIPE_SECRET_KEY: "sk_test_x", STRIPE_PRICE_ID: "price_x" });
     const ctx = makeCtx();

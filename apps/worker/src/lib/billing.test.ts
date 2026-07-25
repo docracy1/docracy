@@ -1,5 +1,12 @@
 import { describe, it, expect } from "vitest";
-import { findAccountIdByStripeCustomerId, getStripeCustomerId, markAccountPaid, setStripeCustomerId } from "./billing";
+import {
+  findAccountIdByEmail,
+  findAccountIdByStripeCustomerId,
+  getStripeCustomerId,
+  markAccountEnterprise,
+  markAccountPaid,
+  setStripeCustomerId,
+} from "./billing";
 import { issueApiToken, hasApiToken } from "./apiTokens";
 import { makeMockEnv } from "../test/mockEnv";
 
@@ -68,6 +75,64 @@ describe("markAccountPaid", () => {
     await markAccountPaid(env, "acct-1", true);
 
     expect(await hasApiToken(env, "acct-1")).toBe(true);
+  });
+
+  it("deletes cloud-storage connections the moment an account is unmarked as paid", async () => {
+    const { env, d1 } = makeMockEnv();
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid, is_enterprise) VALUES (?, ?, ?, 1, 1)`)
+      .bind("acct-1", "anna@example.com", new Date().toISOString())
+      .run();
+    await d1
+      .prepare(
+        `INSERT INTO cloud_connections (id, account_id, provider, access_token, created_at) VALUES (?, ?, ?, ?, ?)`
+      )
+      .bind("conn-1", "acct-1", "dropbox", "at-1", new Date().toISOString())
+      .run();
+
+    await markAccountPaid(env, "acct-1", false);
+
+    const row = await d1.prepare("SELECT COUNT(*) as n FROM cloud_connections WHERE account_id = ?").bind("acct-1").first();
+    expect((row as { n: number }).n).toBe(0);
+  });
+});
+
+describe("markAccountEnterprise", () => {
+  it("sets is_enterprise without stamping any expiry — Stripe's own subscription is authoritative now", async () => {
+    const { env, d1 } = makeMockEnv();
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 1)`)
+      .bind("acct-1", "anna@example.com", new Date().toISOString())
+      .run();
+
+    await markAccountEnterprise(env, "acct-1");
+
+    const row = (await d1.prepare("SELECT is_enterprise FROM accounts WHERE id = ?").bind("acct-1").first()) as {
+      is_enterprise: number;
+    } | null;
+    expect(row?.is_enterprise).toBe(1);
+  });
+
+  it("does nothing (doesn't throw) when DOCRACY_DB isn't bound", async () => {
+    const { env } = makeMockEnv({ DOCRACY_DB: undefined });
+    await expect(markAccountEnterprise(env, "acct-1")).resolves.toBeUndefined();
+  });
+});
+
+describe("findAccountIdByEmail", () => {
+  it("resolves an account id by email, case-insensitively", async () => {
+    const { env, d1 } = makeMockEnv();
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 0)`)
+      .bind("acct-1", "anna@example.com", new Date().toISOString())
+      .run();
+
+    expect(await findAccountIdByEmail(env, "Anna@Example.com")).toBe("acct-1");
+  });
+
+  it("returns null for an unknown email", async () => {
+    const { env } = makeMockEnv();
+    expect(await findAccountIdByEmail(env, "nobody@example.com")).toBeNull();
   });
 });
 
