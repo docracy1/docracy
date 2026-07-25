@@ -1037,6 +1037,12 @@ select {
   padding-top: 16px;
   border-top: 1px solid var(--hairline);
   cursor: pointer;
+  /* Wraps plain text (the account email) — without this, a click that moves even a hair between
+     mousedown and mouseup gets interpreted as a text-selection drag, and browsers suppress the
+     resulting "click" event entirely. Native <button>/<a> elements avoid this because they default
+     to user-select: none; this div needs it explicitly. */
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .dashboard-sidebar-footer {
@@ -1046,6 +1052,12 @@ select {
   padding: 8px;
   border-radius: var(--r-sm);
   transition: background-color 0.15s var(--ease);
+  width: 100%;
+  border: none;
+  background: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
 }
 
 .dashboard-profile:hover .dashboard-sidebar-footer {

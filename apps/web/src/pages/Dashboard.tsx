@@ -114,6 +114,7 @@ export default function Dashboard() {
   const [hasToken, setHasToken] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [profileDiagnostics, setProfileDiagnostics] = useState<string | null>(null);
   const [upgrading, setUpgrading] = useState(false);
   const [upgradeError, setUpgradeError] = useState<string | null>(null);
   const [managingBilling, setManagingBilling] = useState(false);
@@ -169,6 +170,37 @@ export default function Dashboard() {
   };
 
   useNoIndex();
+
+  // Temporary diagnostic: reports what the browser actually sees at the profile row directly on
+  // the page, since DevTools access isn't available in the environment reporting this bug. Runs
+  // once the sidebar has painted.
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const el = document.querySelector(".dashboard-profile");
+      if (!el) {
+        setProfileDiagnostics("no .dashboard-profile element found in the DOM");
+        return;
+      }
+      const rect = el.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const topElement = document.elementFromPoint(cx, cy);
+      const style = getComputedStyle(el);
+      const lines = [
+        `count of .dashboard-profile elements: ${document.querySelectorAll(".dashboard-profile").length}`,
+        `rect: top=${rect.top.toFixed(0)} left=${rect.left.toFixed(0)} width=${rect.width.toFixed(0)} height=${rect.height.toFixed(0)}`,
+        `element at its center point: <${topElement?.tagName.toLowerCase()} class="${(topElement as HTMLElement | null)?.className}">`,
+        `is that the same element: ${topElement === el || el.contains(topElement)}`,
+        `computed style: pointerEvents=${style.pointerEvents} visibility=${style.visibility} display=${style.display} opacity=${style.opacity}`,
+        `tabIndex attribute: ${el.getAttribute("tabindex")}`,
+        `role attribute: ${el.getAttribute("role")}`,
+        `window: ${window.innerWidth}x${window.innerHeight} dpr=${window.devicePixelRatio}`,
+        `userAgent: ${navigator.userAgent}`,
+      ];
+      setProfileDiagnostics(lines.join("\n"));
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const refreshTemplates = () => fetchTemplates().then((res) => setTemplates(res.templates));
 
@@ -565,18 +597,7 @@ export default function Dashboard() {
           </div>
         )}
 
-        <div
-          className="dashboard-profile"
-          role="button"
-          tabIndex={0}
-          onClick={() => setProfileMenuOpen((o) => !o)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              setProfileMenuOpen((o) => !o);
-            }
-          }}
-        >
+        <div className="dashboard-profile">
           {profileMenuOpen && (
             <ProfileMenuBoundary>
             <div className="dashboard-profile-menu">
@@ -630,12 +651,38 @@ export default function Dashboard() {
             </div>
             </ProfileMenuBoundary>
           )}
-          <div className="dashboard-sidebar-footer">
+          <button
+            type="button"
+            className="dashboard-sidebar-footer"
+            onClick={() => setProfileMenuOpen((o) => !o)}
+          >
             <div className="dashboard-avatar">{account.email.slice(0, 2).toUpperCase()}</div>
             <span style={{ fontSize: 13, color: "var(--body)", overflowWrap: "anywhere" }}>{account.email}</span>
-          </div>
+          </button>
         </div>
       </aside>
+
+      {profileDiagnostics && (
+        <pre
+          style={{
+            position: "fixed",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 9999,
+            background: "#111",
+            color: "#0f0",
+            fontSize: 11,
+            padding: 12,
+            margin: 0,
+            whiteSpace: "pre-wrap",
+            maxHeight: "40vh",
+            overflow: "auto",
+          }}
+        >
+          {profileDiagnostics}
+        </pre>
+      )}
 
       <div className="dashboard-content">
         {connectorBanner && (
