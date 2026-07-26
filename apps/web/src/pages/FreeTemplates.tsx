@@ -1,7 +1,16 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FREE_TEMPLATES } from "../lib/freeTemplates";
+import { FREE_TEMPLATES, RECURRING_CATEGORIES } from "../lib/freeTemplates";
 import { usePageMeta } from "../lib/usePageMeta";
+
+function TemplateCard({ slug, name, description }: { slug: string; name: string; description: string }) {
+  return (
+    <Link to={`/free-templates/${slug}`} className="card" style={{ textDecoration: "none", color: "inherit", display: "block" }}>
+      <h3 style={{ marginTop: 0, marginBottom: 8, fontSize: 16 }}>{name}</h3>
+      <p style={{ margin: 0, fontSize: 13, color: "var(--mute)" }}>{description}</p>
+    </Link>
+  );
+}
 
 export default function FreeTemplates() {
   usePageMeta(
@@ -85,18 +94,28 @@ export default function FreeTemplates() {
         Tip: Using a template is the fastest way to send your first document.
       </p>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
-        {FREE_TEMPLATES.map((t) => (
-          <Link
-            key={t.slug}
-            to={`/free-templates/${t.slug}`}
-            className="card"
-            style={{ textDecoration: "none", color: "inherit", display: "block" }}
-          >
-            <h3 style={{ marginTop: 0, marginBottom: 8 }}>{t.name}</h3>
-            <p style={{ margin: 0, fontSize: 13, color: "var(--mute)" }}>{t.description}</p>
-          </Link>
-        ))}
+      {RECURRING_CATEGORIES.map((category) => {
+        const inCategory = FREE_TEMPLATES.filter((t) => t.recurringCategory === category);
+        if (inCategory.length === 0) return null;
+        return (
+          <div key={category} style={{ marginTop: 32 }}>
+            <h2 style={{ fontSize: 19 }}>{category}</h2>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
+              {inCategory.map((t) => (
+                <TemplateCard key={t.slug} slug={t.slug} name={t.name} description={t.description} />
+              ))}
+            </div>
+          </div>
+        );
+      })}
+
+      <div style={{ marginTop: 32 }}>
+        <h2 style={{ fontSize: 19 }}>All templates</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
+          {FREE_TEMPLATES.map((t) => (
+            <TemplateCard key={t.slug} slug={t.slug} name={t.name} description={t.description} />
+          ))}
+        </div>
       </div>
     </div>
   );

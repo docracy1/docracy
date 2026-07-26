@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import templates from "./templates";
 import { createSession, SESSION_COOKIE_NAME } from "../lib/auth";
+import { incrementTemplateUsage } from "../lib/templateUsage";
 import { makeMockEnv, makeValidPdfBytes } from "../test/mockEnv";
 
 const MOCK_CTX = { waitUntil: () => {}, passThroughOnException: () => {} } as unknown as ExecutionContext;
@@ -264,5 +265,54 @@ describe("GET/DELETE /api/account/templates/:id", () => {
       ctx
     );
     expect(deleteRes.status).toBe(404);
+  });
+});
+
+describe("GET /api/account/templates/usage", () => {
+  it("401s without a session", async () => {
+    const { env } = makeMockEnv();
+    const res = await templates.request("/usage", {}, env, MOCK_CTX);
+    expect(res.status).toBe(401);
+  });
+
+  it("tags each template with which recurring threshold it's crossed, most-used first", async () => {
+    const { env } = makeMockEnv();
+    const ctx = makeCtx();
+    const token = await paidSession(env, ctx);
+
+    await incrementTemplateUsage(env, "acct-1", "mutual-nda"); // 1 — below every threshold
+    for (let i = 0; i < 5; i++) await incrementTemplateUsage(env, "acct-1", "work-order"); // 5 — recurring + suggest saving
+    for (let i = 0; i < 10; i++) await incrementTemplateUsage(env, "acct-1", "client-contract"); // 10 — every threshold
+
+    const res = await templates.request("/usage", { headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } }, env, ctx);
+    expect(res.status).toBe(200);
+    const body: {
+      usage: Array<{ templateId: string; completedCount: number; isRecurring: boolean; suggestSaving: boolean; teamUpsell: boolean }>;
+    } = await res.json();
+
+    expect(body.usage.map((u) => u.templateId)).toEqual(["client-contract", "work-order", "mutual-nda"]);
+
+    const clientContract = body.usage.find((u) => u.templateId === "client-contract")!;
+    expect(clientContract).toMatchObject({ completedCount: 10, isRecurring: true, suggestSaving: true, teamUpsell: true });
+
+    const workOrder = body.usage.find((u) => u.templateId === "work-order")!;
+    expect(workOrder).toMatchObject({ completedCount: 5, isRecurring: true, suggestSaving: true, teamUpsell: false });
+
+    const mutualNda = body.usage.find((u) => u.templateId === "mutual-nda")!;
+    expect(mutualNda).toMatchObject({ completedCount: 1, isRecurring: false, suggestSaving: false, teamUpsell: false });
+  });
+
+  it("only returns the caller's own workspace usage", async () => {
+    const { env } = makeMockEnv();
+    const ctx = makeCtx();
+    const token = await paidSession(env, ctx);
+    await incrementTemplateUsage(env, "acct-1", "mutual-nda");
+
+    const otherToken = await createSession(env, ctx, "acct-2", "max@example.com", true, false, null, null);
+    await incrementTemplateUsage(env, "acct-2", "work-order");
+
+    const res = await templates.request("/usage", { headers: { Cookie: `${SESSION_COOKIE_NAME}=${otherToken}` } }, env, ctx);
+    const body: { usage: Array<{ templateId: string }> } = await res.json();
+    expect(body.usage.map((u) => u.templateId)).toEqual(["work-order"]);
   });
 });

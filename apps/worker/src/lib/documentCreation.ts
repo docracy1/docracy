@@ -4,6 +4,7 @@ import { indexDocumentCreated } from "./index-d1";
 import { sha256Hex } from "./hash";
 import { deliverWebhookEvent } from "./webhooks";
 import { trackEvent } from "./analytics";
+import { incrementTemplateUsage } from "./templateUsage";
 import { signToken, hashOpaqueToken } from "@docracy/shared";
 import type { AuditEvent, DocField, DocState, Env, Signer } from "@docracy/shared";
 
@@ -137,6 +138,18 @@ export async function createDocumentCore(
         templateId: params.templateId,
       });
     }
+  }
+
+  // Recurring-template usage counting — always runs (independent of skipFunnelTracking, which is
+  // an analytics opt-out, not a product-feature opt-out) but only for paid workspaces, since an
+  // anonymous document creation has no workspaceId to key a count against at all.
+  if (params.templateId && accountId) {
+    const templateId = params.templateId;
+    ctx.waitUntil(
+      incrementTemplateUsage(env, accountId, templateId).catch((err) =>
+        console.error(`Template usage increment failed for doc ${docId} (non-fatal):`, err)
+      )
+    );
   }
 
   // Fire-and-forget, like the D1 indexing below — a stalled or failing outbound email call must

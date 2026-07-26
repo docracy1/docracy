@@ -2,6 +2,12 @@ import { Hono } from "hono";
 import { PDFDocument } from "pdf-lib";
 import { requirePaidAccount, type AccountContext } from "../lib/auth";
 import { createTemplate, listTemplates, getTemplate, deleteTemplate } from "../lib/templates";
+import {
+  listTemplateUsage,
+  RECURRING_THRESHOLD,
+  SUGGEST_SAVING_THRESHOLD,
+  TEAM_UPSELL_THRESHOLD,
+} from "../lib/templateUsage";
 import { bytesToBase64 } from "../lib/base64";
 import { trackEvent } from "../lib/analytics";
 import type { DocField, Env } from "@docracy/shared";
@@ -102,6 +108,23 @@ templates.get("/", requirePaidAccount, async (c) => {
   const account = c.get("account")!;
   const templateList = await listTemplates(c.env, account.workspaceId);
   return c.json({ templates: templateList });
+});
+
+/** "Recurring Templates" usage — every template (paid saved-template id, or free-template slug)
+ *  this workspace has completed at least once, most-used first, each tagged with which threshold
+ *  (if any) it's crossed. Registered ahead of GET /:id so "usage" is never mistaken for a
+ *  template id, though Hono's router already prefers a static match over a param one regardless. */
+templates.get("/usage", requirePaidAccount, async (c) => {
+  const account = c.get("account")!;
+  const usage = await listTemplateUsage(c.env, account.workspaceId);
+  return c.json({
+    usage: usage.map((u) => ({
+      ...u,
+      isRecurring: u.completedCount >= RECURRING_THRESHOLD,
+      suggestSaving: u.completedCount >= SUGGEST_SAVING_THRESHOLD,
+      teamUpsell: u.completedCount >= TEAM_UPSELL_THRESHOLD,
+    })),
+  });
 });
 
 templates.get("/:id", requirePaidAccount, async (c) => {

@@ -511,6 +511,493 @@ const TEMPLATES = [
       },
     ],
   },
+  {
+    slug: "client-contract",
+    title: "CLIENT CONTRACT",
+    signerLabels: ["Business", "Client"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Business: ", blank: TEXT_BLANK },
+      { type: "field", label: "Client: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Scope of Engagement" },
+      {
+        type: "paragraph",
+        text: "The Business agrees to provide the following work or services to the Client:",
+      },
+      { type: "field", label: "", blank: TEXT_BLANK },
+
+      { type: "section", text: "Timeline" },
+      { type: "field", label: "Start Date: ", blank: DATE_BLANK },
+      { type: "field", label: "Expected Completion: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Payment Terms" },
+      { type: "field", label: "Total Fee: ", blank: TEXT_BLANK },
+      { type: "field", label: "Payment Schedule: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Responsibilities" },
+      {
+        type: "paragraph",
+        text:
+          "Each party agrees to fulfill the responsibilities described above in good faith and to communicate " +
+          "promptly about any changes that affect scope, timeline, or cost.",
+      },
+
+      { type: "section", text: "Confidentiality" },
+      {
+        type: "paragraph",
+        text:
+          "Both parties agree to keep any non-public information shared during this engagement confidential, " +
+          "both during and after the engagement.",
+      },
+
+      { type: "section", text: "Termination" },
+      {
+        type: "paragraph",
+        text:
+          "Either party may terminate this contract with written notice. Work completed and expenses incurred " +
+          "up to the termination date remain payable.",
+      },
+
+      { type: "section", text: "Signatures" },
+      {
+        type: "signatures",
+        signers: [
+          { label: "Business", order: 1 },
+          { label: "Client", order: 2 },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "service-agreement",
+    title: "SERVICE AGREEMENT",
+    signerLabels: ["Provider", "Client"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Provider: ", blank: TEXT_BLANK },
+      { type: "field", label: "Client: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Services Provided" },
+      { type: "paragraph", text: "The Provider agrees to deliver the following services:" },
+      { type: "field", label: "", blank: TEXT_BLANK },
+
+      { type: "section", text: "Service Level" },
+      {
+        type: "paragraph",
+        text: "The Provider will perform the services with reasonable skill and care, and within the schedule below.",
+      },
+      { type: "field", label: "Schedule / Frequency: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Fees" },
+      {
+        type: "table",
+        widths: [0.6, 0.4],
+        headers: ["Fee Type", "Amount"],
+        rows: [
+          ["Setup Fee", TEXT_BLANK],
+          ["Recurring Fee", TEXT_BLANK],
+        ],
+      },
+
+      { type: "section", text: "Term and Renewal" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement begins on the start date below and continues until either party gives written notice " +
+          "of termination.",
+      },
+      { type: "field", label: "Start Date: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Confidentiality" },
+      {
+        type: "paragraph",
+        text: "Both parties agree to keep any non-public information shared under this Agreement confidential.",
+      },
+
+      { type: "section", text: "Signatures" },
+      {
+        type: "signatures",
+        signers: [
+          { label: "Provider", order: 1 },
+          { label: "Client", order: 2 },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "scope-of-work",
+    title: "SCOPE OF WORK",
+    signerLabels: ["Client", "Contractor"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Client: ", blank: TEXT_BLANK },
+      { type: "field", label: "Contractor: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Project Overview" },
+      { type: "field", label: "", blank: TEXT_BLANK },
+
+      { type: "section", text: "Deliverables" },
+      {
+        type: "paragraph",
+        text: "The Contractor will deliver the following, in the order and by the dates listed:",
+      },
+      {
+        type: "table",
+        widths: [0.6, 0.4],
+        headers: ["Deliverable", "Due Date"],
+        rows: [
+          [TEXT_BLANK, DATE_BLANK],
+          [TEXT_BLANK, DATE_BLANK],
+          [TEXT_BLANK, DATE_BLANK],
+        ],
+      },
+
+      { type: "section", text: "Out of Scope" },
+      {
+        type: "paragraph",
+        text: "Any work not listed above is considered out of scope and will require a separate written agreement.",
+      },
+
+      { type: "section", text: "Fees" },
+      { type: "field", label: "Total Fee: ", blank: TEXT_BLANK },
+      { type: "field", label: "Payment Schedule: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Signatures" },
+      {
+        type: "signatures",
+        signers: [
+          { label: "Client", order: 1 },
+          { label: "Contractor", order: 2 },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "supplier-terms",
+    title: "SUPPLIER TERMS",
+    signerLabels: ["Buyer", "Supplier"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Buyer: ", blank: TEXT_BLANK },
+      { type: "field", label: "Supplier: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Goods or Services Supplied" },
+      { type: "field", label: "", blank: TEXT_BLANK },
+
+      { type: "section", text: "Pricing" },
+      {
+        type: "table",
+        widths: [0.6, 0.4],
+        headers: ["Item", "Unit Price"],
+        rows: [
+          [TEXT_BLANK, TEXT_BLANK],
+          [TEXT_BLANK, TEXT_BLANK],
+        ],
+      },
+
+      { type: "section", text: "Delivery Terms" },
+      { type: "field", label: "Lead Time: ", blank: TEXT_BLANK },
+      { type: "field", label: "Delivery Location: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Payment Terms" },
+      { type: "field", label: "Payment Due: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Quality and Returns" },
+      {
+        type: "paragraph",
+        text:
+          "The Supplier warrants that goods or services will match the agreed specification. Defective or " +
+          "non-conforming items may be returned or credited at the Buyer's request.",
+      },
+
+      { type: "section", text: "Confidentiality" },
+      {
+        type: "paragraph",
+        text: "Both parties agree to keep pricing and any other non-public terms of this Agreement confidential.",
+      },
+
+      { type: "section", text: "Signatures" },
+      {
+        type: "signatures",
+        signers: [
+          { label: "Buyer", order: 1 },
+          { label: "Supplier", order: 2 },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "employee-onboarding-agreement",
+    title: "EMPLOYEE ONBOARDING AGREEMENT",
+    signerLabels: ["Employer", "Employee"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Employer: ", blank: TEXT_BLANK },
+      { type: "field", label: "Employee: ", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "Start Date: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Acknowledgements" },
+      {
+        type: "paragraph",
+        text: "By signing below, the Employee confirms they have received and reviewed the following:",
+      },
+      {
+        type: "table",
+        widths: [0.7, 0.3],
+        headers: ["Item", "Received"],
+        rows: [
+          ["Employee Handbook", TEXT_BLANK],
+          ["Company Policies", TEXT_BLANK],
+          ["Equipment / Access Credentials", TEXT_BLANK],
+        ],
+      },
+
+      { type: "section", text: "Confidentiality" },
+      {
+        type: "paragraph",
+        text:
+          "The Employee agrees to keep confidential information encountered during employment private, both " +
+          "during and after employment.",
+      },
+
+      { type: "section", text: "Code of Conduct" },
+      {
+        type: "paragraph",
+        text: "The Employee agrees to follow the Employer's code of conduct and workplace policies as provided.",
+      },
+
+      { type: "section", text: "Signatures" },
+      {
+        type: "signatures",
+        signers: [
+          { label: "Employer", order: 1 },
+          { label: "Employee", order: 2 },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "contractor-onboarding-agreement",
+    title: "CONTRACTOR ONBOARDING AGREEMENT",
+    signerLabels: ["Company", "Contractor"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Company: ", blank: TEXT_BLANK },
+      { type: "field", label: "Contractor: ", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "Start Date: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Engagement Details" },
+      { type: "field", label: "Project / Role: ", blank: TEXT_BLANK },
+      { type: "field", label: "Point of Contact: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Acknowledgements" },
+      {
+        type: "paragraph",
+        text: "By signing below, the Contractor confirms they have received and reviewed the following:",
+      },
+      {
+        type: "table",
+        widths: [0.7, 0.3],
+        headers: ["Item", "Received"],
+        rows: [
+          ["System / Tool Access", TEXT_BLANK],
+          ["Relevant Company Policies", TEXT_BLANK],
+        ],
+      },
+
+      { type: "section", text: "Independent Contractor Status" },
+      {
+        type: "paragraph",
+        text:
+          "The Contractor is engaged as an independent contractor, not an employee, and is responsible for their " +
+          "own taxes and benefits.",
+      },
+
+      { type: "section", text: "Confidentiality" },
+      {
+        type: "paragraph",
+        text: "The Contractor agrees to keep any non-public information encountered during the engagement confidential.",
+      },
+
+      { type: "section", text: "Signatures" },
+      {
+        type: "signatures",
+        signers: [
+          { label: "Company", order: 1 },
+          { label: "Contractor", order: 2 },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "payment-terms-agreement",
+    title: "PAYMENT TERMS AGREEMENT",
+    signerLabels: ["Payer", "Payee"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Payer: ", blank: TEXT_BLANK },
+      { type: "field", label: "Payee: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Amount Owed" },
+      { type: "field", label: "Total Amount: ", blank: TEXT_BLANK },
+      { type: "field", label: "For: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Payment Schedule" },
+      { type: "field", label: "Due Date: ", blank: DATE_BLANK },
+      { type: "field", label: "Payment Method: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Late Payment" },
+      {
+        type: "paragraph",
+        text:
+          "If payment is not received by the due date above, the Payee may charge reasonable late fees or " +
+          "interest as allowed by law, and may pursue collection of the amount owed.",
+      },
+
+      { type: "section", text: "Signatures" },
+      {
+        type: "signatures",
+        signers: [
+          { label: "Payer", order: 1 },
+          { label: "Payee", order: 2 },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "installment-agreement",
+    title: "INSTALLMENT AGREEMENT",
+    signerLabels: ["Debtor", "Creditor"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Debtor: ", blank: TEXT_BLANK },
+      { type: "field", label: "Creditor: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Total Amount Owed" },
+      { type: "field", label: "Total Amount: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Installment Schedule" },
+      {
+        type: "table",
+        widths: [0.3, 0.35, 0.35],
+        headers: ["Installment #", "Amount", "Due Date"],
+        rows: [
+          ["1", TEXT_BLANK, DATE_BLANK],
+          ["2", TEXT_BLANK, DATE_BLANK],
+          ["3", TEXT_BLANK, DATE_BLANK],
+        ],
+      },
+
+      { type: "section", text: "Missed Payments" },
+      {
+        type: "paragraph",
+        text:
+          "If any installment is not paid within the agreed grace period, the Creditor may declare the full " +
+          "remaining balance due immediately.",
+      },
+
+      { type: "section", text: "Signatures" },
+      {
+        type: "signatures",
+        signers: [
+          { label: "Debtor", order: 1 },
+          { label: "Creditor", order: 2 },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "privacy-acknowledgement",
+    title: "PRIVACY ACKNOWLEDGEMENT",
+    signerLabels: ["Individual"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Company: ", blank: TEXT_BLANK },
+      { type: "field", label: "Individual: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Acknowledgement" },
+      {
+        type: "paragraph",
+        text:
+          "The Individual acknowledges that they have received, read, and understood the Company's privacy " +
+          "policy describing what personal data is collected, how it is used, and how it is protected.",
+      },
+
+      { type: "section", text: "Consent" },
+      {
+        type: "paragraph",
+        text:
+          "The Individual consents to the collection and use of their personal data as described in the privacy " +
+          "policy referenced above.",
+      },
+
+      { type: "section", text: "Signature" },
+      {
+        type: "signatures",
+        signers: [{ label: "Individual", order: 1 }],
+      },
+    ],
+  },
+  {
+    slug: "data-processing-agreement",
+    title: "DATA PROCESSING AGREEMENT",
+    signerLabels: ["Data Controller", "Data Processor"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Data Controller: ", blank: TEXT_BLANK },
+      { type: "field", label: "Data Processor: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Subject Matter and Duration" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement governs the Data Processor's processing of personal data on behalf of the Data " +
+          "Controller for the duration of their underlying business relationship.",
+      },
+
+      { type: "section", text: "Nature and Purpose of Processing" },
+      { type: "field", label: "", blank: TEXT_BLANK },
+
+      { type: "section", text: "Categories of Data and Data Subjects" },
+      { type: "field", label: "Data Categories: ", blank: TEXT_BLANK },
+      { type: "field", label: "Data Subjects: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Processor Obligations" },
+      {
+        type: "paragraph",
+        text:
+          "The Data Processor agrees to process personal data only on documented instructions from the Data " +
+          "Controller, to maintain appropriate technical and organizational security measures, and to assist the " +
+          "Data Controller in responding to data subject requests.",
+      },
+
+      { type: "section", text: "Sub-processors" },
+      {
+        type: "paragraph",
+        text:
+          "The Data Processor will not engage a sub-processor without the Data Controller's prior written " +
+          "authorization, and remains liable for any sub-processor's performance.",
+      },
+
+      { type: "section", text: "Breach Notification" },
+      {
+        type: "paragraph",
+        text:
+          "The Data Processor will notify the Data Controller without undue delay after becoming aware of a " +
+          "personal data breach.",
+      },
+
+      { type: "section", text: "Signatures" },
+      {
+        type: "signatures",
+        signers: [
+          { label: "Data Controller", order: 1 },
+          { label: "Data Processor", order: 2 },
+        ],
+      },
+    ],
+  },
 ];
 
 fs.mkdirSync(outDir, { recursive: true });

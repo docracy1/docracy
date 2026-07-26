@@ -15,6 +15,7 @@ import {
   fetchMyDocuments,
   fetchTeam,
   fetchTemplates,
+  fetchTemplateUsage,
   fetchTokenStatus,
   fetchWebhooks,
   fetchWorkspaceSlug,
@@ -34,6 +35,7 @@ import {
   type PendingInviteSummary,
   type TeamMemberSummary,
   type TemplateSummary,
+  type TemplateUsageEntry,
   type WebhookEventType,
   type WebhookSummary,
 } from "../lib/api";
@@ -136,6 +138,7 @@ export default function Dashboard() {
   const [newConnectorUrl, setNewConnectorUrl] = useState<string | null>(null);
   const [newApiKey, setNewApiKey] = useState<string | null>(null);
   const [templates, setTemplates] = useState<TemplateSummary[]>([]);
+  const [templateUsage, setTemplateUsage] = useState<TemplateUsageEntry[]>([]);
   const [deletingTemplateId, setDeletingTemplateId] = useState<string | null>(null);
   const [templateError, setTemplateError] = useState<string | null>(null);
   const [webhooks, setWebhooks] = useState<WebhookSummary[]>([]);
@@ -441,6 +444,24 @@ export default function Dashboard() {
     () => documents.filter((d) => d.status === "pending" && !d.awaitingYou),
     [documents]
   );
+
+  // "Recurring Templates" Quick Actions — top 3 templates (saved or free) this workspace keeps
+  // sending, each resolved back to a display name + a one-click "send again" link. templateId is
+  // either a saved-template id (in `templates`) or a free-template slug (in FREE_TEMPLATES); a
+  // usage row whose id matches neither (e.g. a template deleted since) is simply skipped.
+  const recurringQuickActions = useMemo(() => {
+    return templateUsage
+      .filter((u) => u.isRecurring)
+      .slice(0, 3)
+      .flatMap((usage) => {
+        const saved = templates.find((t) => t.id === usage.templateId);
+        if (saved) return [{ templateId: usage.templateId, name: saved.name, href: `/prepare?template=${saved.id}`, usage }];
+        const free = FREE_TEMPLATES.find((t) => t.slug === usage.templateId);
+        if (free) return [{ templateId: usage.templateId, name: free.name, href: `/prepare?freeTemplate=${free.slug}`, usage }];
+        return [];
+      });
+  }, [templateUsage, templates]);
+  const topRecurringUsage = recurringQuickActions[0]?.usage;
   const completedDocs = useMemo(() => documents.filter((d) => d.status === "completed"), [documents]);
   const visibleDocs = useMemo(() => {
     if (docsSubTab === "awaiting") return awaitingYouDocs;
@@ -495,6 +516,8 @@ export default function Dashboard() {
           setHasToken(hasToken);
           const { templates } = await fetchTemplates();
           setTemplates(templates);
+          const { usage } = await fetchTemplateUsage();
+          setTemplateUsage(usage);
           const { webhooks } = await fetchWebhooks();
           setWebhooks(webhooks);
           const { members, pendingInvites } = await fetchTeam();
@@ -816,6 +839,51 @@ export default function Dashboard() {
                 + New document
               </Link>
             </div>
+
+            {recurringQuickActions.length > 0 && (
+              <div className="card" style={{ marginTop: 24 }}>
+                <h3 style={{ fontSize: 15 }}>Quick actions</h3>
+                <p style={{ fontSize: 12, color: "var(--mute)", marginTop: -4 }}>
+                  Documents you send often — jump straight back into one.
+                </p>
+                {recurringQuickActions.map((qa) => (
+                  <div
+                    key={qa.templateId}
+                    style={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      gap: 8,
+                      padding: "8px 0",
+                      borderBottom: "1px solid var(--hairline)",
+                    }}
+                  >
+                    <span>
+                      {qa.name}{" "}
+                      <span style={{ fontSize: 12, color: "var(--mute)" }}>
+                        — sent {qa.usage.completedCount} time{qa.usage.completedCount === 1 ? "" : "s"}
+                      </span>
+                    </span>
+                    <Link to={qa.href} className="btn-secondary" style={{ textDecoration: "none", padding: "4px 10px", fontSize: 13 }}>
+                      Send again
+                    </Link>
+                  </div>
+                ))}
+                {topRecurringUsage?.suggestSaving && !templates.some((t) => t.id === topRecurringUsage.templateId) && (
+                  <p style={{ fontSize: 13, marginTop: 12, marginBottom: 0 }}>
+                    💡 You've sent this {topRecurringUsage.completedCount} times — consider saving it as a reusable
+                    template from the Templates tab so you don't have to re-place fields each time.
+                  </p>
+                )}
+                {topRecurringUsage?.teamUpsell && !account.isEnterprise && (
+                  <p style={{ fontSize: 13, marginTop: 12, marginBottom: 0 }}>
+                    👥 This is clearly part of your regular workflow — an Enterprise team plan lets your whole team
+                    share templates like this one instead of everyone recreating them.
+                  </p>
+                )}
+              </div>
+            )}
 
             {!account.isPaid && (
               <div className="card" style={{ marginTop: 24 }}>
@@ -1447,6 +1515,27 @@ export default function Dashboard() {
             <p style={{ fontSize: 12, color: "var(--mute)", marginBottom: 0, marginTop: 8 }}>
               Only the workspace owner can invite or remove teammates.
             </p>
+          )}
+
+          {recurringQuickActions.length > 0 && (
+            <div style={{ marginTop: 20, paddingTop: 16, borderTop: "1px solid var(--hairline)" }}>
+              <h4 style={{ fontSize: 13, marginBottom: 4 }}>Shared templates</h4>
+              <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 0 }}>
+                Every teammate on this workspace already sees the same templates — these are the ones you send
+                often enough that they're worth everyone knowing about.
+              </p>
+              {recurringQuickActions.map((qa) => (
+                <div key={qa.templateId} style={{ fontSize: 13, padding: "4px 0" }}>
+                  {qa.name} <span style={{ fontSize: 12, color: "var(--mute)" }}>({qa.usage.completedCount}×)</span>
+                </div>
+              ))}
+              {!account.isEnterprise && topRecurringUsage?.teamUpsell && (
+                <p style={{ fontSize: 13, marginTop: 8, marginBottom: 0 }}>
+                  This much repeat volume is usually a sign it's time for more hands on deck — Enterprise adds
+                  cloud-storage connectors and higher limits on top of the team sharing you already have.
+                </p>
+              )}
+            </div>
           )}
         </div>
       )}

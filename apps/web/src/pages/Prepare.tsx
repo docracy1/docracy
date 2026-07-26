@@ -9,9 +9,10 @@ import {
   fetchMe,
   fetchTemplate,
   fetchTemplates,
+  fetchTemplateUsage,
   generateContract,
 } from "../lib/api";
-import type { Account, ContractRisk, TemplateSummary } from "../lib/api";
+import type { Account, ContractRisk, TemplateSummary, TemplateUsageEntry } from "../lib/api";
 import { base64ToBytes } from "../lib/base64";
 import {
   addTextAnnotation,
@@ -125,6 +126,7 @@ export default function Prepare() {
 
   const [account, setAccount] = useState<Account | null>(null);
   const [availableTemplates, setAvailableTemplates] = useState<TemplateSummary[]>([]);
+  const [templateUsage, setTemplateUsage] = useState<TemplateUsageEntry[]>([]);
   const [loadingTemplate, setLoadingTemplate] = useState(false);
   const [templateLoadError, setTemplateLoadError] = useState<string | null>(null);
   const [showTemplateNameInput, setShowTemplateNameInput] = useState(false);
@@ -146,6 +148,9 @@ export default function Prepare() {
       fetchTemplates()
         .then((res) => setAvailableTemplates(res.templates))
         .catch(() => setAvailableTemplates([]));
+      fetchTemplateUsage()
+        .then((res) => setTemplateUsage(res.usage))
+        .catch(() => setTemplateUsage([]));
     }
   }, [account, pdfBytes]);
 
@@ -656,6 +661,7 @@ export default function Prepare() {
         customSubject: customSubject.trim() || undefined,
         customMessage: customMessage.trim() || undefined,
         signingMode: effectiveSigningMode,
+        templateId: templateId ?? freeTemplateSlug ?? undefined,
       });
       navigate("/prepare/sent", { state: { docId, statusToken, signingMode: effectiveSigningMode } });
     } catch (err) {
@@ -681,15 +687,31 @@ export default function Prepare() {
                   <p style={{ marginTop: 0, marginBottom: 6, fontSize: 13, color: "var(--mute)" }}>
                     Start from a template
                   </p>
-                  {availableTemplates.map((t) => (
-                    <Link
-                      key={t.id}
-                      to={`/prepare?template=${t.id}`}
-                      style={{ display: "block", marginBottom: 4 }}
-                    >
-                      {t.name} ({t.signerCount} signer{t.signerCount === 1 ? "" : "s"})
-                    </Link>
-                  ))}
+                  {availableTemplates.map((t) => {
+                    const usage = templateUsage.find((u) => u.templateId === t.id);
+                    return (
+                      <div key={t.id} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                        <Link to={`/prepare?template=${t.id}`}>
+                          {t.name} ({t.signerCount} signer{t.signerCount === 1 ? "" : "s"})
+                        </Link>
+                        {usage?.isRecurring && (
+                          <span
+                            title={`Sent ${usage.completedCount} times`}
+                            style={{
+                              fontSize: 11,
+                              fontWeight: 600,
+                              color: "var(--primary)",
+                              background: "var(--primary-soft)",
+                              borderRadius: 999,
+                              padding: "1px 8px",
+                            }}
+                          >
+                            🔁 Recurring
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               )}
               <p>Upload the PDF you want signed.</p>

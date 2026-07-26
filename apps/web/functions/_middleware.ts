@@ -5,39 +5,21 @@
 // slow/failing analytics call never delays the actual page response.
 const WORKER_URL = "https://api.docracy.io";
 
-const STATIC_TEMPLATE_SLUGS = [
-  "mutual-nda",
-  "independent-contractor-agreement",
-  "offer-letter",
-  "remote-work-policy",
-  "freelance-service-agreement",
-  "unilateral-nda",
-  "simple-commercial-lease-agreement",
-  "non-compete-non-solicitation-agreement",
-  "consulting-agreement",
-  "vendor-agreement",
-  "separation-agreement",
-  "equipment-rental-agreement",
-  "partnership-agreement",
-  "sales-agreement",
-  "referral-agreement",
-];
-
-const TRACKED_ROUTES = new Set([
-  "/",
-  "/free-templates",
-  "/mcp",
-  "/about",
-  "/pricing",
-  "/docs",
-  ...STATIC_TEMPLATE_SLUGS.map((slug) => `/free-templates/${slug}`),
-]);
+const TRACKED_ROUTES = new Set(["/", "/free-templates", "/mcp", "/about", "/pricing", "/docs"]);
 
 // Blog posts are published via the self-serve CMS (no deploy needed), so their slugs can't be
-// enumerated in a fixed set the way the routes above are — matched by prefix instead. The worker's
-// own isTrackedRoute (routes/analytics.ts) applies the identical rule as a second gate.
+// enumerated in a fixed set the way the routes above are — matched by prefix instead. Free
+// templates are matched by prefix too: this used to be a hardcoded per-slug list, which quietly
+// fell out of sync with the actual template library (round 2's 6 templates were never added to
+// it). The worker's own isTrackedRoute (routes/analytics.ts) applies the identical rule as a
+// second gate.
 function isTrackedRoute(pathname: string): boolean {
-  return TRACKED_ROUTES.has(pathname) || pathname === "/blog" || pathname.startsWith("/blog/");
+  return (
+    TRACKED_ROUTES.has(pathname) ||
+    pathname === "/blog" ||
+    pathname.startsWith("/blog/") ||
+    pathname.startsWith("/free-templates/")
+  );
 }
 
 export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => {

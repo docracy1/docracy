@@ -5,36 +5,17 @@ import type { Env } from "@docracy/shared";
 
 // Only the routes this funnel actually cares about (public marketing pages) — an allow-list, not
 // a denylist, so a junk/typo'd route from a stray client never becomes a phantom row in the data.
-const TRACKED_ROUTES = new Set([
-  "/",
-  "/free-templates",
-  "/mcp",
-  "/about",
-  "/pricing",
-  "/docs",
-  "/free-templates/mutual-nda",
-  "/free-templates/independent-contractor-agreement",
-  "/free-templates/offer-letter",
-  "/free-templates/remote-work-policy",
-  "/free-templates/freelance-service-agreement",
-  "/free-templates/unilateral-nda",
-  "/free-templates/simple-commercial-lease-agreement",
-  "/free-templates/non-compete-non-solicitation-agreement",
-  "/free-templates/consulting-agreement",
-  "/free-templates/vendor-agreement",
-  "/free-templates/separation-agreement",
-  "/free-templates/equipment-rental-agreement",
-  "/free-templates/partnership-agreement",
-  "/free-templates/sales-agreement",
-  "/free-templates/referral-agreement",
-]);
+// /free-templates/* used to be enumerated slug-by-slug here, which quietly fell out of sync with
+// the actual template library twice (round 2's 6 templates were never added) — matched by prefix
+// instead now, same fix as the /blog/* prefix match below.
+const TRACKED_ROUTES = new Set(["/", "/free-templates", "/mcp", "/about", "/pricing", "/docs"]);
 
 // Blog posts are published via the self-serve CMS (no deploy needed — see routes/blogPosts.ts), so
 // their slugs can't be enumerated in a fixed set the way the routes above are; matched by prefix
 // instead. `/blog` itself (the index) is tracked as a page view but isn't an "article", so it's
 // deliberately excluded from blog_article_loaded below.
 function isTrackedRoute(route: string): boolean {
-  return TRACKED_ROUTES.has(route) || route === "/blog" || route.startsWith("/blog/");
+  return TRACKED_ROUTES.has(route) || route === "/blog" || route.startsWith("/blog/") || route.startsWith("/free-templates/");
 }
 
 const analytics = new Hono<{ Bindings: Env }>();

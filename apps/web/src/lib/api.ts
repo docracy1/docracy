@@ -44,6 +44,11 @@ export interface CreateDocumentOptions {
   customSubject?: string;
   customMessage?: string;
   signingMode?: "sequential" | "parallel";
+  /** Set when these fields came from a saved (paid-tier) template id or a free-template slug —
+   *  always fires the template_completed funnel event; the persistent "Recurring Templates" usage
+   *  counter additionally requires a logged-in paid account (no workspace to key a free-tier
+   *  anonymous send's usage against otherwise). */
+  templateId?: string;
 }
 
 export async function createDocument(
@@ -244,6 +249,23 @@ export async function createTemplate(
 
 export async function deleteTemplate(id: string): Promise<{ ok: true }> {
   const res = await apiFetch(`/api/account/templates/${id}`, { method: "DELETE" });
+  return asJson(res);
+}
+
+export interface TemplateUsageEntry {
+  templateId: string;
+  completedCount: number;
+  lastCompletedAt: string;
+  isRecurring: boolean;
+  suggestSaving: boolean;
+  teamUpsell: boolean;
+}
+
+/** Every template (saved-template id or free-template slug) this workspace has completed at
+ *  least once, most-used first — drives the "Recurring Templates" badges/upsells across the
+ *  Template Library, Dashboard Quick Actions, and the in-editor template picker. */
+export async function fetchTemplateUsage(): Promise<{ usage: TemplateUsageEntry[] }> {
+  const res = await apiFetch("/api/account/templates/usage");
   return asJson(res);
 }
 
