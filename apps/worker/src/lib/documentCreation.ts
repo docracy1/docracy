@@ -107,6 +107,7 @@ export async function createDocumentCore(
     events,
     customSubject: params.customSubject,
     customMessage: params.customMessage,
+    preparerEmail: preparerEmail?.trim() || undefined,
   };
 
   for (const s of signersToInvite) s.linkSentAt = now.toISOString();

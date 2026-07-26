@@ -173,6 +173,84 @@ export async function sendReminder(env: Env, doc: DocState, order: number, token
   );
 }
 
+/** Preparer-facing nudges about one specific signer's progress on a document they sent — distinct
+ *  from sendCompletionEmails below (which goes to the *signers* once everyone's done) and from
+ *  sendReminder (which goes to the *signer* themselves). Only sent when the preparer gave an email
+ *  at creation time (doc.preparerEmail) — see lib/documentCreation.ts and lib/completionEmails.ts
+ *  for the sweep/event-driven triggers. All three share the same status-page CTA so the preparer
+ *  always lands on the one page that shows every signer's live status. */
+function preparerDocLabel(doc: DocState): string {
+  return doc.title ? `"${escapeHtml(doc.title)}"` : "your document";
+}
+
+export async function sendCompletionEmailNotOpened(
+  env: Env,
+  preparerEmail: string,
+  doc: DocState,
+  signerName: string,
+  statusToken: string
+): Promise<void> {
+  const link = `${env.PUBLIC_APP_URL}/status/${statusToken}`;
+  const body = `
+    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">${escapeHtml(signerName)} hasn't opened your document yet</p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      You sent ${preparerDocLabel(doc)} to ${escapeHtml(signerName)} a few hours ago, and the link hasn't been
+      opened yet. This sometimes just means it landed in a spam folder or got missed.
+    </p>
+    ${ctaButton(link, "Check status")}
+    <p style="margin:0;font-size:14px;color:${MUTED};">
+      From that page you can resend the signing link if you'd like to follow up directly.
+    </p>
+    ${SIGN_OFF}
+  `;
+  await send(env, preparerEmail, `${signerName} hasn't opened your document yet`, emailShell(env.PUBLIC_APP_URL, body));
+}
+
+export async function sendCompletionEmailViewedNotSigned(
+  env: Env,
+  preparerEmail: string,
+  doc: DocState,
+  signerName: string,
+  statusToken: string
+): Promise<void> {
+  const link = `${env.PUBLIC_APP_URL}/status/${statusToken}`;
+  const body = `
+    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">${escapeHtml(signerName)} opened your document but hasn't signed yet</p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      ${escapeHtml(signerName)} opened ${preparerDocLabel(doc)} but hasn't completed signing. A quick
+      follow-up message often helps at this stage.
+    </p>
+    ${ctaButton(link, "Check status")}
+    <p style="margin:0;font-size:14px;color:${MUTED};">
+      You'll find their contact details and a resend option on the status page.
+    </p>
+    ${SIGN_OFF}
+  `;
+  await send(env, preparerEmail, `${signerName} opened your document but hasn't signed yet`, emailShell(env.PUBLIC_APP_URL, body));
+}
+
+export async function sendCompletionEmailSigned(
+  env: Env,
+  preparerEmail: string,
+  doc: DocState,
+  signerName: string,
+  statusToken: string
+): Promise<void> {
+  const link = `${env.PUBLIC_APP_URL}/status/${statusToken}`;
+  const body = `
+    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">${escapeHtml(signerName)} just signed your document</p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      Good news — ${escapeHtml(signerName)} just signed ${preparerDocLabel(doc)}.
+    </p>
+    ${ctaButton(link, "View status")}
+    <p style="margin:0;font-size:14px;color:${MUTED};">
+      We'll let you know as soon as everyone's signed and the final copy is ready.
+    </p>
+    ${SIGN_OFF}
+  `;
+  await send(env, preparerEmail, `${signerName} just signed your document`, emailShell(env.PUBLIC_APP_URL, body));
+}
+
 export async function sendCompletionEmails(
   env: Env,
   doc: DocState,

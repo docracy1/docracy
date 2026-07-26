@@ -24,6 +24,7 @@ import { runExpiredDocCleanup } from "./lib/cleanup";
 import { runHealthCheckAndAlert } from "./lib/healthcheck";
 import { runPaymentFreezeSweep } from "./lib/paymentFreeze";
 import { runOnboardingEmailSweep } from "./lib/onboardingEmails";
+import { runCompletionEmailSweep } from "./lib/completionEmails";
 import type { Env } from "@docracy/shared";
 
 const app = new Hono<{ Bindings: Env }>();
@@ -68,11 +69,11 @@ app.route("/api/admin/blog-posts", blogPostsAdmin);
 app.route("/api/blog-posts", blogPostsPublic);
 app.route("/api/status", statusRoute);
 
-// The frequent cron (see wrangler.toml's second crons entry) exists only to give the onboarding
-// email drip minute-scale granularity — everything else here is fine running once a day. Without
-// branching on event.cron, adding that entry would make the daily sweeps below fire every few
-// minutes too.
-const ONBOARDING_EMAIL_CRON = "*/5 * * * *";
+// The frequent cron (see wrangler.toml's second crons entry) exists to give the onboarding email
+// drip and the preparer completion-nudge sweep minute-scale granularity (both have hour-scale
+// thresholds) — everything else here is fine running once a day. Without branching on event.cron,
+// adding that entry would make the daily sweeps below fire every few minutes too.
+const FREQUENT_CRON = "*/5 * * * *";
 
 export default {
   fetch: app.fetch,
@@ -82,8 +83,9 @@ export default {
       return;
     }
 
-    if (event.cron === ONBOARDING_EMAIL_CRON) {
+    if (event.cron === FREQUENT_CRON) {
       ctx.waitUntil(runOnboardingEmailSweep(env).catch((err) => console.error("Onboarding email sweep failed:", err)));
+      ctx.waitUntil(runCompletionEmailSweep(env).catch((err) => console.error("Completion-email sweep failed:", err)));
       return;
     }
 

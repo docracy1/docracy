@@ -29,6 +29,16 @@ export interface Signer {
   /** HMAC-SHA256 hex digest of an optional PIN the preparer set for this signer, never the raw
    *  PIN — see lib/signUnlock.ts. Absent entirely for the (default) no-PIN case. */
   pinHash?: string;
+  /** Set the first time this signer opens their signing link (GET /sign/:token, on-turn and past
+   *  any PIN gate) — unlike index-d1.ts's recordViewedOnce (D1-only, so only paid/account-linked
+   *  docs), this lives directly on the KV-resident DocState and is populated for every document,
+   *  since lib/completionEmails.ts's preparer nudges need it regardless of account status. Optional
+   *  so signers created before this field existed still deserialize as "not yet viewed". */
+  viewedAt?: string | null;
+  /** Which preparer-facing completion nudges (lib/completionEmails.ts) have already been sent for
+   *  this signer, so a sweep never re-sends the same nudge twice. Optional/absent means none sent
+   *  yet — always read via `signer.completionNudgesSent ?? []`. */
+  completionNudgesSent?: ("not_opened" | "viewed_not_signed")[];
 }
 
 export type AuditEventType = "created" | "invite_sent" | "consented" | "signed" | "completed";
@@ -87,6 +97,12 @@ export interface DocState {
    *  absent. Length-capped at creation (see routes/documents.ts). */
   customSubject?: string;
   customMessage?: string;
+  /** Preparer's own email, set at creation only if they gave one (see routes/documents.ts) — used
+   *  to send the one-time status-link email (lib/documentCreation.ts) and, ongoing, the
+   *  preparer-facing completion-nudge sweep (lib/completionEmails.ts). Optional so a doc created
+   *  before this field existed just never gets nudges — same "always read the optional field"
+   *  pattern as customSubject/customMessage above. */
+  preparerEmail?: string;
 }
 
 export interface Env {

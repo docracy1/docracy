@@ -3,8 +3,9 @@ main = "src/index.ts"
 compatibility_date = "2024-12-01"
 compatibility_flags = ["nodejs_compat"]
 
-# Daily reminder sweep, plus a 5-minute cron so the onboarding email drip (index.ts branches on
-# event.cron to run only that sweep on this entry) has minute-scale granularity. Cron syntax is UTC.
+# Daily reminder sweep, plus a 5-minute cron so the onboarding email drip and the preparer
+# completion-nudge sweep (index.ts branches on event.cron to run only those on this entry) have
+# minute-scale granularity. Cron syntax is UTC.
 [triggers]
 crons = ["0 8 * * *", "*/5 * * * *"]
 

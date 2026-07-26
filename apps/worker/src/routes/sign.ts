@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { getCookie } from "hono/cookie";
 import { getDoc, putDoc, isSignerOnTurn, currentTurnOrder } from "../lib/kv";
 import { burnFields, decodedByteLength, generateCertificate, MAX_SIGNATURE_IMAGE_BYTES, type FieldValue } from "../lib/pdf";
-import { sendSigningInvite, sendCompletionEmails } from "../lib/email";
+import { sendSigningInvite, sendCompletionEmails, sendCompletionEmailSigned } from "../lib/email";
 import { recordViewedOnce, indexSignerSigned, indexInviteSent, indexCompleted } from "../lib/index-d1";
 import { checkTokenAccessRateLimit, checkPinAttemptRateLimit } from "../lib/ratelimit";
 import { sha256Hex } from "../lib/hash";
@@ -114,6 +114,20 @@ sign.get("/sign/:token", async (c) => {
 
   if (doc.accountId) {
     indexNonFatal(c.executionCtx, doc.docId, "viewed", recordViewedOnce(c.env, doc, verified.order));
+  }
+
+  // Awaited directly rather than ctx.waitUntil'd: this only ever writes once per signer (guarded
+  // by the !viewedAt check), so the added latency is a one-time cost on their very first view, not
+  // something that recurs on every page load — and it keeps this route independent of
+  // c.executionCtx, unlike the accountId-gated D1 indexing above.
+  const viewedSigner = doc.signers.find((s) => s.order === verified.order);
+  if (viewedSigner && !viewedSigner.viewedAt) {
+    viewedSigner.viewedAt = new Date().toISOString();
+    try {
+      await putDoc(c.env, doc);
+    } catch (err) {
+      console.error(`Marking signer viewed failed for doc ${doc.docId} (non-fatal):`, err);
+    }
   }
 
   const pdfObj = await c.env.DOCRACY_DOCS.get(`docs/${doc.docId}/working.pdf`);
@@ -281,6 +295,15 @@ sign.post("/sign/:token", async (c) => {
   // whenever the chain/batch isn't done yet. What differs is what happens next: sequential mode
   // invites exactly one new signer (the next one in order); parallel mode already invited every
   // signer at creation, so there's no one new to notify — just record this signer's completion.
+  if (freshDoc.preparerEmail) {
+    const statusToken = await signToken(freshDoc.docId, 0, c.env.TOKEN_SECRET);
+    c.executionCtx.waitUntil(
+      sendCompletionEmailSigned(c.env, freshDoc.preparerEmail, freshDoc, freshSigner.name, statusToken).catch((err) =>
+        console.error(`Completion-email (signed) failed for doc ${freshDoc.docId} signer ${verified.order} (non-fatal):`, err)
+      )
+    );
+  }
+
   const remainingPending = freshDoc.signers.some((s) => s.status === "pending");
   if (remainingPending && (freshDoc.signingMode ?? "sequential") === "sequential") {
     const nextOrder = currentTurnOrder(freshDoc)!;
