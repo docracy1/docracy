@@ -1,6 +1,8 @@
 import { Hono } from "hono";
 import { getCookie } from "hono/cookie";
 import { trackEvent, NOTRACK_COOKIE_NAME } from "../lib/analytics";
+import { checkTrackEventRateLimit } from "../lib/ratelimit";
+import type { FunnelEvent } from "../lib/analytics";
 import type { Env } from "@docracy/shared";
 
 // Only the routes this funnel actually cares about (public marketing pages) — an allow-list, not
@@ -65,6 +67,77 @@ analytics.post("/pageview", async (c) => {
       // Malformed/unparseable Referer header — not worth logging over.
     }
   }
+
+  return c.json({ ok: true });
+});
+
+// Events a browser is allowed to fire directly, as opposed to the much larger FunnelEvent set —
+// an allow-list (not a denylist) so a compromised/malicious client can't write arbitrary event
+// names (or spoof a server-only event like document_signed) into Analytics Engine. Every event
+// here is genuinely only observable client-side (a click, a field placement, a page unmount) —
+// anything derivable from the request itself already gets logged server-side instead.
+const CLIENT_TRACKABLE_EVENTS = new Set<FunnelEvent>([
+  "document_upload_started",
+  "document_uploaded",
+  "fields_added",
+  "template_opened",
+  "template_used",
+  "template_category_viewed",
+  "template_preview_opened",
+  "template_started",
+  "template_abandoned",
+  "dashboard_loaded",
+  "landingpage_cta_clicked",
+  "blog_cta_clicked",
+  "upload_failed",
+  "field_error",
+]);
+
+interface TrackBody {
+  event?: string;
+  route?: string;
+  documentId?: string;
+  templateId?: string;
+  source?: string;
+  templateCategory?: string;
+  errorCode?: string;
+  sessionId?: string;
+}
+
+// A real (if generous) rate limit, unlike /pageview above — that route only ever fires once per
+// navigation from trusted server-side middleware, while this one is reachable directly from any
+// browser and could otherwise be hammered.
+analytics.post("/track", async (c) => {
+  const ip = c.req.header("CF-Connecting-IP") ?? "unknown";
+  if (!(await checkTrackEventRateLimit(c.env, ip))) {
+    return c.json({ error: "Too many events. Please try again shortly." }, 429);
+  }
+
+  let body: TrackBody;
+  try {
+    body = await c.req.json<TrackBody>();
+  } catch {
+    return c.json({ error: "Invalid request body" }, 400);
+  }
+
+  if (!body.event || !CLIENT_TRACKABLE_EVENTS.has(body.event as FunnelEvent)) {
+    return c.json({ error: "Unknown or unsupported event" }, 400);
+  }
+
+  if (getCookie(c, NOTRACK_COOKIE_NAME) === "1") return c.json({ ok: true, skipped: true });
+
+  trackEvent(c.env, {
+    event: body.event as FunnelEvent,
+    route: body.route,
+    userAgent: c.req.header("user-agent"),
+    country: c.req.header("CF-IPCountry"),
+    documentId: body.documentId,
+    templateId: body.templateId,
+    source: body.source,
+    templateCategory: body.templateCategory,
+    errorCode: body.errorCode,
+    sessionId: body.sessionId,
+  });
 
   return c.json({ ok: true });
 });

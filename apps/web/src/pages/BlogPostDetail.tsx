@@ -5,6 +5,33 @@ import { getArticle, type ArticleBlock } from "../lib/articles";
 import { getCompetitor, formatUsd, DOCRACY_PRICE } from "../lib/competitors";
 import { fetchBlogPost, type DynamicBlogPostDetail } from "../lib/api";
 import { usePageMeta } from "../lib/usePageMeta";
+import { track } from "../lib/track";
+
+/** The "Try Docracy free" / "See pricing" pair every post type ends with — `slug` is passed
+ *  through as the click's `source` so blog_cta_clicked can be attributed back to which post
+ *  drove it. */
+function BlogCta({ slug }: { slug: string }) {
+  return (
+    <div style={{ display: "flex", gap: 12, marginTop: 24, flexWrap: "wrap" }}>
+      <Link
+        to="/prepare"
+        className="btn-primary"
+        style={{ textDecoration: "none" }}
+        onClick={() => track("blog_cta_clicked", { source: slug })}
+      >
+        Try Docracy free
+      </Link>
+      <Link
+        to="/pricing"
+        className="btn-secondary"
+        style={{ textDecoration: "none" }}
+        onClick={() => track("blog_cta_clicked", { source: slug })}
+      >
+        See pricing
+      </Link>
+    </div>
+  );
+}
 
 /** Renders a plain-text body as paragraphs split on blank lines — the same convention the static
  *  competitor-comparison posts already use for their intro/section text, just applied to a single
@@ -55,14 +82,7 @@ function DynamicPostView({ post }: { post: DynamicBlogPostDetail }) {
       <div style={{ fontSize: 12, color: "var(--mute)", marginBottom: 4 }}>{date}</div>
       <h1>{post.title}</h1>
       <BodyParagraphs body={post.body} />
-      <div style={{ display: "flex", gap: 12, marginTop: 24, flexWrap: "wrap" }}>
-        <Link to="/prepare" className="btn-primary" style={{ textDecoration: "none" }}>
-          Try Docracy free
-        </Link>
-        <Link to="/pricing" className="btn-secondary" style={{ textDecoration: "none" }}>
-          See pricing
-        </Link>
-      </div>
+      <BlogCta slug={post.slug} />
     </div>
   );
 }
@@ -96,14 +116,7 @@ export default function BlogPostDetail() {
         <div style={{ fontSize: 12, color: "var(--mute)", marginBottom: 4 }}>{article.publishedDate}</div>
         <h1>{article.title}</h1>
         <ArticleBlocks blocks={article.blocks} />
-        <div style={{ display: "flex", gap: 12, marginTop: 24, flexWrap: "wrap" }}>
-          <Link to="/prepare" className="btn-primary" style={{ textDecoration: "none" }}>
-            Try Docracy free
-          </Link>
-          <Link to="/pricing" className="btn-secondary" style={{ textDecoration: "none" }}>
-            See pricing
-          </Link>
-        </div>
+        <BlogCta slug={article.slug} />
       </div>
     );
   }
@@ -155,14 +168,7 @@ export default function BlogPostDetail() {
           <p>{staticPost.verdict}</p>
         </div>
 
-        <div style={{ display: "flex", gap: 12, marginTop: 24, flexWrap: "wrap" }}>
-          <Link to="/prepare" className="btn-primary" style={{ textDecoration: "none" }}>
-            Try Docracy free
-          </Link>
-          <Link to="/pricing" className="btn-secondary" style={{ textDecoration: "none" }}>
-            See pricing
-          </Link>
-        </div>
+        <BlogCta slug={staticPost.slug} />
 
         <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 32 }}>
           Prices reflect each vendor's published pricing as of {staticPost.publishedDate} — check their pricing

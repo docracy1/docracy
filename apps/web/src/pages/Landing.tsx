@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import PricingCalculator from "../components/PricingCalculator";
 import FirstDocumentPrompt from "../components/FirstDocumentPrompt";
+import { track } from "../lib/track";
 
 /** Abstract illustration of the product (a document, either freshly signed or having its fields
  *  auto-detected) — deliberately not a literal app screenshot, which would need re-cropping every
@@ -320,7 +321,7 @@ export default function Landing() {
         </div>
       </div>
 
-      <FirstDocumentPrompt />
+      <FirstDocumentPrompt source="hero" />
 
       <div className="core-features-band">
         <div className="core-features-inner">
@@ -351,7 +352,7 @@ export default function Landing() {
           feature cards would break the 2-column CSS grid (a full-span item here forces every
           later card down a row, out of alignment), so this sits right after the features section
           that Feature #1 leads instead — same visual position, without wrecking the grid. */}
-      <FirstDocumentPrompt />
+      <FirstDocumentPrompt source="features" />
 
       <div className="spotlight-band">
         <div className="spotlight-inner">
@@ -386,7 +387,12 @@ export default function Landing() {
           </div>
 
           <div style={{ marginTop: 24 }}>
-            <Link to="/login" className="btn-primary btn-lg" style={{ display: "inline-block", textDecoration: "none" }}>
+            <Link
+              to="/login"
+              className="btn-primary btn-lg"
+              style={{ display: "inline-block", textDecoration: "none" }}
+              onClick={() => track("landingpage_cta_clicked", { source: "paid_plan_signin" })}
+            >
               Sign in to try the paid plan
             </Link>
           </div>
@@ -465,10 +471,20 @@ export default function Landing() {
         <h2 style={{ fontSize: 22, marginBottom: 8 }}>Ready to send your first document?</h2>
         <p style={{ marginTop: 0, marginBottom: 20 }}>Free to start — no account needed to send or sign.</p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-          <Link to="/prepare" className="btn-primary btn-lg" style={{ display: "inline-block", textDecoration: "none" }}>
+          <Link
+            to="/prepare"
+            className="btn-primary btn-lg"
+            style={{ display: "inline-block", textDecoration: "none" }}
+            onClick={() => track("landingpage_cta_clicked", { source: "final_cta_band" })}
+          >
             Start a signing chain
           </Link>
-          <Link to="/free-templates" className="btn-secondary btn-lg" style={{ display: "inline-block", textDecoration: "none" }}>
+          <Link
+            to="/free-templates"
+            className="btn-secondary btn-lg"
+            style={{ display: "inline-block", textDecoration: "none" }}
+            onClick={() => track("landingpage_cta_clicked", { source: "final_cta_band_templates" })}
+          >
             Browse free templates
           </Link>
         </div>
@@ -486,7 +502,7 @@ export default function Landing() {
         </p>
       </div>
 
-      <FirstDocumentPrompt mobileOnly />
+      <FirstDocumentPrompt mobileOnly source="mobile_footer" />
     </div>
   );
 }

@@ -56,6 +56,16 @@ export async function checkFeedbackRateLimit(env: Env, ip: string): Promise<bool
   return checkLimit(env, `feedback:${ip}`, FEEDBACK_MAX_PER_WINDOW, FEEDBACK_WINDOW_SECONDS);
 }
 
+const TRACK_EVENT_WINDOW_SECONDS = 60;
+const TRACK_EVENT_MAX_PER_WINDOW = 120;
+
+/** Soft per-IP limit on client-fired analytics events (POST /api/analytics/track) — generous
+ *  enough for legitimate rapid-fire usage (placing several fields in a row) while still bounding
+ *  how much junk one client can write to Analytics Engine. */
+export async function checkTrackEventRateLimit(env: Env, ip: string): Promise<boolean> {
+  return checkLimit(env, `track:${ip}`, TRACK_EVENT_MAX_PER_WINDOW, TRACK_EVENT_WINDOW_SECONDS);
+}
+
 const MAGIC_LINK_WINDOW_SECONDS = 60 * 60; // 1 hour
 const MAGIC_LINK_MAX_PER_WINDOW = 5;
 

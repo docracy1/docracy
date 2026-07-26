@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FREE_TEMPLATES, RECURRING_CATEGORIES } from "../lib/freeTemplates";
 import { usePageMeta } from "../lib/usePageMeta";
+import { track } from "../lib/track";
 
 function TemplateCard({ slug, name, description }: { slug: string; name: string; description: string }) {
   return (
@@ -60,6 +61,16 @@ export default function FreeTemplates() {
       });
     } catch {
       // Experimental, unstable API — never let an unexpected shape/behavior break the page.
+    }
+  }, []);
+
+  // "Viewed" here means "rendered in front of the visitor" (same sense page_view already uses for
+  // the whole page) — there's no distinct click/filter interaction to hang this off, since every
+  // category section is visible on the page at once rather than behind a category filter.
+  useEffect(() => {
+    const presentCategories = RECURRING_CATEGORIES.filter((c) => FREE_TEMPLATES.some((t) => t.recurringCategory === c));
+    for (const category of presentCategories) {
+      track("template_category_viewed", { templateCategory: category });
     }
   }, []);
 

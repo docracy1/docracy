@@ -14,6 +14,7 @@ import {
   type AdminEnterpriseAccount,
   type DynamicBlogPostSummary,
   type FunnelRow,
+  type FunnelStepRow,
 } from "../lib/api";
 import { usePageMeta } from "../lib/usePageMeta";
 
@@ -28,6 +29,104 @@ const BOT_COLOR = "#d9822b";
 
 function sum(rows: FunnelRow[]): number {
   return rows.reduce((total, r) => total + r.count, 0);
+}
+
+interface FunnelStepDef {
+  event: string;
+  label: string;
+}
+
+// Literal event order per category, matching the spec exactly. Activation and Template funnels use
+// totalCount (raw event counts) since their steps aren't inflated by anything. Completion uses
+// distinctDocuments instead: document_viewed/document_signed both fire once per signer, so a raw
+// count overcounts any multi-signer chain — COUNT(DISTINCT documentId) fixes that. The two
+// "_after_" timeout events and template_abandoned are outcomes, not forward funnel progress, so
+// they're pulled out as side stats rather than fake sequential steps.
+const ACTIVATION_STEPS: FunnelStepDef[] = [
+  { event: "signup_started", label: "Signup started" },
+  { event: "signup_completed", label: "Signup completed" },
+  { event: "dashboard_loaded", label: "Dashboard loaded" },
+  { event: "document_upload_started", label: "Upload started" },
+  { event: "document_uploaded", label: "Document uploaded" },
+  { event: "template_opened", label: "Template opened" },
+  { event: "template_used", label: "Template used" },
+  { event: "fields_added", label: "Fields added" },
+  { event: "document_sent", label: "Document sent" },
+];
+
+const COMPLETION_STEPS: FunnelStepDef[] = [
+  { event: "document_sent", label: "Document sent" },
+  { event: "document_viewed", label: "Document viewed" },
+  { event: "document_signed", label: "Signed" },
+  { event: "document_downloaded", label: "Downloaded" },
+];
+const COMPLETION_SIDE_STATS: FunnelStepDef[] = [
+  { event: "document_not_opened_after_2h", label: "Stalled — not opened after 2h" },
+  { event: "document_not_signed_after_4h", label: "Stalled — viewed but not signed after 4h" },
+];
+
+const TEMPLATE_STEPS: FunnelStepDef[] = [
+  { event: "template_category_viewed", label: "Category viewed" },
+  { event: "template_preview_opened", label: "Preview opened" },
+  { event: "template_started", label: "Started" },
+  { event: "template_completed", label: "Completed" },
+];
+const TEMPLATE_SIDE_STATS: FunnelStepDef[] = [{ event: "template_abandoned", label: "Abandoned" }];
+
+function FunnelCard({
+  title,
+  note,
+  steps,
+  sideStats,
+  countKey,
+  stepsByEvent,
+}: {
+  title: string;
+  note?: string;
+  steps: FunnelStepDef[];
+  sideStats?: FunnelStepDef[];
+  countKey: "totalCount" | "distinctDocuments";
+  stepsByEvent: Map<string, FunnelStepRow>;
+}) {
+  const counts = steps.map((s) => stepsByEvent.get(s.event)?.[countKey] ?? 0);
+  const maxCount = Math.max(1, ...counts);
+
+  return (
+    <div className="card" style={{ marginBottom: 16 }}>
+      <h3 style={{ marginTop: 0, fontSize: 15 }}>{title}</h3>
+      {note && <p style={{ fontSize: 12, color: "var(--mute)", marginTop: -4 }}>{note}</p>}
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {steps.map((s, i) => {
+          const count = counts[i];
+          const pctOfMax = maxCount > 0 ? (count / maxCount) * 100 : 0;
+          const convFromPrev = i === 0 || counts[i - 1] <= 0 ? null : Math.round((count / counts[i - 1]) * 100);
+          return (
+            <div key={s.event}>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, marginBottom: 3 }}>
+                <span>{s.label}</span>
+                <span>
+                  <strong>{count}</strong>
+                  {convFromPrev !== null && <span style={{ color: "var(--mute)", marginLeft: 8 }}>{convFromPrev}% of previous</span>}
+                </span>
+              </div>
+              <div style={{ background: "var(--hairline)", borderRadius: 4, height: 8, overflow: "hidden" }}>
+                <div style={{ width: `${pctOfMax}%`, background: HUMAN_COLOR, height: "100%", borderRadius: 4 }} />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      {sideStats && sideStats.length > 0 && (
+        <div style={{ display: "flex", gap: 16, marginTop: 14, paddingTop: 14, borderTop: "1px solid var(--hairline)", flexWrap: "wrap" }}>
+          {sideStats.map((s) => (
+            <div key={s.event} style={{ fontSize: 12, color: "var(--mute)" }}>
+              {s.label}: <strong style={{ color: "var(--body)" }}>{stepsByEvent.get(s.event)?.totalCount ?? 0}</strong>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
 
 function StatTile({ label, value, sub }: { label: string; value: string; sub?: string }) {
@@ -691,6 +790,7 @@ export default function AdminAnalytics() {
 
   const [days, setDays] = useState(30);
   const [rows, setRows] = useState<FunnelRow[] | null>(null);
+  const [funnelSteps, setFunnelSteps] = useState<FunnelStepRow[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [noTrack, setNoTrack] = useState(() => readNoTrackCookie());
@@ -719,7 +819,10 @@ export default function AdminAnalytics() {
     setError(null);
     fetchAdminAnalytics(days)
       .then((res) => {
-        if (!cancelled) setRows(res.rows);
+        if (!cancelled) {
+          setRows(res.rows);
+          setFunnelSteps(res.funnelSteps);
+        }
       })
       .catch((err) => {
         if (!cancelled) setError(err instanceof Error ? err.message : "Failed to load analytics");
@@ -732,17 +835,22 @@ export default function AdminAnalytics() {
     };
   }, [days]);
 
+  const stepsByEvent = useMemo(() => {
+    const map = new Map<string, FunnelStepRow>();
+    for (const r of funnelSteps ?? []) map.set(r.event, r);
+    return map;
+  }, [funnelSteps]);
+
   const totals = useMemo(() => {
     if (!rows) return null;
     const pageViews = rows.filter((r) => r.event === "page_view");
-    const created = sum(rows.filter((r) => r.event === "document_sent"));
-    // document_signed fires once per signer's signature, not just once per fully-completed
-    // document (see lib/analytics.ts's FunnelEvent union) — for a single-signer document that's
-    // the same number as before; for a multi-signer chain this now counts every signature, not
-    // just the last one. A per-document completion rate needs the Phase 3 dashboard rebuild.
-    const completed = sum(rows.filter((r) => r.event === "document_signed"));
     const totalViews = sum(pageViews);
     const botViews = sum(pageViews.filter((r) => r.traffic_type === "bot"));
+    // Distinct-document counts (not SUM(double1)) — document_signed fires once per signer, so a
+    // raw event count overcounts any multi-signer chain. COUNT(DISTINCT documentId) gives the
+    // real per-document completion rate.
+    const created = stepsByEvent.get("document_sent")?.distinctDocuments ?? 0;
+    const completed = stepsByEvent.get("document_signed")?.distinctDocuments ?? 0;
     return {
       totalViews,
       botPct: totalViews > 0 ? Math.round((botViews / totalViews) * 100) : 0,
@@ -750,7 +858,7 @@ export default function AdminAnalytics() {
       completed,
       completionRate: created > 0 ? Math.round((completed / created) * 100) : null,
     };
-  }, [rows]);
+  }, [rows, stepsByEvent]);
 
   return (
     <div className="container" style={{ maxWidth: 900 }}>
@@ -795,14 +903,36 @@ export default function AdminAnalytics() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 12, marginBottom: 24 }}>
             <StatTile label="Page views" value={String(totals.totalViews)} sub={`${totals.botPct}% known bots`} />
             <StatTile label="Documents sent" value={String(totals.created)} />
-            <StatTile label="Signer signatures" value={String(totals.completed)} sub="counts every signer, not just fully-completed docs" />
+            <StatTile label="Documents signed" value={String(totals.completed)} sub="distinct documents, not per-signer" />
             <StatTile
               label="Sent → signed"
               value={totals.completionRate === null ? "—" : `${totals.completionRate}%`}
             />
           </div>
 
-          <div className="card" style={{ marginBottom: 24 }}>
+          <FunnelCard
+            title="Activation funnel"
+            steps={ACTIVATION_STEPS}
+            countKey="totalCount"
+            stepsByEvent={stepsByEvent}
+          />
+          <FunnelCard
+            title="Completion funnel"
+            note="Counts distinct documents (not raw events) — document_signed fires once per signer, so this corrects for multi-signer chains."
+            steps={COMPLETION_STEPS}
+            sideStats={COMPLETION_SIDE_STATS}
+            countKey="distinctDocuments"
+            stepsByEvent={stepsByEvent}
+          />
+          <FunnelCard
+            title="Template funnel"
+            steps={TEMPLATE_STEPS}
+            sideStats={TEMPLATE_SIDE_STATS}
+            countKey="totalCount"
+            stepsByEvent={stepsByEvent}
+          />
+
+          <div className="card" style={{ marginBottom: 24, marginTop: 24 }}>
             <h3 style={{ marginTop: 0, fontSize: 15 }}>Page views by day</h3>
             <DailyViewsChart rows={rows} />
           </div>

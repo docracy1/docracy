@@ -28,6 +28,7 @@ import type { TextSpan } from "../lib/pdfEdit";
 import { getFreeTemplate } from "../lib/freeTemplates";
 import { assignFieldsToSigners, detectFieldCandidates } from "../lib/fieldDetection";
 import type { DocField, DocFieldType, SignerInput } from "../lib/types";
+import { track } from "../lib/track";
 
 const FREE_TIER_MAX_SIGNERS = 2;
 const MAX_PDF_BYTES = 15 * 1024 * 1024;
@@ -69,6 +70,30 @@ export default function Prepare() {
   const [searchParams] = useSearchParams();
   const templateId = searchParams.get("template");
   const freeTemplateSlug = searchParams.get("freeTemplate");
+  // Refs (not state) since these only need to be read once, in an unmount cleanup — a ref keeps
+  // that cleanup's closure looking at the live value without adding either to a dependency array.
+  const documentSentRef = useRef(false);
+  const activeTemplateRef = useRef<{ id: string; category?: string } | null>(null);
+  activeTemplateRef.current = templateId
+    ? { id: templateId }
+    : freeTemplateSlug
+      ? { id: freeTemplateSlug, category: getFreeTemplate(freeTemplateSlug)?.recurringCategory }
+      : null;
+
+  // template_abandoned: fires once, only if a template was actually active and the user never
+  // completed a send before leaving — covers both client-side navigation away (cleanup runs) and
+  // closing the tab (track()'s keepalive fetch survives that, unlike a plain fetch would).
+  useEffect(() => {
+    return () => {
+      if (activeTemplateRef.current && !documentSentRef.current) {
+        track("template_abandoned", {
+          templateId: activeTemplateRef.current.id,
+          templateCategory: activeTemplateRef.current.category,
+        });
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [file, setFile] = useState<File | null>(null);
   const [pdfBytes, setPdfBytes] = useState<Uint8Array | null>(null);
   const [preparerSigns, setPreparerSigns] = useState(false);
@@ -194,20 +219,28 @@ export default function Prepare() {
         setFields(template.fields);
         setFile(new File([bytes as unknown as BlobPart], `${template.name}.pdf`, { type: "application/pdf" }));
         setSigners(template.signerLabels.map((_, i) => ({ order: i + 1, name: "", email: "" })));
+        // Only fired here (the free-template path) — the paid saved-template path above already
+        // fires the server-side equivalent (routes/templates.ts's GET /:id) at load time, so
+        // firing again here would double-count it.
+        track("template_used", { templateId: freeTemplateSlug, templateCategory: template.recurringCategory });
+        track("template_started", { templateId: freeTemplateSlug, templateCategory: template.recurringCategory });
       })
       .catch((err) => setTemplateLoadError(err instanceof Error ? err.message : "Couldn't load that template"))
       .finally(() => setLoadingTemplate(false));
   }, [freeTemplateSlug]);
 
   const acceptFile = async (f: File) => {
+    track("document_upload_started");
     if (f.size > MAX_PDF_BYTES) {
       setError(`PDF must be under ${MAX_PDF_BYTES / (1024 * 1024)}MB — this one is ${(f.size / (1024 * 1024)).toFixed(1)}MB.`);
+      track("upload_failed", { errorCode: "pdf_too_large" });
       return;
     }
     setError(null);
     setFile(f);
     setPdfBytes(new Uint8Array(await f.arrayBuffer()));
     setFields([]);
+    track("document_uploaded");
   };
 
   const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -378,7 +411,10 @@ export default function Prepare() {
       }
       const detected = assignFieldsToSigners(candidates, signers.length, fieldIdCounter);
       fieldIdCounter += detected.length;
-      setFields((prev) => [...prev, ...detected]);
+      setFields((prev) => {
+        if (prev.length === 0) track("fields_added");
+        return [...prev, ...detected];
+      });
       setDetectFieldsNotice(
         `Placed ${detected.length} field${detected.length === 1 ? "" : "s"} automatically — review them and adjust or remove any that aren't right.`
       );
@@ -596,7 +632,10 @@ export default function Prepare() {
         hFrac: size.h,
         type: placingFieldType,
       };
-      setFields((prev) => [...prev, field]);
+      setFields((prev) => {
+        if (prev.length === 0) track("fields_added");
+        return [...prev, field];
+      });
     };
     window.addEventListener("mousemove", onMove);
     window.addEventListener("mouseup", onUp);
@@ -663,9 +702,12 @@ export default function Prepare() {
         signingMode: effectiveSigningMode,
         templateId: templateId ?? freeTemplateSlug ?? undefined,
       });
+      documentSentRef.current = true;
       navigate("/prepare/sent", { state: { docId, statusToken, signingMode: effectiveSigningMode } });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
+      const message = err instanceof Error ? err.message : "Something went wrong";
+      setError(message);
+      track("field_error", { errorCode: message.slice(0, 100) });
     } finally {
       setSubmitting(false);
     }

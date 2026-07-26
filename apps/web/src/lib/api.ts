@@ -461,7 +461,16 @@ export interface FunnelRow {
   count: number;
 }
 
-export async function fetchAdminAnalytics(days: number): Promise<{ days: number; rows: FunnelRow[] }> {
+export interface FunnelStepRow {
+  event: string;
+  totalCount: number;
+  distinctDocuments: number;
+  distinctTemplates: number;
+}
+
+export async function fetchAdminAnalytics(
+  days: number
+): Promise<{ days: number; rows: FunnelRow[]; funnelSteps: FunnelStepRow[] }> {
   const res = await apiFetch(`/api/admin/analytics?days=${days}`);
   return asJson(res);
 }

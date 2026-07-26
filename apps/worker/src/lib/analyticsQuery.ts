@@ -33,3 +33,43 @@ export async function queryFunnelSummary(env: Env, days: number): Promise<unknow
   const data = (await response.json()) as { data?: unknown[] };
   return data.data ?? [];
 }
+
+export interface FunnelStepRow {
+  event: string;
+  totalCount: number;
+  distinctDocuments: number;
+  distinctTemplates: number;
+}
+
+/** Per-event totals for the 3 named funnels (Activation/Completion/Template), not broken down by
+ *  route/day/country like queryFunnelSummary above. `distinctDocuments`/`distinctTemplates` exist
+ *  because `document_signed` fires once per signer, not once per completed document — a raw
+ *  SUM(double1) on that event overcounts any multi-signer chain. COUNT(DISTINCT blob7/blob8) with
+ *  the empty-string guard (rows that never carry a documentId/templateId, e.g. signup_started)
+ *  gives the correct per-document/per-template step counts for funnels that need them; callers
+ *  that don't (Activation, Template) just use totalCount instead. */
+export async function queryFunnelStepCounts(env: Env, days: number): Promise<FunnelStepRow[] | null> {
+  if (!env.CF_ANALYTICS_API_TOKEN || !env.CF_ACCOUNT_ID) return null;
+
+  const sql = `
+    SELECT
+      blob1 AS event,
+      SUM(double1) AS totalCount,
+      COUNT(DISTINCT CASE WHEN blob7 != '' THEN blob7 END) AS distinctDocuments,
+      COUNT(DISTINCT CASE WHEN blob8 != '' THEN blob8 END) AS distinctTemplates
+    FROM docracy_funnel
+    WHERE timestamp > now() - INTERVAL '${days}' DAY
+    GROUP BY event
+    ORDER BY event
+  `.trim();
+
+  const response = await fetch(`https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/analytics_engine/sql`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${env.CF_ANALYTICS_API_TOKEN}`, "Content-Type": "text/plain" },
+    body: sql,
+  });
+
+  if (!response.ok) return null;
+  const data = (await response.json()) as { data?: FunnelStepRow[] };
+  return data.data ?? [];
+}

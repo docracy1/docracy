@@ -41,6 +41,7 @@ import {
 } from "../lib/api";
 import { useNoIndex } from "../lib/useNoIndex";
 import { FREE_TEMPLATES } from "../lib/freeTemplates";
+import { track } from "../lib/track";
 
 /** Isolates the profile-menu popup so a render error there (e.g. from unexpected account/team
  *  data shape) shows an inline message instead of silently freezing the whole dashboard — this
@@ -508,6 +509,7 @@ export default function Dashboard() {
         setAccount(res.account);
         setIsAdmin(res.isAdmin);
         if (res.account) {
+          track("dashboard_loaded");
           const { documents } = await fetchMyDocuments();
           setDocuments(documents);
         }

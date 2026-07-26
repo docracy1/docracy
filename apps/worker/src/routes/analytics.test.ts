@@ -140,3 +140,88 @@ describe("POST /api/analytics/pageview", () => {
     expect(res.status).toBe(400);
   });
 });
+
+describe("POST /api/analytics/track", () => {
+  it("logs an allow-listed client event", async () => {
+    const calls: unknown[][] = [];
+    const { env } = makeMockEnv({
+      ANALYTICS: { writeDataPoint: (...args: unknown[]) => calls.push(args) } as any,
+    });
+
+    const res = await analytics.request(
+      "/track",
+      post({ event: "fields_added", route: "/prepare" }),
+      env,
+      MOCK_CTX
+    );
+
+    expect(res.status).toBe(200);
+    expect(eventsOf(calls)).toEqual(["fields_added"]);
+  });
+
+  it("rejects an event not on the client allow-list", async () => {
+    const { env } = makeMockEnv();
+    const res = await analytics.request("/track", post({ event: "document_signed" }), env, MOCK_CTX);
+    expect(res.status).toBe(400);
+  });
+
+  it("rejects an unknown event name", async () => {
+    const { env } = makeMockEnv();
+    const res = await analytics.request("/track", post({ event: "totally_made_up" }), env, MOCK_CTX);
+    expect(res.status).toBe(400);
+  });
+
+  it("rejects a missing event", async () => {
+    const { env } = makeMockEnv();
+    const res = await analytics.request("/track", post({}), env, MOCK_CTX);
+    expect(res.status).toBe(400);
+  });
+
+  it("skips logging (but still returns 200) when the notrack cookie is set", async () => {
+    const calls: unknown[][] = [];
+    const { env } = makeMockEnv({
+      ANALYTICS: { writeDataPoint: (...args: unknown[]) => calls.push(args) } as any,
+    });
+
+    const res = await analytics.request(
+      "/track",
+      post({ event: "dashboard_loaded" }, { cookie: "docracy_notrack=1" }),
+      env,
+      MOCK_CTX
+    );
+
+    expect(res.status).toBe(200);
+    const body: { ok: boolean; skipped?: boolean } = await res.json();
+    expect(body.skipped).toBe(true);
+    expect(calls).toEqual([]);
+  });
+
+  it("passes through documentId/templateId/errorCode when given", async () => {
+    const calls: unknown[][] = [];
+    const { env } = makeMockEnv({
+      ANALYTICS: { writeDataPoint: (...args: unknown[]) => calls.push(args) } as any,
+    });
+
+    await analytics.request(
+      "/track",
+      post({ event: "template_abandoned", templateId: "mutual-nda", templateCategory: "NDAs" }),
+      env,
+      MOCK_CTX
+    );
+
+    const [point] = calls[0] as [{ blobs: string[] }];
+    expect(point.blobs[7]).toBe("mutual-nda"); // blob8 = templateId
+    expect(point.blobs[13]).toBe("NDAs"); // blob14 = templateCategory
+  });
+
+  it("rejects invalid JSON", async () => {
+    const { env } = makeMockEnv();
+    const res = await analytics.request(
+      "/track",
+      { method: "POST", headers: { "Content-Type": "application/json" }, body: "not json" },
+      env,
+      MOCK_CTX
+    );
+    expect(res.status).toBe(400);
+  });
+});

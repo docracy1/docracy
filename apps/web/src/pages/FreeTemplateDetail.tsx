@@ -1,6 +1,8 @@
+import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getFreeTemplate } from "../lib/freeTemplates";
 import { usePageMeta } from "../lib/usePageMeta";
+import { track } from "../lib/track";
 
 export default function FreeTemplateDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -10,6 +12,16 @@ export default function FreeTemplateDetail() {
     template ? `${template.seoTitle} | Docracy` : "Template not found | Docracy",
     template?.description ?? "This template couldn't be found."
   );
+
+  // Fires both names from the spec's two overlapping funnels — Activation's "template_opened"
+  // and the Template funnel's "template_preview_opened" both describe this exact same moment
+  // (landing on a free template's own page), just from two different funnel viewpoints.
+  useEffect(() => {
+    if (!template) return;
+    track("template_opened", { templateId: template.slug, templateCategory: template.recurringCategory });
+    track("template_preview_opened", { templateId: template.slug, templateCategory: template.recurringCategory });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [template?.slug]);
 
   if (!template) {
     return (

@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { setCookie, deleteCookie } from "hono/cookie";
-import { queryFunnelSummary } from "../lib/analyticsQuery";
+import { queryFunnelSummary, queryFunnelStepCounts } from "../lib/analyticsQuery";
 import { NOTRACK_COOKIE_NAME, NOTRACK_COOKIE_MAX_AGE_SECONDS } from "../lib/analytics";
 import { requireAdminAccount, type AccountContext } from "../lib/auth";
 import { findAccountIdByEmail, markAccountEnterprise, markAccountPaid } from "../lib/billing";
@@ -69,8 +69,8 @@ admin.post("/grant-enterprise", requireAdminAccount, async (c) => {
 
 admin.get("/analytics", requireAdminAccount, async (c) => {
   const days = Math.min(90, Math.max(1, Number(c.req.query("days")) || 30));
-  const rows = await queryFunnelSummary(c.env, days);
-  if (rows === null) {
+  const [rows, funnelSteps] = await Promise.all([queryFunnelSummary(c.env, days), queryFunnelStepCounts(c.env, days)]);
+  if (rows === null || funnelSteps === null) {
     return c.json(
       {
         error:
@@ -80,7 +80,7 @@ admin.get("/analytics", requireAdminAccount, async (c) => {
       501
     );
   }
-  return c.json({ days, rows });
+  return c.json({ days, rows, funnelSteps });
 });
 
 // Toggles a cookie (see lib/analytics.ts) that opts the caller's own browser out of funnel
