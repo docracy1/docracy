@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const COLUMNS: Array<{ heading: string; links: Array<{ label: string; to: string; external?: boolean }> }> = [
   {
@@ -42,6 +42,13 @@ const COLUMNS: Array<{ heading: string; links: Array<{ label: string; to: string
 ];
 
 export default function Footer() {
+  // A 4-column marketing footer is exactly the kind of distraction the signing page's "no
+  // distraction, whitespace around the logo" requirement rules out — the person here is signing
+  // a document, not browsing Docracy's site, and often has no account of their own to click into
+  // any of these links with.
+  const location = useLocation();
+  if (location.pathname.startsWith("/sign/")) return null;
+
   return (
     <footer className="site-footer">
       <div className="container site-footer-inner">

@@ -1507,6 +1507,10 @@ export default function Prepare() {
                 Signer identity isn't verified — only use this for documents where that's acceptable.
               </p>
             </div>
+
+            <div style={{ display: "flex", justifyContent: "center", padding: "8px 0 0" }}>
+              <img src="/docracy-wordmark.png" alt="Docracy" style={{ height: 14, width: "auto", opacity: 0.6 }} />
+            </div>
           </div>
         </div>
       )}

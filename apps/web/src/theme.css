@@ -184,6 +184,12 @@ select {
   z-index: 100;
 }
 
+/* The signing page's stripped-down header (logo only, no nav) — extra vertical padding gives the
+   logo the "whitespace around it, no distraction" treatment that page specifically calls for. */
+.site-header-minimal {
+  padding: 24px;
+}
+
 .header-nav-link {
   font-size: 14px;
   font-weight: 500;

@@ -41,11 +41,35 @@ export default function Header() {
     }
   };
 
+  // The signing page is the one place a document's actual RECIPIENT sees this app — often someone
+  // with no Docracy account at all. Every bit of marketing chrome (nav links, sign-in/CTA, mobile
+  // menu) is pure distraction there, so it's stripped down to just the logo, per the "no
+  // distraction" requirement for that page specifically.
+  const isSignRoute = location.pathname.startsWith("/sign/");
+  // Everywhere else inside the actual product (as opposed to the marketing site around it), the
+  // logo drops from the marketing site's 40px down to a quieter in-product size, and clicking it
+  // goes back to the signed-in home (Dashboard) rather than out to the public landing page.
+  const isInAppRoute = ["/dashboard", "/prepare", "/status"].some((p) => location.pathname.startsWith(p));
+  const logoHeight = isSignRoute || isInAppRoute ? 24 : 40;
+  const logoLinkTo = isInAppRoute ? "/dashboard" : "/";
+
+  if (isSignRoute) {
+    return (
+      <header className="site-header site-header-minimal">
+        <div className="container" style={{ padding: 0, display: "flex", alignItems: "center" }}>
+          <Link to={logoLinkTo} style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
+            <img src="/docracy-wordmark.png" alt="Docracy" style={{ height: logoHeight, width: "auto" }} />
+          </Link>
+        </div>
+      </header>
+    );
+  }
+
   return (
     <header className="site-header">
       <div className="container" style={{ padding: 0, display: "flex", alignItems: "center", gap: 16 }}>
-        <Link to="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-          <img src="/docracy-wordmark.png" alt="Docracy" style={{ height: 40, width: "auto" }} />
+        <Link to={logoLinkTo} style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
+          <img src="/docracy-wordmark.png" alt="Docracy" style={{ height: logoHeight, width: "auto" }} />
         </Link>
         <div className="header-nav-right">
           {NAV_LINKS.map((link) => (
