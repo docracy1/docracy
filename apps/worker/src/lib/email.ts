@@ -1,4 +1,4 @@
-import { getWorkspaceSlug, resolveEmailLogoUrl } from "./branding";
+import { resolveEmailLogoUrl } from "./branding";
 import { mergePdfs } from "./pdf";
 import type { DocState, Env } from "@docracy/shared";
 
@@ -74,21 +74,21 @@ const MUTED = "#6b7785";
 
 /** Shared branded shell for Docracy's outbound email — a plain white card on a light gray
  *  background, table-based layout since email clients don't reliably support flexbox/grid.
- *  `customLogoUrl`/`workspaceSlug` replace the Docracy wordmark with a workspace's own branding —
- *  only ever passed by sendSigningInvite, since that's the one email a document's actual signer
- *  sees; Docracy's own transactional emails (magic link, team invite) always keep Docracy's own
- *  branding. */
-function emailShell(appUrl: string, bodyHtml: string, customLogoUrl?: string | null, workspaceSlug?: string | null): string {
-  const displayHost = appUrl.replace(/^https?:\/\//, "");
+ *
+ *  Header: logo only, no adjacent text, no caption — `customLogoUrl` swaps in a workspace's own
+ *  branding here (only ever passed by sendSigningInvite, since that's the one email a document's
+ *  actual signer sees). Footer: always Docracy's own logo regardless of `customLogoUrl` — a
+ *  neutral "sent via Docracy.io" attribution distinct from whatever brand the header shows, plus
+ *  a plain-text sign-off with no personal name (never "Odo"/founder/team — see SIGN_OFF below). */
+function emailShell(appUrl: string, bodyHtml: string, customLogoUrl?: string | null): string {
   return `
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f5f7fa;padding:32px 16px;font-family:Arial,Helvetica,sans-serif;">
   <tr>
     <td align="center">
       <table role="presentation" width="480" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:8px;border:1px solid #e6e9ee;max-width:480px;width:100%;">
         <tr>
-          <td style="padding:28px 32px 8px 32px;">
-            <img src="${customLogoUrl ?? `${appUrl}/docracy-wordmark.png`}" alt="${customLogoUrl ? "" : "Docracy"}" height="26" style="display:block;" />
-            ${workspaceSlug ? `<div style="font-size:12px;color:${MUTED};margin-top:4px;">${workspaceSlug}</div>` : ""}
+          <td align="left" style="padding:28px 32px 8px 32px;">
+            <img src="${customLogoUrl ?? `${appUrl}/docracy-wordmark.png`}" alt="${customLogoUrl ? "" : "Docracy.io"}" width="100" style="display:block;width:100px;max-width:100px;height:auto;" />
           </td>
         </tr>
         <tr>
@@ -99,9 +99,13 @@ function emailShell(appUrl: string, bodyHtml: string, customLogoUrl?: string | n
       </table>
       <table role="presentation" width="480" cellpadding="0" cellspacing="0" style="max-width:480px;width:100%;">
         <tr>
-          <td style="padding:20px 32px 0 32px;text-align:center;font-size:12px;color:${MUTED};line-height:1.6;">
-            ${displayHost}<br />
-            Free, no-signup electronic signatures that disappear when the chain is done.
+          <td align="center" style="padding:20px 32px 0 32px;">
+            <img src="${appUrl}/docracy-wordmark.png" alt="Docracy.io" width="70" style="display:block;width:70px;max-width:70px;height:auto;margin:0 auto 8px;" />
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:0 32px 0 32px;text-align:center;font-size:12px;color:${MUTED};line-height:1.6;">
+            Docracy.io — Simple document signing
           </td>
         </tr>
       </table>
@@ -135,14 +139,13 @@ export async function sendSigningInvite(env: Env, doc: DocState, order: number, 
     ${ctaButton(link, "Sign here")}
     <p style="margin:0;font-size:13px;color:${MUTED};line-height:1.5;">${statusLines(doc)}</p>
     <p style="margin:24px 0 0 0;font-size:14px;color:${INK};">
-      We'll let you know once everyone's signed,<br />The Docracy team
+      We'll let you know once everyone's signed.
     </p>
   `;
 
   const subject = doc.customSubject?.trim() || "Ready to sign — you have a document waiting";
   const customLogoUrl = await resolveEmailLogoUrl(env, doc.accountId);
-  const workspaceSlug = doc.accountId ? await getWorkspaceSlug(env, doc.accountId) : null;
-  await send(env, signer.email, subject, emailShell(env.PUBLIC_APP_URL, body, customLogoUrl, workspaceSlug));
+  await send(env, signer.email, subject, emailShell(env.PUBLIC_APP_URL, body, customLogoUrl));
 }
 
 export async function sendPreparerStatusLink(env: Env, preparerEmail: string, statusToken: string): Promise<void> {
@@ -255,48 +258,40 @@ function templateList(items: string[]): string {
     .join("")}</ul>`;
 }
 
-/** The 4-step onboarding drip, scheduled by lib/onboardingEmails.ts at account creation and sent
- *  by its cron sweep at 3 minutes / 4 hours / 24 hours / 3 days — each step skipped once the
- *  account has actually sent a document (checked live, not tracked on this email itself). */
+// No personal name in the sign-off — not a founder, not "Odo", not "Team" or "Support". Kept as
+// one constant so it can't drift between templates.
+const SIGN_OFF = `<p style="margin:16px 0 0 0;font-size:15px;color:${INK};">Best,<br>Docracy.io</p>`;
+
+/** The onboarding drip, scheduled by lib/onboardingEmails.ts at account creation and sent by its
+ *  cron sweep at 3 minutes / 24 hours / 3 days — each step skipped once the account has actually
+ *  sent a document (checked live, not tracked on this email itself). The former 4-hour "step 2"
+ *  was retired: that slot's content ("you haven't sent anything yet") is superseded by the
+ *  per-document preparer-notification family below, which covers the case where a document *was*
+ *  sent but the recipient hasn't acted — a more specific, more useful nudge than a generic timer. */
 export async function sendOnboardingStep1(env: Env, email: string): Promise<void> {
   const body = `
-    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">Welcome to Docracy.io</p>
+    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">Your first document takes 30 seconds</p>
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
-      Welcome to Docracy.io — built for quick, low-stakes agreements.
+      Thanks for trying Docracy.io — a simple way to send quick agreements without accounts or complexity.
     </p>
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
-      You can send your first document right now. No setup, no accounts, no friction:
-    </p>
-    <p style="margin:12px 0 0 0;font-size:15px;font-weight:bold;color:${INK};">Upload → add fields → send → done</p>
-    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};">Or pick a ready-to-use template:</p>
-    ${templateList(["NDA", "Client contract", "Consulting agreement", "Onboarding docs", "Vendor agreement"])}
-    <p style="margin:0 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
-      Try it once — most users finish their first document in under a minute.
-    </p>
-    ${ctaButton(env.PUBLIC_APP_URL, "Send your first document")}
-    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};">Best,<br>Reinhold</p>
-  `;
-  await send(env, email, "Send your first agreement in minutes", emailShell(env.PUBLIC_APP_URL, body), env.FEEDBACK_EMAIL);
-}
-
-export async function sendOnboardingStep2(env: Env, email: string): Promise<void> {
-  const body = `
-    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">Still need to send your first document?</p>
-    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
-      You haven't sent your first document yet. It only takes 30 seconds and helps you see how fast
-      Docracy.io works.
+      Most users start by sending one small document. It takes less than 30 seconds:
     </p>
     <p style="margin:12px 0 0 0;font-size:15px;font-weight:bold;color:${INK};">
-      Upload your first document → Add signature fields → Send it → Done
+      Upload your first document → Add signature fields → Send it to your client or team → Done
     </p>
-    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};">Or start with a template:</p>
-    ${templateList(["NDA", "Client contract", "Onboarding agreement", "Vendor agreement", "Simple agreement"])}
-    <p style="margin:0;font-size:15px;color:${INK};">Send your first document now:</p>
-    ${ctaButton(env.PUBLIC_APP_URL, "Send your first document")}
-    <p style="margin:0 0 0 0;font-size:14px;color:${MUTED};">If you need help, just reply.</p>
-    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};">Best,<br>Reinhold</p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};">
+      If you don't have a document ready, you can also start with a template:
+    </p>
+    ${templateList(["NDA (one-way or mutual)", "Client contract", "Onboarding agreement", "Vendor agreement", "Simple personal agreement"])}
+    <p style="margin:0;font-size:15px;color:${INK};line-height:1.5;">
+      Send your first document now and see how fast the workflow is.
+    </p>
+    ${ctaButton(env.PUBLIC_APP_URL, "Upload document")}
+    <p style="margin:0;font-size:14px;color:${MUTED};">If you need help, just reply to this email.</p>
+    ${SIGN_OFF}
   `;
-  await send(env, email, "Still need to send your first document?", emailShell(env.PUBLIC_APP_URL, body), env.FEEDBACK_EMAIL);
+  await send(env, email, "Your first document takes 30 seconds", emailShell(env.PUBLIC_APP_URL, body), env.FEEDBACK_EMAIL);
 }
 
 export async function sendOnboardingStep3(env: Env, email: string): Promise<void> {
@@ -311,7 +306,7 @@ export async function sendOnboardingStep3(env: Env, email: string): Promise<void
     </p>
     ${ctaButton(env.PUBLIC_APP_URL, "Send your first document")}
     <p style="margin:0;font-size:14px;color:${MUTED};">If you prefer templates, you can use one instantly.</p>
-    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};">Best,<br>Reinhold</p>
+    ${SIGN_OFF}
   `;
   await send(env, email, "Try sending one quick document", emailShell(env.PUBLIC_APP_URL, body), env.FEEDBACK_EMAIL);
 }
@@ -327,7 +322,7 @@ export async function sendOnboardingStep4(env: Env, email: string): Promise<void
     ${templateList(["NDA", "Client contract", "Service agreement", "Onboarding docs", "Rental agreement", "Work order"])}
     ${ctaButton(env.PUBLIC_APP_URL, "Send a document")}
     <p style="margin:0;font-size:14px;color:${MUTED};">Happy to help if you need anything.</p>
-    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};">Best,<br>Reinhold</p>
+    ${SIGN_OFF}
   `;
   await send(env, email, "Want to give Docracy.io a quick try?", emailShell(env.PUBLIC_APP_URL, body), env.FEEDBACK_EMAIL);
 }

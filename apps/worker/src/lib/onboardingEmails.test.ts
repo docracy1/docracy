@@ -84,10 +84,10 @@ describe("runOnboardingEmailSweep", () => {
     expect(row?.step1_sent_at).toBe(firstSentAt);
   });
 
-  it("sends step 2 (4h) only once the account has NOT sent a document", async () => {
+  it("sends step 3 (24h) only once the account has NOT sent a document", async () => {
     const { env, d1 } = makeMockEnv();
     await insertAccount(d1, "acct-sent", "sent@example.com");
-    await insertOnboardingRow(d1, "acct-sent", "sent@example.com", 5 * HOUR);
+    await insertOnboardingRow(d1, "acct-sent", "sent@example.com", 25 * HOUR);
     await d1
       .prepare(
         `INSERT INTO documents (doc_id, account_id, title, status, preparer_signs, created_at, expires_at) VALUES (?, ?, ?, ?, 0, ?, ?)`
@@ -96,20 +96,20 @@ describe("runOnboardingEmailSweep", () => {
       .run();
 
     await insertAccount(d1, "acct-not-sent", "notsent@example.com");
-    await insertOnboardingRow(d1, "acct-not-sent", "notsent@example.com", 5 * HOUR);
+    await insertOnboardingRow(d1, "acct-not-sent", "notsent@example.com", 25 * HOUR);
 
     await runOnboardingEmailSweep(env);
 
-    const sentRow = (await d1.prepare(`SELECT step2_sent_at FROM onboarding_emails WHERE account_id = ?`).bind("acct-sent").first()) as {
-      step2_sent_at: string | null;
+    const sentRow = (await d1.prepare(`SELECT step3_sent_at FROM onboarding_emails WHERE account_id = ?`).bind("acct-sent").first()) as {
+      step3_sent_at: string | null;
     } | null;
     const notSentRow = (await d1
-      .prepare(`SELECT step2_sent_at FROM onboarding_emails WHERE account_id = ?`)
+      .prepare(`SELECT step3_sent_at FROM onboarding_emails WHERE account_id = ?`)
       .bind("acct-not-sent")
-      .first()) as { step2_sent_at: string | null } | null;
+      .first()) as { step3_sent_at: string | null } | null;
 
-    expect(sentRow?.step2_sent_at).toBeNull(); // already sent a document — no nudge
-    expect(notSentRow?.step2_sent_at).not.toBeNull(); // never sent one — gets the nudge
+    expect(sentRow?.step3_sent_at).toBeNull(); // already sent a document — no nudge
+    expect(notSentRow?.step3_sent_at).not.toBeNull(); // never sent one — gets the nudge
   });
 
   it("sends only the most-escalated due step per account in a single sweep (long cron gap)", async () => {

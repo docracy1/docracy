@@ -1,12 +1,12 @@
 import type { Env } from "@docracy/shared";
-import { sendOnboardingStep1, sendOnboardingStep2, sendOnboardingStep3, sendOnboardingStep4 } from "./email";
+import { sendOnboardingStep1, sendOnboardingStep3, sendOnboardingStep4 } from "./email";
 
 const MINUTE = 60 * 1000;
 const HOUR = 60 * MINUTE;
 const DAY = 24 * HOUR;
 
 interface Step {
-  column: "step1_sent_at" | "step2_sent_at" | "step3_sent_at" | "step4_sent_at";
+  column: "step1_sent_at" | "step3_sent_at" | "step4_sent_at";
   delayMs: number;
   send: (env: Env, email: string) => Promise<void>;
 }
@@ -15,10 +15,14 @@ interface Step {
 // given account (see runOnboardingEmailSweep) — the only way an earlier step could still be
 // pending when a later one is *also* due is if the cron didn't run for a while, in which case the
 // later, more urgent email is the more useful one to actually land.
+//
+// step2_sent_at still exists as a dormant column in the onboarding_emails table (see migration
+// 0013) but is deliberately unused now — the 4-hour "you haven't sent anything yet" nudge it used
+// to drive was retired in favor of the per-document preparer-notification family in email.ts,
+// which reacts to what actually happened (recipient hasn't opened/signed) instead of a blind timer.
 const STEPS: Step[] = [
   { column: "step4_sent_at", delayMs: 3 * DAY, send: sendOnboardingStep4 },
   { column: "step3_sent_at", delayMs: 24 * HOUR, send: sendOnboardingStep3 },
-  { column: "step2_sent_at", delayMs: 4 * HOUR, send: sendOnboardingStep2 },
   { column: "step1_sent_at", delayMs: 3 * MINUTE, send: sendOnboardingStep1 },
 ];
 
