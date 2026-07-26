@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getBlogPost } from "../lib/blog";
+import { getArticle, type ArticleBlock } from "../lib/articles";
 import { getCompetitor, formatUsd, DOCRACY_PRICE } from "../lib/competitors";
 import { fetchBlogPost, type DynamicBlogPostDetail } from "../lib/api";
 import { usePageMeta } from "../lib/usePageMeta";
@@ -18,6 +19,26 @@ function BodyParagraphs({ body }: { body: string }) {
         .map((p, i) => (
           <p key={i}>{p}</p>
         ))}
+    </>
+  );
+}
+
+function ArticleBlocks({ blocks }: { blocks: ArticleBlock[] }) {
+  return (
+    <>
+      {blocks.map((block, i) =>
+        block.type === "list" ? (
+          <ul key={i} style={{ margin: "0 0 1em", paddingLeft: 20 }}>
+            {block.items.map((item, j) => (
+              <li key={j} style={{ marginBottom: 4 }}>
+                {item}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p key={i}>{block.text}</p>
+        )
+      )}
     </>
   );
 }
@@ -49,21 +70,43 @@ function DynamicPostView({ post }: { post: DynamicBlogPostDetail }) {
 export default function BlogPostDetail() {
   const { slug } = useParams<{ slug: string }>();
   const staticPost = slug ? getBlogPost(slug) : undefined;
+  const article = !staticPost && slug ? getArticle(slug) : undefined;
 
   const [dynamicPost, setDynamicPost] = useState<DynamicBlogPostDetail | null>(null);
   const [dynamicNotFound, setDynamicNotFound] = useState(false);
 
   useEffect(() => {
-    if (staticPost || !slug) return;
+    if (staticPost || article || !slug) return;
     fetchBlogPost(slug)
       .then((res) => setDynamicPost(res.post))
       .catch(() => setDynamicNotFound(true));
-  }, [slug, staticPost]);
+  }, [slug, staticPost, article]);
 
   usePageMeta(
-    staticPost ? `${staticPost.title} | Docracy` : "Loading… | Docracy",
-    staticPost?.description ?? "This post couldn't be found."
+    staticPost || article ? `${(staticPost ?? article)!.title} | Docracy` : "Loading… | Docracy",
+    (staticPost ?? article)?.description ?? "This post couldn't be found."
   );
+
+  if (article) {
+    return (
+      <div className="container" style={{ maxWidth: 720 }}>
+        <p style={{ fontSize: 13 }}>
+          <Link to="/blog">← All posts</Link>
+        </p>
+        <div style={{ fontSize: 12, color: "var(--mute)", marginBottom: 4 }}>{article.publishedDate}</div>
+        <h1>{article.title}</h1>
+        <ArticleBlocks blocks={article.blocks} />
+        <div style={{ display: "flex", gap: 12, marginTop: 24, flexWrap: "wrap" }}>
+          <Link to="/prepare" className="btn-primary" style={{ textDecoration: "none" }}>
+            Try Docracy free
+          </Link>
+          <Link to="/pricing" className="btn-secondary" style={{ textDecoration: "none" }}>
+            See pricing
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   if (staticPost) {
     const competitor = getCompetitor(staticPost.competitorKey);

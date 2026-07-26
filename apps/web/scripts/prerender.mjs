@@ -64,6 +64,18 @@ await build({
 const { BLOG_POSTS } = require(blogBundleFile);
 fs.unlinkSync(blogBundleFile);
 
+const articlesBundleFile = path.join(__dirname, "_articles.bundle.cjs");
+await build({
+  entryPoints: [path.join(root, "src/lib/articles.ts")],
+  outfile: articlesBundleFile,
+  bundle: true,
+  platform: "node",
+  format: "cjs",
+  logLevel: "warning",
+});
+const { ARTICLES } = require(articlesBundleFile);
+fs.unlinkSync(articlesBundleFile);
+
 const marketingBundleFile = path.join(__dirname, "_marketingPages.bundle.cjs");
 await build({
   entryPoints: [path.join(root, "src/lib/marketingPages.ts")],
@@ -153,6 +165,12 @@ const routes = [
     outFile: `blog/${p.slug}.html`,
     title: `${p.title} | Docracy`,
     description: p.description,
+  })),
+  ...ARTICLES.map((a) => ({
+    urlPath: `/blog/${a.slug}`,
+    outFile: `blog/${a.slug}.html`,
+    title: `${a.title} | Docracy`,
+    description: a.description,
   })),
   ...FREE_TEMPLATES.map((t) => ({
     urlPath: `/free-templates/${t.slug}`,
