@@ -136,6 +136,36 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://docracy.io/free-templates/employment-agreement</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/free-templates/rental-agreement</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/free-templates/authorization-form</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/free-templates/purchase-order</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/free-templates/work-order</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/free-templates/delivery-confirmation</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://docracy.io/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
