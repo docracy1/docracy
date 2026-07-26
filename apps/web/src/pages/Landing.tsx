@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import PricingCalculator from "../components/PricingCalculator";
+import FirstDocumentPrompt from "../components/FirstDocumentPrompt";
 
 /** Abstract illustration of the product (a document, either freshly signed or having its fields
  *  auto-detected) — deliberately not a literal app screenshot, which would need re-cropping every
@@ -319,6 +320,8 @@ export default function Landing() {
         </div>
       </div>
 
+      <FirstDocumentPrompt />
+
       <div className="core-features-band">
         <div className="core-features-inner">
           <h2 style={{ fontSize: 26, marginBottom: 8, textAlign: "center" }}>
@@ -343,6 +346,12 @@ export default function Landing() {
           </div>
         </div>
       </div>
+
+      {/* "Repeated under Feature #1" per spec — spliced directly between the first and second
+          feature cards would break the 2-column CSS grid (a full-span item here forces every
+          later card down a row, out of alignment), so this sits right after the features section
+          that Feature #1 leads instead — same visual position, without wrecking the grid. */}
+      <FirstDocumentPrompt />
 
       <div className="spotlight-band">
         <div className="spotlight-inner">
@@ -476,6 +485,8 @@ export default function Landing() {
           identity-verified signatures, use a compliance-grade e-signature service instead.
         </p>
       </div>
+
+      <FirstDocumentPrompt mobileOnly />
     </div>
   );
 }

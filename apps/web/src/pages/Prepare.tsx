@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import PdfViewer from "../components/PdfViewer";
 import {
   analyzeDocumentRisks,
@@ -64,6 +64,7 @@ function SidebarHeading({ label, count }: { label: string; count?: number }) {
 
 export default function Prepare() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const templateId = searchParams.get("template");
   const freeTemplateSlug = searchParams.get("freeTemplate");
@@ -193,12 +194,9 @@ export default function Prepare() {
       .finally(() => setLoadingTemplate(false));
   }, [freeTemplateSlug]);
 
-  const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const f = e.target.files?.[0];
-    if (!f) return;
+  const acceptFile = async (f: File) => {
     if (f.size > MAX_PDF_BYTES) {
       setError(`PDF must be under ${MAX_PDF_BYTES / (1024 * 1024)}MB — this one is ${(f.size / (1024 * 1024)).toFixed(1)}MB.`);
-      e.target.value = "";
       return;
     }
     setError(null);
@@ -206,6 +204,26 @@ export default function Prepare() {
     setPdfBytes(new Uint8Array(await f.arrayBuffer()));
     setFields([]);
   };
+
+  const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    await acceptFile(f);
+    if (f.size > MAX_PDF_BYTES) e.target.value = "";
+  };
+
+  // FirstDocumentPrompt's upload modal (on the homepage) hands its file in via router state
+  // rather than a shared upload endpoint — simplest way to carry a live File object across a
+  // client-side navigation without round-tripping it through the network first. Consumed once on
+  // mount, then replaced out of history so navigating back here later doesn't re-trigger it.
+  useEffect(() => {
+    const uploadedFile = (location.state as { uploadedFile?: File } | null)?.uploadedFile;
+    if (uploadedFile instanceof File) {
+      acceptFile(uploadedFile);
+      navigate(location.pathname + location.search, { replace: true, state: null });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const updateSigner = (order: number, patch: Partial<SignerInput>) => {
     setSigners((prev) => prev.map((s) => (s.order === order ? { ...s, ...patch } : s)));
