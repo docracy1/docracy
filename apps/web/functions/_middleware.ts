@@ -33,9 +33,16 @@ const TRACKED_ROUTES = new Set([
   ...STATIC_TEMPLATE_SLUGS.map((slug) => `/free-templates/${slug}`),
 ]);
 
+// Blog posts are published via the self-serve CMS (no deploy needed), so their slugs can't be
+// enumerated in a fixed set the way the routes above are — matched by prefix instead. The worker's
+// own isTrackedRoute (routes/analytics.ts) applies the identical rule as a second gate.
+function isTrackedRoute(pathname: string): boolean {
+  return TRACKED_ROUTES.has(pathname) || pathname === "/blog" || pathname.startsWith("/blog/");
+}
+
 export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => {
   const url = new URL(context.request.url);
-  if (TRACKED_ROUTES.has(url.pathname)) {
+  if (isTrackedRoute(url.pathname)) {
     context.waitUntil(
       fetch(`${WORKER_URL}/api/analytics/pageview`, {
         method: "POST",
@@ -45,6 +52,10 @@ export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => 
           // Forwarded so the worker can see the notrack opt-out cookie (see lib/analytics.ts) —
           // without this, a browser that's opted out would still get counted here.
           cookie: context.request.headers.get("cookie") ?? "",
+          // The visitor's previous page (if any) — used for referral_source_detected and the
+          // Traffic funnel. Sent as a custom header rather than relying on this fetch's own Referer
+          // (which would describe this Pages Function calling the worker, not the original visitor).
+          "x-referrer": context.request.headers.get("referer") ?? "",
         },
         body: JSON.stringify({ route: url.pathname }),
       }).catch(() => {})

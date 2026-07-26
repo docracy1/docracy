@@ -35,10 +35,14 @@ export interface Signer {
    *  since lib/completionEmails.ts's preparer nudges need it regardless of account status. Optional
    *  so signers created before this field existed still deserialize as "not yet viewed". */
   viewedAt?: string | null;
-  /** Which preparer-facing completion nudges (lib/completionEmails.ts) have already been sent for
-   *  this signer, so a sweep never re-sends the same nudge twice. Optional/absent means none sent
-   *  yet — always read via `signer.completionNudgesSent ?? []`. */
-  completionNudgesSent?: ("not_opened" | "viewed_not_signed")[];
+  /** Which preparer-facing completion nudges AND Completion-funnel analytics checkpoints
+   *  (lib/completionEmails.ts) have already fired for this signer, so a sweep never re-sends/
+   *  re-logs the same one twice. "not_opened"/"viewed_not_signed" gate the actual preparer email
+   *  (only sent when the doc has a preparerEmail); the "analytics_*" markers gate a funnel-only
+   *  trackEvent call that fires for every document regardless of preparerEmail, at different (2h/
+   *  4h) thresholds than the email nudges use. Optional/absent means none fired yet — always read
+   *  via `signer.completionNudgesSent ?? []`. */
+  completionNudgesSent?: ("not_opened" | "viewed_not_signed" | "analytics_not_opened_2h" | "analytics_not_signed_4h")[];
 }
 
 export type AuditEventType = "created" | "invite_sent" | "consented" | "signed" | "completed";
@@ -112,6 +116,12 @@ export interface Env {
   DOCRACY_DB?: D1Database;
   TOKEN_SECRET: string;
   RESEND_API_KEY?: string;
+  /** Signing secret for Resend's outbound webhooks (email.opened/clicked/bounced — see
+   *  routes/resendWebhook.ts), in Resend's "whsec_..." Svix format. Absent until manually copied
+   *  from the Resend dashboard's webhook config; that route 401s every request until it's set,
+   *  same graceful-degradation pattern as STRIPE_WEBHOOK_SECRET below. Set with:
+   *  `wrangler secret put RESEND_WEBHOOK_SECRET`. */
+  RESEND_WEBHOOK_SECRET?: string;
   /** Cloudflare Workers AI binding, used for AI-first support triage — see lib/support.ts. Free
    *  (10k neurons/day), requires no external account or API key, so unlike the optional secrets
    *  below this is always present. */

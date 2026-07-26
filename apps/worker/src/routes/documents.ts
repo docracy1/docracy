@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { getCookie } from "hono/cookie";
 import { PDFDocument } from "pdf-lib";
 import { createDocumentCore } from "../lib/documentCreation";
-import { NOTRACK_COOKIE_NAME } from "../lib/analytics";
+import { NOTRACK_COOKIE_NAME, trackEvent } from "../lib/analytics";
 import { checkRateLimit, checkInviteRateLimit } from "../lib/ratelimit";
 import { optionalAccount, type AccountContext } from "../lib/auth";
 import type { DocField, Env } from "@docracy/shared";
@@ -15,6 +15,10 @@ interface CreateDocumentBody {
   customSubject?: string;
   customMessage?: string;
   signingMode?: "sequential" | "parallel";
+  /** Set only when these fields were loaded from a saved (paid-tier) template — see
+   *  routes/templates.ts's GET /:id, which fires the matching template_started event. Purely for
+   *  the Template funnel's template_completed step; never persisted on the resulting document. */
+  templateId?: string;
 }
 
 const MAX_PDF_BYTES = 15 * 1024 * 1024; // 15MB
@@ -30,9 +34,26 @@ const documents = new Hono<{ Bindings: Env; Variables: Variables }>();
 documents.post("/", optionalAccount, async (c) => {
   const account = c.get("account");
   const ip = c.req.header("CF-Connecting-IP") ?? "unknown";
+
+  // Logs the funnel event before returning, for the higher-signal failure modes worth tracking
+  // for conversion analysis (a PDF that can't be used at all, rate limits, paid-tier gating) — not
+  // for plain malformed-request shapes (bad JSON, missing multipart fields), which represent a
+  // broken client rather than a real visitor hitting a real funnel obstacle.
+  const failWith = <T>(event: "upload_failed" | "send_failed", body: T, status: 400 | 402 | 429, errorCode: string) => {
+    trackEvent(c.env, {
+      event,
+      route: "prepare",
+      userAgent: c.req.header("user-agent"),
+      country: c.req.header("CF-IPCountry"),
+      userId: account?.workspaceId ?? null,
+      errorCode,
+    });
+    return c.json(body, status);
+  };
+
   const allowed = await checkRateLimit(c.env, ip);
   if (!allowed) {
-    return c.json({ error: "Too many documents created recently. Please try again later." }, 429);
+    return failWith("send_failed", { error: "Too many documents created recently. Please try again later." }, 429, "rate_limited");
   }
 
   const form = await c.req.parseBody();
@@ -44,13 +65,13 @@ documents.post("/", optionalAccount, async (c) => {
   }
 
   if (pdfFile.size > MAX_PDF_BYTES) {
-    return c.json({ error: `PDF must be under ${MAX_PDF_BYTES / (1024 * 1024)}MB` }, 400);
+    return failWith("upload_failed", { error: `PDF must be under ${MAX_PDF_BYTES / (1024 * 1024)}MB` }, 400, "pdf_too_large");
   }
 
   const pdfBytes = new Uint8Array(await pdfFile.arrayBuffer());
   const header = new TextDecoder().decode(pdfBytes.slice(0, 5));
   if (header !== "%PDF-") {
-    return c.json({ error: "That file doesn't look like a valid PDF" }, 400);
+    return failWith("upload_failed", { error: "That file doesn't look like a valid PDF" }, 400, "not_a_pdf");
   }
 
   // A real parse, not just the header sniff above — the header check alone lets a corrupt or
@@ -61,7 +82,7 @@ documents.post("/", optionalAccount, async (c) => {
     const probe = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
     pageCount = probe.getPageCount();
   } catch {
-    return c.json({ error: "That PDF couldn't be read — it may be corrupted" }, 400);
+    return failWith("upload_failed", { error: "That PDF couldn't be read — it may be corrupted" }, 400, "pdf_unreadable");
   }
 
   let meta: CreateDocumentBody;
@@ -77,14 +98,16 @@ documents.post("/", optionalAccount, async (c) => {
     return c.json({ error: "At least one signer is required" }, 400);
   }
   if (meta.signers.length > maxSigners) {
-    return c.json(
+    return failWith(
+      "send_failed",
       { error: `Free plan supports up to ${maxSigners} signers. Sign in with a paid account for unlimited signers.` },
-      402
+      402,
+      "signer_cap_exceeded"
     );
   }
   // PIN-protected signing links are a paid-tier feature — same 402 pattern as the signer cap above.
   if (meta.signers.some((s) => s.pin) && !account?.isPaid) {
-    return c.json({ error: "PIN-protected signing links require a paid account." }, 402);
+    return failWith("send_failed", { error: "PIN-protected signing links require a paid account." }, 402, "pin_requires_paid");
   }
 
   const seenEmails = new Set<string>();
@@ -152,9 +175,11 @@ documents.post("/", optionalAccount, async (c) => {
   if (meta.preparerEmail) recipientEmails.add(meta.preparerEmail.trim().toLowerCase());
   for (const email of recipientEmails) {
     if (!(await checkInviteRateLimit(c.env, email))) {
-      return c.json(
+      return failWith(
+        "send_failed",
         { error: "Too many documents have recently been sent to one of these email addresses. Please try again later." },
-        429
+        429,
+        "invite_rate_limited"
       );
     }
   }
@@ -181,6 +206,7 @@ documents.post("/", optionalAccount, async (c) => {
     customSubject: meta.customSubject?.trim() || undefined,
     customMessage: meta.customMessage?.trim() || undefined,
     signingMode: meta.signingMode,
+    templateId: meta.templateId,
   });
 
   return c.json({ docId, statusToken });

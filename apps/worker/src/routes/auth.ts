@@ -11,6 +11,7 @@ import {
   sessionCookieOptions,
   type AccountContext,
 } from "../lib/auth";
+import { trackEvent } from "../lib/analytics";
 import type { Env } from "@docracy/shared";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -34,6 +35,15 @@ auth.post("/request-link", async (c) => {
   const ip = c.req.header("CF-Connecting-IP") ?? null;
   const result = await requestMagicLink(c.env, c.executionCtx, email, ip);
   if (!result.ok) return c.json({ error: result.error }, 400);
+  // Fired for every request, new account or returning login alike — there's no way to know which
+  // without a D1 lookup this route doesn't otherwise need, and a broad "auth flow started" signal
+  // is still useful for the Activation funnel even with that overlap.
+  trackEvent(c.env, {
+    event: "signup_started",
+    route: "auth",
+    userAgent: c.req.header("user-agent"),
+    country: c.req.header("CF-IPCountry"),
+  });
   return c.json({ ok: true });
 });
 

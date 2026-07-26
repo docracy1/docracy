@@ -17,6 +17,7 @@ import aiRoute from "./routes/ai";
 import analyticsRoute from "./routes/analytics";
 import adminRoute from "./routes/admin";
 import statusRoute from "./routes/status";
+import resendWebhook from "./routes/resendWebhook";
 import { blogPostsAdmin, blogPostsPublic } from "./routes/blogPosts";
 import { runReminderSweep } from "./lib/reminders";
 import { reconcileD1Index } from "./lib/index-d1";
@@ -68,6 +69,7 @@ app.route("/api/admin", adminRoute);
 app.route("/api/admin/blog-posts", blogPostsAdmin);
 app.route("/api/blog-posts", blogPostsPublic);
 app.route("/api/status", statusRoute);
+app.route("/api/webhooks/resend", resendWebhook);
 
 // The frequent cron (see wrangler.toml's second crons entry) exists to give the onboarding email
 // drip and the preparer completion-nudge sweep minute-scale granularity (both have hour-scale

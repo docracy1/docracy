@@ -426,7 +426,11 @@ export async function generateContract(prompt: string): Promise<GeneratedAgreeme
 }
 
 export interface FunnelRow {
-  event: "page_view" | "document_created" | "document_completed";
+  // Loosely typed rather than an exhaustive literal union — see apps/worker/src/lib/analytics.ts's
+  // FunnelEvent for the full, larger set this can now be; keeping this in lockstep would just be
+  // maintenance drift for a value only ever compared against string literals below, never switched
+  // on exhaustively.
+  event: string;
   route: string;
   traffic_type: "human" | "bot";
   bot_name: string;

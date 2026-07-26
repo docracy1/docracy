@@ -5,6 +5,7 @@ import type { Env } from "@docracy/shared";
 import { sendMagicLink } from "./email";
 import { checkAdminLoginRateLimit, checkMagicLinkRateLimit } from "./ratelimit";
 import { scheduleOnboardingEmails } from "./onboardingEmails";
+import { trackEvent } from "./analytics";
 
 const MAGIC_LINK_TTL_SECONDS = 15 * 60; // 15 minutes
 export const SESSION_TTL_SECONDS = 30 * 24 * 60 * 60; // 30 days
@@ -147,6 +148,7 @@ async function findOrCreateAccount(
       console.error("Onboarding email scheduling failed (non-fatal):", err)
     )
   );
+  trackEvent(env, { event: "signup_completed", userId: id });
 
   return { id, isPaid: false, isEnterprise: false };
 }

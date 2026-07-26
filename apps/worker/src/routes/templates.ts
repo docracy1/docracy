@@ -3,6 +3,7 @@ import { PDFDocument } from "pdf-lib";
 import { requirePaidAccount, type AccountContext } from "../lib/auth";
 import { createTemplate, listTemplates, getTemplate, deleteTemplate } from "../lib/templates";
 import { bytesToBase64 } from "../lib/base64";
+import { trackEvent } from "../lib/analytics";
 import type { DocField, Env } from "@docracy/shared";
 
 interface CreateTemplateBody {
@@ -108,10 +109,16 @@ templates.get("/:id", requirePaidAccount, async (c) => {
     return c.json({ error: "Not available on this deployment yet." }, 501);
   }
   const account = c.get("account")!;
-  const result = await getTemplate(c.env, account.workspaceId, c.req.param("id"));
+  const templateId = c.req.param("id");
+  const result = await getTemplate(c.env, account.workspaceId, templateId);
   if (!result) {
     return c.json({ error: "Template not found" }, 404);
   }
+  // This covers a workspace's own saved templates specifically (paid tier) — the public
+  // free-templates library has no backend route of its own (static client-side data, see
+  // apps/web/src/lib/freeTemplates.ts) and gets its template_started/template_category_viewed/
+  // template_preview_opened instrumentation from the frontend instead (Phase 2).
+  trackEvent(c.env, { event: "template_started", route: "prepare", userId: account.workspaceId, templateId });
   return c.json({
     name: result.summary.name,
     signerCount: result.summary.signerCount,

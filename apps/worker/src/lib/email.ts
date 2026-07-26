@@ -1,5 +1,6 @@
 import { resolveEmailLogoUrl } from "./branding";
 import { mergePdfs } from "./pdf";
+import { trackEvent } from "./analytics";
 import type { DocState, Env } from "@docracy/shared";
 
 // docracy.io is verified in Resend (DKIM on the root domain, SPF/bounce handling via the
@@ -36,12 +37,30 @@ async function resendFetch(env: Env, body: unknown): Promise<void> {
   }
 }
 
-async function send(env: Env, to: string, subject: string, html: string, replyTo?: string): Promise<void> {
+interface SendOptions {
+  /** Short, stable label identifying which email template this is (e.g. "signing_invite",
+   *  "onboarding_step1") — attached to the Resend send as a tag (echoed back verbatim on every
+   *  webhook event for this message, see routes/resendWebhook.ts) and to the email_sent funnel
+   *  event, so opens/clicks/bounces can be attributed back to a specific campaign. Required, not
+   *  optional, so a new call site can't silently ship with no attribution. */
+  emailType: string;
+  replyTo?: string;
+}
+
+async function send(env: Env, to: string, subject: string, html: string, opts: SendOptions): Promise<void> {
+  trackEvent(env, { event: "email_sent", emailType: opts.emailType });
   if (!env.RESEND_API_KEY) {
-    console.log(`[email:dev] to=${to} subject="${subject}"${replyTo ? ` reply-to=${replyTo}` : ""}\n${html}\n`);
+    console.log(`[email:dev] to=${to} subject="${subject}"${opts.replyTo ? ` reply-to=${opts.replyTo}` : ""}\n${html}\n`);
     return;
   }
-  await resendFetch(env, { from: FROM, to, subject, html, ...(replyTo ? { reply_to: replyTo } : {}) });
+  await resendFetch(env, {
+    from: FROM,
+    to,
+    subject,
+    html,
+    tags: [{ name: "email_type", value: opts.emailType }],
+    ...(opts.replyTo ? { reply_to: opts.replyTo } : {}),
+  });
 }
 
 function escapeHtml(str: string): string {
@@ -145,7 +164,7 @@ export async function sendSigningInvite(env: Env, doc: DocState, order: number, 
 
   const subject = doc.customSubject?.trim() || "Ready to sign — you have a document waiting";
   const customLogoUrl = await resolveEmailLogoUrl(env, doc.accountId);
-  await send(env, signer.email, subject, emailShell(env.PUBLIC_APP_URL, body, customLogoUrl));
+  await send(env, signer.email, subject, emailShell(env.PUBLIC_APP_URL, body, customLogoUrl), { emailType: "signing_invite" });
 }
 
 export async function sendPreparerStatusLink(env: Env, preparerEmail: string, statusToken: string): Promise<void> {
@@ -154,7 +173,8 @@ export async function sendPreparerStatusLink(env: Env, preparerEmail: string, st
     env,
     preparerEmail,
     "Your document's status link",
-    `<p>Bookmark this link to check on your signing chain any time — it's the only way to get back to it, so hang on to this email: <a href="${link}">${link}</a></p>`
+    `<p>Bookmark this link to check on your signing chain any time — it's the only way to get back to it, so hang on to this email: <a href="${link}">${link}</a></p>`,
+    { emailType: "preparer_status_link" }
   );
 }
 
@@ -169,7 +189,8 @@ export async function sendReminder(env: Env, doc: DocState, order: number, token
     env,
     signer.email,
     subject,
-    `<p>Hi ${escapeHtml(signer.name)},</p><p>You still need to sign: <a href="${link}">${link}</a></p>${tone}`
+    `<p>Hi ${escapeHtml(signer.name)},</p><p>You still need to sign: <a href="${link}">${link}</a></p>${tone}`,
+    { emailType: "reminder" }
   );
 }
 
@@ -203,7 +224,9 @@ export async function sendCompletionEmailNotOpened(
     </p>
     ${SIGN_OFF}
   `;
-  await send(env, preparerEmail, `${signerName} hasn't opened your document yet`, emailShell(env.PUBLIC_APP_URL, body));
+  await send(env, preparerEmail, `${signerName} hasn't opened your document yet`, emailShell(env.PUBLIC_APP_URL, body), {
+    emailType: "completion_not_opened",
+  });
 }
 
 export async function sendCompletionEmailViewedNotSigned(
@@ -226,7 +249,9 @@ export async function sendCompletionEmailViewedNotSigned(
     </p>
     ${SIGN_OFF}
   `;
-  await send(env, preparerEmail, `${signerName} opened your document but hasn't signed yet`, emailShell(env.PUBLIC_APP_URL, body));
+  await send(env, preparerEmail, `${signerName} opened your document but hasn't signed yet`, emailShell(env.PUBLIC_APP_URL, body), {
+    emailType: "completion_viewed_not_signed",
+  });
 }
 
 export async function sendCompletionEmailSigned(
@@ -248,7 +273,9 @@ export async function sendCompletionEmailSigned(
     </p>
     ${SIGN_OFF}
   `;
-  await send(env, preparerEmail, `${signerName} just signed your document`, emailShell(env.PUBLIC_APP_URL, body));
+  await send(env, preparerEmail, `${signerName} just signed your document`, emailShell(env.PUBLIC_APP_URL, body), {
+    emailType: "completion_signed",
+  });
 }
 
 export async function sendCompletionEmails(
@@ -265,6 +292,7 @@ export async function sendCompletionEmails(
   const attachments = [{ filename: "signed-document.pdf", content: bytesToBase64(combinedPdf) }];
 
   for (const signer of doc.signers) {
+    trackEvent(env, { event: "email_sent", emailType: "completion_all_signed" });
     if (!env.RESEND_API_KEY) {
       console.log(
         `[email:dev] to=${signer.email} subject="Signed document" (combined PDF attached, ${combinedPdf.byteLength} bytes)\n${statusLines(doc)}\n`
@@ -277,6 +305,7 @@ export async function sendCompletionEmails(
       subject: "Your document is fully signed",
       html: `<p>Everyone has signed. The signed document, including a certificate of completion, is attached.</p><p>${statusLines(doc)}</p>`,
       attachments,
+      tags: [{ name: "email_type", value: "completion_all_signed" }],
     });
   }
 }
@@ -292,7 +321,7 @@ export async function sendMagicLink(env: Env, email: string, link: string): Prom
       If you didn't request this, you can safely ignore this email — no account changes were made.
     </p>
   `;
-  await send(env, email, "Your Docracy sign-in link", emailShell(env.PUBLIC_APP_URL, body));
+  await send(env, email, "Your Docracy sign-in link", emailShell(env.PUBLIC_APP_URL, body), { emailType: "magic_link" });
 }
 
 export async function sendTeamInvite(env: Env, email: string, ownerEmail: string, link: string): Promise<void> {
@@ -308,7 +337,9 @@ export async function sendTeamInvite(env: Env, email: string, ownerEmail: string
       If you weren't expecting this, you can safely ignore this email — no account changes were made.
     </p>
   `;
-  await send(env, email, "You're invited to a Docracy workspace", emailShell(env.PUBLIC_APP_URL, body));
+  await send(env, email, "You're invited to a Docracy workspace", emailShell(env.PUBLIC_APP_URL, body), {
+    emailType: "team_invite",
+  });
 }
 
 export async function sendHealthAlert(
@@ -316,18 +347,15 @@ export async function sendHealthAlert(
   failures: { name: string; detail?: string }[]
 ): Promise<void> {
   const lines = failures.map((f) => `${escapeHtml(f.name)}: ${escapeHtml(f.detail ?? "failed")}`).join("<br>");
-  await send(env, env.FEEDBACK_EMAIL, "Docracy healthcheck failure", `<p>${lines}</p>`);
+  await send(env, env.FEEDBACK_EMAIL, "Docracy healthcheck failure", `<p>${lines}</p>`, { emailType: "health_alert" });
 }
 
 export async function sendFeedback(env: Env, fromEmail: string, message: string): Promise<void> {
   const body = escapeHtml(message).replace(/\n/g, "<br>");
-  await send(
-    env,
-    env.FEEDBACK_EMAIL,
-    "Docracy feedback",
-    `<p>From: ${escapeHtml(fromEmail)}</p><p>${body}</p>`,
-    fromEmail
-  );
+  await send(env, env.FEEDBACK_EMAIL, "Docracy feedback", `<p>From: ${escapeHtml(fromEmail)}</p><p>${body}</p>`, {
+    emailType: "feedback",
+    replyTo: fromEmail,
+  });
 }
 
 function templateList(items: string[]): string {
@@ -369,7 +397,10 @@ export async function sendOnboardingStep1(env: Env, email: string): Promise<void
     <p style="margin:0;font-size:14px;color:${MUTED};">If you need help, just reply to this email.</p>
     ${SIGN_OFF}
   `;
-  await send(env, email, "Your first document takes 30 seconds", emailShell(env.PUBLIC_APP_URL, body), env.FEEDBACK_EMAIL);
+  await send(env, email, "Your first document takes 30 seconds", emailShell(env.PUBLIC_APP_URL, body), {
+    emailType: "onboarding_step1",
+    replyTo: env.FEEDBACK_EMAIL,
+  });
 }
 
 export async function sendOnboardingStep3(env: Env, email: string): Promise<void> {
@@ -386,7 +417,10 @@ export async function sendOnboardingStep3(env: Env, email: string): Promise<void
     <p style="margin:0;font-size:14px;color:${MUTED};">If you prefer templates, you can use one instantly.</p>
     ${SIGN_OFF}
   `;
-  await send(env, email, "Try sending one quick document", emailShell(env.PUBLIC_APP_URL, body), env.FEEDBACK_EMAIL);
+  await send(env, email, "Try sending one quick document", emailShell(env.PUBLIC_APP_URL, body), {
+    emailType: "onboarding_step3",
+    replyTo: env.FEEDBACK_EMAIL,
+  });
 }
 
 export async function sendOnboardingStep4(env: Env, email: string): Promise<void> {
@@ -402,7 +436,10 @@ export async function sendOnboardingStep4(env: Env, email: string): Promise<void
     <p style="margin:0;font-size:14px;color:${MUTED};">Happy to help if you need anything.</p>
     ${SIGN_OFF}
   `;
-  await send(env, email, "Want to give Docracy.io a quick try?", emailShell(env.PUBLIC_APP_URL, body), env.FEEDBACK_EMAIL);
+  await send(env, email, "Want to give Docracy.io a quick try?", emailShell(env.PUBLIC_APP_URL, body), {
+    emailType: "onboarding_step4",
+    replyTo: env.FEEDBACK_EMAIL,
+  });
 }
 
 function bytesToBase64(bytes: Uint8Array): string {

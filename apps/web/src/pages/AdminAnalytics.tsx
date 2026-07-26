@@ -735,8 +735,12 @@ export default function AdminAnalytics() {
   const totals = useMemo(() => {
     if (!rows) return null;
     const pageViews = rows.filter((r) => r.event === "page_view");
-    const created = sum(rows.filter((r) => r.event === "document_created"));
-    const completed = sum(rows.filter((r) => r.event === "document_completed"));
+    const created = sum(rows.filter((r) => r.event === "document_sent"));
+    // document_signed fires once per signer's signature, not just once per fully-completed
+    // document (see lib/analytics.ts's FunnelEvent union) — for a single-signer document that's
+    // the same number as before; for a multi-signer chain this now counts every signature, not
+    // just the last one. A per-document completion rate needs the Phase 3 dashboard rebuild.
+    const completed = sum(rows.filter((r) => r.event === "document_signed"));
     const totalViews = sum(pageViews);
     const botViews = sum(pageViews.filter((r) => r.traffic_type === "bot"));
     return {
@@ -790,10 +794,10 @@ export default function AdminAnalytics() {
         <>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 12, marginBottom: 24 }}>
             <StatTile label="Page views" value={String(totals.totalViews)} sub={`${totals.botPct}% known bots`} />
-            <StatTile label="Documents created" value={String(totals.created)} />
-            <StatTile label="Documents completed" value={String(totals.completed)} />
+            <StatTile label="Documents sent" value={String(totals.created)} />
+            <StatTile label="Signer signatures" value={String(totals.completed)} sub="counts every signer, not just fully-completed docs" />
             <StatTile
-              label="Created → completed"
+              label="Sent → signed"
               value={totals.completionRate === null ? "—" : `${totals.completionRate}%`}
             />
           </div>

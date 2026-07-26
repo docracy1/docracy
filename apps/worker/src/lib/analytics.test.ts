@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { classifyBot, logFunnelEvent } from "./analytics";
+import { classifyBot, trackEvent } from "./analytics";
 import { makeMockEnv } from "../test/mockEnv";
 
 describe("classifyBot", () => {
@@ -29,49 +29,84 @@ describe("classifyBot", () => {
   });
 });
 
-describe("logFunnelEvent", () => {
-  it("writes a data point with the expected shape for a bot request", () => {
+describe("trackEvent", () => {
+  it("writes a data point with the expected 14-blob shape for a bot request", () => {
     const writeDataPoint = vi.fn();
     const { env } = makeMockEnv({ ANALYTICS: { writeDataPoint } as any });
 
-    logFunnelEvent(env, "page_view", "/free-templates/mutual-nda", "GPTBot/1.1", "US");
+    trackEvent(env, {
+      event: "page_view",
+      route: "/free-templates/mutual-nda",
+      userAgent: "GPTBot/1.1",
+      country: "US",
+    });
 
     expect(writeDataPoint).toHaveBeenCalledWith({
-      blobs: ["page_view", "/free-templates/mutual-nda", "bot", "GPTBot", "US"],
-      doubles: [1],
+      blobs: ["page_view", "/free-templates/mutual-nda", "bot", "GPTBot", "US", "", "", "", "", "", "", "", "", ""],
+      doubles: [1, 0],
       indexes: ["page_view"],
     });
   });
 
-  it("writes a data point for a human request", () => {
+  it("writes a data point for a human request with every optional field populated", () => {
     const writeDataPoint = vi.fn();
     const { env } = makeMockEnv({ ANALYTICS: { writeDataPoint } as any });
 
-    logFunnelEvent(env, "document_completed", "/prepare", "Mozilla/5.0", "AT");
+    trackEvent(env, {
+      event: "document_signed",
+      route: "/sign",
+      userAgent: "Mozilla/5.0",
+      country: "AT",
+      userId: "acct-1",
+      documentId: "doc-1",
+      templateId: "tpl-1",
+      source: "utm-test",
+      referrer: "https://example.com",
+      sessionId: "sess-1",
+      durationMs: 1234,
+      errorCode: "some_error",
+      emailType: "signing_invite",
+      templateCategory: "nda",
+    });
 
     expect(writeDataPoint).toHaveBeenCalledWith({
-      blobs: ["document_completed", "/prepare", "human", "", "AT"],
-      doubles: [1],
-      indexes: ["document_completed"],
+      blobs: [
+        "document_signed",
+        "/sign",
+        "human",
+        "",
+        "AT",
+        "acct-1",
+        "doc-1",
+        "tpl-1",
+        "utm-test",
+        "https://example.com",
+        "sess-1",
+        "some_error",
+        "signing_invite",
+        "nda",
+      ],
+      doubles: [1, 1234],
+      indexes: ["document_signed"],
     });
   });
 
-  it("defaults country to an empty string when omitted", () => {
+  it("defaults every optional field to an empty string/zero when omitted", () => {
     const writeDataPoint = vi.fn();
     const { env } = makeMockEnv({ ANALYTICS: { writeDataPoint } as any });
 
-    logFunnelEvent(env, "document_created", "/prepare", null);
+    trackEvent(env, { event: "signup_completed" });
 
     expect(writeDataPoint).toHaveBeenCalledWith({
-      blobs: ["document_created", "/prepare", "human", "", ""],
-      doubles: [1],
-      indexes: ["document_created"],
+      blobs: ["signup_completed", "", "human", "", "", "", "", "", "", "", "", "", "", ""],
+      doubles: [1, 0],
+      indexes: ["signup_completed"],
     });
   });
 
   it("does nothing when the ANALYTICS binding is absent", () => {
     const { env } = makeMockEnv({ ANALYTICS: undefined });
-    expect(() => logFunnelEvent(env, "page_view", "/mcp", "Mozilla/5.0")).not.toThrow();
+    expect(() => trackEvent(env, { event: "page_view", route: "/mcp" })).not.toThrow();
   });
 
   it("swallows a write error rather than throwing", () => {
@@ -79,6 +114,6 @@ describe("logFunnelEvent", () => {
       throw new Error("boom");
     });
     const { env } = makeMockEnv({ ANALYTICS: { writeDataPoint } as any });
-    expect(() => logFunnelEvent(env, "page_view", "/mcp", "Mozilla/5.0")).not.toThrow();
+    expect(() => trackEvent(env, { event: "page_view", route: "/mcp" })).not.toThrow();
   });
 });

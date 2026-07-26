@@ -10,7 +10,7 @@ import { requestTimestamp } from "../lib/timestamp";
 import { verifyPin, issueUnlockToken, verifyUnlockToken } from "../lib/signUnlock";
 import { deliverWebhookEvent } from "../lib/webhooks";
 import { uploadCompletedDocument } from "../lib/cloudConnectors";
-import { logFunnelEvent, NOTRACK_COOKIE_NAME } from "../lib/analytics";
+import { trackEvent, NOTRACK_COOKIE_NAME } from "../lib/analytics";
 import { getWorkspaceSlug, hasCustomLogo, logoPath } from "../lib/branding";
 import { verifyToken, signToken } from "@docracy/shared";
 import type { AuditEvent, DocField, Env } from "@docracy/shared";
@@ -127,6 +127,16 @@ sign.get("/sign/:token", async (c) => {
       await putDoc(c.env, doc);
     } catch (err) {
       console.error(`Marking signer viewed failed for doc ${doc.docId} (non-fatal):`, err);
+    }
+    if (getCookie(c, NOTRACK_COOKIE_NAME) !== "1") {
+      trackEvent(c.env, {
+        event: "document_viewed",
+        route: "sign",
+        userAgent: c.req.header("user-agent"),
+        country: c.req.header("CF-IPCountry"),
+        userId: doc.accountId,
+        documentId: doc.docId,
+      });
     }
   }
 
@@ -251,7 +261,21 @@ sign.post("/sign/:token", async (c) => {
   const signer = doc.signers.find((s) => s.order === verified.order)!;
   const signedAt = new Date().toISOString();
 
-  const updatedBytes = await burnFields(workingBytes, myFields, body.values, signer.email, signedAt);
+  let updatedBytes: Uint8Array;
+  try {
+    updatedBytes = await burnFields(workingBytes, myFields, body.values, signer.email, signedAt);
+  } catch (err) {
+    trackEvent(c.env, {
+      event: "signature_error",
+      route: "sign",
+      userAgent: c.req.header("user-agent"),
+      country: c.req.header("CF-IPCountry"),
+      userId: doc.accountId,
+      documentId: doc.docId,
+      errorCode: err instanceof Error ? err.message.slice(0, 200) : "unknown",
+    });
+    throw err;
+  }
   const signedHash = await sha256Hex(updatedBytes);
 
   // Re-fetch and re-check right before committing: burnFields above is the slowest step in this
@@ -271,6 +295,20 @@ sign.post("/sign/:token", async (c) => {
   const freshSigner = freshDoc.signers.find((s) => s.order === verified.order)!;
   freshSigner.status = "signed";
   freshSigner.signedAt = signedAt;
+
+  // Fired for every signer's signature, not just the document's overall completion (see the
+  // "everyone done" branch further down, which no longer logs a separate funnel event of its own —
+  // the last signer's signature already fires this one, same as any other signer's).
+  if (getCookie(c, NOTRACK_COOKIE_NAME) !== "1") {
+    trackEvent(c.env, {
+      event: "document_signed",
+      route: "sign",
+      userAgent,
+      country: c.req.header("CF-IPCountry"),
+      userId: freshDoc.accountId,
+      documentId: freshDoc.docId,
+    });
+  }
 
   const events: AuditEvent[] = [
     ...(freshDoc.events ?? []),
@@ -350,14 +388,25 @@ sign.post("/sign/:token", async (c) => {
     }
 
     await c.env.DOCRACY_DOCS.put(`docs/${freshDoc.docId}/final.pdf`, updatedBytes);
-    const certificateBytes = await generateCertificate(freshDoc, signedHash);
+    let certificateBytes: Uint8Array;
+    try {
+      certificateBytes = await generateCertificate(freshDoc, signedHash);
+    } catch (err) {
+      trackEvent(c.env, {
+        event: "pdf_generation_failed",
+        route: "sign",
+        userAgent,
+        country: c.req.header("CF-IPCountry"),
+        userId: freshDoc.accountId,
+        documentId: freshDoc.docId,
+        errorCode: err instanceof Error ? err.message.slice(0, 200) : "unknown",
+      });
+      throw err;
+    }
     await c.env.DOCRACY_DOCS.put(`docs/${freshDoc.docId}/certificate.pdf`, certificateBytes);
 
     await putDoc(c.env, freshDoc);
     await sendCompletionEmails(c.env, freshDoc, updatedBytes, certificateBytes);
-    if (getCookie(c, NOTRACK_COOKIE_NAME) !== "1") {
-      logFunnelEvent(c.env, "document_completed", "sign", null, c.req.header("CF-IPCountry"));
-    }
 
     if (freshDoc.accountId) {
       indexNonFatal(c.executionCtx, freshDoc.docId, "completed", indexCompleted(c.env, freshDoc));
