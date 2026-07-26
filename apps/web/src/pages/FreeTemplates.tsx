@@ -56,13 +56,36 @@ export default function FreeTemplates() {
 
   return (
     <div className="container">
-      <h1>Free document templates</h1>
-      <p style={{ maxWidth: 640, color: "var(--mute)" }}>
-        Standard templates for the business documents people need most — pick one, fill in your details, and send it
-        out for signature. No account required to get started.
+      <h1 style={{ fontSize: 20, fontWeight: 700, letterSpacing: "-0.01em" }}>Ready-to-use templates for quick agreements</h1>
+      <p style={{ maxWidth: 640, fontSize: 14, color: "var(--body)" }}>
+        Docracy.io provides simple, ready-to-use templates you can send in minutes. Choose a template, add signature
+        fields, and send it — no formatting, no setup, no accounts required.
       </p>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16, marginTop: 24 }}>
+      <p style={{ maxWidth: 640, fontSize: 14, fontWeight: 700, margin: "16px 0 8px" }}>How it works:</p>
+      <ol style={{ maxWidth: 640, fontSize: 14, color: "var(--body)", margin: 0, paddingLeft: 20, lineHeight: 1.7 }}>
+        <li>Select a template</li>
+        <li>Add the fields you need</li>
+        <li>Send it for signature</li>
+      </ol>
+
+      <p style={{ maxWidth: 640, fontSize: 14, fontWeight: 700, margin: "16px 0 8px" }}>Popular templates:</p>
+      <ul style={{ maxWidth: 640, fontSize: 14, color: "var(--body)", margin: 0, paddingLeft: 20, lineHeight: 1.7 }}>
+        <li>NDA (one-way or mutual)</li>
+        <li>Client contract</li>
+        <li>Service agreement</li>
+        <li>Onboarding agreement</li>
+        <li>Vendor agreement</li>
+        <li>Rental agreement</li>
+        <li>Work order</li>
+        <li>Delivery confirmation</li>
+      </ul>
+
+      <p style={{ maxWidth: 640, fontSize: 13, color: "var(--mute)", fontStyle: "italic", margin: "16px 0 28px" }}>
+        Tip: Using a template is the fastest way to send your first document.
+      </p>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
         {FREE_TEMPLATES.map((t) => (
           <Link
             key={t.slug}
