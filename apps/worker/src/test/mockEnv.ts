@@ -123,6 +123,10 @@ const BLOG_POSTS_MIGRATION_SQL = readFileSync(
   fileURLToPath(new URL("../../migrations/0012_blog_posts.sql", import.meta.url).toString()),
   "utf-8"
 );
+const ONBOARDING_EMAILS_MIGRATION_SQL = readFileSync(
+  fileURLToPath(new URL("../../migrations/0013_onboarding_emails.sql", import.meta.url).toString()),
+  "utf-8"
+);
 
 // sql.js's default WASM build doesn't compile in the FTS5 extension. It's swapped for a plain
 // table here — full-text MATCH queries aren't exercised by anything built in this pass anyway
@@ -143,7 +147,8 @@ const TEST_MIGRATION_SQL =
   CLOUD_CONNECTORS_MIGRATION_SQL +
   PAYMENT_FAILED_MIGRATION_SQL +
   WORKSPACE_SLUG_MIGRATION_SQL +
-  BLOG_POSTS_MIGRATION_SQL;
+  BLOG_POSTS_MIGRATION_SQL +
+  ONBOARDING_EMAILS_MIGRATION_SQL;
 
 // sql.js's WASM module only needs loading once per test run; each test still gets its own
 // fresh in-memory `SQL.Database()` instance below.

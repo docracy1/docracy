@@ -23,6 +23,7 @@ import { reconcileD1Index } from "./lib/index-d1";
 import { runExpiredDocCleanup } from "./lib/cleanup";
 import { runHealthCheckAndAlert } from "./lib/healthcheck";
 import { runPaymentFreezeSweep } from "./lib/paymentFreeze";
+import { runOnboardingEmailSweep } from "./lib/onboardingEmails";
 import type { Env } from "@docracy/shared";
 
 const app = new Hono<{ Bindings: Env }>();
@@ -67,13 +68,25 @@ app.route("/api/admin/blog-posts", blogPostsAdmin);
 app.route("/api/blog-posts", blogPostsPublic);
 app.route("/api/status", statusRoute);
 
+// The frequent cron (see wrangler.toml's second crons entry) exists only to give the onboarding
+// email drip minute-scale granularity — everything else here is fine running once a day. Without
+// branching on event.cron, adding that entry would make the daily sweeps below fire every few
+// minutes too.
+const ONBOARDING_EMAIL_CRON = "*/5 * * * *";
+
 export default {
   fetch: app.fetch,
-  async scheduled(_event: ScheduledEvent, env: Env, ctx: ExecutionContext) {
+  async scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionContext) {
     if (!env.TOKEN_SECRET) {
-      console.error("Skipping reminder sweep: TOKEN_SECRET is not set");
+      console.error("Skipping scheduled sweeps: TOKEN_SECRET is not set");
       return;
     }
+
+    if (event.cron === ONBOARDING_EMAIL_CRON) {
+      ctx.waitUntil(runOnboardingEmailSweep(env).catch((err) => console.error("Onboarding email sweep failed:", err)));
+      return;
+    }
+
     ctx.waitUntil(runReminderSweep(env));
     ctx.waitUntil(reconcileD1Index(env).catch((err) => console.error("D1 reconciliation sweep failed:", err)));
     ctx.waitUntil(runExpiredDocCleanup(env).catch((err) => console.error("Expired doc cleanup sweep failed:", err)));

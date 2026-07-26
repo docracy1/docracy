@@ -4,6 +4,7 @@ import { generateOpaqueToken, hashOpaqueToken } from "@docracy/shared";
 import type { Env } from "@docracy/shared";
 import { sendMagicLink } from "./email";
 import { checkAdminLoginRateLimit, checkMagicLinkRateLimit } from "./ratelimit";
+import { scheduleOnboardingEmails } from "./onboardingEmails";
 
 const MAGIC_LINK_TTL_SECONDS = 15 * 60; // 15 minutes
 export const SESSION_TTL_SECONDS = 30 * 24 * 60 * 60; // 30 days
@@ -140,6 +141,13 @@ async function findOrCreateAccount(
     .prepare(`INSERT INTO accounts (id, email, created_at, is_paid, last_login_at) VALUES (?, ?, ?, 0, ?)`)
     .bind(id, email, now, now)
     .run();
+
+  ctx.waitUntil(
+    scheduleOnboardingEmails(env, id, email).catch((err) =>
+      console.error("Onboarding email scheduling failed (non-fatal):", err)
+    )
+  );
+
   return { id, isPaid: false, isEnterprise: false };
 }
 

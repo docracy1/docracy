@@ -249,6 +249,89 @@ export async function sendFeedback(env: Env, fromEmail: string, message: string)
   );
 }
 
+function templateList(items: string[]): string {
+  return `<ul style="margin:12px 0;padding-left:20px;font-size:15px;color:${INK};line-height:1.7;">${items
+    .map((i) => `<li>${escapeHtml(i)}</li>`)
+    .join("")}</ul>`;
+}
+
+/** The 4-step onboarding drip, scheduled by lib/onboardingEmails.ts at account creation and sent
+ *  by its cron sweep at 3 minutes / 4 hours / 24 hours / 3 days — each step skipped once the
+ *  account has actually sent a document (checked live, not tracked on this email itself). */
+export async function sendOnboardingStep1(env: Env, email: string): Promise<void> {
+  const body = `
+    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">Welcome to Docracy.io</p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      Welcome to Docracy.io — built for quick, low-stakes agreements.
+    </p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      You can send your first document right now. No setup, no accounts, no friction:
+    </p>
+    <p style="margin:12px 0 0 0;font-size:15px;font-weight:bold;color:${INK};">Upload → add fields → send → done</p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};">Or pick a ready-to-use template:</p>
+    ${templateList(["NDA", "Client contract", "Consulting agreement", "Onboarding docs", "Vendor agreement"])}
+    <p style="margin:0 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      Try it once — most users finish their first document in under a minute.
+    </p>
+    ${ctaButton(env.PUBLIC_APP_URL, "Send your first document")}
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};">Best,<br>Reinhold</p>
+  `;
+  await send(env, email, "Send your first agreement in minutes", emailShell(env.PUBLIC_APP_URL, body), env.FEEDBACK_EMAIL);
+}
+
+export async function sendOnboardingStep2(env: Env, email: string): Promise<void> {
+  const body = `
+    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">Still need to send your first document?</p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      You haven't sent your first document yet. It only takes 30 seconds and helps you see how fast
+      Docracy.io works.
+    </p>
+    <p style="margin:12px 0 0 0;font-size:15px;font-weight:bold;color:${INK};">
+      Upload your first document → Add signature fields → Send it → Done
+    </p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};">Or start with a template:</p>
+    ${templateList(["NDA", "Client contract", "Onboarding agreement", "Vendor agreement", "Simple agreement"])}
+    <p style="margin:0;font-size:15px;color:${INK};">Send your first document now:</p>
+    ${ctaButton(env.PUBLIC_APP_URL, "Send your first document")}
+    <p style="margin:0 0 0 0;font-size:14px;color:${MUTED};">If you need help, just reply.</p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};">Best,<br>Reinhold</p>
+  `;
+  await send(env, email, "Still need to send your first document?", emailShell(env.PUBLIC_APP_URL, body), env.FEEDBACK_EMAIL);
+}
+
+export async function sendOnboardingStep3(env: Env, email: string): Promise<void> {
+  const body = `
+    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">Try sending one quick document</p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      Just a quick reminder — you can send your first document anytime. No setup, no accounts, no
+      complexity.
+    </p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      Most users start with a small NDA or client contract and finish in under a minute.
+    </p>
+    ${ctaButton(env.PUBLIC_APP_URL, "Send your first document")}
+    <p style="margin:0;font-size:14px;color:${MUTED};">If you prefer templates, you can use one instantly.</p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};">Best,<br>Reinhold</p>
+  `;
+  await send(env, email, "Try sending one quick document", emailShell(env.PUBLIC_APP_URL, body), env.FEEDBACK_EMAIL);
+}
+
+export async function sendOnboardingStep4(env: Env, email: string): Promise<void> {
+  const body = `
+    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">Want to give Docracy.io a quick try?</p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      If you still want to try Docracy.io, you can send a quick document now. It's simple: upload →
+      add fields → send.
+    </p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};">Or choose a template:</p>
+    ${templateList(["NDA", "Client contract", "Service agreement", "Onboarding docs", "Rental agreement", "Work order"])}
+    ${ctaButton(env.PUBLIC_APP_URL, "Send a document")}
+    <p style="margin:0;font-size:14px;color:${MUTED};">Happy to help if you need anything.</p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};">Best,<br>Reinhold</p>
+  `;
+  await send(env, email, "Want to give Docracy.io a quick try?", emailShell(env.PUBLIC_APP_URL, body), env.FEEDBACK_EMAIL);
+}
+
 function bytesToBase64(bytes: Uint8Array): string {
   let binary = "";
   for (const b of bytes) binary += String.fromCharCode(b);
