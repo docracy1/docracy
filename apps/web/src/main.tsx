@@ -28,6 +28,9 @@ import Imprint from "./pages/Imprint";
 import Uptime from "./pages/Uptime";
 import Blog from "./pages/Blog";
 import BlogPostDetail from "./pages/BlogPostDetail";
+import FeaturePage from "./pages/FeaturePage";
+import AlternativePage from "./pages/AlternativePage";
+import ExplainerPage from "./pages/ExplainerPage";
 import NotFound from "./pages/NotFound";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -58,6 +61,16 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/uptime" element={<Uptime />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPostDetail />} />
+        <Route path="/simple-agreements" element={<FeaturePage slug="simple-agreements" />} />
+        <Route path="/nda-signing" element={<FeaturePage slug="nda-signing" />} />
+        <Route path="/client-contracts" element={<FeaturePage slug="client-contracts" />} />
+        <Route path="/onboarding-documents" element={<FeaturePage slug="onboarding-documents" />} />
+        <Route path="/vendor-agreements" element={<FeaturePage slug="vendor-agreements" />} />
+        <Route path="/compliance-documentation" element={<FeaturePage slug="compliance-documentation" />} />
+        <Route path="/eversign-alternative" element={<AlternativePage slug="eversign-alternative" />} />
+        <Route path="/docusign-alternative" element={<AlternativePage slug="docusign-alternative" />} />
+        <Route path="/what-is-an-nda" element={<ExplainerPage slug="what-is-an-nda" />} />
+        <Route path="/are-electronic-signatures-legal" element={<ExplainerPage slug="are-electronic-signatures-legal" />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />

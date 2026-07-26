@@ -1,3 +1,9 @@
+# /templates was requested as its own landing page, but /free-templates already is that page
+# (15 real templates, its own SEO meta) — a second page with the same purpose would just be
+# duplicate content competing with itself in search results. A redirect captures the shorter URL
+# without the duplication.
+/templates  /free-templates  301
+
 # Explicit SPA fallback — Cloudflare Pages checks for an exact static-asset match (including the
 # prerendered .html files under scripts/prerender.mjs) before evaluating this file, so this only
 # ever catches routes with no matching static file: legitimate client-only routes (/dashboard,

@@ -12,6 +12,9 @@ import Docs from "../src/pages/Docs";
 import Imprint from "../src/pages/Imprint";
 import Blog from "../src/pages/Blog";
 import BlogPostDetail from "../src/pages/BlogPostDetail";
+import FeaturePage from "../src/pages/FeaturePage";
+import AlternativePage from "../src/pages/AlternativePage";
+import ExplainerPage from "../src/pages/ExplainerPage";
 
 /** Renders the real app components to static markup for a single path — same components a
  *  browser gets, minus effects (which never run during static rendering, so Header's login-check
@@ -31,6 +34,16 @@ function renderPath(targetPath: string): string {
         <Route path="/imprint" element={<Imprint />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPostDetail />} />
+        <Route path="/simple-agreements" element={<FeaturePage slug="simple-agreements" />} />
+        <Route path="/nda-signing" element={<FeaturePage slug="nda-signing" />} />
+        <Route path="/client-contracts" element={<FeaturePage slug="client-contracts" />} />
+        <Route path="/onboarding-documents" element={<FeaturePage slug="onboarding-documents" />} />
+        <Route path="/vendor-agreements" element={<FeaturePage slug="vendor-agreements" />} />
+        <Route path="/compliance-documentation" element={<FeaturePage slug="compliance-documentation" />} />
+        <Route path="/eversign-alternative" element={<AlternativePage slug="eversign-alternative" />} />
+        <Route path="/docusign-alternative" element={<AlternativePage slug="docusign-alternative" />} />
+        <Route path="/what-is-an-nda" element={<ExplainerPage slug="what-is-an-nda" />} />
+        <Route path="/are-electronic-signatures-legal" element={<ExplainerPage slug="are-electronic-signatures-legal" />} />
       </Routes>
       <Footer />
     </MemoryRouter>
