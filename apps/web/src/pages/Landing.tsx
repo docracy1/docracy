@@ -51,7 +51,11 @@ function DocumentMockup({ variant }: { variant: "signed" | "detect" }) {
 
 /** Minimalist monochrome line icons (hand-drawn, Heroicons-outline style) for the feature-card
  *  grid below — kept inline rather than pulling in an icon library for five one-off glyphs. */
-function FeatureIcon({ name }: { name: "bolt" | "workflow" | "shield" | "users" | "duplicate" }) {
+function FeatureIcon({
+  name,
+}: {
+  name: "bolt" | "workflow" | "shield" | "users" | "duplicate" | "send" | "pen" | "sparkles" | "single";
+}) {
   const common = {
     width: 24,
     height: 24,
@@ -101,50 +105,98 @@ function FeatureIcon({ name }: { name: "bolt" | "workflow" | "shield" | "users" 
           <path d="M4 15V4.5A1.5 1.5 0 0 1 5.5 3H15" />
         </svg>
       );
+    case "send":
+      return (
+        <svg {...common}>
+          <path d="M3 11l18-8-8 18-2-8-8-2z" />
+        </svg>
+      );
+    case "pen":
+      return (
+        <svg {...common}>
+          <path d="M15 4l5 5-9.5 9.5H6v-4.5L15 4z" />
+          <path d="M4 20c2-1.2 4-1.2 6 0" />
+        </svg>
+      );
+    case "sparkles":
+      return (
+        <svg {...common}>
+          <path d="M12 3l1.4 4.6L18 9l-4.6 1.4L12 15l-1.4-4.6L6 9l4.6-1.4L12 3z" />
+          <path d="M19 15l0.7 2.3L22 18l-2.3 0.7L19 21l-0.7-2.3L16 18l2.3-0.7L19 15z" />
+        </svg>
+      );
+    case "single":
+      return (
+        <svg {...common}>
+          <rect x="6" y="3" width="12" height="18" rx="1.5" />
+          <path d="M9 8h6M9 12h6M9 16h3" />
+        </svg>
+      );
   }
 }
 
 const CORE_FEATURES: Array<{
-  icon: "bolt" | "workflow" | "shield" | "users" | "duplicate";
+  icon: "bolt" | "workflow" | "shield" | "users" | "duplicate" | "send" | "pen" | "sparkles" | "single";
   title: string;
   body: string;
   to: string;
   linkLabel: string;
 }> = [
   {
-    icon: "bolt",
-    title: "Fast e-signatures",
-    body: "Sign documents in seconds with a clean, distraction-free interface. No complexity, no setup overhead — just reliable, fast signing for you and your clients.",
+    icon: "send",
+    title: "Simple document sending",
+    body: "Upload a PDF, add recipients, and send it for signature in seconds — no complicated setup.",
     to: "/prepare",
-    linkLabel: "Start a signing chain",
+    linkLabel: "Send a document",
   },
   {
-    icon: "workflow",
-    title: "Simple workflow setup",
-    body: "Create document workflows in minutes. Add steps, assign recipients, and automate basic flows without technical knowledge. Ideal for small teams and growing businesses.",
+    icon: "pen",
+    title: "Clean signing experience",
+    body: "Signers get a distraction-free page to review and sign — no account, no software to install.",
     to: "/docs",
-    linkLabel: "Read the docs",
+    linkLabel: "See how it works",
   },
   {
-    icon: "shield",
-    title: "Secure document storage",
-    body: "Store all documents in a compliant, encrypted environment. Every file is versioned, traceable, and protected — giving you full control and audit-ready transparency.",
-    to: "/privacy",
-    linkLabel: "Read our privacy policy",
+    icon: "sparkles",
+    title: "AI-assisted field placement",
+    body: "Upload a document and Docracy automatically finds and places signature, date, and initial fields for you.",
+    to: "/mcp",
+    linkLabel: "See our AI tools",
+  },
+  {
+    icon: "duplicate",
+    title: "Reusable templates",
+    body: "Save a PDF and its field layout once, then reuse it for every new NDA, contract, or agreement.",
+    to: "/free-templates",
+    linkLabel: "Browse free templates",
   },
   {
     icon: "users",
-    title: "Team collaboration",
-    body: "Invite team members, share templates, and manage signing processes together. Keep everything organized and accessible in one place.",
+    title: "Team access",
+    body: "Invite teammates to share documents, templates, and webhooks under one paid workspace.",
     to: "/pricing",
     linkLabel: "See team plans",
   },
   {
-    icon: "duplicate",
-    title: "Templates for recurring documents",
-    body: "Save time with reusable templates for NDAs, contracts, agreements, onboarding documents, and more. Create once, reuse forever.",
-    to: "/free-templates",
-    linkLabel: "Browse free templates",
+    icon: "single",
+    title: "One-off agreements",
+    body: "Splitting rent, selling something, settling a favor — sign it free, no account, gone once it's done.",
+    to: "/prepare",
+    linkLabel: "Start free",
+  },
+  {
+    icon: "shield",
+    title: "Secure storage",
+    body: "Documents and their audit trail are encrypted and automatically deleted after a short retention window — nothing sits around indefinitely.",
+    to: "/privacy",
+    linkLabel: "Read our privacy policy",
+  },
+  {
+    icon: "bolt",
+    title: "Fast workflows",
+    body: "Sequential signing keeps deals moving in order, or switch to all-at-once so everyone can sign the moment they're invited.",
+    to: "/docs",
+    linkLabel: "Read the docs",
   },
 ];
 
@@ -199,18 +251,30 @@ const TESTIMONIALS: Array<{ quote: string; name: string; title: string; company:
   },
 ];
 
-const AUDIENCES = [
+const USE_CASES = [
   {
-    title: "Freelancers & solo businesses",
-    body: "Send a contract, offer letter, or NDA today — no software subscription for something you'll use twice a month.",
+    title: "Client contracts",
+    body: "Send contracts, collect signatures, and store everything securely — without confusing clients or slowing down deals.",
   },
   {
-    title: "Small teams",
-    body: "Add teammates, save reusable templates, and let AI place fields and draft agreements for you — on the paid plan.",
+    title: "HR onboarding",
+    body: "Share onboarding documents, assign signers in order, and reuse templates for every new hire.",
   },
   {
-    title: "One-off agreements",
-    body: "Splitting rent, selling something, settling a favor in writing — free, no account, gone once it's signed.",
+    title: "Internal approvals",
+    body: "Create simple approval chains for internal documents, policies, and agreements.",
+  },
+  {
+    title: "Vendor agreements",
+    body: "Manage supplier contracts, service agreements, and renewals with clear workflows and secure storage.",
+  },
+  {
+    title: "Compliance documentation",
+    body: "Collect signatures for compliance forms, policies, and mandatory acknowledgements — fully traceable and audit-ready.",
+  },
+  {
+    title: "Recurring templates for NDAs & agreements",
+    body: "Create reusable templates for NDAs, partnership agreements, and recurring documents to save time and reduce errors — on a paid account.",
   },
 ];
 
@@ -237,9 +301,9 @@ export default function Landing() {
         <div className="hero-inner hero-split">
           <div>
             <div className="hero-eyebrow">Free · No signup · Sequential e-signatures</div>
-            <h1>Simple, secure e-signatures for your business</h1>
+            <h1>Built for quick, low-stakes agreements</h1>
             <p>
-              Create, send, and sign documents in minutes — with a clean workflow and reliable compliance.
+              Send, sign, and finish simple documents in minutes — without subscriptions, complexity, or setup.
             </p>
             <ul className="hero-benefit-list">
               <li>Fast and frictionless document signing</li>
@@ -322,12 +386,12 @@ export default function Landing() {
 
       <div className="audience-band">
         <div className="audience-inner">
-          <h2 style={{ fontSize: 22, marginBottom: 0 }}>Built for quick, low-stakes agreements</h2>
+          <h2 style={{ fontSize: 22, marginBottom: 0 }}>Popular use cases</h2>
           <div className="accent-grid">
-            {AUDIENCES.map((a) => (
-              <div key={a.title} className="accent-item">
-                <h3 style={{ fontSize: 15, marginBottom: 3 }}>{a.title}</h3>
-                <p style={{ margin: 0, fontSize: 13.5 }}>{a.body}</p>
+            {USE_CASES.map((u) => (
+              <div key={u.title} className="accent-item">
+                <h3 style={{ fontSize: 15, marginBottom: 3 }}>{u.title}</h3>
+                <p style={{ margin: 0, fontSize: 13.5 }}>{u.body}</p>
               </div>
             ))}
           </div>
