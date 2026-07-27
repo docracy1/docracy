@@ -14,7 +14,7 @@ PUBLIC_CONNECTOR_URL=http://localhost:8788
 # localhost:8787/api/billing/webhook` (prints the webhook signing secret to use below).
 # STRIPE_SECRET_KEY=sk_test_xxxxxxxx
 # STRIPE_WEBHOOK_SECRET=whsec_xxxxxxxx
-# STRIPE_PRICE_ID=price_xxxxxxxx
+# STRIPE_PRICE_ID=price_1TxwaFQvixTOu6qpCjZQupJJ
 
 # Turnstile (bot check on the login form) — leave unset to skip verification entirely locally.
 # TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA

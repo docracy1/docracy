@@ -53,6 +53,9 @@ FEEDBACK_EMAIL = "founder@docracy.io"
 ADMIN_EMAILS = "rl@relacon.at"
 # Not secret (just an identifier) — needed only for the Analytics Engine SQL read API.
 CF_ACCOUNT_ID = "d7764515fd9887154193dc04810d81d8"
+# Paid (standard) plan — not secret (just an identifier). Used by POST /api/billing/checkout
+# when no {plan: "enterprise"} is requested.
+STRIPE_PRICE_ID = "price_1TxwaFQvixTOu6qpCjZQupJJ"
 # Reference only (see packages/shared/src/types.ts) — not read at runtime.
 STRIPE_ENTERPRISE_PRODUCT_ID = "prod_UwhdVD23t6zce3"
 # The actual Price used to create Enterprise checkout sessions (POST /api/billing/checkout
@@ -77,8 +80,7 @@ BOX_CLIENT_ID = "b1hihpb8dhxe7wye5jf9mswpiqhknj42"
 # --- Billing (Stripe) — all optional; billing routes 501 gracefully until these are set ---
 # Set with: wrangler secret put STRIPE_SECRET_KEY
 # Set with: wrangler secret put STRIPE_WEBHOOK_SECRET   (from the Stripe Dashboard's webhook config)
-# STRIPE_PRICE_ID is not secret (just an identifier) — once a Price exists in the Stripe
-# Dashboard, add it to [vars] above as STRIPE_PRICE_ID = "price_xxxxx".
+# STRIPE_PRICE_ID / STRIPE_ENTERPRISE_PRICE_ID are not secret (just identifiers) — set in [vars].
 #
 # --- Cloud connectors (Dropbox/OneDrive/Box) — all optional; each 501s until configured ---
 # Set with: wrangler secret put DROPBOX_CLIENT_SECRET
@@ -133,6 +135,7 @@ FREE_TIER_MAX_SIGNERS = "2"
 DOC_TTL_DAYS = "9"
 FEEDBACK_EMAIL = "founder@docracy.io"
 ADMIN_EMAILS = "rl@relacon.at"
+STRIPE_PRICE_ID = "price_1TxwaFQvixTOu6qpCjZQupJJ"
 DROPBOX_CLIENT_ID = "t0e14bciku06etn"
 MS_CLIENT_ID = "a09dea4c-3518-4312-9de8-b1a91a03f283"
 BOX_CLIENT_ID = "b1hihpb8dhxe7wye5jf9mswpiqhknj42"
