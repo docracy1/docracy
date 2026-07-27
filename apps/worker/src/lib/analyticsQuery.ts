@@ -1,25 +1,29 @@
 import type { Env } from "@docracy/shared";
 
 export type AnalyticsQueryFailure =
-  | { kind: "not_configured"; missing: Array<"CF_ANALYTICS_API_TOKEN" | "CF_ACCOUNT_ID"> }
+  | { kind: "not_configured" }
   | { kind: "api_error"; status: number; detail: string };
 
 export type AnalyticsQueryResult<T> = { ok: true; data: T } | { ok: false; failure: AnalyticsQueryFailure };
 
+/** Accept either secret name — CF_API_TOKEN was used on some deployments before CF_ANALYTICS_API_TOKEN. */
+export function analyticsReadToken(env: Env): string | undefined {
+  return env.CF_ANALYTICS_API_TOKEN ?? env.CF_API_TOKEN;
+}
+
 function missingConfig(env: Env): AnalyticsQueryFailure | null {
-  const missing: Array<"CF_ANALYTICS_API_TOKEN" | "CF_ACCOUNT_ID"> = [];
-  if (!env.CF_ANALYTICS_API_TOKEN) missing.push("CF_ANALYTICS_API_TOKEN");
-  if (!env.CF_ACCOUNT_ID) missing.push("CF_ACCOUNT_ID");
-  return missing.length ? { kind: "not_configured", missing } : null;
+  if (!analyticsReadToken(env) || !env.CF_ACCOUNT_ID) return { kind: "not_configured" };
+  return null;
 }
 
 async function runAnalyticsSql<T>(env: Env, sql: string): Promise<AnalyticsQueryResult<T>> {
   const config = missingConfig(env);
   if (config) return { ok: false, failure: config };
 
+  const token = analyticsReadToken(env)!;
   const response = await fetch(`https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/analytics_engine/sql`, {
     method: "POST",
-    headers: { Authorization: `Bearer ${env.CF_ANALYTICS_API_TOKEN}`, "Content-Type": "text/plain" },
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "text/plain" },
     body: sql,
   });
 
@@ -89,10 +93,9 @@ export async function queryFunnelStepCounts(env: Env, days: number): Promise<Ana
 export function formatAnalyticsFailure(failure: AnalyticsQueryFailure): string {
   if (failure.kind === "not_configured") {
     return (
-      "Analytics Engine's read API isn't configured yet — set " +
-      failure.missing.join(" and ") +
-      " (token via `wrangler secret put CF_ANALYTICS_API_TOKEN` with Account Analytics:Read; " +
-      "account id is already in wrangler.toml as CF_ACCOUNT_ID)."
+      "Analytics Engine's read API isn't configured yet — set CF_ANALYTICS_API_TOKEN " +
+      "(or CF_API_TOKEN) via `wrangler secret put`, using a Cloudflare API token scoped to " +
+      "Account Analytics:Read. CF_ACCOUNT_ID is already in wrangler.toml."
     );
   }
   return (

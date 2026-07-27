@@ -174,6 +174,8 @@ export interface Env {
    *  until manually created in the Cloudflare dashboard; the admin analytics route degrades to a
    *  clear "not configured" response rather than failing when this is unset. */
   CF_ANALYTICS_API_TOKEN?: string;
+  /** Legacy alias for CF_ANALYTICS_API_TOKEN — some deployments set this shorter name instead. */
+  CF_API_TOKEN?: string;
   /** Enterprise-only cloud-storage connectors (lib/cloudConnectors.ts). Each provider's OAuth app
    *  is created in that provider's own developer console; client IDs are public and live here,
    *  client secrets are set via `wrangler secret put {PROVIDER}_CLIENT_SECRET` and never appear in

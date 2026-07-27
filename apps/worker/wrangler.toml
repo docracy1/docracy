@@ -70,9 +70,9 @@ BOX_CLIENT_ID = "b1hihpb8dhxe7wye5jf9mswpiqhknj42"
 # --- Secrets (never stored in this file) ---
 # Set with: wrangler secret put TOKEN_SECRET
 # Set with: wrangler secret put RESEND_API_KEY   (optional locally — omit to log emails to console instead of sending)
-# Set with: wrangler secret put CF_ANALYTICS_API_TOKEN   (optional — a Cloudflare API token scoped
-#   to Account Analytics:Read; GET /api/admin/analytics returns a "not configured" response until
-#   this is set, rather than failing)
+# Set with: wrangler secret put CF_ANALYTICS_API_TOKEN   (optional — CF_API_TOKEN also accepted;
+#   a Cloudflare API token scoped to Account Analytics:Read; GET /api/admin/analytics returns a
+#   "not configured" response until this is set, rather than failing)
 #
 # --- Billing (Stripe) — all optional; billing routes 501 gracefully until these are set ---
 # Set with: wrangler secret put STRIPE_SECRET_KEY

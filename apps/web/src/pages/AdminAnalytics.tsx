@@ -1016,9 +1016,15 @@ export default function AdminAnalytics() {
             <>
               {loading && <p style={{ color: "var(--mute)" }}>Loading…</p>}
               {error && (
-                <div className="card" style={{ borderColor: "var(--danger)", color: "var(--danger)" }}>
-                  {error}
-                </div>
+                <>
+                  <div className="card" style={{ borderColor: "var(--danger)", color: "var(--danger)", marginBottom: 16 }}>
+                    {error}
+                  </div>
+                  <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 0 }}>
+                    Funnel and traffic charts need Analytics Engine. <strong>Blog posts</strong> and{" "}
+                    <strong>Signups</strong> in the sidebar still work — they use the database directly.
+                  </p>
+                </>
               )}
 
               {!loading && !error && rows && totals && (
