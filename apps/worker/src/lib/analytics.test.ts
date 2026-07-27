@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { classifyBot, trackEvent } from "./analytics";
+import { classifyBot, trackEvent, isExcludedAgent } from "./analytics";
 import { makeMockEnv } from "../test/mockEnv";
 
 describe("classifyBot", () => {
@@ -22,10 +22,27 @@ describe("classifyBot", () => {
     });
   });
 
+  it("classifies Cursor agent user agents", () => {
+    expect(classifyBot("Mozilla/5.0 Cursor/1.0")).toEqual({ isBot: true, botName: "Cursor" });
+  });
+
   it("treats a missing user agent as human (not a bot)", () => {
     expect(classifyBot(undefined)).toEqual({ isBot: false, botName: "" });
     expect(classifyBot(null)).toEqual({ isBot: false, botName: "" });
     expect(classifyBot("")).toEqual({ isBot: false, botName: "" });
+  });
+});
+
+describe("isExcludedAgent", () => {
+  it("excludes Claude and Cursor agents from analytics", () => {
+    expect(isExcludedAgent("ClaudeBot/1.0")).toBe(true);
+    expect(isExcludedAgent("Claude-User")).toBe(true);
+    expect(isExcludedAgent("Mozilla/5.0 Cursor/1.0")).toBe(true);
+  });
+
+  it("does not exclude other bots or humans", () => {
+    expect(isExcludedAgent("GPTBot/1.1")).toBe(false);
+    expect(isExcludedAgent("Mozilla/5.0")).toBe(false);
   });
 });
 
@@ -46,6 +63,16 @@ describe("trackEvent", () => {
       doubles: [1, 0],
       indexes: ["page_view"],
     });
+  });
+
+  it("skips writing for Claude and Cursor agents", () => {
+    const writeDataPoint = vi.fn();
+    const { env } = makeMockEnv({ ANALYTICS: { writeDataPoint } as any });
+
+    trackEvent(env, { event: "page_view", route: "/", userAgent: "ClaudeBot/1.0" });
+    trackEvent(env, { event: "page_view", route: "/", userAgent: "Mozilla/5.0 Cursor/1.0" });
+
+    expect(writeDataPoint).not.toHaveBeenCalled();
   });
 
   it("writes a data point for a human request with every optional field populated", () => {

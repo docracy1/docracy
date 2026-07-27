@@ -48,6 +48,18 @@ export type FunnelEvent =
 export const NOTRACK_COOKIE_NAME = "docracy_notrack";
 export const NOTRACK_COOKIE_MAX_AGE_SECONDS = 365 * 24 * 60 * 60;
 
+/** Cookie options for the founder notrack opt-out — readable by the admin UI (not HttpOnly). */
+export function noTrackCookieOptions(env: Env) {
+  const isHttps = env.PUBLIC_APP_URL.startsWith("https");
+  return {
+    httpOnly: false,
+    secure: isHttps,
+    sameSite: (isHttps ? "None" : "Lax") as "None" | "Lax",
+    path: "/",
+    maxAge: NOTRACK_COOKIE_MAX_AGE_SECONDS,
+  };
+}
+
 /** Documented User-Agent substrings for AI crawlers/assistants likely to hit these pages — not a
  *  security control (trivially spoofable), just good-enough classification for traffic analytics.
  *  Ordered roughly by how often we expect to see them. */
@@ -58,6 +70,7 @@ const BOT_PATTERNS: Array<{ name: string; pattern: RegExp }> = [
   { name: "ClaudeBot", pattern: /ClaudeBot/i },
   { name: "Claude-User", pattern: /Claude-User/i },
   { name: "anthropic-ai", pattern: /anthropic-ai/i },
+  { name: "Cursor", pattern: /Cursor/i },
   { name: "PerplexityBot", pattern: /PerplexityBot/i },
   { name: "Perplexity-User", pattern: /Perplexity-User/i },
   { name: "CCBot", pattern: /CCBot/i },
@@ -70,6 +83,11 @@ const BOT_PATTERNS: Array<{ name: string; pattern: RegExp }> = [
   { name: "meta-externalagent", pattern: /meta-externalagent/i },
 ];
 
+/** Founder tooling traffic that should never inflate funnel numbers — Claude Code / Claude bots
+ *  and Cursor agent browsers. Classified as bots above, and skipped entirely on write (and filtered
+ *  out of admin SQL reads) so they don't show up as "traffic". */
+const EXCLUDED_FROM_ANALYTICS = new Set(["ClaudeBot", "Claude-User", "anthropic-ai", "Cursor"]);
+
 export function classifyBot(userAgent: string | null | undefined): { isBot: boolean; botName: string } {
   if (!userAgent) return { isBot: false, botName: "" };
   for (const { name, pattern } of BOT_PATTERNS) {
@@ -77,6 +95,15 @@ export function classifyBot(userAgent: string | null | undefined): { isBot: bool
   }
   return { isBot: false, botName: "" };
 }
+
+/** True for Claude / Cursor agent user agents — always omitted from Analytics Engine writes. */
+export function isExcludedAgent(userAgent: string | null | undefined): boolean {
+  const { botName } = classifyBot(userAgent);
+  return EXCLUDED_FROM_ANALYTICS.has(botName);
+}
+
+/** SQL fragment that drops excluded agent rows from admin reads (blob4 = botName). */
+export const EXCLUDED_AGENTS_SQL_FILTER = `blob4 NOT IN ('ClaudeBot', 'Claude-User', 'anthropic-ai', 'Cursor')`;
 
 export interface TrackEventParams {
   event: FunnelEvent;
@@ -123,6 +150,8 @@ export interface TrackEventParams {
  */
 export function trackEvent(env: Env, params: TrackEventParams): void {
   if (!env.ANALYTICS) return;
+  // Claude / Cursor agent traffic is never written — keeps funnel charts about real visitors.
+  if (isExcludedAgent(params.userAgent)) return;
   const { isBot, botName } = classifyBot(params.userAgent);
   try {
     env.ANALYTICS.writeDataPoint({

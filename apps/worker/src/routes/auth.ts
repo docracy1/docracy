@@ -6,12 +6,13 @@ import {
   consumeMagicLink,
   isAdminEmail,
   optionalAccount,
+  resolveAccount,
   SESSION_COOKIE_NAME,
   SESSION_TTL_SECONDS,
   sessionCookieOptions,
   type AccountContext,
 } from "../lib/auth";
-import { trackEvent } from "../lib/analytics";
+import { trackEvent, NOTRACK_COOKIE_NAME, noTrackCookieOptions } from "../lib/analytics";
 import type { Env } from "@docracy/shared";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -37,13 +38,16 @@ auth.post("/request-link", async (c) => {
   if (!result.ok) return c.json({ error: result.error }, 400);
   // Fired for every request, new account or returning login alike — there's no way to know which
   // without a D1 lookup this route doesn't otherwise need, and a broad "auth flow started" signal
-  // is still useful for the Activation funnel even with that overlap.
-  trackEvent(c.env, {
-    event: "signup_started",
-    route: "auth",
-    userAgent: c.req.header("user-agent"),
-    country: c.req.header("CF-IPCountry"),
-  });
+  // is still useful for the Activation funnel even with that overlap. Skip for ADMIN_EMAILS so
+  // founder QA never lands in the Activation funnel.
+  if (!isAdminEmail(c.env, email)) {
+    trackEvent(c.env, {
+      event: "signup_started",
+      route: "auth",
+      userAgent: c.req.header("user-agent"),
+      country: c.req.header("CF-IPCountry"),
+    });
+  }
   return c.json({ ok: true });
 });
 
@@ -67,6 +71,11 @@ auth.post("/consume", async (c) => {
     ...sessionCookieOptions(c.env),
     maxAge: SESSION_TTL_SECONDS,
   });
+  // Founders on ADMIN_EMAILS always get the notrack cookie so QA visits never inflate funnels.
+  const account = await resolveAccount(c.env, result.sessionToken);
+  if (account && isAdminEmail(c.env, account.email)) {
+    setCookie(c, NOTRACK_COOKIE_NAME, "1", noTrackCookieOptions(c.env));
+  }
   return c.json({ ok: true });
 });
 
@@ -93,6 +102,7 @@ auth.post("/admin-login", async (c) => {
     ...sessionCookieOptions(c.env),
     maxAge: SESSION_TTL_SECONDS,
   });
+  setCookie(c, NOTRACK_COOKIE_NAME, "1", noTrackCookieOptions(c.env));
   return c.json({ ok: true });
 });
 
@@ -104,6 +114,11 @@ auth.post("/logout", async (c) => {
 auth.get("/me", optionalAccount, async (c) => {
   const account = c.get("account");
   const isAdmin = !!account && isAdminEmail(c.env, account.email);
+  // Keep the founder notrack cookie fresh on every /me so Pages middleware pageviews (which only
+  // see the cookie, not the session alone when forwarded) stay opted out.
+  if (isAdmin) {
+    setCookie(c, NOTRACK_COOKIE_NAME, "1", noTrackCookieOptions(c.env));
+  }
   return c.json({ account, isAdmin });
 });
 

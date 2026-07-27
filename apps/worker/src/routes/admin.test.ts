@@ -164,7 +164,7 @@ describe("POST /api/admin/analytics/notrack", () => {
     expect(res.status).toBe(401);
   });
 
-  it("sets the notrack cookie when enabling", async () => {
+  it("always sets the notrack cookie (founder traffic stays out of analytics)", async () => {
     const { env } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com" });
     const headers = await sessionCookie(env, "admin@example.com");
     const res = await admin.request(
@@ -179,7 +179,7 @@ describe("POST /api/admin/analytics/notrack", () => {
     expect(res.headers.get("set-cookie")).toContain("docracy_notrack=1");
   });
 
-  it("clears the notrack cookie when disabling", async () => {
+  it("keeps notrack enabled even when the client asks to disable it", async () => {
     const { env } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com" });
     const headers = await sessionCookie(env, "admin@example.com");
     const res = await admin.request(
@@ -189,7 +189,6 @@ describe("POST /api/admin/analytics/notrack", () => {
       MOCK_CTX
     );
     expect(res.status).toBe(200);
-    const setCookie = res.headers.get("set-cookie") ?? "";
-    expect(setCookie).toContain("docracy_notrack=;");
+    expect(res.headers.get("set-cookie")).toContain("docracy_notrack=1");
   });
 });

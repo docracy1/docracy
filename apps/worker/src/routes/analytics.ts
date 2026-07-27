@@ -1,9 +1,11 @@
 import { Hono } from "hono";
 import { getCookie } from "hono/cookie";
-import { trackEvent, NOTRACK_COOKIE_NAME } from "../lib/analytics";
+import { trackEvent, NOTRACK_COOKIE_NAME, isExcludedAgent } from "../lib/analytics";
 import { checkTrackEventRateLimit } from "../lib/ratelimit";
+import { isAdminEmail, resolveAccount, SESSION_COOKIE_NAME } from "../lib/auth";
 import type { FunnelEvent } from "../lib/analytics";
 import type { Env } from "@docracy/shared";
+import type { Context } from "hono";
 
 // Only the routes this funnel actually cares about (public marketing pages) — an allow-list, not
 // a denylist, so a junk/typo'd route from a stray client never becomes a phantom row in the data.
@@ -18,6 +20,14 @@ const TRACKED_ROUTES = new Set(["/", "/free-templates", "/mcp", "/about", "/pric
 // deliberately excluded from blog_article_loaded below.
 function isTrackedRoute(route: string): boolean {
   return TRACKED_ROUTES.has(route) || route === "/blog" || route.startsWith("/blog/") || route.startsWith("/free-templates/");
+}
+
+/** Skip founder QA (notrack cookie or ADMIN_EMAILS session) and Claude/Cursor agent browsers. */
+async function shouldSkipAnalytics(c: Context<{ Bindings: Env }>): Promise<boolean> {
+  if (getCookie(c, NOTRACK_COOKIE_NAME) === "1") return true;
+  if (isExcludedAgent(c.req.header("user-agent"))) return true;
+  const account = await resolveAccount(c.env, getCookie(c, SESSION_COOKIE_NAME));
+  return !!account && isAdminEmail(c.env, account.email);
 }
 
 const analytics = new Hono<{ Bindings: Env }>();
@@ -35,10 +45,10 @@ analytics.post("/pageview", async (c) => {
   const route = body.route ?? "";
   if (!isTrackedRoute(route)) return c.json({ error: "Unknown route" }, 400);
 
-  // Opt-out for whoever's own browser has the cookie set (e.g. the site owner doing QA) — see
-  // POST /api/admin/analytics/notrack. Still returns 200 either way so the caller (the Pages
-  // Function middleware) never sees this as an error.
-  if (getCookie(c, NOTRACK_COOKIE_NAME) === "1") return c.json({ ok: true, skipped: true });
+  // Opt-out for the site owner (notrack / admin session) and Claude/Cursor agents — see
+  // lib/analytics.ts. Still returns 200 either way so the Pages Function middleware never treats
+  // this as an error.
+  if (await shouldSkipAnalytics(c)) return c.json({ ok: true, skipped: true });
 
   const userAgent = c.req.header("user-agent");
   const country = c.req.header("CF-IPCountry");
@@ -124,7 +134,7 @@ analytics.post("/track", async (c) => {
     return c.json({ error: "Unknown or unsupported event" }, 400);
   }
 
-  if (getCookie(c, NOTRACK_COOKIE_NAME) === "1") return c.json({ ok: true, skipped: true });
+  if (await shouldSkipAnalytics(c)) return c.json({ ok: true, skipped: true });
 
   trackEvent(c.env, {
     event: body.event as FunnelEvent,

@@ -18,12 +18,6 @@ import {
 } from "../lib/api";
 import { usePageMeta } from "../lib/usePageMeta";
 
-const NOTRACK_COOKIE_NAME = "docracy_notrack";
-
-function readNoTrackCookie(): boolean {
-  return document.cookie.split("; ").some((c) => c === `${NOTRACK_COOKIE_NAME}=1`);
-}
-
 const HUMAN_COLOR = "#2f7ed8"; // var(--primary)
 const BOT_COLOR = "#d9822b";
 
@@ -889,26 +883,13 @@ export default function AdminAnalytics() {
   const [funnelSteps, setFunnelSteps] = useState<FunnelStepRow[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [noTrack, setNoTrack] = useState(() => readNoTrackCookie());
-  const [noTrackBusy, setNoTrackBusy] = useState(false);
-  const [noTrackError, setNoTrackError] = useState<string | null>(null);
   const [section, setSection] = useState<AdminSection>("analytics");
 
-  const onToggleNoTrack = async () => {
-    setNoTrackBusy(true);
-    setNoTrackError(null);
-    try {
-      const next = !noTrack;
-      await setAnalyticsNoTrack(next);
-      // Read the cookie back rather than trusting the request succeeded — if the browser rejected
-      // the Set-Cookie for any reason, this reflects what's actually true instead of what we hoped.
-      setNoTrack(readNoTrackCookie());
-    } catch (err) {
-      setNoTrackError(err instanceof Error ? err.message : "Failed to update — try again.");
-    } finally {
-      setNoTrackBusy(false);
-    }
-  };
+  // Founder visits are always excluded (ADMIN_EMAILS session + permanent notrack cookie). Claude
+  // and Cursor agent traffic is filtered on write and in SQL reads — no toggle needed.
+  useEffect(() => {
+    setAnalyticsNoTrack(true).catch(() => {});
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -991,13 +972,9 @@ export default function AdminAnalytics() {
             ))}
           </div>
 
-          <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "var(--body)", marginBottom: 4 }}>
-            <input type="checkbox" checked={noTrack} disabled={noTrackBusy} onChange={onToggleNoTrack} />
-            Don't count my own visits (this browser only)
-          </label>
-          {noTrackError && <p style={{ color: "var(--danger)", fontSize: 12, marginTop: 0, marginBottom: 16 }}>{noTrackError}</p>}
-          {!noTrackError && <div style={{ marginBottom: 20 }} />}
-
+          <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 0, marginBottom: 20 }}>
+            Your visits, Claude, and Cursor are always excluded from these charts.
+          </p>
           {/* Blog posts and Signups are backed by their own independent D1-only fetches (each
               card manages its own loading/error state) — they have no dependency on the
               Analytics Engine call below, so they must render regardless of whether that call
