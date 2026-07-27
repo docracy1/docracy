@@ -7,7 +7,7 @@
 ## Primary services
 
 - [Prepare a document](https://docracy.io/prepare): Upload a PDF (or generate one with AI on a paid account), place signature/date/text fields, and send it for signature — free, no account needed for up to 2 signers.
-- [Free legal templates](https://docracy.io/free-templates): 15 ready-to-use templates (NDA, offer letter, freelance agreement, lease, etc.) with fields already placed.
+- [Free legal templates](https://docracy.io/free-templates): 31 ready-to-use templates (NDA, offer letter, freelance agreement, lease, etc.) with fields already placed.
 - [Pricing](https://docracy.io/pricing): Free vs. paid feature comparison.
 - [Documentation](https://docracy.io/docs): How the free flow, paid AI tools, templates, webhooks, and MCP/Zapier automation work.
 

@@ -288,9 +288,8 @@ const HOW_IT_WORKS = [
   { title: "Signed & done", body: "Once everyone's signed, download the final PDF and its certificate of completion." },
 ];
 
-// The library has 15 templates today; these 4 are shown here purely as a representative sample —
-// same underlying FREE_TEMPLATES data /free-templates itself reads, so this can't drift out of
-// sync with what's actually in the library.
+// These 4 are shown here purely as a representative sample — same underlying FREE_TEMPLATES
+// data /free-templates itself reads, so the count and list can't drift out of sync.
 const FEATURED_TEMPLATE_SLUGS = ["mutual-nda", "independent-contractor-agreement", "offer-letter", "freelance-service-agreement"];
 const FEATURED_TEMPLATES = FREE_TEMPLATES.filter((t) => FEATURED_TEMPLATE_SLUGS.includes(t.slug));
 
@@ -460,7 +459,7 @@ export default function Landing() {
           </div>
           <div style={{ marginTop: 20 }}>
             <Link to="/free-templates" style={{ fontSize: 13.5, fontWeight: 600 }}>
-              Browse all 15 free templates →
+              Browse all {FREE_TEMPLATES.length} free templates →
             </Link>
           </div>
         </div>

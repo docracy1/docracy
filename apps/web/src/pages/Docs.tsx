@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { usePageMeta } from "../lib/usePageMeta";
+import { FREE_TEMPLATES } from "../lib/freeTemplates";
 
 function Section({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
   return (
@@ -34,7 +35,7 @@ export default function Docs() {
 
       <Section id="templates-free" title="Free templates">
         <p>
-          <Link to="/free-templates">15 ready-to-use templates</Link> — NDAs, offer letters, freelance
+          <Link to="/free-templates">{FREE_TEMPLATES.length} ready-to-use templates</Link> — NDAs, offer letters, freelance
           agreements, leases, and more — with fields already placed. Pick one, fill in the bracketed
           details, and send it the same way as an uploaded PDF.
         </p>

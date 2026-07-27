@@ -1,5 +1,5 @@
 # /templates was requested as its own landing page, but /free-templates already is that page
-# (15 real templates, its own SEO meta) — a second page with the same purpose would just be
+# (the full free template library, its own SEO meta) — a second page with the same purpose would just be
 # duplicate content competing with itself in search results. A redirect captures the shorter URL
 # without the duplication.
 /templates  /free-templates  301
