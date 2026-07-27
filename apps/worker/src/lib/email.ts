@@ -169,13 +169,18 @@ export async function sendSigningInvite(env: Env, doc: DocState, order: number, 
 
 export async function sendPreparerStatusLink(env: Env, preparerEmail: string, statusToken: string): Promise<void> {
   const link = `${env.PUBLIC_APP_URL}/status/${statusToken}`;
-  await send(
-    env,
-    preparerEmail,
-    "Your document's status link",
-    `<p>Bookmark this link to check on your signing chain any time — it's the only way to get back to it, so hang on to this email: <a href="${link}">${link}</a></p>`,
-    { emailType: "preparer_status_link" }
-  );
+  const body = `
+    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">Your document's status link</p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      Bookmark this link to check on your signing chain any time — it's the only way to get back to
+      it, so hang on to this email.
+    </p>
+    ${ctaButton(link, "View status")}
+    ${SIGN_OFF}
+  `;
+  await send(env, preparerEmail, "Your document's status link", emailShell(env.PUBLIC_APP_URL, body), {
+    emailType: "preparer_status_link",
+  });
 }
 
 export async function sendReminder(env: Env, doc: DocState, order: number, token: string, urgent: boolean): Promise<void> {
@@ -183,15 +188,17 @@ export async function sendReminder(env: Env, doc: DocState, order: number, token
   const link = `${env.PUBLIC_APP_URL}/sign/${token}`;
   const subject = urgent ? "Reminder: this signing link expires soon" : "Reminder: you have a document waiting to be signed";
   const tone = urgent
-    ? `<p><strong>This link expires soon.</strong> Please sign before it does, or the document will be deleted.</p>`
+    ? `<p style="margin:16px 0 0 0;font-size:15px;color:${INK};"><strong>This link expires soon.</strong> Please sign before it does, or the document will be deleted.</p>`
     : "";
-  await send(
-    env,
-    signer.email,
-    subject,
-    `<p>Hi ${escapeHtml(signer.name)},</p><p>You still need to sign: <a href="${link}">${link}</a></p>${tone}`,
-    { emailType: "reminder" }
-  );
+  const body = `
+    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">You still have a document to sign</p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};">Hi ${escapeHtml(signer.name)},</p>
+    ${ctaButton(link, "Sign here")}
+    ${tone}
+    ${SIGN_OFF}
+  `;
+  const customLogoUrl = await resolveEmailLogoUrl(env, doc.accountId);
+  await send(env, signer.email, subject, emailShell(env.PUBLIC_APP_URL, body, customLogoUrl), { emailType: "reminder" });
 }
 
 /** Preparer-facing nudges about one specific signer's progress on a document they sent — distinct
@@ -290,6 +297,16 @@ export async function sendCompletionEmails(
   // this merge changes nothing about the audit trail, only what the recipient downloads.
   const combinedPdf = certificatePdf ? await mergePdfs([finalPdf, certificatePdf]) : finalPdf;
   const attachments = [{ filename: "signed-document.pdf", content: bytesToBase64(combinedPdf) }];
+  const customLogoUrl = await resolveEmailLogoUrl(env, doc.accountId);
+  const body = `
+    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">Everyone has signed</p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      The signed document, including a certificate of completion, is attached.
+    </p>
+    <p style="margin:0;font-size:13px;color:${MUTED};line-height:1.5;">${statusLines(doc)}</p>
+    ${SIGN_OFF}
+  `;
+  const html = emailShell(env.PUBLIC_APP_URL, body, customLogoUrl);
 
   for (const signer of doc.signers) {
     trackEvent(env, { event: "email_sent", emailType: "completion_all_signed" });
@@ -303,7 +320,7 @@ export async function sendCompletionEmails(
       from: FROM,
       to: signer.email,
       subject: "Your document is fully signed",
-      html: `<p>Everyone has signed. The signed document, including a certificate of completion, is attached.</p><p>${statusLines(doc)}</p>`,
+      html,
       attachments,
       tags: [{ name: "email_type", value: "completion_all_signed" }],
     });

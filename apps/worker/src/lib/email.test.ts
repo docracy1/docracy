@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { PDFDocument } from "pdf-lib";
-import { sendSigningInvite, sendReminder, sendCompletionEmails, sendFeedback } from "./email";
+import { sendSigningInvite, sendReminder, sendPreparerStatusLink, sendCompletionEmails, sendFeedback } from "./email";
 import { makeMockEnv } from "../test/mockEnv";
 import type { DocState } from "@docracy/shared";
 
@@ -103,6 +103,45 @@ describe("sendSigningInvite — custom subject/message", () => {
     expect(capture.logged()).toContain('subject="Please sign the lease"');
     expect(capture.logged()).toContain("Sign by &lt;Friday&gt;!");
     expect(capture.logged()).not.toContain("You've been invited to sign");
+  });
+});
+
+describe("emailShell branding — the 3 templates that used to bypass it", () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  it("wraps sendPreparerStatusLink in the Docracy-branded emailShell", async () => {
+    const { env } = makeMockEnv();
+    const capture = captureDevEmailLog();
+
+    await sendPreparerStatusLink(env, "preparer@example.com", "tok");
+
+    expect(capture.logged()).toContain("docracy-wordmark.png");
+  });
+
+  it("wraps sendReminder in the Docracy-branded emailShell", async () => {
+    const { env } = makeMockEnv();
+    const capture = captureDevEmailLog();
+
+    await sendReminder(env, makeDoc("Anna"), 1, "tok", false);
+
+    expect(capture.logged()).toContain("docracy-wordmark.png");
+  });
+
+  it("wraps sendCompletionEmails' final-signed email in the Docracy-branded emailShell", async () => {
+    // sendCompletionEmails has its own dev-mode console.log (just a byte count, not the HTML), so
+    // unlike the other two above this one only actually builds the branded HTML on the real send
+    // path — RESEND_API_KEY has to be set and fetch mocked to see it.
+    const { env } = makeMockEnv({ RESEND_API_KEY: "test-key" });
+    const bodies: string[] = [];
+    vi.spyOn(global, "fetch").mockImplementation(async (_url, init) => {
+      bodies.push(JSON.parse(init!.body as string).html);
+      return new Response("{}", { status: 200 });
+    });
+    const finalPdf = await makePdfWithPages(1);
+
+    await sendCompletionEmails(env, makeDoc("Anna"), finalPdf);
+
+    expect(bodies[0]).toContain("docracy-wordmark.png");
   });
 });
 
