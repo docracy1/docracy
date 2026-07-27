@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import PricingCalculator from "../components/PricingCalculator";
 import FirstDocumentPrompt from "../components/FirstDocumentPrompt";
 import { track } from "../lib/track";
+import { FREE_TEMPLATES } from "../lib/freeTemplates";
 
 /** Abstract illustration of the product (a document, either freshly signed or having its fields
  *  auto-detected) — deliberately not a literal app screenshot, which would need re-cropping every
@@ -280,6 +281,19 @@ const USE_CASES = [
   },
 ];
 
+const HOW_IT_WORKS = [
+  { title: "Upload", body: "Add the PDF you want signed, or start from a free template." },
+  { title: "Add signers & fields", body: "Enter who needs to sign, in what order, and drop signature and date fields onto the document." },
+  { title: "Send", body: "Everyone in the chain gets an email link — no account required to sign." },
+  { title: "Signed & done", body: "Once everyone's signed, download the final PDF and its certificate of completion." },
+];
+
+// The library has 15 templates today; these 4 are shown here purely as a representative sample —
+// same underlying FREE_TEMPLATES data /free-templates itself reads, so this can't drift out of
+// sync with what's actually in the library.
+const FEATURED_TEMPLATE_SLUGS = ["mutual-nda", "independent-contractor-agreement", "offer-letter", "freelance-service-agreement"];
+const FEATURED_TEMPLATES = FREE_TEMPLATES.filter((t) => FEATURED_TEMPLATE_SLUGS.includes(t.slug));
+
 const AI_FEATURES = [
   { title: "Auto-detect fields", body: "Upload a PDF and it places signature, date, and initial fields for you." },
   { title: "Plain-English explainer", body: "A 3-bullet summary of what each party is agreeing to, no legal jargon." },
@@ -311,6 +325,7 @@ export default function Landing() {
               <li>Fast and frictionless document signing</li>
               <li>Simple workflow setup for teams</li>
               <li>Secure and compliant document storage</li>
+              <li>Legally binding signatures under e-signature laws like ESIGN and eIDAS</li>
             </ul>
           </div>
           <div className="doc-mockup-glow">
@@ -322,6 +337,22 @@ export default function Landing() {
       </div>
 
       <FirstDocumentPrompt source="hero" />
+
+      <div className="audience-band">
+        <div className="audience-inner">
+          <h2 style={{ fontSize: 22, marginBottom: 0, textAlign: "center" }}>How it works</h2>
+          <div className="accent-grid">
+            {HOW_IT_WORKS.map((step, i) => (
+              <div key={step.title} className="accent-item">
+                <h3 style={{ fontSize: 15, marginBottom: 3 }}>
+                  <span style={{ color: "var(--primary)" }}>{i + 1}.</span> {step.title}
+                </h3>
+                <p style={{ margin: 0, fontSize: 13.5 }}>{step.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
       <div className="core-features-band">
         <div className="core-features-inner">
@@ -409,6 +440,28 @@ export default function Landing() {
                 <p style={{ margin: 0, fontSize: 13.5 }}>{u.body}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="audience-band">
+        <div className="audience-inner">
+          <h2 style={{ fontSize: 22, marginBottom: 0 }}>Popular templates</h2>
+          <div className="accent-grid">
+            {FEATURED_TEMPLATES.map((t) => (
+              <div key={t.slug} className="accent-item">
+                <h3 style={{ fontSize: 15, marginBottom: 3 }}>{t.name}</h3>
+                <p style={{ margin: 0, fontSize: 13.5 }}>{t.description}</p>
+                <Link to={`/free-templates/${t.slug}`} style={{ fontSize: 13, fontWeight: 600 }}>
+                  Use this template →
+                </Link>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 20 }}>
+            <Link to="/free-templates" style={{ fontSize: 13.5, fontWeight: 600 }}>
+              Browse all 15 free templates →
+            </Link>
           </div>
         </div>
       </div>
