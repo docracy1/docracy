@@ -64,7 +64,7 @@ STRIPE_ENTERPRISE_PRICE_ID = "price_1TwoDtQvixTOu6qpwfZgfEO5"
 # the OAuth app in that provider's own developer console with redirect URI
 # {PUBLIC_WORKER_URL}/api/account/connectors/{provider}/callback, then fill these in:
 DROPBOX_CLIENT_ID = "t0e14bciku06etn"
-# MS_CLIENT_ID = "..."
+MS_CLIENT_ID = "a09dea4c-3518-4312-9de8-b1a91a03f283"
 # BOX_CLIENT_ID = "..."
 
 # --- Secrets (never stored in this file) ---
@@ -134,3 +134,4 @@ DOC_TTL_DAYS = "9"
 FEEDBACK_EMAIL = "founder@docracy.io"
 ADMIN_EMAILS = "rl@relacon.at"
 DROPBOX_CLIENT_ID = "t0e14bciku06etn"
+MS_CLIENT_ID = "a09dea4c-3518-4312-9de8-b1a91a03f283"
