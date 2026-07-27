@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { setCookie, deleteCookie } from "hono/cookie";
-import { queryFunnelSummary, queryFunnelStepCounts } from "../lib/analyticsQuery";
+import { queryFunnelSummary, queryFunnelStepCounts, formatAnalyticsFailure } from "../lib/analyticsQuery";
 import { NOTRACK_COOKIE_NAME, NOTRACK_COOKIE_MAX_AGE_SECONDS } from "../lib/analytics";
 import { requireAdminAccount, type AccountContext } from "../lib/auth";
 import { findAccountIdByEmail, markAccountEnterprise, markAccountPaid } from "../lib/billing";
@@ -69,18 +69,10 @@ admin.post("/grant-enterprise", requireAdminAccount, async (c) => {
 
 admin.get("/analytics", requireAdminAccount, async (c) => {
   const days = Math.min(90, Math.max(1, Number(c.req.query("days")) || 30));
-  const [rows, funnelSteps] = await Promise.all([queryFunnelSummary(c.env, days), queryFunnelStepCounts(c.env, days)]);
-  if (rows === null || funnelSteps === null) {
-    return c.json(
-      {
-        error:
-          "Analytics Engine's read API isn't configured yet — set CF_ANALYTICS_API_TOKEN " +
-          "(a Cloudflare API token scoped to Account Analytics:Read) via `wrangler secret put`.",
-      },
-      501
-    );
-  }
-  return c.json({ days, rows, funnelSteps });
+  const [summary, steps] = await Promise.all([queryFunnelSummary(c.env, days), queryFunnelStepCounts(c.env, days)]);
+  if (!summary.ok) return c.json({ error: formatAnalyticsFailure(summary.failure) }, 501);
+  if (!steps.ok) return c.json({ error: formatAnalyticsFailure(steps.failure) }, 501);
+  return c.json({ days, rows: summary.data, funnelSteps: steps.data });
 });
 
 // Toggles a cookie (see lib/analytics.ts) that opts the caller's own browser out of funnel

@@ -1,13 +1,43 @@
 import type { Env } from "@docracy/shared";
 
+export type AnalyticsQueryFailure =
+  | { kind: "not_configured"; missing: Array<"CF_ANALYTICS_API_TOKEN" | "CF_ACCOUNT_ID"> }
+  | { kind: "api_error"; status: number; detail: string };
+
+export type AnalyticsQueryResult<T> = { ok: true; data: T } | { ok: false; failure: AnalyticsQueryFailure };
+
+function missingConfig(env: Env): AnalyticsQueryFailure | null {
+  const missing: Array<"CF_ANALYTICS_API_TOKEN" | "CF_ACCOUNT_ID"> = [];
+  if (!env.CF_ANALYTICS_API_TOKEN) missing.push("CF_ANALYTICS_API_TOKEN");
+  if (!env.CF_ACCOUNT_ID) missing.push("CF_ACCOUNT_ID");
+  return missing.length ? { kind: "not_configured", missing } : null;
+}
+
+async function runAnalyticsSql<T>(env: Env, sql: string): Promise<AnalyticsQueryResult<T>> {
+  const config = missingConfig(env);
+  if (config) return { ok: false, failure: config };
+
+  const response = await fetch(`https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/analytics_engine/sql`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${env.CF_ANALYTICS_API_TOKEN}`, "Content-Type": "text/plain" },
+    body: sql,
+  });
+
+  if (!response.ok) {
+    const detail = (await response.text()).slice(0, 500);
+    console.error(`Analytics Engine SQL API failed: ${response.status} ${detail}`);
+    return { ok: false, failure: { kind: "api_error", status: response.status, detail } };
+  }
+
+  const payload = (await response.json()) as { data?: T };
+  return { ok: true, data: payload.data ?? ([] as T) };
+}
+
 /** Analytics Engine's binding is write-only from inside the Worker — reading aggregates back
  *  requires this separate HTTP API with a scoped API token (Account Analytics:Read), which isn't
- *  something this code can provision for itself. Returns null (not a thrown error) when the
- *  token/account id aren't configured yet, so the admin route can degrade to a clear message
- *  instead of a crash — same pattern as the Stripe billing routes elsewhere in this app. */
-export async function queryFunnelSummary(env: Env, days: number): Promise<unknown[] | null> {
-  if (!env.CF_ANALYTICS_API_TOKEN || !env.CF_ACCOUNT_ID) return null;
-
+ *  something this code can provision for itself. Returns a structured failure (not a thrown error)
+ *  when the token/account id aren't configured yet or the SQL API rejects the query. */
+export async function queryFunnelSummary(env: Env, days: number): Promise<AnalyticsQueryResult<unknown[]>> {
   const sql = `
     SELECT
       blob1 AS event,
@@ -23,18 +53,7 @@ export async function queryFunnelSummary(env: Env, days: number): Promise<unknow
     ORDER BY day DESC, event, count DESC
   `.trim();
 
-  const response = await fetch(`https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/analytics_engine/sql`, {
-    method: "POST",
-    headers: { Authorization: `Bearer ${env.CF_ANALYTICS_API_TOKEN}`, "Content-Type": "text/plain" },
-    body: sql,
-  });
-
-  if (!response.ok) {
-    console.error(`Analytics Engine SQL API failed: ${response.status} ${await response.text()}`);
-    return null;
-  }
-  const data = (await response.json()) as { data?: unknown[] };
-  return data.data ?? [];
+  return runAnalyticsSql<unknown[]>(env, sql);
 }
 
 export interface FunnelStepRow {
@@ -51,9 +70,7 @@ export interface FunnelStepRow {
  *  the empty-string guard (rows that never carry a documentId/templateId, e.g. signup_started)
  *  gives the correct per-document/per-template step counts for funnels that need them; callers
  *  that don't (Activation, Template) just use totalCount instead. */
-export async function queryFunnelStepCounts(env: Env, days: number): Promise<FunnelStepRow[] | null> {
-  if (!env.CF_ANALYTICS_API_TOKEN || !env.CF_ACCOUNT_ID) return null;
-
+export async function queryFunnelStepCounts(env: Env, days: number): Promise<AnalyticsQueryResult<FunnelStepRow[]>> {
   const sql = `
     SELECT
       blob1 AS event,
@@ -66,16 +83,21 @@ export async function queryFunnelStepCounts(env: Env, days: number): Promise<Fun
     ORDER BY event
   `.trim();
 
-  const response = await fetch(`https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/analytics_engine/sql`, {
-    method: "POST",
-    headers: { Authorization: `Bearer ${env.CF_ANALYTICS_API_TOKEN}`, "Content-Type": "text/plain" },
-    body: sql,
-  });
+  return runAnalyticsSql<FunnelStepRow[]>(env, sql);
+}
 
-  if (!response.ok) {
-    console.error(`Analytics Engine SQL API failed: ${response.status} ${await response.text()}`);
-    return null;
+export function formatAnalyticsFailure(failure: AnalyticsQueryFailure): string {
+  if (failure.kind === "not_configured") {
+    return (
+      "Analytics Engine's read API isn't configured yet — set " +
+      failure.missing.join(" and ") +
+      " (token via `wrangler secret put CF_ANALYTICS_API_TOKEN` with Account Analytics:Read; " +
+      "account id is already in wrangler.toml as CF_ACCOUNT_ID)."
+    );
   }
-  const data = (await response.json()) as { data?: FunnelStepRow[] };
-  return data.data ?? [];
+  return (
+    `Analytics Engine SQL API failed (${failure.status}). ` +
+    "Check that the token has Account Analytics:Read on this account and that CF_ACCOUNT_ID matches the dashboard. " +
+    `Cloudflare said: ${failure.detail}`
+  );
 }
