@@ -65,7 +65,7 @@ STRIPE_ENTERPRISE_PRICE_ID = "price_1TwoDtQvixTOu6qpwfZgfEO5"
 # {PUBLIC_WORKER_URL}/api/account/connectors/{provider}/callback, then fill these in:
 DROPBOX_CLIENT_ID = "t0e14bciku06etn"
 MS_CLIENT_ID = "a09dea4c-3518-4312-9de8-b1a91a03f283"
-# BOX_CLIENT_ID = "..."
+BOX_CLIENT_ID = "b1hihpb8dhxe7wye5jf9mswpiqhknj42"
 
 # --- Secrets (never stored in this file) ---
 # Set with: wrangler secret put TOKEN_SECRET
@@ -135,3 +135,4 @@ FEEDBACK_EMAIL = "founder@docracy.io"
 ADMIN_EMAILS = "rl@relacon.at"
 DROPBOX_CLIENT_ID = "t0e14bciku06etn"
 MS_CLIENT_ID = "a09dea4c-3518-4312-9de8-b1a91a03f283"
+BOX_CLIENT_ID = "b1hihpb8dhxe7wye5jf9mswpiqhknj42"
