@@ -1,7 +1,7 @@
 # Docracy
 
 > Docracy is a free, no-signup e-signature tool: upload a PDF, add signers in order, and each one
-> gets their turn automatically. Free for chains of up to 2 signers. A paid plan ($7/month) adds
+> gets their turn automatically. Free for chains of up to 2 signers. A paid plan ($10/month) adds
 > unlimited signers, AI tools, and an MCP connector so AI assistants can send/check documents.
 
 ## Primary services

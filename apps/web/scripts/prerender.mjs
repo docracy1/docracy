@@ -138,7 +138,7 @@ const routes = [
     outFile: "pricing.html",
     title: "Pricing — Docracy",
     description:
-      "Free for signing chains of up to 2 signers, no account required. Paid is $7/month and adds AI tools, an " +
+      "Free for signing chains of up to 2 signers, no account required. Paid is $10/month and adds AI tools, an " +
       "MCP connector, unlimited signers, templates, webhooks, and team accounts.",
   },
   {

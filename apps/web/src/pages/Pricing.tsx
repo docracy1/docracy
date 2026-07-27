@@ -22,7 +22,7 @@ const TIERS: Array<{
   {
     name: "Paid",
     tagline: "For teams and growing businesses",
-    price: "$7",
+    price: "$10",
     priceNote: "/mo, flat — not per seat",
     features: [
       "Unlimited signers",
@@ -62,7 +62,7 @@ const TIERS: Array<{
 export default function Pricing() {
   usePageMeta(
     "Pricing — Docracy",
-    "Free for signing chains of up to 2 signers, no account required. Paid is $7/month and adds AI tools, an MCP connector, unlimited signers, templates, webhooks, and team accounts."
+    "Free for signing chains of up to 2 signers, no account required. Paid is $10/month and adds AI tools, an MCP connector, unlimited signers, templates, webhooks, and team accounts."
   );
 
   return (
@@ -70,7 +70,7 @@ export default function Pricing() {
       <h1 style={{ fontSize: 30 }}>Pricing</h1>
       <p style={{ maxWidth: 640, marginBottom: 32 }}>
         Free for signing chains of up to 2 signers, no account required. A paid account is a flat{" "}
-        <strong>$7/month per workspace</strong> — not per seat — and adds unlimited signers, a dashboard,
+        <strong>$10/month per workspace</strong> — not per seat — and adds unlimited signers, a dashboard,
         reusable templates, webhooks, team accounts, white-label branding, PIN-protected links, an MCP
         connector for AI assistants, and a full set of AI tools.
       </p>
@@ -134,7 +134,7 @@ export default function Pricing() {
               <tr>
                 <th></th>
                 <th>Free</th>
-                <th className="plan-col-paid">Paid — $7/mo</th>
+                <th className="plan-col-paid">Paid — $10/mo</th>
                 <th>
                   Enterprise
                   <div style={{ fontSize: 12, fontWeight: 400, marginTop: 2 }}>

@@ -41,7 +41,7 @@ export default function Docs() {
         </p>
       </Section>
 
-      <Section id="paid" title="Paid account ($7/month)">
+      <Section id="paid" title="Paid account ($10/month)">
         <p>
           Signing in adds unlimited signers per document, a dashboard with document history, reusable
           saved templates, parallel (all-at-once) signing, PIN-protected signing links, team accounts

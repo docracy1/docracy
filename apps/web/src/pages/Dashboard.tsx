@@ -889,7 +889,7 @@ export default function Dashboard() {
 
             {!account.isPaid && (
               <div className="card" style={{ marginTop: 24 }}>
-                <h3 style={{ fontSize: 15 }}>Upgrade to paid — $7/month</h3>
+                <h3 style={{ fontSize: 15 }}>Upgrade to paid — $10/month</h3>
                 <p>
                   Unlimited signers, a connector so Claude, ChatGPT, Grok, or Perplexity can look up your documents,
                   team accounts, white-label branding, and a set of AI tools — auto-detect signature/date fields,
@@ -934,7 +934,7 @@ export default function Dashboard() {
             <h3 style={{ fontSize: 15 }}>Templates are a paid feature</h3>
             <p>Upgrade to save reusable templates from any document you've prepared.</p>
             <button className="btn-primary" onClick={onUpgrade} disabled={upgrading}>
-              {upgrading ? "Redirecting…" : "Upgrade — $7/month"}
+              {upgrading ? "Redirecting…" : "Upgrade — $10/month"}
             </button>
           </div>
         )}
@@ -984,7 +984,7 @@ export default function Dashboard() {
               Upgrade for the MCP connector &amp; API key, webhooks, white-label branding, and team accounts.
             </p>
             <button className="btn-primary" onClick={onUpgrade} disabled={upgrading}>
-              {upgrading ? "Redirecting…" : "Upgrade — $7/month"}
+              {upgrading ? "Redirecting…" : "Upgrade — $10/month"}
             </button>
           </div>
         )}

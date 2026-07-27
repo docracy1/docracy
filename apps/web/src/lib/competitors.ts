@@ -20,7 +20,7 @@ export const COMPETITORS: Competitor[] = [
   { key: "adobesign", name: "Adobe Acrobat Sign (Pro for Teams)", pricePerSeat: 23.99, minSeats: 1, billing: "annual commitment", url: "https://www.adobe.com/acrobat/business/pricing-plans.html" },
 ];
 
-export const DOCRACY_PRICE = 7;
+export const DOCRACY_PRICE = 10;
 
 export function getCompetitor(key: string): Competitor | undefined {
   return COMPETITORS.find((c) => c.key === key);

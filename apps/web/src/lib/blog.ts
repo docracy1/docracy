@@ -36,7 +36,7 @@ export const BLOG_POSTS: BlogPost[] = [
             "Its Professional plan runs $16/user/month billed annually — a per-seat price that grows with " +
             "your team.",
           "Docracy's free tier needs no account at all — paste in emails, place fields, send. A paid " +
-            "workspace is a flat $7/month regardless of team size, since Docracy doesn't charge per seat.",
+            "workspace is a flat $10/month regardless of team size, since Docracy doesn't charge per seat.",
         ],
       },
       {
@@ -80,7 +80,7 @@ export const BLOG_POSTS: BlogPost[] = [
         body: [
           "DocuSign's Business Pro plan lists at $40/user/month billed annually, with a 5-seat minimum on " +
             "commercial plans — so a small team of 2 still pays for 5 seats.",
-          "Docracy's paid plan is a flat $7/month per workspace, with unlimited team members and unlimited " +
+          "Docracy's paid plan is a flat $10/month per workspace, with unlimited team members and unlimited " +
             "signers — no seat minimum, no per-user math.",
         ],
       },
@@ -126,7 +126,7 @@ export const BLOG_POSTS: BlogPost[] = [
         body: [
           "PandaDoc's Business plan is $49/user/month billed annually — priced per seat, aimed at sales " +
             "teams generating proposals at volume.",
-          "Docracy is a flat $7/month per workspace, unlimited team members and signers included — a much " +
+          "Docracy is a flat $10/month per workspace, unlimited team members and signers included — a much " +
             "smaller bill for a team that just needs documents signed, not a sales-proposal engine.",
         ],
       },
@@ -150,7 +150,7 @@ export const BLOG_POSTS: BlogPost[] = [
     verdict:
       "If e-signature is one part of a larger sales-proposal workflow, PandaDoc's CRM and content-library " +
       "features earn its per-seat price. If you just need agreements signed without the sales-platform " +
-      "overhead, Docracy does that job for a flat $7/month.",
+      "overhead, Docracy does that job for a flat $10/month.",
   },
   {
     slug: "docracy-vs-adobe-acrobat-sign",
@@ -170,7 +170,7 @@ export const BLOG_POSTS: BlogPost[] = [
         body: [
           "Acrobat Pro for Teams runs $23.99/user/month, tied to an annual commitment and a 150-transaction " +
             "per-user yearly cap.",
-          "Docracy's paid plan is a flat $7/month per workspace with unlimited signers and no annual " +
+          "Docracy's paid plan is a flat $10/month per workspace with unlimited signers and no annual " +
             "lock-in — cancel anytime.",
         ],
       },

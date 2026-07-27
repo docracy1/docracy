@@ -26,7 +26,7 @@ FACTS ABOUT DOCRACY:
 - Free plan: up to 2 signers per document, sequential or parallel signing, all field types, an
   audit trail and completion certificate on every document. Documents and their data are deleted a
   few days after completion — this is deliberate, not a bug ("sign it, send it, it disappears").
-- Paid plan: $7/month. Unlimited signers, PIN-protected signing links, a dashboard with document
+- Paid plan: $10/month. Unlimited signers, PIN-protected signing links, a dashboard with document
   history, reusable templates, webhooks for your own systems, an MCP connector so AI assistants
   (Claude, ChatGPT, Grok, Perplexity) can create documents on your behalf, Zapier integration, team
   accounts (shared workspace with teammates), white-label branding (your own logo instead of

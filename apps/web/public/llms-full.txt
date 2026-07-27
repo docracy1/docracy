@@ -20,7 +20,7 @@ Operated by RELACON GmbH, Elisabethstraße 15/5b, 1010 Vienna, Austria. Contact:
   has signed and the final copy has been emailed out — whichever comes first.
 - 31 free templates with fields pre-placed (list below) at https://docracy.io/free-templates.
 
-## Paid tier ($7/month, requires a free account via magic-link email sign-in)
+## Paid tier ($10/month, requires a free account via magic-link email sign-in)
 
 - Unlimited signers per document (vs. 2 on free).
 - Parallel (all-at-once) signing, not just sequential.

@@ -168,7 +168,7 @@ export async function fetchMe(): Promise<{ account: Account | null; isAdmin: boo
 }
 
 /** Returns the Stripe-hosted checkout URL to redirect the browser to. Omit `plan` (or pass
- *  "paid") for the standard $7/month subscription; pass "enterprise" for the Enterprise plan's
+ *  "paid") for the standard $10/month subscription; pass "enterprise" for the Enterprise plan's
  *  recurring annual subscription — same self-serve flow either way. */
 export async function startCheckout(plan?: "paid" | "enterprise"): Promise<{ url: string }> {
   const res = await apiFetch("/api/billing/checkout", {
