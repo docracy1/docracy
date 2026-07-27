@@ -1,4 +1,5 @@
 import type { Env } from "@docracy/shared";
+import { EXCLUDED_AGENTS_SQL_FILTER } from "./analytics";
 
 export type AnalyticsQueryFailure =
   | { kind: "not_configured" }
@@ -53,6 +54,7 @@ export async function queryFunnelSummary(env: Env, days: number): Promise<Analyt
       SUM(double1) AS count
     FROM docracy_funnel
     WHERE timestamp > now() - INTERVAL '${days}' DAY
+      AND ${EXCLUDED_AGENTS_SQL_FILTER}
     GROUP BY event, route, traffic_type, bot_name, country, day
     ORDER BY day DESC, event, count DESC
   `.trim();
@@ -75,7 +77,7 @@ export interface FunnelStepRow {
  *  correct per-document/per-template step counts for funnels that need them; callers that don't
  *  (Activation, Template) just use totalCount instead. */
 export async function queryFunnelStepCounts(env: Env, days: number): Promise<AnalyticsQueryResult<FunnelStepRow[]>> {
-  const window = `timestamp > now() - INTERVAL '${days}' DAY`;
+  const window = `timestamp > now() - INTERVAL '${days}' DAY AND ${EXCLUDED_AGENTS_SQL_FILTER}`;
 
   const totalsSql = `
     SELECT blob1 AS event, SUM(double1) AS totalCount
