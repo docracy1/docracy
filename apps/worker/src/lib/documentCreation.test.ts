@@ -2,7 +2,7 @@ import { describe, it, expect, vi, afterEach } from "vitest";
 import { createDocumentCore } from "./documentCreation";
 import { sha256Hex } from "./hash";
 import { makeMockEnv, makeValidPdfBytes } from "../test/mockEnv";
-import type { DocState } from "@docracy/shared";
+import type { DocState, Env } from "@docracy/shared";
 
 function makeCtx() {
   const promises: Promise<unknown>[] = [];
@@ -97,6 +97,31 @@ describe("createDocumentCore — anonymous path (accountId: null)", () => {
     expect(stored.events).toHaveLength(2);
     expect(stored.events![0]).toMatchObject({ type: "created", ip: "9.9.9.9", pdfSha256: expectedHash });
     expect(stored.events![1]).toMatchObject({ type: "invite_sent", signerOrder: 1 });
+  });
+
+  // Free-template sends have no accountId (Prepare.tsx resolves templateId ?? freeTemplateSlug, so
+  // this param is truthy either way) — template_completed's gate is `params.templateId` alone, not
+  // accountId, so it must fire here too, not just for logged-in saved-template sends.
+  it("fires template_completed for a templateId-bearing send with no account (free-template path)", async () => {
+    const writeDataPoint = vi.fn();
+    const { env } = makeMockEnv({ ANALYTICS: { writeDataPoint } as unknown as Env["ANALYTICS"] });
+    const ctx = makeCtx();
+    const pdfBytes = await makeValidPdfBytes();
+
+    await createDocumentCore({
+      env,
+      ctx,
+      pdfBytes,
+      accountId: null,
+      templateId: "mutual-nda",
+      ...baseParams,
+    });
+    await ctx.flush();
+
+    const events = writeDataPoint.mock.calls.map((call) => call[0].blobs[0]);
+    expect(events).toContain("template_completed");
+    const templateCompletedCall = writeDataPoint.mock.calls.find((call) => call[0].blobs[0] === "template_completed");
+    expect(templateCompletedCall![0].blobs[7]).toBe("mutual-nda");
   });
 });
 

@@ -68,6 +68,28 @@ describe("sign routes", () => {
     expect(body.signers).toHaveLength(2);
   });
 
+  it("rejects a download while the document is still pending", async () => {
+    const token2 = await signToken(docId, 2, env.TOKEN_SECRET);
+    const res = await sign.request(`/status/${token2}/download`, {}, env);
+    expect(res.status).toBe(409);
+  });
+
+  it("serves the final PDF once the document is completed, using any signer's token", async () => {
+    const doc = await getDoc(env, docId);
+    doc!.status = "completed";
+    doc!.completedAt = new Date().toISOString();
+    await putDoc(env, doc!);
+    const finalBytes = await makeValidPdfBytes();
+    await r2.put(`docs/${docId}/final.pdf`, finalBytes);
+
+    const token2 = await signToken(docId, 2, env.TOKEN_SECRET);
+    const res = await sign.request(`/status/${token2}/download`, {}, env);
+    expect(res.status).toBe(200);
+    expect(res.headers.get("Content-Type")).toBe("application/pdf");
+    const bytes = new Uint8Array(await res.arrayBuffer());
+    expect(bytes).toEqual(finalBytes);
+  });
+
   it("GET /sign for a signer who isn't up yet returns onTurn: false with no PDF", async () => {
     const token2 = await signToken(docId, 2, env.TOKEN_SECRET);
     const res = await sign.request(`/sign/${token2}`, {}, env);

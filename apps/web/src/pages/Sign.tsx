@@ -5,6 +5,7 @@ import PdfViewer from "../components/PdfViewer";
 import { apiUrl, fetchSignView, submitSignature, unlockSign } from "../lib/api";
 import { useNoIndex } from "../lib/useNoIndex";
 import type { SignPayload } from "../lib/api";
+import type { StatusPayload } from "../lib/types";
 
 function base64ToBytes(base64: string): Uint8Array {
   const binary = atob(base64);
@@ -33,6 +34,7 @@ export default function Sign() {
   const [consented, setConsented] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
+  const [finalStatus, setFinalStatus] = useState<StatusPayload | null>(null);
   const [unlockToken, setUnlockToken] = useState<string | null>(() =>
     token ? sessionStorage.getItem(`sign-unlock:${token}`) : null
   );
@@ -109,7 +111,7 @@ export default function Sign() {
     setSubmitting(true);
     setError(null);
     try {
-      await submitSignature(
+      const result = await submitSignature(
         token,
         payload.fields.map((f) => ({
           fieldId: f.id,
@@ -120,6 +122,7 @@ export default function Sign() {
         consented,
         unlockToken ?? undefined
       );
+      setFinalStatus(result.status);
       setDone(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
@@ -151,6 +154,16 @@ export default function Sign() {
         <BrandLogo path={payload.brandLogoPath} slug={payload.brandWorkspaceSlug} />
         <h1>Signed</h1>
         <p>Thanks — you're done. Everyone in the chain will be notified as the document moves forward.</p>
+        {finalStatus?.status === "completed" && token && (
+          <a
+            href={apiUrl(`/api/status/${token}/download`)}
+            download
+            className="btn-primary"
+            style={{ display: "inline-block", textDecoration: "none", marginTop: 4, marginBottom: 20 }}
+          >
+            Download signed PDF
+          </a>
+        )}
         {/* The recipient never needed an account to get here — this is the moment they're most
          *  likely to become a sender themselves. Skipped entirely for white-labeled workspaces,
          *  who are paying specifically to keep their signers from seeing Docracy at all. */}

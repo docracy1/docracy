@@ -86,6 +86,44 @@ sign.get("/status/:token", async (c) => {
   });
 });
 
+// Same token as /status/:token (any signer's or the preparer's) — whoever can see the status can
+// download the final result once it exists. Serves the fully-executed PDF written at completion
+// (routes/sign.ts's POST /sign/:token handler), not the in-progress working.pdf signers annotate.
+sign.get("/status/:token/download", async (c) => {
+  const token = c.req.param("token");
+  if (!(await checkTokenAccessRateLimit(c.env, token))) {
+    return c.json({ error: "Too many requests. Please try again shortly." }, 429);
+  }
+
+  const verified = await verifyToken(token, c.env.TOKEN_SECRET);
+  if (!verified) return c.json({ error: "Invalid or tampered link" }, 403);
+
+  const doc = await getDoc(c.env, verified.docId);
+  if (!doc) return c.json({ error: "This document has expired or doesn't exist" }, 404);
+  if (doc.status !== "completed") return c.json({ error: "This document hasn't been fully signed yet" }, 409);
+
+  const pdfObj = await c.env.DOCRACY_DOCS.get(`docs/${doc.docId}/final.pdf`);
+  if (!pdfObj) return c.json({ error: "Signed document is missing" }, 404);
+
+  if (getCookie(c, NOTRACK_COOKIE_NAME) !== "1") {
+    trackEvent(c.env, {
+      event: "document_downloaded",
+      route: "status",
+      userAgent: c.req.header("user-agent"),
+      country: c.req.header("CF-IPCountry"),
+      userId: doc.accountId,
+      documentId: doc.docId,
+    });
+  }
+
+  return new Response(await pdfObj.arrayBuffer(), {
+    headers: {
+      "Content-Type": "application/pdf",
+      "Content-Disposition": `attachment; filename="${(doc.title ?? "signed-document").replace(/[^\w.-]/g, "_")}.pdf"`,
+    },
+  });
+});
+
 sign.get("/sign/:token", async (c) => {
   const token = c.req.param("token");
   if (!(await checkTokenAccessRateLimit(c.env, token))) {

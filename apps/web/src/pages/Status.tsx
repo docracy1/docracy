@@ -68,6 +68,16 @@ export default function Status() {
               )}
             </div>
           ))}
+        {status.status === "completed" && (
+          <a
+            href={apiUrl(`/api/status/${token}/download`)}
+            download
+            className="btn-primary"
+            style={{ display: "inline-block", textDecoration: "none", marginTop: 16 }}
+          >
+            Download signed PDF
+          </a>
+        )}
       </div>
     </div>
   );
