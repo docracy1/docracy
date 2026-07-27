@@ -1,0 +1,16 @@
+---
+description: Docracy monorepo conventions and layout
+globs: **/*
+alwaysApply: true
+---
+
+# Docracy
+
+E-signature monorepo at `apps/worker`, `apps/web`, `apps/connector`, `packages/shared`.
+
+- Cloudflare Workers + KV + R2 + D1 (derived index only) + Resend
+- YAGNI: duplicate code except HMAC token logic in `packages/shared`
+- D1 never source of truth; anonymous flow has no accounts/DB
+- Read `README.md` and `CLAUDE.md` for setup and conventions
+- Local dev: `npm run dev:worker` + `npm run dev:web`; tests: `npm test`
+- Never commit secrets (`.dev.vars`, `.env`)
