@@ -49,10 +49,11 @@ const TIERS: Array<{
     priceNote: "sales@docracy.io",
     features: [
       "Everything in Paid",
-      "Invoice billing &amp; annual contracts",
+      "Dropbox, OneDrive, and Box connectors — signed PDFs upload automatically",
+      "Invoice billing & annual contracts",
       "Premium customer support (SLA-backed)",
       "SSO or multi-workspace setup, scoped to your needs",
-      "Volume discounts &amp; custom onboarding",
+      "Volume discounts & custom onboarding",
     ],
     cta: { label: "Contact sales", to: "mailto:sales@docracy.io", external: true },
   },

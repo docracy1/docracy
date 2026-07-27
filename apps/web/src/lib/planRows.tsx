@@ -20,6 +20,7 @@ export const PLAN_ROWS: Array<{ label: string; free: boolean | string; paid: boo
   { label: "AI risk & clause highlighter", free: false, paid: true },
   { label: "AI contract generator (describe it, get a signable PDF)", free: false, paid: true },
   { label: "Customer support", free: false, paid: true, enterprise: "Premium" },
+  { label: "Cloud storage connectors (Dropbox, OneDrive, Box)", free: false, paid: false, enterprise: true },
   { label: "Volume discounts & custom onboarding", free: false, paid: false, enterprise: true },
 ];
 

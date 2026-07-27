@@ -1022,8 +1022,8 @@ export default function Dashboard() {
                   <strong>Need more than the Paid plan?</strong>
                 </p>
                 <p style={{ fontSize: 12, color: "var(--mute)", marginBottom: 8 }}>
-                  Enterprise adds invoice billing, premium customer support, SSO/multi-workspace setup, and
-                  volume discounts, scoped to your needs.
+                  Enterprise adds Dropbox, OneDrive, and Box connectors (signed PDFs upload automatically),
+                  invoice billing, premium customer support, SSO/multi-workspace setup, and volume discounts.
                 </p>
                 {upgradeEnterpriseError && (
                   <p style={{ color: "var(--danger)", fontSize: 13 }}>{upgradeEnterpriseError}</p>
@@ -1534,7 +1534,7 @@ export default function Dashboard() {
               {!account.isEnterprise && topRecurringUsage?.teamUpsell && (
                 <p style={{ fontSize: 13, marginTop: 8, marginBottom: 0 }}>
                   This much repeat volume is usually a sign it's time for more hands on deck — Enterprise adds
-                  cloud-storage connectors and higher limits on top of the team sharing you already have.
+                  Dropbox, OneDrive, and Box connectors and higher limits on top of the team sharing you already have.
                 </p>
               )}
             </div>
