@@ -998,110 +998,119 @@ export default function AdminAnalytics() {
           {noTrackError && <p style={{ color: "var(--danger)", fontSize: 12, marginTop: 0, marginBottom: 16 }}>{noTrackError}</p>}
           {!noTrackError && <div style={{ marginBottom: 20 }} />}
 
-          {loading && <p style={{ color: "var(--mute)" }}>Loading…</p>}
-          {error && (
-            <div className="card" style={{ borderColor: "var(--danger)", color: "var(--danger)" }}>
-              {error}
-            </div>
+          {/* Blog posts and Signups are backed by their own independent D1-only fetches (each
+              card manages its own loading/error state) — they have no dependency on the
+              Analytics Engine call below, so they must render regardless of whether that call
+              succeeded. Every other section reads rows/totals/stepsByEvent from that call and
+              only makes sense once it has resolved. */}
+          {section === "blog" && <BlogPostsCard />}
+
+          {section === "signups" && (
+            <>
+              <AllAccountsCard />
+              <EnterpriseAccountsCard />
+            </>
           )}
 
-          {!loading && !error && rows && totals && (
+          {section !== "blog" && section !== "signups" && (
             <>
-              {section === "analytics" && (
+              {loading && <p style={{ color: "var(--mute)" }}>Loading…</p>}
+              {error && (
+                <div className="card" style={{ borderColor: "var(--danger)", color: "var(--danger)" }}>
+                  {error}
+                </div>
+              )}
+
+              {!loading && !error && rows && totals && (
                 <>
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 12, marginBottom: 24 }}>
-                    <StatTile label="Page views" value={String(totals.totalViews)} sub={`${totals.botPct}% known bots`} />
-                    <StatTile label="Documents sent" value={String(totals.created)} />
-                    <StatTile label="Documents signed" value={String(totals.completed)} sub="distinct documents, not per-signer" />
-                    <StatTile
-                      label="Sent → signed"
-                      value={totals.completionRate === null ? "—" : `${totals.completionRate}%`}
+                  {section === "analytics" && (
+                    <>
+                      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 12, marginBottom: 24 }}>
+                        <StatTile label="Page views" value={String(totals.totalViews)} sub={`${totals.botPct}% known bots`} />
+                        <StatTile label="Documents sent" value={String(totals.created)} />
+                        <StatTile label="Documents signed" value={String(totals.completed)} sub="distinct documents, not per-signer" />
+                        <StatTile
+                          label="Sent → signed"
+                          value={totals.completionRate === null ? "—" : `${totals.completionRate}%`}
+                        />
+                      </div>
+                      <div className="card" style={{ marginBottom: 16 }}>
+                        <h3 style={{ marginTop: 0, fontSize: 15 }}>Page views by day</h3>
+                        <DailyViewsChart rows={rows} />
+                      </div>
+                      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 16 }}>
+                        <div className="card">
+                          <h3 style={{ marginTop: 0, fontSize: 15 }}>By route</h3>
+                          <RouteTable rows={rows} />
+                        </div>
+                        <div className="card">
+                          <h3 style={{ marginTop: 0, fontSize: 15 }}>By bot</h3>
+                          <BotTable rows={rows} />
+                        </div>
+                        <div className="card">
+                          <h3 style={{ marginTop: 0, fontSize: 15 }}>By country</h3>
+                          <CountryTable rows={rows} />
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  {section === "activation" && (
+                    <FunnelCard
+                      title="Activation funnel"
+                      steps={ACTIVATION_STEPS}
+                      countKey="totalCount"
+                      stepsByEvent={stepsByEvent}
+                      kpiEvent="document_sent"
                     />
-                  </div>
-                  <div className="card" style={{ marginBottom: 16 }}>
-                    <h3 style={{ marginTop: 0, fontSize: 15 }}>Page views by day</h3>
-                    <DailyViewsChart rows={rows} />
-                  </div>
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 16 }}>
-                    <div className="card">
-                      <h3 style={{ marginTop: 0, fontSize: 15 }}>By route</h3>
-                      <RouteTable rows={rows} />
-                    </div>
-                    <div className="card">
-                      <h3 style={{ marginTop: 0, fontSize: 15 }}>By bot</h3>
-                      <BotTable rows={rows} />
-                    </div>
-                    <div className="card">
-                      <h3 style={{ marginTop: 0, fontSize: 15 }}>By country</h3>
-                      <CountryTable rows={rows} />
-                    </div>
-                  </div>
+                  )}
+
+                  {section === "completion" && (
+                    <FunnelCard
+                      title="Completion funnel"
+                      note="Counts distinct documents (not raw events) — document_signed fires once per signer, so this corrects for multi-signer chains."
+                      steps={COMPLETION_STEPS}
+                      sideStats={COMPLETION_SIDE_STATS}
+                      countKey="distinctDocuments"
+                      stepsByEvent={stepsByEvent}
+                      kpiEvent="document_signed"
+                    />
+                  )}
+
+                  {section === "templates" && (
+                    <FunnelCard
+                      title="Template funnel"
+                      steps={TEMPLATE_STEPS}
+                      sideStats={TEMPLATE_SIDE_STATS}
+                      countKey="totalCount"
+                      stepsByEvent={stepsByEvent}
+                      kpiEvent="template_completed"
+                    />
+                  )}
+
+                  {section === "traffic" && (
+                    <FunnelCard
+                      title="Traffic events"
+                      steps={TRAFFIC_STEPS}
+                      countKey="totalCount"
+                      stepsByEvent={stepsByEvent}
+                      kpiEvent="landingpage_cta_clicked"
+                    />
+                  )}
+
+                  {section === "email" && (
+                    <FunnelCard
+                      title="Email funnel"
+                      steps={EMAIL_STEPS}
+                      countKey="totalCount"
+                      stepsByEvent={stepsByEvent}
+                      kpiEvent="email_clicked"
+                    />
+                  )}
+
+                  {section === "errors" && <ErrorsCard stepsByEvent={stepsByEvent} />}
                 </>
               )}
-
-              {section === "blog" && <BlogPostsCard />}
-
-              {section === "signups" && (
-                <>
-                  <AllAccountsCard />
-                  <EnterpriseAccountsCard />
-                </>
-              )}
-
-              {section === "activation" && (
-                <FunnelCard
-                  title="Activation funnel"
-                  steps={ACTIVATION_STEPS}
-                  countKey="totalCount"
-                  stepsByEvent={stepsByEvent}
-                  kpiEvent="document_sent"
-                />
-              )}
-
-              {section === "completion" && (
-                <FunnelCard
-                  title="Completion funnel"
-                  note="Counts distinct documents (not raw events) — document_signed fires once per signer, so this corrects for multi-signer chains."
-                  steps={COMPLETION_STEPS}
-                  sideStats={COMPLETION_SIDE_STATS}
-                  countKey="distinctDocuments"
-                  stepsByEvent={stepsByEvent}
-                  kpiEvent="document_signed"
-                />
-              )}
-
-              {section === "templates" && (
-                <FunnelCard
-                  title="Template funnel"
-                  steps={TEMPLATE_STEPS}
-                  sideStats={TEMPLATE_SIDE_STATS}
-                  countKey="totalCount"
-                  stepsByEvent={stepsByEvent}
-                  kpiEvent="template_completed"
-                />
-              )}
-
-              {section === "traffic" && (
-                <FunnelCard
-                  title="Traffic events"
-                  steps={TRAFFIC_STEPS}
-                  countKey="totalCount"
-                  stepsByEvent={stepsByEvent}
-                  kpiEvent="landingpage_cta_clicked"
-                />
-              )}
-
-              {section === "email" && (
-                <FunnelCard
-                  title="Email funnel"
-                  steps={EMAIL_STEPS}
-                  countKey="totalCount"
-                  stepsByEvent={stepsByEvent}
-                  kpiEvent="email_clicked"
-                />
-              )}
-
-              {section === "errors" && <ErrorsCard stepsByEvent={stepsByEvent} />}
             </>
           )}
         </div>
