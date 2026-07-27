@@ -184,4 +184,11 @@ export interface Env {
   MS_CLIENT_SECRET?: string;
   BOX_CLIENT_ID?: string;
   BOX_CLIENT_SECRET?: string;
+  /** Cloudflare Turnstile secret key for the login form's bot check (lib/turnstile.ts, used by
+   *  POST /auth/request-link) — absent until a widget is created (`wrangler turnstile widget
+   *  create`) and this is set via `wrangler secret put TURNSTILE_SECRET_KEY`. Requests skip
+   *  verification entirely while unset, same graceful-degradation pattern as the other optional
+   *  secrets above — this only starts enforcing once both this and the frontend's public site key
+   *  (VITE_TURNSTILE_SITE_KEY) are configured together. */
+  TURNSTILE_SECRET_KEY?: string;
 }

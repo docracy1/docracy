@@ -6,6 +6,7 @@ import { sendMagicLink } from "./email";
 import { checkAdminLoginRateLimit, checkMagicLinkRateLimit } from "./ratelimit";
 import { scheduleOnboardingEmails } from "./onboardingEmails";
 import { trackEvent } from "./analytics";
+import { verifyTurnstile } from "./turnstile";
 
 const MAGIC_LINK_TTL_SECONDS = 15 * 60; // 15 minutes
 export const SESSION_TTL_SECONDS = 30 * 24 * 60 * 60; // 30 days
@@ -81,10 +82,14 @@ export async function requestMagicLink(
   env: Env,
   ctx: Ctx,
   email: string,
-  ip: string | null
+  ip: string | null,
+  turnstileToken?: string
 ): Promise<{ ok: true } | { ok: false; error: string }> {
   if (!env.DOCRACY_DB) {
     return { ok: false, error: "Accounts aren't set up on this deployment yet." };
+  }
+  if (!(await verifyTurnstile(env, turnstileToken, ip))) {
+    return { ok: false, error: "Please complete the verification challenge and try again." };
   }
   const normalizedEmail = email.toLowerCase();
   if (!(await checkMagicLinkRateLimit(env, normalizedEmail))) {

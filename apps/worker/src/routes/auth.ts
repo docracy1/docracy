@@ -20,9 +20,9 @@ type Variables = { account: AccountContext | null };
 const auth = new Hono<{ Bindings: Env; Variables: Variables }>();
 
 auth.post("/request-link", async (c) => {
-  let body: { email?: string };
+  let body: { email?: string; turnstileToken?: string };
   try {
-    body = await c.req.json<{ email?: string }>();
+    body = await c.req.json<{ email?: string; turnstileToken?: string }>();
   } catch {
     return c.json({ error: "Invalid request body" }, 400);
   }
@@ -33,7 +33,7 @@ auth.post("/request-link", async (c) => {
   }
 
   const ip = c.req.header("CF-Connecting-IP") ?? null;
-  const result = await requestMagicLink(c.env, c.executionCtx, email, ip);
+  const result = await requestMagicLink(c.env, c.executionCtx, email, ip, body.turnstileToken);
   if (!result.ok) return c.json({ error: result.error }, 400);
   // Fired for every request, new account or returning login alike — there's no way to know which
   // without a D1 lookup this route doesn't otherwise need, and a broad "auth flow started" signal

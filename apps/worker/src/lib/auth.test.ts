@@ -72,6 +72,38 @@ describe("requestMagicLink", () => {
     }
     expect((await requestMagicLink(env, ctx, "anna@example.com", null)).ok).toBe(false);
   });
+
+  it("skips the Turnstile check entirely when TURNSTILE_SECRET_KEY isn't configured", async () => {
+    const { env } = makeMockEnv();
+    const ctx = makeCtx();
+    vi.spyOn(console, "log").mockImplementation(() => {});
+    const result = await requestMagicLink(env, ctx, "anna@example.com", null); // no turnstileToken passed
+    expect(result.ok).toBe(true);
+  });
+
+  it("rejects a missing Turnstile token once TURNSTILE_SECRET_KEY is configured", async () => {
+    const { env } = makeMockEnv({ TURNSTILE_SECRET_KEY: "test-secret" });
+    const ctx = makeCtx();
+    const result = await requestMagicLink(env, ctx, "anna@example.com", null);
+    expect(result.ok).toBe(false);
+  });
+
+  it("rejects a Turnstile token the siteverify API marks unsuccessful", async () => {
+    const { env } = makeMockEnv({ TURNSTILE_SECRET_KEY: "test-secret" });
+    const ctx = makeCtx();
+    vi.spyOn(global, "fetch").mockResolvedValue(new Response(JSON.stringify({ success: false }), { status: 200 }));
+    const result = await requestMagicLink(env, ctx, "anna@example.com", null, "bad-token");
+    expect(result.ok).toBe(false);
+  });
+
+  it("accepts a Turnstile token the siteverify API confirms", async () => {
+    const { env } = makeMockEnv({ TURNSTILE_SECRET_KEY: "test-secret" });
+    const ctx = makeCtx();
+    vi.spyOn(console, "log").mockImplementation(() => {});
+    vi.spyOn(global, "fetch").mockResolvedValue(new Response(JSON.stringify({ success: true }), { status: 200 }));
+    const result = await requestMagicLink(env, ctx, "anna@example.com", null, "good-token");
+    expect(result.ok).toBe(true);
+  });
 });
 
 describe("consumeMagicLink", () => {

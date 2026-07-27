@@ -73,6 +73,19 @@ const TEMPLATE_STEPS: FunnelStepDef[] = [
 ];
 const TEMPLATE_SIDE_STATS: FunnelStepDef[] = [{ event: "template_abandoned", label: "Abandoned" }];
 
+const TRAFFIC_STEPS: FunnelStepDef[] = [
+  { event: "landingpage_loaded", label: "Landing page loaded" },
+  { event: "landingpage_cta_clicked", label: "Landing page CTA clicked" },
+  { event: "referral_source_detected", label: "Referral source detected" },
+  { event: "blog_article_loaded", label: "Blog article loaded" },
+  { event: "blog_cta_clicked", label: "Blog CTA clicked" },
+  { event: "page_view", label: "Page viewed" },
+];
+
+/** The single "north star" event for a funnel — called out with a badge in the card header and
+ *  bolded/accent-colored in its own row, same convention as Chasa's admin analytics (a sibling
+ *  product built on this same pattern) so an admin skimming multiple funnels always knows which
+ *  row is the one number that matters most. */
 function FunnelCard({
   title,
   note,
@@ -80,6 +93,7 @@ function FunnelCard({
   sideStats,
   countKey,
   stepsByEvent,
+  kpiEvent,
 }: {
   title: string;
   note?: string;
@@ -87,26 +101,44 @@ function FunnelCard({
   sideStats?: FunnelStepDef[];
   countKey: "totalCount" | "distinctDocuments";
   stepsByEvent: Map<string, FunnelStepRow>;
+  kpiEvent?: string;
 }) {
   const counts = steps.map((s) => stepsByEvent.get(s.event)?.[countKey] ?? 0);
   const maxCount = Math.max(1, ...counts);
 
   return (
     <div className="card" style={{ marginBottom: 16 }}>
-      <h3 style={{ marginTop: 0, fontSize: 15 }}>{title}</h3>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
+        <h3 style={{ marginTop: 0, fontSize: 15 }}>{title}</h3>
+        {kpiEvent && (
+          <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.03em", color: HUMAN_COLOR, whiteSpace: "nowrap" }}>
+            KPI · {kpiEvent.toUpperCase()}
+          </span>
+        )}
+      </div>
       {note && <p style={{ fontSize: 12, color: "var(--mute)", marginTop: -4 }}>{note}</p>}
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {steps.map((s, i) => {
           const count = counts[i];
           const pctOfMax = maxCount > 0 ? (count / maxCount) * 100 : 0;
           const convFromPrev = i === 0 || counts[i - 1] <= 0 ? null : Math.round((count / counts[i - 1]) * 100);
+          const isKpi = s.event === kpiEvent;
           return (
             <div key={s.event}>
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, marginBottom: 3 }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  fontSize: 13,
+                  marginBottom: 3,
+                  color: isKpi ? HUMAN_COLOR : undefined,
+                  fontWeight: isKpi ? 700 : undefined,
+                }}
+              >
                 <span>{s.label}</span>
                 <span>
                   <strong>{count}</strong>
-                  {convFromPrev !== null && <span style={{ color: "var(--mute)", marginLeft: 8 }}>{convFromPrev}% of previous</span>}
+                  {convFromPrev !== null && <span style={{ color: "var(--mute)", marginLeft: 8, fontWeight: 400 }}>{convFromPrev}% of previous</span>}
                 </span>
               </div>
               <div style={{ background: "var(--hairline)", borderRadius: 4, height: 8, overflow: "hidden" }}>
@@ -785,6 +817,70 @@ function AllAccountsCard() {
   );
 }
 
+const EMAIL_STEPS: FunnelStepDef[] = [
+  { event: "email_sent", label: "Sent" },
+  { event: "email_opened", label: "Opened" },
+  { event: "email_clicked", label: "Clicked" },
+];
+
+const ERROR_EVENTS: FunnelStepDef[] = [
+  { event: "upload_failed", label: "Upload failed" },
+  { event: "send_failed", label: "Send failed" },
+  { event: "signature_error", label: "Signature error" },
+  { event: "pdf_generation_failed", label: "PDF generation failed" },
+];
+
+/** Error counts aren't a funnel (there's no meaningful "conversion" between failure types, and no
+ *  single one is a "KPI" to aim for — fewer is always better across the board), so this is a plain
+ *  Event/Count table like FunnelCard's rows, just without the bar/KPI/conversion-% framing. */
+function ErrorsCard({ stepsByEvent }: { stepsByEvent: Map<string, FunnelStepRow> }) {
+  return (
+    <div className="card">
+      <h3 style={{ marginTop: 0, fontSize: 15 }}>Error events</h3>
+      <table className="plan-table plan-table-static" style={{ width: "100%" }}>
+        <thead>
+          <tr>
+            <th style={{ textAlign: "left" }}>Event</th>
+            <th style={{ textAlign: "left" }}>Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          {ERROR_EVENTS.map((e) => (
+            <tr key={e.event}>
+              <td style={{ fontFamily: "monospace", fontSize: 13 }}>{e.event}</td>
+              <td>{stepsByEvent.get(e.event)?.totalCount ?? 0}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+const ADMIN_SECTIONS = [
+  "analytics",
+  "blog",
+  "signups",
+  "activation",
+  "completion",
+  "templates",
+  "traffic",
+  "email",
+  "errors",
+] as const;
+type AdminSection = (typeof ADMIN_SECTIONS)[number];
+const ADMIN_SECTION_LABEL: Record<AdminSection, string> = {
+  analytics: "Analytics",
+  blog: "Blog posts",
+  signups: "Signups",
+  activation: "Activation",
+  completion: "Completion",
+  templates: "Templates",
+  traffic: "Traffic events",
+  email: "Email",
+  errors: "Errors",
+};
+
 export default function AdminAnalytics() {
   usePageMeta("Analytics — Docracy", "Internal traffic and funnel analytics.");
 
@@ -796,6 +892,7 @@ export default function AdminAnalytics() {
   const [noTrack, setNoTrack] = useState(() => readNoTrackCookie());
   const [noTrackBusy, setNoTrackBusy] = useState(false);
   const [noTrackError, setNoTrackError] = useState<string | null>(null);
+  const [section, setSection] = useState<AdminSection>("analytics");
 
   const onToggleNoTrack = async () => {
     setNoTrackBusy(true);
@@ -861,98 +958,154 @@ export default function AdminAnalytics() {
   }, [rows, stepsByEvent]);
 
   return (
-    <div className="container" style={{ maxWidth: 900 }}>
+    <div className="container" style={{ maxWidth: 1200 }}>
       <h1 style={{ fontSize: 26 }}>Analytics</h1>
       <p style={{ color: "var(--mute)", marginTop: -8, marginBottom: 20 }}>
         Aggregate traffic and funnel counts — no per-visitor tracking, no IPs or cookies stored.
       </p>
 
-      <BlogPostsCard />
-      <AllAccountsCard />
-      <EnterpriseAccountsCard />
+      <div className="dashboard-shell" style={{ maxWidth: "none", margin: 0, padding: 0 }}>
+        <aside className="dashboard-sidebar">
+          {ADMIN_SECTIONS.map((s) => (
+            <button
+              key={s}
+              className={`dashboard-nav-item${section === s ? " active" : ""}`}
+              onClick={() => setSection(s)}
+            >
+              {ADMIN_SECTION_LABEL[s]}
+            </button>
+          ))}
+        </aside>
 
-      <div style={{ display: "flex", gap: 8, marginBottom: 12, flexWrap: "wrap", alignItems: "center" }}>
-        {[7, 30, 90].map((d) => (
-          <button
-            key={d}
-            className={d === days ? "btn-primary" : "btn-secondary"}
-            style={{ fontSize: 13, padding: "6px 14px" }}
-            onClick={() => setDays(d)}
-          >
-            Last {d}d
-          </button>
-        ))}
-      </div>
+        <div className="dashboard-content">
+          <div style={{ display: "flex", gap: 8, marginBottom: 12, flexWrap: "wrap", alignItems: "center" }}>
+            {[7, 30, 90].map((d) => (
+              <button
+                key={d}
+                className={d === days ? "btn-primary" : "btn-secondary"}
+                style={{ fontSize: 13, padding: "6px 14px" }}
+                onClick={() => setDays(d)}
+              >
+                Last {d}d
+              </button>
+            ))}
+          </div>
 
-      <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "var(--body)", marginBottom: 4 }}>
-        <input type="checkbox" checked={noTrack} disabled={noTrackBusy} onChange={onToggleNoTrack} />
-        Don't count my own visits (this browser only)
-      </label>
-      {noTrackError && <p style={{ color: "var(--danger)", fontSize: 12, marginTop: 0, marginBottom: 16 }}>{noTrackError}</p>}
-      {!noTrackError && <div style={{ marginBottom: 20 }} />}
+          <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "var(--body)", marginBottom: 4 }}>
+            <input type="checkbox" checked={noTrack} disabled={noTrackBusy} onChange={onToggleNoTrack} />
+            Don't count my own visits (this browser only)
+          </label>
+          {noTrackError && <p style={{ color: "var(--danger)", fontSize: 12, marginTop: 0, marginBottom: 16 }}>{noTrackError}</p>}
+          {!noTrackError && <div style={{ marginBottom: 20 }} />}
 
-      {loading && <p style={{ color: "var(--mute)" }}>Loading…</p>}
-      {error && (
-        <div className="card" style={{ borderColor: "var(--danger)", color: "var(--danger)" }}>
-          {error}
+          {loading && <p style={{ color: "var(--mute)" }}>Loading…</p>}
+          {error && (
+            <div className="card" style={{ borderColor: "var(--danger)", color: "var(--danger)" }}>
+              {error}
+            </div>
+          )}
+
+          {!loading && !error && rows && totals && (
+            <>
+              {section === "analytics" && (
+                <>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 12, marginBottom: 24 }}>
+                    <StatTile label="Page views" value={String(totals.totalViews)} sub={`${totals.botPct}% known bots`} />
+                    <StatTile label="Documents sent" value={String(totals.created)} />
+                    <StatTile label="Documents signed" value={String(totals.completed)} sub="distinct documents, not per-signer" />
+                    <StatTile
+                      label="Sent → signed"
+                      value={totals.completionRate === null ? "—" : `${totals.completionRate}%`}
+                    />
+                  </div>
+                  <div className="card" style={{ marginBottom: 16 }}>
+                    <h3 style={{ marginTop: 0, fontSize: 15 }}>Page views by day</h3>
+                    <DailyViewsChart rows={rows} />
+                  </div>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 16 }}>
+                    <div className="card">
+                      <h3 style={{ marginTop: 0, fontSize: 15 }}>By route</h3>
+                      <RouteTable rows={rows} />
+                    </div>
+                    <div className="card">
+                      <h3 style={{ marginTop: 0, fontSize: 15 }}>By bot</h3>
+                      <BotTable rows={rows} />
+                    </div>
+                    <div className="card">
+                      <h3 style={{ marginTop: 0, fontSize: 15 }}>By country</h3>
+                      <CountryTable rows={rows} />
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {section === "blog" && <BlogPostsCard />}
+
+              {section === "signups" && (
+                <>
+                  <AllAccountsCard />
+                  <EnterpriseAccountsCard />
+                </>
+              )}
+
+              {section === "activation" && (
+                <FunnelCard
+                  title="Activation funnel"
+                  steps={ACTIVATION_STEPS}
+                  countKey="totalCount"
+                  stepsByEvent={stepsByEvent}
+                  kpiEvent="document_sent"
+                />
+              )}
+
+              {section === "completion" && (
+                <FunnelCard
+                  title="Completion funnel"
+                  note="Counts distinct documents (not raw events) — document_signed fires once per signer, so this corrects for multi-signer chains."
+                  steps={COMPLETION_STEPS}
+                  sideStats={COMPLETION_SIDE_STATS}
+                  countKey="distinctDocuments"
+                  stepsByEvent={stepsByEvent}
+                  kpiEvent="document_signed"
+                />
+              )}
+
+              {section === "templates" && (
+                <FunnelCard
+                  title="Template funnel"
+                  steps={TEMPLATE_STEPS}
+                  sideStats={TEMPLATE_SIDE_STATS}
+                  countKey="totalCount"
+                  stepsByEvent={stepsByEvent}
+                  kpiEvent="template_completed"
+                />
+              )}
+
+              {section === "traffic" && (
+                <FunnelCard
+                  title="Traffic events"
+                  steps={TRAFFIC_STEPS}
+                  countKey="totalCount"
+                  stepsByEvent={stepsByEvent}
+                  kpiEvent="landingpage_cta_clicked"
+                />
+              )}
+
+              {section === "email" && (
+                <FunnelCard
+                  title="Email funnel"
+                  steps={EMAIL_STEPS}
+                  countKey="totalCount"
+                  stepsByEvent={stepsByEvent}
+                  kpiEvent="email_clicked"
+                />
+              )}
+
+              {section === "errors" && <ErrorsCard stepsByEvent={stepsByEvent} />}
+            </>
+          )}
         </div>
-      )}
-
-      {!loading && !error && rows && totals && (
-        <>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 12, marginBottom: 24 }}>
-            <StatTile label="Page views" value={String(totals.totalViews)} sub={`${totals.botPct}% known bots`} />
-            <StatTile label="Documents sent" value={String(totals.created)} />
-            <StatTile label="Documents signed" value={String(totals.completed)} sub="distinct documents, not per-signer" />
-            <StatTile
-              label="Sent → signed"
-              value={totals.completionRate === null ? "—" : `${totals.completionRate}%`}
-            />
-          </div>
-
-          <FunnelCard
-            title="Activation funnel"
-            steps={ACTIVATION_STEPS}
-            countKey="totalCount"
-            stepsByEvent={stepsByEvent}
-          />
-          <FunnelCard
-            title="Completion funnel"
-            note="Counts distinct documents (not raw events) — document_signed fires once per signer, so this corrects for multi-signer chains."
-            steps={COMPLETION_STEPS}
-            sideStats={COMPLETION_SIDE_STATS}
-            countKey="distinctDocuments"
-            stepsByEvent={stepsByEvent}
-          />
-          <FunnelCard
-            title="Template funnel"
-            steps={TEMPLATE_STEPS}
-            sideStats={TEMPLATE_SIDE_STATS}
-            countKey="totalCount"
-            stepsByEvent={stepsByEvent}
-          />
-
-          <div className="card" style={{ marginBottom: 24, marginTop: 24 }}>
-            <h3 style={{ marginTop: 0, fontSize: 15 }}>Page views by day</h3>
-            <DailyViewsChart rows={rows} />
-          </div>
-
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 16 }}>
-            <div className="card">
-              <h3 style={{ marginTop: 0, fontSize: 15 }}>By route</h3>
-              <RouteTable rows={rows} />
-            </div>
-            <div className="card">
-              <h3 style={{ marginTop: 0, fontSize: 15 }}>By bot</h3>
-              <BotTable rows={rows} />
-            </div>
-            <div className="card">
-              <h3 style={{ marginTop: 0, fontSize: 15 }}>By country</h3>
-              <CountryTable rows={rows} />
-            </div>
-          </div>
-        </>
-      )}
+      </div>
     </div>
   );
 }

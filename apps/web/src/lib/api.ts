@@ -120,11 +120,11 @@ export async function submitFeedback(email: string, message: string): Promise<{ 
   return asJson(res);
 }
 
-export async function requestMagicLink(email: string): Promise<{ ok: true }> {
+export async function requestMagicLink(email: string, turnstileToken?: string): Promise<{ ok: true }> {
   const res = await apiFetch("/api/auth/request-link", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email }),
+    body: JSON.stringify({ email, turnstileToken }),
   });
   return asJson(res);
 }

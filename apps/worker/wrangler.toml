@@ -63,7 +63,7 @@ STRIPE_ENTERPRISE_PRICE_ID = "price_1TwoDtQvixTOu6qpwfZgfEO5"
 # not secret. Each provider's routes 501 gracefully until both its ID and secret are set. Register
 # the OAuth app in that provider's own developer console with redirect URI
 # {PUBLIC_WORKER_URL}/api/account/connectors/{provider}/callback, then fill these in:
-# DROPBOX_CLIENT_ID = "..."
+DROPBOX_CLIENT_ID = "t0e14bciku06etn"
 # MS_CLIENT_ID = "..."
 # BOX_CLIENT_ID = "..."
 
@@ -84,6 +84,12 @@ STRIPE_ENTERPRISE_PRICE_ID = "price_1TwoDtQvixTOu6qpwfZgfEO5"
 # Set with: wrangler secret put DROPBOX_CLIENT_SECRET
 # Set with: wrangler secret put MS_CLIENT_SECRET
 # Set with: wrangler secret put BOX_CLIENT_SECRET
+
+# --- Turnstile (bot check on the login form) — optional; requests skip verification until set ---
+# Create a widget with: wrangler turnstile widget create "Docracy login" --domain docracy.io --mode managed
+# Set with: wrangler secret put TURNSTILE_SECRET_KEY
+# The widget's public sitekey isn't secret — set it as VITE_TURNSTILE_SITE_KEY in apps/web's
+# .env.production and rebuild/redeploy the frontend once the widget exists.
 
 # --- Staging: isolated KV/D1/R2 so testing never touches production data ---
 # Deploy with: wrangler deploy --env staging
@@ -127,3 +133,4 @@ FREE_TIER_MAX_SIGNERS = "2"
 DOC_TTL_DAYS = "9"
 FEEDBACK_EMAIL = "founder@docracy.io"
 ADMIN_EMAILS = "rl@relacon.at"
+DROPBOX_CLIENT_ID = "t0e14bciku06etn"
