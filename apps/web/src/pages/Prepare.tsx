@@ -111,6 +111,7 @@ export default function Prepare() {
   const [placingFieldType, setPlacingFieldType] = useState<DocFieldType>("signature");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isDraggingUpload, setIsDraggingUpload] = useState(false);
   const [draggingFieldId, setDraggingFieldId] = useState<string | null>(null);
   const [creatingDrag, setCreatingDrag] = useState<{ x: number; y: number; overPage: boolean } | null>(null);
 
@@ -248,6 +249,31 @@ export default function Prepare() {
     if (!f) return;
     await acceptFile(f);
     if (f.size > MAX_PDF_BYTES) e.target.value = "";
+  };
+
+  const onUploadDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    if (!isDraggingUpload) setIsDraggingUpload(true);
+  };
+
+  const onUploadDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    // Only clear once the pointer actually leaves the drop zone itself — children re-firing
+    // dragenter/dragleave as the pointer crosses their boundaries would otherwise flicker this off
+    // and on while still hovering the same zone.
+    if (e.currentTarget.contains(e.relatedTarget as Node | null)) return;
+    setIsDraggingUpload(false);
+  };
+
+  const onUploadDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDraggingUpload(false);
+    const f = e.dataTransfer.files?.[0];
+    if (!f) return;
+    if (f.type !== "application/pdf") {
+      setError("Only PDF files are supported.");
+      return;
+    }
+    await acceptFile(f);
   };
 
   // FirstDocumentPrompt's upload modal (on the homepage) hands its file in via router state
@@ -756,8 +782,25 @@ export default function Prepare() {
                   })}
                 </div>
               )}
-              <p>Upload the PDF you want signed.</p>
-              <input type="file" accept="application/pdf" onChange={onFileChange} />
+              <p>Upload the PDF you want signed, or drag and drop it below.</p>
+              <div
+                onDragOver={onUploadDragOver}
+                onDragLeave={onUploadDragLeave}
+                onDrop={onUploadDrop}
+                style={{
+                  border: `2px dashed ${isDraggingUpload ? "var(--primary)" : "var(--hairline)"}`,
+                  borderRadius: "var(--r-md)",
+                  padding: 20,
+                  textAlign: "center",
+                  background: isDraggingUpload ? "var(--primary-soft)" : "transparent",
+                  transition: "border-color 0.15s var(--ease), background 0.15s var(--ease)",
+                }}
+              >
+                <p style={{ margin: "0 0 10px 0", fontSize: 13, color: "var(--mute)" }}>
+                  {isDraggingUpload ? "Drop your PDF here" : "Drag and drop a PDF here, or"}
+                </p>
+                <input type="file" accept="application/pdf" onChange={onFileChange} />
+              </div>
               <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 6, marginBottom: 0 }}>Max file size: 15MB.</p>
               {error && <p style={{ color: "var(--danger)", marginTop: 8 }}>{error}</p>}
 
