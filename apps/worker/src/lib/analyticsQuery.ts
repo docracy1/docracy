@@ -71,23 +71,55 @@ export interface FunnelStepRow {
  *  route/day/country like queryFunnelSummary above. `distinctDocuments`/`distinctTemplates` exist
  *  because `document_signed` fires once per signer, not once per completed document — a raw
  *  SUM(double1) on that event overcounts any multi-signer chain. COUNT(DISTINCT blob7/blob8) with
- *  the empty-string guard (rows that never carry a documentId/templateId, e.g. signup_started)
- *  gives the correct per-document/per-template step counts for funnels that need them; callers
- *  that don't (Activation, Template) just use totalCount instead. */
+ *  empty rows filtered in WHERE (Analytics Engine rejects CASE inside COUNT DISTINCT) gives the
+ *  correct per-document/per-template step counts for funnels that need them; callers that don't
+ *  (Activation, Template) just use totalCount instead. */
 export async function queryFunnelStepCounts(env: Env, days: number): Promise<AnalyticsQueryResult<FunnelStepRow[]>> {
-  const sql = `
-    SELECT
-      blob1 AS event,
-      SUM(double1) AS totalCount,
-      COUNT(DISTINCT CASE WHEN blob7 != '' THEN blob7 END) AS distinctDocuments,
-      COUNT(DISTINCT CASE WHEN blob8 != '' THEN blob8 END) AS distinctTemplates
+  const window = `timestamp > now() - INTERVAL '${days}' DAY`;
+
+  const totalsSql = `
+    SELECT blob1 AS event, SUM(double1) AS totalCount
     FROM docracy_funnel
-    WHERE timestamp > now() - INTERVAL '${days}' DAY
+    WHERE ${window}
     GROUP BY event
     ORDER BY event
   `.trim();
 
-  return runAnalyticsSql<FunnelStepRow[]>(env, sql);
+  const documentsSql = `
+    SELECT blob1 AS event, COUNT(DISTINCT blob7) AS distinctDocuments
+    FROM docracy_funnel
+    WHERE ${window} AND blob7 != ''
+    GROUP BY event
+  `.trim();
+
+  const templatesSql = `
+    SELECT blob1 AS event, COUNT(DISTINCT blob8) AS distinctTemplates
+    FROM docracy_funnel
+    WHERE ${window} AND blob8 != ''
+    GROUP BY event
+  `.trim();
+
+  const [totals, documents, templates] = await Promise.all([
+    runAnalyticsSql<Array<{ event: string; totalCount: number }>>(env, totalsSql),
+    runAnalyticsSql<Array<{ event: string; distinctDocuments: number }>>(env, documentsSql),
+    runAnalyticsSql<Array<{ event: string; distinctTemplates: number }>>(env, templatesSql),
+  ]);
+
+  if (!totals.ok) return totals;
+  if (!documents.ok) return documents;
+  if (!templates.ok) return templates;
+
+  const docByEvent = new Map(documents.data.map((row) => [row.event, row.distinctDocuments]));
+  const tplByEvent = new Map(templates.data.map((row) => [row.event, row.distinctTemplates]));
+
+  const data: FunnelStepRow[] = totals.data.map((row) => ({
+    event: row.event,
+    totalCount: row.totalCount,
+    distinctDocuments: docByEvent.get(row.event) ?? 0,
+    distinctTemplates: tplByEvent.get(row.event) ?? 0,
+  }));
+
+  return { ok: true, data };
 }
 
 export function formatAnalyticsFailure(failure: AnalyticsQueryFailure): string {
