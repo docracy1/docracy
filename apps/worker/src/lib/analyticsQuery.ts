@@ -29,7 +29,10 @@ export async function queryFunnelSummary(env: Env, days: number): Promise<unknow
     body: sql,
   });
 
-  if (!response.ok) return null;
+  if (!response.ok) {
+    console.error(`Analytics Engine SQL API failed: ${response.status} ${await response.text()}`);
+    return null;
+  }
   const data = (await response.json()) as { data?: unknown[] };
   return data.data ?? [];
 }
@@ -69,7 +72,10 @@ export async function queryFunnelStepCounts(env: Env, days: number): Promise<Fun
     body: sql,
   });
 
-  if (!response.ok) return null;
+  if (!response.ok) {
+    console.error(`Analytics Engine SQL API failed: ${response.status} ${await response.text()}`);
+    return null;
+  }
   const data = (await response.json()) as { data?: FunnelStepRow[] };
   return data.data ?? [];
 }
