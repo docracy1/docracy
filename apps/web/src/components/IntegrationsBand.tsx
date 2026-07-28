@@ -25,7 +25,7 @@ export default function IntegrationsBand({ learnMoreTo = "/docs", compact = fals
     <section className={`integrations-band${compact ? " integrations-band-compact" : ""}`} aria-labelledby="integrations-heading">
       <div className="integrations-inner">
         <h2 id="integrations-heading" style={{ fontSize: compact ? 22 : 26, marginBottom: 8, textAlign: "center" }}>
-          Connect Docracy with your favorite tools
+          Connect Docracy with the tools you already use
         </h2>
         <p style={{ textAlign: "center", maxWidth: 560, margin: "0 auto 28px", color: "var(--mute)", fontSize: compact ? 14 : 15.5 }}>
           Plug into the platforms you already use — cloud storage, automation, and AI assistants. Paid accounts unlock

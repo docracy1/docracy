@@ -385,7 +385,7 @@ export default function Landing() {
           that Feature #1 leads instead — same visual position, without wrecking the grid. */}
       <FirstDocumentPrompt source="features" />
 
-      <IntegrationsBand learnMoreTo="/docs" />
+      <IntegrationsBand learnMoreTo="/mcp" />
 
       <div className="spotlight-band">
         <div className="spotlight-inner">

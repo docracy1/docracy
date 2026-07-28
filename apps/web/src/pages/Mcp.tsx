@@ -63,7 +63,7 @@ export default function Mcp() {
         opening a dashboard.
       </p>
 
-      <IntegrationsBand learnMoreTo="/docs#cloud-connectors" compact />
+      <IntegrationsBand learnMoreTo="/docs#automation" compact />
 
       <div className="card" style={{ marginTop: 24, background: "var(--primary-soft)", border: "1px solid var(--primary-soft-strong)" }}>
         <h3 style={{ marginTop: 0, fontSize: 16 }}>Paid account required</h3>
