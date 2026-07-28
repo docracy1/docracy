@@ -52,6 +52,14 @@ function read(): StoredAttribution | null {
   }
 }
 
+function write(entry: StoredAttribution): void {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(entry));
+  } catch {
+    // Storage blocked — this visit just won't be attributable.
+  }
+}
+
 function referrerHost(): string {
   try {
     if (!document.referrer) return "";
@@ -74,18 +82,28 @@ export function captureAttribution(): void {
   const source = sanitize(params.get("utm_source")) || sanitize(params.get("ref")) || referrerHost();
   if (!source) return;
 
-  const entry: StoredAttribution = {
+  write({
     source,
     medium: sanitize(params.get("utm_medium")),
     campaign: sanitize(params.get("utm_campaign")) || sanitize(params.get("utm_content")),
     firstSeenAt: new Date().toISOString(),
-  };
+  });
+}
 
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(entry));
-  } catch {
-    // Storage blocked — this visit just won't be attributable.
-  }
+/**
+ * Seeds first-touch from a short vanity path (/try, /go/ph) before client-side redirect.
+ * No-ops if attribution already exists — same first-touch rule as captureAttribution.
+ */
+export function seedAttribution(source: string, campaign = "", medium = "shortlink"): void {
+  if (read()) return;
+  const cleanSource = sanitize(source);
+  if (!cleanSource) return;
+  write({
+    source: cleanSource,
+    medium: sanitize(medium),
+    campaign: sanitize(campaign),
+    firstSeenAt: new Date().toISOString(),
+  });
 }
 
 /** Compact `source/campaign` label for analytics, e.g. `linkedin/post-01-auto` or `direct`. */

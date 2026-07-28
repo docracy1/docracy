@@ -17,6 +17,6 @@ No copy-pasting doc IDs into a dashboard. Just chat.
 
 Read-only tools — check status, search documents. The heavy lifting (auto-detect, contract explainer) stays in the web app where it belongs.
 
-Setup guide: https://docracy.io/mcp?utm_source=linkedin&utm_medium=social&utm_campaign=post-05-mcp
+Setup guide: https://docracy.io/mcp
 
 #MCP #AI #LegalTech #Integrations

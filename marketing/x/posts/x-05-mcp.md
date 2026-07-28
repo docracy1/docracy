@@ -12,6 +12,6 @@ Then ask:
 → "status of this signing link"
 → "find docs about the lease"
 
-Setup: https://docracy.io/mcp?utm_source=x&utm_medium=social&utm_campaign=x-05-mcp
+Setup: https://docracy.io/mcp
 
 #MCP #AI #LegalTech

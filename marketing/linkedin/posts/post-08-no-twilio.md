@@ -14,6 +14,6 @@ Enable it when preparing a doc, add mobile + carrier, and they get a text alongs
 
 Caveat: gateways aren't 100% reliable. Still beats a buried inbox for a lot of workflows.
 
-Try free: https://docracy.io/prepare?freeTemplate=mutual-nda&utm_source=linkedin&utm_medium=social&utm_campaign=post-08-sms
+Try free: https://docracy.io/try
 
 #BuildInPublic #Startup #eSignature

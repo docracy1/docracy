@@ -12,6 +12,6 @@ Dropbox · OneDrive · Box
 
 Connect once. Done.
 
-https://docracy.io/pricing?utm_source=x&utm_medium=social&utm_campaign=x-07-cloud
+https://docracy.io/price
 
 #Productivity #SaaS

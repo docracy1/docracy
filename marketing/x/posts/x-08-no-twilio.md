@@ -12,6 +12,6 @@ Free + paid.
 
 Caveat: carriers aren't 100%. Still beats a buried email for a lot of people.
 
-https://docracy.io/prepare?freeTemplate=mutual-nda&utm_source=x&utm_medium=social&utm_campaign=x-08-sms
+https://docracy.io/try
 
 #BuildInPublic

@@ -13,6 +13,6 @@ Paid is $10/month and unlocks:
 
 E-sign without the enterprise tax.
 
-https://docracy.io/pricing?utm_source=linkedin&utm_medium=social&utm_campaign=post-09-price
+https://docracy.io/price
 
 #SaaS #LegalTech #Startup

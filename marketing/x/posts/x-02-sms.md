@@ -14,6 +14,6 @@ Docracy can text the signing link (US carriers).
 
 No Twilio bill. Same Resend pipe we already use for email.
 
-https://docracy.io/prepare?freeTemplate=mutual-nda&utm_source=x&utm_medium=social&utm_campaign=x-02-sms
+https://docracy.io/try
 
 #BuildInPublic #eSignature

@@ -6,13 +6,14 @@ import { track } from "../lib/track";
 /**
  * Peak conversion moment for anonymous senders: document just left, status link in hand.
  * Logged-in users already have an account — point them at the dashboard / next send.
- * Anonymous → create account (history) + soft paid nudge.
+ * Anonymous → create account (history) + soft paid nudge + share loop.
  */
 export default function PrepareSent() {
   const { state } = useLocation() as {
     state: { docId: string; statusToken: string; signingMode?: "sequential" | "parallel" } | null;
   };
   const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
+  const [copied, setCopied] = useState<"status" | "share" | null>(null);
 
   useEffect(() => {
     fetchMe()
@@ -32,6 +33,20 @@ export default function PrepareSent() {
     );
   }
 
+  const statusUrl = `${window.location.origin}/status/${state.statusToken}`;
+  const shareBlurb = `I just sent a document for signature with Docracy (free, no signup). Try it: https://docracy.io/try`;
+
+  const copyText = async (kind: "status" | "share", text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(kind);
+      track("viral_cta_clicked", { source: kind === "status" ? "prepare_sent_copy_status" : "prepare_sent_share" });
+      window.setTimeout(() => setCopied(null), 2000);
+    } catch {
+      // Clipboard blocked — fall back to selecting nothing; status URL is still visible as a link.
+    }
+  };
+
   return (
     <div className="container">
       <h1>On its way</h1>
@@ -42,9 +57,15 @@ export default function PrepareSent() {
       </p>
       <div className="card">
         <p style={{ marginBottom: 8 }}>Bookmark this link to check progress any time:</p>
-        <Link to={`/status/${state.statusToken}`}>
-          {window.location.origin}/status/{state.statusToken}
-        </Link>
+        <Link to={`/status/${state.statusToken}`}>{statusUrl}</Link>
+        <div style={{ marginTop: 12, display: "flex", flexWrap: "wrap", gap: 8 }}>
+          <button type="button" className="btn-secondary" onClick={() => copyText("status", statusUrl)}>
+            {copied === "status" ? "Copied" : "Copy status link"}
+          </button>
+          <button type="button" className="btn-secondary" onClick={() => copyText("share", shareBlurb)}>
+            {copied === "share" ? "Copied" : "Share Docracy with a colleague"}
+          </button>
+        </div>
       </div>
 
       {loggedIn === false && (

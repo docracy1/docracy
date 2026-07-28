@@ -14,6 +14,6 @@ PDFs, images, Word — one flow, one audit trail.
 
 Paid.
 
-https://docracy.io/pricing?utm_source=x&utm_medium=social&utm_campaign=x-03-attach
+https://docracy.io/price
 
 #HRtech #LegalTech

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { SignerAttachmentsList } from "../components/SignerAttachmentsList";
-import { apiUrl, fetchStatus, statusAttachmentDownloadUrl, voidDocument } from "../lib/api";
+import { apiUrl, fetchMe, fetchStatus, statusAttachmentDownloadUrl, voidDocument } from "../lib/api";
+import { track } from "../lib/track";
 import { useNoIndex } from "../lib/useNoIndex";
 import type { StatusPayload } from "../lib/types";
 
@@ -11,6 +12,7 @@ export default function Status() {
   const [error, setError] = useState<string | null>(null);
   const [voiding, setVoiding] = useState(false);
   const [voidError, setVoidError] = useState<string | null>(null);
+  const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
 
   useNoIndex();
 
@@ -20,6 +22,12 @@ export default function Status() {
       .then(setStatus)
       .catch((err) => setError(err.message));
   }, [token]);
+
+  useEffect(() => {
+    fetchMe()
+      .then(({ account }) => setLoggedIn(!!account))
+      .catch(() => setLoggedIn(false));
+  }, []);
 
   const onCancel = async () => {
     if (!token) return;
@@ -62,6 +70,9 @@ export default function Status() {
           ? "Document declined"
           : "Document cancelled"
         : "Signing in progress";
+
+  // White-label workspaces pay to hide Docracy marketing on status pages.
+  const showConversion = loggedIn === false && !status.brandLogoPath && !status.brandWorkspaceSlug;
 
   return (
     <div className="container">
@@ -136,6 +147,41 @@ export default function Status() {
           </div>
         )}
       </div>
+
+      {showConversion && status.status === "completed" && (
+        <div className="card" style={{ marginTop: 20 }}>
+          <p style={{ marginBottom: 8, fontWeight: 600 }}>Keep every signed PDF in one place</p>
+          <p style={{ marginBottom: 14, color: "var(--mute)", fontSize: 14 }}>
+            Free accounts save document history. Paid unlocks templates, unlimited signers, and team seats —
+            $10/month.
+          </p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+            <Link to="/login?ref=status-completed" className="btn-primary" style={{ textDecoration: "none" }}>
+              Create a free account
+            </Link>
+            <Link
+              to="/pricing?ref=status-completed"
+              className="btn-secondary"
+              style={{ textDecoration: "none" }}
+              onClick={() => track("upgrade_clicked", { source: "status_completed" })}
+            >
+              See paid plans
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {showConversion && status.status === "pending" && (
+        <div className="card" style={{ marginTop: 20 }}>
+          <p style={{ marginBottom: 8, fontWeight: 600 }}>Don&apos;t lose this status link</p>
+          <p style={{ marginBottom: 14, color: "var(--mute)", fontSize: 14 }}>
+            Create a free account so every document you send lives in one dashboard — no password needed.
+          </p>
+          <Link to="/login?ref=status-pending" className="btn-primary" style={{ textDecoration: "none" }}>
+            Create a free account
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

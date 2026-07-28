@@ -14,6 +14,6 @@ Sheet row / CRM stage / form submit → documents out.
 
 Up to 50 per run.
 
-https://docracy.io/pricing?utm_source=x&utm_medium=social&utm_campaign=x-06-zapier
+https://docracy.io/price
 
 #Zapier #NoCode

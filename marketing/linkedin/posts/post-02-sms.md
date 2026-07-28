@@ -21,6 +21,6 @@ When preparing a doc:
 
 Fair caveat: gateways aren't 100% reliable. But for many workflows, it's a nudge that actually gets opened.
 
-Try free: https://docracy.io/prepare?freeTemplate=mutual-nda&utm_source=linkedin&utm_medium=social&utm_campaign=post-02-sms
+Try free: https://docracy.io/try
 
 #BuildInPublic #Startup #eSignature #ProductDesign

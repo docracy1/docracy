@@ -15,6 +15,7 @@ import {
   type DynamicBlogPostSummary,
   type FunnelRow,
   type FunnelStepRow,
+  type AttributionRow,
 } from "../lib/api";
 import { usePageMeta } from "../lib/usePageMeta";
 
@@ -817,6 +818,38 @@ const EMAIL_STEPS: FunnelStepDef[] = [
   { event: "email_clicked", label: "Clicked" },
 ];
 
+const REVENUE_STEPS: FunnelStepDef[] = [
+  { event: "upgrade_clicked", label: "Upgrade clicked" },
+  { event: "checkout_started", label: "Checkout started" },
+  { event: "checkout_completed", label: "Checkout completed" },
+];
+
+function AttributionTable({ rows }: { rows: AttributionRow[] }) {
+  if (rows.length === 0) {
+    return <p style={{ color: "var(--mute)", fontSize: 13 }}>No attributed growth events in this window yet.</p>;
+  }
+  return (
+    <table className="plan-table plan-table-static" style={{ width: "100%" }}>
+      <thead>
+        <tr>
+          <th style={{ textAlign: "left" }}>Event</th>
+          <th style={{ textAlign: "left" }}>Channel</th>
+          <th style={{ textAlign: "right" }}>Count</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((r) => (
+          <tr key={`${r.event}:${r.attribution}`}>
+            <td>{r.event}</td>
+            <td style={{ fontFamily: "ui-monospace, monospace", fontSize: 12 }}>{r.attribution}</td>
+            <td style={{ textAlign: "right" }}>{r.count}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
 const ERROR_EVENTS: FunnelStepDef[] = [
   { event: "upload_failed", label: "Upload failed" },
   { event: "send_failed", label: "Send failed" },
@@ -853,6 +886,7 @@ function ErrorsCard({ stepsByEvent }: { stepsByEvent: Map<string, FunnelStepRow>
 
 const ADMIN_SECTIONS = [
   "analytics",
+  "growth",
   "blog",
   "signups",
   "activation",
@@ -865,6 +899,7 @@ const ADMIN_SECTIONS = [
 type AdminSection = (typeof ADMIN_SECTIONS)[number];
 const ADMIN_SECTION_LABEL: Record<AdminSection, string> = {
   analytics: "Analytics",
+  growth: "Growth",
   blog: "Blog posts",
   signups: "Signups",
   activation: "Activation",
@@ -884,6 +919,7 @@ export default function AdminAnalytics() {
   const [humansOnly, setHumansOnly] = useState(true);
   const [rows, setRows] = useState<FunnelRow[] | null>(null);
   const [funnelSteps, setFunnelSteps] = useState<FunnelStepRow[] | null>(null);
+  const [attribution, setAttribution] = useState<AttributionRow[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [section, setSection] = useState<AdminSection>("analytics");
@@ -903,6 +939,7 @@ export default function AdminAnalytics() {
         if (!cancelled) {
           setRows(res.rows);
           setFunnelSteps(res.funnelSteps);
+          setAttribution(res.attribution ?? []);
         }
       })
       .catch((err) => {
@@ -1056,6 +1093,26 @@ export default function AdminAnalytics() {
                       stepsByEvent={stepsByEvent}
                       kpiEvent="document_sent"
                     />
+                  )}
+
+                  {section === "growth" && (
+                    <>
+                      <FunnelCard
+                        title="Revenue funnel"
+                        note="upgrade_clicked → checkout_started gap is price bounce; checkout_started → checkout_completed is Stripe drop-off."
+                        steps={REVENUE_STEPS}
+                        countKey="totalCount"
+                        stepsByEvent={stepsByEvent}
+                        kpiEvent="checkout_completed"
+                      />
+                      <div className="card" style={{ marginTop: 16 }}>
+                        <h3 style={{ marginTop: 0, fontSize: 15 }}>Attribution by channel</h3>
+                        <p style={{ color: "var(--mute)", fontSize: 13, marginTop: 0 }}>
+                          First-touch UTM/ref that brought the visitor (e.g. linkedin/post-09-price). Empty = direct.
+                        </p>
+                        <AttributionTable rows={attribution} />
+                      </div>
+                    </>
                   )}
 
                   {section === "completion" && (

@@ -16,6 +16,6 @@ Connect once in the Dashboard. When everyone signs, the final PDF lands in the f
 
 No download → re-upload dance. Your team's source of truth stays where it already lives.
 
-Paid accounts: https://docracy.io/pricing?utm_source=linkedin&utm_medium=social&utm_campaign=post-07-cloud
+Paid: https://docracy.io/price/price
 
 #Dropbox #Productivity #LegalTech #SaaS

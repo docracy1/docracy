@@ -25,6 +25,6 @@ We're building e-sign that fits how people actually work — not another walled 
 
 What would you connect next? Drop it in the comments.
 
-https://docracy.io/prepare?freeTemplate=mutual-nda&utm_source=linkedin&utm_medium=social&utm_campaign=post-10-recap
+https://docracy.io/try
 
 #BuildInPublic #LegalTech #Startup #eSignature

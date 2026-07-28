@@ -21,6 +21,6 @@ Triggers already live too: Document Created, Signer Signed, Document Completed.
 
 Search "Docracy" in Zapier, or start from the Dashboard.
 
-https://docracy.io/pricing?utm_source=linkedin&utm_medium=social&utm_campaign=post-06-zapier
+https://docracy.io/price
 
 #Zapier #Automation #NoCode #eSignature

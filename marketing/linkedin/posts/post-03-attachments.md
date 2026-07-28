@@ -19,6 +19,6 @@ One flow. One audit trail.
 
 HR onboarding, contractors, tenant apps — anywhere the paperwork and signature belong together.
 
-https://docracy.io/pricing?utm_source=linkedin&utm_medium=social&utm_campaign=post-03-attach
+https://docracy.io/price
 
 #HRtech #Onboarding #LegalTech #eSignature

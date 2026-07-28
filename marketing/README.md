@@ -1,5 +1,15 @@
 # Docracy social posts
 
+## Short links (use these — never paste long UTMs)
+
+| Link | Use for |
+|------|---------|
+| https://docracy.io/try | Free try / sample NDA |
+| https://docracy.io/price | Pricing / paid features |
+| https://docracy.io/mcp | MCP setup |
+| https://docracy.io/go/li | LinkedIn-specific |
+| https://docracy.io/go/x | X-specific |
+
 ## LinkedIn (primary) — `linkedin/`
 
 **10 posts** with media:
@@ -12,10 +22,10 @@
 
 Posts: `linkedin/posts/`
 
-Every CTA uses a tagged deep link (`utm_source`, `utm_medium=social`, `utm_campaign=post-NN-…`) so admin analytics can credit signups/checkouts to a specific post. Free-flow posts land on a sample NDA; paid-feature / pricing posts land on `/pricing`; MCP lands on `/mcp`.
+Cold accounts won't acquire from posting alone — see `GET-CUSTOMERS.md` (DMs first).
 
 ## X — `x/`
 
-**10 shorter companion posts** (same topics). Attach the same LinkedIn videos/images. Same UTM pattern with `utm_source=x`.
+**10 shorter companion posts** (same topics). Attach the same LinkedIn videos/images.
 
 Posts: `x/posts/`

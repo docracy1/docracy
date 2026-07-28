@@ -657,13 +657,25 @@ export interface FunnelStepRow {
   distinctTemplates: number;
 }
 
+export interface AttributionRow {
+  event: string;
+  attribution: string;
+  count: number;
+}
+
 /** `humansOnly` drops rows from classified bot user agents out of the funnel step counts — see
  *  queryFunnelStepCounts in the worker for why the unfiltered numbers mislead on any funnel that
  *  pairs a server-side page load with a client-side click. */
 export async function fetchAdminAnalytics(
   days: number,
   humansOnly = false
-): Promise<{ days: number; humansOnly: boolean; rows: FunnelRow[]; funnelSteps: FunnelStepRow[] }> {
+): Promise<{
+  days: number;
+  humansOnly: boolean;
+  rows: FunnelRow[];
+  funnelSteps: FunnelStepRow[];
+  attribution: AttributionRow[];
+}> {
   const res = await apiFetch(`/api/admin/analytics?days=${days}${humansOnly ? "&humansOnly=1" : ""}`);
   return asJson(res);
 }

@@ -16,6 +16,6 @@ Edit anything. Delete anything. Nothing locked.
 
 Paid. Wish we'd shipped it day one.
 
-https://docracy.io/pricing?utm_source=x&utm_medium=social&utm_campaign=x-01-auto
+https://docracy.io/try
 
 #eSignature #LegalTech

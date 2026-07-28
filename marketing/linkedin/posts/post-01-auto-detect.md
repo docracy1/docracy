@@ -16,6 +16,6 @@ Nothing is locked in. Move, resize, or delete anything we get wrong.
 
 Paid feature. Honestly the one I wish we'd had on day one.
 
-Try it: https://docracy.io/pricing?utm_source=linkedin&utm_medium=social&utm_campaign=post-01-auto
+Try it: https://docracy.io/try
 
 #eSignature #LegalTech #ProductUpdate #SaaS

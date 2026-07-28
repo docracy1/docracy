@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { adminLogin, requestMagicLink } from "../lib/api";
 
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
@@ -67,6 +68,29 @@ function TurnstileWidget({ onToken, resetKey }: { onToken: (token: string | null
 }
 
 export default function Login() {
+  const [searchParams] = useSearchParams();
+  const ref = searchParams.get("ref") ?? "";
+  const utmMedium = searchParams.get("utm_medium") ?? "";
+  const utmCampaign = searchParams.get("utm_campaign") ?? "";
+
+  const intent =
+    ref === "prepare-sent" || ref === "status-completed" || ref === "status-pending"
+      ? "save-doc"
+      : utmMedium === "preparer-lead" || utmCampaign === "preparer-done" || utmMedium === "completion"
+        ? "save-doc"
+        : ref === "prepare-signer-cap" || ref === "prepare-cap" || ref === "prepare-cc-cap"
+          ? "upgrade"
+          : "default";
+
+  const headline = intent === "save-doc" ? "Save the document you just sent" : intent === "upgrade" ? "Sign in to upgrade" : "Sign in";
+  const subcopy =
+    intent === "save-doc"
+      ? "Create a free account so every document lives in one place — no password, just a magic link to this email."
+      : intent === "upgrade"
+        ? "Sign in (or create an account), then upgrade for unlimited signers, templates, and history."
+        : "No password — we'll email you a link. First time here? This creates your account too.";
+  const ctaLabel = intent === "save-doc" ? "Email me a magic link" : "Send sign-in link";
+
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -122,8 +146,8 @@ export default function Login() {
 
   return (
     <div className="container">
-      <h1>Sign in</h1>
-      <p>No password — we'll email you a link. First time here? This creates your account too.</p>
+      <h1>{headline}</h1>
+      <p>{subcopy}</p>
       <form onSubmit={onSubmit}>
         <input
           className="form-input"
@@ -138,7 +162,7 @@ export default function Login() {
         <TurnstileWidget onToken={setTurnstileToken} resetKey={turnstileResetKey} />
         {error && <p style={{ color: "var(--danger)", fontSize: 13 }}>{error}</p>}
         <button className="btn-primary" type="submit" disabled={submitting || (!!TURNSTILE_SITE_KEY && !turnstileToken)}>
-          {submitting ? "Sending…" : "Send sign-in link"}
+          {submitting ? "Sending…" : ctaLabel}
         </button>
       </form>
 

@@ -14,6 +14,6 @@ Upload it → Docracy finds them, places the right field type, and whiteouts the
 
 Same prepare screen as auto-detect. Works great for templates you send over and over.
 
-Paid accounts: https://docracy.io/pricing?utm_source=linkedin&utm_medium=social&utm_campaign=post-04-anchor
+Paid: https://docracy.io/price/price
 
 #LegalTech #Automation #NoCode #eSignature
