@@ -60,9 +60,11 @@ async function checkMcpConnector(env: Env): Promise<HealthCheckResult> {
       headers: { "Content-Type": "application/json", Accept: "application/json, text/event-stream" },
       body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/list" }),
     });
-    return res.ok
-      ? { name: "MCP connector", ok: true }
-      : { name: "MCP connector", ok: false, detail: `HTTP ${res.status}` };
+    // Paid-only connector returns 401 without a token — that still proves it's up and enforcing auth.
+    if (res.ok || res.status === 401) {
+      return { name: "MCP connector", ok: true };
+    }
+    return { name: "MCP connector", ok: false, detail: `HTTP ${res.status}` };
   } catch (err) {
     return { name: "MCP connector", ok: false, detail: err instanceof Error ? err.message : String(err) };
   }

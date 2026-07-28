@@ -52,6 +52,13 @@ describe("runHealthCheck", () => {
     const results = await runHealthCheck(env);
     expect(results.find((r) => r.name === "KV")).toMatchObject({ ok: false, detail: "kv unreachable" });
   });
+
+  it("reports MCP connector healthy on 401 (paid-only, no probe token)", async () => {
+    vi.spyOn(global, "fetch").mockResolvedValue(new Response("", { status: 401 }));
+    const { env } = makeMockEnv();
+    const results = await runHealthCheck(env);
+    expect(results.find((r) => r.name === "MCP connector")).toMatchObject({ ok: true });
+  });
 });
 
 describe("runHealthCheckAndAlert", () => {
