@@ -106,8 +106,9 @@ export default function Docs() {
           On Prepare, check <strong>Also text signing links</strong> and add each signer&apos;s US mobile number
           plus carrier (AT&amp;T, T-Mobile, Verizon, Sprint, or US Cellular). Docracy sends the link through your
           carrier&apos;s email-to-SMS gateway using the same Resend email stack — no separate SMS vendor or per-text
-          fee. Delivery isn&apos;t guaranteed (some carriers block automated gateway mail), and only US numbers are
-          supported today.
+          fee. Delivery isn&apos;t guaranteed (some carriers block automated gateway mail).{" "}
+          <strong>US numbers only</strong> — signers outside the United States receive email invites instead; there is
+          no international SMS option today.
         </p>
       </Section>
 

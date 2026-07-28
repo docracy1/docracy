@@ -33,8 +33,8 @@ export function smsGatewayAddress(phone: string, carrier: SmsCarrier): string | 
 }
 
 /**
- * Texts a signing link via the signer's carrier email-to-SMS gateway using Resend.
- * Free — no Twilio or other SMS API; uses the same Resend quota as regular emails.
+ * US-only SMS signing invites via carrier email-to-SMS gateways (Resend).
+ * Not available for international numbers — those signers rely on email invites only.
  */
 export async function sendSigningSmsLink(
   env: Env,

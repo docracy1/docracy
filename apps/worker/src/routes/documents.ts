@@ -138,7 +138,12 @@ documents.post("/", optionalAccount, async (c) => {
       return c.json({ error: "A signer's PIN must be 4-8 digits" }, 400);
     }
     if (s.phone?.trim() && !normalizeUsPhone(s.phone)) {
-      return c.json({ error: `"${s.phone}" isn't a valid US mobile number` }, 400);
+      return c.json(
+        {
+          error: `"${s.phone}" isn't a valid US mobile number — SMS signing links are US-only; signers outside the US receive email invites instead`,
+        },
+        400
+      );
     }
     if (s.smsCarrier && !isSmsCarrier(s.smsCarrier)) {
       return c.json({ error: "Unknown mobile carrier — choose AT&T, T-Mobile, Verizon, Sprint, or US Cellular" }, 400);

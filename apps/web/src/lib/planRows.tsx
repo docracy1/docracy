@@ -9,7 +9,7 @@ export const PLAN_ROWS: Array<{ label: string; free: boolean | string; paid: boo
   { label: "PIN-protected signing links", free: false, paid: true },
   { label: "Text, date, initials, checkbox & dropdown fields", free: true, paid: true },
   { label: "Anchor tags in PDFs ({{sig1}}, etc.)", free: false, paid: true },
-  { label: "SMS signing links (US carriers, via email)", free: true, paid: true },
+  { label: "SMS signing links (US numbers only)", free: true, paid: true },
   { label: "Signer attachments", free: false, paid: true },
   { label: "CC / viewer recipients", free: "Up to 2", paid: "Unlimited" },
   { label: "Decline or cancel a document", free: true, paid: true },

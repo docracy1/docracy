@@ -1486,13 +1486,14 @@ export default function Prepare() {
                 <label style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 13, marginBottom: 8 }}>
                   <input type="checkbox" checked={smsInvites} onChange={(e) => setSmsInvites(e.target.checked)} />
                   <span>
-                    Also text signing links (US carriers — free, uses email-to-SMS gateways via Resend)
+                    Also text signing links <span style={{ color: "var(--mute)" }}>(US numbers only)</span>
                   </span>
                 </label>
                 {smsInvites && (
                   <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 0, marginBottom: 0 }}>
-                    Add each signer&apos;s US mobile number and carrier below. Delivery isn&apos;t guaranteed — some carriers
-                    block automated gateway mail.
+                    US mobile numbers and carriers only — not available outside the United States. Signers
+                    elsewhere still get the link by email. Delivery isn&apos;t guaranteed; some carriers block
+                    automated gateway mail.
                   </p>
                 )}
               </div>
