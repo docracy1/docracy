@@ -10,6 +10,7 @@ const FIELD_SIZE_BY_TYPE: Record<DocFieldType, { w: number; h: number }> = {
   text: { w: 0.22, h: 0.04 },
   date: { w: 0.16, h: 0.04 },
   checkbox: { w: 0.04, h: 0.04 },
+  dropdown: { w: 0.22, h: 0.05 },
 };
 
 const SIGNATURE_RE = /\b(signature|sign(ed)?\s*here|authorized\s*signatory)\b/i;
@@ -137,4 +138,82 @@ export function assignFieldsToSigners(candidates: Candidate[], signerCount: numb
       type: c.kind,
     };
   });
+}
+
+/** Text tags like `{{sig1}}`, `{{signature_2}}`, or `{{dropdown_1:Yes|No|Maybe}}` embedded in the
+ *  PDF — common in mail-merge / API-driven templates. Returns fields plus boxes to white out. */
+const ANCHOR_TAG_RE = /\{\{([a-zA-Z]+)_?(\d+)(?::([^}]+))?\}\}/;
+
+function anchorKindToType(kind: string): DocFieldType | null {
+  const k = kind.toLowerCase();
+  if (k === "sig" || k === "signature") return "signature";
+  if (k === "init" || k === "initials") return "initials";
+  if (k === "date") return "date";
+  if (k === "text") return "text";
+  if (k === "checkbox" || k === "check") return "checkbox";
+  if (k === "dropdown" || k === "select") return "dropdown";
+  return null;
+}
+
+export interface AnchorWhiteoutBox {
+  page: number;
+  xFrac: number;
+  yFrac: number;
+  wFrac: number;
+  hFrac: number;
+}
+
+export async function detectAnchorFields(
+  pdfBytes: Uint8Array,
+  totalPages: number,
+  startId = 1
+): Promise<{ fields: DocField[]; whiteouts: AnchorWhiteoutBox[] }> {
+  const spansByPage = await Promise.all(Array.from({ length: totalPages }, (_, i) => getPageTextSpans(pdfBytes, i)));
+  const fields: DocField[] = [];
+  const whiteouts: AnchorWhiteoutBox[] = [];
+  let idCounter = startId;
+
+  for (let page = 0; page < spansByPage.length; page++) {
+    for (const span of spansByPage[page]) {
+      const match = span.text.match(ANCHOR_TAG_RE);
+      if (!match) continue;
+      const type = anchorKindToType(match[1]);
+      if (!type) continue;
+      const signerOrder = Number(match[2]);
+      if (!Number.isInteger(signerOrder) || signerOrder < 1) continue;
+
+      const size = FIELD_SIZE_BY_TYPE[type];
+      const field: DocField = {
+        id: `at${idCounter++}`,
+        signerOrder,
+        page,
+        xFrac: span.xFrac,
+        yFrac: span.yFrac,
+        wFrac: Math.max(span.wFrac, size.w),
+        hFrac: size.h,
+        type,
+      };
+      if (type === "dropdown" && match[3]) {
+        const opts = match[3]
+          .split("|")
+          .map((o) => o.trim())
+          .filter(Boolean);
+        if (opts.length >= 2) field.options = opts;
+        else field.options = ["Option A", "Option B"];
+      }
+      fields.push(field);
+      whiteouts.push({
+        page,
+        xFrac: span.xFrac,
+        yFrac: span.yFrac,
+        wFrac: span.wFrac,
+        hFrac: span.hFrac,
+      });
+    }
+  }
+
+  return {
+    fields: fields.sort((a, b) => (a.page !== b.page ? a.page - b.page : a.yFrac - b.yFrac)),
+    whiteouts,
+  };
 }

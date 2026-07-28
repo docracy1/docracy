@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import SignatureCanvas from "react-signature-canvas";
 import PdfViewer from "../components/PdfViewer";
-import { apiUrl, declineSign, fetchSignView, submitSignature, unlockSign } from "../lib/api";
+import { apiUrl, declineSign, fetchSignView, submitSignature, unlockSign, uploadSignAttachment } from "../lib/api";
 import { useNoIndex } from "../lib/useNoIndex";
 import type { SignPayload } from "../lib/api";
 import type { StatusPayload } from "../lib/types";
@@ -79,6 +79,8 @@ export default function Sign({
   const [pinInput, setPinInput] = useState("");
   const [unlocking, setUnlocking] = useState(false);
   const [pinError, setPinError] = useState<string | null>(null);
+  const [uploadingAttachment, setUploadingAttachment] = useState(false);
+  const [attachmentError, setAttachmentError] = useState<string | null>(null);
   const sigPadRef = useRef<SignatureCanvas>(null);
   const postTargetOrigin = allowedOrigins?.[0] || "*";
 
@@ -147,10 +149,18 @@ export default function Sign({
           if (f.required === false) return values[f.id] === "true" || values[f.id] === "false";
           return values[f.id] === "true";
         }
+        if (type === "dropdown") return Boolean(values[f.id]);
         return Boolean(values[f.id]);
       }),
     [payload?.fields, values]
   );
+
+  const attachmentsOk = useMemo(() => {
+    if (!payload?.signerAttachments) return true;
+    return (payload.signerAttachments.uploaded?.length ?? 0) > 0;
+  }, [payload?.signerAttachments]);
+
+  const canSubmit = allFilled && attachmentsOk && consented;
 
   const hasUnsavedWork = Object.keys(values).length > 0 && !done && !declined;
   useEffect(() => {
@@ -190,8 +200,32 @@ export default function Sign({
     }
   };
 
+  const onUploadAttachment = async (file: File) => {
+    if (!token) return;
+    setUploadingAttachment(true);
+    setAttachmentError(null);
+    try {
+      const result = await uploadSignAttachment(token, file, unlockToken ?? undefined);
+      setPayload((prev) =>
+        prev?.signerAttachments
+          ? {
+              ...prev,
+              signerAttachments: {
+                ...prev.signerAttachments,
+                uploaded: [...prev.signerAttachments.uploaded, result.attachment],
+              },
+            }
+          : prev
+      );
+    } catch (err) {
+      setAttachmentError(err instanceof Error ? err.message : "Upload failed");
+    } finally {
+      setUploadingAttachment(false);
+    }
+  };
+
   const onSubmit = async () => {
-    if (!token || !payload?.fields || !consented) return;
+    if (!token || !payload?.fields || !canSubmit) return;
     setSubmitting(true);
     setError(null);
     try {
@@ -447,6 +481,37 @@ export default function Sign({
                     );
                   }
 
+                  if (type === "dropdown") {
+                    const opts = f.options ?? [];
+                    return (
+                      <div key={f.id} style={boxStyle}>
+                        <select
+                          aria-label="Dropdown field"
+                          value={values[f.id] ?? ""}
+                          onChange={(e) => setValues((prev) => ({ ...prev, [f.id]: e.target.value }))}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            border: values[f.id] ? "2px solid var(--success)" : "2px dashed var(--primary)",
+                            borderRadius: "var(--r-sm)",
+                            background: "var(--canvas)",
+                            padding: "0 4px",
+                            fontSize: 11,
+                            fontFamily: "inherit",
+                            color: "var(--ink)",
+                          }}
+                        >
+                          <option value="">Choose…</option>
+                          {opts.map((o) => (
+                            <option key={o} value={o}>
+                              {o}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    );
+                  }
+
                   return (
                     <div key={f.id} style={boxStyle}>
                       <button
@@ -518,6 +583,35 @@ export default function Sign({
 
       {error && <p style={{ color: "var(--danger)" }}>{error}</p>}
 
+      {payload.signerAttachments && (
+        <div className="card" style={{ marginTop: 16 }}>
+          <h2 style={{ fontSize: 15, marginTop: 0 }}>Upload attachment</h2>
+          <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 0 }}>
+            Upload at least one file (PDF or image, up to{" "}
+            {Math.round(payload.signerAttachments.maxBytesPerFile / (1024 * 1024))}MB each) before signing.
+          </p>
+          {(payload.signerAttachments.uploaded ?? []).map((a) => (
+            <p key={a.id} style={{ fontSize: 13, margin: "4px 0" }}>
+              ✓ {a.name} ({Math.round(a.sizeBytes / 1024)} KB)
+            </p>
+          ))}
+          {(payload.signerAttachments.uploaded?.length ?? 0) < payload.signerAttachments.maxFiles && (
+            <input
+              type="file"
+              accept=".pdf,image/*"
+              disabled={uploadingAttachment}
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) void onUploadAttachment(file);
+                e.target.value = "";
+              }}
+            />
+          )}
+          {attachmentError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{attachmentError}</p>}
+          {uploadingAttachment && <p style={{ fontSize: 13 }}>Uploading…</p>}
+        </div>
+      )}
+
       <label style={{ display: "flex", gap: 8, alignItems: "flex-start", marginTop: 16, fontSize: 13 }}>
         <input
           type="checkbox"
@@ -532,7 +626,7 @@ export default function Sign({
       </label>
 
       <div style={{ marginTop: 16, display: "flex", flexWrap: "wrap", gap: 8 }}>
-        <button className="btn-primary" disabled={!allFilled || !consented || submitting || declining} onClick={onSubmit}>
+        <button className="btn-primary" disabled={!canSubmit || submitting || declining} onClick={onSubmit}>
           {submitting ? "Submitting…" : "Complete signing"}
         </button>
         <button className="btn-secondary" disabled={submitting || declining} onClick={onDecline}>

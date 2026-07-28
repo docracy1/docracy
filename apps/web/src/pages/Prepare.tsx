@@ -27,7 +27,7 @@ import {
 } from "../lib/pdfEdit";
 import type { TextSpan } from "../lib/pdfEdit";
 import { getFreeTemplate } from "../lib/freeTemplates";
-import { assignFieldsToSigners, detectFieldCandidates } from "../lib/fieldDetection";
+import { assignFieldsToSigners, detectAnchorFields, detectFieldCandidates } from "../lib/fieldDetection";
 import type { CcRecipientInput, DocField, DocFieldType, SignerInput } from "../lib/types";
 import { track } from "../lib/track";
 
@@ -43,6 +43,7 @@ const FIELD_SIZE_BY_TYPE: Record<DocFieldType, { w: number; h: number }> = {
   text: { w: 0.22, h: 0.04 },
   date: { w: 0.16, h: 0.04 },
   checkbox: { w: 0.04, h: 0.04 },
+  dropdown: { w: 0.22, h: 0.05 },
 };
 
 const FIELD_TYPE_LABEL: Record<DocFieldType, string> = {
@@ -51,6 +52,7 @@ const FIELD_TYPE_LABEL: Record<DocFieldType, string> = {
   text: "Text",
   date: "Date",
   checkbox: "Checkbox",
+  dropdown: "Dropdown",
 };
 
 let fieldIdCounter = 0;
@@ -145,6 +147,10 @@ export default function Prepare() {
   const [detectingFields, setDetectingFields] = useState(false);
   const [detectFieldsError, setDetectFieldsError] = useState<string | null>(null);
   const [detectFieldsNotice, setDetectFieldsNotice] = useState<string | null>(null);
+  const [detectingAnchors, setDetectingAnchors] = useState(false);
+  const [smsInvites, setSmsInvites] = useState(false);
+  const [signerAttachmentsEnabled, setSignerAttachmentsEnabled] = useState(false);
+  const [dropdownOptionsInput, setDropdownOptionsInput] = useState("Option A\nOption B\nOption C");
   const [explaining, setExplaining] = useState(false);
   const [explanation, setExplanation] = useState<string | null>(null);
   const [explainError, setExplainError] = useState<string | null>(null);
@@ -486,6 +492,39 @@ export default function Prepare() {
     }
   };
 
+  const onDetectAnchorTags = async () => {
+    if (!pdfBytes || !totalPages) return;
+    setDetectingAnchors(true);
+    setDetectFieldsError(null);
+    setDetectFieldsNotice(null);
+    try {
+      const { fields: detected, whiteouts } = await detectAnchorFields(pdfBytes, totalPages, fieldIdCounter);
+      if (detected.length === 0) {
+        setDetectFieldsNotice(
+          "No anchor tags found — embed tags like {{sig1}}, {{date_2}}, or {{dropdown_1:Yes|No}} in your PDF first."
+        );
+        return;
+      }
+      let bytes = pdfBytes;
+      for (const box of whiteouts) {
+        bytes = await replaceTextSpan(bytes, box.page, box, "");
+      }
+      setPdfBytes(bytes);
+      if (file) {
+        setFile(new File([bytes as unknown as BlobPart], file.name, { type: "application/pdf" }));
+      }
+      setFields(detected);
+      fieldIdCounter += detected.length;
+      setDetectFieldsNotice(
+        `Placed ${detected.length} field${detected.length === 1 ? "" : "s"} from anchor tags — review positions and signer assignments.`
+      );
+    } catch (err) {
+      setDetectFieldsError(err instanceof Error ? err.message : "Couldn't scan for anchor tags");
+    } finally {
+      setDetectingAnchors(false);
+    }
+  };
+
   const onExplain = async () => {
     if (!pdfBytes || !totalPages) return;
     setExplaining(true);
@@ -692,6 +731,15 @@ export default function Prepare() {
         wFrac: size.w,
         hFrac: size.h,
         type: placingFieldType,
+        ...(placingFieldType === "dropdown"
+          ? {
+              options: dropdownOptionsInput
+                .split("\n")
+                .map((o) => o.trim())
+                .filter(Boolean)
+                .slice(0, 20),
+            }
+          : {}),
       };
       setFields((prev) => {
         if (prev.length === 0) track("fields_added");
@@ -767,7 +815,13 @@ export default function Prepare() {
         signingMode: effectiveSigningMode,
         ccRecipients: trimmedCcs.length > 0 ? trimmedCcs : undefined,
         templateId: templateId ?? freeTemplateSlug ?? undefined,
-        ...(account?.isPaid ? { ttlDays } : {}),
+        smsInvites: smsInvites || undefined,
+        ...(account?.isPaid
+          ? {
+              ttlDays,
+              signerAttachments: signerAttachmentsEnabled ? { enabled: true } : undefined,
+            }
+          : {}),
       });
       documentSentRef.current = true;
       navigate("/prepare/sent", { state: { docId, statusToken, signingMode: effectiveSigningMode } });
@@ -960,7 +1014,9 @@ export default function Prepare() {
                               ×
                             </button>
                           </div>
-                          {(f.type ?? "signature") !== "text" && (f.type ?? "signature") !== "date" && (
+                          {(f.type ?? "signature") !== "text" &&
+                            (f.type ?? "signature") !== "date" &&
+                            (f.type ?? "signature") !== "dropdown" && (
                             <img
                               src="/docracy-wordmark.png"
                               alt=""
@@ -1322,6 +1378,37 @@ export default function Prepare() {
                       onChange={(e) => updateSigner(s.order, { pin: e.target.value.replace(/\D/g, "") })}
                     />
                   )}
+                  {smsInvites && (
+                    <>
+                      <input
+                        className="form-input"
+                        style={{ width: "100%", marginTop: 6, marginBottom: 6 }}
+                        placeholder="Mobile (US) — for SMS link, e.g. 4155551234"
+                        aria-label={`Signer ${s.order} mobile`}
+                        type="tel"
+                        value={s.phone ?? ""}
+                        onChange={(e) => updateSigner(s.order, { phone: e.target.value })}
+                      />
+                      <select
+                        className="form-input"
+                        style={{ width: "100%" }}
+                        aria-label={`Signer ${s.order} carrier`}
+                        value={s.smsCarrier ?? ""}
+                        onChange={(e) =>
+                          updateSigner(s.order, {
+                            smsCarrier: e.target.value ? (e.target.value as SignerInput["smsCarrier"]) : undefined,
+                          })
+                        }
+                      >
+                        <option value="">Carrier (for SMS)</option>
+                        <option value="att">AT&amp;T</option>
+                        <option value="tmobile">T-Mobile</option>
+                        <option value="verizon">Verizon</option>
+                        <option value="sprint">Sprint</option>
+                        <option value="uscc">US Cellular</option>
+                      </select>
+                    </>
+                  )}
                   {signers.length > 1 && (
                     <button
                       className="btn-secondary"
@@ -1395,10 +1482,31 @@ export default function Prepare() {
                   <Link to="/login">Sign in for unlimited viewers</Link>.
                 </p>
               )}
-              {!account?.isPaid && (
-                <p style={{ fontSize: 12, marginTop: 8, color: "var(--body)" }}>
-                  <Link to="/login">Sign in with a paid account</Link> to add a PIN to a signer's link.
-                </p>
+              <div style={{ marginTop: 12, paddingTop: 12, borderTop: "1px solid var(--hairline)" }}>
+                <label style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 13, marginBottom: 8 }}>
+                  <input type="checkbox" checked={smsInvites} onChange={(e) => setSmsInvites(e.target.checked)} />
+                  <span>
+                    Also text signing links (US carriers — free, uses email-to-SMS gateways via Resend)
+                  </span>
+                </label>
+                {smsInvites && (
+                  <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 0, marginBottom: 0 }}>
+                    Add each signer&apos;s US mobile number and carrier below. Delivery isn&apos;t guaranteed — some carriers
+                    block automated gateway mail.
+                  </p>
+                )}
+              </div>
+              {account?.isPaid && (
+                <div style={{ marginTop: 12, paddingTop: 12, borderTop: "1px solid var(--hairline)" }}>
+                  <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13 }}>
+                    <input
+                      type="checkbox"
+                      checked={signerAttachmentsEnabled}
+                      onChange={(e) => setSignerAttachmentsEnabled(e.target.checked)}
+                    />
+                    Require signers to upload attachment(s) before signing
+                  </label>
+                </div>
               )}
             </div>
 
@@ -1480,6 +1588,22 @@ export default function Prepare() {
                 </button>
                 {detectFieldsError && <p style={{ color: "var(--danger)", fontSize: 12 }}>{detectFieldsError}</p>}
                 {detectFieldsNotice && <p style={{ fontSize: 12 }}>{detectFieldsNotice}</p>}
+
+                <button
+                  type="button"
+                  className="prepare-highlight-card"
+                  style={{ marginBottom: 8 }}
+                  disabled={detectingAnchors}
+                  onClick={onDetectAnchorTags}
+                >
+                  <span className="prepare-highlight-icon">🏷</span>
+                  <span>
+                    <span className="prepare-highlight-title">{detectingAnchors ? "Scanning…" : "Detect anchor tags"}</span>
+                    <span className="prepare-highlight-sub">
+                      Find {"{{sig1}}"}, {"{{date_2}}"}, {"{{dropdown_1:A|B}}"} tags in the PDF
+                    </span>
+                  </span>
+                </button>
 
                 <button type="button" className="prepare-highlight-card" style={{ marginBottom: 8 }} disabled={explaining} onClick={onExplain}>
                   <span className="prepare-highlight-icon">💬</span>
@@ -1569,7 +1693,18 @@ export default function Prepare() {
                 <option value="text">Text</option>
                 <option value="date">Date</option>
                 <option value="checkbox">Checkbox</option>
+                <option value="dropdown">Dropdown</option>
               </select>
+              {placingFieldType === "dropdown" && (
+                <textarea
+                  className="form-input"
+                  style={{ width: "100%", marginBottom: 8, minHeight: 72, fontSize: 12 }}
+                  aria-label="Dropdown options"
+                  placeholder="One option per line"
+                  value={dropdownOptionsInput}
+                  onChange={(e) => setDropdownOptionsInput(e.target.value)}
+                />
+              )}
               <select
                 className="form-input"
                 style={{ width: "100%", marginBottom: 8 }}

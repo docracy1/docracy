@@ -18,7 +18,7 @@ export interface CreateDocumentCoreParams {
   /** Already validated by the caller (name/email format, no duplicates, PIN is 4-8 digits if
    *  present). Order is assigned here from array position, never trusted from a client-supplied
    *  value. `pin`, if given, is hashed here and never stored in its raw form. */
-  signers: Array<{ name: string; email: string; company?: string; pin?: string }>;
+  signers: Array<{ name: string; email: string; company?: string; pin?: string; phone?: string; smsCarrier?: string }>;
   fields: DocField[];
   /** Notify-only recipients — validated by the caller. */
   ccRecipients?: Array<{ name?: string; email: string }>;
@@ -51,6 +51,10 @@ export interface CreateDocumentCoreParams {
   ttlDays?: number;
   /** Optional bulk-send group id — stamped on every DocState in the batch. */
   batchId?: string;
+  /** Also text signing links via US carrier email-to-SMS gateways (Resend). */
+  smsInvites?: boolean;
+  /** Paid-only attachment requirement for signers. */
+  signerAttachments?: DocState["signerAttachments"];
 }
 
 export async function createDocumentCore(
@@ -79,6 +83,8 @@ export async function createDocumentCore(
       remindersSent: [],
       linkNonce: crypto.randomUUID(),
       pinHash: s.pin ? await hashOpaqueToken(s.pin, env.TOKEN_SECRET) : undefined,
+      phone: s.phone?.trim() || undefined,
+      smsCarrier: s.smsCarrier as Signer["smsCarrier"] | undefined,
     }))
   );
 
@@ -138,6 +144,8 @@ export async function createDocumentCore(
     customSubject: params.customSubject,
     customMessage: params.customMessage,
     preparerEmail: preparerEmail?.trim() || undefined,
+    smsInvites: params.smsInvites || undefined,
+    signerAttachments: params.signerAttachments,
   };
 
   for (const s of signersToInvite) s.linkSentAt = now.toISOString();

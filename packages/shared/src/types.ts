@@ -1,4 +1,4 @@
-export type DocFieldType = "signature" | "initials" | "text" | "date" | "checkbox";
+export type DocFieldType = "signature" | "initials" | "text" | "date" | "checkbox" | "dropdown";
 
 /**
  * `type` is optional and always read via `field.type ?? "signature"` — every field placed before
@@ -16,6 +16,8 @@ export interface DocField {
   type?: DocFieldType;
   /** Checkbox only: when false, the signer may leave it unchecked. Absent/true = required. */
   required?: boolean;
+  /** Dropdown only — at least two non-empty choices. Always read via `field.options ?? []`. */
+  options?: string[];
 }
 
 export interface Signer {
@@ -52,6 +54,20 @@ export interface Signer {
   declineReason?: string;
   /** Prior assignees after a paid reassignment — audit only, never used for routing. */
   priorAssignees?: Array<{ name: string; email: string; replacedAt: string }>;
+  /** US mobile number (10 digits or +1…) — used with smsCarrier when doc.smsInvites is on. */
+  phone?: string;
+  /** US carrier for email-to-SMS gateway delivery via Resend. */
+  smsCarrier?: "att" | "tmobile" | "verizon" | "sprint" | "uscc";
+  /** Files this signer uploaded before signing (paid signer-attachments feature). */
+  attachments?: SignerAttachment[];
+}
+
+export interface SignerAttachment {
+  id: string;
+  name: string;
+  r2Key: string;
+  sizeBytes: number;
+  uploadedAt: string;
 }
 
 /** Notify-only recipients — get status/completion emails, never a signing turn. Always read via
@@ -71,7 +87,8 @@ export type AuditEventType =
   | "declined"
   | "voided"
   | "reassigned"
-  | "cc_invite_sent";
+  | "cc_invite_sent"
+  | "attachment_uploaded";
 
 /**
  * One entry in a document's append-only event log — this is what gives an anonymous, no-account
@@ -141,6 +158,16 @@ export interface DocState {
    *  before this field existed just never gets nudges — same "always read the optional field"
    *  pattern as customSubject/customMessage above. */
   preparerEmail?: string;
+  /** When true, also text signing links to signers with phone + US carrier (via Resend gateways). */
+  smsInvites?: boolean;
+  /** Paid-only: signers must upload file(s) before submitting. Always read via optional chaining. */
+  signerAttachments?: {
+    enabled: boolean;
+    /** Default 3. */
+    maxFiles?: number;
+    /** Default 5MB per file. */
+    maxBytesPerFile?: number;
+  };
 }
 
 export interface Env {

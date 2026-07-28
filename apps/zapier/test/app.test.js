@@ -137,6 +137,6 @@ describe("app definition", () => {
     expect(Object.keys(app.triggers).sort()).toEqual(
       ["template_list", "document_created", "signer_signed", "document_completed"].sort()
     );
-    expect(Object.keys(app.creates)).toEqual(["send_document_from_template"]);
+    expect(Object.keys(app.creates).sort()).toEqual(["bulk_send_from_template", "send_document_from_template"].sort());
   });
 });

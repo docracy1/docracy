@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { getCookie } from "hono/cookie";
 import { PDFDocument } from "pdf-lib";
 import { createDocumentCore } from "../lib/documentCreation";
+import { isSmsCarrier, normalizeUsPhone } from "../lib/sms";
 import { NOTRACK_COOKIE_NAME, trackEvent } from "../lib/analytics";
 import { checkRateLimit, checkInviteRateLimit } from "../lib/ratelimit";
 import { optionalAccount, type AccountContext } from "../lib/auth";
@@ -11,7 +12,7 @@ import type { DocField, Env } from "@docracy/shared";
 interface CreateDocumentBody {
   preparerSigns: boolean;
   preparerEmail?: string;
-  signers: Array<{ order: number; name: string; email: string; pin?: string }>;
+  signers: Array<{ order: number; name: string; email: string; pin?: string; phone?: string; smsCarrier?: string }>;
   fields: DocField[];
   ccRecipients?: Array<{ name?: string; email: string }>;
   customSubject?: string;
@@ -19,6 +20,10 @@ interface CreateDocumentBody {
   signingMode?: "sequential" | "parallel";
   /** Paid-only retention override in days — free ignores / rejects. */
   ttlDays?: number;
+  /** Also text signing links via US carrier gateways (Resend — no extra SMS vendor). */
+  smsInvites?: boolean;
+  /** Paid — require signers to upload attachments before signing. */
+  signerAttachments?: { enabled: boolean; maxFiles?: number; maxBytesPerFile?: number };
   /** Set only when these fields were loaded from a saved (paid-tier) template — see
    *  routes/templates.ts's GET /:id, which fires the matching template_started event. Purely for
    *  the Template funnel's template_completed step; never persisted on the resulting document. */
@@ -29,9 +34,10 @@ const MAX_PDF_BYTES = 15 * 1024 * 1024; // 15MB
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_SUBJECT_LENGTH = 150;
 const MAX_MESSAGE_LENGTH = 1000;
-const FIELD_TYPES = new Set(["signature", "initials", "text", "date", "checkbox"]);
+const FIELD_TYPES = new Set(["signature", "initials", "text", "date", "checkbox", "dropdown"]);
 const PIN_RE = /^\d{4,8}$/;
 const FREE_TIER_MAX_CCS = 2;
+const MAX_DROPDOWN_OPTIONS = 20;
 
 type Variables = { account: AccountContext | null };
 const documents = new Hono<{ Bindings: Env; Variables: Variables }>();
@@ -131,6 +137,21 @@ documents.post("/", optionalAccount, async (c) => {
     if (s.pin && !PIN_RE.test(s.pin)) {
       return c.json({ error: "A signer's PIN must be 4-8 digits" }, 400);
     }
+    if (s.phone?.trim() && !normalizeUsPhone(s.phone)) {
+      return c.json({ error: `"${s.phone}" isn't a valid US mobile number` }, 400);
+    }
+    if (s.smsCarrier && !isSmsCarrier(s.smsCarrier)) {
+      return c.json({ error: "Unknown mobile carrier — choose AT&T, T-Mobile, Verizon, Sprint, or US Cellular" }, 400);
+    }
+    if (s.phone?.trim() && !s.smsCarrier) {
+      return c.json({ error: "Pick a mobile carrier when adding a phone number for SMS" }, 400);
+    }
+    if (s.smsCarrier && !s.phone?.trim()) {
+      return c.json({ error: "A phone number is required when a carrier is selected" }, 400);
+    }
+  }
+  if (meta.smsInvites && !meta.signers.some((s) => s.phone?.trim() && s.smsCarrier)) {
+    return c.json({ error: "SMS is on but no signer has a phone number and carrier" }, 400);
   }
   if (!meta.fields?.every((f) => f.signerOrder >= 1 && f.signerOrder <= meta.signers.length)) {
     return c.json({ error: "A field is assigned to a signer that doesn't exist" }, 400);
@@ -154,6 +175,18 @@ documents.post("/", optionalAccount, async (c) => {
   const typeOk = meta.fields?.every((f) => f.type === undefined || FIELD_TYPES.has(f.type));
   if (!typeOk) {
     return c.json({ error: "A field has an unrecognized type" }, 400);
+  }
+  for (const f of meta.fields ?? []) {
+    if (f.type === "dropdown") {
+      const opts = (f.options ?? []).map((o) => o.trim()).filter(Boolean);
+      if (opts.length < 2) {
+        return c.json({ error: "Dropdown fields need at least two options" }, 400);
+      }
+      if (opts.length > MAX_DROPDOWN_OPTIONS) {
+        return c.json({ error: `Dropdown fields support at most ${MAX_DROPDOWN_OPTIONS} options` }, 400);
+      }
+      f.options = opts;
+    }
   }
   const signerOrdersWithFields = new Set(meta.fields.map((f) => f.signerOrder));
   const unassignedSigner = meta.signers.find((_, i) => !signerOrdersWithFields.has(i + 1));
@@ -233,6 +266,14 @@ documents.post("/", optionalAccount, async (c) => {
       "ttl_requires_paid"
     );
   }
+  if (meta.signerAttachments?.enabled && !account?.isPaid) {
+    return failWith(
+      "send_failed",
+      { error: "Signer attachments require a paid account." },
+      402,
+      "attachments_requires_paid"
+    );
+  }
   const ttl = resolveTtlDays(c.env, { isPaid: !!account?.isPaid, ttlDays: meta.ttlDays });
   if ("error" in ttl) {
     return c.json({ error: ttl.error }, 400);
@@ -257,6 +298,8 @@ documents.post("/", optionalAccount, async (c) => {
     signingMode: meta.signingMode,
     templateId: meta.templateId,
     ttlDays: ttl.ttlDays,
+    smsInvites: meta.smsInvites || undefined,
+    signerAttachments: meta.signerAttachments?.enabled ? meta.signerAttachments : undefined,
   });
 
   return c.json({ docId, statusToken });

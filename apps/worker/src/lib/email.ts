@@ -1,6 +1,7 @@
 import { resolveEmailLogoUrl } from "./branding";
 import { mergePdfs } from "./pdf";
 import { trackEvent } from "./analytics";
+import { sendSigningSmsLink } from "./sms";
 import type { DocState, Env } from "@docracy/shared";
 
 // docracy.io is verified in Resend (DKIM on the root domain, SPF/bounce handling via the
@@ -60,6 +61,23 @@ async function send(env: Env, to: string, subject: string, html: string, opts: S
     html,
     tags: [{ name: "email_type", value: opts.emailType }],
     ...(opts.replyTo ? { reply_to: opts.replyTo } : {}),
+  });
+}
+
+/** Plain-text outbound email — used for US carrier email-to-SMS gateways (lib/sms.ts). */
+export async function sendPlainText(env: Env, to: string, text: string, emailType: string): Promise<void> {
+  trackEvent(env, { event: "email_sent", emailType });
+  const subject = text.length > 70 ? `${text.slice(0, 67)}…` : text;
+  if (!env.RESEND_API_KEY) {
+    console.log(`[sms:dev] to=${to}\n${text}\n`);
+    return;
+  }
+  await resendFetch(env, {
+    from: FROM,
+    to,
+    subject,
+    text,
+    tags: [{ name: "email_type", value: emailType }],
   });
 }
 
@@ -165,6 +183,11 @@ export async function sendSigningInvite(env: Env, doc: DocState, order: number, 
   const subject = doc.customSubject?.trim() || "Ready to sign — you have a document waiting";
   const customLogoUrl = await resolveEmailLogoUrl(env, doc.accountId);
   await send(env, signer.email, subject, emailShell(env.PUBLIC_APP_URL, body, customLogoUrl), { emailType: "signing_invite" });
+  try {
+    await sendSigningSmsLink(env, doc, order, link);
+  } catch (err) {
+    console.error(`Signing invite SMS failed for doc ${doc.docId} signer ${order} (non-fatal):`, err);
+  }
 }
 
 export async function sendPreparerStatusLink(env: Env, preparerEmail: string, statusToken: string): Promise<void> {

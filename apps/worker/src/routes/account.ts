@@ -271,4 +271,28 @@ account.post("/token/regenerate", requirePaidAccount, async (c) => {
   return c.json({ token, connectorUrl: `${c.env.PUBLIC_CONNECTOR_URL}/mcp?token=${token}` });
 });
 
+/** Download a signer attachment uploaded during signing — paid workspace members only. */
+account.get("/documents/:docId/attachments/:signerOrder/:attachmentId", requirePaidAccount, async (c) => {
+  const acct = c.get("account")!;
+  const doc = await getDoc(c.env, c.req.param("docId"));
+  if (!doc || doc.accountId !== acct.workspaceId) {
+    return c.json({ error: "Document not found" }, 404);
+  }
+  const signerOrder = Number(c.req.param("signerOrder"));
+  const attachmentId = c.req.param("attachmentId");
+  const signer = doc.signers.find((s) => s.order === signerOrder);
+  const attachment = signer?.attachments?.find((a) => a.id === attachmentId);
+  if (!attachment) {
+    return c.json({ error: "Attachment not found" }, 404);
+  }
+  const obj = await c.env.DOCRACY_DOCS.get(attachment.r2Key);
+  if (!obj) return c.json({ error: "Attachment file missing" }, 404);
+  return new Response(await obj.arrayBuffer(), {
+    headers: {
+      "Content-Type": obj.httpMetadata?.contentType ?? "application/octet-stream",
+      "Content-Disposition": `attachment; filename="${attachment.name.replace(/[^\w.\-() ]+/g, "_")}"`,
+    },
+  });
+});
+
 export default account;

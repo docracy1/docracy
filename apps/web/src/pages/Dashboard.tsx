@@ -4,6 +4,7 @@ import {
   apiUrl,
   cancelTeamInvite,
   createContact,
+  createEmbedSession,
   createWebhook,
   deleteBrandLogo,
   deleteContact,
@@ -197,6 +198,15 @@ export default function Dashboard() {
   const [reassignLoading, setReassignLoading] = useState(false);
   const [reassignSaving, setReassignSaving] = useState(false);
   const [reassignError, setReassignError] = useState<string | null>(null);
+  const [embedDoc, setEmbedDoc] = useState<DocumentSummary | null>(null);
+  const [embedSigners, setEmbedSigners] = useState<StatusSigner[]>([]);
+  const [embedOrder, setEmbedOrder] = useState<number | null>(null);
+  const [embedOrigins, setEmbedOrigins] = useState("");
+  const [embedReturnUrl, setEmbedReturnUrl] = useState("");
+  const [embedLoading, setEmbedLoading] = useState(false);
+  const [embedCreating, setEmbedCreating] = useState(false);
+  const [embedError, setEmbedError] = useState<string | null>(null);
+  const [embedResult, setEmbedResult] = useState<{ embedUrl: string; expiresAt: string } | null>(null);
   const [contacts, setContacts] = useState<ContactSummary[]>([]);
   const [contactError, setContactError] = useState<string | null>(null);
   const [showAddContact, setShowAddContact] = useState(false);
@@ -258,6 +268,54 @@ export default function Dashboard() {
       setReassignSigners([]);
     } finally {
       setReassignLoading(false);
+    }
+  };
+
+  const openEmbed = async (doc: DocumentSummary) => {
+    setEmbedDoc(doc);
+    setEmbedOrder(null);
+    setEmbedOrigins(typeof window !== "undefined" ? window.location.origin : "");
+    setEmbedReturnUrl("");
+    setEmbedError(null);
+    setEmbedResult(null);
+    setEmbedLoading(true);
+    try {
+      const status = await fetchStatus(doc.statusToken);
+      const pending = status.signers.filter((s) => s.status === "pending");
+      setEmbedSigners(pending);
+      if (pending.length === 1) setEmbedOrder(pending[0].order);
+    } catch (err) {
+      setEmbedError(err instanceof Error ? err.message : "Something went wrong");
+      setEmbedSigners([]);
+    } finally {
+      setEmbedLoading(false);
+    }
+  };
+
+  const onCreateEmbed = async () => {
+    if (!embedDoc || embedOrder == null) return;
+    const origins = embedOrigins
+      .split(/[\n,]+/)
+      .map((o) => o.trim())
+      .filter(Boolean);
+    if (origins.length === 0) {
+      setEmbedError("Add at least one allowed origin (e.g. https://yourapp.com)");
+      return;
+    }
+    setEmbedCreating(true);
+    setEmbedError(null);
+    try {
+      const result = await createEmbedSession({
+        docId: embedDoc.docId,
+        signerOrder: embedOrder,
+        allowedOrigins: origins,
+        returnUrl: embedReturnUrl.trim() || undefined,
+      });
+      setEmbedResult({ embedUrl: result.embedUrl, expiresAt: result.expiresAt });
+    } catch (err) {
+      setEmbedError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setEmbedCreating(false);
     }
   };
 
@@ -1119,6 +1177,13 @@ export default function Dashboard() {
                         >
                           Reassign
                         </button>
+                        <button
+                          className="btn-secondary"
+                          style={{ fontSize: 12, padding: "4px 8px" }}
+                          onClick={() => openEmbed(doc)}
+                        >
+                          Embed
+                        </button>
                       </>
                     )}
                   </div>
@@ -1576,10 +1641,101 @@ export default function Dashboard() {
                   >
                     {connectingProvider === provider ? "Connecting…" : "Connect"}
                   </button>
-                )}
-              </div>
-            );
-          })}
+      )}
+
+      {embedDoc && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.6)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 10,
+          }}
+        >
+          <div className="card" style={{ background: "var(--canvas)", boxShadow: "var(--shadow-lg)", maxWidth: 480, width: "92vw" }}>
+            <h3 style={{ fontSize: 15, marginTop: 0 }}>Create embed session</h3>
+            <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 0 }}>{embedDoc.title}</p>
+            {embedLoading ? (
+              <p>Loading signers…</p>
+            ) : embedResult ? (
+              <>
+                <p style={{ fontSize: 13 }}>Expires {new Date(embedResult.expiresAt).toLocaleString()}</p>
+                <input
+                  className="form-input"
+                  style={{ width: "100%", marginBottom: 8, fontSize: 12 }}
+                  readOnly
+                  value={embedResult.embedUrl}
+                  onFocus={(e) => e.target.select()}
+                />
+                <button
+                  type="button"
+                  className="btn-primary"
+                  onClick={() => void navigator.clipboard.writeText(embedResult.embedUrl)}
+                >
+                  Copy embed URL
+                </button>
+              </>
+            ) : embedSigners.length === 0 ? (
+              <p style={{ marginBottom: 12 }}>No pending signers — embedding is only available while someone still needs to sign.</p>
+            ) : (
+              <>
+                <select
+                  className="form-input"
+                  style={{ width: "100%", marginBottom: 8 }}
+                  value={embedOrder ?? ""}
+                  onChange={(e) => setEmbedOrder(Number(e.target.value))}
+                >
+                  <option value="" disabled>
+                    Select signer
+                  </option>
+                  {embedSigners.map((s) => (
+                    <option key={s.order} value={s.order}>
+                      {s.order}. {s.name}
+                    </option>
+                  ))}
+                </select>
+                <textarea
+                  className="form-input"
+                  style={{ width: "100%", marginBottom: 8, minHeight: 72, fontSize: 12 }}
+                  placeholder="Allowed origins — one per line (e.g. https://app.example.com)"
+                  aria-label="Allowed origins"
+                  value={embedOrigins}
+                  onChange={(e) => setEmbedOrigins(e.target.value)}
+                />
+                <input
+                  className="form-input"
+                  style={{ width: "100%", marginBottom: 8 }}
+                  placeholder="Return URL after signing (optional)"
+                  aria-label="Return URL"
+                  value={embedReturnUrl}
+                  onChange={(e) => setEmbedReturnUrl(e.target.value)}
+                />
+              </>
+            )}
+            {embedError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{embedError}</p>}
+            <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+              {!embedResult && (
+                <button
+                  className="btn-primary"
+                  disabled={embedLoading || embedCreating || embedOrder == null || embedSigners.length === 0}
+                  onClick={() => void onCreateEmbed()}
+                >
+                  {embedCreating ? "Creating…" : "Create embed URL"}
+                </button>
+              )}
+              <button className="btn-secondary" disabled={embedCreating} onClick={() => setEmbedDoc(null)}>
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+})}
         </div>
       )}
 
@@ -1864,6 +2020,97 @@ export default function Dashboard() {
               </button>
               <button className="btn-secondary" disabled={reassignSaving} onClick={() => setReassignDoc(null)}>
                 Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {embedDoc && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.6)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 10,
+          }}
+        >
+          <div className="card" style={{ background: "var(--canvas)", boxShadow: "var(--shadow-lg)", maxWidth: 480, width: "92vw" }}>
+            <h3 style={{ fontSize: 15, marginTop: 0 }}>Create embed session</h3>
+            <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 0 }}>{embedDoc.title}</p>
+            {embedLoading ? (
+              <p>Loading signers…</p>
+            ) : embedResult ? (
+              <>
+                <p style={{ fontSize: 13 }}>Expires {new Date(embedResult.expiresAt).toLocaleString()}</p>
+                <input
+                  className="form-input"
+                  style={{ width: "100%", marginBottom: 8, fontSize: 12 }}
+                  readOnly
+                  value={embedResult.embedUrl}
+                  onFocus={(e) => e.target.select()}
+                />
+                <button
+                  type="button"
+                  className="btn-primary"
+                  onClick={() => void navigator.clipboard.writeText(embedResult.embedUrl)}
+                >
+                  Copy embed URL
+                </button>
+              </>
+            ) : embedSigners.length === 0 ? (
+              <p style={{ marginBottom: 12 }}>No pending signers — embedding is only available while someone still needs to sign.</p>
+            ) : (
+              <>
+                <select
+                  className="form-input"
+                  style={{ width: "100%", marginBottom: 8 }}
+                  value={embedOrder ?? ""}
+                  onChange={(e) => setEmbedOrder(Number(e.target.value))}
+                >
+                  <option value="" disabled>
+                    Select signer
+                  </option>
+                  {embedSigners.map((s) => (
+                    <option key={s.order} value={s.order}>
+                      {s.order}. {s.name}
+                    </option>
+                  ))}
+                </select>
+                <textarea
+                  className="form-input"
+                  style={{ width: "100%", marginBottom: 8, minHeight: 72, fontSize: 12 }}
+                  placeholder="Allowed origins — one per line (e.g. https://app.example.com)"
+                  aria-label="Allowed origins"
+                  value={embedOrigins}
+                  onChange={(e) => setEmbedOrigins(e.target.value)}
+                />
+                <input
+                  className="form-input"
+                  style={{ width: "100%", marginBottom: 8 }}
+                  placeholder="Return URL after signing (optional)"
+                  aria-label="Return URL"
+                  value={embedReturnUrl}
+                  onChange={(e) => setEmbedReturnUrl(e.target.value)}
+                />
+              </>
+            )}
+            {embedError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{embedError}</p>}
+            <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+              {!embedResult && (
+                <button
+                  className="btn-primary"
+                  disabled={embedLoading || embedCreating || embedOrder == null || embedSigners.length === 0}
+                  onClick={() => void onCreateEmbed()}
+                >
+                  {embedCreating ? "Creating…" : "Create embed URL"}
+                </button>
+              )}
+              <button className="btn-secondary" disabled={embedCreating} onClick={() => setEmbedDoc(null)}>
+                Close
               </button>
             </div>
           </div>

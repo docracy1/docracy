@@ -1,4 +1,4 @@
-export type DocFieldType = "signature" | "initials" | "text" | "date" | "checkbox";
+export type DocFieldType = "signature" | "initials" | "text" | "date" | "checkbox" | "dropdown";
 
 /** `type` is optional and always read via `field.type ?? "signature"` — see the matching comment
  *  in packages/shared/src/types.ts (this is a deliberate frontend-only duplicate of that type). */
@@ -13,6 +13,8 @@ export interface DocField {
   type?: DocFieldType;
   /** Checkbox only: when false, the signer may leave it unchecked. Absent/true = required. */
   required?: boolean;
+  /** Dropdown only — at least two choices. */
+  options?: string[];
 }
 
 export interface SignerInput {
@@ -21,6 +23,8 @@ export interface SignerInput {
   email: string;
   /** Optional 4-8 digit PIN gating this signer's link — never sent back to the client once set. */
   pin?: string;
+  phone?: string;
+  smsCarrier?: "att" | "tmobile" | "verizon" | "sprint" | "uscc";
 }
 
 export interface CcRecipientInput {

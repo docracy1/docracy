@@ -47,6 +47,8 @@ export interface CreateDocumentOptions {
   ccRecipients?: CcRecipientInput[];
   /** Paid only — retention days (1–90). Omitted / free always uses the default (9). */
   ttlDays?: number;
+  smsInvites?: boolean;
+  signerAttachments?: { enabled: boolean; maxFiles?: number; maxBytesPerFile?: number };
   /** Set when these fields came from a saved (paid-tier) template id or a free-template slug —
    *  always fires the template_completed funnel event; the persistent "Recurring Templates" usage
    *  counter additionally requires a logged-in paid account (no workspace to key a free-tier
@@ -79,6 +81,11 @@ export interface SignPayload {
   docId?: string;
   pdfBase64?: string;
   fields?: DocField[];
+  signerAttachments?: {
+    maxFiles: number;
+    maxBytesPerFile: number;
+    uploaded: Array<{ id: string; name: string; sizeBytes: number }>;
+  };
   status: StatusPayload;
   brandLogoPath?: string | null;
   brandWorkspaceSlug?: string | null;
@@ -110,6 +117,21 @@ export async function submitSignature(
     method: "POST",
     headers: { "Content-Type": "application/json", ...(unlockToken ? { "X-Sign-Unlock": unlockToken } : {}) },
     body: JSON.stringify({ values, consent }),
+  });
+  return asJson(res);
+}
+
+export async function uploadSignAttachment(
+  token: string,
+  file: File,
+  unlockToken?: string
+): Promise<{ uploadedCount: number; attachment: { id: string; name: string; sizeBytes: number } }> {
+  const form = new FormData();
+  form.set("file", file);
+  const res = await apiFetch(`/api/sign/${token}/attachments`, {
+    method: "POST",
+    body: form,
+    headers: unlockToken ? { "X-Sign-Unlock": unlockToken } : undefined,
   });
   return asJson(res);
 }

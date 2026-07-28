@@ -20,6 +20,11 @@ import { trackEvent, NOTRACK_COOKIE_NAME } from "../lib/analytics";
 import { getWorkspaceSlug, hasCustomLogo, logoPath } from "../lib/branding";
 import { authenticateDocToken } from "../lib/docTokenAuth";
 import { signToken } from "@docracy/shared";
+import {
+  attachmentLimits,
+  isAllowedAttachmentType,
+  storeSignerAttachment,
+} from "../lib/signerAttachments";
 import type { AuditEvent, DocField, DocState, Env } from "@docracy/shared";
 
 const MAX_TEXT_FIELD_LENGTH = 500;
@@ -30,6 +35,10 @@ function fieldSatisfied(f: DocField, raw: string | undefined): boolean {
   if (type === "checkbox") {
     if (f.required === false) return raw === "true" || raw === "false" || raw === "1" || raw === "0";
     return raw === "true" || raw === "1";
+  }
+  if (type === "dropdown") {
+    const opts = f.options ?? [];
+    return Boolean(raw && opts.includes(raw));
   }
   return Boolean(raw?.trim());
 }
@@ -334,6 +343,16 @@ sign.get("/sign/:token", async (c) => {
     docId: doc.docId,
     pdfBase64,
     fields: doc.fields.filter((f) => f.signerOrder === verified.order),
+    signerAttachments: doc.signerAttachments?.enabled
+      ? {
+          ...attachmentLimits(doc),
+          uploaded: (signerForPinCheck?.attachments ?? []).map((a) => ({
+            id: a.id,
+            name: a.name,
+            sizeBytes: a.sizeBytes,
+          })),
+        }
+      : undefined,
     status: statusPayload(doc),
     brandLogoPath,
     brandWorkspaceSlug,
@@ -368,6 +387,74 @@ sign.post("/sign/:token/unlock", async (c) => {
 
   const unlockToken = await issueUnlockToken(c.env, doc.docId, verified.order);
   return c.json({ unlockToken });
+});
+
+sign.post("/sign/:token/attachments", async (c) => {
+  const token = c.req.param("token");
+  if (!(await checkTokenAccessRateLimit(c.env, token))) {
+    return c.json({ error: "Too many requests. Please try again shortly." }, 429);
+  }
+
+  const auth = await authenticateDocToken(c.env, token);
+  if (!auth) return c.json({ error: "Invalid or tampered link" }, 403);
+  const { verified, doc } = auth;
+
+  if (doc.status !== "pending" || !isSignerOnTurn(doc, verified.order)) {
+    return c.json({ error: "You're not able to upload attachments right now" }, 409);
+  }
+  if (!doc.signerAttachments?.enabled) {
+    return c.json({ error: "This document does not accept attachments" }, 400);
+  }
+
+  const signer = doc.signers.find((s) => s.order === verified.order)!;
+  const limits = attachmentLimits(doc);
+  const existing = signer.attachments ?? [];
+  if (existing.length >= limits.maxFiles) {
+    return c.json({ error: `You can upload at most ${limits.maxFiles} file(s)` }, 400);
+  }
+
+  const form = await c.req.parseBody();
+  const file = form["file"];
+  if (!(file instanceof File)) {
+    return c.json({ error: "Expected multipart form with a 'file' field" }, 400);
+  }
+  if (file.size === 0) {
+    return c.json({ error: "That file is empty" }, 400);
+  }
+  if (file.size > limits.maxBytesPerFile) {
+    return c.json(
+      { error: `Each attachment must be under ${Math.round(limits.maxBytesPerFile / (1024 * 1024))}MB` },
+      400
+    );
+  }
+  const mime = file.type || "application/octet-stream";
+  if (!isAllowedAttachmentType(mime)) {
+    return c.json({ error: "That file type is not allowed — use PDF or common image formats" }, 400);
+  }
+
+  const stored = await storeSignerAttachment(c.env, doc.docId, verified.order, file);
+  signer.attachments = [...existing, stored];
+
+  const uploadedAt = stored.uploadedAt;
+  const events: AuditEvent[] = [
+    ...(doc.events ?? []),
+    {
+      type: "attachment_uploaded",
+      signerOrder: verified.order,
+      ip: c.req.header("CF-Connecting-IP") ?? null,
+      userAgent: c.req.header("User-Agent") ?? null,
+      timestamp: uploadedAt,
+      pdfSha256: null,
+    },
+  ];
+  doc.events = events;
+  await putDoc(c.env, doc);
+
+  return c.json({
+    ok: true,
+    attachment: { id: stored.id, name: stored.name, sizeBytes: stored.sizeBytes },
+    uploadedCount: signer.attachments.length,
+  });
 });
 
 sign.post("/sign/:token/decline", async (c) => {
@@ -469,10 +556,15 @@ sign.post("/sign/:token", async (c) => {
     return c.json({ error: "Please fill in every field before submitting" }, 400);
   }
 
+  const signerForAttachments = doc.signers.find((s) => s.order === verified.order)!;
+  if (doc.signerAttachments?.enabled && (signerForAttachments.attachments ?? []).length === 0) {
+    return c.json({ error: "Please upload the required attachment(s) before signing" }, 400);
+  }
+
   const isImageField = (type: DocField["type"]) => type === undefined || type === "signature" || type === "initials";
   const oversized = myFields.some((f) => {
     const value = valueById.get(f.id)!;
-    if (f.type === "checkbox") return false;
+    if (f.type === "checkbox" || f.type === "dropdown") return false;
     return isImageField(f.type) ? decodedByteLength(value) > MAX_SIGNATURE_IMAGE_BYTES : value.length > MAX_TEXT_FIELD_LENGTH;
   });
   if (oversized) {

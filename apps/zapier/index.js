@@ -4,6 +4,7 @@ const documentCreatedTrigger = require("./triggers/documentCreated");
 const signerSignedTrigger = require("./triggers/signerSigned");
 const documentCompletedTrigger = require("./triggers/documentCompleted");
 const sendDocumentFromTemplateCreate = require("./creates/sendDocumentFromTemplate");
+const bulkSendFromTemplateCreate = require("./creates/bulkSendFromTemplate");
 
 // Custom auth (see authentication.js) doesn't inject the key into requests on its own — every
 // outgoing call needs this added by hand, once, here.
@@ -36,6 +37,7 @@ module.exports = {
 
   creates: {
     [sendDocumentFromTemplateCreate.key]: sendDocumentFromTemplateCreate,
+    [bulkSendFromTemplateCreate.key]: bulkSendFromTemplateCreate,
   },
 
   resources: {},
