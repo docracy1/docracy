@@ -57,7 +57,7 @@ module.exports = {
   noun: "Bulk Send",
   display: {
     label: "Bulk Send From Template",
-    description: "Sends a saved template to many recipients at once (up to 50 per run).",
+    description: "Sends a saved template to many recipients in one action step, keeping Zapier Free usage lean.",
   },
   operation: {
     perform,
@@ -68,7 +68,7 @@ module.exports = {
         type: "string",
         required: true,
         dynamic: "template_list.id.name",
-        helpText: "Each filled-in recipient row creates a separate document from this template.",
+        helpText: "Each filled-in recipient row creates a separate document from this template, but the Zap still uses one action step.",
       },
       ...recipientFields,
       {

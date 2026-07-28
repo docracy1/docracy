@@ -248,6 +248,17 @@ export default function Docs() {
           <strong> Webhooks</strong> (configured from the Dashboard) let your own systems subscribe to those same
           three events directly, without Zapier in between.
         </p>
+        <ul style={{ marginTop: 8 }}>
+          <li>
+            <strong>Best Free-plan pattern:</strong> one Docracy trigger + one destination action.
+          </li>
+          <li>
+            <strong>Keep tasks low:</strong> use Docracy&apos;s own bulk-send action instead of fanning one Zap into many action steps.
+          </li>
+          <li>
+            <strong>If you outgrow Free:</strong> prefer Docracy&apos;s direct API or your own webhook consumer rather than building around extra Zapier steps.
+          </li>
+        </ul>
       </Section>
 
       <Section id="api" title="REST API reference">

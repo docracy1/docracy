@@ -34,7 +34,7 @@ module.exports = {
   noun: "Document",
   display: {
     label: "Document Created",
-    description: "Triggers when a document is sent for signature, before anyone has signed.",
+    description: "Triggers when a document is sent for signature. Best used in a simple 2-step Zap on Zapier Free.",
   },
   operation: {
     type: "hook",

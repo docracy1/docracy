@@ -36,7 +36,7 @@ module.exports = {
   noun: "Document",
   display: {
     label: "Send Document From Template",
-    description: "Sends a saved Docracy template out for signature.",
+    description: "Sends a saved Docracy template out for signature in one action step, ideal for Zapier Free.",
   },
   operation: {
     perform,
@@ -47,7 +47,7 @@ module.exports = {
         type: "string",
         required: true,
         dynamic: "template_list.id.name",
-        helpText: "Save a template first on your Docracy Dashboard (Prepare a document → Save as template).",
+        helpText: "Save a template first on your Docracy Dashboard (Prepare a document → Save as template). Works best as the single action step in a 2-step Zap.",
       },
       ...signerFields,
     ],

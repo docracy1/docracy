@@ -36,7 +36,7 @@ module.exports = {
   noun: "Document",
   display: {
     label: "Document Completed",
-    description: "Triggers when every signer has signed a document.",
+    description: "Triggers when every signer has signed a document. Best used in a simple 2-step Zap on Zapier Free.",
   },
   operation: {
     type: "hook",
