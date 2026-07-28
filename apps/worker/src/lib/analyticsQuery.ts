@@ -75,9 +75,22 @@ export interface FunnelStepRow {
  *  SUM(double1) on that event overcounts any multi-signer chain. COUNT(DISTINCT blob7/blob8) with
  *  empty rows filtered in WHERE (Analytics Engine rejects CASE inside COUNT DISTINCT) gives the
  *  correct per-document/per-template step counts for funnels that need them; callers that don't
- *  (Activation, Template) just use totalCount instead. */
-export async function queryFunnelStepCounts(env: Env, days: number): Promise<AnalyticsQueryResult<FunnelStepRow[]>> {
-  const window = `timestamp > now() - INTERVAL '${days}' DAY AND ${EXCLUDED_AGENTS_SQL_FILTER}`;
+ *  (Activation, Template) just use totalCount instead.
+ *
+ *  `humansOnly` (blob3, set on write by classifyBot) exists because server-side events and
+ *  client-side events have structurally different denominators: `landingpage_loaded` is written
+ *  from the Pages middleware for every request to `/`, crawlers included, while its paired
+ *  `landingpage_cta_clicked` can only ever come from a browser running JS. Comparing the two
+ *  unfiltered divides bot+human loads by human-only clicks, which understates the CTA rate by
+ *  however much crawler traffic the site gets. Events written without a user agent at all (cron
+ *  sweeps, Resend webhooks) classify as "human" and so survive this filter. */
+export async function queryFunnelStepCounts(
+  env: Env,
+  days: number,
+  humansOnly = false
+): Promise<AnalyticsQueryResult<FunnelStepRow[]>> {
+  const humanFilter = humansOnly ? ` AND blob3 = 'human'` : "";
+  const window = `timestamp > now() - INTERVAL '${days}' DAY AND ${EXCLUDED_AGENTS_SQL_FILTER}${humanFilter}`;
 
   const totalsSql = `
     SELECT blob1 AS event, SUM(double1) AS totalCount

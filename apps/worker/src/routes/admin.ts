@@ -69,10 +69,13 @@ admin.post("/grant-enterprise", requireAdminAccount, async (c) => {
 
 admin.get("/analytics", requireAdminAccount, async (c) => {
   const days = Math.min(90, Math.max(1, Number(c.req.query("days")) || 30));
-  const [summary, steps] = await Promise.all([queryFunnelSummary(c.env, days), queryFunnelStepCounts(c.env, days)]);
+  // Only the step counts take this filter — queryFunnelSummary already returns traffic_type per
+  // row, so the UI splits bot/human from that one itself.
+  const humansOnly = c.req.query("humansOnly") === "1";
+  const [summary, steps] = await Promise.all([queryFunnelSummary(c.env, days), queryFunnelStepCounts(c.env, days, humansOnly)]);
   if (!summary.ok) return c.json({ error: formatAnalyticsFailure(summary.failure) }, 501);
   if (!steps.ok) return c.json({ error: formatAnalyticsFailure(steps.failure) }, 501);
-  return c.json({ days, rows: summary.data, funnelSteps: steps.data });
+  return c.json({ days, humansOnly, rows: summary.data, funnelSteps: steps.data });
 });
 
 // Always-on for admins: founders (ADMIN_EMAILS), Claude, and Cursor are excluded from funnel

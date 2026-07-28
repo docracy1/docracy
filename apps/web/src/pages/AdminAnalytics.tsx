@@ -879,6 +879,9 @@ export default function AdminAnalytics() {
   usePageMeta("Analytics — Docracy", "Internal traffic and funnel analytics.");
 
   const [days, setDays] = useState(30);
+  // Defaults on: the honest reading of any funnel that pairs a server-side load with a
+  // client-side click (Traffic, above all) needs crawlers out of the denominator.
+  const [humansOnly, setHumansOnly] = useState(true);
   const [rows, setRows] = useState<FunnelRow[] | null>(null);
   const [funnelSteps, setFunnelSteps] = useState<FunnelStepRow[] | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -895,7 +898,7 @@ export default function AdminAnalytics() {
     let cancelled = false;
     setLoading(true);
     setError(null);
-    fetchAdminAnalytics(days)
+    fetchAdminAnalytics(days, humansOnly)
       .then((res) => {
         if (!cancelled) {
           setRows(res.rows);
@@ -911,7 +914,7 @@ export default function AdminAnalytics() {
     return () => {
       cancelled = true;
     };
-  }, [days]);
+  }, [days, humansOnly]);
 
   const stepsByEvent = useMemo(() => {
     const map = new Map<string, FunnelStepRow>();
@@ -970,10 +973,17 @@ export default function AdminAnalytics() {
                 Last {d}d
               </button>
             ))}
+            <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, marginLeft: 4 }}>
+              <input type="checkbox" checked={humansOnly} onChange={(e) => setHumansOnly(e.target.checked)} />
+              Humans only
+            </label>
           </div>
 
           <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 0, marginBottom: 20 }}>
-            Your visits, Claude, and Cursor are always excluded from these charts.
+            Your visits, Claude, and Cursor are always excluded from these charts.{" "}
+            {humansOnly
+              ? "Funnel step counts exclude all other classified crawlers (GPTBot, Googlebot, PerplexityBot, …) — page loads and CTA clicks are then measured against the same audience."
+              : "Funnel step counts include crawler traffic, which inflates server-side page loads relative to click events that need a real browser."}
           </p>
           {/* Blog posts and Signups are backed by their own independent D1-only fetches (each
               card manages its own loading/error state) — they have no dependency on the
