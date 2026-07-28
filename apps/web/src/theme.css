@@ -775,6 +775,35 @@ select {
   border-radius: var(--r-md);
   box-shadow: var(--shadow-sm);
   min-height: 96px;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 140ms ease,
+    box-shadow 140ms ease,
+    border-color 140ms ease,
+    background 140ms ease;
+}
+
+.integrations-tile::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: var(--integration-brand, var(--primary));
+}
+
+.integrations-tile:hover,
+.integrations-tile:focus-visible {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--integration-brand, var(--primary)) 28%, var(--hairline));
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--integration-brand, var(--primary)) 14%, transparent);
+  background: color-mix(in srgb, var(--integration-brand, var(--primary)) 4%, var(--canvas));
+}
+
+.integrations-tile:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--integration-brand, var(--primary)) 60%, white);
+  outline-offset: 2px;
 }
 
 .integrations-tile-logo {

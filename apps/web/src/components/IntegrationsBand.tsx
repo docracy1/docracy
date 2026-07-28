@@ -3,15 +3,21 @@ import { Link } from "react-router-dom";
 /** Real integrations only — logos from Simple Icons (CC0) in /public/integrations/, plus
  *  OneDrive/OpenAI/Grok SVGs aligned with each vendor's brand colors. */
 export const INTEGRATION_LOGOS = [
-  { name: "Dropbox", file: "dropbox.svg", group: "storage" as const },
-  { name: "OneDrive", file: "onedrive.svg", group: "storage" as const },
-  { name: "Box", file: "box.svg", group: "storage" as const },
-  { name: "Zapier", file: "zapier.svg", group: "automation" as const },
-  { name: "Claude", file: "claude.svg", group: "ai" as const },
-  { name: "ChatGPT", file: "openai.svg", group: "ai" as const },
-  { name: "Grok", file: "grok.svg", group: "ai" as const },
-  { name: "Perplexity", file: "perplexity.svg", group: "ai" as const },
-  { name: "Cursor", file: "cursor.svg", group: "ai" as const },
+  { name: "Dropbox", file: "dropbox.svg", group: "storage" as const, href: "https://www.dropbox.com/", color: "#0061ff" },
+  {
+    name: "OneDrive",
+    file: "onedrive.svg",
+    group: "storage" as const,
+    href: "https://www.microsoft.com/microsoft-365/onedrive/online-cloud-storage",
+    color: "#0078d4",
+  },
+  { name: "Box", file: "box.svg", group: "storage" as const, href: "https://www.box.com/", color: "#0061d5" },
+  { name: "Zapier", file: "zapier.svg", group: "automation" as const, href: "https://zapier.com/", color: "#ff4f00" },
+  { name: "Claude", file: "claude.svg", group: "ai" as const, href: "https://claude.ai/", color: "#cc785c" },
+  { name: "ChatGPT", file: "openai.svg", group: "ai" as const, href: "https://chatgpt.com/", color: "#412991" },
+  { name: "Grok", file: "grok.svg", group: "ai" as const, href: "https://grok.com/", color: "#111111" },
+  { name: "Perplexity", file: "perplexity.svg", group: "ai" as const, href: "https://www.perplexity.ai/", color: "#20b8a5" },
+  { name: "Cursor", file: "cursor.svg", group: "ai" as const, href: "https://cursor.com/", color: "#111111" },
 ] as const;
 
 type IntegrationsBandProps = {
@@ -34,10 +40,19 @@ export default function IntegrationsBand({ learnMoreTo = "/docs", compact = fals
 
         <div className="integrations-grid" role="list">
           {INTEGRATION_LOGOS.map((item) => (
-            <div key={item.name} className="integrations-tile" role="listitem">
+            <a
+              key={item.name}
+              className="integrations-tile"
+              role="listitem"
+              href={item.href}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={`Open ${item.name}`}
+              style={{ ["--integration-brand" as string]: item.color }}
+            >
               <img src={`/integrations/${item.file}`} alt="" width={32} height={32} className="integrations-tile-logo" />
               <span className="integrations-tile-name">{item.name}</span>
-            </div>
+            </a>
           ))}
         </div>
 
