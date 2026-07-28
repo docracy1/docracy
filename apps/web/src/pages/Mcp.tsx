@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import IntegrationsBand from "../components/IntegrationsBand";
 import { usePageMeta } from "../lib/usePageMeta";
 
 const EXAMPLE_URL = "https://mcp.docracy.io/mcp?token=dk_YOUR_API_KEY";
@@ -61,6 +62,8 @@ export default function Mcp() {
         connector URL to Claude, ChatGPT, Grok, or Perplexity and ask about your documents in plain English instead of
         opening a dashboard.
       </p>
+
+      <IntegrationsBand learnMoreTo="/docs#cloud-connectors" compact />
 
       <div className="card" style={{ marginTop: 24, background: "var(--primary-soft)", border: "1px solid var(--primary-soft-strong)" }}>
         <h3 style={{ marginTop: 0, fontSize: 16 }}>Paid account required</h3>

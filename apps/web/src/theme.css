@@ -732,6 +732,66 @@ select {
   padding: 0;
 }
 
+/* Integrations logo grid — Xodo-style "connect with your tools" band. */
+
+.integrations-band {
+  background: var(--canvas-soft);
+  border-bottom: 1px solid var(--hairline);
+  padding: 48px 24px 52px;
+}
+
+.integrations-band-compact {
+  padding: 36px 24px 40px;
+}
+
+.integrations-inner {
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.integrations-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+@media (max-width: 640px) {
+  .integrations-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.integrations-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 18px 12px 14px;
+  background: var(--canvas);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-sm);
+  min-height: 96px;
+}
+
+.integrations-tile-logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  display: block;
+}
+
+.integrations-tile-name {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--body-strong);
+  text-align: center;
+  line-height: 1.2;
+}
+
 .core-feature-icon {
   width: 44px;
   height: 44px;

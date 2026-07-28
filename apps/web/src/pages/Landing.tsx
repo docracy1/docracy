@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import PricingCalculator from "../components/PricingCalculator";
 import FirstDocumentPrompt from "../components/FirstDocumentPrompt";
+import IntegrationsBand from "../components/IntegrationsBand";
 import { track } from "../lib/track";
 import { FREE_TEMPLATES } from "../lib/freeTemplates";
 
@@ -383,6 +384,8 @@ export default function Landing() {
           later card down a row, out of alignment), so this sits right after the features section
           that Feature #1 leads instead — same visual position, without wrecking the grid. */}
       <FirstDocumentPrompt source="features" />
+
+      <IntegrationsBand learnMoreTo="/docs" />
 
       <div className="spotlight-band">
         <div className="spotlight-inner">
