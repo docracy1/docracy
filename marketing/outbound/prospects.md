@@ -23,6 +23,10 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 > Quick question: when you send client NDAs / retainer agreements, are you still on DocuSign (or similar), or did you find something lighter?
 >
 > I built Docracy for exactly that: free for 2 signers, no account, $10/mo if you need templates/team. Takes ~30 seconds: https://docracy.io/go/dm
+>
+> Odo
+> Founder, Docracy
+> https://docracy.io
 
 ---
 
@@ -39,6 +43,10 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 > When you send those agreements, are you still on DocuSign / HelloSign, or something lighter?
 >
 > Docracy is free for 2 signers, no account required: https://docracy.io/go/dm — curious what you use today.
+>
+> Odo
+> Founder, Docracy
+> https://docracy.io
 
 ---
 
@@ -53,6 +61,10 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 > Hey Sid — saw you flex contractors in by project — that onboarding paperwork loop is usually where DocuSign seats get silly.
 >
 > Do your contractors still get DocuSign seats for one-off agreements? We've been using a free 2-signer flow for NDAs/onboarding docs — no accounts for them: https://docracy.io/go/dm
+>
+> Odo
+> Founder, Docracy
+> https://docracy.io
 >
 > Curious what you use today.
 
@@ -71,6 +83,10 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 > When you send those, still on DocuSign / Dropbox Sign, or something lighter?
 >
 > Free for 2 signers, no signup: https://docracy.io/go/dm
+>
+> Odo
+> Founder, Docracy
+> https://docracy.io
 
 ---
 
@@ -87,6 +103,10 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 > When you send client agreements (or contractor NDAs), are you still paying DocuSign prices, or did you switch to something lighter?
 >
 > Docracy: free for 2 signers, no account: https://docracy.io/go/dm
+>
+> Odo
+> Founder, Docracy
+> https://docracy.io
 
 ---
 
@@ -101,6 +121,10 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 > Hey — you help studios with ops tooling — curious what you recommend (or use yourselves) for simple NDAs/contracts.
 >
 > Most freelancers I talk to are still overpaying DocuSign for 2-signer docs. We made a free path (no signup) and flat $10/mo when they outgrow it: https://docracy.io/go/dm
+>
+> Odo
+> Founder, Docracy
+> https://docracy.io
 >
 > If it's useful for your partners, happy to hear what broke — still early.
 
@@ -117,6 +141,10 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 > Hey Jillian — your First Hire / onboarding packages make me assume offer letters and contractor NDAs are a weekly thing.
 >
 > Do your clients still put DocuSign seats on one-off agreements? We use a free 2-signer flow so contractors don't need accounts: https://docracy.io/go/dm
+>
+> Odo
+> Founder, Docracy
+> https://docracy.io
 >
 > Curious what you typically set them up with.
 
@@ -135,6 +163,10 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 > When you're spinning up contractor NDAs / offer letters for clients, still on DocuSign, or something lighter?
 >
 > Free for 2 signers, no account: https://docracy.io/go/dm — curious what's in your default stack.
+>
+> Odo
+> Founder, Docracy
+> https://docracy.io
 
 ---
 
@@ -149,6 +181,10 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 > Hey — read your DocuSign vs Dropbox Sign breakdown — the $2/envelope Personal-plan math hit hard.
 >
 > We built a free 2-signer path (no signup) and flat $10/mo when you outgrow it: https://docracy.io/go/dm
+>
+> Odo
+> Founder, Docracy
+> https://docracy.io
 >
 > If it's useful for your readers (or your own stack), happy to hear what you'd flag — still early.
 
@@ -167,6 +203,10 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 > When you send client NDAs / agreements now, still on DocuSign (or Bonsai's signer), or something lighter?
 >
 > Free for 2 signers, no account: https://docracy.io/go/dm
+>
+> Odo
+> Founder, Docracy
+> https://docracy.io
 
 ---
 
@@ -183,6 +223,10 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 > When you send client NDAs / SOWs, are you still on DocuSign, or did you find something lighter?
 >
 > Docracy: free for 2 signers, no signup: https://docracy.io/go/dm
+>
+> Odo
+> Founder, Docracy
+> https://docracy.io
 
 ---
 
@@ -199,6 +243,10 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 > Still on DocuSign / HelloSign for those, or something lighter?
 >
 > Free for 2 signers, no account: https://docracy.io/go/dm
+>
+> Odo
+> Founder, Docracy
+> https://docracy.io
 
 ---
 
@@ -213,6 +261,10 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 > Hi Made team — saw you're bringing in freelance designers and WP contractors — curious how you handle one-off agreements.
 >
 > Do contractors still get DocuSign seats for NDAs? We've been using a free 2-signer flow so they don't need accounts: https://docracy.io/go/dm
+>
+> Odo
+> Founder, Docracy
+> https://docracy.io
 >
 > Curious what you use today.
 
@@ -231,6 +283,10 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 > When you send client agreements (or contractor NDAs), still on DocuSign, or something lighter?
 >
 > Free for 2 signers, no account: https://docracy.io/go/dm
+>
+> Odo
+> Founder, Docracy
+> https://docracy.io
 
 ---
 
@@ -247,6 +303,10 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 > When you send client agreements, still paying DocuSign prices, or did you find something lighter?
 >
 > Free for 2 signers, no signup: https://docracy.io/go/dm
+>
+> Odo
+> Founder, Docracy
+> https://docracy.io
 
 ---
 
@@ -261,6 +321,10 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 > Hi Toward — quick question for studio ops — not a pitch about branding work.
 >
 > Do freelancers / contractors still get DocuSign seats for one-off NDAs? We use a free 2-signer flow with no accounts for them: https://docracy.io/go/dm
+>
+> Odo
+> Founder, Docracy
+> https://docracy.io
 >
 > Curious what you use today.
 
@@ -277,6 +341,10 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 > Hi Sibling — saw you're building a freelance roster — that usually means a pile of one-off NDAs/agreements.
 >
 > Do contractors still get DocuSign seats for those? Free 2-signer flow, no accounts for them: https://docracy.io/go/dm
+>
+> Odo
+> Founder, Docracy
+> https://docracy.io
 >
 > Curious what you use today.
 
@@ -295,6 +363,10 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 > Still on DocuSign for NDAs / contracts, or something lighter?
 >
 > Free for 2 signers, no account: https://docracy.io/go/dm
+>
+> Odo
+> Founder, Docracy
+> https://docracy.io
 
 ---
 
@@ -311,6 +383,10 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 > Hey Whitney — read your 5-step onboarding — the Design Services Agreement + deposit step is exactly where e-sign tools get annoying.
 >
 > Still on DocuSign / HelloSign for those, or something lighter? Free for 2 signers, no account: https://docracy.io/go/dm
+>
+> Odo
+> Founder, Docracy
+> https://docracy.io
 
 ---
 
@@ -325,6 +401,10 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 > Hey Cathryn — your CV note about mobilizing contractors fast jumped out — ops usually fights DocuSign seats on one-offs.
 >
 > Do your contractors still need DocuSign for NDAs? Free 2-signer flow, no accounts: https://docracy.io/go/dm
+>
+> Odo
+> Founder, Docracy
+> https://docracy.io
 >
 > Curious what you use today.
 
@@ -342,6 +422,10 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 >
 > Do your clients still put DocuSign on simple NDAs? Free for 2 signers, no account: https://docracy.io/go/dm
 >
+> Odo
+> Founder, Docracy
+> https://docracy.io
+>
 > Curious what you typically recommend.
 
 ---
@@ -357,6 +441,10 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 > Hey Megan — noticed you gate the full portfolio behind an email — same "just send me a quick NDA" loop a lot of freelancers run.
 >
 > When you send those, still on DocuSign, or something lighter? Free for 2 signers: https://docracy.io/go/dm
+>
+> Odo
+> Founder, Docracy
+> https://docracy.io
 
 ---
 
