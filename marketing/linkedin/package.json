@@ -1,0 +1,11 @@
+{
+  "name": "docracy-linkedin-demos",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "record": "node record-demos.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.52.0"
+  }
+}
