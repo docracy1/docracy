@@ -620,6 +620,55 @@ select {
   font-weight: 700;
 }
 
+/* Hero CTA — one primary button plus a demoted text link, sitting inside .hero-band so the first
+   action is visible without scrolling. */
+.hero-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 28px;
+}
+
+.hero-actions-secondary {
+  color: var(--hero-body);
+  font-size: 14px;
+}
+
+.hero-actions-secondary:hover {
+  color: #ffffff;
+}
+
+/* Beats `.hero-band p` on specificity without !important, so the hint stays small next to the
+   hero's 18px body copy. */
+.hero-band .hero-cta-hint {
+  margin: 14px 0 0;
+  font-size: 13px;
+}
+
+/* Stacks below .hero-split's own 760px breakpoint: a side-by-side button and link get cramped
+   before the columns collapse. */
+@media (max-width: 700px) {
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .hero-actions .btn-primary {
+    width: 100%;
+    text-align: center;
+  }
+
+  .hero-actions-secondary {
+    text-align: center;
+  }
+
+  .hero-band .hero-cta-hint {
+    text-align: center;
+  }
+}
+
 .btn-lg {
   font-size: 16px;
   padding: 14px 26px;
@@ -650,6 +699,108 @@ select {
   box-shadow: var(--shadow-lg);
   overflow: hidden;
   aspect-ratio: 4 / 3;
+}
+
+/* Animated hero product demo — cycles upload → fields → send → signed. */
+.product-flow-demo {
+  position: relative;
+  aspect-ratio: 380 / 285;
+  width: 100%;
+}
+
+.product-flow-stage {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  animation: product-flow-cycle 12s infinite;
+}
+
+.product-flow-stage-1 {
+  animation-delay: 0s;
+}
+.product-flow-stage-2 {
+  animation-delay: 3s;
+}
+.product-flow-stage-3 {
+  animation-delay: 6s;
+}
+.product-flow-stage-4 {
+  animation-delay: 9s;
+}
+
+.product-flow-label {
+  position: absolute;
+  left: 16px;
+  bottom: 14px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--primary);
+  background: var(--primary-soft);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.product-flow-field {
+  transform-origin: center;
+}
+
+.product-flow-send {
+  transform-origin: center;
+}
+
+.product-flow-ink {
+  stroke-dasharray: 280;
+  stroke-dashoffset: 280;
+  animation: product-flow-draw 12s infinite;
+  animation-delay: inherit;
+}
+
+@keyframes product-flow-cycle {
+  0%,
+  4% {
+    opacity: 0;
+  }
+  8%,
+  22% {
+    opacity: 1;
+  }
+  26%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes product-flow-draw {
+  0%,
+  8% {
+    stroke-dashoffset: 280;
+  }
+  14%,
+  22% {
+    stroke-dashoffset: 0;
+  }
+  26%,
+  100% {
+    stroke-dashoffset: 280;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-flow-stage,
+  .product-flow-ink {
+    animation: none;
+  }
+  .product-flow-stage {
+    opacity: 0;
+  }
+  .product-flow-stage-4 {
+    opacity: 1;
+  }
+  .product-flow-ink {
+    stroke-dashoffset: 0;
+  }
 }
 
 .doc-mockup-card svg {
@@ -903,6 +1054,20 @@ select {
   color: var(--ink);
 }
 
+.first-document-prompt-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.first-document-prompt-hint {
+  margin: 12px 0 0 !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  color: var(--mute) !important;
+}
+
 .first-document-prompt-mobile {
   display: none;
 }
@@ -910,6 +1075,17 @@ select {
 @media (max-width: 700px) {
   .first-document-prompt-mobile {
     display: block;
+  }
+
+  .first-document-prompt-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .first-document-prompt-actions .btn-primary,
+  .first-document-prompt-actions .btn-secondary {
+    width: 100%;
+    text-align: center;
   }
 }
 
@@ -927,12 +1103,149 @@ select {
 .upload-modal-card {
   position: relative;
   background: var(--canvas);
-  border-radius: var(--r-md);
+  border-radius: var(--r-lg);
+  padding: 28px 24px 24px;
+  width: min(420px, 100%);
   box-shadow: var(--shadow-lg);
-  padding: 28px 24px;
-  max-width: 380px;
-  width: 100%;
   text-align: left;
+}
+
+.upload-modal-file-label {
+  display: block;
+  margin-top: 12px;
+  cursor: pointer;
+  position: relative;
+}
+
+.upload-modal-file-label input[type="file"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.cta-band-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.blog-cta-band {
+  margin-top: 32px;
+  padding: 24px;
+  background: var(--canvas-soft);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+}
+
+.blog-cta-lead {
+  margin: 0 0 14px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.blog-cta-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.prepare-start-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.prepare-upload-zone {
+  border: 2px dashed var(--hairline);
+  border-radius: var(--r-md);
+  padding: 20px;
+  text-align: center;
+  background: transparent;
+  transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
+}
+
+.prepare-upload-zone.is-dragging {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+}
+
+.prepare-upload-hint {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: var(--mute);
+}
+
+.prepare-upload-hint-mobile {
+  display: none;
+}
+
+.prepare-upload-file-label {
+  display: inline-block;
+  cursor: pointer;
+  position: relative;
+}
+
+.prepare-upload-file-label input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+@media (max-width: 700px) {
+  .cta-band-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cta-band-actions .btn-primary,
+  .cta-band-actions .btn-secondary {
+    width: 100%;
+    text-align: center;
+  }
+
+  .blog-cta-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .blog-cta-actions .btn-primary,
+  .blog-cta-actions .btn-secondary {
+    width: 100%;
+    text-align: center;
+  }
+
+  .prepare-start-actions {
+    flex-direction: column;
+  }
+
+  .prepare-start-actions .btn-primary,
+  .prepare-start-actions .btn-secondary {
+    width: 100%;
+  }
+
+  .prepare-upload-hint-desktop {
+    display: none;
+  }
+
+  .prepare-upload-hint-mobile {
+    display: block;
+  }
+
+  .upload-modal-card {
+    width: 100%;
+    padding: 24px 18px 20px;
+  }
+
+  .upload-modal-backdrop {
+    padding: 12px;
+    align-items: flex-end;
+  }
 }
 
 .upload-modal-close {

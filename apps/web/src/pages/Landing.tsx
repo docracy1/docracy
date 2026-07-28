@@ -3,13 +3,12 @@ import { Link } from "react-router-dom";
 import PricingCalculator from "../components/PricingCalculator";
 import FirstDocumentPrompt from "../components/FirstDocumentPrompt";
 import IntegrationsBand from "../components/IntegrationsBand";
+import ProductFlowDemo from "../components/ProductFlowDemo";
 import { track } from "../lib/track";
 import { FREE_TEMPLATES } from "../lib/freeTemplates";
 
-/** Abstract illustration of the product (a document, either freshly signed or having its fields
- *  auto-detected) — deliberately not a literal app screenshot, which would need re-cropping every
- *  time the UI changes, and deliberately not a fabricated review score or client logo. */
-function DocumentMockup({ variant }: { variant: "signed" | "detect" }) {
+/** Static field-detection mock for the AI spotlight — hero uses the animated ProductFlowDemo. */
+function DetectMockup() {
   return (
     <svg viewBox="0 0 380 285" width="100%" height="100%">
       <rect x="0.5" y="0.5" width="379" height="284" rx="16" fill="var(--canvas)" stroke="var(--hairline)" />
@@ -20,35 +19,19 @@ function DocumentMockup({ variant }: { variant: "signed" | "detect" }) {
       <rect x="32" y="124" width="316" height="8" rx="4" fill="var(--hairline)" />
       <rect x="32" y="142" width="316" height="8" rx="4" fill="var(--hairline)" />
       <rect x="32" y="160" width="170" height="8" rx="4" fill="var(--hairline)" />
-      {variant === "detect" ? (
-        <>
-          <rect x="32" y="200" width="130" height="36" rx="6" fill="var(--primary-soft)" stroke="var(--primary)" strokeDasharray="5 4" strokeWidth="2" />
-          <text x="97" y="222" textAnchor="middle" fontSize="11" fill="var(--primary)" fontFamily="inherit" fontWeight="700">
-            Signature
-          </text>
-          <rect x="178" y="200" width="90" height="36" rx="6" fill="var(--primary-soft)" stroke="var(--primary)" strokeDasharray="5 4" strokeWidth="2" />
-          <text x="223" y="222" textAnchor="middle" fontSize="11" fill="var(--primary)" fontFamily="inherit" fontWeight="700">
-            Date
-          </text>
-          <circle cx="335" cy="40" r="18" fill="var(--primary-soft-strong)" />
-          <path
-            d="M335 30l2.6 7.8L345 40l-7.4 2.2L335 50l-2.6-7.8L325 40l7.4-2.2L335 30Z"
-            fill="var(--primary)"
-          />
-        </>
-      ) : (
-        <>
-          <path
-            d="M38 226c18-26 36 9 55-8 19-17 28-22 50-13s38 22 58 4 42-26 65-4"
-            fill="none"
-            stroke="var(--primary)"
-            strokeWidth="5"
-            strokeLinecap="round"
-          />
-          <circle cx="332" cy="218" r="18" fill="#e3f3e9" />
-          <path d="M324 218l5.5 5.5 11-11" fill="none" stroke="var(--success)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-        </>
-      )}
+      <rect x="32" y="200" width="130" height="36" rx="6" fill="var(--primary-soft)" stroke="var(--primary)" strokeDasharray="5 4" strokeWidth="2" />
+      <text x="97" y="222" textAnchor="middle" fontSize="11" fill="var(--primary)" fontFamily="inherit" fontWeight="700">
+        Signature
+      </text>
+      <rect x="178" y="200" width="90" height="36" rx="6" fill="var(--primary-soft)" stroke="var(--primary)" strokeDasharray="5 4" strokeWidth="2" />
+      <text x="223" y="222" textAnchor="middle" fontSize="11" fill="var(--primary)" fontFamily="inherit" fontWeight="700">
+        Date
+      </text>
+      <circle cx="335" cy="40" r="18" fill="var(--primary-soft-strong)" />
+      <path
+        d="M335 30l2.6 7.8L345 40l-7.4 2.2L335 50l-2.6-7.8L325 40l7.4-2.2L335 30Z"
+        fill="var(--primary)"
+      />
     </svg>
   );
 }
@@ -327,16 +310,36 @@ export default function Landing() {
               <li>Secure and compliant document storage</li>
               <li>Legally binding signatures under e-signature laws like ESIGN and eIDAS</li>
             </ul>
+            {/* Inside the hero on purpose: this used to be a FirstDocumentPrompt directly *below*
+                the band, which on a laptop viewport left the page with no visible action until the
+                visitor scrolled. One dominant primary action (the zero-commitment sample), with
+                upload demoted to a text link rather than a second equal-weight button. */}
+            <div className="hero-actions">
+              <Link
+                to="/prepare?freeTemplate=mutual-nda"
+                className="btn-primary btn-lg"
+                style={{ display: "inline-block", textDecoration: "none" }}
+                onClick={() => track("landingpage_cta_clicked", { source: "hero_inline_sample" })}
+              >
+                Try with a sample NDA
+              </Link>
+              <Link
+                to="/prepare"
+                className="hero-actions-secondary"
+                onClick={() => track("landingpage_cta_clicked", { source: "hero_inline_upload" })}
+              >
+                or upload your own PDF
+              </Link>
+            </div>
+            <p className="hero-cta-hint">No account needed — send or sign in about 30 seconds.</p>
           </div>
           <div className="doc-mockup-glow">
             <div className="doc-mockup-card">
-              <DocumentMockup variant="signed" />
+              <ProductFlowDemo />
             </div>
           </div>
         </div>
       </div>
-
-      <FirstDocumentPrompt source="hero" />
 
       <div className="audience-band">
         <div className="audience-inner">
@@ -414,7 +417,7 @@ export default function Landing() {
             </div>
             <div className="doc-mockup-glow">
               <div className="doc-mockup-card">
-                <DocumentMockup variant="detect" />
+                <DetectMockup />
               </div>
             </div>
           </div>
@@ -525,14 +528,22 @@ export default function Landing() {
       <div className="cta-band">
         <h2 style={{ fontSize: 22, marginBottom: 8 }}>Ready to send your first document?</h2>
         <p style={{ marginTop: 0, marginBottom: 20 }}>Free to start — no account needed to send or sign.</p>
-        <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+        <div className="cta-band-actions">
+          <Link
+            to="/prepare?freeTemplate=mutual-nda"
+            className="btn-primary btn-lg"
+            style={{ display: "inline-block", textDecoration: "none" }}
+            onClick={() => track("landingpage_cta_clicked", { source: "final_cta_band_sample" })}
+          >
+            Try with a sample NDA
+          </Link>
           <Link
             to="/prepare"
-            className="btn-primary btn-lg"
+            className="btn-secondary btn-lg"
             style={{ display: "inline-block", textDecoration: "none" }}
             onClick={() => track("landingpage_cta_clicked", { source: "final_cta_band" })}
           >
-            Start a signing chain
+            Upload your PDF
           </Link>
           <Link
             to="/free-templates"
