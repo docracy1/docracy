@@ -1,168 +1,214 @@
-Docracy — Free, Anonymous, Sequential E‑Signature + API‑First Workflow Engine
-Docracy is a free, no‑signup, sequential e‑signature tool with a fully anonymous flow.
-State lives in Cloudflare KV, PDFs in R2, reminders via a daily Cron Trigger, and email via Resend.
-Documents self‑delete after 9 days. No accounts, no database for the free flow.
+# Docracy
 
-The paid tier (accounts, OAuth, extended retention, audit trail, search, summarize, manual reminders) is implemented at the API level and ready for activation once account creation ships.
+Free, fast e-signatures for simple agreements, with a paid workspace for automation, AI, templates, embedded signing, and cloud integrations.
 
-Live Services
-Frontend: https://docracy.pages.dev
+- Live app: [docracy.pages.dev](https://docracy.pages.dev)
+- Worker API: [docracy-worker.rl-d77.workers.dev](https://docracy-worker.rl-d77.workers.dev)
+- MCP server: [docracy-connector.rl-d77.workers.dev/mcp](https://docracy-connector.rl-d77.workers.dev/mcp)
 
-Worker API: https://docracy-worker.rl-d77.workers.dev
+## What Docracy does
 
-Connector (MCP): https://docracy-connector.rl-d77.workers.dev/mcp
+Docracy is built for low-friction signing:
 
-Features
-Free Tier (Fully Anonymous)
-Sequential e‑signature flow
+- upload a PDF or start from a template
+- add signers and place fields
+- send a sequential signing chain with no signer account required
+- email the finished PDF and completion certificate automatically
 
-No accounts, no login
+The free anonymous flow stores document state in Cloudflare KV, PDFs in R2, sends mail through Resend, and deletes documents after a short retention window. Paid workspaces add accounts, dashboard/history, AI features, reusable templates, automations, integrations, and team workflows.
 
-No database writes
+## Plans
 
-State in Cloudflare KV
+### Free
 
-PDFs stored in R2
+- no account required
+- up to 2 signers per document
+- sequential or all-at-once signing
+- signature, initials, text, date, checkbox, and dropdown fields
+- up to 2 CC recipients
+- document status page, decline/cancel flow, completion certificate
+- optional SMS signing links for US numbers via carrier email-to-SMS gateways
+- automatic deletion after 9 days, or earlier once the document is completed and sent
 
-Automatic deletion after 9 days
+### Paid ($10/month per workspace)
 
-Daily reminder cron
+- unlimited signers
+- unlimited teammates
+- dashboard with document history
+- reusable templates
+- bulk send from a template
+- custom document expiry (1-90 days)
+- embedded signing via iframe
+- saved contacts and signer reassignment
+- white-label branding
+- PIN-protected signing links
+- webhooks
+- API key + MCP connector
+- AI tools
+- Dropbox, OneDrive, and Box auto-upload
+- signer-required attachments
+- anchor tag detection in PDFs
 
-Email delivery via Resend
+### Enterprise
 
-MCP connector (paid): check_status + find_documents
+Everything in Paid, plus:
 
-Local dev without Cloudflare account
+- invoice billing and annual contracts
+- premium support
+- volume discounts and onboarding help
+- optional SSO / multi-workspace setup
 
-Full flow: prepare → upload → place fields → signers → sequential signing → completion email
+## Current feature set
 
-Paid Tier (Account‑Based, API‑First)
-Already implemented at API level, ready for activation:
+### Signing flow
 
-Account system (magic‑link login)
+- sequential or parallel signing
+- no signer login required
+- prepare, sign, status, and dashboard flows
+- completion PDF + certificate email
+- pending document cancel / void support
+- signer reassignment for paid workspaces
 
-OAuth for connector tools
+### Field types
 
-Extended retention
+- signature
+- initials
+- text
+- date
+- checkbox
+- dropdown
 
-Audit trail
+### Smart document prep
 
-Document search
+- AI field auto-detect
+- AI contract explainer
+- AI risk / clause highlighter
+- AI-generated agreements
+- anchor tags like `{{sig1}}`, `{{date_2}}`, or `{{dropdown_1:Yes|No}}`
 
-Document summarization
+### Templates and sending
 
-Pending‑by‑counterparty listing
+- free public templates
+- saved workspace templates
+- bulk send from a saved template
+- custom expiry on paid plans
 
-Manual reminders / resend link
+### Attachments and SMS
 
-Custom branding
+- optional signer attachments on paid plans
+- attachment downloads from status page and dashboard
+- free SMS signing links for US numbers only, sent through carrier email-to-SMS gateways using Resend
 
-D1 indexing for paid accounts (derived index, never source of truth)
+### Integrations and automation
 
-Integrations
-Cloudflare
-KV (state)
+- Dropbox auto-upload
+- OneDrive auto-upload
+- Box auto-upload
+- webhooks
+- Zapier triggers and actions
+- MCP connector for Claude, ChatGPT, Grok, Perplexity, and Cursor
 
-R2 (PDF storage)
+## Architecture
 
-D1 (derived index for paid accounts)
+- `apps/web` — React + Vite frontend
+- `apps/worker` — Cloudflare Worker API, cron reminders, billing hooks, D1 indexing for paid accounts
+- `apps/connector` — remote MCP server
+- `packages/shared` — shared types and HMAC token sign/verify logic
 
-Cron Trigger (daily reminders)
+Core infra:
 
-Workers (API + MCP connector)
+- Cloudflare KV for document state
+- Cloudflare R2 for PDFs and uploads
+- Cloudflare D1 for paid-account derived indexing only
+- Cloudflare Pages for the frontend
+- Resend for email delivery
 
-Pages (frontend hosting)
+## Important design rules
 
-Email
-Resend (magic links, reminders, completion emails)
+- D1 is a derived index, never the source of truth.
+- Anonymous/free documents do not depend on D1.
+- Shared code is intentionally minimal; only cross-cutting token logic belongs in `packages/shared`.
+- Never commit `.env` or `.dev.vars`.
 
-Cloud Storage APIs
-Box
+## Local development
 
-Dropbox
-
-OneDrive
-
-MCP (Model Context Protocol)
-Paid tools: check_status, find_documents
-Requires a paid API key (revoked when the subscription ends)
-
-Repository Layout
-apps/worker — Cloudflare Worker: free‑tier API routes, daily reminder cron, and best‑effort indexing into D1 for paid accounts.
-
-apps/web — React + Vite frontend: prepare/upload, signing, and status pages.
-
-apps/connector — Cloudflare Worker running a remote MCP server.
-
-packages/shared — shared types (DocState, Signer, Env) and HMAC token sign/verify logic.
-
-Important:  
-D1 (docracy-index) is a derived index, never the source of truth.
-Anonymous documents never touch it.
-
-Local Development (No Cloudflare Account Needed)
-Code
+```bash
 npm install
 cp apps/worker/.dev.vars.example apps/worker/.dev.vars
-
 npm run dev:worker
 npm run dev:web
 npm run dev:connector
-Emails are logged locally when RESEND_API_KEY is unset.
+```
 
-Walk the flow:
+Without `RESEND_API_KEY`, outgoing emails are logged to the worker console instead.
 
-localhost:5173/prepare
+### Local URLs
 
-Upload PDF
+- web: `http://localhost:5173`
+- worker: `http://127.0.0.1:8787`
 
-Add signers
+### Typical local flow
 
-Place fields
+1. Open `http://localhost:5173/prepare`
+2. Upload a PDF
+3. Add signers
+4. Place fields
+5. Submit
+6. Copy signing links from the worker console
+7. Complete the signing flow
 
-Submit
+### Trigger the daily reminder cron locally
 
-Copy signer links from worker console
-
-Sign sequentially
-
-Completion email logged locally
-
-Reminder cron locally:
-
-Code
+```bash
 curl "http://127.0.0.1:8787/__scheduled?cron=0+8+*+*+*"
-Run tests:
+```
 
-Code
+## Tests
+
+```bash
 npm test
-Deployment
-Either deploy manually:
+```
 
-Code
-wrangler deploy
+## Deployment
+
+### Worker
+
+```bash
+npm run deploy:worker
+```
+
+### Web
+
+```bash
 npm run build:web
-wrangler pages deploy dist --project-name=docracy
-Or connect repo to Cloudflare for automatic builds on main.
+./node_modules/.bin/wrangler pages deploy apps/web/dist --project-name=docracy
+```
 
-Setup Checklist (One‑Time)
-Create Resend account + API key
+### Connector
 
-Point domain (e.g., docracy.io) to Cloudflare
+```bash
+npm run deploy:connector
+```
 
-Create KV, R2, D1 resources
+## One-time setup checklist
 
-Set secrets (TOKEN_SECRET, RESEND_API_KEY)
+- create a Resend account and API key
+- provision Cloudflare KV, R2, and D1
+- set worker secrets such as `TOKEN_SECRET` and `RESEND_API_KEY`
+- configure `PUBLIC_APP_URL`
+- deploy the MCP connector with the same token secret
+- add an R2 lifecycle rule for document cleanup
 
-Add R2 lifecycle rule (delete after 9 days)
+## Billing notes
 
-Set PUBLIC_APP_URL
+- paid checkout is live via Stripe
+- enterprise can be sold through Stripe annual billing or manual invoicing / custom onboarding
+- MCP/API access is revoked when paid status is removed
 
-Deploy connector with same TOKEN_SECRET
+## Repository status
 
-Status
-Free tier is fully live.
-Paid tier is implemented at API level and ready for activation once accounts ship.
+This repository is live and in active use. Free signing, paid workspaces, billing, AI tools, MCP, webhooks, Zapier, embedded signing, cloud connectors, SMS invites, signer attachments, and bulk send are all implemented.
 
-License
-To be announced.
+## License
+
+TBD.
