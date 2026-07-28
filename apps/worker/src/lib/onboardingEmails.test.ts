@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { scheduleOnboardingEmails, runOnboardingEmailSweep } from "./onboardingEmails";
+import { scheduleOnboardingEmails, schedulePreparerLeadEmails, runOnboardingEmailSweep } from "./onboardingEmails";
 import { makeMockEnv } from "../test/mockEnv";
 
 type MockD1 = ReturnType<typeof makeMockEnv>["d1"];
@@ -128,5 +128,71 @@ describe("runOnboardingEmailSweep", () => {
     const sentCount = Object.values(row ?? {}).filter((v) => v !== null).length;
     expect(sentCount).toBe(1);
     expect(row?.step4_sent_at).not.toBeNull(); // the most escalated one wins
+  });
+});
+
+describe("schedulePreparerLeadEmails", () => {
+  it("inserts a lead for an anonymous opt-in", async () => {
+    const { env, d1 } = makeMockEnv();
+    await schedulePreparerLeadEmails(env, "Preparer@Example.com");
+
+    const row = (await d1.prepare(`SELECT * FROM onboarding_leads WHERE email = ?`).bind("preparer@example.com").first()) as Record<
+      string,
+      unknown
+    > | null;
+    expect(row?.source).toBe("preparer_optin");
+    expect(row?.step1_sent_at).toBeNull();
+  });
+
+  it("does not start a lead drip for an address that already has an account", async () => {
+    const { env, d1 } = makeMockEnv();
+    await insertAccount(d1, "acct-1", "preparer@example.com");
+    await schedulePreparerLeadEmails(env, "preparer@example.com");
+
+    const row = await d1.prepare(`SELECT 1 FROM onboarding_leads WHERE email = ?`).bind("preparer@example.com").first();
+    expect(row).toBeNull();
+  });
+
+  it("does not restart the sequence on a second opt-in", async () => {
+    const { env, d1 } = makeMockEnv();
+    await schedulePreparerLeadEmails(env, "preparer@example.com");
+    const first = (await d1.prepare(`SELECT opted_in_at FROM onboarding_leads WHERE email = ?`).bind("preparer@example.com").first()) as {
+      opted_in_at: string;
+    };
+    await schedulePreparerLeadEmails(env, "preparer@example.com");
+    const second = (await d1.prepare(`SELECT opted_in_at FROM onboarding_leads WHERE email = ?`).bind("preparer@example.com").first()) as {
+      opted_in_at: string;
+    };
+    expect(second.opted_in_at).toBe(first.opted_in_at);
+  });
+
+  it("clears the lead when the same email creates an account", async () => {
+    const { env, d1 } = makeMockEnv();
+    await schedulePreparerLeadEmails(env, "preparer@example.com");
+    await insertAccount(d1, "acct-1", "preparer@example.com");
+    await scheduleOnboardingEmails(env, "acct-1", "preparer@example.com");
+
+    const lead = await d1.prepare(`SELECT 1 FROM onboarding_leads WHERE email = ?`).bind("preparer@example.com").first();
+    expect(lead).toBeNull();
+    const accountRow = await d1.prepare(`SELECT 1 FROM onboarding_emails WHERE account_id = ?`).bind("acct-1").first();
+    expect(accountRow).not.toBeNull();
+  });
+});
+
+describe("runOnboardingEmailSweep leads", () => {
+  it("sends preparer lead step 1 after the delay", async () => {
+    const { env, d1 } = makeMockEnv();
+    const optedInAt = new Date(Date.now() - 4 * MINUTE).toISOString();
+    await d1
+      .prepare(`INSERT INTO onboarding_leads (email, source, opted_in_at) VALUES (?, ?, ?)`)
+      .bind("preparer@example.com", "preparer_optin", optedInAt)
+      .run();
+
+    await runOnboardingEmailSweep(env);
+
+    const row = (await d1.prepare(`SELECT step1_sent_at FROM onboarding_leads WHERE email = ?`).bind("preparer@example.com").first()) as {
+      step1_sent_at: string | null;
+    };
+    expect(row.step1_sent_at).not.toBeNull();
   });
 });

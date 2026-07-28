@@ -7,11 +7,14 @@ import { NOTRACK_COOKIE_NAME, trackEvent } from "../lib/analytics";
 import { checkRateLimit, checkInviteRateLimit } from "../lib/ratelimit";
 import { optionalAccount, type AccountContext } from "../lib/auth";
 import { resolveTtlDays } from "../lib/docTtl";
+import { schedulePreparerLeadEmails } from "../lib/onboardingEmails";
 import type { DocField, Env } from "@docracy/shared";
 
 interface CreateDocumentBody {
   preparerSigns: boolean;
   preparerEmail?: string;
+  /** Explicit marketing opt-in for the preparer tips drip — ignored unless preparerEmail is set. */
+  preparerMarketingOptIn?: boolean;
   signers: Array<{ order: number; name: string; email: string; pin?: string; phone?: string; smsCarrier?: string }>;
   fields: DocField[];
   ccRecipients?: Array<{ name?: string; email: string }>;
@@ -306,6 +309,16 @@ documents.post("/", optionalAccount, async (c) => {
     smsInvites: meta.smsInvites || undefined,
     signerAttachments: meta.signerAttachments?.enabled ? meta.signerAttachments : undefined,
   });
+
+  // Opt-in only — the preparer email itself is collected for the status link. Marketing tips are
+  // a separate, explicit checkbox so this stays GDPR-clean for EU visitors.
+  if (meta.preparerMarketingOptIn && meta.preparerEmail?.trim()) {
+    c.executionCtx.waitUntil(
+      schedulePreparerLeadEmails(c.env, meta.preparerEmail).catch((err) =>
+        console.error("Preparer lead scheduling failed (non-fatal):", err)
+      )
+    );
+  }
 
   return c.json({ docId, statusToken });
 });

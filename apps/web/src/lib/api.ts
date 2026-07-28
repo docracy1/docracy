@@ -41,6 +41,8 @@ async function apiFetch(path: string, init: RequestInit = {}): Promise<Response>
 
 export interface CreateDocumentOptions {
   preparerEmail?: string;
+  /** Explicit opt-in for the preparer tips drip — must be paired with preparerEmail. */
+  preparerMarketingOptIn?: boolean;
   customSubject?: string;
   customMessage?: string;
   signingMode?: "sequential" | "parallel";

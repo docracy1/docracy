@@ -581,6 +581,64 @@ export async function sendOnboardingStep4(env: Env, email: string): Promise<void
   });
 }
 
+/** Preparer-opt-in drip — for people who already sent a document anonymously and ticked the tips
+ *  checkbox. Content must NOT tell them to "send their first document"; they just did. */
+export async function sendPreparerLeadStep1(env: Env, email: string): Promise<void> {
+  const body = `
+    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">Your document is on its way</p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      Thanks for sending with Docracy.io. Keep the status link from your confirmation email — that's
+      how you track who has signed.
+    </p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      Want a free account so every document you send lives in one place? No password — just a magic
+      link to your email.
+    </p>
+    ${ctaButton(`${env.PUBLIC_APP_URL}/login`, "Create a free account")}
+    <p style="margin:0;font-size:14px;color:${MUTED};">You asked for a few tips — reply anytime to stop them.</p>
+    ${SIGN_OFF}
+  `;
+  await send(env, email, "Your document is on its way", emailShell(env.PUBLIC_APP_URL, body), {
+    emailType: "preparer_lead_step1",
+    replyTo: env.FEEDBACK_EMAIL,
+  });
+}
+
+export async function sendPreparerLeadStep3(env: Env, email: string): Promise<void> {
+  const body = `
+    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">Next time, start from a template</p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      Free templates for the agreements people send most often — NDAs, contractor agreements, offer
+      letters — ready to fill and send without rebuilding fields from scratch.
+    </p>
+    ${templateList(["Mutual NDA", "Independent contractor agreement", "Offer letter", "Freelance service agreement"])}
+    ${ctaButton(`${env.PUBLIC_APP_URL}/free-templates`, "Browse free templates")}
+    <p style="margin:0;font-size:14px;color:${MUTED};">Still free, still no account required.</p>
+    ${SIGN_OFF}
+  `;
+  await send(env, email, "Next time, start from a template", emailShell(env.PUBLIC_APP_URL, body), {
+    emailType: "preparer_lead_step3",
+    replyTo: env.FEEDBACK_EMAIL,
+  });
+}
+
+export async function sendPreparerLeadStep4(env: Env, email: string): Promise<void> {
+  const body = `
+    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">When free isn't enough</p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      Free covers quick, low-stakes agreements. Paid unlocks recurring templates, more signers, team
+      seats, and longer retention — for when signing becomes part of how you work every week.
+    </p>
+    ${ctaButton(`${env.PUBLIC_APP_URL}/pricing`, "See plans")}
+    <p style="margin:0;font-size:14px;color:${MUTED};">No pressure — free stays free.</p>
+    ${SIGN_OFF}
+  `;
+  await send(env, email, "When free isn't enough", emailShell(env.PUBLIC_APP_URL, body), {
+    emailType: "preparer_lead_step4",
+    replyTo: env.FEEDBACK_EMAIL,
+  });
+}
+
 function bytesToBase64(bytes: Uint8Array): string {
   let binary = "";
   for (const b of bytes) binary += String.fromCharCode(b);

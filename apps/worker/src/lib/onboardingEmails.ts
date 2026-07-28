@@ -1,5 +1,12 @@
 import type { Env } from "@docracy/shared";
-import { sendOnboardingStep1, sendOnboardingStep3, sendOnboardingStep4 } from "./email";
+import {
+  sendOnboardingStep1,
+  sendOnboardingStep3,
+  sendOnboardingStep4,
+  sendPreparerLeadStep1,
+  sendPreparerLeadStep3,
+  sendPreparerLeadStep4,
+} from "./email";
 
 const MINUTE = 60 * 1000;
 const HOUR = 60 * MINUTE;
@@ -26,17 +33,60 @@ const STEPS: Step[] = [
   { column: "step1_sent_at", delayMs: 3 * MINUTE, send: sendOnboardingStep1 },
 ];
 
+/** Same cadence as account onboarding, but content assumes the recipient already sent a document. */
+const LEAD_STEPS: Step[] = [
+  { column: "step4_sent_at", delayMs: 3 * DAY, send: sendPreparerLeadStep4 },
+  { column: "step3_sent_at", delayMs: 24 * HOUR, send: sendPreparerLeadStep3 },
+  { column: "step1_sent_at", delayMs: 3 * MINUTE, send: sendPreparerLeadStep1 },
+];
+
 /** Called once, right after a brand-new account row is inserted (see auth.ts) — everything here
- *  is non-fatal to the caller, which is expected to wrap this in ctx.waitUntil(...).catch(...). */
+ *  is non-fatal to the caller, which is expected to wrap this in ctx.waitUntil(...).catch(...).
+ *  Also clears any preparer-opt-in lead for the same email so the two drips never run in parallel. */
 export async function scheduleOnboardingEmails(env: Env, accountId: string, email: string): Promise<void> {
   if (!env.DOCRACY_DB) return;
-  await env.DOCRACY_DB.prepare(`INSERT INTO onboarding_emails (account_id, email, account_created_at) VALUES (?, ?, ?)`)
-    .bind(accountId, email, new Date().toISOString())
+  const normalized = email.trim().toLowerCase();
+  await env.DOCRACY_DB.batch([
+    env.DOCRACY_DB.prepare(`DELETE FROM onboarding_leads WHERE email = ?`).bind(normalized),
+    env.DOCRACY_DB.prepare(`INSERT INTO onboarding_emails (account_id, email, account_created_at) VALUES (?, ?, ?)`).bind(
+      accountId,
+      normalized,
+      new Date().toISOString()
+    ),
+  ]);
+}
+
+/**
+ * Called when an anonymous preparer opts in to tips at send time. Never starts a drip for an
+ * address that already has an account (those get the account sequence on signup) or that already
+ * opted in earlier (re-sending does not restart the sequence).
+ */
+export async function schedulePreparerLeadEmails(env: Env, email: string, source = "preparer_optin"): Promise<void> {
+  if (!env.DOCRACY_DB) return;
+  const normalized = email.trim().toLowerCase();
+  if (!normalized) return;
+
+  const existingAccount = await env.DOCRACY_DB.prepare(`SELECT 1 FROM accounts WHERE email = ? LIMIT 1`)
+    .bind(normalized)
+    .first();
+  if (existingAccount) return;
+
+  const existingLead = await env.DOCRACY_DB.prepare(`SELECT 1 FROM onboarding_leads WHERE email = ? LIMIT 1`)
+    .bind(normalized)
+    .first();
+  if (existingLead) return;
+
+  await env.DOCRACY_DB.prepare(`INSERT INTO onboarding_leads (email, source, opted_in_at) VALUES (?, ?, ?)`)
+    .bind(normalized, source, new Date().toISOString())
     .run();
 }
 
 interface PendingRow {
   account_id: string;
+  email: string;
+}
+
+interface LeadRow {
   email: string;
 }
 
@@ -52,6 +102,8 @@ async function hasSentAnyDocument(env: Env, accountId: string): Promise<boolean>
  * the first one it sends for a given account in this pass, so a long cron gap sends at most one
  * (the most relevant) email per account rather than bursting all of them at once. Step 1's
  * nominal 3-minute delay may land up to ~1 hour after signup on free-tier cron spacing.
+ *
+ * Also sweeps preparer-opt-in leads (same cadence, different content — those people already sent).
  */
 export async function runOnboardingEmailSweep(env: Env): Promise<void> {
   if (!env.DOCRACY_DB) return;
@@ -80,6 +132,36 @@ export async function runOnboardingEmailSweep(env: Env): Promise<void> {
         handledThisSweep.add(row.account_id);
       } catch (err) {
         console.error(`Onboarding email (${step.column}) failed for account ${row.account_id}:`, err);
+      }
+    }
+  }
+
+  const handledLeads = new Set<string>();
+  for (const step of LEAD_STEPS) {
+    const cutoff = new Date(now - step.delayMs).toISOString();
+    const rows = await env.DOCRACY_DB.prepare(
+      `SELECT email FROM onboarding_leads WHERE ${step.column} IS NULL AND opted_in_at <= ?`
+    )
+      .bind(cutoff)
+      .all<LeadRow>();
+
+    for (const row of rows.results) {
+      if (handledLeads.has(row.email)) continue;
+      // If they created an account since opting in, drop the lead — account drip owns them now.
+      const account = await env.DOCRACY_DB.prepare(`SELECT 1 FROM accounts WHERE email = ? LIMIT 1`).bind(row.email).first();
+      if (account) {
+        await env.DOCRACY_DB.prepare(`DELETE FROM onboarding_leads WHERE email = ?`).bind(row.email).run();
+        handledLeads.add(row.email);
+        continue;
+      }
+      try {
+        await step.send(env, row.email);
+        await env.DOCRACY_DB.prepare(`UPDATE onboarding_leads SET ${step.column} = ? WHERE email = ?`)
+          .bind(new Date().toISOString(), row.email)
+          .run();
+        handledLeads.add(row.email);
+      } catch (err) {
+        console.error(`Preparer lead email (${step.column}) failed for ${row.email}:`, err);
       }
     }
   }

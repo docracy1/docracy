@@ -104,6 +104,7 @@ export default function Prepare() {
   const [pdfBytes, setPdfBytes] = useState<Uint8Array | null>(null);
   const [preparerSigns, setPreparerSigns] = useState(false);
   const [preparerEmail, setPreparerEmail] = useState("");
+  const [preparerMarketingOptIn, setPreparerMarketingOptIn] = useState(false);
   const [showCustomMessage, setShowCustomMessage] = useState(false);
   const [customSubject, setCustomSubject] = useState("");
   const [customMessage, setCustomMessage] = useState("");
@@ -793,6 +794,7 @@ export default function Prepare() {
     setCcRecipients([]);
     setPreparerSigns(false);
     setPreparerEmail("");
+    setPreparerMarketingOptIn(false);
     setShowCustomMessage(false);
     setCustomSubject("");
     setCustomMessage("");
@@ -810,6 +812,8 @@ export default function Prepare() {
         .filter((cc) => cc.email);
       const { docId, statusToken } = await createDocument(file, preparerSigns, signers, fields, {
         preparerEmail: !preparerSigns && preparerEmail.trim() ? preparerEmail.trim() : undefined,
+        preparerMarketingOptIn:
+          !preparerSigns && preparerEmail.trim() && preparerMarketingOptIn ? true : undefined,
         customSubject: customSubject.trim() || undefined,
         customMessage: customMessage.trim() || undefined,
         signingMode: effectiveSigningMode,
@@ -1332,11 +1336,38 @@ export default function Prepare() {
                     aria-label="Your email"
                     type="email"
                     value={preparerEmail}
-                    onChange={(e) => setPreparerEmail(e.target.value)}
+                    onChange={(e) => {
+                      setPreparerEmail(e.target.value);
+                      if (!e.target.value.trim()) setPreparerMarketingOptIn(false);
+                    }}
                   />
                   <p style={{ fontSize: 11, marginTop: 4, marginBottom: 0 }}>
                     There's no account, so this is the only way to recover the status link if you lose it.
                   </p>
+                  {preparerEmail.trim() && (
+                    <label
+                      style={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        gap: 8,
+                        marginTop: 10,
+                        fontSize: 13,
+                        color: "var(--ink)",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={preparerMarketingOptIn}
+                        onChange={(e) => setPreparerMarketingOptIn(e.target.checked)}
+                        style={{ marginTop: 2 }}
+                      />
+                      <span>
+                        Also email me a few tips on getting the most out of Docracy (optional — you can
+                        stop anytime by replying).
+                      </span>
+                    </label>
+                  )}
                 </div>
               )}
               {signers.map((s, i) => (
