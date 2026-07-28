@@ -241,8 +241,12 @@ export default function Docs() {
           On a paid account, the same API key that powers the MCP connector also works with{" "}
           <strong>Zapier</strong> — trigger a Zap on Document Created, Signer Signed, or Document
           Completed; send a saved template out for signature; or <strong>bulk send</strong> a template to many
-          recipient rows in one action. <strong>Webhooks</strong> (configured from the Dashboard) let your own
-          systems subscribe to those same three events directly, without Zapier in between.
+          recipient rows in one action.
+          <br />
+          Zapier Free compatibility note: set up a simple <strong>2-step Zap</strong> (one trigger +
+          one action) and avoid adding extra steps for best compatibility with the Free-tier limits.
+          <strong> Webhooks</strong> (configured from the Dashboard) let your own systems subscribe to those same
+          three events directly, without Zapier in between.
         </p>
       </Section>
 

@@ -5,6 +5,10 @@ saved template out for signature as an action — without either side needing to
 
 ## What this gives you
 
+Designed to work well on **Zapier Free**: use it as a simple **2-step Zap** (one trigger +
+one action). Avoid adding extra steps (filters/paths/code/etc.) for best compatibility with
+Free-tier limits.
+
 - **Triggers**: Document Created, Signer Signed, Document Completed — each a Zapier REST Hook,
   so events arrive instantly (no polling delay). Internally these are just Docracy webhooks that
   Zapier subscribes to and manages on your behalf.
