@@ -180,9 +180,10 @@ npm run deploy:worker
 ### Web
 
 ```bash
-npm run build:web
-./node_modules/.bin/wrangler pages deploy apps/web/dist --project-name=docracy
+npm run deploy:web
 ```
+
+Deploy from `apps/web` so Cloudflare Pages also bundles `functions/` (the same-origin `/api/*` proxy). Uploading only `dist/` from the repo root skips those functions and breaks API calls on the custom domain.
 
 ### Connector
 

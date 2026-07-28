@@ -15,6 +15,7 @@
     "dev:web": "npm run dev --workspace apps/web",
     "dev:connector": "npm run dev --workspace apps/connector",
     "build:web": "npm run build --workspace apps/web",
+    "deploy:web": "npm run build --workspace apps/web && npm run deploy:pages --workspace apps/web",
     "deploy:worker": "npm run deploy --workspace apps/worker",
     "deploy:connector": "npm run deploy --workspace apps/connector",
     "test:worker": "npm run test --workspace apps/worker",

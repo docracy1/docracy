@@ -70,17 +70,34 @@ export default function Uptime() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch(apiUrl("/api/status"))
-      .then((res) => {
-        if (!res.ok) throw new Error(`Request failed (${res.status})`);
-        return res.json();
-      })
-      .then((json) => {
-        if (!cancelled) setData(json);
-      })
-      .catch((err) => {
-        if (!cancelled) setError(err instanceof Error ? err.message : String(err));
-      });
+    void (async () => {
+      // Same-origin /api/* is proxied to the worker via Pages Functions when deployed from
+      // apps/web. If that proxy is missing (e.g. a deploy uploaded only dist/), the SPA
+      // fallback returns HTML and Safari's JSON parser surfaces "The string did not match
+      // the expected pattern." Fall back to the public worker host for this unauthenticated page.
+      const candidates = [apiUrl("/api/status"), "https://api.docracy.io/api/status"];
+      let lastError: Error | null = null;
+      for (const url of candidates) {
+        try {
+          const res = await fetch(url);
+          const contentType = res.headers.get("content-type") ?? "";
+          if (!res.ok) {
+            lastError = new Error(`Request failed (${res.status})`);
+            continue;
+          }
+          if (!contentType.includes("application/json")) {
+            lastError = new Error("Unexpected response format");
+            continue;
+          }
+          const json = (await res.json()) as StatusResponse;
+          if (!cancelled) setData(json);
+          return;
+        } catch (err) {
+          lastError = err instanceof Error ? err : new Error(String(err));
+        }
+      }
+      if (!cancelled) setError(lastError?.message ?? "Status API unavailable");
+    })();
     return () => {
       cancelled = true;
     };

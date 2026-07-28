@@ -169,16 +169,14 @@ export default function Pricing() {
                 <th>Free</th>
                 <th className="plan-col-paid">
                   Paid
-                  <div style={{ fontSize: 12, fontWeight: 400, marginTop: 2 }}>$10/month</div>
+                  <span className="plan-col-sub">$10/month</span>
                 </th>
                 <th>
                   Enterprise
-                  <div style={{ fontSize: 12, fontWeight: 400, marginTop: 2 }}>
+                  <span className="plan-col-sub">
                     Custom —{" "}
-                    <a href="mailto:sales@docracy.io" style={{ color: "var(--primary)" }}>
-                      sales@docracy.io
-                    </a>
-                  </div>
+                    <a href="mailto:sales@docracy.io">sales@docracy.io</a>
+                  </span>
                 </th>
               </tr>
             </thead>

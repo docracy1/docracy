@@ -959,13 +959,20 @@ select {
      breakpoint below instead of applied unconditionally. */
 }
 
-@media (max-width: 520px) {
+@media (max-width: 768px) {
   .plan-table-scroll {
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .plan-table thead th {
     position: static;
+    top: auto;
+  }
+
+  /* Price/plan subtitles belong in the cards above — hide in the cramped mobile table header. */
+  .plan-table .plan-col-sub {
+    display: none;
   }
 }
 
@@ -975,7 +982,7 @@ select {
      border-collapse, which is why the sticky header row was landing at the wrong offset. */
   border-collapse: separate;
   border-spacing: 0;
-  min-width: 420px;
+  min-width: 520px;
 }
 
 .plan-table th,
@@ -993,6 +1000,7 @@ select {
   position: sticky;
   left: 0;
   background: var(--canvas);
+  z-index: 1;
 }
 
 .plan-table thead th {
@@ -1001,10 +1009,13 @@ select {
   color: var(--ink);
   padding-top: 20px;
   padding-bottom: 16px;
+  vertical-align: top;
+  line-height: 1.25;
   position: sticky;
   top: 72px;
   background: var(--canvas);
-  z-index: 2;
+  z-index: 4;
+  box-shadow: 0 1px 0 var(--hairline);
 }
 
 /* The sticky thead above is tuned for a table that owns the *page's* scroll (72px = the site
@@ -1028,7 +1039,7 @@ select {
 }
 
 .plan-table thead th:first-child {
-  z-index: 3;
+  z-index: 5;
   border-top-left-radius: var(--r-md);
 }
 
@@ -1046,10 +1057,27 @@ select {
 
 .plan-table thead th:not(:first-child) {
   border-radius: var(--r-sm) var(--r-sm) 0 0;
+  min-width: 72px;
 }
 
-.plan-table .plan-col-paid {
+.plan-table thead th.plan-col-paid,
+.plan-table tbody td.plan-col-paid {
   background: var(--primary-soft);
+}
+
+.plan-table .plan-col-sub {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--body);
+  white-space: nowrap;
+}
+
+.plan-table .plan-col-sub a {
+  color: var(--primary);
+  text-decoration: none;
 }
 
 .plan-check {
@@ -1061,7 +1089,7 @@ select {
   color: var(--mute);
 }
 
-@media (max-width: 520px) {
+@media (max-width: 768px) {
   .plan-table th,
   .plan-table td {
     font-size: 13px;
