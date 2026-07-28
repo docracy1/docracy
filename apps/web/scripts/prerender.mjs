@@ -189,6 +189,51 @@ const routes = [
 // --- 4. Render each route and splice it into the built index.html shell ---
 const shell = fs.readFileSync(path.join(distDir, "index.html"), "utf-8");
 
+function escapeXml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}
+
+function writeBlogFeed() {
+  const items = [...BLOG_POSTS, ...ARTICLES]
+    .sort((a, b) => b.publishedDate.localeCompare(a.publishedDate))
+    .map((post) => {
+      const url = `${SITE}/blog/${post.slug}`;
+      return `  <item>
+    <title>${escapeXml(post.title)}</title>
+    <link>${url}</link>
+    <guid>${url}</guid>
+    <pubDate>${new Date(`${post.publishedDate}T00:00:00Z`).toUTCString()}</pubDate>
+    <description>${escapeXml(post.description)}</description>
+  </item>`;
+    })
+    .join("\n");
+
+  const feed = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Docracy Blog</title>
+    <link>${SITE}/blog</link>
+    <description>Product updates, competitor comparisons, and practical guides for simple agreements and online signatures.</description>
+    <language>en-US</language>
+    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+${items}
+  </channel>
+</rss>
+`;
+
+  fs.writeFileSync(path.join(distDir, "blog", "feed.xml"), feed);
+}
+
+function writeIndexNowKey() {
+  const key = "docracy-indexnow-20260728";
+  fs.writeFileSync(path.join(distDir, `${key}.txt`), key);
+}
+
 function withMeta(html, { title, description, urlPath }) {
   const canonical = `${SITE}${urlPath}`;
   return html
@@ -217,5 +262,9 @@ for (const route of routes) {
 
   console.log(`prerendered ${route.urlPath} -> dist/${route.outFile} (+ .md)`);
 }
+
+fs.mkdirSync(path.join(distDir, "blog"), { recursive: true });
+writeBlogFeed();
+writeIndexNowKey();
 
 console.log(`Done — ${routes.length} routes prerendered.`);
