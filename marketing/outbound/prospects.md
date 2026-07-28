@@ -62,11 +62,11 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 >
 > Do your contractors still get DocuSign seats for one-off agreements? We've been using a free 2-signer flow for NDAs/onboarding docs — no accounts for them: https://docracy.io/go/dm
 >
+> Curious what you use today.
+>
 > Odo
 > Founder, Docracy
 > https://docracy.io
->
-> Curious what you use today.
 
 ---
 
@@ -122,11 +122,11 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 >
 > Most freelancers I talk to are still overpaying DocuSign for 2-signer docs. We made a free path (no signup) and flat $10/mo when they outgrow it: https://docracy.io/go/dm
 >
+> If it's useful for your partners, happy to hear what broke — still early.
+>
 > Odo
 > Founder, Docracy
 > https://docracy.io
->
-> If it's useful for your partners, happy to hear what broke — still early.
 
 ---
 
@@ -142,11 +142,11 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 >
 > Do your clients still put DocuSign seats on one-off agreements? We use a free 2-signer flow so contractors don't need accounts: https://docracy.io/go/dm
 >
+> Curious what you typically set them up with.
+>
 > Odo
 > Founder, Docracy
 > https://docracy.io
->
-> Curious what you typically set them up with.
 
 ---
 
@@ -182,11 +182,11 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 >
 > We built a free 2-signer path (no signup) and flat $10/mo when you outgrow it: https://docracy.io/go/dm
 >
+> If it's useful for your readers (or your own stack), happy to hear what you'd flag — still early.
+>
 > Odo
 > Founder, Docracy
 > https://docracy.io
->
-> If it's useful for your readers (or your own stack), happy to hear what you'd flag — still early.
 
 ---
 
@@ -262,11 +262,11 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 >
 > Do contractors still get DocuSign seats for NDAs? We've been using a free 2-signer flow so they don't need accounts: https://docracy.io/go/dm
 >
+> Curious what you use today.
+>
 > Odo
 > Founder, Docracy
 > https://docracy.io
->
-> Curious what you use today.
 
 ---
 
@@ -322,11 +322,11 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 >
 > Do freelancers / contractors still get DocuSign seats for one-off NDAs? We use a free 2-signer flow with no accounts for them: https://docracy.io/go/dm
 >
+> Curious what you use today.
+>
 > Odo
 > Founder, Docracy
 > https://docracy.io
->
-> Curious what you use today.
 
 ---
 
@@ -342,11 +342,11 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 >
 > Do contractors still get DocuSign seats for those? Free 2-signer flow, no accounts for them: https://docracy.io/go/dm
 >
+> Curious what you use today.
+>
 > Odo
 > Founder, Docracy
 > https://docracy.io
->
-> Curious what you use today.
 
 ---
 
@@ -402,11 +402,11 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 >
 > Do your contractors still need DocuSign for NDAs? Free 2-signer flow, no accounts: https://docracy.io/go/dm
 >
+> Curious what you use today.
+>
 > Odo
 > Founder, Docracy
 > https://docracy.io
->
-> Curious what you use today.
 
 ---
 
@@ -422,11 +422,11 @@ Sources are public contact pages / published posts only. Do not invent or scrape
 >
 > Do your clients still put DocuSign on simple NDAs? Free for 2 signers, no account: https://docracy.io/go/dm
 >
+> Curious what you typically recommend.
+>
 > Odo
 > Founder, Docracy
 > https://docracy.io
->
-> Curious what you typically recommend.
 
 ---
 
