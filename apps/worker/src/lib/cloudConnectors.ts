@@ -120,19 +120,25 @@ const DROPBOX: ProviderConfig = {
 
 const MS_SCOPE = "Files.ReadWrite.AppFolder offline_access User.Read";
 
-function msClientId(env: Env): string | undefined {
-  return env.MS_CLIENT_ID ?? env.ONEDRIVE_CLIENT_ID;
-}
-function msClientSecret(env: Env): string | undefined {
-  return env.MS_CLIENT_SECRET ?? env.ONEDRIVE_CLIENT_SECRET;
+/** Prod was configured with ONEDRIVE_* wrangler secrets; wrangler.toml uses MS_CLIENT_ID in [vars].
+ *  When both ONEDRIVE_* are set, use them as a matched pair so client id and secret belong to the same app. */
+function msCredentials(env: Env): { clientId?: string; clientSecret?: string } {
+  if (env.ONEDRIVE_CLIENT_ID && env.ONEDRIVE_CLIENT_SECRET) {
+    return { clientId: env.ONEDRIVE_CLIENT_ID, clientSecret: env.ONEDRIVE_CLIENT_SECRET };
+  }
+  return {
+    clientId: env.MS_CLIENT_ID ?? env.ONEDRIVE_CLIENT_ID,
+    clientSecret: env.MS_CLIENT_SECRET ?? env.ONEDRIVE_CLIENT_SECRET,
+  };
 }
 
 const ONEDRIVE: ProviderConfig = {
-  clientId: msClientId,
-  clientSecret: msClientSecret,
+  clientId: (env) => msCredentials(env).clientId,
+  clientSecret: (env) => msCredentials(env).clientSecret,
   buildAuthorizeUrl: (env, state) => {
+    const { clientId } = msCredentials(env);
     const params = new URLSearchParams({
-      client_id: msClientId(env)!,
+      client_id: clientId!,
       response_type: "code",
       redirect_uri: redirectUri(env, "onedrive"),
       scope: MS_SCOPE,
@@ -140,23 +146,27 @@ const ONEDRIVE: ProviderConfig = {
     });
     return `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?${params.toString()}`;
   },
-  exchangeCode: (env, code) =>
-    formTokenRequest("https://login.microsoftonline.com/common/oauth2/v2.0/token", {
+  exchangeCode: (env, code) => {
+    const { clientId, clientSecret } = msCredentials(env);
+    return formTokenRequest("https://login.microsoftonline.com/common/oauth2/v2.0/token", {
       code,
       grant_type: "authorization_code",
-      client_id: msClientId(env)!,
-      client_secret: msClientSecret(env)!,
+      client_id: clientId!,
+      client_secret: clientSecret!,
       redirect_uri: redirectUri(env, "onedrive"),
       scope: MS_SCOPE,
-    }),
-  refresh: (env, refreshToken) =>
-    formTokenRequest("https://login.microsoftonline.com/common/oauth2/v2.0/token", {
+    });
+  },
+  refresh: (env, refreshToken) => {
+    const { clientId, clientSecret } = msCredentials(env);
+    return formTokenRequest("https://login.microsoftonline.com/common/oauth2/v2.0/token", {
       grant_type: "refresh_token",
       refresh_token: refreshToken,
-      client_id: msClientId(env)!,
-      client_secret: msClientSecret(env)!,
+      client_id: clientId!,
+      client_secret: clientSecret!,
       scope: MS_SCOPE,
-    }),
+    });
+  },
   fetchConnectedEmail: async (_env, accessToken) => {
     const res = await fetch("https://graph.microsoft.com/v1.0/me", {
       headers: { Authorization: `Bearer ${accessToken}` },

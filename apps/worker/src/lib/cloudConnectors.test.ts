@@ -38,6 +38,14 @@ describe("isProviderConfigured", () => {
     const { env: configured } = makeMockEnv(DROPBOX_ENV);
     expect(isProviderConfigured(configured, "dropbox")).toBe(true);
   });
+
+  it("accepts ONEDRIVE_* secrets as a matched OneDrive pair", () => {
+    const { env } = makeMockEnv({
+      ONEDRIVE_CLIENT_ID: "ms-id",
+      ONEDRIVE_CLIENT_SECRET: "ms-secret",
+    });
+    expect(isProviderConfigured(env, "onedrive")).toBe(true);
+  });
 });
 
 describe("getAuthorizeUrl", () => {
