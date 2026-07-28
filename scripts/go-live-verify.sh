@@ -23,8 +23,8 @@ check "Docs" "https://docracy.io/docs"
 check "Sitemap" "https://docracy.io/sitemap.xml"
 check "RSS" "https://docracy.io/blog/feed.xml"
 check "IndexNow key" "https://docracy.io/docracy-indexnow-20260728.txt"
-check "Worker root" "https://api.docracy.io/"
-check "Connector" "https://mcp.docracy.io/mcp" "200"
+check "Worker root" "https://api.docracy.io/" "404"
+check "Connector auth gate" "https://mcp.docracy.io/mcp" "401"
 
 if [[ $fail -eq 0 ]]; then
   echo "All checks passed — Docracy is live."
