@@ -134,7 +134,10 @@ export default function Pricing() {
               <tr>
                 <th></th>
                 <th>Free</th>
-                <th className="plan-col-paid">Paid — $10/mo</th>
+                <th className="plan-col-paid">
+                  Paid
+                  <div style={{ fontSize: 12, fontWeight: 400, marginTop: 2 }}>$10/month</div>
+                </th>
                 <th>
                   Enterprise
                   <div style={{ fontSize: 12, fontWeight: 400, marginTop: 2 }}>
