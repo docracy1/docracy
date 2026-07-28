@@ -3,8 +3,7 @@ import { z } from "zod";
 import { checkStatus } from "./status";
 import type { ConnectorEnv as Env } from "./types";
 
-/** Shared between the free and paid tool sets — paid accounts keep check_status, they just also
- *  get find_documents (see paidTools.ts), never lose a tool by upgrading. */
+/** Registers check_status on the paid MCP server (see paidTools.ts). */
 export function registerCheckStatus(server: McpServer, env: Env) {
   server.registerTool(
     "check_status",

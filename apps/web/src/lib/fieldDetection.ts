@@ -9,6 +9,7 @@ const FIELD_SIZE_BY_TYPE: Record<DocFieldType, { w: number; h: number }> = {
   initials: { w: 0.1, h: 0.06 },
   text: { w: 0.22, h: 0.04 },
   date: { w: 0.16, h: 0.04 },
+  checkbox: { w: 0.04, h: 0.04 },
 };
 
 const SIGNATURE_RE = /\b(signature|sign(ed)?\s*here|authorized\s*signatory)\b/i;

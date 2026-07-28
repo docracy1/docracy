@@ -3,6 +3,8 @@ import { requireApiTokenAccount, type ApiTokenAccount } from "../lib/apiTokenAut
 import { getTemplate, listTemplates } from "../lib/templates";
 import { createWebhook, deleteWebhook, WEBHOOK_EVENT_TYPES, type WebhookEventType } from "../lib/webhooks";
 import { createDocumentCore } from "../lib/documentCreation";
+import { bulkSendFromTemplate } from "../lib/bulkSend";
+import { resolveTtlDays } from "../lib/docTtl";
 import type { Env } from "@docracy/shared";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -81,6 +83,7 @@ zapier.get("/templates", async (c) => {
 interface CreateFromTemplateBody {
   templateId?: string;
   signers?: Array<{ name?: string; email?: string }>;
+  ttlDays?: number;
 }
 
 // The Action: "Send a document for signature" — reuses a saved template's PDF + field layout so
@@ -121,6 +124,11 @@ zapier.post("/documents", async (c) => {
     }
   }
 
+  const ttl = resolveTtlDays(c.env, { isPaid: true, ttlDays: body.ttlDays });
+  if ("error" in ttl) {
+    return c.json({ error: ttl.error }, 400);
+  }
+
   const { docId, statusToken } = await createDocumentCore({
     env: c.env,
     ctx: c.executionCtx,
@@ -131,9 +139,54 @@ zapier.post("/documents", async (c) => {
     fields: template.fields,
     accountId: account.workspaceId,
     title: template.summary.name,
+    ttlDays: ttl.ttlDays,
   });
 
   return c.json({ docId, statusToken, statusUrl: `${c.env.PUBLIC_APP_URL}/status/${statusToken}` });
+});
+
+zapier.post("/documents/bulk", async (c) => {
+  if (!c.env.DOCRACY_DB) {
+    return c.json({ error: "Not available on this deployment yet." }, 501);
+  }
+  const account = c.get("apiAccount");
+
+  let body: {
+    templateId?: string;
+    recipients?: Array<{ signers?: Array<{ name?: string; email?: string }>; title?: string }>;
+    ttlDays?: number;
+    customSubject?: string;
+    customMessage?: string;
+    signingMode?: "sequential" | "parallel";
+  };
+  try {
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: "Invalid request body" }, 400);
+  }
+  if (!body.templateId) {
+    return c.json({ error: "Missing templateId" }, 400);
+  }
+
+  const result = await bulkSendFromTemplate({
+    env: c.env,
+    ctx: c.executionCtx,
+    workspaceId: account.workspaceId,
+    templateId: body.templateId,
+    recipients: (body.recipients ?? []).map((r) => ({
+      signers: (r.signers ?? []).map((s) => ({ name: s.name ?? "", email: s.email ?? "" })),
+      title: r.title,
+    })),
+    ttlDays: body.ttlDays,
+    customSubject: body.customSubject?.trim() || undefined,
+    customMessage: body.customMessage?.trim() || undefined,
+    signingMode: body.signingMode,
+  });
+
+  if ("error" in result) {
+    return c.json({ error: result.error }, result.status);
+  }
+  return c.json(result);
 });
 
 export default zapier;

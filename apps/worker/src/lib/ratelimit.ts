@@ -11,6 +11,11 @@ const MAX_PER_WINDOW = 10;
  */
 const memoryFallback = new Map<string, { value: string; expiresAt: number }>();
 
+/** Clears the in-memory fallback used when `caches.default` is unavailable (unit tests). */
+export function resetRateLimitMemoryForTests(): void {
+  memoryFallback.clear();
+}
+
 async function readCounter(key: string): Promise<number> {
   if (typeof caches !== "undefined" && caches.default) {
     const res = await caches.default.match(new Request(`https://docracy-ratelimit.internal/${encodeURIComponent(key)}`));

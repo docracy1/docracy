@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { requireEnterpriseAccount, type AccountContext } from "../lib/auth";
+import { requirePaidAccount, type AccountContext } from "../lib/auth";
 import {
   CLOUD_PROVIDERS,
   getAuthorizeUrl,
@@ -18,14 +18,14 @@ function isCloudProvider(value: string): value is CloudProvider {
 type Variables = { account: AccountContext | null };
 const connectors = new Hono<{ Bindings: Env; Variables: Variables }>();
 
-connectors.get("/", requireEnterpriseAccount, async (c) => {
+connectors.get("/", requirePaidAccount, async (c) => {
   if (!c.env.DOCRACY_DB) return c.json({ connections: [] });
   const account = c.get("account")!;
   const connections = await listConnections(c.env, account.workspaceId);
   return c.json({ connections });
 });
 
-connectors.get("/:provider/authorize", requireEnterpriseAccount, async (c) => {
+connectors.get("/:provider/authorize", requirePaidAccount, async (c) => {
   const provider = c.req.param("provider");
   if (!isCloudProvider(provider)) return c.json({ error: "Unknown provider" }, 404);
   if (!c.env.DOCRACY_DB || !isProviderConfigured(c.env, provider)) {
@@ -55,7 +55,7 @@ connectors.get("/:provider/callback", async (c) => {
   return c.redirect(`${appUrl}/dashboard?connector=${result.ok ? "connected" : "error"}`);
 });
 
-connectors.delete("/:provider", requireEnterpriseAccount, async (c) => {
+connectors.delete("/:provider", requirePaidAccount, async (c) => {
   const provider = c.req.param("provider");
   if (!isCloudProvider(provider)) return c.json({ error: "Unknown provider" }, 404);
   const account = c.get("account")!;

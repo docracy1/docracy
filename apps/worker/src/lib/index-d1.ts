@@ -149,6 +149,50 @@ export async function indexCompleted(env: Env, doc: DocState): Promise<void> {
   ]);
 }
 
+export async function indexVoided(env: Env, doc: DocState, detail?: Record<string, unknown> | null): Promise<void> {
+  if (!doc.accountId || !env.DOCRACY_DB) return;
+  const decliner = doc.signers.find((s) => s.status === "declined");
+  await env.DOCRACY_DB.batch([
+    env.DOCRACY_DB.prepare(`UPDATE documents SET status = 'voided', completed_at = NULL WHERE doc_id = ?`).bind(doc.docId),
+    ...(decliner
+      ? [
+          env.DOCRACY_DB.prepare(
+            `UPDATE signers SET status = 'declined', signed_at = NULL WHERE doc_id = ? AND "order" = ?`
+          ).bind(doc.docId, decliner.order),
+        ]
+      : []),
+    insertAuditStmt(
+      env,
+      doc.docId,
+      doc.accountId,
+      doc.voidedBy === "decline" ? "declined" : "voided",
+      decliner?.order ?? null,
+      decliner?.name ?? null,
+      detail ?? (doc.voidReason ? { reason: doc.voidReason } : null)
+    ),
+  ]);
+}
+
+export async function indexSignerReassigned(
+  env: Env,
+  doc: DocState,
+  signerOrder: number,
+  prior: { name: string; email: string }
+): Promise<void> {
+  if (!doc.accountId || !env.DOCRACY_DB) return;
+  const signer = doc.signers.find((s) => s.order === signerOrder);
+  if (!signer) return;
+  await env.DOCRACY_DB.batch([
+    env.DOCRACY_DB.prepare(
+      `UPDATE signers SET name = ?, email = ?, status = 'pending', signed_at = NULL, link_sent_at = ? WHERE doc_id = ? AND "order" = ?`
+    ).bind(signer.name, signer.email, signer.linkSentAt, doc.docId, signerOrder),
+    insertAuditStmt(env, doc.docId, doc.accountId, "reassigned", signerOrder, signer.name, {
+      from: prior,
+      to: { name: signer.name, email: signer.email },
+    }),
+  ]);
+}
+
 export async function indexReminderSent(env: Env, doc: DocState, signerOrder: number, daysWaiting: number): Promise<void> {
   if (!doc.accountId || !env.DOCRACY_DB) return;
   const signer = doc.signers.find((s) => s.order === signerOrder);

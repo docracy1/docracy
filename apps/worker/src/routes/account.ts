@@ -1,11 +1,20 @@
 import { Hono } from "hono";
 import { requireAccount, requirePaidAccount, type AccountContext } from "../lib/auth";
 import { issueApiToken, hasApiToken } from "../lib/apiTokens";
-import { signToken } from "@docracy/shared";
+import { getDoc, putDoc } from "../lib/kv";
+import { sendSigningInvite, sendDocumentVoidedNotice } from "../lib/email";
+import { indexVoided, indexSignerReassigned, indexInviteSent } from "../lib/index-d1";
+import { deliverWebhookEvent } from "../lib/webhooks";
+import { upsertContact } from "../lib/contacts";
+import { signToken, hashOpaqueToken } from "@docracy/shared";
 import type { Env } from "@docracy/shared";
 
 type Variables = { account: AccountContext | null };
 const account = new Hono<{ Bindings: Env; Variables: Variables }>();
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PIN_RE = /^\d{4,8}$/;
+const MAX_REASON_LENGTH = 500;
 
 interface DocumentRow {
   doc_id: string;
@@ -23,9 +32,6 @@ account.get("/documents", requireAccount, async (c) => {
     return c.json({ documents: [] });
   }
 
-  // order1_status: the preparer, when they also sign, is always seeded as signer order 1 (see
-  // documentCreation.ts) — joining it here is what lets the dashboard tell "waiting on you" apart
-  // from "waiting on someone else" without a second round trip.
   const { results } = await c.env.DOCRACY_DB.prepare(
     `SELECT d.doc_id, d.title, d.status, d.created_at, d.completed_at, d.preparer_signs, s1.status AS order1_status
      FROM documents d
@@ -36,14 +42,17 @@ account.get("/documents", requireAccount, async (c) => {
     .bind(acct.workspaceId)
     .all<DocumentRow>();
 
-  // A viewer token (order 0) recomputed on the fly — same deterministic HMAC used when the
-  // document was created (see documentCreation.ts), so the dashboard can link straight to each
-  // document's existing /status/:token page without storing the token anywhere. The order-1
-  // (signer) token is recomputed the same way, but only handed out when it's actually this
-  // account's turn to sign.
   const documents = await Promise.all(
     results.map(async (r) => {
       const awaitingYou = r.status === "pending" && !!r.preparer_signs && r.order1_status === "pending";
+      let signTok: string | null = null;
+      if (awaitingYou) {
+        // Prefer KV so we can include linkNonce; if the doc isn't in KV (rare race / test fixture
+        // with D1-only rows), fall back to a legacy token without a nonce.
+        const doc = await getDoc(c.env, r.doc_id);
+        const signer = doc?.signers.find((s) => s.order === 1);
+        signTok = await signToken(r.doc_id, 1, c.env.TOKEN_SECRET, signer?.linkNonce);
+      }
       return {
         docId: r.doc_id,
         title: r.title,
@@ -52,12 +61,199 @@ account.get("/documents", requireAccount, async (c) => {
         completedAt: r.completed_at,
         statusToken: await signToken(r.doc_id, 0, c.env.TOKEN_SECRET),
         awaitingYou,
-        signToken: awaitingYou ? await signToken(r.doc_id, 1, c.env.TOKEN_SECRET) : null,
+        signToken: signTok,
       };
     })
   );
 
   return c.json({ documents });
+});
+
+account.post("/documents/:docId/void", requirePaidAccount, async (c) => {
+  const acct = c.get("account")!;
+  const doc = await getDoc(c.env, c.req.param("docId"));
+  if (!doc || doc.accountId !== acct.workspaceId) {
+    return c.json({ error: "Document not found" }, 404);
+  }
+  if (doc.status !== "pending") {
+    return c.json({ error: "This document is no longer pending" }, 409);
+  }
+
+  let body: { reason?: string };
+  try {
+    body = await c.req.json<{ reason?: string }>();
+  } catch {
+    body = {};
+  }
+  const reason = body.reason?.trim();
+  if (reason && reason.length > MAX_REASON_LENGTH) {
+    return c.json({ error: `Reason must be under ${MAX_REASON_LENGTH} characters` }, 400);
+  }
+
+  const now = new Date().toISOString();
+  doc.status = "voided";
+  doc.voidedAt = now;
+  doc.voidedBy = "preparer";
+  if (reason) doc.voidReason = reason;
+  doc.events = [
+    ...(doc.events ?? []),
+    {
+      type: "voided",
+      signerOrder: null,
+      ip: c.req.header("CF-Connecting-IP") ?? null,
+      userAgent: c.req.header("User-Agent") ?? null,
+      timestamp: now,
+      pdfSha256: null,
+    },
+  ];
+  await putDoc(c.env, doc);
+
+  c.executionCtx.waitUntil(
+    indexVoided(c.env, doc, reason ? { reason } : null).catch((err) =>
+      console.error(`D1 indexing (voided) failed for doc ${doc.docId} (non-fatal):`, err)
+    )
+  );
+  c.executionCtx.waitUntil(
+    deliverWebhookEvent(c.env, acct.workspaceId, "document.voided", { docId: doc.docId }).catch((err) =>
+      console.error(`Webhook delivery (document.voided) failed for doc ${doc.docId} (non-fatal):`, err)
+    )
+  );
+
+  const statusToken = await signToken(doc.docId, 0, c.env.TOKEN_SECRET);
+  const recipients = new Set<string>();
+  if (doc.preparerEmail) recipients.add(doc.preparerEmail.trim());
+  for (const s of doc.signers) recipients.add(s.email.trim());
+  for (const cc of doc.ccRecipients ?? []) recipients.add(cc.email.trim());
+  for (const to of recipients) {
+    c.executionCtx.waitUntil(
+      sendDocumentVoidedNotice(c.env, to, doc, statusToken, reason).catch((err) =>
+        console.error(`Void notice email failed for doc ${doc.docId} (non-fatal):`, err)
+      )
+    );
+  }
+
+  return c.json({ ok: true, status: doc.status });
+});
+
+account.post("/documents/:docId/signers/:order/reassign", requirePaidAccount, async (c) => {
+  const acct = c.get("account")!;
+  const order = Number(c.req.param("order"));
+  if (!Number.isInteger(order) || order < 1) {
+    return c.json({ error: "Invalid signer order" }, 400);
+  }
+
+  const doc = await getDoc(c.env, c.req.param("docId"));
+  if (!doc || doc.accountId !== acct.workspaceId) {
+    return c.json({ error: "Document not found" }, 404);
+  }
+  if (doc.status !== "pending") {
+    return c.json({ error: "This document is no longer pending" }, 409);
+  }
+
+  const signer = doc.signers.find((s) => s.order === order);
+  if (!signer) return c.json({ error: "Signer not found" }, 404);
+  if (signer.status !== "pending") {
+    return c.json({ error: "Only a pending signer can be reassigned" }, 409);
+  }
+
+  let body: { name?: string; email?: string; pin?: string; saveContact?: boolean; company?: string };
+  try {
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: "Invalid request body" }, 400);
+  }
+
+  const name = body.name?.trim() ?? "";
+  const email = body.email?.trim() ?? "";
+  if (!name) return c.json({ error: "A name is required" }, 400);
+  if (!EMAIL_RE.test(email)) return c.json({ error: "That doesn't look like a valid email address" }, 400);
+  if (body.pin && !PIN_RE.test(body.pin)) {
+    return c.json({ error: "A signer's PIN must be 4-8 digits" }, 400);
+  }
+
+  const emailLower = email.toLowerCase();
+  if (doc.signers.some((s) => s.order !== order && s.email.trim().toLowerCase() === emailLower)) {
+    return c.json({ error: "That email is already used by another signer" }, 400);
+  }
+
+  const prior = { name: signer.name, email: signer.email, replacedAt: new Date().toISOString() };
+  signer.priorAssignees = [...(signer.priorAssignees ?? []), prior];
+  signer.name = name;
+  signer.email = email;
+  signer.linkNonce = crypto.randomUUID();
+  signer.viewedAt = null;
+  signer.remindersSent = [];
+  signer.completionNudgesSent = [];
+  signer.pinHash = body.pin ? await hashOpaqueToken(body.pin, c.env.TOKEN_SECRET) : undefined;
+
+  const shouldInvite =
+    (doc.signingMode ?? "sequential") === "parallel" || Boolean(signer.linkSentAt);
+  if (shouldInvite) {
+    signer.linkSentAt = new Date().toISOString();
+  }
+
+  doc.events = [
+    ...(doc.events ?? []),
+    {
+      type: "reassigned",
+      signerOrder: order,
+      ip: c.req.header("CF-Connecting-IP") ?? null,
+      userAgent: c.req.header("User-Agent") ?? null,
+      timestamp: prior.replacedAt,
+      pdfSha256: null,
+    },
+    ...(shouldInvite
+      ? [
+          {
+            type: "invite_sent" as const,
+            signerOrder: order,
+            ip: null,
+            userAgent: null,
+            timestamp: signer.linkSentAt!,
+            pdfSha256: null,
+          },
+        ]
+      : []),
+  ];
+  await putDoc(c.env, doc);
+
+  c.executionCtx.waitUntil(
+    indexSignerReassigned(c.env, doc, order, { name: prior.name, email: prior.email }).catch((err) =>
+      console.error(`D1 indexing (reassigned) failed for doc ${doc.docId} (non-fatal):`, err)
+    )
+  );
+  c.executionCtx.waitUntil(
+    deliverWebhookEvent(c.env, acct.workspaceId, "document.signer.reassigned", {
+      docId: doc.docId,
+      signerOrder: order,
+    }).catch((err) =>
+      console.error(`Webhook delivery (document.signer.reassigned) failed for doc ${doc.docId} (non-fatal):`, err)
+    )
+  );
+
+  if (shouldInvite) {
+    const token = await signToken(doc.docId, order, c.env.TOKEN_SECRET, signer.linkNonce);
+    c.executionCtx.waitUntil(
+      sendSigningInvite(c.env, doc, order, token).catch((err) =>
+        console.error(`Reassign invite email failed for doc ${doc.docId} (non-fatal):`, err)
+      )
+    );
+    c.executionCtx.waitUntil(
+      indexInviteSent(c.env, doc, order).catch((err) =>
+        console.error(`D1 indexing (invite_sent) failed for doc ${doc.docId} (non-fatal):`, err)
+      )
+    );
+  }
+
+  if (body.saveContact && c.env.DOCRACY_DB) {
+    c.executionCtx.waitUntil(
+      upsertContact(c.env, acct.workspaceId, { name, email, company: body.company }).catch((err) =>
+        console.error(`Contact upsert failed for workspace ${acct.workspaceId} (non-fatal):`, err)
+      )
+    );
+  }
+
+  return c.json({ ok: true, signer: { order: signer.order, name: signer.name, email: signer.email, status: signer.status } });
 });
 
 account.get("/token", requirePaidAccount, async (c) => {
@@ -71,8 +267,6 @@ account.post("/token/regenerate", requirePaidAccount, async (c) => {
     return c.json({ error: "Not available on this deployment yet." }, 501);
   }
   const acct = c.get("account")!;
-  // Workspace-scoped, not per-login — any teammate regenerating replaces the one shared connector
-  // URL for the whole workspace, consistent with everyone seeing the same documents through it.
   const token = await issueApiToken(c.env, acct.workspaceId);
   return c.json({ token, connectorUrl: `${c.env.PUBLIC_CONNECTOR_URL}/mcp?token=${token}` });
 });

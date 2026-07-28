@@ -33,7 +33,8 @@ or a `?token=` query parameter — both work identically for:
 - No separate revocation endpoint: regenerating the key from the Dashboard immediately invalidates
   the previous one. That's the only "revoke."
 
-## No key needed for the free tier
+## Authentication for agents
 
-The free tier (2-signer signing chains, and the MCP connector's `check_status` tool) requires no
-authentication at all — anyone, human or agent, can use it anonymously.
+The free tier (anonymous 2-signer signing chains) requires no authentication. The MCP connector and
+the REST / Zapier API key are paid-only — get your key from the Dashboard after upgrading. If the
+subscription ends, the key is revoked and MCP/API access stops.

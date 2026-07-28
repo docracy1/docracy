@@ -34,18 +34,18 @@ describe("GET /api/account/connectors", () => {
     expect(res.status).toBe(401);
   });
 
-  it("402s for a paid but non-Enterprise account", async () => {
+  it("402s for a free (unpaid) account", async () => {
     const { env } = makeMockEnv();
     const ctx = makeCtx();
-    const token = await paidNonEnterpriseSession(env, ctx);
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, false, null, null);
     const res = await connectors.request("/", { headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } }, env, ctx);
     expect(res.status).toBe(402);
   });
 
-  it("returns an empty list for an Enterprise account with nothing connected", async () => {
+  it("returns an empty list for a paid account with nothing connected", async () => {
     const { env } = makeMockEnv();
     const ctx = makeCtx();
-    const token = await enterpriseSession(env, ctx);
+    const token = await paidNonEnterpriseSession(env, ctx);
     const res = await connectors.request("/", { headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } }, env, ctx);
     expect(res.status).toBe(200);
     const body: { connections: unknown[] } = await res.json();

@@ -12,7 +12,7 @@ Free, no-signup sequential e-signature. State in Cloudflare KV, PDFs in R2, emai
 |------|------|
 | `apps/worker` | Cloudflare Worker — API, cron reminders, D1 indexing (paid only) |
 | `apps/web` | React + Vite frontend |
-| `apps/connector` | MCP server (free: `check_status` only) |
+| `apps/connector` | MCP server (paid: `check_status` + `find_documents`) |
 | `packages/shared` | Shared types + HMAC token sign/verify (only shared code — YAGNI elsewhere) |
 
 ## Conventions

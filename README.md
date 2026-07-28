@@ -30,7 +30,7 @@ Daily reminder cron
 
 Email delivery via Resend
 
-MCP connector with one free tool: check_status
+MCP connector (paid): check_status + find_documents
 
 Local dev without Cloudflare account
 
@@ -84,9 +84,8 @@ Dropbox
 OneDrive
 
 MCP (Model Context Protocol)
-Free tool: check_status
-
-Paid tools: find_documents, summarize_document, list_pending_by_counterparty, get_audit_trail, send_reminder
+Paid tools: check_status, find_documents
+Requires a paid API key (revoked when the subscription ends)
 
 Repository Layout
 apps/worker — Cloudflare Worker: free‑tier API routes, daily reminder cron, and best‑effort indexing into D1 for paid accounts.

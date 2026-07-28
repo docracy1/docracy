@@ -16,9 +16,14 @@ export function decodedByteLength(dataUrl: string): number {
 }
 
 /** Signature and initials are drawn as an image (the signer's hand-drawn mark); text and date are
- *  drawn as plain text. A missing `type` means "signature" — see the doc comment on DocField. */
+ *  drawn as plain text; checkboxes draw a square + optional checkmark. A missing `type` means
+ *  "signature" — see the doc comment on DocField. */
 function isImageField(type: DocField["type"]): boolean {
   return type === undefined || type === "signature" || type === "initials";
+}
+
+function isCheckboxChecked(raw: string): boolean {
+  return raw === "true" || raw === "1";
 }
 
 /**
@@ -27,6 +32,7 @@ function isImageField(type: DocField["type"]): boolean {
  * date automatically printed in a caption strip underneath, so nobody has to place a separate
  * date/text field just to record that. Text/date fields draw the submitted string directly, sized
  * to fit the box, with no caption (it would just repeat information already visible in the field).
+ * Checkbox fields draw a square outline and a checkmark when checked.
  * Coordinates are fractions of page width/height, origin top-left (matches how the browser places
  * fields over a rendered canvas), converted here to pdf-lib's bottom-left origin.
  */
@@ -47,7 +53,9 @@ export async function burnFields(
 
   for (const field of fields) {
     const raw = valueById.get(field.id);
-    if (!raw) continue;
+    if (raw === undefined) continue;
+    // Unchecked optional checkboxes still submit "false" — draw the empty box so the field is
+    // visible on the PDF; only skip entirely when the value is missing from the submission.
 
     const page = pdfDoc.getPage(field.page);
     const { width: pageW, height: pageH } = page.getSize();
@@ -58,7 +66,29 @@ export async function burnFields(
     const yTop = field.yFrac * pageH;
     const y = pageH - yTop - h;
 
-    if (isImageField(field.type)) {
+    if (field.type === "checkbox") {
+      const size = Math.min(w, h);
+      const inset = Math.max(size * 0.08, 0.5);
+      page.drawRectangle({
+        x: x + inset,
+        y: y + inset,
+        width: size - inset * 2,
+        height: size - inset * 2,
+        borderWidth: Math.max(size * 0.08, 0.75),
+        borderColor: INK,
+      });
+      if (isCheckboxChecked(raw)) {
+        const markSize = size * 0.7;
+        page.drawText("X", {
+          x: x + (size - markSize * 0.55) / 2,
+          y: y + (size - markSize) / 2 + markSize * 0.1,
+          size: markSize,
+          font,
+          color: INK,
+        });
+      }
+    } else if (isImageField(field.type)) {
+      if (!raw) continue;
       const captionSize = Math.min(7, h * 0.3);
       const captionHeight = captionSize + 2;
       const imageAreaHeight = Math.max(h - captionHeight, h * 0.5);
@@ -81,6 +111,7 @@ export async function burnFields(
         color: rgb(0.35, 0.35, 0.38),
       });
     } else {
+      if (!raw) continue;
       // Text/date: size the font to fit the box height, cap it so a tall-but-narrow field doesn't
       // produce oversized text, and clip to the field's width by truncating (there's no PDF text
       // auto-wrap primitive worth the complexity here — fields are single-line by design).

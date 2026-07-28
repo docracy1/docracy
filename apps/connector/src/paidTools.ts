@@ -43,8 +43,7 @@ export async function findDocuments(env: Env, accountId: string, query: string):
   return results.map((r) => ({ docId: r.doc_id, title: r.title, status: r.status, createdAt: r.created_at }));
 }
 
-/** Paid tool set, scoped to a single already-resolved account (see index.ts) — everything the
- *  free tier gets, plus find_documents. Upgrading never takes a tool away. */
+/** Paid tool set, scoped to a single already-resolved account (see index.ts). */
 export function buildPaidServer(env: Env, accountId: string) {
   const server = new McpServer(SERVER_INFO);
   registerCheckStatus(server, env);

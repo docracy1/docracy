@@ -1,12 +1,12 @@
 import { putDoc } from "./kv";
-import { sendSigningInvite, sendPreparerStatusLink } from "./email";
+import { sendSigningInvite, sendPreparerStatusLink, sendCcInvite } from "./email";
 import { indexDocumentCreated } from "./index-d1";
 import { sha256Hex } from "./hash";
 import { deliverWebhookEvent } from "./webhooks";
 import { trackEvent } from "./analytics";
 import { incrementTemplateUsage } from "./templateUsage";
 import { signToken, hashOpaqueToken } from "@docracy/shared";
-import type { AuditEvent, DocField, DocState, Env, Signer } from "@docracy/shared";
+import type { AuditEvent, CcRecipient, DocField, DocState, Env, Signer } from "@docracy/shared";
 
 export interface CreateDocumentCoreParams {
   env: Env;
@@ -20,6 +20,8 @@ export interface CreateDocumentCoreParams {
    *  value. `pin`, if given, is hashed here and never stored in its raw form. */
   signers: Array<{ name: string; email: string; company?: string; pin?: string }>;
   fields: DocField[];
+  /** Notify-only recipients — validated by the caller. */
+  ccRecipients?: Array<{ name?: string; email: string }>;
   /** null for the anonymous free-tier flow (100% of documents today) — every D1/index write
    *  below is skipped in that case, so this function's KV/R2 behavior is byte-for-byte identical
    *  to before this helper existed. Only set for a logged-in paid account's connector upload. */
@@ -44,6 +46,11 @@ export interface CreateDocumentCoreParams {
    *  routes/templates.ts's GET /:id, which fires the matching template_started event) — purely for
    *  the Template funnel's completion step (template_completed), never persisted on the doc itself. */
   templateId?: string;
+  /** Retention in days. Callers must already have validated paid-only overrides via resolveTtlDays.
+   *  When omitted, falls back to env.DOC_TTL_DAYS. */
+  ttlDays?: number;
+  /** Optional bulk-send group id — stamped on every DocState in the batch. */
+  batchId?: string;
 }
 
 export async function createDocumentCore(
@@ -54,7 +61,7 @@ export async function createDocumentCore(
 
   const docId = crypto.randomUUID();
   const now = new Date();
-  const ttlDays = Number(env.DOC_TTL_DAYS);
+  const ttlDays = params.ttlDays ?? Number(env.DOC_TTL_DAYS);
   const expiresAt = new Date(now.getTime() + ttlDays * 24 * 60 * 60 * 1000);
 
   await env.DOCRACY_DOCS.put(`docs/${docId}/original.pdf`, pdfBytes);
@@ -70,9 +77,17 @@ export async function createDocumentCore(
       signedAt: null,
       linkSentAt: null,
       remindersSent: [],
+      linkNonce: crypto.randomUUID(),
       pinHash: s.pin ? await hashOpaqueToken(s.pin, env.TOKEN_SECRET) : undefined,
     }))
   );
+
+  const nowIso = now.toISOString();
+  const ccRecipients: CcRecipient[] = (params.ccRecipients ?? []).map((cc) => ({
+    email: cc.email.trim(),
+    name: cc.name?.trim() || undefined,
+    notifiedAt: nowIso,
+  }));
 
   // Sequential invites only the first signer (this app's original behavior); parallel invites
   // everyone at once, since there's no "next" signer to wait for.
@@ -95,6 +110,14 @@ export async function createDocumentCore(
       timestamp: now.toISOString(),
       pdfSha256: null,
     })),
+    ...ccRecipients.map(() => ({
+      type: "cc_invite_sent" as const,
+      signerOrder: null,
+      ip: null,
+      userAgent: null,
+      timestamp: now.toISOString(),
+      pdfSha256: null,
+    })),
   ];
 
   const doc: DocState = {
@@ -109,6 +132,8 @@ export async function createDocumentCore(
     signingMode,
     signers,
     fields,
+    ccRecipients: ccRecipients.length > 0 ? ccRecipients : undefined,
+    batchId: params.batchId,
     events,
     customSubject: params.customSubject,
     customMessage: params.customMessage,
@@ -155,7 +180,7 @@ export async function createDocumentCore(
   // Fire-and-forget, like the D1 indexing below — a stalled or failing outbound email call must
   // never block (or hang) the response to the person who just created the document.
   for (const s of signersToInvite) {
-    const token = await signToken(docId, s.order, env.TOKEN_SECRET);
+    const token = await signToken(docId, s.order, env.TOKEN_SECRET, s.linkNonce);
     ctx.waitUntil(
       sendSigningInvite(env, doc, s.order, token).catch((err) =>
         console.error(`Signing invite email failed for doc ${docId} signer ${s.order} (non-fatal):`, err)
@@ -164,7 +189,7 @@ export async function createDocumentCore(
   }
 
   // A generic viewer token (order 0, no matching signer) so the preparer can bookmark a status page
-  // even if they opted not to sign themselves.
+  // even if they opted not to sign themselves. Shared with CC recipients for view-only access.
   const statusToken = await signToken(docId, 0, env.TOKEN_SECRET);
 
   if (preparerEmail) {
@@ -172,6 +197,14 @@ export async function createDocumentCore(
     ctx.waitUntil(
       sendPreparerStatusLink(env, trimmedPreparerEmail, statusToken).catch((err) =>
         console.error(`Preparer status-link email failed for doc ${docId} (non-fatal):`, err)
+      )
+    );
+  }
+
+  for (const cc of ccRecipients) {
+    ctx.waitUntil(
+      sendCcInvite(env, doc, cc, statusToken).catch((err) =>
+        console.error(`CC invite email failed for doc ${docId} to ${cc.email} (non-fatal):`, err)
       )
     );
   }

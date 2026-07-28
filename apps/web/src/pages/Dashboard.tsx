@@ -3,16 +3,20 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   apiUrl,
   cancelTeamInvite,
+  createContact,
   createWebhook,
   deleteBrandLogo,
+  deleteContact,
   deleteTemplate,
   deleteWebhook,
   deleteWorkspaceSlug,
   disconnectConnector,
   fetchBranding,
   fetchConnectors,
+  fetchContacts,
   fetchMe,
   fetchMyDocuments,
+  fetchStatus,
   fetchTeam,
   fetchTemplates,
   fetchTemplateUsage,
@@ -23,14 +27,17 @@ import {
   inviteTeammate,
   logout,
   openBillingPortal,
+  reassignSigner,
   regenerateApiToken,
   removeTeamMember,
   setWorkspaceSlug,
   startCheckout,
   uploadBrandLogo,
+  voidAccountDocument,
   type Account,
   type CloudConnectionSummary,
   type CloudProvider,
+  type ContactSummary,
   type DocumentSummary,
   type PendingInviteSummary,
   type TeamMemberSummary,
@@ -42,6 +49,7 @@ import {
 import { useNoIndex } from "../lib/useNoIndex";
 import { FREE_TEMPLATES } from "../lib/freeTemplates";
 import { track } from "../lib/track";
+import type { StatusSigner } from "../lib/types";
 
 /** Isolates the profile-menu popup so a render error there (e.g. from unexpected account/team
  *  data shape) shows an inline message instead of silently freezing the whole dashboard — this
@@ -169,7 +177,7 @@ export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<"dashboard" | "templates" | "documents" | "tools">("dashboard");
   const [docsSubTab, setDocsSubTab] = useState<"all" | "awaiting" | "waiting" | "completed">("all");
   const [toolsSubTab, setToolsSubTab] = useState<
-    "connector" | "webhooks" | "connectors" | "branding" | "team" | "subscription"
+    "connector" | "webhooks" | "connectors" | "branding" | "team" | "subscription" | "contacts"
   >("connector");
   const [documentsExpanded, setDocumentsExpanded] = useState(false);
   const [toolsExpanded, setToolsExpanded] = useState(false);
@@ -179,6 +187,23 @@ export default function Dashboard() {
   const [connectingProvider, setConnectingProvider] = useState<CloudProvider | null>(null);
   const [disconnectingProvider, setDisconnectingProvider] = useState<CloudProvider | null>(null);
   const [connectorBanner, setConnectorBanner] = useState<"connected" | "error" | null>(null);
+  const [docActionError, setDocActionError] = useState<string | null>(null);
+  const [voidingDocId, setVoidingDocId] = useState<string | null>(null);
+  const [reassignDoc, setReassignDoc] = useState<DocumentSummary | null>(null);
+  const [reassignSigners, setReassignSigners] = useState<StatusSigner[]>([]);
+  const [reassignOrder, setReassignOrder] = useState<number | null>(null);
+  const [reassignName, setReassignName] = useState("");
+  const [reassignEmail, setReassignEmail] = useState("");
+  const [reassignLoading, setReassignLoading] = useState(false);
+  const [reassignSaving, setReassignSaving] = useState(false);
+  const [reassignError, setReassignError] = useState<string | null>(null);
+  const [contacts, setContacts] = useState<ContactSummary[]>([]);
+  const [contactError, setContactError] = useState<string | null>(null);
+  const [showAddContact, setShowAddContact] = useState(false);
+  const [newContactName, setNewContactName] = useState("");
+  const [newContactEmail, setNewContactEmail] = useState("");
+  const [creatingContact, setCreatingContact] = useState(false);
+  const [deletingContactId, setDeletingContactId] = useState<string | null>(null);
   const navigate = useNavigate();
   const profileRef = useRef<HTMLDivElement>(null);
 
@@ -193,6 +218,97 @@ export default function Dashboard() {
   useNoIndex();
 
   const refreshTemplates = () => fetchTemplates().then((res) => setTemplates(res.templates));
+
+  const refreshDocuments = () => fetchMyDocuments().then((res) => setDocuments(res.documents));
+
+  const refreshContacts = () => fetchContacts().then((res) => setContacts(res.contacts));
+
+  const onVoidDocument = async (doc: DocumentSummary) => {
+    const reason = window.prompt("Optional reason for voiding (leave blank to skip):");
+    if (reason === null) return;
+    setVoidingDocId(doc.docId);
+    setDocActionError(null);
+    try {
+      await voidAccountDocument(doc.docId, reason.trim() || undefined);
+      await refreshDocuments();
+    } catch (err) {
+      setDocActionError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setVoidingDocId(null);
+    }
+  };
+
+  const openReassign = async (doc: DocumentSummary) => {
+    setReassignDoc(doc);
+    setReassignOrder(null);
+    setReassignName("");
+    setReassignEmail("");
+    setReassignError(null);
+    setReassignLoading(true);
+    try {
+      const status = await fetchStatus(doc.statusToken);
+      const pending = status.signers.filter((s) => s.status === "pending");
+      setReassignSigners(pending);
+      if (pending.length === 1) {
+        setReassignOrder(pending[0].order);
+        setReassignName(pending[0].name);
+      }
+    } catch (err) {
+      setReassignError(err instanceof Error ? err.message : "Something went wrong");
+      setReassignSigners([]);
+    } finally {
+      setReassignLoading(false);
+    }
+  };
+
+  const onReassign = async () => {
+    if (!reassignDoc || reassignOrder == null || !reassignName.trim() || !reassignEmail.trim()) return;
+    setReassignSaving(true);
+    setReassignError(null);
+    try {
+      await reassignSigner(reassignDoc.docId, reassignOrder, {
+        name: reassignName.trim(),
+        email: reassignEmail.trim(),
+        saveContact: true,
+      });
+      setReassignDoc(null);
+      await refreshDocuments();
+    } catch (err) {
+      setReassignError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setReassignSaving(false);
+    }
+  };
+
+  const onCreateContact = async () => {
+    if (!newContactName.trim() || !newContactEmail.trim()) return;
+    setCreatingContact(true);
+    setContactError(null);
+    try {
+      await createContact({ name: newContactName.trim(), email: newContactEmail.trim() });
+      setNewContactName("");
+      setNewContactEmail("");
+      setShowAddContact(false);
+      await refreshContacts();
+    } catch (err) {
+      setContactError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setCreatingContact(false);
+    }
+  };
+
+  const onDeleteContact = async (id: string) => {
+    setDeletingContactId(id);
+    setContactError(null);
+    try {
+      await deleteContact(id);
+      await refreshContacts();
+    } catch (err) {
+      setContactError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setDeletingContactId(null);
+    }
+  };
 
   const onDeleteTemplate = async (id: string) => {
     setDeletingTemplateId(id);
@@ -522,6 +638,8 @@ export default function Dashboard() {
           setTemplateUsage(usage);
           const { webhooks } = await fetchWebhooks();
           setWebhooks(webhooks);
+          const { contacts } = await fetchContacts();
+          setContacts(contacts);
           const { members, pendingInvites } = await fetchTeam();
           setTeamMembers(members);
           setPendingInvites(pendingInvites);
@@ -530,7 +648,7 @@ export default function Dashboard() {
           const { slug } = await fetchWorkspaceSlug();
           setWorkspaceSlugState(slug);
         }
-        if (res.account?.isEnterprise) {
+        if (res.account?.isPaid) {
           const { connections } = await fetchConnectors();
           setConnections(connections);
         }
@@ -577,7 +695,8 @@ export default function Dashboard() {
   const TOOLS_SUBNAV: Array<{ key: typeof toolsSubTab; label: string }> = [
     { key: "connector", label: "Connector & API key" },
     { key: "webhooks", label: "Webhooks" },
-    ...(account.isEnterprise ? [{ key: "connectors" as const, label: "Connectors" }] : []),
+    { key: "contacts", label: "Contacts" },
+    ...(account.isPaid ? [{ key: "connectors" as const, label: "Connectors" }] : []),
     { key: "branding", label: "Branding" },
   ];
 
@@ -950,6 +1069,7 @@ export default function Dashboard() {
                 ? "Completed"
                 : "All documents"}
             </h3>
+            {docActionError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{docActionError}</p>}
             {visibleDocs.length === 0 ? (
               <p style={{ marginBottom: 0 }}>Nothing here yet.</p>
             ) : (
@@ -963,14 +1083,45 @@ export default function Dashboard() {
                     flexWrap: "wrap",
                     justifyContent: "space-between",
                     gap: 8,
+                    alignItems: "center",
                   }}
                 >
                   <Link to={`/status/${doc.statusToken}`} style={{ overflowWrap: "anywhere" }}>
                     {doc.title}
                   </Link>
-                  <span style={{ color: doc.status === "completed" ? "var(--success)" : "var(--body)" }}>
-                    {doc.status === "completed" ? "Signed" : "Pending"}
-                  </span>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
+                    <span
+                      style={{
+                        color:
+                          doc.status === "completed"
+                            ? "var(--success)"
+                            : doc.status === "voided"
+                              ? "var(--danger)"
+                              : "var(--body)",
+                      }}
+                    >
+                      {doc.status === "completed" ? "Signed" : doc.status === "voided" ? "Voided" : "Pending"}
+                    </span>
+                    {doc.status === "pending" && account.isPaid && (
+                      <>
+                        <button
+                          className="btn-secondary"
+                          style={{ fontSize: 12, padding: "4px 8px" }}
+                          disabled={voidingDocId === doc.docId}
+                          onClick={() => onVoidDocument(doc)}
+                        >
+                          {voidingDocId === doc.docId ? "Voiding…" : "Void"}
+                        </button>
+                        <button
+                          className="btn-secondary"
+                          style={{ fontSize: 12, padding: "4px 8px" }}
+                          onClick={() => openReassign(doc)}
+                        >
+                          Reassign
+                        </button>
+                      </>
+                    )}
+                  </div>
                 </div>
               ))
             )}
@@ -1022,8 +1173,8 @@ export default function Dashboard() {
                   <strong>Need more than the Paid plan?</strong>
                 </p>
                 <p style={{ fontSize: 12, color: "var(--mute)", marginBottom: 8 }}>
-                  Enterprise adds Dropbox, OneDrive, and Box connectors (signed PDFs upload automatically),
-                  invoice billing, premium customer support, SSO/multi-workspace setup, and volume discounts.
+                  Enterprise adds invoice billing, premium customer support, SSO/multi-workspace setup, and
+                  volume discounts on top of everything on Paid (including Dropbox, OneDrive, and Box).
                 </p>
                 {upgradeEnterpriseError && (
                   <p style={{ color: "var(--danger)", fontSize: 13 }}>{upgradeEnterpriseError}</p>
@@ -1146,7 +1297,14 @@ export default function Dashboard() {
 
       {activeTab === "templates" && account.isPaid && (
         <div className="card" style={{ marginTop: 24 }}>
-          <h3 style={{ fontSize: 15 }}>Templates</h3>
+          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: 8, marginBottom: 4 }}>
+            <h3 style={{ fontSize: 15, margin: 0 }}>Templates</h3>
+            {templates.length > 0 && (
+              <Link to="/bulk-send" className="btn-secondary" style={{ textDecoration: "none", padding: "4px 10px", fontSize: 13 }}>
+                Bulk send
+              </Link>
+            )}
+          </div>
           {templateError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{templateError}</p>}
           {templates.length === 0 ? (
             <>
@@ -1286,7 +1444,84 @@ export default function Dashboard() {
         </div>
       )}
 
-      {activeTab === "tools" && account.isEnterprise && toolsSubTab === "connectors" && (
+      {activeTab === "tools" && account.isPaid && toolsSubTab === "contacts" && (
+        <div className="card" style={{ marginTop: 24 }}>
+          <h3 style={{ fontSize: 15 }}>Contacts</h3>
+          <p style={{ fontSize: 12, color: "var(--mute)" }}>
+            Saved names and emails for autocomplete when preparing documents or reassigning signers.
+          </p>
+          {contactError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{contactError}</p>}
+          {contacts.length === 0 ? (
+            <p style={{ marginBottom: 12 }}>No contacts yet.</p>
+          ) : (
+            contacts.map((c) => (
+              <div
+                key={c.id}
+                style={{
+                  padding: "8px 0",
+                  borderBottom: "1px solid var(--hairline)",
+                  display: "flex",
+                  flexWrap: "wrap",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  gap: 8,
+                }}
+              >
+                <span style={{ overflowWrap: "anywhere" }}>
+                  {c.name}{" "}
+                  <span style={{ fontSize: 12, color: "var(--mute)" }}>
+                    ({c.email}
+                    {c.company ? ` · ${c.company}` : ""})
+                  </span>
+                </span>
+                <button
+                  className="btn-secondary"
+                  style={{ fontSize: 13, padding: "4px 10px" }}
+                  disabled={deletingContactId === c.id}
+                  onClick={() => onDeleteContact(c.id)}
+                >
+                  {deletingContactId === c.id ? "Deleting…" : "Delete"}
+                </button>
+              </div>
+            ))
+          )}
+
+          {showAddContact ? (
+            <div style={{ marginTop: 12 }}>
+              <input
+                className="form-input"
+                style={{ width: "100%", marginBottom: 8 }}
+                placeholder="Name"
+                aria-label="Contact name"
+                value={newContactName}
+                onChange={(e) => setNewContactName(e.target.value)}
+              />
+              <input
+                className="form-input"
+                style={{ width: "100%", marginBottom: 8 }}
+                placeholder="Email"
+                aria-label="Contact email"
+                type="email"
+                value={newContactEmail}
+                onChange={(e) => setNewContactEmail(e.target.value)}
+              />
+              <button
+                className="btn-secondary"
+                disabled={creatingContact || !newContactName.trim() || !newContactEmail.trim()}
+                onClick={onCreateContact}
+              >
+                {creatingContact ? "Adding…" : "Add contact"}
+              </button>
+            </div>
+          ) : (
+            <button className="btn-secondary" style={{ marginTop: 8 }} onClick={() => setShowAddContact(true)}>
+              + Add contact
+            </button>
+          )}
+        </div>
+      )}
+
+      {activeTab === "tools" && account.isPaid && toolsSubTab === "connectors" && (
         <div className="card" style={{ marginTop: 24 }}>
           <h3 style={{ fontSize: 15 }}>Connectors</h3>
           <p style={{ fontSize: 12, color: "var(--mute)" }}>
@@ -1534,11 +1769,104 @@ export default function Dashboard() {
               {!account.isEnterprise && topRecurringUsage?.teamUpsell && (
                 <p style={{ fontSize: 13, marginTop: 8, marginBottom: 0 }}>
                   This much repeat volume is usually a sign it's time for more hands on deck — Enterprise adds
-                  Dropbox, OneDrive, and Box connectors and higher limits on top of the team sharing you already have.
+                  invoice billing, premium support, and volume discounts on top of the team sharing you already have.
                 </p>
               )}
             </div>
           )}
+        </div>
+      )}
+
+      {reassignDoc && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.6)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 10,
+          }}
+        >
+          <div className="card" style={{ background: "var(--canvas)", boxShadow: "var(--shadow-lg)", maxWidth: 420, width: "92vw" }}>
+            <h3 style={{ fontSize: 15, marginTop: 0 }}>Reassign signer</h3>
+            <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 0 }}>{reassignDoc.title}</p>
+            {reassignLoading ? (
+              <p>Loading signers…</p>
+            ) : reassignSigners.length === 0 ? (
+              <p style={{ marginBottom: 12 }}>No pending signers to reassign.</p>
+            ) : (
+              <>
+                <select
+                  className="form-input"
+                  style={{ width: "100%", marginBottom: 8 }}
+                  value={reassignOrder ?? ""}
+                  onChange={(e) => {
+                    const order = Number(e.target.value);
+                    setReassignOrder(order);
+                    const signer = reassignSigners.find((s) => s.order === order);
+                    if (signer) setReassignName(signer.name);
+                  }}
+                >
+                  <option value="" disabled>
+                    Select signer
+                  </option>
+                  {reassignSigners.map((s) => (
+                    <option key={s.order} value={s.order}>
+                      {s.order}. {s.name}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  className="form-input"
+                  style={{ width: "100%", marginBottom: 8 }}
+                  placeholder="New name"
+                  aria-label="New signer name"
+                  value={reassignName}
+                  onChange={(e) => setReassignName(e.target.value)}
+                />
+                <input
+                  className="form-input"
+                  style={{ width: "100%", marginBottom: 8 }}
+                  placeholder="New email"
+                  aria-label="New signer email"
+                  type="email"
+                  list={contacts.length > 0 ? "dashboard-contacts" : undefined}
+                  value={reassignEmail}
+                  onChange={(e) => setReassignEmail(e.target.value)}
+                />
+                {contacts.length > 0 && (
+                  <datalist id="dashboard-contacts">
+                    {contacts.map((c) => (
+                      <option key={c.id} value={c.email}>
+                        {c.name}
+                      </option>
+                    ))}
+                  </datalist>
+                )}
+              </>
+            )}
+            {reassignError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{reassignError}</p>}
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <button
+                className="btn-primary"
+                disabled={
+                  reassignLoading ||
+                  reassignSaving ||
+                  reassignOrder == null ||
+                  !reassignName.trim() ||
+                  !reassignEmail.trim()
+                }
+                onClick={onReassign}
+              >
+                {reassignSaving ? "Reassigning…" : "Reassign"}
+              </button>
+              <button className="btn-secondary" disabled={reassignSaving} onClick={() => setReassignDoc(null)}>
+                Cancel
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

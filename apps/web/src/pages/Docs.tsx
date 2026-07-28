@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { PLAN_ROWS, PlanCell } from "../lib/planRows";
 import { usePageMeta } from "../lib/usePageMeta";
 import { FREE_TEMPLATES } from "../lib/freeTemplates";
 
@@ -14,13 +15,50 @@ function Section({ id, title, children }: { id: string; title: string; children:
 export default function Docs() {
   usePageMeta(
     "Documentation — Docracy",
-    "How Docracy's free signing flow, paid AI tools, templates, webhooks, and MCP/Zapier automation actually work."
+    "How Docracy's free signing flow, paid features (bulk send, embed, contacts, Dropbox/OneDrive/Box, AI), Enterprise options, templates, webhooks, and MCP/Zapier automation work."
   );
 
   return (
     <div className="container" style={{ maxWidth: 760 }}>
       <h1 style={{ fontSize: 30 }}>Documentation</h1>
       <p style={{ color: "var(--mute)" }}>How everything in Docracy actually works, in one place.</p>
+
+      <Section id="plans" title="Plans at a glance (Free / Paid / Enterprise)">
+        <p style={{ marginBottom: 12 }}>
+          Same feature matrix as <Link to="/pricing">Pricing</Link> — Free vs Paid ($10/mo) vs Enterprise.
+          Dropbox, OneDrive, and Box auto-upload are included on <strong>Paid</strong>.
+        </p>
+        <div className="card" style={{ padding: 0 }}>
+          <div className="plan-table-scroll">
+            <table className="plan-table">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Free</th>
+                  <th className="plan-col-paid">Paid</th>
+                  <th>Enterprise</th>
+                </tr>
+              </thead>
+              <tbody>
+                {PLAN_ROWS.map((row) => (
+                  <tr key={row.label}>
+                    <td>{row.label}</td>
+                    <td>
+                      <PlanCell value={row.free} />
+                    </td>
+                    <td className="plan-col-paid">
+                      <PlanCell value={row.paid} />
+                    </td>
+                    <td>
+                      <PlanCell value={row.enterprise ?? row.paid} />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </Section>
 
       <Section id="sending" title="Sending a document (free)">
         <p>
@@ -46,7 +84,75 @@ export default function Docs() {
           Signing in adds unlimited signers per document, a dashboard with document history, reusable
           saved templates, parallel (all-at-once) signing, PIN-protected signing links, team accounts
           (shared workspace with teammates), white-label branding (your own logo on emails/signing pages),
-          and webhooks. See <Link to="/pricing">Pricing</Link> for the full comparison.
+          webhooks, MCP/Zapier, AI tools, Dropbox/OneDrive/Box auto-upload, plus the workflow features
+          below. See the table above or <Link to="/pricing">Pricing</Link>.
+        </p>
+      </Section>
+
+      <Section id="cloud-connectors" title="Dropbox, OneDrive, and Box (paid)">
+        <p>
+          Connect cloud storage from Dashboard → Tools → <strong>Connectors</strong>. After a document
+          finishes signing, Docracy uploads the final PDF automatically — no manual download step.
+          Available on Paid and Enterprise.
+        </p>
+        <ul>
+          <li>
+            <strong>Dropbox</strong>
+          </li>
+          <li>
+            <strong>OneDrive</strong> (Microsoft)
+          </li>
+          <li>
+            <strong>Box</strong>
+          </li>
+        </ul>
+      </Section>
+
+      <Section id="bulk-send" title="Bulk send (paid)">
+        <p>
+          From the Dashboard (Templates → Bulk send, or <code>/bulk-send</code>), pick a saved template and
+          send it to many recipient groups at once — one document per row. Paste a list of names/emails or
+          fill the form; each row becomes its own signing chain with the same field layout. Optionally set
+          a custom expiry (see below). Paid only.
+        </p>
+      </Section>
+
+      <Section id="expiry" title="Custom document expiry (paid)">
+        <p>
+          Free documents always expire after 9 days (or sooner once everyone has signed and the final copy
+          is emailed). On a paid account you can choose retention of <strong>1–90 days</strong> when
+          preparing a document or bulk-sending from a template.
+        </p>
+      </Section>
+
+      <Section id="embed" title="Embedded signing (paid)">
+        <p>
+          Host the signing UI inside your own product via an iframe. Create a short-lived embed session
+          with <code>POST /api/embed/sessions</code> (cookie session or API key) — body includes{" "}
+          <code>docId</code>, <code>signerOrder</code>, optional <code>allowedOrigins</code>,{" "}
+          <code>returnUrl</code>, and <code>ttlSeconds</code>. The response gives an{" "}
+          <code>embedUrl</code> to load at <code>/embed/sign/…</code>. Origins not on the allowlist are
+          rejected. Read-only status for agents still goes through MCP; embedding is for your app&apos;s
+          UI.
+        </p>
+      </Section>
+
+      <Section id="contacts" title="Contacts &amp; signer reassignment (paid)">
+        <p>
+          Save contacts under Dashboard → Tools → <strong>Contacts</strong>. Their names and emails
+          autocomplete on Prepare and when reassigning. For a pending document, reassign a signer to a
+          new name/email from the Dashboard — the old link stops working and the new person gets the
+          turn. You can also <strong>void</strong> a pending document from the Dashboard so the chain is
+          cancelled.
+        </p>
+      </Section>
+
+      <Section id="enterprise" title="Enterprise">
+        <p>
+          Enterprise includes everything in Paid, plus invoice/annual billing, premium (SLA-backed)
+          support, volume discounts &amp; custom onboarding, and optional SSO or multi-workspace setup.
+          Contact <a href="mailto:sales@docracy.io">sales@docracy.io</a> or upgrade from the Dashboard
+          subscription tab.
         </p>
       </Section>
 
@@ -76,9 +182,9 @@ export default function Docs() {
       <Section id="mcp" title="Connect an AI assistant (MCP)">
         <p>
           Docracy runs an <a href="https://modelcontextprotocol.io" target="_blank" rel="noreferrer">MCP</a>{" "}
-          server so Claude, ChatGPT, Grok, Perplexity, or an IDE agent like Cursor can check on a document
-          or (on a paid account) search and send documents for you directly from a chat. There's a free,
-          no-signup connector URL to try immediately. Full setup instructions: <Link to="/mcp">AI & MCP</Link>.
+          server so Claude, ChatGPT, Grok, Perplexity, or an IDE agent like Cursor can check signing status and
+          search your documents from a chat. Requires a paid account — copy your personal connector URL from
+          Dashboard → Connector &amp; API key. Full setup instructions: <Link to="/mcp">AI & MCP</Link>.
         </p>
       </Section>
 
@@ -145,11 +251,21 @@ export default function Docs() {
                 <code>{`{ target_url }`}</code>. Returns <code>{`{ id }`}</code>.
               </td>
             </tr>
-            <tr>
+            <tr style={{ borderBottom: "1px solid var(--hairline)" }}>
               <td style={{ padding: "6px 8px 6px 0", whiteSpace: "nowrap" }}>
                 <code>DELETE /api/zapier/hooks/:id</code>
               </td>
               <td style={{ padding: "6px 8px" }}>Removes a webhook subscription created above.</td>
+            </tr>
+            <tr>
+              <td style={{ padding: "6px 8px 6px 0", whiteSpace: "nowrap" }}>
+                <code>POST /api/embed/sessions</code>
+              </td>
+              <td style={{ padding: "6px 8px" }}>
+                Creates an embedded-signing session (paid). Body:{" "}
+                <code>{`{ docId, signerOrder, allowedOrigins?, returnUrl?, ttlSeconds? }`}</code>. Returns{" "}
+                <code>{`{ embedToken, embedUrl, expiresAt }`}</code>. Also accepts the workspace API key.
+              </td>
             </tr>
           </tbody>
         </table>

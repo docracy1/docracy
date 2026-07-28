@@ -40,6 +40,7 @@ export async function listActiveDocIds(env: Env): Promise<string[]> {
 
 /** The signer whose turn it currently is: first pending signer whose predecessors have all signed. */
 export function currentTurnOrder(doc: DocState): number | null {
+  if (doc.status !== "pending") return null;
   const sorted = [...doc.signers].sort((a, b) => a.order - b.order);
   for (const signer of sorted) {
     if (signer.status === "pending") return signer.order;
@@ -50,8 +51,10 @@ export function currentTurnOrder(doc: DocState): number | null {
 /** In sequential mode (the default), only the current signer in order may act. In parallel mode,
  *  every signer was invited at once — any signer who hasn't signed yet may act, regardless of
  *  order. Every existing caller (sign.ts, reminders.ts) keeps calling this exactly the same way;
- *  only this one function needs to know which mode a given doc is in. */
+ *  only this one function needs to know which mode a given doc is in. Voided/completed docs never
+ *  have anyone "on turn." */
 export function isSignerOnTurn(doc: DocState, order: number): boolean {
+  if (doc.status !== "pending") return false;
   if (doc.signingMode === "parallel") {
     const signer = doc.signers.find((s) => s.order === order);
     return signer?.status === "pending";

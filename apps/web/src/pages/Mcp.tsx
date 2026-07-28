@@ -2,47 +2,51 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { usePageMeta } from "../lib/usePageMeta";
 
-const FREE_URL = "https://mcp.docracy.io/mcp";
+const EXAMPLE_URL = "https://mcp.docracy.io/mcp?token=dk_YOUR_API_KEY";
 
 const CLIENTS = [
   {
     name: "Claude",
     sub: "(claude.ai or the desktop app)",
-    setup: 'Settings → Connectors → Add custom connector → paste the URL above, authentication "None".',
-    use: 'Click the "+" at the bottom-left of the chat box → Connectors → make sure Docracy is toggled on for that conversation. Then just ask naturally — e.g. "check the status of [link]."',
+    setup:
+      'Settings → Connectors → Add custom connector → paste your personal connector URL from the Dashboard (authentication "None" — the key is already in the URL).',
+    use: 'Click the "+" at the bottom-left of the chat box → Connectors → make sure Docracy is toggled on for that conversation. Then just ask naturally — e.g. "find documents for Acme" or "check the status of [link]."',
   },
   {
     name: "ChatGPT",
     sub: "",
-    setup: "Settings → Security and login → turn on Developer Mode. Then Settings → Connectors (or Plugins) → Add custom connector → paste the URL above.",
+    setup:
+      "Settings → Security and login → turn on Developer Mode. Then Settings → Connectors (or Plugins) → Add custom connector → paste your personal connector URL from the Dashboard.",
     use: 'Pick it from the Tools menu (the "+"/tools icon in the message box), or type "@Docracy" followed by your request.',
   },
   {
     name: "Grok",
     sub: "",
-    setup: 'Available on Grok\'s paid tiers. Click the "+" in the chat box → Connectors → New Connector → Custom → paste the URL above.',
+    setup:
+      'Available on Grok\'s paid tiers. Click the "+" in the chat box → Connectors → New Connector → Custom → paste your personal connector URL from the Dashboard.',
     use: "Just ask your question normally once it's added — Grok calls the tool automatically when it's relevant.",
   },
   {
     name: "Perplexity",
     sub: "",
-    setup: 'Requires a Pro or Max plan. Settings → Connectors → Add custom connector → paste the URL above, authentication "None".',
-    use: 'Reference it directly in your question — mentioning "Docracy" or asking something clearly related to a signing link is usually enough.',
+    setup:
+      'Requires a Pro or Max plan. Settings → Connectors → Add custom connector → paste your personal connector URL from the Dashboard, authentication "None".',
+    use: 'Reference it directly in your question — mentioning "Docracy" or asking something clearly related to your documents is usually enough.',
   },
 ];
 
 export default function Mcp() {
   const [copied, setCopied] = useState(false);
   const onCopy = async () => {
-    await navigator.clipboard.writeText(FREE_URL);
+    await navigator.clipboard.writeText(EXAMPLE_URL);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   usePageMeta(
     "Connect Docracy to Your AI Assistant — MCP Connector | Docracy",
-    "Connect Docracy to Claude, ChatGPT, Grok, or Perplexity as an MCP connector — free to try with no signup, " +
-      "or upgrade for document search and the full AI toolset. Also automates with Zapier."
+    "Connect Docracy to Claude, ChatGPT, Grok, or Perplexity as an MCP connector on a paid account — " +
+      "check signing status and search your documents from chat. Also automates with Zapier."
   );
 
   return (
@@ -53,32 +57,35 @@ export default function Mcp() {
       <h1 style={{ fontSize: 36 }}>Connect Docracy to your AI assistant</h1>
       <p style={{ fontSize: 16, maxWidth: 620 }}>
         Docracy runs an <a href="https://modelcontextprotocol.io" target="_blank" rel="noreferrer">MCP</a> server —
-        an open standard for giving an AI assistant tools it can call directly. Add it to Claude, ChatGPT, Grok, or
-        Perplexity and ask about a signing link in plain English instead of opening a dashboard.
+        an open standard for giving an AI assistant tools it can call directly. On a paid account, add your personal
+        connector URL to Claude, ChatGPT, Grok, or Perplexity and ask about your documents in plain English instead of
+        opening a dashboard.
       </p>
 
-      <div className="card" style={{ marginTop: 24 }}>
-        <h3 style={{ marginTop: 0, fontSize: 16 }}>Try it now — free, no signup</h3>
-        <p style={{ marginBottom: 8 }}>
-          Copy this URL into your AI assistant's connector settings (see the setup steps below) — it's a
-          server address for your assistant to call, not a page to open in your browser, so visiting it
-          directly won't show anything useful. Once connected, it gives your assistant one tool:{" "}
-          <strong>check the status of a signing link</strong> — who's signed, who's still pending.
+      <div className="card" style={{ marginTop: 24, background: "var(--primary-soft)", border: "1px solid var(--primary-soft-strong)" }}>
+        <h3 style={{ marginTop: 0, fontSize: 16 }}>Paid account required</h3>
+        <p style={{ marginBottom: 12 }}>
+          The MCP connector uses your workspace API key. Sign in, upgrade if needed, then copy the personal connector
+          URL from <strong>Dashboard → Connector &amp; API key</strong>. If the subscription ends, that key is revoked
+          and the connector stops working.
         </p>
-        <div style={{ display: "flex", gap: 8 }}>
-          <input
-            className="form-input"
-            readOnly
-            value={FREE_URL}
-            onFocus={(e) => e.target.select()}
-            style={{ width: "100%", fontFamily: "monospace", fontSize: 13 }}
-          />
-          <button type="button" className="btn-secondary" onClick={onCopy} style={{ flexShrink: 0 }}>
-            {copied ? "Copied!" : "Copy"}
-          </button>
-        </div>
-        <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 8, marginBottom: 0 }}>
-          Nothing is ever signed or changed through MCP — every tool here is read-only.
+        <p style={{ marginBottom: 12, fontSize: 13.5 }}>
+          Once connected, your assistant gets two read-only tools:
+        </p>
+        <ul style={{ marginTop: 0, paddingLeft: 20, fontSize: 13.5, marginBottom: 16 }}>
+          <li>
+            <strong>check_status</strong> — who's signed / who's still pending on a signing or status link.
+          </li>
+          <li>
+            <strong>find_documents</strong> — search your own documents by title, signer name, email, or company.
+          </li>
+        </ul>
+        <Link to="/login" className="btn-primary" style={{ display: "inline-block", textDecoration: "none" }}>
+          Sign in to get your connector URL
+        </Link>
+        <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 12, marginBottom: 0 }}>
+          Nothing is ever signed or changed through MCP — every tool here is read-only. (PDF AI tools like
+          auto-detect fields and contract explainer live in the web app, not in MCP.)
         </p>
       </div>
 
@@ -103,8 +110,21 @@ export default function Mcp() {
         <p style={{ marginBottom: 8 }}>
           These connect via a JSON config file rather than a browser settings screen. Most MCP clients that
           support remote (HTTP) servers use a <code>mcpServers</code> block like this — add it to your client's MCP
-          config file (e.g. Cursor's <code>.cursor/mcp.json</code>, Claude Code's <code>.mcp.json</code>):
+          config file (e.g. Cursor's <code>.cursor/mcp.json</code>, Claude Code's <code>.mcp.json</code>), replacing
+          the token with the one from your Dashboard:
         </p>
+        <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
+          <input
+            className="form-input"
+            readOnly
+            value={EXAMPLE_URL}
+            onFocus={(e) => e.target.select()}
+            style={{ width: "100%", fontFamily: "monospace", fontSize: 13 }}
+          />
+          <button type="button" className="btn-secondary" onClick={onCopy} style={{ flexShrink: 0 }}>
+            {copied ? "Copied!" : "Copy"}
+          </button>
+        </div>
         <pre
           style={{
             background: "var(--canvas-soft)",
@@ -118,45 +138,15 @@ export default function Mcp() {
 {`{
   "mcpServers": {
     "docracy": {
-      "url": "${FREE_URL}"
+      "url": "${EXAMPLE_URL}"
     }
   }
 }`}
         </pre>
         <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 8, marginBottom: 0 }}>
           The exact key your client expects can vary (some want a <code>"type": "http"</code> field alongside{" "}
-          <code>"url"</code>) — check your client's own MCP docs if this doesn't connect right away. For the paid
-          tier's personal URL, replace the URL above with the one from your Dashboard.
+          <code>"url"</code>) — check your client's own MCP docs if this doesn't connect right away.
         </p>
-      </div>
-
-      <div className="card" style={{ marginTop: 24, background: "var(--primary-soft)", border: "1px solid var(--primary-soft-strong)" }}>
-        <h3 style={{ marginTop: 0, fontSize: 16 }}>Upgrade for the rest of the toolset</h3>
-        <p style={{ marginBottom: 12 }}>
-          A paid account swaps that free URL for a personal one that adds:
-        </p>
-        <ul style={{ marginTop: 0, paddingLeft: 20, fontSize: 13.5 }}>
-          <li>
-            <strong>Search your own documents</strong> — by title, signer name, email, or company, right from the
-            chat.
-          </li>
-          <li>
-            <strong>Auto-detect signature &amp; date fields</strong> on any PDF you upload.
-          </li>
-          <li>
-            <strong>Plain-English contract explainer</strong> — a 3-bullet summary of what each party is agreeing to.
-          </li>
-          <li>
-            <strong>Risk &amp; clause highlighter</strong> — flags one-sided terms before you sign.
-          </li>
-          <li>
-            <strong>Generate a contract with AI</strong> — describe an agreement in a sentence, get a ready-to-sign
-            PDF back.
-          </li>
-        </ul>
-        <Link to="/login" className="btn-primary" style={{ display: "inline-block", textDecoration: "none", marginTop: 4 }}>
-          Sign in to get your connector URL
-        </Link>
       </div>
 
       <div style={{ marginTop: 32 }}>

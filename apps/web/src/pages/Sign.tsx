@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import SignatureCanvas from "react-signature-canvas";
 import PdfViewer from "../components/PdfViewer";
-import { apiUrl, fetchSignView, submitSignature, unlockSign } from "../lib/api";
+import { apiUrl, declineSign, fetchSignView, submitSignature, unlockSign } from "../lib/api";
 import { useNoIndex } from "../lib/useNoIndex";
 import type { SignPayload } from "../lib/api";
 import type { StatusPayload } from "../lib/types";
@@ -25,15 +25,53 @@ function BrandLogo({ path, slug }: { path?: string | null; slug?: string | null 
   );
 }
 
-export default function Sign() {
-  const { token } = useParams<{ token: string }>();
+function SignerStatusList({ status }: { status: StatusPayload }) {
+  return (
+    <div className="card">
+      {status.signers
+        .slice()
+        .sort((a, b) => a.order - b.order)
+        .map((s) => (
+          <div key={s.order} style={{ padding: "8px 0", borderBottom: "1px solid var(--hairline)" }}>
+            {s.status === "signed" ? (
+              <span style={{ color: "var(--success)" }}>Signed by: {s.name} ✓</span>
+            ) : s.status === "declined" ? (
+              <span style={{ color: "var(--danger)" }}>Declined: {s.name}</span>
+            ) : (
+              <span style={{ color: "var(--body)" }}>Pending: {s.name}</span>
+            )}
+          </div>
+        ))}
+    </div>
+  );
+}
+
+export interface SignProps {
+  /** When set (embed flow), used instead of the `:token` route param. */
+  overrideToken?: string;
+  /** Chrome-less iframe signing — posts lifecycle events to the parent frame. */
+  embedMode?: boolean;
+  allowedOrigins?: string[];
+  returnUrl?: string;
+}
+
+export default function Sign({
+  overrideToken,
+  embedMode = false,
+  allowedOrigins,
+  returnUrl,
+}: SignProps = {}) {
+  const { token: paramToken } = useParams<{ token: string }>();
+  const token = overrideToken ?? paramToken;
   const [payload, setPayload] = useState<SignPayload | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [values, setValues] = useState<Record<string, string>>({});
   const [signingFieldId, setSigningFieldId] = useState<string | null>(null);
   const [consented, setConsented] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [declining, setDeclining] = useState(false);
   const [done, setDone] = useState(false);
+  const [declined, setDeclined] = useState(false);
   const [finalStatus, setFinalStatus] = useState<StatusPayload | null>(null);
   const [unlockToken, setUnlockToken] = useState<string | null>(() =>
     token ? sessionStorage.getItem(`sign-unlock:${token}`) : null
@@ -42,15 +80,44 @@ export default function Sign() {
   const [unlocking, setUnlocking] = useState(false);
   const [pinError, setPinError] = useState<string | null>(null);
   const sigPadRef = useRef<SignatureCanvas>(null);
+  const postTargetOrigin = allowedOrigins?.[0] || "*";
+
+  const postEmbed = (type: "ready" | "signed" | "declined" | "error", extra?: { docId?: string }) => {
+    if (!embedMode || window.parent === window) return;
+    window.parent.postMessage({ source: "docracy", type, ...extra }, postTargetOrigin);
+  };
 
   useNoIndex();
 
   useEffect(() => {
     if (!token) return;
     fetchSignView(token, unlockToken ?? undefined)
-      .then(setPayload)
-      .catch((err) => setError(err.message));
+      .then((data) => {
+        setPayload(data);
+        postEmbed("ready", { docId: data.docId });
+      })
+      .catch((err) => {
+        setError(err.message);
+        postEmbed("error", {});
+      });
+    // postEmbed intentionally omitted — only re-fetch when token/unlock changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, unlockToken]);
+
+  useEffect(() => {
+    if (!payload?.fields) return;
+    setValues((prev) => {
+      const next = { ...prev };
+      let changed = false;
+      for (const f of payload.fields!) {
+        if ((f.type ?? "signature") === "checkbox" && f.required === false && next[f.id] === undefined) {
+          next[f.id] = "false";
+          changed = true;
+        }
+      }
+      return changed ? next : prev;
+    });
+  }, [payload?.fields]);
 
   const onUnlock = async () => {
     if (!token || !pinInput.trim()) return;
@@ -73,11 +140,19 @@ export default function Sign() {
   );
 
   const allFilled = useMemo(
-    () => (payload?.fields ?? []).every((f) => Boolean(values[f.id])),
+    () =>
+      (payload?.fields ?? []).every((f) => {
+        const type = f.type ?? "signature";
+        if (type === "checkbox") {
+          if (f.required === false) return values[f.id] === "true" || values[f.id] === "false";
+          return values[f.id] === "true";
+        }
+        return Boolean(values[f.id]);
+      }),
     [payload?.fields, values]
   );
 
-  const hasUnsavedWork = Object.keys(values).length > 0 && !done;
+  const hasUnsavedWork = Object.keys(values).length > 0 && !done && !declined;
   useEffect(() => {
     if (!hasUnsavedWork) return;
     const handler = (e: BeforeUnloadEvent) => {
@@ -106,6 +181,15 @@ export default function Sign() {
     setSigningFieldId(null);
   };
 
+  const maybeRedirectReturnUrl = () => {
+    if (!embedMode || !returnUrl) return;
+    try {
+      if (window.top) window.top.location.href = returnUrl;
+    } catch {
+      window.location.href = returnUrl;
+    }
+  };
+
   const onSubmit = async () => {
     if (!token || !payload?.fields || !consented) return;
     setSubmitting(true);
@@ -124,14 +208,37 @@ export default function Sign() {
       );
       setFinalStatus(result.status);
       setDone(true);
+      postEmbed("signed", { docId: payload.docId ?? result.status.docId });
+      maybeRedirectReturnUrl();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
+      postEmbed("error", { docId: payload.docId });
     } finally {
       setSubmitting(false);
     }
   };
 
-  if (error) {
+  const onDecline = async () => {
+    if (!token) return;
+    const reason = window.prompt("Optional reason for declining (leave blank to skip):") ?? undefined;
+    if (reason === undefined) return;
+    setDeclining(true);
+    setError(null);
+    try {
+      const result = await declineSign(token, reason.trim() || undefined, unlockToken ?? undefined);
+      setFinalStatus(result.status);
+      setDeclined(true);
+      postEmbed("declined", { docId: payload?.docId ?? result.status.docId });
+      maybeRedirectReturnUrl();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
+      postEmbed("error", { docId: payload?.docId });
+    } finally {
+      setDeclining(false);
+    }
+  };
+
+  if (error && !payload) {
     return (
       <div className="container">
         <h1>Not available</h1>
@@ -144,6 +251,25 @@ export default function Sign() {
     return (
       <div className="container">
         <p>Loading…</p>
+      </div>
+    );
+  }
+
+  if (declined || finalStatus?.status === "voided") {
+    const wasDecline = declined || finalStatus?.voidedBy === "decline";
+    return (
+      <div className="container">
+        <BrandLogo path={payload.brandLogoPath} slug={payload.brandWorkspaceSlug} />
+        <h1>{wasDecline ? "Declined" : "Document cancelled"}</h1>
+        <p>
+          {wasDecline
+            ? "You've declined to sign. The sender and other parties have been notified."
+            : "This document has been cancelled and is no longer available for signing."}
+        </p>
+        {finalStatus?.voidReason && (
+          <p style={{ color: "var(--mute)", fontSize: 14 }}>Reason: {finalStatus.voidReason}</p>
+        )}
+        {finalStatus && <SignerStatusList status={finalStatus} />}
       </div>
     );
   }
@@ -166,8 +292,9 @@ export default function Sign() {
         )}
         {/* The recipient never needed an account to get here — this is the moment they're most
          *  likely to become a sender themselves. Skipped entirely for white-labeled workspaces,
-         *  who are paying specifically to keep their signers from seeing Docracy at all. */}
-        {!payload.brandLogoPath && (
+         *  who are paying specifically to keep their signers from seeing Docracy at all. Also
+         *  skipped in embedMode so the iframe stays chrome-less. */}
+        {!embedMode && !payload.brandLogoPath && (
           <div className="card" style={{ marginTop: 24, maxWidth: 420 }}>
             <p style={{ marginBottom: 12 }}>Created with Docracy — send your own documents for free.</p>
             <Link to="/prepare" className="btn-primary" style={{ display: "inline-block", textDecoration: "none" }}>
@@ -179,25 +306,32 @@ export default function Sign() {
     );
   }
 
+  if (payload.status.status === "voided") {
+    const wasDecline = payload.status.voidedBy === "decline";
+    return (
+      <div className="container">
+        <BrandLogo path={payload.brandLogoPath} slug={payload.brandWorkspaceSlug} />
+        <h1>{wasDecline ? "Document declined" : "Document cancelled"}</h1>
+        <p>
+          {wasDecline
+            ? "A signer declined this document, so it's no longer available for signing."
+            : "This document has been cancelled and is no longer available for signing."}
+        </p>
+        {payload.status.voidReason && (
+          <p style={{ color: "var(--mute)", fontSize: 14 }}>Reason: {payload.status.voidReason}</p>
+        )}
+        <SignerStatusList status={payload.status} />
+      </div>
+    );
+  }
+
   if (!payload.onTurn) {
     return (
       <div className="container">
         <BrandLogo path={payload.brandLogoPath} slug={payload.brandWorkspaceSlug} />
         <h1>Not your turn yet</h1>
         <p>Someone earlier in the signing order hasn't signed yet. Here's where things stand:</p>
-        <div className="card">
-          {payload.status.signers
-            .sort((a, b) => a.order - b.order)
-            .map((s) => (
-              <div key={s.order} style={{ padding: "8px 0", borderBottom: "1px solid var(--hairline)" }}>
-                {s.status === "signed" ? (
-                  <span style={{ color: "var(--success)" }}>Signed by: {s.name} ✓</span>
-                ) : (
-                  <span style={{ color: "var(--body)" }}>Pending: {s.name}</span>
-                )}
-              </div>
-            ))}
-        </div>
+        <SignerStatusList status={payload.status} />
       </div>
     );
   }
@@ -242,6 +376,7 @@ export default function Sign() {
                 .filter((f) => f.page === page.index)
                 .map((f) => {
                   const type = f.type ?? "signature";
+
                   const boxStyle: React.CSSProperties = {
                     position: "absolute",
                     left: `${f.xFrac * 100}%`,
@@ -249,6 +384,43 @@ export default function Sign() {
                     width: `${f.wFrac * 100}%`,
                     height: `${f.hFrac * 100}%`,
                   };
+
+                  if (type === "checkbox") {
+                    const checked = values[f.id] === "true";
+                    return (
+                      <div key={f.id} style={boxStyle}>
+                        <button
+                          type="button"
+                          aria-label={f.required === false ? "Optional checkbox" : "Required checkbox"}
+                          aria-pressed={checked}
+                          onClick={() =>
+                            setValues((prev) => ({
+                              ...prev,
+                              [f.id]: prev[f.id] === "true" ? "false" : "true",
+                            }))
+                          }
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            border: checked ? "2px solid var(--success)" : "2px dashed var(--primary)",
+                            borderRadius: "var(--r-sm)",
+                            background: checked ? "var(--canvas)" : "var(--primary-soft)",
+                            cursor: "pointer",
+                            padding: 0,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontSize: Math.max(12, Math.min(f.wFrac, f.hFrac) * 400),
+                            fontWeight: 700,
+                            color: "var(--primary)",
+                            lineHeight: 1,
+                          }}
+                        >
+                          {checked ? "✓" : ""}
+                        </button>
+                      </div>
+                    );
+                  }
 
                   if (type === "text" || type === "date") {
                     return (
@@ -359,9 +531,12 @@ export default function Sign() {
         </span>
       </label>
 
-      <div style={{ marginTop: 16 }}>
-        <button className="btn-primary" disabled={!allFilled || !consented || submitting} onClick={onSubmit}>
+      <div style={{ marginTop: 16, display: "flex", flexWrap: "wrap", gap: 8 }}>
+        <button className="btn-primary" disabled={!allFilled || !consented || submitting || declining} onClick={onSubmit}>
           {submitting ? "Submitting…" : "Complete signing"}
+        </button>
+        <button className="btn-secondary" disabled={submitting || declining} onClick={onDecline}>
+          {declining ? "Declining…" : "Decline"}
         </button>
       </div>
     </div>

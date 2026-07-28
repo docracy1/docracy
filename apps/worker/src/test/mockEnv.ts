@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 import initSqlJs from "sql.js";
 import { PDFDocument } from "pdf-lib";
 import type { Env } from "@docracy/shared";
+import { resetRateLimitMemoryForTests } from "../lib/ratelimit";
 
 /** Minimal in-memory stand-ins for the KV/R2 methods this app actually uses. */
 function createMockKV() {
@@ -209,6 +210,7 @@ function createMockD1() {
 }
 
 export function makeMockEnv(overrides: Partial<Env> = {}) {
+  resetRateLimitMemoryForTests();
   const kv = createMockKV();
   const r2 = createMockR2();
   const d1 = createMockD1();
@@ -223,6 +225,7 @@ export function makeMockEnv(overrides: Partial<Env> = {}) {
     PUBLIC_WORKER_URL: "http://localhost:8787",
     FREE_TIER_MAX_SIGNERS: "2",
     DOC_TTL_DAYS: "9",
+    DOC_TTL_MAX_DAYS: "90",
     FEEDBACK_EMAIL: "feedback-test@example.com",
     ...overrides,
   } as Env;

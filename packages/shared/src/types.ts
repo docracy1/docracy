@@ -1,4 +1,4 @@
-export type DocFieldType = "signature" | "initials" | "text" | "date";
+export type DocFieldType = "signature" | "initials" | "text" | "date" | "checkbox";
 
 /**
  * `type` is optional and always read via `field.type ?? "signature"` — every field placed before
@@ -14,6 +14,8 @@ export interface DocField {
   wFrac: number;
   hFrac: number;
   type?: DocFieldType;
+  /** Checkbox only: when false, the signer may leave it unchecked. Absent/true = required. */
+  required?: boolean;
 }
 
 export interface Signer {
@@ -22,7 +24,7 @@ export interface Signer {
   email: string;
   /** Optional — lets the paid connector's find_documents search by company. Never required. */
   company?: string;
-  status: "pending" | "signed";
+  status: "pending" | "signed" | "declined";
   signedAt: string | null;
   linkSentAt: string | null;
   remindersSent: number[];
@@ -43,9 +45,33 @@ export interface Signer {
    *  4h) thresholds than the email nudges use. Optional/absent means none fired yet — always read
    *  via `signer.completionNudgesSent ?? []`. */
   completionNudgesSent?: ("not_opened" | "viewed_not_signed" | "analytics_not_opened_2h" | "analytics_not_signed_4h")[];
+  /** Bound into the signing-link HMAC so reassignment invalidates the previous link. Absent on
+   *  documents created before this field existed — those keep verifying with the legacy message. */
+  linkNonce?: string;
+  declinedAt?: string | null;
+  declineReason?: string;
+  /** Prior assignees after a paid reassignment — audit only, never used for routing. */
+  priorAssignees?: Array<{ name: string; email: string; replacedAt: string }>;
 }
 
-export type AuditEventType = "created" | "invite_sent" | "consented" | "signed" | "completed";
+/** Notify-only recipients — get status/completion emails, never a signing turn. Always read via
+ *  `doc.ccRecipients ?? []`. */
+export interface CcRecipient {
+  email: string;
+  name?: string;
+  notifiedAt?: string | null;
+}
+
+export type AuditEventType =
+  | "created"
+  | "invite_sent"
+  | "consented"
+  | "signed"
+  | "completed"
+  | "declined"
+  | "voided"
+  | "reassigned"
+  | "cc_invite_sent";
 
 /**
  * One entry in a document's append-only event log — this is what gives an anonymous, no-account
@@ -76,8 +102,12 @@ export interface DocState {
   createdAt: string;
   expiresAt: string;
   preparerSigns: boolean;
-  status: "pending" | "completed";
+  status: "pending" | "completed" | "voided";
   completedAt: string | null;
+  voidedAt?: string | null;
+  voidReason?: string;
+  /** Who voided: preparer action vs automatic void after a signer decline. */
+  voidedBy?: "preparer" | "decline" | null;
   /** "sequential" (default) means only the current signer in order may act — the flow this app
    *  started with. "parallel" means every signer gets their invite at once and any of them may
    *  act in any order; completion still just means "no signer remains pending." Optional and
@@ -86,9 +116,13 @@ export interface DocState {
   signingMode?: "sequential" | "parallel";
   signers: Signer[];
   fields: DocField[];
+  /** Notify-only recipients — always read via `doc.ccRecipients ?? []`. */
+  ccRecipients?: CcRecipient[];
   /** Optional so any doc written before this field existed still deserializes — always read via
    *  `doc.events ?? []`, never assume it's present. */
   events?: AuditEvent[];
+  /** Groups N independent docs created by one bulk-send request. Always read via `doc.batchId`. */
+  batchId?: string;
   /** RFC 3161 trusted timestamp over the final signed PDF's hash, from a third-party Time-Stamp
    *  Authority (see lib/timestamp.ts) — proves the document existed at this time independent of
    *  Docracy's own clock/servers. Best-effort: absent if the TSA was unreachable when the last
@@ -136,6 +170,8 @@ export interface Env {
   PUBLIC_CONNECTOR_URL: string;
   FREE_TIER_MAX_SIGNERS: string;
   DOC_TTL_DAYS: string;
+  /** Max custom retention a paid account may set at create time (days). Defaults to 90 when unset. */
+  DOC_TTL_MAX_DAYS?: string;
   FEEDBACK_EMAIL: string;
   /** Absent until a real Stripe account exists — billing routes must degrade gracefully (501),
    *  never throw, when these are unset. See lib/billing.ts. */
@@ -176,7 +212,7 @@ export interface Env {
   CF_ANALYTICS_API_TOKEN?: string;
   /** Legacy alias for CF_ANALYTICS_API_TOKEN — some deployments set this shorter name instead. */
   CF_API_TOKEN?: string;
-  /** Enterprise-only cloud-storage connectors (lib/cloudConnectors.ts). Each provider's OAuth app
+  /** Paid-plan cloud-storage connectors (lib/cloudConnectors.ts). Each provider's OAuth app
    *  is created in that provider's own developer console; client IDs are public and live here,
    *  client secrets are set via `wrangler secret put {PROVIDER}_CLIENT_SECRET` and never appear in
    *  this file. Routes degrade to a graceful 501 for any provider left unconfigured. */

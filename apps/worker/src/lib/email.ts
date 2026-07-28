@@ -75,11 +75,11 @@ function escapeHtml(str: string): string {
 function statusLines(doc: DocState): string {
   return [...doc.signers]
     .sort((a, b) => a.order - b.order)
-    .map((s) =>
-      s.status === "signed"
-        ? `Signed by: ${escapeHtml(s.name)} ✓ (${formatDate(s.signedAt!)})`
-        : `Pending: ${escapeHtml(s.name)}`
-    )
+    .map((s) => {
+      if (s.status === "signed") return `Signed by: ${escapeHtml(s.name)} ✓ (${formatDate(s.signedAt!)})`;
+      if (s.status === "declined") return `Declined: ${escapeHtml(s.name)}`;
+      return `Pending: ${escapeHtml(s.name)}`;
+    })
     .join("<br>");
 }
 
@@ -180,6 +180,84 @@ export async function sendPreparerStatusLink(env: Env, preparerEmail: string, st
   `;
   await send(env, preparerEmail, "Your document's status link", emailShell(env.PUBLIC_APP_URL, body), {
     emailType: "preparer_status_link",
+  });
+}
+
+export async function sendCcInvite(
+  env: Env,
+  doc: DocState,
+  cc: { email: string; name?: string },
+  statusToken: string
+): Promise<void> {
+  const link = `${env.PUBLIC_APP_URL}/status/${statusToken}`;
+  const docLabel = doc.title ? `"${escapeHtml(doc.title)}"` : "a document";
+  const greeting = cc.name ? `Hi ${escapeHtml(cc.name)},` : "Hi,";
+  const body = `
+    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">You're copied on ${docLabel}</p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      ${greeting} you've been added as a viewer — you don't need to sign. Use the link below to follow progress.
+    </p>
+    ${ctaButton(link, "View status")}
+    <p style="margin:0;font-size:13px;color:${MUTED};line-height:1.5;">${statusLines(doc)}</p>
+    ${SIGN_OFF}
+  `;
+  const customLogoUrl = await resolveEmailLogoUrl(env, doc.accountId);
+  await send(env, cc.email, `You're copied on a document`, emailShell(env.PUBLIC_APP_URL, body, customLogoUrl), {
+    emailType: "cc_invite",
+  });
+}
+
+export async function sendDocumentVoidedNotice(
+  env: Env,
+  to: string,
+  doc: DocState,
+  statusToken: string,
+  reason?: string
+): Promise<void> {
+  const link = `${env.PUBLIC_APP_URL}/status/${statusToken}`;
+  const docLabel = doc.title ? `"${escapeHtml(doc.title)}"` : "The document";
+  const reasonLine = reason
+    ? `<p style="margin:12px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">Reason: ${escapeHtml(reason)}</p>`
+    : "";
+  const body = `
+    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">${docLabel} was cancelled</p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      Signing has been stopped. No further action is needed.
+    </p>
+    ${reasonLine}
+    ${ctaButton(link, "View status")}
+    <p style="margin:0;font-size:13px;color:${MUTED};line-height:1.5;">${statusLines(doc)}</p>
+    ${SIGN_OFF}
+  `;
+  await send(env, to, "Document cancelled", emailShell(env.PUBLIC_APP_URL, body), {
+    emailType: "document_voided",
+  });
+}
+
+export async function sendSignerDeclinedNotice(
+  env: Env,
+  to: string,
+  doc: DocState,
+  declinerName: string,
+  statusToken: string,
+  reason?: string
+): Promise<void> {
+  const link = `${env.PUBLIC_APP_URL}/status/${statusToken}`;
+  const reasonLine = reason
+    ? `<p style="margin:12px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">Reason: ${escapeHtml(reason)}</p>`
+    : "";
+  const body = `
+    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">${escapeHtml(declinerName)} declined to sign</p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      The signing chain has been stopped.
+    </p>
+    ${reasonLine}
+    ${ctaButton(link, "View status")}
+    <p style="margin:0;font-size:13px;color:${MUTED};line-height:1.5;">${statusLines(doc)}</p>
+    ${SIGN_OFF}
+  `;
+  await send(env, to, `${declinerName} declined to sign`, emailShell(env.PUBLIC_APP_URL, body), {
+    emailType: "signer_declined",
   });
 }
 
@@ -319,6 +397,27 @@ export async function sendCompletionEmails(
     await resendFetch(env, {
       from: FROM,
       to: signer.email,
+      subject: "Your document is fully signed",
+      html,
+      attachments,
+      tags: [{ name: "email_type", value: "completion_all_signed" }],
+    });
+  }
+
+  // CC viewers get the same completed PDF; skip anyone already covered as a signer.
+  const signerEmails = new Set(doc.signers.map((s) => s.email.trim().toLowerCase()));
+  for (const cc of doc.ccRecipients ?? []) {
+    if (signerEmails.has(cc.email.trim().toLowerCase())) continue;
+    trackEvent(env, { event: "email_sent", emailType: "completion_all_signed" });
+    if (!env.RESEND_API_KEY) {
+      console.log(
+        `[email:dev] to=${cc.email} subject="Signed document (CC)" (combined PDF attached, ${combinedPdf.byteLength} bytes)\n${statusLines(doc)}\n`
+      );
+      continue;
+    }
+    await resendFetch(env, {
+      from: FROM,
+      to: cc.email,
       subject: "Your document is fully signed",
       html,
       attachments,

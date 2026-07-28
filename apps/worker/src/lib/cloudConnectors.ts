@@ -31,7 +31,7 @@ interface TokenResult {
 const STATE_TTL_SECONDS = 10 * 60;
 
 /** Cloud connections only ever belong to an Enterprise account — every caller has already gone
- *  through requireEnterpriseAccount, so a missing D1 binding here means the deployment simply
+ *  through requirePaidAccount, so a missing D1 binding here means the deployment simply
  *  hasn't been configured yet, not a real runtime state to recover from. */
 function requireDb(env: Env) {
   if (!env.DOCRACY_DB) throw new Error("D1 is not configured on this deployment");

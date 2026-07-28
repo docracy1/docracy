@@ -38,7 +38,7 @@ async function maybeSendReminder(env: Env, doc: DocState, signer: Signer): Promi
   const normalDue = dueThreshold(daysWaiting, signer.remindersSent);
   if (!urgentDue && normalDue === undefined) return;
 
-  const token = await signToken(doc.docId, signer.order, env.TOKEN_SECRET);
+  const token = await signToken(doc.docId, signer.order, env.TOKEN_SECRET, signer.linkNonce);
   await sendReminder(env, doc, signer.order, token, urgentDue);
 
   if (urgentDue) {

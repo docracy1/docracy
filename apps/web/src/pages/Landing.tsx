@@ -389,8 +389,8 @@ export default function Landing() {
           <h2 style={{ fontSize: 24, marginBottom: 6 }}>AI tools, and an MCP connector for your AI assistant</h2>
           <p style={{ marginTop: 0, marginBottom: 0, maxWidth: 640 }}>
             Beyond the free chain-signing flow above, a paid account adds AI that does the busywork and a
-            connector so Claude, ChatGPT, Grok, or Perplexity can create and send documents for you directly
-            from a chat.
+            connector so Claude, ChatGPT, Grok, or Perplexity can check status and search your documents
+            directly from a chat.
           </p>
 
           <div className="spotlight-split">
@@ -404,8 +404,8 @@ export default function Landing() {
               <div className="accent-item is-mcp">
                 <h3 style={{ fontSize: 15, marginBottom: 3 }}>MCP connector</h3>
                 <p style={{ margin: 0, fontSize: 13.5 }}>
-                  Claude, ChatGPT, Grok, and Perplexity can create, send, and check the status of your
-                  documents on your behalf — just ask.
+                  Claude, ChatGPT, Grok, and Perplexity can check signing status and search your documents
+                  on your behalf — just ask. Read-only; requires a paid account.
                 </p>
               </div>
             </div>

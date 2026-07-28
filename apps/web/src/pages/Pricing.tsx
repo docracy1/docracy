@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { fetchMe, startCheckout, type Account } from "../lib/api";
 import { PLAN_ROWS, PlanCell } from "../lib/planRows";
 import { usePageMeta } from "../lib/usePageMeta";
 
@@ -30,6 +32,10 @@ const TIERS: Array<{
       "Dashboard with document history",
       "Customer support",
       "Reusable templates",
+      "Bulk send from a template",
+      "Custom document expiry (up to 90 days)",
+      "Embedded signing (iframe)",
+      "Saved contacts + signer reassignment",
       "Webhooks for your own systems",
       "MCP connector (Claude, ChatGPT, Grok, Perplexity)",
       "AI auto-detect signature & date fields",
@@ -38,7 +44,9 @@ const TIERS: Array<{
       "AI contract generator",
       "White-label branding",
       "PIN-protected signing links",
+      "Dropbox, OneDrive, and Box connectors",
     ],
+    // Placeholder — Paid CTA is rendered dynamically from session state below.
     cta: { label: "Sign in to upgrade", to: "/login" },
     highlight: true,
   },
@@ -49,7 +57,6 @@ const TIERS: Array<{
     priceNote: "sales@docracy.io",
     features: [
       "Everything in Paid",
-      "Dropbox, OneDrive, and Box connectors — signed PDFs upload automatically",
       "Invoice billing & annual contracts",
       "Premium customer support (SLA-backed)",
       "SSO or multi-workspace setup, scoped to your needs",
@@ -62,8 +69,30 @@ const TIERS: Array<{
 export default function Pricing() {
   usePageMeta(
     "Pricing — Docracy",
-    "Free for signing chains of up to 2 signers, no account required. Paid is $10/month and adds AI tools, an MCP connector, unlimited signers, templates, webhooks, and team accounts."
+    "Free for signing chains of up to 2 signers, no account required. Paid is $10/month and adds AI tools, an MCP connector, bulk send, embedded signing, unlimited signers, templates, webhooks, and team accounts."
   );
+
+  const [account, setAccount] = useState<Account | null | undefined>(undefined);
+  const [upgrading, setUpgrading] = useState(false);
+  const [upgradeError, setUpgradeError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchMe()
+      .then(({ account: a }) => setAccount(a))
+      .catch(() => setAccount(null));
+  }, []);
+
+  const onUpgrade = async () => {
+    setUpgrading(true);
+    setUpgradeError(null);
+    try {
+      const { url } = await startCheckout();
+      window.location.href = url;
+    } catch (err) {
+      setUpgradeError(err instanceof Error ? err.message : "Something went wrong");
+      setUpgrading(false);
+    }
+  };
 
   return (
     <div className="container">
@@ -71,8 +100,10 @@ export default function Pricing() {
       <p style={{ maxWidth: 640, marginBottom: 32 }}>
         Free for signing chains of up to 2 signers, no account required. A paid account is a flat{" "}
         <strong>$10/month per workspace</strong> — not per seat — and adds unlimited signers, a dashboard,
-        reusable templates, webhooks, team accounts, white-label branding, PIN-protected links, an MCP
-        connector for AI assistants, and a full set of AI tools.
+        reusable templates, bulk send, custom expiry, embedded signing, contacts, Dropbox/OneDrive/Box
+        auto-upload, webhooks, team accounts, white-label branding, PIN-protected links, an MCP
+        connector for AI assistants, and a full set of AI tools. <strong>Enterprise</strong> adds
+        invoice billing, premium support, SSO/multi-workspace, and volume discounts.
       </p>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 20, marginBottom: 40 }}>
@@ -110,7 +141,9 @@ export default function Pricing() {
                 </li>
               ))}
             </ul>
-            {tier.cta.external ? (
+            {tier.name === "Paid" ? (
+              <PaidCta account={account} upgrading={upgrading} upgradeError={upgradeError} onUpgrade={onUpgrade} />
+            ) : tier.cta.external ? (
               <a href={tier.cta.to} className={tier.highlight ? "btn-primary" : "btn-secondary"} style={{ textAlign: "center", textDecoration: "none" }}>
                 {tier.cta.label}
               </a>
@@ -175,5 +208,47 @@ export default function Pricing() {
         service instead.
       </p>
     </div>
+  );
+}
+
+function PaidCta({
+  account,
+  upgrading,
+  upgradeError,
+  onUpgrade,
+}: {
+  account: Account | null | undefined;
+  upgrading: boolean;
+  upgradeError: string | null;
+  onUpgrade: () => void;
+}) {
+  if (account === undefined) {
+    return (
+      <button className="btn-primary" disabled style={{ textAlign: "center" }}>
+        …
+      </button>
+    );
+  }
+  if (account?.isPaid) {
+    return (
+      <Link to="/dashboard" className="btn-primary" style={{ textAlign: "center", textDecoration: "none" }}>
+        Go to dashboard
+      </Link>
+    );
+  }
+  if (account) {
+    return (
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <button className="btn-primary" onClick={onUpgrade} disabled={upgrading}>
+          {upgrading ? "Redirecting…" : "Upgrade — $10/month"}
+        </button>
+        {upgradeError && <p style={{ margin: 0, fontSize: 12.5, color: "var(--danger)" }}>{upgradeError}</p>}
+      </div>
+    );
+  }
+  return (
+    <Link to="/login" className="btn-primary" style={{ textAlign: "center", textDecoration: "none" }}>
+      Sign in to upgrade
+    </Link>
   );
 }

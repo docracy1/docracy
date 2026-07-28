@@ -1,7 +1,14 @@
 import { generateOpaqueToken, hmacKey } from "@docracy/shared";
 import type { Env } from "@docracy/shared";
 
-export const WEBHOOK_EVENT_TYPES = ["document.created", "document.signer.signed", "document.completed"] as const;
+export const WEBHOOK_EVENT_TYPES = [
+  "document.created",
+  "document.signer.signed",
+  "document.signer.declined",
+  "document.signer.reassigned",
+  "document.completed",
+  "document.voided",
+] as const;
 export type WebhookEventType = (typeof WEBHOOK_EVENT_TYPES)[number];
 
 export interface WebhookSummary {

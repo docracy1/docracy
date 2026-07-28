@@ -6,13 +6,14 @@ import {
   createDocument,
   createTemplate,
   explainDocument,
+  fetchContacts,
   fetchMe,
   fetchTemplate,
   fetchTemplates,
   fetchTemplateUsage,
   generateContract,
 } from "../lib/api";
-import type { Account, ContractRisk, TemplateSummary, TemplateUsageEntry } from "../lib/api";
+import type { Account, ContactSummary, ContractRisk, TemplateSummary, TemplateUsageEntry } from "../lib/api";
 import { base64ToBytes } from "../lib/base64";
 import {
   addTextAnnotation,
@@ -27,10 +28,11 @@ import {
 import type { TextSpan } from "../lib/pdfEdit";
 import { getFreeTemplate } from "../lib/freeTemplates";
 import { assignFieldsToSigners, detectFieldCandidates } from "../lib/fieldDetection";
-import type { DocField, DocFieldType, SignerInput } from "../lib/types";
+import type { CcRecipientInput, DocField, DocFieldType, SignerInput } from "../lib/types";
 import { track } from "../lib/track";
 
 const FREE_TIER_MAX_SIGNERS = 2;
+const FREE_TIER_MAX_CCS = 2;
 const MAX_PDF_BYTES = 15 * 1024 * 1024;
 
 // Signature/initials are taller to leave room for the auto-printed "email · date" caption text/date
@@ -40,6 +42,7 @@ const FIELD_SIZE_BY_TYPE: Record<DocFieldType, { w: number; h: number }> = {
   initials: { w: 0.1, h: 0.06 },
   text: { w: 0.22, h: 0.04 },
   date: { w: 0.16, h: 0.04 },
+  checkbox: { w: 0.04, h: 0.04 },
 };
 
 const FIELD_TYPE_LABEL: Record<DocFieldType, string> = {
@@ -47,6 +50,7 @@ const FIELD_TYPE_LABEL: Record<DocFieldType, string> = {
   initials: "Initial here",
   text: "Text",
   date: "Date",
+  checkbox: "Checkbox",
 };
 
 let fieldIdCounter = 0;
@@ -106,6 +110,8 @@ export default function Prepare() {
     { order: 1, name: "", email: "" },
     { order: 2, name: "", email: "" },
   ]);
+  const [ccRecipients, setCcRecipients] = useState<CcRecipientInput[]>([]);
+  const [contacts, setContacts] = useState<ContactSummary[]>([]);
   const [fields, setFields] = useState<DocField[]>([]);
   const [placingSignerOrder, setPlacingSignerOrder] = useState(1);
   const [placingFieldType, setPlacingFieldType] = useState<DocFieldType>("signature");
@@ -160,6 +166,8 @@ export default function Prepare() {
   const [savingTemplate, setSavingTemplate] = useState(false);
   const [templateSaveError, setTemplateSaveError] = useState<string | null>(null);
   const [templateSavedName, setTemplateSavedName] = useState<string | null>(null);
+  /** Paid custom retention — default matches free/hard-coded DOC_EXPIRY_DAYS. */
+  const [ttlDays, setTtlDays] = useState(DOC_EXPIRY_DAYS);
 
   // Only used to gate the (paid-only) template UI — anonymous/free usage of this page is
   // otherwise completely unaffected by this call.
@@ -168,6 +176,16 @@ export default function Prepare() {
       .then((res) => setAccount(res.account))
       .catch(() => setAccount(null));
   }, []);
+
+  useEffect(() => {
+    if (!account?.isPaid) {
+      setContacts([]);
+      return;
+    }
+    fetchContacts()
+      .then((res) => setContacts(res.contacts))
+      .catch(() => setContacts([]));
+  }, [account?.isPaid]);
 
   useEffect(() => {
     if (account?.isPaid && !pdfBytes) {
@@ -304,6 +322,23 @@ export default function Prepare() {
         .map((s, i) => ({ ...s, order: i + 1 }))
     );
     setFields((prev) => prev.filter((f) => f.signerOrder !== order));
+  };
+
+  const updateCc = (index: number, patch: Partial<CcRecipientInput>) => {
+    setCcRecipients((prev) => prev.map((cc, i) => (i === index ? { ...cc, ...patch } : cc)));
+  };
+
+  const addCc = () => {
+    setCcRecipients((prev) => [...prev, { name: "", email: "" }]);
+  };
+
+  const removeCc = (index: number) => {
+    setCcRecipients((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const applyContactEmail = (email: string, onMatch: (c: ContactSummary) => void) => {
+    const match = contacts.find((c) => c.email.toLowerCase() === email.trim().toLowerCase());
+    if (match) onMatch(match);
   };
 
   const togglePreparerSigns = (checked: boolean) => {
@@ -707,6 +742,7 @@ export default function Prepare() {
       { order: 1, name: "", email: "" },
       { order: 2, name: "", email: "" },
     ]);
+    setCcRecipients([]);
     setPreparerSigns(false);
     setPreparerEmail("");
     setShowCustomMessage(false);
@@ -721,12 +757,17 @@ export default function Prepare() {
     setError(null);
     try {
       const effectiveSigningMode = signers.length > 1 ? signingMode : undefined;
+      const trimmedCcs = ccRecipients
+        .map((cc) => ({ name: cc.name?.trim() || undefined, email: cc.email.trim() }))
+        .filter((cc) => cc.email);
       const { docId, statusToken } = await createDocument(file, preparerSigns, signers, fields, {
         preparerEmail: !preparerSigns && preparerEmail.trim() ? preparerEmail.trim() : undefined,
         customSubject: customSubject.trim() || undefined,
         customMessage: customMessage.trim() || undefined,
         signingMode: effectiveSigningMode,
+        ccRecipients: trimmedCcs.length > 0 ? trimmedCcs : undefined,
         templateId: templateId ?? freeTemplateSlug ?? undefined,
+        ...(account?.isPaid ? { ttlDays } : {}),
       });
       documentSentRef.current = true;
       navigate("/prepare/sent", { state: { docId, statusToken, signingMode: effectiveSigningMode } });
@@ -1201,7 +1242,7 @@ export default function Prepare() {
             {error && <p style={{ color: "var(--danger)", fontSize: 13 }}>{error}</p>}
 
             <div className="card">
-              <SidebarHeading label="Signers & viewers" count={signers.length} />
+              <SidebarHeading label="Signers & viewers" count={signers.length + ccRecipients.length} />
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
                 <button
                   type="button"
@@ -1213,7 +1254,19 @@ export default function Prepare() {
                 <button type="button" className="prepare-pill-btn" onClick={addSigner}>
                   + Signer
                 </button>
+                <button type="button" className="prepare-pill-btn" onClick={addCc}>
+                  + Viewer (CC)
+                </button>
               </div>
+              {contacts.length > 0 && (
+                <datalist id="prepare-contacts">
+                  {contacts.map((c) => (
+                    <option key={c.id} value={c.email}>
+                      {c.name}
+                    </option>
+                  ))}
+                </datalist>
+              )}
               {!preparerSigns && (
                 <div style={{ marginBottom: 12 }}>
                   <input
@@ -1249,8 +1302,13 @@ export default function Prepare() {
                     placeholder="Email"
                     aria-label={`Signer ${s.order} email`}
                     type="email"
+                    list={contacts.length > 0 ? "prepare-contacts" : undefined}
                     value={s.email}
-                    onChange={(e) => updateSigner(s.order, { email: e.target.value })}
+                    onChange={(e) => {
+                      const email = e.target.value;
+                      updateSigner(s.order, { email });
+                      applyContactEmail(email, (c) => updateSigner(s.order, { email: c.email, name: s.name.trim() ? s.name : c.name }));
+                    }}
                   />
                   {account?.isPaid && (
                     <input
@@ -1275,6 +1333,42 @@ export default function Prepare() {
                   )}
                 </div>
               ))}
+              {ccRecipients.map((cc, i) => (
+                <div key={`cc-${i}`} style={{ marginBottom: 10, paddingBottom: 10, borderBottom: "1px solid var(--hairline)" }}>
+                  <div style={{ fontSize: 12, color: "var(--mute)", marginBottom: 4 }}>Viewer (CC)</div>
+                  <input
+                    className="form-input"
+                    style={{ width: "100%", marginBottom: 6 }}
+                    placeholder="Name (optional)"
+                    aria-label={`Viewer ${i + 1} name`}
+                    value={cc.name ?? ""}
+                    onChange={(e) => updateCc(i, { name: e.target.value })}
+                  />
+                  <input
+                    className="form-input"
+                    style={{ width: "100%", marginBottom: 6 }}
+                    placeholder="Email"
+                    aria-label={`Viewer ${i + 1} email`}
+                    type="email"
+                    list={contacts.length > 0 ? "prepare-contacts" : undefined}
+                    value={cc.email}
+                    onChange={(e) => {
+                      const email = e.target.value;
+                      updateCc(i, { email });
+                      applyContactEmail(email, (c) =>
+                        updateCc(i, { email: c.email, name: (cc.name ?? "").trim() ? cc.name : c.name })
+                      );
+                    }}
+                  />
+                  <button
+                    className="btn-secondary"
+                    style={{ marginTop: 6, fontSize: 12, padding: "4px 8px" }}
+                    onClick={() => removeCc(i)}
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
               {signers.length > 1 && (
                 <div style={{ marginTop: 12, paddingTop: 12, borderTop: "1px solid var(--hairline)" }}>
                   <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 0, marginBottom: 6 }}>Signing order</p>
@@ -1293,6 +1387,12 @@ export default function Prepare() {
                 <p style={{ fontSize: 12, marginTop: 8, color: "var(--body)" }}>
                   Free plan supports up to {FREE_TIER_MAX_SIGNERS} signers.{" "}
                   <Link to="/login">Sign in for unlimited signers</Link>.
+                </p>
+              )}
+              {!account?.isPaid && ccRecipients.length > FREE_TIER_MAX_CCS && (
+                <p style={{ fontSize: 12, marginTop: 8, color: "var(--body)" }}>
+                  Free plan supports up to {FREE_TIER_MAX_CCS} CC viewers.{" "}
+                  <Link to="/login">Sign in for unlimited viewers</Link>.
                 </p>
               )}
               {!account?.isPaid && (
@@ -1468,6 +1568,7 @@ export default function Prepare() {
                 <option value="initials">Initials</option>
                 <option value="text">Text</option>
                 <option value="date">Date</option>
+                <option value="checkbox">Checkbox</option>
               </select>
               <select
                 className="form-input"
@@ -1608,7 +1709,28 @@ export default function Prepare() {
               </div>
               <div className="prepare-sidebar-summary-row">
                 <span>Expiration</span>
-                <strong>in {DOC_EXPIRY_DAYS} days</strong>
+                {account?.isPaid ? (
+                  <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                    <span style={{ fontSize: 12, color: "var(--mute)" }}>in</span>
+                    <input
+                      className="form-input"
+                      type="number"
+                      min={1}
+                      max={90}
+                      aria-label="Retention days"
+                      value={ttlDays}
+                      onChange={(e) => {
+                        const n = Number(e.target.value);
+                        if (!Number.isFinite(n)) return;
+                        setTtlDays(Math.min(90, Math.max(1, Math.floor(n))));
+                      }}
+                      style={{ width: 56, padding: "2px 6px", fontSize: 13, fontWeight: 600 }}
+                    />
+                    <strong style={{ fontSize: 13 }}>days</strong>
+                  </span>
+                ) : (
+                  <strong>in {DOC_EXPIRY_DAYS} days</strong>
+                )}
               </div>
               <p style={{ fontSize: 11, color: "var(--mute)", margin: "4px 0 0" }}>
                 Signer identity isn't verified — only use this for documents where that's acceptable.

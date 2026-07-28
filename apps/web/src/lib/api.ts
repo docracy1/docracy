@@ -1,4 +1,4 @@
-import type { DocField, SignerInput, StatusPayload } from "./types";
+import type { CcRecipientInput, DocField, SignerInput, StatusPayload } from "./types";
 
 // Empty in dev (Vite proxies /api to the local worker); set to the deployed worker's absolute
 // URL for production builds, since the frontend (Pages) and worker live on different domains.
@@ -44,6 +44,9 @@ export interface CreateDocumentOptions {
   customSubject?: string;
   customMessage?: string;
   signingMode?: "sequential" | "parallel";
+  ccRecipients?: CcRecipientInput[];
+  /** Paid only — retention days (1–90). Omitted / free always uses the default (9). */
+  ttlDays?: number;
   /** Set when these fields came from a saved (paid-tier) template id or a free-template slug —
    *  always fires the template_completed funnel event; the persistent "Recurring Templates" usage
    *  counter additionally requires a logged-in paid account (no workspace to key a free-tier
@@ -108,6 +111,94 @@ export async function submitSignature(
     headers: { "Content-Type": "application/json", ...(unlockToken ? { "X-Sign-Unlock": unlockToken } : {}) },
     body: JSON.stringify({ values, consent }),
   });
+  return asJson(res);
+}
+
+export async function declineSign(
+  token: string,
+  reason?: string,
+  unlockToken?: string
+): Promise<{ ok: true; status: StatusPayload }> {
+  const res = await apiFetch(`/api/sign/${token}/decline`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...(unlockToken ? { "X-Sign-Unlock": unlockToken } : {}) },
+    body: JSON.stringify({ reason: reason || undefined }),
+  });
+  return asJson(res);
+}
+
+export async function voidDocument(token: string, reason?: string): Promise<{ ok: true; status: StatusPayload }> {
+  const res = await apiFetch(`/api/status/${token}/void`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ reason: reason || undefined }),
+  });
+  return asJson(res);
+}
+
+export async function voidAccountDocument(docId: string, reason?: string): Promise<{ ok: true; status: string }> {
+  const res = await apiFetch(`/api/account/documents/${docId}/void`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ reason: reason || undefined }),
+  });
+  return asJson(res);
+}
+
+export async function reassignSigner(
+  docId: string,
+  order: number,
+  input: { name: string; email: string; pin?: string; saveContact?: boolean; company?: string }
+): Promise<{ ok: true }> {
+  const res = await apiFetch(`/api/account/documents/${docId}/signers/${order}/reassign`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  return asJson(res);
+}
+
+export interface ContactSummary {
+  id: string;
+  name: string;
+  email: string;
+  company: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export async function fetchContacts(): Promise<{ contacts: ContactSummary[] }> {
+  const res = await apiFetch("/api/account/contacts");
+  return asJson(res);
+}
+
+export async function createContact(input: {
+  name: string;
+  email: string;
+  company?: string;
+}): Promise<{ contact: ContactSummary }> {
+  const res = await apiFetch("/api/account/contacts", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  return asJson(res);
+}
+
+export async function updateContact(
+  id: string,
+  input: { name?: string; email?: string; company?: string | null }
+): Promise<{ contact: ContactSummary }> {
+  const res = await apiFetch(`/api/account/contacts/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  return asJson(res);
+}
+
+export async function deleteContact(id: string): Promise<{ ok: true }> {
+  const res = await apiFetch(`/api/account/contacts/${id}`, { method: "DELETE" });
   return asJson(res);
 }
 
@@ -189,7 +280,7 @@ export async function openBillingPortal(): Promise<{ url: string }> {
 export interface DocumentSummary {
   docId: string;
   title: string;
-  status: "pending" | "completed";
+  status: "pending" | "completed" | "voided";
   createdAt: string;
   completedAt: string | null;
   statusToken: string;
@@ -249,6 +340,64 @@ export async function createTemplate(
 
 export async function deleteTemplate(id: string): Promise<{ ok: true }> {
   const res = await apiFetch(`/api/account/templates/${id}`, { method: "DELETE" });
+  return asJson(res);
+}
+
+export interface BulkSendRecipient {
+  signers: Array<{ name: string; email: string }>;
+  title?: string;
+}
+
+export interface BulkSendResultDoc {
+  docId: string;
+  statusToken: string;
+  statusUrl: string;
+  title: string;
+  recipientLabel: string;
+}
+
+export async function bulkSendFromTemplate(input: {
+  templateId: string;
+  recipients: BulkSendRecipient[];
+  ttlDays?: number;
+  customSubject?: string;
+  customMessage?: string;
+  signingMode?: "sequential" | "parallel";
+  preparerEmail?: string;
+}): Promise<{ batchId: string; documents: BulkSendResultDoc[] }> {
+  const res = await apiFetch("/api/account/bulk-send", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  return asJson(res);
+}
+
+export async function createEmbedSession(input: {
+  docId: string;
+  signerOrder: number;
+  allowedOrigins: string[];
+  returnUrl?: string;
+  ttlSeconds?: number;
+}): Promise<{ embedToken: string; embedUrl: string; expiresAt: string }> {
+  const res = await apiFetch("/api/embed/sessions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  return asJson(res);
+}
+
+export async function resolveEmbedSession(
+  token: string
+): Promise<{
+  signToken: string;
+  docId: string;
+  order: number;
+  allowedOrigins: string[];
+  returnUrl?: string;
+}> {
+  const res = await apiFetch(`/api/embed/sessions/${token}`);
   return asJson(res);
 }
 

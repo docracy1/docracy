@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { signToken, verifyToken } from "./token";
+import { parseToken, signToken, verifyToken } from "./token";
 
 const SECRET = "test-secret";
 
@@ -36,5 +36,23 @@ describe("token", () => {
     expect(await verifyToken("not-a-token", SECRET)).toBeNull();
     expect(await verifyToken("a.b", SECRET)).toBeNull();
     expect(await verifyToken("", SECRET)).toBeNull();
+    expect(parseToken("a.b")).toBeNull();
+  });
+
+  it("binds a linkNonce into the HMAC so rotating it invalidates old links", async () => {
+    const token = await signToken("doc-1", 1, SECRET, "nonce-a");
+    expect(await verifyToken(token, SECRET, "nonce-a")).toEqual({ docId: "doc-1", order: 1 });
+    expect(await verifyToken(token, SECRET, "nonce-b")).toBeNull();
+    expect(await verifyToken(token, SECRET)).toBeNull();
+  });
+
+  it("still verifies legacy tokens minted without a linkNonce", async () => {
+    const token = await signToken("doc-1", 1, SECRET);
+    expect(await verifyToken(token, SECRET)).toEqual({ docId: "doc-1", order: 1 });
+    expect(await verifyToken(token, SECRET, "unexpected-nonce")).toBeNull();
+  });
+
+  it("parseToken extracts docId and order without verifying", () => {
+    expect(parseToken("abc.3.sigpart")).toEqual({ docId: "abc", order: 3 });
   });
 });

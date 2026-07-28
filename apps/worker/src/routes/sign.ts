@@ -2,8 +2,14 @@ import { Hono } from "hono";
 import { getCookie } from "hono/cookie";
 import { getDoc, putDoc, isSignerOnTurn, currentTurnOrder } from "../lib/kv";
 import { burnFields, decodedByteLength, generateCertificate, MAX_SIGNATURE_IMAGE_BYTES, type FieldValue } from "../lib/pdf";
-import { sendSigningInvite, sendCompletionEmails, sendCompletionEmailSigned } from "../lib/email";
-import { recordViewedOnce, indexSignerSigned, indexInviteSent, indexCompleted } from "../lib/index-d1";
+import {
+  sendSigningInvite,
+  sendCompletionEmails,
+  sendCompletionEmailSigned,
+  sendDocumentVoidedNotice,
+  sendSignerDeclinedNotice,
+} from "../lib/email";
+import { recordViewedOnce, indexSignerSigned, indexInviteSent, indexCompleted, indexVoided } from "../lib/index-d1";
 import { checkTokenAccessRateLimit, checkPinAttemptRateLimit } from "../lib/ratelimit";
 import { sha256Hex } from "../lib/hash";
 import { requestTimestamp } from "../lib/timestamp";
@@ -12,10 +18,21 @@ import { deliverWebhookEvent } from "../lib/webhooks";
 import { uploadCompletedDocument } from "../lib/cloudConnectors";
 import { trackEvent, NOTRACK_COOKIE_NAME } from "../lib/analytics";
 import { getWorkspaceSlug, hasCustomLogo, logoPath } from "../lib/branding";
-import { verifyToken, signToken } from "@docracy/shared";
-import type { AuditEvent, DocField, Env } from "@docracy/shared";
+import { authenticateDocToken } from "../lib/docTokenAuth";
+import { signToken } from "@docracy/shared";
+import type { AuditEvent, DocField, DocState, Env } from "@docracy/shared";
 
 const MAX_TEXT_FIELD_LENGTH = 500;
+const MAX_REASON_LENGTH = 500;
+
+function fieldSatisfied(f: DocField, raw: string | undefined): boolean {
+  const type = f.type ?? "signature";
+  if (type === "checkbox") {
+    if (f.required === false) return raw === "true" || raw === "false" || raw === "1" || raw === "0";
+    return raw === "true" || raw === "1";
+  }
+  return Boolean(raw?.trim());
+}
 
 function indexNonFatal(
   ctx: { waitUntil(promise: Promise<unknown>): void },
@@ -39,18 +56,17 @@ function connectorNonFatal(ctx: { waitUntil(promise: Promise<unknown>): void }, 
   ctx.waitUntil(work.catch((err) => console.error(`Cloud connector upload failed for doc ${docId} (non-fatal):`, err)));
 }
 
+function emailNonFatal(ctx: { waitUntil(promise: Promise<unknown>): void }, docId: string, label: string, work: Promise<void>) {
+  ctx.waitUntil(work.catch((err) => console.error(`${label} email failed for doc ${docId} (non-fatal):`, err)));
+}
+
 const sign = new Hono<{ Bindings: Env }>();
 
-/** Null for anonymous/free-tier documents (accountId null) and for paid ones whose workspace
- *  never uploaded a custom logo — Sign.tsx/Status.tsx fall back to the default Docracy wordmark
- *  in either case. */
 async function brandLogoPathFor(env: Env, accountId: string | null): Promise<string | null> {
   if (!accountId) return null;
   return (await hasCustomLogo(env, accountId)) ? logoPath(accountId) : null;
 }
 
-/** Same null-for-anonymous/no-slug-set fallback as brandLogoPathFor above — the cosmetic
- *  workspace label shown alongside the logo (see lib/branding.ts's setWorkspaceSlug). */
 async function brandWorkspaceSlugFor(env: Env, accountId: string | null): Promise<string | null> {
   if (!accountId) return null;
   return getWorkspaceSlug(env, accountId);
@@ -63,8 +79,110 @@ function statusPayload(doc: Awaited<ReturnType<typeof getDoc>>) {
     status: doc.status,
     signers: [...doc.signers]
       .sort((a, b) => a.order - b.order)
-      .map((s) => ({ order: s.order, name: s.name, status: s.status, signedAt: s.signedAt })),
+      .map((s) => ({
+        order: s.order,
+        name: s.name,
+        status: s.status,
+        signedAt: s.signedAt,
+        declinedAt: s.declinedAt ?? null,
+      })),
+    ccRecipients: (doc.ccRecipients ?? []).map((cc) => ({ name: cc.name, email: cc.email })),
+    voidedAt: doc.voidedAt ?? null,
+    voidReason: doc.voidReason,
+    voidedBy: doc.voidedBy ?? null,
   };
+}
+
+async function notifyDocCancelled(
+  env: Env,
+  ctx: { waitUntil(promise: Promise<unknown>): void },
+  doc: DocState,
+  kind: "voided" | "declined",
+  declinerName?: string
+) {
+  const statusToken = await signToken(doc.docId, 0, env.TOKEN_SECRET);
+  const recipients = new Set<string>();
+  if (doc.preparerEmail) recipients.add(doc.preparerEmail.trim().toLowerCase());
+  for (const s of doc.signers) recipients.add(s.email.trim().toLowerCase());
+  for (const cc of doc.ccRecipients ?? []) recipients.add(cc.email.trim().toLowerCase());
+
+  const emailByLower = new Map<string, string>();
+  if (doc.preparerEmail) emailByLower.set(doc.preparerEmail.trim().toLowerCase(), doc.preparerEmail.trim());
+  for (const s of doc.signers) emailByLower.set(s.email.trim().toLowerCase(), s.email.trim());
+  for (const cc of doc.ccRecipients ?? []) emailByLower.set(cc.email.trim().toLowerCase(), cc.email.trim());
+
+  for (const lower of recipients) {
+    const to = emailByLower.get(lower)!;
+    if (kind === "declined" && declinerName) {
+      emailNonFatal(
+        ctx,
+        doc.docId,
+        "decline notice",
+        sendSignerDeclinedNotice(env, to, doc, declinerName, statusToken, doc.voidReason)
+      );
+    } else {
+      emailNonFatal(ctx, doc.docId, "void notice", sendDocumentVoidedNotice(env, to, doc, statusToken, doc.voidReason));
+    }
+  }
+}
+
+async function voidDocument(
+  env: Env,
+  ctx: { waitUntil(promise: Promise<unknown>): void },
+  doc: DocState,
+  opts: {
+    voidedBy: "preparer" | "decline";
+    reason?: string;
+    declinedSignerOrder?: number;
+    ip: string | null;
+    userAgent: string | null;
+  }
+): Promise<DocState> {
+  const now = new Date().toISOString();
+  if (opts.declinedSignerOrder != null) {
+    const signer = doc.signers.find((s) => s.order === opts.declinedSignerOrder)!;
+    signer.status = "declined";
+    signer.declinedAt = now;
+    if (opts.reason) signer.declineReason = opts.reason;
+  }
+  doc.status = "voided";
+  doc.voidedAt = now;
+  doc.voidedBy = opts.voidedBy;
+  if (opts.reason) doc.voidReason = opts.reason;
+  doc.events = [
+    ...(doc.events ?? []),
+    {
+      type: opts.voidedBy === "decline" ? "declined" : "voided",
+      signerOrder: opts.declinedSignerOrder ?? null,
+      ip: opts.ip,
+      userAgent: opts.userAgent,
+      timestamp: now,
+      pdfSha256: null,
+    },
+  ];
+  await putDoc(env, doc);
+
+  if (doc.accountId) {
+    indexNonFatal(ctx, doc.docId, "voided", indexVoided(env, doc, opts.reason ? { reason: opts.reason } : null));
+    webhookNonFatal(
+      ctx,
+      doc.docId,
+      opts.voidedBy === "decline" ? "document.signer.declined" : "document.voided",
+      deliverWebhookEvent(
+        env,
+        doc.accountId,
+        opts.voidedBy === "decline" ? "document.signer.declined" : "document.voided",
+        {
+          docId: doc.docId,
+          ...(opts.declinedSignerOrder != null ? { signerOrder: opts.declinedSignerOrder } : {}),
+        }
+      )
+    );
+  }
+
+  const decliner = opts.declinedSignerOrder != null ? doc.signers.find((s) => s.order === opts.declinedSignerOrder) : null;
+  await notifyDocCancelled(env, ctx, doc, opts.voidedBy === "decline" ? "declined" : "voided", decliner?.name);
+  return doc;
 }
 
 sign.get("/status/:token", async (c) => {
@@ -73,11 +191,9 @@ sign.get("/status/:token", async (c) => {
     return c.json({ error: "Too many requests. Please try again shortly." }, 429);
   }
 
-  const verified = await verifyToken(token, c.env.TOKEN_SECRET);
-  if (!verified) return c.json({ error: "Invalid or tampered link" }, 403);
-
-  const doc = await getDoc(c.env, verified.docId);
-  if (!doc) return c.json({ error: "This document has expired or doesn't exist" }, 404);
+  const auth = await authenticateDocToken(c.env, token);
+  if (!auth) return c.json({ error: "Invalid or tampered link" }, 403);
+  const { doc } = auth;
 
   return c.json({
     ...statusPayload(doc),
@@ -86,20 +202,15 @@ sign.get("/status/:token", async (c) => {
   });
 });
 
-// Same token as /status/:token (any signer's or the preparer's) — whoever can see the status can
-// download the final result once it exists. Serves the fully-executed PDF written at completion
-// (routes/sign.ts's POST /sign/:token handler), not the in-progress working.pdf signers annotate.
 sign.get("/status/:token/download", async (c) => {
   const token = c.req.param("token");
   if (!(await checkTokenAccessRateLimit(c.env, token))) {
     return c.json({ error: "Too many requests. Please try again shortly." }, 429);
   }
 
-  const verified = await verifyToken(token, c.env.TOKEN_SECRET);
-  if (!verified) return c.json({ error: "Invalid or tampered link" }, 403);
-
-  const doc = await getDoc(c.env, verified.docId);
-  if (!doc) return c.json({ error: "This document has expired or doesn't exist" }, 404);
+  const auth = await authenticateDocToken(c.env, token);
+  if (!auth) return c.json({ error: "Invalid or tampered link" }, 403);
+  const { doc } = auth;
   if (doc.status !== "completed") return c.json({ error: "This document hasn't been fully signed yet" }, 409);
 
   const pdfObj = await c.env.DOCRACY_DOCS.get(`docs/${doc.docId}/final.pdf`);
@@ -119,9 +230,47 @@ sign.get("/status/:token/download", async (c) => {
   return new Response(await pdfObj.arrayBuffer(), {
     headers: {
       "Content-Type": "application/pdf",
-      "Content-Disposition": `attachment; filename="${(doc.title ?? "signed-document").replace(/[^\w.-]/g, "_")}.pdf"`,
+      "Content-Disposition": `attachment; filename="${(doc.title ?? "signed-document").replace(/[^\w.-]+/g, "_")}.pdf"`,
     },
   });
+});
+
+sign.post("/status/:token/void", async (c) => {
+  const token = c.req.param("token");
+  if (!(await checkTokenAccessRateLimit(c.env, token))) {
+    return c.json({ error: "Too many requests. Please try again shortly." }, 429);
+  }
+
+  const auth = await authenticateDocToken(c.env, token);
+  if (!auth) return c.json({ error: "Invalid or tampered link" }, 403);
+  const { verified, doc } = auth;
+
+  if (verified.order !== 0) {
+    return c.json({ error: "Only the preparer can cancel this document" }, 403);
+  }
+  if (doc.status !== "pending") {
+    return c.json({ error: "This document is no longer pending" }, 409);
+  }
+
+  let body: { reason?: string };
+  try {
+    body = await c.req.json<{ reason?: string }>();
+  } catch {
+    body = {};
+  }
+  const reason = body.reason?.trim();
+  if (reason && reason.length > MAX_REASON_LENGTH) {
+    return c.json({ error: `Reason must be under ${MAX_REASON_LENGTH} characters` }, 400);
+  }
+
+  const voided = await voidDocument(c.env, c.executionCtx, doc, {
+    voidedBy: "preparer",
+    reason: reason || undefined,
+    ip: c.req.header("CF-Connecting-IP") ?? null,
+    userAgent: c.req.header("User-Agent") ?? null,
+  });
+
+  return c.json({ ok: true, status: statusPayload(voided) });
 });
 
 sign.get("/sign/:token", async (c) => {
@@ -130,13 +279,15 @@ sign.get("/sign/:token", async (c) => {
     return c.json({ error: "Too many requests. Please try again shortly." }, 429);
   }
 
-  const verified = await verifyToken(token, c.env.TOKEN_SECRET);
-  if (!verified) return c.json({ error: "Invalid or tampered link" }, 403);
-
-  const doc = await getDoc(c.env, verified.docId);
-  if (!doc) return c.json({ error: "This document has expired or doesn't exist" }, 404);
+  const auth = await authenticateDocToken(c.env, token);
+  if (!auth) return c.json({ error: "Invalid or tampered link" }, 403);
+  const { verified, doc } = auth;
   const brandLogoPath = await brandLogoPathFor(c.env, doc.accountId);
   const brandWorkspaceSlug = await brandWorkspaceSlugFor(c.env, doc.accountId);
+
+  if (doc.status !== "pending") {
+    return c.json({ onTurn: false, status: statusPayload(doc), brandLogoPath, brandWorkspaceSlug });
+  }
 
   if (!isSignerOnTurn(doc, verified.order)) {
     return c.json({ onTurn: false, status: statusPayload(doc), brandLogoPath, brandWorkspaceSlug });
@@ -154,10 +305,6 @@ sign.get("/sign/:token", async (c) => {
     indexNonFatal(c.executionCtx, doc.docId, "viewed", recordViewedOnce(c.env, doc, verified.order));
   }
 
-  // Awaited directly rather than ctx.waitUntil'd: this only ever writes once per signer (guarded
-  // by the !viewedAt check), so the added latency is a one-time cost on their very first view, not
-  // something that recurs on every page load — and it keeps this route independent of
-  // c.executionCtx, unlike the accountId-gated D1 indexing above.
   const viewedSigner = doc.signers.find((s) => s.order === verified.order);
   if (viewedSigner && !viewedSigner.viewedAt) {
     viewedSigner.viewedAt = new Date().toISOString();
@@ -195,17 +342,13 @@ sign.get("/sign/:token", async (c) => {
 
 sign.post("/sign/:token/unlock", async (c) => {
   const token = c.req.param("token");
-  // Deliberately much tighter than checkTokenAccessRateLimit — this endpoint exists specifically
-  // to check a brute-forceable 4-8 digit secret, so the number of guesses matters, not just reads.
   if (!(await checkPinAttemptRateLimit(c.env, token))) {
     return c.json({ error: "Too many attempts. Please try again later." }, 429);
   }
 
-  const verified = await verifyToken(token, c.env.TOKEN_SECRET);
-  if (!verified) return c.json({ error: "Invalid or tampered link" }, 403);
-
-  const doc = await getDoc(c.env, verified.docId);
-  if (!doc) return c.json({ error: "This document has expired or doesn't exist" }, 404);
+  const auth = await authenticateDocToken(c.env, token);
+  if (!auth) return c.json({ error: "Invalid or tampered link" }, 403);
+  const { verified, doc } = auth;
 
   const signer = doc.signers.find((s) => s.order === verified.order);
   if (!signer?.pinHash) {
@@ -227,17 +370,69 @@ sign.post("/sign/:token/unlock", async (c) => {
   return c.json({ unlockToken });
 });
 
+sign.post("/sign/:token/decline", async (c) => {
+  const token = c.req.param("token");
+  if (!(await checkTokenAccessRateLimit(c.env, token))) {
+    return c.json({ error: "Too many requests. Please try again shortly." }, 429);
+  }
+
+  const auth = await authenticateDocToken(c.env, token);
+  if (!auth) return c.json({ error: "Invalid or tampered link" }, 403);
+  const { verified, doc } = auth;
+
+  if (verified.order === 0) {
+    return c.json({ error: "Use cancel instead of decline for the preparer status link" }, 400);
+  }
+  if (doc.status !== "pending") {
+    return c.json({ error: "This document is no longer available for signing" }, 409);
+  }
+  if (!isSignerOnTurn(doc, verified.order)) {
+    return c.json({ error: "It's not your turn to sign yet" }, 409);
+  }
+
+  const signerForPinCheck = doc.signers.find((s) => s.order === verified.order);
+  if (signerForPinCheck?.pinHash) {
+    const unlockToken = c.req.header("X-Sign-Unlock");
+    if (!(await verifyUnlockToken(c.env, unlockToken, doc.docId, verified.order))) {
+      return c.json({ needsPin: true, error: "PIN required" }, 401);
+    }
+  }
+
+  let body: { reason?: string };
+  try {
+    body = await c.req.json<{ reason?: string }>();
+  } catch {
+    body = {};
+  }
+  const reason = body.reason?.trim();
+  if (reason && reason.length > MAX_REASON_LENGTH) {
+    return c.json({ error: `Reason must be under ${MAX_REASON_LENGTH} characters` }, 400);
+  }
+
+  const voided = await voidDocument(c.env, c.executionCtx, doc, {
+    voidedBy: "decline",
+    reason: reason || undefined,
+    declinedSignerOrder: verified.order,
+    ip: c.req.header("CF-Connecting-IP") ?? null,
+    userAgent: c.req.header("User-Agent") ?? null,
+  });
+
+  return c.json({ ok: true, status: statusPayload(voided) });
+});
+
 sign.post("/sign/:token", async (c) => {
   const token = c.req.param("token");
   if (!(await checkTokenAccessRateLimit(c.env, token))) {
     return c.json({ error: "Too many requests. Please try again shortly." }, 429);
   }
 
-  const verified = await verifyToken(token, c.env.TOKEN_SECRET);
-  if (!verified) return c.json({ error: "Invalid or tampered link" }, 403);
+  const auth = await authenticateDocToken(c.env, token);
+  if (!auth) return c.json({ error: "Invalid or tampered link" }, 403);
+  const { verified, doc } = auth;
 
-  const doc = await getDoc(c.env, verified.docId);
-  if (!doc) return c.json({ error: "This document has expired or doesn't exist" }, 404);
+  if (doc.status !== "pending") {
+    return c.json({ error: "This document is no longer available for signing" }, 409);
+  }
 
   if (!isSignerOnTurn(doc, verified.order)) {
     return c.json({ error: "It's not your turn to sign yet" }, 409);
@@ -258,24 +453,18 @@ sign.post("/sign/:token", async (c) => {
     return c.json({ error: "Invalid request body" }, 400);
   }
 
-  // The legal weight of an electronic signature rests on the signer affirmatively agreeing to
-  // sign electronically — the web UI's checkbox is the primary control, this is defense in depth
-  // (and the source of truth recorded in the "consented" audit event below).
   if (body.consent !== true) {
     return c.json({ error: "You must confirm you agree to sign electronically before submitting" }, 400);
   }
 
   const myFields = doc.fields.filter((f) => f.signerOrder === verified.order);
 
-  // Defense in depth: creation already requires every signer to have a field, but if that were
-  // ever bypassed, a signer with zero fields would otherwise trivially "complete" their turn
-  // without signing anything at all — an empty array vacuously passes an every()/some() check.
   if (myFields.length === 0) {
     return c.json({ error: "This signer has no signature field to sign — contact whoever prepared this document" }, 400);
   }
 
   const valueById = new Map(body.values?.map((v) => [v.fieldId, v.value]) ?? []);
-  const missing = myFields.some((f) => !valueById.get(f.id)?.trim());
+  const missing = myFields.some((f) => !fieldSatisfied(f, valueById.get(f.id)));
   if (missing) {
     return c.json({ error: "Please fill in every field before submitting" }, 400);
   }
@@ -283,6 +472,7 @@ sign.post("/sign/:token", async (c) => {
   const isImageField = (type: DocField["type"]) => type === undefined || type === "signature" || type === "initials";
   const oversized = myFields.some((f) => {
     const value = valueById.get(f.id)!;
+    if (f.type === "checkbox") return false;
     return isImageField(f.type) ? decodedByteLength(value) > MAX_SIGNATURE_IMAGE_BYTES : value.length > MAX_TEXT_FIELD_LENGTH;
   });
   if (oversized) {
@@ -316,15 +506,8 @@ sign.post("/sign/:token", async (c) => {
   }
   const signedHash = await sha256Hex(updatedBytes);
 
-  // Re-fetch and re-check right before committing: burnFields above is the slowest step in this
-  // handler, so a near-simultaneous duplicate submission (double-click, a retried request) could
-  // otherwise slip through the earlier isSignerOnTurn check too and double-advance the chain —
-  // double-sending the next signer's invite, or on the last signer, double-sending completion
-  // emails with the signed PDF attached to everyone. This doesn't fully eliminate the race (KV
-  // has no compare-and-swap), but it collapses the window from "the whole PDF burn" to "one KV
-  // read plus a couple of writes," which is enough for the double-click/retry case this guards.
   const freshDoc = await getDoc(c.env, verified.docId);
-  if (!freshDoc || !isSignerOnTurn(freshDoc, verified.order)) {
+  if (!freshDoc || freshDoc.status !== "pending" || !isSignerOnTurn(freshDoc, verified.order)) {
     return c.json({ error: "This submission was already received" }, 409);
   }
 
@@ -334,9 +517,6 @@ sign.post("/sign/:token", async (c) => {
   freshSigner.status = "signed";
   freshSigner.signedAt = signedAt;
 
-  // Fired for every signer's signature, not just the document's overall completion (see the
-  // "everyone done" branch further down, which no longer logs a separate funnel event of its own —
-  // the last signer's signature already fires this one, same as any other signer's).
   if (getCookie(c, NOTRACK_COOKIE_NAME) !== "1") {
     trackEvent(c.env, {
       event: "document_signed",
@@ -367,10 +547,6 @@ sign.post("/sign/:token", async (c) => {
     );
   }
 
-  // "Is anyone still pending" is mode-agnostic — true in both sequential and parallel mode
-  // whenever the chain/batch isn't done yet. What differs is what happens next: sequential mode
-  // invites exactly one new signer (the next one in order); parallel mode already invited every
-  // signer at creation, so there's no one new to notify — just record this signer's completion.
   if (freshDoc.preparerEmail) {
     const statusToken = await signToken(freshDoc.docId, 0, c.env.TOKEN_SECRET);
     c.executionCtx.waitUntil(
@@ -396,14 +572,13 @@ sign.post("/sign/:token", async (c) => {
     freshDoc.events = events;
     await putDoc(c.env, freshDoc);
 
-    const nextToken = await signToken(freshDoc.docId, nextOrder, c.env.TOKEN_SECRET);
+    const nextToken = await signToken(freshDoc.docId, nextOrder, c.env.TOKEN_SECRET, nextSigner.linkNonce);
     await sendSigningInvite(c.env, freshDoc, nextOrder, nextToken);
 
     if (freshDoc.accountId) {
       indexNonFatal(c.executionCtx, freshDoc.docId, "invite_sent", indexInviteSent(c.env, freshDoc, nextOrder));
     }
   } else if (remainingPending) {
-    // Parallel mode, not yet complete: just persist this signer's "signed" status and events.
     freshDoc.events = events;
     await putDoc(c.env, freshDoc);
   } else {

@@ -5,6 +5,7 @@ import { createDocumentCore } from "../lib/documentCreation";
 import { NOTRACK_COOKIE_NAME, trackEvent } from "../lib/analytics";
 import { checkRateLimit, checkInviteRateLimit } from "../lib/ratelimit";
 import { optionalAccount, type AccountContext } from "../lib/auth";
+import { resolveTtlDays } from "../lib/docTtl";
 import type { DocField, Env } from "@docracy/shared";
 
 interface CreateDocumentBody {
@@ -12,9 +13,12 @@ interface CreateDocumentBody {
   preparerEmail?: string;
   signers: Array<{ order: number; name: string; email: string; pin?: string }>;
   fields: DocField[];
+  ccRecipients?: Array<{ name?: string; email: string }>;
   customSubject?: string;
   customMessage?: string;
   signingMode?: "sequential" | "parallel";
+  /** Paid-only retention override in days — free ignores / rejects. */
+  ttlDays?: number;
   /** Set only when these fields were loaded from a saved (paid-tier) template — see
    *  routes/templates.ts's GET /:id, which fires the matching template_started event. Purely for
    *  the Template funnel's template_completed step; never persisted on the resulting document. */
@@ -25,8 +29,9 @@ const MAX_PDF_BYTES = 15 * 1024 * 1024; // 15MB
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_SUBJECT_LENGTH = 150;
 const MAX_MESSAGE_LENGTH = 1000;
-const FIELD_TYPES = new Set(["signature", "initials", "text", "date"]);
+const FIELD_TYPES = new Set(["signature", "initials", "text", "date", "checkbox"]);
 const PIN_RE = /^\d{4,8}$/;
+const FREE_TIER_MAX_CCS = 2;
 
 type Variables = { account: AccountContext | null };
 const documents = new Hono<{ Bindings: Env; Variables: Variables }>();
@@ -168,12 +173,42 @@ documents.post("/", optionalAccount, async (c) => {
     return c.json({ error: "signingMode must be 'sequential' or 'parallel'" }, 400);
   }
 
+  const ccRecipients = meta.ccRecipients ?? [];
+  const maxCcs = account?.isPaid ? Infinity : FREE_TIER_MAX_CCS;
+  if (ccRecipients.length > maxCcs) {
+    return failWith(
+      "send_failed",
+      {
+        error: `Free plan supports up to ${FREE_TIER_MAX_CCS} CC viewers. Sign in with a paid account for unlimited viewers.`,
+      },
+      402,
+      "cc_cap_exceeded"
+    );
+  }
+  for (const cc of ccRecipients) {
+    const email = cc.email?.trim().toLowerCase() ?? "";
+    if (!EMAIL_RE.test(email)) {
+      return c.json({ error: `"${cc.email}" doesn't look like a valid email address` }, 400);
+    }
+    if (seenEmails.has(email)) {
+      return c.json({ error: `${cc.email} is already a signer — remove them from viewers or signers` }, 400);
+    }
+  }
+  const seenCcEmails = new Set<string>();
+  for (const cc of ccRecipients) {
+    const email = cc.email.trim().toLowerCase();
+    if (seenCcEmails.has(email)) {
+      return c.json({ error: `${cc.email} is listed as a viewer more than once` }, 400);
+    }
+    seenCcEmails.add(email);
+  }
+
   // Per-recipient cap, independent of the per-IP creation limit above: without this, one IP could
   // fan invite emails out across many separate documents that all name the same victim address —
   // each document creation still passes the IP limit since it's a distinct "creation" event.
-  const recipientEmails = new Set(seenEmails);
-  if (meta.preparerEmail) recipientEmails.add(meta.preparerEmail.trim().toLowerCase());
-  for (const email of recipientEmails) {
+  const inviteEmails = new Set([...seenEmails, ...seenCcEmails]);
+  if (meta.preparerEmail) inviteEmails.add(meta.preparerEmail.trim().toLowerCase());
+  for (const email of inviteEmails) {
     if (!(await checkInviteRateLimit(c.env, email))) {
       return failWith(
         "send_failed",
@@ -190,6 +225,19 @@ documents.post("/", optionalAccount, async (c) => {
   // under the shared workspace every teammate's dashboard queries against.
   const accountId = account?.isPaid ? account.workspaceId : null;
 
+  if (meta.ttlDays !== undefined && !account?.isPaid) {
+    return failWith(
+      "send_failed",
+      { error: "Custom document expiry requires a paid account." },
+      402,
+      "ttl_requires_paid"
+    );
+  }
+  const ttl = resolveTtlDays(c.env, { isPaid: !!account?.isPaid, ttlDays: meta.ttlDays });
+  if ("error" in ttl) {
+    return c.json({ error: ttl.error }, 400);
+  }
+
   const { docId, statusToken } = await createDocumentCore({
     env: c.env,
     ctx: c.executionCtx,
@@ -199,6 +247,7 @@ documents.post("/", optionalAccount, async (c) => {
     preparerEmail: meta.preparerEmail,
     signers: meta.signers,
     fields: meta.fields,
+    ccRecipients,
     accountId,
     creatorIp: ip,
     creatorCountry: c.req.header("CF-IPCountry"),
@@ -207,6 +256,7 @@ documents.post("/", optionalAccount, async (c) => {
     customMessage: meta.customMessage?.trim() || undefined,
     signingMode: meta.signingMode,
     templateId: meta.templateId,
+    ttlDays: ttl.ttlDays,
   });
 
   return c.json({ docId, statusToken });
