@@ -47,7 +47,7 @@ describe("isExcludedAgent", () => {
 });
 
 describe("trackEvent", () => {
-  it("writes a data point with the expected 14-blob shape for a bot request", () => {
+  it("writes a data point with the expected 15-blob shape for a bot request", () => {
     const writeDataPoint = vi.fn();
     const { env } = makeMockEnv({ ANALYTICS: { writeDataPoint } as any });
 
@@ -59,7 +59,7 @@ describe("trackEvent", () => {
     });
 
     expect(writeDataPoint).toHaveBeenCalledWith({
-      blobs: ["page_view", "/free-templates/mutual-nda", "bot", "GPTBot", "US", "", "", "", "", "", "", "", "", ""],
+      blobs: ["page_view", "/free-templates/mutual-nda", "bot", "GPTBot", "US", "", "", "", "", "", "", "", "", "", ""],
       doubles: [1, 0],
       indexes: ["page_view"],
     });
@@ -94,6 +94,7 @@ describe("trackEvent", () => {
       errorCode: "some_error",
       emailType: "signing_invite",
       templateCategory: "nda",
+      attribution: "linkedin/post-01-auto",
     });
 
     expect(writeDataPoint).toHaveBeenCalledWith({
@@ -112,6 +113,7 @@ describe("trackEvent", () => {
         "some_error",
         "signing_invite",
         "nda",
+        "linkedin/post-01-auto",
       ],
       doubles: [1, 1234],
       indexes: ["document_signed"],
@@ -125,7 +127,7 @@ describe("trackEvent", () => {
     trackEvent(env, { event: "signup_completed" });
 
     expect(writeDataPoint).toHaveBeenCalledWith({
-      blobs: ["signup_completed", "", "human", "", "", "", "", "", "", "", "", "", "", ""],
+      blobs: ["signup_completed", "", "human", "", "", "", "", "", "", "", "", "", "", "", ""],
       doubles: [1, 0],
       indexes: ["signup_completed"],
     });

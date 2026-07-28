@@ -399,12 +399,21 @@ export async function sendCompletionEmails(
   const combinedPdf = certificatePdf ? await mergePdfs([finalPdf, certificatePdf]) : finalPdf;
   const attachments = [{ filename: "signed-document.pdf", content: bytesToBase64(combinedPdf) }];
   const customLogoUrl = await resolveEmailLogoUrl(env, doc.accountId);
+  // White-labeled workspaces pay to hide Docracy — skip the viral CTA in those completion emails.
+  const viralCta = customLogoUrl
+    ? ""
+    : `
+    <p style="margin:24px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">
+      Sent with Docracy — free e-signatures for simple agreements.
+    </p>
+    ${ctaButton(`${env.PUBLIC_APP_URL}/prepare?ref=completion-email`, "Send your own free")}`;
   const body = `
     <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">Everyone has signed</p>
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
       The signed document, including a certificate of completion, is attached.
     </p>
     <p style="margin:0;font-size:13px;color:${MUTED};line-height:1.5;">${statusLines(doc)}</p>
+    ${viralCta}
     ${SIGN_OFF}
   `;
   const html = emailShell(env.PUBLIC_APP_URL, body, customLogoUrl);
@@ -594,7 +603,7 @@ export async function sendPreparerLeadStep1(env: Env, email: string): Promise<vo
       Want a free account so every document you send lives in one place? No password — just a magic
       link to your email.
     </p>
-    ${ctaButton(`${env.PUBLIC_APP_URL}/login`, "Create a free account")}
+    ${ctaButton(`${env.PUBLIC_APP_URL}/login?utm_source=email&utm_medium=preparer-lead&utm_campaign=step1`, "Create a free account")}
     <p style="margin:0;font-size:14px;color:${MUTED};">You asked for a few tips — reply anytime to stop them.</p>
     ${SIGN_OFF}
   `;
@@ -612,7 +621,7 @@ export async function sendPreparerLeadStep3(env: Env, email: string): Promise<vo
       letters — ready to fill and send without rebuilding fields from scratch.
     </p>
     ${templateList(["Mutual NDA", "Independent contractor agreement", "Offer letter", "Freelance service agreement"])}
-    ${ctaButton(`${env.PUBLIC_APP_URL}/free-templates`, "Browse free templates")}
+    ${ctaButton(`${env.PUBLIC_APP_URL}/free-templates?utm_source=email&utm_medium=preparer-lead&utm_campaign=step3`, "Browse free templates")}
     <p style="margin:0;font-size:14px;color:${MUTED};">Still free, still no account required.</p>
     ${SIGN_OFF}
   `;
@@ -629,7 +638,7 @@ export async function sendPreparerLeadStep4(env: Env, email: string): Promise<vo
       Free covers quick, low-stakes agreements. Paid unlocks recurring templates, more signers, team
       seats, and longer retention — for when signing becomes part of how you work every week.
     </p>
-    ${ctaButton(`${env.PUBLIC_APP_URL}/pricing`, "See plans")}
+    ${ctaButton(`${env.PUBLIC_APP_URL}/pricing?utm_source=email&utm_medium=preparer-lead&utm_campaign=step4`, "See plans")}
     <p style="margin:0;font-size:14px;color:${MUTED};">No pressure — free stays free.</p>
     ${SIGN_OFF}
   `;

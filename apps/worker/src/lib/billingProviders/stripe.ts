@@ -2,7 +2,14 @@ import { hmacKey } from "@docracy/shared";
 import type { Env } from "@docracy/shared";
 
 export type StripeWebhookResult =
-  | { type: "checkout_completed"; accountId: string; customerId: string | null; isEnterprise: boolean }
+  | {
+      type: "checkout_completed";
+      accountId: string;
+      customerId: string | null;
+      isEnterprise: boolean;
+      /** First-touch channel round-tripped via session metadata — "" when unknown. */
+      attribution: string;
+    }
   | { type: "subscription_deleted"; customerId: string }
   | { type: "invoice_payment_failed"; customerId: string }
   | { type: "invoice_payment_succeeded"; customerId: string };
@@ -82,13 +89,15 @@ export async function verifyAndExtract(
     // metadata.plan="enterprise", set once when the link is created, rather than a distinct price
     // this worker would need to know about.
     const metadata = event.data?.object?.metadata;
-    const isEnterprise =
-      typeof metadata === "object" && metadata !== null && (metadata as Record<string, unknown>).plan === "enterprise";
+    const metadataRecord = typeof metadata === "object" && metadata !== null ? (metadata as Record<string, unknown>) : {};
+    const isEnterprise = metadataRecord.plan === "enterprise";
+    const attribution = metadataRecord.attribution;
     return {
       type: "checkout_completed",
       accountId,
       customerId: typeof customer === "string" ? customer : null,
       isEnterprise,
+      attribution: typeof attribution === "string" ? attribution : "",
     };
   }
 

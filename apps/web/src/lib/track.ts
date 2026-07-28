@@ -1,4 +1,5 @@
 import { apiUrl } from "./api";
+import { attributionLabel } from "./attribution";
 
 /** The client-fireable subset of the worker's FunnelEvent union — kept in sync with
  *  CLIENT_TRACKABLE_EVENTS in apps/worker/src/routes/analytics.ts (that allow-list is the one
@@ -16,6 +17,8 @@ export type ClientTrackableEvent =
   | "dashboard_loaded"
   | "landingpage_cta_clicked"
   | "blog_cta_clicked"
+  | "upgrade_clicked"
+  | "viral_cta_clicked"
   | "upload_failed"
   | "field_error";
 
@@ -30,7 +33,10 @@ export interface TrackExtra {
 /** Fire-and-forget client-side analytics event. `keepalive: true` is what makes this safe to call
  *  from a page-unload/route-change cleanup (e.g. template_abandoned) — a plain fetch there would
  *  otherwise routinely get cancelled mid-flight as the page navigates away. Never throws: a failed
- *  or blocked (ad-blocker, offline) analytics call must never surface as an error to the caller. */
+ *  or blocked (ad-blocker, offline) analytics call must never surface as an error to the caller.
+ *
+ *  Every event carries first-touch `attribution` automatically — orthogonal to `source` (where
+ *  *in the page* a click came from). */
 export function track(event: ClientTrackableEvent, extra: TrackExtra = {}): void {
   try {
     fetch(apiUrl("/api/analytics/track"), {
@@ -38,7 +44,7 @@ export function track(event: ClientTrackableEvent, extra: TrackExtra = {}): void
       headers: { "Content-Type": "application/json" },
       credentials: "include",
       keepalive: true,
-      body: JSON.stringify({ event, route: window.location.pathname, ...extra }),
+      body: JSON.stringify({ event, route: window.location.pathname, attribution: attributionLabel(), ...extra }),
     }).catch(() => {});
   } catch {
     // Same-origin/CSP oddities, ad blockers, etc. — analytics must never break the page.

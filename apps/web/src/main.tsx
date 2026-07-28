@@ -34,6 +34,10 @@ import FeaturePage from "./pages/FeaturePage";
 import AlternativePage from "./pages/AlternativePage";
 import ExplainerPage from "./pages/ExplainerPage";
 import NotFound from "./pages/NotFound";
+import { captureAttribution } from "./lib/attribution";
+
+// Before first render so the first funnel event already carries the channel that brought them.
+captureAttribution();
 
 function AppRoutes() {
   return (

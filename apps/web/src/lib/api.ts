@@ -1,3 +1,4 @@
+import { attributionLabel } from "./attribution";
 import type { CcRecipientInput, DocField, SignerInput, StatusPayload } from "./types";
 
 // Empty in dev (Vite proxies /api to the local worker); set to the deployed worker's absolute
@@ -254,7 +255,7 @@ export async function requestMagicLink(email: string, turnstileToken?: string): 
   const res = await apiFetch("/api/auth/request-link", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, turnstileToken }),
+    body: JSON.stringify({ email, turnstileToken, attribution: attributionLabel() }),
   });
   return asJson(res);
 }
@@ -263,7 +264,7 @@ export async function consumeMagicLinkToken(token: string): Promise<{ ok: true }
   const res = await apiFetch("/api/auth/consume", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ token }),
+    body: JSON.stringify({ token, attribution: attributionLabel() }),
   });
   return asJson(res);
 }
@@ -304,7 +305,7 @@ export async function startCheckout(plan?: "paid" | "enterprise"): Promise<{ url
   const res = await apiFetch("/api/billing/checkout", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ plan }),
+    body: JSON.stringify({ plan, attribution: attributionLabel() }),
   });
   return asJson(res);
 }

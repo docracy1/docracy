@@ -5,7 +5,24 @@
 // slow/failing analytics call never delays the actual page response.
 const WORKER_URL = "https://api.docracy.io";
 
-const TRACKED_ROUTES = new Set(["/", "/free-templates", "/mcp", "/about", "/pricing", "/docs"]);
+const TRACKED_ROUTES = new Set([
+  "/",
+  "/free-templates",
+  "/mcp",
+  "/about",
+  "/pricing",
+  "/docs",
+  "/simple-agreements",
+  "/nda-signing",
+  "/client-contracts",
+  "/onboarding-documents",
+  "/vendor-agreements",
+  "/compliance-documentation",
+  "/eversign-alternative",
+  "/docusign-alternative",
+  "/what-is-an-nda",
+  "/are-electronic-signatures-legal",
+]);
 
 // Blog posts are published via the self-serve CMS (no deploy needed), so their slugs can't be
 // enumerated in a fixed set the way the routes above are — matched by prefix instead. Free
@@ -39,7 +56,8 @@ export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => 
           // (which would describe this Pages Function calling the worker, not the original visitor).
           "x-referrer": context.request.headers.get("referer") ?? "",
         },
-        body: JSON.stringify({ route: url.pathname }),
+        // Query string so the worker can credit utm_source/utm_campaign on crawler-visible views.
+        body: JSON.stringify({ route: url.pathname, query: url.search }),
       }).catch(() => {})
     );
   }

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchMe, startCheckout, type Account } from "../lib/api";
 import { PLAN_ROWS, PlanCell } from "../lib/planRows";
+import { track } from "../lib/track";
 import { usePageMeta } from "../lib/usePageMeta";
 
 const TIERS: Array<{
@@ -83,6 +84,7 @@ export default function Pricing() {
   }, []);
 
   const onUpgrade = async () => {
+    track("upgrade_clicked", { source: "pricing_page" });
     setUpgrading(true);
     setUpgradeError(null);
     try {
