@@ -4,15 +4,47 @@ const WINDOW_SECONDS = 60 * 60; // 1 hour
 const MAX_PER_WINDOW = 10;
 
 /**
+ * Soft rate-limit counters live in the Cache API (not KV) so abuse throttles don't burn the
+ * Workers Free plan's tiny KV write budget (1,000 writes/day). Cache is per-colo and soft —
+ * same non-atomic caveats as the old KV counter. In unit tests (no caches.default), falls back
+ * to an in-memory map so behavior stays assertable without a real edge cache.
+ */
+const memoryFallback = new Map<string, { value: string; expiresAt: number }>();
+
+async function readCounter(key: string): Promise<number> {
+  if (typeof caches !== "undefined" && caches.default) {
+    const res = await caches.default.match(new Request(`https://docracy-ratelimit.internal/${encodeURIComponent(key)}`));
+    if (!res) return 0;
+    return Number(await res.text()) || 0;
+  }
+  const entry = memoryFallback.get(key);
+  if (!entry) return 0;
+  if (entry.expiresAt <= Date.now()) {
+    memoryFallback.delete(key);
+    return 0;
+  }
+  return Number(entry.value) || 0;
+}
+
+async function writeCounter(key: string, count: number, windowSeconds: number): Promise<void> {
+  if (typeof caches !== "undefined" && caches.default) {
+    await caches.default.put(
+      new Request(`https://docracy-ratelimit.internal/${encodeURIComponent(key)}`),
+      new Response(String(count), { headers: { "Cache-Control": `max-age=${windowSeconds}` } })
+    );
+    return;
+  }
+  memoryFallback.set(key, { value: String(count), expiresAt: Date.now() + windowSeconds * 1000 });
+}
+
+/**
  * Soft, non-atomic counter — a burst of concurrent requests could slip a couple over the cap.
  * Fine here: every caller below is a cost/abuse throttle, not a hard security boundary.
  */
-async function checkLimit(env: Env, key: string, max: number, windowSeconds: number): Promise<boolean> {
-  const rlKey = `ratelimit:${key}`;
-  const current = await env.DOCRACY_KV.get(rlKey);
-  const count = current ? Number(current) : 0;
+async function checkLimit(_env: Env, key: string, max: number, windowSeconds: number): Promise<boolean> {
+  const count = await readCounter(key);
   if (count >= max) return false;
-  await env.DOCRACY_KV.put(rlKey, String(count + 1), { expirationTtl: windowSeconds });
+  await writeCounter(key, count + 1, windowSeconds);
   return true;
 }
 

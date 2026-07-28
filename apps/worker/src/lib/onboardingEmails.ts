@@ -46,11 +46,12 @@ async function hasSentAnyDocument(env: Env, accountId: string): Promise<boolean>
 }
 
 /**
- * Runs every few minutes (see index.ts's scheduled handler, branching on the frequent cron entry
- * in wrangler.toml) — sends whichever onboarding step is newly due for each account, skipping any
+ * Runs hourly (see index.ts's scheduled handler, branching on the hourly cron entry in
+ * wrangler.toml) — sends whichever onboarding step is newly due for each account, skipping any
  * step once the account has actually sent a document. Processes steps latest-first and stops at
  * the first one it sends for a given account in this pass, so a long cron gap sends at most one
- * (the most relevant) email per account rather than bursting all of them at once.
+ * (the most relevant) email per account rather than bursting all of them at once. Step 1's
+ * nominal 3-minute delay may land up to ~1 hour after signup on free-tier cron spacing.
  */
 export async function runOnboardingEmailSweep(env: Env): Promise<void> {
   if (!env.DOCRACY_DB) return;

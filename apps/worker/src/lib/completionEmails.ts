@@ -72,9 +72,9 @@ async function maybeSendCompletionNudge(env: Env, doc: DocState, signer: Signer)
 }
 
 /**
- * Runs on the frequent cron (see index.ts's scheduled handler, same 5-minute entry the onboarding
- * drip uses — hour-scale thresholds need finer granularity than the once-daily sweeps). Mirrors
- * runReminderSweep's sequential/parallel candidate selection, but nudges the *preparer* about a
+ * Runs hourly (see index.ts's scheduled handler, same cron entry the onboarding drip uses —
+ * hour-scale thresholds don't need sub-hour granularity; listing every KV doc more often burned
+ * the free-tier list budget). Mirrors runReminderSweep's sequential/parallel candidate selection, but nudges the *preparer* about a
  * specific signer's inaction instead of nudging the signer themselves — and, independent of that,
  * logs the Completion funnel's own timing checkpoints for every pending document.
  */
