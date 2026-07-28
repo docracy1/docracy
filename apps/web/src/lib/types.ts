@@ -45,11 +45,18 @@ export interface StatusCcRecipient {
   email: string;
 }
 
+export interface SignerAttachmentGroup {
+  order: number;
+  name: string;
+  attachments: Array<{ id: string; name: string; sizeBytes: number; uploadedAt: string }>;
+}
+
 export interface StatusPayload {
   docId: string;
   status: "pending" | "completed" | "voided";
   signers: StatusSigner[];
   ccRecipients?: StatusCcRecipient[];
+  signerAttachmentGroups?: SignerAttachmentGroup[];
   voidedAt?: string | null;
   voidReason?: string;
   voidedBy?: "preparer" | "decline" | null;

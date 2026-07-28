@@ -167,6 +167,21 @@ export async function voidAccountDocument(docId: string, reason?: string): Promi
   return asJson(res);
 }
 
+export function statusAttachmentDownloadUrl(token: string, signerOrder: number, attachmentId: string): string {
+  return apiUrl(`/api/status/${token}/attachments/${signerOrder}/${attachmentId}`);
+}
+
+export function accountAttachmentDownloadUrl(docId: string, signerOrder: number, attachmentId: string): string {
+  return apiUrl(`/api/account/documents/${docId}/attachments/${signerOrder}/${attachmentId}`);
+}
+
+export async function fetchDocumentAttachments(
+  docId: string
+): Promise<{ signers: Array<{ order: number; name: string; attachments: Array<{ id: string; name: string; sizeBytes: number; uploadedAt: string }> }> }> {
+  const res = await apiFetch(`/api/account/documents/${docId}/attachments`);
+  return asJson(res);
+}
+
 export async function reassignSigner(
   docId: string,
   order: number,

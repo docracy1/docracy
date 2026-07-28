@@ -83,6 +83,19 @@ async function brandWorkspaceSlugFor(env: Env, accountId: string | null): Promis
 
 function statusPayload(doc: Awaited<ReturnType<typeof getDoc>>) {
   if (!doc) return null;
+  const signerAttachmentGroups = [...doc.signers]
+    .sort((a, b) => a.order - b.order)
+    .filter((s) => (s.attachments ?? []).length > 0)
+    .map((s) => ({
+      order: s.order,
+      name: s.name,
+      attachments: (s.attachments ?? []).map((a) => ({
+        id: a.id,
+        name: a.name,
+        sizeBytes: a.sizeBytes,
+        uploadedAt: a.uploadedAt,
+      })),
+    }));
   return {
     docId: doc.docId,
     status: doc.status,
@@ -99,7 +112,27 @@ function statusPayload(doc: Awaited<ReturnType<typeof getDoc>>) {
     voidedAt: doc.voidedAt ?? null,
     voidReason: doc.voidReason,
     voidedBy: doc.voidedBy ?? null,
+    signerAttachmentGroups: signerAttachmentGroups.length > 0 ? signerAttachmentGroups : undefined,
   };
+}
+
+async function attachmentDownloadResponse(
+  env: Env,
+  doc: DocState,
+  signerOrder: number,
+  attachmentId: string
+): Promise<Response | null> {
+  const signer = doc.signers.find((s) => s.order === signerOrder);
+  const attachment = signer?.attachments?.find((a) => a.id === attachmentId);
+  if (!attachment) return null;
+  const obj = await env.DOCRACY_DOCS.get(attachment.r2Key);
+  if (!obj) return null;
+  return new Response(await obj.arrayBuffer(), {
+    headers: {
+      "Content-Type": obj.httpMetadata?.contentType ?? "application/octet-stream",
+      "Content-Disposition": `attachment; filename="${attachment.name.replace(/[^\w.\-() ]+/g, "_")}"`,
+    },
+  });
 }
 
 async function notifyDocCancelled(
@@ -242,6 +275,23 @@ sign.get("/status/:token/download", async (c) => {
       "Content-Disposition": `attachment; filename="${(doc.title ?? "signed-document").replace(/[^\w.-]+/g, "_")}.pdf"`,
     },
   });
+});
+
+sign.get("/status/:token/attachments/:signerOrder/:attachmentId", async (c) => {
+  const token = c.req.param("token");
+  if (!(await checkTokenAccessRateLimit(c.env, token))) {
+    return c.json({ error: "Too many requests. Please try again shortly." }, 429);
+  }
+
+  const auth = await authenticateDocToken(c.env, token);
+  if (!auth) return c.json({ error: "Invalid or tampered link" }, 403);
+  const { doc } = auth;
+
+  const signerOrder = Number(c.req.param("signerOrder"));
+  const attachmentId = c.req.param("attachmentId");
+  const response = await attachmentDownloadResponse(c.env, doc, signerOrder, attachmentId);
+  if (!response) return c.json({ error: "Attachment not found" }, 404);
+  return response;
 });
 
 sign.post("/status/:token/void", async (c) => {

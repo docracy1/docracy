@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { apiUrl, fetchStatus, voidDocument } from "../lib/api";
+import { SignerAttachmentsList } from "../components/SignerAttachmentsList";
+import { apiUrl, fetchStatus, statusAttachmentDownloadUrl, voidDocument } from "../lib/api";
 import { useNoIndex } from "../lib/useNoIndex";
 import type { StatusPayload } from "../lib/types";
 
@@ -110,6 +111,12 @@ export default function Status() {
             </span>
           </div>
         ))}
+        {token && status.signerAttachmentGroups && status.signerAttachmentGroups.length > 0 && (
+          <SignerAttachmentsList
+            groups={status.signerAttachmentGroups}
+            buildDownloadUrl={(order, id) => statusAttachmentDownloadUrl(token, order, id)}
+          />
+        )}
         {status.status === "completed" && (
           <a
             href={apiUrl(`/api/status/${token}/download`)}

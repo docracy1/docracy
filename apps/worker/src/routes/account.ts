@@ -272,6 +272,28 @@ account.post("/token/regenerate", requirePaidAccount, async (c) => {
 });
 
 /** Download a signer attachment uploaded during signing — paid workspace members only. */
+account.get("/documents/:docId/attachments", requirePaidAccount, async (c) => {
+  const acct = c.get("account")!;
+  const doc = await getDoc(c.env, c.req.param("docId"));
+  if (!doc || doc.accountId !== acct.workspaceId) {
+    return c.json({ error: "Document not found" }, 404);
+  }
+  const signers = [...doc.signers]
+    .sort((a, b) => a.order - b.order)
+    .filter((s) => (s.attachments ?? []).length > 0)
+    .map((s) => ({
+      order: s.order,
+      name: s.name,
+      attachments: (s.attachments ?? []).map((a) => ({
+        id: a.id,
+        name: a.name,
+        sizeBytes: a.sizeBytes,
+        uploadedAt: a.uploadedAt,
+      })),
+    }));
+  return c.json({ signers });
+});
+
 account.get("/documents/:docId/attachments/:signerOrder/:attachmentId", requirePaidAccount, async (c) => {
   const acct = c.get("account")!;
   const doc = await getDoc(c.env, c.req.param("docId"));

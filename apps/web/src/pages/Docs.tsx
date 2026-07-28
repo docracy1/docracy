@@ -15,7 +15,7 @@ function Section({ id, title, children }: { id: string; title: string; children:
 export default function Docs() {
   usePageMeta(
     "Documentation — Docracy",
-    "How Docracy's free signing flow, paid features (bulk send, embed, contacts, Dropbox/OneDrive/Box, AI), Enterprise options, templates, webhooks, and MCP/Zapier automation work."
+    "How Docracy's free signing flow, paid features (bulk send, embed, contacts, attachments, SMS gateways, Dropbox/OneDrive/Box, AI), Enterprise options, templates, webhooks, and MCP/Zapier automation work."
   );
 
   return (
@@ -63,11 +63,59 @@ export default function Docs() {
       <Section id="sending" title="Sending a document (free)">
         <p>
           Go to <Link to="/prepare">Prepare a document</Link>, upload a PDF, add signers in the order they
-          should sign, and place a signature/date/text/initials field for each one. Free accounts support
-          chains of up to 2 signers, no login required. Once you send it, the first signer gets an email
-          with a link — no account needed on their end either. Each signer gets their turn automatically;
-          the document (and all its data) is deleted 9 days after creation, or as soon as everyone's signed
-          and the final copy has gone out by email — whichever comes first.
+          should sign, and place fields for each one — signature, initials, text, date, checkbox, or dropdown.
+          Free accounts support chains of up to 2 signers, no login required. You can also add up to 2 CC
+          viewers, decline or cancel a pending document, and optionally text signing links to US mobile numbers
+          (see below). Once you send it, the first signer gets an email with a link — no account needed on
+          their end either. Each signer gets their turn automatically; the document (and all its data) is deleted
+          9 days after creation, or as soon as everyone&apos;s signed and the final copy has gone out by email —
+          whichever comes first.
+        </p>
+      </Section>
+
+      <Section id="fields" title="Field types">
+        <ul style={{ marginTop: 0 }}>
+          <li>
+            <strong>Signature / initials</strong> — drawn in the browser; email and date are stamped automatically.
+          </li>
+          <li>
+            <strong>Text / date</strong> — single-line text or a date picker.
+          </li>
+          <li>
+            <strong>Checkbox</strong> — required or optional.
+          </li>
+          <li>
+            <strong>Dropdown</strong> — you define the options when placing the field; the chosen value is burned
+            into the PDF.
+          </li>
+        </ul>
+      </Section>
+
+      <Section id="anchor-tags" title="Anchor tags in PDFs (paid)">
+        <p>
+          Embed placement tags directly in your PDF before upload — useful for mail-merge or API-driven templates.
+          On Prepare (paid), use <strong>Detect anchor tags</strong> to scan for tags like{" "}
+          <code>{"{{sig1}}"}</code>, <code>{"{{date_2}}"}</code>, or{" "}
+          <code>{"{{dropdown_1:Yes|No|Maybe}}"}</code>. The tag text is removed and replaced with the matching
+          field for that signer number.
+        </p>
+      </Section>
+
+      <Section id="sms" title="SMS signing links (free, US)">
+        <p>
+          On Prepare, check <strong>Also text signing links</strong> and add each signer&apos;s US mobile number
+          plus carrier (AT&amp;T, T-Mobile, Verizon, Sprint, or US Cellular). Docracy sends the link through your
+          carrier&apos;s email-to-SMS gateway using the same Resend email stack — no separate SMS vendor or per-text
+          fee. Delivery isn&apos;t guaranteed (some carriers block automated gateway mail), and only US numbers are
+          supported today.
+        </p>
+      </Section>
+
+      <Section id="signer-attachments" title="Signer attachments (paid)">
+        <p>
+          When preparing a document on a paid account, enable <strong>Require signers to upload attachment(s)</strong>.
+          Each signer must upload at least one PDF or image before they can complete signing. Preparers download
+          uploads from the document status page or Dashboard → Documents → <strong>Files</strong>.
         </p>
       </Section>
 
@@ -127,13 +175,12 @@ export default function Docs() {
 
       <Section id="embed" title="Embedded signing (paid)">
         <p>
-          Host the signing UI inside your own product via an iframe. Create a short-lived embed session
-          with <code>POST /api/embed/sessions</code> (cookie session or API key) — body includes{" "}
-          <code>docId</code>, <code>signerOrder</code>, optional <code>allowedOrigins</code>,{" "}
-          <code>returnUrl</code>, and <code>ttlSeconds</code>. The response gives an{" "}
-          <code>embedUrl</code> to load at <code>/embed/sign/…</code>. Origins not on the allowlist are
-          rejected. Read-only status for agents still goes through MCP; embedding is for your app&apos;s
-          UI.
+          Host the signing UI inside your own product via an iframe. From the Dashboard, open a pending document
+          and click <strong>Embed</strong> to create a short-lived URL — or call{" "}
+          <code>POST /api/embed/sessions</code> (cookie session or API key). Body includes <code>docId</code>,{" "}
+          <code>signerOrder</code>, optional <code>allowedOrigins</code>, <code>returnUrl</code>, and{" "}
+          <code>ttlSeconds</code>. The response gives an <code>embedUrl</code> to load at{" "}
+          <code>/embed/sign/…</code>. Origins not on the allowlist are rejected.
         </p>
       </Section>
 
@@ -192,9 +239,9 @@ export default function Docs() {
         <p>
           On a paid account, the same API key that powers the MCP connector also works with{" "}
           <strong>Zapier</strong> — trigger a Zap on Document Created, Signer Signed, or Document
-          Completed, or send a saved template out for signature as an action. <strong>Webhooks</strong>{" "}
-          (configured from the Dashboard) let your own systems subscribe to those same three events
-          directly, without Zapier in between.
+          Completed; send a saved template out for signature; or <strong>bulk send</strong> a template to many
+          recipient rows in one action. <strong>Webhooks</strong> (configured from the Dashboard) let your own
+          systems subscribe to those same three events directly, without Zapier in between.
         </p>
       </Section>
 
@@ -239,6 +286,16 @@ export default function Docs() {
                 Sends a saved template for signature. Body: <code>{`{ templateId, signers: [{ name, email }] }`}</code> —
                 the number of signers must match the template. Returns{" "}
                 <code>{`{ docId, statusToken, statusUrl }`}</code>.
+              </td>
+            </tr>
+            <tr style={{ borderBottom: "1px solid var(--hairline)" }}>
+              <td style={{ padding: "6px 8px 6px 0", whiteSpace: "nowrap" }}>
+                <code>POST /api/zapier/documents/bulk</code>
+              </td>
+              <td style={{ padding: "6px 8px" }}>
+                Bulk send a template. Body:{" "}
+                <code>{`{ templateId, recipients: [{ signers: [{ name, email }], title? }], customSubject?, customMessage? }`}</code>.
+                Returns <code>{`{ batchId, documents: [...] }`}</code>.
               </td>
             </tr>
             <tr style={{ borderBottom: "1px solid var(--hairline)" }}>

@@ -9,8 +9,9 @@ saved template out for signature as an action — without either side needing to
   so events arrive instantly (no polling delay). Internally these are just Docracy webhooks that
   Zapier subscribes to and manages on your behalf.
 - **Action**: Send Document From Template — pick a saved template, fill in signer name(s)/
-  email(s), and Docracy creates and sends the document. Docracy's own free/paid document-creation
-  logic runs underneath — signers must still match the template's saved signer count.
+  email(s), and Docracy creates and sends the document.
+- **Action**: Bulk Send From Template — same as above, but up to 10 recipient rows per Zap run
+  (each row becomes its own document). Signers must still match the template's saved signer count.
 - **Auth**: a single API key (from the Docracy Dashboard's "MCP connector" card) — the *same* key
   used for the Claude/ChatGPT/Grok/Perplexity connector, not a separate credential to manage.
 
@@ -20,9 +21,8 @@ saved template out for signature as an action — without either side needing to
 - `triggers/templateList.js` — hidden; powers the Action's "Template" dropdown.
 - `triggers/documentCreated.js`, `triggers/signerSigned.js`, `triggers/documentCompleted.js` —
   each a REST Hook trigger (subscribe/unsubscribe wired to `apps/worker/src/routes/zapier.ts`).
-- `creates/sendDocumentFromTemplate.js` — the one action, with a fixed 4 optional signer slots
-  (only filled-in ones are sent — see the code comment for why a template's real, variable
-  signer count can't be a dynamic Zapier field list).
+- `creates/sendDocumentFromTemplate.js` — send one document from a template.
+- `creates/bulkSendFromTemplate.js` — bulk send a template to many recipients.
 - `index.js` — wires everything together and injects the API key into every outgoing request.
 - `test/app.test.js` — unit tests against a stubbed `z.request`, no live server needed
   (`npx vitest run` from this folder).

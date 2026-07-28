@@ -6,6 +6,8 @@ import {
   createContact,
   createEmbedSession,
   createWebhook,
+  accountAttachmentDownloadUrl,
+  fetchDocumentAttachments,
   deleteBrandLogo,
   deleteContact,
   deleteTemplate,
@@ -49,6 +51,7 @@ import {
 } from "../lib/api";
 import { useNoIndex } from "../lib/useNoIndex";
 import { FREE_TEMPLATES } from "../lib/freeTemplates";
+import { SignerAttachmentsList } from "../components/SignerAttachmentsList";
 import { track } from "../lib/track";
 import type { StatusSigner } from "../lib/types";
 
@@ -207,6 +210,12 @@ export default function Dashboard() {
   const [embedCreating, setEmbedCreating] = useState(false);
   const [embedError, setEmbedError] = useState<string | null>(null);
   const [embedResult, setEmbedResult] = useState<{ embedUrl: string; expiresAt: string } | null>(null);
+  const [attachmentsDoc, setAttachmentsDoc] = useState<DocumentSummary | null>(null);
+  const [attachmentsLoading, setAttachmentsLoading] = useState(false);
+  const [attachmentsError, setAttachmentsError] = useState<string | null>(null);
+  const [attachmentGroups, setAttachmentGroups] = useState<
+    Array<{ order: number; name: string; attachments: Array<{ id: string; name: string; sizeBytes: number }> }>
+  >([]);
   const [contacts, setContacts] = useState<ContactSummary[]>([]);
   const [contactError, setContactError] = useState<string | null>(null);
   const [showAddContact, setShowAddContact] = useState(false);
@@ -316,6 +325,21 @@ export default function Dashboard() {
       setEmbedError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
       setEmbedCreating(false);
+    }
+  };
+
+  const openAttachments = async (doc: DocumentSummary) => {
+    setAttachmentsDoc(doc);
+    setAttachmentsLoading(true);
+    setAttachmentsError(null);
+    setAttachmentGroups([]);
+    try {
+      const { signers } = await fetchDocumentAttachments(doc.docId);
+      setAttachmentGroups(signers);
+    } catch (err) {
+      setAttachmentsError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setAttachmentsLoading(false);
     }
   };
 
@@ -1160,6 +1184,15 @@ export default function Dashboard() {
                     >
                       {doc.status === "completed" ? "Signed" : doc.status === "voided" ? "Voided" : "Pending"}
                     </span>
+                    {account.isPaid && doc.status !== "voided" && (
+                      <button
+                        className="btn-secondary"
+                        style={{ fontSize: 12, padding: "4px 8px" }}
+                        onClick={() => openAttachments(doc)}
+                      >
+                        Files
+                      </button>
+                    )}
                     {doc.status === "pending" && account.isPaid && (
                       <>
                         <button
@@ -2113,6 +2146,39 @@ export default function Dashboard() {
                 Close
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {attachmentsDoc && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.6)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 10,
+          }}
+        >
+          <div className="card" style={{ background: "var(--canvas)", boxShadow: "var(--shadow-lg)", maxWidth: 420, width: "92vw" }}>
+            <h3 style={{ fontSize: 15, marginTop: 0 }}>Signer uploads</h3>
+            <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 0 }}>{attachmentsDoc.title}</p>
+            {attachmentsLoading ? (
+              <p>Loading…</p>
+            ) : attachmentGroups.length === 0 ? (
+              <p style={{ marginBottom: 12 }}>No signer uploads yet.</p>
+            ) : (
+              <SignerAttachmentsList
+                groups={attachmentGroups}
+                buildDownloadUrl={(order, id) => accountAttachmentDownloadUrl(attachmentsDoc.docId, order, id)}
+              />
+            )}
+            {attachmentsError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{attachmentsError}</p>}
+            <button className="btn-secondary" style={{ marginTop: 12 }} onClick={() => setAttachmentsDoc(null)}>
+              Close
+            </button>
           </div>
         </div>
       )}
