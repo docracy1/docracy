@@ -120,12 +120,19 @@ const DROPBOX: ProviderConfig = {
 
 const MS_SCOPE = "Files.ReadWrite.AppFolder offline_access User.Read";
 
+function msClientId(env: Env): string | undefined {
+  return env.MS_CLIENT_ID ?? env.ONEDRIVE_CLIENT_ID;
+}
+function msClientSecret(env: Env): string | undefined {
+  return env.MS_CLIENT_SECRET ?? env.ONEDRIVE_CLIENT_SECRET;
+}
+
 const ONEDRIVE: ProviderConfig = {
-  clientId: (env) => env.MS_CLIENT_ID,
-  clientSecret: (env) => env.MS_CLIENT_SECRET,
+  clientId: msClientId,
+  clientSecret: msClientSecret,
   buildAuthorizeUrl: (env, state) => {
     const params = new URLSearchParams({
-      client_id: env.MS_CLIENT_ID!,
+      client_id: msClientId(env)!,
       response_type: "code",
       redirect_uri: redirectUri(env, "onedrive"),
       scope: MS_SCOPE,
@@ -137,8 +144,8 @@ const ONEDRIVE: ProviderConfig = {
     formTokenRequest("https://login.microsoftonline.com/common/oauth2/v2.0/token", {
       code,
       grant_type: "authorization_code",
-      client_id: env.MS_CLIENT_ID!,
-      client_secret: env.MS_CLIENT_SECRET!,
+      client_id: msClientId(env)!,
+      client_secret: msClientSecret(env)!,
       redirect_uri: redirectUri(env, "onedrive"),
       scope: MS_SCOPE,
     }),
@@ -146,8 +153,8 @@ const ONEDRIVE: ProviderConfig = {
     formTokenRequest("https://login.microsoftonline.com/common/oauth2/v2.0/token", {
       grant_type: "refresh_token",
       refresh_token: refreshToken,
-      client_id: env.MS_CLIENT_ID!,
-      client_secret: env.MS_CLIENT_SECRET!,
+      client_id: msClientId(env)!,
+      client_secret: msClientSecret(env)!,
       scope: MS_SCOPE,
     }),
   fetchConnectedEmail: async (_env, accessToken) => {

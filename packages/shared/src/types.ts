@@ -220,6 +220,10 @@ export interface Env {
   DROPBOX_CLIENT_SECRET?: string;
   MS_CLIENT_ID?: string;
   MS_CLIENT_SECRET?: string;
+  /** Alias for MS_CLIENT_ID — some deployments set ONEDRIVE_* secrets instead of MS_*. */
+  ONEDRIVE_CLIENT_ID?: string;
+  /** Alias for MS_CLIENT_SECRET. */
+  ONEDRIVE_CLIENT_SECRET?: string;
   BOX_CLIENT_ID?: string;
   BOX_CLIENT_SECRET?: string;
   /** Cloudflare Turnstile secret key for the login form's bot check (lib/turnstile.ts, used by
