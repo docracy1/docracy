@@ -925,8 +925,12 @@ export default function AdminAnalytics() {
   const totals = useMemo(() => {
     if (!rows) return null;
     const pageViews = rows.filter((r) => r.event === "page_view");
-    const totalViews = sum(pageViews);
+    const humanViews = sum(pageViews.filter((r) => r.traffic_type !== "bot"));
     const botViews = sum(pageViews.filter((r) => r.traffic_type === "bot"));
+    const allViews = sum(pageViews);
+    // Humans only applies to the headline Page views tile too — previously only funnel steps
+    // were filtered, so the tile kept showing bot+human while the copy claimed otherwise.
+    const totalViews = humansOnly ? humanViews : allViews;
     // Distinct-document counts (not SUM(double1)) — document_signed fires once per signer, so a
     // raw event count overcounts any multi-signer chain. COUNT(DISTINCT documentId) gives the
     // real per-document completion rate.
@@ -934,12 +938,14 @@ export default function AdminAnalytics() {
     const completed = stepsByEvent.get("document_signed")?.distinctDocuments ?? 0;
     return {
       totalViews,
-      botPct: totalViews > 0 ? Math.round((botViews / totalViews) * 100) : 0,
+      botViews,
+      allViews,
+      botPct: allViews > 0 ? Math.round((botViews / allViews) * 100) : 0,
       created,
       completed,
       completionRate: created > 0 ? Math.round((completed / created) * 100) : null,
     };
-  }, [rows, stepsByEvent]);
+  }, [rows, stepsByEvent, humansOnly]);
 
   return (
     <div className="container" style={{ maxWidth: 1200 }}>
@@ -982,8 +988,8 @@ export default function AdminAnalytics() {
           <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 0, marginBottom: 20 }}>
             Your visits, Claude, and Cursor are always excluded from these charts.{" "}
             {humansOnly
-              ? "Funnel step counts exclude all other classified crawlers (GPTBot, Googlebot, PerplexityBot, …) — page loads and CTA clicks are then measured against the same audience."
-              : "Funnel step counts include crawler traffic, which inflates server-side page loads relative to click events that need a real browser."}
+              ? "Page views and funnel steps exclude classified crawlers (search, social previews, SEO tools, …). The daily chart still shows the bot split so you can see what was filtered out."
+              : "Counts include crawler traffic, which inflates server-side page loads relative to click events that need a real browser."}
           </p>
           {/* Blog posts and Signups are backed by their own independent D1-only fetches (each
               card manages its own loading/error state) — they have no dependency on the
@@ -1019,7 +1025,15 @@ export default function AdminAnalytics() {
                   {section === "analytics" && (
                     <>
                       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 12, marginBottom: 24 }}>
-                        <StatTile label="Page views" value={String(totals.totalViews)} sub={`${totals.botPct}% known bots`} />
+                        <StatTile
+                          label="Page views"
+                          value={String(totals.totalViews)}
+                          sub={
+                            humansOnly
+                              ? `${totals.botPct}% of all traffic was known bots (excluded)`
+                              : `${totals.botPct}% known bots`
+                          }
+                        />
                         <StatTile label="Documents sent" value={String(totals.created)} />
                         <StatTile label="Documents signed" value={String(totals.completed)} sub="distinct documents, not per-signer" />
                         <StatTile

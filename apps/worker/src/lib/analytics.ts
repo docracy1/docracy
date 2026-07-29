@@ -60,10 +60,13 @@ export function noTrackCookieOptions(env: Env) {
   };
 }
 
-/** Documented User-Agent substrings for AI crawlers/assistants likely to hit these pages — not a
- *  security control (trivially spoofable), just good-enough classification for traffic analytics.
- *  Ordered roughly by how often we expect to see them. */
+/** Documented User-Agent substrings for crawlers, link-preview fetchers, SEO tools, and uptime
+ *  monitors — not a security control (trivially spoofable), just good-enough classification so the
+ *  admin "human" counts aren't inflated by every scraper that forgets to spoof Chrome. Ordered
+ *  roughly by how often we expect to see them. A missing/empty UA stays "human" on purpose:
+ *  cron sweeps and Resend webhooks call trackEvent with no UA and must survive humansOnly. */
 const BOT_PATTERNS: Array<{ name: string; pattern: RegExp }> = [
+  // AI crawlers / assistants
   { name: "GPTBot", pattern: /GPTBot/i },
   { name: "ChatGPT-User", pattern: /ChatGPT-User/i },
   { name: "OAI-SearchBot", pattern: /OAI-SearchBot/i },
@@ -75,12 +78,52 @@ const BOT_PATTERNS: Array<{ name: string; pattern: RegExp }> = [
   { name: "Perplexity-User", pattern: /Perplexity-User/i },
   { name: "CCBot", pattern: /CCBot/i },
   { name: "Google-Extended", pattern: /Google-Extended/i },
+  // Search engines
   { name: "Googlebot", pattern: /Googlebot/i },
   { name: "bingbot", pattern: /bingbot/i },
   { name: "Applebot", pattern: /Applebot/i },
   { name: "Amazonbot", pattern: /Amazonbot/i },
+  { name: "YandexBot", pattern: /Yandex(Bot|Images|Accessibility|Render)/i },
+  { name: "DuckDuckBot", pattern: /DuckDuckBot/i },
+  { name: "Baiduspider", pattern: /Baiduspider/i },
+  { name: "SeznamBot", pattern: /SeznamBot/i },
+  { name: "PetalBot", pattern: /PetalBot/i },
+  // Social / chat link previews (hit every shared URL)
+  { name: "facebookexternalhit", pattern: /facebookexternalhit|Facebot/i },
+  { name: "Twitterbot", pattern: /Twitterbot/i },
+  { name: "LinkedInBot", pattern: /LinkedInBot/i },
+  { name: "Slackbot", pattern: /Slackbot|Slack-ImgProxy/i },
+  { name: "Discordbot", pattern: /Discordbot/i },
+  { name: "WhatsApp", pattern: /WhatsApp/i },
+  { name: "TelegramBot", pattern: /TelegramBot/i },
+  { name: "Pinterest", pattern: /Pinterestbot|Pinterest\//i },
+  { name: "Redditbot", pattern: /Redditbot/i },
+  { name: "Embedly", pattern: /Embedly/i },
+  { name: "Quora", pattern: /Quora-Bot|Quora Link Preview/i },
+  // SEO / site auditors
+  { name: "AhrefsBot", pattern: /AhrefsBot/i },
+  { name: "SemrushBot", pattern: /SemrushBot|SemrushBot-BA/i },
+  { name: "DotBot", pattern: /DotBot/i },
+  { name: "MJ12bot", pattern: /MJ12bot/i },
+  { name: "BLEXBot", pattern: /BLEXBot/i },
+  { name: "DataForSeoBot", pattern: /DataForSeoBot/i },
+  { name: "Screaming Frog", pattern: /Screaming Frog/i },
   { name: "Bytespider", pattern: /Bytespider/i },
   { name: "meta-externalagent", pattern: /meta-externalagent/i },
+  // Uptime / health / archives / headless
+  { name: "UptimeRobot", pattern: /UptimeRobot/i },
+  { name: "Pingdom", pattern: /Pingdom/i },
+  { name: "StatusCake", pattern: /StatusCake/i },
+  { name: "Better Stack", pattern: /BetterUptimeBot|Better Stack/i },
+  { name: "archive.org", pattern: /archive\.org_bot|IA_archiver/i },
+  { name: "HeadlessChrome", pattern: /HeadlessChrome/i },
+  // Raw HTTP clients (scripts, monitors, our own probes if they forget a browser UA)
+  { name: "curl", pattern: /\bcurl\//i },
+  { name: "wget", pattern: /\bwget\//i },
+  { name: "python-requests", pattern: /python-requests|Python-urllib|aiohttp/i },
+  { name: "Go-http-client", pattern: /Go-http-client/i },
+  { name: "axios", pattern: /\baxios\//i },
+  { name: "node-fetch", pattern: /node-fetch|undici/i },
 ];
 
 /** Founder tooling traffic that should never inflate funnel numbers — Claude Code / Claude bots

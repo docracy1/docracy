@@ -15,6 +15,18 @@ describe("classifyBot", () => {
     });
   });
 
+  it("classifies social preview, SEO, and raw HTTP clients as bots", () => {
+    expect(classifyBot("facebookexternalhit/1.1").botName).toBe("facebookexternalhit");
+    expect(classifyBot("Twitterbot/1.0").botName).toBe("Twitterbot");
+    expect(classifyBot("LinkedInBot/1.0").botName).toBe("LinkedInBot");
+    expect(classifyBot("Slackbot-LinkExpanding 1.0").botName).toBe("Slackbot");
+    expect(classifyBot("Mozilla/5.0 (compatible; AhrefsBot/7.0)").botName).toBe("AhrefsBot");
+    expect(classifyBot("Mozilla/5.0 (compatible; SemrushBot/7~bl)").botName).toBe("SemrushBot");
+    expect(classifyBot("curl/8.0.1").botName).toBe("curl");
+    expect(classifyBot("python-requests/2.31.0").botName).toBe("python-requests");
+    expect(classifyBot("Mozilla/5.0 HeadlessChrome/120.0").botName).toBe("HeadlessChrome");
+  });
+
   it("classifies a normal browser user agent as human", () => {
     expect(classifyBot("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15")).toEqual({
       isBot: false,
