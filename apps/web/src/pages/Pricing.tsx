@@ -45,7 +45,7 @@ const TIERS: Array<{
       "AI contract generator",
       "White-label branding",
       "PIN-protected signing links",
-      "Dropbox, OneDrive, and Box connectors",
+      "Dropbox, OneDrive, Box, and Google Drive connectors",
     ],
     // Placeholder — Paid CTA is rendered dynamically from session state below.
     cta: { label: "Sign in to upgrade", to: "/login" },
@@ -102,8 +102,8 @@ export default function Pricing() {
       <p style={{ maxWidth: 640, marginBottom: 32 }}>
         Free for signing chains of up to 2 signers, no account required. A paid account is a flat{" "}
         <strong>$10/month per workspace</strong> — not per seat — and adds unlimited signers, a dashboard,
-        reusable templates, bulk send, custom expiry, embedded signing, contacts, Dropbox/OneDrive/Box
-        auto-upload, webhooks, team accounts, white-label branding, PIN-protected links, an MCP
+        reusable templates, bulk send, custom expiry, embedded signing, contacts, Dropbox/OneDrive/Box/Google
+        Drive auto-upload, webhooks, team accounts, white-label branding, PIN-protected links, an MCP
         connector for AI assistants, and a full set of AI tools. <strong>Enterprise</strong> adds
         invoice billing, premium support, SSO/multi-workspace, and volume discounts.
       </p>

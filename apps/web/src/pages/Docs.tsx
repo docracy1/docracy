@@ -15,7 +15,7 @@ function Section({ id, title, children }: { id: string; title: string; children:
 export default function Docs() {
   usePageMeta(
     "Documentation — Docracy",
-    "How Docracy's free signing flow, paid features (bulk send, embed, contacts, attachments, SMS gateways, Dropbox/OneDrive/Box, AI), Enterprise options, templates, webhooks, and MCP/Zapier automation work."
+    "How Docracy's free signing flow, paid features (bulk send, embed, contacts, attachments, SMS gateways, Dropbox/OneDrive/Box/Google Drive, AI), Enterprise options, templates, webhooks, and MCP/Zapier automation work."
   );
 
   return (
@@ -26,7 +26,7 @@ export default function Docs() {
       <Section id="plans" title="Plans at a glance (Free / Paid / Enterprise)">
         <p style={{ marginBottom: 12 }}>
           Same feature matrix as <Link to="/pricing">Pricing</Link> — Free vs Paid ($10/mo) vs Enterprise.
-          Dropbox, OneDrive, and Box auto-upload are included on <strong>Paid</strong>.
+          Dropbox, OneDrive, Box, and Google Drive auto-upload are included on <strong>Paid</strong>.
         </p>
         <div className="card" style={{ padding: 0 }}>
           <div className="plan-table-scroll">
@@ -133,12 +133,12 @@ export default function Docs() {
           Signing in adds unlimited signers per document, a dashboard with document history, reusable
           saved templates, parallel (all-at-once) signing, PIN-protected signing links, team accounts
           (shared workspace with teammates), white-label branding (your own logo on emails/signing pages),
-          webhooks, MCP/Zapier, AI tools, Dropbox/OneDrive/Box auto-upload, plus the workflow features
+          webhooks, MCP/Zapier, AI tools, Dropbox/OneDrive/Box/Google Drive auto-upload, plus the workflow features
           below. See the table above or <Link to="/pricing">Pricing</Link>.
         </p>
       </Section>
 
-      <Section id="cloud-connectors" title="Dropbox, OneDrive, and Box (paid)">
+      <Section id="cloud-connectors" title="Dropbox, OneDrive, Box, and Google Drive (paid)">
         <p>
           Connect cloud storage from Dashboard → Tools → <strong>Connectors</strong>. After a document
           finishes signing, Docracy uploads the final PDF automatically — no manual download step.
@@ -153,6 +153,9 @@ export default function Docs() {
           </li>
           <li>
             <strong>Box</strong>
+          </li>
+          <li>
+            <strong>Google Drive</strong>
           </li>
         </ul>
       </Section>

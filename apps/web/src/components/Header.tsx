@@ -50,6 +50,7 @@ export default function Header() {
   // logo drops from the marketing site's 40px down to a quieter in-product size, and clicking it
   // goes back to the signed-in home (Dashboard) rather than out to the public landing page.
   const isInAppRoute = ["/dashboard", "/prepare", "/status"].some((p) => location.pathname.startsWith(p));
+  const isDashboardRoute = location.pathname.startsWith("/dashboard");
   const logoHeight = isSignRoute || isInAppRoute ? 24 : 40;
   const logoLinkTo = isInAppRoute ? "/dashboard" : "/";
 
@@ -60,6 +61,21 @@ export default function Header() {
           <Link to={logoLinkTo} style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
             <img src="/docracy-wordmark.png" alt="Docracy" style={{ height: logoHeight, width: "auto" }} />
           </Link>
+        </div>
+      </header>
+    );
+  }
+
+  // Dashboard has its own mobile bottom nav — keep the site header to logo + title so we don't
+  // stack two competing nav systems (the bug that made the panel unusable on phones).
+  if (isDashboardRoute) {
+    return (
+      <header className="site-header site-header-app">
+        <div className="container" style={{ padding: 0, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <Link to="/dashboard" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
+            <img src="/docracy-wordmark.png" alt="Docracy" style={{ height: logoHeight, width: "auto" }} />
+          </Link>
+          <span className="header-app-title">Dashboard</span>
         </div>
       </header>
     );
@@ -101,15 +117,39 @@ export default function Header() {
             <span />
           </button>
         </div>
-        {menuOpen && (
-          <div className="header-mobile-menu">
-            {NAV_LINKS.map((link) => (
-              <Link key={link.to} to={link.to}>
-                {link.label}
-              </Link>
-            ))}
-          </div>
-        )}
+      </div>
+
+      {/* Slide-in mobile panel — Swipesign style */}
+      {menuOpen && (
+        <div className="header-mobile-backdrop" onClick={() => setMenuOpen(false)} aria-hidden="true" />
+      )}
+      <div className={`header-mobile-panel${menuOpen ? " is-open" : ""}`} aria-hidden={!menuOpen}>
+        <button
+          className="header-mobile-close"
+          aria-label="Close menu"
+          onClick={() => setMenuOpen(false)}
+        >
+          ✕
+        </button>
+        <nav className="header-mobile-nav">
+          {NAV_LINKS.map((link) => (
+            <Link key={link.to} to={link.to} className="header-mobile-nav-link">
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+        <div className="header-mobile-ctas">
+          <Link to="/prepare" className="header-mobile-cta-primary" onClick={() => setMenuOpen(false)}>
+            Start free
+          </Link>
+          <Link
+            to={signedIn ? "/dashboard" : "/login"}
+            className="header-mobile-cta-secondary"
+            onClick={() => setMenuOpen(false)}
+          >
+            {signedIn ? "Dashboard" : "Sign in"}
+          </Link>
+        </div>
       </div>
     </header>
   );

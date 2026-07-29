@@ -6,6 +6,7 @@ export const INTEGRATION_LOGOS = [
   { name: "Dropbox", file: "dropbox.svg", group: "storage" as const },
   { name: "OneDrive", file: "onedrive.svg", group: "storage" as const },
   { name: "Box", file: "box.svg", group: "storage" as const },
+  { name: "Google Drive", file: "googledrive.svg", group: "storage" as const },
   { name: "Zapier", file: "zapier.svg", group: "automation" as const },
   { name: "Claude", file: "claude.svg", group: "ai" as const },
   { name: "ChatGPT", file: "openai.svg", group: "ai" as const },
@@ -42,8 +43,8 @@ export default function IntegrationsBand({ learnMoreTo = "/docs", compact = fals
         </div>
 
         <p style={{ textAlign: "center", fontSize: 12.5, color: "var(--mute)", margin: "20px auto 0", maxWidth: 520 }}>
-          Dropbox, OneDrive, and Box auto-upload signed PDFs. Zapier and webhooks automate your stack. MCP connects Claude,
-          ChatGPT, Grok, Perplexity, and Cursor to your documents.
+          Dropbox, OneDrive, Box, and Google Drive auto-upload signed PDFs. Zapier and webhooks automate your stack. MCP
+          connects Claude, ChatGPT, Grok, Perplexity, and Cursor to your documents.
         </p>
 
         <div style={{ textAlign: "center", marginTop: 24 }}>

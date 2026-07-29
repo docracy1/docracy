@@ -1,7 +1,7 @@
 import { generateOpaqueToken, hashOpaqueToken } from "@docracy/shared";
 import type { Env } from "@docracy/shared";
 
-export const CLOUD_PROVIDERS = ["dropbox", "onedrive", "box"] as const;
+export const CLOUD_PROVIDERS = ["dropbox", "onedrive", "box", "google"] as const;
 export type CloudProvider = (typeof CLOUD_PROVIDERS)[number];
 
 export interface CloudConnectionSummary {
@@ -19,6 +19,7 @@ interface ConnectionRow {
   expires_at: string | null;
   connected_email: string | null;
   box_folder_id: string | null;
+  google_folder_id: string | null;
   created_at: string;
 }
 
@@ -265,7 +266,123 @@ const BOX: ProviderConfig = {
   },
 };
 
-const PROVIDERS: Record<CloudProvider, ProviderConfig> = { dropbox: DROPBOX, onedrive: ONEDRIVE, box: BOX };
+const GOOGLE_FOLDER_NAME = "Docracy Signed Documents";
+const GOOGLE_CONNECTOR_SCOPE =
+  "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.email";
+
+async function ensureGoogleFolderId(env: Env, row: ConnectionRow): Promise<string> {
+  if (row.google_folder_id) return row.google_folder_id;
+
+  const q = encodeURIComponent(
+    `name='${GOOGLE_FOLDER_NAME}' and mimeType='application/vnd.google-apps.folder' and trashed=false`
+  );
+  const list = await fetch(
+    `https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name)&pageSize=1`,
+    { headers: { Authorization: `Bearer ${row.access_token}` } }
+  );
+  if (!list.ok) throw new Error(`Google Drive folder lookup failed: ${list.status} ${await list.text()}`);
+  const listed = (await list.json()) as { files?: Array<{ id: string }> };
+  let folderId = listed.files?.[0]?.id;
+
+  if (!folderId) {
+    const create = await fetch("https://www.googleapis.com/drive/v3/files?fields=id", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${row.access_token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: GOOGLE_FOLDER_NAME,
+        mimeType: "application/vnd.google-apps.folder",
+      }),
+    });
+    if (!create.ok) throw new Error(`Google Drive folder creation failed: ${create.status} ${await create.text()}`);
+    const created = (await create.json()) as { id: string };
+    folderId = created.id;
+  }
+
+  const db = requireDb(env);
+  await db.prepare(`UPDATE cloud_connections SET google_folder_id = ? WHERE id = ?`).bind(folderId, row.id).run();
+  return folderId;
+}
+
+const GOOGLE: ProviderConfig = {
+  clientId: (env) => env.GOOGLE_INTEGRATIONS_CLIENT_ID,
+  clientSecret: (env) => env.GOOGLE_INTEGRATIONS_CLIENT_SECRET,
+  buildAuthorizeUrl: (env, state) => {
+    const params = new URLSearchParams({
+      client_id: env.GOOGLE_INTEGRATIONS_CLIENT_ID!,
+      response_type: "code",
+      redirect_uri: redirectUri(env, "google"),
+      scope: GOOGLE_CONNECTOR_SCOPE,
+      access_type: "offline",
+      prompt: "consent",
+      state,
+    });
+    return `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+  },
+  exchangeCode: (env, code) =>
+    formTokenRequest("https://oauth2.googleapis.com/token", {
+      code,
+      grant_type: "authorization_code",
+      client_id: env.GOOGLE_INTEGRATIONS_CLIENT_ID!,
+      client_secret: env.GOOGLE_INTEGRATIONS_CLIENT_SECRET!,
+      redirect_uri: redirectUri(env, "google"),
+    }),
+  refresh: (env, refreshToken) =>
+    formTokenRequest("https://oauth2.googleapis.com/token", {
+      grant_type: "refresh_token",
+      refresh_token: refreshToken,
+      client_id: env.GOOGLE_INTEGRATIONS_CLIENT_ID!,
+      client_secret: env.GOOGLE_INTEGRATIONS_CLIENT_SECRET!,
+    }),
+  fetchConnectedEmail: async (_env, accessToken) => {
+    const res = await fetch("https://www.googleapis.com/oauth2/v2/userinfo", {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    if (!res.ok) return null;
+    const json = (await res.json()) as { email?: string };
+    return json.email ?? null;
+  },
+  upload: async (env, row, filename, bytes) => {
+    const folderId = await ensureGoogleFolderId(env, row);
+    const metadata = JSON.stringify({ name: filename, parents: [folderId] });
+    const boundary = "docracy_upload_boundary";
+    const encoder = new TextEncoder();
+    const metaPart = encoder.encode(
+      `--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${metadata}\r\n`
+    );
+    const fileHeader = encoder.encode(
+      `--${boundary}\r\nContent-Type: application/pdf\r\n\r\n`
+    );
+    const footer = encoder.encode(`\r\n--${boundary}--`);
+    const body = new Uint8Array(metaPart.length + fileHeader.length + bytes.length + footer.length);
+    body.set(metaPart, 0);
+    body.set(fileHeader, metaPart.length);
+    body.set(bytes, metaPart.length + fileHeader.length);
+    body.set(footer, metaPart.length + fileHeader.length + bytes.length);
+
+    const res = await fetch(
+      "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${row.access_token}`,
+          "Content-Type": `multipart/related; boundary=${boundary}`,
+        },
+        body,
+      }
+    );
+    if (!res.ok) throw new Error(`Google Drive upload failed: ${res.status} ${await res.text()}`);
+  },
+};
+
+const PROVIDERS: Record<CloudProvider, ProviderConfig> = {
+  dropbox: DROPBOX,
+  onedrive: ONEDRIVE,
+  box: BOX,
+  google: GOOGLE,
+};
 
 export function isProviderConfigured(env: Env, provider: CloudProvider): boolean {
   const config = PROVIDERS[provider];

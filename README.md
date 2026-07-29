@@ -45,7 +45,7 @@ The free anonymous flow stores document state in Cloudflare KV, PDFs in R2, send
 - webhooks
 - API key + MCP connector
 - AI tools
-- Dropbox, OneDrive, and Box auto-upload
+- Dropbox, OneDrive, Box, and Google Drive auto-upload
 - signer-required attachments
 - anchor tag detection in PDFs
 

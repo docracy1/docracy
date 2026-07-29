@@ -64,13 +64,17 @@ STRIPE_ENTERPRISE_PRODUCT_ID = "prod_UwhdVD23t6zce3"
 # {plan: "enterprise"}) — a real recurring annual subscription, same self-serve flow as the
 # standard plan. Not secret (just an identifier).
 STRIPE_ENTERPRISE_PRICE_ID = "price_1TwoDtQvixTOu6qpwfZgfEO5"
-# Cloud-storage connectors (Enterprise only, see lib/cloudConnectors.ts) — client IDs are public,
+# Cloud-storage connectors (paid, see lib/cloudConnectors.ts) — client IDs are public,
 # not secret. Each provider's routes 501 gracefully until both its ID and secret are set. Register
 # the OAuth app in that provider's own developer console with redirect URI
 # {PUBLIC_WORKER_URL}/api/account/connectors/{provider}/callback, then fill these in:
 DROPBOX_CLIENT_ID = "t0e14bciku06etn"
 MS_CLIENT_ID = "a09dea4c-3518-4312-9de8-b1a91a03f283"
 BOX_CLIENT_ID = "b1hihpb8dhxe7wye5jf9mswpiqhknj42"
+# Google Drive Integrations client (secret via wrangler secret put GOOGLE_INTEGRATIONS_CLIENT_SECRET)
+GOOGLE_INTEGRATIONS_CLIENT_ID = "188295326340-3hmmaau8nu9i33lb3u80km63hn0r0q3c.apps.googleusercontent.com"
+# Google Sign-In client (secret via wrangler secret put GOOGLE_LOGIN_CLIENT_SECRET)
+GOOGLE_LOGIN_CLIENT_ID = "188295326340-ihcrrfutas19lqgu407u3oft7huq5vhl.apps.googleusercontent.com"
 
 # --- Secrets (never stored in this file) ---
 # Set with: wrangler secret put TOKEN_SECRET

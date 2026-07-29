@@ -32,6 +32,7 @@ export const PLAN_ROWS: Array<{ label: string; free: boolean | string; paid: boo
   { label: "Dropbox connector (auto-upload signed PDFs)", free: false, paid: true },
   { label: "OneDrive connector (auto-upload signed PDFs)", free: false, paid: true },
   { label: "Box connector (auto-upload signed PDFs)", free: false, paid: true },
+  { label: "Google Drive connector (auto-upload signed PDFs)", free: false, paid: true },
   { label: "Invoice billing & annual contracts", free: false, paid: false, enterprise: true },
   { label: "Volume discounts & custom onboarding", free: false, paid: false, enterprise: true },
 ];

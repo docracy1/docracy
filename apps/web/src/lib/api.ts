@@ -491,7 +491,7 @@ export async function deleteWebhook(id: string): Promise<{ ok: true }> {
   return asJson(res);
 }
 
-export type CloudProvider = "dropbox" | "onedrive" | "box";
+export type CloudProvider = "dropbox" | "onedrive" | "box" | "google";
 
 export interface CloudConnectionSummary {
   provider: CloudProvider;

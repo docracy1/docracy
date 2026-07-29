@@ -40,7 +40,7 @@ Both tools work on this folder. Before starting: `git pull --rebase`. After fini
 
 ## Done (production)
 
-- Cloud connectors: Dropbox, OneDrive, Box (Enterprise OAuth + upload)
+- Cloud connectors: Dropbox, OneDrive, Box, Google Drive (paid OAuth + upload)
 - Turnstile on login
 - Admin analytics sidebar (requires `CF_ANALYTICS_API_TOKEN` secret for read API)
 

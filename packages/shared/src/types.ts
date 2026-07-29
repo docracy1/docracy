@@ -253,6 +253,14 @@ export interface Env {
   ONEDRIVE_CLIENT_SECRET?: string;
   BOX_CLIENT_ID?: string;
   BOX_CLIENT_SECRET?: string;
+  /** Google Drive cloud connector (Integrations OAuth client). Client ID is public; secret via
+   *  `wrangler secret put GOOGLE_INTEGRATIONS_CLIENT_SECRET`. Routes 501 until both are set. */
+  GOOGLE_INTEGRATIONS_CLIENT_ID?: string;
+  GOOGLE_INTEGRATIONS_CLIENT_SECRET?: string;
+  /** Google Sign-In OAuth client. Client ID is public; secret via
+   *  `wrangler secret put GOOGLE_LOGIN_CLIENT_SECRET`. */
+  GOOGLE_LOGIN_CLIENT_ID?: string;
+  GOOGLE_LOGIN_CLIENT_SECRET?: string;
   /** Cloudflare Turnstile secret key for the login form's bot check (lib/turnstile.ts, used by
    *  POST /auth/request-link) — absent until a widget is created (`wrangler turnstile widget
    *  create`) and this is set via `wrangler secret put TURNSTILE_SECRET_KEY`. Requests skip

@@ -75,6 +75,52 @@ class ProfileMenuBoundary extends Component<{ children: ReactNode }, { error: st
   }
 }
 
+function BottomNavIcon({ name }: { name: "dashboard" | "contacts" | "documents" | "more" }) {
+  const common = {
+    width: 22,
+    height: 22,
+    viewBox: "0 0 24 24",
+    fill: "none" as const,
+    stroke: "currentColor",
+    strokeWidth: 1.6,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+  };
+  switch (name) {
+    case "dashboard":
+      return (
+        <svg {...common}>
+          <rect x="3" y="3" width="7" height="7" rx="1.5" />
+          <rect x="14" y="3" width="7" height="7" rx="1.5" />
+          <rect x="3" y="14" width="7" height="7" rx="1.5" />
+          <rect x="14" y="14" width="7" height="7" rx="1.5" />
+        </svg>
+      );
+    case "contacts":
+      return (
+        <svg {...common}>
+          <circle cx="9" cy="8" r="3" />
+          <path d="M3.5 19.5c0-3 2.5-5.5 5.5-5.5s5.5 2.5 5.5 5.5" />
+          <circle cx="17" cy="9" r="2.25" />
+          <path d="M15.5 14.2c2.3.4 4 2.4 4 5.3" />
+        </svg>
+      );
+    case "documents":
+      return (
+        <svg {...common}>
+          <path d="M7 3.5h7l4 4V20a1.5 1.5 0 0 1-1.5 1.5H7A1.5 1.5 0 0 1 5.5 20V5A1.5 1.5 0 0 1 7 3.5z" />
+          <path d="M14 3.5V8h4" />
+        </svg>
+      );
+    case "more":
+      return (
+        <svg {...common}>
+          <path d="M4 7h16M4 12h16M4 17h16" />
+        </svg>
+      );
+  }
+}
+
 /** Minimalist monochrome line icons for the profile-menu items — same hand-drawn, Heroicons-
  *  outline-style approach as Landing.tsx's FeatureIcon, kept local since these four are specific
  *  to this one menu. */
@@ -186,6 +232,7 @@ export default function Dashboard() {
   const [documentsExpanded, setDocumentsExpanded] = useState(false);
   const [toolsExpanded, setToolsExpanded] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const [moreSheetOpen, setMoreSheetOpen] = useState(false);
   const [connections, setConnections] = useState<CloudConnectionSummary[]>([]);
   const [connectorError, setConnectorError] = useState<string | null>(null);
   const [connectingProvider, setConnectingProvider] = useState<CloudProvider | null>(null);
@@ -977,44 +1024,35 @@ export default function Dashboard() {
         )}
         {activeTab === "dashboard" && (
           <>
-            <h1>Welcome back</h1>
-            <p>Here's what needs your attention today — signed in as {account.email}.</p>
+            <h1 className="dashboard-welcome-title">Welcome</h1>
+            <p className="dashboard-welcome-sub">Here's what needs your attention today.</p>
 
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
-                gap: 12,
-                marginTop: 16,
-              }}
-            >
+            <div className="dashboard-metrics">
               <div
-                className="card"
-                style={awaitingYouDocs.length > 0 ? { background: "rgba(47,126,216,0.08)", borderColor: "var(--primary)" } : undefined}
+                className={`dashboard-metric-card card${awaitingYouDocs.length > 0 ? " dashboard-metric-card-alert" : ""}`}
               >
-                <div style={{ fontSize: 12, color: "var(--mute)", textTransform: "uppercase", letterSpacing: 0.4 }}>
-                  Awaiting your signature
-                </div>
-                <div style={{ fontSize: 28, fontWeight: 700, color: "var(--primary)" }}>{awaitingYouDocs.length}</div>
+                <div className="dashboard-metric-label">Awaiting your signature</div>
+                <div className="dashboard-metric-value dashboard-metric-value-primary">{awaitingYouDocs.length}</div>
               </div>
-              <div className="card">
-                <div style={{ fontSize: 12, color: "var(--mute)", textTransform: "uppercase", letterSpacing: 0.4 }}>
-                  Waiting on others
-                </div>
-                <div style={{ fontSize: 28, fontWeight: 700 }}>{waitingOnOthersCount}</div>
+              <div className="dashboard-metric-card card">
+                <div className="dashboard-metric-label">Waiting on others</div>
+                <div className="dashboard-metric-value">{waitingOnOthersCount}</div>
               </div>
-              <div className="card">
-                <div style={{ fontSize: 12, color: "var(--mute)", textTransform: "uppercase", letterSpacing: 0.4 }}>
-                  Completed this month
-                </div>
-                <div style={{ fontSize: 28, fontWeight: 700 }}>{completedThisMonthCount}</div>
+              <div className="dashboard-metric-card card">
+                <div className="dashboard-metric-label">Completed this month</div>
+                <div className="dashboard-metric-value">{completedThisMonthCount}</div>
               </div>
             </div>
 
             <div className="card" style={{ marginTop: 24 }}>
               <h3 style={{ fontSize: 15 }}>Awaiting your signature</h3>
               {awaitingYouDocs.length === 0 ? (
-                <p style={{ marginBottom: 0 }}>You're all caught up — nothing is waiting on your signature right now.</p>
+                <p className="dashboard-caught-up" style={{ marginBottom: 0 }}>
+                  <span className="dashboard-caught-up-icon" aria-hidden="true">✓</span>
+                  <span>
+                    <strong>You're all caught up.</strong> Nothing is waiting on your signature right now.
+                  </span>
+                </p>
               ) : (
                 awaitingYouDocs.map((doc) => (
                   <div
@@ -1038,7 +1076,7 @@ export default function Dashboard() {
               )}
             </div>
 
-            <div className="card" style={{ marginTop: 24 }}>
+            <div className="card dashboard-start-new" style={{ marginTop: 24 }}>
               <h3 style={{ fontSize: 15 }}>Start something new</h3>
               <Link to="/prepare" className="btn-primary" style={{ display: "inline-block", textDecoration: "none" }}>
                 + New document
@@ -1274,7 +1312,7 @@ export default function Dashboard() {
                 </p>
                 <p style={{ fontSize: 12, color: "var(--mute)", marginBottom: 8 }}>
                   Enterprise adds invoice billing, premium customer support, SSO/multi-workspace setup, and
-                  volume discounts on top of everything on Paid (including Dropbox, OneDrive, and Box).
+                  volume discounts on top of everything on Paid (including Dropbox, OneDrive, Box, and Google Drive).
                 </p>
                 {upgradeEnterpriseError && (
                   <p style={{ color: "var(--danger)", fontSize: 13 }}>{upgradeEnterpriseError}</p>
@@ -1630,11 +1668,33 @@ export default function Dashboard() {
           {connectorError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{connectorError}</p>}
           {(
             [
-              { provider: "dropbox" as const, label: "Dropbox" },
-              { provider: "onedrive" as const, label: "OneDrive" },
-              { provider: "box" as const, label: "Box" },
+              { provider: "dropbox" as const, label: "Dropbox", logo: (
+                <svg width="20" height="20" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path fill="#0061FF" d="M10 2.5L0 9.167l10 6.666 10-6.666zM30 2.5l-10 6.667 10 6.666 10-6.666zM0 22.5l10 6.667 10-6.667-10-6.666zM30 15.834l-10 6.666 10 6.667 10-6.667zM10 30.834l10 6.666 10-6.666-10-6.667z"/>
+                </svg>
+              )},
+              { provider: "onedrive" as const, label: "OneDrive", logo: (
+                <svg width="22" height="16" viewBox="0 0 22 16" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path fill="#0364B8" d="M13.18 5.77l-.01-.04A5.5 5.5 0 002.5 8a.5.5 0 00.01.08A4 4 0 004.5 16H18a4 4 0 001.41-7.74 5.5 5.5 0 00-6.23-2.49z"/>
+                </svg>
+              )},
+              { provider: "box" as const, label: "Box", logo: (
+                <svg width="34" height="14" viewBox="0 0 34 14" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <text x="0" y="12" fontFamily="Arial Black, sans-serif" fontWeight="900" fontSize="14" fill="#0061D5">Box</text>
+                </svg>
+              )},
+              { provider: "google" as const, label: "Google Drive", logo: (
+                <svg width="22" height="20" viewBox="0 0 87.3 78" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path fill="#0066DA" d="M6.6 66.85l3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3L27.45 53.5H0c0 1.55.4 3.1 1.2 4.5z"/>
+                  <path fill="#00AC47" d="M43.65 25L29.9 1.2C28.55 2 27.4 3.1 26.6 4.5L1.2 48.5C.4 49.9 0 51.45 0 53h27.45z"/>
+                  <path fill="#EA4335" d="M73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l8.55-14.8c.8-1.4 1.2-2.95 1.2-4.5H59.85z"/>
+                  <path fill="#00832D" d="M43.65 25L58.25 0H39.05c-1.6 0-3.15.45-4.5 1.2z"/>
+                  <path fill="#2684FC" d="M27.45 53.5 13.75 76.8c1.35.8 2.9 1.2 4.5 1.2h50.8c1.6 0 3.15-.45 4.5-1.2L59.85 53.5z"/>
+                  <path fill="#FFBA00" d="M59.85 53.5H87.3c0-1.55-.4-3.1-1.2-4.5L72.9 26.2c-.8-1.4-1.95-2.5-3.3-3.3L43.65 25z"/>
+                </svg>
+              )},
             ]
-          ).map(({ provider, label }) => {
+          ).map(({ provider, label, logo }) => {
             const connection = connections.find((c) => c.provider === provider);
             return (
               <div
@@ -1649,14 +1709,19 @@ export default function Dashboard() {
                   gap: 8,
                 }}
               >
-                <span>
-                  {label}
-                  {connection && (
-                    <span style={{ fontSize: 12, color: "var(--mute)" }}>
-                      {" "}
-                      — connected{connection.connectedEmail ? ` as ${connection.connectedEmail}` : ""}
-                    </span>
-                  )}
+                <span style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 28, height: 28, flexShrink: 0 }}>
+                    {logo}
+                  </span>
+                  <span>
+                    {label}
+                    {connection && (
+                      <span style={{ fontSize: 12, color: "var(--mute)" }}>
+                        {" "}
+                        — connected{connection.connectedEmail ? ` as ${connection.connectedEmail}` : ""}
+                      </span>
+                    )}
+                  </span>
                 </span>
                 {connection ? (
                   <button
@@ -1676,101 +1741,10 @@ export default function Dashboard() {
                   >
                     {connectingProvider === provider ? "Connecting…" : "Connect"}
                   </button>
-      )}
-
-      {embedDoc && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(0,0,0,0.6)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 10,
-          }}
-        >
-          <div className="card" style={{ background: "var(--canvas)", boxShadow: "var(--shadow-lg)", maxWidth: 480, width: "92vw" }}>
-            <h3 style={{ fontSize: 15, marginTop: 0 }}>Create embed session</h3>
-            <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 0 }}>{embedDoc.title}</p>
-            {embedLoading ? (
-              <p>Loading signers…</p>
-            ) : embedResult ? (
-              <>
-                <p style={{ fontSize: 13 }}>Expires {new Date(embedResult.expiresAt).toLocaleString()}</p>
-                <input
-                  className="form-input"
-                  style={{ width: "100%", marginBottom: 8, fontSize: 12 }}
-                  readOnly
-                  value={embedResult.embedUrl}
-                  onFocus={(e) => e.target.select()}
-                />
-                <button
-                  type="button"
-                  className="btn-primary"
-                  onClick={() => void navigator.clipboard.writeText(embedResult.embedUrl)}
-                >
-                  Copy embed URL
-                </button>
-              </>
-            ) : embedSigners.length === 0 ? (
-              <p style={{ marginBottom: 12 }}>No pending signers — embedding is only available while someone still needs to sign.</p>
-            ) : (
-              <>
-                <select
-                  className="form-input"
-                  style={{ width: "100%", marginBottom: 8 }}
-                  value={embedOrder ?? ""}
-                  onChange={(e) => setEmbedOrder(Number(e.target.value))}
-                >
-                  <option value="" disabled>
-                    Select signer
-                  </option>
-                  {embedSigners.map((s) => (
-                    <option key={s.order} value={s.order}>
-                      {s.order}. {s.name}
-                    </option>
-                  ))}
-                </select>
-                <textarea
-                  className="form-input"
-                  style={{ width: "100%", marginBottom: 8, minHeight: 72, fontSize: 12 }}
-                  placeholder="Allowed origins — one per line (e.g. https://app.example.com)"
-                  aria-label="Allowed origins"
-                  value={embedOrigins}
-                  onChange={(e) => setEmbedOrigins(e.target.value)}
-                />
-                <input
-                  className="form-input"
-                  style={{ width: "100%", marginBottom: 8 }}
-                  placeholder="Return URL after signing (optional)"
-                  aria-label="Return URL"
-                  value={embedReturnUrl}
-                  onChange={(e) => setEmbedReturnUrl(e.target.value)}
-                />
-              </>
-            )}
-            {embedError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{embedError}</p>}
-            <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
-              {!embedResult && (
-                <button
-                  className="btn-primary"
-                  disabled={embedLoading || embedCreating || embedOrder == null || embedSigners.length === 0}
-                  onClick={() => void onCreateEmbed()}
-                >
-                  {embedCreating ? "Creating…" : "Create embed URL"}
-                </button>
-              )}
-              <button className="btn-secondary" disabled={embedCreating} onClick={() => setEmbedDoc(null)}>
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-})}
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
 
@@ -2186,6 +2160,133 @@ export default function Dashboard() {
       )}
 
       </div>
+
+      <nav className="dashboard-bottom-nav" aria-label="Dashboard">
+        <button
+          type="button"
+          className={`dashboard-bottom-nav-item${activeTab === "dashboard" ? " active" : ""}`}
+          onClick={() => {
+            setActiveTab("dashboard");
+            setMoreSheetOpen(false);
+          }}
+        >
+          <BottomNavIcon name="dashboard" />
+          <span>Dashboard</span>
+        </button>
+        <button
+          type="button"
+          className={`dashboard-bottom-nav-item${
+            account.isPaid
+              ? activeTab === "tools" && toolsSubTab === "contacts"
+                ? " active"
+                : ""
+              : activeTab === "templates"
+                ? " active"
+                : ""
+          }`}
+          onClick={() => {
+            if (account.isPaid) openTools("contacts");
+            else setActiveTab("templates");
+            setMoreSheetOpen(false);
+          }}
+        >
+          <BottomNavIcon name="contacts" />
+          <span>{account.isPaid ? "Contacts" : "Templates"}</span>
+        </button>
+        <Link to="/prepare" className="dashboard-bottom-nav-fab" aria-label="New document">
+          <span aria-hidden="true">+</span>
+        </Link>
+        <button
+          type="button"
+          className={`dashboard-bottom-nav-item${activeTab === "documents" ? " active" : ""}`}
+          onClick={() => {
+            openDocuments("all");
+            setMoreSheetOpen(false);
+          }}
+        >
+          <BottomNavIcon name="documents" />
+          <span>Documents</span>
+        </button>
+        <button
+          type="button"
+          className={`dashboard-bottom-nav-item${moreSheetOpen ? " active" : ""}`}
+          onClick={() => setMoreSheetOpen((o) => !o)}
+        >
+          <BottomNavIcon name="more" />
+          <span>More</span>
+        </button>
+      </nav>
+
+      {moreSheetOpen && (
+        <div className="dashboard-more-sheet" role="dialog" aria-label="More">
+          <button type="button" className="dashboard-more-backdrop" aria-label="Close" onClick={() => setMoreSheetOpen(false)} />
+          <div className="dashboard-more-panel">
+            <div className="dashboard-more-handle" aria-hidden="true" />
+            <p className="dashboard-more-email">{account.email}</p>
+            <button
+              type="button"
+              onClick={() => {
+                setActiveTab("templates");
+                setMoreSheetOpen(false);
+              }}
+            >
+              Templates
+            </button>
+            {account.isPaid &&
+              TOOLS_SUBNAV.filter((item) => item.key !== "contacts").map((item) => (
+                <button
+                  key={item.key}
+                  type="button"
+                  onClick={() => {
+                    openTools(item.key);
+                    setMoreSheetOpen(false);
+                  }}
+                >
+                  {item.label}
+                </button>
+              ))}
+            {account.isPaid && (
+              <button
+                type="button"
+                onClick={() => {
+                  openTools("team");
+                  setMoreSheetOpen(false);
+                }}
+              >
+                Team
+              </button>
+            )}
+            {account.isPaid && isWorkspaceOwner && (
+              <button
+                type="button"
+                onClick={() => {
+                  openTools("subscription");
+                  setMoreSheetOpen(false);
+                }}
+              >
+                Subscription
+              </button>
+            )}
+            {isAdmin && (
+              <Link to="/admin/analytics" onClick={() => setMoreSheetOpen(false)}>
+                Admin
+              </Link>
+            )}
+            <button
+              type="button"
+              onClick={() => {
+                window.dispatchEvent(new Event("docracy:open-chat"));
+                setMoreSheetOpen(false);
+              }}
+            >
+              Support
+            </button>
+            <button type="button" className="dashboard-more-danger" onClick={() => void onLogout()}>
+              Log out
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
