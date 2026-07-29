@@ -232,6 +232,75 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
     compareBlogSlug: "docracy-vs-docusign",
     compareLabel: "See the full price comparison vs. DocuSign",
   },
+  {
+    slug: "hellosign-alternative",
+    seoTitle: "HelloSign / Dropbox Sign Alternative — Free & Simple | Docracy",
+    seoDescription:
+      "Looking for a HelloSign or Dropbox Sign alternative for NDAs and client contracts? Free for up to 2 signers, no account required. Paid $10/mo flat.",
+    heroHeadline: "A simpler alternative to HelloSign / Dropbox Sign.",
+    heroSubheadline: "For freelancers and small teams who just need agreements signed — not another seat tax.",
+    problem:
+      "HelloSign (now Dropbox Sign) is cleaner than DocuSign, but free tiers cap you quickly and paid plans still price like a seat product for light NDA and contract volume.",
+    solution:
+      "Docracy is built for that light volume: free up to 2 signers with no account for anyone, then a flat $10/mo when you need templates, more signers, or a team.",
+    comparison: [
+      "Free for up to 2 signers — no account for sender or signer",
+      "No per-seat pricing on paid — $10/month flat",
+      "Sample mutual NDA ready in ~30 seconds",
+      "Sequential or parallel signing",
+      "Honest limit: not for ID-verified enterprise workflows",
+    ],
+    ctaLabel: "Try free — send a sample NDA",
+    ctaTo: "/prepare?freeTemplate=mutual-nda&ref=seo-hellosign-alternative",
+    compareBlogSlug: "docracy-vs-docusign",
+    compareLabel: "See how Docracy prices vs seat-based e-sign tools",
+  },
+  {
+    slug: "pandadoc-alternative",
+    seoTitle: "PandaDoc Alternative for Simple Agreements | Docracy",
+    seoDescription:
+      "Need signatures without PandaDoc’s proposal suite? Docracy is free for up to 2 signers — built for NDAs and client contracts, not sales proposals.",
+    heroHeadline: "PandaDoc is overkill if you only need a signature.",
+    heroSubheadline: "Docracy skips proposals and CPQ — just send the PDF and get it signed.",
+    problem:
+      "PandaDoc shines for quotes and proposals. If your job is “please sign this NDA / contractor agreement,” you’re paying for a sales stack you don’t use.",
+    solution:
+      "Docracy is a lightweight signing path: upload or start from a free template, place fields, send. Free for 2 signers; paid is $10/mo when you outgrow that.",
+    comparison: [
+      "No proposal editor required for simple agreements",
+      "Free ≤2 signers, no accounts",
+      "Flat $10/mo paid — not per seat",
+      "Templates for NDAs, contractor docs, client contracts",
+      "Skip if you need full proposal + payments in one tool",
+    ],
+    ctaLabel: "Try free — send a sample NDA",
+    ctaTo: "/prepare?freeTemplate=mutual-nda&ref=seo-pandadoc-alternative",
+    compareBlogSlug: "docracy-vs-pandadoc",
+    compareLabel: "See the full price comparison vs. PandaDoc",
+  },
+  {
+    slug: "adobe-sign-alternative",
+    seoTitle: "Adobe Sign Alternative — Lightweight E-Sign | Docracy",
+    seoDescription:
+      "Adobe Acrobat Sign alternative for freelancers and small teams. Free for up to 2 signers, no account required. Paid $10/mo flat.",
+    heroHeadline: "Adobe Sign without the Acrobat baggage.",
+    heroSubheadline: "When you need a signature — not another Adobe seat in the stack.",
+    problem:
+      "Adobe Acrobat Sign makes sense inside Acrobat workflows. For occasional NDAs and client agreements, it’s heavy and priced for teams living in Adobe every day.",
+    solution:
+      "Docracy is a focused signing product: free for simple two-party docs, flat $10/mo when you need more — no Creative Cloud required.",
+    comparison: [
+      "No Adobe account for signers",
+      "Free for up to 2 signers",
+      "$10/mo flat when you need templates / more signers / team",
+      "Works from any browser on phone or desktop",
+      "Not a full Acrobat replacement — deliberately lighter",
+    ],
+    ctaLabel: "Try free — send a sample NDA",
+    ctaTo: "/prepare?freeTemplate=mutual-nda&ref=seo-adobe-sign-alternative",
+    compareBlogSlug: "docracy-vs-adobe-acrobat-sign",
+    compareLabel: "See the full price comparison vs. Adobe Sign",
+  },
 ];
 
 export interface ExplainerSection {

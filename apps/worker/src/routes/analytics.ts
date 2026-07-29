@@ -24,6 +24,9 @@ const TRACKED_ROUTES = new Set([
   "/compliance-documentation",
   "/eversign-alternative",
   "/docusign-alternative",
+  "/hellosign-alternative",
+  "/pandadoc-alternative",
+  "/adobe-sign-alternative",
   "/what-is-an-nda",
   "/are-electronic-signatures-legal",
 ]);

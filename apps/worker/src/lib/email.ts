@@ -109,40 +109,33 @@ const PRIMARY = "#2f7ed8";
 const INK = "#1a2b3c";
 const MUTED = "#6b7785";
 
-/** Shared branded shell for Docracy's outbound email — a plain white card on a light gray
- *  background, table-based layout since email clients don't reliably support flexbox/grid.
+/** Shared branded shell for Docracy's outbound email — Swipesign-style: light gray canvas,
+ *  white card, centered logo, table layout (email clients don't reliably support flexbox/grid).
  *
- *  Header: logo only, no adjacent text, no caption — `customLogoUrl` swaps in a workspace's own
- *  branding here (only ever passed by sendSigningInvite, since that's the one email a document's
- *  actual signer sees). Footer: always Docracy's own logo regardless of `customLogoUrl` — a
- *  neutral "sent via Docracy.io" attribution distinct from whatever brand the header shows, plus
- *  a plain-text sign-off with no personal name (never "Odo"/founder/team — see SIGN_OFF below). */
+ *  Header: logo only, centered — `customLogoUrl` swaps in a workspace's own branding here (only
+ *  ever passed by signer-facing emails). Footer: always Docracy's own wordmark + short tagline,
+ *  plus a plain-text sign-off with no personal name (never "Odo"/founder/"team" — see SIGN_OFF). */
 function emailShell(appUrl: string, bodyHtml: string, customLogoUrl?: string | null): string {
   return `
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f5f7fa;padding:32px 16px;font-family:Arial,Helvetica,sans-serif;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#eef1f5;padding:32px 16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,Helvetica,sans-serif;">
   <tr>
     <td align="center">
-      <table role="presentation" width="480" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:8px;border:1px solid #e6e9ee;max-width:480px;width:100%;">
+      <table role="presentation" width="520" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;max-width:520px;width:100%;">
         <tr>
-          <td align="left" style="padding:28px 32px 8px 32px;">
-            <img src="${customLogoUrl ?? `${appUrl}/docracy-wordmark.png`}" alt="${customLogoUrl ? "" : "Docracy.io"}" width="100" style="display:block;width:100px;max-width:100px;height:auto;" />
+          <td align="center" style="padding:32px 32px 12px 32px;">
+            <img src="${customLogoUrl ?? `${appUrl}/docracy-wordmark.png`}" alt="${customLogoUrl ? "" : "Docracy"}" width="120" style="display:block;width:120px;max-width:120px;height:auto;margin:0 auto;" />
           </td>
         </tr>
         <tr>
-          <td style="padding:8px 32px 28px 32px;">
+          <td style="padding:8px 36px 36px 36px;">
             ${bodyHtml}
           </td>
         </tr>
       </table>
-      <table role="presentation" width="480" cellpadding="0" cellspacing="0" style="max-width:480px;width:100%;">
+      <table role="presentation" width="520" cellpadding="0" cellspacing="0" style="max-width:520px;width:100%;">
         <tr>
-          <td align="center" style="padding:20px 32px 0 32px;">
-            <img src="${appUrl}/docracy-wordmark.png" alt="Docracy.io" width="70" style="display:block;width:70px;max-width:70px;height:auto;margin:0 auto 8px;" />
-          </td>
-        </tr>
-        <tr>
-          <td style="padding:0 32px 0 32px;text-align:center;font-size:12px;color:${MUTED};line-height:1.6;">
-            Docracy.io — Simple document signing
+          <td style="padding:24px 32px 0 32px;text-align:center;font-size:12px;color:${MUTED};line-height:1.6;">
+            Free, no-signup e-signatures · <a href="${appUrl}" style="color:${MUTED};text-decoration:underline;">docracy.io</a>
           </td>
         </tr>
       </table>
@@ -151,11 +144,19 @@ function emailShell(appUrl: string, bodyHtml: string, customLogoUrl?: string | n
 </table>`.trim();
 }
 
+/** Centered, brand-blue headline — matches the Swipesign mail pattern used for reminders & invites. */
+function emailHeadline(text: string): string {
+  return `<p style="margin:0 0 20px 0;font-size:22px;font-weight:700;color:${PRIMARY};text-align:center;line-height:1.3;">${text}</p>`;
+}
+
 function ctaButton(url: string, label: string): string {
-  return `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:24px 0;"><tr><td style="border-radius:6px;background:${PRIMARY};">
-    <a href="${url}" style="display:inline-block;padding:12px 28px;font-size:15px;font-weight:bold;color:#ffffff;text-decoration:none;border-radius:6px;">${label}</a>
+  return `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:28px auto;"><tr><td align="center" style="border-radius:999px;background:${PRIMARY};">
+    <a href="${url}" style="display:inline-block;padding:14px 40px;font-size:16px;font-weight:700;color:#ffffff;text-decoration:none;border-radius:999px;">${label}</a>
   </td></tr></table>`;
 }
+
+// No personal name — not a founder, not "Odo", not "Team"/"Support". Warm close, brand only.
+const SIGN_OFF = `<p style="margin:28px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">Until soon,<br><em style="font-style:italic;color:${MUTED};">Docracy</em></p>`;
 
 export async function sendSigningInvite(env: Env, doc: DocState, order: number, token: string): Promise<void> {
   const signer = doc.signers.find((s) => s.order === order)!;
@@ -177,9 +178,9 @@ export async function sendSigningInvite(env: Env, doc: DocState, order: number, 
       Need to send documents yourself? Free at <a href="${env.PUBLIC_APP_URL}/try" style="color:${MUTED};">docracy.io/try</a>
     </p>`;
   const body = `
-    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">Ready to sign</p>
-    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};">Hi ${escapeHtml(signer.name)},</p>
-    <p style="margin:8px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+    ${emailHeadline(`Ready to sign`)}
+    <p style="margin:0;font-size:15px;font-weight:700;color:${INK};">Dear ${escapeHtml(signer.name)},</p>
+    <p style="margin:12px 0 0 0;font-size:15px;color:${INK};line-height:1.55;">
       ${messageLine}
     </p>
     ${ctaButton(link, "Sign here")}
@@ -188,6 +189,7 @@ export async function sendSigningInvite(env: Env, doc: DocState, order: number, 
       We'll let you know once everyone's signed.
     </p>
     ${viralFooter}
+    ${SIGN_OFF}
   `;
   await send(env, signer.email, subject, emailShell(env.PUBLIC_APP_URL, body, customLogoUrl), { emailType: "signing_invite" });
   try {
@@ -200,7 +202,7 @@ export async function sendSigningInvite(env: Env, doc: DocState, order: number, 
 export async function sendPreparerStatusLink(env: Env, preparerEmail: string, statusToken: string): Promise<void> {
   const link = `${env.PUBLIC_APP_URL}/status/${statusToken}`;
   const body = `
-    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">Your document's status link</p>
+    ${emailHeadline(`Your document's status link`)}
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
       Bookmark this link to check on your signing chain any time — it's the only way to get back to
       it, so hang on to this email.
@@ -228,7 +230,7 @@ export async function sendCcInvite(
   const docLabel = doc.title ? `"${escapeHtml(doc.title)}"` : "a document";
   const greeting = cc.name ? `Hi ${escapeHtml(cc.name)},` : "Hi,";
   const body = `
-    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">You're copied on ${docLabel}</p>
+    ${emailHeadline(`You're copied on ${docLabel}`)}
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
       ${greeting} you've been added as a viewer — you don't need to sign. Use the link below to follow progress.
     </p>
@@ -255,7 +257,7 @@ export async function sendDocumentVoidedNotice(
     ? `<p style="margin:12px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">Reason: ${escapeHtml(reason)}</p>`
     : "";
   const body = `
-    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">${docLabel} was cancelled</p>
+    ${emailHeadline(`${docLabel} was cancelled`)}
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
       Signing has been stopped. No further action is needed.
     </p>
@@ -282,7 +284,7 @@ export async function sendSignerDeclinedNotice(
     ? `<p style="margin:12px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">Reason: ${escapeHtml(reason)}</p>`
     : "";
   const body = `
-    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">${escapeHtml(declinerName)} declined to sign</p>
+    ${emailHeadline(`${escapeHtml(declinerName)} declined to sign`)}
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
       The signing chain has been stopped.
     </p>
@@ -299,29 +301,31 @@ export async function sendSignerDeclinedNotice(
 export async function sendReminder(env: Env, doc: DocState, order: number, token: string, urgent: boolean): Promise<void> {
   const signer = doc.signers.find((s) => s.order === order)!;
   const link = `${env.PUBLIC_APP_URL}/sign/${token}`;
-  const subject = urgent ? "Reminder: this signing link expires soon" : "Reminder: you have a document waiting to be signed";
-  const tone = urgent
-    ? `<p style="margin:16px 0 0 0;font-size:15px;color:${INK};"><strong>This link expires soon.</strong> Please sign before it does, or the document will be deleted.</p>`
-    : "";
+  const docLabel = doc.title ? `"${escapeHtml(doc.title)}"` : "a document";
+  const expiresDate = formatDate(doc.expiresAt);
+  const subject = urgent
+    ? "🥲 Your signing link expires soon…"
+    : "Reminder: you have a document waiting to be signed";
+  const headline = urgent
+    ? "Your signing link expires soon 🥲"
+    : "You still have a document to sign";
+  const bodyCopy = urgent
+    ? `Your signature workflow concerning ${docLabel} expires on ${expiresDate}. Please sign before then — after that the link is removed and the document can no longer be completed.`
+    : `Just a friendly reminder — you still have ${docLabel} waiting for your signature.`;
   const body = `
-    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">You still have a document to sign</p>
-    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};">Hi ${escapeHtml(signer.name)},</p>
+    ${emailHeadline(headline)}
+    <p style="margin:0;font-size:15px;font-weight:700;color:${INK};">Dear ${escapeHtml(signer.name)},</p>
+    <p style="margin:12px 0 0 0;font-size:15px;color:${INK};line-height:1.55;">
+      ${bodyCopy}
+    </p>
     ${ctaButton(link, "Sign here")}
-    ${tone}
+    <p style="margin:0;font-size:13px;color:${MUTED};line-height:1.5;">
+      You can also open the link from the original invite email if you still have it.
+    </p>
     ${SIGN_OFF}
   `;
   const customLogoUrl = await resolveEmailLogoUrl(env, doc.accountId);
   await send(env, signer.email, subject, emailShell(env.PUBLIC_APP_URL, body, customLogoUrl), { emailType: "reminder" });
-}
-
-/** Preparer-facing nudges about one specific signer's progress on a document they sent — distinct
- *  from sendCompletionEmails below (which goes to the *signers* once everyone's done) and from
- *  sendReminder (which goes to the *signer* themselves). Only sent when the preparer gave an email
- *  at creation time (doc.preparerEmail) — see lib/documentCreation.ts and lib/completionEmails.ts
- *  for the sweep/event-driven triggers. All three share the same status-page CTA so the preparer
- *  always lands on the one page that shows every signer's live status. */
-function preparerDocLabel(doc: DocState): string {
-  return doc.title ? `"${escapeHtml(doc.title)}"` : "your document";
 }
 
 export async function sendCompletionEmailNotOpened(
@@ -333,7 +337,7 @@ export async function sendCompletionEmailNotOpened(
 ): Promise<void> {
   const link = `${env.PUBLIC_APP_URL}/status/${statusToken}`;
   const body = `
-    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">${escapeHtml(signerName)} hasn't opened your document yet</p>
+    ${emailHeadline(`${escapeHtml(signerName)} hasn't opened your document yet`)}
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
       You sent ${preparerDocLabel(doc)} to ${escapeHtml(signerName)} a few hours ago, and the link hasn't been
       opened yet. This sometimes just means it landed in a spam folder or got missed.
@@ -358,7 +362,7 @@ export async function sendCompletionEmailViewedNotSigned(
 ): Promise<void> {
   const link = `${env.PUBLIC_APP_URL}/status/${statusToken}`;
   const body = `
-    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">${escapeHtml(signerName)} opened your document but hasn't signed yet</p>
+    ${emailHeadline(`${escapeHtml(signerName)} opened your document but hasn't signed yet`)}
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
       ${escapeHtml(signerName)} opened ${preparerDocLabel(doc)} but hasn't completed signing. A quick
       follow-up message often helps at this stage.
@@ -383,7 +387,7 @@ export async function sendCompletionEmailSigned(
 ): Promise<void> {
   const link = `${env.PUBLIC_APP_URL}/status/${statusToken}`;
   const body = `
-    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">${escapeHtml(signerName)} just signed your document</p>
+    ${emailHeadline(`${escapeHtml(signerName)} just signed your document`)}
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
       Good news — ${escapeHtml(signerName)} just signed ${preparerDocLabel(doc)}.
     </p>
@@ -420,7 +424,7 @@ export async function sendCompletionEmails(
     </p>
     ${ctaButton(`${env.PUBLIC_APP_URL}/try`, "Send your own free")}`;
   const body = `
-    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">Everyone has signed</p>
+    ${emailHeadline(`Everyone has signed`)}
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
       The signed document, including a certificate of completion, is attached.
     </p>
@@ -486,7 +490,7 @@ export async function sendCompletionEmails(
       Or <a href="${env.PUBLIC_APP_URL}/login?ref=preparer-done" style="color:${PRIMARY};">create a free account</a> to keep history without paying.
     </p>`;
     const preparerBody = `
-    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">Everyone has signed — your document is ready</p>
+    ${emailHeadline(`Everyone has signed — your document is ready`)}
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
       The signed document, including a certificate of completion, is attached.
     </p>
@@ -515,7 +519,7 @@ export async function sendCompletionEmails(
 
 export async function sendMagicLink(env: Env, email: string, link: string): Promise<void> {
   const body = `
-    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">Sign in to Docracy</p>
+    ${emailHeadline(`Sign in to Docracy`)}
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
       Click the button below to sign in. This link expires in 15 minutes and can only be used once.
     </p>
@@ -529,7 +533,7 @@ export async function sendMagicLink(env: Env, email: string, link: string): Prom
 
 export async function sendTeamInvite(env: Env, email: string, ownerEmail: string, link: string): Promise<void> {
   const body = `
-    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">You're invited to a Docracy workspace</p>
+    ${emailHeadline(`You're invited to a Docracy workspace`)}
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
       ${escapeHtml(ownerEmail)} invited you to join their Docracy workspace — once you accept, you'll
       see the same documents, templates, and webhooks they do. This link expires in 7 days and can
@@ -567,9 +571,6 @@ function templateList(items: string[]): string {
     .join("")}</ul>`;
 }
 
-// No personal name in the sign-off — not a founder, not "Odo", not "Team" or "Support". Kept as
-// one constant so it can't drift between templates.
-const SIGN_OFF = `<p style="margin:16px 0 0 0;font-size:15px;color:${INK};">Best,<br>Docracy.io</p>`;
 
 /** The onboarding drip, scheduled by lib/onboardingEmails.ts at account creation and sent by its
  *  cron sweep at 3 minutes / 24 hours / 3 days — each step skipped once the account has actually
@@ -579,7 +580,7 @@ const SIGN_OFF = `<p style="margin:16px 0 0 0;font-size:15px;color:${INK};">Best
  *  sent but the recipient hasn't acted — a more specific, more useful nudge than a generic timer. */
 export async function sendOnboardingStep1(env: Env, email: string): Promise<void> {
   const body = `
-    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">Your first document takes 30 seconds</p>
+    ${emailHeadline(`Your first document takes 30 seconds`)}
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
       Thanks for trying Docracy.io — a simple way to send quick agreements without accounts or complexity.
     </p>
@@ -596,8 +597,8 @@ export async function sendOnboardingStep1(env: Env, email: string): Promise<void
     <p style="margin:0;font-size:15px;color:${INK};line-height:1.5;">
       Send your first document now and see how fast the workflow is.
     </p>
-    ${ctaButton(env.PUBLIC_APP_URL, "Upload document")}
-    <p style="margin:0;font-size:14px;color:${MUTED};">If you need help, just reply to this email.</p>
+    ${ctaButton(`${env.PUBLIC_APP_URL}/try?utm_source=email&utm_medium=onboarding&utm_campaign=step1`, "Try a sample NDA — 30 seconds")}
+    <p style="margin:0;font-size:14px;color:${MUTED};">Or upload your own PDF from the homepage. If you need help, just reply.</p>
     ${SIGN_OFF}
   `;
   await send(env, email, "Your first document takes 30 seconds", emailShell(env.PUBLIC_APP_URL, body), {
@@ -608,7 +609,7 @@ export async function sendOnboardingStep1(env: Env, email: string): Promise<void
 
 export async function sendOnboardingStep3(env: Env, email: string): Promise<void> {
   const body = `
-    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">Try sending one quick document</p>
+    ${emailHeadline(`Try sending one quick document`)}
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
       Just a quick reminder — you can send your first document anytime. No setup, no accounts, no
       complexity.
@@ -616,8 +617,8 @@ export async function sendOnboardingStep3(env: Env, email: string): Promise<void
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
       Most users start with a small NDA or client contract and finish in under a minute.
     </p>
-    ${ctaButton(env.PUBLIC_APP_URL, "Send your first document")}
-    <p style="margin:0;font-size:14px;color:${MUTED};">If you prefer templates, you can use one instantly.</p>
+    ${ctaButton(`${env.PUBLIC_APP_URL}/try?utm_source=email&utm_medium=onboarding&utm_campaign=step3`, "Send a sample NDA free")}
+    <p style="margin:0;font-size:14px;color:${MUTED};">Or start from any free template — still no account required.</p>
     ${SIGN_OFF}
   `;
   await send(env, email, "Try sending one quick document", emailShell(env.PUBLIC_APP_URL, body), {
@@ -628,14 +629,14 @@ export async function sendOnboardingStep3(env: Env, email: string): Promise<void
 
 export async function sendOnboardingStep4(env: Env, email: string): Promise<void> {
   const body = `
-    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">Want to give Docracy.io a quick try?</p>
+    ${emailHeadline(`Want to give Docracy.io a quick try?`)}
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
       If you still want to try Docracy.io, you can send a quick document now. It's simple: upload →
       add fields → send.
     </p>
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};">Or choose a template:</p>
     ${templateList(["NDA", "Client contract", "Service agreement", "Onboarding docs", "Rental agreement", "Work order"])}
-    ${ctaButton(env.PUBLIC_APP_URL, "Send a document")}
+    ${ctaButton(`${env.PUBLIC_APP_URL}/try?utm_source=email&utm_medium=onboarding&utm_campaign=step4`, "Try a sample NDA free")}
     <p style="margin:0;font-size:14px;color:${MUTED};">Happy to help if you need anything.</p>
     ${SIGN_OFF}
   `;
@@ -649,7 +650,7 @@ export async function sendOnboardingStep4(env: Env, email: string): Promise<void
  *  checkbox. Content must NOT tell them to "send their first document"; they just did. */
 export async function sendPreparerLeadStep1(env: Env, email: string): Promise<void> {
   const body = `
-    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">Your document is on its way</p>
+    ${emailHeadline(`Your document is on its way`)}
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
       Thanks for sending with Docracy.io. Keep the status link from your confirmation email — that's
       how you track who has signed.
@@ -659,6 +660,11 @@ export async function sendPreparerLeadStep1(env: Env, email: string): Promise<vo
       link to your email.
     </p>
     ${ctaButton(`${env.PUBLIC_APP_URL}/login?utm_source=email&utm_medium=preparer-lead&utm_campaign=step1`, "Create a free account")}
+    <p style="margin:16px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">
+      Prefer another quick send first?
+      <a href="${env.PUBLIC_APP_URL}/try?utm_source=email&utm_medium=preparer-lead&utm_campaign=step1" style="color:${PRIMARY};">Open a sample NDA</a>
+      — still free, still no account.
+    </p>
     <p style="margin:0;font-size:14px;color:${MUTED};">You asked for a few tips — reply anytime to stop them.</p>
     ${SIGN_OFF}
   `;
@@ -670,14 +676,17 @@ export async function sendPreparerLeadStep1(env: Env, email: string): Promise<vo
 
 export async function sendPreparerLeadStep3(env: Env, email: string): Promise<void> {
   const body = `
-    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">Next time, start from a template</p>
+    ${emailHeadline(`Next time, start from a template`)}
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
       Free templates for the agreements people send most often — NDAs, contractor agreements, offer
       letters — ready to fill and send without rebuilding fields from scratch.
     </p>
     ${templateList(["Mutual NDA", "Independent contractor agreement", "Offer letter", "Freelance service agreement"])}
-    ${ctaButton(`${env.PUBLIC_APP_URL}/free-templates?utm_source=email&utm_medium=preparer-lead&utm_campaign=step3`, "Browse free templates")}
-    <p style="margin:0;font-size:14px;color:${MUTED};">Still free, still no account required.</p>
+    ${ctaButton(`${env.PUBLIC_APP_URL}/try?utm_source=email&utm_medium=preparer-lead&utm_campaign=step3`, "Send another — sample NDA")}
+    <p style="margin:16px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">
+      Or <a href="${env.PUBLIC_APP_URL}/free-templates?utm_source=email&utm_medium=preparer-lead&utm_campaign=step3" style="color:${PRIMARY};">browse all free templates</a>
+      — still free, still no account required.
+    </p>
     ${SIGN_OFF}
   `;
   await send(env, email, "Next time, start from a template", emailShell(env.PUBLIC_APP_URL, body), {
@@ -688,7 +697,7 @@ export async function sendPreparerLeadStep3(env: Env, email: string): Promise<vo
 
 export async function sendPreparerLeadStep4(env: Env, email: string): Promise<void> {
   const body = `
-    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">When free isn't enough</p>
+    ${emailHeadline(`When free isn't enough`)}
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
       Free covers quick, low-stakes agreements. Paid unlocks recurring templates, more signers, team
       seats, and longer retention — for when signing becomes part of how you work every week.

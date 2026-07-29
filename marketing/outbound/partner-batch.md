@@ -1,7 +1,7 @@
-# Partner + listicle email batch — ready to send
+# Partner + listicle email batch — sent
 
 CTA: **https://docracy.io/go/dm**  
-Check off in `distribution.md` §B / §D as you send.
+**Status: all 12 sent** (see `distribution.md` §B). Reply same day; mark Reply? there.
 
 Sign-off on every email:
 
@@ -73,12 +73,15 @@ https://docracy.io
 
 ---
 
-## 4. GLS HR → contact@glshrconsulting.com
+## 4. Gisella Soderberg — GLS HR → gisella.soderberg@gmail.com
+
+**Do not use** `contact@glshrconsulting.com` — bounced (`550 User doesn't exist`).  
+Also: [linkedin.com/in/gisellasoderberg](https://www.linkedin.com/in/gisellasoderberg) · form: [glshrconsulting.com/contact-us](https://glshrconsulting.com/contact-us/)
 
 **Subject:** DocuSign alternative for early-stage HR clients
 
 ```
-Hey —
+Hey Gisella —
 
 Saw GLS helps startups with fractional Head of People support. When clients need contractor NDAs / simple agreements, are they still stuck on seat-based e-sign?
 
@@ -249,18 +252,4 @@ If it fits a future update, happy to share a screenshot or founder quote. No pre
 Odo
 Founder, Docracy
 https://docracy.io
-```
-
----
-
-## LinkedIn DM stubs (paste)
-
-**Jessica / Celena / Jane / Tiffany** (profiles in `distribution.md`):
-
-```
-Hey {{name}} — saw you're doing fractional Head of People work with startups. When clients need contractor NDAs, are they still defaulting to DocuSign seats?
-
-Built a free 2-signer path (no accounts): https://docracy.io/go/dm — $10/mo flat if they need more. Curious what's in your stack.
-
-Odo · Docracy
 ```

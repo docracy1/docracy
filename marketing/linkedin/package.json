@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "record": "node record-demos.mjs"
+    "record": "node record-demos.mjs",
+    "record:mobile": "node record-mobile.mjs"
   },
   "devDependencies": {
     "playwright": "^1.52.0"

@@ -1416,8 +1416,8 @@ export default function Prepare() {
                         style={{ marginTop: 2 }}
                       />
                       <span>
-                        Also email me a few tips on getting the most out of Docracy (optional — you can
-                        stop anytime by replying).
+                        Email me a few tips — and how to keep every send in one free account (optional;
+                        reply anytime to stop).
                       </span>
                     </label>
                   )}

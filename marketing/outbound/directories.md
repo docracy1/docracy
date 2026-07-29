@@ -10,8 +10,8 @@ Submit once. Use short links. Same positioning everywhere:
 
 | Directory | Notes | Done? |
 |-----------|--------|-------|
-| AlternativeTo | Add as alternative to DocuSign, Dropbox Sign, PandaDoc | [ ] |
-| Indie Hackers Products | Link /try | [ ] |
+| AlternativeTo | Account must be **7 days old** before Suggest new application. Reminder: **2026-08-05**. Then add vs DocuSign, Dropbox Sign, PandaDoc | [ ] blocked until ~2026-08-05 |
+| Indie Hackers Products | Link /try — skip if account can’t add products | [ ] |
 | SaaSHub / Slant | “Best DocuSign alternatives” lists | [ ] |
 | G2 / Capterra | E-Signature category; be honest about free tier limits | [ ] |
 | There's An AI For That | Mention AI field detect + MCP only as secondary | [ ] |

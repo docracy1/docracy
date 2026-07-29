@@ -23,10 +23,17 @@ Attribution is recorded under the hood (`ref` / `utm_*`).
 - [x] Google Search Console domain verified
 - [x] Product Hunt (at go-live) — do not re-launch
 - [x] Community answers (Reddit / IH) — see `outbound/distribution.md`
-- [ ] Partner emails (`outbound/partner-batch.md` — 12 ready)
-- [ ] Directories (AlternativeTo first)
-- [ ] Reverse-trial replies to anyone who used the product
-- [ ] Watch GSC: which queries hit `/docusign-alternative`, `/nda-signing`, templates
+- [x] Partner emails (`outbound/partner-batch.md` — all 12 sent)
+- [x] SaaSHub + G2 + listicle pitches D2–D5
+- [x] Prospects batch 2 (`outbound/prospects-batch-2.md` — 18 emails ready)
+- [x] SEO alternatives: HelloSign, PandaDoc, Adobe Sign pages
+- [x] Drip CTAs → `/try` + clearer preparer opt-in copy
+- [x] Mobile demo video (`linkedin/videos/mobile-sign.webm` + `outbound/mobile-video.md`)
+- [ ] AlternativeTo — blocked until **~2026-08-05**
+- [ ] Send prospects batch 2
+- [ ] Post mobile video (LinkedIn feed / X / Shorts — see `mobile-video.md`)
+- [ ] Reverse-trial / reply same day to every inbound
+- [ ] Watch GSC: paste top queries when Performance has data
 
 ## This week (do in order)
 
@@ -46,7 +53,7 @@ Share top queries — we tighten titles/CTAs from real data. Money pages now CTA
 `outbound/reverse-trial.md` — anyone who sent/signed.
 
 ### 5. Social (support only)
-2–3 posts/week max. Demos in `linkedin/` and `x/`. CTA: `docracy.io/try`.
+2–3 posts/week max on **X** if useful. CTA: `docracy.io/try`. Skip LinkedIn outreach/DMs — doesn’t work for this account.
 
 ### 6. Show HN — optional later
 Only after a few quotes. PH is done. See `outbound/launch-checklist.md`.
@@ -61,5 +68,6 @@ Only after a few quotes. PH is done. See `outbound/launch-checklist.md`.
 
 - Paid ads (except a tiny Google test after we see organic `/try` conversions)
 - Enterprise sales
-- X/LinkedIn automation
+- X automation
+- LinkedIn DMs / LinkedIn outreach (doesn’t work for this account)
 - Re-launch Product Hunt
