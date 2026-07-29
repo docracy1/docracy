@@ -34,11 +34,20 @@ import FeaturePage from "./pages/FeaturePage";
 import AlternativePage from "./pages/AlternativePage";
 import ExplainerPage from "./pages/ExplainerPage";
 import NotFound from "./pages/NotFound";
+import { ShortGoRedirect, ShortNdaRedirect, ShortPriceRedirect, ShortTryRedirect } from "./pages/ShortLinkRedirect";
+import { captureAttribution } from "./lib/attribution";
+
+// Before first render so the first funnel event already carries the channel that brought them.
+captureAttribution();
 
 function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
+      <Route path="/try" element={<ShortTryRedirect />} />
+      <Route path="/nda" element={<ShortNdaRedirect />} />
+      <Route path="/price" element={<ShortPriceRedirect />} />
+      <Route path="/go/:campaign" element={<ShortGoRedirect />} />
       <Route path="/prepare" element={<Prepare />} />
       <Route path="/prepare/sent" element={<PrepareSent />} />
       <Route path="/sign/:token" element={<Sign />} />

@@ -319,6 +319,15 @@ export default function Prepare() {
   };
 
   const addSigner = () => {
+    // Free tier hard-caps at FREE_TIER_MAX_SIGNERS server-side — don't let unpaid users add a
+    // third signer only to fail at send. Paid / logged-out-but-still-under-cap can add freely.
+    if (!account?.isPaid && signers.length >= FREE_TIER_MAX_SIGNERS) {
+      track("upgrade_clicked", { source: "prepare_signer_cap" });
+      setError(
+        `Free plan supports up to ${FREE_TIER_MAX_SIGNERS} signers. Upgrade for unlimited signers, templates, and history.`
+      );
+      return;
+    }
     setSigners((prev) => [...prev, { order: prev.length + 1, name: "", email: "" }]);
   };
 
@@ -336,6 +345,13 @@ export default function Prepare() {
   };
 
   const addCc = () => {
+    if (!account?.isPaid && ccRecipients.length >= FREE_TIER_MAX_CCS) {
+      track("upgrade_clicked", { source: "prepare_cc_cap" });
+      setError(
+        `Free plan supports up to ${FREE_TIER_MAX_CCS} CC viewers. Upgrade for unlimited viewers.`
+      );
+      return;
+    }
     setCcRecipients((prev) => [...prev, { name: "", email: "" }]);
   };
 
@@ -1299,7 +1315,26 @@ export default function Prepare() {
                 </button>
               </div>
             </div>
-            {error && <p style={{ color: "var(--danger)", fontSize: 13 }}>{error}</p>}
+            {error && (
+              <div style={{ marginBottom: 12 }}>
+                <p style={{ color: "var(--danger)", fontSize: 13, marginBottom: 8 }}>{error}</p>
+                {(error.toLowerCase().includes("signer") ||
+                  error.toLowerCase().includes("viewer") ||
+                  error.toLowerCase().includes("upgrade") ||
+                  error.toLowerCase().includes("paid")) && (
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                    <Link
+                      to={account ? "/pricing" : "/login?ref=prepare-cap"}
+                      className="btn-primary"
+                      style={{ textDecoration: "none", fontSize: 13 }}
+                      onClick={() => track("upgrade_clicked", { source: "prepare_cap_error" })}
+                    >
+                      {account ? "See paid plans" : "Sign in to upgrade"}
+                    </Link>
+                  </div>
+                )}
+              </div>
+            )}
 
             <div className="card">
               <SidebarHeading label="Signers & viewers" count={signers.length + ccRecipients.length} />
@@ -1311,10 +1346,28 @@ export default function Prepare() {
                 >
                   + Myself
                 </button>
-                <button type="button" className="prepare-pill-btn" onClick={addSigner}>
+                <button
+                  type="button"
+                  className="prepare-pill-btn"
+                  onClick={addSigner}
+                  title={
+                    !account?.isPaid && signers.length >= FREE_TIER_MAX_SIGNERS
+                      ? `Free plan: up to ${FREE_TIER_MAX_SIGNERS} signers`
+                      : undefined
+                  }
+                >
                   + Signer
                 </button>
-                <button type="button" className="prepare-pill-btn" onClick={addCc}>
+                <button
+                  type="button"
+                  className="prepare-pill-btn"
+                  onClick={addCc}
+                  title={
+                    !account?.isPaid && ccRecipients.length >= FREE_TIER_MAX_CCS
+                      ? `Free plan: up to ${FREE_TIER_MAX_CCS} viewers`
+                      : undefined
+                  }
+                >
                   + Viewer (CC)
                 </button>
               </div>
@@ -1501,16 +1554,40 @@ export default function Prepare() {
                   </select>
                 </div>
               )}
-              {signers.length > FREE_TIER_MAX_SIGNERS && (
-                <p style={{ fontSize: 12, marginTop: 8, color: "var(--body)" }}>
-                  Free plan supports up to {FREE_TIER_MAX_SIGNERS} signers.{" "}
-                  <Link to="/login">Sign in for unlimited signers</Link>.
-                </p>
+              {!account?.isPaid && signers.length >= FREE_TIER_MAX_SIGNERS && (
+                <div
+                  style={{
+                    marginTop: 12,
+                    padding: 12,
+                    borderRadius: 8,
+                    border: "1px solid var(--hairline)",
+                    background: "var(--surface-2, #f5f7fa)",
+                  }}
+                >
+                  <p style={{ margin: "0 0 8px", fontSize: 13, fontWeight: 600 }}>Need more than 2 signers?</p>
+                  <p style={{ margin: "0 0 10px", fontSize: 13, color: "var(--mute)" }}>
+                    Paid unlocks unlimited signers, reusable templates, and document history — $10/month.
+                  </p>
+                  <Link
+                    to={account ? "/pricing" : "/login?ref=prepare-signer-cap"}
+                    className="btn-primary"
+                    style={{ textDecoration: "none", fontSize: 13 }}
+                    onClick={() => track("upgrade_clicked", { source: "prepare_signer_cap_card" })}
+                  >
+                    {account ? "Upgrade — $10/month" : "Sign in to upgrade"}
+                  </Link>
+                </div>
               )}
-              {!account?.isPaid && ccRecipients.length > FREE_TIER_MAX_CCS && (
-                <p style={{ fontSize: 12, marginTop: 8, color: "var(--body)" }}>
+              {!account?.isPaid && ccRecipients.length >= FREE_TIER_MAX_CCS && (
+                <p style={{ fontSize: 13, marginTop: 8 }}>
                   Free plan supports up to {FREE_TIER_MAX_CCS} CC viewers.{" "}
-                  <Link to="/login">Sign in for unlimited viewers</Link>.
+                  <Link
+                    to={account ? "/pricing" : "/login?ref=prepare-cc-cap"}
+                    onClick={() => track("upgrade_clicked", { source: "prepare_cc_cap_card" })}
+                  >
+                    Upgrade for unlimited
+                  </Link>
+                  .
                 </p>
               )}
               <div style={{ marginTop: 12, paddingTop: 12, borderTop: "1px solid var(--hairline)" }}>

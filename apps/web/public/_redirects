@@ -4,6 +4,18 @@
 # without the duplication.
 /templates  /free-templates  301
 
+# Short shareable URLs for outreach / social / launches (avoid ugly UTM strings in posts/DMs).
+# Attribution: query `ref` / `utm_*` is picked up by apps/web/src/lib/attribution.ts on land.
+# SPA fallbacks also exist in React (ShortLinkRedirect) for in-app navigation.
+/try    /prepare?freeTemplate=mutual-nda&ref=try  302
+/nda    /prepare?freeTemplate=mutual-nda&ref=nda  302
+/price  /pricing?ref=price                        302
+/go/ph  /prepare?freeTemplate=mutual-nda&utm_source=producthunt&utm_medium=launch&utm_campaign=launch  302
+/go/hn  /prepare?freeTemplate=mutual-nda&utm_source=hackernews&utm_medium=showhn&utm_campaign=showhn  302
+/go/li  /prepare?freeTemplate=mutual-nda&ref=linkedin  302
+/go/x   /prepare?freeTemplate=mutual-nda&ref=x         302
+/go/dm  /prepare?freeTemplate=mutual-nda&utm_source=outreach&utm_medium=dm&utm_campaign=dm  302
+
 # Explicit SPA fallback — Cloudflare Pages checks for an exact static-asset match (including the
 # prerendered .html files under scripts/prerender.mjs) before evaluating this file, so this only
 # ever catches routes with no matching static file: legitimate client-only routes (/dashboard,

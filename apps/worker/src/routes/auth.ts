@@ -12,7 +12,7 @@ import {
   sessionCookieOptions,
   type AccountContext,
 } from "../lib/auth";
-import { trackEvent, NOTRACK_COOKIE_NAME, noTrackCookieOptions } from "../lib/analytics";
+import { trackEvent, NOTRACK_COOKIE_NAME, noTrackCookieOptions, sanitizeAttribution } from "../lib/analytics";
 import type { Env } from "@docracy/shared";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -21,9 +21,9 @@ type Variables = { account: AccountContext | null };
 const auth = new Hono<{ Bindings: Env; Variables: Variables }>();
 
 auth.post("/request-link", async (c) => {
-  let body: { email?: string; turnstileToken?: string };
+  let body: { email?: string; turnstileToken?: string; attribution?: string };
   try {
-    body = await c.req.json<{ email?: string; turnstileToken?: string }>();
+    body = await c.req.json<{ email?: string; turnstileToken?: string; attribution?: string }>();
   } catch {
     return c.json({ error: "Invalid request body" }, 400);
   }
@@ -46,15 +46,16 @@ auth.post("/request-link", async (c) => {
       route: "auth",
       userAgent: c.req.header("user-agent"),
       country: c.req.header("CF-IPCountry"),
+      attribution: sanitizeAttribution(body.attribution),
     });
   }
   return c.json({ ok: true });
 });
 
 auth.post("/consume", async (c) => {
-  let body: { token?: string };
+  let body: { token?: string; attribution?: string };
   try {
-    body = await c.req.json<{ token?: string }>();
+    body = await c.req.json<{ token?: string; attribution?: string }>();
   } catch {
     return c.json({ error: "Invalid request body" }, 400);
   }
@@ -64,7 +65,14 @@ auth.post("/consume", async (c) => {
 
   const ip = c.req.header("CF-Connecting-IP") ?? null;
   const userAgent = c.req.header("User-Agent") ?? null;
-  const result = await consumeMagicLink(c.env, c.executionCtx, token, ip, userAgent);
+  const result = await consumeMagicLink(
+    c.env,
+    c.executionCtx,
+    token,
+    ip,
+    userAgent,
+    sanitizeAttribution(body.attribution)
+  );
   if (!result.ok) return c.json({ error: result.error }, 400);
 
   setCookie(c, SESSION_COOKIE_NAME, result.sessionToken, {

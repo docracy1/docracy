@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import SignatureCanvas from "react-signature-canvas";
 import PdfViewer from "../components/PdfViewer";
 import { apiUrl, declineSign, fetchSignView, submitSignature, unlockSign, uploadSignAttachment } from "../lib/api";
+import { track } from "../lib/track";
 import { useNoIndex } from "../lib/useNoIndex";
 import type { SignPayload } from "../lib/api";
 import type { StatusPayload } from "../lib/types";
@@ -331,7 +332,12 @@ export default function Sign({
         {!embedMode && !payload.brandLogoPath && (
           <div className="card" style={{ marginTop: 24, maxWidth: 420 }}>
             <p style={{ marginBottom: 12 }}>Created with Docracy — send your own documents for free.</p>
-            <Link to="/prepare" className="btn-primary" style={{ display: "inline-block", textDecoration: "none" }}>
+            <Link
+              to="/prepare?ref=signer-completion"
+              className="btn-primary"
+              style={{ display: "inline-block", textDecoration: "none" }}
+              onClick={() => track("viral_cta_clicked", { source: "signer_done" })}
+            >
               Send a document
             </Link>
           </div>

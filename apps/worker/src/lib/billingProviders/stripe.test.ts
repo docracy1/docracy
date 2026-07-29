@@ -47,6 +47,7 @@ describe("verifyAndExtract (Stripe)", () => {
       accountId: "acct-1",
       customerId: "cus_1",
       isEnterprise: false,
+      attribution: "",
     });
   });
 
@@ -56,7 +57,13 @@ describe("verifyAndExtract (Stripe)", () => {
     const header = await makeHeader(body, WEBHOOK_SECRET);
 
     const result = await verifyAndExtract(body, header, env);
-    expect(result).toEqual({ type: "checkout_completed", accountId: "acct-1", customerId: null, isEnterprise: false });
+    expect(result).toEqual({
+      type: "checkout_completed",
+      accountId: "acct-1",
+      customerId: null,
+      isEnterprise: false,
+      attribution: "",
+    });
   });
 
   it("accepts a checkout.session.completed event with metadata.plan=enterprise", async () => {
@@ -68,7 +75,37 @@ describe("verifyAndExtract (Stripe)", () => {
     const header = await makeHeader(body, WEBHOOK_SECRET);
 
     const result = await verifyAndExtract(body, header, env);
-    expect(result).toEqual({ type: "checkout_completed", accountId: "acct-1", customerId: null, isEnterprise: true });
+    expect(result).toEqual({
+      type: "checkout_completed",
+      accountId: "acct-1",
+      customerId: null,
+      isEnterprise: true,
+      attribution: "",
+    });
+  });
+
+  it("round-trips metadata.attribution on checkout.session.completed", async () => {
+    const { env } = makeMockEnv({ STRIPE_WEBHOOK_SECRET: WEBHOOK_SECRET });
+    const body = JSON.stringify({
+      type: "checkout.session.completed",
+      data: {
+        object: {
+          client_reference_id: "acct-1",
+          customer: "cus_1",
+          metadata: { attribution: "linkedin/post-09-price" },
+        },
+      },
+    });
+    const header = await makeHeader(body, WEBHOOK_SECRET);
+
+    const result = await verifyAndExtract(body, header, env);
+    expect(result).toEqual({
+      type: "checkout_completed",
+      accountId: "acct-1",
+      customerId: "cus_1",
+      isEnterprise: false,
+      attribution: "linkedin/post-09-price",
+    });
   });
 
   it("accepts a validly-signed customer.subscription.deleted event", async () => {

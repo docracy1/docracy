@@ -34,12 +34,32 @@ describe("POST /api/analytics/pageview", () => {
     expect(calls).toEqual([
       [
         {
-          blobs: ["page_view", "/free-templates/mutual-nda", "bot", "GPTBot", "US", "", "", "", "", "", "", "", "", ""],
+          blobs: ["page_view", "/free-templates/mutual-nda", "bot", "GPTBot", "US", "", "", "", "", "", "", "", "", "", ""],
           doubles: [1, 0],
           indexes: ["page_view"],
         },
       ],
     ]);
+  });
+
+  it("accepts SEO marketing landings and credits utm query params as attribution", async () => {
+    const calls: unknown[][] = [];
+    const { env } = makeMockEnv({
+      ANALYTICS: { writeDataPoint: (...args: unknown[]) => calls.push(args) } as any,
+    });
+
+    const res = await analytics.request(
+      "/pageview",
+      post({ route: "/nda-signing", query: "?utm_source=linkedin&utm_campaign=post-01-auto" }),
+      env,
+      MOCK_CTX
+    );
+
+    expect(res.status).toBe(200);
+    const [point] = calls[0] as [{ blobs: string[] }];
+    expect(point.blobs[0]).toBe("page_view");
+    expect(point.blobs[1]).toBe("/nda-signing");
+    expect(point.blobs[14]).toBe("linkedin/post-01-auto"); // blob15 = attribution
   });
 
   it("also logs landingpage_loaded for the homepage", async () => {
@@ -157,6 +177,33 @@ describe("POST /api/analytics/track", () => {
 
     expect(res.status).toBe(200);
     expect(eventsOf(calls)).toEqual(["fields_added"]);
+  });
+
+  it("accepts upgrade_clicked and viral_cta_clicked with attribution", async () => {
+    const calls: unknown[][] = [];
+    const { env } = makeMockEnv({
+      ANALYTICS: { writeDataPoint: (...args: unknown[]) => calls.push(args) } as any,
+    });
+
+    const upgrade = await analytics.request(
+      "/track",
+      post({ event: "upgrade_clicked", source: "pricing_page", attribution: "linkedin/post-09-price" }),
+      env,
+      MOCK_CTX
+    );
+    expect(upgrade.status).toBe(200);
+
+    const viral = await analytics.request(
+      "/track",
+      post({ event: "viral_cta_clicked", source: "signer_done", attribution: "direct" }),
+      env,
+      MOCK_CTX
+    );
+    expect(viral.status).toBe(200);
+
+    expect(eventsOf(calls)).toEqual(["upgrade_clicked", "viral_cta_clicked"]);
+    const [upgradePoint] = calls[0] as [{ blobs: string[] }];
+    expect(upgradePoint.blobs[14]).toBe("linkedin/post-09-price");
   });
 
   it("rejects an event not on the client allow-list", async () => {

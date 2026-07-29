@@ -167,6 +167,15 @@ export async function sendSigningInvite(env: Env, doc: DocState, order: number, 
     ? escapeHtml(doc.customMessage).replace(/\n/g, "<br>")
     : `You've been invited to sign ${docLabel} through Docracy.`;
 
+  const subject = doc.customSubject?.trim() || "Ready to sign — you have a document waiting";
+  const customLogoUrl = await resolveEmailLogoUrl(env, doc.accountId);
+  // White-label pays to hide Docracy. On the free/default path, every invite is a free ad to
+  // someone who just used e-sign successfully — one muted line, never compete with Sign here.
+  const viralFooter = customLogoUrl
+    ? ""
+    : `<p style="margin:24px 0 0 0;font-size:12px;color:${MUTED};line-height:1.5;">
+      Need to send documents yourself? Free at <a href="${env.PUBLIC_APP_URL}/try" style="color:${MUTED};">docracy.io/try</a>
+    </p>`;
   const body = `
     <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">Ready to sign</p>
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};">Hi ${escapeHtml(signer.name)},</p>
@@ -178,10 +187,8 @@ export async function sendSigningInvite(env: Env, doc: DocState, order: number, 
     <p style="margin:24px 0 0 0;font-size:14px;color:${INK};">
       We'll let you know once everyone's signed.
     </p>
+    ${viralFooter}
   `;
-
-  const subject = doc.customSubject?.trim() || "Ready to sign — you have a document waiting";
-  const customLogoUrl = await resolveEmailLogoUrl(env, doc.accountId);
   await send(env, signer.email, subject, emailShell(env.PUBLIC_APP_URL, body, customLogoUrl), { emailType: "signing_invite" });
   try {
     await sendSigningSmsLink(env, doc, order, link);
@@ -199,6 +206,11 @@ export async function sendPreparerStatusLink(env: Env, preparerEmail: string, st
       it, so hang on to this email.
     </p>
     ${ctaButton(link, "View status")}
+    <p style="margin:24px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">
+      Want every document in one place?
+      <a href="${env.PUBLIC_APP_URL}/login?ref=status-email" style="color:${PRIMARY};">Create a free account</a>
+      — no password.
+    </p>
     ${SIGN_OFF}
   `;
   await send(env, preparerEmail, "Your document's status link", emailShell(env.PUBLIC_APP_URL, body), {
@@ -399,12 +411,21 @@ export async function sendCompletionEmails(
   const combinedPdf = certificatePdf ? await mergePdfs([finalPdf, certificatePdf]) : finalPdf;
   const attachments = [{ filename: "signed-document.pdf", content: bytesToBase64(combinedPdf) }];
   const customLogoUrl = await resolveEmailLogoUrl(env, doc.accountId);
+  // White-labeled workspaces pay to hide Docracy — skip the viral CTA in those completion emails.
+  const viralCta = customLogoUrl
+    ? ""
+    : `
+    <p style="margin:24px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">
+      Sent with Docracy — free e-signatures for simple agreements.
+    </p>
+    ${ctaButton(`${env.PUBLIC_APP_URL}/try`, "Send your own free")}`;
   const body = `
     <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">Everyone has signed</p>
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
       The signed document, including a certificate of completion, is attached.
     </p>
     <p style="margin:0;font-size:13px;color:${MUTED};line-height:1.5;">${statusLines(doc)}</p>
+    ${viralCta}
     ${SIGN_OFF}
   `;
   const html = emailShell(env.PUBLIC_APP_URL, body, customLogoUrl);
@@ -446,6 +467,49 @@ export async function sendCompletionEmails(
       attachments,
       tags: [{ name: "email_type", value: "completion_all_signed" }],
     });
+  }
+
+  // Anonymous preparers were told "we'll let you know when everyone's signed" in
+  // sendCompletionEmailSigned — deliver that promise with the PDF + an upgrade ask.
+  // Skip if they were already emailed as a signer or CC.
+  const preparer = doc.preparerEmail?.trim().toLowerCase();
+  if (preparer && !signerEmails.has(preparer) && !(doc.ccRecipients ?? []).some((c) => c.email.trim().toLowerCase() === preparer)) {
+    const preparerUpgrade =
+      customLogoUrl || doc.accountId
+        ? ""
+        : `
+    <p style="margin:24px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">
+      Want every signed PDF in one place, reusable templates, and more than 2 signers?
+    </p>
+    ${ctaButton(`${env.PUBLIC_APP_URL}/price`, "See paid plans")}
+    <p style="margin:12px 0 0 0;font-size:13px;color:${MUTED};">
+      Or <a href="${env.PUBLIC_APP_URL}/login?ref=preparer-done" style="color:${PRIMARY};">create a free account</a> to keep history without paying.
+    </p>`;
+    const preparerBody = `
+    <p style="margin:0 0 4px 0;font-size:20px;font-weight:bold;color:${INK};">Everyone has signed — your document is ready</p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      The signed document, including a certificate of completion, is attached.
+    </p>
+    <p style="margin:0;font-size:13px;color:${MUTED};line-height:1.5;">${statusLines(doc)}</p>
+    ${preparerUpgrade}
+    ${SIGN_OFF}
+  `;
+    const preparerHtml = emailShell(env.PUBLIC_APP_URL, preparerBody, customLogoUrl);
+    trackEvent(env, { event: "email_sent", emailType: "completion_preparer_done" });
+    if (!env.RESEND_API_KEY) {
+      console.log(
+        `[email:dev] to=${doc.preparerEmail} subject="Everyone has signed" (combined PDF attached, ${combinedPdf.byteLength} bytes)\n${statusLines(doc)}\n`
+      );
+    } else {
+      await resendFetch(env, {
+        from: FROM,
+        to: doc.preparerEmail!,
+        subject: "Everyone has signed — your document is ready",
+        html: preparerHtml,
+        attachments,
+        tags: [{ name: "email_type", value: "completion_preparer_done" }],
+      });
+    }
   }
 }
 
@@ -594,7 +658,7 @@ export async function sendPreparerLeadStep1(env: Env, email: string): Promise<vo
       Want a free account so every document you send lives in one place? No password — just a magic
       link to your email.
     </p>
-    ${ctaButton(`${env.PUBLIC_APP_URL}/login`, "Create a free account")}
+    ${ctaButton(`${env.PUBLIC_APP_URL}/login?utm_source=email&utm_medium=preparer-lead&utm_campaign=step1`, "Create a free account")}
     <p style="margin:0;font-size:14px;color:${MUTED};">You asked for a few tips — reply anytime to stop them.</p>
     ${SIGN_OFF}
   `;
@@ -612,7 +676,7 @@ export async function sendPreparerLeadStep3(env: Env, email: string): Promise<vo
       letters — ready to fill and send without rebuilding fields from scratch.
     </p>
     ${templateList(["Mutual NDA", "Independent contractor agreement", "Offer letter", "Freelance service agreement"])}
-    ${ctaButton(`${env.PUBLIC_APP_URL}/free-templates`, "Browse free templates")}
+    ${ctaButton(`${env.PUBLIC_APP_URL}/free-templates?utm_source=email&utm_medium=preparer-lead&utm_campaign=step3`, "Browse free templates")}
     <p style="margin:0;font-size:14px;color:${MUTED};">Still free, still no account required.</p>
     ${SIGN_OFF}
   `;
@@ -629,7 +693,7 @@ export async function sendPreparerLeadStep4(env: Env, email: string): Promise<vo
       Free covers quick, low-stakes agreements. Paid unlocks recurring templates, more signers, team
       seats, and longer retention — for when signing becomes part of how you work every week.
     </p>
-    ${ctaButton(`${env.PUBLIC_APP_URL}/pricing`, "See plans")}
+    ${ctaButton(`${env.PUBLIC_APP_URL}/pricing?utm_source=email&utm_medium=preparer-lead&utm_campaign=step4`, "See plans")}
     <p style="margin:0;font-size:14px;color:${MUTED};">No pressure — free stays free.</p>
     ${SIGN_OFF}
   `;

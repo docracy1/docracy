@@ -122,7 +122,8 @@ export async function requestMagicLink(
 async function findOrCreateAccount(
   env: Env,
   ctx: Ctx,
-  email: string
+  email: string,
+  attribution = ""
 ): Promise<{ id: string; isPaid: boolean; isEnterprise: boolean }> {
   const db = env.DOCRACY_DB!;
   const existing = await db
@@ -153,7 +154,7 @@ async function findOrCreateAccount(
       console.error("Onboarding email scheduling failed (non-fatal):", err)
     )
   );
-  trackEvent(env, { event: "signup_completed", userId: id });
+  trackEvent(env, { event: "signup_completed", userId: id, attribution });
 
   return { id, isPaid: false, isEnterprise: false };
 }
@@ -168,7 +169,9 @@ export async function consumeMagicLink(
   ctx: Ctx,
   token: string,
   ip: string | null,
-  userAgent: string | null
+  userAgent: string | null,
+  /** First-touch channel — stamped on signup_completed only when this consume creates the account. */
+  attribution = ""
 ): Promise<{ ok: true; sessionToken: string } | { ok: false; error: string }> {
   if (!env.DOCRACY_DB) {
     return { ok: false, error: "Accounts aren't set up on this deployment yet." };
@@ -188,7 +191,7 @@ export async function consumeMagicLink(
       .catch((err) => console.error("Auth D1 audit (magic_link consumed) failed (non-fatal):", err))
   );
 
-  const account = await findOrCreateAccount(env, ctx, record.email);
+  const account = await findOrCreateAccount(env, ctx, record.email, attribution);
   const sessionToken = await createSession(
     env,
     ctx,

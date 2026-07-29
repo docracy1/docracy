@@ -570,6 +570,7 @@ export default function Dashboard() {
   };
 
   const onUpgrade = async () => {
+    track("upgrade_clicked", { source: "dashboard" });
     setUpgrading(true);
     setUpgradeError(null);
     try {
@@ -582,6 +583,7 @@ export default function Dashboard() {
   };
 
   const onUpgradeEnterprise = async () => {
+    track("upgrade_clicked", { source: "dashboard_enterprise" });
     setUpgradingEnterprise(true);
     setUpgradeEnterpriseError(null);
     try {

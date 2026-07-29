@@ -11,6 +11,10 @@ export type FunnelEvent =
   | "template_used"
   | "fields_added"
   | "document_sent"
+  // Revenue
+  | "upgrade_clicked"
+  | "checkout_started"
+  | "checkout_completed"
   // Completion
   | "document_viewed"
   | "document_not_opened_after_2h"
@@ -30,6 +34,7 @@ export type FunnelEvent =
   | "referral_source_detected"
   | "blog_article_loaded"
   | "blog_cta_clicked"
+  | "viral_cta_clicked"
   // Email
   | "email_sent"
   | "email_opened"
@@ -167,6 +172,20 @@ export interface TrackEventParams {
   errorCode?: string | null;
   emailType?: string | null;
   templateCategory?: string | null;
+  /** First-touch marketing channel as `source` or `source/campaign` (e.g. "linkedin/post-01-auto").
+   *  Unlike `referrer` (current navigation only), this survives across sessions so signup/checkout
+   *  can still be credited to the post that found the customer. */
+  attribution?: string | null;
+}
+
+/** Clamps a client-supplied attribution label — /track accepts this straight from the browser. */
+export function sanitizeAttribution(value: string | null | undefined): string {
+  if (!value) return "";
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9._/-]/g, "-")
+    .slice(0, 72);
 }
 
 /**
@@ -175,9 +194,9 @@ export interface TrackEventParams {
  * something a request should fail over.
  *
  * Blob layout (Analytics Engine supports up to 20 blobs / 20 doubles / 1 index per point — this
- * uses 14 of the 20 available blob slots, leaving headroom for future parameters without another
+ * uses 15 of the 20 available blob slots, leaving headroom for future parameters without another
  * binding-shape change):
- *   blob1  event            blob8  templateId
+ *   blob1  event            blob8  templateId       blob15 attribution
  *   blob2  route            blob9  source
  *   blob3  traffic_type     blob10 referrer
  *   blob4  botName          blob11 sessionId
@@ -213,6 +232,7 @@ export function trackEvent(env: Env, params: TrackEventParams): void {
         params.errorCode ?? "",
         params.emailType ?? "",
         params.templateCategory ?? "",
+        params.attribution ?? "",
       ],
       doubles: [1, params.durationMs ?? 0],
       indexes: [params.event],

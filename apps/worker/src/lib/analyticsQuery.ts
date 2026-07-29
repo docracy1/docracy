@@ -137,6 +137,52 @@ export async function queryFunnelStepCounts(
   return { ok: true, data };
 }
 
+export interface AttributionRow {
+  event: string;
+  attribution: string;
+  count: number;
+}
+
+/** Breaks down growth events by first-touch marketing channel (blob15). Empty attribution is
+ *  reported as "direct" so every signup/checkout is accounted for. */
+export async function queryAttributionBreakdown(
+  env: Env,
+  days: number,
+  humansOnly = false
+): Promise<AnalyticsQueryResult<AttributionRow[]>> {
+  const humanFilter = humansOnly ? ` AND blob3 = 'human'` : "";
+  const sql = `
+    SELECT
+      blob1 AS event,
+      blob15 AS attribution,
+      SUM(double1) AS count
+    FROM docracy_funnel
+    WHERE timestamp > now() - INTERVAL '${days}' DAY
+      AND ${EXCLUDED_AGENTS_SQL_FILTER}${humanFilter}
+      AND blob1 IN (
+        'signup_started',
+        'signup_completed',
+        'upgrade_clicked',
+        'checkout_started',
+        'checkout_completed',
+        'viral_cta_clicked'
+      )
+    GROUP BY event, attribution
+    ORDER BY event, count DESC
+  `.trim();
+
+  const result = await runAnalyticsSql<Array<{ event: string; attribution: string; count: number }>>(env, sql);
+  if (!result.ok) return result;
+  return {
+    ok: true,
+    data: result.data.map((row) => ({
+      event: row.event,
+      attribution: row.attribution || "direct",
+      count: row.count,
+    })),
+  };
+}
+
 export function formatAnalyticsFailure(failure: AnalyticsQueryFailure): string {
   if (failure.kind === "not_configured") {
     return (

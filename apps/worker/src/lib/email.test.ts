@@ -171,6 +171,45 @@ describe("sendCompletionEmails", () => {
 
     expect(capture.logged()).toContain(`combined PDF attached, ${finalPdf.byteLength} bytes`);
   });
+
+  it("also emails an anonymous preparer the final PDF with an upgrade CTA", async () => {
+    const { env } = makeMockEnv({ RESEND_API_KEY: "test-key" });
+    const recipients: string[] = [];
+    const subjects: string[] = [];
+    const bodies: string[] = [];
+    vi.spyOn(global, "fetch").mockImplementation(async (_url, init) => {
+      const parsed = JSON.parse(init!.body as string) as { to: string; subject: string; html: string };
+      recipients.push(parsed.to);
+      subjects.push(parsed.subject);
+      bodies.push(parsed.html);
+      return new Response("{}", { status: 200 });
+    });
+    const finalPdf = await makePdfWithPages(1);
+    const doc = { ...makeDoc("Anna"), preparerEmail: "preparer@example.com" };
+
+    await sendCompletionEmails(env, doc, finalPdf);
+
+    expect(recipients).toContain("preparer@example.com");
+    expect(subjects).toContain("Everyone has signed — your document is ready");
+    const preparerHtml = bodies[recipients.indexOf("preparer@example.com")];
+    expect(preparerHtml).toContain("/price");
+    expect(preparerHtml).toContain("See paid plans");
+  });
+
+  it("does not double-email a preparer who was also a signer", async () => {
+    const { env } = makeMockEnv({ RESEND_API_KEY: "test-key" });
+    const recipients: string[] = [];
+    vi.spyOn(global, "fetch").mockImplementation(async (_url, init) => {
+      recipients.push(JSON.parse(init!.body as string).to);
+      return new Response("{}", { status: 200 });
+    });
+    const finalPdf = await makePdfWithPages(1);
+    const doc = { ...makeDoc("Anna"), preparerEmail: "victim@example.com" };
+
+    await sendCompletionEmails(env, doc, finalPdf);
+
+    expect(recipients.filter((r) => r === "victim@example.com")).toHaveLength(1);
+  });
 });
 
 describe("sendFeedback", () => {

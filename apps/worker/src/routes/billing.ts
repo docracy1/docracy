@@ -10,6 +10,7 @@ import {
   setStripeCustomerId,
 } from "../lib/billing";
 import { verifyAndExtract } from "../lib/billingProviders/stripe";
+import { sanitizeAttribution, trackEvent } from "../lib/analytics";
 import type { Env } from "@docracy/shared";
 
 type Variables = { account: AccountContext | null };
@@ -17,6 +18,8 @@ const billing = new Hono<{ Bindings: Env; Variables: Variables }>();
 
 interface CheckoutBody {
   plan?: "paid" | "enterprise";
+  /** First-touch channel from the browser — carried into Stripe metadata for checkout_completed. */
+  attribution?: string;
 }
 
 billing.post("/checkout", requireAccount, async (c) => {
@@ -40,6 +43,7 @@ billing.post("/checkout", requireAccount, async (c) => {
     return c.json({ error: "Ask your workspace owner to manage the subscription." }, 403);
   }
 
+  const attribution = sanitizeAttribution(body.attribution);
   const params = new URLSearchParams({
     mode: "subscription",
     "line_items[0][price]": priceId,
@@ -54,6 +58,9 @@ billing.post("/checkout", requireAccount, async (c) => {
   // Payment Link used, so no webhook-side changes were needed for this to work.
   if (isEnterprise) {
     params.set("metadata[plan]", "enterprise");
+  }
+  if (attribution) {
+    params.set("metadata[attribution]", attribution);
   }
 
   const res = await fetch("https://api.stripe.com/v1/checkout/sessions", {
@@ -74,6 +81,14 @@ billing.post("/checkout", requireAccount, async (c) => {
   if (!session.url) {
     return c.json({ error: "Could not start checkout. Please try again." }, 502);
   }
+  // Gap vs checkout_completed = Stripe drop-off; gap vs upgrade_clicked = price bounce.
+  trackEvent(c.env, {
+    event: "checkout_started",
+    route: "billing",
+    userId: account.id,
+    source: isEnterprise ? "enterprise" : "paid",
+    attribution,
+  });
   return c.json({ url: session.url });
 });
 
@@ -87,6 +102,13 @@ billing.post("/webhook", async (c) => {
     await markAccountPaid(c.env, result.accountId, true);
     if (result.customerId) await setStripeCustomerId(c.env, result.accountId, result.customerId);
     if (result.isEnterprise) await markAccountEnterprise(c.env, result.accountId);
+    trackEvent(c.env, {
+      event: "checkout_completed",
+      route: "billing",
+      userId: result.accountId,
+      source: result.isEnterprise ? "enterprise" : "paid",
+      attribution: result.attribution,
+    });
   } else if (result?.type === "subscription_deleted") {
     const accountId = await findAccountIdByStripeCustomerId(c.env, result.customerId);
     if (accountId) await markAccountPaid(c.env, accountId, false);

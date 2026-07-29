@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { setCookie } from "hono/cookie";
-import { queryFunnelSummary, queryFunnelStepCounts, formatAnalyticsFailure } from "../lib/analyticsQuery";
+import { queryFunnelSummary, queryFunnelStepCounts, queryAttributionBreakdown, formatAnalyticsFailure } from "../lib/analyticsQuery";
 import { NOTRACK_COOKIE_NAME, noTrackCookieOptions } from "../lib/analytics";
 import { requireAdminAccount, type AccountContext } from "../lib/auth";
 import { findAccountIdByEmail, markAccountEnterprise, markAccountPaid } from "../lib/billing";
@@ -72,10 +72,21 @@ admin.get("/analytics", requireAdminAccount, async (c) => {
   // Only the step counts take this filter — queryFunnelSummary already returns traffic_type per
   // row, so the UI splits bot/human from that one itself.
   const humansOnly = c.req.query("humansOnly") === "1";
-  const [summary, steps] = await Promise.all([queryFunnelSummary(c.env, days), queryFunnelStepCounts(c.env, days, humansOnly)]);
+  const [summary, steps, attribution] = await Promise.all([
+    queryFunnelSummary(c.env, days),
+    queryFunnelStepCounts(c.env, days, humansOnly),
+    queryAttributionBreakdown(c.env, days, humansOnly),
+  ]);
   if (!summary.ok) return c.json({ error: formatAnalyticsFailure(summary.failure) }, 501);
   if (!steps.ok) return c.json({ error: formatAnalyticsFailure(steps.failure) }, 501);
-  return c.json({ days, humansOnly, rows: summary.data, funnelSteps: steps.data });
+  if (!attribution.ok) return c.json({ error: formatAnalyticsFailure(attribution.failure) }, 501);
+  return c.json({
+    days,
+    humansOnly,
+    rows: summary.data,
+    funnelSteps: steps.data,
+    attribution: attribution.data,
+  });
 });
 
 // Always-on for admins: founders (ADMIN_EMAILS), Claude, and Cursor are excluded from funnel
