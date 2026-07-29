@@ -14,15 +14,15 @@ function BlogCta({ slug }: { slug: string }) {
   return (
     <div style={{ display: "flex", gap: 12, marginTop: 24, flexWrap: "wrap" }}>
       <Link
-        to="/prepare"
+        to={`/prepare?freeTemplate=mutual-nda&ref=blog-${slug}`}
         className="btn-primary"
         style={{ textDecoration: "none" }}
         onClick={() => track("blog_cta_clicked", { source: slug })}
       >
-        Try Docracy free
+        Try free — sample NDA
       </Link>
       <Link
-        to="/pricing"
+        to={`/pricing?ref=blog-${slug}`}
         className="btn-secondary"
         style={{ textDecoration: "none" }}
         onClick={() => track("blog_cta_clicked", { source: slug })}

@@ -10,38 +10,56 @@ Code converts people who already touch the product. This file is the **outbound*
 | https://docracy.io/nda | Same |
 | https://docracy.io/price | Pricing |
 | https://docracy.io/go/dm | Sample NDA (for outreach DMs) |
-| https://docracy.io/go/ph | Product Hunt launch |
+| https://docracy.io/go/ph | Product Hunt (historical) |
 | https://docracy.io/go/hn | Show HN |
 | https://docracy.io/go/li | LinkedIn |
 | https://docracy.io/go/x | X |
 
-Attribution is still recorded under the hood.
+Attribution is recorded under the hood (`ref` / `utm_*`).
+
+## Status
+
+- [x] Conversion CTAs + short links deployed
+- [x] Google Search Console domain verified
+- [x] Product Hunt (at go-live) — do not re-launch
+- [x] Community answers (Reddit / IH) — see `outbound/distribution.md`
+- [ ] Partner emails (`outbound/partner-batch.md` — 12 ready)
+- [ ] Directories (AlternativeTo first)
+- [ ] Reverse-trial replies to anyone who used the product
+- [ ] Watch GSC: which queries hit `/docusign-alternative`, `/nda-signing`, templates
 
 ## This week (do in order)
 
-### 1. Deploy `cursor/get-customers`
-Without deploy, none of the conversion CTAs / short links / completion emails ship.
+**Start here:** `outbound/distribution.md`
 
-### 2. Warm outreach — 20 messages/week (primary channel)
-See `outbound/dm-scripts.md`. Target freelancers / agency ops / people ops who send NDAs.
+### 1. Partner emails (primary for first customers)
+`outbound/partner-batch.md` — send the 12 ready emails. Reply same day.
 
-### 3. Directories (set once)
-See `outbound/directories.md`.
+### 2. Directories + listicle pitches
+`outbound/directories.md` + `distribution.md` §C–D.
 
-### 4. One launch when ready
-Product Hunt (`outbound/product-hunt.md`) **or** Show HN (`outbound/show-hn.md`) — not both the same week. Get ~10 people who've used Docracy to show up.
+### 3. Google (automated channel)
+In Search Console: Performance → filter pages `/docusign-alternative`, `/nda-signing`, `/free-templates/*`.  
+Share top queries — we tighten titles/CTAs from real data. Money pages now CTA to sample NDA in the hero.
+
+### 4. Reverse trials
+`outbound/reverse-trial.md` — anyone who sent/signed.
 
 ### 5. Social (support only)
-2–3 posts/week max. Short links only. Copy in `linkedin/posts/` and `x/posts/` — CTAs should end with `docracy.io/try` or `docracy.io/price`.
+2–3 posts/week max. Demos in `linkedin/` and `x/`. CTA: `docracy.io/try`.
+
+### 6. Show HN — optional later
+Only after a few quotes. PH is done. See `outbound/launch-checklist.md`.
 
 ## Kill criteria (2 weeks)
 
-- DMs → trials but no upgrades → pricing / PrepareSent / Status CTAs
-- Almost no trials from DMs → change niche or message, not product features
-- Cold social posts → ignore vanity; keep posting light
+- Outreach → trials but no upgrades → check PrepareSent / Status / pricing CTAs in Admin → Growth
+- Almost no trials → change niche/message, not product features
+- Cold social → ignore vanity; keep light
 
 ## Do not do yet
 
-- Paid ads
+- Paid ads (except a tiny Google test after we see organic `/try` conversions)
 - Enterprise sales
-- More feature posts without a human conversation attached
+- X/LinkedIn automation
+- Re-launch Product Hunt

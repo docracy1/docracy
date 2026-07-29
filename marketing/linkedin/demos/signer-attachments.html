@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Docracy — Signer attachments demo</title>
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    .demo-main.single { grid-template-columns: 1fr; max-width: 760px; margin: 0 auto; width: 100%; }
+    .sign-field {
+      position: absolute;
+      left: 48px;
+      top: 280px;
+      width: 200px;
+      height: 36px;
+      border: 2px solid var(--success);
+      border-radius: 4px;
+      background: rgba(46, 139, 87, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--success);
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-shell">
+    <header class="demo-header">
+      <span class="demo-logo">Docracy</span>
+      <span class="demo-badge">Sign document</span>
+    </header>
+    <div class="demo-main single">
+      <div class="card" style="padding: 20px 24px">
+        <h2 style="font-size: 18px; margin: 0 0 4px">Independent Contractor Agreement</h2>
+        <p style="font-size: 13px; color: var(--mute); margin: 0 0 16px">Signing as <strong>Morgan Blake</strong></p>
+
+        <div class="pdf-doc" style="margin: 0 0 16px; min-height: 200px">
+          <p class="doc-p">Contractor agrees to perform design services for Client per the attached scope of work.</p>
+          <p class="doc-p">Payment: net-15 upon invoice approval.</p>
+          <div class="sign-field">✓ Signed</div>
+        </div>
+
+        <div class="card" style="padding: 16px; box-shadow: none">
+          <h3 style="font-size: 15px; margin: 0 0 6px">Upload attachment</h3>
+          <p style="font-size: 13px; color: var(--mute); margin: 0 0 12px">
+            Upload at least one file (PDF or image) before signing.
+          </p>
+          <div class="upload-zone" id="uploadZone">Choose file or drag here</div>
+          <p class="uploaded-file" id="uploaded">✓ W-9_Morgan_Blake.pdf (142 KB)</p>
+        </div>
+
+        <button type="button" class="prepare-highlight-card" id="signBtn" style="margin-top: 16px; opacity: 0.45; cursor: default">
+          <span class="prepare-highlight-icon">✓</span>
+          <span>
+            <span class="prepare-highlight-title">Complete signing</span>
+            <span class="prepare-highlight-sub">Enabled after attachment is uploaded</span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="cursor-ring" id="cursor"></div>
+  <script>
+    const cursor = document.getElementById("cursor");
+    const zone = document.getElementById("uploadZone");
+    const uploaded = document.getElementById("uploaded");
+    const signBtn = document.getElementById("signBtn");
+
+    function moveCursor(x, y, click) {
+      cursor.style.left = x + "px";
+      cursor.style.top = y + "px";
+      cursor.classList.add("show");
+      if (click) cursor.classList.add("click");
+      else cursor.classList.remove("click");
+    }
+
+    async function wait(ms) {
+      return new Promise((r) => setTimeout(r, ms));
+    }
+
+    async function run() {
+      await wait(900);
+      const rect = zone.getBoundingClientRect();
+      moveCursor(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      await wait(500);
+      moveCursor(rect.left + rect.width / 2, rect.top + rect.height / 2, true);
+      zone.classList.add("active");
+      zone.textContent = "Uploading…";
+      await wait(900);
+      zone.textContent = "W-9_Morgan_Blake.pdf";
+      zone.style.borderStyle = "solid";
+      zone.style.color = "#2e8b57";
+      uploaded.classList.add("show");
+      signBtn.style.opacity = "1";
+      signBtn.querySelector(".prepare-highlight-sub").textContent = "Ready to submit";
+      await wait(1800);
+      cursor.classList.remove("show");
+    }
+
+    run();
+  </script>
+</body>
+</html>

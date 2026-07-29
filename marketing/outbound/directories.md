@@ -8,13 +8,13 @@ Submit once. Use short links. Same positioning everywhere:
 **Pricing page:** https://docracy.io/price  
 **Alternatives page (if they ask):** https://docracy.io/docusign-alternative
 
-| Directory | Notes |
-|-----------|--------|
-| AlternativeTo | Add as alternative to DocuSign, Dropbox Sign, PandaDoc |
-| G2 / Capterra | E-Signature category; be honest about free tier limits |
-| SaaSHub / Slant | “Best DocuSign alternatives” lists |
-| Indie Hackers Products | Link /try |
-| There's An AI For That | Mention AI field detect + MCP only as secondary |
+| Directory | Notes | Done? |
+|-----------|--------|-------|
+| AlternativeTo | Add as alternative to DocuSign, Dropbox Sign, PandaDoc | [ ] |
+| Indie Hackers Products | Link /try | [ ] |
+| SaaSHub / Slant | “Best DocuSign alternatives” lists | [ ] |
+| G2 / Capterra | E-Signature category; be honest about free tier limits | [ ] |
+| There's An AI For That | Mention AI field detect + MCP only as secondary | [ ] |
 
 ## Short blurb (copy-paste)
 

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { usePageMeta } from "../lib/usePageMeta";
 import { EXPLAINER_PAGES } from "../lib/marketingPages";
+import { track } from "../lib/track";
 
 export default function ExplainerPage({ slug }: { slug: string }) {
   const page = EXPLAINER_PAGES.find((p) => p.slug === slug);
@@ -8,12 +9,30 @@ export default function ExplainerPage({ slug }: { slug: string }) {
 
   usePageMeta(page.seoTitle, page.seoDescription);
 
+  const ctaTo = page.ctaTo.includes("?")
+    ? `${page.ctaTo}&ref=seo-${page.slug}`
+    : `${page.ctaTo}?ref=seo-${page.slug}`;
+
+  const onCta = (placement: string) => {
+    track("landingpage_cta_clicked", { source: `seo:${page.slug}:${placement}` });
+  };
+
   return (
     <div>
       <div className="hero-band">
         <div className="hero-inner" style={{ maxWidth: 720 }}>
           <h1>{page.heroHeadline}</h1>
           <p>{page.heroSubheadline}</p>
+          <div style={{ marginTop: 20 }}>
+            <Link
+              to={ctaTo}
+              className="btn-primary btn-lg"
+              style={{ display: "inline-block", textDecoration: "none" }}
+              onClick={() => onCta("hero")}
+            >
+              {page.ctaLabel}
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -48,7 +67,12 @@ export default function ExplainerPage({ slug }: { slug: string }) {
 
       <div className="cta-band">
         <p style={{ marginTop: 0, marginBottom: 20 }}>Free to start — no account needed to send or sign.</p>
-        <Link to={page.ctaTo} className="btn-primary btn-lg" style={{ display: "inline-block", textDecoration: "none" }}>
+        <Link
+          to={ctaTo}
+          className="btn-primary btn-lg"
+          style={{ display: "inline-block", textDecoration: "none" }}
+          onClick={() => onCta("footer")}
+        >
           {page.ctaLabel}
         </Link>
       </div>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Docracy — Anchor tags demo</title>
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    .tag {
+      display: inline-block;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 12px;
+      background: #fff7ed;
+      color: #c2410c;
+      border: 1px dashed #fb923c;
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: opacity 0.4s, transform 0.4s;
+    }
+    .tag.gone {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    .field-box.a1 { left: 48px; top: 300px; width: 200px; height: 36px; }
+    .field-box.a2 { left: 48px; top: 360px; width: 120px; height: 28px; }
+    .field-box.a3 { left: 48px; top: 420px; width: 180px; height: 28px; }
+  </style>
+</head>
+<body>
+  <div class="demo-shell">
+    <header class="demo-header">
+      <span class="demo-logo">Docracy</span>
+      <span class="demo-badge">Prepare document</span>
+    </header>
+    <div class="demo-main">
+      <div class="card pdf-pane">
+        <div class="pdf-toolbar">vendor-agreement.pdf · Page 1 of 1</div>
+        <div class="pdf-doc">
+          <h1 class="doc-title">Vendor Agreement</h1>
+          <p class="doc-p">Vendor shall deliver goods per the SOW. Payment terms: net-30 from invoice date.</p>
+          <p class="doc-p">Governing law: Delaware. Disputes resolved by binding arbitration.</p>
+          <div class="sig-block">
+            <div><strong>Vendor</strong></div>
+            <div style="margin-top: 12px">Signature: <span class="tag" id="t1">{{sig1}}</span></div>
+            <div style="margin-top: 10px">Date: <span class="tag" id="t2">{{date_1}}</span></div>
+            <div style="margin-top: 10px">Accept terms: <span class="tag" id="t3">{{dropdown_1:Yes|No}}</span></div>
+          </div>
+          <div class="field-box a1">Sign here</div>
+          <div class="field-box a2">Date</div>
+          <div class="field-box a3">Dropdown</div>
+        </div>
+      </div>
+      <aside class="sidebar">
+        <div class="card">
+          <h3>AI tools</h3>
+          <button type="button" class="prepare-highlight-card" id="detectBtn">
+            <span class="prepare-highlight-icon">🏷</span>
+            <span>
+              <span class="prepare-highlight-title" id="detectTitle">Detect anchor tags</span>
+              <span class="prepare-highlight-sub">Find {{sig1}}, {{date_2}}, {{dropdown_1:A|B}}</span>
+            </span>
+          </button>
+          <p class="notice" id="notice">3 fields from anchor tags</p>
+        </div>
+        <div class="card">
+          <h3>How it works</h3>
+          <p style="font-size: 12px; color: var(--body); margin: 0; line-height: 1.5">
+            Embed tags in your PDF. Upload once. Docracy places fields and whites out the tag text.
+          </p>
+        </div>
+      </aside>
+    </div>
+  </div>
+  <div class="cursor-ring" id="cursor"></div>
+  <script>
+    const cursor = document.getElementById("cursor");
+    const btn = document.getElementById("detectBtn");
+    const title = document.getElementById("detectTitle");
+    const notice = document.getElementById("notice");
+    const fields = [...document.querySelectorAll(".field-box")];
+    const tags = ["t1", "t2", "t3"].map((id) => document.getElementById(id));
+
+    function moveCursor(x, y, click) {
+      cursor.style.left = x + "px";
+      cursor.style.top = y + "px";
+      cursor.classList.add("show");
+      if (click) cursor.classList.add("click");
+      else cursor.classList.remove("click");
+    }
+
+    async function wait(ms) {
+      return new Promise((r) => setTimeout(r, ms));
+    }
+
+    async function run() {
+      await wait(800);
+      const rect = btn.getBoundingClientRect();
+      moveCursor(rect.left + rect.width * 0.35, rect.top + rect.height / 2);
+      await wait(600);
+      moveCursor(rect.left + rect.width * 0.35, rect.top + rect.height / 2, true);
+      btn.classList.add("active");
+      title.textContent = "Scanning…";
+      await wait(1000);
+      title.textContent = "Detect anchor tags";
+      for (let i = 0; i < fields.length; i++) {
+        tags[i].classList.add("gone");
+        fields[i].classList.add("show");
+        await wait(400);
+      }
+      notice.classList.add("show");
+      await wait(1500);
+      cursor.classList.remove("show");
+    }
+
+    run();
+  </script>
+</body>
+</html>

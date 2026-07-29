@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Docracy — SMS signing links demo</title>
+  <link rel="stylesheet" href="shared.css" />
+</head>
+<body>
+  <div class="demo-shell">
+    <header class="demo-header">
+      <span class="demo-logo">Docracy</span>
+      <span class="demo-badge">Prepare document</span>
+    </header>
+    <div class="demo-main">
+      <div class="card pdf-pane">
+        <div class="pdf-toolbar">Offer Letter.pdf · Page 1 of 1</div>
+        <div class="pdf-doc">
+          <h1 class="doc-title">Offer of Employment</h1>
+          <p class="doc-p">We are pleased to offer you the position of Senior Product Designer at Acme Co., starting April 1, 2026.</p>
+          <p class="doc-p">Base salary: $145,000/year, plus standard benefits. This offer expires in seven (7) days.</p>
+          <div class="sig-block">
+            <div style="margin-top: 10px">Candidate Signature: <span class="doc-line"></span></div>
+            <div style="margin-top: 8px">Date: <span class="doc-line" style="min-width: 100px"></span></div>
+          </div>
+        </div>
+      </div>
+      <aside class="sidebar">
+        <div class="card">
+          <h3>Signers</h3>
+          <div class="form-row">
+            <div><span class="form-label">Signer 1</span><input class="form-input" value="Sam Rivera" readonly /></div>
+            <div><span class="form-label">Email</span><input class="form-input" value="sam@email.com" readonly /></div>
+          </div>
+          <div id="smsExtra" class="fade-slide">
+            <div class="form-row" style="margin-top: 8px">
+              <div><span class="form-label">Mobile (US)</span><input class="form-input" value="415 555 1234" readonly /></div>
+              <div><span class="form-label">Carrier</span><input class="form-input" value="Verizon" readonly /></div>
+            </div>
+          </div>
+          <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--hairline)">
+            <label class="checkbox-row" id="smsLabel">
+              <input type="checkbox" id="smsCheck" />
+              <span>Also text signing links (US carriers — free, via email-to-SMS gateways)</span>
+            </label>
+          </div>
+        </div>
+        <div class="card" id="phonePreview" style="opacity: 0; transform: translateY(8px); transition: opacity 0.4s, transform 0.4s">
+          <h3>What the signer sees</h3>
+          <div style="background: #1a1a1a; color: #fff; border-radius: 16px; padding: 14px; font-size: 12px; line-height: 1.45">
+            <div style="color: #aaa; font-size: 10px; margin-bottom: 6px">Messages · now</div>
+            Docracy: You've been invited to sign "Offer Letter". Sign here: docracy.io/s/abc…
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+  <div class="cursor-ring" id="cursor"></div>
+  <script>
+    const cursor = document.getElementById("cursor");
+    const smsCheck = document.getElementById("smsCheck");
+    const smsExtra = document.getElementById("smsExtra");
+    const phonePreview = document.getElementById("phonePreview");
+
+    function moveCursor(x, y, click) {
+      cursor.style.left = x + "px";
+      cursor.style.top = y + "px";
+      cursor.classList.add("show");
+      if (click) cursor.classList.add("click");
+      else cursor.classList.remove("click");
+    }
+
+    async function wait(ms) {
+      return new Promise((r) => setTimeout(r, ms));
+    }
+
+    async function run() {
+      await wait(900);
+      const label = document.getElementById("smsLabel");
+      const rect = label.getBoundingClientRect();
+      moveCursor(rect.left + 12, rect.top + 12);
+      await wait(600);
+      moveCursor(rect.left + 12, rect.top + 12, true);
+      smsCheck.checked = true;
+      smsExtra.classList.add("show");
+      await wait(800);
+      phonePreview.style.opacity = "1";
+      phonePreview.style.transform = "translateY(0)";
+      await wait(2200);
+      cursor.classList.remove("show");
+    }
+
+    run();
+  </script>
+</body>
+</html>

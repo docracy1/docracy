@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Docracy — Smart auto-detect demo</title>
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    .field-box.sig1 { left: 48px; top: 318px; width: 200px; height: 36px; }
+    .field-box.date1 { left: 48px; top: 368px; width: 120px; height: 28px; }
+    .field-box.sig2 { left: 48px; top: 448px; width: 200px; height: 36px; }
+    .field-box.date2 { left: 48px; top: 498px; width: 120px; height: 28px; }
+  </style>
+</head>
+<body>
+  <div class="demo-shell">
+    <header class="demo-header">
+      <span class="demo-logo">Docracy</span>
+      <span class="demo-badge">Prepare document</span>
+    </header>
+    <div class="demo-main">
+      <div class="card pdf-pane">
+        <div class="pdf-toolbar">Mutual NDA.pdf · Page 1 of 2</div>
+        <div class="pdf-doc" id="pdf">
+          <h1 class="doc-title">Mutual Non-Disclosure Agreement</h1>
+          <p class="doc-p">The parties agree to keep confidential information private for a period of two (2) years from the Effective Date.</p>
+          <p class="doc-p">Each party may disclose only to employees with a need to know, subject to equivalent confidentiality obligations.</p>
+          <div class="sig-block">
+            <div><strong>Party A</strong></div>
+            <div style="margin-top: 10px">Signature: <span class="doc-line"></span></div>
+            <div style="margin-top: 8px">Date: <span class="doc-line" style="min-width: 100px"></span></div>
+          </div>
+          <div class="sig-block">
+            <div><strong>Party B</strong></div>
+            <div style="margin-top: 10px">Signature: <span class="doc-line"></span></div>
+            <div style="margin-top: 8px">Date: <span class="doc-line" style="min-width: 100px"></span></div>
+          </div>
+          <div class="field-box sig1">Sign here</div>
+          <div class="field-box date1">Date</div>
+          <div class="field-box sig2">Sign here</div>
+          <div class="field-box date2">Date</div>
+        </div>
+      </div>
+      <aside class="sidebar">
+        <div class="card">
+          <h3>AI tools</h3>
+          <button type="button" class="prepare-highlight-card" id="detectBtn">
+            <span class="prepare-highlight-icon">✨</span>
+            <span>
+              <span class="prepare-highlight-title" id="detectTitle">Smart auto-detect</span>
+              <span class="prepare-highlight-sub">Automatically find &amp; place signature fields</span>
+            </span>
+          </button>
+          <p class="notice" id="notice">4 fields placed for 2 signers</p>
+        </div>
+        <div class="card">
+          <h3>Signers</h3>
+          <div class="form-row">
+            <div><span class="form-label">Signer 1</span><input class="form-input" value="Alex Chen" readonly /></div>
+            <div><span class="form-label">Email</span><input class="form-input" value="alex@acme.co" readonly /></div>
+          </div>
+          <div class="form-row">
+            <div><span class="form-label">Signer 2</span><input class="form-input" value="Jordan Lee" readonly /></div>
+            <div><span class="form-label">Email</span><input class="form-input" value="jordan@partner.io" readonly /></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+  <div class="cursor-ring" id="cursor"></div>
+  <script>
+    const cursor = document.getElementById("cursor");
+    const btn = document.getElementById("detectBtn");
+    const title = document.getElementById("detectTitle");
+    const notice = document.getElementById("notice");
+    const fields = [...document.querySelectorAll(".field-box")];
+
+    function moveCursor(x, y, click) {
+      cursor.style.left = x + "px";
+      cursor.style.top = y + "px";
+      cursor.classList.add("show");
+      if (click) cursor.classList.add("click");
+      else cursor.classList.remove("click");
+    }
+
+    async function wait(ms) {
+      return new Promise((r) => setTimeout(r, ms));
+    }
+
+    async function run() {
+      await wait(800);
+      const rect = btn.getBoundingClientRect();
+      moveCursor(rect.left + rect.width * 0.3, rect.top + rect.height / 2);
+      await wait(700);
+      moveCursor(rect.left + rect.width * 0.3, rect.top + rect.height / 2, true);
+      btn.classList.add("active");
+      title.textContent = "Scanning…";
+      await wait(1200);
+      title.textContent = "Smart auto-detect";
+      for (let i = 0; i < fields.length; i++) {
+        fields[i].classList.add("show");
+        await wait(350);
+      }
+      notice.classList.add("show");
+      await wait(1500);
+      cursor.classList.remove("show");
+    }
+
+    run();
+  </script>
+</body>
+</html>

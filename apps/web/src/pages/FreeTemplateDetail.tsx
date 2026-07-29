@@ -56,9 +56,16 @@ export default function FreeTemplateDetail() {
       </div>
 
       <Link
-        to={`/prepare?freeTemplate=${template.slug}`}
+        to={`/prepare?freeTemplate=${template.slug}&ref=seo-template-${template.slug}`}
         className="btn-primary"
         style={{ display: "inline-block", textDecoration: "none", marginTop: 20 }}
+        onClick={() =>
+          track("landingpage_cta_clicked", {
+            source: `seo:template:${template.slug}`,
+            templateId: template.slug,
+            templateCategory: template.recurringCategory,
+          })
+        }
       >
         Use this template
       </Link>
