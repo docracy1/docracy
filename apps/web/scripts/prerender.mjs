@@ -319,16 +319,17 @@ function writeIndexNowKey() {
 
 function withMeta(html, { title, description, urlPath, locale = "en", alternates }) {
   const canonical = `${SITE}${urlPath === "/" ? "/" : urlPath}`;
+  // Use function replacers — string replacements treat `$10` in copy as a capture-group token.
   let out = html
     .replace(/<html lang="[^"]*"/, `<html lang="${locale}"`)
-    .replace(/<title>.*?<\/title>/, `<title>${title}</title>`)
-    .replace(/(<meta\s+name="description"\s+content=")[^"]*(")/, `$1${description}$2`)
-    .replace(/(<meta property="og:title" content=")[^"]*(")/, `$1${title}$2`)
-    .replace(/(<meta\s+property="og:description"\s+content=")[^"]*(")/, `$1${description}$2`)
-    .replace(/(<meta property="og:url" content=")[^"]*(")/, `$1${canonical}$2`)
-    .replace(/(<meta name="twitter:title" content=")[^"]*(")/, `$1${title}$2`)
-    .replace(/(<meta\s+name="twitter:description"\s+content=")[^"]*(")/, `$1${description}$2`)
-    .replace(/(<link rel="canonical" href=")[^"]*(")/, `$1${canonical}$2`);
+    .replace(/<title>.*?<\/title>/, () => `<title>${title}</title>`)
+    .replace(/(<meta\s+name="description"\s+content=")[^"]*(")/, (_, a, b) => `${a}${description}${b}`)
+    .replace(/(<meta property="og:title" content=")[^"]*(")/, (_, a, b) => `${a}${title}${b}`)
+    .replace(/(<meta\s+property="og:description"\s+content=")[^"]*(")/, (_, a, b) => `${a}${description}${b}`)
+    .replace(/(<meta property="og:url" content=")[^"]*(")/, (_, a, b) => `${a}${canonical}${b}`)
+    .replace(/(<meta name="twitter:title" content=")[^"]*(")/, (_, a, b) => `${a}${title}${b}`)
+    .replace(/(<meta\s+name="twitter:description"\s+content=")[^"]*(")/, (_, a, b) => `${a}${description}${b}`)
+    .replace(/(<link rel="canonical" href=")[^"]*(")/, (_, a, b) => `${a}${canonical}${b}`);
 
   if (alternates) {
     const enHref = `${SITE}${alternates.en === "/" ? "/" : alternates.en}`;
