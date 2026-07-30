@@ -1,6 +1,9 @@
 /** Animated hero illustration: upload → place fields → send → signed.
  *  CSS-driven (no video asset) so it stays in sync with the brand and respects reduced-motion. */
+import { useT } from "../lib/i18n";
+
 export default function ProductFlowDemo() {
+  const t = useT();
   return (
     <div className="product-flow-demo" aria-hidden="true">
       <div className="product-flow-stage product-flow-stage-1">
@@ -9,10 +12,10 @@ export default function ProductFlowDemo() {
           <rect x="110" y="88" width="160" height="110" rx="10" fill="var(--primary-soft)" stroke="var(--primary)" strokeWidth="2" strokeDasharray="6 5" />
           <path d="M190 118v40M170 138h40" stroke="var(--primary)" strokeWidth="3" strokeLinecap="round" />
           <text x="190" y="220" textAnchor="middle" fontSize="13" fill="var(--mute)" fontFamily="inherit" fontWeight="600">
-            Drop PDF here
+            {t("flow.dropPdf")}
           </text>
         </svg>
-        <span className="product-flow-label">1 · Upload</span>
+        <span className="product-flow-label">{t("flow.step1")}</span>
       </div>
 
       <div className="product-flow-stage product-flow-stage-2">
@@ -37,7 +40,7 @@ export default function ProductFlowDemo() {
             strokeWidth="2"
           />
           <text x="97" y="222" textAnchor="middle" fontSize="11" fill="var(--primary)" fontFamily="inherit" fontWeight="700">
-            Signature
+            {t("flow.signature")}
           </text>
           <rect
             className="product-flow-field product-flow-field-delay"
@@ -52,10 +55,10 @@ export default function ProductFlowDemo() {
             strokeWidth="2"
           />
           <text x="223" y="222" textAnchor="middle" fontSize="11" fill="var(--primary)" fontFamily="inherit" fontWeight="700">
-            Date
+            {t("flow.date")}
           </text>
         </svg>
-        <span className="product-flow-label">2 · Place fields</span>
+        <span className="product-flow-label">{t("flow.step2")}</span>
       </div>
 
       <div className="product-flow-stage product-flow-stage-3">
@@ -67,14 +70,14 @@ export default function ProductFlowDemo() {
           <g className="product-flow-send">
             <rect x="90" y="130" width="200" height="56" rx="12" fill="var(--primary)" />
             <text x="190" y="164" textAnchor="middle" fontSize="15" fill="#fff" fontFamily="inherit" fontWeight="700">
-              Send for signature
+              {t("flow.send")}
             </text>
           </g>
           <text x="190" y="220" textAnchor="middle" fontSize="12" fill="var(--mute)" fontFamily="inherit">
-            Link emailed to each signer
+            {t("flow.linkEmailed")}
           </text>
         </svg>
-        <span className="product-flow-label">3 · Send</span>
+        <span className="product-flow-label">{t("flow.step3")}</span>
       </div>
 
       <div className="product-flow-stage product-flow-stage-4">
@@ -95,7 +98,7 @@ export default function ProductFlowDemo() {
           <circle cx="332" cy="218" r="18" fill="#e3f3e9" />
           <path d="M324 218l5.5 5.5 11-11" fill="none" stroke="var(--success)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
-        <span className="product-flow-label">4 · Signed</span>
+        <span className="product-flow-label">{t("flow.step4")}</span>
       </div>
     </div>
   );
