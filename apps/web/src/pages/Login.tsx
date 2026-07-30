@@ -104,6 +104,18 @@ export default function Login() {
   const [passwordSubmitting, setPasswordSubmitting] = useState(false);
   const [passwordError, setPasswordError] = useState<string | null>(null);
 
+  // Password login is admin-only (ADMIN_EMAILS / rl@relacon.at). Hide the toggle unless that
+  // address is typed — everyone else only sees magic-link + Google.
+  const isAdminEmail = email.trim().toLowerCase() === "rl@relacon.at";
+
+  useEffect(() => {
+    if (!isAdminEmail) {
+      setShowPasswordLogin(false);
+      setPassword("");
+      setPasswordError(null);
+    }
+  }, [isAdminEmail]);
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
@@ -187,41 +199,45 @@ export default function Login() {
         </button>
       </form>
 
-      <button
-        type="button"
-        onClick={() => setShowPasswordLogin((v) => !v)}
-        style={{
-          background: "none",
-          border: "none",
-          padding: 0,
-          marginTop: 16,
-          fontSize: 13,
-          color: "var(--mute)",
-          textDecoration: "underline",
-          cursor: "pointer",
-          display: "block",
-        }}
-      >
-        {showPasswordLogin ? t("login.passwordHide") : t("login.passwordToggle")}
-      </button>
-
-      {showPasswordLogin && (
-        <form onSubmit={onPasswordSubmit} style={{ marginTop: 12 }}>
-          <input
-            className="form-input"
-            type="password"
-            placeholder={t("login.password")}
-            aria-label={t("login.password")}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            style={{ width: "100%", maxWidth: 360, marginBottom: 12, display: "block" }}
-          />
-          {passwordError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{passwordError}</p>}
-          <button className="btn-secondary" type="submit" disabled={passwordSubmitting}>
-            {passwordSubmitting ? t("common.signingIn") : t("login.title")}
+      {isAdminEmail && (
+        <>
+          <button
+            type="button"
+            onClick={() => setShowPasswordLogin((v) => !v)}
+            style={{
+              background: "none",
+              border: "none",
+              padding: 0,
+              marginTop: 16,
+              fontSize: 13,
+              color: "var(--mute)",
+              textDecoration: "underline",
+              cursor: "pointer",
+              display: "block",
+            }}
+          >
+            {showPasswordLogin ? t("login.passwordHide") : t("login.passwordToggle")}
           </button>
-        </form>
+
+          {showPasswordLogin && (
+            <form onSubmit={onPasswordSubmit} style={{ marginTop: 12 }}>
+              <input
+                className="form-input"
+                type="password"
+                placeholder={t("login.password")}
+                aria-label={t("login.password")}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                style={{ width: "100%", maxWidth: 360, marginBottom: 12, display: "block" }}
+              />
+              {passwordError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{passwordError}</p>}
+              <button className="btn-secondary" type="submit" disabled={passwordSubmitting}>
+                {passwordSubmitting ? t("common.signingIn") : t("login.title")}
+              </button>
+            </form>
+          )}
+        </>
       )}
     </div>
   );
