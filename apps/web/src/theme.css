@@ -1580,14 +1580,15 @@ select {
   .plan-table-pricing th:first-child,
   .plan-table-pricing td:first-child {
     min-width: 148px;
-    max-width: 200px;
+    max-width: none;
     font-size: 12px;
     line-height: 1.35;
     padding-right: 10px;
   }
 
   .plan-table-pricing .plan-cell-text {
-    font-size: 12px;
+    font-size: 16px;
+    font-weight: 800;
   }
 }
 
@@ -1723,6 +1724,24 @@ select {
 .pricing-compare {
   padding-top: 28px;
   padding-bottom: 0;
+  /* Shared column math so the sticky price bar lines up under Free / Paid / Enterprise. */
+  --pricing-feature-col: 34%;
+  --pricing-plan-col: calc((100% - var(--pricing-feature-col)) / 3);
+}
+
+.plan-table-pricing {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.plan-table-pricing th:first-child,
+.plan-table-pricing td:first-child {
+  width: var(--pricing-feature-col);
+}
+
+.plan-table-pricing th:not(:first-child),
+.plan-table-pricing td:not(:first-child) {
+  width: var(--pricing-plan-col);
 }
 
 .plan-table-pricing thead th {
@@ -1750,14 +1769,28 @@ select {
   white-space: nowrap;
 }
 
+/* Spec strings (Unlimited, Up to 2, …) match sticky price weight/size. */
+.plan-table-pricing .plan-cell-text {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1.15;
+}
+
 .pricing-sticky-bar {
   position: sticky;
   bottom: 0;
   z-index: 6;
   display: grid;
-  grid-template-columns: minmax(160px, 1.5fr) 1fr 1fr 1fr;
+  grid-template-columns:
+    var(--pricing-feature-col)
+    var(--pricing-plan-col)
+    var(--pricing-plan-col)
+    var(--pricing-plan-col);
   gap: 0;
   margin-top: 0;
+  width: 100%;
+  box-sizing: border-box;
   background: var(--canvas);
   border: 1px solid var(--hairline);
   border-radius: var(--r-md);
