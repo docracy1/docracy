@@ -12,18 +12,18 @@ export default function Footer() {
   const compareLinks =
     locale === "es"
       ? [
-          { label: t("footer.vsEversign"), to: "/blog/docracy-vs-eversign" },
+          { label: t("footer.vsEversign"), to: "/es/alternativa-a-eversign" },
           { label: t("footer.vsDocusign"), to: "/es/alternativa-a-docusign" },
           { label: t("footer.vsHellosign"), to: "/es/alternativa-a-hellosign" },
-          { label: t("footer.vsPandadoc"), to: "/blog/docracy-vs-pandadoc" },
+          { label: t("footer.vsPandadoc"), to: "/es/alternativa-a-pandadoc" },
           { label: t("footer.vsAdobe"), to: "/es/alternativa-a-adobe-sign" },
           { label: t("footer.allComparisons"), to: "/blog" },
         ]
       : [
-          { label: t("footer.vsEversign"), to: "/blog/docracy-vs-eversign" },
+          { label: t("footer.vsEversign"), to: "/eversign-alternative" },
           { label: t("footer.vsDocusign"), to: "/docusign-alternative" },
           { label: t("footer.vsHellosign"), to: "/hellosign-alternative" },
-          { label: t("footer.vsPandadoc"), to: "/blog/docracy-vs-pandadoc" },
+          { label: t("footer.vsPandadoc"), to: "/pandadoc-alternative" },
           { label: t("footer.vsAdobe"), to: "/adobe-sign-alternative" },
           { label: t("footer.allComparisons"), to: "/blog" },
         ];

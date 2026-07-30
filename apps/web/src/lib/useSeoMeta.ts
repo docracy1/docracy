@@ -11,6 +11,10 @@ const SEO_CATALOG_KEY: Record<SeoPage, string> = {
   docusignAlternative: "docusign",
   hellosignAlternative: "hellosign",
   adobeSignAlternative: "adobeSign",
+  eversignAlternative: "eversign",
+  pandadocAlternative: "pandadoc",
+  ndaSigning: "ndaSigning",
+  clientContracts: "clientContracts",
   docs: "docs",
   mcp: "mcp",
 };

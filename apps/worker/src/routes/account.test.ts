@@ -200,3 +200,92 @@ describe("POST /api/account/token/regenerate", () => {
     expect((await statusRes.json()) as { hasToken: boolean }).toEqual({ hasToken: true });
   });
 });
+
+describe("POST /api/account/documents/claim", () => {
+  it("401s without a session", async () => {
+    const { env } = makeMockEnv();
+    const res = await account.request(
+      "/documents/claim",
+      { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ claimToken: "x" }) },
+      env,
+      MOCK_CTX
+    );
+    expect(res.status).toBe(401);
+  });
+
+  it("attaches an anonymous document to the signed-in account and indexes D1", async () => {
+    const { env, kv, d1 } = makeMockEnv();
+    const ctx = makeCtx();
+    const { createDocumentCore, documentClaimKvKey } = await import("../lib/documentCreation");
+    const { hashOpaqueToken } = await import("@docracy/shared");
+    const { makeValidPdfBytes } = await import("../test/mockEnv");
+    const pdfBytes = await makeValidPdfBytes();
+
+    const { docId, claimToken } = await createDocumentCore({
+      env,
+      ctx,
+      pdfBytes,
+      accountId: null,
+      filename: "nda.pdf",
+      preparerSigns: false,
+      signers: [{ name: "Anna", email: "anna@example.com" }],
+      fields: [{ id: "f1", signerOrder: 1, page: 0, xFrac: 0.1, yFrac: 0.1, wFrac: 0.2, hFrac: 0.05 }],
+    });
+    await ctx.flush();
+    expect(claimToken).toBeTruthy();
+
+    const sessionToken = await createSession(env, ctx, "acct-1", "owner@example.com", false, false, null, null);
+    const res = await account.request(
+      "/documents/claim",
+      {
+        method: "POST",
+        headers: {
+          Cookie: `${SESSION_COOKIE_NAME}=${sessionToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ claimToken }),
+      },
+      env,
+      ctx
+    );
+    expect(res.status).toBe(200);
+    const body: { ok: true; docId: string; title: string } = await res.json();
+    expect(body.docId).toBe(docId);
+    expect(body.title).toBe("nda.pdf");
+    await ctx.flush();
+
+    const stored = JSON.parse(kv._store.get(`doc:${docId}`)!) as { accountId: string; title: string };
+    expect(stored.accountId).toBe("acct-1");
+    expect(stored.title).toBe("nda.pdf");
+
+    const claimHash = await hashOpaqueToken(claimToken!, env.TOKEN_SECRET);
+    expect(kv._store.has(documentClaimKvKey(claimHash))).toBe(false);
+
+    const row = (await d1.prepare("SELECT account_id, title FROM documents WHERE doc_id = ?").bind(docId).first()) as {
+      account_id: string;
+      title: string;
+    };
+    expect(row.account_id).toBe("acct-1");
+    expect(row.title).toBe("nda.pdf");
+  });
+
+  it("404s for an unknown or already-consumed claim token", async () => {
+    const { env } = makeMockEnv();
+    const ctx = makeCtx();
+    const sessionToken = await createSession(env, ctx, "acct-1", "owner@example.com", false, false, null, null);
+    const res = await account.request(
+      "/documents/claim",
+      {
+        method: "POST",
+        headers: {
+          Cookie: `${SESSION_COOKIE_NAME}=${sessionToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ claimToken: "not-a-real-token" }),
+      },
+      env,
+      ctx
+    );
+    expect(res.status).toBe(404);
+  });
+});

@@ -65,7 +65,7 @@ export async function createDocument(
   signers: SignerInput[],
   fields: DocField[],
   options: CreateDocumentOptions = {}
-): Promise<{ docId: string; statusToken: string }> {
+): Promise<{ docId: string; statusToken: string; claimToken?: string }> {
   const form = new FormData();
   form.set("pdf", pdf);
   form.set("meta", JSON.stringify({ preparerSigns, signers, fields, ...options }));
@@ -334,6 +334,18 @@ export interface DocumentSummary {
 
 export async function fetchMyDocuments(): Promise<{ documents: DocumentSummary[] }> {
   const res = await apiFetch("/api/account/documents");
+  return asJson(res);
+}
+
+/** Redeem an anonymous create's claimToken onto the signed-in account's dashboard history. */
+export async function claimDocument(
+  claimToken: string
+): Promise<{ ok: true; docId: string; title: string; alreadyClaimed?: boolean }> {
+  const res = await apiFetch("/api/account/documents/claim", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ claimToken }),
+  });
   return asJson(res);
 }
 

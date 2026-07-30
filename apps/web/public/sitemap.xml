@@ -485,11 +485,33 @@
     <loc>https://docracy.io/nda-signing</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/nda-signing" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/firma-de-nda" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/nda-signing" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/firma-de-nda</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/nda-signing" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/firma-de-nda" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/nda-signing" />
   </url>
   <url>
     <loc>https://docracy.io/client-contracts</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/client-contracts" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/contratos-con-clientes" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/client-contracts" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/contratos-con-clientes</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/client-contracts" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/contratos-con-clientes" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/client-contracts" />
   </url>
   <url>
     <loc>https://docracy.io/onboarding-documents</loc>
@@ -510,6 +532,17 @@
     <loc>https://docracy.io/eversign-alternative</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/eversign-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-eversign" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/eversign-alternative" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/alternativa-a-eversign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/eversign-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-eversign" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/eversign-alternative" />
   </url>
   <url>
     <loc>https://docracy.io/docusign-alternative</loc>
@@ -547,6 +580,17 @@
     <loc>https://docracy.io/pandadoc-alternative</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/pandadoc-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-pandadoc" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/pandadoc-alternative" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/alternativa-a-pandadoc</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/pandadoc-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-pandadoc" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/pandadoc-alternative" />
   </url>
   <url>
     <loc>https://docracy.io/adobe-sign-alternative</loc>

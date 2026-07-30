@@ -38,6 +38,7 @@ import {
   startCheckout,
   uploadBrandLogo,
   voidAccountDocument,
+  claimDocument,
   type Account,
   type CloudConnectionSummary,
   type CloudProvider,
@@ -52,6 +53,7 @@ import {
 } from "../lib/api";
 import { useNoIndex } from "../lib/useNoIndex";
 import { FREE_TEMPLATES } from "../lib/freeTemplates";
+import { clearPendingClaim, readPendingClaim } from "../lib/pendingClaim";
 import { SignerAttachmentsList } from "../components/SignerAttachmentsList";
 import { track } from "../lib/track";
 import type { StatusSigner } from "../lib/types";
@@ -240,6 +242,7 @@ export default function Dashboard() {
   const [connectingProvider, setConnectingProvider] = useState<CloudProvider | null>(null);
   const [disconnectingProvider, setDisconnectingProvider] = useState<CloudProvider | null>(null);
   const [connectorBanner, setConnectorBanner] = useState<"connected" | "error" | null>(null);
+  const [claimBanner, setClaimBanner] = useState<string | null>(null);
   const [docActionError, setDocActionError] = useState<string | null>(null);
   const [voidingDocId, setVoidingDocId] = useState<string | null>(null);
   const [reassignDoc, setReassignDoc] = useState<DocumentSummary | null>(null);
@@ -759,6 +762,17 @@ export default function Dashboard() {
         setIsAdmin(res.isAdmin);
         if (res.account) {
           track("dashboard_loaded");
+          const pending = readPendingClaim();
+          if (pending?.claimToken) {
+            try {
+              const claimed = await claimDocument(pending.claimToken);
+              clearPendingClaim();
+              setClaimBanner(claimed.title?.trim() || "Untitled document");
+            } catch {
+              // Expired / already claimed / network — drop local token so we don't retry forever.
+              clearPendingClaim();
+            }
+          }
           const { documents } = await fetchMyDocuments();
           setDocuments(documents);
         }
@@ -1020,6 +1034,24 @@ export default function Dashboard() {
             </span>
             <button className="btn-secondary" style={{ fontSize: 13, padding: "4px 10px" }} onClick={() => setConnectorBanner(null)}>
               Dismiss
+            </button>
+          </div>
+        )}
+        {claimBanner && (
+          <div
+            className="card"
+            style={{
+              marginBottom: 16,
+              borderColor: "var(--primary)",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: 12,
+            }}
+          >
+            <span>{t("dash.claimSuccess", { title: claimBanner })}</span>
+            <button className="btn-secondary" style={{ fontSize: 13, padding: "4px 10px" }} onClick={() => setClaimBanner(null)}>
+              {t("common.dismiss")}
             </button>
           </div>
         )}

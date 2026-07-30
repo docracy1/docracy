@@ -288,7 +288,7 @@ documents.post("/", optionalAccount, async (c) => {
     return c.json({ error: ttl.error }, 400);
   }
 
-  const { docId, statusToken } = await createDocumentCore({
+  const { docId, statusToken, claimToken } = await createDocumentCore({
     env: c.env,
     ctx: c.executionCtx,
     pdfBytes,
@@ -323,7 +323,7 @@ documents.post("/", optionalAccount, async (c) => {
     );
   }
 
-  return c.json({ docId, statusToken });
+  return c.json({ docId, statusToken, ...(claimToken ? { claimToken } : {}) });
 });
 
 export default documents;

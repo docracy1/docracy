@@ -22,7 +22,12 @@ export default function FirstDocumentPrompt({ mobileOnly = false, source = "hero
     const f = e.target.files?.[0];
     if (!f) return;
     if (f.size > MAX_PDF_BYTES) {
-      setError(`PDF must be under ${MAX_PDF_BYTES / (1024 * 1024)}MB — this one is ${(f.size / (1024 * 1024)).toFixed(1)}MB.`);
+      setError(
+        t("prepare.pdfTooBig", {
+          max: MAX_PDF_BYTES / (1024 * 1024),
+          size: (f.size / (1024 * 1024)).toFixed(1),
+        })
+      );
       track("upload_failed", { errorCode: "pdf_too_large", source });
       e.target.value = "";
       return;

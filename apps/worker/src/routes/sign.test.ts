@@ -60,6 +60,22 @@ describe("sign routes", () => {
     expect(res.status).toBe(403);
   });
 
+  it("CC viewer tokens can view status but cannot void", async () => {
+    const viewerToken = await signToken(docId, -1, env.TOKEN_SECRET);
+    const statusRes = await sign.request(`/status/${viewerToken}`, {}, env);
+    expect(statusRes.status).toBe(200);
+    const statusBody: { canVoid: boolean } = await statusRes.json();
+    expect(statusBody.canVoid).toBe(false);
+
+    const voidRes = await sign.request(`/status/${viewerToken}/void`, { method: "POST", body: "{}" }, env);
+    expect(voidRes.status).toBe(403);
+
+    const preparerToken = await signToken(docId, 0, env.TOKEN_SECRET);
+    const preparerStatus = await sign.request(`/status/${preparerToken}`, {}, env);
+    const preparerBody: { canVoid: boolean } = await preparerStatus.json();
+    expect(preparerBody.canVoid).toBe(true);
+  });
+
   it("status is visible regardless of whose turn it is", async () => {
     const token2 = await signToken(docId, 2, env.TOKEN_SECRET);
     const res = await sign.request(`/status/${token2}`, {}, env);

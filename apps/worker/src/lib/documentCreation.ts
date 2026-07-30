@@ -5,8 +5,18 @@ import { sha256Hex } from "./hash";
 import { deliverWebhookEvent } from "./webhooks";
 import { trackEvent } from "./analytics";
 import { incrementTemplateUsage } from "./templateUsage";
-import { signToken, hashOpaqueToken } from "@docracy/shared";
+import { signToken, hashOpaqueToken, generateOpaqueToken } from "@docracy/shared";
 import type { AuditEvent, CcRecipient, DocField, DocState, Env, Signer } from "@docracy/shared";
+
+/** Opaque claim tokens let a later signup attach an anonymous send to a dashboard (24h). */
+export const DOCUMENT_CLAIM_TTL_SECONDS = 24 * 60 * 60;
+export const documentClaimKvKey = (hash: string) => `document-claim:${hash}`;
+
+export interface DocumentClaimRecord {
+  docId: string;
+  title: string;
+  createdAt: string;
+}
 
 export interface CreateDocumentCoreParams {
   env: Env;
@@ -59,7 +69,7 @@ export interface CreateDocumentCoreParams {
 
 export async function createDocumentCore(
   params: CreateDocumentCoreParams
-): Promise<{ docId: string; statusToken: string }> {
+): Promise<{ docId: string; statusToken: string; claimToken?: string }> {
   const { env, ctx, pdfBytes, filename, preparerSigns, preparerEmail, fields, accountId } = params;
   const signingMode = params.signingMode ?? "sequential";
 
@@ -196,9 +206,11 @@ export async function createDocumentCore(
     );
   }
 
-  // A generic viewer token (order 0, no matching signer) so the preparer can bookmark a status page
-  // even if they opted not to sign themselves. Shared with CC recipients for view-only access.
+  // Order 0 = preparer status link (can void). CCs get a separate order -1 viewer token so they
+  // can watch progress / download when complete, but cannot cancel the document.
   const statusToken = await signToken(docId, 0, env.TOKEN_SECRET);
+  const viewerToken =
+    ccRecipients.length > 0 ? await signToken(docId, -1, env.TOKEN_SECRET) : statusToken;
 
   if (preparerEmail) {
     const trimmedPreparerEmail = preparerEmail.trim();
@@ -211,10 +223,26 @@ export async function createDocumentCore(
 
   for (const cc of ccRecipients) {
     ctx.waitUntil(
-      sendCcInvite(env, doc, cc, statusToken).catch((err) =>
+      sendCcInvite(env, doc, cc, viewerToken).catch((err) =>
         console.error(`CC invite email failed for doc ${docId} to ${cc.email} (non-fatal):`, err)
       )
     );
+  }
+
+  // Anonymous sends only: one-time opaque claim so a later free signup can attach this doc to
+  // dashboard history. Never returned (or stored) when the create was already account-linked.
+  let claimToken: string | undefined;
+  if (!accountId) {
+    claimToken = generateOpaqueToken();
+    const claimHash = await hashOpaqueToken(claimToken, env.TOKEN_SECRET);
+    const claimRecord: DocumentClaimRecord = {
+      docId,
+      title: filename.trim() || "Untitled document",
+      createdAt: now.toISOString(),
+    };
+    await env.DOCRACY_KV.put(documentClaimKvKey(claimHash), JSON.stringify(claimRecord), {
+      expirationTtl: DOCUMENT_CLAIM_TTL_SECONDS,
+    });
   }
 
   if (accountId) {
@@ -230,5 +258,5 @@ export async function createDocumentCore(
     );
   }
 
-  return { docId, statusToken };
+  return { docId, statusToken, claimToken };
 }

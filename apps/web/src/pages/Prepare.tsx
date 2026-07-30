@@ -155,7 +155,8 @@ export default function Prepare() {
   const [detectingAnchors, setDetectingAnchors] = useState(false);
   const [smsInvites, setSmsInvites] = useState(false);
   const [signerAttachmentsEnabled, setSignerAttachmentsEnabled] = useState(false);
-  const [dropdownOptionsInput, setDropdownOptionsInput] = useState("Option A\nOption B\nOption C");
+  const [dropdownOptionsInput, setDropdownOptionsInput] = useState(() => t("prepare.defaultDropdownOptions"));
+  const previousDefaultDropdownOptionsRef = useRef(dropdownOptionsInput);
   const [explaining, setExplaining] = useState(false);
   const [explanation, setExplanation] = useState<string | null>(null);
   const [explainError, setExplainError] = useState<string | null>(null);
@@ -179,6 +180,14 @@ export default function Prepare() {
   const [templateSavedName, setTemplateSavedName] = useState<string | null>(null);
   /** Paid custom retention — default matches free/hard-coded DOC_EXPIRY_DAYS. */
   const [ttlDays, setTtlDays] = useState(DOC_EXPIRY_DAYS);
+
+  useEffect(() => {
+    const nextDefault = t("prepare.defaultDropdownOptions");
+    setDropdownOptionsInput((prev) =>
+      prev === previousDefaultDropdownOptionsRef.current ? nextDefault : prev
+    );
+    previousDefaultDropdownOptionsRef.current = nextDefault;
+  }, [t]);
 
   // Only used to gate the (paid-only) template UI — anonymous/free usage of this page is
   // otherwise completely unaffected by this call.
@@ -220,7 +229,11 @@ export default function Prepare() {
         setFields(tpl.fields);
         // Uint8Array's `.buffer` is typed ArrayBufferLike (could be a SharedArrayBuffer) which
         // BlobPart rejects — base64ToBytes's output is always backed by a plain ArrayBuffer.
-        setFile(new File([bytes as unknown as BlobPart], `${tpl.name || "template"}.pdf`, { type: "application/pdf" }));
+        setFile(
+          new File([bytes as unknown as BlobPart], `${tpl.name || t("prepare.defaultTemplateFilename")}.pdf`, {
+            type: "application/pdf",
+          })
+        );
         setSigners(Array.from({ length: tpl.signerCount }, (_, i) => ({ order: i + 1, name: "", email: "" })));
       })
       .catch((err) => setTemplateLoadError(err instanceof Error ? err.message : t("prepare.loadTemplateError")))
@@ -406,7 +419,12 @@ export default function Prepare() {
 
   const applyPdfBytes = (newBytes: Uint8Array) => {
     setPdfBytes(newBytes);
-    setFile((prev) => new File([newBytes as unknown as BlobPart], prev?.name ?? "document.pdf", { type: "application/pdf" }));
+    setFile(
+      (prev) =>
+        new File([newBytes as unknown as BlobPart], prev?.name ?? t("prepare.defaultDocumentFilename"), {
+          type: "application/pdf",
+        })
+    );
   };
 
   const runPdfEdit = async (mutate: (bytes: Uint8Array) => Promise<Uint8Array>, opts: { resetFields?: boolean } = {}) => {
@@ -773,7 +791,7 @@ export default function Prepare() {
 
   const signerLabel = (order: number) => {
     const s = signers.find((x) => x.order === order);
-    return s?.name || `Signer ${order}`;
+    return s?.name || t("prepare.signerN", { n: order });
   };
 
   const signersWithoutFields = useMemo(
@@ -830,7 +848,7 @@ export default function Prepare() {
       const trimmedCcs = ccRecipients
         .map((cc) => ({ name: cc.name?.trim() || undefined, email: cc.email.trim() }))
         .filter((cc) => cc.email);
-      const { docId, statusToken } = await createDocument(file, preparerSigns, signers, fields, {
+      const { docId, statusToken, claimToken } = await createDocument(file, preparerSigns, signers, fields, {
         preparerEmail: !preparerSigns && preparerEmail.trim() ? preparerEmail.trim() : undefined,
         preparerMarketingOptIn:
           !preparerSigns && preparerEmail.trim() && preparerMarketingOptIn ? true : undefined,
@@ -848,7 +866,9 @@ export default function Prepare() {
           : {}),
       });
       documentSentRef.current = true;
-      navigate("/prepare/sent", { state: { docId, statusToken, signingMode: effectiveSigningMode } });
+      navigate("/prepare/sent", {
+        state: { docId, statusToken, claimToken, signingMode: effectiveSigningMode },
+      });
     } catch (err) {
       const message = err instanceof Error ? err.message : t("common.error");
       setError(message);
@@ -930,12 +950,12 @@ export default function Prepare() {
                   {showGenerate ? (
                     <>
                       <p style={{ marginTop: 0, marginBottom: 6, fontSize: 13, color: "var(--mute)" }}>
-                        Describe the agreement you need
+                        {t("prepare.describeAgreement")}
                       </p>
                       <textarea
                         className="form-textarea"
                         style={{ width: "100%", minHeight: 80, resize: "vertical", marginBottom: 8 }}
-                        placeholder='e.g. "A simple web design contract for a $2,500 fixed-price project with a 2-week deadline"'
+                        placeholder={t("prepare.generatePlaceholder")}
                         maxLength={2000}
                         value={generatePrompt}
                         onChange={(e) => setGeneratePrompt(e.target.value)}
@@ -959,23 +979,22 @@ export default function Prepare() {
                             setGenerateError(null);
                           }}
                         >
-                          Cancel
+                          {t("common.cancel")}
                         </button>
                       </div>
                       <p style={{ fontSize: 11, marginTop: 8, marginBottom: 0 }}>
-                        AI-drafted — review carefully before sending, this isn't legal advice.
+                        {t("prepare.aiDisclaimer")}
                       </p>
                     </>
                   ) : (
                     <button type="button" className="btn-secondary" style={{ width: "100%" }} onClick={() => setShowGenerate(true)}>
-                      Or generate one with AI
+                      {t("prepare.generateWithAi")}
                     </button>
                   )}
                 </div>
               ) : (
                 <p style={{ fontSize: 12, marginTop: 16, paddingTop: 16, borderTop: "1px solid var(--hairline)" }}>
-                  <Link to="/login">Sign in with a paid account</Link> to generate a contract with AI instead of
-                  uploading one.
+                  <Link to="/login">{t("prepare.signInPaidAi")}</Link> {t("prepare.signInPaidAiSub")}
                 </p>
               )}
             </>
@@ -1083,7 +1102,7 @@ export default function Prepare() {
                         disabled={totalPages <= 1 || pdfEditBusy}
                         onClick={() => deletePage(page.index)}
                       >
-                        🗑 Delete page
+                        {t("prepare.deletePage")}
                       </button>
                     </div>
                   )}
@@ -1132,8 +1151,7 @@ export default function Prepare() {
                         }}
                       >
                         <p style={{ fontSize: 12, marginTop: 0, marginBottom: 8 }}>
-                          Redact this area? The page is flattened to an image — text under it won't be selectable or
-                          recoverable afterward.
+                          {t("prepare.redactConfirm")}
                         </p>
                         <div style={{ display: "flex", gap: 6 }}>
                           <button
@@ -1151,7 +1169,7 @@ export default function Prepare() {
                             style={{ flex: 1, fontSize: 12, padding: "4px 8px" }}
                             onClick={() => setPendingRedaction(null)}
                           >
-                            Cancel
+                            {t("common.cancel")}
                           </button>
                         </div>
                       </div>
@@ -1203,7 +1221,7 @@ export default function Prepare() {
                           style={{ flex: 1, fontSize: 12, padding: "4px 8px" }}
                           onClick={() => setTextAnnotationAt(null)}
                         >
-                          Cancel
+                          {t("common.cancel")}
                         </button>
                       </div>
                     </div>
@@ -1274,7 +1292,7 @@ export default function Prepare() {
                           disabled={pdfEditBusy}
                           onClick={() => applyTextSpanEdit(editingSpanValue)}
                         >
-                          {pdfEditBusy ? "Saving…" : "Save"}
+                          {pdfEditBusy ? t("common.saving") : t("common.save")}
                         </button>
                         <button
                           type="button"
@@ -1283,7 +1301,7 @@ export default function Prepare() {
                           disabled={pdfEditBusy}
                           onClick={() => applyTextSpanEdit("")}
                         >
-                          Delete
+                          {t("common.delete")}
                         </button>
                       </div>
                       <button
@@ -1292,7 +1310,7 @@ export default function Prepare() {
                         style={{ width: "100%", fontSize: 12, padding: "4px 8px" }}
                         onClick={() => setEditingSpan(null)}
                       >
-                        Cancel
+                        {t("common.cancel")}
                       </button>
                     </div>
                   )}
@@ -1350,7 +1368,7 @@ export default function Prepare() {
                   className={`prepare-pill-btn ${preparerSigns ? "active" : ""}`}
                   onClick={() => togglePreparerSigns(!preparerSigns)}
                 >
-                  + Myself
+                  {t("prepare.myself")}
                 </button>
                 <button
                   type="button"
@@ -1362,7 +1380,7 @@ export default function Prepare() {
                       : undefined
                   }
                 >
-                  + Signer
+                  {t("prepare.addSigner")}
                 </button>
                 <button
                   type="button"
@@ -1374,7 +1392,7 @@ export default function Prepare() {
                       : undefined
                   }
                 >
-                  + Viewer (CC)
+                  {t("prepare.addViewer")}
                 </button>
               </div>
               {contacts.length > 0 && (
@@ -1401,7 +1419,7 @@ export default function Prepare() {
                     }}
                   />
                   <p style={{ fontSize: 11, marginTop: 4, marginBottom: 0 }}>
-                    There's no account, so this is the only way to recover the status link if you lose it.
+                    {t("prepare.recoverStatusHint")}
                   </p>
                   {preparerEmail.trim() && (
                     <label
@@ -1421,10 +1439,7 @@ export default function Prepare() {
                         onChange={(e) => setPreparerMarketingOptIn(e.target.checked)}
                         style={{ marginTop: 2 }}
                       />
-                      <span>
-                        Email me a few tips — and how to keep every send in one free account (optional;
-                        reply anytime to stop).
-                      </span>
+                      <span>{t("prepare.marketingOptIn")}</span>
                     </label>
                   )}
                 </div>
@@ -1437,7 +1452,7 @@ export default function Prepare() {
                   <input
                     className="form-input"
                     style={{ width: "100%", marginBottom: 6 }}
-                    placeholder="Name"
+                    placeholder={t("prepare.namePh")}
                     aria-label={t("prepare.signerNameAria", { n: s.order })}
                     value={s.name}
                     onChange={(e) => updateSigner(s.order, { name: e.target.value })}
@@ -1445,7 +1460,7 @@ export default function Prepare() {
                   <input
                     className="form-input"
                     style={{ width: "100%", marginBottom: 6 }}
-                    placeholder="Email"
+                    placeholder={t("prepare.emailPh")}
                     aria-label={t("prepare.signerEmailAria", { n: s.order })}
                     type="email"
                     list={contacts.length > 0 ? "prepare-contacts" : undefined}
@@ -1490,7 +1505,7 @@ export default function Prepare() {
                           })
                         }
                       >
-                        <option value="">Carrier (for SMS)</option>
+                        <option value="">{t("prepare.carrierPh")}</option>
                         <option value="att">AT&amp;T</option>
                         <option value="tmobile">T-Mobile</option>
                         <option value="verizon">Verizon</option>
@@ -1505,14 +1520,14 @@ export default function Prepare() {
                       style={{ marginTop: 6, fontSize: 12, padding: "4px 8px" }}
                       onClick={() => removeSigner(s.order)}
                     >
-                      Remove
+                      {t("common.remove")}
                     </button>
                   )}
                 </div>
               ))}
               {ccRecipients.map((cc, i) => (
                 <div key={`cc-${i}`} style={{ marginBottom: 10, paddingBottom: 10, borderBottom: "1px solid var(--hairline)" }}>
-                  <div style={{ fontSize: 12, color: "var(--mute)", marginBottom: 4 }}>Viewer (CC)</div>
+                  <div style={{ fontSize: 12, color: "var(--mute)", marginBottom: 4 }}>{t("prepare.viewerCc")}</div>
                   <input
                     className="form-input"
                     style={{ width: "100%", marginBottom: 6 }}
@@ -1524,7 +1539,7 @@ export default function Prepare() {
                   <input
                     className="form-input"
                     style={{ width: "100%", marginBottom: 6 }}
-                    placeholder="Email"
+                    placeholder={t("prepare.emailPh")}
                     aria-label={t("prepare.viewerEmailAria", { n: i + 1 })}
                     type="email"
                     list={contacts.length > 0 ? "prepare-contacts" : undefined}
@@ -1542,21 +1557,23 @@ export default function Prepare() {
                     style={{ marginTop: 6, fontSize: 12, padding: "4px 8px" }}
                     onClick={() => removeCc(i)}
                   >
-                    Remove
+                    {t("common.remove")}
                   </button>
                 </div>
               ))}
               {signers.length > 1 && (
                 <div style={{ marginTop: 12, paddingTop: 12, borderTop: "1px solid var(--hairline)" }}>
-                  <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 0, marginBottom: 6 }}>Signing order</p>
+                  <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 0, marginBottom: 6 }}>
+                    {t("prepare.signingOrder")}
+                  </p>
                   <select
                     className="form-input"
                     style={{ width: "100%" }}
                     value={signingMode}
                     onChange={(e) => setSigningMode(e.target.value as "sequential" | "parallel")}
                   >
-                    <option value="sequential">Sequential (default) — one signer at a time, in order</option>
-                    <option value="parallel">All at once — every signer can sign as soon as they're invited</option>
+                    <option value="sequential">{t("prepare.signingSequential")}</option>
+                    <option value="parallel">{t("prepare.signingParallel")}</option>
                   </select>
                 </div>
               )}
@@ -1570,9 +1587,11 @@ export default function Prepare() {
                     background: "var(--surface-2, #f5f7fa)",
                   }}
                 >
-                  <p style={{ margin: "0 0 8px", fontSize: 13, fontWeight: 600 }}>Need more than 2 signers?</p>
+                  <p style={{ margin: "0 0 8px", fontSize: 13, fontWeight: 600 }}>
+                    {t("prepare.signerUpsellTitle", { max: FREE_TIER_MAX_SIGNERS })}
+                  </p>
                   <p style={{ margin: "0 0 10px", fontSize: 13, color: "var(--mute)" }}>
-                    Paid unlocks unlimited signers, reusable templates, and document history — $10/month.
+                    {t("prepare.signerUpsellBody")}
                   </p>
                   <Link
                     to={account ? "/pricing" : "/login?ref=prepare-signer-cap"}
@@ -1624,7 +1643,7 @@ export default function Prepare() {
             </div>
 
             <div className="card">
-              <h3 className="prepare-sidebar-heading">Edit document</h3>
+              <h3 className="prepare-sidebar-heading">{t("prepare.editPdf")}</h3>
               {viewMode === "fields" ? (
                 <button
                   type="button"
@@ -1636,7 +1655,7 @@ export default function Prepare() {
                     setViewMode("edit");
                   }}
                 >
-                  Reorder, redact, or insert text
+                  {t("prepare.editPdfAction")}
                 </button>
               ) : (
                 <>
@@ -1652,10 +1671,10 @@ export default function Prepare() {
                       setEditingSpan(null);
                     }}
                   >
-                    <option value="move">Reorder / delete pages</option>
-                    <option value="redact">Redact — drag a box to black out</option>
-                    <option value="text">Add text — click to insert</option>
-                    <option value="editText">Edit existing text — click to fix or remove</option>
+                    <option value="move">{t("prepare.editModeMove")}</option>
+                    <option value="redact">{t("prepare.editModeRedact")}</option>
+                    <option value="text">{t("prepare.editModeAddText")}</option>
+                    <option value="editText">{t("prepare.editModeExistingText")}</option>
                   </select>
                   <p style={{ fontSize: 11, marginTop: 0, marginBottom: 8 }}>
                     {editTool === "move" && t("prepare.editMoveHint")}
@@ -1681,7 +1700,7 @@ export default function Prepare() {
                       setEditingSpan(null);
                     }}
                   >
-                    Done editing
+                    {t("prepare.doneEditing")}
                   </button>
                 </>
               )}
@@ -1689,13 +1708,13 @@ export default function Prepare() {
 
             {viewMode === "fields" && account?.isPaid && (
               <div className="card">
-                <h3 className="prepare-sidebar-heading">AI tools</h3>
+                <h3 className="prepare-sidebar-heading">{t("prepare.aiTools")}</h3>
 
                 <button type="button" className="prepare-highlight-card" style={{ marginBottom: 8 }} disabled={detectingFields} onClick={onDetectFields}>
                   <span className="prepare-highlight-icon">✨</span>
                   <span>
                     <span className="prepare-highlight-title">{detectingFields ? t("prepare.scanning") : t("prepare.smartDetect")}</span>
-                    <span className="prepare-highlight-sub">Automatically find & place signature fields</span>
+                    <span className="prepare-highlight-sub">{t("prepare.autoDetectSub")}</span>
                   </span>
                 </button>
                 {detectFieldsError && <p style={{ color: "var(--danger)", fontSize: 12 }}>{detectFieldsError}</p>}
@@ -1711,9 +1730,7 @@ export default function Prepare() {
                   <span className="prepare-highlight-icon">🏷</span>
                   <span>
                     <span className="prepare-highlight-title">{detectingAnchors ? t("prepare.scanning") : t("prepare.detectAnchors")}</span>
-                    <span className="prepare-highlight-sub">
-                      Find {"{{sig1}}"}, {"{{date_2}}"}, {"{{dropdown_1:A|B}}"} tags in the PDF
-                    </span>
+                    <span className="prepare-highlight-sub">{t("prepare.detectAnchorsSub")}</span>
                   </span>
                 </button>
 
@@ -1721,7 +1738,7 @@ export default function Prepare() {
                   <span className="prepare-highlight-icon">💬</span>
                   <span>
                     <span className="prepare-highlight-title">{explaining ? t("prepare.reading") : t("prepare.explainPlain")}</span>
-                    <span className="prepare-highlight-sub">Turn legal text into a plain-language summary</span>
+                    <span className="prepare-highlight-sub">{t("prepare.explainSub")}</span>
                   </span>
                 </button>
                 {explainError && <p style={{ color: "var(--danger)", fontSize: 12 }}>{explainError}</p>}
@@ -1744,12 +1761,12 @@ export default function Prepare() {
                   <span className="prepare-highlight-icon">⚠️</span>
                   <span>
                     <span className="prepare-highlight-title">{analyzingRisks ? t("prepare.checking") : t("prepare.checkRisks")}</span>
-                    <span className="prepare-highlight-sub">Flag terms worth a second look before you send</span>
+                    <span className="prepare-highlight-sub">{t("prepare.riskSub")}</span>
                   </span>
                 </button>
                 {risksError && <p style={{ color: "var(--danger)", fontSize: 12 }}>{risksError}</p>}
                 {risks && risks.length === 0 && (
-                  <p style={{ fontSize: 12, color: "var(--success)" }}>Nothing unusual stood out.</p>
+                  <p style={{ fontSize: 12, color: "var(--success)" }}>{t("prepare.riskNone")}</p>
                 )}
                 {risks && risks.length > 0 && (
                   <ul style={{ fontSize: 12, paddingLeft: 18, marginTop: 8, marginBottom: 0 }}>
@@ -1776,17 +1793,16 @@ export default function Prepare() {
                 )}
 
                 <p style={{ fontSize: 11, marginTop: 8, marginBottom: 0 }}>
-                  AI tools are a best guess, not legal advice — always read a contract yourself before sending it.
+                  {t("prepare.aiLegalDisclaimer")}
                 </p>
               </div>
             )}
 
             {viewMode === "fields" && !account?.isPaid && (
               <div className="card">
-                <h3 className="prepare-sidebar-heading">AI tools</h3>
+                <h3 className="prepare-sidebar-heading">{t("prepare.aiTools")}</h3>
                 <p style={{ fontSize: 12, marginTop: 0, marginBottom: 0 }}>
-                  <Link to="/login">Sign in with a paid account</Link> to auto-detect fields, get a plain-English
-                  explanation, and check for risky clauses.
+                  <Link to="/login">{t("prepare.signInPaidAi")}</Link> {t("prepare.aiPaidToolsSub")}
                 </p>
               </div>
             )}
@@ -1800,12 +1816,12 @@ export default function Prepare() {
                 value={placingFieldType}
                 onChange={(e) => setPlacingFieldType(e.target.value as DocFieldType)}
               >
-                <option value="signature">Signature</option>
-                <option value="initials">Initials</option>
-                <option value="text">Text</option>
-                <option value="date">Date</option>
-                <option value="checkbox">Checkbox</option>
-                <option value="dropdown">Dropdown</option>
+                <option value="signature">{t("prepare.fieldSignature")}</option>
+                <option value="initials">{t("prepare.fieldInitials")}</option>
+                <option value="text">{t("prepare.fieldText")}</option>
+                <option value="date">{t("prepare.fieldDate")}</option>
+                <option value="checkbox">{t("prepare.fieldCheckbox")}</option>
+                <option value="dropdown">{t("prepare.fieldDropdown")}</option>
               </select>
               {placingFieldType === "dropdown" && (
                 <textarea
@@ -1845,19 +1861,19 @@ export default function Prepare() {
                   userSelect: "none",
                 }}
               >
-                ⠿ Drag onto the document
+                {t("prepare.dragOntoDoc")}
               </div>
               <p style={{ fontSize: 11, marginTop: 8, marginBottom: 0 }}>
-                The signer's email and the date get stamped in automatically — no need for separate fields.
+                {t("prepare.signerStampHint")}
               </p>
             </div>
             )}
 
             {viewMode === "fields" && account?.isPaid && fields.length > 0 && (
               <div className="card">
-                <h3 className="prepare-sidebar-heading">Save as template</h3>
+                <h3 className="prepare-sidebar-heading">{t("prepare.saveTemplate")}</h3>
                 {templateSavedName ? (
-                  <p style={{ marginBottom: 0 }}>Saved "{templateSavedName}" — find it on your Dashboard.</p>
+                  <p style={{ marginBottom: 0 }}>{t("prepare.templateSaved", { name: templateSavedName })}</p>
                 ) : showTemplateNameInput ? (
                   <>
                     <input
@@ -1872,8 +1888,9 @@ export default function Prepare() {
                     )}
                     {signersWithoutFields.length > 0 && (
                       <p style={{ color: "var(--danger)", fontSize: 13 }}>
-                        Every signer needs a field before this can be saved — still needs one:{" "}
-                        {signersWithoutFields.map((s) => signerLabel(s.order)).join(", ")}
+                        {t("prepare.templateMissingField", {
+                          names: signersWithoutFields.map((s) => signerLabel(s.order)).join(", "),
+                        })}
                       </p>
                     )}
                     <button
@@ -1887,19 +1904,20 @@ export default function Prepare() {
                   </>
                 ) : (
                   <button className="btn-secondary" style={{ width: "100%" }} onClick={() => setShowTemplateNameInput(true)}>
-                    Save as template
+                    {t("prepare.saveTemplate")}
                   </button>
                 )}
                 <p style={{ fontSize: 11, marginTop: 8, marginBottom: 0 }}>
-                  Saves this PDF and field layout for reuse — signer names and emails aren't stored, just how many
-                  signers there are and where their fields go.
+                  {t("prepare.saveTemplateHint")}
                 </p>
               </div>
             )}
 
             {signersWithoutFields.length > 0 && fields.length > 0 && (
               <p style={{ fontSize: 12, color: "var(--danger)" }}>
-                Still needs a field: {signersWithoutFields.map((s) => signerLabel(s.order)).join(", ")}
+                {t("prepare.missingField", {
+                  names: signersWithoutFields.map((s) => signerLabel(s.order)).join(", "),
+                })}
               </p>
             )}
 
@@ -1911,7 +1929,7 @@ export default function Prepare() {
               >
                 <div>
                   <h3 className="prepare-sidebar-heading" style={{ marginBottom: 2 }}>
-                    Invite email
+                    {t("prepare.inviteEmail")}
                   </h3>
                   <p style={{ fontSize: 12, color: "var(--mute)", margin: 0 }}>
                     {customSubject.trim() || customMessage.trim() ? t("prepare.customized") : t("prepare.defaultInvite")}
@@ -1943,22 +1961,22 @@ export default function Prepare() {
 
             <div className="card prepare-sidebar-summary">
               <div className="prepare-sidebar-summary-row">
-                <span>Files</span>
+                <span>{t("prepare.files")}</span>
                 <strong>1</strong>
               </div>
               <div className="prepare-sidebar-summary-row">
-                <span>Signers</span>
+                <span>{t("prepare.signers")}</span>
                 <strong>{signers.length}</strong>
               </div>
               <div className="prepare-sidebar-summary-row">
-                <span>Fields placed</span>
+                <span>{t("prepare.fieldsPlaced")}</span>
                 <strong>{fields.length}</strong>
               </div>
               <div className="prepare-sidebar-summary-row">
-                <span>Expiration</span>
+                <span>{t("prepare.expiration")}</span>
                 {account?.isPaid ? (
                   <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                    <span style={{ fontSize: 12, color: "var(--mute)" }}>in</span>
+                    <span style={{ fontSize: 12, color: "var(--mute)" }}>{t("prepare.inDays")}</span>
                     <input
                       className="form-input"
                       type="number"
@@ -1973,14 +1991,16 @@ export default function Prepare() {
                       }}
                       style={{ width: 56, padding: "2px 6px", fontSize: 13, fontWeight: 600 }}
                     />
-                    <strong style={{ fontSize: 13 }}>days</strong>
+                    <strong style={{ fontSize: 13 }}>{t("prepare.days")}</strong>
                   </span>
                 ) : (
-                  <strong>in {DOC_EXPIRY_DAYS} days</strong>
+                  <strong>
+                    {t("prepare.inDays")} {DOC_EXPIRY_DAYS} {t("prepare.days")}
+                  </strong>
                 )}
               </div>
               <p style={{ fontSize: 11, color: "var(--mute)", margin: "4px 0 0" }}>
-                Signer identity isn't verified — only use this for documents where that's acceptable.
+                {t("prepare.identityNote")}
               </p>
             </div>
 

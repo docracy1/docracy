@@ -2,21 +2,33 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { fetchMe } from "../lib/api";
 import { localizePath, useI18n, useT } from "../lib/i18n";
+import { savePendingClaim } from "../lib/pendingClaim";
 import { track } from "../lib/track";
 
 /**
  * Peak conversion moment for anonymous senders: document just left, status link in hand.
  * Logged-in users already have an account — point them at the dashboard / next send.
- * Anonymous → create account (history for future sends) + soft paid nudge + share loop.
+ * Anonymous → create account (claim this send into dashboard) + soft paid nudge + share loop.
  */
 export default function PrepareSent() {
   const t = useT();
   const { locale } = useI18n();
   const { state } = useLocation() as {
-    state: { docId: string; statusToken: string; signingMode?: "sequential" | "parallel" } | null;
+    state: {
+      docId: string;
+      statusToken: string;
+      claimToken?: string;
+      signingMode?: "sequential" | "parallel";
+    } | null;
   };
   const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
   const [copied, setCopied] = useState<"status" | "share" | null>(null);
+
+  useEffect(() => {
+    if (state?.docId && state.claimToken) {
+      savePendingClaim(state.docId, state.claimToken);
+    }
+  }, [state?.docId, state?.claimToken]);
 
   useEffect(() => {
     fetchMe()
@@ -38,7 +50,8 @@ export default function PrepareSent() {
 
   const statusUrl = `${window.location.origin}/status/${state.statusToken}`;
   const shareBlurb = t("sent.shareBlurb");
-  const statusNext = encodeURIComponent(`/status/${state.statusToken}`);
+  // After signup, land on dashboard so the pending claim can redeem into history.
+  const loginNext = encodeURIComponent("/dashboard");
 
   const copyText = async (kind: "status" | "share", text: string) => {
     try {
@@ -68,7 +81,7 @@ export default function PrepareSent() {
         </div>
       </div>
 
-      {loggedIn === false && (
+      {loggedIn === false && state.claimToken && (
         <div className="card" style={{ marginTop: 20 }}>
           <p style={{ marginBottom: 8, fontWeight: 600 }}>{t("sent.saveAccount")}</p>
           <p style={{ marginBottom: 14, color: "var(--mute)", fontSize: 14 }}>
@@ -76,7 +89,33 @@ export default function PrepareSent() {
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
             <Link
-              to={`/login?ref=prepare-sent&next=${statusNext}`}
+              to={`/login?ref=prepare-sent&next=${loginNext}`}
+              className="btn-primary"
+              style={{ textDecoration: "none" }}
+            >
+              {t("status.createAccount")}
+            </Link>
+            <Link
+              to={`${localizePath("/pricing", locale)}?ref=prepare-sent`}
+              className="btn-secondary"
+              style={{ textDecoration: "none" }}
+              onClick={() => track("upgrade_clicked", { source: "prepare_sent_pricing" })}
+            >
+              {t("status.seePaidPlans")}
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {loggedIn === false && !state.claimToken && (
+        <div className="card" style={{ marginTop: 20 }}>
+          <p style={{ marginBottom: 8, fontWeight: 600 }}>{t("sent.saveAccount")}</p>
+          <p style={{ marginBottom: 14, color: "var(--mute)", fontSize: 14 }}>
+            {t("sent.saveAccountSubFuture")}
+          </p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+            <Link
+              to={`/login?ref=prepare-sent&next=${loginNext}`}
               className="btn-primary"
               style={{ textDecoration: "none" }}
             >
