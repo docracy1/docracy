@@ -8,6 +8,7 @@ import { checkRateLimit, checkInviteRateLimit } from "../lib/ratelimit";
 import { optionalAccount, type AccountContext } from "../lib/auth";
 import { resolveTtlDays } from "../lib/docTtl";
 import { schedulePreparerLeadEmails } from "../lib/onboardingEmails";
+import { clampAttachmentLimits } from "../lib/signerAttachments";
 import type { DocField, Env } from "@docracy/shared";
 
 interface CreateDocumentBody {
@@ -307,7 +308,9 @@ documents.post("/", optionalAccount, async (c) => {
     templateId: meta.templateId,
     ttlDays: ttl.ttlDays,
     smsInvites: meta.smsInvites || undefined,
-    signerAttachments: meta.signerAttachments?.enabled ? meta.signerAttachments : undefined,
+    signerAttachments: meta.signerAttachments?.enabled
+      ? { enabled: true, ...clampAttachmentLimits(meta.signerAttachments) }
+      : undefined,
   });
 
   // Opt-in only — the preparer email itself is collected for the status link. Marketing tips are

@@ -30,16 +30,9 @@ export default function EmbedSign() {
       setError("Missing embed token");
       return;
     }
-    resolveEmbedSession(token)
+    const origin = parentOrigin();
+    resolveEmbedSession(token, origin)
       .then((session) => {
-        const framed = window.self !== window.top;
-        if (framed) {
-          const origin = parentOrigin();
-          if (!origin || !session.allowedOrigins.includes(origin)) {
-            setError("This signing page cannot be embedded from this origin.");
-            return;
-          }
-        }
         setAllowedOrigins(session.allowedOrigins);
         setReturnUrl(session.returnUrl);
         setSignToken(session.signToken);

@@ -83,8 +83,12 @@ embed.get("/sessions/:token", async (c) => {
   if (!(await checkTokenAccessRateLimit(c.env, token))) {
     return c.json({ error: "Too many requests. Please try again shortly." }, 429);
   }
-  const resolved = await resolveEmbedSession(c.env, token);
+  const parentOrigin = c.req.header("X-Embed-Parent-Origin") ?? null;
+  const resolved = await resolveEmbedSession(c.env, token, parentOrigin);
   if (!resolved) return c.json({ error: "Embed session expired or invalid" }, 404);
+  if ("error" in resolved) {
+    return c.json({ error: "This signing page cannot be embedded from this origin." }, 403);
+  }
   return c.json(resolved);
 });
 

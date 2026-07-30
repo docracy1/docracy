@@ -94,7 +94,7 @@ export default function Trust() {
               ["Cloudflare, Inc.", "Hosting, CDN, compute, storage, bot protection, analytics", "Global edge; config may pin EU"],
               ["Resend, Inc.", "Transactional email (invite, reminder, completion)", "US / EU depending on Resend routing"],
               ["Stripe, Inc.", "Paid plan billing (card payments)", "US / global Stripe regions"],
-              ["Google LLC", "Optional Google sign-in; optional Google Drive upload", "Global"],
+              ["Google LLC", "Optional Google Drive upload (customer-initiated)", "Global"],
               ["Dropbox, Inc.", "Optional cloud connector (customer-initiated)", "Global"],
               ["Microsoft Corporation", "Optional OneDrive connector (customer-initiated)", "Global"],
               ["Box, Inc.", "Optional Box connector (customer-initiated)", "Global"],
@@ -122,7 +122,7 @@ export default function Trust() {
       <h2 style={{ fontSize: 19, marginTop: 28 }}>Access control</h2>
       <ul>
         <li>Anonymous sends: access is link-based (HMAC tokens), no password accounts required to sign.</li>
-        <li>Paid workspaces: magic-link or Google sign-in; team roles on Solo+ / paid plans.</li>
+        <li>Paid workspaces: magic-link sign-in; team roles on Solo+ / paid plans.</li>
         <li>Optional PIN protection on signing links (paid).</li>
         <li>Production secrets live in Cloudflare Workers secrets — not in the client bundle.</li>
       </ul>
@@ -154,7 +154,7 @@ export default function Trust() {
         </dd>
         <dt>Do you support MFA?</dt>
         <dd>
-          Sign-in is passwordless (email magic link or Google). Signing links can use an optional PIN on paid
+          Sign-in is passwordless (email magic link). Signing links can use an optional PIN on paid
           plans. We do not offer TOTP MFA on workspace accounts yet.
         </dd>
         <dt>Do you process PHI / HIPAA?</dt>

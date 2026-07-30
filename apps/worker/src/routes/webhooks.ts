@@ -10,6 +10,36 @@ interface CreateWebhookBody {
 
 const MAX_WEBHOOKS_PER_ACCOUNT = 10;
 
+/** Block localhost / private / link-local hosts to reduce SSRF via outbound webhook delivery. */
+export function isBlockedWebhookHost(hostname: string): boolean {
+  let host = hostname.toLowerCase().replace(/\.$/, "");
+  if (host.startsWith("[") && host.endsWith("]")) host = host.slice(1, -1);
+
+  if (
+    host === "localhost" ||
+    host.endsWith(".localhost") ||
+    host === "0.0.0.0" ||
+    host === "::1" ||
+    host === "0:0:0:0:0:0:0:1"
+  ) {
+    return true;
+  }
+  if (host.startsWith("fe80:") || host.startsWith("fc") || host.startsWith("fd")) return true;
+
+  const ipv4 = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/.exec(host);
+  if (ipv4) {
+    const parts = ipv4.slice(1).map((p) => Number(p));
+    if (parts.some((n) => n > 255)) return true;
+    const [a, b] = parts;
+    if (a === 0 || a === 10 || a === 127) return true;
+    if (a === 169 && b === 254) return true;
+    if (a === 172 && b >= 16 && b <= 31) return true;
+    if (a === 192 && b === 168) return true;
+    if (a === 100 && b >= 64 && b <= 127) return true; // CGNAT
+  }
+  return false;
+}
+
 type Variables = { account: AccountContext | null };
 const webhooks = new Hono<{ Bindings: Env; Variables: Variables }>();
 
@@ -34,6 +64,9 @@ webhooks.post("/", requirePaidAccount, async (c) => {
   }
   if (url.protocol !== "https:") {
     return c.json({ error: "Webhook URL must use https://" }, 400);
+  }
+  if (isBlockedWebhookHost(url.hostname)) {
+    return c.json({ error: "Webhook URL host is not allowed" }, 400);
   }
 
   if (!Array.isArray(body.events) || body.events.length === 0) {

@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { setCookie, deleteCookie } from "hono/cookie";
+import { setCookie, deleteCookie, getCookie } from "hono/cookie";
 import {
   adminLogin,
   requestMagicLink,
@@ -7,6 +7,7 @@ import {
   isAdminEmail,
   optionalAccount,
   resolveAccount,
+  revokeSession,
   SESSION_COOKIE_NAME,
   SESSION_TTL_SECONDS,
   sessionCookieOptions,
@@ -115,7 +116,8 @@ auth.post("/admin-login", async (c) => {
 });
 
 auth.post("/logout", async (c) => {
-  deleteCookie(c, SESSION_COOKIE_NAME, { path: "/" });
+  await revokeSession(c.env, getCookie(c, SESSION_COOKIE_NAME));
+  deleteCookie(c, SESSION_COOKIE_NAME, sessionCookieOptions(c.env));
   return c.json({ ok: true });
 });
 

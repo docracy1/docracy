@@ -107,9 +107,15 @@ export async function issueEmbedSession(
   };
 }
 
+/**
+ * Resolve an embed session and issue a signing token only when `parentOrigin` is on the
+ * session allowlist. Client must send the embedding page's origin (e.g. via
+ * `X-Embed-Parent-Origin`) — top-level opens with a missing/mismatched origin are rejected.
+ */
 export async function resolveEmbedSession(
   env: Env,
-  embedToken: string
+  embedToken: string,
+  parentOrigin: string | null
 ): Promise<
   | {
       signToken: string;
@@ -119,10 +125,16 @@ export async function resolveEmbedSession(
       returnUrl?: string;
     }
   | null
+  | { error: "origin"; status: 403 }
 > {
   const hash = await hashOpaqueToken(embedToken, env.TOKEN_SECRET);
   const record = await env.DOCRACY_KV.get<EmbedSessionRecord>(`embedsession:${hash}`, "json");
   if (!record) return null;
+
+  const normalizedParent = parentOrigin?.trim().replace(/\/$/, "") || null;
+  if (!normalizedParent || !record.allowedOrigins.includes(normalizedParent)) {
+    return { error: "origin", status: 403 };
+  }
 
   const doc = await getDoc(env, record.docId);
   if (!doc || doc.accountId !== record.accountId || doc.status !== "pending") return null;
