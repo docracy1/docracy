@@ -4,7 +4,8 @@ compatibility_date = "2024-12-01"
 compatibility_flags = ["nodejs_compat"]
 
 # Daily reminder/cleanup/health (08:00 UTC) plus Monday SEO blog publish inside that handler,
-# and hourly onboarding/completion nudges. (Account cron-trigger limit — avoid a third schedule.)
+# and hourly onboarding/completion nudges + SPA smoke (Sign in / Start free).
+# (Account cron-trigger limit — avoid a third schedule; SPA smoke rides the hourly cron.)
 [triggers]
 crons = ["0 8 * * *", "0 * * * *"]
 

@@ -562,6 +562,29 @@ export async function sendHealthAlert(
   await send(env, env.FEEDBACK_EMAIL, "Docracy healthcheck failure", `<p>${lines}</p>`, { emailType: "health_alert" });
 }
 
+/** SPA hydrate failure (Sign in / Start free) — recipient is usually FEEDBACK_EMAIL / founder@. */
+export async function sendSpaSmokeAlert(
+  env: Env,
+  to: string,
+  failures: { name: string; detail?: string }[]
+): Promise<void> {
+  const lines = failures.map((f) => `<li><strong>${escapeHtml(f.name)}</strong>: ${escapeHtml(f.detail ?? "failed")}</li>`).join("");
+  const body = `
+    ${emailHeadline("Docracy SPA smoke check failed")}
+    <p style="margin:0 0 16px 0;font-size:15px;color:${INK};line-height:1.5;">
+      Sign in (/login) or Start free (/prepare) may be stuck on prerendered HTML because the main
+      JS bundle is not serving as JavaScript (often <code>text/html</code> SPA fallback).
+    </p>
+    <ul style="margin:0;padding-left:20px;font-size:14px;color:${INK};line-height:1.6;">${lines}</ul>
+    <p style="margin:20px 0 0 0;font-size:13px;color:${MUTED};line-height:1.5;">
+      Deduped: alert on new failure, then every 6 hours while still down.
+    </p>
+  `;
+  await send(env, to, "Docracy: Sign in / Start free broken (SPA JS)", emailShell(env.PUBLIC_APP_URL, body), {
+    emailType: "spa_smoke_alert",
+  });
+}
+
 export async function sendFeedback(env: Env, fromEmail: string, message: string): Promise<void> {
   const body = escapeHtml(message).replace(/\n/g, "<br>");
   await send(env, env.FEEDBACK_EMAIL, "Docracy feedback", `<p>From: ${escapeHtml(fromEmail)}</p><p>${body}</p>`, {

@@ -29,6 +29,7 @@ import { runHealthCheckAndAlert } from "./lib/healthcheck";
 import { runPaymentFreezeSweep } from "./lib/paymentFreeze";
 import { runOnboardingEmailSweep } from "./lib/onboardingEmails";
 import { runCompletionEmailSweep } from "./lib/completionEmails";
+import { runSpaSmokeAndAlert } from "./lib/spaSmoke";
 import { BLOG_WEEKLY_CRON, runWeeklyBlogPublish, isWeeklyBlogMondayUtc } from "./lib/blogWeekly";
 import type { Env } from "@docracy/shared";
 
@@ -94,6 +95,8 @@ export default {
     if (event.cron === HOURLY_CRON) {
       ctx.waitUntil(runOnboardingEmailSweep(env).catch((err) => console.error("Onboarding email sweep failed:", err)));
       ctx.waitUntil(runCompletionEmailSweep(env).catch((err) => console.error("Completion-email sweep failed:", err)));
+      // SPA Sign in / Start free hydrate probe — hourly so founders see outages quickly.
+      ctx.waitUntil(runSpaSmokeAndAlert(env).catch((err) => console.error("SPA smoke sweep failed:", err)));
       return;
     }
 
