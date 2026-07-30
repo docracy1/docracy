@@ -736,6 +736,44 @@ const en: Messages = {
   "mcp.zapierBody":
     "Prefer a no-code automation instead of an AI assistant? The same paid account works with Zapier: trigger a Zap on Document Created, Signer Signed, or Document Completed, or send a saved template out for signature as an action. Search for \"Docracy\" when adding a new app to a Zap — same API key as above, used as the \"API Key\" field instead of the full connector URL.",
   "mcp.zapierTitle": "Automate with Zapier",
+  "seo.home.title": "Docracy.io – Simple and secure e-signatures for businesses",
+  "seo.home.description":
+    "Create, send, and sign documents in minutes. Docracy.io offers fast e-signatures, simple workflows, and secure, compliant document storage.",
+  "seo.pricing.title": "Pricing — Docracy",
+  "seo.pricing.description":
+    "Free for signing chains of up to 2 signers. Paid is $10/month flat per workspace — unlimited signers, templates, AI tools, connectors, and team accounts.",
+  "seo.freeTemplates.title": "Free Business Document Templates — NDA, Contractor Agreement, Offer Letter | Docracy",
+  "seo.freeTemplates.description":
+    "Free, ready-to-sign templates for the most common business documents — mutual NDA, independent contractor agreement, offer letter, remote work policy, and freelance service agreement. Fill in your details and send for signature in minutes.",
+  "seo.prepare.title": "Prepare a document — Docracy",
+  "seo.prepare.description":
+    "Upload a PDF or start from a free template, add signers, and send for signature in minutes — no account required.",
+  "seo.docusign.title": "DocuSign Alternative — Simple Signing | Docracy",
+  "seo.docusign.description":
+    "A simple alternative to DocuSign for quick agreements. Fast, clean, no account required. Free for up to 2 signers.",
+  "seo.docs.title": "Documentation — Docracy",
+  "seo.docs.description":
+    "How Docracy's free signing flow, paid features (bulk send, embed, contacts, attachments, SMS gateways, Dropbox/OneDrive/Box/Google Drive, AI), Enterprise options, templates, webhooks, and MCP/Zapier automation work.",
+  "seo.mcp.title": "Connect Docracy to Your AI Assistant — MCP Connector | Docracy",
+  "seo.mcp.description":
+    "Connect Docracy to Claude, ChatGPT, Grok, or Perplexity as an MCP connector on a paid account — check signing status and search your documents from chat. Also automates with Zapier.",
+  "alt.problem": "The problem",
+  "alt.solution": "The Docracy way",
+  "alt.compare": "How Docracy compares",
+  "alt.seePricing": "See pricing",
+  "alt.footerCta": "Free to start — no account needed to send or sign.",
+  "alt.docusign.heroHeadline": "DocuSign is too heavy for simple agreements.",
+  "alt.docusign.heroSubheadline": "Docracy.io is built for fast, lightweight signing.",
+  "alt.docusign.problem":
+    "DocuSign is great for enterprise workflows — but overkill for NDAs, client contracts, and one-off agreements.",
+  "alt.docusign.solution": "Docracy.io removes the friction and focuses on speed.",
+  "alt.docusign.c1": "Faster signing — no accounts, no delays",
+  "alt.docusign.c2": "No account required for recipients",
+  "alt.docusign.c3": "No subscriptions for simple agreements — up to 2 signers, completely free",
+  "alt.docusign.c4": "AI-assisted field placement (paid accounts)",
+  "alt.docusign.c5": "Clean, distraction-free workflow",
+  "alt.docusign.ctaLabel": "Try free — send a sample NDA",
+  "alt.docusign.compareLabel": "See the full price comparison vs. DocuSign",
   "chat.title": "Docracy Assistant",
   "chat.greeting": "Hey there 👋 I can help you find the right thing:",
   "chat.sales": "I want to talk to sales",

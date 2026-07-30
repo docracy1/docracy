@@ -15,10 +15,7 @@ function Section({ id, title, children }: { id: string; title: string; children:
 
 export default function Docs() {
   const t = useT();
-  usePageMeta(
-    "Documentation — Docracy",
-    "How Docracy's free signing flow, paid features (bulk send, embed, contacts, attachments, SMS gateways, Dropbox/OneDrive/Box/Google Drive, AI), Enterprise options, templates, webhooks, and MCP/Zapier automation work."
-  );
+  usePageMeta(t("seo.docs.title"), t("seo.docs.description"));
 
   return (
     <div className="container" style={{ maxWidth: 760 }}>

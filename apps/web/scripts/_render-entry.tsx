@@ -2,7 +2,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import Header from "../src/components/Header";
 import Footer from "../src/components/Footer";
-import { LocaleProvider } from "../src/lib/i18n";
+import { LocaleProvider, type Locale } from "../src/lib/i18n";
 import Landing from "../src/pages/Landing";
 import FreeTemplates from "../src/pages/FreeTemplates";
 import FreeTemplateDetail from "../src/pages/FreeTemplateDetail";
@@ -22,19 +22,23 @@ import ExplainerPage from "../src/pages/ExplainerPage";
 /** Renders the real app components to static markup for a single path — same components a
  *  browser gets, minus effects (which never run during static rendering, so Header's login-check
  *  fetch just stays in its default signed-out state, which is an accurate crawl-time snapshot).
- *  LocaleProvider defaults to `en` for prerender (no browser locale). */
-function renderPath(targetPath: string): string {
+ *  Pass `locale` so Spanish Phase 1 URLs prerender with the ES catalog.
+ *  `/prepare` and `/es/preparar` stay client-only (pdf.js Vite `?url` import breaks the esbuild bundle). */
+function renderPath(targetPath: string, locale: Locale = "en"): string {
   return renderToStaticMarkup(
-    <LocaleProvider>
+    <LocaleProvider initialLocale={locale}>
       <MemoryRouter initialEntries={[targetPath]}>
         <Header />
         <Routes>
           <Route path="/" element={<Landing />} />
+          <Route path="/es" element={<Landing />} />
           <Route path="/free-templates" element={<FreeTemplates />} />
+          <Route path="/es/plantillas-gratis" element={<FreeTemplates />} />
           <Route path="/free-templates/:slug" element={<FreeTemplateDetail />} />
           <Route path="/mcp" element={<Mcp />} />
           <Route path="/about" element={<About />} />
           <Route path="/pricing" element={<Pricing />} />
+          <Route path="/es/precios" element={<Pricing />} />
           <Route path="/docs" element={<Docs />} />
           <Route path="/imprint" element={<Imprint />} />
           <Route path="/trust" element={<Trust />} />
@@ -49,6 +53,10 @@ function renderPath(targetPath: string): string {
           <Route path="/compliance-documentation" element={<FeaturePage slug="compliance-documentation" />} />
           <Route path="/eversign-alternative" element={<AlternativePage slug="eversign-alternative" />} />
           <Route path="/docusign-alternative" element={<AlternativePage slug="docusign-alternative" />} />
+          <Route path="/es/alternativa-a-docusign" element={<AlternativePage slug="docusign-alternative" />} />
+          <Route path="/hellosign-alternative" element={<AlternativePage slug="hellosign-alternative" />} />
+          <Route path="/pandadoc-alternative" element={<AlternativePage slug="pandadoc-alternative" />} />
+          <Route path="/adobe-sign-alternative" element={<AlternativePage slug="adobe-sign-alternative" />} />
           <Route path="/what-is-an-nda" element={<ExplainerPage slug="what-is-an-nda" />} />
           <Route path="/are-electronic-signatures-legal" element={<ExplainerPage slug="are-electronic-signatures-legal" />} />
         </Routes>

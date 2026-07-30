@@ -17,11 +17,7 @@ export default function Mcp() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  usePageMeta(
-    "Connect Docracy to Your AI Assistant — MCP Connector | Docracy",
-    "Connect Docracy to Claude, ChatGPT, Grok, or Perplexity as an MCP connector on a paid account — " +
-      "check signing status and search your documents from chat. Also automates with Zapier."
-  );
+  usePageMeta(t("seo.mcp.title"), t("seo.mcp.description"));
 
   return (
     <div className="container" style={{ maxWidth: 760 }}>

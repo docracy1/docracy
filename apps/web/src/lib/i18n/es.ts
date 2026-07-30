@@ -176,6 +176,18 @@ const es: Messages = {
   "freeTemplates.sub":
     "Documentos listos para firmar — elige uno, completa tus datos y envía a firmar en minutos.",
   "freeTemplates.title": "Plantillas gratis",
+  "freeTemplates.intro":
+    "Docracy.io ofrece plantillas simples y listas para usar que puedes enviar en minutos. Elige una plantilla, agrega campos de firma y envíala — sin formato, sin configuración, sin cuentas.",
+  "freeTemplates.popularTitle": "Plantillas populares:",
+  "freeTemplates.pop1": "NDA (unilateral o mutuo)",
+  "freeTemplates.pop2": "Contrato con cliente",
+  "freeTemplates.pop3": "Acuerdo de servicios",
+  "freeTemplates.pop4": "Acuerdo de onboarding",
+  "freeTemplates.pop5": "Acuerdo con proveedor",
+  "freeTemplates.pop6": "Contrato de alquiler",
+  "freeTemplates.pop7": "Orden de trabajo",
+  "freeTemplates.pop8": "Confirmación de entrega",
+  "freeTemplates.tip": "Consejo: usar una plantilla es la forma más rápida de enviar tu primer documento.",
   "hero.b1": "Firma de documentos rápida y sin fricción",
   "hero.b2": "Flujo simple para equipos",
   "hero.b3": "Almacenamiento seguro y conforme",
@@ -333,6 +345,10 @@ const es: Messages = {
   "mcp.eyebrow": "Para desarrolladores y usuarios avanzados de IA",
   "mcp.paidRequired": "Se requiere cuenta de pago",
   "mcp.title": "Conecta Docracy a tu asistente de IA",
+  "mcp.paidBody":
+    "El conector MCP usa la clave API de tu espacio de trabajo. Inicia sesión, mejora el plan si hace falta y copia la URL del conector personal desde Panel → Conector y clave API. Si termina la suscripción, esa clave se revoca y el conector deja de funcionar.",
+  "mcp.toolsIntro": "Una vez conectado, tu asistente obtiene dos herramientas de solo lectura:",
+  "mcp.signInCta": "Inicia sesión para obtener tu URL de conector",
   "nav.blog": "Blog",
   "nav.closeMenu": "Cerrar menú",
   "nav.dashboard": "Panel",
@@ -821,6 +837,45 @@ const es: Messages = {
     "¿Prefieres automatización sin código en lugar de un asistente de IA? La misma cuenta de pago funciona con Zapier: dispara un Zap en Documento creado, Firmante firmó o Documento completado, o envía una plantilla guardada a firmar como acción. Busca \"Docracy\" al agregar una app a un Zap — la misma clave API de arriba, usada en el campo \"API Key\" en lugar de la URL completa del conector.",
   "mcp.zapierTitle": "Automatiza con Zapier",
   "uptime.title": "Estado del sistema",
+  "seo.home.title": "Docracy.io – Firmas electrónicas simples y seguras para negocios",
+  "seo.home.description":
+    "Crea, envía y firma documentos en minutos. Docracy.io ofrece firmas electrónicas rápidas, flujos simples y almacenamiento seguro y conforme.",
+  "seo.pricing.title": "Precios — Docracy",
+  "seo.pricing.description":
+    "Gratis para cadenas de hasta 2 firmantes. El plan de pago es $10/mes fijo por espacio de trabajo — firmantes ilimitados, plantillas, herramientas de IA, conectores y cuentas de equipo.",
+  "seo.freeTemplates.title":
+    "Plantillas gratis de documentos de negocio — NDA, contrato de contratista, carta de oferta | Docracy",
+  "seo.freeTemplates.description":
+    "Plantillas gratis listas para firmar para los documentos de negocio más comunes — NDA mutuo, acuerdo de contratista independiente, carta de oferta, política de trabajo remoto y acuerdo de servicios freelance. Completa tus datos y envía a firma en minutos.",
+  "seo.prepare.title": "Preparar un documento — Docracy",
+  "seo.prepare.description":
+    "Sube un PDF o empieza desde una plantilla gratis, agrega firmantes y envía a firma en minutos — sin cuenta.",
+  "seo.docusign.title": "Alternativa a DocuSign — Firma simple | Docracy",
+  "seo.docusign.description":
+    "Una alternativa simple a DocuSign para acuerdos rápidos. Rápida, limpia, sin cuenta. Gratis para hasta 2 firmantes.",
+  "seo.docs.title": "Documentación — Docracy",
+  "seo.docs.description":
+    "Cómo funciona el flujo gratis de firma de Docracy, las funciones de pago (envío masivo, embed, contactos, adjuntos, SMS, Dropbox/OneDrive/Box/Google Drive, IA), opciones Enterprise, plantillas, webhooks y automatización MCP/Zapier.",
+  "seo.mcp.title": "Conecta Docracy a tu asistente de IA — Conector MCP | Docracy",
+  "seo.mcp.description":
+    "Conecta Docracy a Claude, ChatGPT, Grok o Perplexity como conector MCP en una cuenta de pago — consulta el estado de firma y busca tus documentos desde el chat. También automatiza con Zapier.",
+  "alt.problem": "El problema",
+  "alt.solution": "La forma Docracy",
+  "alt.compare": "Cómo se compara Docracy",
+  "alt.seePricing": "Ver precios",
+  "alt.footerCta": "Gratis para empezar — no necesitas cuenta para enviar o firmar.",
+  "alt.docusign.heroHeadline": "DocuSign es demasiado pesado para acuerdos simples.",
+  "alt.docusign.heroSubheadline": "Docracy.io está hecho para firmas rápidas y ligeras.",
+  "alt.docusign.problem":
+    "DocuSign es excelente para flujos empresariales — pero excesivo para NDAs, contratos con clientes y acuerdos puntuales.",
+  "alt.docusign.solution": "Docracy.io quita la fricción y se enfoca en la velocidad.",
+  "alt.docusign.c1": "Firma más rápida — sin cuentas, sin demoras",
+  "alt.docusign.c2": "Sin cuenta requerida para los destinatarios",
+  "alt.docusign.c3": "Sin suscripciones para acuerdos simples — hasta 2 firmantes, totalmente gratis",
+  "alt.docusign.c4": "Colocación de campos asistida por IA (cuentas de pago)",
+  "alt.docusign.c5": "Flujo limpio y sin distracciones",
+  "alt.docusign.ctaLabel": "Probar gratis — envía un NDA de ejemplo",
+  "alt.docusign.compareLabel": "Ver la comparación completa de precios vs. DocuSign",
 };
 
 export default es;

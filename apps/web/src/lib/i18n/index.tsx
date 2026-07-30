@@ -23,8 +23,15 @@ type I18nContextValue = {
 
 const I18nContext = createContext<I18nContextValue | null>(null);
 
-export function LocaleProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(() => detectLocale());
+export function LocaleProvider({
+  children,
+  initialLocale,
+}: {
+  children: ReactNode;
+  /** When set (prerender / tests), skip browser detectLocale() so static HTML matches the URL. */
+  initialLocale?: Locale;
+}) {
+  const [locale, setLocaleState] = useState<Locale>(() => initialLocale ?? detectLocale());
 
   useEffect(() => {
     document.documentElement.lang = locale;
@@ -67,3 +74,14 @@ export function translate(key: string, vars?: Record<string, string | number>, l
 }
 
 export type { Locale } from "./types";
+export {
+  alternatePath,
+  cleanPath,
+  EN_PATH_BY_ES,
+  ES_PATH_BY_EN,
+  localizePath,
+  pathLocale,
+  seoAlternates,
+  SEO_EN_PATH,
+  type SeoPage,
+} from "./paths";

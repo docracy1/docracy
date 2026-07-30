@@ -1,8 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
-import { useT } from "../lib/i18n";
+import { localizePath, useI18n, useT } from "../lib/i18n";
 
 export default function Footer() {
   const t = useT();
+  const { locale } = useI18n();
   const location = useLocation();
   if (location.pathname.startsWith("/sign/")) return null;
 
@@ -10,12 +11,12 @@ export default function Footer() {
     {
       heading: t("footer.product"),
       links: [
-        { label: t("footer.startFree"), to: "/prepare" },
-        { label: t("footer.pricing"), to: "/pricing" },
-        { label: t("footer.templates"), to: "/free-templates" },
+        { label: t("footer.startFree"), to: localizePath("/prepare", locale) },
+        { label: t("footer.pricing"), to: localizePath("/pricing", locale) },
+        { label: t("footer.templates"), to: localizePath("/free-templates", locale) },
         { label: t("footer.mcp"), to: "/mcp" },
         { label: t("footer.docs"), to: "/docs" },
-        { label: t("footer.faq"), to: "/#faq" },
+        { label: t("footer.faq"), to: `${localizePath("/", locale)}#faq` },
       ],
     },
     {

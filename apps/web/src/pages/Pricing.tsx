@@ -3,15 +3,12 @@ import { Link } from "react-router-dom";
 import { fetchMe, startCheckout, type Account } from "../lib/api";
 import { PLAN_ROWS, PlanCell } from "../lib/planRows";
 import { track } from "../lib/track";
-import { usePageMeta } from "../lib/usePageMeta";
 import { useT } from "../lib/i18n";
+import { useSeoMeta } from "../lib/useSeoMeta";
 
 export default function Pricing() {
   const t = useT();
-  usePageMeta(
-    "Pricing — Docracy",
-    "Free for signing chains of up to 2 signers. Paid is $10/month flat per workspace — unlimited signers, templates, AI tools, connectors, and team accounts."
-  );
+  useSeoMeta("pricing");
 
   const [account, setAccount] = useState<Account | null | undefined>(undefined);
   const [upgrading, setUpgrading] = useState(false);

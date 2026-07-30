@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useT } from "../lib/i18n";
+import { useSeoMeta } from "../lib/useSeoMeta";
 import PdfViewer from "../components/PdfViewer";
 import {
   analyzeDocumentRisks,
@@ -73,6 +74,7 @@ function SidebarHeading({ label, count }: { label: string; count?: number }) {
 
 export default function Prepare() {
   const t = useT();
+  useSeoMeta("prepare");
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();

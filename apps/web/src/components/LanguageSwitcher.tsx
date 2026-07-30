@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, useState } from "react";
-import { useI18n, type Locale } from "../lib/i18n";
+import { useLocation, useNavigate } from "react-router-dom";
+import { alternatePath, useI18n, type Locale } from "../lib/i18n";
 
 const LOCALE_NAMES: Record<Locale, string> = {
   en: "English",
@@ -44,6 +45,8 @@ function ChevronIcon({ open }: { open: boolean }) {
 /** SwipeSign-style globe + EN ▾ dropdown for header / mobile panel. */
 export default function LanguageSwitcher({ className = "" }: { className?: string }) {
   const { locale, setLocale, locales, labels } = useI18n();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const menuId = useId();
@@ -67,6 +70,10 @@ export default function LanguageSwitcher({ className = "" }: { className?: strin
   function pick(code: Locale) {
     setLocale(code);
     setOpen(false);
+    const next = alternatePath(location.pathname, code);
+    if (next && next !== location.pathname) {
+      navigate(`${next}${location.search}${location.hash}`);
+    }
   }
 
   return (
