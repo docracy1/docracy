@@ -357,7 +357,7 @@ export default function Dashboard() {
       .map((o) => o.trim())
       .filter(Boolean);
     if (origins.length === 0) {
-      setEmbedError("Add at least one allowed origin (e.g. https://yourapp.com)");
+      setEmbedError(t("dash.embedOriginError"));
       return;
     }
     setEmbedCreating(true);
@@ -1327,107 +1327,42 @@ export default function Dashboard() {
 
         {activeTab === "tools" && account.isPaid && toolsSubTab === "connector" && (
           <div className="card" style={{ marginTop: 24 }}>
-            <h3 style={{ fontSize: 15 }}>MCP connector &amp; API key</h3>
-          <p>Status: {hasToken ? "Active" : "None yet"}</p>
+            <h3 style={{ fontSize: 15 }}>{t("dash.mcpTitle")}</h3>
+          <p>{t("dash.mcpStatus", { status: hasToken ? t("dash.mcpStatusActive") : t("dash.mcpStatusNone") })}</p>
           <p style={{ fontSize: 12, color: "var(--mute)" }}>
-            One key for everything: AI assistants (Claude, ChatGPT, Grok, Perplexity — anything that supports
-            adding a custom MCP connector) and Zapier both use the same credential.
+            {t("dash.mcpIntro")}
           </p>
           {newConnectorUrl && newApiKey ? (
             <>
               <p style={{ marginBottom: 4 }}>
-                For an AI assistant, paste this full URL into its "Add custom connector" screen:
+                {t("dash.mcpPasteUrl")}
               </p>
               <input className="form-input" readOnly value={newConnectorUrl} style={{ width: "100%", marginBottom: 12 }} />
-              <p style={{ marginBottom: 4 }}>For Zapier, paste just the API key into the "API Key" field when connecting:</p>
+              <p style={{ marginBottom: 4 }}>{t("dash.mcpPasteKey")}</p>
               <input className="form-input" readOnly value={newApiKey} style={{ width: "100%" }} />
               <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 4, marginBottom: 0 }}>
-                Neither is shown again — regenerate if you lose them (regenerating replaces both at once).
+                {t("dash.mcpShownOnce")}
               </p>
             </>
           ) : (
             <p style={{ marginBottom: 0 }}>
               {hasToken
-                ? "Regenerating replaces your existing key/connector URL — anything using the old one will stop working."
-                : "Generate a key to connect this account to an AI assistant or Zapier."}
+                ? t("dash.mcpRegenWarn")
+                : t("dash.mcpGenerateHint")}
             </p>
           )}
           {regenerateError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{regenerateError}</p>}
           <button className="btn-secondary" onClick={onRegenerateToken} disabled={regenerating} style={{ marginTop: 8 }}>
-            {regenerating ? "Generating…" : hasToken ? "Regenerate" : "Generate"}
+            {regenerating ? t("common.generating") : hasToken ? t("common.regenerate") : t("common.generate")}
           </button>
 
           <details style={{ marginTop: 16 }}>
             <summary style={{ cursor: "pointer", fontSize: 13, color: "var(--primary)" }}>
-              What can I do with this, how do I set it up, and how do I use it?
+              {t("dash.mcpFaqSummary")}
             </summary>
             <div style={{ marginTop: 12, fontSize: 13, color: "var(--body)", lineHeight: 1.6 }}>
-              <p style={{ marginTop: 0 }}>
-                <strong>What it does:</strong> once connected, your assistant can look up the status of any
-                Docracy signing link ("who's signed, who's still pending") and — since you're on the paid
-                plan — search your own documents by title, signer name, email, or company. Nothing is ever
-                changed or signed automatically; both tools are read-only.
-              </p>
-
-              <p style={{ marginBottom: 4 }}>
-                <strong>Claude</strong> (claude.ai or the desktop app)
-              </p>
-              <p style={{ marginTop: 0 }}>
-                Set up: Settings → Connectors → Add custom connector → paste your URL above.
-                <br />
-                Use it: click the "+" at the bottom-left of the chat box → Connectors → make sure Docracy is
-                toggled on for that conversation. Then just ask naturally — e.g. "check the status of
-                [link]" or "find my documents about the lease agreement."
-              </p>
-
-              <p style={{ marginBottom: 4 }}>
-                <strong>ChatGPT</strong>
-              </p>
-              <p style={{ marginTop: 0 }}>
-                Set up: Settings → Security and login → turn on Developer Mode. Then Settings → Connectors
-                (or Plugins) → Add custom connector → paste your URL. Individual Plus/Pro accounts get
-                read-only access, which is all these tools ever do anyway.
-                <br />
-                Use it: pick it from the Tools menu (the "+"/tools icon in the message box), or type
-                "@Docracy" followed by your request — e.g. "@Docracy find my documents about the roommate
-                agreement."
-              </p>
-
-              <p style={{ marginBottom: 4 }}>
-                <strong>Grok</strong>
-              </p>
-              <p style={{ marginTop: 0 }}>
-                Set up: available on Grok's paid tiers. Click the "+" in the chat box → Connectors → New
-                Connector → Custom → paste your URL.
-                <br />
-                Use it: just ask your question normally once it's added — Grok calls the tool automatically
-                when it's relevant.
-              </p>
-
-              <p style={{ marginBottom: 4 }}>
-                <strong>Perplexity</strong>
-              </p>
-              <p style={{ marginBottom: 0, marginTop: 0 }}>
-                Set up: requires a Pro or Max plan (the free plan can't add custom connectors). Settings →
-                Connectors → Add custom connector → paste your URL, authentication "None" (the token's
-                already built into the URL).
-                <br />
-                Use it: reference it directly in your question — mentioning "Docracy" or asking something
-                clearly related to your documents is usually enough for it to reach for the tool.
-              </p>
-
-              <p style={{ marginBottom: 4 }}>
-                <strong>Zapier</strong>
-              </p>
-              <p style={{ marginBottom: 0, marginTop: 0 }}>
-                What it does there: triggers on Document Created, Signer Signed, or Document Completed, and
-                an action to send a saved template out for signature — so Docracy can plug into a Zap without
-                either side needing a server. Unlike the assistants above, use just the <strong>API key</strong>{" "}
-                (not the full connector URL) as Zapier's "API Key" field when connecting.
-                <br />
-                Set up: search for "Docracy" when adding a new app to a Zap, or ask whoever prepared this
-                deployment for the integration link if it isn't public yet.
-              </p>
+              <p style={{ marginTop: 0 }}>{t("dash.mcpFaqBody")}</p>
+              <Link to="/mcp">{t("dash.mcpFaqLink")}</Link>
             </div>
           </details>
         </div>
@@ -1439,7 +1374,7 @@ export default function Dashboard() {
             <h3 style={{ fontSize: 15, margin: 0 }}>{t("dash.templates")}</h3>
             {templates.length > 0 && (
               <Link to="/bulk-send" className="btn-secondary" style={{ textDecoration: "none", padding: "4px 10px", fontSize: 13 }}>
-                Bulk send
+                {t("dash.bulkSend")}
               </Link>
             )}
           </div>
@@ -1447,17 +1382,16 @@ export default function Dashboard() {
           {templates.length === 0 ? (
             <>
               <p style={{ marginBottom: 12 }}>
-                No templates yet — upload a PDF, place a field for every signer, then use the "Save as template"
-                button that appears in the sidebar.
+                {t("dash.noTemplatesYet")}
               </p>
               <Link to="/prepare" className="btn-secondary" style={{ textDecoration: "none", display: "inline-block" }}>
-                Prepare a document
+                {t("dash.prepareDoc")}
               </Link>
             </>
           ) : (
-            templates.map((t) => (
+            templates.map((tpl) => (
               <div
-                key={t.id}
+                key={tpl.id}
                 style={{
                   padding: "8px 0",
                   borderBottom: "1px solid var(--hairline)",
@@ -1469,23 +1403,27 @@ export default function Dashboard() {
                 }}
               >
                 <span style={{ overflowWrap: "anywhere" }}>
-                  {t.name}{" "}
+                  {tpl.name}{" "}
                   <span style={{ fontSize: 12, color: "var(--mute)" }}>
-                    ({t.signerCount} signer{t.signerCount === 1 ? "" : "s"}, {t.pageCount} page
-                    {t.pageCount === 1 ? "" : "s"})
+                    {t("dash.templateMeta", {
+                      signers: tpl.signerCount,
+                      sPlural: tpl.signerCount === 1 ? "" : "s",
+                      pages: tpl.pageCount,
+                      pPlural: tpl.pageCount === 1 ? "" : "s",
+                    })}
                   </span>
                 </span>
                 <span style={{ display: "flex", gap: 8 }}>
-                  <Link to={`/prepare?template=${t.id}`} className="btn-secondary" style={{ textDecoration: "none", padding: "4px 10px", fontSize: 13 }}>
-                    Use
+                  <Link to={`/prepare?template=${tpl.id}`} className="btn-secondary" style={{ textDecoration: "none", padding: "4px 10px", fontSize: 13 }}>
+                    {t("common.use")}
                   </Link>
                   <button
                     className="btn-secondary"
                     style={{ fontSize: 13, padding: "4px 10px" }}
-                    disabled={deletingTemplateId === t.id}
-                    onClick={() => onDeleteTemplate(t.id)}
+                    disabled={deletingTemplateId === tpl.id}
+                    onClick={() => onDeleteTemplate(tpl.id)}
                   >
-                    {deletingTemplateId === t.id ? "Deleting…" : "Delete"}
+                    {deletingTemplateId === tpl.id ? t("common.deleting") : t("common.delete")}
                   </button>
                 </span>
               </div>
@@ -1496,14 +1434,13 @@ export default function Dashboard() {
 
       {activeTab === "tools" && account.isPaid && toolsSubTab === "webhooks" && (
         <div className="card" style={{ marginTop: 24 }}>
-          <h3 style={{ fontSize: 15 }}>Webhooks</h3>
+          <h3 style={{ fontSize: 15 }}>{t("dash.webhooks")}</h3>
           <p style={{ fontSize: 12, color: "var(--mute)" }}>
-            Get notified at a URL you control when a document is created, a signer signs, or a document
-            completes.
+            {t("dash.webhooksSub")}
           </p>
           {webhookError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{webhookError}</p>}
           {webhooks.length === 0 ? (
-            <p style={{ marginBottom: 12 }}>No webhooks yet.</p>
+            <p style={{ marginBottom: 12 }}>{t("dash.noWebhooks")}</p>
           ) : (
             webhooks.map((w) => (
               <div
@@ -1527,7 +1464,7 @@ export default function Dashboard() {
                   disabled={deletingWebhookId === w.id}
                   onClick={() => onDeleteWebhook(w.id)}
                 >
-                  {deletingWebhookId === w.id ? "Deleting…" : "Delete"}
+                  {deletingWebhookId === w.id ? t("common.deleting") : t("common.delete")}
                 </button>
               </div>
             ))
@@ -1536,7 +1473,7 @@ export default function Dashboard() {
           {newWebhookSecret && (
             <div style={{ marginTop: 12, marginBottom: 12 }}>
               <p style={{ marginBottom: 4 }}>
-                Signing secret — copy it now, it won't be shown again:
+                {t("dash.webhookSecret")}
               </p>
               <input className="form-input" readOnly value={newWebhookSecret} style={{ width: "100%" }} />
             </div>
@@ -1548,7 +1485,7 @@ export default function Dashboard() {
                 className="form-input"
                 style={{ width: "100%", marginBottom: 8 }}
                 placeholder="https://your-server.com/webhook"
-                aria-label="Webhook URL"
+                aria-label={t("dash.webhookUrlAria")}
                 value={newWebhookUrl}
                 onChange={(e) => setNewWebhookUrl(e.target.value)}
               />
@@ -1571,12 +1508,12 @@ export default function Dashboard() {
                 disabled={creatingWebhook || !newWebhookUrl.trim() || newWebhookEvents.length === 0}
                 onClick={onCreateWebhook}
               >
-                {creatingWebhook ? "Adding…" : "Add webhook"}
+                {creatingWebhook ? t("common.adding") : t("dash.addWebhook")}
               </button>
             </div>
           ) : (
             <button className="btn-secondary" style={{ marginTop: 8 }} onClick={() => setShowAddWebhook(true)}>
-              + Add webhook
+              {t("dash.addWebhookPlus")}
             </button>
           )}
         </div>
@@ -1584,13 +1521,13 @@ export default function Dashboard() {
 
       {activeTab === "tools" && account.isPaid && toolsSubTab === "contacts" && (
         <div className="card" style={{ marginTop: 24 }}>
-          <h3 style={{ fontSize: 15 }}>Contacts</h3>
+          <h3 style={{ fontSize: 15 }}>{t("dash.contacts")}</h3>
           <p style={{ fontSize: 12, color: "var(--mute)" }}>
-            Saved names and emails for autocomplete when preparing documents or reassigning signers.
+            {t("dash.contactsSub")}
           </p>
           {contactError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{contactError}</p>}
           {contacts.length === 0 ? (
-            <p style={{ marginBottom: 12 }}>No contacts yet.</p>
+            <p style={{ marginBottom: 12 }}>{t("dash.noContacts")}</p>
           ) : (
             contacts.map((c) => (
               <div
@@ -1618,7 +1555,7 @@ export default function Dashboard() {
                   disabled={deletingContactId === c.id}
                   onClick={() => onDeleteContact(c.id)}
                 >
-                  {deletingContactId === c.id ? "Deleting…" : "Delete"}
+                  {deletingContactId === c.id ? t("common.deleting") : t("common.delete")}
                 </button>
               </div>
             ))
@@ -1629,16 +1566,16 @@ export default function Dashboard() {
               <input
                 className="form-input"
                 style={{ width: "100%", marginBottom: 8 }}
-                placeholder="Name"
-                aria-label="Contact name"
+                placeholder={t("dash.namePlaceholder")}
+                aria-label={t("dash.contactNameAria")}
                 value={newContactName}
                 onChange={(e) => setNewContactName(e.target.value)}
               />
               <input
                 className="form-input"
                 style={{ width: "100%", marginBottom: 8 }}
-                placeholder="Email"
-                aria-label="Contact email"
+                placeholder={t("dash.emailPlaceholder")}
+                aria-label={t("dash.contactEmailAria")}
                 type="email"
                 value={newContactEmail}
                 onChange={(e) => setNewContactEmail(e.target.value)}
@@ -1648,12 +1585,12 @@ export default function Dashboard() {
                 disabled={creatingContact || !newContactName.trim() || !newContactEmail.trim()}
                 onClick={onCreateContact}
               >
-                {creatingContact ? "Adding…" : "Add contact"}
+                {creatingContact ? t("common.adding") : t("dash.addContact")}
               </button>
             </div>
           ) : (
             <button className="btn-secondary" style={{ marginTop: 8 }} onClick={() => setShowAddContact(true)}>
-              + Add contact
+              {t("dash.addContactPlus")}
             </button>
           )}
         </div>
@@ -1661,9 +1598,9 @@ export default function Dashboard() {
 
       {activeTab === "tools" && account.isPaid && toolsSubTab === "connectors" && (
         <div className="card" style={{ marginTop: 24 }}>
-          <h3 style={{ fontSize: 15 }}>Connectors</h3>
+          <h3 style={{ fontSize: 15 }}>{t("dash.connectors")}</h3>
           <p style={{ fontSize: 12, color: "var(--mute)" }}>
-            Connect your cloud storage and every signed document uploads there automatically once it's complete.
+            {t("dash.connectorsSub")}
           </p>
           {connectorError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{connectorError}</p>}
           {(
@@ -1717,8 +1654,9 @@ export default function Dashboard() {
                     {label}
                     {connection && (
                       <span style={{ fontSize: 12, color: "var(--mute)" }}>
-                        {" "}
-                        — connected{connection.connectedEmail ? ` as ${connection.connectedEmail}` : ""}
+                        {connection.connectedEmail
+                          ? t("dash.connectedAs", { email: connection.connectedEmail })
+                          : t("dash.connected")}
                       </span>
                     )}
                   </span>
@@ -1730,7 +1668,7 @@ export default function Dashboard() {
                     disabled={disconnectingProvider === provider}
                     onClick={() => onDisconnectProvider(provider)}
                   >
-                    {disconnectingProvider === provider ? "Disconnecting…" : "Disconnect"}
+                    {disconnectingProvider === provider ? t("common.disconnecting") : t("common.disconnect")}
                   </button>
                 ) : (
                   <button
@@ -1739,7 +1677,7 @@ export default function Dashboard() {
                     disabled={connectingProvider === provider}
                     onClick={() => onConnectProvider(provider)}
                   >
-                    {connectingProvider === provider ? "Connecting…" : "Connect"}
+                    {connectingProvider === provider ? t("common.connecting") : t("common.connect")}
                   </button>
                 )}
               </div>
@@ -1750,27 +1688,27 @@ export default function Dashboard() {
 
       {activeTab === "tools" && account.isPaid && toolsSubTab === "branding" && (
         <div className="card" style={{ marginTop: 24 }}>
-          <h3 style={{ fontSize: 15 }}>Branding</h3>
+          <h3 style={{ fontSize: 15 }}>{t("dash.branding")}</h3>
           <p style={{ fontSize: 12, color: "var(--mute)" }}>
-            Replace the Docracy logo with your own on the signing page and invite emails your signers see.
+            {t("dash.brandingSub")}
           </p>
           {brandingError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{brandingError}</p>}
           {brandLogoPath ? (
             <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
               <img
                 src={apiUrl(brandLogoPath)}
-                alt="Your logo"
+                alt={t("dash.yourLogo")}
                 style={{ maxHeight: 48, maxWidth: 220, display: "block" }}
               />
               <button className="btn-secondary" style={{ fontSize: 13, padding: "4px 10px" }} disabled={deletingLogo} onClick={onDeleteLogo}>
-                {deletingLogo ? "Removing…" : "Remove logo"}
+                {deletingLogo ? t("common.removing") : t("dash.removeLogo")}
               </button>
             </div>
           ) : (
             <div>
               <input
                 type="file"
-                aria-label="Upload logo"
+                aria-label={t("dash.uploadLogoAria")}
                 accept="image/png,image/jpeg,image/webp"
                 disabled={uploadingLogo}
                 onChange={(e) => {
@@ -1780,24 +1718,24 @@ export default function Dashboard() {
                 }}
               />
               <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 6, marginBottom: 0 }}>
-                PNG, JPEG, or WebP, up to 2MB. {uploadingLogo && "Uploading…"}
+                {t("dash.logoHint")} {uploadingLogo && t("common.uploading")}
               </p>
             </div>
           )}
 
           <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid var(--hairline)" }}>
             <p style={{ fontSize: 13, marginBottom: 4 }}>
-              <strong>Workspace name</strong>
+              <strong>{t("dash.workspaceName")}</strong>
             </p>
             <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 0 }}>
-              A short label shown next to your logo on the signing page and invite emails.
+              {t("dash.workspaceNameSub")}
             </p>
             {slugError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{slugError}</p>}
             {workspaceSlug ? (
               <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
                 <span style={{ fontSize: 14 }}>{workspaceSlug}</span>
                 <button className="btn-secondary" style={{ fontSize: 13, padding: "4px 10px" }} disabled={savingSlug} onClick={onClearSlug}>
-                  {savingSlug ? "Removing…" : "Remove"}
+                  {savingSlug ? t("common.removing") : t("common.remove")}
                 </button>
               </div>
             ) : (
@@ -1806,18 +1744,18 @@ export default function Dashboard() {
                   className="form-input"
                   style={{ maxWidth: 220 }}
                   placeholder="e.g. AcmeInc"
-                  aria-label="Workspace name"
+                  aria-label={t("dash.workspaceNameAria")}
                   value={slugInput}
                   onChange={(e) => setSlugInput(e.target.value)}
                   disabled={savingSlug}
                 />
                 <button className="btn-secondary" style={{ fontSize: 13, padding: "4px 10px" }} disabled={savingSlug || !slugInput.trim()} onClick={onSaveSlug}>
-                  {savingSlug ? "Saving…" : "Save"}
+                  {savingSlug ? t("common.saving") : t("common.save")}
                 </button>
               </div>
             )}
             <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 6, marginBottom: 0 }}>
-              Letters and numbers only, 3-30 characters.
+              {t("dash.workspaceNameRules")}
             </p>
           </div>
         </div>
@@ -1827,8 +1765,7 @@ export default function Dashboard() {
         <div className="card" style={{ marginTop: 24 }}>
           <h3 style={{ fontSize: 15 }}>{t("dash.team")}</h3>
           <p style={{ fontSize: 12, color: "var(--mute)" }}>
-            Invite teammates to share this workspace — same documents, templates, and webhooks, one
-            subscription.
+            {t("dash.teamSub")}
           </p>
           {teamError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{teamError}</p>}
           {teamMembers.map((m) => (
@@ -1854,7 +1791,7 @@ export default function Dashboard() {
                   disabled={removingMemberId === m.accountId}
                   onClick={() => onRemoveTeamMember(m.accountId)}
                 >
-                  {removingMemberId === m.accountId ? "Removing…" : "Remove"}
+                  {removingMemberId === m.accountId ? t("common.removing") : t("common.remove")}
                 </button>
               )}
             </div>
@@ -1875,7 +1812,7 @@ export default function Dashboard() {
                 }}
               >
                 <span style={{ overflowWrap: "anywhere" }}>
-                  {invite.email} <span style={{ fontSize: 12, color: "var(--mute)" }}>(invited, not yet joined)</span>
+                  {invite.email} <span style={{ fontSize: 12, color: "var(--mute)" }}>{t("dash.invitedPending")}</span>
                 </span>
                 <button
                   className="btn-secondary"
@@ -1883,7 +1820,7 @@ export default function Dashboard() {
                   disabled={cancelingInviteId === invite.id}
                   onClick={() => onCancelInvite(invite.id)}
                 >
-                  {cancelingInviteId === invite.id ? "Cancelling…" : "Cancel invite"}
+                  {cancelingInviteId === invite.id ? t("status.cancelling") : t("dash.cancelInvite")}
                 </button>
               </div>
             ))}
@@ -1895,7 +1832,7 @@ export default function Dashboard() {
                   className="form-input"
                   style={{ width: "100%", marginBottom: 8 }}
                   placeholder="teammate@example.com"
-                  aria-label="Teammate email"
+                  aria-label={t("dash.teammateEmailAria")}
                   type="email"
                   value={newInviteEmail}
                   onChange={(e) => setNewInviteEmail(e.target.value)}
@@ -1905,26 +1842,25 @@ export default function Dashboard() {
                   disabled={invitingTeammate || !newInviteEmail.trim()}
                   onClick={onInviteTeammate}
                 >
-                  {invitingTeammate ? "Inviting…" : "Send invite"}
+                  {invitingTeammate ? t("common.inviting") : t("dash.sendInvite")}
                 </button>
               </div>
             ) : (
               <button className="btn-secondary" style={{ marginTop: 8 }} onClick={() => setShowInviteInput(true)}>
-                + Invite teammate
+                {t("dash.inviteTeammate")}
               </button>
             )
           ) : (
             <p style={{ fontSize: 12, color: "var(--mute)", marginBottom: 0, marginTop: 8 }}>
-              Only the workspace owner can invite or remove teammates.
+              {t("dash.teamOwnerOnly")}
             </p>
           )}
 
           {recurringQuickActions.length > 0 && (
             <div style={{ marginTop: 20, paddingTop: 16, borderTop: "1px solid var(--hairline)" }}>
-              <h4 style={{ fontSize: 13, marginBottom: 4 }}>Shared templates</h4>
+              <h4 style={{ fontSize: 13, marginBottom: 4 }}>{t("dash.sharedTemplates")}</h4>
               <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 0 }}>
-                Every teammate on this workspace already sees the same templates — these are the ones you send
-                often enough that they're worth everyone knowing about.
+                {t("dash.sharedTemplatesSub")}
               </p>
               {recurringQuickActions.map((qa) => (
                 <div key={qa.templateId} style={{ fontSize: 13, padding: "4px 0" }}>
@@ -1933,8 +1869,7 @@ export default function Dashboard() {
               ))}
               {!account.isEnterprise && topRecurringUsage?.teamUpsell && (
                 <p style={{ fontSize: 13, marginTop: 8, marginBottom: 0 }}>
-                  This much repeat volume is usually a sign it's time for more hands on deck — Enterprise adds
-                  invoice billing, premium support, and volume discounts on top of the team sharing you already have.
+                  {t("dash.teamEnterpriseUpsell")}
                 </p>
               )}
             </div>
@@ -1955,12 +1890,12 @@ export default function Dashboard() {
           }}
         >
           <div className="card" style={{ background: "var(--canvas)", boxShadow: "var(--shadow-lg)", maxWidth: 420, width: "92vw" }}>
-            <h3 style={{ fontSize: 15, marginTop: 0 }}>Reassign signer</h3>
+            <h3 style={{ fontSize: 15, marginTop: 0 }}>{t("dash.reassignTitle")}</h3>
             <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 0 }}>{reassignDoc.title}</p>
             {reassignLoading ? (
-              <p>Loading signers…</p>
+              <p>{t("dash.loadingSigners")}</p>
             ) : reassignSigners.length === 0 ? (
-              <p style={{ marginBottom: 12 }}>No pending signers to reassign.</p>
+              <p style={{ marginBottom: 12 }}>{t("dash.noPendingReassign")}</p>
             ) : (
               <>
                 <select
@@ -1975,7 +1910,7 @@ export default function Dashboard() {
                   }}
                 >
                   <option value="" disabled>
-                    Select signer
+                    {t("dash.selectSigner")}
                   </option>
                   {reassignSigners.map((s) => (
                     <option key={s.order} value={s.order}>
@@ -1986,16 +1921,16 @@ export default function Dashboard() {
                 <input
                   className="form-input"
                   style={{ width: "100%", marginBottom: 8 }}
-                  placeholder="New name"
-                  aria-label="New signer name"
+                  placeholder={t("dash.newName")}
+                  aria-label={t("dash.newSignerNameAria")}
                   value={reassignName}
                   onChange={(e) => setReassignName(e.target.value)}
                 />
                 <input
                   className="form-input"
                   style={{ width: "100%", marginBottom: 8 }}
-                  placeholder="New email"
-                  aria-label="New signer email"
+                  placeholder={t("dash.newEmail")}
+                  aria-label={t("dash.newSignerEmailAria")}
                   type="email"
                   list={contacts.length > 0 ? "dashboard-contacts" : undefined}
                   value={reassignEmail}
@@ -2025,10 +1960,10 @@ export default function Dashboard() {
                 }
                 onClick={onReassign}
               >
-                {reassignSaving ? "Reassigning…" : "Reassign"}
+                {reassignSaving ? t("dash.reassigning") : t("dash.reassign")}
               </button>
               <button className="btn-secondary" disabled={reassignSaving} onClick={() => setReassignDoc(null)}>
-                Cancel
+                {t("common.cancel")}
               </button>
             </div>
           </div>
@@ -2048,13 +1983,13 @@ export default function Dashboard() {
           }}
         >
           <div className="card" style={{ background: "var(--canvas)", boxShadow: "var(--shadow-lg)", maxWidth: 480, width: "92vw" }}>
-            <h3 style={{ fontSize: 15, marginTop: 0 }}>Create embed session</h3>
+            <h3 style={{ fontSize: 15, marginTop: 0 }}>{t("dash.embedTitle")}</h3>
             <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 0 }}>{embedDoc.title}</p>
             {embedLoading ? (
-              <p>Loading signers…</p>
+              <p>{t("dash.loadingSigners")}</p>
             ) : embedResult ? (
               <>
-                <p style={{ fontSize: 13 }}>Expires {new Date(embedResult.expiresAt).toLocaleString()}</p>
+                <p style={{ fontSize: 13 }}>{t("dash.embedExpires", { when: new Date(embedResult.expiresAt).toLocaleString() })}</p>
                 <input
                   className="form-input"
                   style={{ width: "100%", marginBottom: 8, fontSize: 12 }}
@@ -2067,11 +2002,11 @@ export default function Dashboard() {
                   className="btn-primary"
                   onClick={() => void navigator.clipboard.writeText(embedResult.embedUrl)}
                 >
-                  Copy embed URL
+                  {t("dash.copyEmbedUrl")}
                 </button>
               </>
             ) : embedSigners.length === 0 ? (
-              <p style={{ marginBottom: 12 }}>No pending signers — embedding is only available while someone still needs to sign.</p>
+              <p style={{ marginBottom: 12 }}>{t("dash.noPendingEmbed")}</p>
             ) : (
               <>
                 <select
@@ -2081,7 +2016,7 @@ export default function Dashboard() {
                   onChange={(e) => setEmbedOrder(Number(e.target.value))}
                 >
                   <option value="" disabled>
-                    Select signer
+                    {t("dash.selectSigner")}
                   </option>
                   {embedSigners.map((s) => (
                     <option key={s.order} value={s.order}>
@@ -2092,16 +2027,16 @@ export default function Dashboard() {
                 <textarea
                   className="form-input"
                   style={{ width: "100%", marginBottom: 8, minHeight: 72, fontSize: 12 }}
-                  placeholder="Allowed origins — one per line (e.g. https://app.example.com)"
-                  aria-label="Allowed origins"
+                  placeholder={t("dash.allowedOriginsPh")}
+                  aria-label={t("dash.allowedOriginsAria")}
                   value={embedOrigins}
                   onChange={(e) => setEmbedOrigins(e.target.value)}
                 />
                 <input
                   className="form-input"
                   style={{ width: "100%", marginBottom: 8 }}
-                  placeholder="Return URL after signing (optional)"
-                  aria-label="Return URL"
+                  placeholder={t("dash.returnUrlPh")}
+                  aria-label={t("dash.returnUrlAria")}
                   value={embedReturnUrl}
                   onChange={(e) => setEmbedReturnUrl(e.target.value)}
                 />
@@ -2115,7 +2050,7 @@ export default function Dashboard() {
                   disabled={embedLoading || embedCreating || embedOrder == null || embedSigners.length === 0}
                   onClick={() => void onCreateEmbed()}
                 >
-                  {embedCreating ? "Creating…" : "Create embed URL"}
+                  {embedCreating ? t("common.creating") : t("dash.createEmbedUrl")}
                 </button>
               )}
               <button className="btn-secondary" disabled={embedCreating} onClick={() => setEmbedDoc(null)}>
@@ -2144,7 +2079,7 @@ export default function Dashboard() {
             {attachmentsLoading ? (
               <p>{t("common.loading")}</p>
             ) : attachmentGroups.length === 0 ? (
-              <p style={{ marginBottom: 12 }}>No signer uploads yet.</p>
+              <p style={{ marginBottom: 12 }}>{t("dash.attachmentsEmpty")}</p>
             ) : (
               <SignerAttachmentsList
                 groups={attachmentGroups}

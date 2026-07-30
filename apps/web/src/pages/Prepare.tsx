@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useT } from "../lib/i18n";
-import { useSeoMeta } from "../lib/useSeoMeta";
 import PdfViewer from "../components/PdfViewer";
 import {
   analyzeDocumentRisks,
@@ -74,7 +73,6 @@ function SidebarHeading({ label, count }: { label: string; count?: number }) {
 
 export default function Prepare() {
   const t = useT();
-  useSeoMeta("prepare");
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
@@ -223,7 +221,7 @@ export default function Prepare() {
         setFile(new File([bytes as unknown as BlobPart], `${tpl.name || "template"}.pdf`, { type: "application/pdf" }));
         setSigners(Array.from({ length: tpl.signerCount }, (_, i) => ({ order: i + 1, name: "", email: "" })));
       })
-      .catch((err) => setTemplateLoadError(err instanceof Error ? err.message : "Couldn't load that template"))
+      .catch((err) => setTemplateLoadError(err instanceof Error ? err.message : t("prepare.loadTemplateError")))
       .finally(() => setLoadingTemplate(false));
   }, [templateId]);
 
@@ -233,14 +231,14 @@ export default function Prepare() {
     if (!freeTemplateSlug) return;
     const template = getFreeTemplate(freeTemplateSlug);
     if (!template) {
-      setTemplateLoadError("That free template couldn't be found.");
+      setTemplateLoadError(t("prepare.freeTemplateMissing"));
       return;
     }
     setLoadingTemplate(true);
     setTemplateLoadError(null);
     fetch(template.pdfPath)
       .then((res) => {
-        if (!res.ok) throw new Error("Couldn't load that template's PDF");
+        if (!res.ok) throw new Error(t("prepare.loadTemplatePdfError"));
         return res.arrayBuffer();
       })
       .then((buf) => {
@@ -255,14 +253,14 @@ export default function Prepare() {
         track("template_used", { templateId: freeTemplateSlug, templateCategory: template.recurringCategory });
         track("template_started", { templateId: freeTemplateSlug, templateCategory: template.recurringCategory });
       })
-      .catch((err) => setTemplateLoadError(err instanceof Error ? err.message : "Couldn't load that template"))
+      .catch((err) => setTemplateLoadError(err instanceof Error ? err.message : t("prepare.loadTemplateError")))
       .finally(() => setLoadingTemplate(false));
   }, [freeTemplateSlug]);
 
   const acceptFile = async (f: File) => {
     track("document_upload_started");
     if (f.size > MAX_PDF_BYTES) {
-      setError(`PDF must be under ${MAX_PDF_BYTES / (1024 * 1024)}MB — this one is ${(f.size / (1024 * 1024)).toFixed(1)}MB.`);
+      setError(t("prepare.pdfTooBig", { max: MAX_PDF_BYTES / (1024 * 1024), size: (f.size / (1024 * 1024)).toFixed(1) }));
       track("upload_failed", { errorCode: "pdf_too_large" });
       return;
     }
@@ -299,7 +297,7 @@ export default function Prepare() {
     const f = e.dataTransfer.files?.[0];
     if (!f) return;
     if (f.type !== "application/pdf") {
-      setError("Only PDF files are supported.");
+      setError(t("prepare.pdfOnly"));
       return;
     }
     await acceptFile(f);
@@ -328,7 +326,7 @@ export default function Prepare() {
     if (!account?.isPaid && signers.length >= FREE_TIER_MAX_SIGNERS) {
       track("upgrade_clicked", { source: "prepare_signer_cap" });
       setError(
-        `Free plan supports up to ${FREE_TIER_MAX_SIGNERS} signers. Upgrade for unlimited signers, templates, and history.`
+        t("prepare.freeSignerLimit", { max: FREE_TIER_MAX_SIGNERS })
       );
       return;
     }
@@ -352,7 +350,7 @@ export default function Prepare() {
     if (!account?.isPaid && ccRecipients.length >= FREE_TIER_MAX_CCS) {
       track("upgrade_clicked", { source: "prepare_cc_cap" });
       setError(
-        `Free plan supports up to ${FREE_TIER_MAX_CCS} CC viewers. Upgrade for unlimited viewers.`
+        t("prepare.freeCcLimit", { max: FREE_TIER_MAX_CCS })
       );
       return;
     }
@@ -418,10 +416,10 @@ export default function Prepare() {
       applyPdfBytes(newBytes);
       if (opts.resetFields && fields.length > 0) {
         setFields([]);
-        setPdfEditNotice("Fields were cleared because the page layout changed — please re-place them.");
+        setPdfEditNotice(t("prepare.fieldsCleared"));
       }
     } catch (err) {
-      setPdfEditError(err instanceof Error ? err.message : "Couldn't apply that change");
+      setPdfEditError(err instanceof Error ? err.message : t("prepare.applyChangeError"));
     } finally {
       setPdfEditBusy(false);
     }
@@ -494,7 +492,7 @@ export default function Prepare() {
     try {
       const candidates = await detectFieldCandidates(pdfBytes, totalPages);
       if (candidates.length === 0) {
-        setDetectFieldsNotice("Couldn't find any signature, date, or initial blanks to auto-place — add fields manually below.");
+        setDetectFieldsNotice(t("prepare.detectNone"));
         return;
       }
       const detected = assignFieldsToSigners(candidates, signers.length, fieldIdCounter);
@@ -504,10 +502,10 @@ export default function Prepare() {
         return [...prev, ...detected];
       });
       setDetectFieldsNotice(
-        `Placed ${detected.length} field${detected.length === 1 ? "" : "s"} automatically — review them and adjust or remove any that aren't right.`
+        detected.length === 1 ? t("prepare.detectPlaced", { count: detected.length }) : t("prepare.detectPlacedPlural", { count: detected.length })
       );
     } catch (err) {
-      setDetectFieldsError(err instanceof Error ? err.message : "Couldn't scan this document");
+      setDetectFieldsError(err instanceof Error ? err.message : t("prepare.scanError"));
     } finally {
       setDetectingFields(false);
     }
@@ -522,7 +520,7 @@ export default function Prepare() {
       const { fields: detected, whiteouts } = await detectAnchorFields(pdfBytes, totalPages, fieldIdCounter);
       if (detected.length === 0) {
         setDetectFieldsNotice(
-          "No anchor tags found — embed tags like {{sig1}}, {{date_2}}, or {{dropdown_1:Yes|No}} in your PDF first."
+          t("prepare.noAnchors")
         );
         return;
       }
@@ -537,10 +535,10 @@ export default function Prepare() {
       setFields(detected);
       fieldIdCounter += detected.length;
       setDetectFieldsNotice(
-        `Placed ${detected.length} field${detected.length === 1 ? "" : "s"} from anchor tags — review positions and signer assignments.`
+        detected.length === 1 ? t("prepare.anchorsPlaced", { count: detected.length }) : t("prepare.anchorsPlacedPlural", { count: detected.length })
       );
     } catch (err) {
-      setDetectFieldsError(err instanceof Error ? err.message : "Couldn't scan for anchor tags");
+      setDetectFieldsError(err instanceof Error ? err.message : t("prepare.anchorScanError"));
     } finally {
       setDetectingAnchors(false);
     }
@@ -556,7 +554,7 @@ export default function Prepare() {
       const { explanation: result } = await explainDocument(text);
       setExplanation(result);
     } catch (err) {
-      setExplainError(err instanceof Error ? err.message : "Couldn't explain this document");
+      setExplainError(err instanceof Error ? err.message : t("prepare.explainError"));
     } finally {
       setExplaining(false);
     }
@@ -572,7 +570,7 @@ export default function Prepare() {
       const { risks: result } = await analyzeDocumentRisks(text);
       setRisks(result);
     } catch (err) {
-      setRisksError(err instanceof Error ? err.message : "Couldn't analyze this document");
+      setRisksError(err instanceof Error ? err.message : t("prepare.risksError"));
     } finally {
       setAnalyzingRisks(false);
     }
@@ -592,7 +590,7 @@ export default function Prepare() {
       setShowGenerate(false);
       setGeneratePrompt("");
     } catch (err) {
-      setGenerateError(err instanceof Error ? err.message : "Couldn't generate a contract");
+      setGenerateError(err instanceof Error ? err.message : t("prepare.generateError"));
     } finally {
       setGenerating(false);
     }
@@ -803,7 +801,7 @@ export default function Prepare() {
   };
 
   const onStartOver = () => {
-    if (!window.confirm("Discard this document and start over? Nothing has been sent yet.")) return;
+    if (!window.confirm(t("prepare.discardConfirm"))) return;
     setFile(null);
     setPdfBytes(null);
     setFields([]);
@@ -874,16 +872,18 @@ export default function Prepare() {
                   <p style={{ marginTop: 0, marginBottom: 6, fontSize: 13, color: "var(--mute)" }}>
                     {t("prepare.startFromTemplate")}
                   </p>
-                  {availableTemplates.map((t) => {
-                    const usage = templateUsage.find((u) => u.templateId === t.id);
+                  {availableTemplates.map((tpl) => {
+                    const usage = templateUsage.find((u) => u.templateId === tpl.id);
                     return (
-                      <div key={t.id} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                        <Link to={`/prepare?template=${t.id}`}>
-                          {t.name} ({t.signerCount} signer{t.signerCount === 1 ? "" : "s"})
+                      <div key={tpl.id} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                        <Link to={`/prepare?template=${tpl.id}`}>
+                          {tpl.name} ({tpl.signerCount === 1
+                            ? t("prepare.signersCount", { count: tpl.signerCount })
+                            : t("prepare.signersCountPlural", { count: tpl.signerCount })})
                         </Link>
                         {usage?.isRecurring && (
                           <span
-                            title={`Sent ${usage.completedCount} times`}
+                            title={t("prepare.sentTimesTitle", { count: usage.completedCount })}
                             style={{
                               fontSize: 11,
                               fontWeight: 600,
@@ -893,7 +893,7 @@ export default function Prepare() {
                               padding: "1px 8px",
                             }}
                           >
-                            🔁 Recurring
+                            {t("prepare.recurringBadge")}
                           </span>
                         )}
                       </div>
@@ -1027,7 +1027,7 @@ export default function Prepare() {
                               {t(FIELD_TYPE_LABEL_KEYS[f.type ?? "signature"])} · {signerLabel(f.signerOrder)}
                             </span>
                             <button
-                              aria-label="Remove field"
+                              aria-label={t("prepare.removeFieldAria")}
                               onMouseDown={(e) => e.stopPropagation()}
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -1056,7 +1056,7 @@ export default function Prepare() {
                     <div style={{ position: "absolute", top: 6, left: 6, display: "flex", gap: 4, zIndex: 5 }}>
                       <button
                         type="button"
-                        aria-label="Move page up"
+                        aria-label={t("prepare.movePageUpAria")}
                         className="btn-secondary"
                         style={{ padding: "2px 8px", fontSize: 12 }}
                         disabled={page.index === 0 || pdfEditBusy}
@@ -1066,7 +1066,7 @@ export default function Prepare() {
                       </button>
                       <button
                         type="button"
-                        aria-label="Move page down"
+                        aria-label={t("prepare.movePageDownAria")}
                         className="btn-secondary"
                         style={{ padding: "2px 8px", fontSize: 12 }}
                         disabled={page.index === totalPages - 1 || pdfEditBusy}
@@ -1141,7 +1141,7 @@ export default function Prepare() {
                             disabled={pdfEditBusy}
                             onClick={applyRedaction}
                           >
-                            {pdfEditBusy ? "Applying…" : "Redact"}
+                            {pdfEditBusy ? t("prepare.applying") : t("prepare.redact")}
                           </button>
                           <button
                             type="button"
@@ -1174,7 +1174,7 @@ export default function Prepare() {
                         autoFocus
                         className="form-input"
                         style={{ width: 180, marginBottom: 6 }}
-                        placeholder="Text to insert"
+                        placeholder={t("prepare.textToInsert")}
                         value={textAnnotationValue}
                         onChange={(e) => setTextAnnotationValue(e.target.value)}
                         onKeyDown={(e) => {
@@ -1193,7 +1193,7 @@ export default function Prepare() {
                           disabled={pdfEditBusy || !textAnnotationValue.trim()}
                           onClick={submitTextAnnotation}
                         >
-                          {pdfEditBusy ? "Adding…" : "Add"}
+                          {pdfEditBusy ? t("common.adding") : t("common.save") /* keep short */}
                         </button>
                         <button
                           type="button"
@@ -1252,7 +1252,7 @@ export default function Prepare() {
                       <input
                         autoFocus
                         className="form-input"
-                        aria-label="Replacement text"
+                        aria-label={t("prepare.replacementTextAria")}
                         style={{ width: "100%", marginBottom: 6 }}
                         value={editingSpanValue}
                         onChange={(e) => setEditingSpanValue(e.target.value)}
@@ -1356,7 +1356,7 @@ export default function Prepare() {
                   onClick={addSigner}
                   title={
                     !account?.isPaid && signers.length >= FREE_TIER_MAX_SIGNERS
-                      ? `Free plan: up to ${FREE_TIER_MAX_SIGNERS} signers`
+                      ? t("prepare.freePlanSigners", { max: FREE_TIER_MAX_SIGNERS })
                       : undefined
                   }
                 >
@@ -1368,7 +1368,7 @@ export default function Prepare() {
                   onClick={addCc}
                   title={
                     !account?.isPaid && ccRecipients.length >= FREE_TIER_MAX_CCS
-                      ? `Free plan: up to ${FREE_TIER_MAX_CCS} viewers`
+                      ? t("prepare.freePlanViewers", { max: FREE_TIER_MAX_CCS })
                       : undefined
                   }
                 >
@@ -1389,8 +1389,8 @@ export default function Prepare() {
                   <input
                     className="form-input"
                     style={{ width: "100%" }}
-                    placeholder="Your email (optional) — to get the status link"
-                    aria-label="Your email"
+                    placeholder={t("prepare.yourEmailPh")}
+                    aria-label={t("prepare.yourEmailAria")}
                     type="email"
                     value={preparerEmail}
                     onChange={(e) => {
@@ -1430,13 +1430,13 @@ export default function Prepare() {
               {signers.map((s, i) => (
                 <div key={s.order} style={{ marginBottom: 10, paddingBottom: 10, borderBottom: "1px solid var(--hairline)" }}>
                   <div style={{ fontSize: 12, color: "var(--mute)", marginBottom: 4 }}>
-                    {s.order}. {preparerSigns && i === 0 ? "You" : `Signer ${s.order}`}
+                    {s.order}. {preparerSigns && i === 0 ? t("prepare.you") : t("prepare.signerN", { n: s.order })}
                   </div>
                   <input
                     className="form-input"
                     style={{ width: "100%", marginBottom: 6 }}
                     placeholder="Name"
-                    aria-label={`Signer ${s.order} name`}
+                    aria-label={t("prepare.signerNameAria", { n: s.order })}
                     value={s.name}
                     onChange={(e) => updateSigner(s.order, { name: e.target.value })}
                   />
@@ -1444,7 +1444,7 @@ export default function Prepare() {
                     className="form-input"
                     style={{ width: "100%", marginBottom: 6 }}
                     placeholder="Email"
-                    aria-label={`Signer ${s.order} email`}
+                    aria-label={t("prepare.signerEmailAria", { n: s.order })}
                     type="email"
                     list={contacts.length > 0 ? "prepare-contacts" : undefined}
                     value={s.email}
@@ -1458,8 +1458,8 @@ export default function Prepare() {
                     <input
                       className="form-input"
                       style={{ width: "100%" }}
-                      placeholder="PIN (optional) — 4-8 digits, extra protection for this link"
-                      aria-label={`Signer ${s.order} PIN`}
+                      placeholder={t("prepare.pinPh")}
+                      aria-label={t("prepare.signerPinAria", { n: s.order })}
                       inputMode="numeric"
                       maxLength={8}
                       value={s.pin ?? ""}
@@ -1471,8 +1471,8 @@ export default function Prepare() {
                       <input
                         className="form-input"
                         style={{ width: "100%", marginTop: 6, marginBottom: 6 }}
-                        placeholder="Mobile (US) — for SMS link, e.g. 4155551234"
-                        aria-label={`Signer ${s.order} mobile`}
+                        placeholder={t("prepare.mobilePh")}
+                        aria-label={t("prepare.signerMobileAria", { n: s.order })}
                         type="tel"
                         value={s.phone ?? ""}
                         onChange={(e) => updateSigner(s.order, { phone: e.target.value })}
@@ -1480,7 +1480,7 @@ export default function Prepare() {
                       <select
                         className="form-input"
                         style={{ width: "100%" }}
-                        aria-label={`Signer ${s.order} carrier`}
+                        aria-label={t("prepare.signerCarrierAria", { n: s.order })}
                         value={s.smsCarrier ?? ""}
                         onChange={(e) =>
                           updateSigner(s.order, {
@@ -1514,8 +1514,8 @@ export default function Prepare() {
                   <input
                     className="form-input"
                     style={{ width: "100%", marginBottom: 6 }}
-                    placeholder="Name (optional)"
-                    aria-label={`Viewer ${i + 1} name`}
+                    placeholder={t("prepare.nameOptionalPh")}
+                    aria-label={t("prepare.viewerNameAria", { n: i + 1 })}
                     value={cc.name ?? ""}
                     onChange={(e) => updateCc(i, { name: e.target.value })}
                   />
@@ -1523,7 +1523,7 @@ export default function Prepare() {
                     className="form-input"
                     style={{ width: "100%", marginBottom: 6 }}
                     placeholder="Email"
-                    aria-label={`Viewer ${i + 1} email`}
+                    aria-label={t("prepare.viewerEmailAria", { n: i + 1 })}
                     type="email"
                     list={contacts.length > 0 ? "prepare-contacts" : undefined}
                     value={cc.email}
@@ -1584,12 +1584,12 @@ export default function Prepare() {
               )}
               {!account?.isPaid && ccRecipients.length >= FREE_TIER_MAX_CCS && (
                 <p style={{ fontSize: 13, marginTop: 8 }}>
-                  Free plan supports up to {FREE_TIER_MAX_CCS} CC viewers.{" "}
+                  {t("prepare.ccCapHint", { max: FREE_TIER_MAX_CCS })}{" "}
                   <Link
                     to={account ? "/pricing" : "/login?ref=prepare-cc-cap"}
                     onClick={() => track("upgrade_clicked", { source: "prepare_cc_cap_card" })}
                   >
-                    Upgrade for unlimited
+                    {t("prepare.upgradeUnlimited")}
                   </Link>
                   .
                 </p>
@@ -1598,14 +1598,12 @@ export default function Prepare() {
                 <label style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 13, marginBottom: 8 }}>
                   <input type="checkbox" checked={smsInvites} onChange={(e) => setSmsInvites(e.target.checked)} />
                   <span>
-                    Also text signing links <span style={{ color: "var(--mute)" }}>(US numbers only)</span>
+                    {t("prepare.alsoSms")} <span style={{ color: "var(--mute)" }}>{t("prepare.usOnly")}</span>
                   </span>
                 </label>
                 {smsInvites && (
                   <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 0, marginBottom: 0 }}>
-                    US mobile numbers and carriers only — not available outside the United States. Signers
-                    elsewhere still get the link by email. Delivery isn&apos;t guaranteed; some carriers block
-                    automated gateway mail.
+                    {t("prepare.smsHint")}
                   </p>
                 )}
               </div>
@@ -1617,7 +1615,7 @@ export default function Prepare() {
                       checked={signerAttachmentsEnabled}
                       onChange={(e) => setSignerAttachmentsEnabled(e.target.checked)}
                     />
-                    Require signers to upload attachment(s) before signing
+                    {t("prepare.requireAttachments")}
                   </label>
                 </div>
               )}
@@ -1658,14 +1656,13 @@ export default function Prepare() {
                     <option value="editText">Edit existing text — click to fix or remove</option>
                   </select>
                   <p style={{ fontSize: 11, marginTop: 0, marginBottom: 8 }}>
-                    {editTool === "move" && "Use the ↑ / ↓ / delete controls on each page."}
-                    {editTool === "redact" && "Drag a box over the document to black it out permanently."}
-                    {editTool === "text" && "Click anywhere on the document to insert a short line of text."}
+                    {editTool === "move" && t("prepare.editMoveHint")}
+                    {editTool === "redact" && t("prepare.editRedactHint")}
+                    {editTool === "text" && t("prepare.editTextHint")}
                     {editTool === "editText" &&
                       (loadingTextSpans
-                        ? "Scanning the document for text…"
-                        : "Click any existing line of text to edit or remove it. This covers the original with white and " +
-                          "draws your change in its place — the old text isn't securely destroyed the way Redact is.")}
+                        ? t("prepare.editScanning")
+                        : t("prepare.editTextSelectHint"))}
                   </p>
                   {pdfEditError && <p style={{ color: "var(--danger)", fontSize: 12 }}>{pdfEditError}</p>}
                   {pdfEditNotice && <p style={{ color: "var(--body)", fontSize: 12 }}>{pdfEditNotice}</p>}
@@ -1695,7 +1692,7 @@ export default function Prepare() {
                 <button type="button" className="prepare-highlight-card" style={{ marginBottom: 8 }} disabled={detectingFields} onClick={onDetectFields}>
                   <span className="prepare-highlight-icon">✨</span>
                   <span>
-                    <span className="prepare-highlight-title">{detectingFields ? "Scanning…" : "Smart auto-detect"}</span>
+                    <span className="prepare-highlight-title">{detectingFields ? t("prepare.scanning") : t("prepare.smartDetect")}</span>
                     <span className="prepare-highlight-sub">Automatically find & place signature fields</span>
                   </span>
                 </button>
@@ -1711,7 +1708,7 @@ export default function Prepare() {
                 >
                   <span className="prepare-highlight-icon">🏷</span>
                   <span>
-                    <span className="prepare-highlight-title">{detectingAnchors ? "Scanning…" : "Detect anchor tags"}</span>
+                    <span className="prepare-highlight-title">{detectingAnchors ? t("prepare.scanning") : t("prepare.detectAnchors")}</span>
                     <span className="prepare-highlight-sub">
                       Find {"{{sig1}}"}, {"{{date_2}}"}, {"{{dropdown_1:A|B}}"} tags in the PDF
                     </span>
@@ -1721,7 +1718,7 @@ export default function Prepare() {
                 <button type="button" className="prepare-highlight-card" style={{ marginBottom: 8 }} disabled={explaining} onClick={onExplain}>
                   <span className="prepare-highlight-icon">💬</span>
                   <span>
-                    <span className="prepare-highlight-title">{explaining ? "Reading…" : "Explain in plain English"}</span>
+                    <span className="prepare-highlight-title">{explaining ? t("prepare.reading") : t("prepare.explainPlain")}</span>
                     <span className="prepare-highlight-sub">Turn legal text into a plain-language summary</span>
                   </span>
                 </button>
@@ -1744,7 +1741,7 @@ export default function Prepare() {
                 <button type="button" className="prepare-highlight-card" disabled={analyzingRisks} onClick={onAnalyzeRisks}>
                   <span className="prepare-highlight-icon">⚠️</span>
                   <span>
-                    <span className="prepare-highlight-title">{analyzingRisks ? "Checking…" : "Check for risky clauses"}</span>
+                    <span className="prepare-highlight-title">{analyzingRisks ? t("prepare.checking") : t("prepare.checkRisks")}</span>
                     <span className="prepare-highlight-sub">Flag terms worth a second look before you send</span>
                   </span>
                 </button>
@@ -1766,7 +1763,7 @@ export default function Prepare() {
                                 : "var(--mute)",
                           }}
                         >
-                          {r.severity === "high" ? "High risk: " : r.severity === "medium" ? "Medium risk: " : "Low risk: "}
+                          {r.severity === "high" ? t("prepare.riskHigh") : r.severity === "medium" ? t("prepare.riskMedium") : t("prepare.riskLow")}
                           {r.issue}
                         </strong>
                         <br />
@@ -1812,8 +1809,8 @@ export default function Prepare() {
                 <textarea
                   className="form-input"
                   style={{ width: "100%", marginBottom: 8, minHeight: 72, fontSize: 12 }}
-                  aria-label="Dropdown options"
-                  placeholder="One option per line"
+                  aria-label={t("prepare.dropdownOptionsAria")}
+                  placeholder={t("prepare.oneOptionPerLine")}
                   value={dropdownOptionsInput}
                   onChange={(e) => setDropdownOptionsInput(e.target.value)}
                 />
@@ -1864,7 +1861,7 @@ export default function Prepare() {
                     <input
                       className="form-input"
                       style={{ width: "100%", marginBottom: 8 }}
-                      placeholder="Template name"
+                      placeholder={t("prepare.templateNamePh")}
                       value={templateNameInput}
                       onChange={(e) => setTemplateNameInput(e.target.value)}
                     />
@@ -1925,7 +1922,7 @@ export default function Prepare() {
                   <input
                     className="form-input"
                     style={{ width: "100%", marginBottom: 8 }}
-                    placeholder="Subject (optional)"
+                    placeholder={t("prepare.subjectPh")}
                     maxLength={150}
                     value={customSubject}
                     onChange={(e) => setCustomSubject(e.target.value)}
@@ -1933,7 +1930,7 @@ export default function Prepare() {
                   <textarea
                     className="form-textarea"
                     style={{ width: "100%", minHeight: 80, resize: "vertical" }}
-                    placeholder="Message to signers (optional) — replaces the default invite text"
+                    placeholder={t("prepare.messagePh")}
                     maxLength={1000}
                     value={customMessage}
                     onChange={(e) => setCustomMessage(e.target.value)}
@@ -1965,7 +1962,7 @@ export default function Prepare() {
                       type="number"
                       min={1}
                       max={90}
-                      aria-label="Retention days"
+                      aria-label={t("prepare.retentionAria")}
                       value={ttlDays}
                       onChange={(e) => {
                         const n = Number(e.target.value);
