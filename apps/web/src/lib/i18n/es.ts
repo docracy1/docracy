@@ -361,7 +361,7 @@ const es: Messages = {
   "plan.ccRecipients": "Destinatarios CC / espectadores",
   "plan.contactsReassign": "Contactos guardados + reasignación de firmantes",
   "plan.customExpiry": "Ventana de firma (luego se elimina)",
-  "plan.dashboard": "Panel con historial de documentos",
+  "plan.dashboard": "Panel con historial de documentos (cuenta gratis)",
   "plan.declineCancel": "Rechazar o cancelar un documento",
   "plan.dropbox": "Conector Dropbox (carga automática de PDFs firmados)",
   "plan.embedded": "Firma integrada",
@@ -721,7 +721,7 @@ const es: Messages = {
     "para que Claude, ChatGPT, Grok, Perplexity o un agente IDE como Cursor consulten el estado de firma y busquen tus documentos desde el chat. Requiere cuenta de pago — copia tu URL de conector personal desde Panel → Conector y clave API. Instrucciones completas:",
   "docs.mcp.title": "Conectar un asistente de IA (MCP)",
   "docs.paid.body1":
-    "Al iniciar sesión obtienes firmantes ilimitados por documento, un panel con historial, plantillas reutilizables, firma paralela (todos a la vez), enlaces protegidos con PIN, cuentas de equipo (espacio compartido), marca blanca (tu logo en correos/páginas de firma), webhooks, MCP/Zapier, herramientas de IA, carga automática a Dropbox/OneDrive/Box/Google Drive, más las funciones de flujo abajo. Ver la tabla arriba o",
+    "Una cuenta gratis ya guarda el historial de cada envío en el panel. El plan de pago añade firmantes ilimitados por documento, plantillas reutilizables, firma paralela (todos a la vez), enlaces protegidos con PIN, cuentas de equipo (espacio compartido), marca blanca (tu logo en correos/páginas de firma), webhooks, MCP/Zapier, herramientas de IA, carga automática a Dropbox/OneDrive/Box/Google Drive, más las funciones de flujo abajo. Ver la tabla arriba o",
   "docs.paid.title": "Cuenta de pago ($10/mes)",
   "docs.plans.body1": "La misma matriz de funciones que en",
   "docs.plans.body2":
