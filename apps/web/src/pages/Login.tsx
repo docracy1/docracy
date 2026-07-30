@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { adminLogin, requestMagicLink } from "../lib/api";
+import { adminLogin, apiUrl, requestMagicLink } from "../lib/api";
 import { useT } from "../lib/i18n";
 
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
@@ -75,6 +75,7 @@ export default function Login() {
   const nextParam = searchParams.get("next") ?? "";
   const utmMedium = searchParams.get("utm_medium") ?? "";
   const utmCampaign = searchParams.get("utm_campaign") ?? "";
+  const oauthError = searchParams.get("error");
 
   const intent =
     ref === "prepare-sent" || ref === "status-completed" || ref === "status-pending"
@@ -93,7 +94,7 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(oauthError);
   const [sent, setSent] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [turnstileResetKey, setTurnstileResetKey] = useState(0);
@@ -146,6 +147,29 @@ export default function Login() {
     <div className="container">
       <h1>{headline}</h1>
       <p>{subcopy}</p>
+
+      {error && <p style={{ color: "var(--danger)", fontSize: 13 }}>{error}</p>}
+
+      <a
+        href={apiUrl(`/api/auth/google${nextParam ? `?next=${encodeURIComponent(nextParam)}` : ""}`)}
+        className="btn-secondary"
+        style={{ display: "inline-flex", alignItems: "center", gap: 10, textDecoration: "none", maxWidth: 360 }}
+      >
+        <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
+          <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l5.7-5.7C34.2 6.1 29.4 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.5-.4-3.5z" />
+          <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16.1 19 13 24 13c3.1 0 5.8 1.1 8 3l5.7-5.7C34.2 6.1 29.4 4 24 4 16.1 4 9.2 8.5 6.3 14.7z" />
+          <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.3 35.3 26.8 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.1 39.6 16 44 24 44z" />
+          <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-1.1 3.1-3.5 5.5-6.5 6.6l.1.1 6.2 5.2C36.9 41.4 44 36 44 24c0-1.3-.1-2.5-.4-3.5z" />
+        </svg>
+        {t("login.google")}
+      </a>
+
+      <div style={{ maxWidth: 360, margin: "16px 0", display: "flex", alignItems: "center", gap: 12 }}>
+        <div style={{ flex: 1, height: 1, background: "var(--hairline)" }} />
+        <span style={{ fontSize: 12, color: "var(--mute)" }}>{t("login.orEmail")}</span>
+        <div style={{ flex: 1, height: 1, background: "var(--hairline)" }} />
+      </div>
+
       <form onSubmit={onSubmit}>
         <input
           className="form-input"
@@ -158,7 +182,6 @@ export default function Login() {
           style={{ width: "100%", maxWidth: 360, marginBottom: 12, display: "block" }}
         />
         <TurnstileWidget onToken={setTurnstileToken} resetKey={turnstileResetKey} />
-        {error && <p style={{ color: "var(--danger)", fontSize: 13 }}>{error}</p>}
         <button className="btn-primary" type="submit" disabled={submitting || (!!TURNSTILE_SITE_KEY && !turnstileToken)}>
           {submitting ? t("common.sending") : ctaLabel}
         </button>
@@ -176,6 +199,7 @@ export default function Login() {
           color: "var(--mute)",
           textDecoration: "underline",
           cursor: "pointer",
+          display: "block",
         }}
       >
         {showPasswordLogin ? t("login.passwordHide") : t("login.passwordToggle")}

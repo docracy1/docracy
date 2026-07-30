@@ -8,6 +8,8 @@ import {
   optionalAccount,
   resolveAccount,
   revokeSession,
+  getGoogleLoginAuthorizeUrl,
+  handleGoogleLoginCallback,
   SESSION_COOKIE_NAME,
   SESSION_TTL_SECONDS,
   sessionCookieOptions,
@@ -119,6 +121,45 @@ auth.post("/logout", async (c) => {
   await revokeSession(c.env, getCookie(c, SESSION_COOKIE_NAME));
   deleteCookie(c, SESSION_COOKIE_NAME, sessionCookieOptions(c.env));
   return c.json({ ok: true });
+});
+
+/** Full-page redirect into Google OAuth. Callback must stay on PUBLIC_APP_URL (/api proxy) so the
+ *  session cookie is first-party on the Pages host. */
+auth.get("/google", async (c) => {
+  const next = c.req.query("next") ?? undefined;
+  const result = await getGoogleLoginAuthorizeUrl(c.env, next);
+  if (!result.ok) {
+    return c.redirect(`${c.env.PUBLIC_APP_URL}/login?error=${encodeURIComponent(result.error)}`);
+  }
+  return c.redirect(result.url);
+});
+
+auth.get("/google/callback", async (c) => {
+  const code = c.req.query("code");
+  const state = c.req.query("state");
+  const oauthError = c.req.query("error");
+  if (oauthError || !code || !state) {
+    const msg = oauthError === "access_denied" ? "Google sign-in was cancelled." : "Google sign-in failed.";
+    return c.redirect(`${c.env.PUBLIC_APP_URL}/login?error=${encodeURIComponent(msg)}`);
+  }
+
+  const ip = c.req.header("CF-Connecting-IP") ?? null;
+  const userAgent = c.req.header("User-Agent") ?? null;
+  const result = await handleGoogleLoginCallback(c.env, c.executionCtx, code, state, ip, userAgent);
+  if (!result.ok) {
+    return c.redirect(`${c.env.PUBLIC_APP_URL}/login?error=${encodeURIComponent(result.error)}`);
+  }
+
+  setCookie(c, SESSION_COOKIE_NAME, result.sessionToken, {
+    ...sessionCookieOptions(c.env),
+    maxAge: SESSION_TTL_SECONDS,
+  });
+  if (isAdminEmail(c.env, result.email)) {
+    setCookie(c, NOTRACK_COOKIE_NAME, "1", noTrackCookieOptions(c.env));
+  }
+
+  const dest = result.next || "/dashboard";
+  return c.redirect(`${c.env.PUBLIC_APP_URL}${dest.startsWith("/") ? dest : "/dashboard"}`);
 });
 
 auth.get("/me", optionalAccount, async (c) => {

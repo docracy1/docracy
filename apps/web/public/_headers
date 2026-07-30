@@ -5,9 +5,13 @@
 # script-src/frame-src/connect-src also allow challenges.cloudflare.com for the Turnstile widget
 # on the login form (Login.tsx) — it loads an external script, renders in an iframe, and posts
 # verification pings back to Cloudflare.
+# script-src needs 'unsafe-inline': Cloudflare Bot Fight / email-obfuscation injects an inline
+# bootstrap (+ a same-origin hidden iframe via frame-src 'self'). Without both, the challenge
+# never completes and subsequent module fetches for /assets/*.js can get an HTML interstitial
+# instead of JS — React never boots, so /login + /prepare look like the landing page.
 /*
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
-  Content-Security-Policy: default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://challenges.cloudflare.com; frame-src 'self' https://challenges.cloudflare.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'
 
 # Vite-built assets are content-hashed (index-<hash>.js), but deliberately NOT marked `immutable`
 # with a year-long max-age: Cloudflare Pages' deploy propagation isn't atomic across edge nodes, and
@@ -27,4 +31,4 @@
 # Embedded signing must be iframe-able. Omit X-Frame-Options here so only CSP frame-ancestors *
 # applies (Cloudflare Pages may not honor ALLOWALL, and DENY from /* would block embeds).
 /embed/*
-  Content-Security-Policy: default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors *
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://challenges.cloudflare.com; frame-src 'self' https://challenges.cloudflare.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors *

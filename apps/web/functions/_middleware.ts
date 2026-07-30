@@ -61,6 +61,19 @@ function isTrackedRoute(pathname: string): boolean {
 
 export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => {
   const url = new URL(context.request.url);
+
+  // Never serve HTML for hashed bundles — SPA fallback / Bot Fight interstitials as text/html
+  // 200 break `type=module` loads ("Failed to fetch dynamically imported module") and leave
+  // /login + /prepare stuck on the prerendered landing shell.
+  if (url.pathname.startsWith("/assets/")) {
+    const assetResponse = await context.next();
+    const ct = assetResponse.headers.get("content-type") ?? "";
+    if (ct.includes("text/html")) {
+      return new Response("Not found", { status: 404, headers: { "content-type": "text/plain; charset=utf-8" } });
+    }
+    return assetResponse;
+  }
+
   if (isTrackedRoute(url.pathname)) {
     context.waitUntil(
       fetch(`${WORKER_URL}/api/analytics/pageview`, {

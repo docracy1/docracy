@@ -16,6 +16,12 @@
 /go/x   /prepare?freeTemplate=mutual-nda&ref=x         302
 /go/dm  /prepare?freeTemplate=mutual-nda&utm_source=outreach&utm_medium=dm&utm_campaign=dm  302
 
+# Hashed Vite assets must NEVER SPA-fallback to index.html. A stale HTML referencing a retired
+# hash (or a Bot Fight interstitial) would otherwise return text/html 200 for /assets/*.js —
+# browsers then refuse the module ("Failed to fetch dynamically imported module") and React
+# never boots. Status 404 here wins over the catch-all below when no real file matches.
+/assets/*  /index.html  404
+
 # Explicit SPA fallback — Cloudflare Pages checks for an exact static-asset match (including the
 # prerendered .html files under scripts/prerender.mjs) before evaluating this file, so this only
 # ever catches routes with no matching static file: legitimate client-only routes (/dashboard,

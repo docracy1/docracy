@@ -440,3 +440,128 @@ export const requireAdminAccount: MiddlewareHandler<AuthEnv> = async (c, next) =
   c.set("account", account);
   await next();
 };
+
+const GOOGLE_LOGIN_STATE_TTL_SECONDS = 10 * 60;
+
+interface GoogleLoginStateRecord {
+  createdAt: string;
+  next?: string;
+}
+
+/** Start Google OAuth — CSRF state in KV. Callback must hit PUBLIC_APP_URL (Pages /api proxy)
+ *  so Set-Cookie is first-party on the app origin, not api.*. */
+export async function getGoogleLoginAuthorizeUrl(
+  env: Env,
+  next?: string
+): Promise<{ ok: true; url: string } | { ok: false; error: string }> {
+  if (!env.GOOGLE_LOGIN_CLIENT_ID || !env.GOOGLE_LOGIN_CLIENT_SECRET) {
+    return { ok: false, error: "Google sign-in isn't configured" };
+  }
+
+  const state = generateOpaqueToken();
+  const hash = await hashOpaqueToken(state, env.TOKEN_SECRET);
+  const sanitizedNext = sanitizeNextPath(next);
+  await env.DOCRACY_KV.put(
+    `googleloginstate:${hash}`,
+    JSON.stringify({
+      createdAt: nowIso(),
+      ...(sanitizedNext ? { next: sanitizedNext } : {}),
+    } satisfies GoogleLoginStateRecord),
+    { expirationTtl: GOOGLE_LOGIN_STATE_TTL_SECONDS }
+  );
+
+  const redirectUri = `${env.PUBLIC_APP_URL}/api/auth/google/callback`;
+  const params = new URLSearchParams({
+    client_id: env.GOOGLE_LOGIN_CLIENT_ID,
+    response_type: "code",
+    redirect_uri: redirectUri,
+    scope: "openid email profile",
+    state,
+    prompt: "select_account",
+  });
+
+  return { ok: true, url: `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}` };
+}
+
+export async function handleGoogleLoginCallback(
+  env: Env,
+  ctx: Ctx,
+  code: string,
+  state: string,
+  ip: string | null,
+  userAgent: string | null
+): Promise<{ ok: true; sessionToken: string; email: string; next?: string } | { ok: false; error: string }> {
+  if (!env.DOCRACY_DB) {
+    return { ok: false, error: "Accounts aren't set up on this deployment yet." };
+  }
+  if (!env.GOOGLE_LOGIN_CLIENT_ID || !env.GOOGLE_LOGIN_CLIENT_SECRET) {
+    return { ok: false, error: "Google sign-in isn't configured" };
+  }
+
+  const hash = await hashOpaqueToken(state, env.TOKEN_SECRET);
+  const stateKey = `googleloginstate:${hash}`;
+  const record = await env.DOCRACY_KV.get<GoogleLoginStateRecord>(stateKey, "json");
+  if (!record) return { ok: false, error: "Invalid or expired Google sign-in. Please try again." };
+  await env.DOCRACY_KV.delete(stateKey);
+
+  const redirectUri = `${env.PUBLIC_APP_URL}/api/auth/google/callback`;
+  const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      code,
+      grant_type: "authorization_code",
+      client_id: env.GOOGLE_LOGIN_CLIENT_ID,
+      client_secret: env.GOOGLE_LOGIN_CLIENT_SECRET,
+      redirect_uri: redirectUri,
+    }).toString(),
+  });
+  if (!tokenRes.ok) {
+    return { ok: false, error: "Google sign-in failed (token exchange)." };
+  }
+
+  const tokenJson = (await tokenRes.json()) as { id_token?: string };
+  const idToken = tokenJson.id_token;
+  if (!idToken) return { ok: false, error: "Google sign-in failed (missing id_token)." };
+
+  const tokenInfoRes = await fetch(
+    `https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(idToken)}`
+  );
+  if (!tokenInfoRes.ok) {
+    return { ok: false, error: "Google sign-in failed (token validation)." };
+  }
+
+  const info = (await tokenInfoRes.json()) as {
+    aud?: string;
+    email?: string;
+    email_verified?: string | boolean;
+    iss?: string;
+  };
+
+  if (info.aud !== env.GOOGLE_LOGIN_CLIENT_ID) {
+    return { ok: false, error: "Google sign-in failed (audience mismatch)." };
+  }
+  const iss = info.iss ?? "";
+  if (iss !== "https://accounts.google.com" && iss !== "accounts.google.com") {
+    return { ok: false, error: "Google sign-in failed (issuer mismatch)." };
+  }
+  const emailVerified = info.email_verified === true || info.email_verified === "true";
+  const email = info.email?.trim().toLowerCase() ?? "";
+  if (!email || !emailVerified) {
+    return { ok: false, error: "Google account email must be verified." };
+  }
+
+  const account = await findOrCreateAccount(env, ctx, email);
+  const sessionToken = await createSession(
+    env,
+    ctx,
+    account.id,
+    email,
+    account.isPaid,
+    account.isEnterprise,
+    ip,
+    userAgent
+  );
+  const next = sanitizeNextPath(record.next);
+  return next ? { ok: true, sessionToken, email, next } : { ok: true, sessionToken, email };
+}
