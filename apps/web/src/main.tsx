@@ -68,6 +68,7 @@ function AppRoutes() {
       <Route path="/free-templates" element={<FreeTemplates />} />
       <Route path="/es/plantillas-gratis" element={<FreeTemplates />} />
       <Route path="/free-templates/:slug" element={<FreeTemplateDetail />} />
+      <Route path="/es/plantillas-gratis/:slug" element={<FreeTemplateDetail />} />
       <Route path="/mcp" element={<Mcp />} />
       <Route path="/admin/analytics" element={<AdminAnalytics />} />
       <Route path="/dashboard" element={<Dashboard />} />

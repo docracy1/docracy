@@ -234,26 +234,81 @@
     <loc>https://docracy.io/free-templates/mutual-nda</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-templates/mutual-nda" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/plantillas-gratis/mutual-nda" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-templates/mutual-nda" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/plantillas-gratis/mutual-nda</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-templates/mutual-nda" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/plantillas-gratis/mutual-nda" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-templates/mutual-nda" />
   </url>
   <url>
     <loc>https://docracy.io/free-templates/independent-contractor-agreement</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-templates/independent-contractor-agreement" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/plantillas-gratis/independent-contractor-agreement" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-templates/independent-contractor-agreement" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/plantillas-gratis/independent-contractor-agreement</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-templates/independent-contractor-agreement" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/plantillas-gratis/independent-contractor-agreement" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-templates/independent-contractor-agreement" />
   </url>
   <url>
     <loc>https://docracy.io/free-templates/offer-letter</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-templates/offer-letter" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/plantillas-gratis/offer-letter" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-templates/offer-letter" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/plantillas-gratis/offer-letter</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-templates/offer-letter" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/plantillas-gratis/offer-letter" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-templates/offer-letter" />
   </url>
   <url>
     <loc>https://docracy.io/free-templates/remote-work-policy</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-templates/remote-work-policy" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/plantillas-gratis/remote-work-policy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-templates/remote-work-policy" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/plantillas-gratis/remote-work-policy</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-templates/remote-work-policy" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/plantillas-gratis/remote-work-policy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-templates/remote-work-policy" />
   </url>
   <url>
     <loc>https://docracy.io/free-templates/freelance-service-agreement</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-templates/freelance-service-agreement" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/plantillas-gratis/freelance-service-agreement" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-templates/freelance-service-agreement" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/plantillas-gratis/freelance-service-agreement</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-templates/freelance-service-agreement" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/plantillas-gratis/freelance-service-agreement" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-templates/freelance-service-agreement" />
   </url>
   <url>
     <loc>https://docracy.io/free-templates/unilateral-nda</loc>

@@ -88,6 +88,42 @@ await build({
 const { FEATURE_PAGES, ALTERNATIVE_PAGES, EXPLAINER_PAGES } = require(marketingBundleFile);
 fs.unlinkSync(marketingBundleFile);
 
+/** Phase 3 — top templates with Spanish detail pages (keep in sync with paths.ts SEO_TEMPLATE_SLUGS). */
+const SEO_TEMPLATE_SLUGS = new Set([
+  "mutual-nda",
+  "independent-contractor-agreement",
+  "offer-letter",
+  "freelance-service-agreement",
+  "remote-work-policy",
+]);
+const ES_TEMPLATE_META = {
+  "mutual-nda": {
+    title: "Plantilla gratis de NDA mutuo — Completa, firma y envía en línea",
+    description:
+      "Un acuerdo de confidencialidad mutuo (NDA) estándar — también llamado acuerdo de no divulgación — para dos partes que exploran una relación comercial.",
+  },
+  "independent-contractor-agreement": {
+    title: "Plantilla gratis de acuerdo de contratista independiente (1099)",
+    description:
+      "Define alcance, pago y propiedad intelectual cuando una empresa contrata a un contratista independiente (1099) — no un empleado.",
+  },
+  "offer-letter": {
+    title: "Plantilla gratis de carta de oferta de empleo",
+    description:
+      "Una carta de oferta de empleo directa que cubre puesto, salario, fecha de inicio y términos de empleo a voluntad.",
+  },
+  "freelance-service-agreement": {
+    title: "Plantilla gratis de contrato freelance (acuerdo de servicios)",
+    description:
+      "Un contrato freelance que cubre alcance, honorarios, revisiones y propiedad cuando un cliente contrata a un freelancer por proyecto.",
+  },
+  "remote-work-policy": {
+    title: "Plantilla gratis de política de trabajo remoto / desde casa",
+    description:
+      "Una política breve de trabajo desde casa que cubre horarios, seguridad y expectativas del espacio de trabajo para que firmen los empleados remotos.",
+  },
+};
+
 // --- 3. Build the list of routes to prerender. Per-template title/description come straight
 //     from FREE_TEMPLATES (the same data FreeTemplateDetail.tsx's usePageMeta call reads) — true
 //     single-sourcing. The two fixed pages' strings are copied verbatim from their own
@@ -247,12 +283,32 @@ const routes = [
     title: `${a.title} | Docracy`,
     description: a.description,
   })),
-  ...FREE_TEMPLATES.map((t) => ({
-    urlPath: `/free-templates/${t.slug}`,
-    outFile: `free-templates/${t.slug}.html`,
-    title: `${t.seoTitle} | Docracy`,
-    description: t.description,
-  })),
+  ...FREE_TEMPLATES.map((t) => {
+    const bilingual = SEO_TEMPLATE_SLUGS.has(t.slug);
+    return {
+      urlPath: `/free-templates/${t.slug}`,
+      outFile: `free-templates/${t.slug}.html`,
+      title: `${t.seoTitle} | Docracy`,
+      description: t.description,
+      ...(bilingual
+        ? {
+            locale: "en",
+            alternates: { en: `/free-templates/${t.slug}`, es: `/es/plantillas-gratis/${t.slug}` },
+          }
+        : {}),
+    };
+  }),
+  ...[...SEO_TEMPLATE_SLUGS].map((slug) => {
+    const meta = ES_TEMPLATE_META[slug];
+    return {
+      urlPath: `/es/plantillas-gratis/${slug}`,
+      outFile: `es/plantillas-gratis/${slug}.html`,
+      title: `${meta.title} | Docracy`,
+      description: meta.description,
+      locale: "es",
+      alternates: { en: `/free-templates/${slug}`, es: `/es/plantillas-gratis/${slug}` },
+    };
+  }),
   ...[...FEATURE_PAGES, ...ALTERNATIVE_PAGES, ...EXPLAINER_PAGES].map((p) => {
     const bilingual = {
       "docusign-alternative": { en: "/docusign-alternative", es: "/es/alternativa-a-docusign" },

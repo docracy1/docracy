@@ -42,7 +42,13 @@ const TRACKED_ROUTES = new Set([
 ]);
 
 function isTrackedRoute(route: string): boolean {
-  return TRACKED_ROUTES.has(route) || route === "/blog" || route.startsWith("/blog/") || route.startsWith("/free-templates/");
+  return (
+    TRACKED_ROUTES.has(route) ||
+    route === "/blog" ||
+    route.startsWith("/blog/") ||
+    route.startsWith("/free-templates/") ||
+    route.startsWith("/es/plantillas-gratis/")
+  );
 }
 
 async function shouldSkipAnalytics(c: Context<{ Bindings: Env }>): Promise<boolean> {

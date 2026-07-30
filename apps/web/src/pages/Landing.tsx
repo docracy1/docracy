@@ -374,9 +374,13 @@ export default function Landing() {
           <div className="accent-grid">
             {FEATURED_TEMPLATES.map((tmpl) => (
               <div key={tmpl.slug} className="accent-item">
-                <h3 style={{ fontSize: 15, marginBottom: 3 }}>{tmpl.name}</h3>
-                <p style={{ margin: 0, fontSize: 13.5 }}>{tmpl.description}</p>
-                <Link to={`/free-templates/${tmpl.slug}`} style={{ fontSize: 13, fontWeight: 600 }}>
+                <h3 style={{ fontSize: 15, marginBottom: 3 }}>
+                  {locale === "es" ? t(`tpl.${tmpl.slug}.name`) : tmpl.name}
+                </h3>
+                <p style={{ margin: 0, fontSize: 13.5 }}>
+                  {locale === "es" ? t(`tpl.${tmpl.slug}.description`) : tmpl.description}
+                </p>
+                <Link to={localizePath(`/free-templates/${tmpl.slug}`, locale)} style={{ fontSize: 13, fontWeight: 600 }}>
                   {t("landing.templateUse")} →
                 </Link>
               </div>
