@@ -55,6 +55,82 @@ describe("createDocumentCore — anonymous path (accountId: null)", () => {
     expect((auditRow as { n: number }).n).toBe(0);
   });
 
+  it("returns a one-time claimToken and stores a hashed claim record for anonymous creates", async () => {
+    const { env, kv } = makeMockEnv();
+    const ctx = makeCtx();
+    const pdfBytes = await makeValidPdfBytes();
+    const { documentClaimKvKey } = await import("./documentCreation");
+    const { hashOpaqueToken, verifyToken } = await import("@docracy/shared");
+
+    const { claimToken, statusToken, docId } = await createDocumentCore({
+      env,
+      ctx,
+      pdfBytes,
+      accountId: null,
+      ...baseParams,
+    });
+    await ctx.flush();
+
+    expect(claimToken).toBeTruthy();
+    const hash = await hashOpaqueToken(claimToken!, env.TOKEN_SECRET);
+    const claimRaw = kv._store.get(documentClaimKvKey(hash));
+    expect(claimRaw).toBeTruthy();
+    expect(JSON.parse(claimRaw!)).toMatchObject({ docId, title: "contract.pdf" });
+
+    const verified = await verifyToken(statusToken, env.TOKEN_SECRET);
+    expect(verified).toEqual({ docId, order: 0 });
+  });
+
+  it("does not return a claimToken for account-linked creates", async () => {
+    const { env } = makeMockEnv();
+    const ctx = makeCtx();
+    const pdfBytes = await makeValidPdfBytes();
+
+    const { claimToken } = await createDocumentCore({
+      env,
+      ctx,
+      pdfBytes,
+      accountId: "acct-1",
+      ...baseParams,
+    });
+    await ctx.flush();
+    expect(claimToken).toBeUndefined();
+  });
+
+  it("emails CCs a viewer token (order -1) that cannot void", async () => {
+    const { env } = makeMockEnv({ RESEND_API_KEY: "test-key" });
+    const fetchMock = vi.spyOn(global, "fetch").mockResolvedValue(new Response("{}", { status: 200 }));
+    const ctx = makeCtx();
+    const pdfBytes = await makeValidPdfBytes();
+    const { verifyToken } = await import("@docracy/shared");
+
+    const { docId, statusToken } = await createDocumentCore({
+      env,
+      ctx,
+      pdfBytes,
+      accountId: null,
+      ccRecipients: [{ email: "viewer@example.com", name: "Viewer" }],
+      ...baseParams,
+    });
+    await ctx.flush();
+
+    // preparer status email is skipped (no preparerEmail); one CC invite email
+    expect(fetchMock).toHaveBeenCalled();
+    const bodies = fetchMock.mock.calls.map((call) => {
+      const init = call[1] as RequestInit | undefined;
+      return typeof init?.body === "string" ? init.body : "";
+    });
+    const ccBody = bodies.find((b) => b.includes("viewer@example.com") || b.includes("/status/"));
+    expect(ccBody).toBeTruthy();
+    // Extract token from status URL in the HTML email body
+    const match = ccBody!.match(/\/status\/([A-Za-z0-9._\-]+)/);
+    expect(match).toBeTruthy();
+    const viewerToken = match![1];
+    const verified = await verifyToken(viewerToken, env.TOKEN_SECRET);
+    expect(verified).toEqual({ docId, order: -1 });
+    expect(viewerToken).not.toBe(statusToken);
+  });
+
   it("resolves without waiting for a stalled signing-invite email (fire-and-forget via ctx.waitUntil)", async () => {
     const { env } = makeMockEnv({ RESEND_API_KEY: "test-key" });
     let resolveFetch: (() => void) | undefined;

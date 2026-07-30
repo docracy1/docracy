@@ -85,7 +85,7 @@ await build({
   format: "cjs",
   logLevel: "warning",
 });
-const { FEATURE_PAGES, ALTERNATIVE_PAGES, EXPLAINER_PAGES } = require(marketingBundleFile);
+const { FEATURE_PAGES, ALTERNATIVE_PAGES, EXPLAINER_PAGES, getFeaturePageContent } = require(marketingBundleFile);
 fs.unlinkSync(marketingBundleFile);
 
 /** Phase 3 — top templates with Spanish detail pages (keep in sync with paths.ts SEO_TEMPLATE_SLUGS). */
@@ -241,6 +241,39 @@ const routes = [
     alternates: { en: "/adobe-sign-alternative", es: "/es/alternativa-a-adobe-sign" },
   },
   {
+    urlPath: "/es/alternativa-a-eversign",
+    outFile: "es/alternativa-a-eversign.html",
+    title: "Alternativa a Eversign — Simple y rápida | Docracy",
+    description: "Una alternativa ligera a Eversign para acuerdos rápidos. Sin suscripciones, sin complejidad.",
+    locale: "es",
+    alternates: { en: "/eversign-alternative", es: "/es/alternativa-a-eversign" },
+  },
+  {
+    urlPath: "/es/alternativa-a-pandadoc",
+    outFile: "es/alternativa-a-pandadoc.html",
+    title: "Alternativa a PandaDoc para acuerdos simples | Docracy",
+    description:
+      "¿Necesitas firmas sin la suite de propuestas de PandaDoc? Docracy es gratis hasta 2 firmantes — hecho para NDAs y contratos con clientes, no para propuestas de venta.",
+    locale: "es",
+    alternates: { en: "/pandadoc-alternative", es: "/es/alternativa-a-pandadoc" },
+  },
+  {
+    urlPath: "/es/firma-de-nda",
+    outFile: "es/firma-de-nda.html",
+    title: getFeaturePageContent("nda-signing", "es").seoTitle,
+    description: getFeaturePageContent("nda-signing", "es").seoDescription,
+    locale: "es",
+    alternates: { en: "/nda-signing", es: "/es/firma-de-nda" },
+  },
+  {
+    urlPath: "/es/contratos-con-clientes",
+    outFile: "es/contratos-con-clientes.html",
+    title: getFeaturePageContent("client-contracts", "es").seoTitle,
+    description: getFeaturePageContent("client-contracts", "es").seoDescription,
+    locale: "es",
+    alternates: { en: "/client-contracts", es: "/es/contratos-con-clientes" },
+  },
+  {
     urlPath: "/docs",
     outFile: "docs.html",
     title: "Documentation — Docracy",
@@ -334,9 +367,13 @@ const routes = [
   }),
   ...[...FEATURE_PAGES, ...ALTERNATIVE_PAGES, ...EXPLAINER_PAGES].map((p) => {
     const bilingual = {
+      "nda-signing": { en: "/nda-signing", es: "/es/firma-de-nda" },
+      "client-contracts": { en: "/client-contracts", es: "/es/contratos-con-clientes" },
       "docusign-alternative": { en: "/docusign-alternative", es: "/es/alternativa-a-docusign" },
       "hellosign-alternative": { en: "/hellosign-alternative", es: "/es/alternativa-a-hellosign" },
       "adobe-sign-alternative": { en: "/adobe-sign-alternative", es: "/es/alternativa-a-adobe-sign" },
+      "eversign-alternative": { en: "/eversign-alternative", es: "/es/alternativa-a-eversign" },
+      "pandadoc-alternative": { en: "/pandadoc-alternative", es: "/es/alternativa-a-pandadoc" },
     }[p.slug];
     return {
       urlPath: `/${p.slug}`,

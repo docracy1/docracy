@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { SignerAttachmentsList } from "../components/SignerAttachmentsList";
 import { apiUrl, fetchMe, fetchStatus, statusAttachmentDownloadUrl, voidDocument } from "../lib/api";
+import { hasPendingClaimForDoc } from "../lib/pendingClaim";
 import { track } from "../lib/track";
 import { useT } from "../lib/i18n";
 import { useNoIndex } from "../lib/useNoIndex";
@@ -74,7 +75,11 @@ export default function Status() {
         : t("status.inProgress");
 
   // White-label workspaces pay to hide Docracy marketing on status pages.
-  const showConversion = loggedIn === false && !status.brandLogoPath && !status.brandWorkspaceSlug;
+  // Claim CTA only when this browser created the anonymous send (pending claim matches).
+  const canClaimThisDoc = hasPendingClaimForDoc(status.docId);
+  const showConversion =
+    loggedIn === false && !status.brandLogoPath && !status.brandWorkspaceSlug && canClaimThisDoc;
+  const canVoid = status.canVoid !== false;
 
   return (
     <div className="container">
@@ -141,7 +146,7 @@ export default function Status() {
             {t("status.download")}
           </a>
         )}
-        {status.status === "pending" && token && (
+        {status.status === "pending" && token && canVoid && (
           <div style={{ marginTop: 16 }}>
             {voidError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{voidError}</p>}
             <button className="btn-secondary" disabled={voiding} onClick={onCancel}>
@@ -159,7 +164,7 @@ export default function Status() {
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
             <Link
-              to={`/login?ref=status-completed&next=${encodeURIComponent(`/status/${token}`)}`}
+              to={`/login?ref=status-completed&next=${encodeURIComponent("/dashboard")}`}
               className="btn-primary"
               style={{ textDecoration: "none" }}
             >
@@ -184,7 +189,7 @@ export default function Status() {
             {t("status.dontLoseLinkSub")}
           </p>
           <Link
-            to={`/login?ref=status-pending&next=${encodeURIComponent(`/status/${token}`)}`}
+            to={`/login?ref=status-pending&next=${encodeURIComponent("/dashboard")}`}
             className="btn-primary"
             style={{ textDecoration: "none" }}
           >

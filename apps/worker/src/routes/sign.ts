@@ -235,10 +235,11 @@ sign.get("/status/:token", async (c) => {
 
   const auth = await authenticateDocToken(c.env, token);
   if (!auth) return c.json({ error: "Invalid or tampered link" }, 403);
-  const { doc } = auth;
+  const { verified, doc } = auth;
 
   return c.json({
     ...statusPayload(doc),
+    canVoid: verified.order === 0,
     brandLogoPath: await brandLogoPathFor(c.env, doc.accountId),
     brandWorkspaceSlug: await brandWorkspaceSlugFor(c.env, doc.accountId),
   });
@@ -517,7 +518,7 @@ sign.post("/sign/:token/decline", async (c) => {
   if (!auth) return c.json({ error: "Invalid or tampered link" }, 403);
   const { verified, doc } = auth;
 
-  if (verified.order === 0) {
+  if (verified.order === 0 || verified.order === -1) {
     return c.json({ error: "Use cancel instead of decline for the preparer status link" }, 400);
   }
   if (doc.status !== "pending") {

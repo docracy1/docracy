@@ -1,21 +1,31 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { usePageMeta } from "../lib/usePageMeta";
-import { FEATURE_PAGES } from "../lib/marketingPages";
-import { useT } from "../lib/i18n";
+import { getFeaturePageContent } from "../lib/marketingPages";
+import { localizePath, useI18n, useT } from "../lib/i18n";
+import { BILINGUAL_FEATURE_BY_SLUG, cleanPath, seoAlternates } from "../lib/i18n/paths";
 import { track } from "../lib/track";
 
 /** Renders one of the FEATURE_PAGES entries — mounted at a distinct literal route per slug (see
  *  main.tsx), not a `:slug` param, so each gets its own static path for SEO/backlinks. */
 export default function FeaturePage({ slug }: { slug: string }) {
-  const page = FEATURE_PAGES.find((p) => p.slug === slug);
+  const { locale } = useI18n();
+  const location = useLocation();
   const t = useT();
+  const page = getFeaturePageContent(slug, locale);
+  const bilingual = BILINGUAL_FEATURE_BY_SLUG[slug];
+
+  usePageMeta(
+    page?.seoTitle ?? "Docracy",
+    page?.seoDescription ?? "",
+    bilingual
+      ? { canonicalPath: cleanPath(location.pathname), alternates: seoAlternates(bilingual) }
+      : undefined
+  );
+
   if (!page) return null;
 
-  usePageMeta(page.seoTitle, page.seoDescription);
-
-  const ctaTo = page.ctaTo.includes("?")
-    ? `${page.ctaTo}&ref=seo-${page.slug}`
-    : `${page.ctaTo}?ref=seo-${page.slug}`;
+  const ctaBase = localizePath(page.ctaTo, locale);
+  const ctaTo = ctaBase.includes("?") ? `${ctaBase}&ref=seo-${page.slug}` : `${ctaBase}?ref=seo-${page.slug}`;
 
   const onCta = (placement: string) => {
     track("landingpage_cta_clicked", { source: `seo:${page.slug}:${placement}` });
@@ -57,7 +67,7 @@ export default function FeaturePage({ slug }: { slug: string }) {
           ))}
         </div>
 
-        <h2 style={{ fontSize: 22, marginTop: 40, marginBottom: 0 }}>Use cases</h2>
+        <h2 style={{ fontSize: 22, marginTop: 40, marginBottom: 0 }}>{t("feature.useCases")}</h2>
         <ul style={{ paddingLeft: 20 }}>
           {page.useCases.map((u) => (
             <li key={u} style={{ marginBottom: 4 }}>
@@ -71,7 +81,7 @@ export default function FeaturePage({ slug }: { slug: string }) {
             {page.relatedLinks.map((l, i) => (
               <span key={l.to}>
                 {i > 0 && " · "}
-                <Link to={l.to}>{l.label}</Link>
+                <Link to={localizePath(l.to, locale)}>{l.label}</Link>
               </span>
             ))}
           </p>
@@ -79,7 +89,7 @@ export default function FeaturePage({ slug }: { slug: string }) {
       </div>
 
       <div className="cta-band">
-        <p style={{ marginTop: 0, marginBottom: 20 }}>Free to start — no account needed to send or sign.</p>
+        <p style={{ marginTop: 0, marginBottom: 20 }}>{t("alt.footerCta")}</p>
         <Link
           to={ctaTo}
           className="btn-primary btn-lg"

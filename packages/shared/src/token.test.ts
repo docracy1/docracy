@@ -55,4 +55,10 @@ describe("token", () => {
   it("parseToken extracts docId and order without verifying", () => {
     expect(parseToken("abc.3.sigpart")).toEqual({ docId: "abc", order: 3 });
   });
+
+  it("round-trips a negative order (CC viewer token)", async () => {
+    const token = await signToken("doc-1", -1, SECRET);
+    expect(parseToken(token)).toEqual({ docId: "doc-1", order: -1 });
+    expect(await verifyToken(token, SECRET)).toEqual({ docId: "doc-1", order: -1 });
+  });
 });

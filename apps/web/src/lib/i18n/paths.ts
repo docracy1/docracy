@@ -9,6 +9,10 @@ export const ES_PATH_BY_EN: Record<string, string> = {
   "/docusign-alternative": "/es/alternativa-a-docusign",
   "/hellosign-alternative": "/es/alternativa-a-hellosign",
   "/adobe-sign-alternative": "/es/alternativa-a-adobe-sign",
+  "/eversign-alternative": "/es/alternativa-a-eversign",
+  "/pandadoc-alternative": "/es/alternativa-a-pandadoc",
+  "/nda-signing": "/es/firma-de-nda",
+  "/client-contracts": "/es/contratos-con-clientes",
   "/docs": "/es/documentacion",
   "/mcp": "/es/mcp",
 };
@@ -43,6 +47,10 @@ export type SeoPage =
   | "docusignAlternative"
   | "hellosignAlternative"
   | "adobeSignAlternative"
+  | "eversignAlternative"
+  | "pandadocAlternative"
+  | "ndaSigning"
+  | "clientContracts"
   | "docs"
   | "mcp";
 
@@ -54,6 +62,10 @@ export const SEO_EN_PATH: Record<SeoPage, string> = {
   docusignAlternative: "/docusign-alternative",
   hellosignAlternative: "/hellosign-alternative",
   adobeSignAlternative: "/adobe-sign-alternative",
+  eversignAlternative: "/eversign-alternative",
+  pandadocAlternative: "/pandadoc-alternative",
+  ndaSigning: "/nda-signing",
+  clientContracts: "/client-contracts",
   docs: "/docs",
   mcp: "/mcp",
 };
@@ -63,6 +75,14 @@ export const BILINGUAL_ALT_BY_SLUG: Record<string, { seoPage: SeoPage; catalogKe
   "docusign-alternative": { seoPage: "docusignAlternative", catalogKey: "docusign" },
   "hellosign-alternative": { seoPage: "hellosignAlternative", catalogKey: "hellosign" },
   "adobe-sign-alternative": { seoPage: "adobeSignAlternative", catalogKey: "adobeSign" },
+  "eversign-alternative": { seoPage: "eversignAlternative", catalogKey: "eversign" },
+  "pandadoc-alternative": { seoPage: "pandadocAlternative", catalogKey: "pandadoc" },
+};
+
+/** Feature landings with EN/ES URL pairs (content in marketingPages.ts). */
+export const BILINGUAL_FEATURE_BY_SLUG: Record<string, SeoPage> = {
+  "nda-signing": "ndaSigning",
+  "client-contracts": "clientContracts",
 };
 
 /** Normalize pathname: strip trailing slash except root. */

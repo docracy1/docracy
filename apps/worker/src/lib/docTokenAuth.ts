@@ -4,7 +4,8 @@ import type { DocState, Env } from "@docracy/shared";
 
 /**
  * Parse → load DocState → verify HMAC (including the signer's linkNonce when present).
- * Status tokens (order 0) never use a nonce. Legacy signers without linkNonce keep verifying.
+ * Status tokens (order 0) and CC viewer tokens (order -1) never use a nonce. Legacy signers
+ * without linkNonce keep verifying.
  */
 export async function authenticateDocToken(
   env: Env,
@@ -16,7 +17,9 @@ export async function authenticateDocToken(
   const doc = await getDoc(env, parsed.docId);
   if (!doc) return null;
 
-  if (parsed.order === 0) {
+  // Order 0 = preparer status (can void). Order -1 = CC viewer (status/download only).
+  // Neither carries a linkNonce.
+  if (parsed.order === 0 || parsed.order === -1) {
     const verified = await verifyToken(token, env.TOKEN_SECRET);
     return verified ? { verified, doc } : null;
   }

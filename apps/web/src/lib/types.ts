@@ -60,6 +60,8 @@ export interface StatusPayload {
   voidedAt?: string | null;
   voidReason?: string;
   voidedBy?: "preparer" | "decline" | null;
+  /** False for CC viewer tokens (order -1); preparer status links omit or true. */
+  canVoid?: boolean;
   /** Path (not a full URL — see apiUrl in lib/api.ts) to the workspace's custom logo, in place of
    *  the default Docracy wordmark. Null/absent for anonymous documents or workspaces with none. */
   brandLogoPath?: string | null;

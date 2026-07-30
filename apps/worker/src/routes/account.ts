@@ -3,9 +3,10 @@ import { requireAccount, requirePaidAccount, type AccountContext } from "../lib/
 import { issueApiToken, hasApiToken } from "../lib/apiTokens";
 import { getDoc, putDoc } from "../lib/kv";
 import { sendSigningInvite, sendDocumentVoidedNotice } from "../lib/email";
-import { indexVoided, indexSignerReassigned, indexInviteSent } from "../lib/index-d1";
+import { indexDocumentCreated, indexVoided, indexSignerReassigned, indexInviteSent } from "../lib/index-d1";
 import { deliverWebhookEvent } from "../lib/webhooks";
 import { upsertContact } from "../lib/contacts";
+import { documentClaimKvKey, type DocumentClaimRecord } from "../lib/documentCreation";
 import { signToken, hashOpaqueToken } from "@docracy/shared";
 import type { Env } from "@docracy/shared";
 
@@ -67,6 +68,67 @@ account.get("/documents", requireAccount, async (c) => {
   );
 
   return c.json({ documents });
+});
+
+/**
+ * Attach an anonymous (no accountId) document to the signed-in account using the one-time
+ * claimToken returned only to the browser that created it. KV is source of truth; D1 is backfilled.
+ */
+account.post("/documents/claim", requireAccount, async (c) => {
+  const acct = c.get("account")!;
+  let body: { claimToken?: string };
+  try {
+    body = await c.req.json<{ claimToken?: string }>();
+  } catch {
+    return c.json({ error: "Invalid JSON body" }, 400);
+  }
+  const claimToken = body.claimToken?.trim();
+  if (!claimToken) {
+    return c.json({ error: "claimToken is required" }, 400);
+  }
+
+  const claimHash = await hashOpaqueToken(claimToken, c.env.TOKEN_SECRET);
+  const claimKey = documentClaimKvKey(claimHash);
+  const claim = (await c.env.DOCRACY_KV.get(claimKey, "json")) as DocumentClaimRecord | null;
+  if (!claim?.docId) {
+    return c.json({ error: "Claim not found or expired" }, 404);
+  }
+
+  const doc = await getDoc(c.env, claim.docId);
+  if (!doc) {
+    await c.env.DOCRACY_KV.delete(claimKey);
+    return c.json({ error: "Document not found or expired" }, 404);
+  }
+
+  if (doc.accountId && doc.accountId !== acct.workspaceId) {
+    await c.env.DOCRACY_KV.delete(claimKey);
+    return c.json({ error: "Document already claimed by another account" }, 409);
+  }
+
+  if (doc.accountId === acct.workspaceId) {
+    // Idempotent: already ours — drop the claim token and return success.
+    await c.env.DOCRACY_KV.delete(claimKey);
+    return c.json({ ok: true, docId: doc.docId, title: doc.title ?? claim.title, alreadyClaimed: true });
+  }
+
+  doc.accountId = acct.workspaceId;
+  doc.title = doc.title?.trim() || claim.title || "Untitled document";
+  await putDoc(c.env, doc);
+  await c.env.DOCRACY_KV.delete(claimKey);
+
+  const original = await c.env.DOCRACY_DOCS.get(`docs/${doc.docId}/original.pdf`);
+  if (original) {
+    const pdfBytes = new Uint8Array(await original.arrayBuffer());
+    c.executionCtx.waitUntil(
+      indexDocumentCreated(c.env, doc, pdfBytes).catch((err) =>
+        console.error(`D1 indexing (claim) failed for doc ${doc.docId} (non-fatal):`, err)
+      )
+    );
+  } else {
+    console.error(`Claim: original.pdf missing for doc ${doc.docId} — KV updated, D1 skipped`);
+  }
+
+  return c.json({ ok: true, docId: doc.docId, title: doc.title });
 });
 
 account.post("/documents/:docId/void", requirePaidAccount, async (c) => {

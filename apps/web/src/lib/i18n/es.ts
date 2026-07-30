@@ -79,6 +79,7 @@ const es: Messages = {
   "dash.completedMonth": "Completados este mes",
   "dash.connector": "Conector y clave API",
   "dash.connectorConnected": "Conectado — los documentos firmados se subirán allí automáticamente.",
+  "dash.claimSuccess": "Guardado en tu panel: {{title}}",
   "dash.connectorFailed": "No se pudo conectar ese proveedor. Inténtalo de nuevo.",
   "dash.toolsPaid": "Las herramientas son una función de pago",
   "dash.toolsPaidSub": "Mejora tu plan para el conector MCP y clave API, webhooks, marca blanca y cuentas de equipo.",
@@ -142,6 +143,7 @@ const es: Messages = {
   "feature.problem": "El problema",
   "feature.related": "Relacionado",
   "feature.solution": "La forma Docracy",
+  "feature.useCases": "Casos de uso",
   "firstDoc.modalSub": "No necesitas cuenta para enviar o firmar.",
   "firstDoc.modalTitle": "Sube tu PDF",
   "firstDoc.prompt": "Envía tu primer documento — toma 30 segundos.",
@@ -512,6 +514,8 @@ const es: Messages = {
   "sent.parallel": "Cada firmante recibió su enlace por correo — pueden firmar en cualquier orden.",
   "sent.saveAccount": "Guardar este envío en una cuenta",
   "sent.saveAccountSub":
+    "Crea una cuenta gratis y moveremos este documento a tu panel — sin contraseña, solo un enlace mágico.",
+  "sent.saveAccountSubFuture":
     "Crea una cuenta gratis para que cada envío futuro aparezca en tu panel — sin contraseña, solo un enlace mágico. Este envío sigue disponible con el enlace de estado de arriba.",
   "sent.sendAnother": "Enviar otro",
   "sent.sequential":
@@ -579,15 +583,15 @@ const es: Messages = {
   "status.cancelPrompt": "Motivo opcional para cancelar (déjalo en blanco para omitir):",
   "status.cancelling": "Cancelando…",
   "status.createAccount": "Crear cuenta gratis",
-  "status.dontLoseLink": "No pierdas este enlace de estado",
+  "status.dontLoseLink": "Guarda este envío en tu panel",
   "status.dontLoseLinkSub":
-    "Crea una cuenta gratis para que cada documento futuro viva en un panel — sin contraseña. Conserva este enlace de estado para el envío actual.",
+    "Crea una cuenta gratis y adjuntaremos este documento a tu historial — sin contraseña. Conserva este enlace de estado como respaldo.",
   "status.download": "Descargar PDF firmado",
   "status.fullySigned": "Completamente firmado",
   "status.inProgress": "Firma en curso",
-  "status.keepPdfs": "Guarda todos tus PDFs firmados en un solo lugar",
+  "status.keepPdfs": "Guarda este documento en tu panel",
   "status.keepPdfsSub":
-    "Inicia sesión gratis para guardar cada envío futuro en tu panel (este enlace de estado sigue valiendo para el documento actual). El plan de pago desbloquea plantillas, firmantes ilimitados y asientos de equipo — 10 $/mes.",
+    "Crea una cuenta gratis y moveremos este envío a tu historial — sin contraseña, solo un enlace mágico. El plan de pago desbloquea plantillas, firmantes ilimitados y asientos de equipo — 10 $/mes.",
   "status.seePaidPlans": "Ver planes de pago",
   "status.viewer": "Espectador: {{info}}",
   "team.failed": "No se pudo aceptar la invitación",
@@ -846,6 +850,18 @@ const es: Messages = {
   "seo.adobeSign.title": "Alternativa a Adobe Sign — Firma electrónica ligera | Docracy",
   "seo.adobeSign.description":
     "Alternativa a Adobe Acrobat Sign para freelancers y equipos pequeños. Gratis hasta 2 firmantes, sin cuenta. Plan de pago $10/mes fijo.",
+  "seo.eversign.title": "Alternativa a Eversign — Simple y rápida | Docracy",
+  "seo.eversign.description":
+    "Una alternativa ligera a Eversign para acuerdos rápidos. Sin suscripciones, sin complejidad.",
+  "seo.pandadoc.title": "Alternativa a PandaDoc para acuerdos simples | Docracy",
+  "seo.pandadoc.description":
+    "¿Necesitas firmas sin la suite de propuestas de PandaDoc? Docracy es gratis hasta 2 firmantes — hecho para NDAs y contratos con clientes, no para propuestas de venta.",
+  "seo.ndaSigning.title": "Firma de NDA en línea — Rápida y simple | Docracy",
+  "seo.ndaSigning.description":
+    "Firma NDAs en línea en minutos. Plantilla de NDA gratis, sin suscripciones ni cuenta requerida.",
+  "seo.clientContracts.title": "Firma de contratos con clientes — Rápida y simple | Docracy",
+  "seo.clientContracts.description":
+    "Envía contratos con clientes sin fricción. Flujo de firma limpio, sin cuentas requeridas.",
   "seo.docs.title": "Documentación — Docracy",
   "seo.docs.description":
     "Cómo funciona el flujo gratis de firma de Docracy, las funciones de pago (envío masivo, embed, contactos, adjuntos, SMS, Dropbox/OneDrive/Box/Google Drive, IA), opciones Enterprise, plantillas, webhooks y automatización MCP/Zapier.",
@@ -895,6 +911,31 @@ const es: Messages = {
   "alt.adobeSign.c5": "No reemplaza Acrobat por completo — deliberadamente más ligero",
   "alt.adobeSign.ctaLabel": "Probar gratis — envía un NDA de ejemplo",
   "alt.adobeSign.compareLabel": "Ver la comparación completa de precios vs. Adobe Sign",
+  "alt.eversign.heroHeadline": "Una alternativa ligera a Eversign.",
+  "alt.eversign.heroSubheadline": "Hecha para acuerdos rápidos y de bajo riesgo — no para flujos empresariales.",
+  "alt.eversign.problem":
+    "Eversign es potente, pero pesado. Si solo necesitas acuerdos simples, es demasiado lento y complejo.",
+  "alt.eversign.solution": "Docracy.io se enfoca en velocidad, simplicidad y una firma limpia.",
+  "alt.eversign.c1": "Sin suscripciones para acuerdos simples — hasta 2 firmantes, totalmente gratis",
+  "alt.eversign.c2": "Sin cuenta requerida para los destinatarios",
+  "alt.eversign.c3": "Flujo de firma más rápido y sin distracciones",
+  "alt.eversign.c4": "Colocación de campos asistida por IA (cuentas de pago)",
+  "alt.eversign.c5": "Ideal para NDAs, contratos con clientes y documentos de onboarding",
+  "alt.eversign.ctaLabel": "Probar gratis — envía un NDA de ejemplo",
+  "alt.eversign.compareLabel": "Ver la comparación completa de precios vs. Eversign",
+  "alt.pandadoc.heroHeadline": "PandaDoc es excesivo si solo necesitas una firma.",
+  "alt.pandadoc.heroSubheadline": "Docracy omite propuestas y CPQ — solo envía el PDF y consigue la firma.",
+  "alt.pandadoc.problem":
+    "PandaDoc brilla en cotizaciones y propuestas. Si tu trabajo es «firma este NDA / acuerdo de contratista», pagas por un stack de ventas que no usas.",
+  "alt.pandadoc.solution":
+    "Docracy es un camino de firma ligero: sube o empieza desde una plantilla gratis, coloca campos y envía. Gratis para 2 firmantes; el plan de pago es $10/mes cuando lo superas.",
+  "alt.pandadoc.c1": "Sin editor de propuestas para acuerdos simples",
+  "alt.pandadoc.c2": "Gratis ≤2 firmantes, sin cuentas",
+  "alt.pandadoc.c3": "$10/mes fijo en el plan de pago — no por asiento",
+  "alt.pandadoc.c4": "Plantillas para NDAs, documentos de contratistas y contratos con clientes",
+  "alt.pandadoc.c5": "No es para ti si necesitas propuesta completa + pagos en una sola herramienta",
+  "alt.pandadoc.ctaLabel": "Probar gratis — envía un NDA de ejemplo",
+  "alt.pandadoc.compareLabel": "Ver la comparación completa de precios vs. PandaDoc",
   "common.and": "y",
   "tpl.detail.back": "Volver a todas las plantillas gratis",
   "tpl.detail.backAll": "Todas las plantillas gratis",
@@ -1080,6 +1121,53 @@ const es: Messages = {
   "prepare.viewerNameAria": "Nombre del espectador {{n}}",
   "prepare.yourEmailAria": "Tu correo",
   "prepare.yourEmailPh": "Tu correo (opcional) — para recibir el enlace de estado",
+  "prepare.defaultDropdownOptions": "Opción A\nOpción B\nOpción C",
+  "prepare.defaultTemplateFilename": "plantilla",
+  "prepare.defaultDocumentFilename": "documento.pdf",
+  "prepare.deletePage": "🗑 Eliminar página",
+  "prepare.redactConfirm":
+    "¿Ocultar esta área? La página se convertirá en una imagen — el texto que quede debajo ya no se podrá seleccionar ni recuperar.",
+  "prepare.recoverStatusHint":
+    "No hay una cuenta, así que esta es la única forma de recuperar el enlace de estado si lo pierdes.",
+  "prepare.marketingOptIn":
+    "Envíame por correo algunos consejos y cómo guardar cada envío en una cuenta gratis (opcional; responde en cualquier momento para dejar de recibirlos).",
+  "prepare.namePh": "Nombre",
+  "prepare.emailPh": "Correo electrónico",
+  "prepare.carrierPh": "Operador (para SMS)",
+  "prepare.signingOrder": "Orden de firma",
+  "prepare.signingSequential": "Secuencial (predeterminado) — un firmante a la vez, en orden",
+  "prepare.signingParallel":
+    "Todos a la vez — cada firmante puede firmar en cuanto reciba la invitación",
+  "prepare.signerUpsellTitle": "¿Necesitas más de {{max}} firmantes?",
+  "prepare.signerUpsellBody":
+    "El plan de pago desbloquea firmantes ilimitados, plantillas reutilizables e historial de documentos — $10/mes.",
+  "prepare.editPdfAction": "Reordena, oculta o inserta texto",
+  "prepare.editModeMove": "Reordenar / eliminar páginas",
+  "prepare.editModeRedact": "Ocultar — arrastra un recuadro para tapar contenido",
+  "prepare.editModeAddText": "Agregar texto — haz clic para insertarlo",
+  "prepare.editModeExistingText": "Editar texto existente — haz clic para corregirlo o quitarlo",
+  "prepare.doneEditing": "Terminar edición",
+  "prepare.aiTools": "Herramientas de IA",
+  "prepare.autoDetectSub": "Busca y coloca automáticamente campos de firma",
+  "prepare.detectAnchorsSub":
+    "Busca etiquetas {sig1}, {date_2}, {dropdown_1:A|B} en el PDF",
+  "prepare.explainSub": "Convierte el texto legal en un resumen en lenguaje sencillo",
+  "prepare.riskSub": "Marca términos que conviene revisar antes de enviar",
+  "prepare.riskNone": "No se detectó nada inusual.",
+  "prepare.aiLegalDisclaimer":
+    "Las herramientas de IA hacen una estimación, no dan asesoría legal — lee siempre el contrato antes de enviarlo.",
+  "prepare.aiPaidToolsSub":
+    "para detectar campos automáticamente, obtener una explicación sencilla y buscar cláusulas riesgosas.",
+  "prepare.signerStampHint":
+    "El correo del firmante y la fecha se estampan automáticamente — no necesitas campos separados.",
+  "prepare.templateSaved": "Se guardó \"{{name}}\" — encuéntrala en tu Panel.",
+  "prepare.templateMissingField":
+    "Cada firmante necesita un campo antes de guardar — aún falta uno para: {{names}}",
+  "prepare.saveTemplateHint":
+    "Guarda este PDF y la distribución de campos para reutilizarlos — no se guardan nombres ni correos, solo cuántos firmantes hay y dónde van sus campos.",
+  "prepare.missingField": "Aún necesita un campo: {{names}}",
+  "prepare.viewerCc": "Espectador (CC)",
+  "prepare.addViewerCc": "+ Espectador (CC)",
   "footer.vsHellosign": "vs HelloSign / Dropbox Sign",
   "flow.dropPdf": "Suelta el PDF aquí",
   "flow.step1": "1 · Subir",

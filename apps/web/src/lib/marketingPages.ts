@@ -176,6 +176,87 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
   },
 ];
 
+export function getNdaSigningPageEs(): FeaturePageContent {
+  return {
+    slug: "nda-signing",
+    seoTitle: "Firma de NDA en línea — Rápida y simple | Docracy",
+    seoDescription:
+      "Firma NDAs en línea en minutos. Plantilla de NDA gratis, sin suscripciones ni cuenta requerida.",
+    heroHeadline: "Firma NDAs rápido — sin suscripciones ni complejidad.",
+    heroSubheadline: "Ideal para freelancers, consultores, agencias y equipos pequeños.",
+    problem:
+      "Las herramientas tradicionales de firma electrónica hacen lento el proceso de NDA: cuentas, onboarding y plantillas detrás de un muro de pago.",
+    solution: "Docracy.io te permite enviar y firmar NDAs al instante — flujo limpio, sin fricción.",
+    features: [
+      { title: "Plantilla de NDA gratis", body: "Empieza con un NDA mutuo o unilateral listo para usar — sin muro de pago." },
+      { title: "Colocación de campos con IA", body: "Campos de firma y fecha colocados automáticamente — en una cuenta de pago." },
+      {
+        title: "Sin cuenta para los destinatarios",
+        body: "Los firmantes abren el enlace y firman — nada que instalar ni registrar.",
+      },
+      { title: "Registro de auditoría seguro", body: "Cada NDA obtiene un registro con marca de tiempo de quién firmó y cuándo." },
+      {
+        title: "Plantillas de NDA reutilizables para clientes recurrentes",
+        body: "Guarda tu NDA una vez y reutilízalo para cada cliente nuevo — en una cuenta de pago.",
+      },
+    ],
+    useCases: [
+      "Freelancers que envían NDAs antes de proyectos",
+      "Agencias que incorporan nuevos clientes",
+      "Equipos que comparten documentos confidenciales",
+      "NDAs puntuales para acuerdos rápidos",
+    ],
+    ctaLabel: "Enviar NDA ahora",
+    ctaTo: "/prepare?freeTemplate=mutual-nda",
+    relatedLinks: [
+      { label: "Plantilla gratis de NDA mutuo", to: "/free-templates/mutual-nda" },
+      { label: "Plantilla gratis de NDA unilateral", to: "/free-templates/unilateral-nda" },
+      { label: "¿Qué es un NDA?", to: "/what-is-an-nda" },
+    ],
+  };
+}
+
+export function getClientContractsPageEs(): FeaturePageContent {
+  return {
+    slug: "client-contracts",
+    seoTitle: "Firma de contratos con clientes — Rápida y simple | Docracy",
+    seoDescription: "Envía contratos con clientes sin fricción. Flujo de firma limpio, sin cuentas requeridas.",
+    heroHeadline: "Envía contratos con clientes sin fricción.",
+    heroSubheadline: "Los clientes firman al instante — sin cuentas ni flujos confusos.",
+    problem:
+      "A los clientes no les gusta crear cuentas solo para firmar un contrato simple. Eso retrasa los acuerdos y perjudica la conversión.",
+    solution: "Docracy.io ofrece a los clientes una experiencia de firma limpia e instantánea.",
+    features: [
+      { title: "Envío simple de contratos", body: "Sube tu contrato y envíalo a firma en segundos." },
+      { title: "Colocación de campos con IA", body: "Campos de firma y fecha colocados automáticamente — en una cuenta de pago." },
+      {
+        title: "Plantillas de contrato reutilizables",
+        body: "Guarda tu contrato estándar una vez y reutilízalo para cada cliente nuevo — en una cuenta de pago.",
+      },
+      { title: "Almacenamiento seguro", body: "Cifrado, seguro y totalmente trazable." },
+      { title: "Flujo de firma rápido", body: "Los clientes firman desde cualquier dispositivo — sin software ni cuenta." },
+    ],
+    useCases: ["Freelancers", "Consultores", "Agencias", "Equipos pequeños", "Acuerdos puntuales con clientes"],
+    ctaLabel: "Envía tu próximo contrato",
+    ctaTo: "/prepare?freeTemplate=freelance-service-agreement",
+    relatedLinks: [
+      { label: "Plantilla gratis de acuerdo de servicios freelance", to: "/free-templates/freelance-service-agreement" },
+      { label: "Plantilla gratis de acuerdo de consultoría", to: "/free-templates/consulting-agreement" },
+    ],
+  };
+}
+
+const ES_FEATURE_GETTERS: Record<string, () => FeaturePageContent> = {
+  "nda-signing": getNdaSigningPageEs,
+  "client-contracts": getClientContractsPageEs,
+};
+
+/** Locale-aware feature page content — ES routes use Spanish copy. */
+export function getFeaturePageContent(slug: string, locale: "en" | "es"): FeaturePageContent | undefined {
+  if (locale === "es" && ES_FEATURE_GETTERS[slug]) return ES_FEATURE_GETTERS[slug]();
+  return FEATURE_PAGES.find((p) => p.slug === slug);
+}
+
 export interface AlternativePageContent {
   slug: string;
   seoTitle: string;
