@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /$
+Allow: /es$
+Allow: /es/
 Allow: /prepare$
 Allow: /privacy$
 Allow: /terms$
@@ -25,6 +27,9 @@ Allow: /vendor-agreements$
 Allow: /compliance-documentation$
 Allow: /eversign-alternative$
 Allow: /docusign-alternative$
+Allow: /hellosign-alternative$
+Allow: /pandadoc-alternative$
+Allow: /adobe-sign-alternative$
 Allow: /what-is-an-nda$
 Allow: /are-electronic-signatures-legal$
 Allow: /templates$

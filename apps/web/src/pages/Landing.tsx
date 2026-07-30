@@ -6,7 +6,8 @@ import IntegrationsBand from "../components/IntegrationsBand";
 import ProductFlowDemo from "../components/ProductFlowDemo";
 import { track } from "../lib/track";
 import { FREE_TEMPLATES } from "../lib/freeTemplates";
-import { useT } from "../lib/i18n";
+import { localizePath, useI18n, useT } from "../lib/i18n";
+import { useSeoMeta } from "../lib/useSeoMeta";
 
 /** Static field-detection mock for the AI spotlight — hero uses the animated ProductFlowDemo. */
 function DetectMockup() {
@@ -205,10 +206,15 @@ const AI_FEATURE_KEYS: Array<{ titleKey: string; bodyKey: string }> = [
 
 export default function Landing() {
   const t = useT();
+  const { locale } = useI18n();
+  useSeoMeta("home");
   const faqItems = FAQ_KEYS.map((item) => ({
     question: t(item.qKey),
     answer: t(item.aKey),
   }));
+  const prepareTo = localizePath("/prepare", locale);
+  const prepareSampleTo = localizePath("/prepare?freeTemplate=mutual-nda", locale);
+  const templatesTo = localizePath("/free-templates", locale);
 
   useEffect(() => {
     if (window.location.hash === "#faq") {
@@ -232,7 +238,7 @@ export default function Landing() {
             </ul>
             <div className="hero-actions">
               <Link
-                to="/prepare?freeTemplate=mutual-nda"
+                to={prepareSampleTo}
                 className="btn-primary btn-lg"
                 style={{ display: "inline-block", textDecoration: "none" }}
                 onClick={() => track("landingpage_cta_clicked", { source: "hero_inline_sample" })}
@@ -240,7 +246,7 @@ export default function Landing() {
                 {t("hero.ctaSample")}
               </Link>
               <Link
-                to="/prepare"
+                to={prepareTo}
                 className="hero-actions-secondary"
                 onClick={() => track("landingpage_cta_clicked", { source: "hero_inline_upload" })}
               >
@@ -289,7 +295,7 @@ export default function Landing() {
                 </div>
                 <h3>{t(f.titleKey)}</h3>
                 <p>{t(f.bodyKey)}</p>
-                <Link to={f.to} style={{ fontSize: 13, fontWeight: 600 }}>
+                <Link to={localizePath(f.to, locale)} style={{ fontSize: 13, fontWeight: 600 }}>
                   {t(f.linkKey)} →
                 </Link>
               </div>
@@ -377,7 +383,7 @@ export default function Landing() {
             ))}
           </div>
           <div style={{ marginTop: 20 }}>
-            <Link to="/free-templates" style={{ fontSize: 13.5, fontWeight: 600 }}>
+            <Link to={templatesTo} style={{ fontSize: 13.5, fontWeight: 600 }}>
               {t("landing.templatesBrowse", { count: FREE_TEMPLATES.length })} →
             </Link>
           </div>
@@ -446,7 +452,7 @@ export default function Landing() {
         <p style={{ marginTop: 0, marginBottom: 20 }}>{t("landing.ctaSub")}</p>
         <div className="cta-band-actions">
           <Link
-            to="/prepare?freeTemplate=mutual-nda"
+            to={prepareSampleTo}
             className="btn-primary btn-lg"
             style={{ display: "inline-block", textDecoration: "none" }}
             onClick={() => track("landingpage_cta_clicked", { source: "final_cta_band_sample" })}
@@ -454,7 +460,7 @@ export default function Landing() {
             {t("landing.ctaSample")}
           </Link>
           <Link
-            to="/prepare"
+            to={prepareTo}
             className="btn-secondary btn-lg"
             style={{ display: "inline-block", textDecoration: "none" }}
             onClick={() => track("landingpage_cta_clicked", { source: "final_cta_band" })}
@@ -462,7 +468,7 @@ export default function Landing() {
             {t("landing.ctaUpload")}
           </Link>
           <Link
-            to="/free-templates"
+            to={templatesTo}
             className="btn-secondary btn-lg"
             style={{ display: "inline-block", textDecoration: "none" }}
             onClick={() => track("landingpage_cta_clicked", { source: "final_cta_band_templates" })}

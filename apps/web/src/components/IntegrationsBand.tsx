@@ -31,8 +31,7 @@ export default function IntegrationsBand({ learnMoreTo = "/docs", compact = fals
           {t("integrations.title")}
         </h2>
         <p style={{ textAlign: "center", maxWidth: 560, margin: "0 auto 28px", color: "var(--mute)", fontSize: compact ? 14 : 15.5 }}>
-          Plug into the platforms you already use — cloud storage, automation, and AI assistants. Paid accounts unlock
-          native connectors; everything listed here is real today.
+          {t("integrations.sub")}
         </p>
 
         <div className="integrations-grid" role="list">
@@ -45,8 +44,7 @@ export default function IntegrationsBand({ learnMoreTo = "/docs", compact = fals
         </div>
 
         <p style={{ textAlign: "center", fontSize: 12.5, color: "var(--mute)", margin: "20px auto 0", maxWidth: 520 }}>
-          Dropbox, OneDrive, Box, and Google Drive auto-upload signed PDFs. Zapier and webhooks automate your stack. MCP
-          connects Claude, ChatGPT, Grok, Perplexity, and Cursor to your documents.
+          {t("integrations.detail")}
         </p>
 
         <div style={{ textAlign: "center", marginTop: 24 }}>

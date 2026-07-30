@@ -106,6 +106,8 @@ const routes = [
     title: "Docracy.io – Simple and secure e-signatures for businesses",
     description:
       "Create, send, and sign documents in minutes. Docracy.io offers fast e-signatures, simple workflows, and secure, compliant document storage.",
+    locale: "en",
+    alternates: { en: "/", es: "/es" },
   },
   {
     urlPath: "/free-templates",
@@ -118,6 +120,8 @@ const routes = [
       "Free, ready-to-sign templates for the most common business documents — mutual NDA, independent contractor " +
       "agreement, offer letter, remote work policy, and freelance service agreement. Fill in your details and send " +
       "for signature in minutes.",
+    locale: "en",
+    alternates: { en: "/free-templates", es: "/es/plantillas-gratis" },
   },
   {
     urlPath: "/mcp",
@@ -140,6 +144,63 @@ const routes = [
     description:
       "Free for signing chains of up to 2 signers, no account required. Paid is $10/month and adds AI tools, an " +
       "MCP connector, unlimited signers, templates, webhooks, and team accounts.",
+    locale: "en",
+    alternates: { en: "/pricing", es: "/es/precios" },
+  },
+  {
+    urlPath: "/es",
+    outFile: "es.html",
+    title: "Docracy.io – Firmas electrónicas simples y seguras para negocios",
+    description:
+      "Crea, envía y firma documentos en minutos. Docracy.io ofrece firmas electrónicas rápidas, flujos simples y almacenamiento seguro y conforme.",
+    locale: "es",
+    alternates: { en: "/", es: "/es" },
+  },
+  {
+    urlPath: "/es/precios",
+    outFile: "es/precios.html",
+    title: "Precios — Docracy",
+    description:
+      "Gratis para cadenas de hasta 2 firmantes. El plan de pago es $10/mes fijo por espacio de trabajo — firmantes ilimitados, plantillas, herramientas de IA, conectores y cuentas de equipo.",
+    locale: "es",
+    alternates: { en: "/pricing", es: "/es/precios" },
+  },
+  {
+    urlPath: "/es/plantillas-gratis",
+    outFile: "es/plantillas-gratis.html",
+    title:
+      "Plantillas gratis de documentos de negocio — NDA, contrato de contratista, carta de oferta | Docracy",
+    description:
+      "Plantillas gratis listas para firmar para los documentos de negocio más comunes — NDA mutuo, acuerdo de contratista independiente, carta de oferta, política de trabajo remoto y acuerdo de servicios freelance. Completa tus datos y envía a firma en minutos.",
+    locale: "es",
+    alternates: { en: "/free-templates", es: "/es/plantillas-gratis" },
+  },
+  {
+    urlPath: "/es/alternativa-a-docusign",
+    outFile: "es/alternativa-a-docusign.html",
+    title: "Alternativa a DocuSign — Firma simple | Docracy",
+    description:
+      "Una alternativa simple a DocuSign para acuerdos rápidos. Rápida, limpia, sin cuenta. Gratis para hasta 2 firmantes.",
+    locale: "es",
+    alternates: { en: "/docusign-alternative", es: "/es/alternativa-a-docusign" },
+  },
+  {
+    urlPath: "/es/alternativa-a-hellosign",
+    outFile: "es/alternativa-a-hellosign.html",
+    title: "Alternativa a HelloSign / Dropbox Sign — Gratis y simple | Docracy",
+    description:
+      "¿Buscas una alternativa a HelloSign o Dropbox Sign para NDAs y contratos? Gratis hasta 2 firmantes, sin cuenta. Plan de pago $10/mes fijo.",
+    locale: "es",
+    alternates: { en: "/hellosign-alternative", es: "/es/alternativa-a-hellosign" },
+  },
+  {
+    urlPath: "/es/alternativa-a-adobe-sign",
+    outFile: "es/alternativa-a-adobe-sign.html",
+    title: "Alternativa a Adobe Sign — Firma electrónica ligera | Docracy",
+    description:
+      "Alternativa a Adobe Acrobat Sign para freelancers y equipos pequeños. Gratis hasta 2 firmantes, sin cuenta. Plan de pago $10/mes fijo.",
+    locale: "es",
+    alternates: { en: "/adobe-sign-alternative", es: "/es/alternativa-a-adobe-sign" },
   },
   {
     urlPath: "/docs",
@@ -192,12 +253,20 @@ const routes = [
     title: `${t.seoTitle} | Docracy`,
     description: t.description,
   })),
-  ...[...FEATURE_PAGES, ...ALTERNATIVE_PAGES, ...EXPLAINER_PAGES].map((p) => ({
-    urlPath: `/${p.slug}`,
-    outFile: `${p.slug}.html`,
-    title: p.seoTitle,
-    description: p.seoDescription,
-  })),
+  ...[...FEATURE_PAGES, ...ALTERNATIVE_PAGES, ...EXPLAINER_PAGES].map((p) => {
+    const bilingual = {
+      "docusign-alternative": { en: "/docusign-alternative", es: "/es/alternativa-a-docusign" },
+      "hellosign-alternative": { en: "/hellosign-alternative", es: "/es/alternativa-a-hellosign" },
+      "adobe-sign-alternative": { en: "/adobe-sign-alternative", es: "/es/alternativa-a-adobe-sign" },
+    }[p.slug];
+    return {
+      urlPath: `/${p.slug}`,
+      outFile: `${p.slug}.html`,
+      title: p.seoTitle,
+      description: p.seoDescription,
+      ...(bilingual ? { locale: "en", alternates: bilingual } : {}),
+    };
+  }),
 ];
 
 // --- 4. Render each route and splice it into the built index.html shell ---
@@ -248,21 +317,38 @@ function writeIndexNowKey() {
   fs.writeFileSync(path.join(distDir, `${key}.txt`), key);
 }
 
-function withMeta(html, { title, description, urlPath }) {
-  const canonical = `${SITE}${urlPath}`;
-  return html
-    .replace(/<title>.*?<\/title>/, `<title>${title}</title>`)
-    .replace(/(<meta\s+name="description"\s+content=")[^"]*(")/, `$1${description}$2`)
-    .replace(/(<meta property="og:title" content=")[^"]*(")/, `$1${title}$2`)
-    .replace(/(<meta\s+property="og:description"\s+content=")[^"]*(")/, `$1${description}$2`)
-    .replace(/(<meta property="og:url" content=")[^"]*(")/, `$1${canonical}$2`)
-    .replace(/(<meta name="twitter:title" content=")[^"]*(")/, `$1${title}$2`)
-    .replace(/(<meta\s+name="twitter:description"\s+content=")[^"]*(")/, `$1${description}$2`)
-    .replace(/(<link rel="canonical" href=")[^"]*(")/, `$1${canonical}$2`);
+function withMeta(html, { title, description, urlPath, locale = "en", alternates }) {
+  const canonical = `${SITE}${urlPath === "/" ? "/" : urlPath}`;
+  // Use function replacers — string replacements treat `$10` in copy as a capture-group token.
+  let out = html
+    .replace(/<html lang="[^"]*"/, `<html lang="${locale}"`)
+    .replace(/<title>.*?<\/title>/, () => `<title>${title}</title>`)
+    .replace(/(<meta\s+name="description"\s+content=")[^"]*(")/, (_, a, b) => `${a}${description}${b}`)
+    .replace(/(<meta property="og:title" content=")[^"]*(")/, (_, a, b) => `${a}${title}${b}`)
+    .replace(/(<meta\s+property="og:description"\s+content=")[^"]*(")/, (_, a, b) => `${a}${description}${b}`)
+    .replace(/(<meta property="og:url" content=")[^"]*(")/, (_, a, b) => `${a}${canonical}${b}`)
+    .replace(/(<meta name="twitter:title" content=")[^"]*(")/, (_, a, b) => `${a}${title}${b}`)
+    .replace(/(<meta\s+name="twitter:description"\s+content=")[^"]*(")/, (_, a, b) => `${a}${description}${b}`)
+    .replace(/(<link rel="canonical" href=")[^"]*(")/, (_, a, b) => `${a}${canonical}${b}`);
+
+  if (alternates) {
+    const enHref = `${SITE}${alternates.en === "/" ? "/" : alternates.en}`;
+    const esHref = `${SITE}${alternates.es}`;
+    const hreflang = [
+      `<link rel="alternate" hreflang="en" href="${enHref}" />`,
+      `<link rel="alternate" hreflang="es" href="${esHref}" />`,
+      `<link rel="alternate" hreflang="x-default" href="${enHref}" />`,
+    ].join("\n    ");
+    // Drop any previous hreflang tags then inject before </head>.
+    out = out.replace(/\s*<link rel="alternate" hreflang="[^"]*" href="[^"]*"\s*\/?>/g, "");
+    out = out.replace("</head>", `    ${hreflang}\n  </head>`);
+  }
+
+  return out;
 }
 
 for (const route of routes) {
-  const bodyMarkup = renderPath(route.urlPath);
+  const bodyMarkup = renderPath(route.urlPath, route.locale ?? "en");
   const html = withMeta(shell, route).replace('<div id="root"></div>', `<div id="root">${bodyMarkup}</div>`);
   const outPath = path.join(distDir, route.outFile);
   fs.mkdirSync(path.dirname(outPath), { recursive: true });

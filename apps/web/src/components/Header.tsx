@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { fetchMe, logout } from "../lib/api";
-import { useT } from "../lib/i18n";
+import { localizePath, useI18n, useT } from "../lib/i18n";
 import LanguageSwitcher from "./LanguageSwitcher";
 
 export default function Header() {
   const t = useT();
+  const { locale } = useI18n();
   const [signedIn, setSignedIn] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
   const NAV_LINKS = [
-    { to: "/pricing", label: t("nav.pricing") },
-    { to: "/free-templates", label: t("nav.templates") },
+    { to: localizePath("/pricing", locale), label: t("nav.pricing") },
+    { to: localizePath("/free-templates", locale), label: t("nav.templates") },
     { to: "/mcp", label: t("nav.mcp") },
     { to: "/docs", label: t("nav.docs") },
     { to: "/blog", label: t("nav.blog") },
@@ -39,10 +40,13 @@ export default function Header() {
   };
 
   const isSignRoute = location.pathname.startsWith("/sign/");
-  const isInAppRoute = ["/dashboard", "/prepare", "/status"].some((p) => location.pathname.startsWith(p));
+  const isInAppRoute = ["/dashboard", "/prepare", "/es/preparar", "/status"].some((p) =>
+    location.pathname.startsWith(p)
+  );
   const isDashboardRoute = location.pathname.startsWith("/dashboard");
   const logoHeight = isSignRoute || isInAppRoute ? 24 : 40;
-  const logoLinkTo = isInAppRoute ? "/dashboard" : "/";
+  const logoLinkTo = isInAppRoute ? "/dashboard" : localizePath("/", locale);
+  const prepareTo = localizePath("/prepare", locale);
 
   if (isSignRoute) {
     return (
@@ -93,7 +97,7 @@ export default function Header() {
             </button>
           )}
           {!signedIn && (
-            <Link to="/prepare" className="btn-primary btn-lg" style={{ textDecoration: "none" }}>
+            <Link to={prepareTo} className="btn-primary btn-lg" style={{ textDecoration: "none" }}>
               {t("nav.startFree")}
             </Link>
           )}
@@ -128,7 +132,7 @@ export default function Header() {
           <LanguageSwitcher />
         </div>
         <div className="header-mobile-ctas">
-          <Link to="/prepare" className="header-mobile-cta-primary" onClick={() => setMenuOpen(false)}>
+          <Link to={prepareTo} className="header-mobile-cta-primary" onClick={() => setMenuOpen(false)}>
             {t("nav.startFree")}
           </Link>
           <Link

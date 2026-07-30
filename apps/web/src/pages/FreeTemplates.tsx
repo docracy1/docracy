@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FREE_TEMPLATES, RECURRING_CATEGORIES } from "../lib/freeTemplates";
 import { useT } from "../lib/i18n";
-import { usePageMeta } from "../lib/usePageMeta";
+import { useSeoMeta } from "../lib/useSeoMeta";
 import { track } from "../lib/track";
 
 const CATEGORY_KEYS: Record<string, string> = {
@@ -28,12 +28,7 @@ function TemplateCard({ slug, name, description }: { slug: string; name: string;
 export default function FreeTemplates() {
   const t = useT();
 
-  usePageMeta(
-    "Free Business Document Templates — NDA, Contractor Agreement, Offer Letter | Docracy",
-    "Free, ready-to-sign templates for the most common business documents — mutual NDA, independent contractor " +
-      "agreement, offer letter, remote work policy, and freelance service agreement. Fill in your details and send " +
-      "for signature in minutes."
-  );
+  useSeoMeta("freeTemplates");
 
   useEffect(() => {
     const modelContext = (navigator as unknown as { modelContext?: { provideContext: (ctx: unknown) => void } }).modelContext;

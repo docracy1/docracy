@@ -11,10 +11,15 @@ import type { Context } from "hono";
 // omitted, so search/social traffic to /nda-signing or /docusign-alternative produced no page_view.
 const TRACKED_ROUTES = new Set([
   "/",
+  "/es",
   "/free-templates",
+  "/es/plantillas-gratis",
   "/mcp",
   "/about",
   "/pricing",
+  "/es/precios",
+  "/prepare",
+  "/es/preparar",
   "/docs",
   "/trust",
   "/dpa",
@@ -26,9 +31,12 @@ const TRACKED_ROUTES = new Set([
   "/compliance-documentation",
   "/eversign-alternative",
   "/docusign-alternative",
+  "/es/alternativa-a-docusign",
   "/hellosign-alternative",
+  "/es/alternativa-a-hellosign",
   "/pandadoc-alternative",
   "/adobe-sign-alternative",
+  "/es/alternativa-a-adobe-sign",
   "/what-is-an-nda",
   "/are-electronic-signatures-legal",
 ]);

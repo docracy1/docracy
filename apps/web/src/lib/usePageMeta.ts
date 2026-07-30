@@ -1,10 +1,37 @@
 import { useEffect } from "react";
 
-/** Sets document.title and the meta description for a single page, restoring the app's default
- *  (from index.html) on unmount — this is a client-rendered SPA with no per-route SSR, so this is
- *  the only way search engines and social previews see anything other than the shared homepage
- *  title/description on every route. */
-export function usePageMeta(title: string, description: string) {
+const SITE = "https://docracy.io";
+
+export type PageMetaOptions = {
+  /** Pathname used for canonical + og:url (e.g. "/es/precios"). */
+  canonicalPath?: string;
+  /** EN/ES pathnames for hreflang alternates on bilingual pages. */
+  alternates?: { en: string; es: string };
+};
+
+function upsertLink(rel: string, attrs: Record<string, string>, identityKey: string, identityValue: string) {
+  let el = document.head.querySelector<HTMLLinkElement>(`link[${identityKey}="${identityValue}"]`);
+  if (!el) {
+    el = document.createElement("link");
+    el.setAttribute(identityKey, identityValue);
+    document.head.appendChild(el);
+  }
+  el.rel = rel;
+  for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+  return el;
+}
+
+function setMetaBySelector(selector: string, content: string) {
+  const el = document.querySelector(selector);
+  if (el) el.setAttribute("content", content);
+}
+
+/** Sets document.title, meta description, and optional canonical/hreflang/og for a route.
+ *  Restores title + description on unmount. Client-only — prerender.mjs injects the same fields
+ *  into static HTML because useEffect never runs during static rendering. */
+export function usePageMeta(title: string, description: string, options: PageMetaOptions = {}) {
+  const { canonicalPath, alternates } = options;
+
   useEffect(() => {
     const prevTitle = document.title;
     const meta = document.querySelector('meta[name="description"]');
@@ -12,10 +39,36 @@ export function usePageMeta(title: string, description: string) {
 
     document.title = title;
     if (meta) meta.setAttribute("content", description);
+    setMetaBySelector('meta[property="og:title"]', title);
+    setMetaBySelector('meta[property="og:description"]', description);
+    setMetaBySelector('meta[name="twitter:title"]', title);
+    setMetaBySelector('meta[name="twitter:description"]', description);
+
+    const managed: HTMLLinkElement[] = [];
+
+    if (canonicalPath) {
+      const href = `${SITE}${canonicalPath === "/" ? "/" : canonicalPath}`;
+      const canonical = upsertLink("canonical", { href }, "rel", "canonical");
+      managed.push(canonical);
+      setMetaBySelector('meta[property="og:url"]', href);
+    }
+
+    if (alternates) {
+      const tags = [
+        { hreflang: "en", href: `${SITE}${alternates.en === "/" ? "/" : alternates.en}` },
+        { hreflang: "es", href: `${SITE}${alternates.es}` },
+        { hreflang: "x-default", href: `${SITE}${alternates.en === "/" ? "/" : alternates.en}` },
+      ];
+      for (const tag of tags) {
+        managed.push(upsertLink("alternate", { href: tag.href, hreflang: tag.hreflang }, "hreflang", tag.hreflang));
+      }
+    }
 
     return () => {
       document.title = prevTitle;
       if (meta && prevDescription !== null) meta.setAttribute("content", prevDescription);
+      // Leave canonical/hreflang in place — the next page's effect will overwrite them.
+      void managed;
     };
-  }, [title, description]);
+  }, [title, description, canonicalPath, alternates?.en, alternates?.es]);
 }

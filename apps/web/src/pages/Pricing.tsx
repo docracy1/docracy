@@ -3,15 +3,13 @@ import { Link } from "react-router-dom";
 import { fetchMe, startCheckout, type Account } from "../lib/api";
 import { PLAN_ROWS, PlanCell } from "../lib/planRows";
 import { track } from "../lib/track";
-import { usePageMeta } from "../lib/usePageMeta";
-import { useT } from "../lib/i18n";
+import { localizePath, useI18n, useT } from "../lib/i18n";
+import { useSeoMeta } from "../lib/useSeoMeta";
 
 export default function Pricing() {
   const t = useT();
-  usePageMeta(
-    "Pricing — Docracy",
-    "Free for signing chains of up to 2 signers. Paid is $10/month flat per workspace — unlimited signers, templates, AI tools, connectors, and team accounts."
-  );
+  const { locale } = useI18n();
+  useSeoMeta("pricing");
 
   const [account, setAccount] = useState<Account | null | undefined>(undefined);
   const [upgrading, setUpgrading] = useState(false);
@@ -54,16 +52,16 @@ export default function Pricing() {
             </thead>
             <tbody>
               {PLAN_ROWS.map((row) => (
-                <tr key={row.label}>
-                  <td>{row.label}</td>
+                <tr key={row.labelKey}>
+                  <td>{t(row.labelKey)}</td>
                   <td>
-                    <PlanCell value={row.free} />
+                    <PlanCell value={row.free} t={t} />
                   </td>
                   <td className="plan-col-paid">
-                    <PlanCell value={row.paid} />
+                    <PlanCell value={row.paid} t={t} />
                   </td>
                   <td>
-                    <PlanCell value={row.enterprise ?? row.paid} />
+                    <PlanCell value={row.enterprise ?? row.paid} t={t} />
                   </td>
                 </tr>
               ))}
@@ -78,7 +76,7 @@ export default function Pricing() {
             <div className="pricing-sticky-price">
               $0<span className="pricing-sticky-note">{t("pricing.free.note")}</span>
             </div>
-            <Link to="/prepare" className="btn-secondary pricing-sticky-cta">
+            <Link to={localizePath("/prepare", locale)} className="btn-secondary pricing-sticky-cta">
               {t("pricing.free.cta")}
             </Link>
           </div>

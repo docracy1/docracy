@@ -39,6 +39,7 @@ import NotFound from "./pages/NotFound";
 import { ShortGoRedirect, ShortNdaRedirect, ShortPriceRedirect, ShortTryRedirect } from "./pages/ShortLinkRedirect";
 import { captureAttribution } from "./lib/attribution";
 import { LocaleProvider } from "./lib/i18n";
+import LocalePathSync from "./components/LocalePathSync";
 
 // Before first render so the first funnel event already carries the channel that brought them.
 captureAttribution();
@@ -47,11 +48,13 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
+      <Route path="/es" element={<Landing />} />
       <Route path="/try" element={<ShortTryRedirect />} />
       <Route path="/nda" element={<ShortNdaRedirect />} />
       <Route path="/price" element={<ShortPriceRedirect />} />
       <Route path="/go/:campaign" element={<ShortGoRedirect />} />
       <Route path="/prepare" element={<Prepare />} />
+      <Route path="/es/preparar" element={<Prepare />} />
       <Route path="/prepare/sent" element={<PrepareSent />} />
       <Route path="/sign/:token" element={<Sign />} />
       <Route path="/status/:token" element={<Status />} />
@@ -63,6 +66,7 @@ function AppRoutes() {
       <Route path="/auth/verify" element={<AuthVerify />} />
       <Route path="/team/accept" element={<TeamAccept />} />
       <Route path="/free-templates" element={<FreeTemplates />} />
+      <Route path="/es/plantillas-gratis" element={<FreeTemplates />} />
       <Route path="/free-templates/:slug" element={<FreeTemplateDetail />} />
       <Route path="/mcp" element={<Mcp />} />
       <Route path="/admin/analytics" element={<AdminAnalytics />} />
@@ -70,6 +74,7 @@ function AppRoutes() {
       <Route path="/bulk-send" element={<BulkSend />} />
       <Route path="/about" element={<About />} />
       <Route path="/pricing" element={<Pricing />} />
+      <Route path="/es/precios" element={<Pricing />} />
       <Route path="/docs" element={<Docs />} />
       <Route path="/imprint" element={<Imprint />} />
       <Route path="/uptime" element={<Uptime />} />
@@ -83,9 +88,12 @@ function AppRoutes() {
       <Route path="/compliance-documentation" element={<FeaturePage slug="compliance-documentation" />} />
       <Route path="/eversign-alternative" element={<AlternativePage slug="eversign-alternative" />} />
       <Route path="/docusign-alternative" element={<AlternativePage slug="docusign-alternative" />} />
+      <Route path="/es/alternativa-a-docusign" element={<AlternativePage slug="docusign-alternative" />} />
       <Route path="/hellosign-alternative" element={<AlternativePage slug="hellosign-alternative" />} />
+      <Route path="/es/alternativa-a-hellosign" element={<AlternativePage slug="hellosign-alternative" />} />
       <Route path="/pandadoc-alternative" element={<AlternativePage slug="pandadoc-alternative" />} />
       <Route path="/adobe-sign-alternative" element={<AlternativePage slug="adobe-sign-alternative" />} />
+      <Route path="/es/alternativa-a-adobe-sign" element={<AlternativePage slug="adobe-sign-alternative" />} />
       <Route path="/what-is-an-nda" element={<ExplainerPage slug="what-is-an-nda" />} />
       <Route path="/are-electronic-signatures-legal" element={<ExplainerPage slug="are-electronic-signatures-legal" />} />
       <Route path="*" element={<NotFound />} />
@@ -104,6 +112,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               path="*"
               element={
                 <>
+                  <LocalePathSync />
                   <Header />
                   <AppRoutes />
                   <Footer />

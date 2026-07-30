@@ -1,19 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://docracy.io/</loc>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es</loc>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/" />
   </url>
   <url>
     <loc>https://docracy.io/prepare</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/prepare" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/preparar" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/prepare" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/preparar</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/prepare" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/preparar" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/prepare" />
   </url>
   <url>
     <loc>https://docracy.io/free-templates</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-templates" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/plantillas-gratis" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-templates" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/plantillas-gratis</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-templates" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/plantillas-gratis" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-templates" />
   </url>
   <url>
     <loc>https://docracy.io/mcp</loc>
@@ -24,6 +58,17 @@
     <loc>https://docracy.io/pricing</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/pricing" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/precios" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/pricing" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/precios</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/pricing" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/precios" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/pricing" />
   </url>
   <url>
     <loc>https://docracy.io/docs</loc>
@@ -409,11 +454,33 @@
     <loc>https://docracy.io/docusign-alternative</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/docusign-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-docusign" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/docusign-alternative" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/alternativa-a-docusign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/docusign-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-docusign" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/docusign-alternative" />
   </url>
   <url>
     <loc>https://docracy.io/hellosign-alternative</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/hellosign-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-hellosign" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/hellosign-alternative" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/alternativa-a-hellosign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/hellosign-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-hellosign" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/hellosign-alternative" />
   </url>
   <url>
     <loc>https://docracy.io/pandadoc-alternative</loc>
@@ -424,6 +491,17 @@
     <loc>https://docracy.io/adobe-sign-alternative</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/adobe-sign-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-adobe-sign" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/adobe-sign-alternative" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/alternativa-a-adobe-sign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/adobe-sign-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-adobe-sign" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/adobe-sign-alternative" />
   </url>
   <url>
     <loc>https://docracy.io/what-is-an-nda</loc>

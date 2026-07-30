@@ -327,6 +327,8 @@ const en: Messages = {
   "plan.val.days9": "9 days",
   "plan.val.days90": "Up to 90 days",
   "plan.val.premium": "Premium",
+  "plan.included": "Included",
+  "plan.notIncluded": "Not included",
   "dash.welcome": "Welcome",
   "dash.welcomeSub": "Here's what needs your attention today.",
   "dash.new": "+ New",
@@ -482,6 +484,7 @@ const en: Messages = {
   "calc.perUser": "{{price}}/user × {{seats}} users, {{billing}}",
   "calc.minSeats": " ({{min}}-seat minimum applies)",
   "calc.footer": "Prices are each vendor's standard commercial/team plan as published on their own pricing page — feature sets differ per plan, so click through to compare exactly what's included.",
+  "calc.perMonth": "/mo",
   "auth.failed": "Sign-in failed",
   "auth.missingToken": "Missing sign-in token.",
   "auth.signingIn": "Signing you in…",
@@ -736,6 +739,76 @@ const en: Messages = {
   "mcp.zapierBody":
     "Prefer a no-code automation instead of an AI assistant? The same paid account works with Zapier: trigger a Zap on Document Created, Signer Signed, or Document Completed, or send a saved template out for signature as an action. Search for \"Docracy\" when adding a new app to a Zap — same API key as above, used as the \"API Key\" field instead of the full connector URL.",
   "mcp.zapierTitle": "Automate with Zapier",
+  "seo.home.title": "Docracy.io – Simple and secure e-signatures for businesses",
+  "seo.home.description":
+    "Create, send, and sign documents in minutes. Docracy.io offers fast e-signatures, simple workflows, and secure, compliant document storage.",
+  "seo.pricing.title": "Pricing — Docracy",
+  "seo.pricing.description":
+    "Free for signing chains of up to 2 signers. Paid is $10/month flat per workspace — unlimited signers, templates, AI tools, connectors, and team accounts.",
+  "seo.freeTemplates.title": "Free Business Document Templates — NDA, Contractor Agreement, Offer Letter | Docracy",
+  "seo.freeTemplates.description":
+    "Free, ready-to-sign templates for the most common business documents — mutual NDA, independent contractor agreement, offer letter, remote work policy, and freelance service agreement. Fill in your details and send for signature in minutes.",
+  "seo.prepare.title": "Prepare a document — Docracy",
+  "seo.prepare.description":
+    "Upload a PDF or start from a free template, add signers, and send for signature in minutes — no account required.",
+  "seo.docusign.title": "DocuSign Alternative — Simple Signing | Docracy",
+  "seo.docusign.description":
+    "A simple alternative to DocuSign for quick agreements. Fast, clean, no account required. Free for up to 2 signers.",
+  "seo.hellosign.title": "HelloSign / Dropbox Sign Alternative — Free & Simple | Docracy",
+  "seo.hellosign.description":
+    "Looking for a HelloSign or Dropbox Sign alternative for NDAs and client contracts? Free for up to 2 signers, no account required. Paid $10/mo flat.",
+  "seo.adobeSign.title": "Adobe Sign Alternative — Lightweight E-Sign | Docracy",
+  "seo.adobeSign.description":
+    "Adobe Acrobat Sign alternative for freelancers and small teams. Free for up to 2 signers, no account required. Paid $10/mo flat.",
+  "seo.docs.title": "Documentation — Docracy",
+  "seo.docs.description":
+    "How Docracy's free signing flow, paid features (bulk send, embed, contacts, attachments, SMS gateways, Dropbox/OneDrive/Box/Google Drive, AI), Enterprise options, templates, webhooks, and MCP/Zapier automation work.",
+  "seo.mcp.title": "Connect Docracy to Your AI Assistant — MCP Connector | Docracy",
+  "seo.mcp.description":
+    "Connect Docracy to Claude, ChatGPT, Grok, or Perplexity as an MCP connector on a paid account — check signing status and search your documents from chat. Also automates with Zapier.",
+  "alt.problem": "The problem",
+  "alt.solution": "The Docracy way",
+  "alt.compare": "How Docracy compares",
+  "alt.seePricing": "See pricing",
+  "alt.footerCta": "Free to start — no account needed to send or sign.",
+  "alt.docusign.heroHeadline": "DocuSign is too heavy for simple agreements.",
+  "alt.docusign.heroSubheadline": "Docracy.io is built for fast, lightweight signing.",
+  "alt.docusign.problem":
+    "DocuSign is great for enterprise workflows — but overkill for NDAs, client contracts, and one-off agreements.",
+  "alt.docusign.solution": "Docracy.io removes the friction and focuses on speed.",
+  "alt.docusign.c1": "Faster signing — no accounts, no delays",
+  "alt.docusign.c2": "No account required for recipients",
+  "alt.docusign.c3": "No subscriptions for simple agreements — up to 2 signers, completely free",
+  "alt.docusign.c4": "AI-assisted field placement (paid accounts)",
+  "alt.docusign.c5": "Clean, distraction-free workflow",
+  "alt.docusign.ctaLabel": "Try free — send a sample NDA",
+  "alt.docusign.compareLabel": "See the full price comparison vs. DocuSign",
+  "alt.hellosign.heroHeadline": "A simpler alternative to HelloSign / Dropbox Sign.",
+  "alt.hellosign.heroSubheadline": "For freelancers and small teams who just need agreements signed — not another seat tax.",
+  "alt.hellosign.problem":
+    "HelloSign (now Dropbox Sign) is cleaner than DocuSign, but free tiers cap you quickly and paid plans still price like a seat product for light NDA and contract volume.",
+  "alt.hellosign.solution":
+    "Docracy is built for that light volume: free up to 2 signers with no account for anyone, then a flat $10/mo when you need templates, more signers, or a team.",
+  "alt.hellosign.c1": "Free for up to 2 signers — no account for sender or signer",
+  "alt.hellosign.c2": "No per-seat pricing on paid — $10/month flat",
+  "alt.hellosign.c3": "Sample mutual NDA ready in ~30 seconds",
+  "alt.hellosign.c4": "Sequential or parallel signing",
+  "alt.hellosign.c5": "Honest limit: not for ID-verified enterprise workflows",
+  "alt.hellosign.ctaLabel": "Try free — send a sample NDA",
+  "alt.hellosign.compareLabel": "See how Docracy prices vs seat-based e-sign tools",
+  "alt.adobeSign.heroHeadline": "Adobe Sign without the Acrobat baggage.",
+  "alt.adobeSign.heroSubheadline": "When you need a signature — not another Adobe seat in the stack.",
+  "alt.adobeSign.problem":
+    "Adobe Acrobat Sign makes sense inside Acrobat workflows. For occasional NDAs and client agreements, it's heavy and priced for teams living in Adobe every day.",
+  "alt.adobeSign.solution":
+    "Docracy is a focused signing product: free for simple two-party docs, flat $10/mo when you need more — no Creative Cloud required.",
+  "alt.adobeSign.c1": "No Adobe account for signers",
+  "alt.adobeSign.c2": "Free for up to 2 signers",
+  "alt.adobeSign.c3": "$10/mo flat when you need templates / more signers / team",
+  "alt.adobeSign.c4": "Works from any browser on phone or desktop",
+  "alt.adobeSign.c5": "Not a full Acrobat replacement — deliberately lighter",
+  "alt.adobeSign.ctaLabel": "Try free — send a sample NDA",
+  "alt.adobeSign.compareLabel": "See the full price comparison vs. Adobe Sign",
   "chat.title": "Docracy Assistant",
   "chat.greeting": "Hey there 👋 I can help you find the right thing:",
   "chat.sales": "I want to talk to sales",
