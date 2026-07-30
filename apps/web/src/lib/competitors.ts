@@ -9,15 +9,50 @@ export interface Competitor {
   name: string;
   pricePerSeat: number;
   minSeats: number;
+  /** English billing blurb for EN blog copy that interpolates the string directly. */
   billing: string;
+  /** i18n key for PricingCalculator (and any localized UI). */
+  billingKey: string;
   url: string;
 }
 
 export const COMPETITORS: Competitor[] = [
-  { key: "eversign", name: "eversign (Xodo Sign) Professional", pricePerSeat: 16, minSeats: 1, billing: "billed annually", url: "https://eversign.com/pricing" },
-  { key: "docusign", name: "DocuSign Business Pro", pricePerSeat: 40, minSeats: 5, billing: "billed annually, 5-seat minimum", url: "https://www.docusign.com/pricing" },
-  { key: "pandadoc", name: "PandaDoc Business", pricePerSeat: 49, minSeats: 1, billing: "billed annually", url: "https://www.pandadoc.com/pricing/" },
-  { key: "adobesign", name: "Adobe Acrobat Sign (Pro for Teams)", pricePerSeat: 23.99, minSeats: 1, billing: "annual commitment", url: "https://www.adobe.com/acrobat/business/pricing-plans.html" },
+  {
+    key: "eversign",
+    name: "eversign (Xodo Sign) Professional",
+    pricePerSeat: 16,
+    minSeats: 1,
+    billing: "billed annually",
+    billingKey: "calc.billing.annually",
+    url: "https://eversign.com/pricing",
+  },
+  {
+    key: "docusign",
+    name: "DocuSign Business Pro",
+    pricePerSeat: 40,
+    minSeats: 5,
+    billing: "billed annually, 5-seat minimum",
+    billingKey: "calc.billing.annuallyMin5",
+    url: "https://www.docusign.com/pricing",
+  },
+  {
+    key: "pandadoc",
+    name: "PandaDoc Business",
+    pricePerSeat: 49,
+    minSeats: 1,
+    billing: "billed annually",
+    billingKey: "calc.billing.annually",
+    url: "https://www.pandadoc.com/pricing/",
+  },
+  {
+    key: "adobesign",
+    name: "Adobe Acrobat Sign (Pro for Teams)",
+    pricePerSeat: 23.99,
+    minSeats: 1,
+    billing: "annual commitment",
+    billingKey: "calc.billing.annualCommitment",
+    url: "https://www.adobe.com/acrobat/business/pricing-plans.html",
+  },
 ];
 
 export const DOCRACY_PRICE = 10;

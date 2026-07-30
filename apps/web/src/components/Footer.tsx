@@ -7,6 +7,27 @@ export default function Footer() {
   const location = useLocation();
   if (location.pathname.startsWith("/sign/")) return null;
 
+  // On Spanish SEO surfaces, prefer bilingual alternative landings over EN-only blog posts
+  // so crawlers and visitors stay on /es. Competitors without an ES URL still use the blog.
+  const compareLinks =
+    locale === "es"
+      ? [
+          { label: t("footer.vsEversign"), to: "/blog/docracy-vs-eversign" },
+          { label: t("footer.vsDocusign"), to: "/es/alternativa-a-docusign" },
+          { label: t("footer.vsHellosign"), to: "/es/alternativa-a-hellosign" },
+          { label: t("footer.vsPandadoc"), to: "/blog/docracy-vs-pandadoc" },
+          { label: t("footer.vsAdobe"), to: "/es/alternativa-a-adobe-sign" },
+          { label: t("footer.allComparisons"), to: "/blog" },
+        ]
+      : [
+          { label: t("footer.vsEversign"), to: "/blog/docracy-vs-eversign" },
+          { label: t("footer.vsDocusign"), to: "/docusign-alternative" },
+          { label: t("footer.vsHellosign"), to: "/hellosign-alternative" },
+          { label: t("footer.vsPandadoc"), to: "/blog/docracy-vs-pandadoc" },
+          { label: t("footer.vsAdobe"), to: "/adobe-sign-alternative" },
+          { label: t("footer.allComparisons"), to: "/blog" },
+        ];
+
   const columns: Array<{ heading: string; links: Array<{ label: string; to: string; external?: boolean }> }> = [
     {
       heading: t("footer.product"),
@@ -21,13 +42,7 @@ export default function Footer() {
     },
     {
       heading: t("footer.compare"),
-      links: [
-        { label: t("footer.vsEversign"), to: "/blog/docracy-vs-eversign" },
-        { label: t("footer.vsDocusign"), to: "/blog/docracy-vs-docusign" },
-        { label: t("footer.vsPandadoc"), to: "/blog/docracy-vs-pandadoc" },
-        { label: t("footer.vsAdobe"), to: "/blog/docracy-vs-adobe-acrobat-sign" },
-        { label: t("footer.allComparisons"), to: "/blog" },
-      ],
+      links: compareLinks,
     },
     {
       heading: t("footer.company"),

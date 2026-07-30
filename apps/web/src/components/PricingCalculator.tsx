@@ -69,7 +69,7 @@ export default function PricingCalculator() {
                 </div>
               </div>
               <div style={{ fontSize: 12, color: "var(--mute)", marginTop: 6 }}>
-                {t("calc.perUser", { price: formatUsd(c.pricePerSeat), seats, billing: c.billing })}
+                {t("calc.perUser", { price: formatUsd(c.pricePerSeat), seats, billing: t(c.billingKey) })}
                 {seats > teamSize ? t("calc.minSeats", { min: c.minSeats }) : ""}
               </div>
             </div>

@@ -46,6 +46,14 @@ export default function AlternativePage({ slug }: { slug: string }) {
   const ctaTo = localizePath(page.ctaTo, locale);
   const pricingTo = localizePath("/pricing?ref=seo-price", locale);
 
+  const relatedAlts = [
+    { slug: "docusign-alternative", labelKey: "alt.related.docusign" },
+    { slug: "hellosign-alternative", labelKey: "alt.related.hellosign" },
+    { slug: "adobe-sign-alternative", labelKey: "alt.related.adobeSign" },
+  ]
+    .filter((r) => r.slug !== slug)
+    .map((r) => ({ ...r, label: t(r.labelKey) }));
+
   return (
     <div>
       <div className="hero-band">
@@ -92,6 +100,21 @@ export default function AlternativePage({ slug }: { slug: string }) {
         <p style={{ marginTop: 24 }}>
           <Link to={`/blog/${page.compareBlogSlug}`}>{compareLabel} →</Link>
         </p>
+
+        <h2 style={{ fontSize: 18, marginTop: 36, marginBottom: 8 }}>{t("alt.alsoSee")}</h2>
+        <ul style={{ paddingLeft: 20, marginTop: 0 }}>
+          {relatedAlts.map((rel) => (
+            <li key={rel.slug} style={{ marginBottom: 6 }}>
+              <Link to={localizePath(`/${rel.slug}`, locale)}>{rel.label}</Link>
+            </li>
+          ))}
+          <li style={{ marginBottom: 6 }}>
+            <Link to={localizePath("/free-templates/mutual-nda", locale)}>{t("alt.related.mutualNda")}</Link>
+          </li>
+          <li style={{ marginBottom: 6 }}>
+            <Link to={localizePath("/pricing", locale)}>{t("alt.seePricing")}</Link>
+          </li>
+        </ul>
       </div>
 
       <div className="cta-band">

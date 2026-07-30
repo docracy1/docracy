@@ -11,6 +11,7 @@ import { useSeoMeta } from "../lib/useSeoMeta";
 
 /** Static field-detection mock for the AI spotlight — hero uses the animated ProductFlowDemo. */
 function DetectMockup() {
+  const t = useT();
   return (
     <svg viewBox="0 0 380 285" width="100%" height="100%">
       <rect x="0.5" y="0.5" width="379" height="284" rx="16" fill="var(--canvas)" stroke="var(--hairline)" />
@@ -23,11 +24,11 @@ function DetectMockup() {
       <rect x="32" y="160" width="170" height="8" rx="4" fill="var(--hairline)" />
       <rect x="32" y="200" width="130" height="36" rx="6" fill="var(--primary-soft)" stroke="var(--primary)" strokeDasharray="5 4" strokeWidth="2" />
       <text x="97" y="222" textAnchor="middle" fontSize="11" fill="var(--primary)" fontFamily="inherit" fontWeight="700">
-        Signature
+        {t("flow.signature")}
       </text>
       <rect x="178" y="200" width="90" height="36" rx="6" fill="var(--primary-soft)" stroke="var(--primary)" strokeDasharray="5 4" strokeWidth="2" />
       <text x="223" y="222" textAnchor="middle" fontSize="11" fill="var(--primary)" fontFamily="inherit" fontWeight="700">
-        Date
+        {t("flow.date")}
       </text>
       <circle cx="335" cy="40" r="18" fill="var(--primary-soft-strong)" />
       <path
