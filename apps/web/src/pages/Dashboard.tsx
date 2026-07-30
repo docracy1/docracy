@@ -1047,7 +1047,31 @@ export default function Dashboard() {
 
             <div className="card" style={{ marginTop: 24 }}>
               <h3 style={{ fontSize: 15 }}>{t("dash.awaitingYou")}</h3>
-              {awaitingYouDocs.length === 0 ? (
+              {documents.length === 0 ? (
+                <div className="dashboard-first-run">
+                  <p style={{ marginBottom: 8 }}>
+                    <strong>{t("dash.firstRunTitle")}</strong>
+                  </p>
+                  <p style={{ fontSize: 13.5, color: "var(--mute)", marginTop: 0 }}>{t("dash.firstRunSub")}</p>
+                  <ol style={{ margin: "0 0 16px", paddingLeft: 18, fontSize: 14, lineHeight: 1.55 }}>
+                    <li>{t("dash.firstRunStep1")}</li>
+                    <li>{t("dash.firstRunStep2")}</li>
+                    <li>{t("dash.firstRunStep3")}</li>
+                  </ol>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+                    <Link
+                      to="/prepare?freeTemplate=mutual-nda&ref=dashboard-first-run"
+                      className="btn-primary"
+                      style={{ textDecoration: "none" }}
+                    >
+                      {t("dash.firstRunCta")}
+                    </Link>
+                    <Link to="/prepare?ref=dashboard-first-run" className="btn-secondary" style={{ textDecoration: "none" }}>
+                      {t("dash.firstRunUpload")}
+                    </Link>
+                  </div>
+                </div>
+              ) : awaitingYouDocs.length === 0 ? (
                 <p className="dashboard-caught-up" style={{ marginBottom: 0 }}>
                   <span className="dashboard-caught-up-icon" aria-hidden="true">✓</span>
                   <span>
@@ -1194,7 +1218,12 @@ export default function Dashboard() {
             </h3>
             {docActionError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{docActionError}</p>}
             {visibleDocs.length === 0 ? (
-              <p style={{ marginBottom: 0 }}>{t("dash.nothingHere")}</p>
+              <div>
+                <p style={{ marginBottom: 12 }}>{t("dash.emptyDocs")}</p>
+                <Link to="/prepare?ref=dashboard-empty-docs" className="btn-primary" style={{ textDecoration: "none" }}>
+                  {t("dash.emptyDocsCta")}
+                </Link>
+              </div>
             ) : (
               visibleDocs.map((doc) => (
                 <div

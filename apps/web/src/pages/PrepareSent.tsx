@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { fetchMe } from "../lib/api";
-import { useT } from "../lib/i18n";
+import { localizePath, useI18n, useT } from "../lib/i18n";
 import { track } from "../lib/track";
 
 /**
  * Peak conversion moment for anonymous senders: document just left, status link in hand.
  * Logged-in users already have an account — point them at the dashboard / next send.
- * Anonymous → create account (history) + soft paid nudge + share loop.
+ * Anonymous → create account (history for future sends) + soft paid nudge + share loop.
  */
 export default function PrepareSent() {
   const t = useT();
+  const { locale } = useI18n();
   const { state } = useLocation() as {
     state: { docId: string; statusToken: string; signingMode?: "sequential" | "parallel" } | null;
   };
@@ -27,7 +28,7 @@ export default function PrepareSent() {
     return (
       <div className="container">
         <h1>{t("sent.titleFallback")}</h1>
-        <p>Your document was created. Check your email for status updates.</p>
+        <p>{t("sent.checkEmail")}</p>
         <Link to="/" className="btn-secondary" style={{ textDecoration: "none" }}>
           {t("common.backHome")}
         </Link>
@@ -36,7 +37,8 @@ export default function PrepareSent() {
   }
 
   const statusUrl = `${window.location.origin}/status/${state.statusToken}`;
-  const shareBlurb = `I just sent a document for signature with Docracy (free, no signup). Try it: https://docracy.io/try`;
+  const shareBlurb = t("sent.shareBlurb");
+  const statusNext = encodeURIComponent(`/status/${state.statusToken}`);
 
   const copyText = async (kind: "status" | "share", text: string) => {
     try {
@@ -52,13 +54,9 @@ export default function PrepareSent() {
   return (
     <div className="container">
       <h1>{t("sent.title")}</h1>
-      <p>
-        {state.signingMode === "parallel"
-          ? "Every signer has been emailed their link — they can sign in any order."
-          : "The first signer has been emailed their link. Everyone else in the chain will be notified in turn."}
-      </p>
+      <p>{state.signingMode === "parallel" ? t("sent.parallel") : t("sent.sequential")}</p>
       <div className="card">
-        <p style={{ marginBottom: 8 }}>Bookmark this link to check progress any time:</p>
+        <p style={{ marginBottom: 8 }}>{t("sent.bookmark")}</p>
         <Link to={`/status/${state.statusToken}`}>{statusUrl}</Link>
         <div style={{ marginTop: 12, display: "flex", flexWrap: "wrap", gap: 8 }}>
           <button type="button" className="btn-secondary" onClick={() => copyText("status", statusUrl)}>
@@ -72,16 +70,20 @@ export default function PrepareSent() {
 
       {loggedIn === false && (
         <div className="card" style={{ marginTop: 20 }}>
-          <p style={{ marginBottom: 8, fontWeight: 600 }}>Save this send to an account</p>
+          <p style={{ marginBottom: 8, fontWeight: 600 }}>{t("sent.saveAccount")}</p>
           <p style={{ marginBottom: 14, color: "var(--mute)", fontSize: 14 }}>
-            Free accounts keep every document you send in one place — no password, just a magic link.
+            {t("sent.saveAccountSub")}
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
-            <Link to="/login?ref=prepare-sent" className="btn-primary" style={{ textDecoration: "none" }}>
+            <Link
+              to={`/login?ref=prepare-sent&next=${statusNext}`}
+              className="btn-primary"
+              style={{ textDecoration: "none" }}
+            >
               {t("status.createAccount")}
             </Link>
             <Link
-              to="/pricing?ref=prepare-sent"
+              to={`${localizePath("/pricing", locale)}?ref=prepare-sent`}
               className="btn-secondary"
               style={{ textDecoration: "none" }}
               onClick={() => track("upgrade_clicked", { source: "prepare_sent_pricing" })}
@@ -94,7 +96,7 @@ export default function PrepareSent() {
 
       {loggedIn === true && (
         <div style={{ marginTop: 20, display: "flex", flexWrap: "wrap", gap: 10 }}>
-          <Link to="/prepare" className="btn-primary" style={{ textDecoration: "none" }}>
+          <Link to={localizePath("/prepare", locale)} className="btn-primary" style={{ textDecoration: "none" }}>
             {t("sent.sendAnother")}
           </Link>
           <Link to="/dashboard" className="btn-secondary" style={{ textDecoration: "none" }}>

@@ -155,11 +155,14 @@ export default function Status() {
         <div className="card" style={{ marginTop: 20 }}>
           <p style={{ marginBottom: 8, fontWeight: 600 }}>{t("status.keepPdfs")}</p>
           <p style={{ marginBottom: 14, color: "var(--mute)", fontSize: 14 }}>
-            Free accounts save document history. Paid unlocks templates, unlimited signers, and team seats —
-            $10/month.
+            {t("status.keepPdfsSub")}
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
-            <Link to="/login?ref=status-completed" className="btn-primary" style={{ textDecoration: "none" }}>
+            <Link
+              to={`/login?ref=status-completed&next=${encodeURIComponent(`/status/${token}`)}`}
+              className="btn-primary"
+              style={{ textDecoration: "none" }}
+            >
               {t("status.createAccount")}
             </Link>
             <Link
@@ -176,11 +179,15 @@ export default function Status() {
 
       {showConversion && status.status === "pending" && (
         <div className="card" style={{ marginTop: 20 }}>
-          <p style={{ marginBottom: 8, fontWeight: 600 }}>Don&apos;t lose this status link</p>
+          <p style={{ marginBottom: 8, fontWeight: 600 }}>{t("status.dontLoseLink")}</p>
           <p style={{ marginBottom: 14, color: "var(--mute)", fontSize: 14 }}>
-            {t("status.createAccount")} so every document you send lives in one dashboard — no password needed.
+            {t("status.dontLoseLinkSub")}
           </p>
-          <Link to="/login?ref=status-pending" className="btn-primary" style={{ textDecoration: "none" }}>
+          <Link
+            to={`/login?ref=status-pending&next=${encodeURIComponent(`/status/${token}`)}`}
+            className="btn-primary"
+            style={{ textDecoration: "none" }}
+          >
             {t("status.createAccount")}
           </Link>
         </div>

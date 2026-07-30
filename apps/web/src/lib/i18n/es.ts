@@ -179,7 +179,7 @@ const es: Messages = {
   "freeTemplates.title": "Plantillas gratis",
   "hero.b1": "Firma de documentos rápida y sin fricción",
   "hero.b2": "Flujo simple para equipos",
-  "hero.b3": "Almacenamiento seguro y conforme",
+  "hero.b3": "Almacenamiento cifrado con retención corta y automática",
   "hero.b4": "Firmas legalmente vinculantes bajo leyes como ESIGN y eIDAS",
   "hero.ctaSample": "Probar con un NDA de ejemplo",
   "hero.ctaUpload": "o sube tu propio PDF",
@@ -241,7 +241,7 @@ const es: Messages = {
   "landing.faq1.q": "¿Qué es Docracy.io?",
   "landing.faq2.a": "Sube un documento, asigna destinatarios y recoge firmas en minutos.",
   "landing.faq2.q": "¿Cómo funcionan las firmas electrónicas?",
-  "landing.faq3.a": "Todos los documentos se cifran, versionan y almacenan en un entorno conforme.",
+  "landing.faq3.a": "Todos los documentos se cifran en tránsito y en reposo, se versionan y se eliminan automáticamente tras un periodo corto de retención.",
   "landing.faq3.q": "¿Es seguro Docracy.io?",
   "landing.faq4.a":
     "Sí, con una cuenta de pago — crea plantillas para documentos recurrentes como NDAs, contratos y formularios de onboarding.",
@@ -325,7 +325,7 @@ const es: Messages = {
   "login.sub":
     "Sin contraseña — te enviamos un enlace por correo. ¿Primera vez? Así también creas tu cuenta.",
   "login.subSave":
-    "Crea una cuenta gratis para tener todos tus documentos en un solo lugar — sin contraseña, solo un enlace mágico a este correo.",
+    "Crea una cuenta gratis para que cada envío futuro viva en tu panel — sin contraseña, solo un enlace mágico a este correo.",
   "login.subUpgrade":
     "Inicia sesión (o crea una cuenta) y luego mejora el plan para firmantes ilimitados, plantillas e historial.",
   "login.title": "Iniciar sesión",
@@ -512,7 +512,7 @@ const es: Messages = {
   "sent.parallel": "Cada firmante recibió su enlace por correo — pueden firmar en cualquier orden.",
   "sent.saveAccount": "Guardar este envío en una cuenta",
   "sent.saveAccountSub":
-    "Las cuentas gratis guardan cada documento que envías en un solo lugar — sin contraseña, solo un enlace mágico.",
+    "Crea una cuenta gratis para que cada envío futuro aparezca en tu panel — sin contraseña, solo un enlace mágico. Este envío sigue disponible con el enlace de estado de arriba.",
   "sent.sendAnother": "Enviar otro",
   "sent.sequential":
     "El primer firmante recibió su enlace. Los demás en la cadena serán notificados en turno.",
@@ -581,13 +581,13 @@ const es: Messages = {
   "status.createAccount": "Crear cuenta gratis",
   "status.dontLoseLink": "No pierdas este enlace de estado",
   "status.dontLoseLinkSub":
-    "Crea una cuenta gratis para que todos tus documentos vivan en un panel — sin contraseña.",
+    "Crea una cuenta gratis para que cada documento futuro viva en un panel — sin contraseña. Conserva este enlace de estado para el envío actual.",
   "status.download": "Descargar PDF firmado",
   "status.fullySigned": "Completamente firmado",
   "status.inProgress": "Firma en curso",
   "status.keepPdfs": "Guarda todos tus PDFs firmados en un solo lugar",
   "status.keepPdfsSub":
-    "Las cuentas gratis guardan el historial. El plan de pago desbloquea plantillas, firmantes ilimitados y equipo — $10/mes.",
+    "Inicia sesión gratis para guardar cada envío futuro en tu panel (este enlace de estado sigue valiendo para el documento actual). El plan de pago desbloquea plantillas, firmantes ilimitados y asientos de equipo — 10 $/mes.",
   "status.seePaidPlans": "Ver planes de pago",
   "status.viewer": "Espectador: {{info}}",
   "team.failed": "No se pudo aceptar la invitación",
@@ -826,7 +826,7 @@ const es: Messages = {
   "uptime.title": "Estado del sistema",
   "seo.home.title": "Docracy.io – Firmas electrónicas simples y seguras para negocios",
   "seo.home.description":
-    "Crea, envía y firma documentos en minutos. Docracy.io ofrece firmas electrónicas rápidas, flujos simples y almacenamiento seguro y conforme.",
+    "Crea, envía y firma documentos en minutos. Docracy.io ofrece firmas electrónicas rápidas, flujos simples y almacenamiento cifrado con retención corta y automática.",
   "seo.pricing.title": "Precios — Docracy",
   "seo.pricing.description":
     "Gratis para cadenas de hasta 2 firmantes. El plan de pago es $10/mes fijo por espacio de trabajo — firmantes ilimitados, plantillas, herramientas de IA, conectores y cuentas de equipo.",
@@ -1098,6 +1098,28 @@ const es: Messages = {
   "alt.related.hellosign": "Alternativa a HelloSign / Dropbox Sign",
   "alt.related.adobeSign": "Alternativa a Adobe Sign",
   "alt.related.mutualNda": "Plantilla gratis de NDA mutuo",
+
+  "sent.checkEmail": "Tu documento se creó. Revisa tu correo para actualizaciones de estado.",
+  "sent.shareBlurb": "Acabo de enviar un documento a firmar con Docracy (gratis, sin registro). Pruébalo: https://docracy.io/try",
+  "dash.firstRunTitle": "Envía tu primer documento",
+  "dash.firstRunSub": "Tres pasos rápidos — luego el progreso aparece aquí.",
+  "dash.firstRunStep1": "Sube un PDF o empieza desde una plantilla gratis",
+  "dash.firstRunStep2": "Agrega firmantes y coloca campos de firma",
+  "dash.firstRunStep3": "Envía — cada uno recibe un enlace por correo; no necesitan cuenta para firmar",
+  "dash.firstRunCta": "Empezar con un NDA de ejemplo",
+  "dash.firstRunUpload": "O sube tu propio PDF",
+  "dash.emptyDocs": "Aún no hay nada — envía un documento y aparecerá en esta lista.",
+  "dash.emptyDocsCta": "Nuevo documento",
+
+
+
+
+  "testimonial.1.quote": "Docracy es un gran producto que he probado y estoy usando. Es fácil de usar, tiene buenas herramientas, siempre está actualizado e implementa nuevas funciones. Muy recomendable.",
+  "testimonial.1.title": "",
+  "testimonial.2.quote": "Docracy es una herramienta sencilla y centrada en la privacidad para firmar documentos sin fricción. Su flujo sin registro y el borrado automático la hacen especialmente valiosa para artistas, curadores y profesionales culturales que necesitan confianza, velocidad y discreción.",
+  "testimonial.2.title": "Directora artística, emprendedora",
+  "testimonial.3.quote": "Docracy es una herramienta de firma electrónica inteligente y sin fricción: sin registro, sin ruido, solo firma secuencial segura con privacidad integrada. Para equipos de cultura y tecnología que van rápido, hace los acuerdos simples, profesionales y discretos.",
+  "testimonial.3.title": "CEO de culttech, inversor",
 };
 
 export default es;

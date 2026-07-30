@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { PLAN_ROWS, PlanCell } from "../lib/planRows";
-import { usePageMeta } from "../lib/usePageMeta";
 import { FREE_TEMPLATES } from "../lib/freeTemplates";
 import { useT } from "../lib/i18n";
+import { useSeoMeta } from "../lib/useSeoMeta";
 
 function Section({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
   return (
@@ -15,7 +15,7 @@ function Section({ id, title, children }: { id: string; title: string; children:
 
 export default function Docs() {
   const t = useT();
-  usePageMeta(t("seo.docs.title"), t("seo.docs.description"));
+  useSeoMeta("docs");
 
   return (
     <div className="container" style={{ maxWidth: 760 }}>

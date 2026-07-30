@@ -141,7 +141,7 @@ const routes = [
     outFile: "index.html",
     title: "Docracy.io – Simple and secure e-signatures for businesses",
     description:
-      "Create, send, and sign documents in minutes. Docracy.io offers fast e-signatures, simple workflows, and secure, compliant document storage.",
+      "Create, send, and sign documents in minutes. Docracy.io offers fast e-signatures, simple workflows, and encrypted storage with short automatic retention.",
     locale: "en",
     alternates: { en: "/", es: "/es" },
   },
@@ -164,8 +164,10 @@ const routes = [
     outFile: "mcp.html",
     title: "Connect Docracy to Your AI Assistant — MCP Connector | Docracy",
     description:
-      "Connect Docracy to Claude, ChatGPT, Grok, or Perplexity as an MCP connector — free to try with no signup, " +
-      "or upgrade for document search and the full AI toolset. Also automates with Zapier.",
+      "Connect Docracy to Claude, ChatGPT, Grok, or Perplexity as an MCP connector on a paid account — check signing " +
+      "status and search your documents from chat. Also automates with Zapier.",
+    locale: "en",
+    alternates: { en: "/mcp", es: "/es/mcp" },
   },
   {
     urlPath: "/about",
@@ -188,7 +190,7 @@ const routes = [
     outFile: "es.html",
     title: "Docracy.io – Firmas electrónicas simples y seguras para negocios",
     description:
-      "Crea, envía y firma documentos en minutos. Docracy.io ofrece firmas electrónicas rápidas, flujos simples y almacenamiento seguro y conforme.",
+      "Crea, envía y firma documentos en minutos. Docracy.io ofrece firmas electrónicas rápidas, flujos simples y almacenamiento cifrado con retención corta y automática.",
     locale: "es",
     alternates: { en: "/", es: "/es" },
   },
@@ -242,7 +244,28 @@ const routes = [
     urlPath: "/docs",
     outFile: "docs.html",
     title: "Documentation — Docracy",
-    description: "How Docracy's free signing flow, paid AI tools, templates, webhooks, and MCP/Zapier automation actually work.",
+    description:
+      "How Docracy's free signing flow, paid features (bulk send, embed, contacts, attachments, SMS gateways, Dropbox/OneDrive/Box/Google Drive, AI), Enterprise options, templates, webhooks, and MCP/Zapier automation work.",
+    locale: "en",
+    alternates: { en: "/docs", es: "/es/documentacion" },
+  },
+  {
+    urlPath: "/es/mcp",
+    outFile: "es/mcp.html",
+    title: "Conecta Docracy a tu asistente de IA — Conector MCP | Docracy",
+    description:
+      "Conecta Docracy a Claude, ChatGPT, Grok o Perplexity como conector MCP en una cuenta de pago — consulta el estado de firma y busca documentos desde el chat. También automatiza con Zapier.",
+    locale: "es",
+    alternates: { en: "/mcp", es: "/es/mcp" },
+  },
+  {
+    urlPath: "/es/documentacion",
+    outFile: "es/documentacion.html",
+    title: "Documentación — Docracy",
+    description:
+      "Cómo funcionan el flujo gratis de firma, las funciones de pago (envío masivo, integración, contactos, adjuntos, SMS, Dropbox/OneDrive/Box/Google Drive, IA), opciones Enterprise, plantillas, webhooks y automatización MCP/Zapier.",
+    locale: "es",
+    alternates: { en: "/docs", es: "/es/documentacion" },
   },
   {
     urlPath: "/imprint",

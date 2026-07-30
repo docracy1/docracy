@@ -72,6 +72,7 @@ export default function Login() {
   const t = useT();
   const [searchParams] = useSearchParams();
   const ref = searchParams.get("ref") ?? "";
+  const nextParam = searchParams.get("next") ?? "";
   const utmMedium = searchParams.get("utm_medium") ?? "";
   const utmCampaign = searchParams.get("utm_campaign") ?? "";
 
@@ -107,7 +108,7 @@ export default function Login() {
     setSubmitting(true);
     setError(null);
     try {
-      await requestMagicLink(email, turnstileToken ?? undefined);
+      await requestMagicLink(email, turnstileToken ?? undefined, nextParam || undefined);
       setSent(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : t("common.error"));

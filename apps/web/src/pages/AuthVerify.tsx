@@ -3,6 +3,13 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useT } from "../lib/i18n";
 import { consumeMagicLinkToken } from "../lib/api";
 
+function safeClientNext(next: string | undefined): string {
+  if (!next) return "/dashboard";
+  if (!next.startsWith("/") || next.startsWith("//")) return "/dashboard";
+  if (next.includes("://") || next.includes("\\")) return "/dashboard";
+  return next;
+}
+
 export default function AuthVerify() {
   const t = useT();
   const [searchParams] = useSearchParams();
@@ -19,7 +26,7 @@ export default function AuthVerify() {
     // shouldn't linger in browser history or get sent as a Referer to any third-party resource.
     window.history.replaceState({}, "", "/auth/verify");
     consumeMagicLinkToken(token)
-      .then(() => navigate("/dashboard", { replace: true }))
+      .then((result) => navigate(safeClientNext(result.next), { replace: true }))
       .catch((err) => setError(err instanceof Error ? err.message : "Something went wrong"));
   }, []);
 

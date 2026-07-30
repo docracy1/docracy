@@ -22,9 +22,9 @@ type Variables = { account: AccountContext | null };
 const auth = new Hono<{ Bindings: Env; Variables: Variables }>();
 
 auth.post("/request-link", async (c) => {
-  let body: { email?: string; turnstileToken?: string; attribution?: string };
+  let body: { email?: string; turnstileToken?: string; attribution?: string; next?: string };
   try {
-    body = await c.req.json<{ email?: string; turnstileToken?: string; attribution?: string }>();
+    body = await c.req.json<{ email?: string; turnstileToken?: string; attribution?: string; next?: string }>();
   } catch {
     return c.json({ error: "Invalid request body" }, 400);
   }
@@ -35,7 +35,7 @@ auth.post("/request-link", async (c) => {
   }
 
   const ip = c.req.header("CF-Connecting-IP") ?? null;
-  const result = await requestMagicLink(c.env, c.executionCtx, email, ip, body.turnstileToken);
+  const result = await requestMagicLink(c.env, c.executionCtx, email, ip, body.turnstileToken, body.next);
   if (!result.ok) return c.json({ error: result.error }, 400);
   // Fired for every request, new account or returning login alike — there's no way to know which
   // without a D1 lookup this route doesn't otherwise need, and a broad "auth flow started" signal
@@ -85,7 +85,7 @@ auth.post("/consume", async (c) => {
   if (account && isAdminEmail(c.env, account.email)) {
     setCookie(c, NOTRACK_COOKIE_NAME, "1", noTrackCookieOptions(c.env));
   }
-  return c.json({ ok: true });
+  return c.json({ ok: true, ...(result.next ? { next: result.next } : {}) });
 });
 
 auth.post("/admin-login", async (c) => {

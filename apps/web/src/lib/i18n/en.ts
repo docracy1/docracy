@@ -19,7 +19,7 @@ const en: Messages = {
   "hero.sub": "Send, sign, and finish simple documents in minutes — without subscriptions, complexity, or setup.",
   "hero.b1": "Fast and frictionless document signing",
   "hero.b2": "Simple workflow setup for teams",
-  "hero.b3": "Secure and compliant document storage",
+  "hero.b3": "Encrypted storage with short automatic retention",
   "hero.b4": "Legally binding signatures under e-signature laws like ESIGN and eIDAS",
   "hero.ctaSample": "Try with a sample NDA",
   "hero.ctaUpload": "or upload your own PDF",
@@ -29,7 +29,7 @@ const en: Messages = {
   "login.titleSave": "Save the document you just sent",
   "login.titleUpgrade": "Sign in to upgrade",
   "login.sub": "No password — we'll email you a link. First time here? This creates your account too.",
-  "login.subSave": "Create a free account so every document lives in one place — no password, just a magic link to this email.",
+  "login.subSave": "Create a free account so every future send lives in your dashboard — no password, just a magic link to this email.",
   "login.subUpgrade": "Sign in (or create an account), then upgrade for unlimited signers, templates, and history.",
   "login.cta": "Send sign-in link",
   "login.ctaSave": "Email me a magic link",
@@ -163,7 +163,7 @@ const en: Messages = {
   "landing.faq2.q": "How do e-signatures work?",
   "landing.faq2.a": "Upload a document, assign recipients, and collect signatures in minutes.",
   "landing.faq3.q": "Is Docracy.io secure?",
-  "landing.faq3.a": "All documents are encrypted, versioned, and stored in a compliant environment.",
+  "landing.faq3.a": "All documents are encrypted in transit and at rest, versioned, and deleted automatically after a short retention window.",
   "landing.faq4.q": "Can I use templates?",
   "landing.faq4.a": "Yes, on a paid account — create templates for recurring documents like NDAs, contracts, and onboarding forms.",
   "landing.faq5.q": "Does Docracy.io support teams?",
@@ -451,11 +451,11 @@ const en: Messages = {
   "status.cancelPrompt": "Optional reason for cancelling (leave blank to skip):",
   "status.viewer": "Viewer: {{info}}",
   "status.keepPdfs": "Keep every signed PDF in one place",
-  "status.keepPdfsSub": "Free accounts save document history. Paid unlocks templates, unlimited signers, and team seats — $10/month.",
+  "status.keepPdfsSub": "Sign in free to keep every future send in your dashboard (this status link still works for the current document). Paid unlocks templates, unlimited signers, and team seats — $10/month.",
   "status.createAccount": "Create a free account",
   "status.seePaidPlans": "See paid plans",
   "status.dontLoseLink": "Don't lose this status link",
-  "status.dontLoseLinkSub": "Create a free account so every document you send lives in one dashboard — no password needed.",
+  "status.dontLoseLinkSub": "Create a free account so every future document you send lives in one dashboard — no password needed. Keep this status link for the current send.",
   "sent.title": "On its way",
   "sent.titleFallback": "Sent",
   "sent.fallbackBody": "Your document was created. Check your email for status updates.",
@@ -465,7 +465,7 @@ const en: Messages = {
   "sent.copyStatus": "Copy status link",
   "sent.shareColleague": "Share Docracy with a colleague",
   "sent.saveAccount": "Save this send to an account",
-  "sent.saveAccountSub": "Free accounts keep every document you send in one place — no password, just a magic link.",
+  "sent.saveAccountSub": "Create a free account so every future send appears in your dashboard — no password, just a magic link. This send stays available via the status link above.",
   "sent.sendAnother": "Send another",
   "firstDoc.prompt": "Send your first document — it takes 30 seconds.",
   "firstDoc.upload": "Upload document",
@@ -741,7 +741,7 @@ const en: Messages = {
   "mcp.zapierTitle": "Automate with Zapier",
   "seo.home.title": "Docracy.io – Simple and secure e-signatures for businesses",
   "seo.home.description":
-    "Create, send, and sign documents in minutes. Docracy.io offers fast e-signatures, simple workflows, and secure, compliant document storage.",
+    "Create, send, and sign documents in minutes. Docracy.io offers fast e-signatures, simple workflows, and encrypted storage with short automatic retention.",
   "seo.pricing.title": "Pricing — Docracy",
   "seo.pricing.description":
     "Free for signing chains of up to 2 signers. Paid is $10/month flat per workspace — unlimited signers, templates, AI tools, connectors, and team accounts.",
@@ -1041,6 +1041,28 @@ const en: Messages = {
   "alt.related.hellosign": "HelloSign / Dropbox Sign alternative",
   "alt.related.adobeSign": "Adobe Sign alternative",
   "alt.related.mutualNda": "Free mutual NDA template",
+
+  "sent.checkEmail": "Your document was created. Check your email for status updates.",
+  "sent.shareBlurb": "I just sent a document for signature with Docracy (free, no signup). Try it: https://docracy.io/try",
+  "dash.firstRunTitle": "Send your first document",
+  "dash.firstRunSub": "Three quick steps — then progress shows up here.",
+  "dash.firstRunStep1": "Upload a PDF or start from a free template",
+  "dash.firstRunStep2": "Add signers and place signature fields",
+  "dash.firstRunStep3": "Send — everyone gets an email link, no account needed to sign",
+  "dash.firstRunCta": "Start with a sample NDA",
+  "dash.firstRunUpload": "Or upload your own PDF",
+  "dash.emptyDocs": "Nothing here yet — send a document and it will show up in this list.",
+  "dash.emptyDocsCta": "New document",
+
+
+
+
+  "testimonial.1.quote": "Docracy is a great product that I have tested and am using. It is easy to use, has good tools, is always up to date, and implements new features. Highly recommended.",
+  "testimonial.1.title": "",
+  "testimonial.2.quote": "Docracy is a beautifully simple, privacy-first tool for signing documents without friction. Its no-signup flow and automatic document deletion make it especially valuable for artists, curators, and cultural professionals who need trust, speed, and discretion.",
+  "testimonial.2.title": "Artist director, entrepreneur",
+  "testimonial.3.quote": "Docracy is a smart, frictionless e-signature tool: no signup, no clutter, just secure sequential signing with privacy built in. For culture and tech teams moving fast, it makes agreements simple, professional, and discreet.",
+  "testimonial.3.title": "CEO of culttech, Investor",
 };
 
 export default en;

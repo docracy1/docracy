@@ -11,6 +11,8 @@ const SEO_CATALOG_KEY: Record<SeoPage, string> = {
   docusignAlternative: "docusign",
   hellosignAlternative: "hellosign",
   adobeSignAlternative: "adobeSign",
+  docs: "docs",
+  mcp: "mcp",
 };
 
 /** Title + description from `seo.<page>.*` catalogs, with canonical + hreflang for bilingual SEO pages. */

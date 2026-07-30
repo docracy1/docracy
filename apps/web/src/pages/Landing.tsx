@@ -150,28 +150,25 @@ const FAQ_KEYS: Array<{ qKey: string; aKey: string }> = [
   { qKey: "landing.faq5.q", aKey: "landing.faq5.a" },
 ];
 
-const TESTIMONIALS: Array<{ quote: string; name: string; title: string; company: string | null; logo: string | null }> = [
+const TESTIMONIALS: Array<{ quoteKey: string; name: string; titleKey: string; company: string | null; logo: string | null }> = [
   {
-    quote:
-      "Docracy is a great product that I have tested and am using. It is easy to use, has good tools, is always up to date, and implements new features. Highly recommended.",
+    quoteKey: "testimonial.1.quote",
     name: "DACH Advisory",
-    title: "",
+    titleKey: "testimonial.1.title",
     company: null,
     logo: "/testimonials/dach-advisory.png",
   },
   {
-    quote:
-      "Docracy is a beautifully simple, privacy-first tool for signing documents without friction. Its no-signup flow and automatic document deletion make it especially valuable for artists, curators, and cultural professionals who need trust, speed, and discretion.",
+    quoteKey: "testimonial.2.quote",
     name: "Abaseh Mirvali",
-    title: "Artist director, entrepreneur",
+    titleKey: "testimonial.2.title",
     company: null,
     logo: null,
   },
   {
-    quote:
-      "Docracy is a smart, frictionless e-signature tool: no signup, no clutter, just secure sequential signing with privacy built in. For culture and tech teams moving fast, it makes agreements simple, professional, and discreet.",
+    quoteKey: "testimonial.3.quote",
     name: "Marc Brandsma",
-    title: "CEO of culttech, Investor",
+    titleKey: "testimonial.3.title",
     company: null,
     logo: "/culttech-logo.png",
   },
@@ -397,17 +394,19 @@ export default function Landing() {
 
       <div className="container" style={{ maxWidth: 960, padding: "48px 24px" }}>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 20 }}>
-          {TESTIMONIALS.map((testimonial) => (
+          {TESTIMONIALS.map((testimonial) => {
+            const title = t(testimonial.titleKey);
+            return (
             <div key={testimonial.name} className="card" style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               <p style={{ fontSize: 15, fontStyle: "italic", color: "var(--body-strong)", margin: 0, flex: 1, lineHeight: 1.5 }}>
-                "{testimonial.quote}"
+                "{t(testimonial.quoteKey)}"
               </p>
               <div>
                 <p style={{ margin: 0, fontSize: 13.5, fontWeight: 600, color: "var(--ink)" }}>{testimonial.name}</p>
-                {(testimonial.title || testimonial.company) && (
+                {(title || testimonial.company) && (
                   <p style={{ margin: 0, fontSize: 12.5, color: "var(--mute)" }}>
-                    {testimonial.title}
-                    {testimonial.title && testimonial.company ? ", " : ""}
+                    {title}
+                    {title && testimonial.company ? ", " : ""}
                     {testimonial.company ?? ""}
                   </p>
                 )}
@@ -421,7 +420,8 @@ export default function Landing() {
                 />
               )}
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 

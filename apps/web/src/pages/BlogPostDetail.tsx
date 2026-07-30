@@ -206,7 +206,9 @@ function ArticleBlocks({ blocks }: { blocks: ArticleBlock[] }) {
 }
 
 function DynamicPostView({ post }: { post: DynamicBlogPostDetail }) {
-  usePageMeta(`${post.title} | Docracy`, post.description || post.title);
+  usePageMeta(`${post.title} | Docracy`, post.description || post.title, {
+    canonicalPath: `/blog/${post.slug}`,
+  });
   const date = (post.publishedAt ?? post.createdAt).slice(0, 10);
 
   return (
@@ -222,25 +224,56 @@ function DynamicPostView({ post }: { post: DynamicBlogPostDetail }) {
   );
 }
 
+function readPreloadedBlogPost(slug: string): DynamicBlogPostDetail | null {
+  if (typeof document === "undefined") return null;
+  const el = document.getElementById("__PRELOADED_BLOG_POST__");
+  if (!el?.textContent) return null;
+  try {
+    const data = JSON.parse(el.textContent) as { post?: DynamicBlogPostDetail };
+    if (data.post?.slug === slug) return data.post;
+  } catch {
+    return null;
+  }
+  return null;
+}
+
 export default function BlogPostDetail() {
   const { slug } = useParams<{ slug: string }>();
   const staticPost = slug ? getBlogPost(slug) : undefined;
   const article = !staticPost && slug ? getArticle(slug) : undefined;
 
-  const [dynamicPost, setDynamicPost] = useState<DynamicBlogPostDetail | null>(null);
+  const [dynamicPost, setDynamicPost] = useState<DynamicBlogPostDetail | null>(() =>
+    slug && !staticPost && !article ? readPreloadedBlogPost(slug) : null
+  );
   const [dynamicNotFound, setDynamicNotFound] = useState(false);
 
   useEffect(() => {
     if (staticPost || article || !slug) return;
+    if (dynamicPost?.slug === slug) return;
     fetchBlogPost(slug)
       .then((res) => setDynamicPost(res.post))
       .catch(() => setDynamicNotFound(true));
-  }, [slug, staticPost, article]);
+  }, [slug, staticPost, article, dynamicPost?.slug]);
 
-  usePageMeta(
-    staticPost || article ? `${(staticPost ?? article)!.title} | Docracy` : "Loading… | Docracy",
-    (staticPost ?? article)?.description ?? "This post couldn't be found."
-  );
+  const pageTitle = staticPost
+    ? `${staticPost.title} | Docracy`
+    : article
+      ? `${article.title} | Docracy`
+      : dynamicPost
+        ? `${dynamicPost.title} | Docracy`
+        : dynamicNotFound
+          ? "Post not found | Docracy"
+          : "Loading… | Docracy";
+  const pageDescription =
+    staticPost?.description ??
+    article?.description ??
+    dynamicPost?.description ??
+    dynamicPost?.title ??
+    (dynamicNotFound ? "This post couldn't be found." : "Docracy blog");
+
+  usePageMeta(pageTitle, pageDescription, {
+    canonicalPath: slug ? `/blog/${slug}` : "/blog",
+  });
 
   if (article) {
     return (
