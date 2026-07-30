@@ -15,6 +15,7 @@ const es: Messages = {
   "calc.footer":
     "Los precios son el plan comercial/equipo estándar de cada proveedor según su propia página — los conjuntos de funciones difieren; haz clic para comparar exactamente qué incluye cada uno.",
   "calc.minSeats": " (mínimo de {{min}} asientos aplica)",
+  "calc.perMonth": "/mes",
   "calc.perUser": "{{price}}/usuario × {{seats}} usuarios, {{billing}}",
   "calc.pricingLink": "precios →",
   "calc.sub":
@@ -396,6 +397,8 @@ const es: Messages = {
   "plan.val.days9": "9 días",
   "plan.val.days90": "Hasta 90 días",
   "plan.val.premium": "Premium",
+  "plan.included": "Incluido",
+  "plan.notIncluded": "No incluido",
   "plan.val.unlimited": "Ilimitado",
   "plan.val.upTo2": "Hasta 2",
   "plan.volumeDiscounts": "Descuentos por volumen e incorporación personalizada",
@@ -853,6 +856,12 @@ const es: Messages = {
   "seo.docusign.title": "Alternativa a DocuSign — Firma simple | Docracy",
   "seo.docusign.description":
     "Una alternativa simple a DocuSign para acuerdos rápidos. Rápida, limpia, sin cuenta. Gratis para hasta 2 firmantes.",
+  "seo.hellosign.title": "Alternativa a HelloSign / Dropbox Sign — Gratis y simple | Docracy",
+  "seo.hellosign.description":
+    "¿Buscas una alternativa a HelloSign o Dropbox Sign para NDAs y contratos? Gratis hasta 2 firmantes, sin cuenta. Plan de pago $10/mes fijo.",
+  "seo.adobeSign.title": "Alternativa a Adobe Sign — Firma electrónica ligera | Docracy",
+  "seo.adobeSign.description":
+    "Alternativa a Adobe Acrobat Sign para freelancers y equipos pequeños. Gratis hasta 2 firmantes, sin cuenta. Plan de pago $10/mes fijo.",
   "seo.docs.title": "Documentación — Docracy",
   "seo.docs.description":
     "Cómo funciona el flujo gratis de firma de Docracy, las funciones de pago (envío masivo, embed, contactos, adjuntos, SMS, Dropbox/OneDrive/Box/Google Drive, IA), opciones Enterprise, plantillas, webhooks y automatización MCP/Zapier.",
@@ -876,6 +885,32 @@ const es: Messages = {
   "alt.docusign.c5": "Flujo limpio y sin distracciones",
   "alt.docusign.ctaLabel": "Probar gratis — envía un NDA de ejemplo",
   "alt.docusign.compareLabel": "Ver la comparación completa de precios vs. DocuSign",
+  "alt.hellosign.heroHeadline": "Una alternativa más simple a HelloSign / Dropbox Sign.",
+  "alt.hellosign.heroSubheadline": "Para freelancers y equipos pequeños que solo necesitan firmar acuerdos — no otro impuesto por asiento.",
+  "alt.hellosign.problem":
+    "HelloSign (ahora Dropbox Sign) es más limpio que DocuSign, pero los planes gratis te limitan rápido y los de pago siguen cobrando por asiento para un volumen ligero de NDAs y contratos.",
+  "alt.hellosign.solution":
+    "Docracy está hecho para ese volumen ligero: gratis hasta 2 firmantes sin cuenta para nadie, luego $10/mes fijo cuando necesitas plantillas, más firmantes o un equipo.",
+  "alt.hellosign.c1": "Gratis hasta 2 firmantes — sin cuenta para quien envía ni quien firma",
+  "alt.hellosign.c2": "Sin precio por asiento en el plan de pago — $10/mes fijo",
+  "alt.hellosign.c3": "NDA mutuo de ejemplo listo en ~30 segundos",
+  "alt.hellosign.c4": "Firma secuencial o en paralelo",
+  "alt.hellosign.c5": "Límite honesto: no es para flujos empresariales con verificación de identidad",
+  "alt.hellosign.ctaLabel": "Probar gratis — envía un NDA de ejemplo",
+  "alt.hellosign.compareLabel": "Ver cómo se compara el precio de Docracy vs herramientas por asiento",
+  "alt.adobeSign.heroHeadline": "Adobe Sign sin el peso de Acrobat.",
+  "alt.adobeSign.heroSubheadline": "Cuando necesitas una firma — no otro asiento de Adobe en tu stack.",
+  "alt.adobeSign.problem":
+    "Adobe Acrobat Sign tiene sentido dentro de flujos de Acrobat. Para NDAs y acuerdos ocasionales con clientes, es pesado y está pensado para equipos que viven en Adobe a diario.",
+  "alt.adobeSign.solution":
+    "Docracy es un producto de firma enfocado: gratis para documentos simples de dos partes, $10/mes fijo cuando necesitas más — sin Creative Cloud.",
+  "alt.adobeSign.c1": "Sin cuenta de Adobe para los firmantes",
+  "alt.adobeSign.c2": "Gratis hasta 2 firmantes",
+  "alt.adobeSign.c3": "$10/mes fijo cuando necesitas plantillas / más firmantes / equipo",
+  "alt.adobeSign.c4": "Funciona desde cualquier navegador en móvil o escritorio",
+  "alt.adobeSign.c5": "No reemplaza Acrobat por completo — deliberadamente más ligero",
+  "alt.adobeSign.ctaLabel": "Probar gratis — envía un NDA de ejemplo",
+  "alt.adobeSign.compareLabel": "Ver la comparación completa de precios vs. Adobe Sign",
 };
 
 export default es;

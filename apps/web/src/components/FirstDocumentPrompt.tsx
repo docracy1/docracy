@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useT } from "../lib/i18n";
+import { localizePath, useI18n, useT } from "../lib/i18n";
 import { track } from "../lib/track";
 
 const MAX_PDF_BYTES = 15 * 1024 * 1024;
@@ -13,6 +13,7 @@ const MAX_PDF_BYTES = 15 * 1024 * 1024;
  *  they'd otherwise all look identical in the data. */
 export default function FirstDocumentPrompt({ mobileOnly = false, source = "hero" }: { mobileOnly?: boolean; source?: string }) {
   const t = useT();
+  const { locale } = useI18n();
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -28,12 +29,12 @@ export default function FirstDocumentPrompt({ mobileOnly = false, source = "hero
     }
     setModalOpen(false);
     setError(null);
-    navigate("/prepare", { state: { uploadedFile: f } });
+    navigate(localizePath("/prepare", locale), { state: { uploadedFile: f } });
   };
 
   return (
     <div className={`first-document-prompt${mobileOnly ? " first-document-prompt-mobile" : ""}`}>
-      <p>{t("firstDoc.prompt")} — it takes 30 seconds.</p>
+      <p>{t("firstDoc.prompt")}</p>
       <button
         type="button"
         className="btn-primary btn-lg"

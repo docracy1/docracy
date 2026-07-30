@@ -185,6 +185,24 @@ const routes = [
     alternates: { en: "/docusign-alternative", es: "/es/alternativa-a-docusign" },
   },
   {
+    urlPath: "/es/alternativa-a-hellosign",
+    outFile: "es/alternativa-a-hellosign.html",
+    title: "Alternativa a HelloSign / Dropbox Sign — Gratis y simple | Docracy",
+    description:
+      "¿Buscas una alternativa a HelloSign o Dropbox Sign para NDAs y contratos? Gratis hasta 2 firmantes, sin cuenta. Plan de pago $10/mes fijo.",
+    locale: "es",
+    alternates: { en: "/hellosign-alternative", es: "/es/alternativa-a-hellosign" },
+  },
+  {
+    urlPath: "/es/alternativa-a-adobe-sign",
+    outFile: "es/alternativa-a-adobe-sign.html",
+    title: "Alternativa a Adobe Sign — Firma electrónica ligera | Docracy",
+    description:
+      "Alternativa a Adobe Acrobat Sign para freelancers y equipos pequeños. Gratis hasta 2 firmantes, sin cuenta. Plan de pago $10/mes fijo.",
+    locale: "es",
+    alternates: { en: "/adobe-sign-alternative", es: "/es/alternativa-a-adobe-sign" },
+  },
+  {
     urlPath: "/docs",
     outFile: "docs.html",
     title: "Documentation — Docracy",
@@ -235,15 +253,20 @@ const routes = [
     title: `${t.seoTitle} | Docracy`,
     description: t.description,
   })),
-  ...[...FEATURE_PAGES, ...ALTERNATIVE_PAGES, ...EXPLAINER_PAGES].map((p) => ({
-    urlPath: `/${p.slug}`,
-    outFile: `${p.slug}.html`,
-    title: p.seoTitle,
-    description: p.seoDescription,
-    ...(p.slug === "docusign-alternative"
-      ? { locale: "en", alternates: { en: "/docusign-alternative", es: "/es/alternativa-a-docusign" } }
-      : {}),
-  })),
+  ...[...FEATURE_PAGES, ...ALTERNATIVE_PAGES, ...EXPLAINER_PAGES].map((p) => {
+    const bilingual = {
+      "docusign-alternative": { en: "/docusign-alternative", es: "/es/alternativa-a-docusign" },
+      "hellosign-alternative": { en: "/hellosign-alternative", es: "/es/alternativa-a-hellosign" },
+      "adobe-sign-alternative": { en: "/adobe-sign-alternative", es: "/es/alternativa-a-adobe-sign" },
+    }[p.slug];
+    return {
+      urlPath: `/${p.slug}`,
+      outFile: `${p.slug}.html`,
+      title: p.seoTitle,
+      description: p.seoDescription,
+      ...(bilingual ? { locale: "en", alternates: bilingual } : {}),
+    };
+  }),
 ];
 
 // --- 4. Render each route and splice it into the built index.html shell ---

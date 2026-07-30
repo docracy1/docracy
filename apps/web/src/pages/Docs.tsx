@@ -41,16 +41,16 @@ export default function Docs() {
               </thead>
               <tbody>
                 {PLAN_ROWS.map((row) => (
-                  <tr key={row.label}>
-                    <td>{row.label}</td>
+                  <tr key={row.labelKey}>
+                    <td>{t(row.labelKey)}</td>
                     <td>
-                      <PlanCell value={row.free} />
+                      <PlanCell value={row.free} t={t} />
                     </td>
                     <td className="plan-col-paid">
-                      <PlanCell value={row.paid} />
+                      <PlanCell value={row.paid} t={t} />
                     </td>
                     <td>
-                      <PlanCell value={row.enterprise ?? row.paid} />
+                      <PlanCell value={row.enterprise ?? row.paid} t={t} />
                     </td>
                   </tr>
                 ))}

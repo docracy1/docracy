@@ -33,8 +33,10 @@ const TRACKED_ROUTES = new Set([
   "/docusign-alternative",
   "/es/alternativa-a-docusign",
   "/hellosign-alternative",
+  "/es/alternativa-a-hellosign",
   "/pandadoc-alternative",
   "/adobe-sign-alternative",
+  "/es/alternativa-a-adobe-sign",
   "/what-is-an-nda",
   "/are-electronic-signatures-legal",
 ]);

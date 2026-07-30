@@ -327,6 +327,8 @@ const en: Messages = {
   "plan.val.days9": "9 days",
   "plan.val.days90": "Up to 90 days",
   "plan.val.premium": "Premium",
+  "plan.included": "Included",
+  "plan.notIncluded": "Not included",
   "dash.welcome": "Welcome",
   "dash.welcomeSub": "Here's what needs your attention today.",
   "dash.new": "+ New",
@@ -482,6 +484,7 @@ const en: Messages = {
   "calc.perUser": "{{price}}/user × {{seats}} users, {{billing}}",
   "calc.minSeats": " ({{min}}-seat minimum applies)",
   "calc.footer": "Prices are each vendor's standard commercial/team plan as published on their own pricing page — feature sets differ per plan, so click through to compare exactly what's included.",
+  "calc.perMonth": "/mo",
   "auth.failed": "Sign-in failed",
   "auth.missingToken": "Missing sign-in token.",
   "auth.signingIn": "Signing you in…",
@@ -751,6 +754,12 @@ const en: Messages = {
   "seo.docusign.title": "DocuSign Alternative — Simple Signing | Docracy",
   "seo.docusign.description":
     "A simple alternative to DocuSign for quick agreements. Fast, clean, no account required. Free for up to 2 signers.",
+  "seo.hellosign.title": "HelloSign / Dropbox Sign Alternative — Free & Simple | Docracy",
+  "seo.hellosign.description":
+    "Looking for a HelloSign or Dropbox Sign alternative for NDAs and client contracts? Free for up to 2 signers, no account required. Paid $10/mo flat.",
+  "seo.adobeSign.title": "Adobe Sign Alternative — Lightweight E-Sign | Docracy",
+  "seo.adobeSign.description":
+    "Adobe Acrobat Sign alternative for freelancers and small teams. Free for up to 2 signers, no account required. Paid $10/mo flat.",
   "seo.docs.title": "Documentation — Docracy",
   "seo.docs.description":
     "How Docracy's free signing flow, paid features (bulk send, embed, contacts, attachments, SMS gateways, Dropbox/OneDrive/Box/Google Drive, AI), Enterprise options, templates, webhooks, and MCP/Zapier automation work.",
@@ -774,6 +783,32 @@ const en: Messages = {
   "alt.docusign.c5": "Clean, distraction-free workflow",
   "alt.docusign.ctaLabel": "Try free — send a sample NDA",
   "alt.docusign.compareLabel": "See the full price comparison vs. DocuSign",
+  "alt.hellosign.heroHeadline": "A simpler alternative to HelloSign / Dropbox Sign.",
+  "alt.hellosign.heroSubheadline": "For freelancers and small teams who just need agreements signed — not another seat tax.",
+  "alt.hellosign.problem":
+    "HelloSign (now Dropbox Sign) is cleaner than DocuSign, but free tiers cap you quickly and paid plans still price like a seat product for light NDA and contract volume.",
+  "alt.hellosign.solution":
+    "Docracy is built for that light volume: free up to 2 signers with no account for anyone, then a flat $10/mo when you need templates, more signers, or a team.",
+  "alt.hellosign.c1": "Free for up to 2 signers — no account for sender or signer",
+  "alt.hellosign.c2": "No per-seat pricing on paid — $10/month flat",
+  "alt.hellosign.c3": "Sample mutual NDA ready in ~30 seconds",
+  "alt.hellosign.c4": "Sequential or parallel signing",
+  "alt.hellosign.c5": "Honest limit: not for ID-verified enterprise workflows",
+  "alt.hellosign.ctaLabel": "Try free — send a sample NDA",
+  "alt.hellosign.compareLabel": "See how Docracy prices vs seat-based e-sign tools",
+  "alt.adobeSign.heroHeadline": "Adobe Sign without the Acrobat baggage.",
+  "alt.adobeSign.heroSubheadline": "When you need a signature — not another Adobe seat in the stack.",
+  "alt.adobeSign.problem":
+    "Adobe Acrobat Sign makes sense inside Acrobat workflows. For occasional NDAs and client agreements, it's heavy and priced for teams living in Adobe every day.",
+  "alt.adobeSign.solution":
+    "Docracy is a focused signing product: free for simple two-party docs, flat $10/mo when you need more — no Creative Cloud required.",
+  "alt.adobeSign.c1": "No Adobe account for signers",
+  "alt.adobeSign.c2": "Free for up to 2 signers",
+  "alt.adobeSign.c3": "$10/mo flat when you need templates / more signers / team",
+  "alt.adobeSign.c4": "Works from any browser on phone or desktop",
+  "alt.adobeSign.c5": "Not a full Acrobat replacement — deliberately lighter",
+  "alt.adobeSign.ctaLabel": "Try free — send a sample NDA",
+  "alt.adobeSign.compareLabel": "See the full price comparison vs. Adobe Sign",
   "chat.title": "Docracy Assistant",
   "chat.greeting": "Hey there 👋 I can help you find the right thing:",
   "chat.sales": "I want to talk to sales",

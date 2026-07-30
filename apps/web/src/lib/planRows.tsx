@@ -1,47 +1,55 @@
-/** Shared between Landing.tsx's inline comparison table and the standalone /pricing page — single
- *  source of truth so the two never drift out of sync. `enterprise` is optional and, where
- *  omitted, falls back to whatever `paid` has (Enterprise is a superset of Paid, not a separate
- *  feature set) — see Pricing.tsx's `row.enterprise ?? row.paid`. Landing.tsx's table only ever
- *  reads `free`/`paid`, so adding this field doesn't affect it. */
-export const PLAN_ROWS: Array<{ label: string; free: boolean | string; paid: boolean | string; enterprise?: boolean | string }> = [
-  { label: "Signers per document", free: "Up to 2", paid: "Unlimited" },
-  { label: "Sequential or all-at-once signing", free: true, paid: true },
-  { label: "PIN-protected signing links", free: false, paid: true },
-  { label: "Text, date, initials, checkbox & dropdown fields", free: true, paid: true },
-  { label: "Anchor tags in PDFs ({{sig1}}, etc.)", free: false, paid: true },
-  { label: "SMS signing links (US numbers only)", free: true, paid: true },
-  { label: "Signer attachments", free: false, paid: true },
-  { label: "CC / viewer recipients", free: "Up to 2", paid: "Unlimited" },
-  { label: "Decline or cancel a document", free: true, paid: true },
-  { label: "Audit trail + completion certificate", free: true, paid: true },
-  { label: "Dashboard with document history", free: false, paid: true },
-  { label: "Reusable templates", free: false, paid: true },
-  { label: "Bulk send", free: false, paid: true },
-  // How long the PDF + signing links stay available before automatic deletion — not long-term storage.
-  { label: "Signing window (then auto-deleted)", free: "9 days", paid: "Up to 90 days" },
-  { label: "Embedded signing", free: false, paid: true },
-  { label: "Saved contacts + signer reassignment", free: false, paid: true },
-  { label: "Webhooks for your own systems", free: false, paid: true },
-  { label: "MCP connector (Claude, ChatGPT, Grok, Perplexity)", free: false, paid: true },
-  { label: "Team accounts (shared workspace)", free: false, paid: true },
-  { label: "White-label branding (your own logo)", free: false, paid: true },
-  { label: "AI auto-detect signature & date fields", free: false, paid: true },
-  { label: "AI plain-English contract explainer", free: false, paid: true },
-  { label: "AI risk & clause highlighter", free: false, paid: true },
-  { label: "AI contract generator (describe it, get a signable PDF)", free: false, paid: true },
-  { label: "Customer support", free: false, paid: true, enterprise: "Premium" },
-  { label: "Dropbox connector (auto-upload signed PDFs)", free: false, paid: true },
-  { label: "OneDrive connector (auto-upload signed PDFs)", free: false, paid: true },
-  { label: "Box connector (auto-upload signed PDFs)", free: false, paid: true },
-  { label: "Google Drive connector (auto-upload signed PDFs)", free: false, paid: true },
-  { label: "Invoice billing & annual contracts", free: false, paid: false, enterprise: true },
-  { label: "Volume discounts & custom onboarding", free: false, paid: false, enterprise: true },
+/** Shared between Pricing.tsx and Docs.tsx — label/value fields are i18n keys resolved at render. */
+export type PlanValue = boolean | string;
+
+export const PLAN_ROWS: Array<{
+  labelKey: string;
+  free: PlanValue;
+  paid: PlanValue;
+  enterprise?: PlanValue;
+}> = [
+  { labelKey: "plan.signersPerDoc", free: "plan.val.upTo2", paid: "plan.val.unlimited" },
+  { labelKey: "plan.sequentialOrParallel", free: true, paid: true },
+  { labelKey: "plan.pinLinks", free: false, paid: true },
+  { labelKey: "plan.fieldTypes", free: true, paid: true },
+  { labelKey: "plan.anchorTags", free: false, paid: true },
+  { labelKey: "plan.smsLinks", free: true, paid: true },
+  { labelKey: "plan.signerAttachments", free: false, paid: true },
+  { labelKey: "plan.ccRecipients", free: "plan.val.upTo2", paid: "plan.val.unlimited" },
+  { labelKey: "plan.declineCancel", free: true, paid: true },
+  { labelKey: "plan.auditCert", free: true, paid: true },
+  { labelKey: "plan.dashboard", free: false, paid: true },
+  { labelKey: "plan.templates", free: false, paid: true },
+  { labelKey: "plan.bulkSend", free: false, paid: true },
+  { labelKey: "plan.customExpiry", free: "plan.val.days9", paid: "plan.val.days90" },
+  { labelKey: "plan.embedded", free: false, paid: true },
+  { labelKey: "plan.contactsReassign", free: false, paid: true },
+  { labelKey: "plan.webhooks", free: false, paid: true },
+  { labelKey: "plan.mcp", free: false, paid: true },
+  { labelKey: "plan.teamAccounts", free: false, paid: true },
+  { labelKey: "plan.whiteLabel", free: false, paid: true },
+  { labelKey: "plan.aiDetect", free: false, paid: true },
+  { labelKey: "plan.aiExplain", free: false, paid: true },
+  { labelKey: "plan.aiRisk", free: false, paid: true },
+  { labelKey: "plan.aiGenerate", free: false, paid: true },
+  { labelKey: "plan.support", free: false, paid: true, enterprise: "plan.val.premium" },
+  { labelKey: "plan.dropbox", free: false, paid: true },
+  { labelKey: "plan.onedrive", free: false, paid: true },
+  { labelKey: "plan.box", free: false, paid: true },
+  { labelKey: "plan.googleDrive", free: false, paid: true },
+  { labelKey: "plan.invoiceBilling", free: false, paid: false, enterprise: true },
+  { labelKey: "plan.volumeDiscounts", free: false, paid: false, enterprise: true },
 ];
 
-export function PlanCell({ value }: { value: boolean | string }) {
-  if (typeof value === "string") return <span className="plan-cell-text">{value}</span>;
+export function PlanCell({
+  value,
+  t,
+}: {
+  value: PlanValue;
+  t: (key: string, vars?: Record<string, string | number>) => string;
+}) {
+  if (typeof value === "string") return <span className="plan-cell-text">{t(value)}</span>;
   return value ? (
-    <span className="plan-check" aria-label="Included">
+    <span className="plan-check" aria-label={t("plan.included")}>
       <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
         <circle cx="9" cy="9" r="9" fill="currentColor" />
         <path
@@ -55,7 +63,7 @@ export function PlanCell({ value }: { value: boolean | string }) {
       </svg>
     </span>
   ) : (
-    <span className="plan-dash" aria-label="Not included">
+    <span className="plan-dash" aria-label={t("plan.notIncluded")}>
       —
     </span>
   );

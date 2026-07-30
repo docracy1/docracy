@@ -90,8 +90,10 @@ function AppRoutes() {
       <Route path="/docusign-alternative" element={<AlternativePage slug="docusign-alternative" />} />
       <Route path="/es/alternativa-a-docusign" element={<AlternativePage slug="docusign-alternative" />} />
       <Route path="/hellosign-alternative" element={<AlternativePage slug="hellosign-alternative" />} />
+      <Route path="/es/alternativa-a-hellosign" element={<AlternativePage slug="hellosign-alternative" />} />
       <Route path="/pandadoc-alternative" element={<AlternativePage slug="pandadoc-alternative" />} />
       <Route path="/adobe-sign-alternative" element={<AlternativePage slug="adobe-sign-alternative" />} />
+      <Route path="/es/alternativa-a-adobe-sign" element={<AlternativePage slug="adobe-sign-alternative" />} />
       <Route path="/what-is-an-nda" element={<ExplainerPage slug="what-is-an-nda" />} />
       <Route path="/are-electronic-signatures-legal" element={<ExplainerPage slug="are-electronic-signatures-legal" />} />
       <Route path="*" element={<NotFound />} />

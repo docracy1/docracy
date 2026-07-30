@@ -9,11 +9,7 @@ export default function PricingCalculator() {
   return (
     <div>
       <h2 style={{ fontSize: 20, marginBottom: 4 }}>{t("calc.title")}</h2>
-      <p style={{ marginTop: 0, marginBottom: 24, maxWidth: 640 }}>
-        Docracy's paid plan is one flat fee per workspace, not a per-seat license — add as many
-        teammates as you want at no extra cost. Here's what the same team size costs on the
-        e-signature tools people compare us to most, using each vendor's own published pricing.
-      </p>
+      <p style={{ marginTop: 0, marginBottom: 24, maxWidth: 640 }}>{t("calc.sub")}</p>
 
       <div className="card" style={{ marginBottom: 20 }}>
         <label htmlFor="team-size-slider" style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--mute)" }}>
@@ -45,7 +41,7 @@ export default function PricingCalculator() {
         </div>
         <div style={{ fontSize: 28, fontWeight: 800, color: "var(--ink)" }}>
           {formatUsd(DOCRACY_PRICE)}
-          <span style={{ fontSize: 14, fontWeight: 400, color: "var(--mute)" }}>/mo</span>
+          <span style={{ fontSize: 14, fontWeight: 400, color: "var(--mute)" }}>{t("calc.perMonth")}</span>
         </div>
       </div>
 
@@ -65,25 +61,23 @@ export default function PricingCalculator() {
                 </div>
                 <div style={{ textAlign: "right" }}>
                   <span style={{ fontSize: 13, color: "var(--danger)", fontWeight: 700, marginRight: 8 }}>
-                    +{formatUsd(delta)}/mo
+                    +{formatUsd(delta)}
+                    {t("calc.perMonth")}
                   </span>
                   <span style={{ fontSize: 18, fontWeight: 800, color: "var(--ink)" }}>{formatUsd(total)}</span>
-                  <span style={{ fontSize: 13, color: "var(--mute)" }}>/mo</span>
+                  <span style={{ fontSize: 13, color: "var(--mute)" }}>{t("calc.perMonth")}</span>
                 </div>
               </div>
               <div style={{ fontSize: 12, color: "var(--mute)", marginTop: 6 }}>
-                {formatUsd(c.pricePerSeat)}/user × {seats} users, {c.billing}
-                {seats > teamSize ? ` (${c.minSeats}-seat minimum applies)` : ""}
+                {t("calc.perUser", { price: formatUsd(c.pricePerSeat), seats, billing: c.billing })}
+                {seats > teamSize ? t("calc.minSeats", { min: c.minSeats }) : ""}
               </div>
             </div>
           );
         })}
       </div>
 
-      <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 16 }}>
-        Prices are each vendor's standard commercial/team plan as published on their own pricing
-        page — feature sets differ per plan, so click through to compare exactly what's included.
-      </p>
+      <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 16 }}>{t("calc.footer")}</p>
     </div>
   );
 }

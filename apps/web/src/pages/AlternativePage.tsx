@@ -1,9 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { usePageMeta } from "../lib/usePageMeta";
 import { ALTERNATIVE_PAGES } from "../lib/marketingPages";
 import { localizePath, useI18n, useT } from "../lib/i18n";
-import { cleanPath, seoAlternates } from "../lib/i18n/paths";
-import { useLocation } from "react-router-dom";
+import { BILINGUAL_ALT_BY_SLUG, cleanPath, seoAlternates } from "../lib/i18n/paths";
 import { track } from "../lib/track";
 
 export default function AlternativePage({ slug }: { slug: string }) {
@@ -11,15 +10,15 @@ export default function AlternativePage({ slug }: { slug: string }) {
   const t = useT();
   const { locale } = useI18n();
   const location = useLocation();
-  const isDocusign = slug === "docusign-alternative";
-  const isDocusignEs = isDocusign && locale === "es";
+  const bilingual = BILINGUAL_ALT_BY_SLUG[slug];
+  const useEsBody = Boolean(bilingual && locale === "es");
+  const catalogKey = bilingual?.catalogKey;
 
-  const docusignAlternates = seoAlternates("docusignAlternative");
   usePageMeta(
-    isDocusign ? t("seo.docusign.title") : page?.seoTitle ?? "Docracy",
-    isDocusign ? t("seo.docusign.description") : page?.seoDescription ?? "",
-    isDocusign
-      ? { canonicalPath: cleanPath(location.pathname), alternates: docusignAlternates }
+    bilingual && catalogKey ? t(`seo.${catalogKey}.title`) : page?.seoTitle ?? "Docracy",
+    bilingual && catalogKey ? t(`seo.${catalogKey}.description`) : page?.seoDescription ?? "",
+    bilingual
+      ? { canonicalPath: cleanPath(location.pathname), alternates: seoAlternates(bilingual.seoPage) }
       : undefined
   );
 
@@ -29,15 +28,21 @@ export default function AlternativePage({ slug }: { slug: string }) {
     track("landingpage_cta_clicked", { source: `seo:${page.slug}:${placement}` });
   };
 
-  const heroHeadline = isDocusignEs ? t("alt.docusign.heroHeadline") : page.heroHeadline;
-  const heroSubheadline = isDocusignEs ? t("alt.docusign.heroSubheadline") : page.heroSubheadline;
-  const problem = isDocusignEs ? t("alt.docusign.problem") : page.problem;
-  const solution = isDocusignEs ? t("alt.docusign.solution") : page.solution;
-  const comparison = isDocusignEs
-    ? [t("alt.docusign.c1"), t("alt.docusign.c2"), t("alt.docusign.c3"), t("alt.docusign.c4"), t("alt.docusign.c5")]
+  const heroHeadline = useEsBody ? t(`alt.${catalogKey}.heroHeadline`) : page.heroHeadline;
+  const heroSubheadline = useEsBody ? t(`alt.${catalogKey}.heroSubheadline`) : page.heroSubheadline;
+  const problem = useEsBody ? t(`alt.${catalogKey}.problem`) : page.problem;
+  const solution = useEsBody ? t(`alt.${catalogKey}.solution`) : page.solution;
+  const comparison = useEsBody
+    ? [
+        t(`alt.${catalogKey}.c1`),
+        t(`alt.${catalogKey}.c2`),
+        t(`alt.${catalogKey}.c3`),
+        t(`alt.${catalogKey}.c4`),
+        t(`alt.${catalogKey}.c5`),
+      ]
     : page.comparison;
-  const ctaLabel = isDocusignEs ? t("alt.docusign.ctaLabel") : page.ctaLabel;
-  const compareLabel = isDocusignEs ? t("alt.docusign.compareLabel") : page.compareLabel;
+  const ctaLabel = useEsBody ? t(`alt.${catalogKey}.ctaLabel`) : page.ctaLabel;
+  const compareLabel = useEsBody ? t(`alt.${catalogKey}.compareLabel`) : page.compareLabel;
   const ctaTo = localizePath(page.ctaTo, locale);
   const pricingTo = localizePath("/pricing?ref=seo-price", locale);
 

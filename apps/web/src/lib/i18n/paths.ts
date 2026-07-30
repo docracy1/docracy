@@ -1,19 +1,28 @@
 import type { Locale } from "./types";
 
-/** Phase 1 Spanish SEO surface — English path → Spanish path. */
+/** Phase 1–2 Spanish SEO surface — English path → Spanish path. */
 export const ES_PATH_BY_EN: Record<string, string> = {
   "/": "/es",
   "/pricing": "/es/precios",
   "/free-templates": "/es/plantillas-gratis",
   "/prepare": "/es/preparar",
   "/docusign-alternative": "/es/alternativa-a-docusign",
+  "/hellosign-alternative": "/es/alternativa-a-hellosign",
+  "/adobe-sign-alternative": "/es/alternativa-a-adobe-sign",
 };
 
 export const EN_PATH_BY_ES: Record<string, string> = Object.fromEntries(
   Object.entries(ES_PATH_BY_EN).map(([en, es]) => [es, en])
 );
 
-export type SeoPage = "home" | "pricing" | "freeTemplates" | "prepare" | "docusignAlternative";
+export type SeoPage =
+  | "home"
+  | "pricing"
+  | "freeTemplates"
+  | "prepare"
+  | "docusignAlternative"
+  | "hellosignAlternative"
+  | "adobeSignAlternative";
 
 export const SEO_EN_PATH: Record<SeoPage, string> = {
   home: "/",
@@ -21,6 +30,15 @@ export const SEO_EN_PATH: Record<SeoPage, string> = {
   freeTemplates: "/free-templates",
   prepare: "/prepare",
   docusignAlternative: "/docusign-alternative",
+  hellosignAlternative: "/hellosign-alternative",
+  adobeSignAlternative: "/adobe-sign-alternative",
+};
+
+/** Catalog suffix under `seo.*` / `alt.*` for bilingual alternative pages. */
+export const BILINGUAL_ALT_BY_SLUG: Record<string, { seoPage: SeoPage; catalogKey: string }> = {
+  "docusign-alternative": { seoPage: "docusignAlternative", catalogKey: "docusign" },
+  "hellosign-alternative": { seoPage: "hellosignAlternative", catalogKey: "hellosign" },
+  "adobe-sign-alternative": { seoPage: "adobeSignAlternative", catalogKey: "adobeSign" },
 };
 
 /** Normalize pathname: strip trailing slash except root. */

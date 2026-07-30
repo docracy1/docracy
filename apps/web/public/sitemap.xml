@@ -470,6 +470,17 @@
     <loc>https://docracy.io/hellosign-alternative</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/hellosign-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-hellosign" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/hellosign-alternative" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/alternativa-a-hellosign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/hellosign-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-hellosign" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/hellosign-alternative" />
   </url>
   <url>
     <loc>https://docracy.io/pandadoc-alternative</loc>
@@ -480,6 +491,17 @@
     <loc>https://docracy.io/adobe-sign-alternative</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/adobe-sign-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-adobe-sign" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/adobe-sign-alternative" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/alternativa-a-adobe-sign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/adobe-sign-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-adobe-sign" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/adobe-sign-alternative" />
   </url>
   <url>
     <loc>https://docracy.io/what-is-an-nda</loc>
