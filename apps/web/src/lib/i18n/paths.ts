@@ -86,8 +86,14 @@ function enPathFromAny(path: string): string | null {
 /** Locale forced by a bilingual SEO URL, or null when the path is not in the map. */
 export function pathLocale(pathname: string): Locale | null {
   const path = cleanPath(pathname);
-  if (path === "/es" || path.startsWith(`${ES_TEMPLATE_PREFIX}/`) || EN_PATH_BY_ES[path]) return "es";
-  if (path.startsWith(`${EN_TEMPLATE_PREFIX}/`) || Object.prototype.hasOwnProperty.call(ES_PATH_BY_EN, path)) return "en";
+  const tmpl = templateSlugFromPath(path);
+  if (tmpl) {
+    // Only SEO template pairs force locale from the URL; non-SEO /es/… URLs shouldn't exist.
+    if (!isSeoTemplateSlug(tmpl)) return path.startsWith(ES_TEMPLATE_PREFIX) ? "es" : "en";
+    return path.startsWith(ES_TEMPLATE_PREFIX) ? "es" : "en";
+  }
+  if (path === "/es" || EN_PATH_BY_ES[path]) return "es";
+  if (Object.prototype.hasOwnProperty.call(ES_PATH_BY_EN, path)) return "en";
   return null;
 }
 
@@ -103,6 +109,10 @@ export function localizePath(href: string, locale: Locale): string {
 
   const tmpl = templateSlugFromPath(path);
   if (tmpl) {
+    // Non-SEO templates stay on English detail URLs to avoid thin EN-under-/es pages.
+    if (!isSeoTemplateSlug(tmpl)) {
+      return `${EN_TEMPLATE_PREFIX}/${tmpl}${query}${hash}`;
+    }
     const base = locale === "es" ? ES_TEMPLATE_PREFIX : EN_TEMPLATE_PREFIX;
     return `${base}/${tmpl}${query}${hash}`;
   }
@@ -119,7 +129,7 @@ export function alternatePath(pathname: string, target: Locale): string | null {
   const path = cleanPath(pathname);
   const tmpl = templateSlugFromPath(path);
   if (tmpl) {
-    // Only SEO templates get hreflang pairs; other slugs still switch prefix for UX.
+    if (!isSeoTemplateSlug(tmpl)) return null;
     const base = target === "es" ? ES_TEMPLATE_PREFIX : EN_TEMPLATE_PREFIX;
     return `${base}/${tmpl}`;
   }

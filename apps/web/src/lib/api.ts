@@ -429,7 +429,8 @@ export async function createEmbedSession(input: {
 }
 
 export async function resolveEmbedSession(
-  token: string
+  token: string,
+  parentOrigin: string | null
 ): Promise<{
   signToken: string;
   docId: string;
@@ -437,7 +438,9 @@ export async function resolveEmbedSession(
   allowedOrigins: string[];
   returnUrl?: string;
 }> {
-  const res = await apiFetch(`/api/embed/sessions/${token}`);
+  const headers: Record<string, string> = {};
+  if (parentOrigin) headers["X-Embed-Parent-Origin"] = parentOrigin;
+  const res = await apiFetch(`/api/embed/sessions/${token}`, { headers });
   return asJson(res);
 }
 

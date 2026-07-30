@@ -65,12 +65,21 @@ function nowIso(): string {
  *  Set-Cookie / delete-cookie call, so route handlers pull this instead of repeating literals. */
 export function sessionCookieOptions(env: Env) {
   const isHttps = env.PUBLIC_APP_URL.startsWith("https");
+  // Lax is enough for first-party /api proxy; None+CSRF was worse than the rare
+  // cross-site iframe login case we never needed.
   return {
     httpOnly: true,
     secure: isHttps,
-    sameSite: (isHttps ? "None" : "Lax") as "None" | "Lax",
+    sameSite: "Lax" as const,
     path: "/",
   };
+}
+
+/** Invalidate a session in KV (logout). No-op when the cookie is missing/unknown. */
+export async function revokeSession(env: Env, sessionToken: string | undefined): Promise<void> {
+  if (!sessionToken) return;
+  const hash = await hashOpaqueToken(sessionToken, env.TOKEN_SECRET);
+  await env.DOCRACY_KV.delete(`session:${hash}`);
 }
 
 /**
