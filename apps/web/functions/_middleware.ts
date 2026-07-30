@@ -48,7 +48,8 @@ function isTrackedRoute(pathname: string): boolean {
     TRACKED_ROUTES.has(pathname) ||
     pathname === "/blog" ||
     pathname.startsWith("/blog/") ||
-    pathname.startsWith("/free-templates/")
+    pathname.startsWith("/free-templates/") ||
+    pathname.startsWith("/es/plantillas-gratis/")
   );
 }
 

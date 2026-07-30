@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FREE_TEMPLATES, RECURRING_CATEGORIES } from "../lib/freeTemplates";
-import { useT } from "../lib/i18n";
+import { isSeoTemplateSlug, localizePath, useI18n, useT } from "../lib/i18n";
 import { useSeoMeta } from "../lib/useSeoMeta";
 import { track } from "../lib/track";
 
@@ -16,9 +16,17 @@ const CATEGORY_KEYS: Record<string, string> = {
   "Compliance Documents": "freeTemplates.cat.compliance",
 };
 
-function TemplateCard({ slug, name, description }: { slug: string; name: string; description: string }) {
+function TemplateCard({
+  name,
+  description,
+  to,
+}: {
+  name: string;
+  description: string;
+  to: string;
+}) {
   return (
-    <Link to={`/free-templates/${slug}`} className="card" style={{ textDecoration: "none", color: "inherit", display: "block" }}>
+    <Link to={to} className="card" style={{ textDecoration: "none", color: "inherit", display: "block" }}>
       <h3 style={{ marginTop: 0, marginBottom: 8, fontSize: 16 }}>{name}</h3>
       <p style={{ margin: 0, fontSize: 13, color: "var(--mute)" }}>{description}</p>
     </Link>
@@ -27,8 +35,16 @@ function TemplateCard({ slug, name, description }: { slug: string; name: string;
 
 export default function FreeTemplates() {
   const t = useT();
+  const { locale } = useI18n();
 
   useSeoMeta("freeTemplates");
+
+  const labelFor = (slug: string, name: string, description: string) => {
+    if (locale === "es" && isSeoTemplateSlug(slug)) {
+      return { name: t(`tpl.${slug}.name`), description: t(`tpl.${slug}.description`) };
+    }
+    return { name, description };
+  };
 
   useEffect(() => {
     const modelContext = (navigator as unknown as { modelContext?: { provideContext: (ctx: unknown) => void } }).modelContext;
@@ -54,7 +70,7 @@ export default function FreeTemplates() {
               ).map((tpl) => ({
                 name: tpl.name,
                 description: tpl.description,
-                url: `https://docracy.io/free-templates/${tpl.slug}`,
+                url: `https://docracy.io${localizePath(`/free-templates/${tpl.slug}`, locale)}`,
               }));
               return { matches };
             },
@@ -64,7 +80,7 @@ export default function FreeTemplates() {
     } catch {
       // Experimental, unstable API — never let an unexpected shape/behavior break the page.
     }
-  }, []);
+  }, [locale]);
 
   useEffect(() => {
     const presentCategories = RECURRING_CATEGORIES.filter((c) => FREE_TEMPLATES.some((tpl) => tpl.recurringCategory === c));
@@ -109,9 +125,17 @@ export default function FreeTemplates() {
           <div key={category} style={{ marginTop: 32 }}>
             <h2 style={{ fontSize: 19 }}>{catKey ? t(catKey) : category}</h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
-              {inCategory.map((tpl) => (
-                <TemplateCard key={tpl.slug} slug={tpl.slug} name={tpl.name} description={tpl.description} />
-              ))}
+              {inCategory.map((tpl) => {
+                const labels = labelFor(tpl.slug, tpl.name, tpl.description);
+                return (
+                  <TemplateCard
+                    key={tpl.slug}
+                    name={labels.name}
+                    description={labels.description}
+                    to={localizePath(`/free-templates/${tpl.slug}`, locale)}
+                  />
+                );
+              })}
             </div>
           </div>
         );
@@ -120,9 +144,17 @@ export default function FreeTemplates() {
       <div style={{ marginTop: 32 }}>
         <h2 style={{ fontSize: 19 }}>{t("freeTemplates.allTemplates")}</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
-          {FREE_TEMPLATES.map((tpl) => (
-            <TemplateCard key={tpl.slug} slug={tpl.slug} name={tpl.name} description={tpl.description} />
-          ))}
+          {FREE_TEMPLATES.map((tpl) => {
+            const labels = labelFor(tpl.slug, tpl.name, tpl.description);
+            return (
+              <TemplateCard
+                key={tpl.slug}
+                name={labels.name}
+                description={labels.description}
+                to={localizePath(`/free-templates/${tpl.slug}`, locale)}
+              />
+            );
+          })}
         </div>
       </div>
     </div>
