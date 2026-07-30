@@ -604,6 +604,222 @@ const es: Messages = {
     "Última comprobación {{time}}. Las comprobaciones se ejecutan en vivo en cada carga y una vez al día para el historial.",
   "uptime.loadFailed": "No se pudo cargar el estado:",
   "uptime.noIncidents": "Sin incidentes reportados — el seguimiento diario empezó hoy.",
+  "bulkSend.addFromPaste": "Agregar desde pegado",
+  "bulkSend.addRecipient": "+ Agregar destinatario",
+  "bulkSend.namePlaceholder": "Nombre",
+  "bulkSend.noTemplates": "Guarda una plantilla primero y vuelve aquí.",
+  "bulkSend.paidOnly": "El envío masivo desde una plantilla está disponible en planes de pago.",
+  "bulkSend.pasteEmails": "Pega correos (uno por línea)",
+  "bulkSend.pastePlaceholder": "alice@example.com\nbob@example.com",
+  "bulkSend.recipientN": "Destinatario {{n}}",
+  "bulkSend.recipientTitleAria": "Título del destinatario {{n}}",
+  "bulkSend.recipients": "Destinatarios",
+  "bulkSend.retention": "Retención (días)",
+  "bulkSend.seePricing": "Ver precios →",
+  "bulkSend.sendMany": "Enviar {{count}} documentos",
+  "bulkSend.sendOne": "Enviar 1 documento",
+  "bulkSend.sentMany": "Enviados {{count}} documentos",
+  "bulkSend.sentOne": "Enviado 1 documento",
+  "bulkSend.signerEmailAria": "Correo del firmante {{signer}} del destinatario {{recipient}}",
+  "bulkSend.signerNameAria": "Nombre del firmante {{signer}} del destinatario {{recipient}}",
+  "bulkSend.statusLink": "Estado →",
+  "bulkSend.sub":
+    "Envía la misma plantilla a muchos destinatarios a la vez. Cada fila se convierte en su propio documento.",
+  "bulkSend.template": "Plantilla",
+  "bulkSend.title": "Envío masivo",
+  "bulkSend.titleOptional": "Título del documento (opcional)",
+  "docs.ai.detect":
+    "Detectar campos automáticamente — sube un PDF y coloca campos de firma/fecha por ti, en lugar de hacerlo a mano.",
+  "docs.ai.explain":
+    "Resumen en lenguaje claro — un resumen de 3 puntos de lo que cada parte acuerda, sin jerga legal.",
+  "docs.ai.generate":
+    "Generar con IA — describe un acuerdo en una frase en la página Preparar (p. ej. \"un contrato simple de diseño web por $2,500 a precio fijo\") y recibe un PDF listo para firmar, con campos ya colocados.",
+  "docs.ai.intro": "Cuatro funciones de IA, disponibles al iniciar sesión con una cuenta de pago:",
+  "docs.ai.risk":
+    "Resaltador de riesgos y cláusulas — marca términos unilaterales (no competencias largas, pagos vagos, etc.) antes de firmar.",
+  "docs.ai.title": "Herramientas de IA (pago)",
+  "docs.anchorTags.body1":
+    "Incrusta etiquetas de colocación directamente en tu PDF antes de subirlo — útil para mail-merge o plantillas vía API. En Preparar (pago), usa",
+  "docs.anchorTags.body2": "para buscar etiquetas como",
+  "docs.anchorTags.body3":
+    "El texto de la etiqueta se elimina y se reemplaza con el campo correspondiente para ese número de firmante.",
+  "docs.anchorTags.detect": "Detectar etiquetas ancla",
+  "docs.anchorTags.or": "o",
+  "docs.anchorTags.title": "Etiquetas ancla en PDFs (pago)",
+  "docs.api.auth": "Autentica con",
+  "docs.api.authTest": "Verifica la clave API. Devuelve { email, workspaceId }.",
+  "docs.api.base": "URL base:",
+  "docs.api.bulk":
+    "Envío masivo de una plantilla. Cuerpo: { templateId, recipients: [{ signers: [{ name, email }], title? }], customSubject?, customMessage? }. Devuelve { batchId, documents: [...] }.",
+  "docs.api.colMethod": "Método y ruta",
+  "docs.api.colWhat": "Qué hace",
+  "docs.api.documents":
+    "Envía una plantilla guardada a firmar. Cuerpo: { templateId, signers: [{ name, email }] } — el número de firmantes debe coincidir con la plantilla. Devuelve { docId, statusToken, statusUrl }.",
+  "docs.api.embed":
+    "Crea una sesión de firma integrada (pago). Cuerpo: { docId, signerOrder, allowedOrigins?, returnUrl?, ttlSeconds? }. Devuelve { embedToken, embedUrl, expiresAt }. También acepta la clave API del espacio de trabajo.",
+  "docs.api.footer":
+    "Esta es la misma superficie que usa Zapier — nada aquí es exclusivo de Zapier. Las entregas de webhook están firmadas con HMAC igual, ya sea que la suscripción venga de Zapier, el Panel o esta API directamente.",
+  "docs.api.hooks":
+    "Suscribe una URL a un evento. :event es uno de document-created, signer-signed, document-completed. Cuerpo: { target_url }. Devuelve { id }.",
+  "docs.api.hooksDelete": "Elimina una suscripción de webhook creada arriba.",
+  "docs.api.intro1":
+    "Todo lo que hace Zapier arriba también es una API REST simple que puedes llamar directamente con la misma clave API (Panel → \"Conector MCP y clave API\") — útil si quieres integrar sin Zapier en el medio.",
+  "docs.api.json": "Todas las respuestas son JSON.",
+  "docs.api.orToken": "(o un",
+  "docs.api.queryParam": "parámetro de consulta).",
+  "docs.api.templates": "Lista tus plantillas guardadas: [{ id, name }].",
+  "docs.api.title": "Referencia de la API REST",
+  "docs.automation.body1":
+    "Con una cuenta de pago, la misma clave API que alimenta el conector MCP también funciona con",
+  "docs.automation.body2":
+    "dispara un Zap en Documento creado, Firmante firmó o Documento completado; envía una plantilla guardada a firmar; o envía masivamente una plantilla a muchas filas de destinatarios en una acción.",
+  "docs.automation.body3":
+    "permite que tus propios sistemas se suscriban a esos mismos tres eventos directamente, sin Zapier en el medio.",
+  "docs.automation.tip1": "Mejor patrón en plan Free: un disparador de Docracy + una acción de destino.",
+  "docs.automation.tip2":
+    "Mantén las tareas bajas: usa la acción de envío masivo de Docracy en lugar de ramificar un Zap en muchos pasos de acción.",
+  "docs.automation.tip3":
+    "Si superas Free: prefiere la API directa de Docracy o tu propio consumidor de webhook en lugar de construir alrededor de pasos extra de Zapier.",
+  "docs.automation.title": "Zapier y webhooks",
+  "docs.automation.webhooks": "Webhooks",
+  "docs.automation.zapierNote":
+    "Nota de compatibilidad con Zapier Free: configura un Zap simple de 2 pasos (un disparador + una acción) y evita pasos extra para mejor compatibilidad con los límites del plan Free.",
+  "docs.bulkSend.body":
+    "Desde el Panel (Plantillas → Envío masivo, o /bulk-send), elige una plantilla guardada y envíala a muchos grupos de destinatarios a la vez — un documento por fila. Pega una lista de nombres/correos o completa el formulario; cada fila se convierte en su propia cadena de firma con el mismo diseño de campos. Opcionalmente establece un vencimiento personalizado (ver abajo). Solo pago.",
+  "docs.bulkSend.title": "Envío masivo (pago)",
+  "docs.cloudConnectors.body1": "Conecta almacenamiento en la nube desde Panel → Herramientas →",
+  "docs.cloudConnectors.body2":
+    "Cuando un documento termina de firmarse, Docracy sube el PDF final automáticamente — sin paso manual de descarga. Disponible en Pago y Enterprise.",
+  "docs.cloudConnectors.microsoft": "(Microsoft)",
+  "docs.cloudConnectors.title": "Dropbox, OneDrive, Box y Google Drive (pago)",
+  "docs.contacts.body1": "Guarda contactos en Panel → Herramientas →",
+  "docs.contacts.body2":
+    "Sus nombres y correos se autocompletan en Preparar y al reasignar. Para un documento pendiente, reasigna un firmante a un nuevo nombre/correo desde el Panel — el enlace anterior deja de funcionar y la nueva persona recibe el turno. También puedes anular un documento pendiente desde el Panel para cancelar la cadena.",
+  "docs.contacts.title": "Contactos y reasignación de firmantes (pago)",
+  "docs.embed.body":
+    "Aloja la interfaz de firma dentro de tu propio producto mediante un iframe. Desde el Panel, abre un documento pendiente y haz clic en Integrar para crear una URL de corta duración — o llama POST /api/embed/sessions (sesión de cookie o clave API). El cuerpo incluye docId, signerOrder, allowedOrigins opcional, returnUrl y ttlSeconds. La respuesta da un embedUrl para cargar en /embed/sign/…. Los orígenes que no estén en la lista permitida se rechazan.",
+  "docs.embed.title": "Firma integrada (pago)",
+  "docs.enterprise.body1":
+    "Enterprise incluye todo lo del plan Pago, más facturación/contratos anuales, soporte premium (con SLA), descuentos por volumen e incorporación personalizada, y SSO o configuración multi-espacio opcional. Contacta a",
+  "docs.enterprise.body2": "o mejora el plan desde la pestaña de suscripción del Panel.",
+  "docs.enterprise.title": "Enterprise",
+  "docs.expiry.body":
+    "Los documentos gratis siempre vencen después de 9 días (o antes, cuando todos hayan firmado y se haya enviado la copia final por correo). Con una cuenta de pago puedes elegir retención de 1–90 días al preparar un documento o enviar masivamente desde una plantilla.",
+  "docs.expiry.title": "Vencimiento personalizado del documento (pago)",
+  "docs.fields.checkbox": "Casilla — obligatoria u opcional.",
+  "docs.fields.dropdown":
+    "Desplegable — defines las opciones al colocar el campo; el valor elegido queda grabado en el PDF.",
+  "docs.fields.sig":
+    "Firma / iniciales — dibujadas en el navegador; el correo y la fecha se estampan automáticamente.",
+  "docs.fields.text": "Texto / fecha — texto de una línea o selector de fecha.",
+  "docs.fields.title": "Tipos de campo",
+  "docs.mcp.body1": "Docracy ejecuta un servidor",
+  "docs.mcp.body2":
+    "para que Claude, ChatGPT, Grok, Perplexity o un agente IDE como Cursor consulten el estado de firma y busquen tus documentos desde el chat. Requiere cuenta de pago — copia tu URL de conector personal desde Panel → Conector y clave API. Instrucciones completas:",
+  "docs.mcp.title": "Conectar un asistente de IA (MCP)",
+  "docs.paid.body1":
+    "Al iniciar sesión obtienes firmantes ilimitados por documento, un panel con historial, plantillas reutilizables, firma paralela (todos a la vez), enlaces protegidos con PIN, cuentas de equipo (espacio compartido), marca blanca (tu logo en correos/páginas de firma), webhooks, MCP/Zapier, herramientas de IA, carga automática a Dropbox/OneDrive/Box/Google Drive, más las funciones de flujo abajo. Ver la tabla arriba o",
+  "docs.paid.title": "Cuenta de pago ($10/mes)",
+  "docs.plans.body1": "La misma matriz de funciones que en",
+  "docs.plans.body2":
+    "— Gratis vs Pago ($10/mes) vs Enterprise. La carga automática a Dropbox, OneDrive, Box y Google Drive está incluida en",
+  "docs.privacy.and": "y",
+  "docs.privacy.body1":
+    "Docracy no verifica quién firma realmente — cualquiera con el enlace del documento puede firmar con el nombre indicado. El registro de auditoría prueba qué se firmó y cuándo, no quién lo firmó realmente. Consulta",
+  "docs.privacy.body2": "para el panorama completo.",
+  "docs.privacy.title": "Privacidad e identidad",
+  "docs.sending.body1": "Ve a",
+  "docs.sending.body2":
+    ", sube un PDF, agrega firmantes en el orden en que deben firmar y coloca campos para cada uno — firma, iniciales, texto, fecha, casilla o desplegable. Las cuentas gratis admiten cadenas de hasta 2 firmantes, sin inicio de sesión. También puedes agregar hasta 2 espectadores CC, rechazar o cancelar un documento pendiente, y opcionalmente enviar enlaces de firma por SMS a números móviles de EE. UU. (ver abajo). Una vez enviado, el primer firmante recibe un correo con un enlace — tampoco necesita cuenta. Cada firmante recibe su turno automáticamente; el documento (y todos sus datos) se elimina 9 días después de crearse, o en cuanto todos hayan firmado y se haya enviado la copia final por correo — lo que ocurra primero.",
+  "docs.sending.title": "Enviar un documento (gratis)",
+  "docs.signerAttachments.body1": "Al preparar un documento con cuenta de pago, activa",
+  "docs.signerAttachments.body2":
+    "Cada firmante debe subir al menos un PDF o imagen antes de completar la firma. Los preparadores descargan los archivos desde la página de estado del documento o Panel → Documentos →",
+  "docs.signerAttachments.files": "Archivos",
+  "docs.signerAttachments.require": "Requerir que los firmantes suban adjunto(s)",
+  "docs.signerAttachments.title": "Adjuntos del firmante (pago)",
+  "docs.sms.body":
+    "En Preparar, marca También enviar enlaces de firma por SMS y agrega el número móvil de EE. UU. de cada firmante más su operador (AT&T, T-Mobile, Verizon, Sprint o US Cellular). Docracy envía el enlace a través de la pasarela email-a-SMS de tu operador usando la misma infraestructura de correo Resend — sin proveedor SMS separado ni tarifa por mensaje. La entrega no está garantizada (algunos operadores bloquean correo automatizado de pasarela). Solo números de EE. UU. — los firmantes fuera de Estados Unidos reciben invitaciones por correo; no hay opción SMS internacional hoy.",
+  "docs.sms.title": "Enlaces de firma por SMS (gratis, EE. UU.)",
+  "docs.templatesFree.body":
+    " — NDAs, cartas de oferta, acuerdos freelance, arrendamientos y más — con campos ya colocados. Elige una, completa los detalles entre corchetes y envíala igual que un PDF subido.",
+  "docs.templatesFree.link": "{{count}} plantillas listas para usar",
+  "docs.templatesFree.title": "Plantillas gratis",
+  "freeTemplates.allTemplates": "Todas las plantillas",
+  "freeTemplates.cat.clientContracts": "Contratos con clientes",
+  "freeTemplates.cat.compliance": "Documentos de cumplimiento",
+  "freeTemplates.cat.ndas": "NDAs",
+  "freeTemplates.cat.onboarding": "Documentos de incorporación",
+  "freeTemplates.cat.payment": "Acuerdos de pago",
+  "freeTemplates.cat.rentalLease": "Arrendamientos y contratos de alquiler",
+  "freeTemplates.cat.vendorAgreements": "Acuerdos con proveedores",
+  "freeTemplates.cat.workOrders": "Órdenes de trabajo",
+  "freeTemplates.heading": "Plantillas listas para acuerdos rápidos",
+  "freeTemplates.howItWorks": "Cómo funciona:",
+  "freeTemplates.intro":
+    "Docracy.io ofrece plantillas simples y listas para usar que puedes enviar en minutos. Elige una plantilla, agrega campos de firma y envíala — sin formato, sin configuración, sin cuentas.",
+  "freeTemplates.pop1": "NDA (unilateral o mutuo)",
+  "freeTemplates.pop2": "Contrato con cliente",
+  "freeTemplates.pop3": "Acuerdo de servicio",
+  "freeTemplates.pop4": "Acuerdo de incorporación",
+  "freeTemplates.pop5": "Acuerdo con proveedor",
+  "freeTemplates.pop6": "Contrato de alquiler",
+  "freeTemplates.pop7": "Orden de trabajo",
+  "freeTemplates.pop8": "Confirmación de entrega",
+  "freeTemplates.popularTitle": "Plantillas populares:",
+  "freeTemplates.step1": "Selecciona una plantilla",
+  "freeTemplates.step2": "Agrega los campos que necesitas",
+  "freeTemplates.step3": "Envíala a firmar",
+  "freeTemplates.tip": "Consejo: usar una plantilla es la forma más rápida de enviar tu primer documento.",
+  "mcp.client.chatgpt.name": "ChatGPT",
+  "mcp.client.chatgpt.setup":
+    "Configuración → Seguridad e inicio de sesión → activa el Modo desarrollador. Luego Configuración → Conectores (o Plugins) → Agregar conector personalizado → pega tu URL de conector personal desde el Panel.",
+  "mcp.client.chatgpt.sub": "",
+  "mcp.client.chatgpt.use":
+    "Elígelo desde el menú Herramientas (el icono \"+\"/herramientas en el cuadro de mensaje), o escribe \"@Docracy\" seguido de tu solicitud.",
+  "mcp.client.claude.name": "Claude",
+  "mcp.client.claude.setup":
+    "Configuración → Conectores → Agregar conector personalizado → pega tu URL de conector personal desde el Panel (autenticación \"None\" — la clave ya está en la URL).",
+  "mcp.client.claude.sub": "(claude.ai o la app de escritorio)",
+  "mcp.client.claude.use":
+    "Haz clic en el \"+\" abajo a la izquierda del cuadro de chat → Conectores → asegúrate de que Docracy esté activado para esa conversación. Luego pregunta con naturalidad — p. ej. \"busca documentos de Acme\" o \"consulta el estado de [enlace].\"",
+  "mcp.client.grok.name": "Grok",
+  "mcp.client.grok.setup":
+    "Disponible en los planes de pago de Grok. Haz clic en el \"+\" en el cuadro de chat → Conectores → Nuevo conector → Personalizado → pega tu URL de conector personal desde el Panel.",
+  "mcp.client.grok.sub": "",
+  "mcp.client.grok.use":
+    "Solo haz tu pregunta con normalidad una vez agregado — Grok llama la herramienta automáticamente cuando es relevante.",
+  "mcp.client.perplexity.name": "Perplexity",
+  "mcp.client.perplexity.setup":
+    "Requiere plan Pro o Max. Configuración → Conectores → Agregar conector personalizado → pega tu URL de conector personal desde el Panel, autenticación \"None\".",
+  "mcp.client.perplexity.sub": "",
+  "mcp.client.perplexity.use":
+    "Menciónalo directamente en tu pregunta — decir \"Docracy\" o preguntar algo claramente relacionado con tus documentos suele ser suficiente.",
+  "mcp.disclaimer":
+    "Docracy no verifica identidad — el registro de auditoría prueba qué se firmó y cuándo, no quién lo firmó realmente. Nada aquí cambia eso; cada herramienta MCP es de solo lectura.",
+  "mcp.ideBody":
+    "Estos se conectan mediante un archivo de configuración JSON en lugar de una pantalla de ajustes del navegador. La mayoría de clientes MCP que admiten servidores remotos (HTTP) usan un bloque mcpServers como este — agrégalo al archivo de configuración MCP de tu cliente (p. ej. .cursor/mcp.json de Cursor, .mcp.json de Claude Code), reemplazando el token con el de tu Panel:",
+  "mcp.ideNote":
+    "La clave exacta que espera tu cliente puede variar (algunos quieren un campo \"type\": \"http\" junto a \"url\") — consulta la documentación MCP de tu cliente si no conecta de inmediato.",
+  "mcp.ideTitle": "Cursor, Claude Code y otros clientes IDE/agente",
+  "mcp.intro1": "Docracy ejecuta un",
+  "mcp.intro2":
+    " servidor — un estándar abierto para dar a un asistente de IA herramientas que puede invocar directamente. Con una cuenta de pago, agrega tu URL de conector personal a Claude, ChatGPT, Grok o Perplexity y pregunta sobre tus documentos en lenguaje claro en lugar de abrir un panel.",
+  "mcp.paidBody":
+    "El conector MCP usa la clave API de tu espacio de trabajo. Inicia sesión, mejora el plan si hace falta, y copia la URL del conector personal desde Panel → Conector y clave API. Si termina la suscripción, esa clave se revoca y el conector deja de funcionar.",
+  "mcp.readOnlyNote":
+    "Nunca se firma ni cambia nada a través de MCP — cada herramienta aquí es de solo lectura. (Las herramientas de IA para PDF como detectar campos y el resumen de contratos viven en la app web, no en MCP.)",
+  "mcp.setupLabel": "Configuración:",
+  "mcp.signInCta": "Inicia sesión para obtener tu URL de conector",
+  "mcp.toolCheckStatus":
+    "check_status — quién firmó / quién sigue pendiente en un enlace de firma o estado.",
+  "mcp.toolFindDocuments":
+    "find_documents — busca tus propios documentos por título, nombre del firmante, correo o empresa.",
+  "mcp.toolsIntro": "Una vez conectado, tu asistente obtiene dos herramientas de solo lectura:",
+  "mcp.useLabel": "Úsalo:",
+  "mcp.zapierBody":
+    "¿Prefieres automatización sin código en lugar de un asistente de IA? La misma cuenta de pago funciona con Zapier: dispara un Zap en Documento creado, Firmante firmó o Documento completado, o envía una plantilla guardada a firmar como acción. Busca \"Docracy\" al agregar una app a un Zap — la misma clave API de arriba, usada en el campo \"API Key\" en lugar de la URL completa del conector.",
+  "mcp.zapierTitle": "Automatiza con Zapier",
   "uptime.title": "Estado del sistema",
 };
 

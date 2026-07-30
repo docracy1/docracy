@@ -8,6 +8,7 @@ import {
   type BulkSendResultDoc,
   type TemplateSummary,
 } from "../lib/api";
+import { useT } from "../lib/i18n";
 import { useNoIndex } from "../lib/useNoIndex";
 
 const DEFAULT_TTL = 9;
@@ -24,6 +25,7 @@ function emptyRow(signerCount: number): RecipientRow {
 
 export default function BulkSend() {
   useNoIndex();
+  const t = useT();
   const [account, setAccount] = useState<Account | null | undefined>(undefined);
   const [templates, setTemplates] = useState<TemplateSummary[]>([]);
   const [templateId, setTemplateId] = useState("");
@@ -51,15 +53,15 @@ export default function BulkSend() {
   }, []);
 
   const selected = useMemo(
-    () => templates.find((t) => t.id === templateId) ?? null,
+    () => templates.find((tpl) => tpl.id === templateId) ?? null,
     [templates, templateId]
   );
   const signerCount = selected?.signerCount ?? 1;
 
   const onSelectTemplate = (id: string) => {
     setTemplateId(id);
-    const t = templates.find((x) => x.id === id);
-    setRows([emptyRow(t?.signerCount ?? 1)]);
+    const tpl = templates.find((x) => x.id === id);
+    setRows([emptyRow(tpl?.signerCount ?? 1)]);
     setResults(null);
     setError(null);
   };
@@ -115,7 +117,7 @@ export default function BulkSend() {
       });
       setResults(documents);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
+      setError(err instanceof Error ? err.message : t("common.error"));
     } finally {
       setSubmitting(false);
     }
@@ -124,7 +126,7 @@ export default function BulkSend() {
   if (account === undefined) {
     return (
       <div className="container">
-        <p>Loading…</p>
+        <p>{t("common.loading")}</p>
       </div>
     );
   }
@@ -136,47 +138,48 @@ export default function BulkSend() {
   if (!account.isPaid) {
     return (
       <div className="container">
-        <h1>Bulk send</h1>
-        <p>Bulk send from a template is available on paid plans.</p>
-        <Link to="/pricing">See pricing →</Link>
+        <h1>{t("bulkSend.title")}</h1>
+        <p>{t("bulkSend.paidOnly")}</p>
+        <Link to="/pricing">{t("bulkSend.seePricing")}</Link>
       </div>
     );
   }
 
   return (
     <div className="container">
-      <h1>Bulk send</h1>
-      <p style={{ color: "var(--mute)", marginBottom: 20 }}>
-        Send the same template to many recipients at once. Each row becomes its own document.
-      </p>
+      <h1>{t("bulkSend.title")}</h1>
+      <p style={{ color: "var(--mute)", marginBottom: 20 }}>{t("bulkSend.sub")}</p>
 
       {templates.length === 0 ? (
         <div className="card">
-          <p style={{ marginBottom: 12 }}>Save a template first, then come back here.</p>
+          <p style={{ marginBottom: 12 }}>{t("bulkSend.noTemplates")}</p>
           <Link to="/prepare" className="btn-secondary" style={{ textDecoration: "none" }}>
-            Prepare a document
+            {t("prepare.title")}
           </Link>
         </div>
       ) : (
         <>
           <div className="card" style={{ marginBottom: 16 }}>
-            <label style={{ display: "block", fontSize: 13, marginBottom: 6 }}>Template</label>
+            <label style={{ display: "block", fontSize: 13, marginBottom: 6 }}>{t("bulkSend.template")}</label>
             <select
               className="form-input"
               style={{ width: "100%", maxWidth: 420 }}
               value={templateId}
               onChange={(e) => onSelectTemplate(e.target.value)}
-              aria-label="Template"
+              aria-label={t("bulkSend.template")}
             >
-              {templates.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.name} ({t.signerCount} signer{t.signerCount === 1 ? "" : "s"})
+              {templates.map((tpl) => (
+                <option key={tpl.id} value={tpl.id}>
+                  {tpl.name}{" "}
+                  ({tpl.signerCount === 1
+                    ? t("prepare.signersCount", { count: tpl.signerCount })
+                    : t("prepare.signersCountPlural", { count: tpl.signerCount })})
                 </option>
               ))}
             </select>
 
             <label style={{ display: "block", fontSize: 13, marginTop: 14, marginBottom: 6 }}>
-              Retention (days)
+              {t("bulkSend.retention")}
             </label>
             <input
               className="form-input"
@@ -190,22 +193,22 @@ export default function BulkSend() {
                 setTtlDays(Math.min(90, Math.max(1, Math.floor(n))));
               }}
               style={{ width: 80 }}
-              aria-label="Retention days"
+              aria-label={t("bulkSend.retention")}
             />
           </div>
 
           {signerCount === 1 && (
             <div className="card" style={{ marginBottom: 16 }}>
               <label style={{ display: "block", fontSize: 13, marginBottom: 6 }}>
-                Paste emails (one per line)
+                {t("bulkSend.pasteEmails")}
               </label>
               <textarea
                 className="form-input"
                 style={{ width: "100%", minHeight: 80, fontFamily: "inherit" }}
                 value={pasteText}
                 onChange={(e) => setPasteText(e.target.value)}
-                placeholder={"alice@example.com\nbob@example.com"}
-                aria-label="Paste emails"
+                placeholder={t("bulkSend.pastePlaceholder")}
+                aria-label={t("bulkSend.pasteEmails")}
               />
               <button
                 className="btn-secondary"
@@ -213,13 +216,13 @@ export default function BulkSend() {
                 disabled={!pasteText.trim()}
                 onClick={applyPaste}
               >
-                Add from paste
+                {t("bulkSend.addFromPaste")}
               </button>
             </div>
           )}
 
           <div className="card" style={{ marginBottom: 16 }}>
-            <h3 style={{ fontSize: 15, marginBottom: 12 }}>Recipients</h3>
+            <h3 style={{ fontSize: 15, marginBottom: 12 }}>{t("bulkSend.recipients")}</h3>
             {rows.map((row, rowIdx) => (
               <div
                 key={rowIdx}
@@ -229,7 +232,7 @@ export default function BulkSend() {
                 }}
               >
                 <div style={{ fontSize: 12, color: "var(--mute)", marginBottom: 6 }}>
-                  Recipient {rowIdx + 1}
+                  {t("bulkSend.recipientN", { n: rowIdx + 1 })}
                 </div>
                 {row.signers.map((s, signerIdx) => (
                   <div
@@ -238,13 +241,13 @@ export default function BulkSend() {
                   >
                     {signerCount > 1 && (
                       <span style={{ fontSize: 12, color: "var(--mute)", alignSelf: "center", minWidth: 56 }}>
-                        Signer {signerIdx + 1}
+                        {t("prepare.signerN", { n: signerIdx + 1 })}
                       </span>
                     )}
                     <input
                       className="form-input"
-                      placeholder="Name"
-                      aria-label={`Recipient ${rowIdx + 1} signer ${signerIdx + 1} name`}
+                      placeholder={t("bulkSend.namePlaceholder")}
+                      aria-label={t("bulkSend.signerNameAria", { recipient: rowIdx + 1, signer: signerIdx + 1 })}
                       value={s.name}
                       onChange={(e) => updateSigner(rowIdx, signerIdx, { name: e.target.value })}
                       style={{ flex: "1 1 140px" }}
@@ -252,8 +255,8 @@ export default function BulkSend() {
                     <input
                       className="form-input"
                       type="email"
-                      placeholder="Email"
-                      aria-label={`Recipient ${rowIdx + 1} signer ${signerIdx + 1} email`}
+                      placeholder={t("login.email")}
+                      aria-label={t("bulkSend.signerEmailAria", { recipient: rowIdx + 1, signer: signerIdx + 1 })}
                       value={s.email}
                       onChange={(e) => updateSigner(rowIdx, signerIdx, { email: e.target.value })}
                       style={{ flex: "1 1 180px" }}
@@ -262,8 +265,8 @@ export default function BulkSend() {
                 ))}
                 <input
                   className="form-input"
-                  placeholder="Document title (optional)"
-                  aria-label={`Recipient ${rowIdx + 1} title`}
+                  placeholder={t("bulkSend.titleOptional")}
+                  aria-label={t("bulkSend.recipientTitleAria", { n: rowIdx + 1 })}
                   value={row.title}
                   onChange={(e) =>
                     setRows((prev) =>
@@ -278,20 +281,24 @@ export default function BulkSend() {
                     style={{ marginTop: 8, fontSize: 12, padding: "4px 8px" }}
                     onClick={() => removeRow(rowIdx)}
                   >
-                    Remove
+                    {t("common.delete")}
                   </button>
                 )}
               </div>
             ))}
             <button className="btn-secondary" style={{ marginTop: 12 }} onClick={addRow}>
-              + Add recipient
+              {t("bulkSend.addRecipient")}
             </button>
           </div>
 
           {error && <p style={{ color: "var(--danger)", marginBottom: 12 }}>{error}</p>}
 
           <button className="btn-primary" disabled={submitting || !templateId} onClick={onSubmit}>
-            {submitting ? "Sending…" : `Send ${rows.length} document${rows.length === 1 ? "" : "s"}`}
+            {submitting
+              ? t("common.sending")
+              : rows.length === 1
+                ? t("bulkSend.sendOne")
+                : t("bulkSend.sendMany", { count: rows.length })}
           </button>
         </>
       )}
@@ -299,7 +306,9 @@ export default function BulkSend() {
       {results && (
         <div className="card" style={{ marginTop: 24 }}>
           <h3 style={{ fontSize: 15, marginBottom: 12 }}>
-            Sent {results.length} document{results.length === 1 ? "" : "s"}
+            {results.length === 1
+              ? t("bulkSend.sentOne")
+              : t("bulkSend.sentMany", { count: results.length })}
           </h3>
           {results.map((doc) => (
             <div
@@ -318,7 +327,7 @@ export default function BulkSend() {
                 <span style={{ fontSize: 12, color: "var(--mute)" }}>({doc.recipientLabel})</span>
               </span>
               <Link to={`/status/${doc.statusToken}`} style={{ fontSize: 13 }}>
-                Status →
+                {t("bulkSend.statusLink")}
               </Link>
             </div>
           ))}

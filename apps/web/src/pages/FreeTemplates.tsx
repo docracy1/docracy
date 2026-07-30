@@ -1,8 +1,20 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FREE_TEMPLATES, RECURRING_CATEGORIES } from "../lib/freeTemplates";
+import { useT } from "../lib/i18n";
 import { usePageMeta } from "../lib/usePageMeta";
 import { track } from "../lib/track";
+
+const CATEGORY_KEYS: Record<string, string> = {
+  NDAs: "freeTemplates.cat.ndas",
+  "Client Contracts": "freeTemplates.cat.clientContracts",
+  "Work Orders": "freeTemplates.cat.workOrders",
+  "Vendor Agreements": "freeTemplates.cat.vendorAgreements",
+  "Rental & Lease Agreements": "freeTemplates.cat.rentalLease",
+  "Onboarding Documents": "freeTemplates.cat.onboarding",
+  "Payment Agreements": "freeTemplates.cat.payment",
+  "Compliance Documents": "freeTemplates.cat.compliance",
+};
 
 function TemplateCard({ slug, name, description }: { slug: string; name: string; description: string }) {
   return (
@@ -14,6 +26,8 @@ function TemplateCard({ slug, name, description }: { slug: string; name: string;
 }
 
 export default function FreeTemplates() {
+  const t = useT();
+
   usePageMeta(
     "Free Business Document Templates — NDA, Contractor Agreement, Offer Letter | Docracy",
     "Free, ready-to-sign templates for the most common business documents — mutual NDA, independent contractor " +
@@ -21,13 +35,6 @@ export default function FreeTemplates() {
       "for signature in minutes."
   );
 
-  // WebMCP (https://webmachinelearning.github.io/webmcp/) — a very early, experimental proposal
-  // for a page to expose tools directly to an in-browser AI agent, separate from the remote MCP
-  // connector (which works without a browser tab open at all). Feature-detected: unsupported in
-  // essentially every browser today, so this is a no-op everywhere it doesn't exist yet. Read-only,
-  // matching how every other agent-facing tool this site exposes (MCP's check_status/
-  // find_documents) is deliberately read-only too — it returns matches, it doesn't navigate the
-  // page or place an order on the caller's behalf.
   useEffect(() => {
     const modelContext = (navigator as unknown as { modelContext?: { provideContext: (ctx: unknown) => void } }).modelContext;
     if (!modelContext?.provideContext) return;
@@ -48,11 +55,11 @@ export default function FreeTemplates() {
             async execute({ query }: { query: string }) {
               const q = query.trim().toLowerCase();
               const matches = FREE_TEMPLATES.filter(
-                (t) => t.name.toLowerCase().includes(q) || t.description.toLowerCase().includes(q)
-              ).map((t) => ({
-                name: t.name,
-                description: t.description,
-                url: `https://docracy.io/free-templates/${t.slug}`,
+                (tpl) => tpl.name.toLowerCase().includes(q) || tpl.description.toLowerCase().includes(q)
+              ).map((tpl) => ({
+                name: tpl.name,
+                description: tpl.description,
+                url: `https://docracy.io/free-templates/${tpl.slug}`,
               }));
               return { matches };
             },
@@ -64,11 +71,8 @@ export default function FreeTemplates() {
     }
   }, []);
 
-  // "Viewed" here means "rendered in front of the visitor" (same sense page_view already uses for
-  // the whole page) — there's no distinct click/filter interaction to hang this off, since every
-  // category section is visible on the page at once rather than behind a category filter.
   useEffect(() => {
-    const presentCategories = RECURRING_CATEGORIES.filter((c) => FREE_TEMPLATES.some((t) => t.recurringCategory === c));
+    const presentCategories = RECURRING_CATEGORIES.filter((c) => FREE_TEMPLATES.some((tpl) => tpl.recurringCategory === c));
     for (const category of presentCategories) {
       track("template_category_viewed", { templateCategory: category });
     }
@@ -76,44 +80,42 @@ export default function FreeTemplates() {
 
   return (
     <div className="container">
-      <h1 style={{ fontSize: 20, fontWeight: 700, letterSpacing: "-0.01em" }}>Ready-to-use templates for quick agreements</h1>
-      <p style={{ maxWidth: 640, fontSize: 14, color: "var(--body)" }}>
-        Docracy.io provides simple, ready-to-use templates you can send in minutes. Choose a template, add signature
-        fields, and send it — no formatting, no setup, no accounts required.
-      </p>
+      <h1 style={{ fontSize: 20, fontWeight: 700, letterSpacing: "-0.01em" }}>{t("freeTemplates.heading")}</h1>
+      <p style={{ maxWidth: 640, fontSize: 14, color: "var(--body)" }}>{t("freeTemplates.intro")}</p>
 
-      <p style={{ maxWidth: 640, fontSize: 14, fontWeight: 700, margin: "16px 0 8px" }}>How it works:</p>
+      <p style={{ maxWidth: 640, fontSize: 14, fontWeight: 700, margin: "16px 0 8px" }}>{t("freeTemplates.howItWorks")}</p>
       <ol style={{ maxWidth: 640, fontSize: 14, color: "var(--body)", margin: 0, paddingLeft: 20, lineHeight: 1.7 }}>
-        <li>Select a template</li>
-        <li>Add the fields you need</li>
-        <li>Send it for signature</li>
+        <li>{t("freeTemplates.step1")}</li>
+        <li>{t("freeTemplates.step2")}</li>
+        <li>{t("freeTemplates.step3")}</li>
       </ol>
 
-      <p style={{ maxWidth: 640, fontSize: 14, fontWeight: 700, margin: "16px 0 8px" }}>Popular templates:</p>
+      <p style={{ maxWidth: 640, fontSize: 14, fontWeight: 700, margin: "16px 0 8px" }}>{t("freeTemplates.popularTitle")}</p>
       <ul style={{ maxWidth: 640, fontSize: 14, color: "var(--body)", margin: 0, paddingLeft: 20, lineHeight: 1.7 }}>
-        <li>NDA (one-way or mutual)</li>
-        <li>Client contract</li>
-        <li>Service agreement</li>
-        <li>Onboarding agreement</li>
-        <li>Vendor agreement</li>
-        <li>Rental agreement</li>
-        <li>Work order</li>
-        <li>Delivery confirmation</li>
+        <li>{t("freeTemplates.pop1")}</li>
+        <li>{t("freeTemplates.pop2")}</li>
+        <li>{t("freeTemplates.pop3")}</li>
+        <li>{t("freeTemplates.pop4")}</li>
+        <li>{t("freeTemplates.pop5")}</li>
+        <li>{t("freeTemplates.pop6")}</li>
+        <li>{t("freeTemplates.pop7")}</li>
+        <li>{t("freeTemplates.pop8")}</li>
       </ul>
 
       <p style={{ maxWidth: 640, fontSize: 13, color: "var(--mute)", fontStyle: "italic", margin: "16px 0 28px" }}>
-        Tip: Using a template is the fastest way to send your first document.
+        {t("freeTemplates.tip")}
       </p>
 
       {RECURRING_CATEGORIES.map((category) => {
-        const inCategory = FREE_TEMPLATES.filter((t) => t.recurringCategory === category);
+        const inCategory = FREE_TEMPLATES.filter((tpl) => tpl.recurringCategory === category);
         if (inCategory.length === 0) return null;
+        const catKey = CATEGORY_KEYS[category];
         return (
           <div key={category} style={{ marginTop: 32 }}>
-            <h2 style={{ fontSize: 19 }}>{category}</h2>
+            <h2 style={{ fontSize: 19 }}>{catKey ? t(catKey) : category}</h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
-              {inCategory.map((t) => (
-                <TemplateCard key={t.slug} slug={t.slug} name={t.name} description={t.description} />
+              {inCategory.map((tpl) => (
+                <TemplateCard key={tpl.slug} slug={tpl.slug} name={tpl.name} description={tpl.description} />
               ))}
             </div>
           </div>
@@ -121,10 +123,10 @@ export default function FreeTemplates() {
       })}
 
       <div style={{ marginTop: 32 }}>
-        <h2 style={{ fontSize: 19 }}>All templates</h2>
+        <h2 style={{ fontSize: 19 }}>{t("freeTemplates.allTemplates")}</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
-          {FREE_TEMPLATES.map((t) => (
-            <TemplateCard key={t.slug} slug={t.slug} name={t.name} description={t.description} />
+          {FREE_TEMPLATES.map((tpl) => (
+            <TemplateCard key={tpl.slug} slug={tpl.slug} name={tpl.name} description={tpl.description} />
           ))}
         </div>
       </div>

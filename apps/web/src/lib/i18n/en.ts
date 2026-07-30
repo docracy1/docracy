@@ -510,19 +510,232 @@ const en: Messages = {
   "terms.noGuarantees": "No guarantees",
   "terms.acceptableUse": "Acceptable use",
   "blog.title": "Blog",
-  "docs.title": "Documentation",
+  "bulkSend.addFromPaste": "Add from paste",
+  "bulkSend.addRecipient": "+ Add recipient",
+  "bulkSend.namePlaceholder": "Name",
+  "bulkSend.noTemplates": "Save a template first, then come back here.",
+  "bulkSend.paidOnly": "Bulk send from a template is available on paid plans.",
+  "bulkSend.pasteEmails": "Paste emails (one per line)",
+  "bulkSend.pastePlaceholder": "alice@example.com\nbob@example.com",
+  "bulkSend.recipientN": "Recipient {{n}}",
+  "bulkSend.recipientTitleAria": "Recipient {{n}} title",
+  "bulkSend.recipients": "Recipients",
+  "bulkSend.retention": "Retention (days)",
+  "bulkSend.seePricing": "See pricing →",
+  "bulkSend.sendMany": "Send {{count}} documents",
+  "bulkSend.sendOne": "Send 1 document",
+  "bulkSend.sentMany": "Sent {{count}} documents",
+  "bulkSend.sentOne": "Sent 1 document",
+  "bulkSend.signerEmailAria": "Recipient {{recipient}} signer {{signer}} email",
+  "bulkSend.signerNameAria": "Recipient {{recipient}} signer {{signer}} name",
+  "bulkSend.statusLink": "Status →",
+  "bulkSend.sub": "Send the same template to many recipients at once. Each row becomes its own document.",
+  "bulkSend.template": "Template",
+  "bulkSend.title": "Bulk send",
+  "bulkSend.titleOptional": "Document title (optional)",
+  "docs.ai.detect":
+    "Auto-detect fields — upload a PDF and it places signature/date fields for you, instead of placing them by hand.",
+  "docs.ai.explain":
+    "Plain-English explainer — a 3-bullet summary of what each party is agreeing to, no legal jargon.",
+  "docs.ai.generate":
+    "Generate with AI — describe an agreement in a sentence on the Prepare page (e.g. \"a simple web design contract for a $2,500 fixed-price project\") and get a ready-to-sign PDF back, with fields already placed.",
+  "docs.ai.intro": "Four AI features, available once signed in on a paid account:",
+  "docs.ai.risk":
+    "Risk & clause highlighter — flags one-sided terms (long non-competes, vague payment terms, etc.) before you sign.",
+  "docs.ai.title": "AI tools (paid)",
+  "docs.anchorTags.body1":
+    "Embed placement tags directly in your PDF before upload — useful for mail-merge or API-driven templates. On Prepare (paid), use",
+  "docs.anchorTags.body2": "to scan for tags like",
+  "docs.anchorTags.body3": "The tag text is removed and replaced with the matching field for that signer number.",
+  "docs.anchorTags.detect": "Detect anchor tags",
+  "docs.anchorTags.or": "or",
+  "docs.anchorTags.title": "Anchor tags in PDFs (paid)",
+  "docs.api.auth": "Authenticate with",
+  "docs.api.authTest": "Verifies the API key. Returns { email, workspaceId }.",
+  "docs.api.base": "Base URL:",
+  "docs.api.bulk":
+    "Bulk send a template. Body: { templateId, recipients: [{ signers: [{ name, email }], title? }], customSubject?, customMessage? }. Returns { batchId, documents: [...] }.",
+  "docs.api.colMethod": "Method & path",
+  "docs.api.colWhat": "What it does",
+  "docs.api.documents":
+    "Sends a saved template for signature. Body: { templateId, signers: [{ name, email }] } — the number of signers must match the template. Returns { docId, statusToken, statusUrl }.",
+  "docs.api.embed":
+    "Creates an embedded-signing session (paid). Body: { docId, signerOrder, allowedOrigins?, returnUrl?, ttlSeconds? }. Returns { embedToken, embedUrl, expiresAt }. Also accepts the workspace API key.",
+  "docs.api.footer":
+    "This is the same surface Zapier itself calls — nothing here is Zapier-exclusive. Webhook deliveries are HMAC-signed the same way regardless of whether the subscription came from Zapier, the Dashboard, or this API directly.",
+  "docs.api.hooks":
+    "Subscribes a URL to an event. :event is one of document-created, signer-signed, document-completed. Body: { target_url }. Returns { id }.",
+  "docs.api.hooksDelete": "Removes a webhook subscription created above.",
+  "docs.api.intro1":
+    "Everything Zapier does above is also a plain REST API you can call directly with the same API key (Dashboard → \"MCP connector & API key\") — useful if you want to integrate without Zapier in the middle.",
+  "docs.api.json": "All responses are JSON.",
+  "docs.api.orToken": "(or a",
+  "docs.api.queryParam": "query param).",
+  "docs.api.templates": "Lists your saved templates: [{ id, name }].",
+  "docs.api.title": "REST API reference",
+  "docs.automation.body1": "On a paid account, the same API key that powers the MCP connector also works with",
+  "docs.automation.body2":
+    "trigger a Zap on Document Created, Signer Signed, or Document Completed; send a saved template out for signature; or bulk send a template to many recipient rows in one action.",
+  "docs.automation.body3":
+    "let your own systems subscribe to those same three events directly, without Zapier in between.",
+  "docs.automation.tip1": "Best Free-plan pattern: one Docracy trigger + one destination action.",
+  "docs.automation.tip2":
+    "Keep tasks low: use Docracy's own bulk-send action instead of fanning one Zap into many action steps.",
+  "docs.automation.tip3":
+    "If you outgrow Free: prefer Docracy's direct API or your own webhook consumer rather than building around extra Zapier steps.",
+  "docs.automation.title": "Zapier & webhooks",
+  "docs.automation.webhooks": "Webhooks",
+  "docs.automation.zapierNote":
+    "Zapier Free compatibility note: set up a simple 2-step Zap (one trigger + one action) and avoid adding extra steps for best compatibility with the Free-tier limits.",
+  "docs.bulkSend.body":
+    "From the Dashboard (Templates → Bulk send, or /bulk-send), pick a saved template and send it to many recipient groups at once — one document per row. Paste a list of names/emails or fill the form; each row becomes its own signing chain with the same field layout. Optionally set a custom expiry (see below). Paid only.",
+  "docs.bulkSend.title": "Bulk send (paid)",
+  "docs.cloudConnectors.body1":
+    "Connect cloud storage from Dashboard → Tools →",
+  "docs.cloudConnectors.body2":
+    "After a document finishes signing, Docracy uploads the final PDF automatically — no manual download step. Available on Paid and Enterprise.",
+  "docs.cloudConnectors.microsoft": "(Microsoft)",
+  "docs.cloudConnectors.title": "Dropbox, OneDrive, Box, and Google Drive (paid)",
+  "docs.contacts.body1":
+    "Save contacts under Dashboard → Tools →",
+  "docs.contacts.body2":
+    "Their names and emails autocomplete on Prepare and when reassigning. For a pending document, reassign a signer to a new name/email from the Dashboard — the old link stops working and the new person gets the turn. You can also void a pending document from the Dashboard so the chain is cancelled.",
+  "docs.contacts.title": "Contacts & signer reassignment (paid)",
+  "docs.embed.body":
+    "Host the signing UI inside your own product via an iframe. From the Dashboard, open a pending document and click Embed to create a short-lived URL — or call POST /api/embed/sessions (cookie session or API key). Body includes docId, signerOrder, optional allowedOrigins, returnUrl, and ttlSeconds. The response gives an embedUrl to load at /embed/sign/…. Origins not on the allowlist are rejected.",
+  "docs.embed.title": "Embedded signing (paid)",
+  "docs.enterprise.body1":
+    "Enterprise includes everything in Paid, plus invoice/annual billing, premium (SLA-backed) support, volume discounts & custom onboarding, and optional SSO or multi-workspace setup. Contact",
+  "docs.enterprise.body2": "or upgrade from the Dashboard subscription tab.",
+  "docs.enterprise.title": "Enterprise",
+  "docs.expiry.body":
+    "Free documents always expire after 9 days (or sooner once everyone has signed and the final copy is emailed). On a paid account you can choose retention of 1–90 days when preparing a document or bulk-sending from a template.",
+  "docs.expiry.title": "Custom document expiry (paid)",
+  "docs.fields.checkbox": "Checkbox — required or optional.",
+  "docs.fields.dropdown":
+    "Dropdown — you define the options when placing the field; the chosen value is burned into the PDF.",
+  "docs.fields.sig": "Signature / initials — drawn in the browser; email and date are stamped automatically.",
+  "docs.fields.text": "Text / date — single-line text or a date picker.",
+  "docs.fields.title": "Field types",
+  "docs.mcp.body1": "Docracy runs an",
+  "docs.mcp.body2":
+    "server so Claude, ChatGPT, Grok, Perplexity, or an IDE agent like Cursor can check signing status and search your documents from a chat. Requires a paid account — copy your personal connector URL from Dashboard → Connector & API key. Full setup instructions:",
+  "docs.mcp.title": "Connect an AI assistant (MCP)",
+  "docs.paid.body1":
+    "Signing in adds unlimited signers per document, a dashboard with document history, reusable saved templates, parallel (all-at-once) signing, PIN-protected signing links, team accounts (shared workspace with teammates), white-label branding (your own logo on emails/signing pages), webhooks, MCP/Zapier, AI tools, Dropbox/OneDrive/Box/Google Drive auto-upload, plus the workflow features below. See the table above or",
+  "docs.paid.title": "Paid account ($10/month)",
+  "docs.plans.body1": "Same feature matrix as",
+  "docs.plans.body2":
+    "— Free vs Paid ($10/mo) vs Enterprise. Dropbox, OneDrive, Box, and Google Drive auto-upload are included on",
+  "docs.privacy.and": "and",
+  "docs.privacy.body1":
+    "Docracy doesn't verify who's actually signing — anyone holding a document's link can sign as the name on it. The audit trail proves what was signed and when, not who a signer really is. See",
+  "docs.privacy.body2": "for the full picture.",
+  "docs.privacy.title": "Privacy & identity",
+  "docs.sending.body1": "Go to",
+  "docs.sending.body2":
+    ", upload a PDF, add signers in the order they should sign, and place fields for each one — signature, initials, text, date, checkbox, or dropdown. Free accounts support chains of up to 2 signers, no login required. You can also add up to 2 CC viewers, decline or cancel a pending document, and optionally text signing links to US mobile numbers (see below). Once you send it, the first signer gets an email with a link — no account needed on their end either. Each signer gets their turn automatically; the document (and all its data) is deleted 9 days after creation, or as soon as everyone's signed and the final copy has gone out by email — whichever comes first.",
+  "docs.sending.title": "Sending a document (free)",
+  "docs.signerAttachments.body1":
+    "When preparing a document on a paid account, enable",
+  "docs.signerAttachments.body2":
+    "Each signer must upload at least one PDF or image before they can complete signing. Preparers download uploads from the document status page or Dashboard → Documents →",
+  "docs.signerAttachments.files": "Files",
+  "docs.signerAttachments.require": "Require signers to upload attachment(s)",
+  "docs.signerAttachments.title": "Signer attachments (paid)",
+  "docs.sms.body":
+    "On Prepare, check Also text signing links and add each signer's US mobile number plus carrier (AT&T, T-Mobile, Verizon, Sprint, or US Cellular). Docracy sends the link through your carrier's email-to-SMS gateway using the same Resend email stack — no separate SMS vendor or per-text fee. Delivery isn't guaranteed (some carriers block automated gateway mail). US numbers only — signers outside the United States receive email invites instead; there is no international SMS option today.",
+  "docs.sms.title": "SMS signing links (free, US)",
   "docs.sub": "How everything in Docracy actually works, in one place.",
+  "docs.templatesFree.body":
+    " — NDAs, offer letters, freelance agreements, leases, and more — with fields already placed. Pick one, fill in the bracketed details, and send it the same way as an uploaded PDF.",
+  "docs.templatesFree.link": "{{count}} ready-to-use templates",
+  "docs.templatesFree.title": "Free templates",
+  "docs.title": "Documentation",
   "docs.plansTitle": "Plans at a glance (Free / Paid / Enterprise)",
   "feature.problem": "The problem",
   "feature.solution": "The Docracy way",
   "feature.features": "Features",
   "feature.cta": "Get started",
   "feature.related": "Related",
-  "freeTemplates.title": "Free templates",
+  "freeTemplates.allTemplates": "All templates",
+  "freeTemplates.cat.clientContracts": "Client Contracts",
+  "freeTemplates.cat.compliance": "Compliance Documents",
+  "freeTemplates.cat.ndas": "NDAs",
+  "freeTemplates.cat.onboarding": "Onboarding Documents",
+  "freeTemplates.cat.payment": "Payment Agreements",
+  "freeTemplates.cat.rentalLease": "Rental & Lease Agreements",
+  "freeTemplates.cat.vendorAgreements": "Vendor Agreements",
+  "freeTemplates.cat.workOrders": "Work Orders",
+  "freeTemplates.heading": "Ready-to-use templates for quick agreements",
+  "freeTemplates.howItWorks": "How it works:",
+  "freeTemplates.intro":
+    "Docracy.io provides simple, ready-to-use templates you can send in minutes. Choose a template, add signature fields, and send it — no formatting, no setup, no accounts required.",
+  "freeTemplates.pop1": "NDA (one-way or mutual)",
+  "freeTemplates.pop2": "Client contract",
+  "freeTemplates.pop3": "Service agreement",
+  "freeTemplates.pop4": "Onboarding agreement",
+  "freeTemplates.pop5": "Vendor agreement",
+  "freeTemplates.pop6": "Rental agreement",
+  "freeTemplates.pop7": "Work order",
+  "freeTemplates.pop8": "Delivery confirmation",
+  "freeTemplates.popularTitle": "Popular templates:",
+  "freeTemplates.step1": "Select a template",
+  "freeTemplates.step2": "Add the fields you need",
+  "freeTemplates.step3": "Send it for signature",
   "freeTemplates.sub": "Ready-to-sign documents — pick one, fill in your details, and send for signature in minutes.",
+  "freeTemplates.tip": "Tip: Using a template is the fastest way to send your first document.",
+  "freeTemplates.title": "Free templates",
+  "mcp.client.chatgpt.name": "ChatGPT",
+  "mcp.client.chatgpt.setup":
+    "Settings → Security and login → turn on Developer Mode. Then Settings → Connectors (or Plugins) → Add custom connector → paste your personal connector URL from the Dashboard.",
+  "mcp.client.chatgpt.sub": "",
+  "mcp.client.chatgpt.use":
+    "Pick it from the Tools menu (the \"+\"/tools icon in the message box), or type \"@Docracy\" followed by your request.",
+  "mcp.client.claude.name": "Claude",
+  "mcp.client.claude.setup":
+    "Settings → Connectors → Add custom connector → paste your personal connector URL from the Dashboard (authentication \"None\" — the key is already in the URL).",
+  "mcp.client.claude.sub": "(claude.ai or the desktop app)",
+  "mcp.client.claude.use":
+    "Click the \"+\" at the bottom-left of the chat box → Connectors → make sure Docracy is toggled on for that conversation. Then just ask naturally — e.g. \"find documents for Acme\" or \"check the status of [link].\"",
+  "mcp.client.grok.name": "Grok",
+  "mcp.client.grok.setup":
+    "Available on Grok's paid tiers. Click the \"+\" in the chat box → Connectors → New Connector → Custom → paste your personal connector URL from the Dashboard.",
+  "mcp.client.grok.sub": "",
+  "mcp.client.grok.use":
+    "Just ask your question normally once it's added — Grok calls the tool automatically when it's relevant.",
+  "mcp.client.perplexity.name": "Perplexity",
+  "mcp.client.perplexity.setup":
+    "Requires a Pro or Max plan. Settings → Connectors → Add custom connector → paste your personal connector URL from the Dashboard, authentication \"None\".",
+  "mcp.client.perplexity.sub": "",
+  "mcp.client.perplexity.use":
+    "Reference it directly in your question — mentioning \"Docracy\" or asking something clearly related to your documents is usually enough.",
+  "mcp.disclaimer":
+    "Docracy doesn't verify identity — the audit trail proves what was signed and when, not who actually signed it. Nothing here changes that; every MCP tool is read-only.",
   "mcp.eyebrow": "For developers & AI power users",
-  "mcp.title": "Connect Docracy to your AI assistant",
+  "mcp.ideBody":
+    "These connect via a JSON config file rather than a browser settings screen. Most MCP clients that support remote (HTTP) servers use a mcpServers block like this — add it to your client's MCP config file (e.g. Cursor's .cursor/mcp.json, Claude Code's .mcp.json), replacing the token with the one from your Dashboard:",
+  "mcp.ideNote":
+    "The exact key your client expects can vary (some want a \"type\": \"http\" field alongside \"url\") — check your client's own MCP docs if this doesn't connect right away.",
+  "mcp.ideTitle": "Cursor, Claude Code, and other IDE/agent clients",
+  "mcp.intro1": "Docracy runs an",
+  "mcp.intro2":
+    " server — an open standard for giving an AI assistant tools it can call directly. On a paid account, add your personal connector URL to Claude, ChatGPT, Grok, or Perplexity and ask about your documents in plain English instead of opening a dashboard.",
+  "mcp.paidBody":
+    "The MCP connector uses your workspace API key. Sign in, upgrade if needed, then copy the personal connector URL from Dashboard → Connector & API key. If the subscription ends, that key is revoked and the connector stops working.",
   "mcp.paidRequired": "Paid account required",
+  "mcp.readOnlyNote":
+    "Nothing is ever signed or changed through MCP — every tool here is read-only. (PDF AI tools like auto-detect fields and contract explainer live in the web app, not in MCP.)",
+  "mcp.setupLabel": "Set up:",
+  "mcp.signInCta": "Sign in to get your connector URL",
+  "mcp.title": "Connect Docracy to your AI assistant",
+  "mcp.toolCheckStatus": "check_status — who's signed / who's still pending on a signing or status link.",
+  "mcp.toolFindDocuments": "find_documents — search your own documents by title, signer name, email, or company.",
+  "mcp.toolsIntro": "Once connected, your assistant gets two read-only tools:",
+  "mcp.useLabel": "Use it:",
+  "mcp.zapierBody":
+    "Prefer a no-code automation instead of an AI assistant? The same paid account works with Zapier: trigger a Zap on Document Created, Signer Signed, or Document Completed, or send a saved template out for signature as an action. Search for \"Docracy\" when adding a new app to a Zap — same API key as above, used as the \"API Key\" field instead of the full connector URL.",
+  "mcp.zapierTitle": "Automate with Zapier",
   "chat.title": "Docracy Assistant",
   "chat.greeting": "Hey there 👋 I can help you find the right thing:",
   "chat.sales": "I want to talk to sales",

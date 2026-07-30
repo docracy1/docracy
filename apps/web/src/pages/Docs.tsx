@@ -27,8 +27,9 @@ export default function Docs() {
 
       <Section id="plans" title={t("docs.plansTitle")}>
         <p style={{ marginBottom: 12 }}>
-          Same feature matrix as <Link to="/pricing">Pricing</Link> — Free vs Paid ($10/mo) vs Enterprise.
-          Dropbox, OneDrive, Box, and Google Drive auto-upload are included on <strong>Paid</strong>.
+          {t("docs.plans.body1")}{" "}
+          <Link to="/pricing">{t("pricing.title")}</Link>
+          {t("docs.plans.body2")} <strong>{t("pricing.colPaid")}</strong>.
         </p>
         <div className="card" style={{ padding: 0 }}>
           <div className="plan-table-scroll">
@@ -62,226 +63,149 @@ export default function Docs() {
         </div>
       </Section>
 
-      <Section id="sending" title="Sending a document (free)">
+      <Section id="sending" title={t("docs.sending.title")}>
         <p>
-          Go to <Link to="/prepare">Prepare a document</Link>, upload a PDF, add signers in the order they
-          should sign, and place fields for each one — signature, initials, text, date, checkbox, or dropdown.
-          Free accounts support chains of up to 2 signers, no login required. You can also add up to 2 CC
-          viewers, decline or cancel a pending document, and optionally text signing links to US mobile numbers
-          (see below). Once you send it, the first signer gets an email with a link — no account needed on
-          their end either. Each signer gets their turn automatically; the document (and all its data) is deleted
-          9 days after creation, or as soon as everyone&apos;s signed and the final copy has gone out by email —
-          whichever comes first.
+          {t("docs.sending.body1")}{" "}
+          <Link to="/prepare">{t("prepare.title")}</Link>
+          {t("docs.sending.body2")}
         </p>
       </Section>
 
-      <Section id="fields" title="Field types">
+      <Section id="fields" title={t("docs.fields.title")}>
         <ul style={{ marginTop: 0 }}>
-          <li>
-            <strong>Signature / initials</strong> — drawn in the browser; email and date are stamped automatically.
-          </li>
-          <li>
-            <strong>Text / date</strong> — single-line text or a date picker.
-          </li>
-          <li>
-            <strong>Checkbox</strong> — required or optional.
-          </li>
-          <li>
-            <strong>Dropdown</strong> — you define the options when placing the field; the chosen value is burned
-            into the PDF.
-          </li>
+          <li>{t("docs.fields.sig")}</li>
+          <li>{t("docs.fields.text")}</li>
+          <li>{t("docs.fields.checkbox")}</li>
+          <li>{t("docs.fields.dropdown")}</li>
         </ul>
       </Section>
 
-      <Section id="anchor-tags" title="Anchor tags in PDFs (paid)">
+      <Section id="anchor-tags" title={t("docs.anchorTags.title")}>
         <p>
-          Embed placement tags directly in your PDF before upload — useful for mail-merge or API-driven templates.
-          On Prepare (paid), use <strong>Detect anchor tags</strong> to scan for tags like{" "}
-          <code>{"{{sig1}}"}</code>, <code>{"{{date_2}}"}</code>, or{" "}
-          <code>{"{{dropdown_1:Yes|No|Maybe}}"}</code>. The tag text is removed and replaced with the matching
-          field for that signer number.
+          {t("docs.anchorTags.body1")}{" "}
+          <strong>{t("docs.anchorTags.detect")}</strong>{" "}
+          {t("docs.anchorTags.body2")}{" "}
+          <code>{"{{sig1}}"}</code>, <code>{"{{date_2}}"}</code>, {t("docs.anchorTags.or")}{" "}
+          <code>{"{{dropdown_1:Yes|No|Maybe}}"}</code>. {t("docs.anchorTags.body3")}
         </p>
       </Section>
 
-      <Section id="sms" title="SMS signing links (free, US)">
+      <Section id="sms" title={t("docs.sms.title")}>
+        <p>{t("docs.sms.body")}</p>
+      </Section>
+
+      <Section id="signer-attachments" title={t("docs.signerAttachments.title")}>
         <p>
-          On Prepare, check <strong>Also text signing links</strong> and add each signer&apos;s US mobile number
-          plus carrier (AT&amp;T, T-Mobile, Verizon, Sprint, or US Cellular). Docracy sends the link through your
-          carrier&apos;s email-to-SMS gateway using the same Resend email stack — no separate SMS vendor or per-text
-          fee. Delivery isn&apos;t guaranteed (some carriers block automated gateway mail).{" "}
-          <strong>US numbers only</strong> — signers outside the United States receive email invites instead; there is
-          no international SMS option today.
+          {t("docs.signerAttachments.body1")}{" "}
+          <strong>{t("docs.signerAttachments.require")}</strong>.{" "}
+          {t("docs.signerAttachments.body2")}{" "}
+          <strong>{t("docs.signerAttachments.files")}</strong>.
         </p>
       </Section>
 
-      <Section id="signer-attachments" title="Signer attachments (paid)">
+      <Section id="templates-free" title={t("docs.templatesFree.title")}>
         <p>
-          When preparing a document on a paid account, enable <strong>Require signers to upload attachment(s)</strong>.
-          Each signer must upload at least one PDF or image before they can complete signing. Preparers download
-          uploads from the document status page or Dashboard → Documents → <strong>Files</strong>.
+          <Link to="/free-templates">
+            {t("docs.templatesFree.link", { count: FREE_TEMPLATES.length })}
+          </Link>
+          {t("docs.templatesFree.body")}
         </p>
       </Section>
 
-      <Section id="templates-free" title="Free templates">
+      <Section id="paid" title={t("docs.paid.title")}>
         <p>
-          <Link to="/free-templates">{FREE_TEMPLATES.length} ready-to-use templates</Link> — NDAs, offer letters, freelance
-          agreements, leases, and more — with fields already placed. Pick one, fill in the bracketed
-          details, and send it the same way as an uploaded PDF.
+          {t("docs.paid.body1")}{" "}
+          <Link to="/pricing">{t("pricing.title")}</Link>.
         </p>
       </Section>
 
-      <Section id="paid" title="Paid account ($10/month)">
+      <Section id="cloud-connectors" title={t("docs.cloudConnectors.title")}>
         <p>
-          Signing in adds unlimited signers per document, a dashboard with document history, reusable
-          saved templates, parallel (all-at-once) signing, PIN-protected signing links, team accounts
-          (shared workspace with teammates), white-label branding (your own logo on emails/signing pages),
-          webhooks, MCP/Zapier, AI tools, Dropbox/OneDrive/Box/Google Drive auto-upload, plus the workflow features
-          below. See the table above or <Link to="/pricing">Pricing</Link>.
-        </p>
-      </Section>
-
-      <Section id="cloud-connectors" title="Dropbox, OneDrive, Box, and Google Drive (paid)">
-        <p>
-          Connect cloud storage from Dashboard → Tools → <strong>Connectors</strong>. After a document
-          finishes signing, Docracy uploads the final PDF automatically — no manual download step.
-          Available on Paid and Enterprise.
+          {t("docs.cloudConnectors.body1")}{" "}
+          <strong>{t("dash.connectors")}</strong>. {t("docs.cloudConnectors.body2")}
         </p>
         <ul>
-          <li>
-            <strong>Dropbox</strong>
-          </li>
-          <li>
-            <strong>OneDrive</strong> (Microsoft)
-          </li>
-          <li>
-            <strong>Box</strong>
-          </li>
-          <li>
-            <strong>Google Drive</strong>
-          </li>
+          <li><strong>Dropbox</strong></li>
+          <li><strong>OneDrive</strong> {t("docs.cloudConnectors.microsoft")}</li>
+          <li><strong>Box</strong></li>
+          <li><strong>Google Drive</strong></li>
         </ul>
       </Section>
 
-      <Section id="bulk-send" title="Bulk send (paid)">
+      <Section id="bulk-send" title={t("docs.bulkSend.title")}>
+        <p>{t("docs.bulkSend.body")}</p>
+      </Section>
+
+      <Section id="expiry" title={t("docs.expiry.title")}>
+        <p>{t("docs.expiry.body")}</p>
+      </Section>
+
+      <Section id="embed" title={t("docs.embed.title")}>
+        <p>{t("docs.embed.body")}</p>
+      </Section>
+
+      <Section id="contacts" title={t("docs.contacts.title")}>
         <p>
-          From the Dashboard (Templates → Bulk send, or <code>/bulk-send</code>), pick a saved template and
-          send it to many recipient groups at once — one document per row. Paste a list of names/emails or
-          fill the form; each row becomes its own signing chain with the same field layout. Optionally set
-          a custom expiry (see below). Paid only.
+          {t("docs.contacts.body1")}{" "}
+          <strong>{t("dash.contacts")}</strong>. {t("docs.contacts.body2")}
         </p>
       </Section>
 
-      <Section id="expiry" title="Custom document expiry (paid)">
+      <Section id="enterprise" title={t("docs.enterprise.title")}>
         <p>
-          Free documents always expire after 9 days (or sooner once everyone has signed and the final copy
-          is emailed). On a paid account you can choose retention of <strong>1–90 days</strong> when
-          preparing a document or bulk-sending from a template.
+          {t("docs.enterprise.body1")}{" "}
+          <a href="mailto:sales@docracy.io">sales@docracy.io</a>{" "}
+          {t("docs.enterprise.body2")}
         </p>
       </Section>
 
-      <Section id="embed" title="Embedded signing (paid)">
-        <p>
-          Host the signing UI inside your own product via an iframe. From the Dashboard, open a pending document
-          and click <strong>Embed</strong> to create a short-lived URL — or call{" "}
-          <code>POST /api/embed/sessions</code> (cookie session or API key). Body includes <code>docId</code>,{" "}
-          <code>signerOrder</code>, optional <code>allowedOrigins</code>, <code>returnUrl</code>, and{" "}
-          <code>ttlSeconds</code>. The response gives an <code>embedUrl</code> to load at{" "}
-          <code>/embed/sign/…</code>. Origins not on the allowlist are rejected.
-        </p>
-      </Section>
-
-      <Section id="contacts" title="Contacts &amp; signer reassignment (paid)">
-        <p>
-          Save contacts under Dashboard → Tools → <strong>Contacts</strong>. Their names and emails
-          autocomplete on Prepare and when reassigning. For a pending document, reassign a signer to a
-          new name/email from the Dashboard — the old link stops working and the new person gets the
-          turn. You can also <strong>void</strong> a pending document from the Dashboard so the chain is
-          cancelled.
-        </p>
-      </Section>
-
-      <Section id="enterprise" title="Enterprise">
-        <p>
-          Enterprise includes everything in Paid, plus invoice/annual billing, premium (SLA-backed)
-          support, volume discounts &amp; custom onboarding, and optional SSO or multi-workspace setup.
-          Contact <a href="mailto:sales@docracy.io">sales@docracy.io</a> or upgrade from the Dashboard
-          subscription tab.
-        </p>
-      </Section>
-
-      <Section id="ai" title="AI tools (paid)">
-        <p style={{ marginBottom: 8 }}>Four AI features, available once signed in on a paid account:</p>
+      <Section id="ai" title={t("docs.ai.title")}>
+        <p style={{ marginBottom: 8 }}>{t("docs.ai.intro")}</p>
         <ul style={{ marginTop: 0 }}>
-          <li>
-            <strong>Auto-detect fields</strong> — upload a PDF and it places signature/date fields for you,
-            instead of placing them by hand.
-          </li>
-          <li>
-            <strong>Plain-English explainer</strong> — a 3-bullet summary of what each party is agreeing
-            to, no legal jargon.
-          </li>
-          <li>
-            <strong>Risk & clause highlighter</strong> — flags one-sided terms (long non-competes, vague
-            payment terms, etc.) before you sign.
-          </li>
-          <li>
-            <strong>Generate with AI</strong> — describe an agreement in a sentence on the Prepare page
-            (e.g. "a simple web design contract for a $2,500 fixed-price project") and get a ready-to-sign
-            PDF back, with fields already placed.
-          </li>
+          <li>{t("docs.ai.detect")}</li>
+          <li>{t("docs.ai.explain")}</li>
+          <li>{t("docs.ai.risk")}</li>
+          <li>{t("docs.ai.generate")}</li>
         </ul>
       </Section>
 
-      <Section id="mcp" title="Connect an AI assistant (MCP)">
+      <Section id="mcp" title={t("docs.mcp.title")}>
         <p>
-          Docracy runs an <a href="https://modelcontextprotocol.io" target="_blank" rel="noreferrer">MCP</a>{" "}
-          server so Claude, ChatGPT, Grok, Perplexity, or an IDE agent like Cursor can check signing status and
-          search your documents from a chat. Requires a paid account — copy your personal connector URL from
-          Dashboard → Connector &amp; API key. Full setup instructions: <Link to="/mcp">AI & MCP</Link>.
+          {t("docs.mcp.body1")}{" "}
+          <a href="https://modelcontextprotocol.io" target="_blank" rel="noreferrer">MCP</a>{" "}
+          {t("docs.mcp.body2")}{" "}
+          <Link to="/mcp">{t("nav.mcp")}</Link>.
         </p>
       </Section>
 
-      <Section id="automation" title="Zapier & webhooks">
+      <Section id="automation" title={t("docs.automation.title")}>
         <p>
-          On a paid account, the same API key that powers the MCP connector also works with{" "}
-          <strong>Zapier</strong> — trigger a Zap on Document Created, Signer Signed, or Document
-          Completed; send a saved template out for signature; or <strong>bulk send</strong> a template to many
-          recipient rows in one action.
+          {t("docs.automation.body1")}{" "}
+          <strong>Zapier</strong> — {t("docs.automation.body2")}
           <br />
-          Zapier Free compatibility note: set up a simple <strong>2-step Zap</strong> (one trigger +
-          one action) and avoid adding extra steps for best compatibility with the Free-tier limits.
-          <strong> Webhooks</strong> (configured from the Dashboard) let your own systems subscribe to those same
-          three events directly, without Zapier in between.
+          {t("docs.automation.zapierNote")}{" "}
+          <strong>{t("docs.automation.webhooks")}</strong>{" "}
+          {t("docs.automation.body3")}
         </p>
         <ul style={{ marginTop: 8 }}>
-          <li>
-            <strong>Best Free-plan pattern:</strong> one Docracy trigger + one destination action.
-          </li>
-          <li>
-            <strong>Keep tasks low:</strong> use Docracy&apos;s own bulk-send action instead of fanning one Zap into many action steps.
-          </li>
-          <li>
-            <strong>If you outgrow Free:</strong> prefer Docracy&apos;s direct API or your own webhook consumer rather than building around extra Zapier steps.
-          </li>
+          <li>{t("docs.automation.tip1")}</li>
+          <li>{t("docs.automation.tip2")}</li>
+          <li>{t("docs.automation.tip3")}</li>
         </ul>
       </Section>
 
-      <Section id="api" title="REST API reference">
+      <Section id="api" title={t("docs.api.title")}>
+        <p>{t("docs.api.intro1")}</p>
         <p>
-          Everything Zapier does above is also a plain REST API you can call directly with the same API
-          key (Dashboard → "MCP connector &amp; API key") — useful if you want to integrate without Zapier
-          in the middle.
-        </p>
-        <p>
-          Base URL: <code>https://api.docracy.io</code>. Authenticate with{" "}
-          <code>Authorization: Bearer &lt;your-api-key&gt;</code> (or a <code>?token=</code> query param).
-          All responses are JSON.
+          {t("docs.api.base")} <code>https://api.docracy.io</code>. {t("docs.api.auth")}{" "}
+          <code>Authorization: Bearer &lt;your-api-key&gt;</code> {t("docs.api.orToken")}{" "}
+          <code>?token=</code> {t("docs.api.queryParam")} {t("docs.api.json")}
         </p>
         <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14, marginTop: 12 }}>
           <thead>
             <tr style={{ textAlign: "left", borderBottom: "1px solid var(--hairline)" }}>
-              <th style={{ padding: "6px 8px 6px 0" }}>Method &amp; path</th>
-              <th style={{ padding: "6px 8px" }}>What it does</th>
+              <th style={{ padding: "6px 8px 6px 0" }}>{t("docs.api.colMethod")}</th>
+              <th style={{ padding: "6px 8px" }}>{t("docs.api.colWhat")}</th>
             </tr>
           </thead>
           <tbody>
@@ -289,77 +213,58 @@ export default function Docs() {
               <td style={{ padding: "6px 8px 6px 0", whiteSpace: "nowrap" }}>
                 <code>GET /api/zapier/auth-test</code>
               </td>
-              <td style={{ padding: "6px 8px" }}>Verifies the API key. Returns <code>{`{ email, workspaceId }`}</code>.</td>
+              <td style={{ padding: "6px 8px" }}>{t("docs.api.authTest")}</td>
             </tr>
             <tr style={{ borderBottom: "1px solid var(--hairline)" }}>
               <td style={{ padding: "6px 8px 6px 0", whiteSpace: "nowrap" }}>
                 <code>GET /api/zapier/templates</code>
               </td>
-              <td style={{ padding: "6px 8px" }}>
-                Lists your saved templates: <code>{`[{ id, name }]`}</code>.
-              </td>
+              <td style={{ padding: "6px 8px" }}>{t("docs.api.templates")}</td>
             </tr>
             <tr style={{ borderBottom: "1px solid var(--hairline)" }}>
               <td style={{ padding: "6px 8px 6px 0", whiteSpace: "nowrap" }}>
                 <code>POST /api/zapier/documents</code>
               </td>
-              <td style={{ padding: "6px 8px" }}>
-                Sends a saved template for signature. Body: <code>{`{ templateId, signers: [{ name, email }] }`}</code> —
-                the number of signers must match the template. Returns{" "}
-                <code>{`{ docId, statusToken, statusUrl }`}</code>.
-              </td>
+              <td style={{ padding: "6px 8px" }}>{t("docs.api.documents")}</td>
             </tr>
             <tr style={{ borderBottom: "1px solid var(--hairline)" }}>
               <td style={{ padding: "6px 8px 6px 0", whiteSpace: "nowrap" }}>
                 <code>POST /api/zapier/documents/bulk</code>
               </td>
-              <td style={{ padding: "6px 8px" }}>
-                Bulk send a template. Body:{" "}
-                <code>{`{ templateId, recipients: [{ signers: [{ name, email }], title? }], customSubject?, customMessage? }`}</code>.
-                Returns <code>{`{ batchId, documents: [...] }`}</code>.
-              </td>
+              <td style={{ padding: "6px 8px" }}>{t("docs.api.bulk")}</td>
             </tr>
             <tr style={{ borderBottom: "1px solid var(--hairline)" }}>
               <td style={{ padding: "6px 8px 6px 0", whiteSpace: "nowrap" }}>
                 <code>POST /api/zapier/hooks/:event</code>
               </td>
-              <td style={{ padding: "6px 8px" }}>
-                Subscribes a URL to an event. <code>:event</code> is one of{" "}
-                <code>document-created</code>, <code>signer-signed</code>, <code>document-completed</code>. Body:{" "}
-                <code>{`{ target_url }`}</code>. Returns <code>{`{ id }`}</code>.
-              </td>
+              <td style={{ padding: "6px 8px" }}>{t("docs.api.hooks")}</td>
             </tr>
             <tr style={{ borderBottom: "1px solid var(--hairline)" }}>
               <td style={{ padding: "6px 8px 6px 0", whiteSpace: "nowrap" }}>
                 <code>DELETE /api/zapier/hooks/:id</code>
               </td>
-              <td style={{ padding: "6px 8px" }}>Removes a webhook subscription created above.</td>
+              <td style={{ padding: "6px 8px" }}>{t("docs.api.hooksDelete")}</td>
             </tr>
             <tr>
               <td style={{ padding: "6px 8px 6px 0", whiteSpace: "nowrap" }}>
                 <code>POST /api/embed/sessions</code>
               </td>
-              <td style={{ padding: "6px 8px" }}>
-                Creates an embedded-signing session (paid). Body:{" "}
-                <code>{`{ docId, signerOrder, allowedOrigins?, returnUrl?, ttlSeconds? }`}</code>. Returns{" "}
-                <code>{`{ embedToken, embedUrl, expiresAt }`}</code>. Also accepts the workspace API key.
-              </td>
+              <td style={{ padding: "6px 8px" }}>{t("docs.api.embed")}</td>
             </tr>
           </tbody>
         </table>
         <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 10, marginBottom: 0 }}>
-          This is the same surface Zapier itself calls — nothing here is Zapier-exclusive. Webhook
-          deliveries are HMAC-signed the same way regardless of whether the subscription came from Zapier,
-          the Dashboard, or this API directly.
+          {t("docs.api.footer")}
         </p>
       </Section>
 
-      <Section id="privacy" title="Privacy & identity">
+      <Section id="privacy" title={t("docs.privacy.title")}>
         <p style={{ marginBottom: 0 }}>
-          Docracy doesn't verify who's actually signing — anyone holding a document's link can sign as the
-          name on it. The audit trail proves what was signed and when, not who a signer really is. See{" "}
-          <Link to="/trust">Trust &amp; security</Link>, <Link to="/privacy">Privacy</Link>, and{" "}
-          <Link to="/terms">Terms</Link> for the full picture.
+          {t("docs.privacy.body1")}{" "}
+          <Link to="/trust">{t("footer.trust")}</Link>,{" "}
+          <Link to="/privacy">{t("footer.privacy")}</Link>, {t("docs.privacy.and")}{" "}
+          <Link to="/terms">{t("footer.terms")}</Link>{" "}
+          {t("docs.privacy.body2")}
         </p>
       </Section>
     </div>
