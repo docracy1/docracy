@@ -133,7 +133,6 @@ const es: Messages = {
   "dash.webhooks": "Webhooks",
   "dash.welcome": "Bienvenido",
   "dash.welcomeSub": "Esto es lo que necesita tu atención hoy.",
-  "docs.plansTitle": "Planes de un vistazo (Gratis / Pago / Enterprise)",
   "docs.sub": "Cómo funciona todo en Docracy, en un solo lugar.",
   "docs.title": "Documentación",
   "error.body": "Esta página tuvo un error inesperado. Recargar suele solucionarlo.",
@@ -725,11 +724,8 @@ const es: Messages = {
     "para que Claude, ChatGPT, Grok, Perplexity o un agente IDE como Cursor consulten el estado de firma y busquen tus documentos desde el chat. Requiere cuenta de pago — copia tu URL de conector personal desde Panel → Conector y clave API. Instrucciones completas:",
   "docs.mcp.title": "Conectar un asistente de IA (MCP)",
   "docs.paid.body1":
-    "Una cuenta gratis ya guarda el historial de cada envío en el panel. El plan de pago añade firmantes ilimitados por documento, plantillas reutilizables, firma paralela (todos a la vez), enlaces protegidos con PIN, cuentas de equipo (espacio compartido), marca blanca (tu logo en correos/páginas de firma), webhooks, MCP/Zapier, herramientas de IA, carga automática a Dropbox/OneDrive/Box/Google Drive, más las funciones de flujo abajo. Ver la tabla arriba o",
+    "Una cuenta gratis ya guarda el historial de cada envío en el panel. El plan de pago añade firmantes ilimitados por documento, plantillas reutilizables, firma paralela (todos a la vez), enlaces protegidos con PIN, cuentas de equipo (espacio compartido), marca blanca (tu logo en correos/páginas de firma), webhooks, MCP/Zapier, herramientas de IA, carga automática a Dropbox/OneDrive/Box/Google Drive, más las funciones de flujo abajo. Comparación completa en",
   "docs.paid.title": "Cuenta de pago ($10/mes)",
-  "docs.plans.body1": "La misma matriz de funciones que en",
-  "docs.plans.body2":
-    "— Gratis vs Pago ($10/mes) vs Enterprise. La carga automática a Dropbox, OneDrive, Box y Google Drive está incluida en",
   "docs.privacy.and": "y",
   "docs.privacy.body1":
     "Docracy no verifica quién firma realmente — cualquiera con el enlace del documento puede firmar con el nombre indicado. El registro de auditoría prueba qué se firmó y cuándo, no quién lo firmó realmente. Consulta",

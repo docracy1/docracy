@@ -627,11 +627,8 @@ const en: Messages = {
     "server so Claude, ChatGPT, Grok, Perplexity, or an IDE agent like Cursor can check signing status and search your documents from a chat. Requires a paid account — copy your personal connector URL from Dashboard → Connector & API key. Full setup instructions:",
   "docs.mcp.title": "Connect an AI assistant (MCP)",
   "docs.paid.body1":
-    "A free account already keeps dashboard history for every send. Paid adds unlimited signers per document, reusable saved templates, parallel (all-at-once) signing, PIN-protected signing links, team accounts (shared workspace with teammates), white-label branding (your own logo on emails/signing pages), webhooks, MCP/Zapier, AI tools, Dropbox/OneDrive/Box/Google Drive auto-upload, plus the workflow features below. See the table above or",
+    "A free account already keeps dashboard history for every send. Paid adds unlimited signers per document, reusable saved templates, parallel (all-at-once) signing, PIN-protected signing links, team accounts (shared workspace with teammates), white-label branding (your own logo on emails/signing pages), webhooks, MCP/Zapier, AI tools, Dropbox/OneDrive/Box/Google Drive auto-upload, plus the workflow features below. Full comparison on",
   "docs.paid.title": "Paid account ($10/month)",
-  "docs.plans.body1": "Same feature matrix as",
-  "docs.plans.body2":
-    "— Free vs Paid ($10/mo) vs Enterprise. Dropbox, OneDrive, Box, and Google Drive auto-upload are included on",
   "docs.privacy.and": "and",
   "docs.privacy.body1":
     "Docracy doesn't verify who's actually signing — anyone holding a document's link can sign as the name on it. The audit trail proves what was signed and when, not who a signer really is. See",
@@ -657,7 +654,6 @@ const en: Messages = {
   "docs.templatesFree.link": "{{count}} ready-to-use templates",
   "docs.templatesFree.title": "Free templates",
   "docs.title": "Documentation",
-  "docs.plansTitle": "Plans at a glance (Free / Paid / Enterprise)",
   "feature.problem": "The problem",
   "feature.solution": "The Docracy way",
   "feature.features": "Features",

@@ -1554,7 +1554,7 @@ select {
 
   .plan-table-pricing thead th:not(:first-child) {
     min-width: 88px;
-    font-size: 11px;
+    font-size: 14px;
     letter-spacing: 0.02em;
     padding: 10px 6px 12px;
     vertical-align: bottom;
@@ -1587,8 +1587,8 @@ select {
   }
 
   .plan-table-pricing .plan-cell-text {
-    font-size: 16px;
-    font-weight: 800;
+    font-size: 13px;
+    font-weight: 700;
   }
 }
 
@@ -1620,8 +1620,8 @@ select {
 }
 
 .plan-table thead th {
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 800;
   color: var(--ink);
   padding-top: 20px;
   padding-bottom: 16px;
@@ -1769,12 +1769,12 @@ select {
   white-space: nowrap;
 }
 
-/* Spec strings (Unlimited, Up to 2, …) match sticky price weight/size. */
+/* Spec strings (Unlimited, Up to 2, …) — keep smaller than Free/Paid/Enterprise headers. */
 .plan-table-pricing .plan-cell-text {
-  font-size: 28px;
-  font-weight: 800;
+  font-size: 15px;
+  font-weight: 700;
   color: var(--ink);
-  line-height: 1.15;
+  line-height: 1.25;
 }
 
 .pricing-sticky-bar {
@@ -1822,8 +1822,8 @@ select {
 }
 
 .pricing-sticky-name {
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 800;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--mute);

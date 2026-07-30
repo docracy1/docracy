@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { adminLogin, apiUrl, requestMagicLink } from "../lib/api";
+import { adminLogin, requestMagicLink } from "../lib/api";
 import { useT } from "../lib/i18n";
 
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
@@ -163,7 +163,7 @@ export default function Login() {
       {error && <p style={{ color: "var(--danger)", fontSize: 13 }}>{error}</p>}
 
       <a
-        href={apiUrl(`/api/auth/google${nextParam ? `?next=${encodeURIComponent(nextParam)}` : ""}`)}
+        href={`/api/auth/google${nextParam ? `?next=${encodeURIComponent(nextParam)}` : ""}`}
         className="btn-secondary"
         style={{ display: "inline-flex", alignItems: "center", gap: 10, textDecoration: "none", maxWidth: 360 }}
       >

@@ -72,7 +72,10 @@ MS_CLIENT_ID = "a09dea4c-3518-4312-9de8-b1a91a03f283"
 BOX_CLIENT_ID = "b1hihpb8dhxe7wye5jf9mswpiqhknj42"
 # Google Drive Integrations client (secret via wrangler secret put GOOGLE_INTEGRATIONS_CLIENT_SECRET)
 GOOGLE_INTEGRATIONS_CLIENT_ID = "188295326340-3hmmaau8nu9i33lb3u80km63hn0r0q3c.apps.googleusercontent.com"
-# Google Sign-In client (secret via wrangler secret put GOOGLE_LOGIN_CLIENT_SECRET)
+# Google Sign-In client (secret via wrangler secret put GOOGLE_LOGIN_CLIENT_SECRET).
+# Authorized redirect URI in Google Cloud must be exactly:
+#   https://docracy.io/api/auth/google/callback
+# (app origin + Pages /api proxy — not api.docracy.io — so the session cookie is first-party).
 GOOGLE_LOGIN_CLIENT_ID = "188295326340-ihcrrfutas19lqgu407u3oft7huq5vhl.apps.googleusercontent.com"
 
 # --- Secrets (never stored in this file) ---

@@ -327,7 +327,6 @@ const NEW_ES = {
   "blog.title": "Blog",
   "docs.title": "Documentación",
   "docs.sub": "Cómo funciona todo en Docracy, en un solo lugar.",
-  "docs.plansTitle": "Planes de un vistazo (Gratis / Pago / Enterprise)",
   "feature.problem": "El problema",
   "feature.solution": "La forma Docracy",
   "feature.features": "Funciones",

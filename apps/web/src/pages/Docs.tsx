@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { PLAN_ROWS, PlanCell } from "../lib/planRows";
 import { FREE_TEMPLATES } from "../lib/freeTemplates";
 import { useT } from "../lib/i18n";
 import { useSeoMeta } from "../lib/useSeoMeta";
@@ -21,44 +20,6 @@ export default function Docs() {
     <div className="container" style={{ maxWidth: 760 }}>
       <h1 style={{ fontSize: 30 }}>{t("docs.title")}</h1>
       <p style={{ color: "var(--mute)" }}>{t("docs.sub")}</p>
-
-      <Section id="plans" title={t("docs.plansTitle")}>
-        <p style={{ marginBottom: 12 }}>
-          {t("docs.plans.body1")}{" "}
-          <Link to="/pricing">{t("pricing.title")}</Link>
-          {t("docs.plans.body2")} <strong>{t("pricing.colPaid")}</strong>.
-        </p>
-        <div className="card" style={{ padding: 0 }}>
-          <div className="plan-table-scroll">
-            <table className="plan-table">
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>{t("pricing.colFree")}</th>
-                  <th className="plan-col-paid">{t("pricing.colPaid")}</th>
-                  <th>{t("pricing.colEnt")}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {PLAN_ROWS.map((row) => (
-                  <tr key={row.labelKey}>
-                    <td>{t(row.labelKey)}</td>
-                    <td>
-                      <PlanCell value={row.free} t={t} />
-                    </td>
-                    <td className="plan-col-paid">
-                      <PlanCell value={row.paid} t={t} />
-                    </td>
-                    <td>
-                      <PlanCell value={row.enterprise ?? row.paid} t={t} />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </Section>
 
       <Section id="sending" title={t("docs.sending.title")}>
         <p>
