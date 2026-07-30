@@ -301,7 +301,7 @@ const en: Messages = {
   "plan.ccRecipients": "CC / viewer recipients",
   "plan.declineCancel": "Decline or cancel a document",
   "plan.auditCert": "Audit trail + completion certificate",
-  "plan.dashboard": "Dashboard with document history",
+  "plan.dashboard": "Dashboard with document history (free account)",
   "plan.templates": "Reusable templates",
   "plan.bulkSend": "Bulk send",
   "plan.customExpiry": "Signing window (then auto-deleted)",
@@ -625,7 +625,7 @@ const en: Messages = {
     "server so Claude, ChatGPT, Grok, Perplexity, or an IDE agent like Cursor can check signing status and search your documents from a chat. Requires a paid account — copy your personal connector URL from Dashboard → Connector & API key. Full setup instructions:",
   "docs.mcp.title": "Connect an AI assistant (MCP)",
   "docs.paid.body1":
-    "Signing in adds unlimited signers per document, a dashboard with document history, reusable saved templates, parallel (all-at-once) signing, PIN-protected signing links, team accounts (shared workspace with teammates), white-label branding (your own logo on emails/signing pages), webhooks, MCP/Zapier, AI tools, Dropbox/OneDrive/Box/Google Drive auto-upload, plus the workflow features below. See the table above or",
+    "A free account already keeps dashboard history for every send. Paid adds unlimited signers per document, reusable saved templates, parallel (all-at-once) signing, PIN-protected signing links, team accounts (shared workspace with teammates), white-label branding (your own logo on emails/signing pages), webhooks, MCP/Zapier, AI tools, Dropbox/OneDrive/Box/Google Drive auto-upload, plus the workflow features below. See the table above or",
   "docs.paid.title": "Paid account ($10/month)",
   "docs.plans.body1": "Same feature matrix as",
   "docs.plans.body2":
