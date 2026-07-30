@@ -6,11 +6,13 @@ import {
   fetchAdminAnalytics,
   fetchAdminBlogPost,
   fetchAdminBlogPosts,
+  fetchAdminDocuments,
   fetchAdminEnterpriseAccounts,
   grantEnterprise,
   setAnalyticsNoTrack,
   updateBlogPost,
   type AdminAccount,
+  type AdminDocumentRow,
   type AdminEnterpriseAccount,
   type DynamicBlogPostSummary,
   type FunnelRow,
@@ -156,12 +158,136 @@ function FunnelCard({
   );
 }
 
-function StatTile({ label, value, sub }: { label: string; value: string; sub?: string }) {
+function StatTile({
+  label,
+  value,
+  sub,
+  onClick,
+  active,
+}: {
+  label: string;
+  value: string;
+  sub?: string;
+  onClick?: () => void;
+  active?: boolean;
+}) {
+  const interactive = Boolean(onClick);
   return (
-    <div className="card" style={{ padding: 16 }}>
+    <div
+      className="card"
+      role={interactive ? "button" : undefined}
+      tabIndex={interactive ? 0 : undefined}
+      onClick={onClick}
+      onKeyDown={
+        interactive
+          ? (e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onClick?.();
+              }
+            }
+          : undefined
+      }
+      style={{
+        padding: 16,
+        cursor: interactive ? "pointer" : undefined,
+        outline: active ? "2px solid var(--primary)" : undefined,
+        outlineOffset: active ? 2 : undefined,
+      }}
+    >
       <div style={{ fontSize: 12, color: "var(--mute)", marginBottom: 4 }}>{label}</div>
       <div style={{ fontSize: 26, fontWeight: 700, color: "var(--ink)" }}>{value}</div>
       {sub && <div style={{ fontSize: 12, color: "var(--mute)", marginTop: 2 }}>{sub}</div>}
+      {interactive && (
+        <div style={{ fontSize: 11, color: "var(--primary)", marginTop: 6, fontWeight: 600 }}>
+          {active ? "Hide emails ↑" : "Show emails →"}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function DocumentsDrilldownCard({ days, kind }: { days: number; kind: "sent" | "signed" }) {
+  const [docs, setDocs] = useState<AdminDocumentRow[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    setError(null);
+    fetchAdminDocuments(days, kind)
+      .then((res) => {
+        if (!cancelled) setDocs(res.documents);
+      })
+      .catch((err) => {
+        if (!cancelled) setError(err instanceof Error ? err.message : "Failed to load documents");
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [days, kind]);
+
+  const title = kind === "signed" ? "Documents signed — emails" : "Documents sent — emails";
+
+  return (
+    <div className="card" style={{ marginBottom: 16 }}>
+      <h3 style={{ marginTop: 0, marginBottom: 4, fontSize: 15 }}>
+        {title}
+        {docs ? ` (${docs.length})` : ""}
+      </h3>
+      <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 0, marginBottom: 12 }}>
+        Account-linked documents only (anonymous free sends never hit the database index). Sender is the
+        workspace email; signers are listed under each document.
+      </p>
+      {loading && <p style={{ color: "var(--mute)", fontSize: 13 }}>Loading…</p>}
+      {error && <p style={{ color: "var(--danger)", fontSize: 13 }}>{error}</p>}
+      {!loading && !error && docs && docs.length === 0 && (
+        <p style={{ color: "var(--mute)", fontSize: 13, marginBottom: 0 }}>
+          No account-linked documents in this range.
+        </p>
+      )}
+      {!loading &&
+        !error &&
+        docs?.map((doc) => (
+          <div
+            key={doc.docId}
+            style={{
+              padding: "10px 0",
+              borderBottom: "1px solid var(--hairline)",
+              fontSize: 13,
+            }}
+          >
+            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: 8 }}>
+              <strong style={{ overflowWrap: "anywhere" }}>{doc.title || doc.docId}</strong>
+              <span style={{ color: "var(--mute)", fontSize: 12 }}>
+                {kind === "signed" && doc.completedAt
+                  ? new Date(doc.completedAt).toLocaleDateString()
+                  : new Date(doc.createdAt).toLocaleDateString()}{" "}
+                · {doc.status}
+              </span>
+            </div>
+            <div style={{ marginTop: 4 }}>
+              Sender: <a href={`mailto:${doc.accountEmail}`}>{doc.accountEmail}</a>
+            </div>
+            {doc.signers.length > 0 && (
+              <ul style={{ margin: "6px 0 0", paddingLeft: 18, color: "var(--body)" }}>
+                {doc.signers.map((s, i) => (
+                  <li key={`${doc.docId}-${i}`}>
+                    <a href={`mailto:${s.email}`}>{s.email}</a>
+                    {s.name ? ` (${s.name})` : ""}
+                    {s.status === "signed" && s.signedAt
+                      ? ` — signed ${new Date(s.signedAt).toLocaleDateString()}`
+                      : ` — ${s.status}`}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        ))}
     </div>
   );
 }
@@ -923,6 +1049,7 @@ export default function AdminAnalytics() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [section, setSection] = useState<AdminSection>("analytics");
+  const [docDrilldown, setDocDrilldown] = useState<"sent" | "signed" | null>(null);
 
   // Founder visits are always excluded (ADMIN_EMAILS session + permanent notrack cookie). Claude
   // and Cursor agent traffic is filtered on write and in SQL reads — no toggle needed.
@@ -1072,13 +1199,25 @@ export default function AdminAnalytics() {
                               : `${totals.botPct}% known bots`
                           }
                         />
-                        <StatTile label="Documents sent" value={String(totals.created)} />
-                        <StatTile label="Documents signed" value={String(totals.completed)} sub="distinct documents, not per-signer" />
+                        <StatTile
+                          label="Documents sent"
+                          value={String(totals.created)}
+                          active={docDrilldown === "sent"}
+                          onClick={() => setDocDrilldown((k) => (k === "sent" ? null : "sent"))}
+                        />
+                        <StatTile
+                          label="Documents signed"
+                          value={String(totals.completed)}
+                          sub="distinct documents, not per-signer"
+                          active={docDrilldown === "signed"}
+                          onClick={() => setDocDrilldown((k) => (k === "signed" ? null : "signed"))}
+                        />
                         <StatTile
                           label="Sent → signed"
                           value={totals.completionRate === null ? "—" : `${totals.completionRate}%`}
                         />
                       </div>
+                      {docDrilldown && <DocumentsDrilldownCard days={days} kind={docDrilldown} />}
                       <div className="card" style={{ marginBottom: 16 }}>
                         <h3 style={{ marginTop: 0, fontSize: 15 }}>Page views by day</h3>
                         <DailyViewsChart rows={rows} />

@@ -113,6 +113,95 @@ function postJson(body: unknown, headers: Record<string, string> = {}) {
   };
 }
 
+describe("GET /api/admin/documents", () => {
+  it("rejects an unauthenticated request", async () => {
+    const { env } = makeMockEnv();
+    const res = await admin.request("/documents", {}, env, MOCK_CTX);
+    expect(res.status).toBe(401);
+  });
+
+  it("lists sent account-linked docs with sender and signer emails", async () => {
+    const { env, d1 } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com" });
+    const now = new Date().toISOString();
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 0)`)
+      .bind("acct-1", "sender@example.com", now)
+      .run();
+    await d1
+      .prepare(
+        `INSERT INTO documents (doc_id, account_id, title, status, preparer_signs, created_at, expires_at)
+         VALUES (?, ?, ?, ?, 0, ?, ?)`
+      )
+      .bind("doc-sent", "acct-1", "NDA", "pending", now, now)
+      .run();
+    await d1
+      .prepare(`INSERT INTO signers (id, doc_id, "order", name, email, status) VALUES (?, ?, ?, ?, ?, ?)`)
+      .bind("sig-1", "doc-sent", 0, "Alice", "alice@example.com", "pending")
+      .run();
+
+    const headers = await sessionCookie(env, "admin@example.com");
+    const res = await admin.request("/documents?days=30&kind=sent", { headers }, env, MOCK_CTX);
+    expect(res.status).toBe(200);
+    const body: {
+      kind: string;
+      documents: Array<{
+        docId: string;
+        accountEmail: string;
+        signers: Array<{ email: string; name: string }>;
+      }>;
+    } = await res.json();
+    expect(body.kind).toBe("sent");
+    expect(body.documents).toHaveLength(1);
+    expect(body.documents[0]).toMatchObject({
+      docId: "doc-sent",
+      accountEmail: "sender@example.com",
+    });
+    expect(body.documents[0].signers).toEqual([
+      expect.objectContaining({ email: "alice@example.com", name: "Alice" }),
+    ]);
+  });
+
+  it("lists only completed docs for kind=signed", async () => {
+    const { env, d1 } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com" });
+    const now = new Date().toISOString();
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 0)`)
+      .bind("acct-1", "sender@example.com", now)
+      .run();
+    await d1
+      .prepare(
+        `INSERT INTO documents (doc_id, account_id, title, status, preparer_signs, created_at, expires_at)
+         VALUES (?, ?, ?, ?, 0, ?, ?)`
+      )
+      .bind("doc-open", "acct-1", "Open", "pending", now, now)
+      .run();
+    await d1
+      .prepare(
+        `INSERT INTO documents (doc_id, account_id, title, status, preparer_signs, created_at, completed_at, expires_at)
+         VALUES (?, ?, ?, ?, 0, ?, ?, ?)`
+      )
+      .bind("doc-done", "acct-1", "Done", "completed", now, now, now)
+      .run();
+    await d1
+      .prepare(
+        `INSERT INTO signers (id, doc_id, "order", name, email, status, signed_at) VALUES (?, ?, ?, ?, ?, ?, ?)`
+      )
+      .bind("sig-2", "doc-done", 0, "Bob", "bob@example.com", "signed", now)
+      .run();
+
+    const headers = await sessionCookie(env, "admin@example.com");
+    const res = await admin.request("/documents?days=30&kind=signed", { headers }, env, MOCK_CTX);
+    expect(res.status).toBe(200);
+    const body: {
+      kind: string;
+      documents: Array<{ docId: string; accountEmail: string; signers: Array<{ email: string }> }>;
+    } = await res.json();
+    expect(body.kind).toBe("signed");
+    expect(body.documents.map((d) => d.docId)).toEqual(["doc-done"]);
+    expect(body.documents[0].signers[0].email).toBe("bob@example.com");
+  });
+});
+
 describe("POST /api/admin/grant-enterprise", () => {
   it("rejects an unauthenticated request", async () => {
     const { env } = makeMockEnv();

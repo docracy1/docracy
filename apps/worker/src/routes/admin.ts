@@ -38,6 +38,64 @@ admin.get("/accounts", requireAdminAccount, async (c) => {
   });
 });
 
+/** Account-linked documents for admin drill-down from the Analytics tiles. Anonymous free-tier
+ *  sends never touch D1, so this list can be smaller than the Analytics Engine document_sent /
+ *  document_signed counts. `kind=sent` filters on created_at; `kind=signed` on completed_at. */
+admin.get("/documents", requireAdminAccount, async (c) => {
+  if (!c.env.DOCRACY_DB) return c.json({ documents: [], kind: "sent", days: 30 });
+  const days = Math.min(90, Math.max(1, Number(c.req.query("days")) || 30));
+  const kind = c.req.query("kind") === "signed" ? "signed" : "sent";
+  const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
+
+  const { results: docs } = await c.env.DOCRACY_DB.prepare(
+    kind === "signed"
+      ? `SELECT d.doc_id, d.title, d.status, d.created_at, d.completed_at, a.email AS account_email
+         FROM documents d
+         JOIN accounts a ON a.id = d.account_id
+         WHERE d.completed_at IS NOT NULL AND d.completed_at >= ?
+         ORDER BY d.completed_at DESC`
+      : `SELECT d.doc_id, d.title, d.status, d.created_at, d.completed_at, a.email AS account_email
+         FROM documents d
+         JOIN accounts a ON a.id = d.account_id
+         WHERE d.created_at >= ?
+         ORDER BY d.created_at DESC`
+  )
+    .bind(since)
+    .all<{
+      doc_id: string;
+      title: string;
+      status: string;
+      created_at: string;
+      completed_at: string | null;
+      account_email: string;
+    }>();
+
+  const documents = [];
+  for (const doc of docs) {
+    const { results: signers } = await c.env.DOCRACY_DB.prepare(
+      `SELECT name, email, status, signed_at FROM signers WHERE doc_id = ? ORDER BY "order" ASC`
+    )
+      .bind(doc.doc_id)
+      .all<{ name: string; email: string; status: string; signed_at: string | null }>();
+    documents.push({
+      docId: doc.doc_id,
+      title: doc.title,
+      status: doc.status,
+      createdAt: doc.created_at,
+      completedAt: doc.completed_at,
+      accountEmail: doc.account_email,
+      signers: signers.map((s) => ({
+        name: s.name,
+        email: s.email,
+        status: s.status,
+        signedAt: s.signed_at,
+      })),
+    });
+  }
+
+  return c.json({ kind, days, documents });
+});
+
 interface GrantEnterpriseBody {
   email?: string;
 }

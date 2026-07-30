@@ -711,6 +711,32 @@ export async function fetchAdminAccounts(): Promise<{ accounts: AdminAccount[] }
   return asJson(res);
 }
 
+export interface AdminDocumentSigner {
+  name: string;
+  email: string;
+  status: string;
+  signedAt: string | null;
+}
+
+export interface AdminDocumentRow {
+  docId: string;
+  title: string;
+  status: string;
+  createdAt: string;
+  completedAt: string | null;
+  accountEmail: string;
+  signers: AdminDocumentSigner[];
+}
+
+/** Account-linked docs for admin drill-down from Documents sent / signed tiles. Admin-only. */
+export async function fetchAdminDocuments(
+  days: number,
+  kind: "sent" | "signed"
+): Promise<{ kind: "sent" | "signed"; days: number; documents: AdminDocumentRow[] }> {
+  const res = await apiFetch(`/api/admin/documents?days=${days}&kind=${kind}`);
+  return asJson(res);
+}
+
 /** Manually grants Enterprise (and paid) status to an account by email — for customers who pay
  *  by bank transfer and never touch Stripe Checkout. Admin-only. */
 export async function grantEnterprise(email: string): Promise<{ ok: true }> {
