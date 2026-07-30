@@ -44,5 +44,8 @@ jobs:
         run: npm run build
         working-directory: apps/web
       - name: Deploy web (Cloudflare Pages)
-        run: npx wrangler pages deploy dist --project-name=docracy
+        # Must pass --branch main so this aliases production (docracy.io). Without it,
+        # wrangler only creates a preview deployment (*.docracy.pages.dev) and the custom
+        # domain stays on the last --branch main deploy.
+        run: npx wrangler pages deploy dist --project-name=docracy --branch main
         working-directory: apps/web
