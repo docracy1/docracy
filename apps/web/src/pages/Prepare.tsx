@@ -47,14 +47,14 @@ const FIELD_SIZE_BY_TYPE: Record<DocFieldType, { w: number; h: number }> = {
   dropdown: { w: 0.22, h: 0.05 },
 };
 
-const FIELD_TYPE_LABEL: Record<DocFieldType, string> = {
-  signature: "Sign here",
-  initials: "Initial here",
-  text: "Text",
-  date: "Date",
-  checkbox: "Checkbox",
-  dropdown: "Dropdown",
-};
+const FIELD_TYPE_LABEL_KEYS = {
+  signature: "prepare.signHere",
+  initials: "prepare.initialHere",
+  text: "prepare.fieldText",
+  date: "prepare.fieldDate",
+  checkbox: "prepare.fieldCheckbox",
+  dropdown: "prepare.fieldDropdown",
+} as const satisfies Record<DocFieldType, string>;
 
 let fieldIdCounter = 0;
 
@@ -945,7 +945,7 @@ export default function Prepare() {
                           disabled={generating || !generatePrompt.trim()}
                           onClick={onGenerateContract}
                         >
-                          {generating ? "Drafting…" : "Generate"}
+                          {generating ? t("prepare.drafting") : t("prepare.generate")}
                         </button>
                         <button
                           type="button"
@@ -1022,7 +1022,7 @@ export default function Prepare() {
                         >
                           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
                             <span>
-                              {FIELD_TYPE_LABEL[f.type ?? "signature"]} · {signerLabel(f.signerOrder)}
+                              {t(FIELD_TYPE_LABEL_KEYS[f.type ?? "signature"])} · {signerLabel(f.signerOrder)}
                             </span>
                             <button
                               aria-label="Remove field"
@@ -1303,7 +1303,7 @@ export default function Prepare() {
                 {file?.name ?? t("prepare.untitled")}
               </span>
               <div className="prepare-sidebar-topbar-actions">
-                <button type="button" className="prepare-start-over-btn" aria-label="Start over" onClick={onStartOver}>
+                <button type="button" className="prepare-start-over-btn" aria-label={t("prepare.startOver")} onClick={onStartOver}>
                   ×
                 </button>
                 <button
@@ -1792,7 +1792,7 @@ export default function Prepare() {
 
             {viewMode === "fields" && (
             <div className="card">
-              <SidebarHeading label="Fields" count={fields.length} />
+              <SidebarHeading label={t("prepare.fields")} count={fields.length} />
               <select
                 className="form-input"
                 style={{ width: "100%", marginBottom: 8 }}
@@ -1881,7 +1881,7 @@ export default function Prepare() {
                       disabled={savingTemplate || !templateNameInput.trim() || signersWithoutFields.length > 0}
                       onClick={onSaveAsTemplate}
                     >
-                      {savingTemplate ? "Saving…" : "Save"}
+                      {savingTemplate ? t("common.saving") : t("common.save")}
                     </button>
                   </>
                 ) : (
@@ -1913,7 +1913,7 @@ export default function Prepare() {
                     Invite email
                   </h3>
                   <p style={{ fontSize: 12, color: "var(--mute)", margin: 0 }}>
-                    {customSubject.trim() || customMessage.trim() ? "Customized" : "Default subject & message"}
+                    {customSubject.trim() || customMessage.trim() ? t("prepare.customized") : t("prepare.defaultInvite")}
                   </p>
                 </div>
                 <span className={`prepare-accordion-chevron ${showCustomMessage ? "open" : ""}`}>⌄</span>
@@ -2011,7 +2011,7 @@ export default function Prepare() {
             boxShadow: "0 6px 16px rgba(0,0,0,0.2)",
           }}
         >
-          {creatingDrag.overPage ? "Drop to place" : `${FIELD_TYPE_LABEL[placingFieldType]} · ${signerLabel(placingSignerOrder)}`}
+          {creatingDrag.overPage ? t("prepare.dropToPlace") : `${t(FIELD_TYPE_LABEL_KEYS[placingFieldType])} · ${signerLabel(placingSignerOrder)}`}
         </div>
       )}
     </>

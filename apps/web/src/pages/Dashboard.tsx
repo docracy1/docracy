@@ -837,19 +837,19 @@ export default function Dashboard() {
     <div className="dashboard-shell">
       <aside className="dashboard-sidebar">
         <Link to="/prepare" className="dashboard-nav-new">
-          + New
+          {t("dash.new")}
         </Link>
         <button
           className={`dashboard-nav-item${activeTab === "dashboard" ? " active" : ""}`}
           onClick={() => setActiveTab("dashboard")}
         >
-          Dashboard
+          {t("dash.dashboard")}
         </button>
         <button
           className={`dashboard-nav-item${activeTab === "templates" ? " active" : ""}`}
           onClick={() => setActiveTab("templates")}
         >
-          Templates
+          {t("dash.templates")}
         </button>
 
         <div className="dashboard-nav-group">
@@ -860,7 +860,7 @@ export default function Dashboard() {
               setDocumentsExpanded((o) => !o);
             }}
           >
-            Documents
+            {t("dash.documents")}
             <span className={`dashboard-nav-chevron${documentsExpanded ? " open" : ""}`}>⌄</span>
           </button>
           {documentsExpanded && (
@@ -887,7 +887,7 @@ export default function Dashboard() {
                 setToolsExpanded((o) => !o);
               }}
             >
-              Tools
+              {t("dash.tools")}
               <span className={`dashboard-nav-chevron${toolsExpanded ? " open" : ""}`}>⌄</span>
             </button>
             {toolsExpanded && (
@@ -920,7 +920,7 @@ export default function Dashboard() {
                   }}
                 >
                   <MenuIcon name="team" />
-                  Team
+                  {t("dash.team")}
                 </button>
               )}
               {account.isPaid && isWorkspaceOwner && (
@@ -933,13 +933,13 @@ export default function Dashboard() {
                   }}
                 >
                   <MenuIcon name="subscription" />
-                  Subscription
+                  {t("dash.subscription")}
                 </button>
               )}
               {isAdmin && (
                 <Link to="/admin/analytics" onClick={() => setProfileMenuOpen(false)}>
                   <MenuIcon name="admin" />
-                  Admin
+                  {t("dash.admin")}
                 </Link>
               )}
               <button
@@ -950,7 +950,7 @@ export default function Dashboard() {
                 }}
               >
                 <MenuIcon name="support" />
-                Support
+                {t("dash.support")}
               </button>
               <div className="dashboard-profile-menu-divider" />
               <button
@@ -961,7 +961,7 @@ export default function Dashboard() {
                 }}
               >
                 <MenuIcon name="logout" />
-                Log out
+                {t("nav.logout")}
               </button>
             </div>
             </ProfileMenuBoundary>
@@ -992,12 +992,11 @@ export default function Dashboard() {
             }}
           >
             <span style={{ color: "var(--danger)" }}>
-              Please settle your unpaid invoice to keep your Docracy account active. Thank you for your
-              understanding!
+{t("dash.paymentFailed")}
             </span>
             {isWorkspaceOwner && (
               <button className="btn-secondary" style={{ fontSize: 13, padding: "4px 10px" }} onClick={onManageBilling}>
-                Update payment method
+                {t("dash.updatePayment")}
               </button>
             )}
           </div>
@@ -1016,8 +1015,8 @@ export default function Dashboard() {
           >
             <span>
               {connectorBanner === "connected"
-                ? "Connected — signed documents will now upload there automatically."
-                : "Couldn't connect that provider. Please try again."}
+                ? t("dash.connectorConnected")
+                : t("dash.connectorFailed")}
             </span>
             <button className="btn-secondary" style={{ fontSize: 13, padding: "4px 10px" }} onClick={() => setConnectorBanner(null)}>
               Dismiss
@@ -1047,7 +1046,7 @@ export default function Dashboard() {
             </div>
 
             <div className="card" style={{ marginTop: 24 }}>
-              <h3 style={{ fontSize: 15 }}>Awaiting your signature</h3>
+              <h3 style={{ fontSize: 15 }}>{t("dash.awaitingYou")}</h3>
               {awaitingYouDocs.length === 0 ? (
                 <p className="dashboard-caught-up" style={{ marginBottom: 0 }}>
                   <span className="dashboard-caught-up-icon" aria-hidden="true">✓</span>
@@ -1071,7 +1070,7 @@ export default function Dashboard() {
                   >
                     <span style={{ overflowWrap: "anywhere" }}>{doc.title}</span>
                     <Link to={`/sign/${doc.signToken}`} className="btn-primary" style={{ textDecoration: "none", padding: "4px 10px", fontSize: 13 }}>
-                      Sign now
+                      {t("dash.signNow")}
                     </Link>
                   </div>
                 ))
@@ -1150,9 +1149,9 @@ export default function Dashboard() {
 
         {activeTab === "templates" && (
           <div className="card" style={{ marginTop: 24 }}>
-            <h3 style={{ fontSize: 15 }}>Free templates</h3>
+            <h3 style={{ fontSize: 15 }}>{t("dash.freeTemplates")}</h3>
             <p style={{ fontSize: 12, color: "var(--mute)" }}>
-              Ready-to-use documents, no account needed — pick one to prefill its signature fields automatically.
+              {t("dash.freeTemplatesSub")}
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 8 }}>
               {FREE_TEMPLATES.map((t) => (
@@ -1167,15 +1166,15 @@ export default function Dashboard() {
               ))}
             </div>
             <Link to="/free-templates" style={{ fontSize: 13, marginTop: 12, display: "inline-block" }}>
-              Browse all free templates →
+              {t("dash.browseFreeTemplates")}
             </Link>
           </div>
         )}
 
         {activeTab === "templates" && !account.isPaid && (
           <div className="card" style={{ marginTop: 24 }}>
-            <h3 style={{ fontSize: 15 }}>Templates are a paid feature</h3>
-            <p>Upgrade to save reusable templates from any document you've prepared.</p>
+            <h3 style={{ fontSize: 15 }}>{t("dash.templatesPaid")}</h3>
+            <p>{t("dash.templatesPaidSub")}</p>
             <button className="btn-primary" onClick={onUpgrade} disabled={upgrading}>
               {upgrading ? t("common.redirecting") : t("pricing.paid.ctaUpgrade")}
             </button>
@@ -1270,9 +1269,9 @@ export default function Dashboard() {
 
         {activeTab === "tools" && !account.isPaid && (
           <div className="card" style={{ marginTop: 24 }}>
-            <h3 style={{ fontSize: 15 }}>Tools are a paid feature</h3>
+            <h3 style={{ fontSize: 15 }}>{t("dash.toolsPaid")}</h3>
             <p>
-              Upgrade for the MCP connector &amp; API key, webhooks, white-label branding, and team accounts.
+              {t("dash.toolsPaidSub")}
             </p>
             <button className="btn-primary" onClick={onUpgrade} disabled={upgrading}>
               {upgrading ? t("common.redirecting") : t("pricing.paid.ctaUpgrade")}
@@ -1283,7 +1282,7 @@ export default function Dashboard() {
         {activeTab === "tools" && account.isPaid && isWorkspaceOwner && toolsSubTab === "subscription" && (
           <div className="card" style={{ marginTop: 24 }}>
             <h3 style={{ fontSize: 15 }}>
-              Subscription
+              {t("dash.subscription")}
               {account.isEnterprise && (
                 <span
                   style={{
@@ -1297,30 +1296,29 @@ export default function Dashboard() {
                     verticalAlign: "middle",
                   }}
                 >
-                  Enterprise
+                  {t("dash.enterprise")}
                 </span>
               )}
             </h3>
-            <p>Manage your payment method, invoices, or cancel your subscription.</p>
+            <p>{t("dash.subscriptionManage")}</p>
             {manageBillingError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{manageBillingError}</p>}
             <button className="btn-secondary" onClick={onManageBilling} disabled={managingBilling}>
-              {managingBilling ? "Redirecting…" : "Manage subscription"}
+              {managingBilling ? t("common.redirecting") : t("common.manageSubscription")}
             </button>
 
             {!account.isEnterprise && (
               <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid var(--hairline)" }}>
                 <p style={{ fontSize: 13, marginBottom: 4 }}>
-                  <strong>Need more than the Paid plan?</strong>
+                  <strong>{t("dash.enterpriseUpsellTitle")}</strong>
                 </p>
                 <p style={{ fontSize: 12, color: "var(--mute)", marginBottom: 8 }}>
-                  Enterprise adds invoice billing, premium customer support, SSO/multi-workspace setup, and
-                  volume discounts on top of everything on Paid (including Dropbox, OneDrive, Box, and Google Drive).
+                  {t("dash.enterpriseUpsellBody")}
                 </p>
                 {upgradeEnterpriseError && (
                   <p style={{ color: "var(--danger)", fontSize: 13 }}>{upgradeEnterpriseError}</p>
                 )}
                 <button className="btn-secondary" onClick={onUpgradeEnterprise} disabled={upgradingEnterprise}>
-                  {upgradingEnterprise ? "Redirecting…" : "Upgrade to Enterprise"}
+                  {upgradingEnterprise ? t("common.redirecting") : t("dash.upgradeEnterprise")}
                 </button>
               </div>
             )}
@@ -2232,7 +2230,7 @@ export default function Dashboard() {
                 setMoreSheetOpen(false);
               }}
             >
-              Templates
+              {t("dash.templates")}
             </button>
             {account.isPaid &&
               TOOLS_SUBNAV.filter((item) => item.key !== "contacts").map((item) => (
@@ -2255,7 +2253,7 @@ export default function Dashboard() {
                   setMoreSheetOpen(false);
                 }}
               >
-                Team
+                {t("dash.team")}
               </button>
             )}
             {account.isPaid && isWorkspaceOwner && (
@@ -2266,12 +2264,12 @@ export default function Dashboard() {
                   setMoreSheetOpen(false);
                 }}
               >
-                Subscription
+                {t("dash.subscription")}
               </button>
             )}
             {isAdmin && (
               <Link to="/admin/analytics" onClick={() => setMoreSheetOpen(false)}>
-                Admin
+                {t("dash.admin")}
               </Link>
             )}
             <button
@@ -2281,10 +2279,10 @@ export default function Dashboard() {
                 setMoreSheetOpen(false);
               }}
             >
-              Support
+              {t("dash.support")}
             </button>
             <button type="button" className="dashboard-more-danger" onClick={() => void onLogout()}>
-              Log out
+              {t("nav.logout")}
             </button>
           </div>
         </div>
