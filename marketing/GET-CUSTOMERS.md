@@ -25,15 +25,20 @@ Attribution is recorded under the hood (`ref` / `utm_*`).
 - [x] Community answers (Reddit / IH) — see `outbound/distribution.md`
 - [x] Partner emails (`outbound/partner-batch.md` — all 12 sent)
 - [x] SaaSHub + G2 + listicle pitches D2–D5
-- [x] Prospects batch 2 (`outbound/prospects-batch-2.md` — 18 emails ready)
+- [x] Prospects batch 2 (`outbound/prospects-batch-2.md` — all 18 sent)
 - [x] SEO alternatives: HelloSign, PandaDoc, Adobe Sign pages
 - [x] Drip CTAs → `/try` + clearer preparer opt-in copy
 - [x] Mobile demo video (`linkedin/videos/mobile-sign.webm` + `outbound/mobile-video.md`)
-- [ ] AlternativeTo — blocked until **~2026-08-05**
-- [ ] Send prospects batch 2
-- [ ] Post mobile video (LinkedIn feed / X / Shorts — see `mobile-video.md`)
-- [ ] Reverse-trial / reply same day to every inbound
-- [ ] Watch GSC: paste top queries when Performance has data
+- [x] Deliverability OK (founder mail reaches inboxes) — 0 replies = offer/ICP, not spam
+- [x] Prospects batch 3 prepared (`outbound/prospects-batch-3.md` — 25 rematched + MX-OK; **no vendor/billing mentions**)
+- [ ] **Send batch 3** (spread over days; gift-product tone)
+- [ ] **Pause cold email** after batch 3 — don’t clone batch 1–2 curiosity ask
+- [ ] Post mobile video (LinkedIn feed / X / Shorts — `mobile-video.md`)
+- [ ] Soft follow-up once only if not already sent (gift `/try`)
+- [ ] AlternativeTo — ~2026-08-05
+- [ ] Watch Admin Growth: `/try`, document_sent, signups
+- [ ] Watch GSC queries when Performance has data
+- [ ] Ask 2–3 people you know to try `/try` and reply with one line (warm path)
 
 ## This week (do in order)
 
