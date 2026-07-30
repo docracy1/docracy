@@ -4,73 +4,13 @@ import { fetchMe, startCheckout, type Account } from "../lib/api";
 import { PLAN_ROWS, PlanCell } from "../lib/planRows";
 import { track } from "../lib/track";
 import { usePageMeta } from "../lib/usePageMeta";
-
-const TIERS: Array<{
-  name: string;
-  tagline: string;
-  price: string;
-  priceNote: string;
-  features: string[];
-  cta: { label: string; to: string; external?: boolean };
-  highlight?: boolean;
-}> = [
-  {
-    name: "Free",
-    tagline: "For quick, one-off agreements",
-    price: "$0",
-    priceNote: "no account, no card",
-    features: ["Up to 2 signers per document", "Sequential or all-at-once signing", "Audit trail + completion certificate"],
-    cta: { label: "Start free", to: "/prepare" },
-  },
-  {
-    name: "Paid",
-    tagline: "For teams and growing businesses",
-    price: "$10",
-    priceNote: "/mo, flat — not per seat",
-    features: [
-      "Unlimited signers",
-      "Unlimited team members",
-      "Dashboard with document history",
-      "Customer support",
-      "Reusable templates",
-      "Bulk send from a template",
-      "Custom document expiry (up to 90 days)",
-      "Embedded signing (iframe)",
-      "Saved contacts + signer reassignment",
-      "Webhooks for your own systems",
-      "MCP connector (Claude, ChatGPT, Grok, Perplexity)",
-      "AI auto-detect signature & date fields",
-      "AI plain-English contract explainer",
-      "AI risk & clause highlighter",
-      "AI contract generator",
-      "White-label branding",
-      "PIN-protected signing links",
-      "Dropbox, OneDrive, Box, and Google Drive connectors",
-    ],
-    // Placeholder — Paid CTA is rendered dynamically from session state below.
-    cta: { label: "Sign in to upgrade", to: "/login" },
-    highlight: true,
-  },
-  {
-    name: "Enterprise",
-    tagline: "For higher-volume, custom needs",
-    price: "Custom",
-    priceNote: "sales@docracy.io",
-    features: [
-      "Everything in Paid",
-      "Invoice billing & annual contracts",
-      "Premium customer support (SLA-backed)",
-      "SSO or multi-workspace setup, scoped to your needs",
-      "Volume discounts & custom onboarding",
-    ],
-    cta: { label: "Contact sales", to: "mailto:sales@docracy.io", external: true },
-  },
-];
+import { useT } from "../lib/i18n";
 
 export default function Pricing() {
+  const t = useT();
   usePageMeta(
     "Pricing — Docracy",
-    "Free for signing chains of up to 2 signers, no account required. Paid is $10/month and adds AI tools, an MCP connector, bulk send, embedded signing, unlimited signers, templates, webhooks, and team accounts."
+    "Free for signing chains of up to 2 signers. Paid is $10/month flat per workspace — unlimited signers, templates, AI tools, connectors, and team accounts."
   );
 
   const [account, setAccount] = useState<Account | null | undefined>(undefined);
@@ -91,95 +31,25 @@ export default function Pricing() {
       const { url } = await startCheckout();
       window.location.href = url;
     } catch (err) {
-      setUpgradeError(err instanceof Error ? err.message : "Something went wrong");
+      setUpgradeError(err instanceof Error ? err.message : t("common.error"));
       setUpgrading(false);
     }
   };
 
   return (
-    <div className="container">
-      <h1 style={{ fontSize: 30 }}>Pricing</h1>
-      <p style={{ maxWidth: 640, marginBottom: 32 }}>
-        Free for signing chains of up to 2 signers, no account required. A paid account is a flat{" "}
-        <strong>$10/month per workspace</strong> — not per seat — and adds unlimited signers, a dashboard,
-        reusable templates, bulk send, custom expiry, embedded signing, contacts, Dropbox/OneDrive/Box/Google
-        Drive auto-upload, webhooks, team accounts, white-label branding, PIN-protected links, an MCP
-        connector for AI assistants, and a full set of AI tools. <strong>Enterprise</strong> adds
-        invoice billing, premium support, SSO/multi-workspace, and volume discounts.
-      </p>
-
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 20, marginBottom: 40 }}>
-        {TIERS.map((tier) => (
-          <div
-            key={tier.name}
-            className="card"
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 14,
-              ...(tier.highlight ? { borderColor: "var(--primary)", borderWidth: 2, boxShadow: "var(--shadow-md)" } : {}),
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.04em", textTransform: "uppercase", color: tier.highlight ? "var(--primary)" : "var(--mute)" }}>
-                {tier.name}
-              </span>
-              {tier.highlight && (
-                <span style={{ fontSize: 11, fontWeight: 700, color: "var(--on-primary)", background: "var(--primary)", borderRadius: 999, padding: "2px 8px" }}>
-                  Best value
-                </span>
-              )}
-            </div>
-            <p style={{ margin: 0, fontSize: 13.5, color: "var(--mute)" }}>{tier.tagline}</p>
-            <div>
-              <span style={{ fontSize: 34, fontWeight: 800, color: "var(--ink)" }}>{tier.price}</span>
-              <div style={{ fontSize: 12.5, color: "var(--mute)" }}>{tier.priceNote}</div>
-            </div>
-            <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 8, flex: 1 }}>
-              {tier.features.map((f) => (
-                <li key={f} style={{ fontSize: 13.5, color: "var(--body-strong)", paddingLeft: 20, position: "relative" }}>
-                  <span style={{ position: "absolute", left: 0, color: "var(--success)", fontWeight: 700 }}>✓</span>
-                  {f}
-                </li>
-              ))}
-            </ul>
-            {tier.name === "Paid" ? (
-              <PaidCta account={account} upgrading={upgrading} upgradeError={upgradeError} onUpgrade={onUpgrade} />
-            ) : tier.cta.external ? (
-              <a href={tier.cta.to} className={tier.highlight ? "btn-primary" : "btn-secondary"} style={{ textAlign: "center", textDecoration: "none" }}>
-                {tier.cta.label}
-              </a>
-            ) : (
-              <Link to={tier.cta.to} className={tier.highlight ? "btn-primary" : "btn-secondary"} style={{ textAlign: "center", textDecoration: "none" }}>
-                {tier.cta.label}
-              </Link>
-            )}
-          </div>
-        ))}
-      </div>
-
-      <h2 style={{ fontSize: 18, marginBottom: 12 }}>Full feature comparison</h2>
-      {/* No overflow:hidden here — any ancestor with a non-visible overflow breaks the sticky
-          thead below (see theme.css's .plan-table-scroll comment); the table's own corner cells
-          are individually rounded instead to match the card's look. */}
-      <div className="card" style={{ padding: 0 }}>
+    <div className="pricing-page">
+      <div className="container pricing-compare">
         <div className="plan-table-scroll">
-          <table className="plan-table">
+          <table className="plan-table plan-table-pricing">
             <thead>
               <tr>
-                <th></th>
-                <th>Free</th>
-                <th className="plan-col-paid">
-                  Paid
-                  <span className="plan-col-sub">$10/month</span>
+                <th scope="col" className="plan-feature-col" />
+                <th scope="col">{t("pricing.free.name")}</th>
+                <th scope="col" className="plan-col-paid">
+                  {t("pricing.paid.name")}
+                  <span className="plan-popular">{t("pricing.bestValue")}</span>
                 </th>
-                <th>
-                  Enterprise
-                  <span className="plan-col-sub">
-                    Custom —{" "}
-                    <a href="mailto:sales@docracy.io">sales@docracy.io</a>
-                  </span>
-                </th>
+                <th scope="col">{t("pricing.ent.name")}</th>
               </tr>
             </thead>
             <tbody>
@@ -200,13 +70,60 @@ export default function Pricing() {
             </tbody>
           </table>
         </div>
+
+        <div className="pricing-sticky-bar" aria-label="Plan prices">
+          <div className="pricing-sticky-spacer" aria-hidden="true" />
+          <div className="pricing-sticky-col">
+            <div className="pricing-sticky-name">{t("pricing.free.name")}</div>
+            <div className="pricing-sticky-price">
+              $0<span className="pricing-sticky-note">{t("pricing.free.note")}</span>
+            </div>
+            <Link to="/prepare" className="btn-secondary pricing-sticky-cta">
+              {t("pricing.free.cta")}
+            </Link>
+          </div>
+          <div className="pricing-sticky-col is-paid">
+            <div className="pricing-sticky-name">{t("pricing.paid.name")}</div>
+            <div className="pricing-sticky-price">
+              $10<span className="pricing-sticky-note">{t("pricing.paid.note")}</span>
+            </div>
+            <PaidCta account={account} upgrading={upgrading} upgradeError={upgradeError} onUpgrade={onUpgrade} />
+          </div>
+          <div className="pricing-sticky-col">
+            <div className="pricing-sticky-name">{t("pricing.ent.name")}</div>
+            <div className="pricing-sticky-price">
+              {t("pricing.ent.price")}
+              <span className="pricing-sticky-note">sales@docracy.io</span>
+            </div>
+            <a href="mailto:sales@docracy.io" className="btn-secondary pricing-sticky-cta">
+              {t("pricing.ent.cta")}
+            </a>
+          </div>
+        </div>
       </div>
 
-      <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 32 }}>
-        Docracy doesn't verify identity — the audit trail proves what was signed and when, not who actually
-        signed it. For contracts that need identity-verified signatures, use a compliance-grade e-signature
-        service instead.
-      </p>
+      <section className="pricing-testimonial">
+        <div className="container pricing-testimonial-inner">
+          <img
+            src="/testimonials/markus-huber.png"
+            alt="Markus Huber"
+            className="pricing-testimonial-photo"
+            width={96}
+            height={96}
+          />
+          <blockquote className="pricing-testimonial-quote">
+            The price is great and I found it to be more intuitive than Docusign. I like the interface much
+            better. This saves us huge amounts of time in getting contracts signed.
+          </blockquote>
+          <div className="pricing-testimonial-by">
+            <strong>Markus Huber</strong>
+          </div>
+        </div>
+      </section>
+
+      <div className="container">
+        <p className="pricing-disclaimer">{t("pricing.disclaimer")}</p>
+      </div>
     </div>
   );
 }
@@ -222,33 +139,35 @@ function PaidCta({
   upgradeError: string | null;
   onUpgrade: () => void;
 }) {
+  const t = useT();
+
   if (account === undefined) {
     return (
-      <button className="btn-primary" disabled style={{ textAlign: "center" }}>
+      <button className="btn-primary pricing-sticky-cta" disabled>
         …
       </button>
     );
   }
   if (account?.isPaid) {
     return (
-      <Link to="/dashboard" className="btn-primary" style={{ textAlign: "center", textDecoration: "none" }}>
-        Go to dashboard
+      <Link to="/dashboard" className="btn-primary pricing-sticky-cta">
+        {t("pricing.goDashboard")}
       </Link>
     );
   }
   if (account) {
     return (
-      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-        <button className="btn-primary" onClick={onUpgrade} disabled={upgrading}>
-          {upgrading ? "Redirecting…" : "Upgrade — $10/month"}
+      <div className="pricing-sticky-cta-stack">
+        <button className="btn-primary pricing-sticky-cta" onClick={onUpgrade} disabled={upgrading}>
+          {upgrading ? t("pricing.paid.redirecting") : t("pricing.paid.ctaUpgrade")}
         </button>
-        {upgradeError && <p style={{ margin: 0, fontSize: 12.5, color: "var(--danger)" }}>{upgradeError}</p>}
+        {upgradeError && <p className="pricing-sticky-error">{upgradeError}</p>}
       </div>
     );
   }
   return (
-    <Link to="/login" className="btn-primary" style={{ textAlign: "center", textDecoration: "none" }}>
-      Sign in to upgrade
+    <Link to="/login" className="btn-primary pricing-sticky-cta">
+      {t("pricing.paid.ctaLogin")}
     </Link>
   );
 }

@@ -6,6 +6,7 @@ import IntegrationsBand from "../components/IntegrationsBand";
 import ProductFlowDemo from "../components/ProductFlowDemo";
 import { track } from "../lib/track";
 import { FREE_TEMPLATES } from "../lib/freeTemplates";
+import { useT } from "../lib/i18n";
 
 /** Static field-detection mock for the AI spotlight — hero uses the animated ProductFlowDemo. */
 function DetectMockup() {
@@ -124,101 +125,37 @@ function FeatureIcon({
 
 const CORE_FEATURES: Array<{
   icon: "bolt" | "workflow" | "shield" | "users" | "duplicate" | "send" | "pen" | "sparkles" | "single";
-  title: string;
-  body: string;
+  titleKey: string;
+  bodyKey: string;
   to: string;
-  linkLabel: string;
+  linkKey: string;
 }> = [
-  {
-    icon: "send",
-    title: "Simple document sending",
-    body: "Upload a PDF, add recipients, and send it for signature in seconds — no complicated setup.",
-    to: "/prepare",
-    linkLabel: "Send a document",
-  },
-  {
-    icon: "pen",
-    title: "Clean signing experience",
-    body: "Signers get a distraction-free page to review and sign — no account, no software to install.",
-    to: "/docs",
-    linkLabel: "See how it works",
-  },
-  {
-    icon: "sparkles",
-    title: "AI-assisted field placement",
-    body: "Upload a document and Docracy automatically finds and places signature, date, and initial fields for you.",
-    to: "/mcp",
-    linkLabel: "See our AI tools",
-  },
-  {
-    icon: "duplicate",
-    title: "Reusable templates",
-    body: "Save a PDF and its field layout once, then reuse it for every new NDA, contract, or agreement.",
-    to: "/free-templates",
-    linkLabel: "Browse free templates",
-  },
-  {
-    icon: "users",
-    title: "Team access",
-    body: "Invite teammates to share documents, templates, and webhooks under one paid workspace.",
-    to: "/pricing",
-    linkLabel: "See team plans",
-  },
-  {
-    icon: "single",
-    title: "One-off agreements",
-    body: "Splitting rent, selling something, settling a favor — sign it free, no account, gone once it's done.",
-    to: "/prepare",
-    linkLabel: "Start free",
-  },
-  {
-    icon: "shield",
-    title: "Secure storage",
-    body: "Documents and their audit trail are encrypted and automatically deleted after a short retention window — nothing sits around indefinitely.",
-    to: "/privacy",
-    linkLabel: "Read our privacy policy",
-  },
-  {
-    icon: "bolt",
-    title: "Fast workflows",
-    body: "Sequential signing keeps deals moving in order, or switch to all-at-once so everyone can sign the moment they're invited.",
-    to: "/docs",
-    linkLabel: "Read the docs",
-  },
+  { icon: "send", titleKey: "landing.feat1.title", bodyKey: "landing.feat1.body", to: "/prepare", linkKey: "landing.feat1.link" },
+  { icon: "pen", titleKey: "landing.feat2.title", bodyKey: "landing.feat2.body", to: "/docs", linkKey: "landing.feat2.link" },
+  { icon: "sparkles", titleKey: "landing.feat3.title", bodyKey: "landing.feat3.body", to: "/mcp", linkKey: "landing.feat3.link" },
+  { icon: "duplicate", titleKey: "landing.feat4.title", bodyKey: "landing.feat4.body", to: "/free-templates", linkKey: "landing.feat4.link" },
+  { icon: "users", titleKey: "landing.feat5.title", bodyKey: "landing.feat5.body", to: "/pricing", linkKey: "landing.feat5.link" },
+  { icon: "single", titleKey: "landing.feat6.title", bodyKey: "landing.feat6.body", to: "/prepare", linkKey: "landing.feat6.link" },
+  { icon: "shield", titleKey: "landing.feat7.title", bodyKey: "landing.feat7.body", to: "/privacy", linkKey: "landing.feat7.link" },
+  { icon: "bolt", titleKey: "landing.feat8.title", bodyKey: "landing.feat8.body", to: "/docs", linkKey: "landing.feat8.link" },
 ];
 
-const FAQ_ITEMS: Array<{ question: string; answer: string }> = [
-  {
-    question: "What is Docracy.io?",
-    answer: "A simple, secure e-signature platform for small teams and growing businesses.",
-  },
-  {
-    question: "How do e-signatures work?",
-    answer: "Upload a document, assign recipients, and collect signatures in minutes.",
-  },
-  {
-    question: "Is Docracy.io secure?",
-    answer: "All documents are encrypted, versioned, and stored in a compliant environment.",
-  },
-  {
-    question: "Can I use templates?",
-    answer:
-      "Yes, on a paid account — create templates for recurring documents like NDAs, contracts, and onboarding forms.",
-  },
-  {
-    question: "Does Docracy.io support teams?",
-    answer: "Yes, on a paid account — invite team members, share templates, and collaborate on workflows.",
-  },
+const FAQ_KEYS: Array<{ qKey: string; aKey: string }> = [
+  { qKey: "landing.faq1.q", aKey: "landing.faq1.a" },
+  { qKey: "landing.faq2.q", aKey: "landing.faq2.a" },
+  { qKey: "landing.faq3.q", aKey: "landing.faq3.a" },
+  { qKey: "landing.faq4.q", aKey: "landing.faq4.a" },
+  { qKey: "landing.faq5.q", aKey: "landing.faq5.a" },
 ];
 
 const TESTIMONIALS: Array<{ quote: string; name: string; title: string; company: string | null; logo: string | null }> = [
   {
     quote:
       "Docracy is a great product that I have tested and am using. It is easy to use, has good tools, is always up to date, and implements new features. Highly recommended.",
-    name: "Markus Huber",
-    title: "Managing Director",
-    company: "viennacontemporary",
-    logo: "/vienna-contemporary-logo.png",
+    name: "DACH Advisory",
+    title: "",
+    company: null,
+    logo: "/testimonials/dach-advisory.png",
   },
   {
     quote:
@@ -238,56 +175,41 @@ const TESTIMONIALS: Array<{ quote: string; name: string; title: string; company:
   },
 ];
 
-const USE_CASES = [
-  {
-    title: "Client contracts",
-    body: "Send contracts, collect signatures, and store everything securely — without confusing clients or slowing down deals.",
-  },
-  {
-    title: "HR onboarding",
-    body: "Share onboarding documents, assign signers in order, and reuse templates for every new hire.",
-  },
-  {
-    title: "Internal approvals",
-    body: "Create simple approval chains for internal documents, policies, and agreements.",
-  },
-  {
-    title: "Vendor agreements",
-    body: "Manage supplier contracts, service agreements, and renewals with clear workflows and secure storage.",
-  },
-  {
-    title: "Compliance documentation",
-    body: "Collect signatures for compliance forms, policies, and mandatory acknowledgements — fully traceable and audit-ready.",
-  },
-  {
-    title: "Recurring templates for NDAs & agreements",
-    body: "Create reusable templates for NDAs, partnership agreements, and recurring documents to save time and reduce errors — on a paid account.",
-  },
+const USE_CASE_KEYS: Array<{ titleKey: string; bodyKey: string }> = [
+  { titleKey: "landing.uc1.title", bodyKey: "landing.uc1.body" },
+  { titleKey: "landing.uc2.title", bodyKey: "landing.uc2.body" },
+  { titleKey: "landing.uc3.title", bodyKey: "landing.uc3.body" },
+  { titleKey: "landing.uc4.title", bodyKey: "landing.uc4.body" },
+  { titleKey: "landing.uc5.title", bodyKey: "landing.uc5.body" },
+  { titleKey: "landing.uc6.title", bodyKey: "landing.uc6.body" },
 ];
 
-const HOW_IT_WORKS = [
-  { title: "Upload", body: "Add the PDF you want signed, or start from a free template." },
-  { title: "Add signers & fields", body: "Enter who needs to sign, in what order, and drop signature and date fields onto the document." },
-  { title: "Send", body: "Everyone in the chain gets an email link — no account required to sign." },
-  { title: "Signed & done", body: "Once everyone's signed, download the final PDF and its certificate of completion." },
+const HOW_IT_WORKS_KEYS: Array<{ titleKey: string; bodyKey: string }> = [
+  { titleKey: "how.s1.title", bodyKey: "how.s1.body" },
+  { titleKey: "how.s2.title", bodyKey: "how.s2.body" },
+  { titleKey: "how.s3.title", bodyKey: "how.s3.body" },
+  { titleKey: "how.s4.title", bodyKey: "how.s4.body" },
 ];
 
 // These 4 are shown here purely as a representative sample — same underlying FREE_TEMPLATES
 // data /free-templates itself reads, so the count and list can't drift out of sync.
 const FEATURED_TEMPLATE_SLUGS = ["mutual-nda", "independent-contractor-agreement", "offer-letter", "freelance-service-agreement"];
-const FEATURED_TEMPLATES = FREE_TEMPLATES.filter((t) => FEATURED_TEMPLATE_SLUGS.includes(t.slug));
+const FEATURED_TEMPLATES = FREE_TEMPLATES.filter((tmpl) => FEATURED_TEMPLATE_SLUGS.includes(tmpl.slug));
 
-const AI_FEATURES = [
-  { title: "Auto-detect fields", body: "Upload a PDF and it places signature, date, and initial fields for you." },
-  { title: "Plain-English explainer", body: "A 3-bullet summary of what each party is agreeing to, no legal jargon." },
-  { title: "Risk & clause highlighter", body: "Flags one-sided terms — long non-competes, vague payment terms, more." },
-  { title: "Generate with AI", body: "Describe an agreement in a sentence, get a ready-to-sign PDF back." },
+const AI_FEATURE_KEYS: Array<{ titleKey: string; bodyKey: string }> = [
+  { titleKey: "landing.ai1.title", bodyKey: "landing.ai1.body" },
+  { titleKey: "landing.ai2.title", bodyKey: "landing.ai2.body" },
+  { titleKey: "landing.ai3.title", bodyKey: "landing.ai3.body" },
+  { titleKey: "landing.ai4.title", bodyKey: "landing.ai4.body" },
 ];
 
 export default function Landing() {
-  // A plain `<a href="#faq">` would work for an in-page click, but the footer's FAQ link is a
-  // react-router <Link> from other routes — client-side navigation to "/#faq" doesn't trigger the
-  // browser's native same-document hash scroll, so this does it manually once Landing has mounted.
+  const t = useT();
+  const faqItems = FAQ_KEYS.map((item) => ({
+    question: t(item.qKey),
+    answer: t(item.aKey),
+  }));
+
   useEffect(() => {
     if (window.location.hash === "#faq") {
       document.getElementById("faq")?.scrollIntoView();
@@ -299,21 +221,15 @@ export default function Landing() {
       <div className="hero-band">
         <div className="hero-inner hero-split">
           <div>
-            <div className="hero-eyebrow">Free · No signup · Sequential e-signatures</div>
-            <h1>Built for quick, low-stakes agreements</h1>
-            <p>
-              Send, sign, and finish simple documents in minutes — without subscriptions, complexity, or setup.
-            </p>
+            <div className="hero-eyebrow">{t("hero.eyebrow")}</div>
+            <h1>{t("hero.title")}</h1>
+            <p>{t("hero.sub")}</p>
             <ul className="hero-benefit-list">
-              <li>Fast and frictionless document signing</li>
-              <li>Simple workflow setup for teams</li>
-              <li>Secure and compliant document storage</li>
-              <li>Legally binding signatures under e-signature laws like ESIGN and eIDAS</li>
+              <li>{t("hero.b1")}</li>
+              <li>{t("hero.b2")}</li>
+              <li>{t("hero.b3")}</li>
+              <li>{t("hero.b4")}</li>
             </ul>
-            {/* Inside the hero on purpose: this used to be a FirstDocumentPrompt directly *below*
-                the band, which on a laptop viewport left the page with no visible action until the
-                visitor scrolled. One dominant primary action (the zero-commitment sample), with
-                upload demoted to a text link rather than a second equal-weight button. */}
             <div className="hero-actions">
               <Link
                 to="/prepare?freeTemplate=mutual-nda"
@@ -321,17 +237,17 @@ export default function Landing() {
                 style={{ display: "inline-block", textDecoration: "none" }}
                 onClick={() => track("landingpage_cta_clicked", { source: "hero_inline_sample" })}
               >
-                Try with a sample NDA
+                {t("hero.ctaSample")}
               </Link>
               <Link
                 to="/prepare"
                 className="hero-actions-secondary"
                 onClick={() => track("landingpage_cta_clicked", { source: "hero_inline_upload" })}
               >
-                or upload your own PDF
+                {t("hero.ctaUpload")}
               </Link>
             </div>
-            <p className="hero-cta-hint">No account needed — send or sign in about 30 seconds.</p>
+            <p className="hero-cta-hint">{t("hero.hint")}</p>
           </div>
           <div className="doc-mockup-glow">
             <div className="doc-mockup-card">
@@ -343,14 +259,14 @@ export default function Landing() {
 
       <div className="audience-band">
         <div className="audience-inner">
-          <h2 style={{ fontSize: 22, marginBottom: 0, textAlign: "center" }}>How it works</h2>
+          <h2 style={{ fontSize: 22, marginBottom: 0, textAlign: "center" }}>{t("how.title")}</h2>
           <div className="accent-grid">
-            {HOW_IT_WORKS.map((step, i) => (
-              <div key={step.title} className="accent-item">
+            {HOW_IT_WORKS_KEYS.map((step, i) => (
+              <div key={step.titleKey} className="accent-item">
                 <h3 style={{ fontSize: 15, marginBottom: 3 }}>
-                  <span style={{ color: "var(--primary)" }}>{i + 1}.</span> {step.title}
+                  <span style={{ color: "var(--primary)" }}>{i + 1}.</span> {t(step.titleKey)}
                 </h3>
-                <p style={{ margin: 0, fontSize: 13.5 }}>{step.body}</p>
+                <p style={{ margin: 0, fontSize: 13.5 }}>{t(step.bodyKey)}</p>
               </div>
             ))}
           </div>
@@ -360,21 +276,21 @@ export default function Landing() {
       <div className="core-features-band">
         <div className="core-features-inner">
           <h2 style={{ fontSize: 26, marginBottom: 8, textAlign: "center" }}>
-            Everything you need for simple, secure document workflows
+            {t("landing.featuresTitle")}
           </h2>
           <p style={{ textAlign: "center", maxWidth: 560, margin: "0 auto" }}>
-            Docracy.io focuses on clarity, speed, and reliability — without unnecessary complexity.
+            {t("landing.featuresSub")}
           </p>
           <div className="core-features-grid">
             {CORE_FEATURES.map((f) => (
-              <div key={f.title} className="core-feature-card">
+              <div key={f.titleKey} className="core-feature-card">
                 <div className="core-feature-icon">
                   <FeatureIcon name={f.icon} />
                 </div>
-                <h3>{f.title}</h3>
-                <p>{f.body}</p>
+                <h3>{t(f.titleKey)}</h3>
+                <p>{t(f.bodyKey)}</p>
                 <Link to={f.to} style={{ fontSize: 13, fontWeight: 600 }}>
-                  {f.linkLabel} →
+                  {t(f.linkKey)} →
                 </Link>
               </div>
             ))}
@@ -392,26 +308,23 @@ export default function Landing() {
 
       <div className="spotlight-band">
         <div className="spotlight-inner">
-          <h2 style={{ fontSize: 24, marginBottom: 6 }}>AI tools, and an MCP connector for your AI assistant</h2>
+          <h2 style={{ fontSize: 24, marginBottom: 6 }}>{t("landing.aiTitle")}</h2>
           <p style={{ marginTop: 0, marginBottom: 0, maxWidth: 640 }}>
-            Beyond the free chain-signing flow above, a paid account adds AI that does the busywork and a
-            connector so Claude, ChatGPT, Grok, or Perplexity can check status and search your documents
-            directly from a chat.
+            {t("landing.aiSub")}
           </p>
 
           <div className="spotlight-split">
             <div className="accent-list">
-              {AI_FEATURES.map((f) => (
-                <div key={f.title} className="accent-item">
-                  <h3 style={{ fontSize: 15, marginBottom: 3 }}>{f.title}</h3>
-                  <p style={{ margin: 0, fontSize: 13.5 }}>{f.body}</p>
+              {AI_FEATURE_KEYS.map((f) => (
+                <div key={f.titleKey} className="accent-item">
+                  <h3 style={{ fontSize: 15, marginBottom: 3 }}>{t(f.titleKey)}</h3>
+                  <p style={{ margin: 0, fontSize: 13.5 }}>{t(f.bodyKey)}</p>
                 </div>
               ))}
               <div className="accent-item is-mcp">
-                <h3 style={{ fontSize: 15, marginBottom: 3 }}>MCP connector</h3>
+                <h3 style={{ fontSize: 15, marginBottom: 3 }}>{t("landing.aiMcp.title")}</h3>
                 <p style={{ margin: 0, fontSize: 13.5 }}>
-                  Claude, ChatGPT, Grok, and Perplexity can check signing status and search your documents
-                  on your behalf — just ask. Read-only; requires a paid account.
+                  {t("landing.aiMcp.body")}
                 </p>
               </div>
             </div>
@@ -429,7 +342,7 @@ export default function Landing() {
               style={{ display: "inline-block", textDecoration: "none" }}
               onClick={() => track("landingpage_cta_clicked", { source: "paid_plan_signin" })}
             >
-              Sign in to try the paid plan
+              {t("landing.aiCta")}
             </Link>
           </div>
         </div>
@@ -437,12 +350,12 @@ export default function Landing() {
 
       <div className="audience-band">
         <div className="audience-inner">
-          <h2 style={{ fontSize: 22, marginBottom: 0 }}>Popular use cases</h2>
+          <h2 style={{ fontSize: 22, marginBottom: 0 }}>{t("landing.useCasesTitle")}</h2>
           <div className="accent-grid">
-            {USE_CASES.map((u) => (
-              <div key={u.title} className="accent-item">
-                <h3 style={{ fontSize: 15, marginBottom: 3 }}>{u.title}</h3>
-                <p style={{ margin: 0, fontSize: 13.5 }}>{u.body}</p>
+            {USE_CASE_KEYS.map((u) => (
+              <div key={u.titleKey} className="accent-item">
+                <h3 style={{ fontSize: 15, marginBottom: 3 }}>{t(u.titleKey)}</h3>
+                <p style={{ margin: 0, fontSize: 13.5 }}>{t(u.bodyKey)}</p>
               </div>
             ))}
           </div>
@@ -451,21 +364,21 @@ export default function Landing() {
 
       <div className="audience-band">
         <div className="audience-inner">
-          <h2 style={{ fontSize: 22, marginBottom: 0 }}>Popular templates</h2>
+          <h2 style={{ fontSize: 22, marginBottom: 0 }}>{t("landing.templatesTitle")}</h2>
           <div className="accent-grid">
-            {FEATURED_TEMPLATES.map((t) => (
-              <div key={t.slug} className="accent-item">
-                <h3 style={{ fontSize: 15, marginBottom: 3 }}>{t.name}</h3>
-                <p style={{ margin: 0, fontSize: 13.5 }}>{t.description}</p>
-                <Link to={`/free-templates/${t.slug}`} style={{ fontSize: 13, fontWeight: 600 }}>
-                  Use this template →
+            {FEATURED_TEMPLATES.map((tmpl) => (
+              <div key={tmpl.slug} className="accent-item">
+                <h3 style={{ fontSize: 15, marginBottom: 3 }}>{tmpl.name}</h3>
+                <p style={{ margin: 0, fontSize: 13.5 }}>{tmpl.description}</p>
+                <Link to={`/free-templates/${tmpl.slug}`} style={{ fontSize: 13, fontWeight: 600 }}>
+                  {t("landing.templateUse")} →
                 </Link>
               </div>
             ))}
           </div>
           <div style={{ marginTop: 20 }}>
             <Link to="/free-templates" style={{ fontSize: 13.5, fontWeight: 600 }}>
-              Browse all {FREE_TEMPLATES.length} free templates →
+              {t("landing.templatesBrowse", { count: FREE_TEMPLATES.length })} →
             </Link>
           </div>
         </div>
@@ -473,22 +386,25 @@ export default function Landing() {
 
       <div className="container" style={{ maxWidth: 960, padding: "48px 24px" }}>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 20 }}>
-          {TESTIMONIALS.map((t) => (
-            <div key={t.name} className="card" style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          {TESTIMONIALS.map((testimonial) => (
+            <div key={testimonial.name} className="card" style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               <p style={{ fontSize: 15, fontStyle: "italic", color: "var(--body-strong)", margin: 0, flex: 1, lineHeight: 1.5 }}>
-                "{t.quote}"
+                "{testimonial.quote}"
               </p>
               <div>
-                <p style={{ margin: 0, fontSize: 13.5, fontWeight: 600, color: "var(--ink)" }}>{t.name}</p>
-                <p style={{ margin: 0, fontSize: 12.5, color: "var(--mute)" }}>
-                  {t.title}
-                  {t.company ? `, ${t.company}` : ""}
-                </p>
+                <p style={{ margin: 0, fontSize: 13.5, fontWeight: 600, color: "var(--ink)" }}>{testimonial.name}</p>
+                {(testimonial.title || testimonial.company) && (
+                  <p style={{ margin: 0, fontSize: 12.5, color: "var(--mute)" }}>
+                    {testimonial.title}
+                    {testimonial.title && testimonial.company ? ", " : ""}
+                    {testimonial.company ?? ""}
+                  </p>
+                )}
               </div>
-              {t.logo && (
+              {testimonial.logo && (
                 <img
-                  src={t.logo}
-                  alt={t.company ?? t.name}
+                  src={testimonial.logo}
+                  alt={testimonial.company ?? testimonial.name}
                   loading="lazy"
                   style={{ height: 36, width: "auto", alignSelf: "flex-start", objectFit: "contain", borderRadius: "var(--r-sm)" }}
                 />
@@ -499,8 +415,8 @@ export default function Landing() {
       </div>
 
       <div className="container" id="faq" style={{ maxWidth: 720, paddingTop: 8, paddingBottom: 8 }}>
-        <h2 style={{ fontSize: 24, marginBottom: 16, textAlign: "center" }}>Frequently asked questions</h2>
-        {FAQ_ITEMS.map((item) => (
+        <h2 style={{ fontSize: 24, marginBottom: 16, textAlign: "center" }}>{t("landing.faqTitle")}</h2>
+        {faqItems.map((item) => (
           <details key={item.question} className="faq-item">
             <summary>{item.question}</summary>
             <p>{item.answer}</p>
@@ -516,7 +432,7 @@ export default function Landing() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "FAQPage",
-            mainEntity: FAQ_ITEMS.map((item) => ({
+            mainEntity: faqItems.map((item) => ({
               "@type": "Question",
               name: item.question,
               acceptedAnswer: { "@type": "Answer", text: item.answer },
@@ -526,8 +442,8 @@ export default function Landing() {
       />
 
       <div className="cta-band">
-        <h2 style={{ fontSize: 22, marginBottom: 8 }}>Ready to send your first document?</h2>
-        <p style={{ marginTop: 0, marginBottom: 20 }}>Free to start — no account needed to send or sign.</p>
+        <h2 style={{ fontSize: 22, marginBottom: 8 }}>{t("landing.ctaTitle")}</h2>
+        <p style={{ marginTop: 0, marginBottom: 20 }}>{t("landing.ctaSub")}</p>
         <div className="cta-band-actions">
           <Link
             to="/prepare?freeTemplate=mutual-nda"
@@ -535,7 +451,7 @@ export default function Landing() {
             style={{ display: "inline-block", textDecoration: "none" }}
             onClick={() => track("landingpage_cta_clicked", { source: "final_cta_band_sample" })}
           >
-            Try with a sample NDA
+            {t("landing.ctaSample")}
           </Link>
           <Link
             to="/prepare"
@@ -543,7 +459,7 @@ export default function Landing() {
             style={{ display: "inline-block", textDecoration: "none" }}
             onClick={() => track("landingpage_cta_clicked", { source: "final_cta_band" })}
           >
-            Upload your PDF
+            {t("landing.ctaUpload")}
           </Link>
           <Link
             to="/free-templates"
@@ -551,7 +467,7 @@ export default function Landing() {
             style={{ display: "inline-block", textDecoration: "none" }}
             onClick={() => track("landingpage_cta_clicked", { source: "final_cta_band_templates" })}
           >
-            Browse free templates
+            {t("landing.ctaTemplates")}
           </Link>
         </div>
       </div>
@@ -562,9 +478,7 @@ export default function Landing() {
         </div>
 
         <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 32 }}>
-          Docracy doesn't verify identity — anyone with the link can sign as the name on it. The audit trail
-          proves what was signed and when, not who actually signed it. For contracts that need
-          identity-verified signatures, use a compliance-grade e-signature service instead.
+          {t("landing.disclaimer")}
         </p>
       </div>
 

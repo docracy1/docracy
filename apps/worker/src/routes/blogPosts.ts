@@ -10,6 +10,7 @@ import {
   slugify,
   updateBlogPost,
 } from "../lib/blogPosts";
+import { blogPostsSitemapXml } from "../lib/blogWeekly";
 import type { Env } from "@docracy/shared";
 
 type Variables = { account: AccountContext | null };
@@ -20,6 +21,17 @@ export const blogPostsPublic = new Hono<{ Bindings: Env; Variables: Variables }>
 blogPostsPublic.get("/", async (c) => {
   const posts = await listPublishedBlogPosts(c.env);
   return c.json({ posts });
+});
+
+/** Dynamic sitemap for CMS / weekly-cron posts — listed in robots.txt alongside the static sitemap. */
+blogPostsPublic.get("/sitemap.xml", async (c) => {
+  const xml = await blogPostsSitemapXml(c.env);
+  return new Response(xml, {
+    headers: {
+      "content-type": "application/xml; charset=utf-8",
+      "cache-control": "public, max-age=3600",
+    },
+  });
 });
 
 blogPostsPublic.get("/:slug", async (c) => {

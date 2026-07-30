@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { fetchMe } from "../lib/api";
+import { useT } from "../lib/i18n";
 import { track } from "../lib/track";
 
 /**
@@ -9,6 +10,7 @@ import { track } from "../lib/track";
  * Anonymous → create account (history) + soft paid nudge + share loop.
  */
 export default function PrepareSent() {
+  const t = useT();
   const { state } = useLocation() as {
     state: { docId: string; statusToken: string; signingMode?: "sequential" | "parallel" } | null;
   };
@@ -24,10 +26,10 @@ export default function PrepareSent() {
   if (!state) {
     return (
       <div className="container">
-        <h1>Sent</h1>
+        <h1>{t("sent.titleFallback")}</h1>
         <p>Your document was created. Check your email for status updates.</p>
         <Link to="/" className="btn-secondary" style={{ textDecoration: "none" }}>
-          Back home
+          {t("common.backHome")}
         </Link>
       </div>
     );
@@ -49,7 +51,7 @@ export default function PrepareSent() {
 
   return (
     <div className="container">
-      <h1>On its way</h1>
+      <h1>{t("sent.title")}</h1>
       <p>
         {state.signingMode === "parallel"
           ? "Every signer has been emailed their link — they can sign in any order."
@@ -60,10 +62,10 @@ export default function PrepareSent() {
         <Link to={`/status/${state.statusToken}`}>{statusUrl}</Link>
         <div style={{ marginTop: 12, display: "flex", flexWrap: "wrap", gap: 8 }}>
           <button type="button" className="btn-secondary" onClick={() => copyText("status", statusUrl)}>
-            {copied === "status" ? "Copied" : "Copy status link"}
+            {copied === "status" ? t("common.copied") : t("sent.copyStatus")}
           </button>
           <button type="button" className="btn-secondary" onClick={() => copyText("share", shareBlurb)}>
-            {copied === "share" ? "Copied" : "Share Docracy with a colleague"}
+            {copied === "share" ? t("common.copied") : t("sent.shareColleague")}
           </button>
         </div>
       </div>
@@ -76,7 +78,7 @@ export default function PrepareSent() {
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
             <Link to="/login?ref=prepare-sent" className="btn-primary" style={{ textDecoration: "none" }}>
-              Create a free account
+              {t("status.createAccount")}
             </Link>
             <Link
               to="/pricing?ref=prepare-sent"
@@ -84,7 +86,7 @@ export default function PrepareSent() {
               style={{ textDecoration: "none" }}
               onClick={() => track("upgrade_clicked", { source: "prepare_sent_pricing" })}
             >
-              See paid plans
+              {t("status.seePaidPlans")}
             </Link>
           </div>
         </div>
@@ -93,10 +95,10 @@ export default function PrepareSent() {
       {loggedIn === true && (
         <div style={{ marginTop: 20, display: "flex", flexWrap: "wrap", gap: 10 }}>
           <Link to="/prepare" className="btn-primary" style={{ textDecoration: "none" }}>
-            Send another
+            {t("sent.sendAnother")}
           </Link>
           <Link to="/dashboard" className="btn-secondary" style={{ textDecoration: "none" }}>
-            Go to dashboard
+            {t("common.goDashboard")}
           </Link>
         </div>
       )}

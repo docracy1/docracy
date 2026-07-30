@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useT } from "../lib/i18n";
 import PdfViewer from "../components/PdfViewer";
 import {
   analyzeDocumentRisks,
@@ -71,6 +72,7 @@ function SidebarHeading({ label, count }: { label: string; count?: number }) {
 }
 
 export default function Prepare() {
+  const t = useT();
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
@@ -792,7 +794,7 @@ export default function Prepare() {
       setShowTemplateNameInput(false);
       setTemplateNameInput("");
     } catch (err) {
-      setTemplateSaveError(err instanceof Error ? err.message : "Something went wrong");
+      setTemplateSaveError(err instanceof Error ? err.message : t("common.error"));
     } finally {
       setSavingTemplate(false);
     }
@@ -846,7 +848,7 @@ export default function Prepare() {
       documentSentRef.current = true;
       navigate("/prepare/sent", { state: { docId, statusToken, signingMode: effectiveSigningMode } });
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Something went wrong";
+      const message = err instanceof Error ? err.message : t("common.error");
       setError(message);
       track("field_error", { errorCode: message.slice(0, 100) });
     } finally {
@@ -857,18 +859,18 @@ export default function Prepare() {
   return (
     <>
     <div className="container">
-      <h1>Prepare a document</h1>
+      <h1>{t("prepare.title")}</h1>
 
       {!pdfBytes && (
         <div className="card">
-          {loadingTemplate && <p>Loading template…</p>}
+          {loadingTemplate && <p>{t("prepare.loadingTemplate")}</p>}
           {templateLoadError && <p style={{ color: "var(--danger)" }}>{templateLoadError}</p>}
           {!loadingTemplate && (
             <>
               {account?.isPaid && availableTemplates.length > 0 && (
                 <div style={{ marginBottom: 16, paddingBottom: 16, borderBottom: "1px solid var(--hairline)" }}>
                   <p style={{ marginTop: 0, marginBottom: 6, fontSize: 13, color: "var(--mute)" }}>
-                    Start from a template
+                    {t("prepare.startFromTemplate")}
                   </p>
                   {availableTemplates.map((t) => {
                     const usage = templateUsage.find((u) => u.templateId === t.id);
@@ -897,7 +899,7 @@ export default function Prepare() {
                   })}
                 </div>
               )}
-              <p>Upload the PDF you want signed, or drag and drop it below.</p>
+              <p>{t("prepare.uploadHint")}</p>
               <div
                 onDragOver={onUploadDragOver}
                 onDragLeave={onUploadDragLeave}
@@ -912,11 +914,11 @@ export default function Prepare() {
                 }}
               >
                 <p style={{ margin: "0 0 10px 0", fontSize: 13, color: "var(--mute)" }}>
-                  {isDraggingUpload ? "Drop your PDF here" : "Drag and drop a PDF here, or"}
+                  {isDraggingUpload ? t("prepare.dropPdf") : t("prepare.dragOr")}
                 </p>
                 <input type="file" accept="application/pdf" onChange={onFileChange} />
               </div>
-              <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 6, marginBottom: 0 }}>Max file size: 15MB.</p>
+              <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 6, marginBottom: 0 }}>{t("prepare.maxSize")}</p>
               {error && <p style={{ color: "var(--danger)", marginTop: 8 }}>{error}</p>}
 
               {account?.isPaid ? (
@@ -1298,7 +1300,7 @@ export default function Prepare() {
           <div className="prepare-sidebar-col">
             <div className="prepare-sidebar-topbar">
               <span className="prepare-sidebar-filename" title={file?.name}>
-                {file?.name ?? "Untitled document"}
+                {file?.name ?? t("prepare.untitled")}
               </span>
               <div className="prepare-sidebar-topbar-actions">
                 <button type="button" className="prepare-start-over-btn" aria-label="Start over" onClick={onStartOver}>
@@ -1311,7 +1313,7 @@ export default function Prepare() {
                   disabled={!canSubmit || submitting}
                   onClick={onSubmit}
                 >
-                  {submitting ? "Sending…" : "Send"}
+                  {submitting ? t("common.sending") : t("prepare.send")}
                 </button>
               </div>
             </div>
@@ -1329,7 +1331,7 @@ export default function Prepare() {
                       style={{ textDecoration: "none", fontSize: 13 }}
                       onClick={() => track("upgrade_clicked", { source: "prepare_cap_error" })}
                     >
-                      {account ? "See paid plans" : "Sign in to upgrade"}
+                      {account ? t("prepare.seePaidPlans") : t("prepare.signInUpgrade")}
                     </Link>
                   </div>
                 )}
@@ -1337,7 +1339,7 @@ export default function Prepare() {
             )}
 
             <div className="card">
-              <SidebarHeading label="Signers & viewers" count={signers.length + ccRecipients.length} />
+              <SidebarHeading label={t("prepare.signersViewers")} count={signers.length + ccRecipients.length} />
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
                 <button
                   type="button"
@@ -1574,7 +1576,7 @@ export default function Prepare() {
                     style={{ textDecoration: "none", fontSize: 13 }}
                     onClick={() => track("upgrade_clicked", { source: "prepare_signer_cap_card" })}
                   >
-                    {account ? "Upgrade — $10/month" : "Sign in to upgrade"}
+                    {account ? t("prepare.upgradeMonthly") : t("prepare.signInUpgrade")}
                   </Link>
                 </div>
               )}

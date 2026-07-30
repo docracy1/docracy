@@ -1,5 +1,6 @@
 import { Component, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useT } from "../lib/i18n";
 import {
   apiUrl,
   cancelTeamInvite,
@@ -180,6 +181,7 @@ function MenuIcon({ name }: { name: "team" | "subscription" | "support" | "logou
 }
 
 export default function Dashboard() {
+  const t = useT();
   const [account, setAccount] = useState<Account | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [documents, setDocuments] = useState<DocumentSummary[]>([]);
@@ -290,7 +292,7 @@ export default function Dashboard() {
   const refreshContacts = () => fetchContacts().then((res) => setContacts(res.contacts));
 
   const onVoidDocument = async (doc: DocumentSummary) => {
-    const reason = window.prompt("Optional reason for voiding (leave blank to skip):");
+    const reason = window.prompt(t("dash.voidPrompt"));
     if (reason === null) return;
     setVoidingDocId(doc.docId);
     setDocActionError(null);
@@ -298,7 +300,7 @@ export default function Dashboard() {
       await voidAccountDocument(doc.docId, reason.trim() || undefined);
       await refreshDocuments();
     } catch (err) {
-      setDocActionError(err instanceof Error ? err.message : "Something went wrong");
+      setDocActionError(err instanceof Error ? err.message : t("common.error"));
     } finally {
       setVoidingDocId(null);
     }
@@ -320,7 +322,7 @@ export default function Dashboard() {
         setReassignName(pending[0].name);
       }
     } catch (err) {
-      setReassignError(err instanceof Error ? err.message : "Something went wrong");
+      setReassignError(err instanceof Error ? err.message : t("common.error"));
       setReassignSigners([]);
     } finally {
       setReassignLoading(false);
@@ -341,7 +343,7 @@ export default function Dashboard() {
       setEmbedSigners(pending);
       if (pending.length === 1) setEmbedOrder(pending[0].order);
     } catch (err) {
-      setEmbedError(err instanceof Error ? err.message : "Something went wrong");
+      setEmbedError(err instanceof Error ? err.message : t("common.error"));
       setEmbedSigners([]);
     } finally {
       setEmbedLoading(false);
@@ -369,7 +371,7 @@ export default function Dashboard() {
       });
       setEmbedResult({ embedUrl: result.embedUrl, expiresAt: result.expiresAt });
     } catch (err) {
-      setEmbedError(err instanceof Error ? err.message : "Something went wrong");
+      setEmbedError(err instanceof Error ? err.message : t("common.error"));
     } finally {
       setEmbedCreating(false);
     }
@@ -384,7 +386,7 @@ export default function Dashboard() {
       const { signers } = await fetchDocumentAttachments(doc.docId);
       setAttachmentGroups(signers);
     } catch (err) {
-      setAttachmentsError(err instanceof Error ? err.message : "Something went wrong");
+      setAttachmentsError(err instanceof Error ? err.message : t("common.error"));
     } finally {
       setAttachmentsLoading(false);
     }
@@ -403,7 +405,7 @@ export default function Dashboard() {
       setReassignDoc(null);
       await refreshDocuments();
     } catch (err) {
-      setReassignError(err instanceof Error ? err.message : "Something went wrong");
+      setReassignError(err instanceof Error ? err.message : t("common.error"));
     } finally {
       setReassignSaving(false);
     }
@@ -420,7 +422,7 @@ export default function Dashboard() {
       setShowAddContact(false);
       await refreshContacts();
     } catch (err) {
-      setContactError(err instanceof Error ? err.message : "Something went wrong");
+      setContactError(err instanceof Error ? err.message : t("common.error"));
     } finally {
       setCreatingContact(false);
     }
@@ -433,7 +435,7 @@ export default function Dashboard() {
       await deleteContact(id);
       await refreshContacts();
     } catch (err) {
-      setContactError(err instanceof Error ? err.message : "Something went wrong");
+      setContactError(err instanceof Error ? err.message : t("common.error"));
     } finally {
       setDeletingContactId(null);
     }
@@ -446,7 +448,7 @@ export default function Dashboard() {
       await deleteTemplate(id);
       await refreshTemplates();
     } catch (err) {
-      setTemplateError(err instanceof Error ? err.message : "Something went wrong");
+      setTemplateError(err instanceof Error ? err.message : t("common.error"));
     } finally {
       setDeletingTemplateId(null);
     }
@@ -469,7 +471,7 @@ export default function Dashboard() {
       setNewWebhookEvents([]);
       await refreshWebhooks();
     } catch (err) {
-      setWebhookError(err instanceof Error ? err.message : "Something went wrong");
+      setWebhookError(err instanceof Error ? err.message : t("common.error"));
     } finally {
       setCreatingWebhook(false);
     }
@@ -482,7 +484,7 @@ export default function Dashboard() {
       await deleteWebhook(id);
       await refreshWebhooks();
     } catch (err) {
-      setWebhookError(err instanceof Error ? err.message : "Something went wrong");
+      setWebhookError(err instanceof Error ? err.message : t("common.error"));
     } finally {
       setDeletingWebhookId(null);
     }
@@ -497,7 +499,7 @@ export default function Dashboard() {
       const { url } = await getConnectorAuthorizeUrl(provider);
       window.location.href = url;
     } catch (err) {
-      setConnectorError(err instanceof Error ? err.message : "Something went wrong");
+      setConnectorError(err instanceof Error ? err.message : t("common.error"));
       setConnectingProvider(null);
     }
   };
@@ -509,7 +511,7 @@ export default function Dashboard() {
       await disconnectConnector(provider);
       await refreshConnectors();
     } catch (err) {
-      setConnectorError(err instanceof Error ? err.message : "Something went wrong");
+      setConnectorError(err instanceof Error ? err.message : t("common.error"));
     } finally {
       setDisconnectingProvider(null);
     }
@@ -530,7 +532,7 @@ export default function Dashboard() {
       setShowInviteInput(false);
       await refreshTeam();
     } catch (err) {
-      setTeamError(err instanceof Error ? err.message : "Something went wrong");
+      setTeamError(err instanceof Error ? err.message : t("common.error"));
     } finally {
       setInvitingTeammate(false);
     }
@@ -543,7 +545,7 @@ export default function Dashboard() {
       await cancelTeamInvite(id);
       await refreshTeam();
     } catch (err) {
-      setTeamError(err instanceof Error ? err.message : "Something went wrong");
+      setTeamError(err instanceof Error ? err.message : t("common.error"));
     } finally {
       setCancelingInviteId(null);
     }
@@ -556,7 +558,7 @@ export default function Dashboard() {
       await removeTeamMember(accountId);
       await refreshTeam();
     } catch (err) {
-      setTeamError(err instanceof Error ? err.message : "Something went wrong");
+      setTeamError(err instanceof Error ? err.message : t("common.error"));
     } finally {
       setRemovingMemberId(null);
     }
@@ -569,7 +571,7 @@ export default function Dashboard() {
       const { logoPath } = await uploadBrandLogo(file);
       setBrandLogoPath(logoPath);
     } catch (err) {
-      setBrandingError(err instanceof Error ? err.message : "Something went wrong");
+      setBrandingError(err instanceof Error ? err.message : t("common.error"));
     } finally {
       setUploadingLogo(false);
     }
@@ -582,7 +584,7 @@ export default function Dashboard() {
       await deleteBrandLogo();
       setBrandLogoPath(null);
     } catch (err) {
-      setBrandingError(err instanceof Error ? err.message : "Something went wrong");
+      setBrandingError(err instanceof Error ? err.message : t("common.error"));
     } finally {
       setDeletingLogo(false);
     }
@@ -597,7 +599,7 @@ export default function Dashboard() {
       setWorkspaceSlugState(slug);
       setSlugInput("");
     } catch (err) {
-      setSlugError(err instanceof Error ? err.message : "Something went wrong");
+      setSlugError(err instanceof Error ? err.message : t("common.error"));
     } finally {
       setSavingSlug(false);
     }
@@ -610,7 +612,7 @@ export default function Dashboard() {
       await deleteWorkspaceSlug();
       setWorkspaceSlugState(null);
     } catch (err) {
-      setSlugError(err instanceof Error ? err.message : "Something went wrong");
+      setSlugError(err instanceof Error ? err.message : t("common.error"));
     } finally {
       setSavingSlug(false);
     }
@@ -624,7 +626,7 @@ export default function Dashboard() {
       const { url } = await startCheckout();
       window.location.href = url;
     } catch (err) {
-      setUpgradeError(err instanceof Error ? err.message : "Something went wrong");
+      setUpgradeError(err instanceof Error ? err.message : t("common.error"));
       setUpgrading(false);
     }
   };
@@ -637,7 +639,7 @@ export default function Dashboard() {
       const { url } = await startCheckout("enterprise");
       window.location.href = url;
     } catch (err) {
-      setUpgradeEnterpriseError(err instanceof Error ? err.message : "Something went wrong");
+      setUpgradeEnterpriseError(err instanceof Error ? err.message : t("common.error"));
       setUpgradingEnterprise(false);
     }
   };
@@ -649,7 +651,7 @@ export default function Dashboard() {
       const { url } = await openBillingPortal();
       window.location.href = url;
     } catch (err) {
-      setManageBillingError(err instanceof Error ? err.message : "Something went wrong");
+      setManageBillingError(err instanceof Error ? err.message : t("common.error"));
       setManagingBilling(false);
     }
   };
@@ -663,7 +665,7 @@ export default function Dashboard() {
       setNewApiKey(token);
       setHasToken(true);
     } catch (err) {
-      setRegenerateError(err instanceof Error ? err.message : "Something went wrong");
+      setRegenerateError(err instanceof Error ? err.message : t("common.error"));
     } finally {
       setRegenerating(false);
     }
@@ -784,14 +786,14 @@ export default function Dashboard() {
           setConnections(connections);
         }
       })
-      .catch((err) => setError(err instanceof Error ? err.message : "Something went wrong"))
+      .catch((err) => setError(err instanceof Error ? err.message : t("common.error")))
       .finally(() => setLoading(false));
   }, []);
 
   if (loading) {
     return (
       <div className="container">
-        <p>Loading…</p>
+        <p>{t("common.loading")}</p>
       </div>
     );
   }
@@ -799,7 +801,7 @@ export default function Dashboard() {
   if (error) {
     return (
       <div className="container">
-        <h1>Not available</h1>
+        <h1>{t("common.notAvailable")}</h1>
         <p>{error}</p>
       </div>
     );
@@ -808,27 +810,27 @@ export default function Dashboard() {
   if (!account) {
     return (
       <div className="container">
-        <h1>Not signed in</h1>
-        <p>You need to sign in to see your dashboard.</p>
+        <h1>{t("dash.notSignedIn")}</h1>
+        <p>{t("dash.notSignedInSub")}</p>
       </div>
     );
   }
 
   const DOCS_SUBNAV: Array<{ key: typeof docsSubTab; label: string }> = [
-    { key: "awaiting", label: "Awaiting your signature" },
-    { key: "waiting", label: "Waiting on others" },
-    { key: "completed", label: "Completed" },
+    { key: "awaiting", label: t("dash.awaitingYou") },
+    { key: "waiting", label: t("dash.waitingOthers") },
+    { key: "completed", label: t("dash.completed") },
   ];
 
   // Team and Subscription are deliberately absent here — they live only in the profile-menu
   // dropdown (anchored to the account row at the bottom of the sidebar), matching the SwipeSign
   // reference exactly. Listing them again in the general Tools accordion would duplicate them.
   const TOOLS_SUBNAV: Array<{ key: typeof toolsSubTab; label: string }> = [
-    { key: "connector", label: "Connector & API key" },
-    { key: "webhooks", label: "Webhooks" },
-    { key: "contacts", label: "Contacts" },
-    ...(account.isPaid ? [{ key: "connectors" as const, label: "Connectors" }] : []),
-    { key: "branding", label: "Branding" },
+    { key: "connector", label: t("dash.connector") },
+    { key: "webhooks", label: t("dash.webhooks") },
+    { key: "contacts", label: t("dash.contacts") },
+    ...(account.isPaid ? [{ key: "connectors" as const, label: t("dash.connectors") }] : []),
+    { key: "branding", label: t("dash.branding") },
   ];
 
   return (
@@ -1024,22 +1026,22 @@ export default function Dashboard() {
         )}
         {activeTab === "dashboard" && (
           <>
-            <h1 className="dashboard-welcome-title">Welcome</h1>
-            <p className="dashboard-welcome-sub">Here's what needs your attention today.</p>
+            <h1 className="dashboard-welcome-title">{t("dash.welcome")}</h1>
+            <p className="dashboard-welcome-sub">{t("dash.welcomeSub")}</p>
 
             <div className="dashboard-metrics">
               <div
                 className={`dashboard-metric-card card${awaitingYouDocs.length > 0 ? " dashboard-metric-card-alert" : ""}`}
               >
-                <div className="dashboard-metric-label">Awaiting your signature</div>
+                <div className="dashboard-metric-label">{t("dash.awaitingYou")}</div>
                 <div className="dashboard-metric-value dashboard-metric-value-primary">{awaitingYouDocs.length}</div>
               </div>
               <div className="dashboard-metric-card card">
-                <div className="dashboard-metric-label">Waiting on others</div>
+                <div className="dashboard-metric-label">{t("dash.waitingOthers")}</div>
                 <div className="dashboard-metric-value">{waitingOnOthersCount}</div>
               </div>
               <div className="dashboard-metric-card card">
-                <div className="dashboard-metric-label">Completed this month</div>
+                <div className="dashboard-metric-label">{t("dash.completedMonth")}</div>
                 <div className="dashboard-metric-value">{completedThisMonthCount}</div>
               </div>
             </div>
@@ -1050,7 +1052,7 @@ export default function Dashboard() {
                 <p className="dashboard-caught-up" style={{ marginBottom: 0 }}>
                   <span className="dashboard-caught-up-icon" aria-hidden="true">✓</span>
                   <span>
-                    <strong>You're all caught up.</strong> Nothing is waiting on your signature right now.
+                    <strong>{t("dash.caughtUp")}</strong> {t("dash.caughtUpSub")}
                   </span>
                 </p>
               ) : (
@@ -1077,17 +1079,17 @@ export default function Dashboard() {
             </div>
 
             <div className="card dashboard-start-new" style={{ marginTop: 24 }}>
-              <h3 style={{ fontSize: 15 }}>Start something new</h3>
+              <h3 style={{ fontSize: 15 }}>{t("dash.startNew")}</h3>
               <Link to="/prepare" className="btn-primary" style={{ display: "inline-block", textDecoration: "none" }}>
-                + New document
+                {t("dash.newDocBtn")}
               </Link>
             </div>
 
             {recurringQuickActions.length > 0 && (
               <div className="card" style={{ marginTop: 24 }}>
-                <h3 style={{ fontSize: 15 }}>Quick actions</h3>
+                <h3 style={{ fontSize: 15 }}>{t("dash.quickActions")}</h3>
                 <p style={{ fontSize: 12, color: "var(--mute)", marginTop: -4 }}>
-                  Documents you send often — jump straight back into one.
+                  {t("dash.quickActionsSub")}
                 </p>
                 {recurringQuickActions.map((qa) => (
                   <div
@@ -1130,7 +1132,7 @@ export default function Dashboard() {
 
             {!account.isPaid && (
               <div className="card" style={{ marginTop: 24 }}>
-                <h3 style={{ fontSize: 15 }}>Upgrade to paid — $10/month</h3>
+                <h3 style={{ fontSize: 15 }}>{t("dash.upgradeTitle")}</h3>
                 <p>
                   Unlimited signers, a connector so Claude, ChatGPT, Grok, or Perplexity can look up your documents,
                   team accounts, white-label branding, and a set of AI tools — auto-detect signature/date fields,
@@ -1139,7 +1141,7 @@ export default function Dashboard() {
                 </p>
                 {upgradeError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{upgradeError}</p>}
                 <button className="btn-primary" onClick={onUpgrade} disabled={upgrading}>
-                  {upgrading ? "Redirecting…" : "Upgrade"}
+                  {upgrading ? t("common.redirecting") : t("common.upgrade")}
                 </button>
               </div>
             )}
@@ -1175,7 +1177,7 @@ export default function Dashboard() {
             <h3 style={{ fontSize: 15 }}>Templates are a paid feature</h3>
             <p>Upgrade to save reusable templates from any document you've prepared.</p>
             <button className="btn-primary" onClick={onUpgrade} disabled={upgrading}>
-              {upgrading ? "Redirecting…" : "Upgrade — $10/month"}
+              {upgrading ? t("common.redirecting") : t("pricing.paid.ctaUpgrade")}
             </button>
           </div>
         )}
@@ -1184,16 +1186,16 @@ export default function Dashboard() {
           <div className="card" style={{ marginTop: 24 }}>
             <h3 style={{ fontSize: 15 }}>
               {docsSubTab === "awaiting"
-                ? "Awaiting your signature"
+                ? t("dash.awaitingYou")
                 : docsSubTab === "waiting"
-                ? "Waiting on others"
+                ? t("dash.waitingOthers")
                 : docsSubTab === "completed"
-                ? "Completed"
-                : "All documents"}
+                ? t("dash.completed")
+                : t("dash.allDocs")}
             </h3>
             {docActionError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{docActionError}</p>}
             {visibleDocs.length === 0 ? (
-              <p style={{ marginBottom: 0 }}>Nothing here yet.</p>
+              <p style={{ marginBottom: 0 }}>{t("dash.nothingHere")}</p>
             ) : (
               visibleDocs.map((doc) => (
                 <div
@@ -1222,7 +1224,7 @@ export default function Dashboard() {
                               : "var(--body)",
                       }}
                     >
-                      {doc.status === "completed" ? "Signed" : doc.status === "voided" ? "Voided" : "Pending"}
+                      {doc.status === "completed" ? t("dash.statusSigned") : doc.status === "voided" ? t("dash.statusVoided") : t("dash.statusPending")}
                     </span>
                     {account.isPaid && doc.status !== "voided" && (
                       <button
@@ -1241,7 +1243,7 @@ export default function Dashboard() {
                           disabled={voidingDocId === doc.docId}
                           onClick={() => onVoidDocument(doc)}
                         >
-                          {voidingDocId === doc.docId ? "Voiding…" : "Void"}
+                          {voidingDocId === doc.docId ? t("dash.voiding") : t("dash.void")}
                         </button>
                         <button
                           className="btn-secondary"
@@ -1273,7 +1275,7 @@ export default function Dashboard() {
               Upgrade for the MCP connector &amp; API key, webhooks, white-label branding, and team accounts.
             </p>
             <button className="btn-primary" onClick={onUpgrade} disabled={upgrading}>
-              {upgrading ? "Redirecting…" : "Upgrade — $10/month"}
+              {upgrading ? t("common.redirecting") : t("pricing.paid.ctaUpgrade")}
             </button>
           </div>
         )}
@@ -1436,7 +1438,7 @@ export default function Dashboard() {
       {activeTab === "templates" && account.isPaid && (
         <div className="card" style={{ marginTop: 24 }}>
           <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: 8, marginBottom: 4 }}>
-            <h3 style={{ fontSize: 15, margin: 0 }}>Templates</h3>
+            <h3 style={{ fontSize: 15, margin: 0 }}>{t("dash.templates")}</h3>
             {templates.length > 0 && (
               <Link to="/bulk-send" className="btn-secondary" style={{ textDecoration: "none", padding: "4px 10px", fontSize: 13 }}>
                 Bulk send
@@ -1825,7 +1827,7 @@ export default function Dashboard() {
 
       {activeTab === "tools" && account.isPaid && toolsSubTab === "team" && (
         <div className="card" style={{ marginTop: 24 }}>
-          <h3 style={{ fontSize: 15 }}>Team</h3>
+          <h3 style={{ fontSize: 15 }}>{t("dash.team")}</h3>
           <p style={{ fontSize: 12, color: "var(--mute)" }}>
             Invite teammates to share this workspace — same documents, templates, and webhooks, one
             subscription.
@@ -2142,7 +2144,7 @@ export default function Dashboard() {
             <h3 style={{ fontSize: 15, marginTop: 0 }}>Signer uploads</h3>
             <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 0 }}>{attachmentsDoc.title}</p>
             {attachmentsLoading ? (
-              <p>Loading…</p>
+              <p>{t("common.loading")}</p>
             ) : attachmentGroups.length === 0 ? (
               <p style={{ marginBottom: 12 }}>No signer uploads yet.</p>
             ) : (
@@ -2161,7 +2163,7 @@ export default function Dashboard() {
 
       </div>
 
-      <nav className="dashboard-bottom-nav" aria-label="Dashboard">
+      <nav className="dashboard-bottom-nav" aria-label={t("dash.dashboard")}>
         <button
           type="button"
           className={`dashboard-bottom-nav-item${activeTab === "dashboard" ? " active" : ""}`}
@@ -2171,7 +2173,7 @@ export default function Dashboard() {
           }}
         >
           <BottomNavIcon name="dashboard" />
-          <span>Dashboard</span>
+          <span>{t("dash.dashboard")}</span>
         </button>
         <button
           type="button"
@@ -2191,9 +2193,9 @@ export default function Dashboard() {
           }}
         >
           <BottomNavIcon name="contacts" />
-          <span>{account.isPaid ? "Contacts" : "Templates"}</span>
+          <span>{account.isPaid ? t("dash.contacts") : t("dash.templates")}</span>
         </button>
-        <Link to="/prepare" className="dashboard-bottom-nav-fab" aria-label="New document">
+        <Link to="/prepare" className="dashboard-bottom-nav-fab" aria-label={t("dash.newDocument")}>
           <span aria-hidden="true">+</span>
         </Link>
         <button
@@ -2205,7 +2207,7 @@ export default function Dashboard() {
           }}
         >
           <BottomNavIcon name="documents" />
-          <span>Documents</span>
+          <span>{t("dash.documents")}</span>
         </button>
         <button
           type="button"
@@ -2213,13 +2215,13 @@ export default function Dashboard() {
           onClick={() => setMoreSheetOpen((o) => !o)}
         >
           <BottomNavIcon name="more" />
-          <span>More</span>
+          <span>{t("dash.more")}</span>
         </button>
       </nav>
 
       {moreSheetOpen && (
-        <div className="dashboard-more-sheet" role="dialog" aria-label="More">
-          <button type="button" className="dashboard-more-backdrop" aria-label="Close" onClick={() => setMoreSheetOpen(false)} />
+        <div className="dashboard-more-sheet" role="dialog" aria-label={t("dash.more")}>
+          <button type="button" className="dashboard-more-backdrop" aria-label={t("common.close")} onClick={() => setMoreSheetOpen(false)} />
           <div className="dashboard-more-panel">
             <div className="dashboard-more-handle" aria-hidden="true" />
             <p className="dashboard-more-email">{account.email}</p>

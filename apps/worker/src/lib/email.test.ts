@@ -76,7 +76,7 @@ describe("email HTML escaping", () => {
 
     await sendSigningInvite(env, makeDoc("Anna Müller"), 1, "tok");
 
-    expect(capture.logged()).toContain("Hi Anna Müller,");
+    expect(capture.logged()).toContain("Dear Anna Müller,");
   });
 });
 

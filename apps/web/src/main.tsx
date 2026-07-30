@@ -15,6 +15,8 @@ import BulkSend from "./pages/BulkSend";
 import Status from "./pages/Status";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
+import Trust from "./pages/Trust";
+import Dpa from "./pages/Dpa";
 import Login from "./pages/Login";
 import AuthVerify from "./pages/AuthVerify";
 import Dashboard from "./pages/Dashboard";
@@ -36,6 +38,7 @@ import ExplainerPage from "./pages/ExplainerPage";
 import NotFound from "./pages/NotFound";
 import { ShortGoRedirect, ShortNdaRedirect, ShortPriceRedirect, ShortTryRedirect } from "./pages/ShortLinkRedirect";
 import { captureAttribution } from "./lib/attribution";
+import { LocaleProvider } from "./lib/i18n";
 
 // Before first render so the first funnel event already carries the channel that brought them.
 captureAttribution();
@@ -54,6 +57,8 @@ function AppRoutes() {
       <Route path="/status/:token" element={<Status />} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />
+      <Route path="/trust" element={<Trust />} />
+      <Route path="/dpa" element={<Dpa />} />
       <Route path="/login" element={<Login />} />
       <Route path="/auth/verify" element={<AuthVerify />} />
       <Route path="/team/accept" element={<TeamAccept />} />
@@ -90,23 +95,25 @@ function AppRoutes() {
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <RootErrorBoundary>
-        <Routes>
-          <Route path="/embed/sign/:token" element={<EmbedSign />} />
-          <Route
-            path="*"
-            element={
-              <>
-                <Header />
-                <AppRoutes />
-                <Footer />
-                <ChatWidget />
-              </>
-            }
-          />
-        </Routes>
-      </RootErrorBoundary>
-    </BrowserRouter>
+    <LocaleProvider>
+      <BrowserRouter>
+        <RootErrorBoundary>
+          <Routes>
+            <Route path="/embed/sign/:token" element={<EmbedSign />} />
+            <Route
+              path="*"
+              element={
+                <>
+                  <Header />
+                  <AppRoutes />
+                  <Footer />
+                  <ChatWidget />
+                </>
+              }
+            />
+          </Routes>
+        </RootErrorBoundary>
+      </BrowserRouter>
+    </LocaleProvider>
   </React.StrictMode>
 );

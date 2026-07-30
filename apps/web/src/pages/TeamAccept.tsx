@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useT } from "../lib/i18n";
 import { acceptTeamInvite } from "../lib/api";
 
 export default function TeamAccept() {
+  const t = useT();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
@@ -10,7 +12,7 @@ export default function TeamAccept() {
   useEffect(() => {
     const token = searchParams.get("token");
     if (!token) {
-      setError("Missing invite token.");
+      setError(t("team.missingToken"));
       return;
     }
     // Scrub the token out of the URL bar/history immediately — it's a bearer credential and
@@ -24,7 +26,7 @@ export default function TeamAccept() {
   if (error) {
     return (
       <div className="container">
-        <h1>Couldn't accept invite</h1>
+        <h1>{t("team.failed")}</h1>
         <p>{error}</p>
       </div>
     );
@@ -32,7 +34,7 @@ export default function TeamAccept() {
 
   return (
     <div className="container">
-      <p>Joining the workspace…</p>
+      <p>{t("team.joining")}</p>
     </div>
   );
 }

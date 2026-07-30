@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useT } from "../lib/i18n";
 import { track } from "../lib/track";
 
 const MAX_PDF_BYTES = 15 * 1024 * 1024;
@@ -11,6 +12,7 @@ const MAX_PDF_BYTES = 15 * 1024 * 1024;
  *  `source` distinguishes the 3 placements in the resulting landingpage_cta_clicked events, since
  *  they'd otherwise all look identical in the data. */
 export default function FirstDocumentPrompt({ mobileOnly = false, source = "hero" }: { mobileOnly?: boolean; source?: string }) {
+  const t = useT();
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -31,7 +33,7 @@ export default function FirstDocumentPrompt({ mobileOnly = false, source = "hero
 
   return (
     <div className={`first-document-prompt${mobileOnly ? " first-document-prompt-mobile" : ""}`}>
-      <p>Send your first document — it takes 30 seconds.</p>
+      <p>{t("firstDoc.prompt")} — it takes 30 seconds.</p>
       <button
         type="button"
         className="btn-primary btn-lg"
@@ -40,19 +42,19 @@ export default function FirstDocumentPrompt({ mobileOnly = false, source = "hero
           track("landingpage_cta_clicked", { source });
         }}
       >
-        Upload document
+        {t("firstDoc.upload")}
       </button>
 
       {modalOpen && (
         <div className="upload-modal-backdrop" onClick={() => setModalOpen(false)}>
           <div className="upload-modal-card" onClick={(e) => e.stopPropagation()}>
-            <button type="button" className="upload-modal-close" aria-label="Close" onClick={() => setModalOpen(false)}>
+            <button type="button" className="upload-modal-close" aria-label={t("common.close")} onClick={() => setModalOpen(false)}>
               ×
             </button>
-            <h3 style={{ marginTop: 0 }}>Upload your PDF</h3>
-            <p style={{ fontSize: 13, color: "var(--mute)" }}>No account needed to send or sign.</p>
-            <input type="file" accept="application/pdf" aria-label="Upload PDF" onChange={onFileChange} />
-            <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 6, marginBottom: 0 }}>Max file size: 15MB.</p>
+            <h3 style={{ marginTop: 0 }}>{t("firstDoc.modalTitle")}</h3>
+            <p style={{ fontSize: 13, color: "var(--mute)" }}>{t("firstDoc.modalSub")}</p>
+            <input type="file" accept="application/pdf" aria-label={t("firstDoc.uploadPdf")} onChange={onFileChange} />
+            <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 6, marginBottom: 0 }}>{t("prepare.maxSize")}</p>
             {error && <p style={{ color: "var(--danger)", marginTop: 8 }}>{error}</p>}
           </div>
         </div>

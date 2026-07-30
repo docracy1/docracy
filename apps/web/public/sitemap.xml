@@ -126,6 +126,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://docracy.io/blog/how-to-sign-a-w-9-form-online</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://docracy.io/blog/best-tools-for-quick-signatures</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -339,6 +344,16 @@
     <loc>https://docracy.io/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/trust</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/dpa</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
   </url>
   <url>
     <loc>https://docracy.io/terms</loc>

@@ -16,6 +16,8 @@ const TRACKED_ROUTES = new Set([
   "/about",
   "/pricing",
   "/docs",
+  "/trust",
+  "/dpa",
   "/simple-agreements",
   "/nda-signing",
   "/client-contracts",

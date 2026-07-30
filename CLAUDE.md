@@ -34,6 +34,34 @@ npm test
 
 Without `RESEND_API_KEY`, emails (incl. signer links) log to the worker console.
 
+## Trust / compliance (Phase 0)
+
+Public pages: `/trust` (security posture, subprocessors, questionnaire answers) and `/dpa` (Art. 28 draft). Honest SES disclaimer — no identity verification, no SOC 2 yet; Cloudflare infra certifications noted as shared responsibility. Countersigned DPA via `sales@docracy.io`.
+
+## i18n (EN + ES)
+
+Lightweight catalogs — no i18next. Locales: `en` | `es` (US Spanish, tú-form). Stored in `localStorage` (`docracy_locale` / `chasa_locale`), browser `navigator.language` as fallback.
+
+| Product | Catalogs | Switcher |
+|---------|----------|----------|
+| Docracy | `apps/web/src/lib/i18n/` | Header |
+| Chasa | `apps/web/app/src/lib/i18n/` | AppShell sidebar / More / Login |
+
+**Phased:** P1 landing/pricing/login/sign (Docracy) + login/shell/welcome (Chasa) → P2 rest of app → P3 emails → P4 docs/blog. Add keys to both `en.ts` and `es.ts`, then `t("key")` in components.
+
+## Weekly SEO blog (Monday cron)
+
+Daily Worker cron `0 8 * * *` (UTC) calls `runWeeklyBlogPublish` on Mondays (`apps/worker/src/lib/blogWeekly.ts`):
+
+1. Publish oldest **draft** in `blog_posts` if any (admin-prepared).
+2. Else take next `queued` row from `blog_topic_queue` (migration `0018`), draft with Workers AI, publish to `blog_posts`.
+
+Local test: `curl "http://127.0.0.1:8787/__scheduled?cron=0+8+*+*+*"` on a Monday, or temporarily force the Monday branch.
+
+Dynamic posts appear on `/blog` via API. Sitemap: `https://api.docracy.io/api/blog-posts/sitemap.xml` (also in `robots.txt`). Static `ARTICLES` / prerender remain for handcrafted posts (e.g. W-9 with screenshots).
+
+Add topics: insert into `blog_topic_queue` (`status='queued'`) or create admin drafts with `publish:false`.
+
 ## Git workflow (Cursor + Claude Code)
 
 Both tools work on this folder. Before starting: `git pull --rebase`. After finishing: commit + push.

@@ -1,12 +1,14 @@
 import { useState } from "react";
+import { useT } from "../lib/i18n";
 import { COMPETITORS, DOCRACY_PRICE, formatUsd } from "../lib/competitors";
 
 export default function PricingCalculator() {
+  const t = useT();
   const [teamSize, setTeamSize] = useState(5);
 
   return (
     <div>
-      <h2 style={{ fontSize: 20, marginBottom: 4 }}>How Docracy compares on price</h2>
+      <h2 style={{ fontSize: 20, marginBottom: 4 }}>{t("calc.title")}</h2>
       <p style={{ marginTop: 0, marginBottom: 24, maxWidth: 640 }}>
         Docracy's paid plan is one flat fee per workspace, not a per-seat license — add as many
         teammates as you want at no extra cost. Here's what the same team size costs on the
@@ -15,11 +17,11 @@ export default function PricingCalculator() {
 
       <div className="card" style={{ marginBottom: 20 }}>
         <label htmlFor="team-size-slider" style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--mute)" }}>
-          Team size
+          {t("calc.teamSize")}
         </label>
         <div style={{ display: "flex", alignItems: "baseline", gap: 8, margin: "4px 0 12px" }}>
           <span style={{ fontSize: 32, fontWeight: 800, color: "var(--ink)" }}>{teamSize}</span>
-          <span style={{ fontSize: 14, color: "var(--mute)" }}>{teamSize === 1 ? "person" : "people"}</span>
+          <span style={{ fontSize: 14, color: "var(--mute)" }}>{teamSize === 1 ? t("common.person") : t("common.people")}</span>
         </div>
         <input
           id="team-size-slider"
@@ -39,7 +41,7 @@ export default function PricingCalculator() {
       <div className="card" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12, marginBottom: 20, borderColor: "var(--primary)", borderWidth: 2 }}>
         <div>
           <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.04em", textTransform: "uppercase", color: "var(--primary)" }}>Docracy</div>
-          <div style={{ fontSize: 13, color: "var(--mute)" }}>Unlimited team members, one workspace</div>
+          <div style={{ fontSize: 13, color: "var(--mute)" }}>{t("calc.unlimitedMembers")}</div>
         </div>
         <div style={{ fontSize: 28, fontWeight: 800, color: "var(--ink)" }}>
           {formatUsd(DOCRACY_PRICE)}
@@ -58,7 +60,7 @@ export default function PricingCalculator() {
                 <div style={{ fontSize: 14, fontWeight: 700, color: "var(--ink)" }}>
                   {c.name}{" "}
                   <a href={c.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, fontWeight: 600 }}>
-                    pricing →
+                    {t("calc.pricingLink")}
                   </a>
                 </div>
                 <div style={{ textAlign: "right" }}>

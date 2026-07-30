@@ -29,6 +29,7 @@ import { runHealthCheckAndAlert } from "./lib/healthcheck";
 import { runPaymentFreezeSweep } from "./lib/paymentFreeze";
 import { runOnboardingEmailSweep } from "./lib/onboardingEmails";
 import { runCompletionEmailSweep } from "./lib/completionEmails";
+import { BLOG_WEEKLY_CRON, runWeeklyBlogPublish, isWeeklyBlogMondayUtc } from "./lib/blogWeekly";
 import type { Env } from "@docracy/shared";
 
 const app = new Hono<{ Bindings: Env }>();
@@ -77,11 +78,10 @@ app.route("/api/blog-posts", blogPostsPublic);
 app.route("/api/status", statusRoute);
 app.route("/api/webhooks/resend", resendWebhook);
 
-// The frequent cron (see wrangler.toml's second crons entry) exists to give the onboarding email
-// drip and the preparer completion-nudge sweep minute-scale granularity (both have hour-scale
-// thresholds) — everything else here is fine running once a day. Without branching on event.cron,
-// adding that entry would make the daily sweeps below fire every few minutes too.
-const FREQUENT_CRON = "*/5 * * * *";
+// Hourly cron runs onboarding drip + completion nudges. Daily cron runs reminders/cleanup/health,
+// and on Mondays (UTC) also publishes one queued SEO blog post. Branch on event.cron so the
+// hourly schedule does not re-fire daily sweeps. (No separate Monday cron — account trigger limit.)
+const HOURLY_CRON = "0 * * * *";
 
 export default {
   fetch: app.fetch,
@@ -91,10 +91,15 @@ export default {
       return;
     }
 
-    if (event.cron === FREQUENT_CRON) {
+    if (event.cron === HOURLY_CRON) {
       ctx.waitUntil(runOnboardingEmailSweep(env).catch((err) => console.error("Onboarding email sweep failed:", err)));
       ctx.waitUntil(runCompletionEmailSweep(env).catch((err) => console.error("Completion-email sweep failed:", err)));
       return;
+    }
+
+    // Daily path (and any unmatched cron string — keep previous behavior for safety).
+    if (isWeeklyBlogMondayUtc(new Date()) || event.cron === BLOG_WEEKLY_CRON) {
+      ctx.waitUntil(runWeeklyBlogPublish(env).catch((err) => console.error("Weekly blog publish failed:", err)));
     }
 
     ctx.waitUntil(runReminderSweep(env));

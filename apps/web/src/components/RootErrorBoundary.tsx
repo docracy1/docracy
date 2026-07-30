@@ -1,4 +1,5 @@
 import { Component, type ReactNode } from "react";
+import { translate } from "../lib/i18n";
 
 interface State {
   error: Error | null;
@@ -24,13 +25,13 @@ export default class RootErrorBoundary extends Component<{ children: ReactNode }
     if (this.state.error) {
       return (
         <div className="container">
-          <h1>Something went wrong</h1>
-          <p>This page hit an unexpected error. Reloading usually fixes it.</p>
+          <h1>{translate("error.title")}</h1>
+          <p>{translate("error.body")}</p>
           <pre style={{ whiteSpace: "pre-wrap", fontSize: 12, color: "var(--danger)", background: "var(--canvas-soft)", padding: 12, borderRadius: 8 }}>
             {this.state.error.message}
           </pre>
           <button className="btn-primary" onClick={() => window.location.reload()}>
-            Reload
+            {translate("common.reload")}
           </button>
         </div>
       );

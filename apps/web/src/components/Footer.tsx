@@ -1,63 +1,63 @@
 import { Link, useLocation } from "react-router-dom";
-
-const COLUMNS: Array<{ heading: string; links: Array<{ label: string; to: string; external?: boolean }> }> = [
-  {
-    heading: "Product",
-    links: [
-      { label: "Start free", to: "/prepare" },
-      { label: "Pricing", to: "/pricing" },
-      { label: "Free templates", to: "/free-templates" },
-      { label: "AI & MCP", to: "/mcp" },
-      { label: "Docs", to: "/docs" },
-      { label: "FAQ", to: "/#faq" },
-    ],
-  },
-  {
-    heading: "Compare",
-    links: [
-      { label: "vs eversign", to: "/blog/docracy-vs-eversign" },
-      { label: "vs DocuSign", to: "/blog/docracy-vs-docusign" },
-      { label: "vs PandaDoc", to: "/blog/docracy-vs-pandadoc" },
-      { label: "vs Adobe Acrobat Sign", to: "/blog/docracy-vs-adobe-acrobat-sign" },
-      { label: "See all comparisons", to: "/blog" },
-    ],
-  },
-  {
-    heading: "Company",
-    links: [
-      { label: "About", to: "/about" },
-      { label: "Status", to: "/uptime" },
-      { label: "Imprint", to: "/imprint" },
-      { label: "Contact sales", to: "mailto:sales@docracy.io", external: true },
-      { label: "GitHub", to: "https://github.com/docracy1/docracy-templates", external: true },
-    ],
-  },
-  {
-    heading: "Legal",
-    links: [
-      { label: "Privacy", to: "/privacy" },
-      { label: "Terms", to: "/terms" },
-    ],
-  },
-];
+import { useT } from "../lib/i18n";
 
 export default function Footer() {
-  // A 4-column marketing footer is exactly the kind of distraction the signing page's "no
-  // distraction, whitespace around the logo" requirement rules out — the person here is signing
-  // a document, not browsing Docracy's site, and often has no account of their own to click into
-  // any of these links with.
+  const t = useT();
   const location = useLocation();
   if (location.pathname.startsWith("/sign/")) return null;
+
+  const columns: Array<{ heading: string; links: Array<{ label: string; to: string; external?: boolean }> }> = [
+    {
+      heading: t("footer.product"),
+      links: [
+        { label: t("footer.startFree"), to: "/prepare" },
+        { label: t("footer.pricing"), to: "/pricing" },
+        { label: t("footer.templates"), to: "/free-templates" },
+        { label: t("footer.mcp"), to: "/mcp" },
+        { label: t("footer.docs"), to: "/docs" },
+        { label: t("footer.faq"), to: "/#faq" },
+      ],
+    },
+    {
+      heading: t("footer.compare"),
+      links: [
+        { label: t("footer.vsEversign"), to: "/blog/docracy-vs-eversign" },
+        { label: t("footer.vsDocusign"), to: "/blog/docracy-vs-docusign" },
+        { label: t("footer.vsPandadoc"), to: "/blog/docracy-vs-pandadoc" },
+        { label: t("footer.vsAdobe"), to: "/blog/docracy-vs-adobe-acrobat-sign" },
+        { label: t("footer.allComparisons"), to: "/blog" },
+      ],
+    },
+    {
+      heading: t("footer.company"),
+      links: [
+        { label: t("footer.about"), to: "/about" },
+        { label: t("footer.status"), to: "/uptime" },
+        { label: t("footer.imprint"), to: "/imprint" },
+        { label: t("footer.contactSales"), to: "mailto:sales@docracy.io", external: true },
+        { label: t("footer.github"), to: "https://github.com/docracy1/docracy-templates", external: true },
+      ],
+    },
+    {
+      heading: t("footer.legal"),
+      links: [
+        { label: t("footer.privacy"), to: "/privacy" },
+        { label: t("footer.trust"), to: "/trust" },
+        { label: t("footer.dpa"), to: "/dpa" },
+        { label: t("footer.terms"), to: "/terms" },
+      ],
+    },
+  ];
 
   return (
     <footer className="site-footer">
       <div className="container site-footer-inner">
         <div className="site-footer-brand">
           <img src="/docracy-wordmark.png" alt="Docracy" loading="lazy" style={{ height: 32, width: "auto" }} />
-          <p>Free, no-signup e-signatures that disappear once the chain is done.</p>
+          <p>{t("footer.tagline")}</p>
         </div>
 
-        {COLUMNS.map((col) => (
+        {columns.map((col) => (
           <div key={col.heading} className="site-footer-col">
             <h4>{col.heading}</h4>
             {col.links.map((link) =>
@@ -74,7 +74,7 @@ export default function Footer() {
           </div>
         ))}
       </div>
-      <div className="site-footer-bottom">© {new Date().getFullYear()} Docracy — a product of RELACON GmbH</div>
+      <div className="site-footer-bottom">{t("footer.copyright", { year: new Date().getFullYear() })}</div>
     </footer>
   );
 }

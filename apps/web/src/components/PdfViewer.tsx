@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useT } from "../lib/i18n";
 import { loadPdf } from "../lib/pdfjs";
 
 export interface PageInfo {
@@ -21,6 +22,7 @@ const MIN_ZOOM = 0.5;
 const MAX_ZOOM = 2.5;
 
 export default function PdfViewer({ pdfBytes, maxScale = 1.8, renderPageOverlay, onPageClick }: PdfViewerProps) {
+  const t = useT();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [pages, setPages] = useState<PageInfo[]>([]);
@@ -166,7 +168,7 @@ export default function PdfViewer({ pdfBytes, maxScale = 1.8, renderPageOverlay,
             className="btn-secondary"
             style={{ padding: "4px 10px", borderRadius: 999 }}
             onClick={() => setZoom((z) => Math.max(MIN_ZOOM, Math.round((z - ZOOM_STEP) * 100) / 100))}
-            aria-label="Zoom out"
+            aria-label={t("pdf.zoomOut")}
           >
             −
           </button>
@@ -178,7 +180,7 @@ export default function PdfViewer({ pdfBytes, maxScale = 1.8, renderPageOverlay,
             className="btn-secondary"
             style={{ padding: "4px 10px", borderRadius: 999 }}
             onClick={() => setZoom((z) => Math.min(MAX_ZOOM, Math.round((z + ZOOM_STEP) * 100) / 100))}
-            aria-label="Zoom in"
+            aria-label={t("pdf.zoomIn")}
           >
             +
           </button>

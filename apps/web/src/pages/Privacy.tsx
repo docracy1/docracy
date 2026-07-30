@@ -1,21 +1,29 @@
+import { Link } from "react-router-dom";
+
+import { useT } from "../lib/i18n";
+
 export default function Privacy() {
+  const t = useT();
   return (
-    <div className="container">
-      <h1>Privacy</h1>
+    <div className="container" style={{ maxWidth: 720 }}>
+      <h1>{t("privacy.title")}</h1>
       <p style={{ fontSize: 13, color: "var(--mute)" }}>
         This describes what Docracy's software actually does with your data today. It hasn't been reviewed
-        by a lawyer — treat it as an accurate technical description, not a legal guarantee.
+        by a lawyer — treat it as an accurate technical description, not a legal guarantee. Security and
+        subprocessors: <Link to="/trust">Trust &amp; security</Link>. Account processing terms:{" "}
+        <Link to="/dpa">DPA</Link>.
       </p>
 
-      <h3>What we collect</h3>
+      <h3>{t("privacy.collect")}</h3>
       <p>
-        No accounts, no passwords. When you prepare a document, we collect the name and email address of
-        each signer (and, optionally, the preparer's email so they can bookmark a status link) — that's
-        what's needed to send signing invitations and reminders. The PDF you upload is stored so signers can
-        view and sign it.
+        No accounts, no passwords for the free signing flow. When you prepare a document, we collect the name
+        and email address of each signer (and, optionally, the preparer's email so they can bookmark a status
+        link) — that's what's needed to send signing invitations and reminders. The PDF you upload is stored so
+        signers can view and sign it. Paid workspaces also store account email, workspace settings, templates,
+        contacts, and team membership.
       </p>
 
-      <h3>Audit trail</h3>
+      <h3>{t("privacy.audit")}</h3>
       <p>
         When someone views, consents to, or signs a document, we record the IP address, browser user-agent,
         timestamp, and a cryptographic hash of the document at that point. This exists to give the signed
@@ -23,14 +31,14 @@ export default function Privacy() {
         document's signing chain.
       </p>
 
-      <h3>Retention</h3>
+      <h3>{t("privacy.retention")}</h3>
       <p>
-        Documents and their associated data are automatically deleted 9 days after creation (or sooner,
-        once everyone has signed and the final copy has been emailed out). We don't keep a copy after that
-        window closes.
+        Anonymous documents and their associated data are automatically deleted 9 days after creation by default
+        (or sooner, once everyone has signed and the final copy has been emailed out). Paid workspace history and
+        templates remain until you delete them or close the account.
       </p>
 
-      <h3>Traffic analytics</h3>
+      <h3>{t("privacy.analytics")}</h3>
       <p>
         We log anonymous, aggregate counts of page views and key actions (e.g. a document being created or
         completed) on our public pages — which page, and whether the visitor's browser/crawler user-agent
@@ -39,14 +47,15 @@ export default function Privacy() {
         used for advertising or shared with any ad network.
       </p>
 
-      <h3>Third parties</h3>
+      <h3>{t("privacy.thirdParties")}</h3>
       <p>
-        Signing invitations, reminders, and the final signed document are sent via Resend, our email
-        delivery provider. Traffic analytics (above) are processed by Cloudflare, our hosting provider. We
-        don't use advertising trackers, and we don't sell or share your data with anyone else.
+        We use Cloudflare (hosting and related services), Resend (email), Stripe (paid billing), and optionally
+        Google (sign-in / Drive), Dropbox, Microsoft, or Box when you connect them. The full subprocessor list
+        is on <Link to="/trust">Trust &amp; security</Link>. We don't use advertising trackers, and we don't sell
+        your data.
       </p>
 
-      <h3>Contact</h3>
+      <h3>{t("privacy.contact")}</h3>
       <p>
         Questions about your data? Reach out at <a href="mailto:founder@docracy.io">founder@docracy.io</a>, or use
         the feedback form on the homepage.

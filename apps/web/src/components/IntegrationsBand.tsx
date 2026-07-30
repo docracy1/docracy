@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useT } from "../lib/i18n";
 
 /** Real integrations only — logos from Simple Icons (CC0) in /public/integrations/, plus
  *  OneDrive/OpenAI/Grok SVGs aligned with each vendor's brand colors. */
@@ -22,11 +23,12 @@ type IntegrationsBandProps = {
 };
 
 export default function IntegrationsBand({ learnMoreTo = "/docs", compact = false }: IntegrationsBandProps) {
+  const t = useT();
   return (
     <section className={`integrations-band${compact ? " integrations-band-compact" : ""}`} aria-labelledby="integrations-heading">
       <div className="integrations-inner">
         <h2 id="integrations-heading" style={{ fontSize: compact ? 22 : 26, marginBottom: 8, textAlign: "center" }}>
-          Connect Docracy with the tools you already use
+          {t("integrations.title")}
         </h2>
         <p style={{ textAlign: "center", maxWidth: 560, margin: "0 auto 28px", color: "var(--mute)", fontSize: compact ? 14 : 15.5 }}>
           Plug into the platforms you already use — cloud storage, automation, and AI assistants. Paid accounts unlock
@@ -49,7 +51,7 @@ export default function IntegrationsBand({ learnMoreTo = "/docs", compact = fals
 
         <div style={{ textAlign: "center", marginTop: 24 }}>
           <Link to={learnMoreTo} className="btn-primary btn-lg" style={{ textDecoration: "none", display: "inline-block" }}>
-            Learn more →
+            {t("integrations.learnMore")}
           </Link>
         </div>
       </div>

@@ -9,6 +9,8 @@ Allow: /about$
 Allow: /pricing$
 Allow: /docs$
 Allow: /imprint$
+Allow: /trust$
+Allow: /dpa$
 Allow: /uptime$
 Allow: /blog
 Allow: /llms.txt$
@@ -32,3 +34,4 @@ Disallow: /status/
 Disallow: /prepare/sent
 
 Sitemap: https://docracy.io/sitemap.xml
+Sitemap: https://api.docracy.io/api/blog-posts/sitemap.xml

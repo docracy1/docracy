@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { PLAN_ROWS, PlanCell } from "../lib/planRows";
 import { usePageMeta } from "../lib/usePageMeta";
 import { FREE_TEMPLATES } from "../lib/freeTemplates";
+import { useT } from "../lib/i18n";
 
 function Section({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
   return (
@@ -13,6 +14,7 @@ function Section({ id, title, children }: { id: string; title: string; children:
 }
 
 export default function Docs() {
+  const t = useT();
   usePageMeta(
     "Documentation — Docracy",
     "How Docracy's free signing flow, paid features (bulk send, embed, contacts, attachments, SMS gateways, Dropbox/OneDrive/Box/Google Drive, AI), Enterprise options, templates, webhooks, and MCP/Zapier automation work."
@@ -20,10 +22,10 @@ export default function Docs() {
 
   return (
     <div className="container" style={{ maxWidth: 760 }}>
-      <h1 style={{ fontSize: 30 }}>Documentation</h1>
-      <p style={{ color: "var(--mute)" }}>How everything in Docracy actually works, in one place.</p>
+      <h1 style={{ fontSize: 30 }}>{t("docs.title")}</h1>
+      <p style={{ color: "var(--mute)" }}>{t("docs.sub")}</p>
 
-      <Section id="plans" title="Plans at a glance (Free / Paid / Enterprise)">
+      <Section id="plans" title={t("docs.plansTitle")}>
         <p style={{ marginBottom: 12 }}>
           Same feature matrix as <Link to="/pricing">Pricing</Link> — Free vs Paid ($10/mo) vs Enterprise.
           Dropbox, OneDrive, Box, and Google Drive auto-upload are included on <strong>Paid</strong>.
@@ -34,9 +36,9 @@ export default function Docs() {
               <thead>
                 <tr>
                   <th></th>
-                  <th>Free</th>
-                  <th className="plan-col-paid">Paid</th>
-                  <th>Enterprise</th>
+                  <th>{t("pricing.colFree")}</th>
+                  <th className="plan-col-paid">{t("pricing.colPaid")}</th>
+                  <th>{t("pricing.colEnt")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -356,7 +358,8 @@ export default function Docs() {
         <p style={{ marginBottom: 0 }}>
           Docracy doesn't verify who's actually signing — anyone holding a document's link can sign as the
           name on it. The audit trail proves what was signed and when, not who a signer really is. See{" "}
-          <Link to="/privacy">Privacy</Link> and <Link to="/terms">Terms</Link> for the full picture.
+          <Link to="/trust">Trust &amp; security</Link>, <Link to="/privacy">Privacy</Link>, and{" "}
+          <Link to="/terms">Terms</Link> for the full picture.
         </p>
       </Section>
     </div>

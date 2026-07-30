@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useT } from "../lib/i18n";
 import { consumeMagicLinkToken } from "../lib/api";
 
 export default function AuthVerify() {
+  const t = useT();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
@@ -10,7 +12,7 @@ export default function AuthVerify() {
   useEffect(() => {
     const token = searchParams.get("token");
     if (!token) {
-      setError("Missing sign-in token.");
+      setError(t("auth.missingToken"));
       return;
     }
     // Scrub the token out of the URL bar/history immediately — it's a bearer credential and
@@ -24,7 +26,7 @@ export default function AuthVerify() {
   if (error) {
     return (
       <div className="container">
-        <h1>Sign-in failed</h1>
+        <h1>{t("auth.failed")}</h1>
         <p>{error}</p>
       </div>
     );
@@ -32,7 +34,7 @@ export default function AuthVerify() {
 
   return (
     <div className="container">
-      <p>Signing you in…</p>
+      <p>{t("auth.signingIn")}</p>
     </div>
   );
 }

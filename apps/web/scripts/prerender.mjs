@@ -154,6 +154,20 @@ const routes = [
     description: "Legal entity behind Docracy.",
   },
   {
+    urlPath: "/trust",
+    outFile: "trust.html",
+    title: "Trust & security — Docracy",
+    description:
+      "How Docracy protects documents: encryption, retention, audit trails, ESIGN/eIDAS SES alignment, subprocessors, and Cloudflare infrastructure certifications.",
+  },
+  {
+    urlPath: "/dpa",
+    outFile: "dpa.html",
+    title: "Data Processing Agreement — Docracy",
+    description:
+      "GDPR Art. 28 data processing terms between RELACON GmbH (Docracy) and customers who use paid or account features.",
+  },
+  {
     urlPath: "/blog",
     outFile: "blog.html",
     title: "Blog — Docracy",

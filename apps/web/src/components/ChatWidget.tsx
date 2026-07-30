@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { submitFeedback } from "../lib/api";
+import { useT } from "../lib/i18n";
 
 type Message = { from: "bot" | "user"; text: string; href?: string; hrefLabel?: string };
 
@@ -11,43 +12,48 @@ const JOKES = [
 ];
 
 export default function ChatWidget() {
+  const t = useT();
   const location = useLocation();
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    { from: "bot", text: "Hey there \u{1F44B} I can help you find the right thing:" },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [email, setEmail] = useState("");
   const [formMessage, setFormMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Lets other parts of the app (e.g. the Dashboard's profile-menu "Support" item) open this
-  // widget without needing shared state — simpler than lifting `open` into a context for one caller.
+  useEffect(() => {
+    setMessages([{ from: "bot", text: t("chat.greeting") }]);
+  }, [t]);
+
   useEffect(() => {
     const onOpenRequest = () => setOpen(true);
     window.addEventListener("docracy:open-chat", onOpenRequest);
     return () => window.removeEventListener("docracy:open-chat", onOpenRequest);
   }, []);
 
-  // Sign/status pages are deep links a document's actual signer follows from an email — floating
-  // marketing chrome has no place interrupting that task, same reasoning as their noindex tag.
   if (location.pathname.startsWith("/sign/") || location.pathname.startsWith("/status/")) return null;
 
   const say = (from: Message["from"], text: string, extra?: Partial<Message>) =>
     setMessages((m) => [...m, { from, text, ...extra }]);
 
-  const onQuickReply = (label: string) => {
-    say("user", label);
-    if (label === "I want to talk to sales") {
-      say("bot", "Reach the team directly and we'll get back to you fast:", {
+  const onQuickReply = (kind: "sales" | "support" | "joke" | "other") => {
+    const labels = {
+      sales: t("chat.sales"),
+      support: t("chat.support"),
+      joke: t("chat.joke"),
+      other: t("chat.other"),
+    };
+    say("user", labels[kind]);
+    if (kind === "sales") {
+      say("bot", t("chat.salesReply"), {
         href: "mailto:sales@docracy.io",
         hrefLabel: "sales@docracy.io",
       });
-    } else if (label === "Tell me a joke") {
+    } else if (kind === "joke") {
       say("bot", JOKES[Math.floor(Math.random() * JOKES.length)]);
     } else {
-      say("bot", "Sure — leave your email and what's up, and we'll get back to you.");
+      say("bot", t("chat.formReply"));
       setShowForm(true);
     }
   };
@@ -59,12 +65,12 @@ export default function ChatWidget() {
     try {
       const res = await submitFeedback(email, formMessage);
       say("user", formMessage);
-      say("bot", res.aiAnswer ?? "Thanks — got it. We'll reply by email.");
+      say("bot", res.aiAnswer ?? t("chat.thanks"));
       setShowForm(false);
       setEmail("");
       setFormMessage("");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
+      setError(err instanceof Error ? err.message : t("common.error"));
     } finally {
       setSubmitting(false);
     }
@@ -77,9 +83,9 @@ export default function ChatWidget() {
           <div className="chat-widget-header">
             <div className="chat-widget-header-title">
               <img src="/docracy-seal-icon.png" alt="" className="chat-widget-avatar" />
-              <span>Docracy Assistant</span>
+              <span>{t("chat.title")}</span>
             </div>
-            <button aria-label="Close" onClick={() => setOpen(false)}>
+            <button aria-label={t("common.close")} onClick={() => setOpen(false)}>
               ×
             </button>
           </div>
@@ -100,8 +106,8 @@ export default function ChatWidget() {
                 <input
                   className="form-input"
                   type="email"
-                  placeholder="you@email.com"
-                  aria-label="Your email"
+                  placeholder={t("chat.emailPlaceholder")}
+                  aria-label={t("chat.yourEmail")}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -109,8 +115,8 @@ export default function ChatWidget() {
                 />
                 <textarea
                   className="form-textarea"
-                  placeholder="What's on your mind"
-                  aria-label="Your message"
+                  placeholder={t("chat.messagePlaceholder")}
+                  aria-label={t("chat.yourMessage")}
                   value={formMessage}
                   onChange={(e) => setFormMessage(e.target.value)}
                   required
@@ -119,21 +125,21 @@ export default function ChatWidget() {
                 />
                 {error && <p style={{ color: "var(--danger)", fontSize: 12, marginBottom: 8 }}>{error}</p>}
                 <button className="btn-primary" type="submit" disabled={submitting} style={{ width: "100%" }}>
-                  {submitting ? "Sending…" : "Send"}
+                  {submitting ? t("common.sending") : t("prepare.send")}
                 </button>
               </form>
             ) : (
               <div className="chat-widget-replies">
-                <button onClick={() => onQuickReply("I want to talk to sales")}>I want to talk to sales</button>
-                <button onClick={() => onQuickReply("I need customer support")}>I need customer support</button>
-                <button onClick={() => onQuickReply("Tell me a joke")}>Tell me a joke</button>
-                <button onClick={() => onQuickReply("I need something else")}>I need something else</button>
+                <button onClick={() => onQuickReply("sales")}>{t("chat.sales")}</button>
+                <button onClick={() => onQuickReply("support")}>{t("chat.support")}</button>
+                <button onClick={() => onQuickReply("joke")}>{t("chat.joke")}</button>
+                <button onClick={() => onQuickReply("other")}>{t("chat.other")}</button>
               </div>
             )}
           </div>
         </div>
       )}
-      <button className="chat-widget-launcher" onClick={() => setOpen((o) => !o)} aria-label={open ? "Close chat" : "Open chat"}>
+      <button className="chat-widget-launcher" onClick={() => setOpen((o) => !o)} aria-label={open ? t("chat.close") : t("chat.open")}>
         {open ? "×" : "\u{1F4AC}"}
       </button>
     </div>

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { BLOG_POSTS } from "../lib/blog";
 import { ARTICLES, CLUSTER_ORDER } from "../lib/articles";
 import { fetchBlogPosts, type DynamicBlogPostSummary } from "../lib/api";
+import { useT } from "../lib/i18n";
 import { usePageMeta } from "../lib/usePageMeta";
 
 interface MergedPost {
@@ -23,6 +24,7 @@ function PostCard({ post }: { post: MergedPost }) {
 }
 
 export default function Blog() {
+  const t = useT();
   usePageMeta(
     "Blog — Docracy",
     "Guides on NDAs, contracts, and online signatures, plus honest comparisons between Docracy and the other e-signature tools people ask us about."

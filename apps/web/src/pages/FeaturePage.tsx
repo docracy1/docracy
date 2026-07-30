@@ -1,12 +1,14 @@
 import { Link } from "react-router-dom";
 import { usePageMeta } from "../lib/usePageMeta";
 import { FEATURE_PAGES } from "../lib/marketingPages";
+import { useT } from "../lib/i18n";
 import { track } from "../lib/track";
 
 /** Renders one of the FEATURE_PAGES entries — mounted at a distinct literal route per slug (see
  *  main.tsx), not a `:slug` param, so each gets its own static path for SEO/backlinks. */
 export default function FeaturePage({ slug }: { slug: string }) {
   const page = FEATURE_PAGES.find((p) => p.slug === slug);
+  const t = useT();
   if (!page) return null;
 
   usePageMeta(page.seoTitle, page.seoDescription);
@@ -39,13 +41,13 @@ export default function FeaturePage({ slug }: { slug: string }) {
       </div>
 
       <div className="container" style={{ maxWidth: 720 }}>
-        <h2 style={{ fontSize: 22, marginTop: 40 }}>The problem</h2>
+        <h2 style={{ fontSize: 22, marginTop: 40 }}>{t("feature.problem")}</h2>
         <p>{page.problem}</p>
 
-        <h2 style={{ fontSize: 22, marginTop: 32 }}>The Docracy way</h2>
+        <h2 style={{ fontSize: 22, marginTop: 32 }}>{t("feature.solution")}</h2>
         <p>{page.solution}</p>
 
-        <h2 style={{ fontSize: 22, marginTop: 40, marginBottom: 8 }}>Features</h2>
+        <h2 style={{ fontSize: 22, marginTop: 40, marginBottom: 8 }}>{t("feature.features")}</h2>
         <div className="core-features-grid">
           {page.features.map((f) => (
             <div key={f.title} className="core-feature-card">

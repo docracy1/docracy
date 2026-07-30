@@ -7,6 +7,7 @@ import { track } from "../lib/track";
 import { useNoIndex } from "../lib/useNoIndex";
 import type { SignPayload } from "../lib/api";
 import type { StatusPayload } from "../lib/types";
+import { useT } from "../lib/i18n";
 
 function base64ToBytes(base64: string): Uint8Array {
   const binary = atob(base64);
@@ -17,16 +18,18 @@ function base64ToBytes(base64: string): Uint8Array {
  *  name label, when they've set either — this is the one surface a signer who's never heard of
  *  Docracy actually looks at. */
 function BrandLogo({ path, slug }: { path?: string | null; slug?: string | null }) {
+  const t = useT();
   if (!path && !slug) return null;
   return (
     <div style={{ marginBottom: 16 }}>
-      {path && <img src={apiUrl(path)} alt="Sender's logo" style={{ maxHeight: 48, maxWidth: 220, display: "block" }} />}
+      {path && <img src={apiUrl(path)} alt={t("sign.senderLogo")} style={{ maxHeight: 48, maxWidth: 220, display: "block" }} />}
       {slug && <div style={{ fontSize: 13, color: "var(--mute)", marginTop: path ? 4 : 0 }}>{slug}</div>}
     </div>
   );
 }
 
 function SignerStatusList({ status }: { status: StatusPayload }) {
+  const t = useT();
   return (
     <div className="card">
       {status.signers
@@ -35,11 +38,11 @@ function SignerStatusList({ status }: { status: StatusPayload }) {
         .map((s) => (
           <div key={s.order} style={{ padding: "8px 0", borderBottom: "1px solid var(--hairline)" }}>
             {s.status === "signed" ? (
-              <span style={{ color: "var(--success)" }}>Signed by: {s.name} ✓</span>
+              <span style={{ color: "var(--success)" }}>{t("sign.signedBy", { name: s.name })}</span>
             ) : s.status === "declined" ? (
-              <span style={{ color: "var(--danger)" }}>Declined: {s.name}</span>
+              <span style={{ color: "var(--danger)" }}>{t("sign.declinedBy", { name: s.name })}</span>
             ) : (
-              <span style={{ color: "var(--body)" }}>Pending: {s.name}</span>
+              <span style={{ color: "var(--body)" }}>{t("sign.pending", { name: s.name })}</span>
             )}
           </div>
         ))}
@@ -62,6 +65,7 @@ export default function Sign({
   allowedOrigins,
   returnUrl,
 }: SignProps = {}) {
+  const t = useT();
   const { token: paramToken } = useParams<{ token: string }>();
   const token = overrideToken ?? paramToken;
   const [payload, setPayload] = useState<SignPayload | null>(null);
@@ -276,7 +280,7 @@ export default function Sign({
   if (error && !payload) {
     return (
       <div className="container">
-        <h1>Not available</h1>
+        <h1>{t("sign.notAvailable")}</h1>
         <p>{error}</p>
       </div>
     );
@@ -285,7 +289,7 @@ export default function Sign({
   if (!payload) {
     return (
       <div className="container">
-        <p>Loading…</p>
+        <p>{t("common.loading")}</p>
       </div>
     );
   }
@@ -295,14 +299,12 @@ export default function Sign({
     return (
       <div className="container">
         <BrandLogo path={payload.brandLogoPath} slug={payload.brandWorkspaceSlug} />
-        <h1>{wasDecline ? "Declined" : "Document cancelled"}</h1>
+        <h1>{wasDecline ? t("sign.declinedTitle") : t("sign.cancelled")}</h1>
         <p>
-          {wasDecline
-            ? "You've declined to sign. The sender and other parties have been notified."
-            : "This document has been cancelled and is no longer available for signing."}
+          {wasDecline ? t("sign.declinedBody") : t("sign.cancelledBody")}
         </p>
         {finalStatus?.voidReason && (
-          <p style={{ color: "var(--mute)", fontSize: 14 }}>Reason: {finalStatus.voidReason}</p>
+          <p style={{ color: "var(--mute)", fontSize: 14 }}>{t("sign.reason", { reason: finalStatus.voidReason })}</p>
         )}
         {finalStatus && <SignerStatusList status={finalStatus} />}
       </div>
@@ -313,8 +315,8 @@ export default function Sign({
     return (
       <div className="container">
         <BrandLogo path={payload.brandLogoPath} slug={payload.brandWorkspaceSlug} />
-        <h1>Signed</h1>
-        <p>Thanks — you're done. Everyone in the chain will be notified as the document moves forward.</p>
+        <h1>{t("sign.signed")}</h1>
+        <p>{t("sign.thanks")}</p>
         {finalStatus?.status === "completed" && token && (
           <a
             href={apiUrl(`/api/status/${token}/download`)}
@@ -322,7 +324,7 @@ export default function Sign({
             className="btn-primary"
             style={{ display: "inline-block", textDecoration: "none", marginTop: 4, marginBottom: 20 }}
           >
-            Download signed PDF
+            {t("sign.download")}
           </a>
         )}
         {/* The recipient never needed an account to get here — this is the moment they're most
@@ -331,14 +333,14 @@ export default function Sign({
          *  skipped in embedMode so the iframe stays chrome-less. */}
         {!embedMode && !payload.brandLogoPath && (
           <div className="card" style={{ marginTop: 24, maxWidth: 420 }}>
-            <p style={{ marginBottom: 12 }}>Created with Docracy — send your own documents for free.</p>
+            <p style={{ marginBottom: 12 }}>{t("sign.viral")}</p>
             <Link
               to="/prepare?ref=signer-completion"
               className="btn-primary"
               style={{ display: "inline-block", textDecoration: "none" }}
               onClick={() => track("viral_cta_clicked", { source: "signer_done" })}
             >
-              Send a document
+              {t("sign.sendDoc")}
             </Link>
           </div>
         )}
@@ -351,14 +353,14 @@ export default function Sign({
     return (
       <div className="container">
         <BrandLogo path={payload.brandLogoPath} slug={payload.brandWorkspaceSlug} />
-        <h1>{wasDecline ? "Document declined" : "Document cancelled"}</h1>
+        <h1>{wasDecline ? t("sign.declinedDoc") : t("sign.cancelled")}</h1>
         <p>
-          {wasDecline
-            ? "A signer declined this document, so it's no longer available for signing."
-            : "This document has been cancelled and is no longer available for signing."}
+          {wasDecline ? t("sign.declinedDocBody") : t("sign.cancelledBody")}
         </p>
         {payload.status.voidReason && (
-          <p style={{ color: "var(--mute)", fontSize: 14 }}>Reason: {payload.status.voidReason}</p>
+          <p style={{ color: "var(--mute)", fontSize: 14 }}>
+            {t("sign.reason", { reason: payload.status.voidReason })}
+          </p>
         )}
         <SignerStatusList status={payload.status} />
       </div>
@@ -369,8 +371,8 @@ export default function Sign({
     return (
       <div className="container">
         <BrandLogo path={payload.brandLogoPath} slug={payload.brandWorkspaceSlug} />
-        <h1>Not your turn yet</h1>
-        <p>Someone earlier in the signing order hasn't signed yet. Here's where things stand:</p>
+        <h1>{t("sign.notYourTurn")}</h1>
+        <p>{t("sign.notTurnBody")}</p>
         <SignerStatusList status={payload.status} />
       </div>
     );
@@ -380,14 +382,14 @@ export default function Sign({
     return (
       <div className="container">
         <BrandLogo path={payload.brandLogoPath} slug={payload.brandWorkspaceSlug} />
-        <h1>Enter your PIN</h1>
-        <p>This document has an extra PIN set on your signing link. Enter it to continue.</p>
+        <h1>{t("sign.enterPin")}</h1>
+        <p>{t("sign.pinBody")}</p>
         <div className="card" style={{ maxWidth: 320 }}>
           <input
             className="form-input"
             style={{ width: "100%", marginBottom: 8 }}
-            placeholder="PIN"
-            aria-label="PIN"
+            placeholder={t("sign.pinPlaceholder")}
+            aria-label={t("sign.pinPlaceholder")}
             inputMode="numeric"
             maxLength={8}
             value={pinInput}
@@ -396,7 +398,7 @@ export default function Sign({
           />
           {pinError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{pinError}</p>}
           <button className="btn-primary" style={{ width: "100%" }} disabled={!pinInput.trim() || unlocking} onClick={onUnlock}>
-            {unlocking ? "Checking…" : "Continue"}
+            {unlocking ? t("sign.checking") : t("sign.continue")}
           </button>
         </div>
       </div>
@@ -406,7 +408,7 @@ export default function Sign({
   return (
     <div className="container">
       <BrandLogo path={payload.brandLogoPath} slug={payload.brandWorkspaceSlug} />
-      <h1>Review &amp; sign</h1>
+      <h1>{t("sign.review")}</h1>
       {pdfBytes && (
         <PdfViewer
           pdfBytes={pdfBytes}
@@ -536,7 +538,7 @@ export default function Sign({
                           <img src={values[f.id]} alt="Your signature" style={{ maxWidth: "100%", maxHeight: "100%" }} />
                         ) : (
                           <span style={{ fontSize: 11, color: "var(--primary)", fontWeight: 600 }}>
-                            {type === "initials" ? "Click to initial" : "Click to sign"}
+                            {t("sign.clickToSign")}
                           </span>
                         )}
                       </button>
@@ -564,7 +566,7 @@ export default function Sign({
             className="card"
             style={{ background: "var(--canvas)", boxShadow: "var(--shadow-lg)", maxWidth: "92vw" }}
           >
-            <p>{payload.fields?.find((f) => f.id === signingFieldId)?.type === "initials" ? "Draw your initials" : "Draw your signature"}</p>
+            <p>{t("sign.draw")}</p>
             <div style={{ background: "var(--canvas)", borderRadius: "var(--r-sm)", width: 360, maxWidth: "100%" }}>
               <SignatureCanvas
                 ref={sigPadRef}
@@ -574,13 +576,13 @@ export default function Sign({
             </div>
             <div className="sign-modal-actions">
               <button className="btn-secondary" onClick={() => sigPadRef.current?.clear()}>
-                Clear
+                {t("sign.clear")}
               </button>
               <button className="btn-primary" onClick={onSaveSignature}>
-                Use this signature
+                {t("sign.saveSig")}
               </button>
               <button className="btn-secondary" onClick={() => setSigningFieldId(null)}>
-                Cancel
+                {t("common.cancel")}
               </button>
             </div>
           </div>
@@ -625,18 +627,15 @@ export default function Sign({
           onChange={(e) => setConsented(e.target.checked)}
           style={{ marginTop: 2 }}
         />
-        <span>
-          I confirm that I'm the person this link was sent to, and that clicking "Complete signing" is my
-          signature on this document.
-        </span>
+        <span>{t("sign.consent")}</span>
       </label>
 
       <div style={{ marginTop: 16, display: "flex", flexWrap: "wrap", gap: 8 }}>
         <button className="btn-primary" disabled={!canSubmit || submitting || declining} onClick={onSubmit}>
-          {submitting ? "Submitting…" : "Complete signing"}
+          {submitting ? t("sign.submitting") : t("sign.submit")}
         </button>
         <button className="btn-secondary" disabled={submitting || declining} onClick={onDecline}>
-          {declining ? "Declining…" : "Decline"}
+          {declining ? t("sign.declining") : t("sign.decline")}
         </button>
       </div>
     </div>

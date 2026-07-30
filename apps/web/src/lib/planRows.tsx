@@ -17,7 +17,8 @@ export const PLAN_ROWS: Array<{ label: string; free: boolean | string; paid: boo
   { label: "Dashboard with document history", free: false, paid: true },
   { label: "Reusable templates", free: false, paid: true },
   { label: "Bulk send", free: false, paid: true },
-  { label: "Custom document expiry", free: "9 days", paid: "Up to 90 days" },
+  // How long the PDF + signing links stay available before automatic deletion — not long-term storage.
+  { label: "Signing window (then auto-deleted)", free: "9 days", paid: "Up to 90 days" },
   { label: "Embedded signing", free: false, paid: true },
   { label: "Saved contacts + signer reassignment", free: false, paid: true },
   { label: "Webhooks for your own systems", free: false, paid: true },
@@ -38,10 +39,20 @@ export const PLAN_ROWS: Array<{ label: string; free: boolean | string; paid: boo
 ];
 
 export function PlanCell({ value }: { value: boolean | string }) {
-  if (typeof value === "string") return <>{value}</>;
+  if (typeof value === "string") return <span className="plan-cell-text">{value}</span>;
   return value ? (
     <span className="plan-check" aria-label="Included">
-      ✓
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+        <circle cx="9" cy="9" r="9" fill="currentColor" />
+        <path
+          d="M5.2 9.2l2.4 2.4 5.2-5.2"
+          fill="none"
+          stroke="#fff"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
     </span>
   ) : (
     <span className="plan-dash" aria-label="Not included">

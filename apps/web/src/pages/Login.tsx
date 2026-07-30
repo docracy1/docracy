@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { adminLogin, requestMagicLink } from "../lib/api";
+import { useT } from "../lib/i18n";
 
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
 const TURNSTILE_SCRIPT_SRC = "https://challenges.cloudflare.com/turnstile/v0/api.js";
@@ -68,6 +69,7 @@ function TurnstileWidget({ onToken, resetKey }: { onToken: (token: string | null
 }
 
 export default function Login() {
+  const t = useT();
   const [searchParams] = useSearchParams();
   const ref = searchParams.get("ref") ?? "";
   const utmMedium = searchParams.get("utm_medium") ?? "";
@@ -82,14 +84,11 @@ export default function Login() {
           ? "upgrade"
           : "default";
 
-  const headline = intent === "save-doc" ? "Save the document you just sent" : intent === "upgrade" ? "Sign in to upgrade" : "Sign in";
+  const headline =
+    intent === "save-doc" ? t("login.titleSave") : intent === "upgrade" ? t("login.titleUpgrade") : t("login.title");
   const subcopy =
-    intent === "save-doc"
-      ? "Create a free account so every document lives in one place — no password, just a magic link to this email."
-      : intent === "upgrade"
-        ? "Sign in (or create an account), then upgrade for unlimited signers, templates, and history."
-        : "No password — we'll email you a link. First time here? This creates your account too.";
-  const ctaLabel = intent === "save-doc" ? "Email me a magic link" : "Send sign-in link";
+    intent === "save-doc" ? t("login.subSave") : intent === "upgrade" ? t("login.subUpgrade") : t("login.sub");
+  const ctaLabel = intent === "save-doc" ? t("login.ctaSave") : t("login.cta");
 
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -111,7 +110,7 @@ export default function Login() {
       await requestMagicLink(email, turnstileToken ?? undefined);
       setSent(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
+      setError(err instanceof Error ? err.message : t("common.error"));
       setTurnstileToken(null);
       setTurnstileResetKey((k) => k + 1);
     } finally {
@@ -127,7 +126,7 @@ export default function Login() {
       await adminLogin(email, password);
       window.location.href = "/dashboard";
     } catch (err) {
-      setPasswordError(err instanceof Error ? err.message : "Something went wrong");
+      setPasswordError(err instanceof Error ? err.message : t("common.error"));
     } finally {
       setPasswordSubmitting(false);
     }
@@ -136,10 +135,8 @@ export default function Login() {
   if (sent) {
     return (
       <div className="container">
-        <h1>Check your email</h1>
-        <p>
-          We sent a sign-in link to {email}. It expires in 15 minutes and only works once.
-        </p>
+        <h1>{t("login.sentTitle")}</h1>
+        <p>{t("login.sentBody", { email })}</p>
       </div>
     );
   }
@@ -152,8 +149,8 @@ export default function Login() {
         <input
           className="form-input"
           type="email"
-          placeholder="you@email.com"
-          aria-label="Email"
+          placeholder={t("login.placeholder")}
+          aria-label={t("login.email")}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -162,7 +159,7 @@ export default function Login() {
         <TurnstileWidget onToken={setTurnstileToken} resetKey={turnstileResetKey} />
         {error && <p style={{ color: "var(--danger)", fontSize: 13 }}>{error}</p>}
         <button className="btn-primary" type="submit" disabled={submitting || (!!TURNSTILE_SITE_KEY && !turnstileToken)}>
-          {submitting ? "Sending…" : ctaLabel}
+          {submitting ? t("common.sending") : ctaLabel}
         </button>
       </form>
 
@@ -180,7 +177,7 @@ export default function Login() {
           cursor: "pointer",
         }}
       >
-        {showPasswordLogin ? "Hide password sign-in" : "Sign in with a password instead"}
+        {showPasswordLogin ? t("login.passwordHide") : t("login.passwordToggle")}
       </button>
 
       {showPasswordLogin && (
@@ -188,8 +185,8 @@ export default function Login() {
           <input
             className="form-input"
             type="password"
-            placeholder="Password"
-            aria-label="Password"
+            placeholder={t("login.password")}
+            aria-label={t("login.password")}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -197,7 +194,7 @@ export default function Login() {
           />
           {passwordError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{passwordError}</p>}
           <button className="btn-secondary" type="submit" disabled={passwordSubmitting}>
-            {passwordSubmitting ? "Signing in…" : "Sign in"}
+            {passwordSubmitting ? t("common.signingIn") : t("login.title")}
           </button>
         </form>
       )}
