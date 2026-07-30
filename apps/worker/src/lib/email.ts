@@ -328,6 +328,11 @@ export async function sendReminder(env: Env, doc: DocState, order: number, token
   await send(env, signer.email, subject, emailShell(env.PUBLIC_APP_URL, body, customLogoUrl), { emailType: "reminder" });
 }
 
+/** Quoted title for preparer-facing copy, or a neutral fallback when the doc has no title. */
+function preparerDocLabel(doc: DocState): string {
+  return doc.title ? `"${escapeHtml(doc.title)}"` : "your document";
+}
+
 export async function sendCompletionEmailNotOpened(
   env: Env,
   preparerEmail: string,
