@@ -991,11 +991,12 @@ export default function AdminAnalytics() {
         Aggregate traffic and funnel counts — no per-visitor tracking, no IPs or cookies stored.
       </p>
 
-      <div className="dashboard-shell" style={{ maxWidth: "none", margin: 0, padding: 0 }}>
-        <aside className="dashboard-sidebar">
+      <div className="dashboard-shell admin-analytics-shell" style={{ maxWidth: "none", margin: 0, padding: 0 }}>
+        <aside className="dashboard-sidebar admin-analytics-nav" aria-label="Admin sections">
           {ADMIN_SECTIONS.map((s) => (
             <button
               key={s}
+              type="button"
               className={`dashboard-nav-item${section === s ? " active" : ""}`}
               onClick={() => setSection(s)}
             >

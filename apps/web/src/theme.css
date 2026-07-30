@@ -2723,6 +2723,36 @@ select {
     color: var(--danger) !important;
     margin-top: 4px;
   }
+
+  /* Admin analytics reuses .dashboard-sidebar, which is hidden above for the user dashboard
+     bottom-nav. Keep all admin sections reachable on phones as a horizontal scroll strip. */
+  .dashboard-shell.admin-analytics-shell {
+    padding: 0 0 16px;
+  }
+
+  .admin-analytics-nav.dashboard-sidebar {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 4px;
+    width: auto;
+    max-width: 100%;
+    min-height: 0;
+    position: static;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 4px 2px 10px;
+    margin: 0 0 8px;
+    scrollbar-width: thin;
+  }
+
+  .admin-analytics-nav .dashboard-nav-item {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    padding: 8px 12px;
+    font-size: 13px;
+  }
 }
 
 @media (max-width: 420px) {
