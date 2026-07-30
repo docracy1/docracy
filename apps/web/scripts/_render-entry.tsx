@@ -37,10 +37,12 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/free-templates/:slug" element={<FreeTemplateDetail />} />
           <Route path="/es/plantillas-gratis/:slug" element={<FreeTemplateDetail />} />
           <Route path="/mcp" element={<Mcp />} />
+          <Route path="/es/mcp" element={<Mcp />} />
           <Route path="/about" element={<About />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/es/precios" element={<Pricing />} />
           <Route path="/docs" element={<Docs />} />
+          <Route path="/es/documentacion" element={<Docs />} />
           <Route path="/imprint" element={<Imprint />} />
           <Route path="/trust" element={<Trust />} />
           <Route path="/dpa" element={<Dpa />} />

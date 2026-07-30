@@ -19,6 +19,18 @@ export const SESSION_COOKIE_NAME = "docracy_session";
 interface MagicLinkRecord {
   email: string;
   createdAt: string;
+  /** Optional post-login relative path (e.g. /status/…). Validated before storage. */
+  next?: string;
+}
+
+/** Local relative path only — rejects protocol-relative and absolute URLs. */
+export function sanitizeNextPath(next: string | undefined | null): string | undefined {
+  if (!next) return undefined;
+  const trimmed = next.trim();
+  if (!trimmed.startsWith("/") || trimmed.startsWith("//")) return undefined;
+  if (trimmed.includes("://") || trimmed.includes("\\")) return undefined;
+  if (!/^\/[A-Za-z0-9/_?=&%.\-]*$/.test(trimmed)) return undefined;
+  return trimmed.slice(0, 500);
 }
 
 interface SessionRecord {
@@ -92,7 +104,8 @@ export async function requestMagicLink(
   ctx: Ctx,
   email: string,
   ip: string | null,
-  turnstileToken?: string
+  turnstileToken?: string,
+  next?: string
 ): Promise<{ ok: true } | { ok: false; error: string }> {
   if (!env.DOCRACY_DB) {
     return { ok: false, error: "Accounts aren't set up on this deployment yet." };
@@ -109,8 +122,13 @@ export async function requestMagicLink(
   const hash = await hashOpaqueToken(token, env.TOKEN_SECRET);
   const now = nowIso();
   const expiresAt = new Date(Date.now() + MAGIC_LINK_TTL_SECONDS * 1000).toISOString();
+  const safeNext = sanitizeNextPath(next);
 
-  const record: MagicLinkRecord = { email: normalizedEmail, createdAt: now };
+  const record: MagicLinkRecord = {
+    email: normalizedEmail,
+    createdAt: now,
+    ...(safeNext ? { next: safeNext } : {}),
+  };
   await env.DOCRACY_KV.put(`magiclink:${hash}`, JSON.stringify(record), { expirationTtl: MAGIC_LINK_TTL_SECONDS });
 
   ctx.waitUntil(
@@ -181,7 +199,7 @@ export async function consumeMagicLink(
   userAgent: string | null,
   /** First-touch channel — stamped on signup_completed only when this consume creates the account. */
   attribution = ""
-): Promise<{ ok: true; sessionToken: string } | { ok: false; error: string }> {
+): Promise<{ ok: true; sessionToken: string; next?: string } | { ok: false; error: string }> {
   if (!env.DOCRACY_DB) {
     return { ok: false, error: "Accounts aren't set up on this deployment yet." };
   }
@@ -211,7 +229,8 @@ export async function consumeMagicLink(
     ip,
     userAgent
   );
-  return { ok: true, sessionToken };
+  const next = sanitizeNextPath(record.next);
+  return next ? { ok: true, sessionToken, next } : { ok: true, sessionToken };
 }
 
 /**

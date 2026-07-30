@@ -9,6 +9,8 @@ export const ES_PATH_BY_EN: Record<string, string> = {
   "/docusign-alternative": "/es/alternativa-a-docusign",
   "/hellosign-alternative": "/es/alternativa-a-hellosign",
   "/adobe-sign-alternative": "/es/alternativa-a-adobe-sign",
+  "/docs": "/es/documentacion",
+  "/mcp": "/es/mcp",
 };
 
 export const EN_PATH_BY_ES: Record<string, string> = Object.fromEntries(
@@ -40,7 +42,9 @@ export type SeoPage =
   | "prepare"
   | "docusignAlternative"
   | "hellosignAlternative"
-  | "adobeSignAlternative";
+  | "adobeSignAlternative"
+  | "docs"
+  | "mcp";
 
 export const SEO_EN_PATH: Record<SeoPage, string> = {
   home: "/",
@@ -50,6 +54,8 @@ export const SEO_EN_PATH: Record<SeoPage, string> = {
   docusignAlternative: "/docusign-alternative",
   hellosignAlternative: "/hellosign-alternative",
   adobeSignAlternative: "/adobe-sign-alternative",
+  docs: "/docs",
+  mcp: "/mcp",
 };
 
 /** Catalog suffix under `seo.*` / `alt.*` for bilingual alternative pages. */

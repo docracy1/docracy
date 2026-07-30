@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import IntegrationsBand from "../components/IntegrationsBand";
 import { useT } from "../lib/i18n";
-import { usePageMeta } from "../lib/usePageMeta";
+import { useSeoMeta } from "../lib/useSeoMeta";
 
 const EXAMPLE_URL = "https://mcp.docracy.io/mcp?token=dk_YOUR_API_KEY";
 
@@ -17,7 +17,7 @@ export default function Mcp() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  usePageMeta(t("seo.mcp.title"), t("seo.mcp.description"));
+  useSeoMeta("mcp");
 
   return (
     <div className="container" style={{ maxWidth: 760 }}>

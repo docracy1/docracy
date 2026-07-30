@@ -251,16 +251,20 @@ export async function submitFeedback(email: string, message: string): Promise<{ 
   return asJson(res);
 }
 
-export async function requestMagicLink(email: string, turnstileToken?: string): Promise<{ ok: true }> {
+export async function requestMagicLink(
+  email: string,
+  turnstileToken?: string,
+  next?: string
+): Promise<{ ok: true }> {
   const res = await apiFetch("/api/auth/request-link", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, turnstileToken, attribution: attributionLabel() }),
+    body: JSON.stringify({ email, turnstileToken, attribution: attributionLabel(), next }),
   });
   return asJson(res);
 }
 
-export async function consumeMagicLinkToken(token: string): Promise<{ ok: true }> {
+export async function consumeMagicLinkToken(token: string): Promise<{ ok: true; next?: string }> {
   const res = await apiFetch("/api/auth/consume", {
     method: "POST",
     headers: { "Content-Type": "application/json" },

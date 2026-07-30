@@ -15,8 +15,8 @@ export default function Header() {
   const NAV_LINKS = [
     { to: localizePath("/pricing", locale), label: t("nav.pricing") },
     { to: localizePath("/free-templates", locale), label: t("nav.templates") },
-    { to: "/mcp", label: t("nav.mcp") },
-    { to: "/docs", label: t("nav.docs") },
+    { to: localizePath("/mcp", locale), label: t("nav.mcp") },
+    { to: localizePath("/docs", locale), label: t("nav.docs") },
     { to: "/blog", label: t("nav.blog") },
   ];
 

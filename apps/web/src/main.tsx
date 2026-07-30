@@ -70,6 +70,7 @@ function AppRoutes() {
       <Route path="/free-templates/:slug" element={<FreeTemplateDetail />} />
       <Route path="/es/plantillas-gratis/:slug" element={<FreeTemplateDetail />} />
       <Route path="/mcp" element={<Mcp />} />
+      <Route path="/es/mcp" element={<Mcp />} />
       <Route path="/admin/analytics" element={<AdminAnalytics />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/bulk-send" element={<BulkSend />} />
@@ -77,6 +78,7 @@ function AppRoutes() {
       <Route path="/pricing" element={<Pricing />} />
       <Route path="/es/precios" element={<Pricing />} />
       <Route path="/docs" element={<Docs />} />
+      <Route path="/es/documentacion" element={<Docs />} />
       <Route path="/imprint" element={<Imprint />} />
       <Route path="/uptime" element={<Uptime />} />
       <Route path="/blog" element={<Blog />} />

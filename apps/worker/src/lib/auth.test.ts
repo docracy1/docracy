@@ -9,6 +9,7 @@ import {
   optionalAccount,
   requireAccount,
   requirePaidAccount,
+  sanitizeNextPath,
   SESSION_COOKIE_NAME,
   type AccountContext,
 } from "./auth";
@@ -32,6 +33,17 @@ function captureDevEmailLog() {
     restore: () => spy.mockRestore(),
   };
 }
+
+describe("sanitizeNextPath", () => {
+  it("accepts local relative paths and rejects open redirects", () => {
+    expect(sanitizeNextPath("/dashboard")).toBe("/dashboard");
+    expect(sanitizeNextPath("/status/abc?x=1")).toBe("/status/abc?x=1");
+    expect(sanitizeNextPath("//evil.com")).toBeUndefined();
+    expect(sanitizeNextPath("https://evil.com")).toBeUndefined();
+    expect(sanitizeNextPath("/\\evil")).toBeUndefined();
+    expect(sanitizeNextPath("dashboard")).toBeUndefined();
+  });
+});
 
 describe("requestMagicLink", () => {
   afterEach(() => vi.restoreAllMocks());
@@ -159,6 +171,22 @@ describe("consumeMagicLink", () => {
     expect(first.ok).toBe(true);
     const second = await consumeMagicLink(env, ctx, token, null, null);
     expect(second.ok).toBe(false);
+  });
+
+  it("returns a stored next path after consume and ignores open redirects", async () => {
+    const { env } = makeMockEnv();
+    const ctx = makeCtx();
+    vi.spyOn(console, "log").mockImplementation(() => {});
+
+    const good = await captureMagicLinkToken(env, ctx, "next@example.com", "/status/abc");
+    const goodResult = await consumeMagicLink(env, ctx, good, null, null);
+    expect(goodResult.ok).toBe(true);
+    if (goodResult.ok) expect(goodResult.next).toBe("/status/abc");
+
+    const bad = await captureMagicLinkToken(env, ctx, "evil@example.com", "//evil.example");
+    const badResult = await consumeMagicLink(env, ctx, bad, null, null);
+    expect(badResult.ok).toBe(true);
+    if (badResult.ok) expect(badResult.next).toBeUndefined();
   });
 });
 
@@ -363,14 +391,15 @@ describe("auth middlewares", () => {
 async function captureMagicLinkToken(
   env: ReturnType<typeof makeMockEnv>["env"],
   ctx: ReturnType<typeof makeCtx>,
-  email: string
+  email: string,
+  next?: string
 ): Promise<string> {
   let capturedToken = "";
   const spy = vi.spyOn(console, "log").mockImplementation((msg: string) => {
-    const match = msg.match(/token=([^\s&"]+)/);
+    const match = String(msg).match(/token=([^\s&"]+)/);
     if (match) capturedToken = match[1];
   });
-  await requestMagicLink(env, ctx, email, null);
+  await requestMagicLink(env, ctx, email, null, undefined, next);
   await ctx.flush();
   spy.mockRestore();
   if (!capturedToken) throw new Error("failed to capture magic link token from dev email log");

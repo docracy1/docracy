@@ -327,7 +327,7 @@ describe("POST /api/documents", () => {
     expect(stored.accountId).toBe("acct-1");
   });
 
-  it("still applies the free-tier cap and leaves accountId null for a logged-in but unpaid account", async () => {
+  it("still applies the free-tier cap but attaches accountId for a logged-in unpaid account", async () => {
     const { env, kv } = makeMockEnv();
     const ctx = makeCtx();
     const sessionToken = await createSession(env, ctx, "acct-2", "unpaid@example.com", false, false, null, null);
@@ -368,6 +368,6 @@ describe("POST /api/documents", () => {
 
     const [, docValue] = [...kv._store.entries()].find(([k]) => k.startsWith("doc:"))!;
     const stored = JSON.parse(docValue);
-    expect(stored.accountId).toBeNull();
+    expect(stored.accountId).toBe("acct-2");
   });
 });

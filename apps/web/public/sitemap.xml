@@ -37,6 +37,17 @@
     <loc>https://docracy.io/mcp</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/mcp" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/mcp" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/mcp" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/mcp</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/mcp" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/mcp" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/mcp" />
   </url>
   <url>
     <loc>https://docracy.io/pricing</loc>
@@ -58,6 +69,17 @@
     <loc>https://docracy.io/docs</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/docs" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/documentacion" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/docs" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/documentacion</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/docs" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/documentacion" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/docs" />
   </url>
   <url>
     <loc>https://docracy.io/about</loc>

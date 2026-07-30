@@ -261,11 +261,11 @@ documents.post("/", optionalAccount, async (c) => {
     }
   }
 
-  // Only a *paid* account attaches to the document — a signed-in-but-unpaid visitor still gets
-  // the anonymous, no-D1-indexing free-tier path (accountId stays null), identical to before this
-  // middleware existed. workspaceId (not id) so a document created by any team member is indexed
-  // under the shared workspace every teammate's dashboard queries against.
-  const accountId = account?.isPaid ? account.workspaceId : null;
+  // Any signed-in account attaches to the document so Dashboard history works for free accounts
+  // too. Paid-only entitlements (signer caps, TTL, attachments, etc.) stay gated on isPaid below.
+  // Truly anonymous (signed-out) sends keep accountId null and never touch the D1 document index.
+  // workspaceId (not id) so team-member creates index under the shared workspace.
+  const accountId = account?.workspaceId ?? null;
 
   if (meta.ttlDays !== undefined && !account?.isPaid) {
     return failWith(
