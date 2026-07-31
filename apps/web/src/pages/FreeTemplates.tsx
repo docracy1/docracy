@@ -46,15 +46,13 @@ function TemplateCard({
   const [hovered, setHovered] = useState(false);
   return (
     <div className="template-card-wrap" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-      <Link
-        to={to}
-        className="card"
-        style={{ textDecoration: "none", color: "inherit", display: "flex", gap: 14, alignItems: "flex-start" }}
-      >
-        <TemplateThumbnail pdfPath={pdfPath} width={110} />
-        <div style={{ minWidth: 0 }}>
-          <h3 style={{ marginTop: 0, marginBottom: 8, fontSize: 16 }}>{name}</h3>
-          <p style={{ margin: 0, fontSize: 13, color: "var(--mute)" }}>{description}</p>
+      <Link to={to} className="template-tile" style={{ textDecoration: "none", color: "inherit" }}>
+        <div className="template-tile-image">
+          <TemplateThumbnail pdfPath={pdfPath} width={150} />
+        </div>
+        <div className="template-tile-body">
+          {category && <span className="template-tile-tag">{category}</span>}
+          <h3>{name}</h3>
         </div>
       </Link>
 
@@ -149,6 +147,19 @@ export default function FreeTemplates() {
 
   return (
     <div>
+      <div className="templates-utility-bar">
+        <span className="templates-utility-label">{t("freeTemplates.title")}</span>
+        <button
+          type="button"
+          className="templates-categories-toggle"
+          aria-expanded={categoriesOpen}
+          onClick={() => setCategoriesOpen((v) => !v)}
+        >
+          {t("freeTemplates.categoriesToggle")}
+          <span className={categoriesOpen ? "templates-chevron templates-chevron-up" : "templates-chevron"}>▾</span>
+        </button>
+      </div>
+
       <div className="hero-band templates-hero">
         <div className="templates-hero-inner">
           <h1>{t("freeTemplates.heroHeadline")}</h1>
@@ -199,18 +210,7 @@ export default function FreeTemplates() {
         ) : (
           <>
             <div className="templates-categories-band" style={{ marginTop: 28 }}>
-              <div className="templates-categories-head">
-                <h2 style={{ fontSize: 19, margin: 0 }}>{t("freeTemplates.categoriesToggle")}</h2>
-                <button
-                  type="button"
-                  className="templates-categories-toggle"
-                  aria-expanded={categoriesOpen}
-                  onClick={() => setCategoriesOpen((v) => !v)}
-                >
-                  {t("freeTemplates.categoriesToggle")}
-                  <span className={categoriesOpen ? "templates-chevron templates-chevron-up" : "templates-chevron"}>▾</span>
-                </button>
-              </div>
+              <h2 style={{ fontSize: 19, margin: "0 0 4px" }}>{t("freeTemplates.categoriesToggle")}</h2>
               {categoriesOpen && (
                 <>
                   <p style={{ maxWidth: 640, fontSize: 14, color: "var(--body)", margin: "4px 0 20px" }}>
