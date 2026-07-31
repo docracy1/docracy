@@ -34,6 +34,11 @@ await build({
   // Vite normally supplies import.meta.env.* at build time; a raw esbuild→CJS bundle doesn't, so
   // this stands in for it — matches the real production build's behavior (VITE_API_URL unset).
   define: { "import.meta.env.VITE_API_URL": '""' },
+  // TemplateThumbnail dynamically imports lib/pdfjs.ts (only from a useEffect, which never fires
+  // during this static render) purely so pdfjs-dist's `?url` worker asset — a Vite-only import
+  // form plain esbuild can't resolve — never has to be bundled here. Externalizing leaves the
+  // dynamic import() call unresolved in the output, which is fine since it's never invoked.
+  external: ["pdfjs-dist"],
 });
 require(bundleOutFile); // populates globalThis.__renderPath
 const renderPath = globalThis.__renderPath;

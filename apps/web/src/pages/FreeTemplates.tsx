@@ -4,6 +4,7 @@ import { FREE_TEMPLATES, RECURRING_CATEGORIES } from "../lib/freeTemplates";
 import { isSeoTemplateSlug, localizePath, useI18n, useT } from "../lib/i18n";
 import { useSeoMeta } from "../lib/useSeoMeta";
 import { track } from "../lib/track";
+import TemplateThumbnail from "../components/TemplateThumbnail";
 
 const CATEGORY_KEYS: Record<string, string> = {
   NDAs: "freeTemplates.cat.ndas",
@@ -20,15 +21,24 @@ function TemplateCard({
   name,
   description,
   to,
+  pdfPath,
 }: {
   name: string;
   description: string;
   to: string;
+  pdfPath: string;
 }) {
   return (
-    <Link to={to} className="card" style={{ textDecoration: "none", color: "inherit", display: "block" }}>
-      <h3 style={{ marginTop: 0, marginBottom: 8, fontSize: 16 }}>{name}</h3>
-      <p style={{ margin: 0, fontSize: 13, color: "var(--mute)" }}>{description}</p>
+    <Link
+      to={to}
+      className="card"
+      style={{ textDecoration: "none", color: "inherit", display: "flex", gap: 12, alignItems: "flex-start" }}
+    >
+      <TemplateThumbnail pdfPath={pdfPath} width={72} />
+      <div style={{ minWidth: 0 }}>
+        <h3 style={{ marginTop: 0, marginBottom: 8, fontSize: 16 }}>{name}</h3>
+        <p style={{ margin: 0, fontSize: 13, color: "var(--mute)" }}>{description}</p>
+      </div>
     </Link>
   );
 }
@@ -133,6 +143,7 @@ export default function FreeTemplates() {
                     name={labels.name}
                     description={labels.description}
                     to={localizePath(`/free-templates/${tpl.slug}`, locale)}
+                    pdfPath={tpl.pdfPath}
                   />
                 );
               })}
@@ -152,6 +163,7 @@ export default function FreeTemplates() {
                 name={labels.name}
                 description={labels.description}
                 to={localizePath(`/free-templates/${tpl.slug}`, locale)}
+                pdfPath={tpl.pdfPath}
               />
             );
           })}

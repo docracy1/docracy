@@ -6,6 +6,7 @@ import { cleanPath } from "../lib/i18n/paths";
 import { usePageMeta } from "../lib/usePageMeta";
 import { track } from "../lib/track";
 import { useLocation } from "react-router-dom";
+import TemplateThumbnail from "../components/TemplateThumbnail";
 
 export default function FreeTemplateDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -56,8 +57,13 @@ export default function FreeTemplateDetail() {
       <p style={{ fontSize: 13 }}>
         <Link to={indexTo}>← {t("tpl.detail.backAll")}</Link>
       </p>
-      <h1>{name}</h1>
-      <p style={{ color: "var(--mute)" }}>{useCase}</p>
+      <div style={{ display: "flex", gap: 20, alignItems: "flex-start", flexWrap: "wrap" }}>
+        <TemplateThumbnail pdfPath={template.pdfPath} width={200} />
+        <div style={{ flex: 1, minWidth: 240 }}>
+          <h1 style={{ marginTop: 0 }}>{name}</h1>
+          <p style={{ color: "var(--mute)" }}>{useCase}</p>
+        </div>
+      </div>
 
       <div className="card" style={{ marginTop: 16 }}>
         <h3 style={{ marginTop: 0 }}>{t("tpl.detail.includedTitle")}</h3>

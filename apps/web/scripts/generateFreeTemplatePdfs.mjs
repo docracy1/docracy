@@ -998,6 +998,347 @@ const TEMPLATES = [
       },
     ],
   },
+  {
+    slug: "promissory-note",
+    title: "PROMISSORY NOTE",
+    signerLabels: ["Borrower"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Lender: ", blank: TEXT_BLANK },
+      { type: "field", label: "Borrower: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Loan Amount" },
+      { type: "field", label: "Principal Amount: ", blank: TEXT_BLANK },
+      { type: "field", label: "Date of Loan: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Interest and Repayment" },
+      { type: "field", label: "Interest Rate: ", blank: TEXT_BLANK },
+      { type: "field", label: "Repayment Schedule: ", blank: TEXT_BLANK },
+      { type: "field", label: "Final Due Date: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Default" },
+      {
+        type: "paragraph",
+        text:
+          "If the Borrower fails to make a payment when due and does not cure the default within a reasonable " +
+          "cure period after written notice, the entire remaining balance becomes immediately due and payable, " +
+          "and the Lender may pursue any remedy available by law.",
+      },
+
+      { type: "section", text: "Prepayment" },
+      { type: "paragraph", text: "The Borrower may prepay all or part of the outstanding balance at any time without penalty." },
+
+      { type: "section", text: "Signature" },
+      { type: "signatures", signers: [{ label: "Borrower", order: 1 }] },
+    ],
+  },
+  {
+    slug: "llc-operating-agreement",
+    title: "LLC OPERATING AGREEMENT",
+    signerLabels: ["Member A", "Member B"],
+    blocks: [
+      { type: "section", text: "Company Formation" },
+      { type: "field", label: "Company Name: ", blank: TEXT_BLANK },
+      { type: "field", label: "Principal Address: ", blank: TEXT_BLANK },
+      { type: "field", label: "State of Formation: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Members and Ownership" },
+      {
+        type: "table",
+        widths: [0.5, 0.25, 0.25],
+        headers: ["Member", "Capital Contribution", "Ownership %"],
+        rows: [
+          [TEXT_BLANK, TEXT_BLANK, TEXT_BLANK],
+          [TEXT_BLANK, TEXT_BLANK, TEXT_BLANK],
+        ],
+      },
+
+      { type: "section", text: "Management" },
+      {
+        type: "paragraph",
+        text:
+          "The Company will be member-managed. Decisions in the ordinary course of business may be made by a " +
+          "majority of the Members; major decisions (sale of the Company, taking on debt above a threshold the " +
+          "Members agree on, admitting a new Member) require unanimous consent.",
+      },
+
+      { type: "section", text: "Profits, Losses, and Distributions" },
+      {
+        type: "paragraph",
+        text:
+          "Profits and losses are allocated to each Member in proportion to their ownership percentage above. " +
+          "Distributions are made at times and in amounts the Members agree by majority vote.",
+      },
+
+      { type: "section", text: "Transfer of Membership Interest" },
+      {
+        type: "paragraph",
+        text: "A Member may not transfer their membership interest without the prior written consent of the other Members.",
+      },
+
+      { type: "section", text: "Dissolution" },
+      {
+        type: "paragraph",
+        text: "The Company dissolves upon unanimous written agreement of the Members or as otherwise required by law.",
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Member A", order: 1 }, { label: "Member B", order: 2 }] },
+    ],
+  },
+  {
+    slug: "sublease-agreement",
+    title: "SUBLEASE AGREEMENT",
+    signerLabels: ["Sublessor", "Subtenant"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Sublessor (Original Tenant): ", blank: TEXT_BLANK },
+      { type: "field", label: "Subtenant: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Property" },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Sublease Term" },
+      { type: "field", label: "Start Date: ", blank: DATE_BLANK },
+      { type: "field", label: "End Date: ", blank: DATE_BLANK },
+      {
+        type: "paragraph",
+        text: "This sublease may not extend beyond the term of the Sublessor's original lease with the property owner.",
+      },
+
+      { type: "section", text: "Rent and Deposit" },
+      {
+        type: "table",
+        widths: [0.5, 0.5],
+        headers: ["Item", "Amount"],
+        rows: [
+          ["Monthly Rent", TEXT_BLANK],
+          ["Security Deposit", TEXT_BLANK],
+          ["Payment Due Date", TEXT_BLANK],
+        ],
+      },
+
+      { type: "section", text: "Landlord Consent" },
+      {
+        type: "paragraph",
+        text:
+          "The Sublessor confirms that this sublease is permitted under the original lease, or that the property " +
+          "owner has separately consented to it in writing.",
+      },
+
+      { type: "section", text: "Condition and Responsibilities" },
+      {
+        type: "paragraph",
+        text:
+          "The Subtenant agrees to follow all terms of the original lease that apply to occupants and to return " +
+          "the property in the same condition, except for normal wear.",
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Sublessor", order: 1 }, { label: "Subtenant", order: 2 }] },
+    ],
+  },
+  {
+    slug: "liability-waiver",
+    title: "LIABILITY WAIVER",
+    signerLabels: ["Participant"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Organization: ", blank: TEXT_BLANK },
+      { type: "field", label: "Participant: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Activity" },
+      { type: "paragraph", text: "Description of activity, event, or service:" },
+      { type: "field", label: "", blank: TEXT_BLANK },
+      { type: "field", label: "Date of Activity: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Assumption of Risk" },
+      {
+        type: "paragraph",
+        text:
+          "The Participant understands that the activity described above carries inherent risks, including the " +
+          "risk of property damage, personal injury, or death, and voluntarily assumes those risks.",
+      },
+
+      { type: "section", text: "Release of Liability" },
+      {
+        type: "paragraph",
+        text:
+          "In exchange for being permitted to participate, the Participant releases the Organization, its owners, " +
+          "employees, and agents from any claims, liability, or damages arising from participation, except for " +
+          "claims arising from the Organization's gross negligence or willful misconduct.",
+      },
+
+      { type: "section", text: "Medical Treatment" },
+      {
+        type: "paragraph",
+        text:
+          "The Participant authorizes the Organization to obtain emergency medical treatment on their behalf if " +
+          "needed, at the Participant's expense.",
+      },
+
+      { type: "section", text: "Signature" },
+      { type: "signatures", signers: [{ label: "Participant", order: 1 }] },
+    ],
+  },
+  {
+    slug: "roommate-agreement",
+    title: "ROOMMATE AGREEMENT",
+    signerLabels: ["Roommate A", "Roommate B"],
+    blocks: [
+      { type: "section", text: "Parties and Property" },
+      { type: "field", label: "Roommate A: ", blank: TEXT_BLANK },
+      { type: "field", label: "Roommate B: ", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Term" },
+      { type: "field", label: "Start Date: ", blank: DATE_BLANK },
+      { type: "field", label: "End Date: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Rent and Expenses" },
+      {
+        type: "table",
+        widths: [0.5, 0.25, 0.25],
+        headers: ["Expense", "Roommate A Share", "Roommate B Share"],
+        rows: [
+          ["Rent", TEXT_BLANK, TEXT_BLANK],
+          ["Utilities", TEXT_BLANK, TEXT_BLANK],
+          ["Other (internet, etc.)", TEXT_BLANK, TEXT_BLANK],
+        ],
+      },
+
+      { type: "section", text: "House Rules" },
+      {
+        type: "paragraph",
+        text:
+          "Both roommates agree to keep shared spaces reasonably clean, give advance notice before having " +
+          "overnight guests, and resolve disagreements about noise, chores, or shared items directly and in good faith.",
+      },
+
+      { type: "section", text: "Moving Out" },
+      {
+        type: "paragraph",
+        text: "A roommate who intends to move out before the end date above will give the other roommate at least 30 days' written notice.",
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Roommate A", order: 1 }, { label: "Roommate B", order: 2 }] },
+    ],
+  },
+  {
+    slug: "cash-receipt",
+    title: "CASH RECEIPT",
+    signerLabels: ["Recipient"],
+    blocks: [
+      { type: "section", text: "Payment Details" },
+      { type: "field", label: "Received From: ", blank: TEXT_BLANK },
+      { type: "field", label: "Received By: ", blank: TEXT_BLANK },
+      { type: "field", label: "Amount: ", blank: TEXT_BLANK },
+      { type: "field", label: "Date Received: ", blank: DATE_BLANK },
+      { type: "field", label: "Payment Method: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "For" },
+      { type: "paragraph", text: "This payment is for:" },
+      { type: "field", label: "", blank: TEXT_BLANK },
+
+      { type: "section", text: "Balance" },
+      { type: "field", label: "Remaining Balance (if any): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Acknowledgement" },
+      { type: "paragraph", text: "This receipt confirms that the payment described above was received in the amount stated." },
+
+      { type: "section", text: "Signature" },
+      { type: "signatures", signers: [{ label: "Recipient", order: 1 }] },
+    ],
+  },
+  {
+    slug: "construction-contract",
+    title: "CONSTRUCTION CONTRACT",
+    signerLabels: ["Owner", "Contractor"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Owner: ", blank: TEXT_BLANK },
+      { type: "field", label: "Contractor: ", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "Project Address: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Scope of Work" },
+      { type: "paragraph", text: "Description of the work to be performed:" },
+      { type: "field", label: "", blank: TEXT_BLANK },
+
+      { type: "section", text: "Schedule" },
+      { type: "field", label: "Start Date: ", blank: DATE_BLANK },
+      { type: "field", label: "Estimated Completion: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Contract Price and Payment" },
+      {
+        type: "table",
+        widths: [0.6, 0.4],
+        headers: ["Payment Milestone", "Amount"],
+        rows: [
+          ["Deposit (on signing)", TEXT_BLANK],
+          ["Progress Payment", TEXT_BLANK],
+          ["Final Payment (on completion)", TEXT_BLANK],
+        ],
+      },
+
+      { type: "section", text: "Change Orders" },
+      {
+        type: "paragraph",
+        text:
+          "Any change to the scope, schedule, or price described above must be agreed in writing by both parties " +
+          "before the additional work begins.",
+      },
+
+      { type: "section", text: "Warranty" },
+      {
+        type: "paragraph",
+        text:
+          "The Contractor warrants that the work will be performed in a workmanlike manner and will correct any " +
+          "defects in materials or workmanship reported within a reasonable time after completion.",
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Owner", order: 1 }, { label: "Contractor", order: 2 }] },
+    ],
+  },
+  {
+    slug: "cease-and-desist-letter",
+    title: "CEASE AND DESIST LETTER",
+    signerLabels: ["Sender"],
+    blocks: [
+      { type: "section", text: "From" },
+      { type: "field", label: "Sender: ", blank: TEXT_BLANK },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "To" },
+      { type: "field", label: "Recipient: ", blank: TEXT_BLANK },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Conduct at Issue" },
+      { type: "paragraph", text: "Description of the conduct the Sender demands the Recipient stop:" },
+      { type: "field", label: "", blank: TEXT_BLANK },
+
+      { type: "section", text: "Demand" },
+      {
+        type: "paragraph",
+        text:
+          "The Sender demands that the Recipient immediately cease and desist from the conduct described above, " +
+          "and confirm in writing within the deadline below that they will do so.",
+      },
+      { type: "field", label: "Response Deadline: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Reservation of Rights" },
+      {
+        type: "paragraph",
+        text:
+          "If the Recipient does not comply, the Sender reserves the right to pursue all available legal remedies, " +
+          "including seeking damages and injunctive relief, without further notice.",
+      },
+
+      { type: "section", text: "Signature" },
+      { type: "signatures", signers: [{ label: "Sender", order: 1 }] },
+    ],
+  },
 ];
 
 fs.mkdirSync(outDir, { recursive: true });
