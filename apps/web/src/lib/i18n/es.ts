@@ -12,6 +12,15 @@ const es: Messages = {
   "auth.missingToken": "Falta el token de acceso.",
   "auth.signingIn": "Iniciando sesión…",
   "blog.title": "Blog",
+  "blog.subtitle":
+    "Guías sobre NDAs, contratos y firmas en línea — además de comparaciones honestas y documentadas entre Docracy y las otras herramientas de firma electrónica que nos suelen preguntar.",
+  "blog.moreFromBlog": "Más del blog",
+  "blog.allPosts": "← Todos los artículos",
+  "blog.backToBlog": "Volver al blog",
+  "blog.postNotFound": "Artículo no encontrado",
+  "blog.tryFreeSampleNda": "Prueba gratis — NDA de ejemplo",
+  "blog.uploadW9": "Sube un PDF W-9",
+  "blog.seePricing": "Ver precios",
   "calc.footer":
     "Los precios son el plan comercial/equipo estándar de cada proveedor según su propia página — los conjuntos de funciones difieren; haz clic para comparar exactamente qué incluye cada uno.",
   "calc.minSeats": " (mínimo de {{min}} asientos aplica)",

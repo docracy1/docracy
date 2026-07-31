@@ -6,14 +6,16 @@ import { getCompetitor, formatUsd, DOCRACY_PRICE } from "../lib/competitors";
 import { fetchBlogPost, type DynamicBlogPostDetail } from "../lib/api";
 import { usePageMeta } from "../lib/usePageMeta";
 import { track } from "../lib/track";
+import { useT } from "../lib/i18n";
 
 /** The "Try Docracy free" / "See pricing" pair every post type ends with — `slug` is passed
  *  through as the click's `source` so blog_cta_clicked can be attributed back to which post
  *  drove it. */
 function BlogCta({ slug }: { slug: string }) {
+  const t = useT();
   const isW9 = slug.includes("w-9");
   const prepareTo = isW9 ? `/prepare?ref=blog-${slug}` : `/prepare?freeTemplate=mutual-nda&ref=blog-${slug}`;
-  const prepareLabel = isW9 ? "Upload a W-9 PDF" : "Try free — sample NDA";
+  const prepareLabel = isW9 ? t("blog.uploadW9") : t("blog.tryFreeSampleNda");
 
   return (
     <div style={{ display: "flex", gap: 12, marginTop: 24, flexWrap: "wrap" }}>
@@ -31,7 +33,7 @@ function BlogCta({ slug }: { slug: string }) {
         style={{ textDecoration: "none" }}
         onClick={() => track("blog_cta_clicked", { source: slug })}
       >
-        See pricing
+        {t("blog.seePricing")}
       </Link>
     </div>
   );
@@ -206,6 +208,7 @@ function ArticleBlocks({ blocks }: { blocks: ArticleBlock[] }) {
 }
 
 function DynamicPostView({ post }: { post: DynamicBlogPostDetail }) {
+  const t = useT();
   usePageMeta(`${post.title} | Docracy`, post.description || post.title, {
     canonicalPath: `/blog/${post.slug}`,
   });
@@ -214,7 +217,7 @@ function DynamicPostView({ post }: { post: DynamicBlogPostDetail }) {
   return (
     <div className="container" style={{ maxWidth: 720 }}>
       <p style={{ fontSize: 13 }}>
-        <Link to="/blog">← All posts</Link>
+        <Link to="/blog">{t("blog.allPosts")}</Link>
       </p>
       <div style={{ fontSize: 12, color: "var(--mute)", marginBottom: 4 }}>{date}</div>
       <h1>{post.title}</h1>
@@ -238,6 +241,7 @@ function readPreloadedBlogPost(slug: string): DynamicBlogPostDetail | null {
 }
 
 export default function BlogPostDetail() {
+  const t = useT();
   const { slug } = useParams<{ slug: string }>();
   const staticPost = slug ? getBlogPost(slug) : undefined;
   const article = !staticPost && slug ? getArticle(slug) : undefined;
@@ -279,7 +283,7 @@ export default function BlogPostDetail() {
     return (
       <div className="container" style={{ maxWidth: 720 }}>
         <p style={{ fontSize: 13 }}>
-          <Link to="/blog">← All posts</Link>
+          <Link to="/blog">{t("blog.allPosts")}</Link>
         </p>
         <div style={{ fontSize: 12, color: "var(--mute)", marginBottom: 4 }}>{article.publishedDate}</div>
         <h1>{article.title}</h1>
@@ -294,7 +298,7 @@ export default function BlogPostDetail() {
     return (
       <div className="container" style={{ maxWidth: 720 }}>
         <p style={{ fontSize: 13 }}>
-          <Link to="/blog">← All posts</Link>
+          <Link to="/blog">{t("blog.allPosts")}</Link>
         </p>
         <div style={{ fontSize: 12, color: "var(--mute)", marginBottom: 4 }}>{staticPost.publishedDate}</div>
         <h1>{staticPost.title}</h1>
@@ -352,9 +356,9 @@ export default function BlogPostDetail() {
   if (dynamicNotFound) {
     return (
       <div className="container">
-        <h1>Post not found</h1>
+        <h1>{t("blog.postNotFound")}</h1>
         <p>
-          <Link to="/blog">Back to the blog</Link>
+          <Link to="/blog">{t("blog.backToBlog")}</Link>
         </p>
       </div>
     );
@@ -362,7 +366,7 @@ export default function BlogPostDetail() {
 
   return (
     <div className="container">
-      <p>Loading…</p>
+      <p>{t("common.loading")}</p>
     </div>
   );
 }

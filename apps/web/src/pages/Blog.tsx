@@ -60,11 +60,8 @@ export default function Blog() {
 
   return (
     <div className="container">
-      <h1 style={{ fontSize: 30 }}>Blog</h1>
-      <p style={{ maxWidth: 640 }}>
-        Guides on NDAs, contracts, and online signatures — plus honest, sourced comparisons between Docracy and the
-        other e-signature tools people ask us about.
-      </p>
+      <h1 style={{ fontSize: 30 }}>{t("blog.title")}</h1>
+      <p style={{ maxWidth: 640 }}>{t("blog.subtitle")}</p>
 
       {clusters.map(({ cluster, posts }) => (
         <div key={cluster} style={{ marginTop: 32 }}>
@@ -79,7 +76,7 @@ export default function Blog() {
 
       {more.length > 0 && (
         <div style={{ marginTop: 32 }}>
-          <h2 style={{ fontSize: 19 }}>More from the blog</h2>
+          <h2 style={{ fontSize: 19 }}>{t("blog.moreFromBlog")}</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {more.map((post) => (
               <PostCard key={post.slug} post={post} />
