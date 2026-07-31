@@ -13,12 +13,28 @@ interface MergedPost {
   date: string;
 }
 
+/** Deterministic per-post gradient (blue/indigo family, matching the brand) — a real, honest
+ *  visual treatment instead of a fabricated stock photo, since no author photo library exists. */
+function gradientForSlug(slug: string): string {
+  let hash = 0;
+  for (let i = 0; i < slug.length; i++) hash = (hash * 31 + slug.charCodeAt(i)) >>> 0;
+  const hue = 195 + (hash % 55);
+  const hue2 = hue + 20 + (hash % 25);
+  return `linear-gradient(135deg, hsl(${hue}, 70%, 42%), hsl(${hue2}, 75%, 22%))`;
+}
+
 function PostCard({ post }: { post: MergedPost }) {
+  const t = useT();
   return (
     <Link to={`/blog/${post.slug}`} className="card" style={{ textDecoration: "none", color: "inherit", display: "block" }}>
+      <div className="blog-card-hero" style={{ background: gradientForSlug(post.slug) }} />
       <div style={{ fontSize: 12, color: "var(--mute)", marginBottom: 6 }}>{post.date}</div>
       <h3 style={{ marginTop: 0, marginBottom: 8, fontSize: 16 }}>{post.title}</h3>
       <p style={{ margin: 0, fontSize: 13.5, color: "var(--mute)" }}>{post.description}</p>
+      <div className="blog-card-byline">
+        <img src="/docracy-seal-icon.png" alt="" />
+        <span>{t("blog.byline")}</span>
+      </div>
     </Link>
   );
 }
@@ -84,10 +100,15 @@ export default function Blog() {
       {featured && (
         <div className="blog-featured-grid">
           <Link to={`/blog/${featured.slug}`} className="blog-featured-card" style={{ textDecoration: "none" }}>
+            <div className="blog-featured-hero" style={{ background: gradientForSlug(featured.slug) }} />
             {isNew && <span className="blog-featured-badge">{t("blog.newBadge")}</span>}
             <span className="blog-featured-tag">{featured.category}</span>
             <h2 className="blog-featured-title">{featured.title}</h2>
             <p className="blog-featured-excerpt">{featured.description}</p>
+            <div className="blog-card-byline">
+              <img src="/docracy-seal-icon.png" alt="" />
+              <span>{t("blog.byline")}</span>
+            </div>
             <span className="blog-pill-btn">{t("blog.readArticle")}</span>
           </Link>
 

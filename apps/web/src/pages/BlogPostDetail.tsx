@@ -8,6 +8,33 @@ import { usePageMeta } from "../lib/usePageMeta";
 import { track } from "../lib/track";
 import { useT } from "../lib/i18n";
 
+/** Deterministic per-post gradient (blue/indigo family, matching the brand) — a real, honest
+ *  visual treatment instead of a fabricated stock photo, since no author photo library exists. */
+function gradientForSlug(slug: string): string {
+  let hash = 0;
+  for (let i = 0; i < slug.length; i++) hash = (hash * 31 + slug.charCodeAt(i)) >>> 0;
+  const hue = 195 + (hash % 55);
+  const hue2 = hue + 20 + (hash % 25);
+  return `linear-gradient(135deg, hsl(${hue}, 70%, 42%), hsl(${hue2}, 75%, 22%))`;
+}
+
+function BlogHero({ slug }: { slug: string }) {
+  return <div className="blog-post-hero" style={{ background: gradientForSlug(slug) }} />;
+}
+
+function BlogByline({ date }: { date: string }) {
+  const t = useT();
+  return (
+    <div className="blog-byline">
+      <img src="/docracy-seal-icon.png" alt="" />
+      <div>
+        <div className="blog-byline-name">{t("blog.byline")}</div>
+        <div className="blog-byline-date">{date}</div>
+      </div>
+    </div>
+  );
+}
+
 /** The "Try Docracy free" / "See pricing" pair every post type ends with — `slug` is passed
  *  through as the click's `source` so blog_cta_clicked can be attributed back to which post
  *  drove it. */
@@ -219,8 +246,9 @@ function DynamicPostView({ post }: { post: DynamicBlogPostDetail }) {
       <p style={{ fontSize: 13 }}>
         <Link to="/blog">{t("blog.allPosts")}</Link>
       </p>
-      <div style={{ fontSize: 12, color: "var(--mute)", marginBottom: 4 }}>{date}</div>
       <h1>{post.title}</h1>
+      <BlogHero slug={post.slug} />
+      <BlogByline date={date} />
       <BodyParagraphs body={post.body} />
       <BlogCta slug={post.slug} />
     </div>
@@ -285,8 +313,9 @@ export default function BlogPostDetail() {
         <p style={{ fontSize: 13 }}>
           <Link to="/blog">{t("blog.allPosts")}</Link>
         </p>
-        <div style={{ fontSize: 12, color: "var(--mute)", marginBottom: 4 }}>{article.publishedDate}</div>
         <h1>{article.title}</h1>
+        <BlogHero slug={article.slug} />
+        <BlogByline date={article.publishedDate} />
         <ArticleBlocks blocks={article.blocks} />
         <BlogCta slug={article.slug} />
       </div>
@@ -300,8 +329,9 @@ export default function BlogPostDetail() {
         <p style={{ fontSize: 13 }}>
           <Link to="/blog">{t("blog.allPosts")}</Link>
         </p>
-        <div style={{ fontSize: 12, color: "var(--mute)", marginBottom: 4 }}>{staticPost.publishedDate}</div>
         <h1>{staticPost.title}</h1>
+        <BlogHero slug={staticPost.slug} />
+        <BlogByline date={staticPost.publishedDate} />
 
         {staticPost.intro.map((p, i) => (
           <p key={i}>{p}</p>

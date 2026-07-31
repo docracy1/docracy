@@ -525,6 +525,7 @@ const en: Messages = {
   "blog.uploadW9": "Upload a W-9 PDF",
   "blog.seePricing": "See pricing",
   "blog.newBadge": "New",
+  "blog.byline": "Docracy Contributor",
   "blog.readArticle": "Read article",
   "blog.quickHelpTitle": "Not sure where to start?",
   "blog.quickHelpBody": "Tell us what you're signing — we'll point you to the right free template and field setup.",

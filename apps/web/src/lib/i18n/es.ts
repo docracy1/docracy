@@ -22,6 +22,7 @@ const es: Messages = {
   "blog.uploadW9": "Sube un PDF W-9",
   "blog.seePricing": "Ver precios",
   "blog.newBadge": "Nuevo",
+  "blog.byline": "Colaborador de Docracy",
   "blog.readArticle": "Leer artículo",
   "blog.quickHelpTitle": "¿No sabes por dónde empezar?",
   "blog.quickHelpBody": "Cuéntanos qué vas a firmar — te indicamos la plantilla gratis y la configuración de campos correcta.",
