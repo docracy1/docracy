@@ -1501,6 +1501,121 @@ select {
   color: var(--hero-body);
 }
 
+.templates-hero {
+  padding: 56px 24px 64px;
+}
+.templates-hero-inner {
+  max-width: 640px;
+  margin: 0 auto;
+  text-align: center;
+}
+.templates-hero-inner h1 {
+  color: #ffffff;
+  font-size: clamp(28px, 4vw, 42px);
+  margin: 0 0 14px;
+}
+.templates-hero-inner p {
+  color: var(--hero-body);
+  font-size: 16px;
+  margin: 0;
+}
+.templates-search-wrap {
+  margin-top: 28px;
+  position: relative;
+}
+.templates-search-icon {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--mute);
+  pointer-events: none;
+}
+.templates-search-input {
+  width: 100%;
+  padding: 16px 20px 16px 48px;
+  border-radius: 999px;
+  border: none;
+  font-size: 15px;
+  color: var(--ink);
+  background: var(--canvas);
+  box-shadow: var(--shadow-md);
+  font-family: inherit;
+}
+.templates-search-input:focus {
+  outline: 2px solid var(--primary-light);
+  outline-offset: 2px;
+}
+.templates-search-input::placeholder {
+  color: var(--mute);
+}
+
+.templates-categories-band {
+  margin-top: 8px;
+  padding: 24px;
+  background: var(--canvas-soft);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+}
+.templates-categories-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.templates-categories-toggle {
+  display: none;
+}
+@media (max-width: 640px) {
+  .templates-categories-head h2 {
+    display: none;
+  }
+  .templates-categories-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--primary);
+    background: var(--canvas);
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+}
+.templates-chevron {
+  display: inline-block;
+  transition: transform 0.15s ease;
+}
+.templates-chevron-up {
+  transform: rotate(180deg);
+}
+.templates-categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px 28px;
+}
+.templates-category-item {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+.templates-category-item h3 {
+  margin: 0 0 6px;
+  font-size: 15px;
+  color: var(--ink);
+}
+.templates-category-item:hover h3 {
+  color: var(--primary);
+}
+.templates-category-item p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--mute);
+}
+
 .blog-figure {
   margin: 20px 0 28px;
   padding: 0;

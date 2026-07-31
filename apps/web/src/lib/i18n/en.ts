@@ -678,26 +678,40 @@ const en: Messages = {
   "feature.related": "Related",
   "freeTemplates.allTemplates": "All templates",
   "freeTemplates.cat.clientContracts": "Client Contracts",
+  "freeTemplates.cat.clientContracts.desc":
+    "Client contract templates define scope, timeline, and payment terms so both sides know exactly what's being delivered and when.",
   "freeTemplates.cat.compliance": "Compliance Documents",
+  "freeTemplates.cat.compliance.desc":
+    "Compliance templates give you a signed, dated record that someone reviewed and agreed to a policy or data-handling obligation.",
   "freeTemplates.cat.ndas": "NDAs",
+  "freeTemplates.cat.ndas.desc":
+    "Confidentiality templates protect shared information — pricing, product plans, or strategy — while two parties evaluate a deal or partnership.",
   "freeTemplates.cat.onboarding": "Onboarding Documents",
+  "freeTemplates.cat.onboarding.desc":
+    "Onboarding templates confirm a new hire or contractor has received policies, equipment, and access before day one.",
   "freeTemplates.cat.payment": "Payment Agreements",
+  "freeTemplates.cat.payment.desc":
+    "Payment agreement templates put an amount owed, due date, and payment method in writing — with or without an installment schedule.",
   "freeTemplates.cat.rentalLease": "Rental & Lease Agreements",
+  "freeTemplates.cat.rentalLease.desc":
+    "Lease and rental templates cover rent, deposit, and responsibilities so landlords and tenants — or owners and renters — start on the same page.",
   "freeTemplates.cat.vendorAgreements": "Vendor Agreements",
+  "freeTemplates.cat.vendorAgreements.desc":
+    "Vendor agreement templates set pricing, delivery, and quality terms for buying goods or services from a supplier.",
   "freeTemplates.cat.workOrders": "Work Orders",
+  "freeTemplates.cat.workOrders.desc":
+    "Work order templates confirm the job, materials, and cost estimate before a service provider starts the work.",
+  "freeTemplates.categoriesToggle": "Categories",
+  "freeTemplates.categoriesIntro": "Jump straight to the kind of agreement you need.",
   "freeTemplates.heading": "Ready-to-use templates for quick agreements",
+  "freeTemplates.heroHeadline": "Send agreements quickly with free templates",
+  "freeTemplates.heroSub":
+    "Browse our library of ready-to-sign templates — fill in your details and send for signature in minutes, completely free.",
+  "freeTemplates.searchPlaceholder": "What template are you looking for?",
+  "freeTemplates.noResults": "No templates match \"{query}\". Try a different word, or browse all templates below.",
   "freeTemplates.howItWorks": "How it works:",
   "freeTemplates.intro":
     "Docracy.io provides simple, ready-to-use templates you can send in minutes. Choose a template, add signature fields, and send it — no formatting, no setup, no accounts required.",
-  "freeTemplates.pop1": "NDA (one-way or mutual)",
-  "freeTemplates.pop2": "Client contract",
-  "freeTemplates.pop3": "Service agreement",
-  "freeTemplates.pop4": "Onboarding agreement",
-  "freeTemplates.pop5": "Vendor agreement",
-  "freeTemplates.pop6": "Rental agreement",
-  "freeTemplates.pop7": "Work order",
-  "freeTemplates.pop8": "Delivery confirmation",
-  "freeTemplates.popularTitle": "Popular templates:",
   "freeTemplates.step1": "Select a template",
   "freeTemplates.step2": "Add the fields you need",
   "freeTemplates.step3": "Send it for signature",

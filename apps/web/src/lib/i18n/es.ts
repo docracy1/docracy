@@ -766,26 +766,40 @@ const es: Messages = {
   "docs.templatesFree.title": "Plantillas gratis",
   "freeTemplates.allTemplates": "Todas las plantillas",
   "freeTemplates.cat.clientContracts": "Contratos con clientes",
+  "freeTemplates.cat.clientContracts.desc":
+    "Las plantillas de contrato con clientes definen alcance, plazos y condiciones de pago para que ambas partes sepan exactamente qué se entrega y cuándo.",
   "freeTemplates.cat.compliance": "Documentos de cumplimiento",
+  "freeTemplates.cat.compliance.desc":
+    "Las plantillas de cumplimiento dejan un registro firmado y fechado de que alguien revisó y aceptó una política u obligación de manejo de datos.",
   "freeTemplates.cat.ndas": "NDAs",
+  "freeTemplates.cat.ndas.desc":
+    "Las plantillas de confidencialidad protegen información compartida — precios, planes de producto, estrategia — mientras dos partes evalúan un acuerdo o alianza.",
   "freeTemplates.cat.onboarding": "Documentos de incorporación",
+  "freeTemplates.cat.onboarding.desc":
+    "Las plantillas de incorporación confirman que un nuevo empleado o contratista recibió políticas, equipo y accesos antes de su primer día.",
   "freeTemplates.cat.payment": "Acuerdos de pago",
+  "freeTemplates.cat.payment.desc":
+    "Las plantillas de acuerdo de pago dejan por escrito un monto adeudado, la fecha de vencimiento y el método de pago — con o sin calendario de cuotas.",
   "freeTemplates.cat.rentalLease": "Arrendamientos y contratos de alquiler",
+  "freeTemplates.cat.rentalLease.desc":
+    "Las plantillas de arrendamiento cubren renta, depósito y responsabilidades para que propietarios e inquilinos empiecen con las mismas reglas claras.",
   "freeTemplates.cat.vendorAgreements": "Acuerdos con proveedores",
+  "freeTemplates.cat.vendorAgreements.desc":
+    "Las plantillas de acuerdo con proveedores fijan precio, entrega y condiciones de calidad al comprar bienes o servicios a un proveedor.",
   "freeTemplates.cat.workOrders": "Órdenes de trabajo",
+  "freeTemplates.cat.workOrders.desc":
+    "Las plantillas de orden de trabajo confirman el trabajo, los materiales y el costo estimado antes de que el proveedor de servicios empiece.",
+  "freeTemplates.categoriesToggle": "Categorías",
+  "freeTemplates.categoriesIntro": "Ve directo al tipo de acuerdo que necesitas.",
   "freeTemplates.heading": "Plantillas listas para acuerdos rápidos",
+  "freeTemplates.heroHeadline": "Envía acuerdos rápido con plantillas gratis",
+  "freeTemplates.heroSub":
+    "Explora nuestra biblioteca de plantillas listas para firmar — completa tus datos y envía a firma en minutos, totalmente gratis.",
+  "freeTemplates.searchPlaceholder": "¿Qué plantilla estás buscando?",
+  "freeTemplates.noResults": "Ninguna plantilla coincide con \"{query}\". Prueba otra palabra o explora todas las plantillas abajo.",
   "freeTemplates.howItWorks": "Cómo funciona:",
   "freeTemplates.intro":
     "Docracy.io ofrece plantillas simples y listas para usar que puedes enviar en minutos. Elige una plantilla, agrega campos de firma y envíala — sin formato, sin configuración, sin cuentas.",
-  "freeTemplates.pop1": "NDA (unilateral o mutuo)",
-  "freeTemplates.pop2": "Contrato con cliente",
-  "freeTemplates.pop3": "Acuerdo de servicio",
-  "freeTemplates.pop4": "Acuerdo de incorporación",
-  "freeTemplates.pop5": "Acuerdo con proveedor",
-  "freeTemplates.pop6": "Contrato de alquiler",
-  "freeTemplates.pop7": "Orden de trabajo",
-  "freeTemplates.pop8": "Confirmación de entrega",
-  "freeTemplates.popularTitle": "Plantillas populares:",
   "freeTemplates.step1": "Selecciona una plantilla",
   "freeTemplates.step2": "Agrega los campos que necesitas",
   "freeTemplates.step3": "Envíala a firmar",
