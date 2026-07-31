@@ -791,6 +791,7 @@ const es: Messages = {
   "freeTemplates.cat.workOrders.desc":
     "Las plantillas de orden de trabajo confirman el trabajo, los materiales y el costo estimado antes de que el proveedor de servicios empiece.",
   "freeTemplates.categoriesToggle": "Categorías",
+  "freeTemplates.utilityBarLabel": "Plantillas Docracy",
   "freeTemplates.categoriesIntro": "Ve directo al tipo de acuerdo que necesitas.",
   "freeTemplates.heading": "Plantillas listas para acuerdos rápidos",
   "freeTemplates.heroHeadline": "Envía acuerdos rápido con plantillas gratis",

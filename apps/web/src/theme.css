@@ -1636,7 +1636,8 @@ select {
 }
 .template-tile-image {
   background: var(--template-tile-bg, #dde9fb);
-  padding: 20px;
+  padding: 32px 20px;
+  min-height: 220px;
   display: flex;
   align-items: center;
   justify-content: center;

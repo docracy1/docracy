@@ -703,6 +703,7 @@ const en: Messages = {
   "freeTemplates.cat.workOrders.desc":
     "Work order templates confirm the job, materials, and cost estimate before a service provider starts the work.",
   "freeTemplates.categoriesToggle": "Categories",
+  "freeTemplates.utilityBarLabel": "Docracy templates",
   "freeTemplates.categoriesIntro": "Jump straight to the kind of agreement you need.",
   "freeTemplates.heading": "Ready-to-use templates for quick agreements",
   "freeTemplates.heroHeadline": "Send agreements quickly with free templates",

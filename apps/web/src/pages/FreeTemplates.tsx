@@ -48,7 +48,7 @@ function TemplateCard({
     <div className="template-card-wrap" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
       <Link to={to} className="template-tile" style={{ textDecoration: "none", color: "inherit" }}>
         <div className="template-tile-image">
-          <TemplateThumbnail pdfPath={pdfPath} width={150} />
+          <TemplateThumbnail pdfPath={pdfPath} width={220} />
         </div>
         <div className="template-tile-body">
           {category && <span className="template-tile-tag">{category}</span>}
@@ -148,7 +148,7 @@ export default function FreeTemplates() {
   return (
     <div>
       <div className="templates-utility-bar">
-        <span className="templates-utility-label">{t("freeTemplates.title")}</span>
+        <span className="templates-utility-label">{t("freeTemplates.utilityBarLabel")}</span>
         <button
           type="button"
           className="templates-categories-toggle"
@@ -159,6 +159,27 @@ export default function FreeTemplates() {
           <span className={categoriesOpen ? "templates-chevron templates-chevron-up" : "templates-chevron"}>▾</span>
         </button>
       </div>
+
+      {categoriesOpen && (
+        <div className="templates-categories-dropdown">
+          <p style={{ maxWidth: 640, fontSize: 14, color: "var(--body)", margin: "0 0 20px" }}>
+            {t("freeTemplates.categoriesIntro")}
+          </p>
+          <div className="templates-categories-grid">
+            {RECURRING_CATEGORIES.map((category) => {
+              const inCategory = FREE_TEMPLATES.filter((tpl) => tpl.recurringCategory === category);
+              if (inCategory.length === 0) return null;
+              const catKey = CATEGORY_KEYS[category];
+              return (
+                <a key={category} href={`#${CATEGORY_ANCHORS[category]}`} className="templates-category-item">
+                  <h3>{catKey ? t(catKey) : category}</h3>
+                  <p>{catKey ? t(`${catKey}.desc`) : ""}</p>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       <div className="hero-band templates-hero">
         <div className="templates-hero-inner">
@@ -209,30 +230,6 @@ export default function FreeTemplates() {
           </div>
         ) : (
           <>
-            <div className="templates-categories-band" style={{ marginTop: 28 }}>
-              <h2 style={{ fontSize: 19, margin: "0 0 4px" }}>{t("freeTemplates.categoriesToggle")}</h2>
-              {categoriesOpen && (
-                <>
-                  <p style={{ maxWidth: 640, fontSize: 14, color: "var(--body)", margin: "4px 0 20px" }}>
-                    {t("freeTemplates.categoriesIntro")}
-                  </p>
-                  <div className="templates-categories-grid">
-                    {RECURRING_CATEGORIES.map((category) => {
-                      const inCategory = FREE_TEMPLATES.filter((tpl) => tpl.recurringCategory === category);
-                      if (inCategory.length === 0) return null;
-                      const catKey = CATEGORY_KEYS[category];
-                      return (
-                        <a key={category} href={`#${CATEGORY_ANCHORS[category]}`} className="templates-category-item">
-                          <h3>{catKey ? t(catKey) : category}</h3>
-                          <p>{catKey ? t(`${catKey}.desc`) : ""}</p>
-                        </a>
-                      );
-                    })}
-                  </div>
-                </>
-              )}
-            </div>
-
             {RECURRING_CATEGORIES.map((category) => {
               const inCategory = FREE_TEMPLATES.filter((tpl) => tpl.recurringCategory === category);
               if (inCategory.length === 0) return null;
