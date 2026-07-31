@@ -128,19 +128,60 @@ describe("runSpaSmokeAndAlert", () => {
     expect(email.sendSpaSmokeAlert).not.toHaveBeenCalled();
   });
 
-  it("emails founder on first failure", async () => {
+  it("emails founder when the failure survives a retry", async () => {
+    vi.useFakeTimers();
     mockBrokenFetch();
     const { env } = makeMockEnv({ FEEDBACK_EMAIL: "founder@docracy.io" });
-    await runSpaSmokeAndAlert(env);
+    const promise = runSpaSmokeAndAlert(env);
+    await vi.advanceTimersByTimeAsync(5000);
+    await promise;
     expect(email.sendSpaSmokeAlert).toHaveBeenCalledTimes(1);
     expect(vi.mocked(email.sendSpaSmokeAlert).mock.calls[0][1]).toBe("founder@docracy.io");
+    vi.useRealTimers();
   });
 
   it("dedupes: second failure within 6h does not re-email", async () => {
+    vi.useFakeTimers();
     mockBrokenFetch();
     const { env } = makeMockEnv({ FEEDBACK_EMAIL: "founder@docracy.io" });
-    await runSpaSmokeAndAlert(env);
-    await runSpaSmokeAndAlert(env);
+    const first = runSpaSmokeAndAlert(env);
+    await vi.advanceTimersByTimeAsync(5000);
+    await first;
+    const second = runSpaSmokeAndAlert(env);
+    await vi.advanceTimersByTimeAsync(5000);
+    await second;
     expect(email.sendSpaSmokeAlert).toHaveBeenCalledTimes(1);
+    vi.useRealTimers();
+  });
+
+  // The actual bug this session's alert flood traced back to: a lone transient 522 (Cloudflare
+  // origin timeout) on the very first attempt used to alert immediately, with nothing to
+  // distinguish it from a real outage — this is what the retry-before-alert logic now prevents.
+  it("does not email when the first pass fails but a retry a few seconds later passes", async () => {
+    vi.useFakeTimers();
+    let call = 0;
+    vi.spyOn(global, "fetch").mockImplementation(async (input) => {
+      call++;
+      const url = String(input);
+      const failingFirstPass = call <= 4; // 3 pages + 1 API check make up "one pass" worth of calls
+      if (url.includes("/api/auth/request-link")) {
+        return new Response(JSON.stringify({ error: "bad" }), {
+          status: failingFirstPass ? 522 : 400,
+          headers: { "Content-Type": failingFirstPass ? "text/plain" : "application/json" },
+        });
+      }
+      if (url.endsWith(".js")) {
+        return failingFirstPass
+          ? new Response(HTML_OK, { status: 200, headers: { "Content-Type": "text/html" } })
+          : new Response(JS_OK, { status: 200, headers: { "Content-Type": "application/javascript" } });
+      }
+      return new Response(HTML_OK, { status: 200, headers: { "Content-Type": "text/html" } });
+    });
+    const { env } = makeMockEnv({ FEEDBACK_EMAIL: "founder@docracy.io" });
+    const promise = runSpaSmokeAndAlert(env);
+    await vi.advanceTimersByTimeAsync(5000);
+    await promise;
+    expect(email.sendSpaSmokeAlert).not.toHaveBeenCalled();
+    vi.useRealTimers();
   });
 });
