@@ -563,6 +563,69 @@ export const ARTICLES: ArticlePost[] = [
     cluster: "Small Business",
     blocks: [p("Use reusable templates and automated reminders.")],
   },
+  {
+    slug: "ai-contract-management-small-business",
+    title: "Do You Need \"AI Agreement Management\" Software? What a New Deloitte Study Really Means for Small Businesses",
+    description:
+      "A 2026 Deloitte/Docusign study found AI contract platforms drive big efficiency gains — but it studied enterprises with thousands of contracts a year. Here's what actually applies if you're small.",
+    publishedDate: "2026-08-01",
+    cluster: "Small Business",
+    blocks: [
+      p(
+        "A new industry report made the rounds recently: Deloitte and Docusign's 2026 study, " +
+          "\"Capitalizing on AI: How Automated Agreement Workflows Drive ROI,\" surveyed over 1,100 senior " +
+          "leaders across six countries and found that companies using AI and automation in contract " +
+          "management are seeing real, measurable returns. If you run a small business or work freelance, " +
+          "the headline numbers are eye-catching — but the fine print matters more than the headline."
+      ),
+      h2("What the report actually found"),
+      p(
+        "The topline numbers are genuinely impressive: respondents reported an average 36% efficiency gain " +
+          "and 36% cost avoidance from mitigated risk after adopting AI and workflow automation in their " +
+          "contract processes, with organizations using \"agentic\" AI workflows and an end-to-end platform " +
+          "seeing close to 30% higher ROI than those that didn't."
+      ),
+      h2("Who the report is actually about"),
+      p(
+        "Here's the part that gets lost in the headlines: the study's respondents were senior leaders at " +
+          "companies with 125 to 5,000+ employees, $25M to $1B+ in annual revenue, and anywhere from 500 to " +
+          "10,000+ contracts a year. Nearly two-thirds of them use four or more separate tools just to manage " +
+          "the contract lifecycle. This is a report about enterprise procurement, legal, and sales teams " +
+          "juggling thousands of agreements a year — not about a two-person consultancy sending out a handful " +
+          "of client contracts a month."
+      ),
+      h2("What doesn't transfer to a small team"),
+      p(
+        "Most of what the report recommends assumes a scale that simply doesn't apply if you're small: " +
+          "buying an end-to-end \"agreement management platform,\" standing up formal AI governance, appointing " +
+          "a Chief AI Officer, or integrating a contract tool with a CRM, ERP, and HR system. None of that is " +
+          "wrong for a 3,000-employee company with a dedicated legal team — it's just not the problem a " +
+          "freelancer or a 5-person shop actually has."
+      ),
+      h2("What actually does transfer"),
+      p(
+        "Strip away the enterprise scale and the report's own list of where AI helps most reads like a " +
+          "checklist any small business can use today, no platform purchase required: drafting agreements from " +
+          "a template instead of a blank page, flagging non-standard or risky clauses before you send " +
+          "something out, and cutting the back-and-forth of manually re-explaining the same terms every time. " +
+          "Those are exactly the capabilities Docracy's free AI tools already cover — a plain-English contract " +
+          "explainer, a clause and risk highlighter, and a prompt-to-agreement generator that drafts a first " +
+          "version for you — built into the same free signing flow, with no separate platform, seat licenses, " +
+          "or IT integration project required."
+      ),
+      h2("The honest takeaway"),
+      p(
+        "If you're running a small business, the lesson from a report like this isn't \"go buy an agreement " +
+          "management platform.\" It's that the specific things AI is good at in contracts — drafting, review, " +
+          "catching risky language — are useful at any scale. You just don't need enterprise software to get " +
+          "them."
+      ),
+      p(
+        "You can read the original 2026 Deloitte/Docusign report at " +
+          "docusign.com/blog/capitalizing-on-AI-deloitte-2026."
+      ),
+    ],
+  },
 
   // --- Comparison cluster ---
   {
