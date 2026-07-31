@@ -9,7 +9,7 @@ import { optionalAccount, type AccountContext } from "../lib/auth";
 import { resolveTtlDays } from "../lib/docTtl";
 import { schedulePreparerLeadEmails } from "../lib/onboardingEmails";
 import { clampAttachmentLimits } from "../lib/signerAttachments";
-import type { DocField, Env } from "@docracy/shared";
+import type { DocField, Env, Locale } from "@docracy/shared";
 
 interface CreateDocumentBody {
   preparerSigns: boolean;
@@ -21,6 +21,9 @@ interface CreateDocumentBody {
   ccRecipients?: Array<{ name?: string; email: string }>;
   customSubject?: string;
   customMessage?: string;
+  /** Preparer's browser locale (see apps/web/src/lib/i18n's detectLocale) — determines the
+   *  language of every email tied to this document. */
+  locale?: Locale;
   signingMode?: "sequential" | "parallel";
   /** Paid-only retention override in days — free ignores / rejects. */
   ttlDays?: number;
@@ -304,6 +307,7 @@ documents.post("/", optionalAccount, async (c) => {
     skipFunnelTracking: getCookie(c, NOTRACK_COOKIE_NAME) === "1",
     customSubject: meta.customSubject?.trim() || undefined,
     customMessage: meta.customMessage?.trim() || undefined,
+    locale: meta.locale,
     signingMode: meta.signingMode,
     templateId: meta.templateId,
     ttlDays: ttl.ttlDays,
@@ -317,7 +321,7 @@ documents.post("/", optionalAccount, async (c) => {
   // a separate, explicit checkbox so this stays GDPR-clean for EU visitors.
   if (meta.preparerMarketingOptIn && meta.preparerEmail?.trim()) {
     c.executionCtx.waitUntil(
-      schedulePreparerLeadEmails(c.env, meta.preparerEmail).catch((err) =>
+      schedulePreparerLeadEmails(c.env, meta.preparerEmail, "preparer_optin", meta.locale).catch((err) =>
         console.error("Preparer lead scheduling failed (non-fatal):", err)
       )
     );

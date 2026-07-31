@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { adminLogin, requestMagicLink } from "../lib/api";
-import { useT } from "../lib/i18n";
+import { useI18n } from "../lib/i18n";
 
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY as string | undefined;
 const TURNSTILE_SCRIPT_SRC = "https://challenges.cloudflare.com/turnstile/v0/api.js";
@@ -69,7 +69,7 @@ function TurnstileWidget({ onToken, resetKey }: { onToken: (token: string | null
 }
 
 export default function Login() {
-  const t = useT();
+  const { t, locale } = useI18n();
   const [searchParams] = useSearchParams();
   const ref = searchParams.get("ref") ?? "";
   const nextParam = searchParams.get("next") ?? "";
@@ -121,7 +121,7 @@ export default function Login() {
     setSubmitting(true);
     setError(null);
     try {
-      await requestMagicLink(email, turnstileToken ?? undefined, nextParam || undefined);
+      await requestMagicLink(email, turnstileToken ?? undefined, nextParam || undefined, locale);
       setSent(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : t("common.error"));

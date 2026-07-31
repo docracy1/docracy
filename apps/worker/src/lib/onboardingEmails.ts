@@ -1,4 +1,4 @@
-import type { Env } from "@docracy/shared";
+import type { Env, Locale } from "@docracy/shared";
 import {
   sendOnboardingStep1,
   sendOnboardingStep3,
@@ -15,7 +15,7 @@ const DAY = 24 * HOUR;
 interface Step {
   column: "step1_sent_at" | "step3_sent_at" | "step4_sent_at";
   delayMs: number;
-  send: (env: Env, email: string) => Promise<void>;
+  send: (env: Env, email: string, locale?: Locale) => Promise<void>;
 }
 
 // Ordered latest-first so a single sweep only ever sends the most-escalated step still due for a
@@ -61,7 +61,12 @@ export async function scheduleOnboardingEmails(env: Env, accountId: string, emai
  * address that already has an account (those get the account sequence on signup) or that already
  * opted in earlier (re-sending does not restart the sequence).
  */
-export async function schedulePreparerLeadEmails(env: Env, email: string, source = "preparer_optin"): Promise<void> {
+export async function schedulePreparerLeadEmails(
+  env: Env,
+  email: string,
+  source = "preparer_optin",
+  locale?: Locale
+): Promise<void> {
   if (!env.DOCRACY_DB) return;
   const normalized = email.trim().toLowerCase();
   if (!normalized) return;
@@ -76,18 +81,20 @@ export async function schedulePreparerLeadEmails(env: Env, email: string, source
     .first();
   if (existingLead) return;
 
-  await env.DOCRACY_DB.prepare(`INSERT INTO onboarding_leads (email, source, opted_in_at) VALUES (?, ?, ?)`)
-    .bind(normalized, source, new Date().toISOString())
+  await env.DOCRACY_DB.prepare(`INSERT INTO onboarding_leads (email, source, opted_in_at, locale) VALUES (?, ?, ?, ?)`)
+    .bind(normalized, source, new Date().toISOString(), locale ?? null)
     .run();
 }
 
 interface PendingRow {
   account_id: string;
   email: string;
+  locale: Locale | null;
 }
 
 interface LeadRow {
   email: string;
+  locale: Locale | null;
 }
 
 async function hasSentAnyDocument(env: Env, accountId: string): Promise<boolean> {
@@ -116,7 +123,10 @@ export async function runOnboardingEmailSweep(env: Env): Promise<void> {
   for (const step of STEPS) {
     const cutoff = new Date(now - step.delayMs).toISOString();
     const rows = await env.DOCRACY_DB.prepare(
-      `SELECT account_id, email FROM onboarding_emails WHERE ${step.column} IS NULL AND account_created_at <= ?`
+      `SELECT oe.account_id AS account_id, oe.email AS email, a.locale AS locale
+       FROM onboarding_emails oe
+       LEFT JOIN accounts a ON a.id = oe.account_id
+       WHERE oe.${step.column} IS NULL AND oe.account_created_at <= ?`
     )
       .bind(cutoff)
       .all<PendingRow>();
@@ -125,7 +135,7 @@ export async function runOnboardingEmailSweep(env: Env): Promise<void> {
       if (handledThisSweep.has(row.account_id)) continue;
       if (await hasSentAnyDocument(env, row.account_id)) continue;
       try {
-        await step.send(env, row.email);
+        await step.send(env, row.email, row.locale ?? undefined);
         await env.DOCRACY_DB.prepare(`UPDATE onboarding_emails SET ${step.column} = ? WHERE account_id = ?`)
           .bind(new Date().toISOString(), row.account_id)
           .run();
@@ -140,7 +150,7 @@ export async function runOnboardingEmailSweep(env: Env): Promise<void> {
   for (const step of LEAD_STEPS) {
     const cutoff = new Date(now - step.delayMs).toISOString();
     const rows = await env.DOCRACY_DB.prepare(
-      `SELECT email FROM onboarding_leads WHERE ${step.column} IS NULL AND opted_in_at <= ?`
+      `SELECT email, locale FROM onboarding_leads WHERE ${step.column} IS NULL AND opted_in_at <= ?`
     )
       .bind(cutoff)
       .all<LeadRow>();
@@ -155,7 +165,7 @@ export async function runOnboardingEmailSweep(env: Env): Promise<void> {
         continue;
       }
       try {
-        await step.send(env, row.email);
+        await step.send(env, row.email, row.locale ?? undefined);
         await env.DOCRACY_DB.prepare(`UPDATE onboarding_leads SET ${step.column} = ? WHERE email = ?`)
           .bind(new Date().toISOString(), row.email)
           .run();

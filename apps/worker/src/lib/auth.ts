@@ -1,7 +1,7 @@
 import type { MiddlewareHandler } from "hono";
 import { getCookie } from "hono/cookie";
 import { generateOpaqueToken, hashOpaqueToken } from "@docracy/shared";
-import type { Env } from "@docracy/shared";
+import type { Env, Locale } from "@docracy/shared";
 import { sendMagicLink } from "./email";
 import { checkAdminLoginRateLimit, checkMagicLinkRateLimit } from "./ratelimit";
 import { scheduleOnboardingEmails } from "./onboardingEmails";
@@ -21,6 +21,9 @@ interface MagicLinkRecord {
   createdAt: string;
   /** Optional post-login relative path (e.g. /status/…). Validated before storage. */
   next?: string;
+  /** Requester's browser locale at request time — carried through to consumeMagicLink so a
+   *  brand-new account is created with the right language stamped on it from the very start. */
+  locale?: Locale;
 }
 
 /** Local relative path only — rejects protocol-relative and absolute URLs. */
@@ -105,7 +108,8 @@ export async function requestMagicLink(
   email: string,
   ip: string | null,
   turnstileToken?: string,
-  next?: string
+  next?: string,
+  locale?: Locale
 ): Promise<{ ok: true } | { ok: false; error: string }> {
   if (!env.DOCRACY_DB) {
     return { ok: false, error: "Accounts aren't set up on this deployment yet." };
@@ -128,6 +132,7 @@ export async function requestMagicLink(
     email: normalizedEmail,
     createdAt: now,
     ...(safeNext ? { next: safeNext } : {}),
+    ...(locale ? { locale } : {}),
   };
   await env.DOCRACY_KV.put(`magiclink:${hash}`, JSON.stringify(record), { expirationTtl: MAGIC_LINK_TTL_SECONDS });
 
@@ -141,7 +146,7 @@ export async function requestMagicLink(
   );
 
   const link = `${env.PUBLIC_APP_URL}/auth/verify?token=${token}`;
-  await sendMagicLink(env, normalizedEmail, link);
+  await sendMagicLink(env, normalizedEmail, link, locale ?? "en");
 
   return { ok: true };
 }
@@ -150,7 +155,8 @@ async function findOrCreateAccount(
   env: Env,
   ctx: Ctx,
   email: string,
-  attribution = ""
+  attribution = "",
+  locale?: Locale
 ): Promise<{ id: string; isPaid: boolean; isEnterprise: boolean }> {
   const db = env.DOCRACY_DB!;
   const existing = await db
@@ -172,8 +178,8 @@ async function findOrCreateAccount(
   const id = crypto.randomUUID();
   const now = nowIso();
   await db
-    .prepare(`INSERT INTO accounts (id, email, created_at, is_paid, last_login_at) VALUES (?, ?, ?, 0, ?)`)
-    .bind(id, email, now, now)
+    .prepare(`INSERT INTO accounts (id, email, created_at, is_paid, last_login_at, locale) VALUES (?, ?, ?, 0, ?, ?)`)
+    .bind(id, email, now, now, locale ?? null)
     .run();
 
   ctx.waitUntil(
@@ -218,7 +224,7 @@ export async function consumeMagicLink(
       .catch((err) => console.error("Auth D1 audit (magic_link consumed) failed (non-fatal):", err))
   );
 
-  const account = await findOrCreateAccount(env, ctx, record.email, attribution);
+  const account = await findOrCreateAccount(env, ctx, record.email, attribution, record.locale);
   const sessionToken = await createSession(
     env,
     ctx,

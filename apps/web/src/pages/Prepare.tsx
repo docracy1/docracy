@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { useT } from "../lib/i18n";
+import { useI18n } from "../lib/i18n";
 import { useSeoMeta } from "../lib/useSeoMeta";
 import PdfViewer from "../components/PdfViewer";
 import {
@@ -73,7 +73,7 @@ function SidebarHeading({ label, count }: { label: string; count?: number }) {
 }
 
 export default function Prepare() {
-  const t = useT();
+  const { t, locale } = useI18n();
   useSeoMeta("prepare");
   const navigate = useNavigate();
   const location = useLocation();
@@ -858,6 +858,7 @@ export default function Prepare() {
         ccRecipients: trimmedCcs.length > 0 ? trimmedCcs : undefined,
         templateId: templateId ?? freeTemplateSlug ?? undefined,
         smsInvites: smsInvites || undefined,
+        locale,
         ...(account?.isPaid
           ? {
               ttlDays,

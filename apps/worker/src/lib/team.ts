@@ -1,5 +1,5 @@
 import { generateOpaqueToken, hashOpaqueToken } from "@docracy/shared";
-import type { Env } from "@docracy/shared";
+import type { Env, Locale } from "@docracy/shared";
 import { createSession } from "./auth";
 import { sendTeamInvite } from "./email";
 
@@ -83,8 +83,12 @@ export async function inviteTeamMember(
     .bind(crypto.randomUUID(), ownerAccountId, normalizedEmail, hash, now, expiresAt)
     .run();
 
+  // The invitee has no account (and so no locale of their own) yet — the owner's own locale is
+  // the best available signal, since colleagues invited into the same workspace are likely to
+  // share a language.
+  const owner = await db.prepare(`SELECT locale FROM accounts WHERE id = ?`).bind(ownerAccountId).first<{ locale: Locale | null }>();
   const link = `${env.PUBLIC_APP_URL}/team/accept?token=${token}`;
-  await sendTeamInvite(env, normalizedEmail, ownerEmail, link);
+  await sendTeamInvite(env, normalizedEmail, ownerEmail, link, owner?.locale ?? "en");
   return { ok: true };
 }
 

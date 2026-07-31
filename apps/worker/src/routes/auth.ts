@@ -16,7 +16,7 @@ import {
   type AccountContext,
 } from "../lib/auth";
 import { trackEvent, NOTRACK_COOKIE_NAME, noTrackCookieOptions, sanitizeAttribution } from "../lib/analytics";
-import type { Env } from "@docracy/shared";
+import type { Env, Locale } from "@docracy/shared";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -24,9 +24,9 @@ type Variables = { account: AccountContext | null };
 const auth = new Hono<{ Bindings: Env; Variables: Variables }>();
 
 auth.post("/request-link", async (c) => {
-  let body: { email?: string; turnstileToken?: string; attribution?: string; next?: string };
+  let body: { email?: string; turnstileToken?: string; attribution?: string; next?: string; locale?: Locale };
   try {
-    body = await c.req.json<{ email?: string; turnstileToken?: string; attribution?: string; next?: string }>();
+    body = await c.req.json<{ email?: string; turnstileToken?: string; attribution?: string; next?: string; locale?: Locale }>();
   } catch {
     return c.json({ error: "Invalid request body" }, 400);
   }
@@ -37,7 +37,8 @@ auth.post("/request-link", async (c) => {
   }
 
   const ip = c.req.header("CF-Connecting-IP") ?? null;
-  const result = await requestMagicLink(c.env, c.executionCtx, email, ip, body.turnstileToken, body.next);
+  const locale = body.locale === "es" ? "es" : undefined;
+  const result = await requestMagicLink(c.env, c.executionCtx, email, ip, body.turnstileToken, body.next, locale);
   if (!result.ok) return c.json({ error: result.error }, 400);
   // Fired for every request, new account or returning login alike — there's no way to know which
   // without a D1 lookup this route doesn't otherwise need, and a broad "auth flow started" signal

@@ -1,5 +1,6 @@
 import { attributionLabel } from "./attribution";
 import type { CcRecipientInput, DocField, SignerInput, StatusPayload } from "./types";
+import type { Locale } from "./i18n/types";
 
 // Empty in dev (Vite proxies /api to the local worker); set to the deployed worker's absolute
 // URL for production builds, since the frontend (Pages) and worker live on different domains.
@@ -57,6 +58,9 @@ export interface CreateDocumentOptions {
    *  counter additionally requires a logged-in paid account (no workspace to key a free-tier
    *  anonymous send's usage against otherwise). */
   templateId?: string;
+  /** Preparer's current browser locale (see lib/i18n's detectLocale) — determines the language of
+   *  every email tied to this document. */
+  locale?: Locale;
 }
 
 export async function createDocument(
@@ -254,12 +258,13 @@ export async function submitFeedback(email: string, message: string): Promise<{ 
 export async function requestMagicLink(
   email: string,
   turnstileToken?: string,
-  next?: string
+  next?: string,
+  locale?: Locale
 ): Promise<{ ok: true }> {
   const res = await apiFetch("/api/auth/request-link", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, turnstileToken, attribution: attributionLabel(), next }),
+    body: JSON.stringify({ email, turnstileToken, attribution: attributionLabel(), next, locale }),
   });
   return asJson(res);
 }

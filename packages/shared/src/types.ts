@@ -1,3 +1,7 @@
+/** Mirrors apps/web/src/lib/i18n's Locale — duplicated intentionally (see CLAUDE.md's YAGNI note)
+ *  rather than importing the frontend's i18n module from the worker/shared package. */
+export type Locale = "en" | "es";
+
 export type DocFieldType = "signature" | "initials" | "text" | "date" | "checkbox" | "dropdown";
 
 /**
@@ -158,6 +162,12 @@ export interface DocState {
    *  before this field existed just never gets nudges — same "always read the optional field"
    *  pattern as customSubject/customMessage above. */
   preparerEmail?: string;
+  /** Preparer's browser locale at creation time (see lib/i18n's detectLocale on the frontend) —
+   *  determines the language of every email tied to this document (invite, reminder, completion,
+   *  status link). Absent on documents created before this field existed; always read via
+   *  `doc.locale ?? "en"`. Not a guess at the *signer's* language, just the best signal available
+   *  for an anonymous chain with no per-signer locale of its own. */
+  locale?: Locale;
   /** When true, also text signing links to signers with phone + US carrier (via Resend gateways). */
   smsInvites?: boolean;
   /** Paid-only: signers must upload file(s) before submitting. Always read via optional chaining. */

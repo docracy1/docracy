@@ -1,6 +1,13 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { PDFDocument } from "pdf-lib";
-import { sendSigningInvite, sendReminder, sendPreparerStatusLink, sendCompletionEmails, sendFeedback } from "./email";
+import {
+  sendSigningInvite,
+  sendReminder,
+  sendPreparerStatusLink,
+  sendCompletionEmails,
+  sendFeedback,
+  sendMagicLink,
+} from "./email";
 import { makeMockEnv } from "../test/mockEnv";
 import type { DocState } from "@docracy/shared";
 
@@ -209,6 +216,64 @@ describe("sendCompletionEmails", () => {
     await sendCompletionEmails(env, doc, finalPdf);
 
     expect(recipients.filter((r) => r === "victim@example.com")).toHaveLength(1);
+  });
+});
+
+describe("locale — Spanish translations", () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  it("sends sendSigningInvite in Spanish when doc.locale is es", async () => {
+    const { env } = makeMockEnv();
+    const capture = captureDevEmailLog();
+
+    await sendSigningInvite(env, { ...makeDoc("Anna"), locale: "es" }, 1, "tok");
+
+    const logged = capture.logged();
+    expect(logged).toContain('subject="Listo para firmar');
+    expect(logged).toContain("Hola Anna,");
+    expect(logged).not.toContain("Dear Anna,");
+  });
+
+  it("falls back to English when doc.locale is absent", async () => {
+    const { env } = makeMockEnv();
+    const capture = captureDevEmailLog();
+
+    await sendSigningInvite(env, makeDoc("Anna"), 1, "tok");
+
+    const logged = capture.logged();
+    expect(logged).toContain("Dear Anna,");
+    expect(logged).not.toContain("Hola Anna,");
+  });
+
+  it("sends sendReminder in Spanish when doc.locale is es", async () => {
+    const { env } = makeMockEnv();
+    const capture = captureDevEmailLog();
+
+    await sendReminder(env, { ...makeDoc("Anna"), locale: "es" }, 1, "tok", false);
+
+    const logged = capture.logged();
+    expect(logged).toContain("Todavía tienes un documento por firmar");
+  });
+
+  it("sends sendPreparerStatusLink in Spanish when passed locale es", async () => {
+    const { env } = makeMockEnv();
+    const capture = captureDevEmailLog();
+
+    await sendPreparerStatusLink(env, "preparer@example.com", "tok", "es");
+
+    const logged = capture.logged();
+    expect(logged).toContain("El enlace de estado de tu documento");
+  });
+
+  it("sends sendMagicLink in Spanish when passed locale es", async () => {
+    const { env } = makeMockEnv();
+    const capture = captureDevEmailLog();
+
+    await sendMagicLink(env, "anna@example.com", "https://docracy.io/auth/verify?token=tok", "es");
+
+    const logged = capture.logged();
+    expect(logged).toContain('subject="Tu enlace de acceso a Docracy"');
+    expect(logged).toContain("Inicia sesión en Docracy");
   });
 });
 

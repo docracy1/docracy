@@ -6,7 +6,7 @@ import { deliverWebhookEvent } from "./webhooks";
 import { trackEvent } from "./analytics";
 import { incrementTemplateUsage } from "./templateUsage";
 import { signToken, hashOpaqueToken, generateOpaqueToken } from "@docracy/shared";
-import type { AuditEvent, CcRecipient, DocField, DocState, Env, Signer } from "@docracy/shared";
+import type { AuditEvent, CcRecipient, DocField, DocState, Env, Locale, Signer } from "@docracy/shared";
 
 /** Opaque claim tokens let a later signup attach an anonymous send to a dashboard (24h). */
 export const DOCUMENT_CLAIM_TTL_SECONDS = 24 * 60 * 60;
@@ -49,6 +49,10 @@ export interface CreateDocumentCoreParams {
    *  once here) since sign.ts's chain-advance re-sends sendSigningInvite for later signers too. */
   customSubject?: string;
   customMessage?: string;
+  /** Preparer's browser locale at creation time (see apps/web/src/lib/i18n's detectLocale) —
+   *  stored on the doc so every email tied to this document sends in the right language.
+   *  Undefined/omitted defaults to "en" everywhere it's read. */
+  locale?: Locale;
   /** "sequential" (default) invites only the first signer, exactly as this app has always worked;
    *  "parallel" invites every signer at once, and any of them may sign in any order. */
   signingMode?: "sequential" | "parallel";
@@ -153,6 +157,7 @@ export async function createDocumentCore(
     events,
     customSubject: params.customSubject,
     customMessage: params.customMessage,
+    locale: params.locale,
     preparerEmail: preparerEmail?.trim() || undefined,
     smsInvites: params.smsInvites || undefined,
     signerAttachments: params.signerAttachments,
@@ -215,7 +220,7 @@ export async function createDocumentCore(
   if (preparerEmail) {
     const trimmedPreparerEmail = preparerEmail.trim();
     ctx.waitUntil(
-      sendPreparerStatusLink(env, trimmedPreparerEmail, statusToken).catch((err) =>
+      sendPreparerStatusLink(env, trimmedPreparerEmail, statusToken, params.locale ?? "en").catch((err) =>
         console.error(`Preparer status-link email failed for doc ${docId} (non-fatal):`, err)
       )
     );
