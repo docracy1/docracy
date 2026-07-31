@@ -21,6 +21,13 @@ const es: Messages = {
   "blog.tryFreeSampleNda": "Prueba gratis — NDA de ejemplo",
   "blog.uploadW9": "Sube un PDF W-9",
   "blog.seePricing": "Ver precios",
+  "blog.newBadge": "Nuevo",
+  "blog.readArticle": "Leer artículo",
+  "blog.quickHelpTitle": "¿No sabes por dónde empezar?",
+  "blog.quickHelpBody": "Cuéntanos qué vas a firmar — te indicamos la plantilla gratis y la configuración de campos correcta.",
+  "blog.askAQuestion": "Hacer una pregunta",
+  "blog.startFree": "Empezar gratis",
+  "blog.quickHelpTip": "Consejo: la mayoría de los acuerdos comunes solo necesitan el plan gratis de Docracy — sin cuenta, sin tarjeta.",
   "calc.footer":
     "Los precios son el plan comercial/equipo estándar de cada proveedor según su propia página — los conjuntos de funciones difieren; haz clic para comparar exactamente qué incluye cada uno.",
   "calc.minSeats": " (mínimo de {{min}} asientos aplica)",

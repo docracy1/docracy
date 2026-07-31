@@ -58,10 +58,58 @@ export default function Blog() {
     })),
   ].sort((a, b) => b.date.localeCompare(a.date));
 
+  // Featured pick draws only from content known at first render (clusters + static BLOG_POSTS,
+  // not the async dynamicPosts fetch) so the hero card never shifts after mount or diverges from
+  // what prerender.mjs's static render produces.
+  const featuredCandidates = [
+    ...clusters.flatMap(({ cluster, posts }) => posts.map((p) => ({ ...p, category: cluster }))),
+    ...BLOG_POSTS.map((p) => ({
+      slug: p.slug,
+      title: p.title,
+      description: p.description,
+      date: p.publishedDate,
+      category: t("blog.moreFromBlog"),
+    })),
+  ].sort((a, b) => b.date.localeCompare(a.date));
+  const featured = featuredCandidates[0];
+  const isNew = featured ? Date.parse(featured.date) > Date.now() - 21 * 24 * 60 * 60 * 1000 : false;
+
   return (
     <div className="container">
-      <h1 style={{ fontSize: 30 }}>{t("blog.title")}</h1>
-      <p style={{ maxWidth: 640 }}>{t("blog.subtitle")}</p>
+      <div className="blog-hero">
+        <h1 className="blog-hero-title">{t("blog.title")}</h1>
+        <p className="blog-hero-subtitle">{t("blog.subtitle")}</p>
+      </div>
+
+      {featured && (
+        <div className="blog-featured-grid">
+          <Link to={`/blog/${featured.slug}`} className="blog-featured-card" style={{ textDecoration: "none" }}>
+            {isNew && <span className="blog-featured-badge">{t("blog.newBadge")}</span>}
+            <span className="blog-featured-tag">{featured.category}</span>
+            <h2 className="blog-featured-title">{featured.title}</h2>
+            <p className="blog-featured-excerpt">{featured.description}</p>
+            <span className="blog-pill-btn">{t("blog.readArticle")}</span>
+          </Link>
+
+          <div className="blog-quick-help">
+            <h3 className="blog-quick-help-title">{t("blog.quickHelpTitle")}</h3>
+            <p className="blog-quick-help-body">{t("blog.quickHelpBody")}</p>
+            <div className="blog-quick-help-actions">
+              <button
+                type="button"
+                className="blog-pill-btn-solid-light"
+                onClick={() => window.dispatchEvent(new Event("docracy:open-chat"))}
+              >
+                {t("blog.askAQuestion")}
+              </button>
+              <Link to="/prepare" className="blog-pill-btn-outline">
+                {t("blog.startFree")}
+              </Link>
+            </div>
+            <p className="blog-quick-help-tip">{t("blog.quickHelpTip")}</p>
+          </div>
+        </div>
+      )}
 
       {clusters.map(({ cluster, posts }) => (
         <div key={cluster} style={{ marginTop: 32 }}>
