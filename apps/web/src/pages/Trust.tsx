@@ -67,9 +67,8 @@ export default function Trust() {
         2 or ISO certificate for the application layer.
       </p>
       <p>
-        Docracy (RELACON GmbH) does not yet hold its own SOC 2 or ISO 27001 attestation. That is on our roadmap
-        when Enterprise demand justifies it; until then we publish this page and answer questionnaires
-        directly.
+        Docracy (RELACON GmbH) does not hold its own SOC 2 or ISO 27001 attestation. We publish this page and
+        answer questionnaires directly.
       </p>
 
       <h2 style={{ fontSize: 19, marginTop: 28 }}>Subprocessors</h2>
@@ -129,9 +128,8 @@ export default function Trust() {
 
       <h2 style={{ fontSize: 19, marginTop: 28 }}>Vulnerability testing</h2>
       <p>
-        We do not yet publish a recurring third-party penetration-test letter. We welcome responsible
-        disclosure to <a href="mailto:founder@docracy.io">founder@docracy.io</a>. An annual external pen test
-        is planned as we take on more Enterprise reviews.
+        We do not publish a recurring third-party penetration-test letter. We welcome responsible
+        disclosure to <a href="mailto:founder@docracy.io">founder@docracy.io</a>.
       </p>
 
       <h2 style={{ fontSize: 19, marginTop: 28 }}>Security questionnaire (short answers)</h2>
