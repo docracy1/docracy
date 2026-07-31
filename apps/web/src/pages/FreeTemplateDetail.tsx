@@ -58,7 +58,7 @@ export default function FreeTemplateDetail() {
         <Link to={indexTo}>← {t("tpl.detail.backAll")}</Link>
       </p>
       <div style={{ display: "flex", gap: 20, alignItems: "flex-start", flexWrap: "wrap" }}>
-        <TemplateThumbnail pdfPath={template.pdfPath} width={200} />
+        <TemplateThumbnail pdfPath={template.pdfPath} width={280} />
         <div style={{ flex: 1, minWidth: 240 }}>
           <h1 style={{ marginTop: 0 }}>{name}</h1>
           <p style={{ color: "var(--mute)" }}>{useCase}</p>

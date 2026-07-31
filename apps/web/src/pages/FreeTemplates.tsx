@@ -35,24 +35,44 @@ function TemplateCard({
   description,
   to,
   pdfPath,
+  category,
 }: {
   name: string;
   description: string;
   to: string;
   pdfPath: string;
+  category?: string;
 }) {
+  const [hovered, setHovered] = useState(false);
   return (
-    <Link
-      to={to}
-      className="card"
-      style={{ textDecoration: "none", color: "inherit", display: "flex", gap: 12, alignItems: "flex-start" }}
-    >
-      <TemplateThumbnail pdfPath={pdfPath} width={72} />
-      <div style={{ minWidth: 0 }}>
-        <h3 style={{ marginTop: 0, marginBottom: 8, fontSize: 16 }}>{name}</h3>
-        <p style={{ margin: 0, fontSize: 13, color: "var(--mute)" }}>{description}</p>
-      </div>
-    </Link>
+    <div className="template-card-wrap" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+      <Link
+        to={to}
+        className="card"
+        style={{ textDecoration: "none", color: "inherit", display: "flex", gap: 14, alignItems: "flex-start" }}
+      >
+        <TemplateThumbnail pdfPath={pdfPath} width={110} />
+        <div style={{ minWidth: 0 }}>
+          <h3 style={{ marginTop: 0, marginBottom: 8, fontSize: 16 }}>{name}</h3>
+          <p style={{ margin: 0, fontSize: 13, color: "var(--mute)" }}>{description}</p>
+        </div>
+      </Link>
+
+      {hovered && (
+        <Link to={to} className="template-preview-popover" style={{ textDecoration: "none" }}>
+          <div className="template-preview-thumb">
+            <TemplateThumbnail pdfPath={pdfPath} width={260} />
+          </div>
+          <div className="template-preview-info">
+            {category && <span className="template-preview-tag">{category}</span>}
+            <h3>{name}</h3>
+            <p>{description}</p>
+            <span className="template-preview-meta">Free · No signup required</span>
+            <span className="template-preview-cta">View template</span>
+          </div>
+        </Link>
+      )}
+    </div>
   );
 }
 
@@ -161,6 +181,7 @@ export default function FreeTemplates() {
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
                 {searchResults.map((tpl) => {
                   const labels = labelFor(tpl.slug, tpl.name, tpl.description);
+                  const catKey = tpl.recurringCategory ? CATEGORY_KEYS[tpl.recurringCategory] : undefined;
                   return (
                     <TemplateCard
                       key={tpl.slug}
@@ -168,6 +189,7 @@ export default function FreeTemplates() {
                       description={labels.description}
                       to={localizePath(`/free-templates/${tpl.slug}`, locale)}
                       pdfPath={tpl.pdfPath}
+                      category={catKey ? t(catKey) : tpl.recurringCategory}
                     />
                   );
                 })}
@@ -176,20 +198,7 @@ export default function FreeTemplates() {
           </div>
         ) : (
           <>
-            <p style={{ maxWidth: 640, fontSize: 14, color: "var(--body)", marginTop: 28 }}>{t("freeTemplates.intro")}</p>
-
-            <p style={{ maxWidth: 640, fontSize: 14, fontWeight: 700, margin: "16px 0 8px" }}>{t("freeTemplates.howItWorks")}</p>
-            <ol style={{ maxWidth: 640, fontSize: 14, color: "var(--body)", margin: 0, paddingLeft: 20, lineHeight: 1.7 }}>
-              <li>{t("freeTemplates.step1")}</li>
-              <li>{t("freeTemplates.step2")}</li>
-              <li>{t("freeTemplates.step3")}</li>
-            </ol>
-
-            <p style={{ maxWidth: 640, fontSize: 13, color: "var(--mute)", fontStyle: "italic", margin: "16px 0 28px" }}>
-              {t("freeTemplates.tip")}
-            </p>
-
-            <div className="templates-categories-band">
+            <div className="templates-categories-band" style={{ marginTop: 28 }}>
               <div className="templates-categories-head">
                 <h2 style={{ fontSize: 19, margin: 0 }}>{t("freeTemplates.categoriesToggle")}</h2>
                 <button
@@ -241,6 +250,7 @@ export default function FreeTemplates() {
                           description={labels.description}
                           to={localizePath(`/free-templates/${tpl.slug}`, locale)}
                           pdfPath={tpl.pdfPath}
+                          category={catKey ? t(catKey) : category}
                         />
                       );
                     })}
@@ -254,6 +264,7 @@ export default function FreeTemplates() {
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
                 {FREE_TEMPLATES.map((tpl) => {
                   const labels = labelFor(tpl.slug, tpl.name, tpl.description);
+                  const catKey = tpl.recurringCategory ? CATEGORY_KEYS[tpl.recurringCategory] : undefined;
                   return (
                     <TemplateCard
                       key={tpl.slug}
@@ -261,10 +272,21 @@ export default function FreeTemplates() {
                       description={labels.description}
                       to={localizePath(`/free-templates/${tpl.slug}`, locale)}
                       pdfPath={tpl.pdfPath}
+                      category={catKey ? t(catKey) : tpl.recurringCategory}
                     />
                   );
                 })}
               </div>
+            </div>
+
+            <div className="templates-faq">
+              <h2 style={{ fontSize: 19 }}>{t("freeTemplates.faqTitle")}</h2>
+              {(["faq1", "faq2", "faq3", "faq4", "faq5", "faq6"] as const).map((key) => (
+                <details key={key} className="templates-faq-item">
+                  <summary>{t(`freeTemplates.${key}.q`)}</summary>
+                  <p>{t(`freeTemplates.${key}.a`)}</p>
+                </details>
+              ))}
             </div>
           </>
         )}

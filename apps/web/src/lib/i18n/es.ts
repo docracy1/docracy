@@ -797,13 +797,25 @@ const es: Messages = {
     "Explora nuestra biblioteca de plantillas listas para firmar — completa tus datos y envía a firma en minutos, totalmente gratis.",
   "freeTemplates.searchPlaceholder": "¿Qué plantilla estás buscando?",
   "freeTemplates.noResults": "Ninguna plantilla coincide con \"{query}\". Prueba otra palabra o explora todas las plantillas abajo.",
-  "freeTemplates.howItWorks": "Cómo funciona:",
-  "freeTemplates.intro":
-    "Docracy.io ofrece plantillas simples y listas para usar que puedes enviar en minutos. Elige una plantilla, agrega campos de firma y envíala — sin formato, sin configuración, sin cuentas.",
-  "freeTemplates.step1": "Selecciona una plantilla",
-  "freeTemplates.step2": "Agrega los campos que necesitas",
-  "freeTemplates.step3": "Envíala a firmar",
-  "freeTemplates.tip": "Consejo: usar una plantilla es la forma más rápida de enviar tu primer documento.",
+  "freeTemplates.faqTitle": "Preguntas frecuentes",
+  "freeTemplates.faq1.q": "¿Qué es una plantilla y en qué se diferencia de un documento?",
+  "freeTemplates.faq1.a":
+    "Una plantilla es un acuerdo prediseñado con las secciones estándar y los campos de firma ya colocados — tú completas los nombres, montos y fechas específicos, y la envías. Un documento, en Docracy, es cualquier archivo que hayas preparado para firmar, ya sea que haya empezado como plantilla o como tu propia carga.",
+  "freeTemplates.faq2.q": "¿Qué tipos de plantillas ofrece Docracy?",
+  "freeTemplates.faq2.a":
+    "NDAs, contratos con clientes, órdenes de trabajo, acuerdos con proveedores, arrendamientos y contratos de alquiler, documentos de incorporación, acuerdos de pago y documentos de cumplimiento — mira las categorías arriba, o usa el buscador para encontrar una en particular.",
+  "freeTemplates.faq3.q": "¿Estas plantillas son legalmente exigibles?",
+  "freeTemplates.faq3.a":
+    "Firmar a través de Docracy usa una firma electrónica simple (SES), reconocida legalmente para acuerdos comerciales cotidianos bajo leyes como la ESIGN Act de EE. UU. y el reglamento eIDAS de la UE. Dicho esto, son plantillas generales, no asesoría legal — para acuerdos de alto riesgo o regulados, haz que un abogado calificado revise el documento para tu situación.",
+  "freeTemplates.faq4.q": "¿Qué tan seguro está mi documento?",
+  "freeTemplates.faq4.a":
+    "Los documentos se cifran en tránsito y en reposo, y los documentos gratuitos se eliminan automáticamente después de un breve período de retención. No se requiere cuenta, así que no se almacena nada más de lo necesario para completar el flujo de firma.",
+  "freeTemplates.faq5.q": "¿Puedo editar una plantilla antes de enviarla?",
+  "freeTemplates.faq5.a":
+    "Sí — el editor de Docracy te permite editar el texto, agregar o quitar campos de firma, tapar secciones y reordenar páginas antes de enviarla.",
+  "freeTemplates.faq6.q": "¿Necesito una cuenta para usar una plantilla?",
+  "freeTemplates.faq6.a":
+    "No — las plantillas son gratis para enviar a hasta 2 firmantes, sin necesidad de registro. Un espacio de trabajo de pago agrega firmantes ilimitados, herramientas de IA y funciones de equipo si las necesitas.",
   "mcp.client.chatgpt.name": "ChatGPT",
   "mcp.client.chatgpt.setup":
     "Configuración → Seguridad e inicio de sesión → activa el Modo desarrollador. Luego Configuración → Conectores (o Plugins) → Agregar conector personalizado → pega tu URL de conector personal desde el Panel.",

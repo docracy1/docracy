@@ -709,15 +709,27 @@ const en: Messages = {
     "Browse our library of ready-to-sign templates — fill in your details and send for signature in minutes, completely free.",
   "freeTemplates.searchPlaceholder": "What template are you looking for?",
   "freeTemplates.noResults": "No templates match \"{query}\". Try a different word, or browse all templates below.",
-  "freeTemplates.howItWorks": "How it works:",
-  "freeTemplates.intro":
-    "Docracy.io provides simple, ready-to-use templates you can send in minutes. Choose a template, add signature fields, and send it — no formatting, no setup, no accounts required.",
-  "freeTemplates.step1": "Select a template",
-  "freeTemplates.step2": "Add the fields you need",
-  "freeTemplates.step3": "Send it for signature",
   "freeTemplates.sub": "Ready-to-sign documents — pick one, fill in your details, and send for signature in minutes.",
-  "freeTemplates.tip": "Tip: Using a template is the fastest way to send your first document.",
   "freeTemplates.title": "Free templates",
+  "freeTemplates.faqTitle": "FAQ",
+  "freeTemplates.faq1.q": "What is a template and how is it different from a document?",
+  "freeTemplates.faq1.a":
+    "A template is a pre-built agreement with the standard sections and signature fields already in place — you fill in the specific names, amounts, and dates, then send it. A document, in Docracy, is any file you've prepared for signing, whether it started from a template or your own upload.",
+  "freeTemplates.faq2.q": "What kinds of templates does Docracy offer?",
+  "freeTemplates.faq2.a":
+    "NDAs, client contracts, work orders, vendor agreements, rental and lease agreements, onboarding documents, payment agreements, and compliance documents — see the categories above, or use the search bar to find a specific one.",
+  "freeTemplates.faq3.q": "Are these templates legally enforceable?",
+  "freeTemplates.faq3.a":
+    "Signing through Docracy uses a simple electronic signature (SES), which is legally recognized for everyday business agreements under laws like the U.S. ESIGN Act and the EU's eIDAS regulation. That said, these are general templates, not legal advice — for high-stakes or regulated agreements, have a qualified attorney review the document for your situation.",
+  "freeTemplates.faq4.q": "How secure is my document?",
+  "freeTemplates.faq4.a":
+    "Documents are encrypted in transit and at rest, and free documents are automatically deleted after a short retention window. No account is required, so nothing is stored beyond what's needed to complete the signing flow.",
+  "freeTemplates.faq5.q": "Can I edit a template before sending it?",
+  "freeTemplates.faq5.a":
+    "Yes — Docracy's editor lets you edit the text, add or remove signature fields, redact sections, and reorder pages before you send it.",
+  "freeTemplates.faq6.q": "Do I need an account to use a template?",
+  "freeTemplates.faq6.a":
+    "No — templates are free to send to up to 2 signers with no signup required. A paid workspace adds unlimited signers, AI tools, and team features if you need them.",
   "mcp.client.chatgpt.name": "ChatGPT",
   "mcp.client.chatgpt.setup":
     "Settings → Security and login → turn on Developer Mode. Then Settings → Connectors (or Plugins) → Add custom connector → paste your personal connector URL from the Dashboard.",
