@@ -128,12 +128,13 @@ describe("runSpaSmokeAndAlert", () => {
     expect(email.sendSpaSmokeAlert).not.toHaveBeenCalled();
   });
 
-  it("emails founder when the failure survives a retry", async () => {
+  it("emails founder when the failure survives every retry", async () => {
     vi.useFakeTimers();
     mockBrokenFetch();
     const { env } = makeMockEnv({ FEEDBACK_EMAIL: "founder@docracy.io" });
     const promise = runSpaSmokeAndAlert(env);
     await vi.advanceTimersByTimeAsync(5000);
+    await vi.advanceTimersByTimeAsync(15000);
     await promise;
     expect(email.sendSpaSmokeAlert).toHaveBeenCalledTimes(1);
     expect(vi.mocked(email.sendSpaSmokeAlert).mock.calls[0][1]).toBe("founder@docracy.io");
@@ -146,9 +147,11 @@ describe("runSpaSmokeAndAlert", () => {
     const { env } = makeMockEnv({ FEEDBACK_EMAIL: "founder@docracy.io" });
     const first = runSpaSmokeAndAlert(env);
     await vi.advanceTimersByTimeAsync(5000);
+    await vi.advanceTimersByTimeAsync(15000);
     await first;
     const second = runSpaSmokeAndAlert(env);
     await vi.advanceTimersByTimeAsync(5000);
+    await vi.advanceTimersByTimeAsync(15000);
     await second;
     expect(email.sendSpaSmokeAlert).toHaveBeenCalledTimes(1);
     vi.useRealTimers();

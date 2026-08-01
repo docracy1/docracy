@@ -9,8 +9,10 @@ const ALERT_STATE_KEY = "spa-smoke:alert";
 /** Reminder while still down — don't email every hourly tick. */
 const REMIND_AFTER_MS = 6 * 60 * 60 * 1000;
 /** A failing first pass is often a transient Cloudflare-origin blip (522, cold start) rather than
- *  a real outage — re-run once after this delay and only alert if the failure survives it. */
-const RETRY_DELAY_MS = 5000;
+ *  a real outage — re-run after each of these delays and only alert if the failure survives every
+ *  retry. A single 5s retry still wasn't enough to ride out some observed multi-second 522 blips
+ *  (this check is hourly, so a few extra seconds before alerting costs nothing on a real outage). */
+const RETRY_DELAYS_MS = [5000, 15000];
 
 async function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -222,15 +224,19 @@ export async function runSpaSmokeAndAlert(env: Env): Promise<void> {
     return;
   }
 
-  // Confirm the failure survives a retry before treating it as real — a lone 522/timeout on the
-  // first pass shouldn't page anyone.
-  await sleep(RETRY_DELAY_MS);
-  const failures = await runSpaSmokeChecks(env);
+  // Confirm the failure survives every retry before treating it as real — a transient 522/timeout
+  // blip on the first pass (or even one retry) shouldn't page anyone.
+  let failures = firstPass;
+  for (const delay of RETRY_DELAYS_MS) {
+    await sleep(delay);
+    failures = await runSpaSmokeChecks(env);
+    if (failures.length === 0) break;
+  }
   if (failures.length === 0) {
     if (prev?.failing) {
       console.log("[spa-smoke] retry passed — recovered after previous failure");
     } else {
-      console.log("[spa-smoke] first pass failed but retry passed — treating as transient, not alerting");
+      console.log("[spa-smoke] first pass failed but a retry passed — treating as transient, not alerting");
     }
     await writeState(env, null);
     return;
