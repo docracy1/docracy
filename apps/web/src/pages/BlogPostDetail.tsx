@@ -7,19 +7,14 @@ import { fetchBlogPost, type DynamicBlogPostDetail } from "../lib/api";
 import { usePageMeta } from "../lib/usePageMeta";
 import { track } from "../lib/track";
 import { useT } from "../lib/i18n";
+import { BlogHeroArt, gradientForSlug, topicForCluster, type BlogTopic } from "../components/BlogHeroArt";
 
-/** Deterministic per-post gradient (blue/indigo family, matching the brand) — a real, honest
- *  visual treatment instead of a fabricated stock photo, since no author photo library exists. */
-function gradientForSlug(slug: string): string {
-  let hash = 0;
-  for (let i = 0; i < slug.length; i++) hash = (hash * 31 + slug.charCodeAt(i)) >>> 0;
-  const hue = 195 + (hash % 55);
-  const hue2 = hue + 20 + (hash % 25);
-  return `linear-gradient(135deg, hsl(${hue}, 70%, 42%), hsl(${hue2}, 75%, 22%))`;
-}
-
-function BlogHero({ slug }: { slug: string }) {
-  return <div className="blog-post-hero" style={{ background: gradientForSlug(slug) }} />;
+function BlogHero({ slug, topic }: { slug: string; topic: BlogTopic }) {
+  return (
+    <div className="blog-post-hero" style={{ background: gradientForSlug(slug) }}>
+      <BlogHeroArt topic={topic} size={80} />
+    </div>
+  );
 }
 
 function BlogByline({ date }: { date: string }) {
@@ -247,7 +242,7 @@ function DynamicPostView({ post }: { post: DynamicBlogPostDetail }) {
         <Link to="/blog">{t("blog.allPosts")}</Link>
       </p>
       <h1>{post.title}</h1>
-      <BlogHero slug={post.slug} />
+      <BlogHero slug={post.slug} topic="general" />
       <BlogByline date={date} />
       <BodyParagraphs body={post.body} />
       <BlogCta slug={post.slug} />
@@ -314,7 +309,7 @@ export default function BlogPostDetail() {
           <Link to="/blog">{t("blog.allPosts")}</Link>
         </p>
         <h1>{article.title}</h1>
-        <BlogHero slug={article.slug} />
+        <BlogHero slug={article.slug} topic={topicForCluster(article.cluster)} />
         <BlogByline date={article.publishedDate} />
         <ArticleBlocks blocks={article.blocks} />
         <BlogCta slug={article.slug} />
@@ -330,7 +325,7 @@ export default function BlogPostDetail() {
           <Link to="/blog">{t("blog.allPosts")}</Link>
         </p>
         <h1>{staticPost.title}</h1>
-        <BlogHero slug={staticPost.slug} />
+        <BlogHero slug={staticPost.slug} topic="comparison" />
         <BlogByline date={staticPost.publishedDate} />
 
         {staticPost.intro.map((p, i) => (

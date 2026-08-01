@@ -1774,18 +1774,27 @@ select {
   aspect-ratio: 21 / 9;
   border-radius: var(--r-md);
   margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .blog-card-hero {
   width: 100%;
   aspect-ratio: 16 / 7;
   border-radius: var(--r-sm);
   margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .blog-featured-hero {
   width: 100%;
   aspect-ratio: 16 / 8;
   border-radius: var(--r-md);
   margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .blog-byline {
   display: flex;

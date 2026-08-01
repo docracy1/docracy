@@ -5,29 +5,23 @@ import { ARTICLES, CLUSTER_ORDER } from "../lib/articles";
 import { fetchBlogPosts, type DynamicBlogPostSummary } from "../lib/api";
 import { useT } from "../lib/i18n";
 import { usePageMeta } from "../lib/usePageMeta";
+import { BlogHeroArt, gradientForSlug, topicForCluster, type BlogTopic } from "../components/BlogHeroArt";
 
 interface MergedPost {
   slug: string;
   title: string;
   description: string;
   date: string;
-}
-
-/** Deterministic per-post gradient (blue/indigo family, matching the brand) — a real, honest
- *  visual treatment instead of a fabricated stock photo, since no author photo library exists. */
-function gradientForSlug(slug: string): string {
-  let hash = 0;
-  for (let i = 0; i < slug.length; i++) hash = (hash * 31 + slug.charCodeAt(i)) >>> 0;
-  const hue = 195 + (hash % 55);
-  const hue2 = hue + 20 + (hash % 25);
-  return `linear-gradient(135deg, hsl(${hue}, 70%, 42%), hsl(${hue2}, 75%, 22%))`;
+  topic: BlogTopic;
 }
 
 function PostCard({ post }: { post: MergedPost }) {
   const t = useT();
   return (
     <Link to={`/blog/${post.slug}`} className="card" style={{ textDecoration: "none", color: "inherit", display: "block" }}>
-      <div className="blog-card-hero" style={{ background: gradientForSlug(post.slug) }} />
+      <div className="blog-card-hero" style={{ background: gradientForSlug(post.slug) }}>
+        <BlogHeroArt topic={post.topic} />
+      </div>
       <div style={{ fontSize: 12, color: "var(--mute)", marginBottom: 6 }}>{post.date}</div>
       <h3 style={{ marginTop: 0, marginBottom: 8, fontSize: 16 }}>{post.title}</h3>
       <p style={{ margin: 0, fontSize: 13.5, color: "var(--mute)" }}>{post.description}</p>
@@ -61,16 +55,24 @@ export default function Blog() {
       title: a.title,
       description: a.description,
       date: a.publishedDate,
+      topic: topicForCluster(cluster),
     })),
   })).filter((c) => c.posts.length > 0);
 
   const more: MergedPost[] = [
-    ...BLOG_POSTS.map((p) => ({ slug: p.slug, title: p.title, description: p.description, date: p.publishedDate })),
+    ...BLOG_POSTS.map((p) => ({
+      slug: p.slug,
+      title: p.title,
+      description: p.description,
+      date: p.publishedDate,
+      topic: "comparison" as BlogTopic,
+    })),
     ...dynamicPosts.map((p) => ({
       slug: p.slug,
       title: p.title,
       description: p.description,
       date: (p.publishedAt ?? p.createdAt).slice(0, 10),
+      topic: "general" as BlogTopic,
     })),
   ].sort((a, b) => b.date.localeCompare(a.date));
 
@@ -84,6 +86,7 @@ export default function Blog() {
       title: p.title,
       description: p.description,
       date: p.publishedDate,
+      topic: "comparison" as BlogTopic,
       category: t("blog.moreFromBlog"),
     })),
   ].sort((a, b) => b.date.localeCompare(a.date));
@@ -100,7 +103,9 @@ export default function Blog() {
       {featured && (
         <div className="blog-featured-grid">
           <Link to={`/blog/${featured.slug}`} className="blog-featured-card" style={{ textDecoration: "none" }}>
-            <div className="blog-featured-hero" style={{ background: gradientForSlug(featured.slug) }} />
+            <div className="blog-featured-hero" style={{ background: gradientForSlug(featured.slug) }}>
+              <BlogHeroArt topic={featured.topic} size={72} />
+            </div>
             {isNew && <span className="blog-featured-badge">{t("blog.newBadge")}</span>}
             <span className="blog-featured-tag">{featured.category}</span>
             <h2 className="blog-featured-title">{featured.title}</h2>
