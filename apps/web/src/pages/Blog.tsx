@@ -104,7 +104,7 @@ export default function Blog() {
         <div className="blog-featured-grid">
           <Link to={`/blog/${featured.slug}`} className="blog-featured-card" style={{ textDecoration: "none" }}>
             <div className="blog-featured-hero" style={{ background: gradientForSlug(featured.slug) }}>
-              <BlogHeroArt topic={featured.topic} size={72} />
+              <BlogHeroArt topic={featured.topic} />
             </div>
             {isNew && <span className="blog-featured-badge">{t("blog.newBadge")}</span>}
             <span className="blog-featured-tag">{featured.category}</span>

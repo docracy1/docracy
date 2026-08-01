@@ -12,7 +12,7 @@ import { BlogHeroArt, gradientForSlug, topicForCluster, type BlogTopic } from ".
 function BlogHero({ slug, topic }: { slug: string; topic: BlogTopic }) {
   return (
     <div className="blog-post-hero" style={{ background: gradientForSlug(slug) }}>
-      <BlogHeroArt topic={topic} size={80} />
+      <BlogHeroArt topic={topic} />
     </div>
   );
 }
