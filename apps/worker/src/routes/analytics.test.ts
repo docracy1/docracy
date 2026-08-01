@@ -143,6 +143,16 @@ describe("POST /api/analytics/pageview", () => {
     expect(res.status).toBe(400);
   });
 
+  // Regression: TemplateThumbnail fetches the raw PDF client-side to render a preview, and that
+  // fetch's path (e.g. /free-templates/mutual-nda.pdf) matches the same "/free-templates/" prefix
+  // as the real page route — without this guard, one page load with N template cards logged N
+  // bogus page views, one per thumbnail, wildly inflating traffic numbers.
+  it("rejects a static asset path even though it shares a tracked route's prefix", async () => {
+    const { env } = makeMockEnv();
+    const res = await analytics.request("/pageview", post({ route: "/free-templates/mutual-nda.pdf" }), env, MOCK_CTX);
+    expect(res.status).toBe(400);
+  });
+
   it("rejects a missing route", async () => {
     const { env } = makeMockEnv();
     const res = await analytics.request("/pageview", post({}), env, MOCK_CTX);

@@ -50,6 +50,10 @@ const TRACKED_ROUTES = new Set([
 // it). The worker's own isTrackedRoute (routes/analytics.ts) applies the identical rule as a
 // second gate.
 function isTrackedRoute(pathname: string): boolean {
+  // Static files served from these same path prefixes (e.g. /free-templates/mutual-nda.pdf,
+  // fetched client-side by TemplateThumbnail to render a preview) must never count as a page
+  // view — only the actual page route (no file extension on the last segment) should.
+  if (/\.[a-z0-9]+$/i.test(pathname)) return false;
   return (
     TRACKED_ROUTES.has(pathname) ||
     pathname === "/blog" ||

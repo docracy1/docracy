@@ -48,6 +48,10 @@ const TRACKED_ROUTES = new Set([
 ]);
 
 function isTrackedRoute(route: string): boolean {
+  // Static files served from these same path prefixes (e.g. /free-templates/mutual-nda.pdf,
+  // fetched client-side by TemplateThumbnail to render a preview) must never count as a page
+  // view — only the actual page route (no file extension on the last segment) should.
+  if (/\.[a-z0-9]+$/i.test(route)) return false;
   return (
     TRACKED_ROUTES.has(route) ||
     route === "/blog" ||
