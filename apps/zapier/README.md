@@ -66,3 +66,21 @@ public listing, Zapier's own manual review. Steps:
    live for accounts you've explicitly invited, or submit the app for Zapier's public app
    directory review (Developer Platform → your app → "Submit for review") — that review is
    Zapier's own process and can take some time; it isn't something either of us can speed up.
+
+## Getting real users before public approval (chicken-and-egg)
+
+Public directory review requires 3+ distinct users with a live Zap using the integration —
+but those users can't find it via Zapier search until it's publicly listed. The fix: they
+don't come from Zapier search at all. Give the link below directly to your own existing
+Docracy customers (via the Dashboard, `/docs`, `/mcp`, or email) instead of telling them to
+"search for Docracy in Zapier."
+
+**Private invite link** (works today, no approval needed — anyone who opens it can connect):
+https://zapier.com/developer/public-invite/244127/19874ff8c2595eb7c85a5fe4bf48914a/
+
+Per Zapier's own docs, this link **can't be revoked once shared** — if tighter control is ever
+needed, invite specific people by email instead (Manage → Sharing → Email Invitations, in the
+developer dashboard).
+
+Once 3 real people have a live Zap running (any trigger/action), go back to Manage → Validate
+and resubmit for public review — the "3 users" checklist item resolves on its own.

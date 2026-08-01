@@ -113,7 +113,16 @@ export default function Mcp() {
 
       <div style={{ marginTop: 32 }}>
         <h3 style={{ fontSize: 16 }}>{t("mcp.zapierTitle")}</h3>
-        <p style={{ marginBottom: 0 }}>{t("mcp.zapierBody")}</p>
+        <p style={{ marginBottom: 8 }}>{t("mcp.zapierBody")}</p>
+        <a
+          href="https://zapier.com/developer/public-invite/244127/19874ff8c2595eb7c85a5fe4bf48914a/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn-secondary"
+          style={{ display: "inline-block" }}
+        >
+          {t("mcp.zapierLinkLabel")}
+        </a>
       </div>
 
       <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 40 }}>

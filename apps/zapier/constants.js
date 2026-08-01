@@ -4,5 +4,5 @@
 // `wrangler dev` instance — Zapier's own runtime never sets it, so production always uses the
 // real constant.
 module.exports = {
-  BASE_URL: process.env.DOCRACY_ZAPIER_TEST_BASE_URL || "https://docracy-worker.rl-d77.workers.dev",
+  BASE_URL: process.env.DOCRACY_ZAPIER_TEST_BASE_URL || "https://api.docracy.io",
 };

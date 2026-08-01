@@ -866,7 +866,8 @@ const es: Messages = {
   "mcp.toolsIntro": "Una vez conectado, tu asistente obtiene dos herramientas de solo lectura:",
   "mcp.useLabel": "Úsalo:",
   "mcp.zapierBody":
-    "¿Prefieres automatización sin código en lugar de un asistente de IA? La misma cuenta de pago funciona con Zapier: dispara un Zap en Documento creado, Firmante firmó o Documento completado, o envía una plantilla guardada a firmar como acción. Busca \"Docracy\" al agregar una app a un Zap — la misma clave API de arriba, usada en el campo \"API Key\" en lugar de la URL completa del conector.",
+    "¿Prefieres automatización sin código en lugar de un asistente de IA? La misma cuenta de pago funciona con Zapier: dispara un Zap en Documento creado, Firmante firmó o Documento completado, o envía una plantilla guardada a firmar como acción. La integración todavía no está en el directorio público de Zapier, así que usa el enlace directo de conexión abajo en lugar de buscar \"Docracy\" en Zapier — la misma clave API de arriba, usada en el campo \"API Key\" en lugar de la URL completa del conector.",
+  "mcp.zapierLinkLabel": "Conectar Docracy en Zapier",
   "mcp.zapierTitle": "Automatiza con Zapier",
   "uptime.title": "Estado del sistema",
   "seo.home.title": "Docracy.io – Firmas electrónicas simples y seguras para negocios",

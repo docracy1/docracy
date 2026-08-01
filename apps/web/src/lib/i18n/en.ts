@@ -781,7 +781,8 @@ const en: Messages = {
   "mcp.toolsIntro": "Once connected, your assistant gets two read-only tools:",
   "mcp.useLabel": "Use it:",
   "mcp.zapierBody":
-    "Prefer a no-code automation instead of an AI assistant? The same paid account works with Zapier: trigger a Zap on Document Created, Signer Signed, or Document Completed, or send a saved template out for signature as an action. Search for \"Docracy\" when adding a new app to a Zap — same API key as above, used as the \"API Key\" field instead of the full connector URL.",
+    "Prefer a no-code automation instead of an AI assistant? The same paid account works with Zapier: trigger a Zap on Document Created, Signer Signed, or Document Completed, or send a saved template out for signature as an action. The integration isn't in Zapier's public directory yet, so use the direct connect link below rather than searching for \"Docracy\" in Zapier — same API key as above, used as the \"API Key\" field instead of the full connector URL.",
+  "mcp.zapierLinkLabel": "Connect Docracy in Zapier",
   "mcp.zapierTitle": "Automate with Zapier",
   "seo.home.title": "Docracy.io – Simple and secure e-signatures for businesses",
   "seo.home.description":
