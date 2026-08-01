@@ -678,6 +678,7 @@ const en: Messages = {
   "feature.cta": "Get started",
   "feature.related": "Related",
   "freeTemplates.allTemplates": "All templates",
+  "freeTemplates.featuredTitle": "Featured templates",
   "freeTemplates.cat.clientContracts": "Client Contracts",
   "freeTemplates.cat.clientContracts.desc":
     "Client contract templates define scope, timeline, and payment terms so both sides know exactly what's being delivered and when.",

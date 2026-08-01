@@ -78,10 +78,11 @@ export default function FreeTemplates() {
   const t = useT();
   const { locale } = useI18n();
   const [query, setQuery] = useState("");
-  // Defaults open (unlike the reference's collapsed-by-default toggle) so the category
-  // descriptions are always present in prerender.mjs's static render — real crawlable SEO copy,
-  // not content hidden behind a client-only interaction.
-  const [categoriesOpen, setCategoriesOpen] = useState(true);
+  // Defaults closed for real visitors (matches the reference's collapsed-by-default toggle), but
+  // the panel below is always rendered in the DOM and only hidden with CSS `display`, not removed
+  // via conditional rendering — so prerender.mjs's static HTML still contains the full category
+  // descriptions for crawlers, even though a first-time visitor sees it collapsed.
+  const [categoriesOpen, setCategoriesOpen] = useState(false);
 
   useSeoMeta("freeTemplates");
 
@@ -160,26 +161,24 @@ export default function FreeTemplates() {
         </button>
       </div>
 
-      {categoriesOpen && (
-        <div className="templates-categories-dropdown">
-          <p style={{ maxWidth: 640, fontSize: 14, color: "var(--body)", margin: "0 0 20px" }}>
-            {t("freeTemplates.categoriesIntro")}
-          </p>
-          <div className="templates-categories-grid">
-            {RECURRING_CATEGORIES.map((category) => {
-              const inCategory = FREE_TEMPLATES.filter((tpl) => tpl.recurringCategory === category);
-              if (inCategory.length === 0) return null;
-              const catKey = CATEGORY_KEYS[category];
-              return (
-                <a key={category} href={`#${CATEGORY_ANCHORS[category]}`} className="templates-category-item">
-                  <h3>{catKey ? t(catKey) : category}</h3>
-                  <p>{catKey ? t(`${catKey}.desc`) : ""}</p>
-                </a>
-              );
-            })}
-          </div>
+      <div className="templates-categories-dropdown" style={{ display: categoriesOpen ? "block" : "none" }}>
+        <p style={{ maxWidth: 640, fontSize: 14, color: "var(--body)", margin: "0 0 20px" }}>
+          {t("freeTemplates.categoriesIntro")}
+        </p>
+        <div className="templates-categories-grid">
+          {RECURRING_CATEGORIES.map((category) => {
+            const inCategory = FREE_TEMPLATES.filter((tpl) => tpl.recurringCategory === category);
+            if (inCategory.length === 0) return null;
+            const catKey = CATEGORY_KEYS[category];
+            return (
+              <a key={category} href={`#${CATEGORY_ANCHORS[category]}`} className="templates-category-item">
+                <h3>{catKey ? t(catKey) : category}</h3>
+                <p>{catKey ? t(`${catKey}.desc`) : ""}</p>
+              </a>
+            );
+          })}
         </div>
-      )}
+      </div>
 
       <div className="hero-band templates-hero">
         <div className="templates-hero-inner">
@@ -230,6 +229,26 @@ export default function FreeTemplates() {
           </div>
         ) : (
           <>
+            <div style={{ marginTop: 28 }}>
+              <h2 style={{ fontSize: 19 }}>{t("freeTemplates.featuredTitle")}</h2>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
+                {FREE_TEMPLATES.filter((tpl) => tpl.featured).map((tpl) => {
+                  const labels = labelFor(tpl.slug, tpl.name, tpl.description);
+                  const catKey = tpl.recurringCategory ? CATEGORY_KEYS[tpl.recurringCategory] : undefined;
+                  return (
+                    <TemplateCard
+                      key={tpl.slug}
+                      name={labels.name}
+                      description={labels.description}
+                      to={localizePath(`/free-templates/${tpl.slug}`, locale)}
+                      pdfPath={tpl.pdfPath}
+                      category={catKey ? t(catKey) : tpl.recurringCategory}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+
             {RECURRING_CATEGORIES.map((category) => {
               const inCategory = FREE_TEMPLATES.filter((tpl) => tpl.recurringCategory === category);
               if (inCategory.length === 0) return null;

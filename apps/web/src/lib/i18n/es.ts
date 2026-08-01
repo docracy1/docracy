@@ -766,6 +766,7 @@ const es: Messages = {
   "docs.templatesFree.link": "{{count}} plantillas listas para usar",
   "docs.templatesFree.title": "Plantillas gratis",
   "freeTemplates.allTemplates": "Todas las plantillas",
+  "freeTemplates.featuredTitle": "Plantillas destacadas",
   "freeTemplates.cat.clientContracts": "Contratos con clientes",
   "freeTemplates.cat.clientContracts.desc":
     "Las plantillas de contrato con clientes definen alcance, plazos y condiciones de pago para que ambas partes sepan exactamente qué se entrega y cuándo.",

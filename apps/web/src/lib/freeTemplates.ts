@@ -20,6 +20,9 @@ export interface FreeTemplate {
    *  Absent for templates outside the recurring-template curation; not every free template needs
    *  to be in a recurring category. */
   recurringCategory?: string;
+  /** Shown in the "Featured templates" strip at the top of /free-templates — the small set of
+   *  templates people search/use most (mirrors the shape of competitor template libraries). */
+  featured?: boolean;
 }
 
 /** Display order for the Template Library's "Recurring templates" section (Dashboard.tsx's
@@ -75,6 +78,7 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
     signerLabels: ["Party A", "Party B"],
     pdfPath: "/free-templates/mutual-nda.pdf",
     fields: standardSignatureFields(2, 2),
+    featured: true,
     recurringCategory: "NDAs",
   },
   {
@@ -574,6 +578,7 @@ FREE_TEMPLATES.push(
       { id: "ft0", signerOrder: 1, page: 1, xFrac: 0.27547794117647056, yFrac: 0.06060606060606061, wFrac: 0.26, hFrac: 0.07, type: "signature" },
       { id: "ft1", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" },
     ],
+    featured: true,
   },
   {
     slug: "llc-operating-agreement",
@@ -591,6 +596,7 @@ FREE_TEMPLATES.push(
       { id: "ft2", signerOrder: 2, page: 1, xFrac: 0.2863954248366013, yFrac: 0.29320707070707075, wFrac: 0.26, hFrac: 0.07, type: "signature" },
       { id: "ft3", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38858585858585865, wFrac: 0.16, hFrac: 0.04, type: "date" },
     ],
+    featured: true,
   },
   {
     slug: "sublease-agreement",
@@ -692,6 +698,54 @@ FREE_TEMPLATES.push(
       { id: "ft0", signerOrder: 1, page: 1, xFrac: 0.2603137254901961, yFrac: 0.06060606060606061, wFrac: 0.26, hFrac: 0.07, type: "signature" },
       { id: "ft1", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" },
     ],
+  }
+);
+
+// The 2 official government forms below are the real, current-revision IRS/USCIS PDFs (public
+// domain U.S. government works, downloaded directly from irs.gov/uscis.gov) — not Docracy-authored
+// content like every other template above. Field positions were measured from the actual PDF text
+// layout via `pdftotext -bbox`, not estimated, since these need to land on the real printed
+// signature lines of an official form. Re-download and re-measure if the IRS/USCIS ever revises
+// either form (check the "Rev." / "Edition" date printed on the form itself).
+FREE_TEMPLATES.push(
+  {
+    slug: "w-9-form",
+    name: "W-9 Form",
+    seoTitle: "Free W-9 Form — Fill Out and Sign the Official IRS Form Online",
+    description:
+      "The official IRS Form W-9 (Rev. March 2024) — collect a contractor or vendor's taxpayer ID before you pay them.",
+    useCase:
+      "Use this before you pay a contractor, freelancer, or vendor so you have their taxpayer identification " +
+      "number on file for 1099 reporting. This is the real, current IRS form — not a Docracy-drafted substitute.",
+    signerLabels: ["Taxpayer"],
+    pdfPath: "/free-templates/w-9-form.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 0, xFrac: 0.19282, yFrac: 0.74395, wFrac: 0.43727, hFrac: 0.02, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 0, xFrac: 0.66179, yFrac: 0.74395, wFrac: 0.26146, hFrac: 0.02, type: "date" },
+    ],
+    recurringCategory: "Compliance Documents",
+    featured: true,
+  },
+  {
+    slug: "i-9-form",
+    name: "I-9 Form",
+    seoTitle: "Free I-9 Form — Fill Out and Sign the Official USCIS Employment Eligibility Form",
+    description:
+      "The official USCIS Form I-9 (Edition 01/20/25) — verify a new hire's identity and authorization to work in the U.S.",
+    useCase:
+      "Use this on or before a new employee's first day to complete Section 1 (employee) and Section 2 " +
+      "(employer review) of the required employment eligibility verification. This is the real, current USCIS " +
+      "form — not a Docracy-drafted substitute.",
+    signerLabels: ["Employee", "Employer or Authorized Representative"],
+    pdfPath: "/free-templates/i-9-form.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 0, xFrac: 0.19281, yFrac: 0.45202, wFrac: 0.4085, hFrac: 0.018, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 0, xFrac: 0.75163, yFrac: 0.45202, wFrac: 0.17974, hFrac: 0.018, type: "date" },
+      { id: "ft2", signerOrder: 2, page: 0, xFrac: 0.47386, yFrac: 0.875, wFrac: 0.31863, hFrac: 0.028, type: "signature" },
+      { id: "ft3", signerOrder: 2, page: 0, xFrac: 0.79248, yFrac: 0.875, wFrac: 0.14706, hFrac: 0.028, type: "date" },
+    ],
+    recurringCategory: "Onboarding Documents",
+    featured: true,
   }
 );
 
