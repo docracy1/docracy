@@ -7,12 +7,12 @@ import { fetchBlogPost, type DynamicBlogPostDetail } from "../lib/api";
 import { usePageMeta } from "../lib/usePageMeta";
 import { track } from "../lib/track";
 import { useT } from "../lib/i18n";
-import { BlogHeroArt, gradientForSlug, topicForCluster, type BlogTopic } from "../components/BlogHeroArt";
+import { BlogHeroArt, CompetitorHeroArt, gradientForSlug, topicForCluster, type BlogTopic } from "../components/BlogHeroArt";
 
-function BlogHero({ slug, topic }: { slug: string; topic: BlogTopic }) {
+function BlogHero({ slug, topic, competitorKey }: { slug: string; topic: BlogTopic; competitorKey?: string }) {
   return (
     <div className="blog-post-hero" style={{ background: gradientForSlug(slug) }}>
-      <BlogHeroArt topic={topic} />
+      {competitorKey ? <CompetitorHeroArt competitorKey={competitorKey} /> : <BlogHeroArt slug={slug} topic={topic} />}
     </div>
   );
 }
@@ -325,7 +325,7 @@ export default function BlogPostDetail() {
           <Link to="/blog">{t("blog.allPosts")}</Link>
         </p>
         <h1>{staticPost.title}</h1>
-        <BlogHero slug={staticPost.slug} topic="comparison" />
+        <BlogHero slug={staticPost.slug} topic="comparison" competitorKey={staticPost.competitorKey} />
         <BlogByline date={staticPost.publishedDate} />
 
         {staticPost.intro.map((p, i) => (

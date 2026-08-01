@@ -5,7 +5,7 @@ import { ARTICLES, CLUSTER_ORDER } from "../lib/articles";
 import { fetchBlogPosts, type DynamicBlogPostSummary } from "../lib/api";
 import { useT } from "../lib/i18n";
 import { usePageMeta } from "../lib/usePageMeta";
-import { BlogHeroArt, gradientForSlug, topicForCluster, type BlogTopic } from "../components/BlogHeroArt";
+import { BlogHeroArt, CompetitorHeroArt, gradientForSlug, topicForCluster, type BlogTopic } from "../components/BlogHeroArt";
 
 interface MergedPost {
   slug: string;
@@ -13,6 +13,7 @@ interface MergedPost {
   description: string;
   date: string;
   topic: BlogTopic;
+  competitorKey?: string;
 }
 
 function PostCard({ post }: { post: MergedPost }) {
@@ -20,7 +21,7 @@ function PostCard({ post }: { post: MergedPost }) {
   return (
     <Link to={`/blog/${post.slug}`} className="card" style={{ textDecoration: "none", color: "inherit", display: "block" }}>
       <div className="blog-card-hero" style={{ background: gradientForSlug(post.slug) }}>
-        <BlogHeroArt topic={post.topic} />
+        {post.competitorKey ? <CompetitorHeroArt competitorKey={post.competitorKey} /> : <BlogHeroArt slug={post.slug} topic={post.topic} />}
       </div>
       <div style={{ fontSize: 12, color: "var(--mute)", marginBottom: 6 }}>{post.date}</div>
       <h3 style={{ marginTop: 0, marginBottom: 8, fontSize: 16 }}>{post.title}</h3>
@@ -66,6 +67,7 @@ export default function Blog() {
       description: p.description,
       date: p.publishedDate,
       topic: "comparison" as BlogTopic,
+      competitorKey: p.competitorKey,
     })),
     ...dynamicPosts.map((p) => ({
       slug: p.slug,
@@ -80,13 +82,16 @@ export default function Blog() {
   // not the async dynamicPosts fetch) so the hero card never shifts after mount or diverges from
   // what prerender.mjs's static render produces.
   const featuredCandidates = [
-    ...clusters.flatMap(({ cluster, posts }) => posts.map((p) => ({ ...p, category: cluster }))),
+    ...clusters.flatMap(({ cluster, posts }) =>
+      posts.map((p) => ({ ...p, category: cluster, competitorKey: undefined as string | undefined }))
+    ),
     ...BLOG_POSTS.map((p) => ({
       slug: p.slug,
       title: p.title,
       description: p.description,
       date: p.publishedDate,
       topic: "comparison" as BlogTopic,
+      competitorKey: p.competitorKey as string | undefined,
       category: t("blog.moreFromBlog"),
     })),
   ].sort((a, b) => b.date.localeCompare(a.date));
@@ -104,7 +109,11 @@ export default function Blog() {
         <div className="blog-featured-grid">
           <Link to={`/blog/${featured.slug}`} className="blog-featured-card" style={{ textDecoration: "none" }}>
             <div className="blog-featured-hero" style={{ background: gradientForSlug(featured.slug) }}>
-              <BlogHeroArt topic={featured.topic} />
+              {featured.competitorKey ? (
+                <CompetitorHeroArt competitorKey={featured.competitorKey} />
+              ) : (
+                <BlogHeroArt slug={featured.slug} topic={featured.topic} />
+              )}
             </div>
             {isNew && <span className="blog-featured-badge">{t("blog.newBadge")}</span>}
             <span className="blog-featured-tag">{featured.category}</span>
