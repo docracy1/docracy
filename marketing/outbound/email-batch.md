@@ -146,6 +146,45 @@ Use with prospects in `prospects.md` or your own list. Keep first line personali
 
 ---
 
+## Cold, no existing connection (industry credibility, no fake personalization)
+
+Use when there's genuinely no relationship to the recipient and no real per-person detail to reference —
+doesn't claim to know anything specific about them, just states real domain credibility.
+
+### 11 — industry background, no eversign name (competitor-safe)
+
+**Subject:** A simpler way to handle signatures
+
+> Hi {{name}},
+>
+> I spent years working in the e-signature industry, and got tired of tools that force a signup even on their free tier and charge per seat as you grow. So I built Docracy: free for 2 signers, no account needed, flat $10/month if you need more.
+>
+> Worth a look? https://docracy.io/go/dm
+>
+> Reinhold
+> Founder, Docracy
+> https://docracy.io
+
+### 11b — DM variant
+
+⚠️ Only use "Saw you're doing client/engagement work" if that's actually true for this specific person
+(checked their profile/post) — sent as a blind template to someone you know nothing about, it's a
+checkable false claim and will read as fake personalization the moment they notice. Use #11 instead
+for a real cold blast with no per-person research.
+
+> Hey {{name}} —
+>
+> Saw you're doing client/engagement work — built something for that: docracy.io/go/dm
+>
+> Free for 2 signers, no account needed. Flat $10/mo if you need templates or more signers.
+>
+> Worth a look?
+>
+> Reinhold
+> Founder, Docracy
+
+---
+
 ## Follow-up (any persona, 3–5 days later)
 
 **Subject:** circling back (sample NDA)

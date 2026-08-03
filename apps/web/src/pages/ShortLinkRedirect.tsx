@@ -17,6 +17,14 @@ const SHORT_LINKS: Record<string, { to: string; source: string; campaign?: strin
   li: { to: "/prepare?freeTemplate=mutual-nda", source: "linkedin" },
   x: { to: "/prepare?freeTemplate=mutual-nda", source: "x" },
   dm: { to: "/prepare?freeTemplate=mutual-nda", source: "outreach", campaign: "dm" },
+  // One per directory listing, so each shows up as its own row in the admin "Tagged campaign
+  // clicks" table instead of all merging into the generic /try bucket with no way to tell which
+  // directory actually sent the click.
+  si: { to: "/prepare?freeTemplate=mutual-nda", source: "startupinspire", campaign: "listing" },
+  ti: { to: "/prepare?freeTemplate=mutual-nda", source: "techimply", campaign: "listing" },
+  gl: { to: "/mcp", source: "glama", campaign: "listing" },
+  sh: { to: "/prepare?freeTemplate=mutual-nda", source: "saashub", campaign: "listing" },
+  at: { to: "/prepare?freeTemplate=mutual-nda", source: "alternativeto", campaign: "listing" },
 };
 
 export function ShortTryRedirect() {

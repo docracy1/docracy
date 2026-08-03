@@ -16,6 +16,15 @@
 /go/x   /prepare?freeTemplate=mutual-nda&ref=x         302
 /go/dm  /prepare?freeTemplate=mutual-nda&utm_source=outreach&utm_medium=dm&utm_campaign=dm  302
 
+# One per directory listing (see ShortLinkRedirect.tsx's SHORT_LINKS) — replaces the shared /try
+# link every listing used to point at, which made it impossible to tell which directory a click
+# actually came from since they all merged into one "try" attribution bucket.
+/go/si  /prepare?freeTemplate=mutual-nda&utm_source=startupinspire&utm_medium=directory&utm_campaign=listing  302
+/go/ti  /prepare?freeTemplate=mutual-nda&utm_source=techimply&utm_medium=directory&utm_campaign=listing  302
+/go/gl  /mcp?utm_source=glama&utm_medium=directory&utm_campaign=listing  302
+/go/sh  /prepare?freeTemplate=mutual-nda&utm_source=saashub&utm_medium=directory&utm_campaign=listing  302
+/go/at  /prepare?freeTemplate=mutual-nda&utm_source=alternativeto&utm_medium=directory&utm_campaign=listing  302
+
 # Hashed Vite assets must NEVER SPA-fallback to index.html. A stale HTML referencing a retired
 # hash (or a Bot Fight interstitial) would otherwise return text/html 200 for /assets/*.js —
 # browsers then refuse the module ("Failed to fetch dynamically imported module") and React

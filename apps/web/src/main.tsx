@@ -28,6 +28,7 @@ import AdminAnalytics from "./pages/AdminAnalytics";
 import About from "./pages/About";
 import Pricing from "./pages/Pricing";
 import Docs from "./pages/Docs";
+import Roadmap from "./pages/Roadmap";
 import Imprint from "./pages/Imprint";
 import Uptime from "./pages/Uptime";
 import Blog from "./pages/Blog";
@@ -78,6 +79,7 @@ function AppRoutes() {
       <Route path="/pricing" element={<Pricing />} />
       <Route path="/es/precios" element={<Pricing />} />
       <Route path="/docs" element={<Docs />} />
+      <Route path="/roadmap" element={<Roadmap />} />
       <Route path="/es/documentacion" element={<Docs />} />
       <Route path="/imprint" element={<Imprint />} />
       <Route path="/uptime" element={<Uptime />} />

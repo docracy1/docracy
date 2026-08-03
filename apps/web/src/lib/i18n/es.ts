@@ -183,6 +183,7 @@ const es: Messages = {
   "footer.product": "Producto",
   "footer.startFree": "Empezar gratis",
   "footer.status": "Estado",
+  "footer.roadmap": "Hoja de ruta",
   "footer.tagline":
     "Firmas electrónicas gratis, sin registro, que desaparecen cuando la cadena termina.",
   "footer.templates": "Plantillas gratis",
@@ -328,6 +329,8 @@ const es: Messages = {
   "landing.useTemplate": "Usar esta plantilla →",
   "lang.en": "English",
   "lang.es": "Español",
+  "login.consentPrefix": "Acepto la",
+  "login.consentAnd": "y los",
   "login.cta": "Enviar enlace de acceso",
   "login.ctaSave": "Envíame un enlace mágico",
   "login.email": "Correo electrónico",

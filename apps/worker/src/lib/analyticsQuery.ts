@@ -143,6 +143,56 @@ export interface AttributionRow {
   count: number;
 }
 
+export interface TrafficSourceRow {
+  /** "referral_source_detected" (external site linked to us — `source` is the referrer hostname)
+   *  or "page_view" (a hit carrying a utm_source/ref query param — `attribution` is that tag).
+   *  A single real visit can produce both, e.g. a tagged Twitter link followed with the browser's
+   *  real Referer header still attached — the two are reported as separate rows on purpose rather
+   *  than deduplicated, since they answer different questions ("what site sent this click" vs
+   *  "which campaign was this click tagged with"). */
+  event: string;
+  source: string;
+  attribution: string;
+  day: string;
+  count: number;
+}
+
+/** Real external traffic sources — everything By-country/By-route can't answer, because those
+ *  don't distinguish a genuine external visit from the site linking to itself (nav clicks between
+ *  our own pages also carry a Referer). Two signals, both already recorded, neither previously
+ *  surfaced in the admin UI on its own:
+ *   - referral_source_detected: blob9 (source) is the external referrer's hostname, already
+ *     filtered server-side (routes/analytics.ts) to exclude same-hostname-as-request-host — but
+ *     that only catches an exact match, so www vs bare-domain self-referrals still slip through
+ *     and get filtered client-side here instead (see SELF_HOST_PATTERN in AdminAnalytics.tsx).
+ *   - page_view: blob15 (attribution) is set whenever the hit's own query string carried
+ *     utm_source/ref — catches outreach/email clicks, which typically arrive with no Referer
+ *     header at all and so'd otherwise be invisible to referral_source_detected entirely. */
+export async function queryTrafficSources(
+  env: Env,
+  days: number,
+  humansOnly = false
+): Promise<AnalyticsQueryResult<TrafficSourceRow[]>> {
+  const humanFilter = humansOnly ? ` AND blob3 = 'human'` : "";
+  const sql = `
+    SELECT
+      blob1 AS event,
+      blob9 AS source,
+      blob15 AS attribution,
+      toDate(timestamp) AS day,
+      SUM(double1) AS count
+    FROM docracy_funnel
+    WHERE timestamp > now() - INTERVAL '${days}' DAY
+      AND ${EXCLUDED_AGENTS_SQL_FILTER}${humanFilter}
+      AND blob1 IN ('referral_source_detected', 'page_view')
+      AND (blob9 != '' OR blob15 != '')
+    GROUP BY event, source, attribution, day
+    ORDER BY day DESC, count DESC
+  `.trim();
+
+  return runAnalyticsSql<TrafficSourceRow[]>(env, sql);
+}
+
 /** Breaks down growth events by first-touch marketing channel (blob15). Empty attribution is
  *  reported as "direct" so every signup/checkout is accounted for. */
 export async function queryAttributionBreakdown(

@@ -48,6 +48,7 @@ export default function Footer() {
       heading: t("footer.company"),
       links: [
         { label: t("footer.about"), to: "/about" },
+        { label: t("footer.roadmap"), to: "/roadmap" },
         { label: t("footer.status"), to: "/uptime" },
         { label: t("footer.imprint"), to: "/imprint" },
         { label: t("footer.contactSales"), to: "mailto:sales@docracy.io", external: true },

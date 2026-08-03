@@ -22,6 +22,7 @@ import adminRoute from "./routes/admin";
 import statusRoute from "./routes/status";
 import resendWebhook from "./routes/resendWebhook";
 import { blogPostsAdmin, blogPostsPublic } from "./routes/blogPosts";
+import { roadmapAdmin, roadmapPublic } from "./routes/roadmap";
 import { runReminderSweep } from "./lib/reminders";
 import { reconcileD1Index } from "./lib/index-d1";
 import { runExpiredDocCleanup } from "./lib/cleanup";
@@ -76,6 +77,8 @@ app.route("/api/analytics", analyticsRoute);
 app.route("/api/admin", adminRoute);
 app.route("/api/admin/blog-posts", blogPostsAdmin);
 app.route("/api/blog-posts", blogPostsPublic);
+app.route("/api/admin/roadmap", roadmapAdmin);
+app.route("/api/roadmap", roadmapPublic);
 app.route("/api/status", statusRoute);
 app.route("/api/webhooks/resend", resendWebhook);
 

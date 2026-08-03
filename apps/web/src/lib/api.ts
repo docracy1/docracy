@@ -687,6 +687,14 @@ export interface AttributionRow {
   count: number;
 }
 
+export interface TrafficSourceRow {
+  event: string;
+  source: string;
+  attribution: string;
+  day: string;
+  count: number;
+}
+
 /** `humansOnly` drops rows from classified bot user agents out of the funnel step counts — see
  *  queryFunnelStepCounts in the worker for why the unfiltered numbers mislead on any funnel that
  *  pairs a server-side page load with a client-side click. */
@@ -699,6 +707,7 @@ export async function fetchAdminAnalytics(
   rows: FunnelRow[];
   funnelSteps: FunnelStepRow[];
   attribution: AttributionRow[];
+  trafficSources: TrafficSourceRow[];
 }> {
   const res = await apiFetch(`/api/admin/analytics?days=${days}${humansOnly ? "&humansOnly=1" : ""}`);
   return asJson(res);
@@ -841,5 +850,51 @@ export async function updateBlogPost(
 
 export async function deleteBlogPost(id: string): Promise<{ ok: true }> {
   const res = await apiFetch(`/api/admin/blog-posts/${id}`, { method: "DELETE" });
+  return asJson(res);
+}
+
+export interface RoadmapFeature {
+  id: string;
+  title: string;
+  description: string;
+  createdAt: string;
+  yesVotes: number;
+  noVotes: number;
+  myVote: "yes" | "no" | null;
+}
+
+/** Public — anyone browsing /roadmap, no account needed. Own prior vote (if any) comes back via
+ *  an anonymous cookie the server sets on first vote. */
+export async function fetchRoadmapFeatures(): Promise<{ features: RoadmapFeature[] }> {
+  const res = await apiFetch("/api/roadmap");
+  return asJson(res);
+}
+
+export async function voteRoadmapFeature(id: string, vote: "yes" | "no"): Promise<{ ok: true }> {
+  const res = await apiFetch(`/api/roadmap/${id}/vote`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ vote }),
+  });
+  return asJson(res);
+}
+
+/** Admin-only — same shape as the public list, minus myVote (no single "voter" to check against). */
+export async function fetchAdminRoadmapFeatures(): Promise<{ features: RoadmapFeature[] }> {
+  const res = await apiFetch("/api/admin/roadmap");
+  return asJson(res);
+}
+
+export async function createRoadmapFeature(input: { title: string; description: string }): Promise<{ ok: true; id: string }> {
+  const res = await apiFetch("/api/admin/roadmap", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  return asJson(res);
+}
+
+export async function deleteRoadmapFeature(id: string): Promise<{ ok: true }> {
+  const res = await apiFetch(`/api/admin/roadmap/${id}`, { method: "DELETE" });
   return asJson(res);
 }

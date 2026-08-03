@@ -1,13 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   createBlogPost,
+  createRoadmapFeature,
   deleteBlogPost,
+  deleteRoadmapFeature,
   fetchAdminAccounts,
   fetchAdminAnalytics,
   fetchAdminBlogPost,
   fetchAdminBlogPosts,
   fetchAdminDocuments,
   fetchAdminEnterpriseAccounts,
+  fetchAdminRoadmapFeatures,
   grantEnterprise,
   setAnalyticsNoTrack,
   updateBlogPost,
@@ -15,9 +18,11 @@ import {
   type AdminDocumentRow,
   type AdminEnterpriseAccount,
   type DynamicBlogPostSummary,
+  type RoadmapFeature,
   type FunnelRow,
   type FunnelStepRow,
   type AttributionRow,
+  type TrafficSourceRow,
 } from "../lib/api";
 import { usePageMeta } from "../lib/usePageMeta";
 
@@ -403,11 +408,54 @@ function DailyViewsChart({ rows }: { rows: FunnelRow[] }) {
   );
 }
 
+/** Shared by RouteTable/BotTable/CountryTable — the distinct page_view days present in `rows`,
+ *  most recent first, so each table's day dropdown offers the same options. */
+function usePageViewDays(rows: FunnelRow[]): string[] {
+  return useMemo(() => {
+    const set = new Set<string>();
+    for (const r of rows) {
+      if (r.event === "page_view") set.add(r.day);
+    }
+    return [...set].sort((a, b) => b.localeCompare(a));
+  }, [rows]);
+}
+
+function DayFilterSelect({
+  days,
+  selectedDay,
+  onChange,
+}: {
+  days: string[];
+  selectedDay: string;
+  onChange: (day: string) => void;
+}) {
+  return (
+    <select
+      className="form-input"
+      aria-label="Filter by day"
+      value={selectedDay}
+      onChange={(e) => onChange(e.target.value)}
+      style={{ fontSize: 13, padding: "4px 8px", marginBottom: 10, width: "auto" }}
+    >
+      <option value="all">All days</option>
+      {days.map((d) => (
+        <option key={d} value={d}>
+          {d}
+        </option>
+      ))}
+    </select>
+  );
+}
+
 function RouteTable({ rows }: { rows: FunnelRow[] }) {
+  const days = usePageViewDays(rows);
+  const [selectedDay, setSelectedDay] = useState("all");
+
   const byRoute = useMemo(() => {
     const map = new Map<string, { total: number; human: number; bot: number }>();
     for (const r of rows) {
       if (r.event !== "page_view") continue;
+      if (selectedDay !== "all" && r.day !== selectedDay) continue;
       const entry = map.get(r.route) ?? { total: 0, human: 0, bot: 0 };
       entry.total += r.count;
       if (r.traffic_type === "bot") entry.bot += r.count;
@@ -415,79 +463,86 @@ function RouteTable({ rows }: { rows: FunnelRow[] }) {
       map.set(r.route, entry);
     }
     return [...map.entries()].sort(([, a], [, b]) => b.total - a.total);
-  }, [rows]);
-
-  if (byRoute.length === 0) return <p style={{ color: "var(--mute)", fontSize: 13 }}>No page views yet.</p>;
+  }, [rows, selectedDay]);
 
   return (
-    <div className="plan-table-scroll" style={{ overflowX: "auto" }}>
-      <table className="plan-table plan-table-static" style={{ width: "100%", minWidth: "auto", tableLayout: "fixed" }}>
-        <thead>
-          <tr>
-            <th style={{ textAlign: "left" }}>Route</th>
-            <th>Total</th>
-            <th>Human</th>
-            <th>Bot</th>
-          </tr>
-        </thead>
-        <tbody>
-          {byRoute.map(([route, v]) => (
-            <tr key={route}>
-              <td style={{ textAlign: "left", overflowWrap: "anywhere" }}>{route}</td>
-              <td>{v.total}</td>
-              <td>{v.human}</td>
-              <td>{v.bot}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <>
+      <DayFilterSelect days={days} selectedDay={selectedDay} onChange={setSelectedDay} />
+      {byRoute.length === 0 ? (
+        <p style={{ color: "var(--mute)", fontSize: 13 }}>No page views for this range.</p>
+      ) : (
+        <div className="plan-table-scroll" style={{ overflowX: "auto" }}>
+          <table className="plan-table plan-table-static" style={{ width: "100%", minWidth: "auto", tableLayout: "fixed" }}>
+            <thead>
+              <tr>
+                <th style={{ textAlign: "left" }}>Route</th>
+                <th>Total</th>
+                <th>Human</th>
+                <th>Bot</th>
+              </tr>
+            </thead>
+            <tbody>
+              {byRoute.map(([route, v]) => (
+                <tr key={route}>
+                  <td style={{ textAlign: "left", overflowWrap: "anywhere" }}>{route}</td>
+                  <td>{v.total}</td>
+                  <td>{v.human}</td>
+                  <td>{v.bot}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </>
   );
 }
 
 function BotTable({ rows }: { rows: FunnelRow[] }) {
+  const days = usePageViewDays(rows);
+  const [selectedDay, setSelectedDay] = useState("all");
+
   const byBot = useMemo(() => {
     const map = new Map<string, number>();
     for (const r of rows) {
       if (r.event !== "page_view" || r.traffic_type !== "bot" || !r.bot_name) continue;
+      if (selectedDay !== "all" && r.day !== selectedDay) continue;
       map.set(r.bot_name, (map.get(r.bot_name) ?? 0) + r.count);
     }
     return [...map.entries()].sort(([, a], [, b]) => b - a);
-  }, [rows]);
-
-  if (byBot.length === 0) return <p style={{ color: "var(--mute)", fontSize: 13 }}>No known bot traffic yet.</p>;
+  }, [rows, selectedDay]);
 
   return (
-    <div className="plan-table-scroll" style={{ overflowX: "auto" }}>
-      <table className="plan-table plan-table-static" style={{ width: "100%", minWidth: "auto", tableLayout: "fixed" }}>
-        <thead>
-          <tr>
-            <th style={{ textAlign: "left" }}>Bot</th>
-            <th>Page views</th>
-          </tr>
-        </thead>
-        <tbody>
-          {byBot.map(([name, count]) => (
-            <tr key={name}>
-              <td style={{ textAlign: "left" }}>{name}</td>
-              <td>{count}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <>
+      <DayFilterSelect days={days} selectedDay={selectedDay} onChange={setSelectedDay} />
+      {byBot.length === 0 ? (
+        <p style={{ color: "var(--mute)", fontSize: 13 }}>No known bot traffic for this range.</p>
+      ) : (
+        <div className="plan-table-scroll" style={{ overflowX: "auto" }}>
+          <table className="plan-table plan-table-static" style={{ width: "100%", minWidth: "auto", tableLayout: "fixed" }}>
+            <thead>
+              <tr>
+                <th style={{ textAlign: "left" }}>Bot</th>
+                <th>Page views</th>
+              </tr>
+            </thead>
+            <tbody>
+              {byBot.map(([name, count]) => (
+                <tr key={name}>
+                  <td style={{ textAlign: "left" }}>{name}</td>
+                  <td>{count}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </>
   );
 }
 
 function CountryTable({ rows }: { rows: FunnelRow[] }) {
-  const days = useMemo(() => {
-    const set = new Set<string>();
-    for (const r of rows) {
-      if (r.event === "page_view") set.add(r.day);
-    }
-    return [...set].sort((a, b) => b.localeCompare(a)); // most recent first
-  }, [rows]);
-
+  const days = usePageViewDays(rows);
   const [selectedDay, setSelectedDay] = useState("all");
 
   const byCountry = useMemo(() => {
@@ -502,20 +557,7 @@ function CountryTable({ rows }: { rows: FunnelRow[] }) {
 
   return (
     <>
-      <select
-        className="form-input"
-        aria-label="Filter by day"
-        value={selectedDay}
-        onChange={(e) => setSelectedDay(e.target.value)}
-        style={{ fontSize: 13, padding: "4px 8px", marginBottom: 10, width: "auto" }}
-      >
-        <option value="all">All days</option>
-        {days.map((d) => (
-          <option key={d} value={d}>
-            {d}
-          </option>
-        ))}
-      </select>
+      <DayFilterSelect days={days} selectedDay={selectedDay} onChange={setSelectedDay} />
       {byCountry.length === 0 ? (
         <p style={{ color: "var(--mute)", fontSize: 13 }}>No country data for this range.</p>
       ) : (
@@ -735,6 +777,125 @@ function BlogPostsCard() {
             </button>
           )}
         </div>
+      </div>
+    </div>
+  );
+}
+
+const EMPTY_ROADMAP_FORM = { title: "", description: "" };
+
+/** Add/delete only, deliberately no edit — the public vote a feature already accumulated stays
+ *  attached to its title, so changing the pitch after people voted would misrepresent what they
+ *  actually voted on. Delete and re-add fresh if a pitch needs to change. */
+function RoadmapCard() {
+  const [features, setFeatures] = useState<RoadmapFeature[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [form, setForm] = useState(EMPTY_ROADMAP_FORM);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [busyId, setBusyId] = useState<string | null>(null);
+
+  const refresh = () =>
+    fetchAdminRoadmapFeatures()
+      .then((res) => setFeatures(res.features))
+      .catch((err) => setError(err instanceof Error ? err.message : "Failed to load the roadmap"));
+
+  useEffect(() => {
+    refresh();
+  }, []);
+
+  const onDelete = async (id: string) => {
+    setBusyId(id);
+    try {
+      await deleteRoadmapFeature(id);
+      await refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to delete feature");
+    } finally {
+      setBusyId(null);
+    }
+  };
+
+  const onAdd = async () => {
+    if (!form.title.trim() || !form.description.trim()) return;
+    setSaving(true);
+    setSaveError(null);
+    try {
+      await createRoadmapFeature({ title: form.title, description: form.description });
+      setForm(EMPTY_ROADMAP_FORM);
+      await refresh();
+    } catch (err) {
+      setSaveError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="card" style={{ marginBottom: 24 }}>
+      <h3 style={{ marginTop: 0, fontSize: 15 }}>Roadmap</h3>
+      <p style={{ fontSize: 12, color: "var(--mute)", marginTop: -4 }}>
+        Public at /roadmap — anyone can vote yes/no, no account needed. Add or remove items here.
+      </p>
+
+      {error && <p style={{ color: "var(--danger)", fontSize: 13 }}>{error}</p>}
+      {features && features.length === 0 && <p style={{ fontSize: 13, color: "var(--mute)" }}>Nothing on the roadmap yet.</p>}
+      {features && features.length > 0 && (
+        <div style={{ marginBottom: 20 }}>
+          {features.map((f) => (
+            <div
+              key={f.id}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                gap: 8,
+                padding: "8px 0",
+                borderBottom: "1px solid var(--hairline)",
+                flexWrap: "wrap",
+              }}
+            >
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontSize: 13.5, overflowWrap: "anywhere" }}>{f.title}</div>
+                <div style={{ fontSize: 11, color: "var(--mute)" }}>
+                  {f.yesVotes} yes · {f.noVotes} no
+                </div>
+              </div>
+              <button
+                className="btn-secondary"
+                style={{ fontSize: 12, padding: "4px 8px", color: "var(--danger)", flexShrink: 0 }}
+                disabled={busyId === f.id}
+                onClick={() => onDelete(f.id)}
+              >
+                Delete
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <h4 style={{ fontSize: 13, marginBottom: 8 }}>Add feature</h4>
+      <div style={{ display: "flex", flexDirection: "column", gap: 8, maxWidth: 560 }}>
+        <input
+          className="form-input"
+          placeholder="Title"
+          aria-label="Title"
+          value={form.title}
+          onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
+        />
+        <textarea
+          className="form-input"
+          placeholder="Short description — shown under the title on /roadmap"
+          aria-label="Description"
+          rows={3}
+          value={form.description}
+          onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
+          style={{ fontFamily: "inherit", resize: "vertical" }}
+        />
+        {saveError && <p style={{ color: "var(--danger)", fontSize: 13, margin: 0 }}>{saveError}</p>}
+        <button className="btn-primary" disabled={saving || !form.title.trim() || !form.description.trim()} onClick={onAdd}>
+          {saving ? "Adding…" : "Add to roadmap"}
+        </button>
       </div>
     </div>
   );
@@ -976,6 +1137,193 @@ function AttributionTable({ rows }: { rows: AttributionRow[] }) {
   );
 }
 
+/** Any hostname that's just docracy itself under a different name/port — the server-side filter
+ *  in routes/analytics.ts only excludes an exact match against the current request's own
+ *  hostname, so a visit to www.docracy.io with a docracy.io referrer (or vice versa) still slips
+ *  through as if it were external, and so do the odd port-suffixed variants (docracy.io:8080 etc.)
+ *  that showed up in a raw data pull — almost certainly scanners re-sending our own hostname as
+ *  their spoofed Referer, not real navigation. */
+const SELF_HOST_RE = /docracy/i;
+
+/** Known referrer hostnames → a human label. Falls back to the bare hostname (www. stripped) for
+ *  anything not in this list — deliberately small and manually curated rather than a giant lookup
+ *  table, since the whole point of this view is naming the handful of channels that actually
+ *  matter, not cataloguing every possible domain. */
+const HOST_LABELS: Record<string, string> = {
+  "t.co": "Twitter/X",
+  "twitter.com": "Twitter/X",
+  "x.com": "Twitter/X",
+  "google.com": "Google",
+  "www.google.com": "Google",
+  "bing.com": "Bing",
+  "www.bing.com": "Bing",
+  "producthunt.com": "Product Hunt",
+  "www.producthunt.com": "Product Hunt",
+  "indiehackers.com": "IndieHackers",
+  "www.indiehackers.com": "IndieHackers",
+  "news.ycombinator.com": "Hacker News",
+  "reddit.com": "Reddit",
+  "www.reddit.com": "Reddit",
+  "linkedin.com": "LinkedIn",
+  "www.linkedin.com": "LinkedIn",
+};
+
+function hostLabel(host: string): string {
+  const bare = host.replace(/^www\./, "");
+  return HOST_LABELS[host] ?? HOST_LABELS[bare] ?? bare;
+}
+
+function TrafficSourcesTable({ rows }: { rows: TrafficSourceRow[] }) {
+  const days = useMemo(() => {
+    const set = new Set<string>();
+    for (const r of rows) set.add(r.day);
+    return [...set].sort((a, b) => b.localeCompare(a));
+  }, [rows]);
+  const [selectedDay, setSelectedDay] = useState("all");
+
+  const { referrers, campaigns, selfReferralCount } = useMemo(() => {
+    const referrerMap = new Map<string, number>();
+    const campaignMap = new Map<string, number>();
+    let selfCount = 0;
+    for (const r of rows) {
+      if (selectedDay !== "all" && r.day !== selectedDay) continue;
+      if (r.event === "referral_source_detected" && r.source) {
+        if (SELF_HOST_RE.test(r.source)) {
+          selfCount += r.count;
+          continue;
+        }
+        const label = hostLabel(r.source);
+        referrerMap.set(label, (referrerMap.get(label) ?? 0) + r.count);
+      } else if (r.event === "page_view" && r.attribution) {
+        campaignMap.set(r.attribution, (campaignMap.get(r.attribution) ?? 0) + r.count);
+      }
+    }
+    return {
+      referrers: [...referrerMap.entries()].sort(([, a], [, b]) => b - a),
+      campaigns: [...campaignMap.entries()].sort(([, a], [, b]) => b - a),
+      selfReferralCount: selfCount,
+    };
+  }, [rows, selectedDay]);
+
+  const nothingYet = referrers.length === 0 && campaigns.length === 0;
+
+  return (
+    <>
+      <DayFilterSelect days={days} selectedDay={selectedDay} onChange={setSelectedDay} />
+      <p style={{ fontSize: 12, color: "var(--mute)", marginTop: -4 }}>
+        Excludes {selfReferralCount} self-referral hit{selfReferralCount === 1 ? "" : "s"} (the site linking to
+        itself, or bot traffic spoofing our own hostname) — this is only genuine external discovery.
+      </p>
+      {nothingYet ? (
+        <p style={{ fontSize: 13, color: "var(--mute)" }}>No external referrers or tagged campaign clicks for this range.</p>
+      ) : (
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, alignItems: "start" }}>
+          <div
+            style={{
+              border: "1px solid var(--hairline)",
+              borderRadius: "var(--r-sm)",
+              padding: 12,
+              background: "var(--canvas)",
+              minWidth: 0,
+            }}
+          >
+            <h4 style={{ fontSize: 13, marginTop: 0, marginBottom: 8 }}>External sites that linked here</h4>
+            {referrers.length === 0 ? (
+              <p style={{ fontSize: 13, color: "var(--mute)", margin: 0 }}>None yet.</p>
+            ) : (
+              // Deliberately not the shared .plan-table class — it forces a 520px min-width and a
+              // sticky, pinned first column (both meant for the big pricing/plan comparison table),
+              // which inside a narrow grid column made this table overflow and clipped the text.
+              <table style={{ width: "100%", tableLayout: "fixed", borderCollapse: "collapse" }}>
+                <colgroup>
+                  <col />
+                  <col style={{ width: 64 }} />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th style={{ textAlign: "left", fontSize: 12, padding: "4px 8px 4px 0", borderBottom: "1px solid var(--hairline)" }}>
+                      Site
+                    </th>
+                    <th style={{ textAlign: "right", fontSize: 12, padding: "4px 0", borderBottom: "1px solid var(--hairline)" }}>
+                      Visits
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {referrers.map(([label, count]) => (
+                    <tr key={label}>
+                      <td style={{ fontSize: 13, padding: "6px 8px 6px 0", overflowWrap: "anywhere", borderBottom: "1px solid var(--hairline)" }}>
+                        {label}
+                      </td>
+                      <td style={{ fontSize: 13, textAlign: "right", padding: "6px 0", borderBottom: "1px solid var(--hairline)" }}>
+                        {count}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+          <div
+            style={{
+              border: "1px solid var(--hairline)",
+              borderRadius: "var(--r-sm)",
+              padding: 12,
+              background: "var(--canvas)",
+              minWidth: 0,
+            }}
+          >
+            <h4 style={{ fontSize: 13, marginTop: 0, marginBottom: 8 }}>Tagged campaign clicks (utm/ref links)</h4>
+            {campaigns.length === 0 ? (
+              <p style={{ fontSize: 13, color: "var(--mute)", margin: 0 }}>None yet.</p>
+            ) : (
+              <div style={{ maxHeight: 260, overflowY: "auto", overflowX: "hidden" }}>
+                <table style={{ width: "100%", tableLayout: "fixed", borderCollapse: "collapse" }}>
+                  <colgroup>
+                    <col />
+                    <col style={{ width: 56 }} />
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th style={{ textAlign: "left", fontSize: 12, padding: "4px 8px 4px 0", borderBottom: "1px solid var(--hairline)" }}>
+                        Campaign
+                      </th>
+                      <th style={{ textAlign: "right", fontSize: 12, padding: "4px 0", borderBottom: "1px solid var(--hairline)" }}>
+                        Clicks
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {campaigns.map(([label, count]) => (
+                      <tr key={label}>
+                        <td
+                          style={{
+                            fontFamily: "ui-monospace, monospace",
+                            fontSize: 12,
+                            padding: "6px 8px 6px 0",
+                            overflowWrap: "anywhere",
+                            wordBreak: "break-all",
+                            borderBottom: "1px solid var(--hairline)",
+                          }}
+                        >
+                          {label}
+                        </td>
+                        <td style={{ fontSize: 13, textAlign: "right", padding: "6px 0", borderBottom: "1px solid var(--hairline)" }}>
+                          {count}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
 const ERROR_EVENTS: FunnelStepDef[] = [
   { event: "upload_failed", label: "Upload failed" },
   { event: "send_failed", label: "Send failed" },
@@ -1014,6 +1362,7 @@ const ADMIN_SECTIONS = [
   "analytics",
   "growth",
   "blog",
+  "roadmap",
   "signups",
   "activation",
   "completion",
@@ -1027,6 +1376,7 @@ const ADMIN_SECTION_LABEL: Record<AdminSection, string> = {
   analytics: "Analytics",
   growth: "Growth",
   blog: "Blog posts",
+  roadmap: "Roadmap",
   signups: "Signups",
   activation: "Activation",
   completion: "Completion",
@@ -1046,6 +1396,7 @@ export default function AdminAnalytics() {
   const [rows, setRows] = useState<FunnelRow[] | null>(null);
   const [funnelSteps, setFunnelSteps] = useState<FunnelStepRow[] | null>(null);
   const [attribution, setAttribution] = useState<AttributionRow[]>([]);
+  const [trafficSources, setTrafficSources] = useState<TrafficSourceRow[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [section, setSection] = useState<AdminSection>("analytics");
@@ -1067,6 +1418,7 @@ export default function AdminAnalytics() {
           setRows(res.rows);
           setFunnelSteps(res.funnelSteps);
           setAttribution(res.attribution ?? []);
+          setTrafficSources(res.trafficSources ?? []);
         }
       })
       .catch((err) => {
@@ -1162,6 +1514,7 @@ export default function AdminAnalytics() {
               succeeded. Every other section reads rows/totals/stepsByEvent from that call and
               only makes sense once it has resolved. */}
           {section === "blog" && <BlogPostsCard />}
+          {section === "roadmap" && <RoadmapCard />}
 
           {section === "signups" && (
             <>
@@ -1218,6 +1571,13 @@ export default function AdminAnalytics() {
                         />
                       </div>
                       {docDrilldown && <DocumentsDrilldownCard days={days} kind={docDrilldown} />}
+                      <div className="card" style={{ marginBottom: 16 }}>
+                        <h3 style={{ marginTop: 0, fontSize: 15 }}>Real external traffic sources</h3>
+                        <p style={{ fontSize: 12, color: "var(--mute)", marginTop: -4, marginBottom: 12 }}>
+                          Where genuine visitors actually come from — the site linking to itself doesn't count.
+                        </p>
+                        <TrafficSourcesTable rows={trafficSources} />
+                      </div>
                       <div className="card" style={{ marginBottom: 16 }}>
                         <h3 style={{ marginTop: 0, fontSize: 15 }}>Page views by day</h3>
                         <DailyViewsChart rows={rows} />
