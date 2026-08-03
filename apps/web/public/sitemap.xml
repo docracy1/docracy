@@ -606,7 +606,27 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/docusign-alternative" />
   </url>
   <url>
-    <loc>https://docracy.io/import-from-docusign-eversign</loc>
+    <loc>https://docracy.io/import-from-docusign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/import-from-eversign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/import-from-hellosign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/import-from-pandadoc</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/import-from-adobe-sign</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

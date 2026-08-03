@@ -4,6 +4,10 @@
 # without the duplication.
 /templates  /free-templates  301
 
+# Superseded by 5 dedicated per-competitor import guides (more specific, better SEO than one
+# combined page) — redirect so the URL doesn't 404 if already shared or indexed.
+/import-from-docusign-eversign  /import-from-docusign  301
+
 # Short shareable URLs for outreach / social / launches (avoid ugly UTM strings in posts/DMs).
 # Attribution: query `ref` / `utm_*` is picked up by apps/web/src/lib/attribution.ts on land.
 # SPA fallbacks also exist in React (ShortLinkRedirect) for in-app navigation.

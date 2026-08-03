@@ -18,7 +18,7 @@ import Dpa from "../src/pages/Dpa";
 import FeaturePage from "../src/pages/FeaturePage";
 import AlternativePage from "../src/pages/AlternativePage";
 import ExplainerPage from "../src/pages/ExplainerPage";
-import ImportGuide from "../src/pages/ImportGuide";
+import ImportGuidePage from "../src/pages/ImportGuidePage";
 
 /** Renders the real app components to static markup for a single path — same components a
  *  browser gets, minus effects (which never run during static rendering, so Header's login-check
@@ -67,7 +67,11 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/es/alternativa-a-pandadoc" element={<AlternativePage slug="pandadoc-alternative" />} />
           <Route path="/adobe-sign-alternative" element={<AlternativePage slug="adobe-sign-alternative" />} />
           <Route path="/es/alternativa-a-adobe-sign" element={<AlternativePage slug="adobe-sign-alternative" />} />
-          <Route path="/import-from-docusign-eversign" element={<ImportGuide />} />
+          <Route path="/import-from-docusign" element={<ImportGuidePage slug="docusign" />} />
+          <Route path="/import-from-eversign" element={<ImportGuidePage slug="eversign" />} />
+          <Route path="/import-from-hellosign" element={<ImportGuidePage slug="hellosign" />} />
+          <Route path="/import-from-pandadoc" element={<ImportGuidePage slug="pandadoc" />} />
+          <Route path="/import-from-adobe-sign" element={<ImportGuidePage slug="adobe-sign" />} />
           <Route path="/what-is-an-nda" element={<ExplainerPage slug="what-is-an-nda" />} />
           <Route path="/are-electronic-signatures-legal" element={<ExplainerPage slug="are-electronic-signatures-legal" />} />
         </Routes>

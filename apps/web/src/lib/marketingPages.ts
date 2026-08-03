@@ -384,6 +384,128 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
   },
 ];
 
+/** One page per competitor: no "connect your account" button anywhere — confirmed via direct
+ *  research that none of these five offer a free, self-serve, general-purpose bulk-export API a
+ *  typical individual account actually has access to (see whyNoConnect per platform for the
+ *  specific gate). Each page instead walks through that platform's real, existing manual
+ *  per-document download, then routes into Docracy's upload flow (AI field detection does the
+ *  rest — zero new backend work). */
+export interface ImportGuideContent {
+  slug: string;
+  competitorName: string;
+  seoTitle: string;
+  seoDescription: string;
+  heroHeadline: string;
+  heroSubheadline: string;
+  whyNoConnect: string;
+  exportSteps: string[];
+  templateNote: string;
+  alternativeSlug: string;
+}
+
+export const IMPORT_GUIDE_PAGES: ImportGuideContent[] = [
+  {
+    slug: "docusign",
+    competitorName: "DocuSign",
+    seoTitle: "Import Your DocuSign Documents to Docracy — Step-by-Step Guide",
+    seoDescription:
+      "Bring your existing DocuSign documents and templates over to Docracy. No account-linking, no password sharing — just the export steps DocuSign already gives you for free.",
+    heroHeadline: "Bring your DocuSign documents to Docracy",
+    heroSubheadline: "No account-linking, no handing over your DocuSign password. Export the PDFs you already have.",
+    whyNoConnect:
+      "DocuSign's API only gets real access to your account once production API access is enabled on it — something most personal and small-business plans don't have by default. We also don't ask for your DocuSign password to \"connect your account\"; that's off-limits here regardless.",
+    exportSteps: [
+      "Sign in to DocuSign and open Manage.",
+      "Open the completed envelope or reusable template you want to bring over.",
+      "Choose Download — for a completed envelope this gives you the signed PDF; for a template, DocuSign exports a package containing the source document.",
+      "Repeat for each document or template you want to keep using.",
+    ],
+    templateNote:
+      "Templates export as a DocuSign-specific package — the underlying PDF comes with it, but the field and routing setup is proprietary and won't transfer directly.",
+    alternativeSlug: "docusign-alternative",
+  },
+  {
+    slug: "eversign",
+    competitorName: "eversign",
+    seoTitle: "Import Your eversign Documents to Docracy — Step-by-Step Guide",
+    seoDescription:
+      "Bring your existing eversign documents over to Docracy. No account-linking required — just the free per-document export eversign already offers.",
+    heroHeadline: "Bring your eversign documents to Docracy",
+    heroSubheadline: "No account-linking, no handing over your eversign password. Export the PDFs you already have.",
+    whyNoConnect:
+      "eversign's API is free only for 2 test envelopes — real production access starts on a paid API plan, which most individual accounts don't carry. We also won't ask for your eversign password to link accounts.",
+    exportSteps: [
+      "Sign in to eversign and open Documents.",
+      "Check both the Completed and Drafts tabs, depending on what you need.",
+      "Open the document and choose Download.",
+      "Repeat for each document — eversign doesn't offer a bulk \"download all\" button either.",
+    ],
+    templateNote:
+      "No portable export path for templates — they live in eversign's own system, though the underlying source document downloads as a normal PDF.",
+    alternativeSlug: "eversign-alternative",
+  },
+  {
+    slug: "hellosign",
+    competitorName: "HelloSign (Dropbox Sign)",
+    seoTitle: "Import Your HelloSign / Dropbox Sign Documents to Docracy",
+    seoDescription:
+      "Bring your existing HelloSign (Dropbox Sign) documents over to Docracy. No account-linking — just the free per-document export already built into Dropbox Sign.",
+    heroHeadline: "Bring your HelloSign documents to Docracy",
+    heroSubheadline: "No account-linking, no handing over your Dropbox Sign password. Export the PDFs you already have.",
+    whyNoConnect:
+      "Dropbox Sign's free API mode only produces watermarked, non-binding test documents — it can't pull your real signed files. Real production API access sits on separate paid API tiers, priced above the consumer plans most people are on.",
+    exportSteps: [
+      "Sign in at sign.dropbox.com.",
+      "Open a completed signature request.",
+      "Choose Download, Download PDF, or Download Signed ZIP.",
+      "Repeat for each document — one-click bulk export needs the Team Sync admin feature, not available on individual plans.",
+    ],
+    templateNote:
+      "Templates are stored in Dropbox Sign's own template system with no documented one-click export — the source PDF or Word file is standard, but the reusable field layout is proprietary.",
+    alternativeSlug: "hellosign-alternative",
+  },
+  {
+    slug: "pandadoc",
+    competitorName: "PandaDoc",
+    seoTitle: "Import Your PandaDoc Documents to Docracy — Step-by-Step Guide",
+    seoDescription:
+      "Bring your existing PandaDoc documents and templates over to Docracy. No account-linking required — PandaDoc's own DocX export makes this the easiest of the five to migrate from.",
+    heroHeadline: "Bring your PandaDoc documents to Docracy",
+    heroSubheadline: "No account-linking, no handing over your PandaDoc password. Export the files you already have.",
+    whyNoConnect:
+      "PandaDoc's free API sandbox is real but capped at 60 documents a year — production use beyond that needs a paid API Developer plan most free-plan accounts don't carry.",
+    exportSteps: [
+      "Sign in to PandaDoc and open Documents.",
+      "Open the completed document.",
+      "Download it as a PDF, or use DocX Export for a native Word file.",
+      "Repeat for each document — bulk download is a Business/Enterprise-only feature.",
+    ],
+    templateNote:
+      "Best portability of the five: PandaDoc's DocX Export turns a template into a native Word file that opens anywhere, not just PandaDoc.",
+    alternativeSlug: "pandadoc-alternative",
+  },
+  {
+    slug: "adobe-sign",
+    competitorName: "Adobe Acrobat Sign",
+    seoTitle: "Import Your Adobe Acrobat Sign Documents to Docracy",
+    seoDescription:
+      "Bring your existing Adobe Acrobat Sign agreements over to Docracy. No account-linking — just the manual per-document download Adobe already provides.",
+    heroHeadline: "Bring your Adobe Sign documents to Docracy",
+    heroSubheadline: "No account-linking, no handing over your Adobe password. Export the PDFs you already have.",
+    whyNoConnect:
+      "Adobe reserves real production API access for enterprise and developer accounts behind a custom quote — there's no self-serve paid tier at all for individual accounts, which makes this the most closed of the five platforms here.",
+    exportSteps: [
+      "Sign in to Adobe Acrobat Sign and open Manage.",
+      "Open the completed agreement.",
+      "Choose Download PDF.",
+      "Repeat for each document — true bulk download is an Enterprise-only tool obtained by contacting Adobe support.",
+    ],
+    templateNote:
+      "A reusable form-field layer can transfer to a new document, but field data alone exports as CSV, not a full portable template — closer to full lock-in than the other four.",
+    alternativeSlug: "adobe-sign-alternative",
+  },
+];
+
 export interface ExplainerSection {
   heading: string;
   body?: string;

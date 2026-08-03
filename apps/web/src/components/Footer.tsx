@@ -25,7 +25,7 @@ export default function Footer() {
           { label: t("footer.vsHellosign"), to: "/hellosign-alternative" },
           { label: t("footer.vsPandadoc"), to: "/pandadoc-alternative" },
           { label: t("footer.vsAdobe"), to: "/adobe-sign-alternative" },
-          { label: t("footer.importGuide"), to: "/import-from-docusign-eversign" },
+          { label: t("footer.importGuide"), to: "/import-from-docusign" },
           { label: t("footer.allComparisons"), to: "/blog" },
         ];
 

@@ -36,7 +36,7 @@ import BlogPostDetail from "./pages/BlogPostDetail";
 import FeaturePage from "./pages/FeaturePage";
 import AlternativePage from "./pages/AlternativePage";
 import ExplainerPage from "./pages/ExplainerPage";
-import ImportGuide from "./pages/ImportGuide";
+import ImportGuidePage from "./pages/ImportGuidePage";
 import NotFound from "./pages/NotFound";
 import { ShortGoRedirect, ShortNdaRedirect, ShortPriceRedirect, ShortTryRedirect } from "./pages/ShortLinkRedirect";
 import { captureAttribution } from "./lib/attribution";
@@ -104,7 +104,11 @@ function AppRoutes() {
       <Route path="/es/alternativa-a-pandadoc" element={<AlternativePage slug="pandadoc-alternative" />} />
       <Route path="/adobe-sign-alternative" element={<AlternativePage slug="adobe-sign-alternative" />} />
       <Route path="/es/alternativa-a-adobe-sign" element={<AlternativePage slug="adobe-sign-alternative" />} />
-      <Route path="/import-from-docusign-eversign" element={<ImportGuide />} />
+      <Route path="/import-from-docusign" element={<ImportGuidePage slug="docusign" />} />
+      <Route path="/import-from-eversign" element={<ImportGuidePage slug="eversign" />} />
+      <Route path="/import-from-hellosign" element={<ImportGuidePage slug="hellosign" />} />
+      <Route path="/import-from-pandadoc" element={<ImportGuidePage slug="pandadoc" />} />
+      <Route path="/import-from-adobe-sign" element={<ImportGuidePage slug="adobe-sign" />} />
       <Route path="/what-is-an-nda" element={<ExplainerPage slug="what-is-an-nda" />} />
       <Route path="/are-electronic-signatures-legal" element={<ExplainerPage slug="are-electronic-signatures-legal" />} />
       <Route path="*" element={<NotFound />} />

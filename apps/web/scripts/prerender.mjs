@@ -175,11 +175,39 @@ const routes = [
     alternates: { en: "/mcp", es: "/es/mcp" },
   },
   {
-    urlPath: "/import-from-docusign-eversign",
-    outFile: "import-from-docusign-eversign.html",
-    title: "Switch to Docracy — Import Your DocuSign & eversign Documents",
+    urlPath: "/import-from-docusign",
+    outFile: "import-from-docusign.html",
+    title: "Import Your DocuSign Documents to Docracy — Step-by-Step Guide",
     description:
-      "Bring your existing DocuSign or eversign documents and templates over to Docracy. Step-by-step export instructions, no account-linking required.",
+      "Bring your existing DocuSign documents and templates over to Docracy. No account-linking, no password sharing — just the export steps DocuSign already gives you for free.",
+  },
+  {
+    urlPath: "/import-from-eversign",
+    outFile: "import-from-eversign.html",
+    title: "Import Your eversign Documents to Docracy — Step-by-Step Guide",
+    description:
+      "Bring your existing eversign documents over to Docracy. No account-linking required — just the free per-document export eversign already offers.",
+  },
+  {
+    urlPath: "/import-from-hellosign",
+    outFile: "import-from-hellosign.html",
+    title: "Import Your HelloSign / Dropbox Sign Documents to Docracy",
+    description:
+      "Bring your existing HelloSign (Dropbox Sign) documents over to Docracy. No account-linking — just the free per-document export already built into Dropbox Sign.",
+  },
+  {
+    urlPath: "/import-from-pandadoc",
+    outFile: "import-from-pandadoc.html",
+    title: "Import Your PandaDoc Documents to Docracy — Step-by-Step Guide",
+    description:
+      "Bring your existing PandaDoc documents and templates over to Docracy. No account-linking required — PandaDoc's own DocX export makes this the easiest of the five to migrate from.",
+  },
+  {
+    urlPath: "/import-from-adobe-sign",
+    outFile: "import-from-adobe-sign.html",
+    title: "Import Your Adobe Acrobat Sign Documents to Docracy",
+    description:
+      "Bring your existing Adobe Acrobat Sign agreements over to Docracy. No account-linking — just the manual per-document download Adobe already provides.",
   },
   {
     urlPath: "/about",
