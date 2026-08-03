@@ -1165,7 +1165,7 @@ const es: Messages = {
   "prepare.viewerEmailAria": "Correo del espectador {{n}}",
   "prepare.viewerNameAria": "Nombre del espectador {{n}}",
   "prepare.yourEmailAria": "Tu correo",
-  "prepare.yourEmailPh": "Tu correo (opcional) — para recibir el enlace de estado",
+  "prepare.yourEmailPh": "Tu correo — te avisamos en cuanto esté firmado (opcional)",
   "prepare.defaultDropdownOptions": "Opción A\nOpción B\nOpción C",
   "prepare.defaultTemplateFilename": "plantilla",
   "prepare.defaultDocumentFilename": "documento.pdf",
@@ -1173,7 +1173,7 @@ const es: Messages = {
   "prepare.redactConfirm":
     "¿Ocultar esta área? La página se convertirá en una imagen — el texto que quede debajo ya no se podrá seleccionar ni recuperar.",
   "prepare.recoverStatusHint":
-    "No hay una cuenta, así que esta es la única forma de recuperar el enlace de estado si lo pierdes.",
+    "Te enviaremos un correo en cuanto todos hayan firmado — y es también la única forma de recuperar el enlace de estado si pierdes esta pestaña. No hace falta cuenta.",
   "prepare.marketingOptIn":
     "Envíame por correo algunos consejos y cómo guardar cada envío en una cuenta gratis (opcional; responde en cualquier momento para dejar de recibirlos).",
   "prepare.namePh": "Nombre",

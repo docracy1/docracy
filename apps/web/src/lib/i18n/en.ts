@@ -1106,7 +1106,7 @@ const en: Messages = {
   "prepare.viewerEmailAria": "Viewer {{n}} email",
   "prepare.viewerNameAria": "Viewer {{n}} name",
   "prepare.yourEmailAria": "Your email",
-  "prepare.yourEmailPh": "Your email (optional) — to get the status link",
+  "prepare.yourEmailPh": "Your email — get notified the moment it's signed (optional)",
   "prepare.defaultDropdownOptions": "Option A\nOption B\nOption C",
   "prepare.defaultTemplateFilename": "template",
   "prepare.defaultDocumentFilename": "document.pdf",
@@ -1114,7 +1114,7 @@ const en: Messages = {
   "prepare.redactConfirm":
     "Redact this area? The page is flattened to an image — text under it won't be selectable or recoverable afterward.",
   "prepare.recoverStatusHint":
-    "There's no account, so this is the only way to recover the status link if you lose it.",
+    "We'll email you as soon as everyone's signed — and it's also the only way to recover the status link if you lose this tab. No account needed.",
   "prepare.marketingOptIn":
     "Email me a few tips — and how to keep every send in one free account (optional; reply anytime to stop).",
   "prepare.namePh": "Name",

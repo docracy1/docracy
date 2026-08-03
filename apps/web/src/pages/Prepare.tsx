@@ -1406,7 +1406,15 @@ export default function Prepare() {
                 </datalist>
               )}
               {!preparerSigns && (
-                <div style={{ marginBottom: 12 }}>
+                <div
+                  style={{
+                    marginBottom: 12,
+                    padding: 10,
+                    background: "var(--primary-soft, var(--canvas-soft))",
+                    border: "1px solid var(--hairline)",
+                    borderRadius: "var(--r-sm)",
+                  }}
+                >
                   <input
                     className="form-input"
                     style={{ width: "100%" }}
@@ -1419,7 +1427,7 @@ export default function Prepare() {
                       if (!e.target.value.trim()) setPreparerMarketingOptIn(false);
                     }}
                   />
-                  <p style={{ fontSize: 11, marginTop: 4, marginBottom: 0 }}>
+                  <p style={{ fontSize: 11.5, marginTop: 6, marginBottom: 0 }}>
                     {t("prepare.recoverStatusHint")}
                   </p>
                   {preparerEmail.trim() && (
