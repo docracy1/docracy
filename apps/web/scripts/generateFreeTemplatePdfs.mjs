@@ -281,6 +281,37 @@ const TEMPLATES = [
           "employment immediately for misconduct or breach of this Agreement.",
       },
 
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Agreement through " +
+          "good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding " +
+          "arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Entire Agreement" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement constitutes the entire understanding between the parties regarding its subject matter " +
+          "and supersedes all prior discussions, agreements, or representations, whether written or oral.",
+      },
+
+      { type: "section", text: "Severability" },
+      {
+        type: "paragraph",
+        text:
+          "If any provision of this Agreement is found invalid or unenforceable, the remaining provisions shall " +
+          "continue in full force and effect.",
+      },
+
       { type: "section", text: "Signatures" },
       {
         type: "signatures",
@@ -337,6 +368,37 @@ const TEMPLATES = [
       { type: "section", text: "Termination" },
       { type: "paragraph", text: "This Agreement may be terminated according to the terms stated here." },
 
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Agreement through " +
+          "good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding " +
+          "arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Entire Agreement" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement constitutes the entire understanding between the parties regarding its subject matter " +
+          "and supersedes all prior discussions, agreements, or representations, whether written or oral.",
+      },
+
+      { type: "section", text: "Severability" },
+      {
+        type: "paragraph",
+        text:
+          "If any provision of this Agreement is found invalid or unenforceable, the remaining provisions shall " +
+          "continue in full force and effect.",
+      },
+
       { type: "section", text: "Signatures" },
       {
         type: "signatures",
@@ -372,6 +434,37 @@ const TEMPLATES = [
       { type: "section", text: "Limitations" },
       { type: "paragraph", text: "This authorization does not include:" },
       { type: "field", label: "", blank: TEXT_BLANK },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Authorization shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Authorization through " +
+          "good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding " +
+          "arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Entire Agreement" },
+      {
+        type: "paragraph",
+        text:
+          "This Authorization constitutes the entire understanding between the parties regarding its subject " +
+          "matter and supersedes all prior discussions, agreements, or representations, whether written or oral.",
+      },
+
+      { type: "section", text: "Severability" },
+      {
+        type: "paragraph",
+        text:
+          "If any provision of this Authorization is found invalid or unenforceable, the remaining provisions " +
+          "shall continue in full force and effect.",
+      },
 
       { type: "section", text: "Signatures" },
       {
@@ -420,6 +513,37 @@ const TEMPLATES = [
       { type: "section", text: "Payment Terms" },
       { type: "field", label: "Payment Terms: ", blank: TEXT_BLANK },
 
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Agreement through " +
+          "good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding " +
+          "arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Entire Agreement" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement constitutes the entire understanding between the parties regarding its subject matter " +
+          "and supersedes all prior discussions, agreements, or representations, whether written or oral.",
+      },
+
+      { type: "section", text: "Severability" },
+      {
+        type: "paragraph",
+        text:
+          "If any provision of this Agreement is found invalid or unenforceable, the remaining provisions shall " +
+          "continue in full force and effect.",
+      },
+
       { type: "section", text: "Signatures" },
       {
         type: "signatures",
@@ -466,6 +590,37 @@ const TEMPLATES = [
       { type: "section", text: "Completion Date" },
       { type: "field", label: "Expected Completion: ", blank: DATE_BLANK },
 
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Agreement through " +
+          "good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding " +
+          "arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Entire Agreement" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement constitutes the entire understanding between the parties regarding its subject matter " +
+          "and supersedes all prior discussions, agreements, or representations, whether written or oral.",
+      },
+
+      { type: "section", text: "Severability" },
+      {
+        type: "paragraph",
+        text:
+          "If any provision of this Agreement is found invalid or unenforceable, the remaining provisions shall " +
+          "continue in full force and effect.",
+      },
+
       { type: "section", text: "Signatures" },
       {
         type: "signatures",
@@ -500,6 +655,20 @@ const TEMPLATES = [
 
       { type: "section", text: "Delivery Date" },
       { type: "field", label: "", blank: DATE_BLANK },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Confirmation shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Severability" },
+      {
+        type: "paragraph",
+        text:
+          "If any provision of this Confirmation is found invalid or unenforceable, the remaining provisions " +
+          "shall continue in full force and effect.",
+      },
 
       { type: "section", text: "Signatures" },
       {
@@ -559,6 +728,37 @@ const TEMPLATES = [
           "up to the termination date remain payable.",
       },
 
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Agreement through " +
+          "good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding " +
+          "arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Entire Agreement" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement constitutes the entire understanding between the parties regarding its subject matter " +
+          "and supersedes all prior discussions, agreements, or representations, whether written or oral.",
+      },
+
+      { type: "section", text: "Severability" },
+      {
+        type: "paragraph",
+        text:
+          "If any provision of this Agreement is found invalid or unenforceable, the remaining provisions shall " +
+          "continue in full force and effect.",
+      },
+
       { type: "section", text: "Signatures" },
       {
         type: "signatures",
@@ -615,6 +815,37 @@ const TEMPLATES = [
         text: "Both parties agree to keep any non-public information shared under this Agreement confidential.",
       },
 
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Agreement through " +
+          "good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding " +
+          "arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Entire Agreement" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement constitutes the entire understanding between the parties regarding its subject matter " +
+          "and supersedes all prior discussions, agreements, or representations, whether written or oral.",
+      },
+
+      { type: "section", text: "Severability" },
+      {
+        type: "paragraph",
+        text:
+          "If any provision of this Agreement is found invalid or unenforceable, the remaining provisions shall " +
+          "continue in full force and effect.",
+      },
+
       { type: "section", text: "Signatures" },
       {
         type: "signatures",
@@ -662,6 +893,37 @@ const TEMPLATES = [
       { type: "section", text: "Fees" },
       { type: "field", label: "Total Fee: ", blank: TEXT_BLANK },
       { type: "field", label: "Payment Schedule: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Agreement through " +
+          "good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding " +
+          "arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Entire Agreement" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement constitutes the entire understanding between the parties regarding its subject matter " +
+          "and supersedes all prior discussions, agreements, or representations, whether written or oral.",
+      },
+
+      { type: "section", text: "Severability" },
+      {
+        type: "paragraph",
+        text:
+          "If any provision of this Agreement is found invalid or unenforceable, the remaining provisions shall " +
+          "continue in full force and effect.",
+      },
 
       { type: "section", text: "Signatures" },
       {
@@ -717,6 +979,37 @@ const TEMPLATES = [
         text: "Both parties agree to keep pricing and any other non-public terms of this Agreement confidential.",
       },
 
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Agreement through " +
+          "good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding " +
+          "arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Entire Agreement" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement constitutes the entire understanding between the parties regarding its subject matter " +
+          "and supersedes all prior discussions, agreements, or representations, whether written or oral.",
+      },
+
+      { type: "section", text: "Severability" },
+      {
+        type: "paragraph",
+        text:
+          "If any provision of this Agreement is found invalid or unenforceable, the remaining provisions shall " +
+          "continue in full force and effect.",
+      },
+
       { type: "section", text: "Signatures" },
       {
         type: "signatures",
@@ -765,6 +1058,37 @@ const TEMPLATES = [
       {
         type: "paragraph",
         text: "The Employee agrees to follow the Employer's code of conduct and workplace policies as provided.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Agreement through " +
+          "good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding " +
+          "arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Entire Agreement" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement constitutes the entire understanding between the parties regarding its subject matter " +
+          "and supersedes all prior discussions, agreements, or representations, whether written or oral.",
+      },
+
+      { type: "section", text: "Severability" },
+      {
+        type: "paragraph",
+        text:
+          "If any provision of this Agreement is found invalid or unenforceable, the remaining provisions shall " +
+          "continue in full force and effect.",
       },
 
       { type: "section", text: "Signatures" },
@@ -820,6 +1144,37 @@ const TEMPLATES = [
         text: "The Contractor agrees to keep any non-public information encountered during the engagement confidential.",
       },
 
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Agreement through " +
+          "good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding " +
+          "arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Entire Agreement" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement constitutes the entire understanding between the parties regarding its subject matter " +
+          "and supersedes all prior discussions, agreements, or representations, whether written or oral.",
+      },
+
+      { type: "section", text: "Severability" },
+      {
+        type: "paragraph",
+        text:
+          "If any provision of this Agreement is found invalid or unenforceable, the remaining provisions shall " +
+          "continue in full force and effect.",
+      },
+
       { type: "section", text: "Signatures" },
       {
         type: "signatures",
@@ -853,6 +1208,37 @@ const TEMPLATES = [
         text:
           "If payment is not received by the due date above, the Payee may charge reasonable late fees or " +
           "interest as allowed by law, and may pursue collection of the amount owed.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Agreement through " +
+          "good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding " +
+          "arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Entire Agreement" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement constitutes the entire understanding between the parties regarding its subject matter " +
+          "and supersedes all prior discussions, agreements, or representations, whether written or oral.",
+      },
+
+      { type: "section", text: "Severability" },
+      {
+        type: "paragraph",
+        text:
+          "If any provision of this Agreement is found invalid or unenforceable, the remaining provisions shall " +
+          "continue in full force and effect.",
       },
 
       { type: "section", text: "Signatures" },
@@ -897,6 +1283,37 @@ const TEMPLATES = [
           "remaining balance due immediately.",
       },
 
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Agreement through " +
+          "good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding " +
+          "arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Entire Agreement" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement constitutes the entire understanding between the parties regarding its subject matter " +
+          "and supersedes all prior discussions, agreements, or representations, whether written or oral.",
+      },
+
+      { type: "section", text: "Severability" },
+      {
+        type: "paragraph",
+        text:
+          "If any provision of this Agreement is found invalid or unenforceable, the remaining provisions shall " +
+          "continue in full force and effect.",
+      },
+
       { type: "section", text: "Signatures" },
       {
         type: "signatures",
@@ -930,6 +1347,20 @@ const TEMPLATES = [
         text:
           "The Individual consents to the collection and use of their personal data as described in the privacy " +
           "policy referenced above.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Acknowledgement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Severability" },
+      {
+        type: "paragraph",
+        text:
+          "If any provision of this Acknowledgement is found invalid or unenforceable, the remaining provisions " +
+          "shall continue in full force and effect.",
       },
 
       { type: "section", text: "Signature" },
@@ -988,6 +1419,37 @@ const TEMPLATES = [
           "personal data breach.",
       },
 
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Agreement through " +
+          "good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding " +
+          "arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Entire Agreement" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement constitutes the entire understanding between the parties regarding its subject matter " +
+          "and supersedes all prior discussions, agreements, or representations, whether written or oral.",
+      },
+
+      { type: "section", text: "Severability" },
+      {
+        type: "paragraph",
+        text:
+          "If any provision of this Agreement is found invalid or unenforceable, the remaining provisions shall " +
+          "continue in full force and effect.",
+      },
+
       { type: "section", text: "Signatures" },
       {
         type: "signatures",
@@ -1027,6 +1489,37 @@ const TEMPLATES = [
 
       { type: "section", text: "Prepayment" },
       { type: "paragraph", text: "The Borrower may prepay all or part of the outstanding balance at any time without penalty." },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Note shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Note through good-faith " +
+          "negotiation. If unresolved within 30 days, either party may pursue mediation or binding arbitration " +
+          "before resorting to litigation.",
+      },
+
+      { type: "section", text: "Entire Agreement" },
+      {
+        type: "paragraph",
+        text:
+          "This Note constitutes the entire understanding between the parties regarding its subject matter and " +
+          "supersedes all prior discussions, agreements, or representations, whether written or oral.",
+      },
+
+      { type: "section", text: "Severability" },
+      {
+        type: "paragraph",
+        text:
+          "If any provision of this Note is found invalid or unenforceable, the remaining provisions shall " +
+          "continue in full force and effect.",
+      },
 
       { type: "section", text: "Signature" },
       { type: "signatures", signers: [{ label: "Borrower", order: 1 }] },
@@ -1082,6 +1575,37 @@ const TEMPLATES = [
         text: "The Company dissolves upon unanimous written agreement of the Members or as otherwise required by law.",
       },
 
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Agreement through " +
+          "good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding " +
+          "arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Entire Agreement" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement constitutes the entire understanding between the parties regarding its subject matter " +
+          "and supersedes all prior discussions, agreements, or representations, whether written or oral.",
+      },
+
+      { type: "section", text: "Severability" },
+      {
+        type: "paragraph",
+        text:
+          "If any provision of this Agreement is found invalid or unenforceable, the remaining provisions shall " +
+          "continue in full force and effect.",
+      },
+
       { type: "section", text: "Signatures" },
       { type: "signatures", signers: [{ label: "Member A", order: 1 }, { label: "Member B", order: 2 }] },
     ],
@@ -1134,6 +1658,37 @@ const TEMPLATES = [
           "the property in the same condition, except for normal wear.",
       },
 
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Agreement through " +
+          "good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding " +
+          "arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Entire Agreement" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement constitutes the entire understanding between the parties regarding its subject matter " +
+          "and supersedes all prior discussions, agreements, or representations, whether written or oral.",
+      },
+
+      { type: "section", text: "Severability" },
+      {
+        type: "paragraph",
+        text:
+          "If any provision of this Agreement is found invalid or unenforceable, the remaining provisions shall " +
+          "continue in full force and effect.",
+      },
+
       { type: "section", text: "Signatures" },
       { type: "signatures", signers: [{ label: "Sublessor", order: 1 }, { label: "Subtenant", order: 2 }] },
     ],
@@ -1175,6 +1730,37 @@ const TEMPLATES = [
         text:
           "The Participant authorizes the Organization to obtain emergency medical treatment on their behalf if " +
           "needed, at the Participant's expense.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Waiver shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Waiver through " +
+          "good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding " +
+          "arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Entire Agreement" },
+      {
+        type: "paragraph",
+        text:
+          "This Waiver constitutes the entire understanding between the parties regarding its subject matter and " +
+          "supersedes all prior discussions, agreements, or representations, whether written or oral.",
+      },
+
+      { type: "section", text: "Severability" },
+      {
+        type: "paragraph",
+        text:
+          "If any provision of this Waiver is found invalid or unenforceable, the remaining provisions shall " +
+          "continue in full force and effect.",
       },
 
       { type: "section", text: "Signature" },
@@ -1221,6 +1807,37 @@ const TEMPLATES = [
         text: "A roommate who intends to move out before the end date above will give the other roommate at least 30 days' written notice.",
       },
 
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Agreement through " +
+          "good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding " +
+          "arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Entire Agreement" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement constitutes the entire understanding between the parties regarding its subject matter " +
+          "and supersedes all prior discussions, agreements, or representations, whether written or oral.",
+      },
+
+      { type: "section", text: "Severability" },
+      {
+        type: "paragraph",
+        text:
+          "If any provision of this Agreement is found invalid or unenforceable, the remaining provisions shall " +
+          "continue in full force and effect.",
+      },
+
       { type: "section", text: "Signatures" },
       { type: "signatures", signers: [{ label: "Roommate A", order: 1 }, { label: "Roommate B", order: 2 }] },
     ],
@@ -1246,6 +1863,20 @@ const TEMPLATES = [
 
       { type: "section", text: "Acknowledgement" },
       { type: "paragraph", text: "This receipt confirms that the payment described above was received in the amount stated." },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Receipt shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Severability" },
+      {
+        type: "paragraph",
+        text:
+          "If any provision of this Receipt is found invalid or unenforceable, the remaining provisions shall " +
+          "continue in full force and effect.",
+      },
 
       { type: "section", text: "Signature" },
       { type: "signatures", signers: [{ label: "Recipient", order: 1 }] },
@@ -1297,6 +1928,37 @@ const TEMPLATES = [
           "defects in materials or workmanship reported within a reasonable time after completion.",
       },
 
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Agreement through " +
+          "good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding " +
+          "arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Entire Agreement" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement constitutes the entire understanding between the parties regarding its subject matter " +
+          "and supersedes all prior discussions, agreements, or representations, whether written or oral.",
+      },
+
+      { type: "section", text: "Severability" },
+      {
+        type: "paragraph",
+        text:
+          "If any provision of this Agreement is found invalid or unenforceable, the remaining provisions shall " +
+          "continue in full force and effect.",
+      },
+
       { type: "section", text: "Signatures" },
       { type: "signatures", signers: [{ label: "Owner", order: 1 }, { label: "Contractor", order: 2 }] },
     ],
@@ -1333,6 +1995,12 @@ const TEMPLATES = [
         text:
           "If the Recipient does not comply, the Sender reserves the right to pursue all available legal remedies, " +
           "including seeking damages and injunctive relief, without further notice.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This letter, and any dispute concerning the conduct described above, shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
       },
 
       { type: "section", text: "Signature" },
