@@ -45,7 +45,9 @@ export default function Header() {
   );
   const isDashboardRoute = location.pathname.startsWith("/dashboard");
   const logoHeight = isSignRoute || isInAppRoute ? 24 : 40;
-  const logoLinkTo = isInAppRoute ? "/dashboard" : localizePath("/", locale);
+  // Always the real homepage — was "/dashboard" while logged in, which just reloaded the page
+  // you were already on instead of taking you back to the marketing site.
+  const logoLinkTo = localizePath("/", locale);
   const prepareTo = localizePath("/prepare", locale);
 
   if (isSignRoute) {
@@ -65,7 +67,7 @@ export default function Header() {
     return (
       <header className="site-header site-header-app">
         <div className="container" style={{ padding: 0, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
-          <Link to="/dashboard" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
+          <Link to={logoLinkTo} style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
             <img src="/docracy-wordmark.png" alt="Docracy" style={{ height: logoHeight, width: "auto" }} />
           </Link>
           <span className="header-app-title">{t("nav.dashboard")}</span>
