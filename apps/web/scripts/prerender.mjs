@@ -175,6 +175,13 @@ const routes = [
     alternates: { en: "/mcp", es: "/es/mcp" },
   },
   {
+    urlPath: "/import-from-docusign-eversign",
+    outFile: "import-from-docusign-eversign.html",
+    title: "Switch to Docracy — Import Your DocuSign & eversign Documents",
+    description:
+      "Bring your existing DocuSign or eversign documents and templates over to Docracy. Step-by-step export instructions, no account-linking required.",
+  },
+  {
     urlPath: "/about",
     outFile: "about.html",
     title: "About Docracy",

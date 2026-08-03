@@ -69,6 +69,7 @@ const en: Messages = {
   "footer.vsDocusign": "vs DocuSign",
   "footer.vsPandadoc": "vs PandaDoc",
   "footer.vsAdobe": "vs Adobe Acrobat Sign",
+  "footer.importGuide": "Import from DocuSign/eversign",
   "footer.allComparisons": "See all comparisons",
   "footer.about": "About",
   "footer.status": "Status",

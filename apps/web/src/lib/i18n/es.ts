@@ -166,6 +166,7 @@ const es: Messages = {
   "firstDoc.upload": "Subir documento",
   "firstDoc.uploadPdf": "Subir PDF",
   "footer.about": "Acerca de",
+  "footer.importGuide": "Importar desde DocuSign/eversign",
   "footer.allComparisons": "Ver todas las comparaciones",
   "footer.company": "Empresa",
   "footer.compare": "Comparar",
