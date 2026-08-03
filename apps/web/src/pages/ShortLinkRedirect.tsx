@@ -25,6 +25,12 @@ const SHORT_LINKS: Record<string, { to: string; source: string; campaign?: strin
   gl: { to: "/mcp", source: "glama", campaign: "listing" },
   sh: { to: "/prepare?freeTemplate=mutual-nda", source: "saashub", campaign: "listing" },
   at: { to: "/prepare?freeTemplate=mutual-nda", source: "alternativeto", campaign: "listing" },
+  // Persona-matched outreach: each cold-email persona lands on a template closer to what
+  // they'd actually send, instead of everyone getting the generic Mutual NDA.
+  "dm-fl": { to: "/prepare?freeTemplate=freelance-service-agreement", source: "outreach", campaign: "dm-freelancer" },
+  "dm-ag": { to: "/prepare?freeTemplate=contractor-onboarding-agreement", source: "outreach", campaign: "dm-agency" },
+  "dm-po": { to: "/prepare?freeTemplate=offer-letter", source: "outreach", campaign: "dm-peopleops" },
+  "dm-fo": { to: "/prepare?freeTemplate=independent-contractor-agreement", source: "outreach", campaign: "dm-founder" },
 };
 
 export function ShortTryRedirect() {

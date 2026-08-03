@@ -25,6 +25,13 @@
 /go/sh  /prepare?freeTemplate=mutual-nda&utm_source=saashub&utm_medium=directory&utm_campaign=listing  302
 /go/at  /prepare?freeTemplate=mutual-nda&utm_source=alternativeto&utm_medium=directory&utm_campaign=listing  302
 
+# Persona-matched outreach: each cold-email persona lands on a template closer to what they'd
+# actually send, instead of everyone getting the generic Mutual NDA (see ShortLinkRedirect.tsx).
+/go/dm-fl  /prepare?freeTemplate=freelance-service-agreement&utm_source=outreach&utm_medium=dm&utm_campaign=dm-freelancer  302
+/go/dm-ag  /prepare?freeTemplate=contractor-onboarding-agreement&utm_source=outreach&utm_medium=dm&utm_campaign=dm-agency  302
+/go/dm-po  /prepare?freeTemplate=offer-letter&utm_source=outreach&utm_medium=dm&utm_campaign=dm-peopleops  302
+/go/dm-fo  /prepare?freeTemplate=independent-contractor-agreement&utm_source=outreach&utm_medium=dm&utm_campaign=dm-founder  302
+
 # Hashed Vite assets must NEVER SPA-fallback to index.html. A stale HTML referencing a retired
 # hash (or a Bot Fight interstitial) would otherwise return text/html 200 for /assets/*.js —
 # browsers then refuse the module ("Failed to fetch dynamically imported module") and React
