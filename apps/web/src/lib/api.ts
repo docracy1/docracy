@@ -88,6 +88,8 @@ export interface SignPayload {
   docId?: string;
   pdfBase64?: string;
   fields?: DocField[];
+  /** Current signer's display name — used to prefill typed signatures. */
+  signerName?: string;
   signerAttachments?: {
     maxFiles: number;
     maxBytesPerFile: number;

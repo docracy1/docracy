@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import SignatureCanvas from "react-signature-canvas";
 import PdfViewer from "../components/PdfViewer";
+import SignatureCaptureModal from "../components/SignatureCaptureModal";
 import { apiUrl, declineSign, fetchSignView, submitSignature, unlockSign, uploadSignAttachment } from "../lib/api";
 import { track } from "../lib/track";
 import { useNoIndex } from "../lib/useNoIndex";
@@ -86,7 +86,6 @@ export default function Sign({
   const [pinError, setPinError] = useState<string | null>(null);
   const [uploadingAttachment, setUploadingAttachment] = useState(false);
   const [attachmentError, setAttachmentError] = useState<string | null>(null);
-  const sigPadRef = useRef<SignatureCanvas>(null);
   const postTargetOrigin = allowedOrigins?.[0] || "*";
 
   const postEmbed = (type: "ready" | "signed" | "declined" | "error", extra?: { docId?: string }) => {
@@ -178,20 +177,15 @@ export default function Sign({
     return () => window.removeEventListener("beforeunload", handler);
   }, [hasUnsavedWork]);
 
-  const onSaveSignature = () => {
-    if (!sigPadRef.current || !signingFieldId) return;
-    if (sigPadRef.current.isEmpty()) return;
-    const trimmed = sigPadRef.current.getTrimmedCanvas();
-    // Flatten onto a white background so the embedded PNG has no alpha/SMask —
-    // some PDF renderers hang decoding pdf-lib-embedded PNGs that carry one.
-    const flattened = document.createElement("canvas");
-    flattened.width = trimmed.width;
-    flattened.height = trimmed.height;
-    const ctx = flattened.getContext("2d")!;
-    ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, flattened.width, flattened.height);
-    ctx.drawImage(trimmed, 0, 0);
-    const dataUrl = flattened.toDataURL("image/png");
+  const signingField = useMemo(
+    () => (payload?.fields ?? []).find((f) => f.id === signingFieldId) ?? null,
+    [payload?.fields, signingFieldId]
+  );
+  const signingFieldKind: "signature" | "initials" =
+    (signingField?.type ?? "signature") === "initials" ? "initials" : "signature";
+
+  const onSaveSignature = (dataUrl: string) => {
+    if (!signingFieldId) return;
     setValues((prev) => ({ ...prev, [signingFieldId]: dataUrl }));
     setSigningFieldId(null);
   };
@@ -538,7 +532,7 @@ export default function Sign({
                           <img src={values[f.id]} alt="Your signature" style={{ maxWidth: "100%", maxHeight: "100%" }} />
                         ) : (
                           <span style={{ fontSize: 11, color: "var(--primary)", fontWeight: 600 }}>
-                            {t("sign.clickToSign")}
+                            {(f.type ?? "signature") === "initials" ? t("sign.clickInitial") : t("sign.clickToSign")}
                           </span>
                         )}
                       </button>
@@ -551,42 +545,12 @@ export default function Sign({
       )}
 
       {signingFieldId && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(0,0,0,0.6)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 10,
-          }}
-        >
-          <div
-            className="card"
-            style={{ background: "var(--canvas)", boxShadow: "var(--shadow-lg)", maxWidth: "92vw" }}
-          >
-            <p>{t("sign.draw")}</p>
-            <div style={{ background: "var(--canvas)", borderRadius: "var(--r-sm)", width: 360, maxWidth: "100%" }}>
-              <SignatureCanvas
-                ref={sigPadRef}
-                penColor="black"
-                canvasProps={{ width: 360, height: 150, style: { maxWidth: "100%", height: "auto", display: "block" } }}
-              />
-            </div>
-            <div className="sign-modal-actions">
-              <button className="btn-secondary" onClick={() => sigPadRef.current?.clear()}>
-                {t("sign.clear")}
-              </button>
-              <button className="btn-primary" onClick={onSaveSignature}>
-                {t("sign.saveSig")}
-              </button>
-              <button className="btn-secondary" onClick={() => setSigningFieldId(null)}>
-                {t("common.cancel")}
-              </button>
-            </div>
-          </div>
-        </div>
+        <SignatureCaptureModal
+          fieldKind={signingFieldKind}
+          signerName={payload.signerName}
+          onSave={onSaveSignature}
+          onCancel={() => setSigningFieldId(null)}
+        />
       )}
 
       {error && <p style={{ color: "var(--danger)" }}>{error}</p>}

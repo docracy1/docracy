@@ -1,9 +1,12 @@
 // Self-hosted so it satisfies script-src 'self' — only the tag Clarity itself injects
 // (https://www.clarity.ms/tag/...) needs its own CSP allowance, not this loader.
-// Skips: the admin's own excluded browser (docracy_notrack, set from /admin/analytics — see
-// lib/analytics.ts) and any non-production hostname, so local/preview traffic never pollutes
-// real session data.
+// Skips: no analytics consent, admin notrack cookie, and non-production hostnames.
 (function () {
+  try {
+    if (localStorage.getItem("docracy_cookie_consent") !== "accepted") return;
+  } catch (e) {
+    return;
+  }
   if (document.cookie.split("; ").some(function (c) { return c === "docracy_notrack=1"; })) return;
   if (window.location.hostname !== "docracy.io") return;
 

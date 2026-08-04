@@ -78,18 +78,45 @@ class ProfileMenuBoundary extends Component<{ children: ReactNode }, { error: st
   }
 }
 
-function BottomNavIcon({ name }: { name: "dashboard" | "contacts" | "documents" | "more" }) {
+function NavIcon({
+  name,
+  size = 18,
+}: {
+  name:
+    | "new"
+    | "dashboard"
+    | "templates"
+    | "documents"
+    | "contacts"
+    | "tools"
+    | "awaiting"
+    | "waiting"
+    | "completed"
+    | "connector"
+    | "webhooks"
+    | "connectors"
+    | "branding";
+  size?: number;
+}) {
   const common = {
-    width: 22,
-    height: 22,
+    className: "dashboard-nav-icon",
+    width: size,
+    height: size,
     viewBox: "0 0 24 24",
     fill: "none" as const,
     stroke: "currentColor",
     strokeWidth: 1.6,
     strokeLinecap: "round" as const,
     strokeLinejoin: "round" as const,
+    "aria-hidden": true as const,
   };
   switch (name) {
+    case "new":
+      return (
+        <svg {...common}>
+          <path d="M12 5v14M5 12h14" />
+        </svg>
+      );
     case "dashboard":
       return (
         <svg {...common}>
@@ -97,6 +124,21 @@ function BottomNavIcon({ name }: { name: "dashboard" | "contacts" | "documents" 
           <rect x="14" y="3" width="7" height="7" rx="1.5" />
           <rect x="3" y="14" width="7" height="7" rx="1.5" />
           <rect x="14" y="14" width="7" height="7" rx="1.5" />
+        </svg>
+      );
+    case "templates":
+      return (
+        <svg {...common}>
+          <path d="M7 3.5h7l4 4V20a1.5 1.5 0 0 1-1.5 1.5H7A1.5 1.5 0 0 1 5.5 20V5A1.5 1.5 0 0 1 7 3.5z" />
+          <path d="M14 3.5V8h4" />
+          <path d="M8.5 13h7M8.5 16.5h5" />
+        </svg>
+      );
+    case "documents":
+      return (
+        <svg {...common}>
+          <path d="M7 3.5h7l4 4V20a1.5 1.5 0 0 1-1.5 1.5H7A1.5 1.5 0 0 1 5.5 20V5A1.5 1.5 0 0 1 7 3.5z" />
+          <path d="M14 3.5V8h4" />
         </svg>
       );
     case "contacts":
@@ -108,20 +150,72 @@ function BottomNavIcon({ name }: { name: "dashboard" | "contacts" | "documents" 
           <path d="M15.5 14.2c2.3.4 4 2.4 4 5.3" />
         </svg>
       );
-    case "documents":
+    case "tools":
       return (
         <svg {...common}>
-          <path d="M7 3.5h7l4 4V20a1.5 1.5 0 0 1-1.5 1.5H7A1.5 1.5 0 0 1 5.5 20V5A1.5 1.5 0 0 1 7 3.5z" />
-          <path d="M14 3.5V8h4" />
+          <path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3.5 17.5l3 3 5.8-5.8a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-2.5 2.5-2.5z" />
         </svg>
       );
-    case "more":
+    case "awaiting":
       return (
         <svg {...common}>
-          <path d="M4 7h16M4 12h16M4 17h16" />
+          <circle cx="12" cy="12" r="8.25" />
+          <path d="M12 8v4.5l3 1.8" />
+        </svg>
+      );
+    case "waiting":
+      return (
+        <svg {...common}>
+          <path d="M4 12h3l2-5 3 10 2-5h6" />
+        </svg>
+      );
+    case "completed":
+      return (
+        <svg {...common}>
+          <circle cx="12" cy="12" r="8.25" />
+          <path d="M8.5 12.2l2.3 2.3 4.7-4.8" />
+        </svg>
+      );
+    case "connector":
+      return (
+        <svg {...common}>
+          <path d="M10 13a5 5 0 0 0 7.07 0l1.41-1.41a5 5 0 0 0-7.07-7.07L10 5.93" />
+          <path d="M14 11a5 5 0 0 0-7.07 0L5.52 12.41a5 5 0 0 0 7.07 7.07L14 18.07" />
+        </svg>
+      );
+    case "webhooks":
+      return (
+        <svg {...common}>
+          <path d="M8 7h11l-2.5 3L19 13H8a3 3 0 1 1 0-6z" />
+          <path d="M8 17a3 3 0 1 0 0-6" />
+        </svg>
+      );
+    case "connectors":
+      return (
+        <svg {...common}>
+          <path d="M7 7h4v4H7zM13 13h4v4h-4z" />
+          <path d="M11 9h2M13 11v2" />
+        </svg>
+      );
+    case "branding":
+      return (
+        <svg {...common}>
+          <circle cx="12" cy="12" r="3.25" />
+          <path d="M12 3.5v2.2M12 18.3v2.2M3.5 12h2.2M18.3 12h2.2M6.1 6.1l1.6 1.6M16.3 16.3l1.6 1.6M17.9 6.1l-1.6 1.6M7.7 16.3l-1.6 1.6" />
         </svg>
       );
   }
+}
+
+function BottomNavIcon({ name }: { name: "dashboard" | "contacts" | "documents" | "more" }) {
+  if (name === "more") {
+    return (
+      <svg width={22} height={22} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" aria-hidden>
+        <path d="M4 7h16M4 12h16M4 17h16" />
+      </svg>
+    );
+  }
+  return <NavIcon name={name === "documents" ? "documents" : name} size={22} />;
 }
 
 /** Minimalist monochrome line icons for the profile-menu items — same hand-drawn, Heroicons-
@@ -228,10 +322,12 @@ export default function Dashboard() {
   const [slugInput, setSlugInput] = useState("");
   const [slugError, setSlugError] = useState<string | null>(null);
   const [savingSlug, setSavingSlug] = useState(false);
-  const [activeTab, setActiveTab] = useState<"dashboard" | "templates" | "documents" | "tools">("dashboard");
+  const [activeTab, setActiveTab] = useState<"dashboard" | "templates" | "documents" | "tools" | "contacts">(
+    "dashboard"
+  );
   const [docsSubTab, setDocsSubTab] = useState<"all" | "awaiting" | "waiting" | "completed">("all");
   const [toolsSubTab, setToolsSubTab] = useState<
-    "connector" | "webhooks" | "connectors" | "branding" | "team" | "subscription" | "contacts"
+    "connector" | "webhooks" | "connectors" | "branding" | "team" | "subscription"
   >("connector");
   const [documentsExpanded, setDocumentsExpanded] = useState(false);
   const [toolsExpanded, setToolsExpanded] = useState(false);
@@ -830,41 +926,61 @@ export default function Dashboard() {
     );
   }
 
-  const DOCS_SUBNAV: Array<{ key: typeof docsSubTab; label: string }> = [
-    { key: "awaiting", label: t("dash.awaitingYou") },
-    { key: "waiting", label: t("dash.waitingOthers") },
-    { key: "completed", label: t("dash.completed") },
+  const DOCS_SUBNAV: Array<{
+    key: typeof docsSubTab;
+    label: string;
+    icon: "awaiting" | "waiting" | "completed";
+  }> = [
+    { key: "awaiting", label: t("dash.awaitingYou"), icon: "awaiting" },
+    { key: "waiting", label: t("dash.waitingOthers"), icon: "waiting" },
+    { key: "completed", label: t("dash.completed"), icon: "completed" },
   ];
 
   // Team and Subscription are deliberately absent here — they live only in the profile-menu
   // dropdown (anchored to the account row at the bottom of the sidebar), matching the SwipeSign
   // reference exactly. Listing them again in the general Tools accordion would duplicate them.
-  const TOOLS_SUBNAV: Array<{ key: typeof toolsSubTab; label: string }> = [
-    { key: "connector", label: t("dash.connector") },
-    { key: "webhooks", label: t("dash.webhooks") },
-    { key: "contacts", label: t("dash.contacts") },
-    ...(account.isPaid ? [{ key: "connectors" as const, label: t("dash.connectors") }] : []),
-    { key: "branding", label: t("dash.branding") },
+  // Contacts is top-level (like Chasa Clients), not nested under Tools.
+  const TOOLS_SUBNAV: Array<{
+    key: typeof toolsSubTab;
+    label: string;
+    icon: "connector" | "webhooks" | "connectors" | "branding";
+  }> = [
+    { key: "connector", label: t("dash.connector"), icon: "connector" },
+    { key: "webhooks", label: t("dash.webhooks"), icon: "webhooks" },
+    ...(account.isPaid ? [{ key: "connectors" as const, label: t("dash.connectors"), icon: "connectors" as const }] : []),
+    { key: "branding", label: t("dash.branding"), icon: "branding" },
   ];
 
   return (
     <div className="dashboard-shell">
       <aside className="dashboard-sidebar">
         <Link to="/prepare" className="dashboard-nav-new">
-          {t("dash.new")}
+          <NavIcon name="new" />
+          <span>{t("dash.new")}</span>
         </Link>
         <button
           className={`dashboard-nav-item${activeTab === "dashboard" ? " active" : ""}`}
           onClick={() => setActiveTab("dashboard")}
         >
-          {t("dash.dashboard")}
+          <NavIcon name="dashboard" />
+          <span>{t("dash.dashboard")}</span>
         </button>
         <button
           className={`dashboard-nav-item${activeTab === "templates" ? " active" : ""}`}
           onClick={() => setActiveTab("templates")}
         >
-          {t("dash.templates")}
+          <NavIcon name="templates" />
+          <span>{t("dash.templates")}</span>
         </button>
+        {account.isPaid && (
+          <button
+            className={`dashboard-nav-item${activeTab === "contacts" ? " active" : ""}`}
+            onClick={() => setActiveTab("contacts")}
+          >
+            <NavIcon name="contacts" />
+            <span>{t("dash.contacts")}</span>
+          </button>
+        )}
 
         <div className="dashboard-nav-group">
           <button
@@ -874,7 +990,10 @@ export default function Dashboard() {
               setDocumentsExpanded((o) => !o);
             }}
           >
-            {t("dash.documents")}
+            <span className="dashboard-nav-item-main">
+              <NavIcon name="documents" />
+              <span>{t("dash.documents")}</span>
+            </span>
             <span className={`dashboard-nav-chevron${documentsExpanded ? " open" : ""}`}>⌄</span>
           </button>
           {documentsExpanded && (
@@ -885,7 +1004,8 @@ export default function Dashboard() {
                   className={`dashboard-nav-subitem${activeTab === "documents" && docsSubTab === item.key ? " active" : ""}`}
                   onClick={() => openDocuments(item.key)}
                 >
-                  {item.label}
+                  <NavIcon name={item.icon} size={16} />
+                  <span>{item.label}</span>
                 </button>
               ))}
             </div>
@@ -901,7 +1021,10 @@ export default function Dashboard() {
                 setToolsExpanded((o) => !o);
               }}
             >
-              {t("dash.tools")}
+              <span className="dashboard-nav-item-main">
+                <NavIcon name="tools" />
+                <span>{t("dash.tools")}</span>
+              </span>
               <span className={`dashboard-nav-chevron${toolsExpanded ? " open" : ""}`}>⌄</span>
             </button>
             {toolsExpanded && (
@@ -912,7 +1035,8 @@ export default function Dashboard() {
                     className={`dashboard-nav-subitem${activeTab === "tools" && toolsSubTab === item.key ? " active" : ""}`}
                     onClick={() => openTools(item.key)}
                   >
-                    {item.label}
+                    <NavIcon name={item.icon} size={16} />
+                    <span>{item.label}</span>
                   </button>
                 ))}
               </div>
@@ -1580,7 +1704,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      {activeTab === "tools" && account.isPaid && toolsSubTab === "contacts" && (
+      {activeTab === "contacts" && account.isPaid && (
         <div className="card" style={{ marginTop: 24 }}>
           <h3 style={{ fontSize: 15 }}>{t("dash.contacts")}</h3>
           <p style={{ fontSize: 12, color: "var(--mute)" }}>
@@ -2173,7 +2297,7 @@ export default function Dashboard() {
           type="button"
           className={`dashboard-bottom-nav-item${
             account.isPaid
-              ? activeTab === "tools" && toolsSubTab === "contacts"
+              ? activeTab === "contacts"
                 ? " active"
                 : ""
               : activeTab === "templates"
@@ -2181,7 +2305,7 @@ export default function Dashboard() {
                 : ""
           }`}
           onClick={() => {
-            if (account.isPaid) openTools("contacts");
+            if (account.isPaid) setActiveTab("contacts");
             else setActiveTab("templates");
             setMoreSheetOpen(false);
           }}
@@ -2229,7 +2353,7 @@ export default function Dashboard() {
               {t("dash.templates")}
             </button>
             {account.isPaid &&
-              TOOLS_SUBNAV.filter((item) => item.key !== "contacts").map((item) => (
+              TOOLS_SUBNAV.map((item) => (
                 <button
                   key={item.key}
                   type="button"

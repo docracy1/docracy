@@ -16,7 +16,7 @@ const SHORT_LINKS: Record<string, { to: string; source: string; campaign?: strin
   hn: { to: "/prepare?freeTemplate=mutual-nda", source: "hackernews", campaign: "showhn" },
   li: { to: "/prepare?freeTemplate=mutual-nda", source: "linkedin" },
   x: { to: "/prepare?freeTemplate=mutual-nda", source: "x" },
-  dm: { to: "/prepare?freeTemplate=mutual-nda", source: "outreach", campaign: "dm" },
+  dm: { to: "/outreach/general", source: "outreach", campaign: "dm" },
   // One per directory listing, so each shows up as its own row in the admin "Tagged campaign
   // clicks" table instead of all merging into the generic /try bucket with no way to tell which
   // directory actually sent the click.
@@ -25,12 +25,14 @@ const SHORT_LINKS: Record<string, { to: string; source: string; campaign?: strin
   gl: { to: "/mcp", source: "glama", campaign: "listing" },
   sh: { to: "/prepare?freeTemplate=mutual-nda", source: "saashub", campaign: "listing" },
   at: { to: "/prepare?freeTemplate=mutual-nda", source: "alternativeto", campaign: "listing" },
-  // Persona-matched outreach: each cold-email persona lands on a template closer to what
-  // they'd actually send, instead of everyone getting the generic Mutual NDA.
-  "dm-fl": { to: "/prepare?freeTemplate=freelance-service-agreement", source: "outreach", campaign: "dm-freelancer" },
-  "dm-ag": { to: "/prepare?freeTemplate=contractor-onboarding-agreement", source: "outreach", campaign: "dm-agency" },
-  "dm-po": { to: "/prepare?freeTemplate=offer-letter", source: "outreach", campaign: "dm-peopleops" },
-  "dm-fo": { to: "/prepare?freeTemplate=independent-contractor-agreement", source: "outreach", campaign: "dm-founder" },
+  // Persona-matched outreach: each cold-email persona lands on a dedicated /outreach page
+  // ("why I reached out" + "what this solves for you" + instant try) matched to a template
+  // closer to what they'd actually send, instead of everyone hitting the homepage or the
+  // generic Mutual NDA.
+  "dm-fl": { to: "/outreach/freelancer", source: "outreach", campaign: "dm-freelancer" },
+  "dm-ag": { to: "/outreach/agency", source: "outreach", campaign: "dm-agency" },
+  "dm-po": { to: "/outreach/peopleops", source: "outreach", campaign: "dm-peopleops" },
+  "dm-fo": { to: "/outreach/founder", source: "outreach", campaign: "dm-founder" },
 };
 
 export function ShortTryRedirect() {

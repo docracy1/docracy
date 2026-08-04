@@ -394,6 +394,7 @@ sign.get("/sign/:token", async (c) => {
     docId: doc.docId,
     pdfBase64,
     fields: doc.fields.filter((f) => f.signerOrder === verified.order),
+    signerName: signerForPinCheck?.name ?? viewedSigner?.name ?? "",
     signerAttachments: doc.signerAttachments?.enabled
       ? {
           ...attachmentLimits(doc),

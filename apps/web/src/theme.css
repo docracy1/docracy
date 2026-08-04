@@ -2639,6 +2639,175 @@ select {
   flex: 1 1 0;
 }
 
+/* Typed + draw signature capture modal (signer flow) */
+
+.sig-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 40;
+  padding: 16px;
+}
+
+.sig-modal {
+  background: var(--canvas);
+  box-shadow: var(--shadow-lg);
+  width: min(520px, 100%);
+  max-height: min(92vh, 720px);
+  overflow: auto;
+  padding: 20px 22px 18px;
+  border-radius: var(--r-md);
+}
+
+.sig-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.sig-modal-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 650;
+  color: var(--ink);
+}
+
+.sig-modal-close {
+  border: none;
+  background: transparent;
+  color: var(--mute);
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.sig-modal-close:hover {
+  color: var(--ink);
+}
+
+.sig-modal-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--hairline);
+  margin-bottom: 16px;
+}
+
+.sig-modal-tabs button {
+  appearance: none;
+  border: none;
+  background: transparent;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 550;
+  color: var(--mute);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+
+.sig-modal-tabs button.is-active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+.sig-type-preview {
+  min-height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: clamp(36px, 8vw, 52px);
+  line-height: 1.15;
+  color: #1a2744;
+  padding: 12px 8px 4px;
+  word-break: break-word;
+}
+
+.sig-type-input {
+  display: block;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid var(--hairline);
+  background: transparent;
+  text-align: center;
+  font-size: 16px;
+  padding: 10px 8px 12px;
+  color: var(--ink);
+  outline: none;
+  margin-bottom: 16px;
+}
+
+.sig-type-input:focus {
+  border-bottom-color: var(--primary);
+}
+
+.sig-style-gallery {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 4px 2px 12px;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+}
+
+.sig-style-option {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  min-width: 118px;
+  max-width: 160px;
+  height: 64px;
+  padding: 8px 12px;
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  background: var(--canvas);
+  color: #1a2744;
+  font-size: 22px;
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.sig-style-option.is-active {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+
+.sig-type-error {
+  color: var(--danger);
+  font-size: 13px;
+  margin: 0 0 8px;
+}
+
+.sig-draw-hint {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: var(--body);
+}
+
+.sig-draw-canvas-wrap {
+  background: var(--canvas);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-sm);
+  width: 100%;
+  overflow: hidden;
+}
+
+.sig-draw-canvas {
+  display: block;
+  width: 100% !important;
+  height: auto !important;
+  max-width: 100%;
+  touch-action: none;
+}
+
 /* Floating chat-assistant widget — bottom-right on every page except the signer-facing sign/status
    deep links (see ChatWidget.tsx's early return there). Decision-tree quick replies, not free-text
    chat, backed by the same submitFeedback() call FeedbackForm.tsx already uses. */
@@ -2828,7 +2997,9 @@ select {
   font-weight: 700;
   color: var(--body-strong);
   text-decoration: none;
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   margin-bottom: 8px;
   transition: background-color 0.15s var(--ease);
 }
@@ -2848,6 +3019,10 @@ select {
   color: var(--body-strong);
   cursor: pointer;
   font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
   transition: background-color 0.15s var(--ease), color 0.15s var(--ease);
 }
 
@@ -2860,16 +3035,36 @@ select {
   color: var(--primary);
 }
 
+.dashboard-nav-icon {
+  flex-shrink: 0;
+  opacity: 0.92;
+}
+
+.dashboard-nav-item.active .dashboard-nav-icon,
+.dashboard-nav-subitem.active .dashboard-nav-icon,
+.dashboard-nav-new .dashboard-nav-icon {
+  opacity: 1;
+}
+
+.dashboard-nav-item-main {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
 .dashboard-nav-group-header {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
 }
 
 .dashboard-nav-chevron {
   font-size: 12px;
   transition: transform 0.15s var(--ease);
+  flex-shrink: 0;
 }
 
 .dashboard-nav-chevron.open {
@@ -2896,6 +3091,10 @@ select {
   color: var(--body);
   cursor: pointer;
   font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
   transition: background-color 0.15s var(--ease), color 0.15s var(--ease);
 }
 
@@ -3276,4 +3475,83 @@ select {
   .sign-modal-actions {
     flex-direction: column;
   }
+}
+
+/* Cookie consent — Chasa-style bottom bar on the start/marketing pages */
+
+.cookie-consent-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  padding: 16px 20px;
+  background: var(--ink);
+  color: #fff;
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.18);
+}
+
+.cookie-consent-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.cookie-consent-inner p {
+  margin: 0;
+  flex: 1;
+  min-width: 220px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.cookie-consent-inner a {
+  color: var(--primary-light);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.cookie-consent-inner a:hover {
+  color: #fff;
+}
+
+.cookie-consent-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.cookie-consent-btn {
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+}
+
+.cookie-consent-accept {
+  background: var(--primary);
+  color: #fff;
+  border: 1.5px solid var(--primary);
+}
+
+.cookie-consent-accept:hover {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+.cookie-consent-decline {
+  background: transparent;
+  color: #fff;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+}
+
+.cookie-consent-decline:hover {
+  border-color: rgba(255, 255, 255, 0.7);
 }

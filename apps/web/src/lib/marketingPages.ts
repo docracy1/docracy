@@ -592,3 +592,69 @@ export const EXPLAINER_PAGES: ExplainerPageContent[] = [
     relatedLinks: [{ label: "How Docracy's signing flow works", to: "/docs" }],
   },
 ];
+
+/** Dedicated landing pages for cold outreach — the homepage pitches Docracy to someone who
+ *  already knows they want e-signatures; an outreach lead just got a DM/email out of nowhere and
+ *  needs a different opening: why they were contacted, what problem it solves for THEM
+ *  specifically, then a fast way to try it. Persona keys match the /go/dm-* short-link campaigns
+ *  in ShortLinkRedirect.tsx, so each cold-email persona lands on copy written for them, not the
+ *  general-audience homepage. */
+export interface OutreachPageContent {
+  persona: string;
+  freeTemplate: string;
+  eyebrow: string;
+  whyReachedOut: string;
+  problemSolved: string;
+  ctaLabel: string;
+}
+
+export const OUTREACH_PAGES: OutreachPageContent[] = [
+  {
+    persona: "freelancer",
+    freeTemplate: "freelance-service-agreement",
+    eyebrow: "Why you're getting this",
+    whyReachedOut:
+      "You send client agreements as part of freelance or contract work — that's the one thing this is actually useful for, so I reached out directly instead of running an ad at everyone.",
+    problemSolved:
+      "Client NDAs and service agreements without the DocuSign tax — no per-seat pricing, and your client doesn't need to create an account just to sign.",
+    ctaLabel: "Try it now — send a sample service agreement",
+  },
+  {
+    persona: "agency",
+    freeTemplate: "contractor-onboarding-agreement",
+    eyebrow: "Why you're getting this",
+    whyReachedOut:
+      "Agencies and studios bringing contractors on project-by-project hit the same paperwork loop over and over — that's specifically what this solves, which is why you're hearing from me rather than a general ad.",
+    problemSolved:
+      "Contractor onboarding and NDAs without buying a DocuSign seat for someone who's only with you for one project.",
+    ctaLabel: "Try it now — send a sample onboarding agreement",
+  },
+  {
+    persona: "peopleops",
+    freeTemplate: "offer-letter",
+    eyebrow: "Why you're getting this",
+    whyReachedOut:
+      "You're likely sending offer letters and contractor NDAs regularly for a growing team — that's the exact use case this is built for, so this isn't a cold blast to everyone.",
+    problemSolved:
+      "Offer letters and onboarding documents without per-seat pricing eating into a lean people-ops budget.",
+    ctaLabel: "Try it now — send a sample offer letter",
+  },
+  {
+    persona: "founder",
+    freeTemplate: "independent-contractor-agreement",
+    eyebrow: "Why you're getting this",
+    whyReachedOut:
+      "Founders hiring their first contractors hit this exact paperwork moment — needing a signature without adding another SaaS seat to a lean stack — which is why this landed in your inbox specifically.",
+    problemSolved: "Contractor agreements and client NDAs without a new subscription just to get one document signed.",
+    ctaLabel: "Try it now — send a sample contractor agreement",
+  },
+  {
+    persona: "general",
+    freeTemplate: "mutual-nda",
+    eyebrow: "Why you're getting this",
+    whyReachedOut:
+      "You clicked through from an outreach message, which usually means you're already sending agreements that need a signature — this is built for exactly that.",
+    problemSolved: "Get a document signed without an account, a subscription, or per-seat pricing.",
+    ctaLabel: "Try it now — send a sample NDA",
+  },
+];

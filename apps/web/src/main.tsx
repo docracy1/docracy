@@ -6,6 +6,7 @@ import RootErrorBoundary from "./components/RootErrorBoundary";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ChatWidget from "./components/ChatWidget";
+import CookieConsentBanner from "./components/CookieConsentBanner";
 import Landing from "./pages/Landing";
 import Prepare from "./pages/Prepare";
 import PrepareSent from "./pages/PrepareSent";
@@ -37,6 +38,7 @@ import FeaturePage from "./pages/FeaturePage";
 import AlternativePage from "./pages/AlternativePage";
 import ExplainerPage from "./pages/ExplainerPage";
 import ImportGuidePage from "./pages/ImportGuidePage";
+import OutreachLanding from "./pages/OutreachLanding";
 import NotFound from "./pages/NotFound";
 import { ShortGoRedirect, ShortNdaRedirect, ShortPriceRedirect, ShortTryRedirect } from "./pages/ShortLinkRedirect";
 import { captureAttribution } from "./lib/attribution";
@@ -109,6 +111,7 @@ function AppRoutes() {
       <Route path="/import-from-hellosign" element={<ImportGuidePage slug="hellosign" />} />
       <Route path="/import-from-pandadoc" element={<ImportGuidePage slug="pandadoc" />} />
       <Route path="/import-from-adobe-sign" element={<ImportGuidePage slug="adobe-sign" />} />
+      <Route path="/outreach/:persona" element={<OutreachLanding />} />
       <Route path="/what-is-an-nda" element={<ExplainerPage slug="what-is-an-nda" />} />
       <Route path="/are-electronic-signatures-legal" element={<ExplainerPage slug="are-electronic-signatures-legal" />} />
       <Route path="*" element={<NotFound />} />
@@ -132,6 +135,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                   <AppRoutes />
                   <Footer />
                   <ChatWidget />
+                  <CookieConsentBanner />
                 </>
               }
             />

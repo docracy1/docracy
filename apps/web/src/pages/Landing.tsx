@@ -225,15 +225,7 @@ export default function Landing() {
       <div className="hero-band">
         <div className="hero-inner hero-split">
           <div>
-            <div className="hero-eyebrow">{t("hero.eyebrow")}</div>
             <h1>{t("hero.title")}</h1>
-            <p>{t("hero.sub")}</p>
-            <ul className="hero-benefit-list">
-              <li>{t("hero.b1")}</li>
-              <li>{t("hero.b2")}</li>
-              <li>{t("hero.b3")}</li>
-              <li>{t("hero.b4")}</li>
-            </ul>
             <div className="hero-actions">
               <Link
                 to={prepareSampleTo}
@@ -242,13 +234,6 @@ export default function Landing() {
                 onClick={() => track("landingpage_cta_clicked", { source: "hero_inline_sample" })}
               >
                 {t("hero.ctaSample")}
-              </Link>
-              <Link
-                to={prepareTo}
-                className="hero-actions-secondary"
-                onClick={() => track("landingpage_cta_clicked", { source: "hero_inline_upload" })}
-              >
-                {t("hero.ctaUpload")}
               </Link>
             </div>
             <p className="hero-cta-hint">{t("hero.hint")}</p>
@@ -393,6 +378,9 @@ export default function Landing() {
       </div>
 
       <div className="container" style={{ maxWidth: 960, padding: "48px 24px" }}>
+        <h2 style={{ fontSize: 24, marginTop: 0, marginBottom: 24, textAlign: "center" }}>
+          {t("landing.testimonialsTitle")}
+        </h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 20 }}>
           {TESTIMONIALS.map((testimonial) => {
             const title = t(testimonial.titleKey);
