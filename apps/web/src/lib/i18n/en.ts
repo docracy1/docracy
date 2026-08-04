@@ -3,6 +3,10 @@ import type { Messages } from "./types";
 const en: Messages = {
   "lang.en": "English",
   "lang.es": "Español",
+  "nav.features": "Features",
+  "nav.industry": "Industry",
+  "nav.resources": "Resources",
+  "nav.contactSales": "Contact sales",
   "nav.pricing": "Pricing",
   "nav.templates": "Free templates",
   "nav.mcp": "AI & MCP",

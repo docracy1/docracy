@@ -38,6 +38,7 @@ import FeaturePage from "./pages/FeaturePage";
 import AlternativePage from "./pages/AlternativePage";
 import ExplainerPage from "./pages/ExplainerPage";
 import ImportGuidePage from "./pages/ImportGuidePage";
+import IndustryPage from "./pages/IndustryPage";
 import OutreachLanding from "./pages/OutreachLanding";
 import NotFound from "./pages/NotFound";
 import { ShortGoRedirect, ShortNdaRedirect, ShortPriceRedirect, ShortTryRedirect } from "./pages/ShortLinkRedirect";
@@ -111,6 +112,11 @@ function AppRoutes() {
       <Route path="/import-from-hellosign" element={<ImportGuidePage slug="hellosign" />} />
       <Route path="/import-from-pandadoc" element={<ImportGuidePage slug="pandadoc" />} />
       <Route path="/import-from-adobe-sign" element={<ImportGuidePage slug="adobe-sign" />} />
+      <Route path="/industry/freelancers" element={<IndustryPage slug="freelancers" />} />
+      <Route path="/industry/creative-agencies" element={<IndustryPage slug="creative-agencies" />} />
+      <Route path="/industry/real-estate" element={<IndustryPage slug="real-estate" />} />
+      <Route path="/industry/construction" element={<IndustryPage slug="construction" />} />
+      <Route path="/industry/small-business" element={<IndustryPage slug="small-business" />} />
       <Route path="/outreach/:persona" element={<OutreachLanding />} />
       <Route path="/what-is-an-nda" element={<ExplainerPage slug="what-is-an-nda" />} />
       <Route path="/are-electronic-signatures-legal" element={<ExplainerPage slug="are-electronic-signatures-legal" />} />

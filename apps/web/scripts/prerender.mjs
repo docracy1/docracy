@@ -90,7 +90,7 @@ await build({
   format: "cjs",
   logLevel: "warning",
 });
-const { FEATURE_PAGES, ALTERNATIVE_PAGES, EXPLAINER_PAGES, getFeaturePageContent } = require(marketingBundleFile);
+const { FEATURE_PAGES, ALTERNATIVE_PAGES, EXPLAINER_PAGES, INDUSTRY_PAGES, getFeaturePageContent } = require(marketingBundleFile);
 fs.unlinkSync(marketingBundleFile);
 
 /** Phase 3 — top templates with Spanish detail pages (keep in sync with paths.ts SEO_TEMPLATE_SLUGS). */
@@ -209,6 +209,12 @@ const routes = [
     description:
       "Bring your existing Adobe Acrobat Sign agreements over to Docracy. No account-linking — just the manual per-document download Adobe already provides.",
   },
+  ...INDUSTRY_PAGES.map((p) => ({
+    urlPath: `/industry/${p.slug}`,
+    outFile: `industry-${p.slug}.html`,
+    title: p.seoTitle,
+    description: p.seoDescription,
+  })),
   {
     urlPath: "/about",
     outFile: "about.html",

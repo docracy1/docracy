@@ -658,3 +658,146 @@ export const OUTREACH_PAGES: OutreachPageContent[] = [
     ctaLabel: "Try it now — send a sample NDA",
   },
 ];
+
+/** One page per small-business "industry" — deliberately not modeled on enterprise mega-menus
+ *  (e.g. a competitor's Real Estate / Legal / Finance / Construction / Technology split, which
+ *  assumes brokerages, law firms, and IT departments as the buyer). Docracy's actual audience is
+ *  solo entrepreneurs, freelancers, and small/medium businesses, so each industry here is scoped
+ *  to the low-stakes paperwork that audience actually sends — never framed as fit for regulated,
+ *  compliance-grade, or identity-verified signing (see Trust.tsx / About.tsx for why: Docracy's
+ *  audit trail proves what was signed and when, not who physically signed it). `honestLimit` is
+ *  only set where a naive reading of the industry name (real estate closings, for instance) could
+ *  otherwise oversell what Docracy actually does. */
+export interface IndustryPageContent {
+  slug: string;
+  seoTitle: string;
+  seoDescription: string;
+  heroHeadline: string;
+  heroSubheadline: string;
+  painPoints: string[];
+  whyDocracy: string;
+  relevantTemplates: string[];
+  /** Only set when the industry name alone could otherwise imply a regulated/compliance use case
+   *  Docracy doesn't support — states the honest scope limit up front, same tone as Trust.tsx. */
+  honestLimit?: string;
+  ctaLabel: string;
+  ctaTo: string;
+}
+
+export const INDUSTRY_PAGES: IndustryPageContent[] = [
+  {
+    slug: "freelancers",
+    seoTitle: "E-Signatures for Freelancers & Consultants | Docracy",
+    seoDescription:
+      "Free e-signing for freelancers and consultants — client agreements, NDAs, and payment terms. No account required, no subscriptions for simple two-party deals.",
+    heroHeadline: "E-signatures built for freelancers and consultants.",
+    heroSubheadline:
+      "Send client agreements, NDAs, and payment terms in minutes — free for you and your client, no account required.",
+    painPoints: [
+      "A client wants a signed agreement before you start work, but you don't have budget for a $30–$75/month e-sign subscription to send a handful of documents a month.",
+      "A prospect wants an NDA signed before a discovery call — asking them to create an account first kills the momentum.",
+      "Payment terms need a real signature, not just an email that says \"sounds good.\"",
+      "Most e-sign tools price per seat or per envelope — brutal math for a solo operator sending a dozen documents a month, not a thousand.",
+    ],
+    whyDocracy:
+      "Docracy is free for signing chains of up to two people — you and your client — with no account required on either side. Start from a free freelance service agreement, NDA, or payment-terms template, fill in your details, and send. It's built for exactly this: one person sending a handful of agreements a month, not a sales team on a seat license.",
+    relevantTemplates: [
+      "freelance-service-agreement",
+      "independent-contractor-agreement",
+      "mutual-nda",
+      "unilateral-nda",
+      "consulting-agreement",
+      "payment-terms-agreement",
+    ],
+    ctaLabel: "Send your first client agreement",
+    ctaTo: "/prepare?ref=seo-industry-freelancers",
+  },
+  {
+    slug: "creative-agencies",
+    seoTitle: "E-Signatures for Creative & Marketing Agencies | Docracy",
+    seoDescription:
+      "Free e-signing for creative and marketing agencies — contractor onboarding, scope of work, and client contracts. No account required, no per-seat pricing.",
+    heroHeadline: "E-signatures built for creative and marketing agencies.",
+    heroSubheadline:
+      "Onboard freelance talent and send client contracts fast — free for two-party signing, no per-seat pricing.",
+    painPoints: [
+      "Bringing on a freelance designer, writer, or developer project-by-project means fresh onboarding paperwork every time — most e-sign tools charge as if each one were a full-time hire.",
+      "Client contracts and scope-of-work docs need to go out fast when a pitch turns into a signed deal, not sit in a queue behind procurement-approved software.",
+      "Scope shifts mid-project constantly — a change order needs a real signature, not a Slack thumbs-up.",
+      "Agencies juggle many small, one-off signing chains (one contractor, one client) rather than a few huge contracts — most e-sign pricing doesn't fit that shape.",
+    ],
+    whyDocracy:
+      "Docracy handles two-party signing — agency and client, or agency and freelance talent — for free, with no account needed by whoever's signing. Start from a contractor onboarding agreement, scope of work, or client contract, fill in the project details, and send. A flat $10/month (not per seat) adds reusable templates and unlimited signers once you outgrow the free tier.",
+    relevantTemplates: ["contractor-onboarding-agreement", "scope-of-work", "client-contract", "service-agreement"],
+    ctaLabel: "Send a scope of work",
+    ctaTo: "/prepare?ref=seo-industry-creative-agencies",
+  },
+  {
+    slug: "real-estate",
+    seoTitle: "E-Signatures for Small Landlords & Property Managers | Docracy",
+    seoDescription:
+      "Free e-signing for leases, subleases, roommate agreements, and vendor paperwork. Built for small landlords and independent property managers — not closings.",
+    heroHeadline: "E-signatures for small landlords and property managers.",
+    heroSubheadline:
+      "Leases, subleases, roommate agreements, and vendor paperwork — signed in minutes, free for two parties.",
+    painPoints: [
+      "A small landlord or independent property manager needs a lease or sublease signed fast, without enterprise real-estate software built for brokerages.",
+      "A repair job needs a signed vendor agreement with a contractor before work starts, not a verbal okay.",
+      "A new roommate move-in needs a clear, signed understanding of rent splits and house rules, separate from the actual lease.",
+      "Most e-sign tools aimed at \"real estate\" are priced and built for high-volume brokers, not someone managing one or two properties on the side.",
+    ],
+    whyDocracy:
+      "Docracy is free for two-party signing — landlord and tenant, sublessor and subtenant, or property manager and vendor — with no account required to sign. Start from a lease, sublease, roommate agreement, or vendor agreement template, fill in the specifics, and send.",
+    honestLimit:
+      "What this is not: Docracy doesn't handle real estate closings, title transfer, or anything that legally requires notarization or identity-verified signing. The audit trail proves what was signed and when — not who physically signed it — which is fine for day-to-day landlord paperwork, but the wrong tool for a property sale or any document your state requires a notary for. For those, use a title company or a compliance-grade, identity-verified signing service instead.",
+    relevantTemplates: [
+      "simple-commercial-lease-agreement",
+      "sublease-agreement",
+      "rental-agreement",
+      "roommate-agreement",
+      "vendor-agreement",
+    ],
+    ctaLabel: "Send a lease or vendor agreement",
+    ctaTo: "/prepare?ref=seo-industry-real-estate",
+  },
+  {
+    slug: "construction",
+    seoTitle: "E-Signatures for Construction & Trades | Docracy",
+    seoDescription:
+      "Free e-signing for contractors — work orders, quotes, subcontractor onboarding, and liability waivers. No account required, sign from the job site.",
+    heroHeadline: "E-signatures built for contractors and trades.",
+    heroSubheadline:
+      "Work orders, quotes, subcontractor onboarding, and liability waivers — signed from the job site, free for two parties.",
+    painPoints: [
+      "A contractor needs to send a work order or quote fast, before the customer calls someone else.",
+      "Bringing on a subcontractor for a single job means onboarding paperwork every time — enterprise e-sign pricing doesn't make sense for one subcontractor on one job.",
+      "Liability waivers need to be signed before someone steps on a job site, not filed away after the fact.",
+      "Change orders come up mid-job constantly — a scope, materials, or cost change needs a signed record, not a handshake.",
+    ],
+    whyDocracy:
+      "Docracy is free for two-party signing — you and your customer, or you and a subcontractor — with no account required for either side. Start from a work order, construction contract, or liability waiver template, fill in the job details, and send from the truck or the job site.",
+    relevantTemplates: ["construction-contract", "work-order", "contractor-onboarding-agreement", "liability-waiver", "purchase-order"],
+    ctaLabel: "Send a work order",
+    ctaTo: "/prepare?ref=seo-industry-construction",
+  },
+  {
+    slug: "small-business",
+    seoTitle: "E-Signatures for Small Business & Local Services | Docracy",
+    seoDescription:
+      "Free e-signing for small businesses — vendor agreements, employee onboarding, bills of sale, and cash receipts. No account required, no subscriptions.",
+    heroHeadline: "E-signatures built for small business and local services.",
+    heroSubheadline:
+      "Vendor agreements, onboarding, bills of sale, and receipts — signed in minutes, free for two parties.",
+    painPoints: [
+      "A vendor or supplier agreement needs a signature before the first order ships, not after.",
+      "New hires need onboarding paperwork signed on day one, without paying for HR software built for much bigger teams.",
+      "A one-time sale of equipment or inventory needs a real bill of sale, not just a text confirming the price.",
+      "A cash payment needs a signed receipt on the spot, for your own records and your accountant's.",
+    ],
+    whyDocracy:
+      "Docracy is free for two-party signing — you and a vendor, employee, or customer — with no account required for whoever's signing. Start from a vendor agreement, employee onboarding agreement, bill of sale, or cash receipt template, fill in the details, and send from the counter or the back office.",
+    relevantTemplates: ["vendor-agreement", "employee-onboarding-agreement", "client-contract", "bill-of-sale", "cash-receipt", "sales-agreement"],
+    ctaLabel: "Send a vendor agreement",
+    ctaTo: "/prepare?ref=seo-industry-small-business",
+  },
+];
