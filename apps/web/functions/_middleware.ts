@@ -14,6 +14,8 @@ const TRACKED_ROUTES = new Set([
   "/es/mcp",
   "/ai",
   "/es/ia",
+  "/esign-ueta",
+  "/es/esign-ueta",
   "/about",
   "/pricing",
   "/es/precios",

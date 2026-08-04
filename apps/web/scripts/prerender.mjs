@@ -185,6 +185,16 @@ const routes = [
     alternates: { en: "/ai", es: "/es/ia" },
   },
   {
+    urlPath: "/esign-ueta",
+    outFile: "esign-ueta.html",
+    title: "ESIGN Act & UETA E-Signatures — Designed for US Law | Docracy",
+    description:
+      "Docracy SES electronic signatures are designed to support the U.S. ESIGN Act and UETA: consent, intent to sign, " +
+      "audit trail, and a certificate of completion. No AES/QES or identity verification.",
+    locale: "en",
+    alternates: { en: "/esign-ueta", es: "/es/esign-ueta" },
+  },
+  {
     urlPath: "/import-from-docusign",
     outFile: "import-from-docusign.html",
     title: "Import Your DocuSign Documents to Docracy — Step-by-Step Guide",
@@ -357,6 +367,16 @@ const routes = [
     alternates: { en: "/ai", es: "/es/ia" },
   },
   {
+    urlPath: "/es/esign-ueta",
+    outFile: "es/esign-ueta.html",
+    title: "Firmas electrónicas ESIGN Act y UETA — Diseñadas para la ley de EE. UU. | Docracy",
+    description:
+      "Las firmas SES de Docracy están diseñadas para respaldar la ESIGN Act y UETA de EE. UU.: consentimiento, " +
+      "intención de firmar, registro de auditoría y certificado de finalización. Sin AES/QES ni verificación de identidad.",
+    locale: "es",
+    alternates: { en: "/esign-ueta", es: "/es/esign-ueta" },
+  },
+  {
     urlPath: "/es/documentacion",
     outFile: "es/documentacion.html",
     title: "Documentación — Docracy",
@@ -376,7 +396,7 @@ const routes = [
     outFile: "trust.html",
     title: "Trust & security — Docracy",
     description:
-      "How Docracy protects documents: encryption, retention, audit trails, ESIGN/eIDAS SES alignment, subprocessors, and Cloudflare infrastructure certifications.",
+      "How Docracy protects documents: encryption, retention, audit trails, ESIGN Act and UETA alignment for SES e-signatures, eIDAS SES, subprocessors, and Cloudflare infrastructure certifications.",
   },
   {
     urlPath: "/dpa",

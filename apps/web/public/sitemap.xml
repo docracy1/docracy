@@ -85,6 +85,22 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/ai" />
   </url>
   <url>
+    <loc>https://docracy.io/esign-ueta</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/esign-ueta" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/esign-ueta" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/esign-ueta" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/esign-ueta</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/esign-ueta" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/esign-ueta" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/esign-ueta" />
+  </url>
+  <url>
     <loc>https://docracy.io/pricing</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

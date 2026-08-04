@@ -197,6 +197,9 @@ const es: Messages = {
   "footer.templates": "Plantillas gratis",
   "footer.terms": "Términos",
   "footer.trust": "Confianza y seguridad",
+  "footer.esignUeta": "ESIGN y UETA",
+  "footer.esignLine": "Firmas SES diseñadas para respaldar la ESIGN Act y UETA de EE. UU.",
+  "footer.esignLineLink": "Más información",
   "footer.vsAdobe": "vs Adobe Acrobat Sign",
   "footer.vsDocusign": "vs DocuSign",
   "footer.vsEversign": "vs eversign",
@@ -264,7 +267,8 @@ const es: Messages = {
   "landing.ctaTitle": "¿Listo para enviar tu primer documento?",
   "landing.ctaUpload": "Subir tu PDF",
   "landing.disclaimer":
-    "Docracy no verifica identidad — cualquiera con el enlace puede firmar con el nombre indicado. El registro de auditoría prueba qué se firmó y cuándo, no quién lo firmó realmente. Para contratos que necesitan firmas con identidad verificada, usa un servicio de firma electrónica de grado de cumplimiento.",
+    "Las firmas SES de Docracy están diseñadas para respaldar la ESIGN Act y UETA de EE. UU. No verificamos identidad — cualquiera con el enlace puede firmar con el nombre indicado. El registro de auditoría prueba qué se firmó y cuándo, no quién lo firmó realmente. Para firmas con identidad verificada, usa un servicio de grado de cumplimiento. Detalles:",
+  "landing.disclaimerTrust": "Confianza y seguridad",
   "landing.faq1.a":
     "Una plataforma de firma electrónica simple y segura para equipos pequeños y empresas en crecimiento.",
   "landing.faq1.q": "¿Qué es Docracy.io?",
@@ -395,6 +399,8 @@ const es: Messages = {
   "nav.mega.feature.storage.desc": "Cifrado, con retención automática corta.",
   "nav.mega.feature.workflows.title": "Flujos rápidos",
   "nav.mega.feature.workflows.desc": "Firma secuencial o todos a la vez, tú eliges.",
+  "nav.mega.feature.esign.title": "ESIGN y UETA",
+  "nav.mega.feature.esign.desc": "Firmas SES diseñadas para respaldar la ESIGN Act y UETA de EE. UU.",
   "nav.mega.compare.docusign.desc": "Más ligero, sin precio por asiento.",
   "nav.mega.compare.eversign.desc": "Flujo de firma más rápido y simple.",
   "nav.mega.compare.pandadoc.desc": "Sin suite de propuestas que no necesitas.",
@@ -529,7 +535,8 @@ const es: Messages = {
   "pricing.colPaidSub": "$10/mes",
   "pricing.compareTitle": "Comparación completa de funciones",
   "pricing.disclaimer":
-    "Docracy no verifica identidad — el registro de auditoría prueba qué se firmó y cuándo, no quién lo firmó realmente. Para contratos que necesitan firmas con identidad verificada, usa un servicio de firma electrónica de grado de cumplimiento.",
+    "Las firmas SES de Docracy están diseñadas para respaldar la ESIGN Act y UETA de EE. UU. No verificamos identidad — el registro de auditoría prueba qué se firmó y cuándo, no quién lo firmó realmente. Para firmas con identidad verificada, usa un servicio de grado de cumplimiento. Detalles:",
+  "pricing.disclaimerTrust": "Confianza y seguridad",
   "pricing.ent.cta": "Contactar ventas",
   "pricing.ent.f1": "Todo lo del plan Pago",
   "pricing.ent.f2": "Facturación y contratos anuales",
@@ -615,7 +622,7 @@ const es: Messages = {
   "sign.chooseStyle": "Elige un estilo de firma",
   "sign.typeFailed": "No se pudo crear la firma. Inténtalo de nuevo o dibújala.",
   "sign.consent":
-    "Confirmo que soy la persona a quien se envió este enlace, y que al hacer clic en \\\"Completar firma\\\" estoy firmando este documento.",
+    "Confirmo que soy la persona a quien se envió este enlace, y que al hacer clic en \"Completar firma\" estoy aplicando mi firma electrónica a este documento — de forma consistente con la ESIGN Act y UETA de EE. UU.",
   "sign.continue": "Continuar",
   "sign.dateField": "Fecha",
   "sign.decline": "Rechazar",
@@ -994,6 +1001,64 @@ const es: Messages = {
   "seo.ai.title": "Detección IA para firmas electrónicas — Campos al instante | Docracy",
   "seo.ai.description":
     "La IA de Docracy detecta campos de firma y fecha, resume contratos en lenguaje claro, marca cláusulas de riesgo y genera PDFs listos para firmar. Incluye conector MCP para Claude y ChatGPT.",
+  "seo.esignUeta.title": "Firmas electrónicas ESIGN Act y UETA — Diseñadas para la ley de EE. UU. | Docracy",
+  "seo.esignUeta.description":
+    "Las firmas SES de Docracy están diseñadas para respaldar la ESIGN Act y UETA de EE. UU.: consentimiento, intención de firmar, registro de auditoría y certificado de finalización. Sin AES/QES ni verificación de identidad.",
+
+  "esign.eyebrow": "Ley de firmas electrónicas en EE. UU.",
+  "esign.heroTitle": "Firmas electrónicas\nbajo ESIGN y UETA.",
+  "esign.heroSub":
+    "Las firmas SES de Docracy están diseñadas para respaldar la ESIGN Act y la Uniform Electronic Transactions Act de EE. UU. en documentos comerciales cotidianos — con un registro de auditoría honesto, no certificaciones exageradas.",
+  "esign.ctaTry": "Empieza gratis — envía un documento →",
+  "esign.ctaPricing": "Ver precios",
+  "esign.lawsTitle": "Qué buscan ESIGN y UETA",
+  "esign.lawsBody":
+    "Estos marcos de EE. UU. suelen dar efecto legal a las firmas electrónicas cuando las partes hacen negocios electrónicos de buena fe. En la práctica: consentimiento, intención de firmar y un registro retenible — no un sello concreto de proveedor.",
+  "esign.laws.1": "Consentimiento para hacer negocios electrónicamente",
+  "esign.laws.2": "Intención clara de firmar el registro electrónico",
+  "esign.laws.3": "Un registro que se pueda conservar y reproducir con exactitud",
+  "esign.provideTitle": "Qué ofrece Docracy",
+  "esign.provideSub":
+    "Pensado para cadenas de firma SES — gratis hasta dos firmantes, sin cuenta para empezar.",
+  "esign.provide.consent.title": "Acuse de consentimiento",
+  "esign.provide.consent.body":
+    "Los firmantes marcan un acuse antes de completar — registrado como evento de consentimiento en la auditoría.",
+  "esign.provide.email.title": "Atribución por correo",
+  "esign.provide.email.body":
+    "Cada firmante se invita por correo (SMS opcional en EE. UU. en el plan de pago). El enlace va firmado con HMAC — no es una contraseña adivinable.",
+  "esign.provide.pin.title": "PIN opcional al firmar",
+  "esign.provide.pin.body":
+    "Los espacios de trabajo de pago pueden añadir un PIN al enlace de firma como secreto compartido extra.",
+  "esign.provide.audit.title": "Registro de auditoría con marca de tiempo",
+  "esign.provide.audit.body":
+    "Los eventos de vista, consentimiento, firma y rechazo capturan marca de tiempo, IP y user-agent.",
+  "esign.provide.hash.title": "Hashes del contenido",
+  "esign.provide.hash.body":
+    "Hashes criptográficos del contenido del documento en puntos clave ayudan a mostrar que el registro se mantuvo intacto.",
+  "esign.provide.cert.title": "Certificado de finalización",
+  "esign.provide.cert.body":
+    "Al terminar la cadena, las partes reciben el PDF firmado y un certificado que resume el rastro.",
+  "esign.limitsTitle": "Límites honestos",
+  "esign.limitsBody":
+    "Solo firma electrónica simple (SES). Docracy no verifica la identidad del firmante y no ofrece firmas avanzadas o cualificadas (AES/QES). Cualquiera con el enlace puede firmar con el nombre indicado. Para contratos de alto riesgo o regulados que requieren identidad verificada, usa un proveedor de grado de cumplimiento. Esta página no es asesoría legal.",
+  "esign.faqTitle": "Preguntas frecuentes",
+  "esign.faq.q1": "¿Las firmas de Docracy cumplen ESIGN / UETA?",
+  "esign.faq.a1":
+    "Los flujos SES de Docracy están diseñados para respaldar la ESIGN Act y UETA de EE. UU. en muchos documentos comerciales cotidianos (consentimiento, intención, registro de auditoría retenible). Usamos un lenguaje cuidadoso de “diseñado para respaldar / consistente con” — no una certificación de que todo tipo de documento sea ejecutable en todas partes.",
+  "esign.faq.q2": "¿Verifican quién firmó?",
+  "esign.faq.a2":
+    "No. El registro de auditoría prueba qué se firmó y cuándo, no quién firmó físicamente. La verificación de identidad está fuera del alcance de Docracy.",
+  "esign.faq.q3": "¿Es AES o QES?",
+  "esign.faq.a3":
+    "No. Docracy solo ofrece SES (firmas electrónicas simples) — no firmas avanzadas o cualificadas bajo eIDAS u otros marcos similares.",
+  "esign.faq.q4": "¿Dónde leo la postura de seguridad completa?",
+  "esign.faq.a4":
+    "Consulta Confianza y seguridad para cifrado, retención, subprocesadores, certificaciones de infraestructura de Cloudflare y el cuestionario de seguridad.",
+  "esign.trustLead": "Más detalle:",
+  "esign.trustLink": "Confianza y seguridad",
+  "esign.pricingLink": "Precios",
+  "esign.prepareLink": "Empezar gratis",
+  "esign.footerCta": "Envía tu primer documento gratis — sin cuenta.",
 
   "ai.eyebrow": "Docracy IA",
   "ai.heroTitle": "Detección IA.\nLos campos se colocan solos.",

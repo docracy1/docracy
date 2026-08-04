@@ -30,6 +30,7 @@ import AdminAnalytics from "./pages/AdminAnalytics";
 import About from "./pages/About";
 import Pricing from "./pages/Pricing";
 import Ai from "./pages/Ai";
+import EsignUeta from "./pages/EsignUeta";
 import Docs from "./pages/Docs";
 import Roadmap from "./pages/Roadmap";
 import Imprint from "./pages/Imprint";
@@ -80,6 +81,8 @@ function AppRoutes() {
       <Route path="/es/mcp" element={<Mcp />} />
       <Route path="/ai" element={<Ai />} />
       <Route path="/es/ia" element={<Ai />} />
+      <Route path="/esign-ueta" element={<EsignUeta />} />
+      <Route path="/es/esign-ueta" element={<EsignUeta />} />
       <Route path="/admin/analytics" element={<AdminAnalytics />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/bulk-send" element={<BulkSend />} />

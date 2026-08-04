@@ -32,6 +32,8 @@ const en: Messages = {
   "nav.mega.feature.storage.desc": "Encrypted, with short automatic retention.",
   "nav.mega.feature.workflows.title": "Fast workflows",
   "nav.mega.feature.workflows.desc": "Sequential or all-at-once signing, your choice.",
+  "nav.mega.feature.esign.title": "ESIGN & UETA",
+  "nav.mega.feature.esign.desc": "SES e-signatures designed to support U.S. ESIGN Act and UETA.",
   "nav.mega.compare.docusign.desc": "Lighter, no per-seat pricing.",
   "nav.mega.compare.eversign.desc": "Faster, simpler signing flow.",
   "nav.mega.compare.pandadoc.desc": "No proposal suite you don't need.",
@@ -123,6 +125,9 @@ const en: Messages = {
   "footer.github": "GitHub",
   "footer.privacy": "Privacy",
   "footer.trust": "Trust & security",
+  "footer.esignUeta": "ESIGN & UETA",
+  "footer.esignLine": "SES e-signatures designed to support the U.S. ESIGN Act and UETA.",
+  "footer.esignLineLink": "Learn more",
   "footer.dpa": "DPA",
   "footer.terms": "Terms",
   "footer.copyright": "© {{year}} Docracy — a product of RELACON GmbH",
@@ -911,6 +916,64 @@ const en: Messages = {
   "seo.ai.title": "AI Auto-Detect for E-Signatures — Place Fields Instantly | Docracy",
   "seo.ai.description":
     "Docracy AI auto-detects signature and date fields, explains contracts in plain English, flags risky clauses, and generates signable PDFs. Plus an MCP connector for Claude and ChatGPT.",
+  "seo.esignUeta.title": "ESIGN Act & UETA E-Signatures — Designed for US Law | Docracy",
+  "seo.esignUeta.description":
+    "Docracy SES electronic signatures are designed to support the U.S. ESIGN Act and UETA: consent, intent to sign, audit trail, and a certificate of completion. No AES/QES or identity verification.",
+
+  "esign.eyebrow": "US electronic signature law",
+  "esign.heroTitle": "Electronic signatures\nunder ESIGN & UETA.",
+  "esign.heroSub":
+    "Docracy SES e-signatures are designed to support the U.S. ESIGN Act and Uniform Electronic Transactions Act for everyday business documents — with an honest audit trail, not overclaimed certifications.",
+  "esign.ctaTry": "Start free — send a document →",
+  "esign.ctaPricing": "See pricing",
+  "esign.lawsTitle": "What ESIGN and UETA look for",
+  "esign.lawsBody":
+    "These U.S. frameworks generally give electronic signatures legal effect when parties do business electronically in good faith. In practice, that means consent, intent to sign, and a retainable record — not a specific vendor seal.",
+  "esign.laws.1": "Consent to do business electronically",
+  "esign.laws.2": "Clear intent to sign the electronic record",
+  "esign.laws.3": "A record that can be retained and accurately reproduced",
+  "esign.provideTitle": "What Docracy provides",
+  "esign.provideSub":
+    "Built for SES-style signing chains — free for up to two signers, no account required to start.",
+  "esign.provide.consent.title": "Consent acknowledgment",
+  "esign.provide.consent.body":
+    "Signers check an acknowledgment before completing — recorded as a consent event in the audit trail.",
+  "esign.provide.email.title": "Email attribution",
+  "esign.provide.email.body":
+    "Each signer is invited by email (optional SMS in the US on paid). The link is HMAC-signed — not a guessable password.",
+  "esign.provide.pin.title": "Optional signing PIN",
+  "esign.provide.pin.body":
+    "Paid workspaces can add a PIN on signing links for an extra shared-secret step.",
+  "esign.provide.audit.title": "Timestamped audit trail",
+  "esign.provide.audit.body":
+    "View, consent, sign, and decline events capture timestamp, IP, and user-agent.",
+  "esign.provide.hash.title": "Content hashes",
+  "esign.provide.hash.body":
+    "Cryptographic hashes of document content at key points help show the record stayed intact.",
+  "esign.provide.cert.title": "Certificate of completion",
+  "esign.provide.cert.body":
+    "When the chain finishes, parties get a signed PDF plus a completion certificate summarizing the trail.",
+  "esign.limitsTitle": "Honest limits",
+  "esign.limitsBody":
+    "This is simple electronic signature (SES) only. Docracy does not verify signer identity, and does not offer advanced or qualified electronic signatures (AES/QES). Anyone with the link can sign as the name on it. For high-stakes or regulated contracts that need identity-verified signatures, use a compliance-grade provider. This page is not legal advice.",
+  "esign.faqTitle": "Common questions",
+  "esign.faq.q1": "Are Docracy signatures ESIGN / UETA compliant?",
+  "esign.faq.a1":
+    "Docracy SES workflows are designed to support the U.S. ESIGN Act and UETA for many everyday business documents (consent, intent, retainable audit record). We use careful “designed to support / consistent with” language — not a certification that every document type is enforceable everywhere.",
+  "esign.faq.q2": "Do you verify who signed?",
+  "esign.faq.a2":
+    "No. The audit trail proves what was signed and when, not who physically signed. Identity verification is out of scope for Docracy.",
+  "esign.faq.q3": "Is this AES or QES?",
+  "esign.faq.a3":
+    "No. Docracy provides SES (simple electronic signatures) only — not advanced or qualified electronic signatures under eIDAS or similar frameworks.",
+  "esign.faq.q4": "Where can I read the full security posture?",
+  "esign.faq.a4":
+    "See Trust & security for encryption, retention, subprocessors, Cloudflare infrastructure certifications, and the security questionnaire.",
+  "esign.trustLead": "More detail:",
+  "esign.trustLink": "Trust & security",
+  "esign.pricingLink": "Pricing",
+  "esign.prepareLink": "Start free",
+  "esign.footerCta": "Send your first document free — no account needed.",
 
   "ai.eyebrow": "Docracy AI",
   "ai.heroTitle": "AI Auto-Detect.\nFields place themselves.",

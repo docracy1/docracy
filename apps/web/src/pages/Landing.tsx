@@ -586,7 +586,10 @@ export default function Landing() {
         </div>
 
         <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 32 }}>
-          {t("landing.disclaimer")}
+          {t("landing.disclaimer")}{" "}
+          <Link to="/trust">{t("landing.disclaimerTrust")}</Link>
+          {" · "}
+          <Link to={localizePath("/esign-ueta", locale)}>{t("footer.esignUeta")}</Link>
         </p>
       </div>
 

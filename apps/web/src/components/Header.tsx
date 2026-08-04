@@ -11,6 +11,7 @@ const FEATURE_ITEMS = [
   { to: "/prepare", icon: "send", titleKey: "nav.mega.feature.send.title", descKey: "nav.mega.feature.send.desc" },
   { to: "/ai", icon: "sparkles", titleKey: "nav.mega.feature.ai.title", descKey: "nav.mega.feature.ai.desc" },
   { to: "/free-templates", icon: "duplicate", titleKey: "nav.mega.feature.templates.title", descKey: "nav.mega.feature.templates.desc" },
+  { to: "/esign-ueta", icon: "scale", titleKey: "nav.mega.feature.esign.title", descKey: "nav.mega.feature.esign.desc" },
   { to: "/pricing", icon: "users", titleKey: "nav.mega.feature.team.title", descKey: "nav.mega.feature.team.desc" },
   { to: "/privacy", icon: "shield", titleKey: "nav.mega.feature.storage.title", descKey: "nav.mega.feature.storage.desc" },
   { to: "/docs", icon: "bolt", titleKey: "nav.mega.feature.workflows.title", descKey: "nav.mega.feature.workflows.desc" },

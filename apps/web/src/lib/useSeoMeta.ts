@@ -18,6 +18,7 @@ const SEO_CATALOG_KEY: Record<SeoPage, string> = {
   docs: "docs",
   mcp: "mcp",
   ai: "ai",
+  esignUeta: "esignUeta",
 };
 
 /** Title + description from `seo.<page>.*` catalogs, with canonical + hreflang for bilingual SEO pages. */

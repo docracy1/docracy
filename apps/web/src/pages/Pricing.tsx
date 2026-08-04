@@ -110,7 +110,12 @@ export default function Pricing() {
       </section>
 
       <div className="container">
-        <p className="pricing-disclaimer">{t("pricing.disclaimer")}</p>
+        <p className="pricing-disclaimer">
+          {t("pricing.disclaimer")}{" "}
+          <Link to="/trust">{t("pricing.disclaimerTrust")}</Link>
+          {" · "}
+          <Link to={localizePath("/esign-ueta", locale)}>{t("footer.esignUeta")}</Link>
+        </p>
       </div>
     </div>
   );

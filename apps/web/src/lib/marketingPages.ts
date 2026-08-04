@@ -589,7 +589,11 @@ export const EXPLAINER_PAGES: ExplainerPageContent[] = [
     ],
     ctaLabel: "Sign documents online",
     ctaTo: "/prepare",
-    relatedLinks: [{ label: "How Docracy's signing flow works", to: "/docs" }],
+    relatedLinks: [
+      { label: "ESIGN Act & UETA (US)", to: "/esign-ueta" },
+      { label: "Trust & security", to: "/trust" },
+      { label: "How Docracy's signing flow works", to: "/docs" },
+    ],
   },
 ];
 

@@ -62,6 +62,7 @@ export default function Footer() {
       links: [
         { label: t("footer.privacy"), to: "/privacy" },
         { label: t("footer.trust"), to: "/trust" },
+        { label: t("footer.esignUeta"), to: localizePath("/esign-ueta", locale) },
         { label: t("footer.dpa"), to: "/dpa" },
         { label: t("footer.terms"), to: "/terms" },
       ],
@@ -99,7 +100,13 @@ export default function Footer() {
           </div>
         ))}
       </div>
-      <div className="site-footer-bottom">{t("footer.copyright", { year: new Date().getFullYear() })}</div>
+      <div className="site-footer-bottom">
+        <span>{t("footer.copyright", { year: new Date().getFullYear() })}</span>
+        <span className="site-footer-esign">
+          {t("footer.esignLine")}{" "}
+          <Link to={localizePath("/esign-ueta", locale)}>{t("footer.esignLineLink")}</Link>
+        </span>
+      </div>
     </footer>
   );
 }

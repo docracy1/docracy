@@ -13,7 +13,8 @@ export default function Trust() {
       <h1>Trust &amp; security</h1>
       <p style={{ fontSize: 13, color: "var(--mute)" }}>
         Last updated 2026-08-04. This page describes how Docracy is built and operated today — not a
-        substitute for a SOC 2 report or legal advice. For privacy details see{" "}
+        substitute for a SOC 2 report or legal advice. For a marketing overview of ESIGN &amp; UETA see{" "}
+        <Link to="/esign-ueta">ESIGN &amp; UETA</Link>. For privacy details see{" "}
         <Link to="/privacy">Privacy</Link>; for processing terms see the <Link to="/dpa">DPA</Link>.
       </p>
 

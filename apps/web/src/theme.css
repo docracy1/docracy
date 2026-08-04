@@ -3624,6 +3624,21 @@ select {
   font-size: 12px;
   color: var(--hero-body);
   opacity: 0.7;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.site-footer-esign a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.site-footer-esign a:hover {
+  color: #ffffff;
 }
 
 .sign-modal-actions {
