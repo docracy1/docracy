@@ -17,6 +17,7 @@ const SEO_CATALOG_KEY: Record<SeoPage, string> = {
   clientContracts: "clientContracts",
   docs: "docs",
   mcp: "mcp",
+  ai: "ai",
 };
 
 /** Title + description from `seo.<page>.*` catalogs, with canonical + hreflang for bilingual SEO pages. */

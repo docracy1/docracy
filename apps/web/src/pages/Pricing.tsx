@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { fetchMe, startCheckout, type Account } from "../lib/api";
+import { fetchMe } from "../lib/api";
 import { PLAN_ROWS, PlanCell } from "../lib/planRows";
-import { track } from "../lib/track";
 import { localizePath, useI18n, useT } from "../lib/i18n";
 import { useSeoMeta } from "../lib/useSeoMeta";
 
@@ -11,28 +10,14 @@ export default function Pricing() {
   const { locale } = useI18n();
   useSeoMeta("pricing");
 
-  const [account, setAccount] = useState<Account | null | undefined>(undefined);
-  const [upgrading, setUpgrading] = useState(false);
-  const [upgradeError, setUpgradeError] = useState<string | null>(null);
+  /** null = logged out (show sticky dock); undefined = loading; Account = signed in (hide dock). */
+  const [signedOut, setSignedOut] = useState<boolean | null>(null);
 
   useEffect(() => {
     fetchMe()
-      .then(({ account: a }) => setAccount(a))
-      .catch(() => setAccount(null));
+      .then(({ account }) => setSignedOut(!account))
+      .catch(() => setSignedOut(true));
   }, []);
-
-  const onUpgrade = async () => {
-    track("upgrade_clicked", { source: "pricing_page" });
-    setUpgrading(true);
-    setUpgradeError(null);
-    try {
-      const { url } = await startCheckout();
-      window.location.href = url;
-    } catch (err) {
-      setUpgradeError(err instanceof Error ? err.message : t("common.error"));
-      setUpgrading(false);
-    }
-  };
 
   return (
     <div className="pricing-page">
@@ -69,35 +54,40 @@ export default function Pricing() {
           </table>
         </div>
 
-        <div className="pricing-sticky-bar" aria-label="Plan prices">
-          <div className="pricing-sticky-spacer" aria-hidden="true" />
-          <div className="pricing-sticky-col">
-            <div className="pricing-sticky-name">{t("pricing.free.name")}</div>
-            <div className="pricing-sticky-price">
-              $0<span className="pricing-sticky-note">{t("pricing.free.note")}</span>
+        {/* Sticky prices for logged-out visitors only — signed-in users don't need the dock. */}
+        {signedOut === true && (
+          <div className="pricing-sticky-bar" aria-label={t("pricing.dockAria")}>
+            <div className="pricing-sticky-spacer" aria-hidden="true" />
+            <div className="pricing-sticky-col">
+              <div className="pricing-sticky-name">{t("pricing.free.name")}</div>
+              <div className="pricing-sticky-price">
+                $0<span className="pricing-sticky-note">{t("pricing.free.note")}</span>
+              </div>
+              <Link to={localizePath("/prepare", locale)} className="btn-secondary pricing-sticky-cta">
+                {t("pricing.free.cta")}
+              </Link>
             </div>
-            <Link to={localizePath("/prepare", locale)} className="btn-secondary pricing-sticky-cta">
-              {t("pricing.free.cta")}
-            </Link>
-          </div>
-          <div className="pricing-sticky-col is-paid">
-            <div className="pricing-sticky-name">{t("pricing.paid.name")}</div>
-            <div className="pricing-sticky-price">
-              $10<span className="pricing-sticky-note">{t("pricing.paid.note")}</span>
+            <div className="pricing-sticky-col is-paid">
+              <div className="pricing-sticky-name">{t("pricing.paid.name")}</div>
+              <div className="pricing-sticky-price">
+                $10<span className="pricing-sticky-note">{t("pricing.paid.note")}</span>
+              </div>
+              <Link to="/login" className="btn-primary pricing-sticky-cta">
+                {t("pricing.paid.ctaGet")}
+              </Link>
             </div>
-            <PaidCta account={account} upgrading={upgrading} upgradeError={upgradeError} onUpgrade={onUpgrade} />
-          </div>
-          <div className="pricing-sticky-col">
-            <div className="pricing-sticky-name">{t("pricing.ent.name")}</div>
-            <div className="pricing-sticky-price">
-              {t("pricing.ent.price")}
-              <span className="pricing-sticky-note">sales@docracy.io</span>
+            <div className="pricing-sticky-col">
+              <div className="pricing-sticky-name">{t("pricing.ent.name")}</div>
+              <div className="pricing-sticky-price">
+                {t("pricing.ent.price")}
+                <span className="pricing-sticky-note">sales@docracy.io</span>
+              </div>
+              <a href="mailto:sales@docracy.io" className="btn-secondary pricing-sticky-cta">
+                {t("pricing.ent.cta")}
+              </a>
             </div>
-            <a href="mailto:sales@docracy.io" className="btn-secondary pricing-sticky-cta">
-              {t("pricing.ent.cta")}
-            </a>
           </div>
-        </div>
+        )}
       </div>
 
       <section className="pricing-testimonial">
@@ -123,49 +113,5 @@ export default function Pricing() {
         <p className="pricing-disclaimer">{t("pricing.disclaimer")}</p>
       </div>
     </div>
-  );
-}
-
-function PaidCta({
-  account,
-  upgrading,
-  upgradeError,
-  onUpgrade,
-}: {
-  account: Account | null | undefined;
-  upgrading: boolean;
-  upgradeError: string | null;
-  onUpgrade: () => void;
-}) {
-  const t = useT();
-
-  if (account === undefined) {
-    return (
-      <button className="btn-primary pricing-sticky-cta" disabled>
-        …
-      </button>
-    );
-  }
-  if (account?.isPaid) {
-    return (
-      <Link to="/dashboard" className="btn-primary pricing-sticky-cta">
-        {t("pricing.goDashboard")}
-      </Link>
-    );
-  }
-  if (account) {
-    return (
-      <div className="pricing-sticky-cta-stack">
-        <button className="btn-primary pricing-sticky-cta" onClick={onUpgrade} disabled={upgrading}>
-          {upgrading ? t("pricing.paid.redirecting") : t("pricing.paid.ctaUpgrade")}
-        </button>
-        {upgradeError && <p className="pricing-sticky-error">{upgradeError}</p>}
-      </div>
-    );
-  }
-  return (
-    <Link to="/login" className="btn-primary pricing-sticky-cta">
-      {t("pricing.paid.ctaLogin")}
-    </Link>
   );
 }

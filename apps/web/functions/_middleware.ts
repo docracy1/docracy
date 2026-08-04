@@ -12,6 +12,8 @@ const TRACKED_ROUTES = new Set([
   "/es/plantillas-gratis",
   "/mcp",
   "/es/mcp",
+  "/ai",
+  "/es/ia",
   "/about",
   "/pricing",
   "/es/precios",

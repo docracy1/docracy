@@ -7,6 +7,8 @@ Allow: /privacy$
 Allow: /terms$
 Allow: /free-templates
 Allow: /mcp$
+Allow: /ai$
+Allow: /es/ia$
 Allow: /about$
 Allow: /pricing$
 Allow: /docs$
@@ -33,6 +35,14 @@ Allow: /adobe-sign-alternative$
 Allow: /what-is-an-nda$
 Allow: /are-electronic-signatures-legal$
 Allow: /templates$
+Allow: /videos/
+Allow: /favicon.ico$
+Allow: /favicon.svg$
+Allow: /favicon.png$
+Allow: /favicon-32.png$
+Allow: /apple-touch-icon.png$
+Allow: /og-image.png$
+Allow: /docracy-seal-icon.png$
 Disallow: /
 Disallow: /sign/
 Disallow: /status/

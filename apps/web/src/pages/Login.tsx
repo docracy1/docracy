@@ -76,6 +76,7 @@ export default function Login() {
   const utmMedium = searchParams.get("utm_medium") ?? "";
   const utmCampaign = searchParams.get("utm_campaign") ?? "";
   const oauthError = searchParams.get("error");
+  const emailParam = searchParams.get("email") ?? "";
 
   const intent =
     ref === "prepare-sent" || ref === "status-completed" || ref === "status-pending"
@@ -92,7 +93,7 @@ export default function Login() {
     intent === "save-doc" ? t("login.subSave") : intent === "upgrade" ? t("login.subUpgrade") : t("login.sub");
   const ctaLabel = intent === "save-doc" ? t("login.ctaSave") : t("login.cta");
 
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(emailParam);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(oauthError);
   const [sent, setSent] = useState(false);

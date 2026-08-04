@@ -9,7 +9,7 @@ import { NavIcon } from "./NavIcons";
 /** Real features only — mirrors Landing.tsx's CORE_FEATURES, not a wishlist. */
 const FEATURE_ITEMS = [
   { to: "/prepare", icon: "send", title: "Simple document sending", description: "Upload a PDF and send it for signature in seconds." },
-  { to: "/mcp", icon: "sparkles", title: "AI-assisted field placement", description: "Auto-detects signature, date, and initial fields." },
+  { to: "/ai", icon: "sparkles", title: "AI Auto-Detect", description: "Automatically finds and places signature, date, and initial fields." },
   { to: "/free-templates", icon: "duplicate", title: "Reusable templates", description: "Save a field layout once, reuse it every time." },
   { to: "/pricing", icon: "users", title: "Team access", description: "Share documents and templates under one workspace." },
   { to: "/privacy", icon: "shield", title: "Secure storage", description: "Encrypted, with short automatic retention." },
@@ -47,11 +47,11 @@ export default function Header() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const NAV_LINKS = [
-    { to: localizePath("/pricing", locale), label: t("nav.pricing") },
+  const NAV_AFTER_PRICING = [
     { to: localizePath("/free-templates", locale), label: t("nav.templates") },
-    { to: localizePath("/mcp", locale), label: t("nav.mcp") },
+    { to: localizePath("/ai", locale), label: t("nav.ai") },
   ];
+  const pricingTo = localizePath("/pricing", locale);
 
   useEffect(() => {
     setMenuOpen(false);
@@ -73,23 +73,24 @@ export default function Header() {
   };
 
   const isSignRoute = location.pathname.startsWith("/sign/");
-  const isInAppRoute = ["/dashboard", "/prepare", "/es/preparar", "/status"].some((p) =>
-    location.pathname.startsWith(p)
-  );
   const isDashboardRoute = location.pathname.startsWith("/dashboard");
-  const logoHeight = isSignRoute || isInAppRoute ? 24 : 40;
   // Always the real homepage — was "/dashboard" while logged in, which just reloaded the page
   // you were already on instead of taking you back to the marketing site.
   const logoLinkTo = localizePath("/", locale);
   const prepareTo = localizePath("/prepare", locale);
 
+  const brand = (
+    <Link to={logoLinkTo} className="header-brand" aria-label="Docracy">
+      <img src="/docracy-seal-icon.png" alt="" className="header-brand-mark" width={28} height={28} />
+      <span className="header-brand-name">Docracy</span>
+    </Link>
+  );
+
   if (isSignRoute) {
     return (
       <header className="site-header site-header-minimal">
-        <div className="container" style={{ padding: 0, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <Link to={logoLinkTo} style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-            <img src="/docracy-wordmark.png" alt="Docracy" style={{ height: logoHeight, width: "auto" }} />
-          </Link>
+        <div className="container header-bar">
+          {brand}
           <LanguageSwitcher className="lang-switcher-on-dark" />
         </div>
       </header>
@@ -99,10 +100,8 @@ export default function Header() {
   if (isDashboardRoute) {
     return (
       <header className="site-header site-header-app">
-        <div className="container" style={{ padding: 0, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
-          <Link to={logoLinkTo} style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-            <img src="/docracy-wordmark.png" alt="Docracy" style={{ height: logoHeight, width: "auto" }} />
-          </Link>
+        <div className="container header-bar">
+          {brand}
           <span className="header-app-title">{t("nav.dashboard")}</span>
           <LanguageSwitcher className="lang-switcher-on-dark" />
         </div>
@@ -112,41 +111,62 @@ export default function Header() {
 
   return (
     <header className="site-header">
-      <div className="container" style={{ padding: 0, display: "flex", alignItems: "center", gap: 16 }}>
-        <Link to={logoLinkTo} style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
-          <img src="/docracy-wordmark.png" alt="Docracy" style={{ height: logoHeight, width: "auto" }} />
-        </Link>
-        <div className="header-nav-right">
-          <NavMegaMenu label={t("nav.features")} items={FEATURE_ITEMS.map((f) => ({ ...f, icon: <NavIcon name={f.icon} /> }))} panel={{
-            title: "Compare",
-            items: COMPARE_ITEMS.map((c) => ({ ...c, icon: <NavIcon name={c.icon} /> })),
-            footerLabel: "See all comparisons",
-            footerTo: "/blog",
-          }} />
-          <NavMegaMenu label={t("nav.industry")} items={INDUSTRY_ITEMS.map((i) => ({ ...i, icon: <NavIcon name={i.icon} /> }))} columns={2} />
-          {NAV_LINKS.map((link) => (
+      <div className="container header-bar">
+        {brand}
+        <nav className="header-nav-right" aria-label="Primary">
+          <NavMegaMenu
+            label={t("nav.features")}
+            items={FEATURE_ITEMS.map((f) => ({ ...f, icon: <NavIcon name={f.icon} /> }))}
+            panel={{
+              title: "Compare",
+              items: COMPARE_ITEMS.map((c) => ({ ...c, icon: <NavIcon name={c.icon} /> })),
+              footerLabel: "See all comparisons",
+              footerTo: "/blog",
+            }}
+          />
+          <NavMegaMenu
+            label={t("nav.industry")}
+            items={INDUSTRY_ITEMS.map((i) => ({ ...i, icon: <NavIcon name={i.icon} /> }))}
+            columns={2}
+          />
+          <Link to={pricingTo} className="header-templates-link header-nav-link">
+            {t("nav.pricing")}
+          </Link>
+          <NavMegaMenu
+            label={t("nav.resources")}
+            items={RESOURCE_ITEMS.map((r) => ({ ...r, icon: <NavIcon name={r.icon} /> }))}
+            columns={2}
+          />
+          {NAV_AFTER_PRICING.map((link) => (
             <Link key={link.to} to={link.to} className="header-templates-link header-nav-link">
               {link.label}
             </Link>
           ))}
-          <NavMegaMenu label={t("nav.resources")} items={RESOURCE_ITEMS.map((r) => ({ ...r, icon: <NavIcon name={r.icon} /> }))} columns={2} />
           <LanguageSwitcher className="lang-switcher-on-dark header-templates-link" />
-          <a href="mailto:sales@docracy.io" className="header-nav-sales header-templates-link">
-            {t("nav.contactSales")}
-          </a>
-          <Link to={signedIn ? "/dashboard" : "/login"} className="header-nav-link header-nav-link-strong">
-            {signedIn ? t("nav.dashboard") : t("nav.signin")}
-          </Link>
-          {signedIn && (
-            <button onClick={onLogout} className="header-logout-btn">
-              {t("nav.logout")}
-            </button>
-          )}
-          {!signedIn && (
-            <Link to={prepareTo} className="btn-primary btn-lg" style={{ textDecoration: "none" }}>
-              {t("nav.startFree")}
-            </Link>
-          )}
+          <div className="header-cta-group">
+            <a href="mailto:sales@docracy.io" className="header-nav-sales header-templates-link">
+              {t("nav.contactSales")}
+            </a>
+            {!signedIn ? (
+              <>
+                <Link to={prepareTo} className="header-try-btn header-startfree-btn">
+                  {t("nav.tryFree")}
+                </Link>
+                <Link to="/login" className="header-login-btn">
+                  {t("nav.signin")}
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link to="/dashboard" className="header-try-btn header-startfree-btn">
+                  {t("nav.dashboard")}
+                </Link>
+                <button type="button" onClick={onLogout} className="header-login-btn">
+                  {t("nav.logout")}
+                </button>
+              </>
+            )}
+          </div>
           <button
             className="header-menu-toggle"
             aria-label={menuOpen ? t("nav.closeMenu") : t("nav.openMenu")}
@@ -157,7 +177,7 @@ export default function Header() {
             <span />
             <span />
           </button>
-        </div>
+        </nav>
       </div>
 
       {menuOpen && (
@@ -188,11 +208,9 @@ export default function Header() {
               ))}
             </div>
           </details>
-          {NAV_LINKS.map((link) => (
-            <Link key={link.to} to={link.to} className="header-mobile-nav-link">
-              {link.label}
-            </Link>
-          ))}
+          <Link to={pricingTo} className="header-mobile-nav-link" onClick={() => setMenuOpen(false)}>
+            {t("nav.pricing")}
+          </Link>
           <details className="header-mobile-accordion">
             <summary>{t("nav.resources")}</summary>
             <div className="header-mobile-accordion-sublist">
@@ -203,13 +221,18 @@ export default function Header() {
               ))}
             </div>
           </details>
+          {NAV_AFTER_PRICING.map((link) => (
+            <Link key={link.to} to={link.to} className="header-mobile-nav-link" onClick={() => setMenuOpen(false)}>
+              {link.label}
+            </Link>
+          ))}
         </nav>
         <div style={{ margin: "16px 0" }}>
           <LanguageSwitcher />
         </div>
         <div className="header-mobile-ctas">
           <Link to={prepareTo} className="header-mobile-cta-primary" onClick={() => setMenuOpen(false)}>
-            {t("nav.startFree")}
+            {t("nav.tryFree")}
           </Link>
           <Link
             to={signedIn ? "/dashboard" : "/login"}

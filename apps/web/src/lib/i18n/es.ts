@@ -184,11 +184,12 @@ const es: Messages = {
   "footer.github": "GitHub",
   "footer.imprint": "Aviso legal",
   "footer.legal": "Legal",
-  "footer.mcp": "IA y MCP",
+  "footer.mcp": "Conector MCP",
+  "footer.ai": "Detección IA",
   "footer.pricing": "Precios",
   "footer.privacy": "Privacidad",
   "footer.product": "Producto",
-  "footer.startFree": "Empezar gratis",
+  "footer.startFree": "Probar gratis",
   "footer.status": "Estado",
   "footer.roadmap": "Hoja de ruta",
   "footer.tagline":
@@ -209,11 +210,14 @@ const es: Messages = {
   "hero.b4": "Firmas legalmente vinculantes bajo leyes como ESIGN y eIDAS",
   "hero.ctaSample": "Empieza gratis — prueba un contrato de ejemplo",
   "hero.ctaUpload": "o sube tu propio PDF",
-  "hero.eyebrow": "Gratis · Sin registro · Firmas electrónicas en secuencia",
-  "hero.hint": "No necesitas cuenta — envía o firma en unos 30 segundos.",
-  "hero.sub":
-    "Envía, firma y termina documentos simples en minutos — sin suscripciones, complejidad ni configuración.",
-  "hero.title": "Firma documentos en menos de un minuto — gratis hasta dos firmantes, sin necesidad de cuenta.",
+  "hero.eyebrow": "Firmas en secuencia · Con IA",
+  "hero.hint": "Sin tarjeta · no necesitas cuenta para empezar.",
+  "hero.emailPlaceholder": "¿Cuál es tu correo?",
+  "hero.startFree": "Empezar gratis",
+  "hero.orTemplates": "o explora plantillas gratis",
+  "hero.watchHow": "Mira cómo funciona",
+  "hero.sub": "Sube, agrega firmantes, envía — firmas sin suscripciones ni configuración.",
+  "hero.title": "Cierra acuerdos en minutos.\nLa detección automática con IA coloca cada campo.",
   "how.s1.body": "Agrega el PDF que quieres firmar, o empieza desde una plantilla gratis.",
   "how.s1.title": "Subir",
   "how.s2.body":
@@ -373,10 +377,12 @@ const es: Messages = {
   "nav.resources": "Recursos",
   "nav.logout": "Cerrar sesión",
   "nav.mcp": "IA y MCP",
+  "nav.ai": "Detección IA",
   "nav.openMenu": "Abrir menú",
   "nav.pricing": "Precios",
   "nav.signin": "Iniciar sesión",
-  "nav.startFree": "Empezar gratis",
+  "nav.startFree": "Probar gratis",
+  "nav.tryFree": "Probar gratis",
   "nav.templates": "Plantillas gratis",
   "notFound.body": "No hay nada aquí — el enlace puede estar viejo o mal escrito.",
   "notFound.home": "Volver al inicio",
@@ -506,6 +512,8 @@ const es: Messages = {
   "pricing.goDashboard": "Ir al panel",
   "pricing.intro":
     "Gratis para cadenas de hasta 2 firmantes, sin cuenta. Una cuenta de pago es $10/mes por espacio de trabajo — no por asiento — e incluye firmantes ilimitados, panel, plantillas reutilizables, envío masivo, vencimiento personalizado, firma integrada, contactos, carga automática a Dropbox/OneDrive/Box/Google Drive, webhooks, equipos, marca blanca, enlaces con PIN, conector MCP para asistentes de IA y herramientas de IA. Enterprise añade facturación, soporte premium, SSO/varios espacios y descuentos por volumen.",
+  "pricing.dockAria": "Precios de planes",
+  "pricing.paid.ctaGet": "Pasar a Paid",
   "pricing.paid.ctaLogin": "Inicia sesión para mejorar el plan",
   "pricing.paid.ctaUpgrade": "Mejorar plan — $10/mes",
   "pricing.paid.f1": "Firmantes ilimitados",
@@ -895,7 +903,10 @@ const es: Messages = {
   "uptime.title": "Estado del sistema",
   "seo.home.title": "Docracy.io – Firmas electrónicas simples y seguras para negocios",
   "seo.home.description":
-    "Crea, envía y firma documentos en minutos. Docracy.io ofrece firmas electrónicas rápidas, flujos simples y almacenamiento cifrado con retención corta y automática.",
+    "Crea, envía y firma documentos en minutos — gratis hasta dos firmantes, sin necesidad de cuenta. Mira cómo funciona Docracy y empieza con una plantilla o tu propio PDF.",
+  "seo.video.name": "Cómo funciona Docracy — firma documentos en menos de un minuto",
+  "seo.video.description":
+    "Un recorrido breve de Docracy: sube un PDF, coloca campos de firma, envía enlaces por correo y descarga el documento firmado — gratis hasta dos firmantes, sin cuenta.",
   "seo.pricing.title": "Precios — Docracy",
   "seo.pricing.description":
     "Gratis para cadenas de hasta 2 firmantes. El plan de pago es $10/mes fijo por espacio de trabajo — firmantes ilimitados, plantillas, herramientas de IA, conectores y cuentas de equipo.",
@@ -933,6 +944,57 @@ const es: Messages = {
   "seo.mcp.title": "Conecta Docracy a tu asistente de IA — Conector MCP | Docracy",
   "seo.mcp.description":
     "Conecta Docracy a Claude, ChatGPT, Grok o Perplexity como conector MCP en una cuenta de pago — consulta el estado de firma y busca tus documentos desde el chat. También automatiza con Zapier.",
+  "seo.ai.title": "Detección IA para firmas electrónicas — Campos al instante | Docracy",
+  "seo.ai.description":
+    "La IA de Docracy detecta campos de firma y fecha, resume contratos en lenguaje claro, marca cláusulas de riesgo y genera PDFs listos para firmar. Incluye conector MCP para Claude y ChatGPT.",
+
+  "ai.eyebrow": "Docracy IA",
+  "ai.heroTitle": "Detección IA.\nLos campos se colocan solos.",
+  "ai.heroSub":
+    "Sube un PDF y deja que la IA encuentre cada firma y fecha, resuma el acuerdo en lenguaje claro y señale cláusulas a revisar — luego envía a firmar.",
+  "ai.ctaTry": "Probar la IA en un documento →",
+  "ai.ctaPricing": "Ver precios Paid",
+  "ai.featuresTitle": "IA que cierra el trato de verdad",
+  "ai.featuresSub":
+    "Integrada en Preparar — no es un chatbot aparte. Cada herramienta tiene un trabajo: firmar el documento correcto más rápido.",
+  "ai.feat.detect.title": "Detección automática con IA",
+  "ai.feat.detect.body":
+    "Analiza tu PDF y coloca campos de firma, fecha e iniciales donde corresponden — sin arrastrar cajas a mano.",
+  "ai.feat.explain.title": "Resumen en lenguaje claro",
+  "ai.feat.explain.body":
+    "Un resumen corto sin jerga legal de lo que cada parte acepta — útil antes de enviar o cuando un firmante pregunta “¿qué firmo?”",
+  "ai.feat.risk.title": "Resaltado de riesgos y cláusulas",
+  "ai.feat.risk.body":
+    "Marca términos que suelen merecer una segunda mirada (responsabilidad inusual, renovaciones automáticas, IP unilateral) para evitar sorpresas después de firmar.",
+  "ai.feat.generate.title": "Generador de contratos con IA",
+  "ai.feat.generate.body":
+    "Describe el acuerdo en una línea y obtén un PDF editable, con campos y listo para enviar — sin partir de una página en blanco.",
+  "ai.feat.mcp.title": "MCP para Claude, ChatGPT y más",
+  "ai.feat.mcp.body":
+    "Conecta un espacio de pago para que tu asistente de IA consulte el estado de firma y encuentre documentos desde el chat — solo lectura, con clave API.",
+  "ai.howTitle": "Cómo funciona la detección IA",
+  "ai.how.1": "Sube un PDF o empieza desde una plantilla gratis.",
+  "ai.how.2": "Ejecuta la detección inteligente — aparecen campos en firmas y fechas.",
+  "ai.how.3": "Opcionalmente abre el resumen o la revisión de riesgos antes de enviar.",
+  "ai.how.4": "Agrega firmantes y envía — firman con un enlace, sin cuenta.",
+  "ai.faqTitle": "Preguntas sobre detección IA",
+  "ai.faq.q1": "¿La detección IA es gratis?",
+  "ai.faq.a1":
+    "Gratis cubre cadenas de hasta dos firmantes sin cuenta. Las herramientas de IA (detección, resumen, riesgos, generador) y el conector MCP están en el plan Paid ($10/mes).",
+  "ai.faq.q2": "¿La IA cambia o firma mi documento?",
+  "ai.faq.a2":
+    "No. La detección solo coloca campos que puedes mover o quitar. El resumen y riesgos son de solo lectura. La firma ocurre cuando una persona dibuja o escribe su firma.",
+  "ai.faq.q3": "¿Qué es MCP?",
+  "ai.faq.a3":
+    "Model Context Protocol permite que asistentes como Claude o ChatGPT llamen herramientas de Docracy (estado, buscar documentos) con tu clave API de pago. No envía ni firma por ti.",
+  "ai.faq.q4": "¿Es lo bastante precisa la detección IA?",
+  "ai.faq.a4":
+    "Es un buen punto de partida en PDFs empresariales habituales — siempre revisa los campos antes de enviar. Tú controlas cada campo y cada envío.",
+  "ai.mcpLinkLead": "¿Necesitas la guía del conector para Claude, ChatGPT, Grok o Perplexity?",
+  "ai.mcpLink": "Abrir la guía del conector MCP →",
+  "ai.footerCta": "¿Listo para dejar de colocar campos a mano?",
+  "ai.schemaOffer": "Plan Paid con detección IA y herramientas relacionadas",
+
   "alt.problem": "El problema",
   "alt.solution": "La forma Docracy",
   "alt.compare": "Cómo se compara Docracy",

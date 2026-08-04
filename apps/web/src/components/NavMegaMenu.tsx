@@ -12,16 +12,40 @@ export interface NavMegaMenuProps {
   label: string;
   items: NavMegaMenuItem[];
   /** Optional side panel (mirrors the "Compare" column on competitor mega-menus). */
-  panel?: { title: string; items: Array<{ to: string; icon: React.ReactNode; title: string; description: string }>; footerLabel: string; footerTo: string };
+  panel?: {
+    title: string;
+    items: Array<{ to: string; icon: React.ReactNode; title: string; description: string }>;
+    footerLabel: string;
+    footerTo: string;
+  };
   columns?: 2 | 3;
 }
 
-/** Click-to-open dropdown mega-menu for the header nav — same outside-click/Escape mechanics as
- *  LanguageSwitcher, scaled up to a grid of icon+title+description cards instead of a plain list. */
+/** Hover-to-open mega-menu (click still toggles on touch). Outside-click / Escape still close. */
 export default function NavMegaMenu({ label, items, panel, columns = 3 }: NavMegaMenuProps) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const menuId = useId();
+
+  const clearCloseTimer = () => {
+    if (closeTimer.current) {
+      clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+  };
+
+  const openMenu = () => {
+    clearCloseTimer();
+    setOpen(true);
+  };
+
+  const scheduleClose = () => {
+    clearCloseTimer();
+    closeTimer.current = setTimeout(() => setOpen(false), 120);
+  };
+
+  useEffect(() => () => clearCloseTimer(), []);
 
   useEffect(() => {
     if (!open) return;
@@ -40,7 +64,13 @@ export default function NavMegaMenu({ label, items, panel, columns = 3 }: NavMeg
   }, [open]);
 
   return (
-    <div ref={rootRef} className="nav-megamenu" data-open={open ? "true" : undefined}>
+    <div
+      ref={rootRef}
+      className="nav-megamenu"
+      data-open={open ? "true" : undefined}
+      onMouseEnter={openMenu}
+      onMouseLeave={scheduleClose}
+    >
       <button
         type="button"
         className="nav-megamenu-trigger header-nav-link"
@@ -48,14 +78,28 @@ export default function NavMegaMenu({ label, items, panel, columns = 3 }: NavMeg
         aria-expanded={open}
         aria-controls={menuId}
         onClick={() => setOpen((v) => !v)}
+        onFocus={openMenu}
       >
         {label}
-        <svg className={`nav-megamenu-chevron${open ? " is-open" : ""}`} width="10" height="10" viewBox="0 0 12 12" aria-hidden="true">
-          <path d="M2.5 4.5L6 8l3.5-3.5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        <svg
+          className={`nav-megamenu-chevron${open ? " is-open" : ""}`}
+          width="10"
+          height="10"
+          viewBox="0 0 12 12"
+          aria-hidden="true"
+        >
+          <path
+            d="M2.5 4.5L6 8l3.5-3.5"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       </button>
       {open && (
-        <div id={menuId} className="nav-megamenu-panel" data-columns={columns}>
+        <div id={menuId} className="nav-megamenu-panel" data-columns={columns} role="menu">
           <div className="nav-megamenu-grid" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
             {items.map((item) => (
               <Link key={item.to} to={item.to} className="nav-megamenu-item" onClick={() => setOpen(false)}>

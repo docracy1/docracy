@@ -146,7 +146,7 @@ const routes = [
     outFile: "index.html",
     title: "Docracy.io – Simple and secure e-signatures for businesses",
     description:
-      "Create, send, and sign documents in minutes. Docracy.io offers fast e-signatures, simple workflows, and encrypted storage with short automatic retention.",
+      "Create, send, and sign documents in minutes — free for up to two signers, no account required. Watch how Docracy works, then start from a template or your own PDF.",
     locale: "en",
     alternates: { en: "/", es: "/es" },
   },
@@ -173,6 +173,16 @@ const routes = [
       "status and search your documents from chat. Also automates with Zapier.",
     locale: "en",
     alternates: { en: "/mcp", es: "/es/mcp" },
+  },
+  {
+    urlPath: "/ai",
+    outFile: "ai.html",
+    title: "AI Auto-Detect for E-Signatures — Place Fields Instantly | Docracy",
+    description:
+      "Docracy AI auto-detects signature and date fields, explains contracts in plain English, flags risky clauses, " +
+      "and generates signable PDFs. Plus an MCP connector for Claude and ChatGPT.",
+    locale: "en",
+    alternates: { en: "/ai", es: "/es/ia" },
   },
   {
     urlPath: "/import-from-docusign",
@@ -236,7 +246,7 @@ const routes = [
     outFile: "es.html",
     title: "Docracy.io – Firmas electrónicas simples y seguras para negocios",
     description:
-      "Crea, envía y firma documentos en minutos. Docracy.io ofrece firmas electrónicas rápidas, flujos simples y almacenamiento cifrado con retención corta y automática.",
+      "Crea, envía y firma documentos en minutos — gratis hasta dos firmantes, sin necesidad de cuenta. Mira cómo funciona Docracy y empieza con una plantilla o tu propio PDF.",
     locale: "es",
     alternates: { en: "/", es: "/es" },
   },
@@ -336,6 +346,15 @@ const routes = [
       "Conecta Docracy a Claude, ChatGPT, Grok o Perplexity como conector MCP en una cuenta de pago — consulta el estado de firma y busca documentos desde el chat. También automatiza con Zapier.",
     locale: "es",
     alternates: { en: "/mcp", es: "/es/mcp" },
+  },
+  {
+    urlPath: "/es/ia",
+    outFile: "es/ia.html",
+    title: "Detección IA para firmas electrónicas — Campos al instante | Docracy",
+    description:
+      "La IA de Docracy detecta campos de firma y fecha, resume contratos en lenguaje claro, marca cláusulas de riesgo y genera PDFs listos para firmar. Incluye conector MCP para Claude y ChatGPT.",
+    locale: "es",
+    alternates: { en: "/ai", es: "/es/ia" },
   },
   {
     urlPath: "/es/documentacion",

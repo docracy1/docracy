@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Docracy — How it works (full product tour)</title>
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    .scene {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+    .scene.active { opacity: 1; pointer-events: auto; }
+    .scene-shell { position: relative; width: 1280px; height: 720px; }
+
+    .title-scene {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      background: linear-gradient(145deg, #0c1e36 0%, #1a3a62 55%, #163552 100%);
+      color: #fff;
+      text-align: center;
+      font-family: Inter, system-ui, sans-serif;
+    }
+    .title-scene .logo { font-size: 42px; font-weight: 800; color: #5ba3f0; }
+    .title-scene h1 { font-size: 34px; font-weight: 750; margin: 0; max-width: 16em; line-height: 1.15; }
+    .title-scene p { font-size: 18px; color: rgba(255,255,255,0.75); margin: 0; }
+
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      padding: 8px 0;
+    }
+    .template-card {
+      border: 1.5px solid var(--hairline);
+      border-radius: var(--r-sm);
+      padding: 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--body);
+      background: var(--canvas);
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+    }
+    .template-card.pick {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(47,126,216,0.2);
+      transform: scale(1.02);
+      color: var(--primary);
+    }
+
+    .field-box.sig1 { left: 48px; top: 300px; width: 200px; height: 36px; }
+    .field-box.date1 { left: 48px; top: 350px; width: 120px; height: 28px; }
+    .field-box.sig2 { left: 48px; top: 430px; width: 200px; height: 36px; }
+    .field-box.date2 { left: 48px; top: 480px; width: 120px; height: 28px; }
+
+    .ai-explainer {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: var(--r-sm);
+      background: #f0f7ff;
+      border: 1px solid #c8dff7;
+      font-size: 11px;
+      line-height: 1.45;
+      color: var(--body);
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.4s, transform 0.4s;
+    }
+    .ai-explainer.show { opacity: 1; transform: none; }
+    .ai-explainer strong { color: var(--ink); display: block; margin-bottom: 6px; font-size: 12px; }
+    .ai-explainer li { margin-left: 16px; }
+
+    .send-primary {
+      width: 100%;
+      margin-top: 12px;
+      padding: 12px;
+      border: none;
+      border-radius: var(--r-sm);
+      background: var(--primary);
+      color: #fff;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      opacity: 0.55;
+      transform: scale(0.98);
+      transition: opacity 0.35s, transform 0.35s, box-shadow 0.35s;
+    }
+    .send-primary.go {
+      opacity: 1;
+      transform: scale(1);
+      box-shadow: 0 8px 24px rgba(47,126,216,0.35);
+    }
+
+    .toast {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(12px);
+      background: #1a2b3c;
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      opacity: 0;
+      transition: opacity 0.4s, transform 0.4s;
+      white-space: nowrap;
+      z-index: 20;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* Signer screen */
+    .sign-shell {
+      width: 1280px;
+      height: 720px;
+      display: flex;
+      flex-direction: column;
+      background: var(--canvas-soft);
+    }
+    .sign-main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 16px;
+      padding: 16px 24px 24px;
+      min-height: 0;
+    }
+    .sign-panel { padding: 16px; }
+    .sign-panel h3 { margin: 0 0 12px; font-size: 14px; }
+    .sig-preview {
+      border: 2px dashed var(--primary);
+      border-radius: var(--r-sm);
+      height: 80px;
+      display: grid;
+      place-items: center;
+      background: var(--primary-soft);
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .sig-preview svg { width: 80%; opacity: 0; transition: opacity 0.6s; }
+    .sig-preview.draw svg { opacity: 1; }
+    .sig-preview svg path {
+      fill: none;
+      stroke: var(--primary);
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-dasharray: 300;
+      stroke-dashoffset: 300;
+    }
+    .sig-preview.draw svg path { animation: ink 1s ease forwards; }
+    @keyframes ink { to { stroke-dashoffset: 0; } }
+    .btn-sign {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: var(--r-sm);
+      background: var(--primary);
+      color: #fff;
+      font: inherit;
+      font-weight: 700;
+      font-size: 14px;
+      opacity: 0.5;
+      transition: opacity 0.35s;
+    }
+    .btn-sign.go { opacity: 1; }
+
+    .done-banner {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px;
+      border-radius: var(--r-sm);
+      background: #e8f5ee;
+      border: 1px solid #b8dfc8;
+      margin-top: 12px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.45s, transform 0.45s;
+    }
+    .done-banner.show { opacity: 1; transform: none; }
+    .done-icon {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--success); color: #fff;
+      display: grid; place-items: center; font-size: 20px; flex-shrink: 0;
+    }
+    .done-banner strong { display: block; font-size: 14px; color: var(--ink); }
+    .done-banner span { font-size: 12px; color: var(--body); }
+
+    .step-caption {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 10px 24px;
+      background: rgba(26,43,60,0.92);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      z-index: 15;
+      opacity: 0;
+      transition: opacity 0.35s;
+    }
+    .step-caption.show { opacity: 1; }
+
+    .order-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--primary);
+      background: var(--primary-soft);
+      padding: 3px 8px;
+      border-radius: 999px;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="scene-shell">
+    <!-- 0 · Intro -->
+    <section class="scene title-scene active" id="sc0">
+      <div class="logo">Docracy</div>
+      <h1>Close deals in minutes.<br>AI auto-detect places every field.</h1>
+      <p>Full walkthrough on a Freelance Service Agreement</p>
+    </section>
+
+    <!-- 1 · Template -->
+    <section class="scene" id="sc1">
+      <div class="demo-shell">
+        <header class="demo-header">
+          <span class="demo-logo">Docracy</span>
+          <span class="demo-badge">Free templates</span>
+        </header>
+        <div style="padding: 24px 32px; flex:1">
+          <h2 style="margin:0 0 16px;font-size:22px">Start from a template</h2>
+          <div class="template-grid">
+            <div class="template-card">Mutual NDA</div>
+            <div class="template-card pick" id="tplPick">Freelance Service Agreement</div>
+            <div class="template-card">Offer Letter</div>
+            <div class="template-card">Independent Contractor</div>
+            <div class="template-card">Consulting Agreement</div>
+            <div class="template-card">Vendor Agreement</div>
+          </div>
+        </div>
+      </div>
+      <div class="step-caption show" id="cap1">1 · Choose a sample document or upload your PDF</div>
+    </section>
+
+    <!-- 2 · Prepare + signers -->
+    <section class="scene" id="sc2">
+      <div class="demo-shell">
+        <header class="demo-header">
+          <span class="demo-logo">Docracy</span>
+          <span class="demo-badge">Prepare document</span>
+        </header>
+        <div class="demo-main">
+          <div class="card pdf-pane">
+            <div class="pdf-toolbar">Freelance-Service-Agreement.pdf · Page 1 of 2</div>
+            <div class="pdf-doc">
+              <h1 class="doc-title">Freelance Service Agreement</h1>
+              <p class="doc-p">Client engages Freelancer to deliver the services described in Exhibit A. Payment terms: net 15 days upon invoice.</p>
+              <p class="doc-p">Work product and deliverables become Client property upon full payment, unless otherwise agreed in writing.</p>
+              <div class="sig-block">
+                <div><strong>Client</strong></div>
+                <div style="margin-top:10px">Signature: <span class="doc-line"></span></div>
+                <div style="margin-top:8px">Date: <span class="doc-line" style="min-width:100px"></span></div>
+              </div>
+              <div class="sig-block">
+                <div><strong>Freelancer</strong></div>
+                <div style="margin-top:10px">Signature: <span class="doc-line"></span></div>
+                <div style="margin-top:8px">Date: <span class="doc-line" style="min-width:100px"></span></div>
+              </div>
+            </div>
+          </div>
+          <aside class="sidebar">
+            <div class="card">
+              <span class="order-badge">Sequential signing</span>
+              <h3>Signers</h3>
+              <div class="form-row">
+                <div><span class="form-label">Signer 1 · Client</span><input class="form-input" value="Morgan Lee" readonly /></div>
+                <div><span class="form-label">Email</span><input class="form-input" value="morgan@studio.co" readonly /></div>
+              </div>
+              <div class="form-row">
+                <div><span class="form-label">Signer 2 · Freelancer</span><input class="form-input" value="Alex Chen" readonly /></div>
+                <div><span class="form-label">Email</span><input class="form-input" value="alex@freelance.io" readonly /></div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+      <div class="step-caption show" id="cap2">2 · Add signers — sequential or all-at-once</div>
+    </section>
+
+    <!-- 3 · AI auto-detect -->
+    <section class="scene" id="sc3">
+      <div class="demo-shell">
+        <header class="demo-header">
+          <span class="demo-logo">Docracy</span>
+          <span class="demo-badge">Prepare document</span>
+        </header>
+        <div class="demo-main">
+          <div class="card pdf-pane">
+            <div class="pdf-toolbar">Freelance-Service-Agreement.pdf · Page 1 of 2</div>
+            <div class="pdf-doc">
+              <h1 class="doc-title">Freelance Service Agreement</h1>
+              <p class="doc-p">Client engages Freelancer to deliver the services described in Exhibit A. Payment terms: net 15 days upon invoice.</p>
+              <p class="doc-p">Work product and deliverables become Client property upon full payment, unless otherwise agreed in writing.</p>
+              <div class="sig-block"><div><strong>Client</strong></div></div>
+              <div class="sig-block"><div><strong>Freelancer</strong></div></div>
+              <div class="field-box sig1" id="f1">Sign here</div>
+              <div class="field-box date1" id="f2">Date</div>
+              <div class="field-box sig2" id="f3">Sign here</div>
+              <div class="field-box date2" id="f4">Date</div>
+            </div>
+          </div>
+          <aside class="sidebar">
+            <div class="card">
+              <h3>AI tools</h3>
+              <button type="button" class="prepare-highlight-card active" id="detectBtn">
+                <span class="prepare-highlight-icon">✨</span>
+                <span>
+                  <span class="prepare-highlight-title" id="detectTitle">Smart auto-detect</span>
+                  <span class="prepare-highlight-sub">Automatically find &amp; place signature fields</span>
+                </span>
+              </button>
+              <p class="notice show" id="notice">4 fields placed for 2 signers</p>
+              <div class="ai-explainer" id="explainer">
+                <strong>Plain-English explainer</strong>
+                <ul>
+                  <li>Client hires Freelancer for scoped project work</li>
+                  <li>Payment due net 15 after invoice</li>
+                  <li>Deliverables transfer on full payment</li>
+                </ul>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+      <div class="step-caption show" id="cap3">3 · AI auto-detect + plain-English summary</div>
+    </section>
+
+    <!-- 4 · Send -->
+    <section class="scene" id="sc4">
+      <div class="demo-shell">
+        <header class="demo-header">
+          <span class="demo-logo">Docracy</span>
+          <span class="demo-badge">Prepare document</span>
+        </header>
+        <div class="demo-main">
+          <div class="card pdf-pane">
+            <div class="pdf-toolbar">Freelance-Service-Agreement.pdf · Ready to send</div>
+            <div class="pdf-doc" style="display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:14px">
+              4 signature fields · 2 signers · sequential order
+            </div>
+          </div>
+          <aside class="sidebar">
+            <div class="card">
+              <h3>Review &amp; send</h3>
+              <p style="font-size:12px;color:var(--body);margin:0 0 8px">Morgan signs first, then Alex.</p>
+              <button type="button" class="send-primary go" id="sendBtn">Send for signature</button>
+            </div>
+          </aside>
+        </div>
+      </div>
+      <div class="toast" id="sentToast">✉️ Signing links emailed to Morgan &amp; Alex</div>
+      <div class="step-caption show" id="cap4">4 · Send — signers get a link, no account needed</div>
+    </section>
+
+    <!-- 5 · Signer 1 -->
+    <section class="scene" id="sc5">
+      <div class="sign-shell">
+        <header class="demo-header">
+          <span class="demo-logo">Docracy</span>
+          <span class="demo-badge">Sign document</span>
+        </header>
+        <div class="sign-main">
+          <div class="card pdf-pane">
+            <div class="pdf-toolbar">Freelance Service Agreement · Morgan Lee</div>
+            <div class="pdf-doc" style="padding:32px">
+              <h1 class="doc-title" style="font-size:16px">Freelance Service Agreement</h1>
+              <p class="doc-p">Review the agreement, then sign below.</p>
+              <div style="margin-top:40px;border:2px dashed var(--primary);border-radius:6px;height:48px;background:var(--primary-soft);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--primary)">Your signature</div>
+            </div>
+          </div>
+          <div class="card sign-panel">
+            <h3>Add your signature</h3>
+            <div class="sig-preview" id="sig1">
+              <svg viewBox="0 0 240 60"><path d="M8 38c20-28 38 12 58-6 18-16 28-20 52-8s42 24 64 6 38-22 58-4"/></svg>
+            </div>
+            <button type="button" class="btn-sign go" id="signBtn1">Sign &amp; continue</button>
+          </div>
+        </div>
+      </div>
+      <div class="step-caption show" id="cap5">5 · Signer reviews and signs — draw or type</div>
+    </section>
+
+    <!-- 6 · Signer 2 + done -->
+    <section class="scene" id="sc6">
+      <div class="sign-shell">
+        <header class="demo-header">
+          <span class="demo-logo">Docracy</span>
+          <span class="demo-badge">Sign document</span>
+        </header>
+        <div class="sign-main">
+          <div class="card pdf-pane">
+            <div class="pdf-toolbar">Freelance Service Agreement · Alex Chen</div>
+            <div class="pdf-doc" style="padding:32px">
+              <h1 class="doc-title" style="font-size:16px">Freelance Service Agreement</h1>
+              <p class="doc-p">Morgan Lee signed on Aug 4, 2026.</p>
+              <div style="margin-top:40px;border:2px dashed var(--primary);border-radius:6px;height:48px;background:var(--primary-soft);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--primary)">Your signature</div>
+            </div>
+          </div>
+          <div class="card sign-panel">
+            <h3>Add your signature</h3>
+            <div class="sig-preview draw" id="sig2">
+              <svg viewBox="0 0 240 60"><path d="M6 42c22-30 40 10 60-8 20-18 30-18 54-6s44 26 66 4"/></svg>
+            </div>
+            <div class="done-banner show" id="doneBanner">
+              <div class="done-icon">✓</div>
+              <div>
+                <strong>Everyone signed</strong>
+                <span>Download final PDF + certificate of completion</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="step-caption show" id="cap6">6 · Sequential chain completes — signed PDF ready</div>
+    </section>
+
+    <!-- 7 · Outro -->
+    <section class="scene title-scene" id="sc7">
+      <div class="logo">Docracy</div>
+      <h1>Upload. Auto-detect. Send. Sign. Done.</h1>
+      <p>docracy.io</p>
+    </section>
+
+    <div class="cursor-ring" id="cursor"></div>
+  </div>
+
+  <script>
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    const cursor = document.getElementById("cursor");
+    const fields = ["f1","f2","f3","f4"].map((id) => document.getElementById(id));
+
+    function show(id) {
+      document.querySelectorAll(".scene").forEach((s) => s.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+    }
+
+    function moveCursor(x, y, click) {
+      cursor.style.left = x + "px";
+      cursor.style.top = y + "px";
+      cursor.classList.add("show");
+      cursor.classList.toggle("click", !!click);
+    }
+
+    async function run() {
+      // 0 intro (~5s)
+      await sleep(5000);
+
+      // 1 template (~6.5s)
+      show("sc1");
+      await sleep(6500);
+
+      // 2 signers (~7.5s)
+      show("sc2");
+      await sleep(7500);
+
+      // 3 AI auto-detect (~11s)
+      show("sc3");
+      const title = document.getElementById("detectTitle");
+      title.textContent = "Scanning…";
+      await sleep(1200);
+      title.textContent = "Smart auto-detect";
+      for (const f of fields) {
+        f.classList.add("show");
+        await sleep(550);
+      }
+      document.getElementById("explainer").classList.add("show");
+      await sleep(8500);
+
+      // 4 send (~9s)
+      show("sc4");
+      await sleep(1800);
+      const sendBtn = document.getElementById("sendBtn");
+      const rect = sendBtn.getBoundingClientRect();
+      moveCursor(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      await sleep(900);
+      moveCursor(rect.left + rect.width / 2, rect.top + rect.height / 2, true);
+      document.getElementById("sentToast").classList.add("show");
+      await sleep(6300);
+      cursor.classList.remove("show");
+
+      // 5 signer 1 (~9.5s)
+      show("sc5");
+      await sleep(1800);
+      document.getElementById("sig1").classList.add("draw");
+      await sleep(7700);
+
+      // 6 signer 2 + complete (~9s)
+      show("sc6");
+      await sleep(9000);
+
+      // 7 outro (~5s)
+      show("sc7");
+      await sleep(5000);
+    }
+
+    run();
+  </script>
+</body>
+</html>

@@ -12,6 +12,10 @@
   --primary-soft: rgba(47, 126, 216, 0.08);
   --primary-soft-strong: rgba(47, 126, 216, 0.14);
   --on-primary: #ffffff;
+  /* High-visibility CTA accent (mint) — complements navy/blue so Try free / Start free pop */
+  --accent: #00e8a8;
+  --accent-hover: #2affc0;
+  --on-accent: #04241c;
   --success: #2e8b57;
   --danger: #c0392b;
 
@@ -32,6 +36,18 @@
 
 * {
   box-sizing: border-box;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 html {
@@ -178,21 +194,62 @@ select {
 }
 
 .site-header {
-  padding: 16px 24px;
+  padding: 0 28px;
+  min-height: 64px;
+  display: flex;
+  align-items: center;
   position: sticky;
   top: 0;
-  background: var(--hero-to);
+  background: #16345a;
   z-index: 100;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-/* The signing page's stripped-down header (logo only, no nav) — extra vertical padding gives the
-   logo the "whitespace around it, no distraction" treatment that page specifically calls for. */
+.site-header > .container,
+.header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  flex-wrap: nowrap;
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+}
+
+/* Eversign-style brand: seal + clean sans wordmark (white on navy). */
+.header-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  flex-shrink: 0;
+  color: #ffffff;
+}
+.header-brand-mark {
+  width: 28px;
+  height: 28px;
+  display: block;
+  filter: brightness(0) invert(1);
+}
+.header-brand-name {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: #ffffff;
+  -webkit-font-smoothing: antialiased;
+}
+
 .site-header-minimal {
-  padding: 24px;
+  min-height: 72px;
+  padding: 0 28px;
 }
 
 .site-header-app {
-  padding: 14px 20px;
+  min-height: 56px;
+  padding: 0 20px;
 }
 
 .header-app-title {
@@ -211,21 +268,24 @@ select {
 .header-nav-link {
   font-size: 14px;
   font-weight: 500;
+  letter-spacing: 0.01em;
   color: #ffffff;
   text-decoration: none;
-  padding: 6px 2px;
-  border-bottom: 2px solid transparent;
-  opacity: 0.75;
-  transition: opacity 0.15s var(--ease), border-color 0.15s var(--ease);
+  padding: 8px 2px;
+  border-bottom: none;
+  opacity: 0.88;
+  white-space: nowrap;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: opacity 0.15s var(--ease);
 }
 
 .header-nav-link:hover {
   opacity: 1;
-  border-bottom-color: #ffffff;
 }
 
 .header-nav-link-strong {
-  font-weight: 700;
+  font-weight: 600;
   color: #ffffff;
   opacity: 1;
 }
@@ -237,13 +297,83 @@ select {
   font-size: 14px;
   font-family: inherit;
   color: #ffffff;
-  opacity: 0.75;
+  opacity: 0.85;
   cursor: pointer;
+  white-space: nowrap;
   transition: opacity 0.15s var(--ease);
 }
 
 .header-logout-btn:hover {
   opacity: 1;
+}
+
+.header-nav-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.header-cta-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  margin-left: 6px;
+}
+
+.header-try-btn,
+.header-startfree-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding: 10px 18px;
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  border-radius: 999px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: none;
+  transition: background 0.15s var(--ease), transform 0.1s var(--ease);
+}
+.header-try-btn:hover,
+.header-startfree-btn:hover {
+  background: var(--accent-hover);
+  color: var(--on-accent);
+}
+
+.header-login-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding: 9px 16px;
+  font-size: 13.5px;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+  border-radius: 999px;
+  text-decoration: none;
+  background: transparent;
+  color: #ffffff;
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s var(--ease), border-color 0.15s var(--ease);
+}
+.header-login-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #ffffff;
+  color: #ffffff;
 }
 
 .lang-switcher {
@@ -338,21 +468,12 @@ select {
   color: #fff;
 }
 
-.header-nav-right {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-}
-
-/* Mega-menu dropdowns (Features / Industry / Resources) — white card panel dropping from a dark
-   navy trigger, matching the "crisp icon-grid" pattern competitors use for exactly this. Trigger
-   reuses .header-nav-link's look; the chevron is the only addition. */
+/* Mega-menu dropdowns (Features / Industry / Resources) — open on hover; same letter style as
+   Pricing / Free templates links (inherit Inter, no button reset quirks / focus rings). */
 .nav-megamenu {
   position: relative;
   display: inline-flex;
+  align-items: center;
 }
 .nav-megamenu-trigger {
   display: inline-flex;
@@ -360,25 +481,42 @@ select {
   gap: 5px;
   background: none;
   border: none;
-  font: inherit;
+  border-bottom: none;
+  margin: 0;
+  padding: 8px 2px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  line-height: inherit;
+  color: #ffffff;
+  opacity: 0.88;
   cursor: pointer;
+  white-space: nowrap;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  outline: none;
+  box-shadow: none;
+  transition: opacity 0.15s var(--ease);
+}
+.nav-megamenu-trigger:hover,
+.nav-megamenu-trigger:focus-visible,
+.nav-megamenu[data-open] .nav-megamenu-trigger {
+  opacity: 1;
+  border-bottom-color: transparent;
 }
 .nav-megamenu-chevron {
   display: block;
   flex-shrink: 0;
-  opacity: 0.7;
+  opacity: 0.75;
   transition: transform 0.15s ease;
 }
 .nav-megamenu-chevron.is-open {
   transform: rotate(180deg);
 }
-.nav-megamenu[data-open] .nav-megamenu-trigger {
-  opacity: 1;
-  border-bottom-color: #ffffff;
-}
 .nav-megamenu-panel {
   position: absolute;
-  top: calc(100% + 14px);
+  top: calc(100% + 12px);
   left: 50%;
   transform: translateX(-50%);
   z-index: 90;
@@ -387,8 +525,17 @@ select {
   background: #ffffff;
   border-radius: 16px;
   box-shadow: 0 24px 48px rgba(15, 23, 42, 0.18), 0 4px 12px rgba(15, 23, 42, 0.08);
-  overflow: hidden;
+  overflow: visible;
   min-width: 560px;
+}
+/* Invisible hover bridge between the trigger and the card */
+.nav-megamenu-panel::before {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: 0;
+  right: 0;
+  height: 12px;
 }
 .nav-megamenu-panel[data-columns="2"] {
   min-width: 460px;
@@ -488,24 +635,20 @@ select {
 .header-nav-sales {
   display: inline-flex;
   align-items: center;
-  padding: 8px 16px;
-  border-radius: var(--r-sm);
+  padding: 10px 16px;
+  border-radius: 999px;
   background: #ffffff;
-  color: var(--hero-to);
+  color: #102a45;
   font-size: 13.5px;
   font-weight: 700;
   text-decoration: none;
-  transition: background 0.15s var(--ease), transform 0.1s var(--ease);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.15s var(--ease);
 }
 .header-nav-sales:hover {
-  background: var(--primary-soft-strong);
-  transform: translateY(-1px);
-}
-
-@media (max-width: 960px) {
-  .nav-megamenu {
-    display: none;
-  }
+  background: #eef6ff;
+  transform: none;
 }
 
 .header-menu-toggle {
@@ -647,10 +790,10 @@ select {
   text-align: center;
   padding: 14px 20px;
   border-radius: 999px;
-  background: var(--primary);
-  color: #ffffff;
+  background: var(--accent);
+  color: var(--on-accent);
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
   text-decoration: none;
 }
 
@@ -667,8 +810,20 @@ select {
   background: transparent;
 }
 
-@media (max-width: 480px) {
-  .header-templates-link {
+/* One breakpoint for the whole desktop nav (megamenus, plain links, language switcher, Contact
+   sales, Sign in, Start free) — previously this was split across 960px (megamenus) and 480px
+   (everything else), leaving a dead zone in between where megamenus vanished but the hamburger
+   hadn't appeared yet, and above 960px the full item list still didn't reliably fit one row on a
+   typical laptop width and wrapped. Below 1180px, the mobile panel (which already duplicates
+   Start free / Sign in) takes over entirely instead. */
+@media (max-width: 1180px) {
+  .nav-megamenu,
+  .header-templates-link,
+  .header-nav-link,
+  .header-cta-group,
+  .header-startfree-btn,
+  .header-try-btn,
+  .header-login-btn {
     display: none;
   }
 
@@ -960,16 +1115,40 @@ select {
   align-items: center;
 }
 
-@media (max-width: 760px) {
-  .hero-split {
-    grid-template-columns: 1fr;
-  }
-}
-
 .hero-band h1 {
   color: #ffffff;
   font-size: clamp(36px, 4.6vw, 60px);
   margin: 0 0 20px;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  white-space: pre-line;
+  max-width: 14em;
+}
+
+@media (max-width: 760px) {
+  .hero-split {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-band {
+    padding: 36px 20px 40px;
+  }
+
+  .hero-band h1 {
+    font-size: clamp(26px, 7.2vw, 34px);
+    margin: 0 0 12px;
+    max-width: none;
+  }
+
+  .hero-sub {
+    font-size: 15px;
+    margin: 0 0 16px;
+  }
+
+  /* Mockup is secondary on phone — keep hero CTA in the first viewport */
+  .hero-band .doc-mockup-glow {
+    display: none;
+  }
 }
 
 .hero-band p {
@@ -1014,8 +1193,111 @@ select {
   font-weight: 700;
 }
 
-/* Hero CTA — one primary button plus a demoted text link, sitting inside .hero-band so the first
-   action is visible without scrolling. */
+/* Hero CTA — email + Start free strip (Eversign-style); mint accent pops on navy */
+.hero-sub {
+  color: var(--hero-body);
+  font-size: 17px;
+  line-height: 1.45;
+  margin: 0 0 22px;
+  max-width: 34em;
+}
+
+.hero-cta-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px 22px;
+  margin-top: 8px;
+}
+
+.hero-signup {
+  display: flex;
+  align-items: stretch;
+  flex: 1 1 320px;
+  max-width: 480px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
+}
+
+.hero-signup-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  padding: 14px 18px;
+  font: inherit;
+  font-size: 15px;
+  color: var(--ink);
+  background: transparent;
+}
+
+.hero-signup-input::placeholder {
+  color: var(--mute);
+}
+
+.hero-signup-btn {
+  flex-shrink: 0;
+  border: none;
+  cursor: pointer;
+  padding: 14px 22px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  background: var(--accent);
+  color: var(--on-accent);
+  white-space: nowrap;
+  transition: background 0.15s var(--ease);
+}
+
+.hero-signup-btn:hover {
+  background: var(--accent-hover);
+}
+
+.hero-watch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 6px 0;
+  letter-spacing: 0.01em;
+  transition: opacity 0.15s var(--ease);
+}
+
+.hero-watch-btn:hover {
+  opacity: 0.88;
+}
+
+.hero-watch-icon {
+  display: inline-flex;
+  line-height: 0;
+}
+
+.hero-secondary-link {
+  margin: 14px 0 0;
+  font-size: 14px;
+}
+
+.hero-secondary-link a {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.hero-secondary-link a:hover {
+  color: #ffffff;
+}
+
 .hero-actions {
   display: flex;
   align-items: center;
@@ -1036,13 +1318,94 @@ select {
 /* Beats `.hero-band p` on specificity without !important, so the hint stays small next to the
    hero's 18px body copy. */
 .hero-band .hero-cta-hint {
-  margin: 14px 0 0;
+  margin: 12px 0 0;
   font-size: 13px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.how-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 800;
+  background: rgba(6, 16, 32, 0.78);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.how-modal {
+  position: relative;
+  width: min(940px, 100%);
+  background: #000;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+}
+
+.how-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  z-index: 2;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.how-modal-close:hover {
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.how-modal-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  background: #000;
 }
 
 /* Stacks below .hero-split's own 760px breakpoint: a side-by-side button and link get cramped
    before the columns collapse. */
 @media (max-width: 700px) {
+  .hero-cta-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  /* flex-basis: 320px is width on desktop; on column flex it became ~320px HEIGHT and
+     flex:1 on the input filled the empty space. */
+  .hero-signup {
+    flex: 0 0 auto;
+    max-width: none;
+    width: 100%;
+    flex-direction: column;
+    border-radius: 14px;
+  }
+
+  .hero-signup-input {
+    flex: 0 0 auto;
+    width: 100%;
+    padding: 12px 16px;
+  }
+
+  .hero-signup-btn {
+    width: 100%;
+    padding: 12px 16px;
+  }
+
+  .hero-watch-btn {
+    justify-content: flex-start;
+    font-size: 14px;
+  }
+
   .hero-actions {
     flex-direction: column;
     align-items: stretch;
@@ -1059,7 +1422,8 @@ select {
   }
 
   .hero-band .hero-cta-hint {
-    text-align: center;
+    text-align: left;
+    margin-top: 10px;
   }
 }
 
@@ -2749,9 +3113,30 @@ select {
   }
 
   /* Keep chat launcher above the fixed pricing bar. */
-  body:has(.pricing-page) .chat-widget {
+  body:has(.pricing-page) .chat-widget,
+  body:has(.mobile-pricing-dock) .chat-widget {
     bottom: calc(268px + env(safe-area-inset-bottom, 0px));
     right: 16px;
+  }
+
+  /* Site-wide mobile dock (marketing pages, logged out) — same stacked rows as /pricing. */
+  .mobile-pricing-dock {
+    display: block;
+  }
+
+  .mobile-pricing-dock-bar {
+    margin: 0;
+    width: auto;
+  }
+
+  body:has(.mobile-pricing-dock) .site-footer {
+    padding-bottom: calc(280px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-pricing-dock {
+    display: none;
   }
 }
 

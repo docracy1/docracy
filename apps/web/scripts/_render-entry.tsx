@@ -7,6 +7,7 @@ import Landing from "../src/pages/Landing";
 import FreeTemplates from "../src/pages/FreeTemplates";
 import FreeTemplateDetail from "../src/pages/FreeTemplateDetail";
 import Mcp from "../src/pages/Mcp";
+import Ai from "../src/pages/Ai";
 import About from "../src/pages/About";
 import Pricing from "../src/pages/Pricing";
 import Docs from "../src/pages/Docs";
@@ -40,6 +41,8 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/es/plantillas-gratis/:slug" element={<FreeTemplateDetail />} />
           <Route path="/mcp" element={<Mcp />} />
           <Route path="/es/mcp" element={<Mcp />} />
+          <Route path="/ai" element={<Ai />} />
+          <Route path="/es/ia" element={<Ai />} />
           <Route path="/about" element={<About />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/es/precios" element={<Pricing />} />

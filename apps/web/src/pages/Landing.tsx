@@ -1,11 +1,13 @@
-import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState, type FormEvent } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import PricingCalculator from "../components/PricingCalculator";
 import FirstDocumentPrompt from "../components/FirstDocumentPrompt";
+import HowItWorksModal from "../components/HowItWorksModal";
 import IntegrationsBand from "../components/IntegrationsBand";
 import ProductFlowDemo from "../components/ProductFlowDemo";
 import { track } from "../lib/track";
 import { FREE_TEMPLATES } from "../lib/freeTemplates";
+import { HOW_IT_WORKS_VIDEO } from "../lib/howItWorksVideo";
 import { localizePath, useI18n, useT } from "../lib/i18n";
 import { useSeoMeta } from "../lib/useSeoMeta";
 
@@ -134,7 +136,7 @@ const CORE_FEATURES: Array<{
 }> = [
   { icon: "send", titleKey: "landing.feat1.title", bodyKey: "landing.feat1.body", to: "/prepare", linkKey: "landing.feat1.link" },
   { icon: "pen", titleKey: "landing.feat2.title", bodyKey: "landing.feat2.body", to: "/docs", linkKey: "landing.feat2.link" },
-  { icon: "sparkles", titleKey: "landing.feat3.title", bodyKey: "landing.feat3.body", to: "/mcp", linkKey: "landing.feat3.link" },
+  { icon: "sparkles", titleKey: "landing.feat3.title", bodyKey: "landing.feat3.body", to: "/ai", linkKey: "landing.feat3.link" },
   { icon: "duplicate", titleKey: "landing.feat4.title", bodyKey: "landing.feat4.body", to: "/free-templates", linkKey: "landing.feat4.link" },
   { icon: "users", titleKey: "landing.feat5.title", bodyKey: "landing.feat5.body", to: "/pricing", linkKey: "landing.feat5.link" },
   { icon: "single", titleKey: "landing.feat6.title", bodyKey: "landing.feat6.body", to: "/prepare", linkKey: "landing.feat6.link" },
@@ -205,6 +207,9 @@ const AI_FEATURE_KEYS: Array<{ titleKey: string; bodyKey: string }> = [
 export default function Landing() {
   const t = useT();
   const { locale } = useI18n();
+  const navigate = useNavigate();
+  const [heroEmail, setHeroEmail] = useState("");
+  const [watchOpen, setWatchOpen] = useState(false);
   useSeoMeta("home");
   const faqItems = FAQ_KEYS.map((item) => ({
     question: t(item.qKey),
@@ -221,7 +226,37 @@ export default function Landing() {
     if (window.location.hash === "#faq") {
       document.getElementById("faq")?.scrollIntoView();
     }
+    if (window.location.hash === "#watch-how-it-works") {
+      setWatchOpen(true);
+    }
   }, []);
+
+  useEffect(() => {
+    const onHash = () => {
+      if (window.location.hash === "#watch-how-it-works") setWatchOpen(true);
+    };
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+
+  const closeWatch = () => {
+    setWatchOpen(false);
+    if (window.location.hash === "#watch-how-it-works") {
+      history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
+  };
+
+  const onHeroStart = (e: FormEvent) => {
+    e.preventDefault();
+    track("landingpage_cta_clicked", { source: "hero_email_start" });
+    const email = heroEmail.trim();
+    if (email) {
+      const next = encodeURIComponent(prepareSampleTo);
+      navigate(`/login?email=${encodeURIComponent(email)}&next=${next}`);
+      return;
+    }
+    navigate(prepareSampleTo);
+  };
 
   return (
     <div>
@@ -229,17 +264,53 @@ export default function Landing() {
         <div className="hero-inner hero-split">
           <div>
             <h1>{t("hero.title")}</h1>
-            <div className="hero-actions">
-              <Link
-                to={prepareSampleTo}
-                className="btn-primary btn-lg"
-                style={{ display: "inline-block", textDecoration: "none" }}
-                onClick={() => track("landingpage_cta_clicked", { source: "hero_inline_sample" })}
+            <p className="hero-sub">{t("hero.sub")}</p>
+            <div className="hero-cta-row">
+              <form className="hero-signup" onSubmit={onHeroStart}>
+                <input
+                  className="hero-signup-input"
+                  type="email"
+                  name="email"
+                  autoComplete="email"
+                  placeholder={t("hero.emailPlaceholder")}
+                  aria-label={t("hero.emailPlaceholder")}
+                  value={heroEmail}
+                  onChange={(e) => setHeroEmail(e.target.value)}
+                />
+                <button type="submit" className="hero-signup-btn">
+                  {t("hero.startFree")} →
+                </button>
+              </form>
+              <button
+                type="button"
+                className="hero-watch-btn"
+                id="watch-how-it-works"
+                onClick={() => {
+                  track("landingpage_cta_clicked", { source: "hero_watch_how" });
+                  setWatchOpen(true);
+                  if (window.location.hash !== "#watch-how-it-works") {
+                    history.replaceState(null, "", "#watch-how-it-works");
+                  }
+                }}
               >
-                {t("hero.ctaSample")}
-              </Link>
+                <span className="hero-watch-icon" aria-hidden="true">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="10" fill="rgba(255,255,255,0.18)" />
+                    <path d="M10 8.5v7l6-3.5-6-3.5z" fill="#fff" />
+                  </svg>
+                </span>
+                {t("hero.watchHow")}
+              </button>
             </div>
             <p className="hero-cta-hint">{t("hero.hint")}</p>
+            <p className="hero-secondary-link">
+              <Link
+                to={templatesTo}
+                onClick={() => track("landingpage_cta_clicked", { source: "hero_browse_templates" })}
+              >
+                {t("hero.orTemplates")}
+              </Link>
+            </p>
           </div>
           <div className="doc-mockup-glow">
             <div className="doc-mockup-card">
@@ -249,7 +320,7 @@ export default function Landing() {
         </div>
       </div>
 
-      <div className="audience-band">
+      <div className="audience-band" id="how-it-works">
         <div className="audience-inner">
           <h2 style={{ fontSize: 22, marginBottom: 0, textAlign: "center" }}>{t("how.title")}</h2>
           <div className="accent-grid">
@@ -427,19 +498,55 @@ export default function Landing() {
       </div>
       <script
         type="application/ld+json"
-        // Rendered inline (not just in index.html's static schemas) so it appears in the
-        // prerendered homepage markup right alongside the questions it describes — search engines
-        // match FAQPage rich-result eligibility against visible on-page text, not just the schema.
+        // Rendered inline so VideoObject / HowTo / FAQPage appear in prerendered homepage markup
+        // alongside the visible how-it-works video and FAQ copy (rich-result eligibility).
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: faqItems.map((item) => ({
-              "@type": "Question",
-              name: item.question,
-              acceptedAnswer: { "@type": "Answer", text: item.answer },
-            })),
-          }),
+          __html: JSON.stringify([
+            {
+              "@context": "https://schema.org",
+              "@type": "VideoObject",
+              name: t("seo.video.name"),
+              description: t("seo.video.description"),
+              thumbnailUrl: [HOW_IT_WORKS_VIDEO.posterUrl],
+              uploadDate: HOW_IT_WORKS_VIDEO.uploadDate,
+              duration: HOW_IT_WORKS_VIDEO.durationIso,
+              contentUrl: HOW_IT_WORKS_VIDEO.contentUrl,
+              embedUrl: HOW_IT_WORKS_VIDEO.embedUrl,
+              encodingFormat: "video/webm",
+              inLanguage: locale === "es" ? "es" : "en",
+              publisher: {
+                "@type": "Organization",
+                name: "Docracy",
+                url: "https://docracy.io",
+                logo: {
+                  "@type": "ImageObject",
+                  url: "https://docracy.io/docracy-seal-icon.png",
+                },
+              },
+            },
+            {
+              "@context": "https://schema.org",
+              "@type": "HowTo",
+              name: t("how.title"),
+              description: t("seo.video.description"),
+              totalTime: HOW_IT_WORKS_VIDEO.durationIso,
+              step: HOW_IT_WORKS_KEYS.map((step, i) => ({
+                "@type": "HowToStep",
+                position: i + 1,
+                name: t(step.titleKey),
+                text: t(step.bodyKey),
+              })),
+            },
+            {
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: faqItems.map((item) => ({
+                "@type": "Question",
+                name: item.question,
+                acceptedAnswer: { "@type": "Answer", text: item.answer },
+              })),
+            },
+          ]),
         }}
       />
 
@@ -485,6 +592,7 @@ export default function Landing() {
       </div>
 
       <FirstDocumentPrompt mobileOnly source="mobile_footer" />
+      {watchOpen && <HowItWorksModal onClose={closeWatch} />}
     </div>
   );
 }

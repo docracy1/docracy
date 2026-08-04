@@ -7,6 +7,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ChatWidget from "./components/ChatWidget";
 import CookieConsentBanner from "./components/CookieConsentBanner";
+import MobilePricingBar from "./components/MobilePricingBar";
 import Landing from "./pages/Landing";
 import Prepare from "./pages/Prepare";
 import PrepareSent from "./pages/PrepareSent";
@@ -28,6 +29,7 @@ import Mcp from "./pages/Mcp";
 import AdminAnalytics from "./pages/AdminAnalytics";
 import About from "./pages/About";
 import Pricing from "./pages/Pricing";
+import Ai from "./pages/Ai";
 import Docs from "./pages/Docs";
 import Roadmap from "./pages/Roadmap";
 import Imprint from "./pages/Imprint";
@@ -76,6 +78,8 @@ function AppRoutes() {
       <Route path="/es/plantillas-gratis/:slug" element={<FreeTemplateDetail />} />
       <Route path="/mcp" element={<Mcp />} />
       <Route path="/es/mcp" element={<Mcp />} />
+      <Route path="/ai" element={<Ai />} />
+      <Route path="/es/ia" element={<Ai />} />
       <Route path="/admin/analytics" element={<AdminAnalytics />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/bulk-send" element={<BulkSend />} />
@@ -140,6 +144,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                   <Header />
                   <AppRoutes />
                   <Footer />
+                  <MobilePricingBar />
                   <ChatWidget />
                   <CookieConsentBanner />
                 </>

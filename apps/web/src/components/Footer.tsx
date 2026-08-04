@@ -36,6 +36,7 @@ export default function Footer() {
         { label: t("footer.startFree"), to: localizePath("/prepare", locale) },
         { label: t("footer.pricing"), to: localizePath("/pricing", locale) },
         { label: t("footer.templates"), to: localizePath("/free-templates", locale) },
+        { label: t("footer.ai"), to: localizePath("/ai", locale) },
         { label: t("footer.mcp"), to: localizePath("/mcp", locale) },
         { label: t("footer.docs"), to: localizePath("/docs", locale) },
         { label: t("footer.faq"), to: `${localizePath("/", locale)}#faq` },
