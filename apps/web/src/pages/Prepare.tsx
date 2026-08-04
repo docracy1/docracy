@@ -137,7 +137,7 @@ export default function Prepare() {
   const [isDraggingUpload, setIsDraggingUpload] = useState(false);
   const [draggingFieldId, setDraggingFieldId] = useState<string | null>(null);
   const [creatingDrag, setCreatingDrag] = useState<{ x: number; y: number; overPage: boolean } | null>(null);
-  /** Mobile / coarse-pointer: Place field → tap PDF to drop; placed fields stay finger-draggable. */
+  /** Mobile: Place signature → tap PDF to drop; placed fields stay finger-draggable. */
   const [preferTapPlace, setPreferTapPlace] = useState(false);
   const [placeMode, setPlaceMode] = useState(false);
   /** Swipesign-style: setup lives in a sheet; document stays full-bleed when sheet is hidden. */
@@ -205,10 +205,10 @@ export default function Prepare() {
     previousDefaultDropdownOptionsRef.current = nextDefault;
   }, [t]);
 
-  // Match prepare-grid's 860px stack breakpoint, plus any coarse pointer (phones / many tablets)
-  // so create-from-sidebar uses Place field + tap instead of chip drag (reposition still uses touch).
+  // Match prepare-grid's 860px stack breakpoint exactly (CSS mobile sheet/dock live in the same
+  // media query). Coarse-pointer desktops keep chip drag so wide layouts aren't half-mobile.
   useEffect(() => {
-    const mq = window.matchMedia("(max-width: 860px), (pointer: coarse)");
+    const mq = window.matchMedia("(max-width: 860px)");
     const sync = () => setPreferTapPlace(mq.matches);
     sync();
     mq.addEventListener("change", sync);
@@ -227,8 +227,15 @@ export default function Prepare() {
   }, [placeMode, setupOpen, preferTapPlace]);
 
   // Open setup when a PDF first lands on mobile so signers can be filled without hunting for UI.
+  // Guarded to fire once per document (not every time preferTapPlace re-evaluates to true) —
+  // otherwise this re-opens the sheet right after the user closes it to place a field, since
+  // `preferTapPlace` re-settling to the same `true` value still re-runs the effect.
+  const autoOpenedForBytesRef = useRef<Uint8Array | null>(null);
   useEffect(() => {
-    if (pdfBytes && preferTapPlace) setSetupOpen(true);
+    if (pdfBytes && preferTapPlace && autoOpenedForBytesRef.current !== pdfBytes) {
+      autoOpenedForBytesRef.current = pdfBytes;
+      setSetupOpen(true);
+    }
   }, [pdfBytes, preferTapPlace]);
 
   // Only used to gate the (paid-only) template UI — anonymous/free usage of this page is
@@ -472,7 +479,10 @@ export default function Prepare() {
     });
   };
 
-  const enterPlaceMode = () => {
+  /** Swipesign-style: pick a signer (and optional field type) → hide setup → tap PDF to place. */
+  const enterPlaceMode = (signerOrder: number = placingSignerOrder, fieldType: DocFieldType = placingFieldType) => {
+    setPlacingSignerOrder(signerOrder);
+    setPlacingFieldType(fieldType);
     setPlaceMode(true);
     if (preferTapPlace) setSetupOpen(false);
     requestAnimationFrame(() => {
@@ -797,22 +807,25 @@ export default function Prepare() {
   /** Pointer-based so fields can be repositioned on touch as well as mouse (incl. during place mode). */
   const onFieldPointerDown = (e: React.PointerEvent<HTMLDivElement>, field: DocField) => {
     if (e.pointerType === "mouse" && e.button !== 0) return;
-    e.preventDefault();
+    // stopPropagation so PdfViewer's tap-to-place does not fire under the field.
     e.stopPropagation();
+    e.preventDefault();
     const target = e.currentTarget;
-    const pageEl = target.offsetParent as HTMLElement;
+    const pageEl = target.offsetParent as HTMLElement | null;
+    if (!pageEl) return;
     try {
       target.setPointerCapture(e.pointerId);
     } catch {
       /* capture optional — window listeners still work */
     }
+    const pageRect = pageEl.getBoundingClientRect();
     dragState.current = {
       id: field.id,
       startClientX: e.clientX,
       startClientY: e.clientY,
       startXFrac: field.xFrac,
       startYFrac: field.yFrac,
-      pageRect: pageEl.getBoundingClientRect(),
+      pageRect,
       wFrac: field.wFrac,
       hFrac: field.hFrac,
     };
@@ -822,8 +835,11 @@ export default function Prepare() {
       if (moveEvent.pointerId !== e.pointerId) return;
       const drag = dragState.current;
       if (!drag) return;
-      const dxFrac = (moveEvent.clientX - drag.startClientX) / drag.pageRect.width;
-      const dyFrac = (moveEvent.clientY - drag.startClientY) / drag.pageRect.height;
+      moveEvent.preventDefault();
+      // Live rect — zoom/scroll during drag would otherwise desync finger vs field.
+      const liveRect = pageEl.getBoundingClientRect();
+      const dxFrac = (moveEvent.clientX - drag.startClientX) / liveRect.width;
+      const dyFrac = (moveEvent.clientY - drag.startClientY) / liveRect.height;
       const xFrac = Math.min(Math.max(drag.startXFrac + dxFrac, 0), 1 - drag.wFrac);
       const yFrac = Math.min(Math.max(drag.startYFrac + dyFrac, 0), 1 - drag.hFrac);
       updateField(drag.id, { xFrac, yFrac });
@@ -841,7 +857,7 @@ export default function Prepare() {
       window.removeEventListener("pointerup", onUp);
       window.removeEventListener("pointercancel", onUp);
     };
-    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointermove", onMove, { passive: false });
     window.addEventListener("pointerup", onUp);
     window.addEventListener("pointercancel", onUp);
   };
@@ -1621,10 +1637,21 @@ export default function Prepare() {
                   )}
                 </div>
               )}
+              {preferTapPlace && (
+                <p className="prepare-mobile-place-instruction" style={{ marginBottom: 12 }}>
+                  {t("prepare.mobilePlaceInstruction")}
+                </p>
+              )}
               {signers.map((s, i) => (
                 <div key={s.order} style={{ marginBottom: 10, paddingBottom: 10, borderBottom: "1px solid var(--hairline)" }}>
                   <div style={{ fontSize: 12, color: "var(--mute)", marginBottom: 4 }}>
                     {s.order}. {preparerSigns && i === 0 ? t("prepare.you") : t("prepare.signerN", { n: s.order })}
+                    {fields.some((f) => f.signerOrder === s.order) && (
+                      <span className="prepare-signer-field-count">
+                        {" "}
+                        · {fields.filter((f) => f.signerOrder === s.order).length}
+                      </span>
+                    )}
                   </div>
                   <input
                     className="form-input"
@@ -1691,15 +1718,26 @@ export default function Prepare() {
                       </select>
                     </>
                   )}
-                  {signers.length > 1 && (
-                    <button
-                      className="btn-secondary"
-                      style={{ marginTop: 6, fontSize: 12, padding: "4px 8px" }}
-                      onClick={() => removeSigner(s.order)}
-                    >
-                      {t("common.remove")}
-                    </button>
-                  )}
+                  <div className="prepare-signer-actions">
+                    {preferTapPlace && viewMode === "fields" && (
+                      <button
+                        type="button"
+                        className="btn-primary prepare-signer-place-btn"
+                        onClick={() => enterPlaceMode(s.order, "signature")}
+                      >
+                        {t("prepare.placeSignature")}
+                      </button>
+                    )}
+                    {signers.length > 1 && (
+                      <button
+                        className="btn-secondary"
+                        style={{ fontSize: 12, padding: "4px 8px" }}
+                        onClick={() => removeSigner(s.order)}
+                      >
+                        {t("common.remove")}
+                      </button>
+                    )}
+                  </div>
                 </div>
               ))}
               {ccRecipients.map((cc, i) => (
@@ -2025,13 +2063,18 @@ export default function Prepare() {
               </select>
               {preferTapPlace ? (
                 <div className="prepare-mobile-place-block">
-                  <p className="prepare-mobile-place-instruction">{t("prepare.mobilePlaceInstruction")}</p>
+                  <p className="prepare-mobile-place-instruction">{t("prepare.moreFieldTypesHint")}</p>
                   {placeMode ? (
                     <button type="button" className="btn-secondary" style={{ width: "100%" }} onClick={hideSetup}>
                       {t("prepare.hideSetup")}
                     </button>
                   ) : (
-                    <button type="button" className="btn-primary" style={{ width: "100%" }} onClick={enterPlaceMode}>
+                    <button
+                      type="button"
+                      className="btn-secondary"
+                      style={{ width: "100%" }}
+                      onClick={() => enterPlaceMode(placingSignerOrder, placingFieldType)}
+                    >
                       {t("prepare.placeFieldCta", { type: t(FIELD_TYPE_NAME_KEYS[placingFieldType]) })}
                     </button>
                   )}

@@ -20,6 +20,8 @@ interface PdfViewerProps {
 const ZOOM_STEP = 0.1;
 const MIN_ZOOM = 0.5;
 const MAX_ZOOM = 2.5;
+/** Ignore pointer-ups that moved farther than this — treat as scroll/pan, not a place tap. */
+const TAP_MOVE_PX = 14;
 
 export default function PdfViewer({ pdfBytes, maxScale = 1.8, renderPageOverlay, onPageClick }: PdfViewerProps) {
   const t = useT();
@@ -30,6 +32,7 @@ export default function PdfViewer({ pdfBytes, maxScale = 1.8, renderPageOverlay,
   // 1 = "100%", the container-fit size — matches the reference's default zoom readout, not a
   // literal 1:1 pixel scale.
   const [zoom, setZoom] = useState(1);
+  const tapStartRef = useRef<{ pointerId: number; x: number; y: number } | null>(null);
 
   // Track available width so pages scale down to fit on narrow (e.g. mobile) screens instead of
   // forcing horizontal scroll. Measured directly (not just via ResizeObserver) since some embedded
@@ -117,6 +120,14 @@ export default function PdfViewer({ pdfBytes, maxScale = 1.8, renderPageOverlay,
     };
   }, [pdfBytes, containerWidth, maxScale, zoom]);
 
+  const commitPageTap = (page: PageInfo, clientX: number, clientY: number, target: HTMLElement) => {
+    if (!onPageClick) return;
+    const rect = target.getBoundingClientRect();
+    const xFrac = (clientX - rect.left) / rect.width;
+    const yFrac = (clientY - rect.top) / rect.height;
+    onPageClick(page, xFrac, yFrac);
+  };
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 12, width: "100%" }}>
       <div ref={wrapperRef} style={{ position: "relative", width: "100%" }}>
@@ -125,12 +136,22 @@ export default function PdfViewer({ pdfBytes, maxScale = 1.8, renderPageOverlay,
           <div
             key={page.index}
             data-page-index={page.index}
-            onClick={(e) => {
+            onPointerDown={(e) => {
               if (!onPageClick) return;
-              const rect = e.currentTarget.getBoundingClientRect();
-              const xFrac = (e.clientX - rect.left) / rect.width;
-              const yFrac = (e.clientY - rect.top) / rect.height;
-              onPageClick(page, xFrac, yFrac);
+              if (e.pointerType === "mouse" && e.button !== 0) return;
+              // Don't preventDefault — parent must still scroll the PDF between place taps.
+              tapStartRef.current = { pointerId: e.pointerId, x: e.clientX, y: e.clientY };
+            }}
+            onPointerUp={(e) => {
+              if (!onPageClick) return;
+              const start = tapStartRef.current;
+              tapStartRef.current = null;
+              if (!start || start.pointerId !== e.pointerId) return;
+              if (Math.hypot(e.clientX - start.x, e.clientY - start.y) > TAP_MOVE_PX) return;
+              commitPageTap(page, e.clientX, e.clientY, e.currentTarget);
+            }}
+            onPointerCancel={() => {
+              tapStartRef.current = null;
             }}
             style={{
               position: "absolute",
@@ -139,6 +160,8 @@ export default function PdfViewer({ pdfBytes, maxScale = 1.8, renderPageOverlay,
               width: page.widthPx,
               height: page.heightPx,
               cursor: onPageClick ? "crosshair" : "default",
+              // Auto keeps vertical pan for scrolling; place taps use the movement threshold above.
+              touchAction: onPageClick ? "pan-y" : "auto",
             }}
           >
             {renderPageOverlay?.(page)}

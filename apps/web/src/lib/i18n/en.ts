@@ -545,7 +545,9 @@ const en: Messages = {
   "prepare.setup": "Setup",
   "prepare.hideSetup": "Hide setup",
   "prepare.mobilePlaceInstruction":
-    "Pick a signer, tap Place field, then tap or drag fields on the document.",
+    "Tap Place signature on a signer, then tap the document. Drag a field to move it.",
+  "prepare.placeSignature": "Place signature",
+  "prepare.moreFieldTypesHint": "Need initials, text, date, or other fields? Choose a type and signer above, then Place.",
   "prepare.placeFieldCta": "Place {{type}}",
   "status.fullySigned": "Fully signed",
   "status.inProgress": "Signing in progress",

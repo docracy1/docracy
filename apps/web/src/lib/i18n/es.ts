@@ -482,7 +482,10 @@ const es: Messages = {
   "prepare.setup": "Configurar",
   "prepare.hideSetup": "Ocultar",
   "prepare.mobilePlaceInstruction":
-    "Elige un firmante, toca Colocar campo y luego toca o arrastra campos en el documento.",
+    "Toca Colocar firma en un firmante y luego toca el documento. Arrastra un campo para moverlo.",
+  "prepare.placeSignature": "Colocar firma",
+  "prepare.moreFieldTypesHint":
+    "¿Necesitas iniciales, texto, fecha u otros campos? Elige el tipo y el firmante arriba y luego Colocar.",
   "prepare.placeFieldCta": "Colocar {{type}}",
   "prepare.dragOr": "Arrastra y suelta un PDF aquí, o",
   "prepare.dropPdf": "Suelta tu PDF aquí",
