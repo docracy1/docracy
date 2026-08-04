@@ -57,6 +57,16 @@ const FIELD_TYPE_LABEL_KEYS = {
   dropdown: "prepare.fieldDropdown",
 } as const satisfies Record<DocFieldType, string>;
 
+/** Shorter names for place-mode chrome (vs. the on-document chip labels above). */
+const FIELD_TYPE_NAME_KEYS = {
+  signature: "prepare.fieldSignature",
+  initials: "prepare.fieldInitials",
+  text: "prepare.fieldText",
+  date: "prepare.fieldDate",
+  checkbox: "prepare.fieldCheckbox",
+  dropdown: "prepare.fieldDropdown",
+} as const satisfies Record<DocFieldType, string>;
+
 let fieldIdCounter = 0;
 
 // Keep in sync with apps/worker/wrangler.toml's DOC_TTL_DAYS — shown as a cosmetic "expires in"
@@ -127,6 +137,10 @@ export default function Prepare() {
   const [isDraggingUpload, setIsDraggingUpload] = useState(false);
   const [draggingFieldId, setDraggingFieldId] = useState<string | null>(null);
   const [creatingDrag, setCreatingDrag] = useState<{ x: number; y: number; overPage: boolean } | null>(null);
+  /** Mobile / coarse-pointer: select field type, then tap the PDF (drag doesn't work on phones). */
+  const [preferTapPlace, setPreferTapPlace] = useState(false);
+  const [placeMode, setPlaceMode] = useState(false);
+  const pdfColRef = useRef<HTMLDivElement>(null);
 
   // PDF editing (reorder/delete pages, redact, insert text) — a separate mode from field
   // placement, since the interactions (page-level controls, drag-to-redact, click-to-annotate)
@@ -188,6 +202,25 @@ export default function Prepare() {
     );
     previousDefaultDropdownOptionsRef.current = nextDefault;
   }, [t]);
+
+  // Match prepare-grid's 860px stack breakpoint, plus any coarse pointer (phones / many tablets)
+  // so the Fields card never shows a drag affordance that touch can't complete.
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 860px), (pointer: coarse)");
+    const sync = () => setPreferTapPlace(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  useEffect(() => {
+    if (!placeMode) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setPlaceMode(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [placeMode]);
 
   // Only used to gate the (paid-only) template UI — anonymous/free usage of this page is
   // otherwise completely unaffected by this call.
@@ -399,6 +432,42 @@ export default function Prepare() {
     const el = document.elementFromPoint(clientX, clientY)?.closest<HTMLElement>("[data-page-index]");
     if (!el) return null;
     return { index: Number(el.dataset.pageIndex), rect: el.getBoundingClientRect() };
+  };
+
+  const placeFieldAt = (pageIndex: number, tapXFrac: number, tapYFrac: number) => {
+    const size = FIELD_SIZE_BY_TYPE[placingFieldType];
+    const xFrac = Math.min(Math.max(tapXFrac - size.w / 2, 0), 1 - size.w);
+    const yFrac = Math.min(Math.max(tapYFrac - size.h / 2, 0), 1 - size.h);
+    const field: DocField = {
+      id: `f${fieldIdCounter++}`,
+      signerOrder: placingSignerOrder,
+      page: pageIndex,
+      xFrac,
+      yFrac,
+      wFrac: size.w,
+      hFrac: size.h,
+      type: placingFieldType,
+      ...(placingFieldType === "dropdown"
+        ? {
+            options: dropdownOptionsInput
+              .split("\n")
+              .map((o) => o.trim())
+              .filter(Boolean)
+              .slice(0, 20),
+          }
+        : {}),
+    };
+    setFields((prev) => {
+      if (prev.length === 0) track("fields_added");
+      return [...prev, field];
+    });
+  };
+
+  const enterPlaceMode = () => {
+    setPlaceMode(true);
+    requestAnimationFrame(() => {
+      pdfColRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
   };
 
   useEffect(() => {
@@ -698,7 +767,9 @@ export default function Prepare() {
     hFrac: number;
   } | null>(null);
 
-  const onFieldDragStart = (e: React.MouseEvent<HTMLDivElement>, field: DocField) => {
+  /** Pointer-based so fields can be repositioned on touch as well as mouse. */
+  const onFieldPointerDown = (e: React.PointerEvent<HTMLDivElement>, field: DocField) => {
+    if (e.pointerType === "mouse" && e.button !== 0) return;
     e.preventDefault();
     e.stopPropagation();
     const pageEl = e.currentTarget.offsetParent as HTMLElement;
@@ -714,7 +785,7 @@ export default function Prepare() {
     };
     setDraggingFieldId(field.id);
 
-    const onMove = (moveEvent: MouseEvent) => {
+    const onMove = (moveEvent: PointerEvent) => {
       const drag = dragState.current;
       if (!drag) return;
       const dxFrac = (moveEvent.clientX - drag.startClientX) / drag.pageRect.width;
@@ -726,11 +797,13 @@ export default function Prepare() {
     const onUp = () => {
       dragState.current = null;
       setDraggingFieldId(null);
-      window.removeEventListener("mousemove", onMove);
-      window.removeEventListener("mouseup", onUp);
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onUp);
     };
-    window.addEventListener("mousemove", onMove);
-    window.addEventListener("mouseup", onUp);
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onUp);
   };
 
   /** Real drag-and-drop for creating a field: mousedown on the sidebar chip picks it up, a
@@ -758,32 +831,9 @@ export default function Prepare() {
 
       const target = pageAt(upEvent.clientX, upEvent.clientY);
       if (!target) return; // dropped outside the document — cancel, don't place blind
-      const size = FIELD_SIZE_BY_TYPE[placingFieldType];
-      const xFrac = Math.min(Math.max((upEvent.clientX - target.rect.left) / target.rect.width - size.w / 2, 0), 1 - size.w);
-      const yFrac = Math.min(Math.max((upEvent.clientY - target.rect.top) / target.rect.height - size.h / 2, 0), 1 - size.h);
-      const field: DocField = {
-        id: `f${fieldIdCounter++}`,
-        signerOrder: placingSignerOrder,
-        page: target.index,
-        xFrac,
-        yFrac,
-        wFrac: size.w,
-        hFrac: size.h,
-        type: placingFieldType,
-        ...(placingFieldType === "dropdown"
-          ? {
-              options: dropdownOptionsInput
-                .split("\n")
-                .map((o) => o.trim())
-                .filter(Boolean)
-                .slice(0, 20),
-            }
-          : {}),
-      };
-      setFields((prev) => {
-        if (prev.length === 0) track("fields_added");
-        return [...prev, field];
-      });
+      const xFrac = (upEvent.clientX - target.rect.left) / target.rect.width;
+      const yFrac = (upEvent.clientY - target.rect.top) / target.rect.height;
+      placeFieldAt(target.index, xFrac, yFrac);
     };
     window.addEventListener("mousemove", onMove);
     window.addEventListener("mouseup", onUp);
@@ -837,6 +887,7 @@ export default function Prepare() {
     setCustomSubject("");
     setCustomMessage("");
     setError(null);
+    setPlaceMode(false);
   };
 
   const onSubmit = async () => {
@@ -1005,10 +1056,31 @@ export default function Prepare() {
     </div>
 
     {pdfBytes && (
-        <div className="prepare-grid">
-          <div className="prepare-pdf-col">
+        <div className={`prepare-grid${placeMode ? " prepare-grid--place-mode" : ""}`}>
+          <div className="prepare-pdf-col" ref={pdfColRef}>
+            {placeMode && (
+              <div className="prepare-place-banner" role="status">
+                <div className="prepare-place-banner-text">
+                  <strong>
+                    {t("prepare.placeModeBanner", {
+                      type: t(FIELD_TYPE_NAME_KEYS[placingFieldType]),
+                      signer: signerLabel(placingSignerOrder),
+                    })}
+                  </strong>
+                  <span>{t("prepare.placeModeHint")}</span>
+                </div>
+                <button type="button" className="btn-secondary prepare-place-done-btn" onClick={() => setPlaceMode(false)}>
+                  {t("prepare.donePlacing")}
+                </button>
+              </div>
+            )}
             <PdfViewer
               pdfBytes={pdfBytes}
+              onPageClick={
+                placeMode && viewMode === "fields"
+                  ? (_page, xFrac, yFrac) => placeFieldAt(_page.index, xFrac, yFrac)
+                  : undefined
+              }
               renderPageOverlay={(page) => (
                 <>
                   {viewMode === "fields" &&
@@ -1019,7 +1091,15 @@ export default function Prepare() {
                       return (
                         <div
                           key={f.id}
-                          onMouseDown={(e) => onFieldDragStart(e, f)}
+                          onPointerDown={(e) => {
+                            if (placeMode) {
+                              // Block place-mode page tap under this field; reposition after Done.
+                              e.stopPropagation();
+                              return;
+                            }
+                            onFieldPointerDown(e, f);
+                          }}
+                          onClick={(e) => e.stopPropagation()}
                           style={{
                             position: "absolute",
                             left: `${f.xFrac * 100}%`,
@@ -1040,8 +1120,9 @@ export default function Prepare() {
                             padding: "2px 6px",
                             fontSize: 11,
                             color: "var(--primary)",
-                            cursor: isDragging ? "grabbing" : "grab",
+                            cursor: placeMode ? "default" : isDragging ? "grabbing" : "grab",
                             userSelect: "none",
+                            touchAction: placeMode ? "auto" : "none",
                           }}
                         >
                           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
@@ -1050,7 +1131,7 @@ export default function Prepare() {
                             </span>
                             <button
                               aria-label={t("prepare.removeFieldAria")}
-                              onMouseDown={(e) => e.stopPropagation()}
+                              onPointerDown={(e) => e.stopPropagation()}
                               onClick={(e) => {
                                 e.stopPropagation();
                                 removeField(f.id);
@@ -1661,6 +1742,7 @@ export default function Prepare() {
                   onClick={() => {
                     setPdfEditError(null);
                     setPdfEditNotice(null);
+                    setPlaceMode(false);
                     setViewMode("edit");
                   }}
                 >
@@ -1854,25 +1936,48 @@ export default function Prepare() {
                   </option>
                 ))}
               </select>
-              <div
-                onMouseDown={onCreateDragStart}
-                style={{
-                  width: "100%",
-                  textAlign: "center",
-                  padding: "10px 12px",
-                  borderRadius: "var(--r-sm)",
-                  border: "1.5px dashed var(--primary)",
-                  background: "var(--primary-soft)",
-                  color: "var(--primary)",
-                  fontWeight: 600,
-                  fontSize: 14,
-                  cursor: "grab",
-                  userSelect: "none",
-                }}
-              >
-                {t("prepare.dragOntoDoc")}
-              </div>
+              {preferTapPlace ? (
+                placeMode ? (
+                  <button
+                    type="button"
+                    className="btn-secondary"
+                    style={{ width: "100%" }}
+                    onClick={() => setPlaceMode(false)}
+                  >
+                    {t("prepare.donePlacing")}
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="btn-primary"
+                    style={{ width: "100%" }}
+                    onClick={enterPlaceMode}
+                  >
+                    {t("prepare.tapToPlace")}
+                  </button>
+                )
+              ) : (
+                <div
+                  onMouseDown={onCreateDragStart}
+                  style={{
+                    width: "100%",
+                    textAlign: "center",
+                    padding: "10px 12px",
+                    borderRadius: "var(--r-sm)",
+                    border: "1.5px dashed var(--primary)",
+                    background: "var(--primary-soft)",
+                    color: "var(--primary)",
+                    fontWeight: 600,
+                    fontSize: 14,
+                    cursor: "grab",
+                    userSelect: "none",
+                  }}
+                >
+                  {t("prepare.dragOntoDoc")}
+                </div>
+              )}
               <p style={{ fontSize: 11, marginTop: 8, marginBottom: 0 }}>
+                {preferTapPlace && !placeMode ? `${t("prepare.tapPlaceHint")} ` : null}
                 {t("prepare.signerStampHint")}
               </p>
             </div>

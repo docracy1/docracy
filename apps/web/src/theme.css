@@ -900,6 +900,76 @@ select {
   }
 }
 
+/* Mobile / coarse-pointer place mode: keep the PDF on screen and park a Done bar at the bottom
+   so the stacked sidebar doesn't bury the document while tapping fields into place. */
+.prepare-place-banner {
+  display: none;
+}
+
+.prepare-grid--place-mode .prepare-place-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  position: sticky;
+  top: 72px;
+  z-index: 20;
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  background: var(--canvas);
+  border: 1px solid var(--primary);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.prepare-place-banner-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  font-size: 12px;
+  color: var(--body);
+}
+
+.prepare-place-banner-text strong {
+  color: var(--primary);
+  font-size: 13px;
+}
+
+.prepare-grid--place-mode .prepare-pdf-col [data-page-index] {
+  box-shadow: inset 0 0 0 2px var(--primary);
+}
+
+@media (max-width: 860px) {
+  .prepare-grid--place-mode .prepare-sidebar-col {
+    display: none;
+  }
+
+  .prepare-grid--place-mode .prepare-pdf-col {
+    padding-bottom: 72px;
+  }
+
+  .prepare-grid--place-mode .prepare-place-banner {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    padding: 12px 16px;
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  .prepare-grid--place-mode .pdf-zoom-controls {
+    bottom: 80px;
+  }
+}
+
 .prepare-sidebar-heading {
   font-size: 12px;
   font-weight: 700;
@@ -2600,6 +2670,260 @@ select {
   padding: 4px;
 }
 
+/* Post-sign conversion popup — anonymous signer → free account */
+.signer-conv-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 520;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 20%, rgba(47, 126, 216, 0.28), transparent 55%),
+    rgba(16, 34, 56, 0.62);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: signer-conv-fade-in 0.28s var(--ease);
+}
+
+.signer-conv-card {
+  width: min(400px, 100%);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--canvas);
+  box-shadow: 0 24px 64px rgba(16, 34, 56, 0.32), var(--shadow-lg);
+  animation: signer-conv-rise 0.4s var(--ease);
+}
+
+.signer-conv-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 28px 24px 22px;
+  background: linear-gradient(145deg, #2f7ed8 0%, #1f3f68 72%, #16345a 100%);
+  color: var(--hero-ink);
+  overflow: hidden;
+}
+
+.signer-conv-hero-glow {
+  position: absolute;
+  inset: -40% -20% auto;
+  height: 120%;
+  background: radial-gradient(circle at 50% 30%, rgba(141, 192, 240, 0.35), transparent 60%);
+  pointer-events: none;
+}
+
+.signer-conv-seal {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+  animation: signer-conv-seal-in 0.55s var(--ease) 0.08s both;
+}
+
+.signer-conv-check {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(0, 232, 168, 0.18);
+  color: var(--accent);
+  border: 1.5px solid rgba(0, 232, 168, 0.55);
+  animation: signer-conv-check-in 0.5s var(--ease) 0.18s both;
+}
+
+.signer-conv-brand {
+  position: relative;
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.signer-conv-body {
+  padding: 22px 22px 20px;
+  text-align: center;
+}
+
+.signer-conv-headline {
+  margin: 0 0 6px;
+  font-size: clamp(24px, 5vw, 28px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: var(--ink);
+}
+
+.signer-conv-sub {
+  margin: 0 0 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--primary-hover);
+}
+
+.signer-conv-copy {
+  margin: 0 0 18px;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--body);
+}
+
+.signer-conv-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.signer-conv-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--body-strong);
+}
+
+.signer-conv-input {
+  width: 100%;
+}
+
+.signer-conv-error {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--danger);
+}
+
+.signer-conv-cta {
+  margin-top: 4px;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 18px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  background: var(--accent);
+  color: var(--on-accent);
+  transition: background 0.15s var(--ease), transform 0.1s var(--ease);
+}
+
+.signer-conv-cta:hover {
+  background: var(--accent-hover);
+}
+
+.signer-conv-cta:active {
+  transform: translateY(1px);
+}
+
+.signer-conv-dismiss {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  padding: 6px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--mute);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.signer-conv-dismiss:hover {
+  color: var(--body);
+}
+
+@keyframes signer-conv-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes signer-conv-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes signer-conv-seal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes signer-conv-check-in {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 480px) {
+  .signer-conv-backdrop {
+    padding: 12px;
+    align-items: flex-end;
+  }
+
+  .signer-conv-card {
+    width: 100%;
+    border-radius: var(--r-lg) var(--r-lg) 0 0;
+    animation: signer-conv-sheet 0.38s var(--ease);
+  }
+
+  .signer-conv-body {
+    padding: 20px 18px 18px;
+  }
+}
+
+@keyframes signer-conv-sheet {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .signer-conv-backdrop,
+  .signer-conv-card,
+  .signer-conv-seal,
+  .signer-conv-check {
+    animation: none;
+  }
+}
+
 /* Free vs. paid plan comparison table */
 
 .plan-table-scroll {
@@ -2615,11 +2939,16 @@ select {
   .plan-table-scroll {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    margin: 0 -4px;
-    padding-bottom: 4px;
+    overscroll-behavior-x: contain;
+    margin: 0 -16px;
+    padding: 0 16px 8px;
   }
 
-  .plan-table thead th {
+  /* Vertical sticky thead fights horizontal scroll + cramped headers on phones — park the
+     head in normal flow. Match .plan-table-static specificity so th:first-child's sticky-left
+     rule cannot leave only the corner cell floating at top:72px. */
+  .plan-table thead th,
+  .plan-table thead th:first-child {
     position: static;
     top: auto;
     box-shadow: none;
@@ -2634,47 +2963,91 @@ select {
     display: none;
   }
 
+  /* Explicit px columns beat percentage fixed-layout (which was squeezing the table into the
+     viewport on Safari and letting BEST VALUE / Unlimited spill across headers). */
+  .pricing-compare {
+    --pricing-feature-col: 152px;
+    --pricing-plan-col: 112px;
+  }
+
   .plan-table-pricing {
-    min-width: 580px;
+    table-layout: fixed;
+    width: calc(
+      var(--pricing-feature-col) + (var(--pricing-plan-col) * 3)
+    );
+    min-width: calc(
+      var(--pricing-feature-col) + (var(--pricing-plan-col) * 3)
+    );
+    max-width: none;
+  }
+
+  .plan-table-pricing thead th:first-child,
+  .plan-table-pricing tbody td:first-child {
+    width: var(--pricing-feature-col);
+    min-width: var(--pricing-feature-col);
+    max-width: var(--pricing-feature-col);
+    position: sticky;
+    left: 0;
+    z-index: 3;
+    background: var(--canvas);
+    box-shadow: 6px 0 10px -8px rgba(20, 40, 70, 0.35);
+    font-size: 12px;
+    line-height: 1.35;
+    padding: 10px 10px 10px 4px;
+    overflow-wrap: anywhere;
+    hyphens: auto;
+  }
+
+  .plan-table-pricing thead th:first-child {
+    z-index: 4;
+    background: var(--canvas);
+  }
+
+  .plan-table-pricing th:not(:first-child),
+  .plan-table-pricing td:not(:first-child) {
+    width: var(--pricing-plan-col);
+    min-width: var(--pricing-plan-col);
+    max-width: var(--pricing-plan-col);
   }
 
   .plan-table-pricing thead th:not(:first-child) {
-    min-width: 88px;
     font-size: 14px;
     letter-spacing: 0.02em;
-    padding: 10px 6px 12px;
+    padding: 8px 6px 10px;
     vertical-align: bottom;
     white-space: normal;
     line-height: 1.2;
   }
 
   .plan-table-pricing thead th.plan-col-paid {
-    min-width: 96px;
+    min-width: var(--pricing-plan-col);
+  }
+
+  .plan-table-pricing tbody td.plan-col-paid {
+    background: var(--primary-soft);
+  }
+
+  .plan-table-pricing thead th.plan-col-paid {
+    background: var(--primary-soft);
   }
 
   .plan-table-pricing .plan-popular {
     display: block;
     margin: 4px auto 0;
     width: fit-content;
-    max-width: 100%;
+    max-width: calc(100% - 4px);
     font-size: 8px;
-    letter-spacing: 0.03em;
-    padding: 2px 6px;
+    letter-spacing: 0.02em;
+    padding: 2px 5px;
     white-space: nowrap;
-  }
-
-  .plan-table-pricing th:first-child,
-  .plan-table-pricing td:first-child {
-    min-width: 148px;
-    max-width: none;
-    font-size: 12px;
-    line-height: 1.35;
-    padding-right: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .plan-table-pricing .plan-cell-text {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
+    overflow-wrap: anywhere;
   }
 }
 
@@ -2830,13 +3203,20 @@ select {
   width: var(--pricing-plan-col);
 }
 
-.plan-table-pricing thead th {
-  top: 72px;
+/* Desktop only — must not override the mobile thead { top: auto } rules above. */
+@media (min-width: 769px) {
+  .plan-table-pricing thead th {
+    top: 72px;
+  }
 }
 
 .plan-table-pricing thead th.plan-col-paid {
   white-space: normal;
   line-height: 1.25;
+}
+
+.plan-table-pricing .plan-col-heading {
+  display: block;
 }
 
 .plan-table-pricing .plan-popular {
@@ -3028,8 +3408,14 @@ select {
     padding-bottom: calc(280px + env(safe-area-inset-bottom, 0px));
   }
 
+  .pricing-page > .container.pricing-compare {
+    padding-top: 8px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
   .pricing-compare {
-    padding-top: 16px;
+    padding-top: 8px;
   }
 
   .pricing-sticky-bar {
@@ -3124,16 +3510,20 @@ select {
     margin-bottom: 16px;
   }
 
-  /* Keep chat launcher above the fixed pricing bar. */
-  body:has(.pricing-page) .chat-widget,
+  /* Pricing page: hide chat FAB — the fixed plan dock already owns the bottom chrome, and
+     lifting the launcher above cookie+dock parked it mid-table over checkmarks. */
+  body:has(.pricing-page) .chat-widget {
+    display: none;
+  }
+
+  /* Other marketing pages with the mobile pricing dock — sit just above the dock. */
   body:has(.mobile-pricing-dock) .chat-widget {
-    bottom: calc(268px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(208px + env(safe-area-inset-bottom, 0px));
     right: 16px;
   }
 
-  body:has(.cookie-consent-banner):has(.mobile-pricing-dock) .chat-widget,
-  body:has(.cookie-consent-banner):has(.pricing-page) .chat-widget {
-    bottom: calc(388px + env(safe-area-inset-bottom, 0px));
+  body:has(.cookie-consent-banner):has(.mobile-pricing-dock) .chat-widget {
+    bottom: calc(320px + env(safe-area-inset-bottom, 0px));
   }
 
   /* Site-wide mobile dock (marketing pages, logged out) — same stacked rows as /pricing. */

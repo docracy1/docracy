@@ -29,7 +29,7 @@ export default function Pricing() {
                 <th scope="col" className="plan-feature-col" />
                 <th scope="col">{t("pricing.free.name")}</th>
                 <th scope="col" className="plan-col-paid">
-                  {t("pricing.paid.name")}
+                  <span className="plan-col-heading">{t("pricing.paid.name")}</span>
                   <span className="plan-popular">{t("pricing.bestValue")}</span>
                 </th>
                 <th scope="col">{t("pricing.ent.name")}</th>

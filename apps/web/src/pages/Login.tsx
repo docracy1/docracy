@@ -79,9 +79,15 @@ export default function Login() {
   const emailParam = searchParams.get("email") ?? "";
 
   const intent =
-    ref === "prepare-sent" || ref === "status-completed" || ref === "status-pending"
+    ref === "prepare-sent" ||
+    ref === "status-completed" ||
+    ref === "status-pending" ||
+    ref === "signer-completion"
       ? "save-doc"
-      : utmMedium === "preparer-lead" || utmCampaign === "preparer-done" || utmMedium === "completion"
+      : utmMedium === "preparer-lead" ||
+          utmCampaign === "preparer-done" ||
+          utmMedium === "completion" ||
+          utmMedium === "signer"
         ? "save-doc"
         : ref === "prepare-signer-cap" || ref === "prepare-cap" || ref === "prepare-cc-cap"
           ? "upgrade"

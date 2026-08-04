@@ -148,6 +148,7 @@ export default function PdfViewer({ pdfBytes, maxScale = 1.8, renderPageOverlay,
 
       {pages.length > 0 && (
         <div
+          className="pdf-zoom-controls"
           style={{
             position: "sticky",
             bottom: 16,

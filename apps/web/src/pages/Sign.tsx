@@ -2,7 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import PdfViewer from "../components/PdfViewer";
 import SignatureCaptureModal from "../components/SignatureCaptureModal";
-import { apiUrl, declineSign, fetchSignView, submitSignature, unlockSign, uploadSignAttachment } from "../lib/api";
+import SignerConversionPopup from "../components/SignerConversionPopup";
+import { apiUrl, declineSign, fetchMe, fetchSignView, submitSignature, unlockSign, uploadSignAttachment } from "../lib/api";
 import { track } from "../lib/track";
 import { useNoIndex } from "../lib/useNoIndex";
 import type { SignPayload } from "../lib/api";
@@ -86,6 +87,8 @@ export default function Sign({
   const [pinError, setPinError] = useState<string | null>(null);
   const [uploadingAttachment, setUploadingAttachment] = useState(false);
   const [attachmentError, setAttachmentError] = useState<string | null>(null);
+  const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
+  const [conversionDismissed, setConversionDismissed] = useState(false);
   const postTargetOrigin = allowedOrigins?.[0] || "*";
 
   const postEmbed = (type: "ready" | "signed" | "declined" | "error", extra?: { docId?: string }) => {
@@ -124,6 +127,25 @@ export default function Sign({
       return changed ? next : prev;
     });
   }, [payload?.fields]);
+
+  // Conversion popup only for anonymous signers on the public (non-embed, non-white-label) flow.
+  useEffect(() => {
+    if (!done || embedMode || payload?.brandLogoPath) {
+      setLoggedIn(null);
+      return;
+    }
+    let cancelled = false;
+    fetchMe()
+      .then(({ account }) => {
+        if (!cancelled) setLoggedIn(!!account);
+      })
+      .catch(() => {
+        if (!cancelled) setLoggedIn(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [done, embedMode, payload?.brandLogoPath]);
 
   const onUnlock = async () => {
     if (!token || !pinInput.trim()) return;
@@ -306,6 +328,11 @@ export default function Sign({
   }
 
   if (done) {
+    const showConversionPopup =
+      !embedMode && !payload.brandLogoPath && loggedIn === false && !conversionDismissed;
+    const showViralCard =
+      !embedMode && !payload.brandLogoPath && (loggedIn === true || conversionDismissed);
+
     return (
       <div className="container">
         <BrandLogo path={payload.brandLogoPath} slug={payload.brandWorkspaceSlug} />
@@ -324,8 +351,9 @@ export default function Sign({
         {/* The recipient never needed an account to get here — this is the moment they're most
          *  likely to become a sender themselves. Skipped entirely for white-labeled workspaces,
          *  who are paying specifically to keep their signers from seeing Docracy at all. Also
-         *  skipped in embedMode so the iframe stays chrome-less. */}
-        {!embedMode && !payload.brandLogoPath && (
+         *  skipped in embedMode so the iframe stays chrome-less. Logged-in signers get the soft
+         *  viral card instead of the account-creation popup. */}
+        {showViralCard && (
           <div className="card" style={{ marginTop: 24, maxWidth: 420 }}>
             <p style={{ marginBottom: 12 }}>{t("sign.viral")}</p>
             <Link
@@ -337,6 +365,9 @@ export default function Sign({
               {t("sign.sendDoc")}
             </Link>
           </div>
+        )}
+        {showConversionPopup && (
+          <SignerConversionPopup onDismiss={() => setConversionDismissed(true)} />
         )}
       </div>
     );
