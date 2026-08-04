@@ -1,5 +1,5 @@
-import { useEffect, useState, type FormEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import { Link } from "react-router-dom";
 import PricingCalculator from "../components/PricingCalculator";
 import FirstDocumentPrompt from "../components/FirstDocumentPrompt";
 import HowItWorksModal from "../components/HowItWorksModal";
@@ -12,6 +12,8 @@ import { FREE_TEMPLATES } from "../lib/freeTemplates";
 import { HOW_IT_WORKS_VIDEO } from "../lib/howItWorksVideo";
 import { localizePath, useI18n, useT } from "../lib/i18n";
 import { useSeoMeta } from "../lib/useSeoMeta";
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /** Static field-detection mock for the AI spotlight — hero uses the animated ProductFlowDemo. */
 function DetectMockup() {
@@ -209,7 +211,6 @@ const AI_FEATURE_KEYS: Array<{ titleKey: string; bodyKey: string }> = [
 export default function Landing() {
   const t = useT();
   const { locale } = useI18n();
-  const navigate = useNavigate();
   const [heroEmail, setHeroEmail] = useState("");
   const [heroSubmitting, setHeroSubmitting] = useState(false);
   const [heroSent, setHeroSent] = useState(false);
@@ -217,19 +218,23 @@ export default function Landing() {
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [turnstileResetKey, setTurnstileResetKey] = useState(0);
   const [watchOpen, setWatchOpen] = useState(false);
+  const heroEmailRef = useRef<HTMLInputElement>(null);
   useSeoMeta("home");
   const faqItems = FAQ_KEYS.map((item) => ({
     question: t(item.qKey),
     answer: t(item.aKey),
   }));
-  const prepareTo = localizePath("/prepare", locale);
   // Freelance service agreement, not the mutual NDA — most freelancers/SMEs landing on the
   // homepage need to get a client agreement signed, not protect confidential info. NDA stays the
   // default only for outreach personas/short-links that are specifically about that use case.
   const prepareSampleTo = localizePath("/prepare?freeTemplate=freelance-service-agreement", locale);
   const templatesTo = localizePath("/free-templates", locale);
   const emailTrimmed = heroEmail.trim();
-  const heroNeedsTurnstile = !!emailTrimmed && turnstileRequired();
+  // Match Login: mount Turnstile whenever the site key is set so a token is ready before submit.
+  // Keep the button clickable with an empty field so we can show "Email is missing" instead of
+  // silently routing to /prepare (the previous empty-submit path).
+  const needsTurnstile = turnstileRequired();
+  const heroNeedsTurnstileToken = !!emailTrimmed && needsTurnstile;
 
   useEffect(() => {
     if (window.location.hash === "#faq") {
@@ -255,12 +260,26 @@ export default function Landing() {
     }
   };
 
+  const focusHeroEmail = () => {
+    heroEmailRef.current?.focus();
+  };
+
   const onHeroStart = async (e: FormEvent) => {
     e.preventDefault();
     track("landingpage_cta_clicked", { source: "hero_email_start" });
     const email = heroEmail.trim();
     if (!email) {
-      navigate(prepareSampleTo);
+      setHeroError(t("hero.emailMissing"));
+      focusHeroEmail();
+      return;
+    }
+    if (!EMAIL_RE.test(email)) {
+      setHeroError(t("hero.emailInvalid"));
+      focusHeroEmail();
+      return;
+    }
+    if (needsTurnstile && !turnstileToken) {
+      setHeroError(t("hero.turnstileRequired"));
       return;
     }
     setHeroSubmitting(true);
@@ -298,31 +317,41 @@ export default function Landing() {
                   </Link>
                 </div>
               ) : (
-                <form className="hero-signup-form" onSubmit={onHeroStart}>
+                <form className="hero-signup-form" onSubmit={onHeroStart} noValidate>
                   <div className="hero-signup">
                     <input
+                      ref={heroEmailRef}
                       className="hero-signup-input"
                       type="email"
                       name="email"
                       autoComplete="email"
                       placeholder={t("hero.emailPlaceholder")}
                       aria-label={t("hero.emailPlaceholder")}
+                      aria-invalid={!!heroError}
+                      aria-describedby={heroError ? "hero-signup-error" : undefined}
                       value={heroEmail}
-                      onChange={(e) => setHeroEmail(e.target.value)}
+                      onChange={(e) => {
+                        setHeroEmail(e.target.value);
+                        if (heroError) setHeroError(null);
+                      }}
                       disabled={heroSubmitting}
                     />
                     <button
                       type="submit"
                       className="hero-signup-btn"
-                      disabled={heroSubmitting || (heroNeedsTurnstile && !turnstileToken)}
+                      disabled={heroSubmitting || (heroNeedsTurnstileToken && !turnstileToken)}
                     >
                       {heroSubmitting ? t("common.sending") : `${t("hero.startFree")} →`}
                     </button>
                   </div>
-                  {heroNeedsTurnstile && (
+                  {needsTurnstile && (
                     <TurnstileWidget onToken={setTurnstileToken} resetKey={turnstileResetKey} />
                   )}
-                  {heroError && <p className="hero-signup-error">{heroError}</p>}
+                  {heroError && (
+                    <p id="hero-signup-error" className="hero-signup-error" role="alert">
+                      {heroError}
+                    </p>
+                  )}
                 </form>
               )}
               <button
@@ -593,36 +622,6 @@ export default function Landing() {
           ]),
         }}
       />
-
-      <div className="cta-band">
-        <h2 style={{ fontSize: 22, marginBottom: 20 }}>{t("landing.ctaTitle")}</h2>
-        <div className="cta-band-actions">
-          <Link
-            to={prepareSampleTo}
-            className="btn-primary btn-lg"
-            style={{ display: "inline-block", textDecoration: "none" }}
-            onClick={() => track("landingpage_cta_clicked", { source: "final_cta_band_sample" })}
-          >
-            {t("landing.ctaSample")}
-          </Link>
-          <Link
-            to={prepareTo}
-            className="btn-secondary btn-lg"
-            style={{ display: "inline-block", textDecoration: "none" }}
-            onClick={() => track("landingpage_cta_clicked", { source: "final_cta_band" })}
-          >
-            {t("landing.ctaUpload")}
-          </Link>
-          <Link
-            to={templatesTo}
-            className="btn-secondary btn-lg"
-            style={{ display: "inline-block", textDecoration: "none" }}
-            onClick={() => track("landingpage_cta_clicked", { source: "final_cta_band_templates" })}
-          >
-            {t("landing.ctaTemplates")}
-          </Link>
-        </div>
-      </div>
 
       <div className="container">
         <div style={{ marginTop: 40 }}>

@@ -211,11 +211,12 @@ const es: Messages = {
   "hero.b2": "Flujo simple para equipos",
   "hero.b3": "Almacenamiento cifrado con retención corta y automática",
   "hero.b4": "Firmas SES pensadas para respaldar la ESIGN Act, UETA y eIDAS",
-  "hero.ctaSample": "Empieza gratis — prueba un contrato de ejemplo",
-  "hero.ctaUpload": "o sube tu propio PDF",
   "hero.eyebrow": "Firmas en secuencia · Con IA",
   "hero.hint": "Sin tarjeta · te enviamos un enlace gratis para iniciar sesión.",
   "hero.emailPlaceholder": "¿Cuál es tu correo?",
+  "hero.emailMissing": "Falta el correo",
+  "hero.emailInvalid": "Introduce tu correo",
+  "hero.turnstileRequired": "Completa la verificación e inténtalo de nuevo.",
   "hero.startFree": "Empezar gratis",
   "hero.sentTitle": "Revisa tu correo",
   "hero.sentBody":
@@ -266,10 +267,6 @@ const es: Messages = {
   "landing.compareSub":
     "El plan de pago de Docracy es una tarifa fija por espacio de trabajo, no por asiento — agrega tantos compañeros como quieras sin costo extra.",
   "landing.compareTitle": "Cómo se compara Docracy en precio",
-  "landing.ctaSample": "Probar con un NDA de ejemplo",
-  "landing.ctaTemplates": "Explorar plantillas gratis",
-  "landing.ctaTitle": "¿Listo para enviar tu primer documento?",
-  "landing.ctaUpload": "Subir tu PDF",
   "landing.disclaimer":
     "Las firmas SES de Docracy están diseñadas para respaldar la ESIGN Act y UETA de EE. UU. No verificamos identidad — cualquiera con el enlace puede firmar con el nombre indicado. El registro de auditoría prueba qué se firmó y cuándo, no quién lo firmó realmente. Para firmas con identidad verificada, usa un servicio de grado de cumplimiento. Detalles:",
   "landing.disclaimerTrust": "Confianza y seguridad",
