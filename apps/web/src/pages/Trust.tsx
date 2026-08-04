@@ -5,14 +5,14 @@ import { usePageMeta } from "../lib/usePageMeta";
 export default function Trust() {
   usePageMeta(
     "Trust & security — Docracy",
-    "How Docracy protects documents: encryption, retention, audit trails, ESIGN/eIDAS SES alignment, subprocessors, and Cloudflare infrastructure certifications."
+    "How Docracy protects documents: encryption, retention, audit trails, ESIGN Act and UETA alignment for SES e-signatures, eIDAS SES, subprocessors, and Cloudflare infrastructure certifications."
   );
 
   return (
     <div className="container" style={{ maxWidth: 720 }}>
       <h1>Trust &amp; security</h1>
       <p style={{ fontSize: 13, color: "var(--mute)" }}>
-        Last updated 2026-07-29. This page describes how Docracy is built and operated today — not a
+        Last updated 2026-08-04. This page describes how Docracy is built and operated today — not a
         substitute for a SOC 2 report or legal advice. For privacy details see{" "}
         <Link to="/privacy">Privacy</Link>; for processing terms see the <Link to="/dpa">DPA</Link>.
       </p>
@@ -20,8 +20,8 @@ export default function Trust() {
       <h2 style={{ fontSize: 19, marginTop: 28 }}>What Docracy is (and isn't)</h2>
       <p>
         Docracy provides <strong>simple electronic signatures (SES)</strong> with a timestamped audit trail
-        and a certificate of completion. That model aligns with the practical requirements of laws like the
-        US ESIGN Act, UETA, and eIDAS for many low-stakes business documents.
+        and a certificate of completion. That model is designed to support everyday business documents under
+        US and EU e-signature frameworks — see <a href="#esign-ueta">ESIGN &amp; UETA</a> below.
       </p>
       <p>
         Docracy does <strong>not</strong> verify signer identity. Anyone with a signing link can sign as the
@@ -29,6 +29,44 @@ export default function Trust() {
         physically signed. We do not offer advanced or qualified electronic signatures (AES/QES), identity
         verification, or Qualified Trust Service Provider (QTSP) services. For contracts that need
         identity-verified signatures, use a compliance-grade provider.
+      </p>
+
+      <h2 id="esign-ueta" style={{ fontSize: 19, marginTop: 28 }}>
+        ESIGN Act &amp; UETA (United States)
+      </h2>
+      <p>
+        Docracy electronic signatures are <strong>designed to support</strong> the requirements of the U.S.{" "}
+        <em>Electronic Signatures in Global and National Commerce Act</em> (ESIGN) and the{" "}
+        <em>Uniform Electronic Transactions Act</em> (UETA) for SES-style electronic signatures. We use
+        careful “aligned with / designed to support” language — not a certification or legal guarantee that
+        every document type is enforceable in every jurisdiction.
+      </p>
+      <p>
+        Under ESIGN and UETA, electronic signatures are generally given legal effect when the parties
+        consent to do business electronically, intend to sign, and an associated record can be retained and
+        accurately reproduced. Docracy’s signing flow is built around those practical requirements:
+      </p>
+      <ul>
+        <li>
+          <strong>Consent</strong> — signers must check an acknowledgment before completing the signature.
+        </li>
+        <li>
+          <strong>Intent</strong> — clicking “Complete signing” (after applying signature fields) is the
+          signing act recorded in the audit trail.
+        </li>
+        <li>
+          <strong>Record integrity</strong> — per-event timestamps, IP, user-agent, and content hashes;
+          parties receive a signed PDF plus a certificate of completion summarizing the trail.
+        </li>
+      </ul>
+      <p>
+        This is <strong>SES-level</strong> only. Docracy does not provide AES or QES, identity verification,
+        or QTSP services. Suitability for a given agreement depends on document type, industry rules, and
+        jurisdiction — this page is not legal advice.
+      </p>
+      <p style={{ fontSize: 13, color: "var(--mute)" }}>
+        EU note: the same SES model is consistent with eIDAS simple electronic signatures for many
+        low-stakes business documents. We do not claim AES/QES under eIDAS.
       </p>
 
       <h2 style={{ fontSize: 19, marginTop: 28 }}>Encryption &amp; transport</h2>
@@ -157,6 +195,14 @@ export default function Trust() {
         </dd>
         <dt>Do you process PHI / HIPAA?</dt>
         <dd>No. Docracy is not HIPAA-ready and we do not sign BAAs.</dd>
+        <dt>Are signatures ESIGN / UETA compliant?</dt>
+        <dd>
+          Docracy SES workflows are designed to support the U.S. ESIGN Act and UETA for many everyday
+          business documents (consent, intent to sign, retainable audit record). We do not verify identity
+          and do not offer AES/QES. See{" "}
+          <a href="#esign-ueta">ESIGN Act &amp; UETA</a> above — not a substitute for counsel on high-stakes
+          or regulated agreements.
+        </dd>
         <dt>Do you offer a DPA?</dt>
         <dd>
           Yes — see <Link to="/dpa">Data Processing Agreement</Link> for paid / account use. Email{" "}

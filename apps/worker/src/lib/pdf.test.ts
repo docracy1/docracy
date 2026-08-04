@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+import { inflateSync } from "node:zlib";
 import { PDFDocument } from "pdf-lib";
 import {
   burnFields,
@@ -143,11 +144,63 @@ describe("generateCertificate", () => {
     ],
   };
 
+  /**
+   * pdf-lib encodes StandardFonts text as hex `<…>` Tj operands inside FlateDecode streams.
+   * Inflate those streams and decode hex so certificate copy is assertable.
+   */
+  function pdfSearchableText(bytes: Uint8Array): string {
+    const buf = Buffer.from(bytes);
+    const decoded: string[] = [];
+    const streamMarker = Buffer.from("stream");
+    const endMarker = Buffer.from("endstream");
+    let i = 0;
+    while (i < buf.length) {
+      const start = buf.indexOf(streamMarker, i);
+      if (start < 0) break;
+      let dataStart = start + streamMarker.length;
+      if (buf[dataStart] === 0x0d) dataStart++;
+      if (buf[dataStart] === 0x0a) dataStart++;
+      const end = buf.indexOf(endMarker, dataStart);
+      if (end < 0) break;
+      try {
+        const inflated = inflateSync(buf.subarray(dataStart, end)).toString("latin1");
+        for (const m of inflated.matchAll(/<([0-9A-Fa-f]+)>/g)) {
+          decoded.push(Buffer.from(m[1]!, "hex").toString("utf8"));
+        }
+      } catch {
+        /* image / xref streams */
+      }
+      i = end + endMarker.length;
+    }
+    return decoded.join("\n");
+  }
+
   it("produces a loadable single-page PDF", async () => {
     const bytes = await generateCertificate(doc, "bbb");
     const loaded = await PDFDocument.load(bytes);
     expect(loaded.getPageCount()).toBe(1);
     expect(bytes.byteLength).toBeGreaterThan(0);
+  });
+
+  it("embeds honest SES / ESIGN / UETA seals and brand caption, not PDF/A LTV QES AES seals", async () => {
+    const text = pdfSearchableText(await generateCertificate(doc, "bbb"));
+    expect(text).toContain("Signed with Docracy");
+    expect(text).toContain("Certificate of Completion");
+    // Center acronyms + under-seal captions (whole strings); arc letters are one glyph each
+    expect(text).toContain("SES");
+    expect(text).toContain("ESIGN");
+    expect(text).toContain("UETA");
+    expect(text).toContain("eIDAS SES");
+    expect(text).toContain("US ESIGN Act");
+    expect(text).toContain("US UETA");
+    expect(text).toContain("Aligns with eIDAS SES and US ESIGN & UETA");
+    expect(text).toContain("No identity verification");
+    expect(text).toContain("Not AES/QES");
+    expect(text).toContain("Not PDF/A or PAdES-LTV");
+    expect(text).not.toContain("Qualified Electronic Signature");
+    expect(text).not.toContain("Advanced Electronic Signature");
+    expect(text).not.toContain("PDF/A-2");
+    expect(text).not.toContain("PDF/A-3");
   });
 
   it("doesn't throw when the document has no recorded events (older/degraded doc state)", async () => {

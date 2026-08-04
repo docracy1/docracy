@@ -1,4 +1,4 @@
-import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage, type PDFImage } from "pdf-lib";
+import { PDFDocument, StandardFonts, degrees, rgb, type PDFFont, type PDFPage, type PDFImage, type RGB } from "pdf-lib";
 import type { DocField, DocState } from "@docracy/shared";
 import { docracySealPngBytes } from "./docracySealPng";
 
@@ -242,8 +242,78 @@ export async function stampPageFooters(
   return pdfDoc.save();
 }
 
-/** Circular SES level mark — honest simple-electronic-signature badge, not QES/AES. */
-function drawSesBadge(page: PDFPage, cx: number, cy: number, size: number, bold: PDFFont) {
+/**
+ * Draw uppercase text along a circular arc (outward-facing), centered on the top or bottom.
+ * Used for honest law/level seals on the completion certificate — not QES/AES/PDF/A marks.
+ */
+function drawArcText(
+  page: PDFPage,
+  text: string,
+  cx: number,
+  cy: number,
+  radius: number,
+  font: PDFFont,
+  size: number,
+  color: RGB,
+  position: "top" | "bottom"
+) {
+  const chars = [...text.toUpperCase()];
+  if (chars.length === 0) return;
+  const widths = chars.map((ch) => font.widthOfTextAtSize(ch, size));
+  const tracking = size * 0.06;
+  const total = widths.reduce((s, w) => s + w, 0) + tracking * (chars.length - 1);
+  const span = total / radius;
+
+  if (position === "top") {
+    let angle = Math.PI / 2 + span / 2;
+    for (let i = 0; i < chars.length; i++) {
+      const w = widths[i]!;
+      const mid = angle - w / (2 * radius);
+      const x = cx + radius * Math.cos(mid);
+      const y = cy + radius * Math.sin(mid);
+      const tangent = mid - Math.PI / 2;
+      page.drawText(chars[i]!, {
+        x: x - (w / 2) * Math.cos(tangent),
+        y: y - (w / 2) * Math.sin(tangent),
+        size,
+        font,
+        color,
+        rotate: degrees((mid * 180) / Math.PI - 90),
+      });
+      angle -= (w + (i < chars.length - 1 ? tracking : 0)) / radius;
+    }
+  } else {
+    let angle = -Math.PI / 2 - span / 2;
+    for (let i = 0; i < chars.length; i++) {
+      const w = widths[i]!;
+      const mid = angle + w / (2 * radius);
+      const x = cx + radius * Math.cos(mid);
+      const y = cy + radius * Math.sin(mid);
+      const tangent = mid + Math.PI / 2;
+      page.drawText(chars[i]!, {
+        x: x - (w / 2) * Math.cos(tangent),
+        y: y - (w / 2) * Math.sin(tangent),
+        size,
+        font,
+        color,
+        rotate: degrees((mid * 180) / Math.PI + 90),
+      });
+      angle += (w + (i < chars.length - 1 ? tracking : 0)) / radius;
+    }
+  }
+}
+
+/** Circular law/level seal — double ring, center acronym, optional top/bottom arc phrases. */
+function drawCircularSeal(
+  page: PDFPage,
+  cx: number,
+  cy: number,
+  size: number,
+  bold: PDFFont,
+  center: string,
+  topArc: string,
+  bottomArc?: string
+) {
   const r = size / 2;
   page.drawEllipse({
     x: cx,
@@ -261,10 +331,17 @@ function drawSesBadge(page: PDFPage, cx: number, cy: number, size: number, bold:
     borderWidth: 0.8,
     borderColor: BRAND,
   });
-  const label = "SES";
-  const textSize = size * 0.26;
-  const tw = bold.widthOfTextAtSize(label, textSize);
-  page.drawText(label, {
+
+  const arcSize = Math.max(3.6, size * 0.095);
+  const arcRadius = r - 5.2;
+  drawArcText(page, topArc, cx, cy, arcRadius, bold, arcSize, BRAND, "top");
+  if (bottomArc) {
+    drawArcText(page, bottomArc, cx, cy, arcRadius, bold, arcSize, BRAND, "bottom");
+  }
+
+  const textSize = center.length > 4 ? size * 0.2 : size * 0.26;
+  const tw = bold.widthOfTextAtSize(center, textSize);
+  page.drawText(center, {
     x: cx - tw / 2,
     y: cy - textSize * 0.35,
     size: textSize,
@@ -280,7 +357,7 @@ function drawSesBadge(page: PDFPage, cx: number, cy: number, size: number, bold:
  * same, unambiguous bytes. Bounded to one page: the free tier caps signers at 2, so the signer
  * list + event log always fits comfortably on US Letter.
  *
- * Branding is honest SES only — no PDF/A, LTV, QES, or AES seals (those are not implemented).
+ * Honest seals only: Docracy brand + SES + US ESIGN + UETA. No PDF/A, LTV, QES, or AES seals.
  */
 export async function generateCertificate(doc: DocState, finalPdfSha256: string): Promise<Uint8Array> {
   const cert = await PDFDocument.create();
@@ -297,63 +374,61 @@ export async function generateCertificate(doc: DocState, finalPdfSha256: string)
     y -= size + 8;
   };
 
-  // Brand header: Docracy seal + "Signed with Docracy"
-  const headerSeal = 36;
-  const sealScaled = seal.scaleToFit(headerSeal, headerSeal);
-  page.drawImage(seal, {
-    x: left,
-    y: y - sealScaled.height + 8,
-    width: sealScaled.width,
-    height: sealScaled.height,
-  });
-  page.drawText("Signed with Docracy", {
-    x: left + sealScaled.width + 10,
-    y: y - 6,
-    size: 14,
-    font: bold,
-    color: INK,
-  });
-  page.drawText("Certificate of Completion", {
-    x: left + sealScaled.width + 10,
-    y: y - 24,
-    size: 11,
-    font,
-    color: MUTED,
-  });
-  y -= headerSeal + 16;
-
+  write("Certificate of Completion", 16, bold);
   write(`Document ID: ${doc.docId}`, 10, font, MUTED);
   write(`Completed: ${doc.completedAt ? new Date(doc.completedAt).toLocaleString() : "-"}`, 10, font, MUTED);
-  y -= 4;
+  y -= 6;
 
-  // Honest signature-level seal (SES only — competitors may show QES/LTV/PDF/A; we do not).
-  write("Signature level", 13, bold);
-  const badgeSize = 44;
-  const badgeCy = y - badgeSize / 2 + 4;
-  drawSesBadge(page, left + badgeSize / 2, badgeCy, badgeSize, bold);
-  const levelLeft = left + badgeSize + 12;
-  page.drawText("Simple Electronic Signature (SES)", {
-    x: levelLeft,
-    y: badgeCy + 10,
-    size: 10,
-    font: bold,
-    color: INK,
+  // Seal row: Docracy brand + SES + ESIGN + UETA (no PDF/A, LTV, QES, or AES).
+  const badgeSize = 52;
+  const gap = 18;
+  const brandSize = 44;
+  const rowWidth = brandSize + gap + badgeSize * 3 + gap * 2;
+  const rowLeft = left + Math.max(0, (500 - rowWidth) / 2);
+  const badgeCy = y - badgeSize / 2;
+
+  const brandScaled = seal.scaleToFit(brandSize, brandSize);
+  const brandCx = rowLeft + brandSize / 2;
+  page.drawImage(seal, {
+    x: brandCx - brandScaled.width / 2,
+    y: badgeCy - brandScaled.height / 2,
+    width: brandScaled.width,
+    height: brandScaled.height,
   });
-  page.drawText("Aligns with eIDAS SES / US ESIGN & UETA for many business docs.", {
-    x: levelLeft,
-    y: badgeCy - 4,
-    size: 8,
-    font,
-    color: MUTED,
+
+  const lawSeals: { center: string; top: string; bottom?: string }[] = [
+    { center: "SES", top: "Simple Electronic", bottom: "Signature" },
+    { center: "ESIGN", top: "US ESIGN Act" },
+    { center: "UETA", top: "Uniform Electronic", bottom: "Transactions Act" },
+  ];
+  lawSeals.forEach((spec, i) => {
+    const cx = rowLeft + brandSize + gap + badgeSize / 2 + i * (badgeSize + gap);
+    drawCircularSeal(page, cx, badgeCy, badgeSize, bold, spec.center, spec.top, spec.bottom);
   });
-  page.drawText("No identity verification · Not AES/QES · Not PDF/A or PAdES-LTV", {
-    x: levelLeft,
-    y: badgeCy - 16,
-    size: 8,
-    font,
-    color: MUTED,
+
+  // Captions under each seal
+  const captionY = badgeCy - badgeSize / 2 - 12;
+  const captionSize = 6.5;
+  const captions = ["Signed with Docracy", "eIDAS SES", "US ESIGN Act", "US UETA"];
+  const centers = [
+    brandCx,
+    ...lawSeals.map((_, i) => rowLeft + brandSize + gap + badgeSize / 2 + i * (badgeSize + gap)),
+  ];
+  captions.forEach((label, i) => {
+    const tw = font.widthOfTextAtSize(label, captionSize);
+    page.drawText(label, {
+      x: centers[i]! - tw / 2,
+      y: captionY,
+      size: captionSize,
+      font,
+      color: MUTED,
+    });
   });
-  y = badgeCy - badgeSize / 2 - 14;
+
+  y = captionY - 16;
+  write("Aligns with eIDAS SES and US ESIGN & UETA for many business documents.", 8, font, MUTED);
+  write("No identity verification · Not AES/QES · Not PDF/A or PAdES-LTV", 8, font, MUTED);
+  y -= 4;
 
   write("What this certificate records", 13, bold);
   write("HMAC-signed signing links (not guessable account passwords)", 9, font, MUTED);

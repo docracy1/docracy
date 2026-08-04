@@ -207,7 +207,7 @@ const es: Messages = {
   "hero.b1": "Firma de documentos rápida y sin fricción",
   "hero.b2": "Flujo simple para equipos",
   "hero.b3": "Almacenamiento cifrado con retención corta y automática",
-  "hero.b4": "Firmas legalmente vinculantes bajo leyes como ESIGN y eIDAS",
+  "hero.b4": "Firmas SES pensadas para respaldar la ESIGN Act, UETA y eIDAS",
   "hero.ctaSample": "Empieza gratis — prueba un contrato de ejemplo",
   "hero.ctaUpload": "o sube tu propio PDF",
   "hero.eyebrow": "Firmas en secuencia · Con IA",
