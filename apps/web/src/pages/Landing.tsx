@@ -211,7 +211,10 @@ export default function Landing() {
     answer: t(item.aKey),
   }));
   const prepareTo = localizePath("/prepare", locale);
-  const prepareSampleTo = localizePath("/prepare?freeTemplate=mutual-nda", locale);
+  // Freelance service agreement, not the mutual NDA — most freelancers/SMEs landing on the
+  // homepage need to get a client agreement signed, not protect confidential info. NDA stays the
+  // default only for outreach personas/short-links that are specifically about that use case.
+  const prepareSampleTo = localizePath("/prepare?freeTemplate=freelance-service-agreement", locale);
   const templatesTo = localizePath("/free-templates", locale);
 
   useEffect(() => {

@@ -207,7 +207,7 @@ const es: Messages = {
   "hero.b2": "Flujo simple para equipos",
   "hero.b3": "Almacenamiento cifrado con retención corta y automática",
   "hero.b4": "Firmas legalmente vinculantes bajo leyes como ESIGN y eIDAS",
-  "hero.ctaSample": "Empieza gratis — prueba un NDA de ejemplo",
+  "hero.ctaSample": "Empieza gratis — prueba un contrato de ejemplo",
   "hero.ctaUpload": "o sube tu propio PDF",
   "hero.eyebrow": "Gratis · Sin registro · Firmas electrónicas en secuencia",
   "hero.hint": "No necesitas cuenta — envía o firma en unos 30 segundos.",

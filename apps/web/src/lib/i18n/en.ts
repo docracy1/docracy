@@ -21,7 +21,7 @@ const en: Messages = {
   "hero.b2": "Simple workflow setup for teams",
   "hero.b3": "Encrypted storage with short automatic retention",
   "hero.b4": "Legally binding signatures under e-signature laws like ESIGN and eIDAS",
-  "hero.ctaSample": "Start free — try a sample NDA",
+  "hero.ctaSample": "Start free — try a sample agreement",
   "hero.ctaUpload": "or upload your own PDF",
   "hero.hint": "No account needed — send or sign in about 30 seconds.",
   "how.title": "How it works",
