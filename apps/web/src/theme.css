@@ -644,6 +644,7 @@ select {
   text-decoration: none;
   white-space: nowrap;
   flex-shrink: 0;
+  cursor: pointer;
   transition: background 0.15s var(--ease);
 }
 .header-nav-sales:hover {
@@ -1525,15 +1526,76 @@ select {
   margin-top: 8px;
 }
 
+.hero-signup-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  flex: 1 1 320px;
+  max-width: 480px;
+}
+
+.hero-signup-form .turnstile-widget {
+  margin-top: 2px;
+}
+
+.hero-signup-error {
+  margin: 0;
+  font-size: 13px;
+  color: #fecaca;
+}
+
+.hero-signup-sent {
+  flex: 1 1 320px;
+  max-width: 480px;
+  padding: 14px 18px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+
+.hero-signup-sent-title {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.hero-signup-sent-body {
+  margin: 0 0 10px;
+  font-size: 14px;
+  line-height: 1.45;
+  opacity: 0.92;
+}
+
+.hero-signup-sent-continue {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.hero-signup-sent-continue:hover {
+  opacity: 0.88;
+}
+
 .hero-signup {
   display: flex;
   align-items: stretch;
-  flex: 1 1 320px;
-  max-width: 480px;
+  width: 100%;
   border-radius: 999px;
   overflow: hidden;
   background: #ffffff;
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
+}
+
+.hero-signup-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.turnstile-widget {
+  margin-bottom: 12px;
 }
 
 .hero-signup-input {
@@ -1693,6 +1755,12 @@ select {
     flex-direction: column;
     align-items: stretch;
     gap: 14px;
+  }
+
+  .hero-signup-form {
+    flex: 0 0 auto;
+    max-width: none;
+    width: 100%;
   }
 
   /* flex-basis: 320px is width on desktop; on column flex it became ~320px HEIGHT and

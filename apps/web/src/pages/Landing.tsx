@@ -5,6 +5,8 @@ import FirstDocumentPrompt from "../components/FirstDocumentPrompt";
 import HowItWorksModal from "../components/HowItWorksModal";
 import IntegrationsBand from "../components/IntegrationsBand";
 import ProductFlowDemo from "../components/ProductFlowDemo";
+import TurnstileWidget, { turnstileRequired } from "../components/TurnstileWidget";
+import { requestMagicLink } from "../lib/api";
 import { track } from "../lib/track";
 import { FREE_TEMPLATES } from "../lib/freeTemplates";
 import { HOW_IT_WORKS_VIDEO } from "../lib/howItWorksVideo";
@@ -209,6 +211,11 @@ export default function Landing() {
   const { locale } = useI18n();
   const navigate = useNavigate();
   const [heroEmail, setHeroEmail] = useState("");
+  const [heroSubmitting, setHeroSubmitting] = useState(false);
+  const [heroSent, setHeroSent] = useState(false);
+  const [heroError, setHeroError] = useState<string | null>(null);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [turnstileResetKey, setTurnstileResetKey] = useState(0);
   const [watchOpen, setWatchOpen] = useState(false);
   useSeoMeta("home");
   const faqItems = FAQ_KEYS.map((item) => ({
@@ -221,6 +228,8 @@ export default function Landing() {
   // default only for outreach personas/short-links that are specifically about that use case.
   const prepareSampleTo = localizePath("/prepare?freeTemplate=freelance-service-agreement", locale);
   const templatesTo = localizePath("/free-templates", locale);
+  const emailTrimmed = heroEmail.trim();
+  const heroNeedsTurnstile = !!emailTrimmed && turnstileRequired();
 
   useEffect(() => {
     if (window.location.hash === "#faq") {
@@ -246,16 +255,26 @@ export default function Landing() {
     }
   };
 
-  const onHeroStart = (e: FormEvent) => {
+  const onHeroStart = async (e: FormEvent) => {
     e.preventDefault();
     track("landingpage_cta_clicked", { source: "hero_email_start" });
     const email = heroEmail.trim();
-    if (email) {
-      const next = encodeURIComponent(prepareSampleTo);
-      navigate(`/login?email=${encodeURIComponent(email)}&next=${next}`);
+    if (!email) {
+      navigate(prepareSampleTo);
       return;
     }
-    navigate(prepareSampleTo);
+    setHeroSubmitting(true);
+    setHeroError(null);
+    try {
+      await requestMagicLink(email, turnstileToken ?? undefined, prepareSampleTo, locale);
+      setHeroSent(true);
+    } catch (err) {
+      setHeroError(err instanceof Error ? err.message : t("common.error"));
+      setTurnstileToken(null);
+      setTurnstileResetKey((k) => k + 1);
+    } finally {
+      setHeroSubmitting(false);
+    }
   };
 
   return (
@@ -266,21 +285,46 @@ export default function Landing() {
             <h1>{t("hero.title")}</h1>
             <p className="hero-sub">{t("hero.sub")}</p>
             <div className="hero-cta-row">
-              <form className="hero-signup" onSubmit={onHeroStart}>
-                <input
-                  className="hero-signup-input"
-                  type="email"
-                  name="email"
-                  autoComplete="email"
-                  placeholder={t("hero.emailPlaceholder")}
-                  aria-label={t("hero.emailPlaceholder")}
-                  value={heroEmail}
-                  onChange={(e) => setHeroEmail(e.target.value)}
-                />
-                <button type="submit" className="hero-signup-btn">
-                  {t("hero.startFree")} →
-                </button>
-              </form>
+              {heroSent ? (
+                <div className="hero-signup-sent" role="status">
+                  <p className="hero-signup-sent-title">{t("hero.sentTitle")}</p>
+                  <p className="hero-signup-sent-body">{t("hero.sentBody", { email: emailTrimmed })}</p>
+                  <Link
+                    to={prepareSampleTo}
+                    className="hero-signup-sent-continue"
+                    onClick={() => track("landingpage_cta_clicked", { source: "hero_continue_prepare" })}
+                  >
+                    {t("hero.continuePrepare")} →
+                  </Link>
+                </div>
+              ) : (
+                <form className="hero-signup-form" onSubmit={onHeroStart}>
+                  <div className="hero-signup">
+                    <input
+                      className="hero-signup-input"
+                      type="email"
+                      name="email"
+                      autoComplete="email"
+                      placeholder={t("hero.emailPlaceholder")}
+                      aria-label={t("hero.emailPlaceholder")}
+                      value={heroEmail}
+                      onChange={(e) => setHeroEmail(e.target.value)}
+                      disabled={heroSubmitting}
+                    />
+                    <button
+                      type="submit"
+                      className="hero-signup-btn"
+                      disabled={heroSubmitting || (heroNeedsTurnstile && !turnstileToken)}
+                    >
+                      {heroSubmitting ? t("common.sending") : `${t("hero.startFree")} →`}
+                    </button>
+                  </div>
+                  {heroNeedsTurnstile && (
+                    <TurnstileWidget onToken={setTurnstileToken} resetKey={turnstileResetKey} />
+                  )}
+                  {heroError && <p className="hero-signup-error">{heroError}</p>}
+                </form>
+              )}
               <button
                 type="button"
                 className="hero-watch-btn"
@@ -302,7 +346,7 @@ export default function Landing() {
                 {t("hero.watchHow")}
               </button>
             </div>
-            <p className="hero-cta-hint">{t("hero.hint")}</p>
+            {!heroSent && <p className="hero-cta-hint">{t("hero.hint")}</p>}
             <p className="hero-secondary-link">
               <Link
                 to={templatesTo}

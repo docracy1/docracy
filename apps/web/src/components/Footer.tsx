@@ -29,7 +29,10 @@ export default function Footer() {
           { label: t("footer.allComparisons"), to: "/blog" },
         ];
 
-  const columns: Array<{ heading: string; links: Array<{ label: string; to: string; external?: boolean }> }> = [
+  const columns: Array<{
+    heading: string;
+    links: Array<{ label: string; to: string; external?: boolean; openSalesChat?: boolean }>;
+  }> = [
     {
       heading: t("footer.product"),
       links: [
@@ -53,7 +56,12 @@ export default function Footer() {
         { label: t("footer.roadmap"), to: "/roadmap" },
         { label: t("footer.status"), to: "/uptime" },
         { label: t("footer.imprint"), to: "/imprint" },
-        { label: t("footer.contactSales"), to: "mailto:sales@docracy.io?subject=Docracy%20inquiry", external: true },
+        {
+          label: t("footer.contactSales"),
+          to: "mailto:sales@docracy.io?subject=Docracy%20inquiry",
+          external: true,
+          openSalesChat: true,
+        },
         { label: t("footer.github"), to: "https://github.com/docracy1/docracy-templates", external: true },
       ],
     },
@@ -85,6 +93,14 @@ export default function Footer() {
                 <a
                   key={link.label}
                   href={link.to}
+                  onClick={
+                    link.openSalesChat
+                      ? () =>
+                          window.dispatchEvent(
+                            new CustomEvent("docracy:open-chat", { detail: { intent: "sales" } })
+                          )
+                      : undefined
+                  }
                   {...(link.to.startsWith("http")
                     ? { target: "_blank", rel: "noopener noreferrer" }
                     : {})}

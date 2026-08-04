@@ -6,6 +6,14 @@ import LanguageSwitcher from "./LanguageSwitcher";
 import NavMegaMenu from "./NavMegaMenu";
 import { NavIcon } from "./NavIcons";
 
+/** Real <a href> — never React Router <Link>, which treats mailto as an SPA path. */
+const SALES_MAILTO = "mailto:sales@docracy.io?subject=Docracy%20inquiry";
+
+/** Open the chat widget's sales form as a visible fallback when no mail client is configured. */
+function openSalesChat() {
+  window.dispatchEvent(new CustomEvent("docracy:open-chat", { detail: { intent: "sales" } }));
+}
+
 /** Real features only — mirrors Landing.tsx's CORE_FEATURES, not a wishlist. */
 const FEATURE_ITEMS = [
   { to: "/prepare", icon: "send", titleKey: "nav.mega.feature.send.title", descKey: "nav.mega.feature.send.desc" },
@@ -37,7 +45,7 @@ const RESOURCE_ITEMS = [
   { to: "/blog", icon: "book", titleKey: "nav.mega.resource.blog.title", descKey: "nav.mega.resource.blog.desc" },
   { to: "/docs", icon: "lifering", titleKey: "nav.mega.resource.docs.title", descKey: "nav.mega.resource.docs.desc" },
   { to: "/about", icon: "info", titleKey: "nav.mega.resource.about.title", descKey: "nav.mega.resource.about.desc" },
-  { to: "mailto:sales@docracy.io?subject=Docracy%20inquiry", icon: "mail", titleKey: "nav.mega.resource.contact.title", descKey: "nav.mega.resource.contact.desc" },
+  { to: SALES_MAILTO, icon: "mail", titleKey: "nav.mega.resource.contact.title", descKey: "nav.mega.resource.contact.desc" },
 ] as const;
 
 export default function Header() {
@@ -178,9 +186,10 @@ export default function Header() {
           <LanguageSwitcher className="lang-switcher-on-dark header-templates-link" />
           <div className="header-cta-group">
             <a
-              href="mailto:sales@docracy.io?subject=Docracy%20inquiry"
+              href={SALES_MAILTO}
               className="header-nav-sales header-templates-link"
               title="sales@docracy.io"
+              onClick={openSalesChat}
             >
               {t("nav.contactSales")}
             </a>
@@ -257,7 +266,10 @@ export default function Header() {
                     key={r.to}
                     href={r.to}
                     className="header-mobile-accordion-sublink"
-                    onClick={() => setMenuOpen(false)}
+                    onClick={() => {
+                      setMenuOpen(false);
+                      if (r.to.startsWith("mailto:")) openSalesChat();
+                    }}
                   >
                     {r.title}
                   </a>
@@ -285,9 +297,12 @@ export default function Header() {
         </div>
         <div className="header-mobile-ctas">
           <a
-            href="mailto:sales@docracy.io?subject=Docracy%20inquiry"
+            href={SALES_MAILTO}
             className="header-mobile-cta-secondary"
-            onClick={() => setMenuOpen(false)}
+            onClick={() => {
+              setMenuOpen(false);
+              openSalesChat();
+            }}
           >
             {t("nav.contactSales")}
           </a>

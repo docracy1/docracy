@@ -33,7 +33,11 @@ await build({
   logLevel: "warning",
   // Vite normally supplies import.meta.env.* at build time; a raw esbuild→CJS bundle doesn't, so
   // this stands in for it — matches the real production build's behavior (VITE_API_URL unset).
-  define: { "import.meta.env.VITE_API_URL": '""' },
+  // Landing now mounts TurnstileWidget; leave the site key empty so prerender skips the widget.
+  define: {
+    "import.meta.env.VITE_API_URL": '""',
+    "import.meta.env.VITE_TURNSTILE_SITE_KEY": '""',
+  },
   // TemplateThumbnail dynamically imports lib/pdfjs.ts (only from a useEffect, which never fires
   // during this static render) purely so pdfjs-dist's `?url` worker asset — a Vite-only import
   // form plain esbuild can't resolve — never has to be bundled here. Externalizing leaves the

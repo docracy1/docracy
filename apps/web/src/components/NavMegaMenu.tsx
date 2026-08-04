@@ -42,7 +42,13 @@ function MegaLink({
       <a
         href={to}
         className={className}
-        onClick={onClick}
+        onClick={() => {
+          onClick?.();
+          // mailto often no-ops with no mail client — also open the in-app sales chat.
+          if (to.startsWith("mailto:")) {
+            window.dispatchEvent(new CustomEvent("docracy:open-chat", { detail: { intent: "sales" } }));
+          }
+        }}
         rel={to.startsWith("http") ? "noopener noreferrer" : undefined}
       >
         {children}

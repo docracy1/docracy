@@ -137,7 +137,7 @@ export default function Prepare() {
   const [isDraggingUpload, setIsDraggingUpload] = useState(false);
   const [draggingFieldId, setDraggingFieldId] = useState<string | null>(null);
   const [creatingDrag, setCreatingDrag] = useState<{ x: number; y: number; overPage: boolean } | null>(null);
-  /** Mobile / coarse-pointer: select field type, then tap the PDF (drag doesn't work on phones). */
+  /** Mobile / coarse-pointer: Place field → tap PDF to drop; placed fields stay finger-draggable. */
   const [preferTapPlace, setPreferTapPlace] = useState(false);
   const [placeMode, setPlaceMode] = useState(false);
   /** Swipesign-style: setup lives in a sheet; document stays full-bleed when sheet is hidden. */
@@ -206,7 +206,7 @@ export default function Prepare() {
   }, [t]);
 
   // Match prepare-grid's 860px stack breakpoint, plus any coarse pointer (phones / many tablets)
-  // so the Fields card never shows a drag affordance that touch can't complete.
+  // so create-from-sidebar uses Place field + tap instead of chip drag (reposition still uses touch).
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 860px), (pointer: coarse)");
     const sync = () => setPreferTapPlace(mq.matches);
@@ -487,6 +487,14 @@ export default function Prepare() {
 
   const hideSetup = () => {
     setSetupOpen(false);
+  };
+
+  const toggleSetup = () => {
+    if (setupOpen) {
+      hideSetup();
+      return;
+    }
+    openSetup();
   };
 
   useEffect(() => {
@@ -786,12 +794,18 @@ export default function Prepare() {
     hFrac: number;
   } | null>(null);
 
-  /** Pointer-based so fields can be repositioned on touch as well as mouse. */
+  /** Pointer-based so fields can be repositioned on touch as well as mouse (incl. during place mode). */
   const onFieldPointerDown = (e: React.PointerEvent<HTMLDivElement>, field: DocField) => {
     if (e.pointerType === "mouse" && e.button !== 0) return;
     e.preventDefault();
     e.stopPropagation();
-    const pageEl = e.currentTarget.offsetParent as HTMLElement;
+    const target = e.currentTarget;
+    const pageEl = target.offsetParent as HTMLElement;
+    try {
+      target.setPointerCapture(e.pointerId);
+    } catch {
+      /* capture optional — window listeners still work */
+    }
     dragState.current = {
       id: field.id,
       startClientX: e.clientX,
@@ -805,6 +819,7 @@ export default function Prepare() {
     setDraggingFieldId(field.id);
 
     const onMove = (moveEvent: PointerEvent) => {
+      if (moveEvent.pointerId !== e.pointerId) return;
       const drag = dragState.current;
       if (!drag) return;
       const dxFrac = (moveEvent.clientX - drag.startClientX) / drag.pageRect.width;
@@ -813,9 +828,15 @@ export default function Prepare() {
       const yFrac = Math.min(Math.max(drag.startYFrac + dyFrac, 0), 1 - drag.hFrac);
       updateField(drag.id, { xFrac, yFrac });
     };
-    const onUp = () => {
+    const onUp = (upEvent: PointerEvent) => {
+      if (upEvent.pointerId !== e.pointerId) return;
       dragState.current = null;
       setDraggingFieldId(null);
+      try {
+        if (target.hasPointerCapture(e.pointerId)) target.releasePointerCapture(e.pointerId);
+      } catch {
+        /* ignore */
+      }
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerup", onUp);
       window.removeEventListener("pointercancel", onUp);
@@ -1144,11 +1165,8 @@ export default function Prepare() {
                         <div
                           key={f.id}
                           onPointerDown={(e) => {
-                            if (placeMode) {
-                              // Block place-mode page tap under this field; reposition after Done.
-                              e.stopPropagation();
-                              return;
-                            }
+                            // Always reposition by drag (incl. place mode / mobile). stopPropagation
+                            // so the page tap-to-place handler does not fire under the field.
                             onFieldPointerDown(e, f);
                           }}
                           onClick={(e) => e.stopPropagation()}
@@ -1172,9 +1190,9 @@ export default function Prepare() {
                             padding: "2px 6px",
                             fontSize: 11,
                             color: "var(--primary)",
-                            cursor: placeMode ? "default" : isDragging ? "grabbing" : "grab",
+                            cursor: isDragging ? "grabbing" : "grab",
                             userSelect: "none",
-                            touchAction: placeMode ? "auto" : "none",
+                            touchAction: "none",
                           }}
                         >
                           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
@@ -2195,8 +2213,14 @@ export default function Prepare() {
 
           {preferTapPlace && (
             <div className="prepare-mobile-dock" role="toolbar" aria-label={t("prepare.setup")}>
-              <button type="button" className="prepare-mobile-dock-setup" onClick={openSetup}>
-                <span>{t("prepare.setup")}</span>
+              <button
+                type="button"
+                className="prepare-mobile-dock-setup"
+                aria-expanded={setupOpen}
+                aria-controls="prepare-setup-sheet"
+                onClick={toggleSetup}
+              >
+                <span>{setupOpen ? t("prepare.hideSetup") : t("prepare.setup")}</span>
                 <span className="prepare-mobile-dock-badge" aria-label={t("prepare.fieldsPlaced")}>
                   {fields.length}
                 </span>

@@ -27,10 +27,26 @@ export default function ChatWidget() {
   }, [t]);
 
   useEffect(() => {
-    const onOpenRequest = () => setOpen(true);
+    const onOpenRequest = (e: Event) => {
+      setOpen(true);
+      const intent = (e as CustomEvent<{ intent?: string }>).detail?.intent;
+      if (intent === "sales") {
+        setMessages([
+          { from: "bot", text: t("chat.greeting") },
+          { from: "user", text: t("chat.sales") },
+          {
+            from: "bot",
+            text: t("chat.salesReply"),
+            href: "mailto:sales@docracy.io?subject=Docracy%20inquiry",
+            hrefLabel: "sales@docracy.io",
+          },
+        ]);
+        setShowForm(true);
+      }
+    };
     window.addEventListener("docracy:open-chat", onOpenRequest);
     return () => window.removeEventListener("docracy:open-chat", onOpenRequest);
-  }, []);
+  }, [t]);
 
   if (location.pathname.startsWith("/sign/") || location.pathname.startsWith("/status/")) return null;
 
@@ -46,10 +62,12 @@ export default function ChatWidget() {
     };
     say("user", labels[kind]);
     if (kind === "sales") {
+      // mailto alone often does nothing without a configured mail client — also show the form.
       say("bot", t("chat.salesReply"), {
-        href: "mailto:sales@docracy.io",
+        href: "mailto:sales@docracy.io?subject=Docracy%20inquiry",
         hrefLabel: "sales@docracy.io",
       });
+      setShowForm(true);
     } else if (kind === "joke") {
       say("bot", JOKES[Math.floor(Math.random() * JOKES.length)]);
     } else {
