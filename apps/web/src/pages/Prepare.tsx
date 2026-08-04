@@ -140,6 +140,8 @@ export default function Prepare() {
   /** Mobile / coarse-pointer: select field type, then tap the PDF (drag doesn't work on phones). */
   const [preferTapPlace, setPreferTapPlace] = useState(false);
   const [placeMode, setPlaceMode] = useState(false);
+  /** Swipesign-style: setup lives in a sheet; document stays full-bleed when sheet is hidden. */
+  const [setupOpen, setSetupOpen] = useState(true);
   const pdfColRef = useRef<HTMLDivElement>(null);
 
   // PDF editing (reorder/delete pages, redact, insert text) — a separate mode from field
@@ -214,13 +216,20 @@ export default function Prepare() {
   }, []);
 
   useEffect(() => {
-    if (!placeMode) return;
+    if (!placeMode && !setupOpen) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setPlaceMode(false);
+      if (e.key !== "Escape") return;
+      if (placeMode) setPlaceMode(false);
+      else if (preferTapPlace && setupOpen) setSetupOpen(false);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [placeMode]);
+  }, [placeMode, setupOpen, preferTapPlace]);
+
+  // Open setup when a PDF first lands on mobile so signers can be filled without hunting for UI.
+  useEffect(() => {
+    if (pdfBytes && preferTapPlace) setSetupOpen(true);
+  }, [pdfBytes, preferTapPlace]);
 
   // Only used to gate the (paid-only) template UI — anonymous/free usage of this page is
   // otherwise completely unaffected by this call.
@@ -465,9 +474,19 @@ export default function Prepare() {
 
   const enterPlaceMode = () => {
     setPlaceMode(true);
+    if (preferTapPlace) setSetupOpen(false);
     requestAnimationFrame(() => {
       pdfColRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
+  };
+
+  const openSetup = () => {
+    setPlaceMode(false);
+    setSetupOpen(true);
+  };
+
+  const hideSetup = () => {
+    setSetupOpen(false);
   };
 
   useEffect(() => {
@@ -1056,9 +1075,42 @@ export default function Prepare() {
     </div>
 
     {pdfBytes && (
-        <div className={`prepare-grid${placeMode ? " prepare-grid--place-mode" : ""}`}>
+        <div
+          className={[
+            "prepare-grid",
+            preferTapPlace ? "prepare-grid--mobile" : "",
+            placeMode ? "prepare-grid--place-mode" : "",
+            preferTapPlace && setupOpen ? "prepare-grid--setup-open" : "",
+          ]
+            .filter(Boolean)
+            .join(" ")}
+        >
           <div className="prepare-pdf-col" ref={pdfColRef}>
-            {placeMode && (
+            {preferTapPlace && placeMode && (
+              <div className="prepare-place-tip" role="status">
+                <div className="prepare-place-tip-text">
+                  <strong>
+                    {t("prepare.placeModeBanner", {
+                      type: t(FIELD_TYPE_NAME_KEYS[placingFieldType]),
+                      signer: signerLabel(placingSignerOrder),
+                    })}
+                  </strong>
+                  <span>{t("prepare.placeModeHint")}</span>
+                </div>
+                <button type="button" className="btn-secondary prepare-place-done-btn" onClick={openSetup}>
+                  {t("prepare.setup")}
+                </button>
+              </div>
+            )}
+            {preferTapPlace && !placeMode && !setupOpen && (
+              <div className="prepare-place-tip prepare-place-tip--idle" role="note">
+                <span>{t("prepare.mobilePlaceInstruction")}</span>
+                <button type="button" className="btn-secondary prepare-place-done-btn" onClick={openSetup}>
+                  {t("prepare.setup")}
+                </button>
+              </div>
+            )}
+            {!preferTapPlace && placeMode && (
               <div className="prepare-place-banner" role="status">
                 <div className="prepare-place-banner-text">
                   <strong>
@@ -1401,7 +1453,22 @@ export default function Prepare() {
             />
           </div>
 
-          <div className="prepare-sidebar-col">
+          <div className="prepare-sidebar-col" id="prepare-setup-sheet">
+            {preferTapPlace && (
+              <div className="prepare-setup-sheet-header">
+                <div className="prepare-setup-sheet-title-row">
+                  <h2 className="prepare-setup-sheet-title">{t("prepare.setup")}</h2>
+                  {(fields.length > 0 || signers.length > 0) && (
+                    <span className="prepare-setup-sheet-badge" aria-hidden>
+                      {fields.length > 0 ? fields.length : signers.length}
+                    </span>
+                  )}
+                </div>
+                <button type="button" className="btn-secondary prepare-hide-setup-btn" onClick={hideSetup}>
+                  {t("prepare.hideSetup")}
+                </button>
+              </div>
+            )}
             <div className="prepare-sidebar-topbar">
               <span className="prepare-sidebar-filename" title={file?.name}>
                 {file?.name ?? t("prepare.untitled")}
@@ -1410,15 +1477,17 @@ export default function Prepare() {
                 <button type="button" className="prepare-start-over-btn" aria-label={t("prepare.startOver")} onClick={onStartOver}>
                   ×
                 </button>
-                <button
-                  type="button"
-                  className="btn-primary"
-                  style={{ padding: "6px 16px", fontSize: 13 }}
-                  disabled={!canSubmit || submitting}
-                  onClick={onSubmit}
-                >
-                  {submitting ? t("common.sending") : t("prepare.send")}
-                </button>
+                {!preferTapPlace && (
+                  <button
+                    type="button"
+                    className="btn-primary"
+                    style={{ padding: "6px 16px", fontSize: 13 }}
+                    disabled={!canSubmit || submitting}
+                    onClick={onSubmit}
+                  >
+                    {submitting ? t("common.sending") : t("prepare.send")}
+                  </button>
+                )}
               </div>
             </div>
             {error && (
@@ -1937,25 +2006,18 @@ export default function Prepare() {
                 ))}
               </select>
               {preferTapPlace ? (
-                placeMode ? (
-                  <button
-                    type="button"
-                    className="btn-secondary"
-                    style={{ width: "100%" }}
-                    onClick={() => setPlaceMode(false)}
-                  >
-                    {t("prepare.donePlacing")}
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    className="btn-primary"
-                    style={{ width: "100%" }}
-                    onClick={enterPlaceMode}
-                  >
-                    {t("prepare.tapToPlace")}
-                  </button>
-                )
+                <div className="prepare-mobile-place-block">
+                  <p className="prepare-mobile-place-instruction">{t("prepare.mobilePlaceInstruction")}</p>
+                  {placeMode ? (
+                    <button type="button" className="btn-secondary" style={{ width: "100%" }} onClick={hideSetup}>
+                      {t("prepare.hideSetup")}
+                    </button>
+                  ) : (
+                    <button type="button" className="btn-primary" style={{ width: "100%" }} onClick={enterPlaceMode}>
+                      {t("prepare.placeFieldCta", { type: t(FIELD_TYPE_NAME_KEYS[placingFieldType]) })}
+                    </button>
+                  )}
+                </div>
               ) : (
                 <div
                   onMouseDown={onCreateDragStart}
@@ -1977,7 +2039,6 @@ export default function Prepare() {
                 </div>
               )}
               <p style={{ fontSize: 11, marginTop: 8, marginBottom: 0 }}>
-                {preferTapPlace && !placeMode ? `${t("prepare.tapPlaceHint")} ` : null}
                 {t("prepare.signerStampHint")}
               </p>
             </div>
@@ -2122,6 +2183,34 @@ export default function Prepare() {
               <img src="/docracy-wordmark.png" alt="Docracy" style={{ height: 14, width: "auto", opacity: 0.6 }} />
             </div>
           </div>
+
+          {preferTapPlace && setupOpen && (
+            <button
+              type="button"
+              className="prepare-setup-backdrop"
+              aria-label={t("prepare.hideSetup")}
+              onClick={hideSetup}
+            />
+          )}
+
+          {preferTapPlace && (
+            <div className="prepare-mobile-dock" role="toolbar" aria-label={t("prepare.setup")}>
+              <button type="button" className="prepare-mobile-dock-setup" onClick={openSetup}>
+                <span>{t("prepare.setup")}</span>
+                <span className="prepare-mobile-dock-badge" aria-label={t("prepare.fieldsPlaced")}>
+                  {fields.length}
+                </span>
+              </button>
+              <button
+                type="button"
+                className="btn-primary prepare-mobile-dock-send"
+                disabled={!canSubmit || submitting}
+                onClick={onSubmit}
+              >
+                {submitting ? t("common.sending") : t("prepare.send")}
+              </button>
+            </div>
+          )}
         </div>
       )}
 

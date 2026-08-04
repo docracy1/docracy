@@ -1,9 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { fetchMe } from "../lib/api";
-import { PLAN_ROWS, PlanCell } from "../lib/planRows";
+import { PLAN_ROWS, PlanCell, type PlanValue } from "../lib/planRows";
 import { localizePath, useI18n, useT } from "../lib/i18n";
 import { useSeoMeta } from "../lib/useSeoMeta";
+
+type PlanId = "free" | "paid" | "enterprise";
+
+function planValue(row: (typeof PLAN_ROWS)[number], plan: PlanId): PlanValue {
+  if (plan === "free") return row.free;
+  if (plan === "paid") return row.paid;
+  return row.enterprise ?? row.paid;
+}
 
 export default function Pricing() {
   const t = useT();
@@ -12,6 +20,8 @@ export default function Pricing() {
 
   /** null = logged out (show sticky dock); undefined = loading; Account = signed in (hide dock). */
   const [signedOut, setSignedOut] = useState<boolean | null>(null);
+  /** Mobile accordion: Paid open by default (best value). */
+  const [openPlan, setOpenPlan] = useState<PlanId | null>("paid");
 
   useEffect(() => {
     fetchMe()
@@ -19,10 +29,53 @@ export default function Pricing() {
       .catch(() => setSignedOut(true));
   }, []);
 
+  const mobilePlans: Array<{
+    id: PlanId;
+    nameKey: string;
+    price: string;
+    note: string;
+    cta: ReactNode;
+  }> = [
+    {
+      id: "free",
+      nameKey: "pricing.free.name",
+      price: "$0",
+      note: t("pricing.free.note"),
+      cta: (
+        <Link to={localizePath("/prepare", locale)} className="btn-secondary pricing-mobile-cta">
+          {t("pricing.free.cta")}
+        </Link>
+      ),
+    },
+    {
+      id: "paid",
+      nameKey: "pricing.paid.name",
+      price: "$10",
+      note: t("pricing.paid.note"),
+      cta: (
+        <Link to="/login" className="btn-primary pricing-mobile-cta">
+          {t("pricing.paid.ctaGet")}
+        </Link>
+      ),
+    },
+    {
+      id: "enterprise",
+      nameKey: "pricing.ent.name",
+      price: t("pricing.ent.price"),
+      note: "sales@docracy.io",
+      cta: (
+        <a href="mailto:sales@docracy.io" className="btn-secondary pricing-mobile-cta">
+          {t("pricing.ent.cta")}
+        </a>
+      ),
+    },
+  ];
+
   return (
     <div className="pricing-page">
       <div className="container pricing-compare">
-        <div className="plan-table-scroll">
+        {/* Desktop: multi-column comparison table */}
+        <div className="plan-table-scroll pricing-desktop-table">
           <table className="plan-table plan-table-pricing">
             <thead>
               <tr>
@@ -54,9 +107,90 @@ export default function Pricing() {
           </table>
         </div>
 
-        {/* Sticky prices for logged-out visitors only — signed-in users don't need the dock. */}
+        {/* Mobile: accordion per plan — full feature text, no squeezed table */}
+        <div className="pricing-mobile-compare" aria-label={t("pricing.compareTitle")}>
+          <h1 className="pricing-mobile-title">{t("pricing.compareTitle")}</h1>
+          <div className="pricing-mobile-plans">
+            {mobilePlans.map((plan) => {
+              const isOpen = openPlan === plan.id;
+              const panelId = `pricing-mobile-panel-${plan.id}`;
+              return (
+                <section
+                  key={plan.id}
+                  className={`pricing-mobile-card${plan.id === "paid" ? " is-paid" : ""}${isOpen ? " is-open" : ""}`}
+                >
+                  <button
+                    type="button"
+                    className="pricing-mobile-card-toggle"
+                    aria-expanded={isOpen}
+                    aria-controls={panelId}
+                    onClick={() => setOpenPlan(isOpen ? null : plan.id)}
+                  >
+                    <span className="pricing-mobile-card-head">
+                      <span className="pricing-mobile-card-name">
+                        {t(plan.nameKey)}
+                        {plan.id === "paid" && (
+                          <span className="plan-popular pricing-mobile-popular">{t("pricing.bestValue")}</span>
+                        )}
+                      </span>
+                      <span className="pricing-mobile-card-price">
+                        {plan.price}
+                        <span className="pricing-mobile-card-note">{plan.note}</span>
+                      </span>
+                    </span>
+                    <span className="pricing-mobile-card-chevron" aria-hidden="true" />
+                  </button>
+                  <div className="pricing-mobile-card-cta-wrap">{plan.cta}</div>
+                  {isOpen && (
+                    <div id={panelId} className="pricing-mobile-card-body">
+                      <ul className="pricing-mobile-features">
+                        {PLAN_ROWS.map((row) => {
+                          const value = planValue(row, plan.id);
+                          const included = value !== false;
+                          return (
+                            <li
+                              key={row.labelKey}
+                              className={`pricing-mobile-feature${included ? " is-included" : " is-excluded"}`}
+                            >
+                              <span className="pricing-mobile-feature-mark" aria-hidden="true">
+                                {included ? (
+                                  <svg width="16" height="16" viewBox="0 0 18 18">
+                                    <circle cx="9" cy="9" r="9" fill="currentColor" />
+                                    <path
+                                      d="M5.2 9.2l2.4 2.4 5.2-5.2"
+                                      fill="none"
+                                      stroke="#fff"
+                                      strokeWidth="1.8"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                    />
+                                  </svg>
+                                ) : (
+                                  <span className="pricing-mobile-dash">—</span>
+                                )}
+                              </span>
+                              <span className="pricing-mobile-feature-text">
+                                {t(row.labelKey)}
+                                {typeof value === "string" && (
+                                  <span className="pricing-mobile-feature-value">{t(value)}</span>
+                                )}
+                              </span>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  )}
+                </section>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Sticky prices — desktop only. Mobile uses accordion cards with inline CTAs;
+            a fixed 3-row dock was crushing the feature list under cookie+chrome. */}
         {signedOut === true && (
-          <div className="pricing-sticky-bar" aria-label={t("pricing.dockAria")}>
+          <div className="pricing-sticky-bar pricing-sticky-bar-desktop" aria-label={t("pricing.dockAria")}>
             <div className="pricing-sticky-spacer" aria-hidden="true" />
             <div className="pricing-sticky-col">
               <div className="pricing-sticky-name">{t("pricing.free.name")}</div>

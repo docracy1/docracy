@@ -940,16 +940,28 @@ select {
   box-shadow: inset 0 0 0 2px var(--primary);
 }
 
+/* —— Swipesign-style mobile prepare (document-first + setup sheet + dock) —— */
+
+.prepare-place-tip {
+  display: none;
+}
+
+.prepare-setup-sheet-header,
+.prepare-setup-backdrop,
+.prepare-mobile-dock {
+  display: none;
+}
+
 @media (max-width: 860px) {
-  .prepare-grid--place-mode .prepare-sidebar-col {
+  .prepare-grid--place-mode:not(.prepare-grid--mobile) .prepare-sidebar-col {
     display: none;
   }
 
-  .prepare-grid--place-mode .prepare-pdf-col {
+  .prepare-grid--place-mode:not(.prepare-grid--mobile) .prepare-pdf-col {
     padding-bottom: 72px;
   }
 
-  .prepare-grid--place-mode .prepare-place-banner {
+  .prepare-grid--place-mode:not(.prepare-grid--mobile) .prepare-place-banner {
     position: fixed;
     top: auto;
     bottom: 0;
@@ -965,8 +977,241 @@ select {
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
   }
 
-  .prepare-grid--place-mode .pdf-zoom-controls {
+  .prepare-grid--place-mode:not(.prepare-grid--mobile) .pdf-zoom-controls {
     bottom: 80px;
+  }
+
+  .prepare-grid--mobile {
+    position: relative;
+    padding: 0;
+    margin: 0;
+    max-width: none;
+    gap: 0;
+    min-height: calc(100vh - 72px);
+  }
+
+  .prepare-grid--mobile .prepare-pdf-col {
+    height: calc(100vh - 72px - 64px);
+    max-height: calc(100dvh - 72px - 64px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 8px 12px 24px;
+    padding-bottom: 88px;
+    background: var(--canvas-soft, #f4f6f8);
+  }
+
+  .prepare-grid--mobile.prepare-grid--place-mode .prepare-pdf-col [data-page-index] {
+    box-shadow: inset 0 0 0 2px var(--primary);
+    cursor: crosshair;
+  }
+
+  .prepare-grid--mobile .prepare-place-tip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    position: sticky;
+    top: 0;
+    z-index: 15;
+    margin: 0 0 10px;
+    padding: 10px 12px;
+    background: var(--canvas);
+    border: 1px solid var(--primary);
+    border-radius: var(--r-md);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .prepare-place-tip-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    font-size: 12px;
+    color: var(--body);
+  }
+
+  .prepare-place-tip-text strong {
+    color: var(--primary);
+    font-size: 13px;
+  }
+
+  .prepare-place-tip--idle {
+    border-color: var(--hairline);
+    background: var(--canvas);
+  }
+
+  .prepare-place-tip--idle span {
+    font-size: 12px;
+    color: var(--body);
+    line-height: 1.35;
+  }
+
+  .prepare-grid--mobile .prepare-sidebar-col {
+    display: none;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 64px;
+    bottom: calc(64px + env(safe-area-inset-bottom));
+    z-index: 30;
+    height: min(72vh, 640px);
+    max-height: calc(100dvh - 72px - 64px - env(safe-area-inset-bottom));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0;
+    padding: 0 16px 20px;
+    background: var(--canvas);
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -8px 32px rgba(15, 23, 42, 0.14);
+    gap: 12px;
+  }
+
+  .prepare-grid--mobile.prepare-grid--setup-open .prepare-sidebar-col {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .prepare-grid--mobile .prepare-setup-sheet-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    margin: 0 -16px;
+    padding: 14px 16px 12px;
+    background: var(--canvas);
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .prepare-setup-sheet-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .prepare-setup-sheet-title {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 650;
+    color: var(--ink);
+  }
+
+  .prepare-setup-sheet-badge,
+  .prepare-mobile-dock-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: var(--primary);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .prepare-hide-setup-btn {
+    flex-shrink: 0;
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .prepare-grid--mobile .prepare-sidebar-topbar {
+    padding-top: 4px;
+  }
+
+  .prepare-grid--mobile.prepare-grid--setup-open .prepare-setup-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 25;
+    border: none;
+    padding: 0;
+    margin: 0;
+    background: rgba(15, 23, 42, 0.35);
+    cursor: pointer;
+  }
+
+  .prepare-grid--mobile .prepare-mobile-dock {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 35;
+    padding: 10px 14px;
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+    background: var(--canvas);
+    border-top: 1px solid var(--hairline);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06);
+  }
+
+  .prepare-mobile-dock-setup {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 48px;
+    padding: 0 14px;
+    border-radius: var(--r-md);
+    border: 1px solid var(--hairline);
+    background: var(--canvas);
+    color: var(--ink);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .prepare-mobile-dock-setup:active {
+    background: var(--canvas-soft, #f4f6f8);
+  }
+
+  .prepare-mobile-dock-send {
+    flex: 1 1 auto;
+    min-height: 48px;
+    font-size: 16px;
+    font-weight: 650;
+  }
+
+  .prepare-grid--mobile .pdf-zoom-controls {
+    bottom: 80px;
+    z-index: 20;
+  }
+
+  .prepare-mobile-place-block {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .prepare-mobile-place-instruction {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--body);
+  }
+
+  .prepare-place-done-btn {
+    flex-shrink: 0;
+    padding: 8px 12px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+}
+
+@media (min-width: 861px) {
+  .prepare-grid--mobile .prepare-place-tip,
+  .prepare-grid--mobile .prepare-setup-sheet-header,
+  .prepare-grid--mobile .prepare-setup-backdrop,
+  .prepare-grid--mobile .prepare-mobile-dock {
+    display: none !important;
   }
 }
 
@@ -2962,93 +3207,6 @@ select {
   .plan-table .plan-col-sub {
     display: none;
   }
-
-  /* Explicit px columns beat percentage fixed-layout (which was squeezing the table into the
-     viewport on Safari and letting BEST VALUE / Unlimited spill across headers). */
-  .pricing-compare {
-    --pricing-feature-col: 152px;
-    --pricing-plan-col: 112px;
-  }
-
-  .plan-table-pricing {
-    table-layout: fixed;
-    width: calc(
-      var(--pricing-feature-col) + (var(--pricing-plan-col) * 3)
-    );
-    min-width: calc(
-      var(--pricing-feature-col) + (var(--pricing-plan-col) * 3)
-    );
-    max-width: none;
-  }
-
-  .plan-table-pricing thead th:first-child,
-  .plan-table-pricing tbody td:first-child {
-    width: var(--pricing-feature-col);
-    min-width: var(--pricing-feature-col);
-    max-width: var(--pricing-feature-col);
-    position: sticky;
-    left: 0;
-    z-index: 3;
-    background: var(--canvas);
-    box-shadow: 6px 0 10px -8px rgba(20, 40, 70, 0.35);
-    font-size: 12px;
-    line-height: 1.35;
-    padding: 10px 10px 10px 4px;
-    overflow-wrap: anywhere;
-    hyphens: auto;
-  }
-
-  .plan-table-pricing thead th:first-child {
-    z-index: 4;
-    background: var(--canvas);
-  }
-
-  .plan-table-pricing th:not(:first-child),
-  .plan-table-pricing td:not(:first-child) {
-    width: var(--pricing-plan-col);
-    min-width: var(--pricing-plan-col);
-    max-width: var(--pricing-plan-col);
-  }
-
-  .plan-table-pricing thead th:not(:first-child) {
-    font-size: 14px;
-    letter-spacing: 0.02em;
-    padding: 8px 6px 10px;
-    vertical-align: bottom;
-    white-space: normal;
-    line-height: 1.2;
-  }
-
-  .plan-table-pricing thead th.plan-col-paid {
-    min-width: var(--pricing-plan-col);
-  }
-
-  .plan-table-pricing tbody td.plan-col-paid {
-    background: var(--primary-soft);
-  }
-
-  .plan-table-pricing thead th.plan-col-paid {
-    background: var(--primary-soft);
-  }
-
-  .plan-table-pricing .plan-popular {
-    display: block;
-    margin: 4px auto 0;
-    width: fit-content;
-    max-width: calc(100% - 4px);
-    font-size: 8px;
-    letter-spacing: 0.02em;
-    padding: 2px 5px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .plan-table-pricing .plan-cell-text {
-    font-size: 12px;
-    font-weight: 700;
-    overflow-wrap: anywhere;
-  }
 }
 
 .plan-table {
@@ -3204,7 +3362,7 @@ select {
 }
 
 /* Desktop only — must not override the mobile thead { top: auto } rules above. */
-@media (min-width: 769px) {
+@media (min-width: 861px) {
   .plan-table-pricing thead th {
     top: 72px;
   }
@@ -3241,6 +3399,223 @@ select {
   font-weight: 700;
   color: var(--ink);
   line-height: 1.25;
+}
+
+/* Mobile accordion compare — hidden on desktop; table hidden on small screens. */
+.pricing-mobile-compare {
+  display: none;
+}
+
+@media (max-width: 860px) {
+  .pricing-desktop-table {
+    display: none;
+  }
+
+  .pricing-mobile-compare {
+    display: block;
+  }
+}
+
+.pricing-mobile-title {
+  margin: 0 0 16px;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.pricing-mobile-plans {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pricing-mobile-card {
+  background: var(--canvas);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+
+.pricing-mobile-card.is-paid {
+  border-color: color-mix(in srgb, var(--primary) 35%, var(--hairline));
+  box-shadow: 0 0 0 1px var(--primary-soft);
+}
+
+.pricing-mobile-card-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  margin: 0;
+  padding: 14px 14px 14px 16px;
+  border: none;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  color: var(--ink);
+}
+
+.pricing-mobile-card.is-paid .pricing-mobile-card-toggle {
+  background: var(--primary-soft);
+}
+
+.pricing-mobile-card-head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+
+.pricing-mobile-card-name {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+
+.pricing-mobile-card.is-paid .pricing-mobile-card-name {
+  color: var(--primary);
+}
+
+.pricing-mobile-popular {
+  margin: 0;
+  font-size: 9px;
+  padding: 2px 7px;
+}
+
+.pricing-mobile-card-price {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1.15;
+}
+
+.pricing-mobile-card-note {
+  display: inline;
+  margin-left: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--mute);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.pricing-mobile-card-chevron {
+  flex: 0 0 auto;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid var(--mute);
+  border-bottom: 2px solid var(--mute);
+  transform: rotate(45deg);
+  transition: transform 0.15s var(--ease);
+  margin-right: 4px;
+}
+
+.pricing-mobile-card.is-open .pricing-mobile-card-chevron {
+  transform: rotate(225deg);
+  margin-top: 4px;
+}
+
+.pricing-mobile-card-body {
+  padding: 4px 16px 16px;
+  border-top: 1px solid var(--hairline);
+}
+
+.pricing-mobile-card.is-paid .pricing-mobile-card-body {
+  background: var(--canvas);
+}
+
+.pricing-mobile-features {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.pricing-mobile-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--hairline);
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--body-strong);
+}
+
+.pricing-mobile-feature:last-child {
+  border-bottom: none;
+}
+
+.pricing-mobile-feature.is-excluded {
+  color: var(--mute);
+}
+
+.pricing-mobile-feature-mark {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pricing-mobile-dash {
+  color: var(--mute);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.pricing-mobile-feature-text {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.pricing-mobile-feature-value {
+  display: block;
+  margin-top: 2px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.pricing-mobile-feature.is-excluded .pricing-mobile-feature-value {
+  color: var(--mute);
+  font-weight: 600;
+}
+
+.pricing-mobile-card-cta-wrap {
+  padding: 0 16px 14px;
+}
+
+.pricing-mobile-card.is-paid .pricing-mobile-card-cta-wrap {
+  background: var(--primary-soft);
+}
+
+.pricing-mobile-card.is-open .pricing-mobile-card-cta-wrap {
+  padding-bottom: 12px;
+}
+
+.pricing-mobile-cta {
+  display: block;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  box-sizing: border-box;
 }
 
 .pricing-sticky-bar {
@@ -3403,42 +3778,80 @@ select {
   max-width: 720px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 860px) {
   .pricing-page {
-    padding-bottom: calc(280px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
   }
 
   .pricing-page > .container.pricing-compare {
-    padding-top: 8px;
+    padding-top: 12px;
     padding-left: 16px;
     padding-right: 16px;
   }
 
   .pricing-compare {
-    padding-top: 8px;
+    padding-top: 12px;
   }
 
-  .pricing-sticky-bar {
+  /* Accordion owns CTAs on mobile — hide the desktop sticky column dock. */
+  .pricing-sticky-bar-desktop {
+    display: none;
+  }
+
+  .pricing-testimonial {
+    margin-top: 32px;
+  }
+
+  .pricing-testimonial-quote {
+    font-size: 16px;
+  }
+
+  .pricing-disclaimer {
+    margin-bottom: 16px;
+  }
+
+  /* Chat FAB ok on pricing mobile now that the fixed dock is gone — keep it above cookies. */
+  body:has(.pricing-page):has(.cookie-consent-banner) .chat-widget {
+    bottom: calc(120px + env(safe-area-inset-bottom, 0px));
+    right: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Other marketing pages with the mobile pricing dock — sit just above the dock. */
+  body:has(.mobile-pricing-dock) .chat-widget {
+    bottom: calc(208px + env(safe-area-inset-bottom, 0px));
+    right: 16px;
+  }
+
+  body:has(.cookie-consent-banner):has(.mobile-pricing-dock) .chat-widget {
+    bottom: calc(320px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Site-wide mobile dock (marketing pages, logged out) — same stacked rows as /pricing used to. */
+  .mobile-pricing-dock {
+    display: block;
+  }
+
+  .mobile-pricing-dock-bar {
     position: fixed;
     left: 12px;
     right: 12px;
     bottom: calc(12px + env(safe-area-inset-bottom, 0px));
     z-index: 20;
+    display: grid;
     grid-template-columns: 1fr;
+    margin: 0;
+    width: auto;
     border-radius: var(--r-md);
     box-shadow: 0 -4px 28px rgba(20, 40, 70, 0.14);
   }
 
-  /* Cookie banner is z-index 9999 and sits on the bottom — lift the dock so CTAs stay tappable. */
-  body:has(.cookie-consent-banner) .pricing-sticky-bar {
+  body:has(.cookie-consent-banner) .mobile-pricing-dock-bar {
     bottom: calc(132px + env(safe-area-inset-bottom, 0px));
   }
 
-  .pricing-sticky-spacer {
-    display: none;
-  }
-
-  .pricing-sticky-col {
+  .mobile-pricing-dock .pricing-sticky-col {
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: center;
@@ -3450,23 +3863,23 @@ select {
     text-align: left;
   }
 
-  .pricing-sticky-col:last-child {
+  .mobile-pricing-dock .pricing-sticky-col:last-child {
     border-bottom: none;
   }
 
-  .pricing-sticky-name {
+  .mobile-pricing-dock .pricing-sticky-name {
     flex: 0 0 58px;
     font-size: 10px;
   }
 
-  .pricing-sticky-price {
+  .mobile-pricing-dock .pricing-sticky-price {
     flex: 1 1 auto;
     min-width: 0;
     font-size: 18px;
     text-align: left;
   }
 
-  .pricing-sticky-note {
+  .mobile-pricing-dock .pricing-sticky-note {
     display: inline;
     margin-top: 0;
     margin-left: 4px;
@@ -3478,7 +3891,7 @@ select {
     vertical-align: middle;
   }
 
-  .pricing-sticky-cta {
+  .mobile-pricing-dock .pricing-sticky-cta {
     flex: 0 0 auto;
     margin-left: auto;
     width: auto;
@@ -3488,52 +3901,6 @@ select {
     font-size: 12px;
     white-space: nowrap;
     line-height: 1.2;
-  }
-
-  .pricing-sticky-cta-stack {
-    flex: 0 0 auto;
-    margin-left: auto;
-    width: auto;
-    min-width: 96px;
-    max-width: none;
-  }
-
-  .pricing-sticky-cta-stack .pricing-sticky-cta {
-    max-width: 100%;
-  }
-
-  .pricing-testimonial-quote {
-    font-size: 16px;
-  }
-
-  .pricing-disclaimer {
-    margin-bottom: 16px;
-  }
-
-  /* Pricing page: hide chat FAB — the fixed plan dock already owns the bottom chrome, and
-     lifting the launcher above cookie+dock parked it mid-table over checkmarks. */
-  body:has(.pricing-page) .chat-widget {
-    display: none;
-  }
-
-  /* Other marketing pages with the mobile pricing dock — sit just above the dock. */
-  body:has(.mobile-pricing-dock) .chat-widget {
-    bottom: calc(208px + env(safe-area-inset-bottom, 0px));
-    right: 16px;
-  }
-
-  body:has(.cookie-consent-banner):has(.mobile-pricing-dock) .chat-widget {
-    bottom: calc(320px + env(safe-area-inset-bottom, 0px));
-  }
-
-  /* Site-wide mobile dock (marketing pages, logged out) — same stacked rows as /pricing. */
-  .mobile-pricing-dock {
-    display: block;
-  }
-
-  .mobile-pricing-dock-bar {
-    margin: 0;
-    width: auto;
   }
 
   body:has(.mobile-pricing-dock) .site-footer {
@@ -3818,6 +4185,137 @@ select {
   height: auto !important;
   max-width: 100%;
   touch-action: none;
+}
+
+/* Guided mobile signing (recipient) — Start / Next field dock */
+
+.sign-guided-intro {
+  font-size: 14px;
+  color: var(--mute);
+  margin: -8px 0 16px;
+}
+
+.sign-field-tap-target {
+  width: 100%;
+  height: 100%;
+  min-height: 36px;
+  border: 2px dashed var(--primary);
+  border-radius: var(--r-sm);
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.sign-field-tap-value {
+  color: var(--ink);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.sign-guided-actions {
+  margin-top: 16px;
+  padding-bottom: 88px;
+}
+
+.sign-guided-dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  padding-bottom: max(10px, env(safe-area-inset-bottom));
+  background: var(--canvas);
+  border-top: 1px solid var(--hairline);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.sign-guided-progress {
+  flex: 1 1 auto;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.sign-guided-next {
+  flex: 0 0 auto;
+  min-height: 48px;
+  padding: 0 18px;
+  font-size: 15px;
+}
+
+.sign-guided-submit-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+/* Field input bottom sheet (text/date/dropdown on mobile sign) */
+
+.field-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  z-index: 45;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.field-sheet {
+  width: 100%;
+  max-width: 520px;
+  background: var(--canvas);
+  border-radius: 16px 16px 0 0;
+  padding: 10px 18px 20px;
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
+  box-shadow: 0 -8px 32px rgba(15, 23, 42, 0.16);
+}
+
+.field-sheet-handle {
+  width: 40px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--hairline);
+  margin: 4px auto 12px;
+}
+
+.field-sheet-title {
+  margin: 0 0 12px;
+  font-size: 17px;
+  font-weight: 650;
+  color: var(--ink);
+}
+
+.field-sheet-input {
+  width: 100%;
+  min-height: 48px;
+  font-size: 16px;
+  margin-bottom: 14px;
+}
+
+.field-sheet-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.field-sheet-actions button {
+  flex: 1 1 0;
+  min-height: 48px;
 }
 
 /* Floating chat-assistant widget — bottom-right on every page except the signer-facing sign/status

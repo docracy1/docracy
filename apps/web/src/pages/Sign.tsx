@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import FieldInputSheet from "../components/FieldInputSheet";
 import PdfViewer from "../components/PdfViewer";
 import SignatureCaptureModal from "../components/SignatureCaptureModal";
 import SignerConversionPopup from "../components/SignerConversionPopup";
@@ -7,8 +8,27 @@ import { apiUrl, declineSign, fetchMe, fetchSignView, submitSignature, unlockSig
 import { track } from "../lib/track";
 import { useNoIndex } from "../lib/useNoIndex";
 import type { SignPayload } from "../lib/api";
-import type { StatusPayload } from "../lib/types";
+import type { DocField, StatusPayload } from "../lib/types";
 import { useT } from "../lib/i18n";
+
+function fieldIsFilled(f: DocField, values: Record<string, string>): boolean {
+  const type = f.type ?? "signature";
+  if (type === "checkbox") {
+    if (f.required === false) return values[f.id] === "true" || values[f.id] === "false";
+    return values[f.id] === "true";
+  }
+  return Boolean(values[f.id]);
+}
+
+function fieldTypeLabelKey(f: DocField): string {
+  const type = f.type ?? "signature";
+  if (type === "initials") return "sign.fieldKind.initials";
+  if (type === "text") return "sign.fieldKind.text";
+  if (type === "date") return "sign.fieldKind.date";
+  if (type === "checkbox") return "sign.fieldKind.checkbox";
+  if (type === "dropdown") return "sign.fieldKind.dropdown";
+  return "sign.fieldKind.signature";
+}
 
 function base64ToBytes(base64: string): Uint8Array {
   const binary = atob(base64);
@@ -73,6 +93,11 @@ export default function Sign({
   const [error, setError] = useState<string | null>(null);
   const [values, setValues] = useState<Record<string, string>>({});
   const [signingFieldId, setSigningFieldId] = useState<string | null>(null);
+  /** Text/date/dropdown sheet (mobile guided mode — not signature/initials). */
+  const [editingFieldId, setEditingFieldId] = useState<string | null>(null);
+  const [highlightFieldId, setHighlightFieldId] = useState<string | null>(null);
+  const [guidedMode, setGuidedMode] = useState(false);
+  const [guidedStarted, setGuidedStarted] = useState(false);
   const [consented, setConsented] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [declining, setDeclining] = useState(false);
@@ -90,6 +115,7 @@ export default function Sign({
   const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
   const [conversionDismissed, setConversionDismissed] = useState(false);
   const postTargetOrigin = allowedOrigins?.[0] || "*";
+  const pendingAdvanceRef = useRef(false);
 
   const postEmbed = (type: "ready" | "signed" | "declined" | "error", extra?: { docId?: string }) => {
     if (!embedMode || window.parent === window) return;
@@ -97,6 +123,16 @@ export default function Sign({
   };
 
   useNoIndex();
+
+  // Phones / coarse pointers: guided step-through (DocuSign Next / Dropbox Form View style).
+  // Desktop keeps PDF-overlay editing; mobile must not rely on tiny inline inputs or drag.
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 720px), (pointer: coarse)");
+    const sync = () => setGuidedMode(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
 
   useEffect(() => {
     if (!token) return;
@@ -168,18 +204,16 @@ export default function Sign({
   );
 
   const allFilled = useMemo(
-    () =>
-      (payload?.fields ?? []).every((f) => {
-        const type = f.type ?? "signature";
-        if (type === "checkbox") {
-          if (f.required === false) return values[f.id] === "true" || values[f.id] === "false";
-          return values[f.id] === "true";
-        }
-        if (type === "dropdown") return Boolean(values[f.id]);
-        return Boolean(values[f.id]);
-      }),
+    () => (payload?.fields ?? []).every((f) => fieldIsFilled(f, values)),
     [payload?.fields, values]
   );
+
+  const fields = payload?.fields ?? [];
+  const remainingFields = useMemo(
+    () => fields.filter((f) => !fieldIsFilled(f, values)),
+    [fields, values]
+  );
+  const remainingCount = remainingFields.length;
 
   const attachmentsOk = useMemo(() => {
     if (!payload?.signerAttachments) return true;
@@ -200,16 +234,114 @@ export default function Sign({
   }, [hasUnsavedWork]);
 
   const signingField = useMemo(
-    () => (payload?.fields ?? []).find((f) => f.id === signingFieldId) ?? null,
-    [payload?.fields, signingFieldId]
+    () => fields.find((f) => f.id === signingFieldId) ?? null,
+    [fields, signingFieldId]
   );
   const signingFieldKind: "signature" | "initials" =
     (signingField?.type ?? "signature") === "initials" ? "initials" : "signature";
 
+  const editingField = useMemo(
+    () => fields.find((f) => f.id === editingFieldId) ?? null,
+    [fields, editingFieldId]
+  );
+
+  const scrollToField = (fieldId: string) => {
+    requestAnimationFrame(() => {
+      document
+        .querySelector(`[data-sign-field-id="${fieldId}"]`)
+        ?.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+  };
+
+  const openField = (f: DocField) => {
+    setGuidedStarted(true);
+    setHighlightFieldId(f.id);
+    scrollToField(f.id);
+    const type = f.type ?? "signature";
+    if (type === "signature" || type === "initials") {
+      setEditingFieldId(null);
+      setSigningFieldId(f.id);
+      return;
+    }
+    if (type === "checkbox") {
+      setSigningFieldId(null);
+      setEditingFieldId(null);
+      setValues((prev) => {
+        const nextChecked = prev[f.id] === "true" ? "false" : "true";
+        // Required checkboxes only advance when checked; optional always advance after toggle.
+        const shouldAdvance =
+          nextChecked === "true" || f.required === false;
+        if (shouldAdvance) pendingAdvanceRef.current = true;
+        return { ...prev, [f.id]: nextChecked };
+      });
+      return;
+    }
+    setSigningFieldId(null);
+    setEditingFieldId(f.id);
+  };
+
+  const advanceToNextEmpty = (fromValues?: Record<string, string>) => {
+    const vals = fromValues ?? values;
+    const next = (payload?.fields ?? []).find((f) => !fieldIsFilled(f, vals));
+    if (!next) {
+      setHighlightFieldId(null);
+      setSigningFieldId(null);
+      setEditingFieldId(null);
+      return;
+    }
+    openField(next);
+  };
+
+  const onGuidedPrimary = () => {
+    if (allFilled) {
+      document.getElementById("sign-consent")?.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    if (!guidedStarted) {
+      const first = remainingFields[0];
+      if (first) openField(first);
+      return;
+    }
+    const current =
+      (highlightFieldId && fields.find((f) => f.id === highlightFieldId)) ||
+      remainingFields[0];
+    if (!current) return;
+    if (fieldIsFilled(current, values)) {
+      advanceToNextEmpty();
+      return;
+    }
+    openField(current);
+  };
+
+  // After checkbox toggle (or other deferred fill), advance when guided.
+  useEffect(() => {
+    if (!pendingAdvanceRef.current || !guidedMode) return;
+    pendingAdvanceRef.current = false;
+    const t = window.setTimeout(() => advanceToNextEmpty(), 120);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [values, guidedMode]);
+
   const onSaveSignature = (dataUrl: string) => {
     if (!signingFieldId) return;
-    setValues((prev) => ({ ...prev, [signingFieldId]: dataUrl }));
+    const id = signingFieldId;
+    const next = { ...values, [id]: dataUrl };
+    setValues(next);
     setSigningFieldId(null);
+    if (guidedMode) {
+      window.setTimeout(() => advanceToNextEmpty(next), 80);
+    }
+  };
+
+  const onSaveFieldValue = (value: string) => {
+    if (!editingFieldId) return;
+    const id = editingFieldId;
+    const next = { ...values, [id]: value };
+    setValues(next);
+    setEditingFieldId(null);
+    if (guidedMode) {
+      window.setTimeout(() => advanceToNextEmpty(next), 80);
+    }
   };
 
   const maybeRedirectReturnUrl = () => {
@@ -431,9 +563,12 @@ export default function Sign({
   }
 
   return (
-    <div className="container">
+    <div className={`container${guidedMode ? " sign-page--guided" : ""}`}>
       <BrandLogo path={payload.brandLogoPath} slug={payload.brandWorkspaceSlug} />
       <h1>{t("sign.review")}</h1>
+      {guidedMode && (
+        <p className="sign-guided-intro">{t("sign.guidedIntro")}</p>
+      )}
       {pdfBytes && (
         <PdfViewer
           pdfBytes={pdfBytes}
@@ -443,6 +578,8 @@ export default function Sign({
                 .filter((f) => f.page === page.index)
                 .map((f) => {
                   const type = f.type ?? "signature";
+                  const filled = fieldIsFilled(f, values);
+                  const highlighted = highlightFieldId === f.id;
 
                   const boxStyle: React.CSSProperties = {
                     position: "absolute",
@@ -450,25 +587,32 @@ export default function Sign({
                     top: `${f.yFrac * 100}%`,
                     width: `${f.wFrac * 100}%`,
                     height: `${f.hFrac * 100}%`,
+                    outline: highlighted ? "3px solid var(--primary)" : undefined,
+                    outlineOffset: 2,
+                    zIndex: highlighted ? 3 : 1,
                   };
 
                   if (type === "checkbox") {
                     const checked = values[f.id] === "true";
                     return (
-                      <div key={f.id} style={boxStyle}>
+                      <div key={f.id} data-sign-field-id={f.id} style={boxStyle}>
                         <button
                           type="button"
-                          aria-label={f.required === false ? "Optional checkbox" : "Required checkbox"}
+                          aria-label={f.required === false ? t("sign.optionalCheckbox") : t("sign.requiredCheckbox")}
                           aria-pressed={checked}
-                          onClick={() =>
-                            setValues((prev) => ({
-                              ...prev,
-                              [f.id]: prev[f.id] === "true" ? "false" : "true",
-                            }))
-                          }
+                          onClick={() => {
+                            if (guidedMode) openField(f);
+                            else {
+                              setValues((prev) => ({
+                                ...prev,
+                                [f.id]: prev[f.id] === "true" ? "false" : "true",
+                              }));
+                            }
+                          }}
                           style={{
                             width: "100%",
                             height: "100%",
+                            minHeight: guidedMode ? 36 : undefined,
                             border: checked ? "2px solid var(--success)" : "2px dashed var(--primary)",
                             borderRadius: "var(--r-sm)",
                             background: checked ? "var(--canvas)" : "var(--primary-soft)",
@@ -489,15 +633,63 @@ export default function Sign({
                     );
                   }
 
-                  if (type === "text" || type === "date") {
+                  if (type === "text" || type === "date" || type === "dropdown") {
+                    if (guidedMode) {
+                      return (
+                        <div key={f.id} data-sign-field-id={f.id} style={boxStyle}>
+                          <button
+                            type="button"
+                            className="sign-field-tap-target"
+                            aria-label={t(fieldTypeLabelKey(f))}
+                            onClick={() => openField(f)}
+                          >
+                            {filled ? (
+                              <span className="sign-field-tap-value">{values[f.id]}</span>
+                            ) : (
+                              <span>{t(fieldTypeLabelKey(f))}</span>
+                            )}
+                          </button>
+                        </div>
+                      );
+                    }
+                    if (type === "dropdown") {
+                      const opts = f.options ?? [];
+                      return (
+                        <div key={f.id} data-sign-field-id={f.id} style={boxStyle}>
+                          <select
+                            aria-label={t("sign.dropdownField")}
+                            value={values[f.id] ?? ""}
+                            onChange={(e) => setValues((prev) => ({ ...prev, [f.id]: e.target.value }))}
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              border: values[f.id] ? "2px solid var(--success)" : "2px dashed var(--primary)",
+                              borderRadius: "var(--r-sm)",
+                              background: "var(--canvas)",
+                              padding: "0 4px",
+                              fontSize: 11,
+                              fontFamily: "inherit",
+                              color: "var(--ink)",
+                            }}
+                          >
+                            <option value="">{t("sign.choose")}</option>
+                            {opts.map((o) => (
+                              <option key={o} value={o}>
+                                {o}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      );
+                    }
                     return (
-                      <div key={f.id} style={boxStyle}>
+                      <div key={f.id} data-sign-field-id={f.id} style={boxStyle}>
                         <input
                           type={type === "date" ? "date" : "text"}
-                          aria-label={type === "date" ? "Date" : "Text field"}
+                          aria-label={type === "date" ? t("sign.dateField") : t("sign.textField")}
                           value={values[f.id] ?? ""}
                           onChange={(e) => setValues((prev) => ({ ...prev, [f.id]: e.target.value }))}
-                          placeholder={type === "date" ? undefined : "Type here"}
+                          placeholder={type === "date" ? undefined : t("sign.typeHere")}
                           style={{
                             width: "100%",
                             height: "100%",
@@ -514,44 +706,15 @@ export default function Sign({
                     );
                   }
 
-                  if (type === "dropdown") {
-                    const opts = f.options ?? [];
-                    return (
-                      <div key={f.id} style={boxStyle}>
-                        <select
-                          aria-label="Dropdown field"
-                          value={values[f.id] ?? ""}
-                          onChange={(e) => setValues((prev) => ({ ...prev, [f.id]: e.target.value }))}
-                          style={{
-                            width: "100%",
-                            height: "100%",
-                            border: values[f.id] ? "2px solid var(--success)" : "2px dashed var(--primary)",
-                            borderRadius: "var(--r-sm)",
-                            background: "var(--canvas)",
-                            padding: "0 4px",
-                            fontSize: 11,
-                            fontFamily: "inherit",
-                            color: "var(--ink)",
-                          }}
-                        >
-                          <option value="">Choose…</option>
-                          {opts.map((o) => (
-                            <option key={o} value={o}>
-                              {o}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    );
-                  }
-
                   return (
-                    <div key={f.id} style={boxStyle}>
+                    <div key={f.id} data-sign-field-id={f.id} style={boxStyle}>
                       <button
-                        onClick={() => setSigningFieldId(f.id)}
+                        type="button"
+                        onClick={() => (guidedMode ? openField(f) : setSigningFieldId(f.id))}
                         style={{
                           width: "100%",
                           height: "100%",
+                          minHeight: guidedMode ? 40 : undefined,
                           border: values[f.id] ? "2px solid var(--success)" : "2px dashed var(--primary)",
                           borderRadius: "var(--r-sm)",
                           background: values[f.id] ? "var(--canvas)" : "var(--primary-soft)",
@@ -560,7 +723,7 @@ export default function Sign({
                         }}
                       >
                         {values[f.id] ? (
-                          <img src={values[f.id]} alt="Your signature" style={{ maxWidth: "100%", maxHeight: "100%" }} />
+                          <img src={values[f.id]} alt={t("sign.yourSignature")} style={{ maxWidth: "100%", maxHeight: "100%" }} />
                         ) : (
                           <span style={{ fontSize: 11, color: "var(--primary)", fontWeight: 600 }}>
                             {(f.type ?? "signature") === "initials" ? t("sign.clickInitial") : t("sign.clickToSign")}
@@ -584,14 +747,24 @@ export default function Sign({
         />
       )}
 
+      {editingField && (
+        <FieldInputSheet
+          field={editingField}
+          initialValue={values[editingField.id] ?? ""}
+          onSave={onSaveFieldValue}
+          onCancel={() => setEditingFieldId(null)}
+        />
+      )}
+
       {error && <p style={{ color: "var(--danger)" }}>{error}</p>}
 
       {payload.signerAttachments && (
         <div className="card" style={{ marginTop: 16 }}>
-          <h2 style={{ fontSize: 15, marginTop: 0 }}>Upload attachment</h2>
+          <h2 style={{ fontSize: 15, marginTop: 0 }}>{t("sign.uploadAttachment")}</h2>
           <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 0 }}>
-            Upload at least one file (PDF or image, up to{" "}
-            {Math.round(payload.signerAttachments.maxBytesPerFile / (1024 * 1024))}MB each) before signing.
+            {t("sign.uploadAttachmentBody", {
+              mb: Math.round(payload.signerAttachments.maxBytesPerFile / (1024 * 1024)),
+            })}
           </p>
           {(payload.signerAttachments.uploaded ?? []).map((a) => (
             <p key={a.id} style={{ fontSize: 13, margin: "4px 0" }}>
@@ -611,11 +784,14 @@ export default function Sign({
             />
           )}
           {attachmentError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{attachmentError}</p>}
-          {uploadingAttachment && <p style={{ fontSize: 13 }}>Uploading…</p>}
+          {uploadingAttachment && <p style={{ fontSize: 13 }}>{t("sign.uploading")}</p>}
         </div>
       )}
 
-      <label style={{ display: "flex", gap: 8, alignItems: "flex-start", marginTop: 16, fontSize: 13 }}>
+      <label
+        id="sign-consent"
+        style={{ display: "flex", gap: 8, alignItems: "flex-start", marginTop: 16, fontSize: 13 }}
+      >
         <input
           type="checkbox"
           checked={consented}
@@ -625,13 +801,45 @@ export default function Sign({
         <span>{t("sign.consent")}</span>
       </label>
 
-      <div style={{ marginTop: 16, display: "flex", flexWrap: "wrap", gap: 8 }}>
-        <button className="btn-primary" disabled={!canSubmit || submitting || declining} onClick={onSubmit}>
-          {submitting ? t("sign.submitting") : t("sign.submit")}
-        </button>
-        <button className="btn-secondary" disabled={submitting || declining} onClick={onDecline}>
-          {declining ? t("sign.declining") : t("sign.decline")}
-        </button>
+      <div
+        className={guidedMode ? "sign-guided-actions" : undefined}
+        style={guidedMode ? undefined : { marginTop: 16, display: "flex", flexWrap: "wrap", gap: 8 }}
+      >
+        {guidedMode ? (
+          <>
+            <div className="sign-guided-dock">
+              <span className="sign-guided-progress">
+                {allFilled
+                  ? t("sign.guidedAllDone")
+                  : t("sign.guidedRemaining", { count: remainingCount })}
+              </span>
+              <button type="button" className="btn-primary sign-guided-next" onClick={onGuidedPrimary}>
+                {!guidedStarted
+                  ? t("sign.guidedStart")
+                  : allFilled
+                    ? t("sign.guidedReview")
+                    : t("sign.guidedNext")}
+              </button>
+            </div>
+            <div className="sign-guided-submit-row">
+              <button className="btn-primary" disabled={!canSubmit || submitting || declining} onClick={onSubmit}>
+                {submitting ? t("sign.submitting") : t("sign.submit")}
+              </button>
+              <button className="btn-secondary" disabled={submitting || declining} onClick={onDecline}>
+                {declining ? t("sign.declining") : t("sign.decline")}
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <button className="btn-primary" disabled={!canSubmit || submitting || declining} onClick={onSubmit}>
+              {submitting ? t("sign.submitting") : t("sign.submit")}
+            </button>
+            <button className="btn-secondary" disabled={submitting || declining} onClick={onDecline}>
+              {declining ? t("sign.declining") : t("sign.decline")}
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

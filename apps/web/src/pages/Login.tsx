@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { adminLogin, requestMagicLink } from "../lib/api";
 import { useI18n } from "../lib/i18n";
 
@@ -105,7 +105,6 @@ export default function Login() {
   const [sent, setSent] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [turnstileResetKey, setTurnstileResetKey] = useState(0);
-  const [privacyConsent, setPrivacyConsent] = useState(false);
 
   const [showPasswordLogin, setShowPasswordLogin] = useState(false);
   const [password, setPassword] = useState("");
@@ -170,34 +169,15 @@ export default function Login() {
 
       {error && <p style={{ color: "var(--danger)", fontSize: 13 }}>{error}</p>}
 
-      <label style={{ display: "flex", gap: 8, alignItems: "flex-start", marginBottom: 16, fontSize: 13, maxWidth: 360 }}>
-        <input
-          type="checkbox"
-          checked={privacyConsent}
-          onChange={(e) => setPrivacyConsent(e.target.checked)}
-          style={{ marginTop: 2 }}
-        />
-        <span>
-          {t("login.consentPrefix")} <Link to="/privacy">{t("footer.privacy")}</Link> {t("login.consentAnd")}{" "}
-          <Link to="/terms">{t("footer.terms")}</Link>.
-        </span>
-      </label>
-
       <a
         href={`/api/auth/google${nextParam ? `?next=${encodeURIComponent(nextParam)}` : ""}`}
         className="btn-secondary"
-        aria-disabled={!privacyConsent}
-        onClick={(e) => {
-          if (!privacyConsent) e.preventDefault();
-        }}
         style={{
           display: "inline-flex",
           alignItems: "center",
           gap: 10,
           textDecoration: "none",
           maxWidth: 360,
-          opacity: privacyConsent ? 1 : 0.5,
-          cursor: privacyConsent ? "pointer" : "not-allowed",
         }}
       >
         <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
@@ -230,7 +210,7 @@ export default function Login() {
         <button
           className="btn-primary"
           type="submit"
-          disabled={submitting || (!!TURNSTILE_SITE_KEY && !turnstileToken) || !privacyConsent}
+          disabled={submitting || (!!TURNSTILE_SITE_KEY && !turnstileToken)}
         >
           {submitting ? t("common.sending") : ctaLabel}
         </button>
