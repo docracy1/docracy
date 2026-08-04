@@ -551,8 +551,7 @@ export default function Landing() {
       />
 
       <div className="cta-band">
-        <h2 style={{ fontSize: 22, marginBottom: 8 }}>{t("landing.ctaTitle")}</h2>
-        <p style={{ marginTop: 0, marginBottom: 20 }}>{t("landing.ctaSub")}</p>
+        <h2 style={{ fontSize: 22, marginBottom: 20 }}>{t("landing.ctaTitle")}</h2>
         <div className="cta-band-actions">
           <Link
             to={prepareSampleTo}

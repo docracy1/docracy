@@ -8,36 +8,36 @@ import { NavIcon } from "./NavIcons";
 
 /** Real features only — mirrors Landing.tsx's CORE_FEATURES, not a wishlist. */
 const FEATURE_ITEMS = [
-  { to: "/prepare", icon: "send", title: "Simple document sending", description: "Upload a PDF and send it for signature in seconds." },
-  { to: "/ai", icon: "sparkles", title: "AI Auto-Detect", description: "Automatically finds and places signature, date, and initial fields." },
-  { to: "/free-templates", icon: "duplicate", title: "Reusable templates", description: "Save a field layout once, reuse it every time." },
-  { to: "/pricing", icon: "users", title: "Team access", description: "Share documents and templates under one workspace." },
-  { to: "/privacy", icon: "shield", title: "Secure storage", description: "Encrypted, with short automatic retention." },
-  { to: "/docs", icon: "bolt", title: "Fast workflows", description: "Sequential or all-at-once signing, your choice." },
-];
+  { to: "/prepare", icon: "send", titleKey: "nav.mega.feature.send.title", descKey: "nav.mega.feature.send.desc" },
+  { to: "/ai", icon: "sparkles", titleKey: "nav.mega.feature.ai.title", descKey: "nav.mega.feature.ai.desc" },
+  { to: "/free-templates", icon: "duplicate", titleKey: "nav.mega.feature.templates.title", descKey: "nav.mega.feature.templates.desc" },
+  { to: "/pricing", icon: "users", titleKey: "nav.mega.feature.team.title", descKey: "nav.mega.feature.team.desc" },
+  { to: "/privacy", icon: "shield", titleKey: "nav.mega.feature.storage.title", descKey: "nav.mega.feature.storage.desc" },
+  { to: "/docs", icon: "bolt", titleKey: "nav.mega.feature.workflows.title", descKey: "nav.mega.feature.workflows.desc" },
+] as const;
 
 const COMPARE_ITEMS = [
-  { to: "/docusign-alternative", icon: "scale", title: "vs DocuSign", description: "Lighter, no per-seat pricing." },
-  { to: "/eversign-alternative", icon: "scale", title: "vs eversign", description: "Faster, simpler signing flow." },
-  { to: "/pandadoc-alternative", icon: "scale", title: "vs PandaDoc", description: "No proposal suite you don't need." },
-];
+  { to: "/docusign-alternative", icon: "scale", titleKey: "footer.vsDocusign", descKey: "nav.mega.compare.docusign.desc" },
+  { to: "/eversign-alternative", icon: "scale", titleKey: "footer.vsEversign", descKey: "nav.mega.compare.eversign.desc" },
+  { to: "/pandadoc-alternative", icon: "scale", titleKey: "footer.vsPandadoc", descKey: "nav.mega.compare.pandadoc.desc" },
+] as const;
 
 /** Solo entrepreneurs, freelancers, and SMEs — not enterprise verticals like a bigger competitor
  *  would list (no "Legal"/"Finance" compliance-grade categories Docracy doesn't actually serve). */
 const INDUSTRY_ITEMS = [
-  { to: "/industry/freelancers", icon: "briefcase", title: "Freelancers & Consultants", description: "Client agreements, NDAs, and invoices." },
-  { to: "/industry/creative-agencies", icon: "megaphone", title: "Creative & Marketing Agencies", description: "Contractor onboarding and scopes of work." },
-  { to: "/industry/real-estate", icon: "building", title: "Real Estate & Property", description: "Leases, subleases, and vendor agreements." },
-  { to: "/industry/construction", icon: "hammer", title: "Construction & Trades", description: "Work orders, quotes, and liability waivers." },
-  { to: "/industry/small-business", icon: "store", title: "Small Business & Local Services", description: "Vendor terms, onboarding, and client contracts." },
-];
+  { to: "/industry/freelancers", icon: "briefcase", titleKey: "nav.mega.industry.freelancers.title", descKey: "nav.mega.industry.freelancers.desc" },
+  { to: "/industry/creative-agencies", icon: "megaphone", titleKey: "nav.mega.industry.creative.title", descKey: "nav.mega.industry.creative.desc" },
+  { to: "/industry/real-estate", icon: "building", titleKey: "nav.mega.industry.realEstate.title", descKey: "nav.mega.industry.realEstate.desc" },
+  { to: "/industry/construction", icon: "hammer", titleKey: "nav.mega.industry.construction.title", descKey: "nav.mega.industry.construction.desc" },
+  { to: "/industry/small-business", icon: "store", titleKey: "nav.mega.industry.smallBusiness.title", descKey: "nav.mega.industry.smallBusiness.desc" },
+] as const;
 
 const RESOURCE_ITEMS = [
-  { to: "/blog", icon: "book", title: "Blog", description: "Product updates and how-to guides." },
-  { to: "/docs", icon: "lifering", title: "Documentation", description: "Every feature, API, and integration." },
-  { to: "/about", icon: "info", title: "About", description: "Why Docracy exists and who runs it." },
-  { to: "mailto:sales@docracy.io", icon: "mail", title: "Contact", description: "Questions before you sign up? Ask." },
-];
+  { to: "/blog", icon: "book", titleKey: "nav.mega.resource.blog.title", descKey: "nav.mega.resource.blog.desc" },
+  { to: "/docs", icon: "lifering", titleKey: "nav.mega.resource.docs.title", descKey: "nav.mega.resource.docs.desc" },
+  { to: "/about", icon: "info", titleKey: "nav.mega.resource.about.title", descKey: "nav.mega.resource.about.desc" },
+  { to: "mailto:sales@docracy.io?subject=Docracy%20inquiry", icon: "mail", titleKey: "nav.mega.resource.contact.title", descKey: "nav.mega.resource.contact.desc" },
+] as const;
 
 export default function Header() {
   const t = useT();
@@ -52,6 +52,38 @@ export default function Header() {
     { to: localizePath("/ai", locale), label: t("nav.ai") },
   ];
   const pricingTo = localizePath("/pricing", locale);
+
+  const featureItems = FEATURE_ITEMS.map((f) => ({
+    to: localizePath(f.to, locale),
+    icon: <NavIcon name={f.icon} />,
+    title: t(f.titleKey),
+    description: t(f.descKey),
+  }));
+  const compareItems = COMPARE_ITEMS.map((c) => ({
+    to: localizePath(c.to, locale),
+    icon: <NavIcon name={c.icon} />,
+    title: t(c.titleKey),
+    description: t(c.descKey),
+  }));
+  const industryItems = INDUSTRY_ITEMS.map((i) => ({
+    to: localizePath(i.to, locale),
+    icon: <NavIcon name={i.icon} />,
+    title: t(i.titleKey),
+    description: t(i.descKey),
+  }));
+  const resourceItems = RESOURCE_ITEMS.map((r) => ({
+    to: r.to.startsWith("mailto:") ? r.to : localizePath(r.to, locale),
+    icon: <NavIcon name={r.icon} />,
+    title: t(r.titleKey),
+    description: t(r.descKey),
+  }));
+  // Titles-only lists for mobile accordion (no icons/descriptions).
+  const featureMobile = FEATURE_ITEMS.map((f) => ({ to: localizePath(f.to, locale), title: t(f.titleKey) }));
+  const industryMobile = INDUSTRY_ITEMS.map((i) => ({ to: localizePath(i.to, locale), title: t(i.titleKey) }));
+  const resourceMobile = RESOURCE_ITEMS.map((r) => ({
+    to: r.to.startsWith("mailto:") ? r.to : localizePath(r.to, locale),
+    title: t(r.titleKey),
+  }));
 
   useEffect(() => {
     setMenuOpen(false);
@@ -116,17 +148,17 @@ export default function Header() {
         <nav className="header-nav-right" aria-label="Primary">
           <NavMegaMenu
             label={t("nav.features")}
-            items={FEATURE_ITEMS.map((f) => ({ ...f, icon: <NavIcon name={f.icon} /> }))}
+            items={featureItems}
             panel={{
-              title: "Compare",
-              items: COMPARE_ITEMS.map((c) => ({ ...c, icon: <NavIcon name={c.icon} /> })),
-              footerLabel: "See all comparisons",
-              footerTo: "/blog",
+              title: t("footer.compare"),
+              items: compareItems,
+              footerLabel: t("footer.allComparisons"),
+              footerTo: localizePath("/blog", locale),
             }}
           />
           <NavMegaMenu
             label={t("nav.industry")}
-            items={INDUSTRY_ITEMS.map((i) => ({ ...i, icon: <NavIcon name={i.icon} /> }))}
+            items={industryItems}
             columns={2}
           />
           <Link to={pricingTo} className="header-templates-link header-nav-link">
@@ -134,7 +166,7 @@ export default function Header() {
           </Link>
           <NavMegaMenu
             label={t("nav.resources")}
-            items={RESOURCE_ITEMS.map((r) => ({ ...r, icon: <NavIcon name={r.icon} /> }))}
+            items={resourceItems}
             columns={2}
           />
           {NAV_AFTER_PRICING.map((link) => (
@@ -144,7 +176,11 @@ export default function Header() {
           ))}
           <LanguageSwitcher className="lang-switcher-on-dark header-templates-link" />
           <div className="header-cta-group">
-            <a href="mailto:sales@docracy.io" className="header-nav-sales header-templates-link">
+            <a
+              href="mailto:sales@docracy.io?subject=Docracy%20inquiry"
+              className="header-nav-sales header-templates-link"
+              title="sales@docracy.io"
+            >
               {t("nav.contactSales")}
             </a>
             {!signedIn ? (
@@ -191,7 +227,7 @@ export default function Header() {
           <details className="header-mobile-accordion">
             <summary>{t("nav.features")}</summary>
             <div className="header-mobile-accordion-sublist">
-              {FEATURE_ITEMS.map((f) => (
+              {featureMobile.map((f) => (
                 <Link key={f.to} to={f.to} className="header-mobile-accordion-sublink" onClick={() => setMenuOpen(false)}>
                   {f.title}
                 </Link>
@@ -201,7 +237,7 @@ export default function Header() {
           <details className="header-mobile-accordion">
             <summary>{t("nav.industry")}</summary>
             <div className="header-mobile-accordion-sublist">
-              {INDUSTRY_ITEMS.map((i) => (
+              {industryMobile.map((i) => (
                 <Link key={i.to} to={i.to} className="header-mobile-accordion-sublink" onClick={() => setMenuOpen(false)}>
                   {i.title}
                 </Link>
@@ -214,11 +250,27 @@ export default function Header() {
           <details className="header-mobile-accordion">
             <summary>{t("nav.resources")}</summary>
             <div className="header-mobile-accordion-sublist">
-              {RESOURCE_ITEMS.map((r) => (
-                <Link key={r.to} to={r.to} className="header-mobile-accordion-sublink" onClick={() => setMenuOpen(false)}>
-                  {r.title}
-                </Link>
-              ))}
+              {resourceMobile.map((r) =>
+                r.to.startsWith("mailto:") || r.to.startsWith("http") ? (
+                  <a
+                    key={r.to}
+                    href={r.to}
+                    className="header-mobile-accordion-sublink"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {r.title}
+                  </a>
+                ) : (
+                  <Link
+                    key={r.to}
+                    to={r.to}
+                    className="header-mobile-accordion-sublink"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {r.title}
+                  </Link>
+                )
+              )}
             </div>
           </details>
           {NAV_AFTER_PRICING.map((link) => (
@@ -231,6 +283,13 @@ export default function Header() {
           <LanguageSwitcher />
         </div>
         <div className="header-mobile-ctas">
+          <a
+            href="mailto:sales@docracy.io?subject=Docracy%20inquiry"
+            className="header-mobile-cta-secondary"
+            onClick={() => setMenuOpen(false)}
+          >
+            {t("nav.contactSales")}
+          </a>
           <Link to={prepareTo} className="header-mobile-cta-primary" onClick={() => setMenuOpen(false)}>
             {t("nav.tryFree")}
           </Link>

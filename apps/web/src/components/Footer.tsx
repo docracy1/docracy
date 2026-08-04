@@ -53,7 +53,7 @@ export default function Footer() {
         { label: t("footer.roadmap"), to: "/roadmap" },
         { label: t("footer.status"), to: "/uptime" },
         { label: t("footer.imprint"), to: "/imprint" },
-        { label: t("footer.contactSales"), to: "mailto:sales@docracy.io", external: true },
+        { label: t("footer.contactSales"), to: "mailto:sales@docracy.io?subject=Docracy%20inquiry", external: true },
         { label: t("footer.github"), to: "https://github.com/docracy1/docracy-templates", external: true },
       ],
     },
@@ -81,7 +81,13 @@ export default function Footer() {
             <h4>{col.heading}</h4>
             {col.links.map((link) =>
               link.external ? (
-                <a key={link.label} href={link.to} target="_blank" rel="noopener noreferrer">
+                <a
+                  key={link.label}
+                  href={link.to}
+                  {...(link.to.startsWith("http")
+                    ? { target: "_blank", rel: "noopener noreferrer" }
+                    : {})}
+                >
                   {link.label}
                 </a>
               ) : (

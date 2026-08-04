@@ -3043,17 +3043,22 @@ select {
     box-shadow: 0 -4px 28px rgba(20, 40, 70, 0.14);
   }
 
+  /* Cookie banner is z-index 9999 and sits on the bottom — lift the dock so CTAs stay tappable. */
+  body:has(.cookie-consent-banner) .pricing-sticky-bar {
+    bottom: calc(132px + env(safe-area-inset-bottom, 0px));
+  }
+
   .pricing-sticky-spacer {
     display: none;
   }
 
   .pricing-sticky-col {
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: center;
     justify-content: space-between;
-    gap: 8px 12px;
-    padding: 12px 14px;
+    gap: 8px 10px;
+    padding: 10px 12px;
     border-right: none;
     border-bottom: 1px solid var(--hairline);
     text-align: left;
@@ -3064,13 +3069,14 @@ select {
   }
 
   .pricing-sticky-name {
-    flex: 0 0 72px;
+    flex: 0 0 58px;
     font-size: 10px;
   }
 
   .pricing-sticky-price {
-    flex: 1 1 80px;
-    font-size: 20px;
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: 18px;
     text-align: left;
   }
 
@@ -3079,25 +3085,31 @@ select {
     margin-top: 0;
     margin-left: 4px;
     font-size: 10px;
-    white-space: normal;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 9.5em;
+    vertical-align: middle;
   }
 
   .pricing-sticky-cta {
     flex: 0 0 auto;
+    margin-left: auto;
     width: auto;
-    min-width: 108px;
-    max-width: 46%;
+    min-width: 96px;
+    max-width: none;
     padding: 8px 10px;
-    font-size: 11.5px;
-    white-space: normal;
+    font-size: 12px;
+    white-space: nowrap;
     line-height: 1.2;
   }
 
   .pricing-sticky-cta-stack {
     flex: 0 0 auto;
+    margin-left: auto;
     width: auto;
-    min-width: 108px;
-    max-width: 46%;
+    min-width: 96px;
+    max-width: none;
   }
 
   .pricing-sticky-cta-stack .pricing-sticky-cta {
@@ -3117,6 +3129,11 @@ select {
   body:has(.mobile-pricing-dock) .chat-widget {
     bottom: calc(268px + env(safe-area-inset-bottom, 0px));
     right: 16px;
+  }
+
+  body:has(.cookie-consent-banner):has(.mobile-pricing-dock) .chat-widget,
+  body:has(.cookie-consent-banner):has(.pricing-page) .chat-widget {
+    bottom: calc(388px + env(safe-area-inset-bottom, 0px));
   }
 
   /* Site-wide mobile dock (marketing pages, logged out) — same stacked rows as /pricing. */

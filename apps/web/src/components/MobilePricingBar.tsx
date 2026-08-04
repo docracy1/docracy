@@ -32,7 +32,7 @@ export default function MobilePricingBar() {
   const t = useT();
   const { locale } = useI18n();
   const location = useLocation();
-  const [signedIn, setSignedIn] = useState<boolean | null>(null);
+  const [signedIn, setSignedIn] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -48,7 +48,7 @@ export default function MobilePricingBar() {
     };
   }, [location.pathname]);
 
-  if (signedIn !== false) return null;
+  if (signedIn) return null;
   if (shouldHideDock(location.pathname)) return null;
 
   const prepareTo = localizePath("/prepare", locale);

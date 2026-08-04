@@ -25,6 +25,23 @@
 /assets/*
   Cache-Control: public, max-age=14400, must-revalidate
 
+# Favicons: short cache so a bad prior response (e.g. SPA HTML for /favicon.ico) can recover,
+# and so ?v= cache-bust query bumps take effect quickly across browsers.
+/favicon.ico
+  Cache-Control: public, max-age=86400, must-revalidate
+
+/favicon.svg
+  Cache-Control: public, max-age=86400, must-revalidate
+
+/favicon.png
+  Cache-Control: public, max-age=86400, must-revalidate
+
+/favicon-32.png
+  Cache-Control: public, max-age=86400, must-revalidate
+
+/apple-touch-icon.png
+  Cache-Control: public, max-age=86400, must-revalidate
+
 # RFC 8288 Link headers pointing agents/crawlers at real, existing resources — deliberately not an
 # api-catalog link, since there's no /.well-known/api-catalog file behind it yet; /docs now has a
 # genuine REST API reference section (see Docs.tsx), so service-doc is honest.

@@ -1,9 +1,9 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 
 export interface NavMegaMenuItem {
   to: string;
-  icon: React.ReactNode;
+  icon: ReactNode;
   title: string;
   description: string;
 }
@@ -14,11 +14,46 @@ export interface NavMegaMenuProps {
   /** Optional side panel (mirrors the "Compare" column on competitor mega-menus). */
   panel?: {
     title: string;
-    items: Array<{ to: string; icon: React.ReactNode; title: string; description: string }>;
+    items: Array<{ to: string; icon: ReactNode; title: string; description: string }>;
     footerLabel: string;
     footerTo: string;
   };
   columns?: 2 | 3;
+}
+
+function isExternalHref(to: string): boolean {
+  return /^(https?:|mailto:|tel:)/i.test(to);
+}
+
+/** Router Link for in-app paths; plain <a> for mailto / http(s) so they aren't treated as SPA routes. */
+function MegaLink({
+  to,
+  className,
+  onClick,
+  children,
+}: {
+  to: string;
+  className: string;
+  onClick?: () => void;
+  children: ReactNode;
+}) {
+  if (isExternalHref(to)) {
+    return (
+      <a
+        href={to}
+        className={className}
+        onClick={onClick}
+        rel={to.startsWith("http") ? "noopener noreferrer" : undefined}
+      >
+        {children}
+      </a>
+    );
+  }
+  return (
+    <Link to={to} className={className} onClick={onClick}>
+      {children}
+    </Link>
+  );
 }
 
 /** Hover-to-open mega-menu (click still toggles on touch). Outside-click / Escape still close. */
@@ -102,30 +137,30 @@ export default function NavMegaMenu({ label, items, panel, columns = 3 }: NavMeg
         <div id={menuId} className="nav-megamenu-panel" data-columns={columns} role="menu">
           <div className="nav-megamenu-grid" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
             {items.map((item) => (
-              <Link key={item.to} to={item.to} className="nav-megamenu-item" onClick={() => setOpen(false)}>
+              <MegaLink key={item.to} to={item.to} className="nav-megamenu-item" onClick={() => setOpen(false)}>
                 <span className="nav-megamenu-icon">{item.icon}</span>
                 <span>
                   <span className="nav-megamenu-item-title">{item.title}</span>
                   <span className="nav-megamenu-item-desc">{item.description}</span>
                 </span>
-              </Link>
+              </MegaLink>
             ))}
           </div>
           {panel && (
             <div className="nav-megamenu-side">
               <h4>{panel.title}</h4>
               {panel.items.map((p) => (
-                <Link key={p.to} to={p.to} className="nav-megamenu-side-item" onClick={() => setOpen(false)}>
+                <MegaLink key={p.to} to={p.to} className="nav-megamenu-side-item" onClick={() => setOpen(false)}>
                   <span className="nav-megamenu-icon nav-megamenu-icon-sm">{p.icon}</span>
                   <span>
                     <span className="nav-megamenu-item-title">{p.title}</span>
                     <span className="nav-megamenu-item-desc">{p.description}</span>
                   </span>
-                </Link>
+                </MegaLink>
               ))}
-              <Link to={panel.footerTo} className="nav-megamenu-side-footer" onClick={() => setOpen(false)}>
+              <MegaLink to={panel.footerTo} className="nav-megamenu-side-footer" onClick={() => setOpen(false)}>
                 {panel.footerLabel} →
-              </Link>
+              </MegaLink>
             </div>
           )}
         </div>
