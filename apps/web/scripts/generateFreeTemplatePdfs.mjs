@@ -2007,6 +2007,359 @@ const TEMPLATES = [
       { type: "signatures", signers: [{ label: "Sender", order: 1 }] },
     ],
   },
+  {
+    slug: "letter-of-intent",
+    title: "LETTER OF INTENT",
+    signerLabels: ["Party A", "Party B"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Party A: ", blank: TEXT_BLANK },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+      { type: "field", label: "Party B: ", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Background and Purpose" },
+      {
+        type: "paragraph",
+        text:
+          "The parties are considering a definitive agreement for the proposed transaction described below and " +
+          "wish to record their current understanding of its principal terms before that agreement is negotiated.",
+      },
+      { type: "field", label: "Proposed Transaction: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Proposed Terms" },
+      {
+        type: "table",
+        widths: [0.4, 0.6],
+        headers: ["Term", "Summary"],
+        rows: [
+          ["Purchase Price / Consideration", TEXT_BLANK],
+          ["Structure", TEXT_BLANK],
+          ["Target Timeline", TEXT_BLANK],
+        ],
+      },
+
+      { type: "section", text: "Non-Binding Effect" },
+      {
+        type: "paragraph",
+        text:
+          "This Letter of Intent is a statement of preliminary intent only. Except for the binding " +
+          "Confidentiality and Exclusivity sections below, nothing in this Letter obligates either party to " +
+          "complete the proposed transaction, and neither party may rely on it as a commitment to do so. A " +
+          "binding obligation to proceed arises only upon signing a separate, definitive agreement.",
+      },
+
+      { type: "section", text: "Confidentiality (Binding)" },
+      {
+        type: "paragraph",
+        text:
+          "Each party agrees to keep this Letter's existence and terms, and any non-public information exchanged " +
+          "while negotiating the proposed transaction, confidential, and to use it only to evaluate the " +
+          "transaction.",
+      },
+
+      { type: "section", text: "Exclusivity (Binding)" },
+      {
+        type: "paragraph",
+        text:
+          "For the period stated below, the party identified as the transaction's target will not solicit, " +
+          "negotiate, or accept a competing offer from any third party.",
+      },
+      { type: "field", label: "Exclusivity Period (if any): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Expiration of this Letter" },
+      {
+        type: "paragraph",
+        text:
+          "This Letter, and each party's obligations under it, expires automatically on the date below unless " +
+          "the parties have by then signed a definitive agreement or agreed in writing to extend it.",
+      },
+      { type: "field", label: "Expiration Date: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Letter shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Letter, including its " +
+          "binding Confidentiality and Exclusivity provisions, through good-faith negotiation. If unresolved " +
+          "within 30 days, either party may pursue mediation or binding arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Entire Agreement" },
+      {
+        type: "paragraph",
+        text:
+          "As to the binding provisions above, this Letter constitutes the entire understanding between the " +
+          "parties regarding its subject matter and supersedes all prior discussions, agreements, or " +
+          "representations, whether written or oral.",
+      },
+
+      { type: "section", text: "Severability" },
+      {
+        type: "paragraph",
+        text:
+          "If any provision of this Letter is found invalid or unenforceable, the remaining provisions shall " +
+          "continue in full force and effect.",
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Party A", order: 1 }, { label: "Party B", order: 2 }] },
+    ],
+  },
+  {
+    slug: "bill-of-sale",
+    title: "BILL OF SALE",
+    signerLabels: ["Seller", "Buyer"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Seller: ", blank: TEXT_BLANK },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+      { type: "field", label: "Buyer: ", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Description of Item(s)" },
+      {
+        type: "paragraph",
+        text: "The Seller sells, transfers, and delivers to the Buyer full ownership of the following item(s):",
+      },
+      { type: "field", label: "", blank: TEXT_BLANK },
+
+      { type: "section", text: "Sale Price" },
+      { type: "field", label: "Sale Price: ", blank: TEXT_BLANK },
+      { type: "field", label: "Payment Method: ", blank: TEXT_BLANK },
+      { type: "field", label: "Date of Sale: ", blank: DATE_BLANK },
+
+      { type: "section", text: "As-Is, No Warranty" },
+      {
+        type: "paragraph",
+        text:
+          "Except for the warranty of title below, the item(s) are sold \"as-is, where-is,\" with no warranty of " +
+          "any kind, express or implied, including as to condition, merchantability, or fitness for a particular " +
+          "purpose. The Buyer accepts the item(s) after their own inspection or opportunity to inspect.",
+      },
+
+      { type: "section", text: "Seller's Warranty of Title" },
+      {
+        type: "paragraph",
+        text:
+          "The Seller warrants that they are the lawful owner of the item(s), that the item(s) are free of all " +
+          "liens, encumbrances, and claims of any third party, and that the Seller has full right and authority " +
+          "to sell and transfer the item(s) to the Buyer.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Bill of Sale shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Entire Agreement" },
+      {
+        type: "paragraph",
+        text:
+          "This Bill of Sale constitutes the entire understanding between the parties regarding the sale of the " +
+          "item(s) described above and supersedes all prior discussions, agreements, or representations, whether " +
+          "written or oral.",
+      },
+
+      { type: "section", text: "Severability" },
+      {
+        type: "paragraph",
+        text:
+          "If any provision of this Bill of Sale is found invalid or unenforceable, the remaining provisions " +
+          "shall continue in full force and effect.",
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Seller", order: 1 }, { label: "Buyer", order: 2 }] },
+    ],
+  },
+  {
+    slug: "loan-agreement",
+    title: "LOAN AGREEMENT",
+    signerLabels: ["Lender", "Borrower"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Lender: ", blank: TEXT_BLANK },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+      { type: "field", label: "Borrower: ", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Loan Amount" },
+      { type: "field", label: "Principal Amount: ", blank: TEXT_BLANK },
+      { type: "field", label: "Date Funds Disbursed: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Interest Rate" },
+      { type: "field", label: "Annual Interest Rate: ", blank: TEXT_BLANK },
+      {
+        type: "paragraph",
+        text: "Interest accrues on the outstanding principal balance from the date of disbursement until repaid in full.",
+      },
+
+      { type: "section", text: "Repayment Terms" },
+      { type: "field", label: "Repayment Schedule: ", blank: TEXT_BLANK },
+      { type: "field", label: "Final Due Date: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Collateral" },
+      { type: "paragraph", text: "This loan is (check one and describe any collateral securing it):" },
+      { type: "field", label: "Secured / Unsecured — Collateral (if any): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Default and Acceleration" },
+      {
+        type: "paragraph",
+        text:
+          "If the Borrower fails to make any payment when due and does not cure the default within a reasonable " +
+          "cure period after written notice from the Lender, the Lender may declare the entire outstanding " +
+          "principal balance, together with accrued interest, immediately due and payable, and may pursue any " +
+          "remedy available by law, including against any collateral securing this loan.",
+      },
+
+      { type: "section", text: "Prepayment" },
+      {
+        type: "paragraph",
+        text:
+          "The Borrower may prepay all or part of the outstanding balance at any time without penalty. " +
+          "Prepayments are applied first to accrued interest, then to outstanding principal.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Agreement through " +
+          "good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding " +
+          "arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Entire Agreement" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement constitutes the entire understanding between the parties regarding its subject matter " +
+          "and supersedes all prior discussions, agreements, or representations, whether written or oral.",
+      },
+
+      { type: "section", text: "Severability" },
+      {
+        type: "paragraph",
+        text:
+          "If any provision of this Agreement is found invalid or unenforceable, the remaining provisions shall " +
+          "continue in full force and effect.",
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Lender", order: 1 }, { label: "Borrower", order: 2 }] },
+    ],
+  },
+  {
+    slug: "power-of-attorney",
+    title: "POWER OF ATTORNEY",
+    signerLabels: ["Principal", "Agent (Attorney-in-Fact)"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Principal: ", blank: TEXT_BLANK },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+      { type: "field", label: "Agent (Attorney-in-Fact): ", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Grant of Authority" },
+      {
+        type: "paragraph",
+        text:
+          "The Principal appoints the Agent as their attorney-in-fact, to act in the Principal's name and on the " +
+          "Principal's behalf as described in the Scope of Authority below.",
+      },
+
+      { type: "section", text: "Scope of Authority" },
+      {
+        type: "paragraph",
+        text:
+          "The Agent is authorized to act for the Principal in the following matters — for example, financial " +
+          "accounts or real estate transactions — or as a general power covering all lawful acts the Principal " +
+          "could perform personally:",
+      },
+      { type: "field", label: "", blank: TEXT_BLANK },
+
+      { type: "section", text: "Effective Date" },
+      { type: "field", label: "This Power of Attorney takes effect on: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Durability" },
+      {
+        type: "paragraph",
+        text:
+          "A durable power of attorney remains in effect if the Principal becomes incapacitated; a non-durable " +
+          "power of attorney ends at that point.",
+      },
+      { type: "field", label: "Is this Power of Attorney durable? (Yes/No): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Revocation" },
+      {
+        type: "paragraph",
+        text:
+          "The Principal may revoke this Power of Attorney at any time by delivering written notice to the Agent " +
+          "and to any third party relying on it. It also ends automatically upon the Principal's death.",
+      },
+
+      { type: "section", text: "State Requirements — Notarization and Witnessing" },
+      {
+        type: "paragraph",
+        text:
+          "Many states require a power of attorney to be notarized, witnessed, or both before it is legally " +
+          "valid and before banks, hospitals, or government agencies will honor it. Requirements vary by state " +
+          "and by the type of authority granted — real estate and healthcare powers often carry stricter rules " +
+          "than a general financial power. Confirm the notarization and witnessing requirements that apply where " +
+          "the Principal lives and where the Agent will use this document, and arrange for notarization and/or " +
+          "witnesses accordingly before relying on it. This document alone, without the signing formalities your " +
+          "state requires, may not be sufficient to grant valid legal authority.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Power of Attorney shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Power of Attorney through " +
+          "good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding " +
+          "arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Entire Agreement" },
+      {
+        type: "paragraph",
+        text:
+          "This Power of Attorney constitutes the entire understanding between the parties regarding its subject " +
+          "matter and supersedes all prior discussions, agreements, or representations, whether written or oral.",
+      },
+
+      { type: "section", text: "Severability" },
+      {
+        type: "paragraph",
+        text:
+          "If any provision of this Power of Attorney is found invalid or unenforceable, the remaining " +
+          "provisions shall continue in full force and effect.",
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Principal", order: 1 }, { label: "Agent", order: 2 }] },
+    ],
+  },
 ];
 
 fs.mkdirSync(outDir, { recursive: true });

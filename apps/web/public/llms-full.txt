@@ -18,7 +18,7 @@ Operated by RELACON GmbH, Elisabethstraße 15/5b, 1010 Vienna, Austria. Contact:
 - Tamper-evident audit trail + completion certificate on every completed document.
 - Documents (and all associated data) are deleted 9 days after creation, or as soon as everyone
   has signed and the final copy has been emailed out — whichever comes first.
-- 31 free templates with fields pre-placed (list below) at https://docracy.io/free-templates.
+- 45 free templates with fields pre-placed (list below) at https://docracy.io/free-templates.
 
 ## Paid tier ($10/month, requires a free account via magic-link email sign-in)
 
@@ -110,7 +110,7 @@ returnUrl?, ttlSeconds? }` returns `{ embedToken, embedUrl, expiresAt }`. Load `
 | sales-agreement | Sales / Purchase Agreement | Seller, Buyer | A one-off sale of goods. |
 | referral-agreement | Referral / Affiliate Agreement | Company, Referrer | Commission terms for someone referring paying customers. |
 
-All 31 templates' full legal text (Markdown, MIT license, free to copy/fork) is also published at
+All 45 templates' full legal text (Markdown, MIT license, free to copy/fork) is also published at
 https://github.com/docracy1/docracy-templates — each file links back to its matching page above
 for a ready-to-sign version.
 
