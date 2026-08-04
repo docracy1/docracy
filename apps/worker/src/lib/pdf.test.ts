@@ -1,15 +1,24 @@
 import { describe, it, expect } from "vitest";
 import { PDFDocument } from "pdf-lib";
-import { burnFields, decodedByteLength, generateCertificate, mergePdfs, MAX_SIGNATURE_IMAGE_BYTES } from "./pdf";
+import {
+  burnFields,
+  decodedByteLength,
+  generateCertificate,
+  stampPageFooters,
+  mergePdfs,
+  MAX_SIGNATURE_IMAGE_BYTES,
+} from "./pdf";
+import { docracySealPngBytes } from "./docracySealPng";
 import type { DocField, DocState } from "@docracy/shared";
 
 // A real minimal 1x1 PNG — needed because pdf-lib's embedPng actually decodes the image.
 const TINY_PNG =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=";
+const TINY_PNG_BYTES = Uint8Array.from(atob(TINY_PNG.split(",")[1]!), (c) => c.charCodeAt(0));
 
-async function makeBlankPdfBytes(): Promise<Uint8Array> {
+async function makeBlankPdfBytes(pageCount = 1): Promise<Uint8Array> {
   const doc = await PDFDocument.create();
-  doc.addPage([400, 500]);
+  for (let i = 0; i < pageCount; i++) doc.addPage([400, 500]);
   return doc.save();
 }
 
@@ -71,6 +80,35 @@ describe("burnFields", () => {
     await expect(
       burnFields(pdfBytes, [field], [{ fieldId: "f1", value: longValue }], "anna@example.com", new Date().toISOString())
     ).resolves.toBeInstanceOf(Uint8Array);
+  });
+});
+
+describe("stampPageFooters", () => {
+  it("keeps page count and grows the PDF when stamping every page", async () => {
+    const pdfBytes = await makeBlankPdfBytes(3);
+    const result = await stampPageFooters(pdfBytes, {
+      docId: "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+      completedAt: "2026-01-02T12:00:00Z",
+    });
+    const loaded = await PDFDocument.load(result);
+    expect(loaded.getPageCount()).toBe(3);
+    expect(result.byteLength).toBeGreaterThan(pdfBytes.byteLength);
+  });
+
+  it("accepts a white-label PNG logo in place of the Docracy seal", async () => {
+    const pdfBytes = await makeBlankPdfBytes(1);
+    const result = await stampPageFooters(pdfBytes, {
+      docId: "doc-wl",
+      completedAt: "2026-01-02T12:00:00Z",
+      brand: { logoBytes: TINY_PNG_BYTES, logoContentType: "image/png" },
+    });
+    const loaded = await PDFDocument.load(result);
+    expect(loaded.getPageCount()).toBe(1);
+    expect(result.byteLength).toBeGreaterThan(0);
+  });
+
+  it("embeds the real Docracy seal bytes", () => {
+    expect(docracySealPngBytes().byteLength).toBeGreaterThan(1000);
   });
 });
 

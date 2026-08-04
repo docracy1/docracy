@@ -1,7 +1,14 @@
 import { Hono } from "hono";
 import { getCookie } from "hono/cookie";
 import { getDoc, putDoc, isSignerOnTurn, currentTurnOrder } from "../lib/kv";
-import { burnFields, decodedByteLength, generateCertificate, MAX_SIGNATURE_IMAGE_BYTES, type FieldValue } from "../lib/pdf";
+import {
+  burnFields,
+  decodedByteLength,
+  generateCertificate,
+  stampPageFooters,
+  MAX_SIGNATURE_IMAGE_BYTES,
+  type FieldValue,
+} from "../lib/pdf";
 import {
   sendSigningInvite,
   sendCompletionEmails,
@@ -17,7 +24,7 @@ import { verifyPin, issueUnlockToken, verifyUnlockToken } from "../lib/signUnloc
 import { deliverWebhookEvent } from "../lib/webhooks";
 import { uploadCompletedDocument } from "../lib/cloudConnectors";
 import { trackEvent, NOTRACK_COOKIE_NAME } from "../lib/analytics";
-import { getWorkspaceSlug, hasCustomLogo, logoPath } from "../lib/branding";
+import { getWorkspaceSlug, getLogoObject, hasCustomLogo, logoPath } from "../lib/branding";
 import { authenticateDocToken } from "../lib/docTokenAuth";
 import { signToken } from "@docracy/shared";
 import {
@@ -728,26 +735,52 @@ sign.post("/sign/:token", async (c) => {
   } else {
     freshDoc.status = "completed";
     freshDoc.completedAt = new Date().toISOString();
+
+    // Platform audit footer on every page of the final PDF — applied after the last signature
+    // burn so the signer's "signed" event hash still reflects what they submitted, while the
+    // completed hash / timestamp / certificate cover the stamped deliverable.
+    let finalBytes = updatedBytes;
+    try {
+      const logo = freshDoc.accountId ? await getLogoObject(c.env, freshDoc.accountId) : null;
+      finalBytes = await stampPageFooters(updatedBytes, {
+        docId: freshDoc.docId,
+        completedAt: freshDoc.completedAt,
+        brand: logo ? { logoBytes: logo.bytes, logoContentType: logo.contentType } : null,
+      });
+    } catch (err) {
+      trackEvent(c.env, {
+        event: "pdf_generation_failed",
+        route: "sign",
+        userAgent,
+        country: c.req.header("CF-IPCountry"),
+        userId: freshDoc.accountId,
+        documentId: freshDoc.docId,
+        errorCode: err instanceof Error ? err.message.slice(0, 200) : "unknown",
+      });
+      throw err;
+    }
+    const finalHash = await sha256Hex(finalBytes);
+
     events.push({
       type: "completed",
       signerOrder: null,
       ip: null,
       userAgent: null,
       timestamp: freshDoc.completedAt,
-      pdfSha256: signedHash,
+      pdfSha256: finalHash,
     });
     freshDoc.events = events;
 
-    const timestamp = await requestTimestamp(signedHash);
+    const timestamp = await requestTimestamp(finalHash);
     if (timestamp) {
       freshDoc.timestampToken = timestamp.tokenBase64;
       freshDoc.timestampGenTime = timestamp.genTime;
     }
 
-    await c.env.DOCRACY_DOCS.put(`docs/${freshDoc.docId}/final.pdf`, updatedBytes);
+    await c.env.DOCRACY_DOCS.put(`docs/${freshDoc.docId}/final.pdf`, finalBytes);
     let certificateBytes: Uint8Array;
     try {
-      certificateBytes = await generateCertificate(freshDoc, signedHash);
+      certificateBytes = await generateCertificate(freshDoc, finalHash);
     } catch (err) {
       trackEvent(c.env, {
         event: "pdf_generation_failed",
@@ -763,7 +796,7 @@ sign.post("/sign/:token", async (c) => {
     await c.env.DOCRACY_DOCS.put(`docs/${freshDoc.docId}/certificate.pdf`, certificateBytes);
 
     await putDoc(c.env, freshDoc);
-    await sendCompletionEmails(c.env, freshDoc, updatedBytes, certificateBytes);
+    await sendCompletionEmails(c.env, freshDoc, finalBytes, certificateBytes);
 
     if (freshDoc.accountId) {
       indexNonFatal(c.executionCtx, freshDoc.docId, "completed", indexCompleted(c.env, freshDoc));
@@ -776,7 +809,7 @@ sign.post("/sign/:token", async (c) => {
       connectorNonFatal(
         c.executionCtx,
         freshDoc.docId,
-        uploadCompletedDocument(c.env, freshDoc.accountId, freshDoc.docId, `${freshDoc.docId}.pdf`, updatedBytes)
+        uploadCompletedDocument(c.env, freshDoc.accountId, freshDoc.docId, `${freshDoc.docId}.pdf`, finalBytes)
       );
     }
   }

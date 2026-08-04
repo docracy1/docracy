@@ -1,5 +1,6 @@
-import { PDFDocument, StandardFonts, rgb, type PDFFont } from "pdf-lib";
+import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage, type PDFImage } from "pdf-lib";
 import type { DocField, DocState } from "@docracy/shared";
+import { docracySealPngBytes } from "./docracySealPng";
 
 export interface FieldValue {
   fieldId: string;
@@ -139,6 +140,138 @@ function dataUrlToBytes(dataUrl: string): Uint8Array {
 
 const MUTED = rgb(0.4, 0.4, 0.42);
 const INK = rgb(0.1, 0.1, 0.12);
+/** Matches the Docracy seal mark (#2F7ED8). */
+const BRAND = rgb(47 / 255, 126 / 255, 216 / 255);
+const FOOTER_INK = rgb(0.45, 0.45, 0.48);
+
+/** Bottom safe zone for the per-page audit strip — keep clear of typical signature fields. */
+const FOOTER_BOTTOM = 8;
+const FOOTER_SEAL_SIZE = 12;
+const FOOTER_FONT_SIZE = 6.5;
+
+export interface PageFooterBrand {
+  /** White-label workspace logo bytes (PNG/JPEG). When set, replaces the Docracy seal. */
+  logoBytes?: Uint8Array | null;
+  logoContentType?: string | null;
+}
+
+async function embedBrandImage(
+  pdfDoc: PDFDocument,
+  bytes: Uint8Array,
+  contentType: string | null | undefined
+): Promise<PDFImage | null> {
+  const ct = (contentType ?? "").toLowerCase();
+  try {
+    if (ct.includes("jpeg") || ct.includes("jpg")) return await pdfDoc.embedJpg(bytes);
+    if (ct.includes("png") || !ct) return await pdfDoc.embedPng(bytes);
+    // WebP (and anything else) isn't embeddable via pdf-lib — skip the image.
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Stamps a subtle audit footer on every page of the completed PDF.
+ * Left: document id + completion timestamp. Right: "Secured by" + Docracy seal, or the
+ * workspace's white-label logo when provided (no Docracy mark in that case).
+ */
+export async function stampPageFooters(
+  pdfBytes: Uint8Array,
+  opts: { docId: string; completedAt: string; brand?: PageFooterBrand | null }
+): Promise<Uint8Array> {
+  const pdfDoc = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
+  const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+  const leftText = `ID ${opts.docId}  ·  ${new Date(opts.completedAt).toLocaleString()}`;
+
+  const customBytes = opts.brand?.logoBytes ?? null;
+  let rightImage: PDFImage | null = null;
+  let useDocracySeal = true;
+
+  if (customBytes && customBytes.byteLength > 0) {
+    useDocracySeal = false;
+    rightImage = await embedBrandImage(pdfDoc, customBytes, opts.brand?.logoContentType);
+  }
+  if (useDocracySeal) {
+    rightImage = await pdfDoc.embedPng(docracySealPngBytes());
+  }
+
+  for (const page of pdfDoc.getPages()) {
+    const { width: pageW } = page.getSize();
+    const marginX = Math.min(36, pageW * 0.06);
+    const textY = FOOTER_BOTTOM + (FOOTER_SEAL_SIZE - FOOTER_FONT_SIZE) / 2;
+
+    page.drawText(leftText, {
+      x: marginX,
+      y: textY,
+      size: FOOTER_FONT_SIZE,
+      font,
+      color: FOOTER_INK,
+      maxWidth: pageW * 0.55,
+    });
+
+    if (!rightImage && !useDocracySeal) {
+      // White-label logo present but not embeddable (e.g. WebP) — omit right brand rather than
+      // falling back to Docracy, which would defeat white-label.
+      continue;
+    }
+    if (!rightImage) continue;
+
+    const scaled = rightImage.scaleToFit(FOOTER_SEAL_SIZE * 2.2, FOOTER_SEAL_SIZE);
+    const label = "Secured by";
+    const labelWidth = font.widthOfTextAtSize(label, FOOTER_FONT_SIZE);
+    const gap = 3;
+    const blockWidth = labelWidth + gap + scaled.width;
+    const blockX = pageW - marginX - blockWidth;
+
+    page.drawText(label, {
+      x: blockX,
+      y: textY,
+      size: FOOTER_FONT_SIZE,
+      font,
+      color: FOOTER_INK,
+    });
+    page.drawImage(rightImage, {
+      x: blockX + labelWidth + gap,
+      y: FOOTER_BOTTOM,
+      width: scaled.width,
+      height: scaled.height,
+    });
+  }
+
+  return pdfDoc.save();
+}
+
+/** Circular SES level mark — honest simple-electronic-signature badge, not QES/AES. */
+function drawSesBadge(page: PDFPage, cx: number, cy: number, size: number, bold: PDFFont) {
+  const r = size / 2;
+  page.drawEllipse({
+    x: cx,
+    y: cy,
+    xScale: r,
+    yScale: r,
+    borderWidth: 1.6,
+    borderColor: BRAND,
+  });
+  page.drawEllipse({
+    x: cx,
+    y: cy,
+    xScale: r - 3.5,
+    yScale: r - 3.5,
+    borderWidth: 0.8,
+    borderColor: BRAND,
+  });
+  const label = "SES";
+  const textSize = size * 0.26;
+  const tw = bold.widthOfTextAtSize(label, textSize);
+  page.drawText(label, {
+    x: cx - tw / 2,
+    y: cy - textSize * 0.35,
+    size: textSize,
+    font: bold,
+    color: BRAND,
+  });
+}
 
 /**
  * A standalone one-page PDF documenting who signed, from where, when, and a hash of the final
@@ -146,12 +279,15 @@ const INK = rgb(0.1, 0.1, 0.12);
  * hashing the delivered document and hashing "what this certificate attests to" refer to the
  * same, unambiguous bytes. Bounded to one page: the free tier caps signers at 2, so the signer
  * list + event log always fits comfortably on US Letter.
+ *
+ * Branding is honest SES only — no PDF/A, LTV, QES, or AES seals (those are not implemented).
  */
 export async function generateCertificate(doc: DocState, finalPdfSha256: string): Promise<Uint8Array> {
   const cert = await PDFDocument.create();
   const page = cert.addPage([612, 792]); // US Letter, points
   const font = await cert.embedFont(StandardFonts.Helvetica);
   const bold = await cert.embedFont(StandardFonts.HelveticaBold);
+  const seal = await cert.embedPng(docracySealPngBytes());
 
   const left = 56;
   let y = 740;
@@ -161,11 +297,74 @@ export async function generateCertificate(doc: DocState, finalPdfSha256: string)
     y -= size + 8;
   };
 
-  write("Certificate of Completion", 20, bold);
-  y -= 4;
+  // Brand header: Docracy seal + "Signed with Docracy"
+  const headerSeal = 36;
+  const sealScaled = seal.scaleToFit(headerSeal, headerSeal);
+  page.drawImage(seal, {
+    x: left,
+    y: y - sealScaled.height + 8,
+    width: sealScaled.width,
+    height: sealScaled.height,
+  });
+  page.drawText("Signed with Docracy", {
+    x: left + sealScaled.width + 10,
+    y: y - 6,
+    size: 14,
+    font: bold,
+    color: INK,
+  });
+  page.drawText("Certificate of Completion", {
+    x: left + sealScaled.width + 10,
+    y: y - 24,
+    size: 11,
+    font,
+    color: MUTED,
+  });
+  y -= headerSeal + 16;
+
   write(`Document ID: ${doc.docId}`, 10, font, MUTED);
   write(`Completed: ${doc.completedAt ? new Date(doc.completedAt).toLocaleString() : "-"}`, 10, font, MUTED);
-  y -= 8;
+  y -= 4;
+
+  // Honest signature-level seal (SES only — competitors may show QES/LTV/PDF/A; we do not).
+  write("Signature level", 13, bold);
+  const badgeSize = 44;
+  const badgeCy = y - badgeSize / 2 + 4;
+  drawSesBadge(page, left + badgeSize / 2, badgeCy, badgeSize, bold);
+  const levelLeft = left + badgeSize + 12;
+  page.drawText("Simple Electronic Signature (SES)", {
+    x: levelLeft,
+    y: badgeCy + 10,
+    size: 10,
+    font: bold,
+    color: INK,
+  });
+  page.drawText("Aligns with eIDAS SES / US ESIGN & UETA for many business docs.", {
+    x: levelLeft,
+    y: badgeCy - 4,
+    size: 8,
+    font,
+    color: MUTED,
+  });
+  page.drawText("No identity verification · Not AES/QES · Not PDF/A or PAdES-LTV", {
+    x: levelLeft,
+    y: badgeCy - 16,
+    size: 8,
+    font,
+    color: MUTED,
+  });
+  y = badgeCy - badgeSize / 2 - 14;
+
+  write("What this certificate records", 13, bold);
+  write("HMAC-signed signing links (not guessable account passwords)", 9, font, MUTED);
+  write("Per-event audit trail: consent, sign, timestamp, IP, user-agent", 9, font, MUTED);
+  write("SHA-256 hash of the final signed PDF (integrity check)", 9, font, MUTED);
+  if (doc.timestampGenTime) {
+    write("Optional RFC 3161 trusted timestamp from a third-party TSA (when obtained)", 9, font, MUTED);
+  }
+  write("Short retention TTL — documents are deleted after the retention window", 9, font, MUTED);
+  write("Does not prove who physically signed — only what was signed and when", 9, font, MUTED);
+  y -= 6;
 
   write("Signers", 13, bold);
   const events = doc.events ?? [];
@@ -179,20 +378,20 @@ export async function generateCertificate(doc: DocState, finalPdfSha256: string)
       MUTED
     );
   }
-  y -= 8;
+  y -= 6;
 
   write("Each signer explicitly confirmed their consent to sign electronically", 9, font, MUTED);
   write("before submitting a signature — see the event log below.", 9, font, MUTED);
-  y -= 8;
+  y -= 6;
 
   write("Integrity", 13, bold);
   write("SHA-256 of the final signed document:", 9, font, MUTED);
-  write(finalPdfSha256, 9, font, INK);
+  write(finalPdfSha256, 8, font, INK);
   if (doc.timestampGenTime) {
     write("Trusted timestamp (RFC 3161, FreeTSA.org):", 9, font, MUTED);
     write(new Date(doc.timestampGenTime).toLocaleString(), 9, font, INK);
   }
-  y -= 8;
+  y -= 6;
 
   write("Event log", 13, bold);
   for (const e of events) {
