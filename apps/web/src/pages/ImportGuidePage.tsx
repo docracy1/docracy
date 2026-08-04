@@ -80,6 +80,23 @@ export default function ImportGuidePage({ slug }: { slug: string }) {
           </div>
         </div>
 
+        <h2 style={{ fontSize: 22, marginTop: 32, marginBottom: 8 }}>Where your documents end up</h2>
+        <p>
+          Docracy isn't a long-term archive by design — completed documents and their audit trail are
+          encrypted and automatically deleted after a short retention window (9 days by default), the same
+          as everything else on the platform. If you're migrating documents over, you'll want them to land
+          somewhere permanent, not just disappear again.
+        </p>
+        <p>
+          A paid account ($10/mo) can connect Dropbox, OneDrive, Box, or Google Drive — once linked, every
+          completed document auto-uploads there the moment everyone's signed, so it lives in your own
+          storage going forward. Zapier and webhooks cover any other destination (a CRM, a shared drive, an
+          internal tool) if none of those four fit.
+        </p>
+        <p style={{ fontSize: 14 }}>
+          <Link to="/docs">See all connectors →</Link>
+        </p>
+
         <p style={{ marginTop: 32, fontSize: 14 }}>
           <Link to={`/${page.alternativeSlug}`}>Why teams switch from {page.competitorName} →</Link>
         </p>
