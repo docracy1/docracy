@@ -370,4 +370,78 @@ describe("POST /api/documents", () => {
     const stored = JSON.parse(docValue);
     expect(stored.accountId).toBe("acct-2");
   });
+
+  it("rejects a WhatsApp signer for an anonymous (signed-out) sender", async () => {
+    const { env } = makeMockEnv();
+    const pdf = await makeValidPdfBytes();
+    const meta = { ...validMeta, whatsappInvites: true, signers: [{ ...validMeta.signers[0], whatsappPhone: "+14155551234" }, validMeta.signers[1]] };
+    const res = await documents.request("/", { method: "POST", body: buildForm(pdf, meta) }, env, MOCK_CTX);
+    expect(res.status).toBe(402);
+    const body: { error: string } = await res.json();
+    expect(body.error).toMatch(/free Docracy account/);
+  });
+
+  it("rejects WhatsApp signers past the free tier's monthly cap of 2", async () => {
+    const { env, d1 } = makeMockEnv({ FREE_TIER_MAX_SIGNERS: "5" });
+    const ctx = makeCtx();
+    const sessionToken = await createSession(env, ctx, "acct-free", "free@example.com", false, false, null, null);
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 0)`)
+      .bind("acct-free", "free@example.com", new Date().toISOString())
+      .run();
+    const pdf = await makeValidPdfBytes();
+    const meta = {
+      ...validMeta,
+      whatsappInvites: true,
+      signers: [
+        { order: 1, name: "A", email: "a@example.com", whatsappPhone: "+14155551234" },
+        { order: 2, name: "B", email: "b@example.com", whatsappPhone: "+14155551235" },
+        { order: 3, name: "C", email: "c@example.com", whatsappPhone: "+14155551236" },
+      ],
+      fields: [
+        { id: "f1", signerOrder: 1, page: 0, xFrac: 0.1, yFrac: 0.1, wFrac: 0.2, hFrac: 0.05 },
+        { id: "f2", signerOrder: 2, page: 0, xFrac: 0.1, yFrac: 0.3, wFrac: 0.2, hFrac: 0.05 },
+        { id: "f3", signerOrder: 3, page: 0, xFrac: 0.1, yFrac: 0.5, wFrac: 0.2, hFrac: 0.05 },
+      ],
+    };
+    const res = await documents.request(
+      "/",
+      { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${sessionToken}` }, body: buildForm(pdf, meta) },
+      env,
+      ctx
+    );
+    expect(res.status).toBe(402);
+    const body: { error: string } = await res.json();
+    expect(body.error).toMatch(/2 WhatsApp-signed invites/);
+  });
+
+  it("lets a paid account send WhatsApp invites with no monthly cap", async () => {
+    const { env, kv, d1 } = makeMockEnv();
+    const ctx = makeCtx();
+    const sessionToken = await createSession(env, ctx, "acct-paid", "paid@example.com", true, false, null, null);
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 1)`)
+      .bind("acct-paid", "paid@example.com", new Date().toISOString())
+      .run();
+    const pdf = await makeValidPdfBytes();
+    const meta = {
+      ...validMeta,
+      whatsappInvites: true,
+      signers: [
+        { order: 1, name: "A", email: "a@example.com", whatsappPhone: "+14155551234" },
+        { order: 2, name: "B", email: "b@example.com", whatsappPhone: "+14155551235" },
+      ],
+    };
+    const res = await documents.request(
+      "/",
+      { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${sessionToken}` }, body: buildForm(pdf, meta) },
+      env,
+      ctx
+    );
+    expect(res.status).toBe(200);
+    const [, docValue] = [...kv._store.entries()].find(([k]) => k.startsWith("doc:"))!;
+    const stored = JSON.parse(docValue);
+    expect(stored.whatsappInvites).toBe(true);
+    expect(stored.signers[0].whatsappPhone).toBe("+14155551234");
+  });
 });
