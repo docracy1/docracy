@@ -223,6 +223,13 @@ function ArticleBlocks({ blocks }: { blocks: ArticleBlock[] }) {
             </figure>
           );
         }
+        if (block.type === "link") {
+          return (
+            <p key={i}>
+              <Link to={block.to}>{block.text}</Link>
+            </p>
+          );
+        }
         return <p key={i}>{block.text}</p>;
       })}
     </>

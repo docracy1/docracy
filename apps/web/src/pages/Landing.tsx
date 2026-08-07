@@ -151,13 +151,13 @@ const TESTIMONIALS: Array<{ quoteKey: string; name: string; titleKey: string; co
   },
 ];
 
-const USE_CASE_KEYS: Array<{ titleKey: string; bodyKey: string }> = [
-  { titleKey: "landing.uc1.title", bodyKey: "landing.uc1.body" },
-  { titleKey: "landing.uc2.title", bodyKey: "landing.uc2.body" },
-  { titleKey: "landing.uc3.title", bodyKey: "landing.uc3.body" },
-  { titleKey: "landing.uc4.title", bodyKey: "landing.uc4.body" },
-  { titleKey: "landing.uc5.title", bodyKey: "landing.uc5.body" },
-  { titleKey: "landing.uc6.title", bodyKey: "landing.uc6.body" },
+const USE_CASE_KEYS: Array<{ titleKey: string; bodyKey: string; to: string }> = [
+  { titleKey: "landing.uc1.title", bodyKey: "landing.uc1.body", to: "/client-contracts" },
+  { titleKey: "landing.uc2.title", bodyKey: "landing.uc2.body", to: "/onboarding-documents" },
+  { titleKey: "landing.uc3.title", bodyKey: "landing.uc3.body", to: "/simple-agreements" },
+  { titleKey: "landing.uc4.title", bodyKey: "landing.uc4.body", to: "/vendor-agreements" },
+  { titleKey: "landing.uc5.title", bodyKey: "landing.uc5.body", to: "/compliance-documentation" },
+  { titleKey: "landing.uc6.title", bodyKey: "landing.uc6.body", to: "/nda-signing" },
 ];
 
 const HOW_IT_WORKS_KEYS: Array<{ titleKey: string; bodyKey: string }> = [
@@ -460,10 +460,10 @@ export default function Landing() {
           <h2 style={{ fontSize: 22, marginBottom: 0 }}>{t("landing.useCasesTitle")}</h2>
           <div className="accent-grid">
             {USE_CASE_KEYS.map((u) => (
-              <div key={u.titleKey} className="accent-item">
+              <Link key={u.titleKey} to={localizePath(u.to, locale)} className="accent-item" style={{ textDecoration: "none", color: "inherit" }}>
                 <h3 style={{ fontSize: 15, marginBottom: 3 }}>{t(u.titleKey)}</h3>
                 <p style={{ margin: 0, fontSize: 13.5 }}>{t(u.bodyKey)}</p>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

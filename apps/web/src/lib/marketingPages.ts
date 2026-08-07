@@ -149,7 +149,11 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     useCases: ["Supplier contracts", "Service agreements", "Partnership agreements", "Renewal documents", "One-off vendor deals"],
     ctaLabel: "Send vendor agreement",
     ctaTo: "/prepare?freeTemplate=vendor-agreement",
-    relatedLinks: [{ label: "Free vendor agreement template", to: "/free-templates/vendor-agreement" }],
+    relatedLinks: [
+      { label: "Free vendor agreement template", to: "/free-templates/vendor-agreement" },
+      { label: "See pricing", to: "/pricing" },
+      { label: "For construction businesses", to: "/industry/construction" },
+    ],
   },
   {
     slug: "compliance-documentation",
@@ -172,7 +176,11 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     useCases: ["HR compliance", "Safety policies", "Mandatory acknowledgements", "Internal documentation", "Contractor compliance"],
     ctaLabel: "Send compliance document",
     ctaTo: "/prepare",
-    relatedLinks: [{ label: "Free remote work policy template", to: "/free-templates/remote-work-policy" }],
+    relatedLinks: [
+      { label: "Free remote work policy template", to: "/free-templates/remote-work-policy" },
+      { label: "See pricing", to: "/pricing" },
+      { label: "For small businesses", to: "/industry/small-business" },
+    ],
   },
 ];
 

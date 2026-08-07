@@ -9,7 +9,11 @@ export type ArticleBlock =
   | { type: "list"; items: string[] }
   | { type: "h2"; text: string }
   | { type: "h3"; text: string }
-  | { type: "img"; src: string; alt: string; caption?: string };
+  | { type: "img"; src: string; alt: string; caption?: string }
+  /** A standalone contextual link to another internal page (a feature/industry/explainer page,
+   *  a template, etc.) — for linking a cluster article to the product page its topic matches,
+   *  not for arbitrary external links. */
+  | { type: "link"; text: string; to: string };
 
 export interface ArticlePost {
   slug: string;
@@ -36,6 +40,10 @@ function h2(text: string): ArticleBlock {
 
 function h3(text: string): ArticleBlock {
   return { type: "h3", text };
+}
+
+function link(text: string, to: string): ArticleBlock {
+  return { type: "link", text, to };
 }
 
 function img(src: string, alt: string, caption?: string): ArticleBlock {
@@ -73,6 +81,7 @@ export const ARTICLES: ArticlePost[] = [
         "Signing an NDA online is fast and legally valid. Tools like Docracy.io allow you to send NDAs without " +
           "accounts or complex workflows."
       ),
+      link("Send an NDA now — free mutual NDA template", "/nda-signing"),
     ],
   },
   {
@@ -133,6 +142,7 @@ export const ARTICLES: ArticlePost[] = [
         "Prevents misuse of your own work",
         "Builds trust early in the relationship",
       ]),
+      link("Docracy for freelancers", "/industry/freelancers"),
     ],
   },
   {
@@ -553,7 +563,10 @@ export const ARTICLES: ArticlePost[] = [
     description: "Vendor agreements define responsibilities, pricing, delivery terms, and confidentiality between a business and its suppliers.",
     publishedDate: PUBLISHED,
     cluster: "Small Business",
-    blocks: [p("Defines responsibilities, pricing, delivery terms, and confidentiality.")],
+    blocks: [
+      p("Defines responsibilities, pricing, delivery terms, and confidentiality."),
+      link("Send a vendor agreement — free template", "/vendor-agreements"),
+    ],
   },
   {
     slug: "how-to-manage-recurring-documents",
