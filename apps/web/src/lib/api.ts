@@ -302,10 +302,22 @@ export interface Account {
   /** ISO timestamp of the workspace's first unresolved Stripe payment failure, or null — drives
    *  the Dashboard's "please settle your unpaid invoice" banner. */
   paymentFailedAt: string | null;
+  /** Whether this account opted in to occasional product-news emails (accounts.marketing_opt_in). */
+  marketingOptIn: boolean;
 }
 
 export async function fetchMe(): Promise<{ account: Account | null; isAdmin: boolean }> {
   const res = await apiFetch("/api/auth/me");
+  return asJson(res);
+}
+
+/** Updates the caller's own occasional-product-news email preference. */
+export async function setMarketingOptIn(optIn: boolean): Promise<{ ok: true; marketingOptIn: boolean }> {
+  const res = await apiFetch("/api/account/marketing-opt-in", {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ optIn }),
+  });
   return asJson(res);
 }
 
@@ -772,6 +784,24 @@ export async function grantEnterprise(email: string): Promise<{ ok: true }> {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email }),
+  });
+  return asJson(res);
+}
+
+/** Live count of opted-in marketing-email recipients (accounts.marketing_opt_in=1 plus
+ *  non-unsubscribed onboarding_leads, deduplicated by email). Admin-only. */
+export async function fetchMarketingRecipientsCount(): Promise<{ count: number }> {
+  const res = await apiFetch("/api/admin/marketing-email/recipients-count");
+  return asJson(res);
+}
+
+/** Sends an admin-composed broadcast to every current opted-in recipient. Irreversible — the
+ *  caller should confirm with the admin before invoking this. Admin-only. */
+export async function sendMarketingEmail(subject: string, body: string): Promise<{ sent: number; failed: number }> {
+  const res = await apiFetch("/api/admin/marketing-email/send", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ subject, body }),
   });
   return asJson(res);
 }

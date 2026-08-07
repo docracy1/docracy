@@ -1100,6 +1100,14 @@ export async function sendPreparerLeadStep4(env: Env, email: string, locale: Loc
   });
 }
 
+/** Admin-composed broadcast (see lib/marketingEmail.ts) — the only email type sent to someone who
+ *  isn't mid-signing-flow, so it's the only one gated on an explicit opt-in rather than being
+ *  implied by using the product. `bodyHtml` already has the required unsubscribe/postal-address
+ *  footer appended by the caller before this wraps it in the standard branded shell. */
+export async function sendMarketingEmail(env: Env, to: string, subject: string, bodyHtml: string): Promise<void> {
+  await send(env, to, subject, emailShell(env.PUBLIC_APP_URL, bodyHtml), { emailType: "marketing_broadcast" });
+}
+
 function bytesToBase64(bytes: Uint8Array): string {
   let binary = "";
   for (const b of bytes) binary += String.fromCharCode(b);

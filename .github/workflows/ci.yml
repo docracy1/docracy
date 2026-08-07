@@ -49,3 +49,7 @@ jobs:
         # domain stays on the last --branch main deploy.
         run: npx wrangler pages deploy dist --project-name=docracy --branch main
         working-directory: apps/web
+      - name: Submit sitemap to IndexNow (Bing, Yandex, etc.)
+        # Best-effort — a transient IndexNow outage shouldn't fail an otherwise-successful deploy.
+        run: npm run submit:indexnow || true
+        working-directory: apps/web

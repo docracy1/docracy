@@ -11,7 +11,9 @@ import {
   fetchAdminDocuments,
   fetchAdminEnterpriseAccounts,
   fetchAdminRoadmapFeatures,
+  fetchMarketingRecipientsCount,
   grantEnterprise,
+  sendMarketingEmail,
   setAnalyticsNoTrack,
   updateBlogPost,
   type AdminAccount,
@@ -993,6 +995,113 @@ function EnterpriseAccountsCard() {
   );
 }
 
+/** Composes and sends the opted-in product-news broadcast (accounts.marketing_opt_in +
+ *  non-unsubscribed onboarding_leads — see lib/marketingEmail.ts on the worker). Real emails to
+ *  real people, so sending requires clicking "Send" twice — the button relabels itself into an
+ *  explicit confirmation rather than firing on the first click. */
+function MarketingEmailCard() {
+  const [count, setCount] = useState<number | null>(null);
+  const [countError, setCountError] = useState<string | null>(null);
+  const [subject, setSubject] = useState("");
+  const [body, setBody] = useState("");
+  const [confirming, setConfirming] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState<string | null>(null);
+  const [sendResult, setSendResult] = useState<{ sent: number; failed: number } | null>(null);
+
+  const refreshCount = () =>
+    fetchMarketingRecipientsCount()
+      .then((res) => setCount(res.count))
+      .catch((err) => setCountError(err instanceof Error ? err.message : "Failed to load recipient count"));
+
+  useEffect(() => {
+    refreshCount();
+  }, []);
+
+  const onSendClick = async () => {
+    if (!confirming) {
+      setConfirming(true);
+      return;
+    }
+    setSending(true);
+    setSendError(null);
+    setSendResult(null);
+    try {
+      const result = await sendMarketingEmail(subject.trim(), body.trim());
+      setSendResult(result);
+      setSubject("");
+      setBody("");
+      await refreshCount();
+    } catch (err) {
+      setSendError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setSending(false);
+      setConfirming(false);
+    }
+  };
+
+  const canSend = subject.trim().length > 0 && body.trim().length > 0 && !sending;
+
+  return (
+    <div className="card" style={{ marginBottom: 24 }}>
+      <h3 style={{ marginTop: 0, fontSize: 15 }}>Marketing email</h3>
+      <p style={{ fontSize: 12, color: "var(--mute)", marginTop: -4 }}>
+        Sends to accounts that opted in under Dashboard &rarr; Subscription, plus leads who haven't
+        unsubscribed. Every send gets a one-click unsubscribe footer automatically.{" "}
+        {countError ? (
+          <span style={{ color: "var(--danger)" }}>{countError}</span>
+        ) : (
+          <strong>{count === null ? "Loading recipients…" : `${count} recipient${count === 1 ? "" : "s"}`}</strong>
+        )}
+      </p>
+
+      <input
+        className="form-input"
+        style={{ marginBottom: 8 }}
+        placeholder="Subject"
+        aria-label="Subject"
+        value={subject}
+        onChange={(e) => {
+          setSubject(e.target.value);
+          setConfirming(false);
+        }}
+      />
+      <textarea
+        className="form-input"
+        style={{ marginBottom: 8, minHeight: 160, fontFamily: "monospace", fontSize: 13 }}
+        placeholder="HTML body — sent as-is inside the standard Docracy email shell."
+        aria-label="Body (HTML)"
+        value={body}
+        onChange={(e) => {
+          setBody(e.target.value);
+          setConfirming(false);
+        }}
+      />
+
+      <button className={confirming ? "btn-primary" : "btn-secondary"} disabled={!canSend} onClick={onSendClick}>
+        {sending
+          ? "Sending…"
+          : confirming
+            ? `Confirm: send to ${count ?? "?"} recipient${count === 1 ? "" : "s"}`
+            : "Send"}
+      </button>
+      {confirming && !sending && (
+        <button className="btn-secondary" style={{ marginLeft: 8 }} onClick={() => setConfirming(false)}>
+          Cancel
+        </button>
+      )}
+
+      {sendError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{sendError}</p>}
+      {sendResult && (
+        <p style={{ color: "var(--success)", fontSize: 13 }}>
+          Sent {sendResult.sent}
+          {sendResult.failed > 0 ? `, ${sendResult.failed} failed` : ""}.
+        </p>
+      )}
+    </div>
+  );
+}
+
 /** Every signup, paid or not — a customer only ever sees their own account. Email is the only
  *  identity Docracy collects at signup (magic-link auth, no separate name field). */
 /** A plain (non-`.plan-table`) scrollable list — `.plan-table`'s thead uses `position: sticky;
@@ -1520,6 +1629,7 @@ export default function AdminAnalytics() {
             <>
               <AllAccountsCard />
               <EnterpriseAccountsCard />
+              <MarketingEmailCard />
             </>
           )}
 

@@ -171,7 +171,19 @@ auth.get("/me", optionalAccount, async (c) => {
   if (isAdmin) {
     setCookie(c, NOTRACK_COOKIE_NAME, "1", noTrackCookieOptions(c.env));
   }
-  return c.json({ account, isAdmin });
+
+  // marketing_opt_in isn't part of the cached session record (SessionRecord/AccountContext) —
+  // it's a low-stakes UI preference, not an authorization decision, so it's simplest to just read
+  // it fresh from D1 on every /me rather than threading it through the session cache/refresh path.
+  let marketingOptIn = false;
+  if (account && c.env.DOCRACY_DB) {
+    const row = await c.env.DOCRACY_DB.prepare(`SELECT marketing_opt_in FROM accounts WHERE id = ?`)
+      .bind(account.id)
+      .first<{ marketing_opt_in: number }>();
+    marketingOptIn = !!row?.marketing_opt_in;
+  }
+
+  return c.json({ account: account ? { ...account, marketingOptIn } : null, isAdmin });
 });
 
 export default auth;

@@ -10,6 +10,7 @@ import {
 import { NOTRACK_COOKIE_NAME, noTrackCookieOptions } from "../lib/analytics";
 import { requireAdminAccount, type AccountContext } from "../lib/auth";
 import { findAccountIdByEmail, markAccountEnterprise, markAccountPaid } from "../lib/billing";
+import { getMarketingRecipientsCount, sendMarketingBroadcast } from "../lib/marketingEmail";
 import type { Env } from "@docracy/shared";
 
 type Variables = { account: AccountContext | null };
@@ -162,6 +163,38 @@ admin.get("/analytics", requireAdminAccount, async (c) => {
   admin.post("/analytics/notrack", requireAdminAccount, async (c) => {
   setCookie(c, NOTRACK_COOKIE_NAME, "1", noTrackCookieOptions(c.env));
   return c.json({ ok: true, enabled: true });
+});
+
+// Live count backing the admin "Marketing Email" tool's "Recipients: N" — accounts.marketing_opt_in
+// plus non-unsubscribed onboarding_leads, deduplicated by email (see lib/marketingEmail.ts).
+admin.get("/marketing-email/recipients-count", requireAdminAccount, async (c) => {
+  const count = await getMarketingRecipientsCount(c.env);
+  return c.json({ count });
+});
+
+interface SendMarketingEmailBody {
+  subject?: string;
+  body?: string;
+}
+
+// Irreversible (real emails to real opted-in people) — the Dashboard UI gates this behind its own
+// two-step confirmation, but this route itself has no extra confirmation step of its own; anyone
+// who can reach an admin session can trigger a real send.
+admin.post("/marketing-email/send", requireAdminAccount, async (c) => {
+  if (!c.env.DOCRACY_DB) return c.json({ error: "Not available on this deployment yet." }, 501);
+  let body: SendMarketingEmailBody;
+  try {
+    body = await c.req.json<SendMarketingEmailBody>();
+  } catch {
+    return c.json({ error: "Invalid request body" }, 400);
+  }
+  const subject = body.subject?.trim();
+  const html = body.body?.trim();
+  if (!subject) return c.json({ error: "Subject is required" }, 400);
+  if (!html) return c.json({ error: "Body is required" }, 400);
+
+  const result = await sendMarketingBroadcast(c.env, subject, html);
+  return c.json(result);
 });
 
 export default admin;

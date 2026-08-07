@@ -110,6 +110,7 @@ const en: Messages = {
   "footer.pricing": "Pricing",
   "footer.templates": "Free templates",
   "footer.mcp": "MCP connector",
+  "footer.industries": "Industries",
   "footer.ai": "AI Auto-Detect",
   "footer.docs": "Docs",
   "footer.faq": "FAQ",
@@ -275,6 +276,7 @@ const en: Messages = {
   "pricing.ent.f5": "Volume discounts & custom onboarding",
   "pricing.ent.cta": "Contact sales",
   "pricing.compareTitle": "Full feature comparison",
+  "pricing.competitorLinksTitle": "How we compare",
   "pricing.disclaimer":
     "Docracy SES e-signatures are designed to support the U.S. ESIGN Act and UETA. We don't verify identity — the audit trail proves what was signed and when, not who actually signed it. For identity-verified signatures, use a compliance-grade service. Details:",
   "pricing.disclaimerTrust": "Trust & security",
@@ -478,6 +480,7 @@ const en: Messages = {
   "dash.toolsPaid": "Tools are a paid feature",
   "dash.toolsPaidSub": "Upgrade for the MCP connector & API key, webhooks, white-label branding, and team accounts.",
   "dash.subscriptionManage": "Manage your payment method, invoices, or cancel your subscription.",
+  "dash.marketingOptIn": "Send me occasional product news and updates",
   "dash.enterprise": "Enterprise",
   "dash.enterpriseUpsellTitle": "Need more than the Paid plan?",
   "dash.enterpriseUpsellBody": "Enterprise adds invoice billing, premium customer support, SSO/multi-workspace setup, and volume discounts on top of everything on Paid (including Dropbox, OneDrive, Box, and Google Drive).",

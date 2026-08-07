@@ -289,3 +289,98 @@ describe("POST /api/account/documents/claim", () => {
     expect(res.status).toBe(404);
   });
 });
+
+describe("PATCH /api/account/marketing-opt-in", () => {
+  it("401s without a session", async () => {
+    const { env } = makeMockEnv();
+    const res = await account.request(
+      "/marketing-opt-in",
+      { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ optIn: true }) },
+      env,
+      MOCK_CTX
+    );
+    expect(res.status).toBe(401);
+  });
+
+  it("400s when optIn is missing or not a boolean", async () => {
+    const { env } = makeMockEnv();
+    const ctx = makeCtx();
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, false, null, null);
+    const res = await account.request(
+      "/marketing-opt-in",
+      {
+        method: "PATCH",
+        headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ optIn: "yes" }),
+      },
+      env,
+      ctx
+    );
+    expect(res.status).toBe(400);
+  });
+
+  it("works for a free account (not gated on isPaid) and persists the flag", async () => {
+    const { env, d1 } = makeMockEnv();
+    const ctx = makeCtx();
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, false, null, null);
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at) VALUES (?, ?, ?)`)
+      .bind("acct-1", "anna@example.com", "2026-01-01T00:00:00Z")
+      .run();
+
+    const res = await account.request(
+      "/marketing-opt-in",
+      {
+        method: "PATCH",
+        headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ optIn: true }),
+      },
+      env,
+      ctx
+    );
+    expect(res.status).toBe(200);
+    const body: { ok: true; marketingOptIn: boolean } = await res.json();
+    expect(body.marketingOptIn).toBe(true);
+
+    const row = (await d1.prepare("SELECT marketing_opt_in FROM accounts WHERE id = ?").bind("acct-1").first()) as {
+      marketing_opt_in: number;
+    };
+    expect(row.marketing_opt_in).toBe(1);
+  });
+
+  it("can toggle back off", async () => {
+    const { env, d1 } = makeMockEnv();
+    const ctx = makeCtx();
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", true, false, null, null);
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 1)`)
+      .bind("acct-1", "anna@example.com", "2026-01-01T00:00:00Z")
+      .run();
+
+    await account.request(
+      "/marketing-opt-in",
+      {
+        method: "PATCH",
+        headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ optIn: true }),
+      },
+      env,
+      ctx
+    );
+    const res = await account.request(
+      "/marketing-opt-in",
+      {
+        method: "PATCH",
+        headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ optIn: false }),
+      },
+      env,
+      ctx
+    );
+    expect(res.status).toBe(200);
+    const row = (await d1.prepare("SELECT marketing_opt_in FROM accounts WHERE id = ?").bind("acct-1").first()) as {
+      marketing_opt_in: number;
+    };
+    expect(row.marketing_opt_in).toBe(0);
+  });
+});

@@ -107,6 +107,7 @@ const es: Messages = {
   "dash.toolsPaid": "Las herramientas son una función de pago",
   "dash.toolsPaidSub": "Mejora tu plan para el conector MCP y clave API, webhooks, marca blanca y cuentas de equipo.",
   "dash.subscriptionManage": "Gestiona tu método de pago, facturas o cancela tu suscripción.",
+  "dash.marketingOptIn": "Enviarme noticias y actualizaciones ocasionales del producto",
   "dash.enterprise": "Enterprise",
   "dash.enterpriseUpsellTitle": "¿Necesitas más que el plan de pago?",
   "dash.enterpriseUpsellBody": "Enterprise añade facturación por factura, soporte premium, SSO/multi-workspace y descuentos por volumen además de todo lo del plan de pago (incluidos Dropbox, OneDrive, Box y Google Drive).",
@@ -185,6 +186,7 @@ const es: Messages = {
   "footer.imprint": "Aviso legal",
   "footer.legal": "Legal",
   "footer.mcp": "Conector MCP",
+  "footer.industries": "Industrias",
   "footer.ai": "Detección IA",
   "footer.pricing": "Precios",
   "footer.privacy": "Privacidad",
@@ -541,6 +543,7 @@ const es: Messages = {
   "pricing.colPaid": "Pago",
   "pricing.colPaidSub": "$10/mes",
   "pricing.compareTitle": "Comparación completa de funciones",
+  "pricing.competitorLinksTitle": "Cómo nos comparamos",
   "pricing.disclaimer":
     "Las firmas SES de Docracy están diseñadas para respaldar la ESIGN Act y UETA de EE. UU. No verificamos identidad — el registro de auditoría prueba qué se firmó y cuándo, no quién lo firmó realmente. Para firmas con identidad verificada, usa un servicio de grado de cumplimiento. Detalles:",
   "pricing.disclaimerTrust": "Confianza y seguridad",

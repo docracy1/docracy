@@ -4,6 +4,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createRequire } from "node:module";
 import { htmlToMarkdown } from "./htmlToMarkdown.mjs";
+import { INDEXNOW_KEY } from "./indexNowKey.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
@@ -96,6 +97,18 @@ await build({
 });
 const { FEATURE_PAGES, ALTERNATIVE_PAGES, EXPLAINER_PAGES, INDUSTRY_PAGES, getFeaturePageContent } = require(marketingBundleFile);
 fs.unlinkSync(marketingBundleFile);
+
+const seoPagesBundleFile = path.join(__dirname, "_seoPages.bundle.cjs");
+await build({
+  entryPoints: [path.join(root, "src/lib/seoPages.ts")],
+  outfile: seoPagesBundleFile,
+  bundle: true,
+  platform: "node",
+  format: "cjs",
+  logLevel: "warning",
+});
+const { SEO_LANDING_PAGES } = require(seoPagesBundleFile);
+fs.unlinkSync(seoPagesBundleFile);
 
 /** Phase 3 — top templates with Spanish detail pages (keep in sync with paths.ts SEO_TEMPLATE_SLUGS). */
 const SEO_TEMPLATE_SLUGS = new Set([
@@ -472,6 +485,12 @@ const routes = [
       ...(bilingual ? { locale: "en", alternates: bilingual } : {}),
     };
   }),
+  ...SEO_LANDING_PAGES.map((p) => ({
+    urlPath: `/${p.slug}`,
+    outFile: `${p.slug}.html`,
+    title: p.seoTitle,
+    description: p.seoDescription,
+  })),
 ];
 
 // --- 4. Render each route and splice it into the built index.html shell ---
@@ -518,8 +537,7 @@ ${items}
 }
 
 function writeIndexNowKey() {
-  const key = "docracy-indexnow-20260728";
-  fs.writeFileSync(path.join(distDir, `${key}.txt`), key);
+  fs.writeFileSync(path.join(distDir, `${INDEXNOW_KEY}.txt`), INDEXNOW_KEY);
 }
 
 function withMeta(html, { title, description, urlPath, locale = "en", alternates }) {

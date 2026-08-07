@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import DetectMockup from "../components/DetectMockup";
 import { localizePath, useI18n, useT } from "../lib/i18n";
 import { useSeoMeta } from "../lib/useSeoMeta";
 import { track } from "../lib/track";
@@ -87,14 +88,21 @@ export default function Ai() {
       </div>
 
       <div className="spotlight-band" style={{ marginTop: 8 }}>
-        <div className="container" style={{ maxWidth: 720 }}>
+        <div className="spotlight-inner">
           <h2 style={{ fontSize: 22, marginTop: 0 }}>{t("ai.howTitle")}</h2>
-          <ol style={{ paddingLeft: 20, margin: "12px 0 0", lineHeight: 1.55 }}>
-            <li style={{ marginBottom: 10 }}>{t("ai.how.1")}</li>
-            <li style={{ marginBottom: 10 }}>{t("ai.how.2")}</li>
-            <li style={{ marginBottom: 10 }}>{t("ai.how.3")}</li>
-            <li>{t("ai.how.4")}</li>
-          </ol>
+          <div className="spotlight-split">
+            <ol style={{ paddingLeft: 20, margin: "12px 0 0", lineHeight: 1.55 }}>
+              <li style={{ marginBottom: 10 }}>{t("ai.how.1")}</li>
+              <li style={{ marginBottom: 10 }}>{t("ai.how.2")}</li>
+              <li style={{ marginBottom: 10 }}>{t("ai.how.3")}</li>
+              <li>{t("ai.how.4")}</li>
+            </ol>
+            <div className="doc-mockup-glow">
+              <div className="doc-mockup-card">
+                <DetectMockup />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

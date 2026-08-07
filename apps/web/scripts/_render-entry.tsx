@@ -22,6 +22,8 @@ import AlternativePage from "../src/pages/AlternativePage";
 import ExplainerPage from "../src/pages/ExplainerPage";
 import ImportGuidePage from "../src/pages/ImportGuidePage";
 import IndustryPage from "../src/pages/IndustryPage";
+import SeoLandingTemplate from "../src/components/SeoLandingTemplate";
+import { SEO_LANDING_PAGES } from "../src/lib/seoPages";
 
 /** Renders the real app components to static markup for a single path — same components a
  *  browser gets, minus effects (which never run during static rendering, so Header's login-check
@@ -86,6 +88,9 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/industry/small-business" element={<IndustryPage slug="small-business" />} />
           <Route path="/what-is-an-nda" element={<ExplainerPage slug="what-is-an-nda" />} />
           <Route path="/are-electronic-signatures-legal" element={<ExplainerPage slug="are-electronic-signatures-legal" />} />
+          {SEO_LANDING_PAGES.map((page) => (
+            <Route key={page.slug} path={`/${page.slug}`} element={<SeoLandingTemplate slug={page.slug} />} />
+          ))}
         </Routes>
         <Footer />
       </MemoryRouter>

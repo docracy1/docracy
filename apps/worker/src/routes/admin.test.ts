@@ -281,3 +281,82 @@ describe("POST /api/admin/analytics/notrack", () => {
     expect(res.headers.get("set-cookie")).toContain("docracy_notrack=1");
   });
 });
+
+describe("GET /api/admin/marketing-email/recipients-count", () => {
+  it("rejects an unauthenticated request", async () => {
+    const { env } = makeMockEnv();
+    const res = await admin.request("/marketing-email/recipients-count", {}, env, MOCK_CTX);
+    expect(res.status).toBe(401);
+  });
+
+  it("counts opted-in accounts plus non-unsubscribed leads, deduplicated by email", async () => {
+    const { env, d1 } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com" });
+    const headers = await sessionCookie(env, "admin@example.com");
+
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, marketing_opt_in) VALUES (?, ?, ?, 1)`)
+      .bind("acct-optin", "optedin@example.com", "2026-01-01T00:00:00Z")
+      .run();
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, marketing_opt_in) VALUES (?, ?, ?, 0)`)
+      .bind("acct-optout", "optedout@example.com", "2026-01-01T00:00:00Z")
+      .run();
+    await d1
+      .prepare(
+        `INSERT INTO onboarding_leads (email, source, opted_in_at, marketing_unsubscribed) VALUES (?, ?, ?, 0)`
+      )
+      .bind("lead@example.com", "test", "2026-01-01T00:00:00Z")
+      .run();
+    await d1
+      .prepare(
+        `INSERT INTO onboarding_leads (email, source, opted_in_at, marketing_unsubscribed) VALUES (?, ?, ?, 1)`
+      )
+      .bind("unsubscribed@example.com", "test", "2026-01-01T00:00:00Z")
+      .run();
+
+    const res = await admin.request("/marketing-email/recipients-count", { headers }, env, MOCK_CTX);
+    expect(res.status).toBe(200);
+    const body: { count: number } = await res.json();
+    expect(body.count).toBe(2);
+  });
+});
+
+describe("POST /api/admin/marketing-email/send", () => {
+  it("rejects an unauthenticated request", async () => {
+    const { env } = makeMockEnv();
+    const res = await admin.request(
+      "/marketing-email/send",
+      postJson({ subject: "Hi", body: "<p>Hi</p>" }),
+      env,
+      MOCK_CTX
+    );
+    expect(res.status).toBe(401);
+  });
+
+  it("400s when subject or body is missing", async () => {
+    const { env } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com" });
+    const headers = await sessionCookie(env, "admin@example.com");
+    const res = await admin.request("/marketing-email/send", postJson({ body: "<p>Hi</p>" }, headers), env, MOCK_CTX);
+    expect(res.status).toBe(400);
+  });
+
+  it("sends to every opted-in recipient and reports the result", async () => {
+    const { env, d1 } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com" });
+    const headers = await sessionCookie(env, "admin@example.com");
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, marketing_opt_in) VALUES (?, ?, ?, 1)`)
+      .bind("acct-optin", "optedin@example.com", "2026-01-01T00:00:00Z")
+      .run();
+
+    const res = await admin.request(
+      "/marketing-email/send",
+      postJson({ subject: "News", body: "<p>Hello</p>" }, headers),
+      env,
+      MOCK_CTX
+    );
+    expect(res.status).toBe(200);
+    const body: { sent: number; failed: number } = await res.json();
+    expect(body.sent).toBe(1);
+    expect(body.failed).toBe(0);
+  });
+});

@@ -244,6 +244,21 @@ export default function Pricing() {
       </section>
 
       <div className="container">
+        <div style={{ marginBottom: 24 }}>
+          <h2 style={{ fontSize: 18, marginBottom: 10 }}>{t("pricing.competitorLinksTitle")}</h2>
+          <p style={{ fontSize: 14, lineHeight: 1.9 }}>
+            <Link to={localizePath("/docusign-alternative", locale)}>{t("footer.vsDocusign")}</Link>
+            {" · "}
+            <Link to={localizePath("/eversign-alternative", locale)}>{t("footer.vsEversign")}</Link>
+            {" · "}
+            <Link to={localizePath("/hellosign-alternative", locale)}>{t("footer.vsHellosign")}</Link>
+            {" · "}
+            <Link to={localizePath("/pandadoc-alternative", locale)}>{t("footer.vsPandadoc")}</Link>
+            {" · "}
+            <Link to="/blog">{t("footer.allComparisons")}</Link>
+          </p>
+        </div>
+
         <p className="pricing-disclaimer">
           {t("pricing.disclaimer")}{" "}
           <Link to="/trust">{t("pricing.disclaimerTrust")}</Link>

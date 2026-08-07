@@ -44,6 +44,8 @@ import ImportGuidePage from "./pages/ImportGuidePage";
 import IndustryPage from "./pages/IndustryPage";
 import OutreachLanding from "./pages/OutreachLanding";
 import NotFound from "./pages/NotFound";
+import SeoLandingTemplate from "./components/SeoLandingTemplate";
+import { SEO_LANDING_PAGES } from "./lib/seoPages";
 import { ShortGoRedirect, ShortNdaRedirect, ShortPriceRedirect, ShortTryRedirect } from "./pages/ShortLinkRedirect";
 import { captureAttribution } from "./lib/attribution";
 import { LocaleProvider } from "./lib/i18n";
@@ -119,6 +121,7 @@ function AppRoutes() {
       <Route path="/import-from-hellosign" element={<ImportGuidePage slug="hellosign" />} />
       <Route path="/import-from-pandadoc" element={<ImportGuidePage slug="pandadoc" />} />
       <Route path="/import-from-adobe-sign" element={<ImportGuidePage slug="adobe-sign" />} />
+
       <Route path="/industry/freelancers" element={<IndustryPage slug="freelancers" />} />
       <Route path="/industry/creative-agencies" element={<IndustryPage slug="creative-agencies" />} />
       <Route path="/industry/real-estate" element={<IndustryPage slug="real-estate" />} />
@@ -127,6 +130,9 @@ function AppRoutes() {
       <Route path="/outreach/:persona" element={<OutreachLanding />} />
       <Route path="/what-is-an-nda" element={<ExplainerPage slug="what-is-an-nda" />} />
       <Route path="/are-electronic-signatures-legal" element={<ExplainerPage slug="are-electronic-signatures-legal" />} />
+      {SEO_LANDING_PAGES.map((page) => (
+        <Route key={page.slug} path={`/${page.slug}`} element={<SeoLandingTemplate slug={page.slug} />} />
+      ))}
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

@@ -20,6 +20,7 @@ import aiRoute from "./routes/ai";
 import analyticsRoute from "./routes/analytics";
 import adminRoute from "./routes/admin";
 import statusRoute from "./routes/status";
+import unsubscribeRoute from "./routes/unsubscribe";
 import resendWebhook from "./routes/resendWebhook";
 import { blogPostsAdmin, blogPostsPublic } from "./routes/blogPosts";
 import { roadmapAdmin, roadmapPublic } from "./routes/roadmap";
@@ -80,6 +81,7 @@ app.route("/api/blog-posts", blogPostsPublic);
 app.route("/api/admin/roadmap", roadmapAdmin);
 app.route("/api/roadmap", roadmapPublic);
 app.route("/api/status", statusRoute);
+app.route("/api/unsubscribe", unsubscribeRoute);
 app.route("/api/webhooks/resend", resendWebhook);
 
 // Hourly cron runs onboarding drip + completion nudges. Daily cron runs reminders/cleanup/health,

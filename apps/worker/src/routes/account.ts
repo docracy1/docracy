@@ -318,6 +318,33 @@ account.post("/documents/:docId/signers/:order/reassign", requirePaidAccount, as
   return c.json({ ok: true, signer: { order: signer.order, name: signer.name, email: signer.email, status: signer.status } });
 });
 
+interface MarketingOptInBody {
+  optIn?: boolean;
+}
+
+// Session-authenticated (any signed-in account, paid or free) — this is a per-person email
+// preference, not a workspace/billing setting, so it's keyed on the account's own id (acct.id),
+// never acct.workspaceId. See migration 0021 and lib/marketingEmail.ts for the rest of the flow.
+account.patch("/marketing-opt-in", requireAccount, async (c) => {
+  if (!c.env.DOCRACY_DB) return c.json({ error: "Not available on this deployment yet." }, 501);
+  const acct = c.get("account")!;
+  let body: MarketingOptInBody;
+  try {
+    body = await c.req.json<MarketingOptInBody>();
+  } catch {
+    return c.json({ error: "Invalid request body" }, 400);
+  }
+  if (typeof body.optIn !== "boolean") {
+    return c.json({ error: "optIn must be a boolean" }, 400);
+  }
+
+  await c.env.DOCRACY_DB.prepare(`UPDATE accounts SET marketing_opt_in = ? WHERE id = ?`)
+    .bind(body.optIn ? 1 : 0, acct.id)
+    .run();
+
+  return c.json({ ok: true, marketingOptIn: body.optIn });
+});
+
 account.get("/token", requirePaidAccount, async (c) => {
   const acct = c.get("account")!;
   const hasToken = await hasApiToken(c.env, acct.workspaceId);

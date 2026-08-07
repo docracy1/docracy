@@ -34,6 +34,7 @@ import {
   reassignSigner,
   regenerateApiToken,
   removeTeamMember,
+  setMarketingOptIn,
   setWorkspaceSlug,
   startCheckout,
   uploadBrandLogo,
@@ -290,6 +291,8 @@ export default function Dashboard() {
   const [upgradeEnterpriseError, setUpgradeEnterpriseError] = useState<string | null>(null);
   const [managingBilling, setManagingBilling] = useState(false);
   const [manageBillingError, setManageBillingError] = useState<string | null>(null);
+  const [savingMarketingOptIn, setSavingMarketingOptIn] = useState(false);
+  const [marketingOptInError, setMarketingOptInError] = useState<string | null>(null);
   const [regenerating, setRegenerating] = useState(false);
   const [regenerateError, setRegenerateError] = useState<string | null>(null);
   const [newConnectorUrl, setNewConnectorUrl] = useState<string | null>(null);
@@ -752,6 +755,21 @@ export default function Dashboard() {
     } catch (err) {
       setManageBillingError(err instanceof Error ? err.message : t("common.error"));
       setManagingBilling(false);
+    }
+  };
+
+  const onToggleMarketingOptIn = async (optIn: boolean) => {
+    setSavingMarketingOptIn(true);
+    setMarketingOptInError(null);
+    const previous = account;
+    setAccount((a) => (a ? { ...a, marketingOptIn: optIn } : a));
+    try {
+      await setMarketingOptIn(optIn);
+    } catch (err) {
+      setAccount(previous);
+      setMarketingOptInError(err instanceof Error ? err.message : t("common.error"));
+    } finally {
+      setSavingMarketingOptIn(false);
     }
   };
 
@@ -1490,6 +1508,24 @@ export default function Dashboard() {
             <button className="btn-secondary" onClick={onManageBilling} disabled={managingBilling}>
               {managingBilling ? t("common.redirecting") : t("common.manageSubscription")}
             </button>
+
+            <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid var(--hairline)" }}>
+              <label
+                style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 13, cursor: "pointer" }}
+              >
+                <input
+                  type="checkbox"
+                  checked={account.marketingOptIn}
+                  disabled={savingMarketingOptIn}
+                  onChange={(e) => onToggleMarketingOptIn(e.target.checked)}
+                  style={{ marginTop: 2 }}
+                />
+                <span>{t("dash.marketingOptIn")}</span>
+              </label>
+              {marketingOptInError && (
+                <p style={{ color: "var(--danger)", fontSize: 13, marginTop: 4 }}>{marketingOptInError}</p>
+              )}
+            </div>
 
             {!account.isEnterprise && (
               <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid var(--hairline)" }}>
