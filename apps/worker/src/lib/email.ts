@@ -2,6 +2,7 @@ import { resolveEmailLogoUrl } from "./branding";
 import { mergePdfs } from "./pdf";
 import { trackEvent } from "./analytics";
 import { sendSigningSmsLink } from "./sms";
+import { sendWhatsAppSigningLink } from "./whatsapp";
 import type { DocState, Env, Locale } from "@docracy/shared";
 
 // docracy.io is verified in Resend (DKIM on the root domain, SPF/bounce handling via the
@@ -227,6 +228,11 @@ export async function sendSigningInvite(env: Env, doc: DocState, order: number, 
     await sendSigningSmsLink(env, doc, order, link);
   } catch (err) {
     console.error(`Signing invite SMS failed for doc ${doc.docId} signer ${order} (non-fatal):`, err);
+  }
+  try {
+    await sendWhatsAppSigningLink(env, doc, order, link);
+  } catch (err) {
+    console.error(`Signing invite WhatsApp failed for doc ${doc.docId} signer ${order} (non-fatal):`, err);
   }
 }
 

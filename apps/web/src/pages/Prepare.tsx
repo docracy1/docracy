@@ -170,6 +170,7 @@ export default function Prepare() {
   const [detectFieldsNotice, setDetectFieldsNotice] = useState<string | null>(null);
   const [detectingAnchors, setDetectingAnchors] = useState(false);
   const [smsInvites, setSmsInvites] = useState(false);
+  const [whatsappInvites, setWhatsappInvites] = useState(false);
   const [signerAttachmentsEnabled, setSignerAttachmentsEnabled] = useState(false);
   const [dropdownOptionsInput, setDropdownOptionsInput] = useState(() => t("prepare.defaultDropdownOptions"));
   const previousDefaultDropdownOptionsRef = useRef(dropdownOptionsInput);
@@ -965,6 +966,7 @@ export default function Prepare() {
         ccRecipients: trimmedCcs.length > 0 ? trimmedCcs : undefined,
         templateId: templateId ?? freeTemplateSlug ?? undefined,
         smsInvites: smsInvites || undefined,
+        whatsappInvites: whatsappInvites || undefined,
         locale,
         ...(account?.isPaid
           ? {
@@ -1718,6 +1720,17 @@ export default function Prepare() {
                       </select>
                     </>
                   )}
+                  {whatsappInvites && account && (
+                    <input
+                      className="form-input"
+                      style={{ width: "100%", marginTop: 6 }}
+                      placeholder={t("prepare.whatsappPh")}
+                      aria-label={t("prepare.signerWhatsappAria", { n: s.order })}
+                      type="tel"
+                      value={s.whatsappPhone ?? ""}
+                      onChange={(e) => updateSigner(s.order, { whatsappPhone: e.target.value })}
+                    />
+                  )}
                   <div className="prepare-signer-actions">
                     {preferTapPlace && viewMode === "fields" && (
                       <button
@@ -1840,6 +1853,32 @@ export default function Prepare() {
                 {smsInvites && (
                   <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 0, marginBottom: 0 }}>
                     {t("prepare.smsHint")}
+                  </p>
+                )}
+              </div>
+              <div style={{ marginTop: 12, paddingTop: 12, borderTop: "1px solid var(--hairline)" }}>
+                {account ? (
+                  <>
+                    <label style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 13, marginBottom: 8 }}>
+                      <input type="checkbox" checked={whatsappInvites} onChange={(e) => setWhatsappInvites(e.target.checked)} />
+                      <span>{t("prepare.alsoWhatsapp")}</span>
+                    </label>
+                    {whatsappInvites && !account.isPaid && (
+                      <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 0, marginBottom: 0 }}>
+                        {t("prepare.whatsappQuotaHint", { remaining: account.whatsappQuotaRemaining ?? 2 })}
+                      </p>
+                    )}
+                  </>
+                ) : (
+                  <p style={{ fontSize: 13, margin: 0 }}>
+                    {t("prepare.whatsappRequiresAccount")}{" "}
+                    <Link
+                      to="/login?ref=prepare-whatsapp"
+                      onClick={() => track("upgrade_clicked", { source: "prepare_whatsapp_signup" })}
+                    >
+                      {t("prepare.signUpFree")}
+                    </Link>
+                    .
                   </p>
                 )}
               </div>

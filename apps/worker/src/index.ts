@@ -22,6 +22,7 @@ import adminRoute from "./routes/admin";
 import statusRoute from "./routes/status";
 import unsubscribeRoute from "./routes/unsubscribe";
 import resendWebhook from "./routes/resendWebhook";
+import whatsappWebhook from "./routes/whatsappWebhook";
 import { blogPostsAdmin, blogPostsPublic } from "./routes/blogPosts";
 import { roadmapAdmin, roadmapPublic } from "./routes/roadmap";
 import { runReminderSweep } from "./lib/reminders";
@@ -83,6 +84,7 @@ app.route("/api/roadmap", roadmapPublic);
 app.route("/api/status", statusRoute);
 app.route("/api/unsubscribe", unsubscribeRoute);
 app.route("/api/webhooks/resend", resendWebhook);
+app.route("/api/webhooks/whatsapp", whatsappWebhook);
 
 // Hourly cron runs onboarding drip + completion nudges. Daily cron runs reminders/cleanup/health,
 // and on Mondays (UTC) also publishes one queued SEO blog post. Branch on event.cron so the

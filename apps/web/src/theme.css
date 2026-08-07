@@ -518,7 +518,7 @@ select {
   position: absolute;
   top: calc(100% + 12px);
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(calc(-50% + var(--megamenu-shift, 0px)));
   z-index: 90;
   display: flex;
   gap: 0;

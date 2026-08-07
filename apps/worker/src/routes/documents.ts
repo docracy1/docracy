@@ -3,6 +3,8 @@ import { getCookie } from "hono/cookie";
 import { PDFDocument } from "pdf-lib";
 import { createDocumentCore } from "../lib/documentCreation";
 import { isSmsCarrier, normalizeUsPhone } from "../lib/sms";
+import { normalizeE164 } from "../lib/whatsapp";
+import { consumeWhatsappQuota } from "../lib/whatsappQuota";
 import { NOTRACK_COOKIE_NAME, trackEvent } from "../lib/analytics";
 import { checkRateLimit, checkInviteRateLimit } from "../lib/ratelimit";
 import { optionalAccount, type AccountContext } from "../lib/auth";
@@ -16,7 +18,15 @@ interface CreateDocumentBody {
   preparerEmail?: string;
   /** Explicit marketing opt-in for the preparer tips drip — ignored unless preparerEmail is set. */
   preparerMarketingOptIn?: boolean;
-  signers: Array<{ order: number; name: string; email: string; pin?: string; phone?: string; smsCarrier?: string }>;
+  signers: Array<{
+    order: number;
+    name: string;
+    email: string;
+    pin?: string;
+    phone?: string;
+    smsCarrier?: string;
+    whatsappPhone?: string;
+  }>;
   fields: DocField[];
   ccRecipients?: Array<{ name?: string; email: string }>;
   customSubject?: string;
@@ -29,6 +39,8 @@ interface CreateDocumentBody {
   ttlDays?: number;
   /** Also text signing links via US carrier gateways (Resend — no extra SMS vendor). */
   smsInvites?: boolean;
+  /** Also send signing links via WhatsApp — requires a signed-up account (free-tier: 2/month, paid: unlimited). */
+  whatsappInvites?: boolean;
   /** Paid — require signers to upload attachments before signing. */
   signerAttachments?: { enabled: boolean; maxFiles?: number; maxBytesPerFile?: number };
   /** Set only when these fields were loaded from a saved (paid-tier) template — see
@@ -161,9 +173,15 @@ documents.post("/", optionalAccount, async (c) => {
     if (s.smsCarrier && !s.phone?.trim()) {
       return c.json({ error: "A phone number is required when a carrier is selected" }, 400);
     }
+    if (s.whatsappPhone?.trim() && !normalizeE164(s.whatsappPhone)) {
+      return c.json({ error: `"${s.whatsappPhone}" doesn't look like a valid phone number for WhatsApp` }, 400);
+    }
   }
   if (meta.smsInvites && !meta.signers.some((s) => s.phone?.trim() && s.smsCarrier)) {
     return c.json({ error: "SMS is on but no signer has a phone number and carrier" }, 400);
+  }
+  if (meta.whatsappInvites && !meta.signers.some((s) => s.whatsappPhone?.trim())) {
+    return c.json({ error: "WhatsApp is on but no signer has a phone number" }, 400);
   }
   if (!meta.fields?.every((f) => f.signerOrder >= 1 && f.signerOrder <= meta.signers.length)) {
     return c.json({ error: "A field is assigned to a signer that doesn't exist" }, 400);
@@ -291,6 +309,35 @@ documents.post("/", optionalAccount, async (c) => {
     return c.json({ error: ttl.error }, 400);
   }
 
+  // WhatsApp is the AES-track channel — gated to signed-up accounts (anonymous senders are
+  // rejected outright), with a free-tier monthly cap; paid accounts get it unlimited/bundled.
+  // Checked last, immediately before creation, so a request that fails any earlier validation or
+  // rate limit never consumes quota for a document that was never actually going to be created.
+  const whatsappSignerCount = meta.signers.filter((s) => s.whatsappPhone?.trim()).length;
+  if (whatsappSignerCount > 0) {
+    if (!account) {
+      return failWith(
+        "send_failed",
+        { error: "WhatsApp signing requires a free Docracy account — sign up (no password) to use it." },
+        402,
+        "whatsapp_requires_account"
+      );
+    }
+    if (!account.isPaid) {
+      const allowed = await consumeWhatsappQuota(c.env, account.workspaceId, whatsappSignerCount);
+      if (!allowed) {
+        return failWith(
+          "send_failed",
+          {
+            error: "Free accounts get 2 WhatsApp-signed invites per month — you've used them all. Upgrade for unlimited WhatsApp signing.",
+          },
+          402,
+          "whatsapp_quota_exceeded"
+        );
+      }
+    }
+  }
+
   const { docId, statusToken, claimToken } = await createDocumentCore({
     env: c.env,
     ctx: c.executionCtx,
@@ -312,6 +359,7 @@ documents.post("/", optionalAccount, async (c) => {
     templateId: meta.templateId,
     ttlDays: ttl.ttlDays,
     smsInvites: meta.smsInvites || undefined,
+    whatsappInvites: meta.whatsappInvites || undefined,
     signerAttachments: meta.signerAttachments?.enabled
       ? { enabled: true, ...clampAttachmentLimits(meta.signerAttachments) }
       : undefined,

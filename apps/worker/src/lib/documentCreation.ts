@@ -28,7 +28,15 @@ export interface CreateDocumentCoreParams {
   /** Already validated by the caller (name/email format, no duplicates, PIN is 4-8 digits if
    *  present). Order is assigned here from array position, never trusted from a client-supplied
    *  value. `pin`, if given, is hashed here and never stored in its raw form. */
-  signers: Array<{ name: string; email: string; company?: string; pin?: string; phone?: string; smsCarrier?: string }>;
+  signers: Array<{
+    name: string;
+    email: string;
+    company?: string;
+    pin?: string;
+    phone?: string;
+    smsCarrier?: string;
+    whatsappPhone?: string;
+  }>;
   fields: DocField[];
   /** Notify-only recipients — validated by the caller. */
   ccRecipients?: Array<{ name?: string; email: string }>;
@@ -67,6 +75,10 @@ export interface CreateDocumentCoreParams {
   batchId?: string;
   /** Also text signing links via US carrier email-to-SMS gateways (Resend). */
   smsInvites?: boolean;
+  /** Also send signing links via WhatsApp (Meta Cloud API) to signers with a whatsappPhone —
+   *  gated to signed-up accounts, with a free-tier monthly cap, both enforced by the caller
+   *  (routes/documents.ts) before this is ever set true. */
+  whatsappInvites?: boolean;
   /** Paid-only attachment requirement for signers. */
   signerAttachments?: DocState["signerAttachments"];
 }
@@ -99,6 +111,7 @@ export async function createDocumentCore(
       pinHash: s.pin ? await hashOpaqueToken(s.pin, env.TOKEN_SECRET) : undefined,
       phone: s.phone?.trim() || undefined,
       smsCarrier: s.smsCarrier as Signer["smsCarrier"] | undefined,
+      whatsappPhone: s.whatsappPhone?.trim() || undefined,
     }))
   );
 
@@ -160,6 +173,7 @@ export async function createDocumentCore(
     locale: params.locale,
     preparerEmail: preparerEmail?.trim() || undefined,
     smsInvites: params.smsInvites || undefined,
+    whatsappInvites: params.whatsappInvites || undefined,
     signerAttachments: params.signerAttachments,
   };
 

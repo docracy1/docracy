@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState, type ReactNode } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 
 export interface NavMegaMenuItem {
@@ -66,6 +66,7 @@ function MegaLink({
 export default function NavMegaMenu({ label, items, panel, columns = 3 }: NavMegaMenuProps) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const menuId = useId();
 
@@ -104,6 +105,31 @@ export default function NavMegaMenu({ label, items, panel, columns = 3 }: NavMeg
     };
   }, [open]);
 
+  // The panel is centered on the trigger by default (left: 50%; translateX(-50%)), which clips
+  // off-screen for triggers near either edge — "Features" sits right after the logo, so a wide
+  // panel centered on it runs off the left of the viewport. Measure after layout and nudge it
+  // back on-screen via a CSS var rather than hardcoding a fixed offset per trigger.
+  useLayoutEffect(() => {
+    if (!open) return;
+    const clamp = () => {
+      const el = panelRef.current;
+      if (!el) return;
+      el.style.setProperty("--megamenu-shift", "0px");
+      const rect = el.getBoundingClientRect();
+      const margin = 12;
+      let shift = 0;
+      if (rect.left < margin) {
+        shift = margin - rect.left;
+      } else if (rect.right > window.innerWidth - margin) {
+        shift = window.innerWidth - margin - rect.right;
+      }
+      el.style.setProperty("--megamenu-shift", `${shift}px`);
+    };
+    clamp();
+    window.addEventListener("resize", clamp);
+    return () => window.removeEventListener("resize", clamp);
+  }, [open]);
+
   return (
     <div
       ref={rootRef}
@@ -140,7 +166,7 @@ export default function NavMegaMenu({ label, items, panel, columns = 3 }: NavMeg
         </svg>
       </button>
       {open && (
-        <div id={menuId} className="nav-megamenu-panel" data-columns={columns} role="menu">
+        <div ref={panelRef} id={menuId} className="nav-megamenu-panel" data-columns={columns} role="menu">
           <div className="nav-megamenu-grid" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
             {items.map((item) => (
               <MegaLink key={item.to} to={item.to} className="nav-megamenu-item" onClick={() => setOpen(false)}>

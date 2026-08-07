@@ -16,6 +16,7 @@ import {
   type AccountContext,
 } from "../lib/auth";
 import { trackEvent, NOTRACK_COOKIE_NAME, noTrackCookieOptions, sanitizeAttribution } from "../lib/analytics";
+import { peekWhatsappQuotaRemaining } from "../lib/whatsappQuota";
 import type { Env, Locale } from "@docracy/shared";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -183,7 +184,16 @@ auth.get("/me", optionalAccount, async (c) => {
     marketingOptIn = !!row?.marketing_opt_in;
   }
 
-  return c.json({ account: account ? { ...account, marketingOptIn } : null, isAdmin });
+  // Paid accounts have no cap at all, so there's nothing worth showing them — only free signed-up
+  // accounts need the "X of 2 left this month" nudge on Prepare. Same low-stakes fresh-D1-read
+  // posture as marketingOptIn above, not part of the cached session record.
+  const whatsappQuotaRemaining =
+    account && !account.isPaid ? await peekWhatsappQuotaRemaining(c.env, account.workspaceId) : undefined;
+
+  return c.json({
+    account: account ? { ...account, marketingOptIn, ...(whatsappQuotaRemaining !== undefined ? { whatsappQuotaRemaining } : {}) } : null,
+    isAdmin,
+  });
 });
 
 export default auth;

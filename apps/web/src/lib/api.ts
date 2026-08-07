@@ -52,6 +52,8 @@ export interface CreateDocumentOptions {
   /** Paid only — retention days (1–90). Omitted / free always uses the default (9). */
   ttlDays?: number;
   smsInvites?: boolean;
+  /** Also send signing links via WhatsApp — requires a signed-up account (free: 2/month, paid: unlimited). */
+  whatsappInvites?: boolean;
   signerAttachments?: { enabled: boolean; maxFiles?: number; maxBytesPerFile?: number };
   /** Set when these fields came from a saved (paid-tier) template id or a free-template slug —
    *  always fires the template_completed funnel event; the persistent "Recurring Templates" usage
@@ -304,6 +306,9 @@ export interface Account {
   paymentFailedAt: string | null;
   /** Whether this account opted in to occasional product-news emails (accounts.marketing_opt_in). */
   marketingOptIn: boolean;
+  /** Free accounts only — WhatsApp-invited signers left this calendar month (of 2). Undefined for
+   *  paid accounts, which have no cap. */
+  whatsappQuotaRemaining?: number;
 }
 
 export async function fetchMe(): Promise<{ account: Account | null; isAdmin: boolean }> {

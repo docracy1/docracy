@@ -64,6 +64,18 @@ export interface Signer {
   smsCarrier?: "att" | "tmobile" | "verizon" | "sprint" | "uscc";
   /** Files this signer uploaded before signing (paid signer-attachments feature). */
   attachments?: SignerAttachment[];
+  /** International phone number in E.164 (e.g. "+15551234567") — used when doc.whatsappInvites is
+   *  on. Unlike phone/smsCarrier (US-only), this is the AES-track WhatsApp channel and isn't
+   *  restricted to the US. */
+  whatsappPhone?: string;
+  /** Set from the WhatsApp Cloud API webhook's "delivered" status callback (see
+   *  routes/whatsappWebhook.ts) — part of the evidence trail behind the AES-track claim: proof the
+   *  specific WhatsApp-verified device received the signing link, independent of the signer
+   *  actually clicking it. Optional/absent until (if ever) that callback arrives. */
+  whatsappDeliveredAt?: string | null;
+  /** Set from the WhatsApp Cloud API webhook's "read" status callback — same rationale as
+   *  whatsappDeliveredAt, one step further (the message was actually opened on that device). */
+  whatsappReadAt?: string | null;
 }
 
 export interface SignerAttachment {
@@ -92,7 +104,9 @@ export type AuditEventType =
   | "voided"
   | "reassigned"
   | "cc_invite_sent"
-  | "attachment_uploaded";
+  | "attachment_uploaded"
+  | "whatsapp_delivered"
+  | "whatsapp_read";
 
 /**
  * One entry in a document's append-only event log — this is what gives an anonymous, no-account
@@ -170,6 +184,9 @@ export interface DocState {
   locale?: Locale;
   /** When true, also text signing links to signers with phone + US carrier (via Resend gateways). */
   smsInvites?: boolean;
+  /** When true, also send signing links via WhatsApp to signers with a whatsappPhone set (Meta
+   *  Cloud API) — the AES-track channel, gated to signed-up accounts (see routes/documents.ts). */
+  whatsappInvites?: boolean;
   /** Paid-only: signers must upload file(s) before submitting. Always read via optional chaining. */
   signerAttachments?: {
     enabled: boolean;
@@ -278,4 +295,23 @@ export interface Env {
    *  secrets above — this only starts enforcing once both this and the frontend's public site key
    *  (VITE_TURNSTILE_SITE_KEY) are configured together. */
   TURNSTILE_SECRET_KEY?: string;
+  /** Meta WhatsApp Cloud API system-user access token — see lib/whatsapp.ts. Absent means every
+   *  WhatsApp send degrades to a console.log dev line, same graceful-degradation pattern as
+   *  RESEND_API_KEY. Set with `wrangler secret put WHATSAPP_ACCESS_TOKEN`. */
+  WHATSAPP_ACCESS_TOKEN?: string;
+  /** Meta phone number ID (not the phone number itself) the messages are sent from. */
+  WHATSAPP_PHONE_NUMBER_ID?: string;
+  /** Name of the pre-approved WhatsApp message template used for signing invites (created and
+   *  submitted for approval in Meta Business Manager — not something this codebase can create).
+   *  Defaults to "signing_invite" when unset. */
+  WHATSAPP_TEMPLATE_NAME?: string;
+  /** Meta locale code for the template (e.g. "en_US", "es"). Defaults based on doc.locale when unset. */
+  WHATSAPP_TEMPLATE_LANG?: string;
+  /** Shared secret Meta's webhook subscription handshake echoes back (hub.verify_token) — see
+   *  routes/whatsappWebhook.ts's GET handler. Absent means that handshake always fails closed. */
+  WHATSAPP_WEBHOOK_VERIFY_TOKEN?: string;
+  /** Meta app secret used to verify the X-Hub-Signature-256 header on inbound webhook POSTs.
+   *  Absent means signature verification is skipped, same degrade-safe pattern as
+   *  RESEND_WEBHOOK_SECRET. */
+  WHATSAPP_APP_SECRET?: string;
 }

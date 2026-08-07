@@ -25,6 +25,8 @@ export interface SignerInput {
   pin?: string;
   phone?: string;
   smsCarrier?: "att" | "tmobile" | "verizon" | "sprint" | "uscc";
+  /** International phone number for the WhatsApp channel — requires a signed-up account. */
+  whatsappPhone?: string;
 }
 
 export interface CcRecipientInput {

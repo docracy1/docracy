@@ -183,6 +183,7 @@ export default function Landing() {
   const t = useT();
   const { locale } = useI18n();
   const [heroEmail, setHeroEmail] = useState("");
+  const [heroEmailStarted, setHeroEmailStarted] = useState(false);
   const [heroSubmitting, setHeroSubmitting] = useState(false);
   const [heroSent, setHeroSent] = useState(false);
   const [heroError, setHeroError] = useState<string | null>(null);
@@ -303,6 +304,7 @@ export default function Landing() {
                       value={heroEmail}
                       onChange={(e) => {
                         setHeroEmail(e.target.value);
+                        if (e.target.value.trim()) setHeroEmailStarted(true);
                         if (heroError) setHeroError(null);
                       }}
                       disabled={heroSubmitting}
@@ -315,7 +317,7 @@ export default function Landing() {
                       {heroSubmitting ? t("common.sending") : `${t("hero.startFree")} →`}
                     </button>
                   </div>
-                  {needsTurnstile && (
+                  {needsTurnstile && heroEmailStarted && (
                     <TurnstileWidget onToken={setTurnstileToken} resetKey={turnstileResetKey} />
                   )}
                   {heroError && (
