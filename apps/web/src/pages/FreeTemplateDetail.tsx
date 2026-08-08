@@ -52,8 +52,24 @@ export default function FreeTemplateDetail() {
   const signers = template.signerLabels.join(` ${t("common.and")} `);
   const ctaTo = localizePath(`/prepare?freeTemplate=${template.slug}&ref=seo-template-${template.slug}`, locale);
 
+  const faqVars = { name, signers };
+  const faqs = [1, 2, 3, 4].map((n) => ({
+    question: t(`tpl.detail.faq${n}.q`, faqVars),
+    answer: t(`tpl.detail.faq${n}.a`, faqVars),
+  }));
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  };
+
   return (
     <div className="container" style={{ maxWidth: 720 }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       <p style={{ fontSize: 13 }}>
         <Link to={indexTo}>← {t("tpl.detail.backAll")}</Link>
       </p>
@@ -86,6 +102,14 @@ export default function FreeTemplateDetail() {
         {t("tpl.detail.cta")}
       </Link>
       <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 8 }}>{t("tpl.detail.freeNote")}</p>
+
+      <h2 style={{ fontSize: 19, marginTop: 32 }}>{t("tpl.detail.faqTitle")}</h2>
+      {faqs.map((faq, i) => (
+        <details key={i} className="faq-item" style={{ marginTop: 12 }}>
+          <summary style={{ fontWeight: 700, cursor: "pointer" }}>{faq.question}</summary>
+          <p style={{ margin: "8px 0 0", color: "var(--body)" }}>{faq.answer}</p>
+        </details>
+      ))}
     </div>
   );
 }

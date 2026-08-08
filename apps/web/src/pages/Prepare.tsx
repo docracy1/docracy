@@ -1133,6 +1133,7 @@ export default function Prepare() {
             .join(" ")}
         >
           <div className="prepare-pdf-col" ref={pdfColRef}>
+            <p className="prepare-trust-banner">{t("prepare.trustBanner")}</p>
             {preferTapPlace && placeMode && (
               <div className="prepare-place-tip" role="status">
                 <div className="prepare-place-tip-text">
