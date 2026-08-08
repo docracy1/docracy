@@ -456,7 +456,6 @@ describe("POST /api/documents", () => {
       env,
       ctx
     );
-    if (res.status !== 200) console.log("DEBUG BODY", await res.clone().json());
     expect(res.status).toBe(200);
     const [, docValue] = [...kv._store.entries()].find(([k]) => k.startsWith("doc:"))!;
     const stored = JSON.parse(docValue);
