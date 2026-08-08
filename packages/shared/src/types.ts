@@ -243,6 +243,16 @@ export interface Env {
    *  plan checkout keeps working). Renewal/cancellation both flow through Stripe's own webhooks —
    *  see lib/billingProviders/stripe.ts's metadata.plan === "enterprise" handling. */
   STRIPE_ENTERPRISE_PRICE_ID?: string;
+  /** Stripe Price ID for the metered WhatsApp-overage line item ($0.50/unit past the paid plan's
+   *  included 10/month — see lib/whatsappOverage.ts) — attached as a second line item at checkout
+   *  time (routes/billing.ts) alongside the flat plan price. Absent means new checkouts just get
+   *  the flat plan with no overage item, same as today. */
+  STRIPE_WHATSAPP_OVERAGE_PRICE_ID?: string;
+  /** The Stripe Billing Meter's event_name that STRIPE_WHATSAPP_OVERAGE_PRICE_ID is attached to —
+   *  created in the Stripe Dashboard alongside the metered price above. Absent means WhatsApp
+   *  overage is never reported, and a paid account that exhausts its included 10/month hard-stops
+   *  exactly like a free account would (see routes/documents.ts) rather than billing further. */
+  STRIPE_WHATSAPP_METER_NAME?: string;
   /** This worker's own public origin (e.g. https://docracy-worker.rl-d77.workers.dev) — used only
    *  to build absolute URLs to this worker's own routes for contexts that can't use a relative
    *  path, like a custom workspace logo embedded in an outbound email. Optional: emails just fall

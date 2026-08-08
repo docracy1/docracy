@@ -62,6 +62,14 @@ billing.post("/checkout", requireAccount, async (c) => {
   if (attribution) {
     params.set("metadata[attribution]", attribution);
   }
+  // Standard-plan checkouts only — Enterprise deals go through a manually-created Payment Link
+  // (see the metadata.plan comment above) and get the overage item added directly in the Stripe
+  // Dashboard if a deal needs it. A metered price takes no quantity of its own; Stripe tracks it
+  // via lib/whatsappOverage.ts's meter events instead. Absent until STRIPE_WHATSAPP_OVERAGE_PRICE_ID
+  // is configured, in which case new subscriptions just don't get the item (same as today).
+  if (!isEnterprise && c.env.STRIPE_WHATSAPP_OVERAGE_PRICE_ID) {
+    params.set("line_items[1][price]", c.env.STRIPE_WHATSAPP_OVERAGE_PRICE_ID);
+  }
 
   const res = await fetch("https://api.stripe.com/v1/checkout/sessions", {
     method: "POST",

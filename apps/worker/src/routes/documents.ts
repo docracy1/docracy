@@ -4,7 +4,9 @@ import { PDFDocument } from "pdf-lib";
 import { createDocumentCore } from "../lib/documentCreation";
 import { isSmsCarrier, normalizeUsPhone } from "../lib/sms";
 import { normalizeE164 } from "../lib/whatsapp";
-import { consumeWhatsappQuota } from "../lib/whatsappQuota";
+import { consumeWhatsappQuota, consumeWhatsappQuotaWithOverage, FREE_MONTHLY_LIMIT, PAID_MONTHLY_LIMIT } from "../lib/whatsappQuota";
+import { reportWhatsappOverageUsage, whatsappOverageConfigured } from "../lib/whatsappOverage";
+import { getStripeCustomerId } from "../lib/billing";
 import { NOTRACK_COOKIE_NAME, trackEvent } from "../lib/analytics";
 import { checkRateLimit, checkInviteRateLimit } from "../lib/ratelimit";
 import { optionalAccount, type AccountContext } from "../lib/auth";
@@ -319,9 +321,12 @@ documents.post("/", optionalAccount, async (c) => {
   }
 
   // WhatsApp is the AES-track channel — gated to signed-up accounts (anonymous senders are
-  // rejected outright), with a free-tier monthly cap; paid accounts get it unlimited/bundled.
-  // Checked last, immediately before creation, so a request that fails any earlier validation or
-  // rate limit never consumes quota for a document that was never actually going to be created.
+  // rejected outright). Free accounts hard-stop at FREE_MONTHLY_LIMIT/month, no exceptions. Paid
+  // accounts get PAID_MONTHLY_LIMIT/month included; past that they either hard-stop too (if this
+  // deployment hasn't configured Stripe overage billing) or keep going with the excess billed at
+  // $0.50/unit (see lib/whatsappOverage.ts). Checked last, immediately before creation, so a
+  // request that fails any earlier validation or rate limit never consumes quota for a document
+  // that was never actually going to be created.
   const whatsappSignerCount = meta.signers.filter((s) => s.whatsappPhone?.trim()).length;
   if (whatsappSignerCount > 0) {
     if (!account) {
@@ -332,13 +337,34 @@ documents.post("/", optionalAccount, async (c) => {
         "whatsapp_requires_account"
       );
     }
-    if (!account.isPaid) {
-      const allowed = await consumeWhatsappQuota(c.env, account.workspaceId, whatsappSignerCount);
+    if (account.isPaid && whatsappOverageConfigured(c.env)) {
+      const overageUnits = await consumeWhatsappQuotaWithOverage(c.env, account.workspaceId, whatsappSignerCount);
+      if (overageUnits > 0) {
+        const stripeCustomerId = await getStripeCustomerId(c.env, account.workspaceId);
+        if (stripeCustomerId) {
+          c.executionCtx.waitUntil(
+            reportWhatsappOverageUsage(c.env, stripeCustomerId, overageUnits).catch((err) =>
+              console.error(`WhatsApp overage report failed for account ${account.workspaceId} (non-fatal):`, err)
+            )
+          );
+        } else {
+          // Shouldn't happen for a real paid account (every checkout sets this), but billing
+          // silently going uncollected is worse than a loud log — never blocks the send either way.
+          console.error(
+            `WhatsApp overage: paid account ${account.workspaceId} has no Stripe customer id — ${overageUnits} unit(s) not billed`
+          );
+        }
+      }
+    } else {
+      const allowed = await consumeWhatsappQuota(c.env, account.workspaceId, account.isPaid, whatsappSignerCount);
       if (!allowed) {
+        const limit = account.isPaid ? PAID_MONTHLY_LIMIT : FREE_MONTHLY_LIMIT;
         return failWith(
           "send_failed",
           {
-            error: "Free accounts get 2 WhatsApp-signed invites per month — you've used them all. Upgrade for unlimited WhatsApp signing.",
+            error: account.isPaid
+              ? `Paid accounts get ${limit} WhatsApp-signed invites per month — you've used them all this month.`
+              : `Free accounts get ${limit} WhatsApp-signed invites per month — you've used them all. Upgrade for ${PAID_MONTHLY_LIMIT}/month.`,
           },
           402,
           "whatsapp_quota_exceeded"

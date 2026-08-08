@@ -76,6 +76,7 @@ export default function ProductFlowDemo() {
           <text x="190" y="220" textAnchor="middle" fontSize="12" fill="var(--mute)" fontFamily="inherit">
             {t("flow.linkEmailed")}
           </text>
+          <image href="/integrations/whatsapp.svg" x="177" y="232" width="16" height="16" />
         </svg>
         <span className="product-flow-label">{t("flow.step3")}</span>
       </div>

@@ -184,11 +184,12 @@ auth.get("/me", optionalAccount, async (c) => {
     marketingOptIn = !!row?.marketing_opt_in;
   }
 
-  // Paid accounts have no cap at all, so there's nothing worth showing them — only free signed-up
-  // accounts need the "X of 2 left this month" nudge on Prepare. Same low-stakes fresh-D1-read
-  // posture as marketingOptIn above, not part of the cached session record.
-  const whatsappQuotaRemaining =
-    account && !account.isPaid ? await peekWhatsappQuotaRemaining(c.env, account.workspaceId) : undefined;
+  // Both tiers have a real (if different) cap now — 2/month free, 10/month paid — so both need
+  // the "X left this month" nudge on Prepare. Same low-stakes fresh-D1-read posture as
+  // marketingOptIn above, not part of the cached session record.
+  const whatsappQuotaRemaining = account
+    ? await peekWhatsappQuotaRemaining(c.env, account.workspaceId, account.isPaid)
+    : undefined;
 
   return c.json({
     account: account ? { ...account, marketingOptIn, ...(whatsappQuotaRemaining !== undefined ? { whatsappQuotaRemaining } : {}) } : null,

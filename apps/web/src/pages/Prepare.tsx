@@ -35,6 +35,8 @@ import { track } from "../lib/track";
 
 const FREE_TIER_MAX_SIGNERS = 2;
 const FREE_TIER_MAX_CCS = 2;
+const WHATSAPP_FREE_MONTHLY_LIMIT = 2;
+const WHATSAPP_PAID_MONTHLY_LIMIT = 10;
 const MAX_PDF_BYTES = 15 * 1024 * 1024;
 
 // Signature/initials are taller to leave room for the auto-printed "email · date" caption text/date
@@ -1869,9 +1871,18 @@ export default function Prepare() {
                       <input type="checkbox" checked={whatsappInvites} onChange={(e) => setWhatsappInvites(e.target.checked)} />
                       <span>{t("prepare.alsoWhatsapp")}</span>
                     </label>
-                    {whatsappInvites && !account.isPaid && (
+                    {whatsappInvites && (
                       <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 0, marginBottom: 0 }}>
-                        {t("prepare.whatsappQuotaHint", { remaining: account.whatsappQuotaRemaining ?? 2 })}
+                        {account.isPaid
+                          ? t("prepare.whatsappQuotaHintPaid", {
+                              remaining: account.whatsappQuotaRemaining ?? WHATSAPP_PAID_MONTHLY_LIMIT,
+                              max: WHATSAPP_PAID_MONTHLY_LIMIT,
+                            })
+                          : t("prepare.whatsappQuotaHint", {
+                              remaining: account.whatsappQuotaRemaining ?? WHATSAPP_FREE_MONTHLY_LIMIT,
+                              max: WHATSAPP_FREE_MONTHLY_LIMIT,
+                              paidMax: WHATSAPP_PAID_MONTHLY_LIMIT,
+                            })}
                       </p>
                     )}
                   </>

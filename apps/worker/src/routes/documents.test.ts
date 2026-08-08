@@ -1,7 +1,30 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import documents from "./documents";
 import { createSession, SESSION_COOKIE_NAME } from "../lib/auth";
 import { makeMockEnv, makeValidPdfBytes } from "../test/mockEnv";
+
+/** Builds `count` distinct WhatsApp-enabled, PIN-protected signers with fields, for cap/overage tests. */
+function makeWhatsappSigners(count: number) {
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  return {
+    signers: Array.from({ length: count }, (_, i) => ({
+      order: i + 1,
+      name: letters[i],
+      email: `${letters[i].toLowerCase()}@example.com`,
+      whatsappPhone: `+1415555${String(1000 + i).slice(-4)}`,
+      pin: "1234",
+    })),
+    fields: Array.from({ length: count }, (_, i) => ({
+      id: `f${i + 1}`,
+      signerOrder: i + 1,
+      page: 0,
+      xFrac: 0.1,
+      yFrac: 0.05 + i * 0.05,
+      wFrac: 0.2,
+      hFrac: 0.04,
+    })),
+  };
+}
 
 function makeCtx() {
   const promises: Promise<unknown>[] = [];
@@ -433,7 +456,7 @@ describe("POST /api/documents", () => {
     expect(body.error).toMatch(/2 WhatsApp-signed invites/);
   });
 
-  it("lets a paid account send WhatsApp invites with no monthly cap", async () => {
+  it("lets a paid account send WhatsApp invites within its 10/month included allowance", async () => {
     const { env, kv, d1 } = makeMockEnv();
     const ctx = makeCtx();
     const sessionToken = await createSession(env, ctx, "acct-paid", "paid@example.com", true, false, null, null);
@@ -442,14 +465,7 @@ describe("POST /api/documents", () => {
       .bind("acct-paid", "paid@example.com", new Date().toISOString())
       .run();
     const pdf = await makeValidPdfBytes();
-    const meta = {
-      ...validMeta,
-      whatsappInvites: true,
-      signers: [
-        { order: 1, name: "A", email: "a@example.com", whatsappPhone: "+14155551234", pin: "1234" },
-        { order: 2, name: "B", email: "b@example.com", whatsappPhone: "+14155551235", pin: "1234" },
-      ],
-    };
+    const meta = { ...validMeta, whatsappInvites: true, ...makeWhatsappSigners(2) };
     const res = await documents.request(
       "/",
       { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${sessionToken}` }, body: buildForm(pdf, meta) },
@@ -460,6 +476,60 @@ describe("POST /api/documents", () => {
     const [, docValue] = [...kv._store.entries()].find(([k]) => k.startsWith("doc:"))!;
     const stored = JSON.parse(docValue);
     expect(stored.whatsappInvites).toBe(true);
-    expect(stored.signers[0].whatsappPhone).toBe("+14155551234");
+    expect(stored.signers[0].whatsappPhone).toBeTruthy();
+  });
+
+  it("hard-stops a paid account past its 10/month allowance when overage billing isn't configured", async () => {
+    const { env, d1 } = makeMockEnv(); // no STRIPE_WHATSAPP_METER_NAME/PRICE_ID set
+    const ctx = makeCtx();
+    const sessionToken = await createSession(env, ctx, "acct-paid", "paid@example.com", true, false, null, null);
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 1)`)
+      .bind("acct-paid", "paid@example.com", new Date().toISOString())
+      .run();
+    const pdf = await makeValidPdfBytes();
+    const meta = { ...validMeta, whatsappInvites: true, ...makeWhatsappSigners(11) };
+    const res = await documents.request(
+      "/",
+      { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${sessionToken}` }, body: buildForm(pdf, meta) },
+      env,
+      ctx
+    );
+    expect(res.status).toBe(402);
+    const body: { error: string } = await res.json();
+    expect(body.error).toMatch(/Paid accounts get 10/);
+  });
+
+  it("lets a paid account go past 10/month and bills the overage via Stripe when configured", async () => {
+    const { env, d1 } = makeMockEnv({
+      STRIPE_SECRET_KEY: "sk_test_x",
+      STRIPE_WHATSAPP_METER_NAME: "whatsapp_overage",
+    });
+    const ctx = makeCtx();
+    const sessionToken = await createSession(env, ctx, "acct-paid", "paid@example.com", true, false, null, null);
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid, stripe_customer_id) VALUES (?, ?, ?, 1, ?)`)
+      .bind("acct-paid", "paid@example.com", new Date().toISOString(), "cus_123")
+      .run();
+    const fetchSpy = vi.spyOn(global, "fetch").mockResolvedValue(new Response("{}", { status: 200 }));
+    const pdf = await makeValidPdfBytes();
+    const meta = { ...validMeta, whatsappInvites: true, ...makeWhatsappSigners(13) }; // 10 included + 3 overage
+    const ctxWithFlush = makeCtx();
+    const res = await documents.request(
+      "/",
+      { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${sessionToken}` }, body: buildForm(pdf, meta) },
+      env,
+      ctxWithFlush
+    );
+    expect(res.status).toBe(200);
+    await ctxWithFlush.flush();
+
+    const meterCall = fetchSpy.mock.calls.find(([url]) => String(url).includes("/v1/billing/meter_events"));
+    expect(meterCall).toBeTruthy();
+    const meterBody = String(meterCall![1]?.body ?? "");
+    expect(meterBody).toContain("event_name=whatsapp_overage");
+    expect(meterBody).toContain("cus_123");
+    expect(meterBody).toContain(`${encodeURIComponent("payload[value]")}=3`);
+    fetchSpy.mockRestore();
   });
 });

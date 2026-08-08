@@ -306,8 +306,9 @@ export interface Account {
   paymentFailedAt: string | null;
   /** Whether this account opted in to occasional product-news emails (accounts.marketing_opt_in). */
   marketingOptIn: boolean;
-  /** Free accounts only — WhatsApp-invited signers left this calendar month (of 2). Undefined for
-   *  paid accounts, which have no cap. */
+  /** WhatsApp-invited signers left this calendar month — free accounts get 2/month, paid 10/month
+   *  (see WHATSAPP_FREE_MONTHLY_LIMIT/WHATSAPP_PAID_MONTHLY_LIMIT in Prepare.tsx). Present for any
+   *  signed-in account; undefined only when signed out entirely. */
   whatsappQuotaRemaining?: number;
 }
 
