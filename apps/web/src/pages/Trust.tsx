@@ -18,7 +18,7 @@ export default function Trust() {
         <Link to="/privacy">Privacy</Link>; for processing terms see the <Link to="/dpa">DPA</Link>.
       </p>
 
-      <h2 style={{ fontSize: 19, marginTop: 28 }}>What Docracy is (and isn't)</h2>
+      <h2 id="what-docracy-is" style={{ fontSize: 19, marginTop: 28 }}>What Docracy is (and isn't)</h2>
       <p>
         Docracy provides <strong>simple electronic signatures (SES)</strong> with a timestamped audit trail
         and a certificate of completion. That model is designed to support everyday business documents under
@@ -73,20 +73,23 @@ export default function Trust() {
         </li>
       </ul>
       <p>
-        This is <strong>SES-level</strong> only. Docracy does not provide AES or QES, identity verification,
-        or QTSP services. Suitability for a given agreement depends on document type, industry rules, and
-        jurisdiction — this page is not legal advice.
+        This is <strong>SES-level</strong> by default. Paid and Enterprise accounts can additionally turn on
+        WhatsApp-verified signing — the AES-track option described in{" "}
+        <a href="#what-docracy-is">What Docracy is (and isn't)</a> above — but Docracy still does not provide
+        QES, identity verification, or QTSP services under any plan. Suitability for a given agreement
+        depends on document type, industry rules, and jurisdiction — this page is not legal advice.
       </p>
       <p style={{ fontSize: 13, color: "var(--mute)" }}>
-        EU note: the same SES model is consistent with eIDAS simple electronic signatures for many
-        low-stakes business documents. We do not claim AES/QES under eIDAS.
+        EU note: the free-tier SES model is consistent with eIDAS simple electronic signatures for many
+        low-stakes business documents. WhatsApp-verified signing (paid/Enterprise) is designed to meet the
+        higher eIDAS AES bar instead — see above — but we do not claim QES under eIDAS on any plan.
       </p>
 
       <h2 style={{ fontSize: 19, marginTop: 28 }}>Template legal review</h2>
       <p>
         Every free template in our{" "}
         <Link to="/free-templates">template library</Link> has been reviewed by{" "}
-        <a href="https://www.boeck.law/about" target="_blank" rel="noopener noreferrer">
+        <a href="https://www.linkedin.com/in/dr-denisa-boeck-373424123/" target="_blank" rel="noopener noreferrer">
           Dr. Denisa Boeck
         </a>
         , attorney at BOECK Law (Liechtenstein Bar), for legal clarity and correctness. That review

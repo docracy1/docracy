@@ -80,7 +80,7 @@ export default function FreeTemplateDetail() {
           <p style={{ color: "var(--mute)" }}>{useCase}</p>
           <p style={{ fontSize: 12, color: "var(--mute)" }}>
             ✓ {t("tpl.detail.legalReviewLead")}{" "}
-            <a href="https://www.boeck.law/about" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.linkedin.com/in/dr-denisa-boeck-373424123/" target="_blank" rel="noopener noreferrer">
               Dr. Denisa Boeck
             </a>
             {t("tpl.detail.legalReviewTrail")}

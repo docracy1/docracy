@@ -953,7 +953,7 @@ const en: Messages = {
     "Docracy AI auto-detects signature and date fields, explains contracts in plain English, flags risky clauses, and generates signable PDFs. Plus an MCP connector for Claude and ChatGPT.",
   "seo.esignUeta.title": "ESIGN Act & UETA E-Signatures — Designed for US Law | Docracy",
   "seo.esignUeta.description":
-    "Docracy SES electronic signatures are designed to support the U.S. ESIGN Act and UETA: consent, intent to sign, audit trail, and a certificate of completion. No AES/QES or identity verification.",
+    "Docracy SES electronic signatures are designed to support the U.S. ESIGN Act and UETA: consent, intent to sign, audit trail, and a certificate of completion. Paid/Enterprise accounts can add WhatsApp-verified Advanced Electronic Signature (AES) — still no QES or identity verification.",
 
   "esign.eyebrow": "US electronic signature law",
   "esign.heroTitle": "Electronic signatures\nunder ESIGN & UETA.",
@@ -988,9 +988,23 @@ const en: Messages = {
   "esign.provide.cert.title": "Certificate of completion",
   "esign.provide.cert.body":
     "When the chain finishes, parties get a signed PDF plus a completion certificate summarizing the trail.",
+  "esign.aesTitle": "Beyond SES: Advanced Electronic Signature via WhatsApp",
+  "esign.aesBody":
+    "ESIGN and UETA only require consent, intent, and a retainable record — the SES model above already clears that bar. Paid and Enterprise accounts can go further: WhatsApp-verified signing binds the link to a specific phone number and requires a PIN before signing, designed to meet the EU eIDAS criteria for an Advanced Electronic Signature (AES) — a stronger standard than U.S. federal law requires.",
+  "esign.aes.1":
+    "Uniquely linked to and capable of identifying the signatory — the link only reaches that signer's own WhatsApp number.",
+  "esign.aes.2":
+    "Created under the signatory's sole control — a preparer-set PIN is required, not optional, on every WhatsApp-delivered link.",
+  "esign.aes.3":
+    "Detectably linked to the signed data — the same SHA-256 hash chain and audit trail as every Docracy document.",
+  "esign.aes.4": "Backed by delivery and read receipts, recorded in the audit trail alongside the signature.",
+  "esign.aesNote":
+    "This is a self-declared AES-track design, not a certified Qualified Electronic Signature (QES) — we're not a Qualified Trust Service Provider (QTSP). See Trust & security for the full picture.",
+  "esign.aesLinkWhatsapp": "How WhatsApp signing works →",
+  "esign.aesLinkAdvanced": "More on Advanced Electronic Signature (AES) →",
   "esign.limitsTitle": "Honest limits",
   "esign.limitsBody":
-    "This is simple electronic signature (SES) only. Docracy does not verify signer identity, and does not offer advanced or qualified electronic signatures (AES/QES). Anyone with the link can sign as the name on it. For high-stakes or regulated contracts that need identity-verified signatures, use a compliance-grade provider. This page is not legal advice.",
+    "By default (free tier, no WhatsApp), this is simple electronic signature (SES) only — Docracy does not verify signer identity, and anyone with the link can sign as the name on it. Docracy does not offer Qualified Electronic Signatures (QES) on any plan, and doesn't claim third-party certification for the WhatsApp AES-track option above. For contracts that need identity-verified or certified signatures, use a compliance-grade provider. This page is not legal advice.",
   "esign.faqTitle": "Common questions",
   "esign.faq.q1": "Are Docracy signatures ESIGN / UETA compliant?",
   "esign.faq.a1":
@@ -1000,7 +1014,7 @@ const en: Messages = {
     "No. The audit trail proves what was signed and when, not who physically signed. Identity verification is out of scope for Docracy.",
   "esign.faq.q3": "Is this AES or QES?",
   "esign.faq.a3":
-    "No. Docracy provides SES (simple electronic signatures) only — not advanced or qualified electronic signatures under eIDAS or similar frameworks.",
+    "Not by default — the free tier is SES (simple electronic signature) only. Paid and Enterprise accounts can turn on WhatsApp-verified signing, designed to meet the EU eIDAS criteria for an Advanced Electronic Signature (AES): phone-bound delivery, a required PIN, and a tamper-evident record. It's still not a Qualified Electronic Signature (QES) — we're not a Qualified Trust Service Provider (QTSP) and haven't sought third-party AES certification.",
   "esign.faq.q4": "Where can I read the full security posture?",
   "esign.faq.a4":
     "See Trust & security for encryption, retention, subprocessors, Cloudflare infrastructure certifications, and the security questionnaire.",

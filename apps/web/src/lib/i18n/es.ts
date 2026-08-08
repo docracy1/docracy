@@ -1040,7 +1040,7 @@ const es: Messages = {
     "La IA de Docracy detecta campos de firma y fecha, resume contratos en lenguaje claro, marca cláusulas de riesgo y genera PDFs listos para firmar. Incluye conector MCP para Claude y ChatGPT.",
   "seo.esignUeta.title": "Firmas electrónicas ESIGN Act y UETA — Diseñadas para la ley de EE. UU. | Docracy",
   "seo.esignUeta.description":
-    "Las firmas SES de Docracy están diseñadas para respaldar la ESIGN Act y UETA de EE. UU.: consentimiento, intención de firmar, registro de auditoría y certificado de finalización. Sin AES/QES ni verificación de identidad.",
+    "Las firmas SES de Docracy están diseñadas para respaldar la ESIGN Act y UETA de EE. UU.: consentimiento, intención de firmar, registro de auditoría y certificado de finalización. Las cuentas de pago/Enterprise pueden añadir firma avanzada (AES) verificada por WhatsApp — sigue sin QES ni verificación de identidad.",
 
   "esign.eyebrow": "Ley de firmas electrónicas en EE. UU.",
   "esign.heroTitle": "Firmas electrónicas\nbajo ESIGN y UETA.",
@@ -1075,9 +1075,23 @@ const es: Messages = {
   "esign.provide.cert.title": "Certificado de finalización",
   "esign.provide.cert.body":
     "Al terminar la cadena, las partes reciben el PDF firmado y un certificado que resume el rastro.",
+  "esign.aesTitle": "Más allá de SES: firma electrónica avanzada por WhatsApp",
+  "esign.aesBody":
+    "ESIGN y UETA solo requieren consentimiento, intención y un registro conservable — el modelo SES anterior ya cumple ese estándar. Las cuentas de pago y Enterprise pueden ir más allá: la firma verificada por WhatsApp vincula el enlace a un número de teléfono específico y exige un PIN antes de firmar, diseñada para cumplir los criterios eIDAS de la UE para una Firma Electrónica Avanzada (AES) — un estándar más exigente que el que requiere la ley federal de EE. UU.",
+  "esign.aes.1":
+    "Vinculada de forma única e identifica al firmante — el enlace solo llega al número de WhatsApp de ese firmante.",
+  "esign.aes.2":
+    "Creada bajo el control exclusivo del firmante — se exige un PIN definido por quien prepara el documento en cada enlace enviado por WhatsApp, no es opcional.",
+  "esign.aes.3":
+    "Vinculada de forma detectable a los datos firmados — la misma cadena de hashes SHA-256 y registro de auditoría que todo documento de Docracy.",
+  "esign.aes.4": "Respaldada por confirmaciones de entrega y lectura, registradas en el historial de auditoría junto a la firma.",
+  "esign.aesNote":
+    "Este es un diseño autodeclarado orientado a AES, no una Firma Electrónica Cualificada (QES) certificada — no somos un Proveedor Cualificado de Servicios de Confianza (QTSP). Consulta Confianza y seguridad para el panorama completo.",
+  "esign.aesLinkWhatsapp": "Cómo funciona la firma por WhatsApp →",
+  "esign.aesLinkAdvanced": "Más sobre la Firma Electrónica Avanzada (AES) →",
   "esign.limitsTitle": "Límites honestos",
   "esign.limitsBody":
-    "Solo firma electrónica simple (SES). Docracy no verifica la identidad del firmante y no ofrece firmas avanzadas o cualificadas (AES/QES). Cualquiera con el enlace puede firmar con el nombre indicado. Para contratos de alto riesgo o regulados que requieren identidad verificada, usa un proveedor de grado de cumplimiento. Esta página no es asesoría legal.",
+    "Por defecto (plan gratis, sin WhatsApp), esto es solo firma electrónica simple (SES) — Docracy no verifica la identidad del firmante y cualquiera con el enlace puede firmar con el nombre indicado. Docracy no ofrece Firmas Electrónicas Cualificadas (QES) en ningún plan, ni reclama certificación de terceros para la opción AES por WhatsApp descrita arriba. Para contratos que necesiten firmas verificadas por identidad o certificadas, usa un proveedor de nivel de cumplimiento. Esta página no es asesoría legal.",
   "esign.faqTitle": "Preguntas frecuentes",
   "esign.faq.q1": "¿Las firmas de Docracy cumplen ESIGN / UETA?",
   "esign.faq.a1":
@@ -1087,7 +1101,7 @@ const es: Messages = {
     "No. El registro de auditoría prueba qué se firmó y cuándo, no quién firmó físicamente. La verificación de identidad está fuera del alcance de Docracy.",
   "esign.faq.q3": "¿Es AES o QES?",
   "esign.faq.a3":
-    "No. Docracy solo ofrece SES (firmas electrónicas simples) — no firmas avanzadas o cualificadas bajo eIDAS u otros marcos similares.",
+    "No por defecto — el plan gratis es solo SES (firma electrónica simple). Las cuentas de pago y Enterprise pueden activar la firma verificada por WhatsApp, diseñada para cumplir los criterios eIDAS de la UE para una Firma Electrónica Avanzada (AES): entrega vinculada al teléfono, PIN obligatorio y un registro a prueba de manipulaciones. Sigue sin ser una Firma Electrónica Cualificada (QES) — no somos un Proveedor Cualificado de Servicios de Confianza (QTSP) ni hemos buscado certificación AES de terceros.",
   "esign.faq.q4": "¿Dónde leo la postura de seguridad completa?",
   "esign.faq.a4":
     "Consulta Confianza y seguridad para cifrado, retención, subprocesadores, certificaciones de infraestructura de Cloudflare y el cuestionario de seguridad.",

@@ -79,6 +79,27 @@ export default function EsignUeta() {
         </div>
       </div>
 
+      <div className="container" style={{ maxWidth: 720, paddingTop: 8, paddingBottom: 8 }}>
+        <h2 style={{ fontSize: 22, marginTop: 0 }}>{t("esign.aesTitle")}</h2>
+        <p>{t("esign.aesBody")}</p>
+        <ul style={{ paddingLeft: 20, lineHeight: 1.55 }}>
+          <li style={{ marginBottom: 8 }}>{t("esign.aes.1")}</li>
+          <li style={{ marginBottom: 8 }}>{t("esign.aes.2")}</li>
+          <li style={{ marginBottom: 8 }}>{t("esign.aes.3")}</li>
+          <li>{t("esign.aes.4")}</li>
+        </ul>
+        <p style={{ fontSize: 13, color: "var(--mute)" }}>{t("esign.aesNote")}</p>
+        <p style={{ fontSize: 14 }}>
+          <Link to="/whatsapp-signing" onClick={() => onCta("aes_whatsapp")}>
+            {t("esign.aesLinkWhatsapp")}
+          </Link>
+          {" · "}
+          <Link to="/advanced-electronic-signature" onClick={() => onCta("aes_advanced")}>
+            {t("esign.aesLinkAdvanced")}
+          </Link>
+        </p>
+      </div>
+
       <div className="spotlight-band" style={{ marginTop: 8 }}>
         <div className="container" style={{ maxWidth: 720 }}>
           <h2 style={{ fontSize: 22, marginTop: 0 }}>{t("esign.limitsTitle")}</h2>
