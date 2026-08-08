@@ -1053,6 +1053,12 @@ export default function Prepare() {
                 <input type="file" accept="application/pdf" onChange={onFileChange} />
               </div>
               <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 6, marginBottom: 0 }}>{t("prepare.maxSize")}</p>
+              <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 6, marginBottom: 0, display: "flex", alignItems: "center", gap: 5 }}>
+                <img src="/integrations/whatsapp.svg" alt="" width={14} height={14} style={{ display: "block" }} />
+                <Link to="/whatsapp-signing" style={{ color: "var(--mute)" }}>
+                  {t("prepare.whatsappAvailableHint")}
+                </Link>
+              </p>
               {error && <p style={{ color: "var(--danger)", marginTop: 8 }}>{error}</p>}
 
               {account?.isPaid ? (
@@ -1677,11 +1683,11 @@ export default function Prepare() {
                       applyContactEmail(email, (c) => updateSigner(s.order, { email: c.email, name: s.name.trim() ? s.name : c.name }));
                     }}
                   />
-                  {account?.isPaid && (
+                  {(account?.isPaid || (whatsappInvites && account)) && (
                     <input
                       className="form-input"
                       style={{ width: "100%" }}
-                      placeholder={t("prepare.pinPh")}
+                      placeholder={s.whatsappPhone?.trim() ? t("prepare.pinRequiredForWhatsappPh") : t("prepare.pinPh")}
                       aria-label={t("prepare.signerPinAria", { n: s.order })}
                       inputMode="numeric"
                       maxLength={8}

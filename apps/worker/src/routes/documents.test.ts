@@ -371,10 +371,28 @@ describe("POST /api/documents", () => {
     expect(stored.accountId).toBe("acct-2");
   });
 
+  it("rejects a WhatsApp signer with no PIN, regardless of account status", async () => {
+    const { env } = makeMockEnv();
+    const pdf = await makeValidPdfBytes();
+    const meta = {
+      ...validMeta,
+      whatsappInvites: true,
+      signers: [{ ...validMeta.signers[0], whatsappPhone: "+14155551234" }, validMeta.signers[1]],
+    };
+    const res = await documents.request("/", { method: "POST", body: buildForm(pdf, meta) }, env, MOCK_CTX);
+    expect(res.status).toBe(400);
+    const body: { error: string } = await res.json();
+    expect(body.error).toMatch(/PIN is required/);
+  });
+
   it("rejects a WhatsApp signer for an anonymous (signed-out) sender", async () => {
     const { env } = makeMockEnv();
     const pdf = await makeValidPdfBytes();
-    const meta = { ...validMeta, whatsappInvites: true, signers: [{ ...validMeta.signers[0], whatsappPhone: "+14155551234" }, validMeta.signers[1]] };
+    const meta = {
+      ...validMeta,
+      whatsappInvites: true,
+      signers: [{ ...validMeta.signers[0], whatsappPhone: "+14155551234", pin: "1234" }, validMeta.signers[1]],
+    };
     const res = await documents.request("/", { method: "POST", body: buildForm(pdf, meta) }, env, MOCK_CTX);
     expect(res.status).toBe(402);
     const body: { error: string } = await res.json();
@@ -394,9 +412,9 @@ describe("POST /api/documents", () => {
       ...validMeta,
       whatsappInvites: true,
       signers: [
-        { order: 1, name: "A", email: "a@example.com", whatsappPhone: "+14155551234" },
-        { order: 2, name: "B", email: "b@example.com", whatsappPhone: "+14155551235" },
-        { order: 3, name: "C", email: "c@example.com", whatsappPhone: "+14155551236" },
+        { order: 1, name: "A", email: "a@example.com", whatsappPhone: "+14155551234", pin: "1234" },
+        { order: 2, name: "B", email: "b@example.com", whatsappPhone: "+14155551235", pin: "1234" },
+        { order: 3, name: "C", email: "c@example.com", whatsappPhone: "+14155551236", pin: "1234" },
       ],
       fields: [
         { id: "f1", signerOrder: 1, page: 0, xFrac: 0.1, yFrac: 0.1, wFrac: 0.2, hFrac: 0.05 },
@@ -428,8 +446,8 @@ describe("POST /api/documents", () => {
       ...validMeta,
       whatsappInvites: true,
       signers: [
-        { order: 1, name: "A", email: "a@example.com", whatsappPhone: "+14155551234" },
-        { order: 2, name: "B", email: "b@example.com", whatsappPhone: "+14155551235" },
+        { order: 1, name: "A", email: "a@example.com", whatsappPhone: "+14155551234", pin: "1234" },
+        { order: 2, name: "B", email: "b@example.com", whatsappPhone: "+14155551235", pin: "1234" },
       ],
     };
     const res = await documents.request(
@@ -438,6 +456,7 @@ describe("POST /api/documents", () => {
       env,
       ctx
     );
+    if (res.status !== 200) console.log("DEBUG BODY", await res.clone().json());
     expect(res.status).toBe(200);
     const [, docValue] = [...kv._store.entries()].find(([k]) => k.startsWith("doc:"))!;
     const stored = JSON.parse(docValue);

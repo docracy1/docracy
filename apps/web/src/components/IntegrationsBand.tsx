@@ -8,6 +8,7 @@ export const INTEGRATION_LOGOS = [
   { name: "OneDrive", file: "onedrive.svg", group: "storage" as const },
   { name: "Box", file: "box.svg", group: "storage" as const },
   { name: "Google Drive", file: "googledrive.svg", group: "storage" as const },
+  { name: "WhatsApp", file: "whatsapp.svg", group: "messaging" as const },
   { name: "Zapier", file: "zapier.svg", group: "automation" as const },
   { name: "Claude", file: "claude.svg", group: "ai" as const },
   { name: "ChatGPT", file: "openai.svg", group: "ai" as const },

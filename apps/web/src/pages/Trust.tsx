@@ -30,10 +30,12 @@ export default function Trust() {
         <em>who</em> physically signed.
       </p>
       <p>
-        Paid accounts can additionally deliver a signer's link over <strong>WhatsApp</strong> instead of (or
-        alongside) email. Because that link only reaches a phone number tied to that signer's own WhatsApp
-        account, and Meta's delivery/read receipts are recorded in the audit trail next to the existing
-        tamper-evident PDF hash, this channel is designed to meet the EU eIDAS criteria for an{" "}
+        Signed-up accounts (free or paid) can additionally deliver a signer's link over{" "}
+        <strong>WhatsApp</strong> instead of (or alongside) email. That link only reaches a phone number tied
+        to that signer's own WhatsApp account, Meta's delivery/read receipts are recorded in the audit trail
+        next to the existing tamper-evident PDF hash, and a PIN — set by the preparer and required, not
+        optional, on every WhatsApp-delivered link — must be entered before signing, so possession of the
+        phone alone isn't enough. Together, that combination is designed to meet the EU eIDAS criteria for an{" "}
         <strong>Advanced Electronic Signature (AES)</strong>: a signature uniquely linked to and capable of
         identifying the signatory, created under their sole control, and detectably tied to the signed data.
         It is <strong>not</strong> a Qualified Electronic Signature (QES) — we are not a Qualified Trust

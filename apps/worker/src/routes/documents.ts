@@ -135,8 +135,11 @@ documents.post("/", optionalAccount, async (c) => {
       "signer_cap_exceeded"
     );
   }
-  // PIN-protected signing links are a paid-tier feature — same 402 pattern as the signer cap above.
-  if (meta.signers.some((s) => s.pin) && !account?.isPaid) {
+  // PIN-protected signing links are normally a paid-tier feature — except for a WhatsApp signer,
+  // where the PIN is mandatory (see below) regardless of plan: it's the "sole control" factor that
+  // makes the AES-track claim on /trust defensible — without it, anyone who can open that WhatsApp
+  // thread could sign, not just the phone's owner. So only a *non*-WhatsApp PIN is paid-gated here.
+  if (meta.signers.some((s) => s.pin && !s.whatsappPhone?.trim()) && !account?.isPaid) {
     return failWith("send_failed", { error: "PIN-protected signing links require a paid account." }, 402, "pin_requires_paid");
   }
 
@@ -175,6 +178,12 @@ documents.post("/", optionalAccount, async (c) => {
     }
     if (s.whatsappPhone?.trim() && !normalizeE164(s.whatsappPhone)) {
       return c.json({ error: `"${s.whatsappPhone}" doesn't look like a valid phone number for WhatsApp` }, 400);
+    }
+    if (s.whatsappPhone?.trim() && !s.pin?.trim()) {
+      return c.json(
+        { error: "A PIN is required for signers using WhatsApp — it pairs with the phone-bound link to prove sole control." },
+        400
+      );
     }
   }
   if (meta.smsInvites && !meta.signers.some((s) => s.phone?.trim() && s.smsCarrier)) {
