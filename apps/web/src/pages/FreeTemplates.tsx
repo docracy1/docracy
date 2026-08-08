@@ -198,6 +198,13 @@ export default function FreeTemplates() {
               aria-label={t("freeTemplates.searchPlaceholder")}
             />
           </div>
+          <p className="templates-legal-review">
+            {t("freeTemplates.legalReviewLead")}{" "}
+            <a href="https://www.boeck.law/about" target="_blank" rel="noopener noreferrer">
+              Dr. Denisa Boeck
+            </a>
+            {t("freeTemplates.legalReviewTrail")}
+          </p>
         </div>
       </div>
 

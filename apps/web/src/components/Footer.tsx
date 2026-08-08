@@ -123,6 +123,13 @@ export default function Footer() {
           {t("footer.esignLine")}{" "}
           <Link to={localizePath("/esign-ueta", locale)}>{t("footer.esignLineLink")}</Link>
         </span>
+        <span className="site-footer-esign">
+          {t("footer.legalReviewLead")}{" "}
+          <a href="https://www.boeck.law/about" target="_blank" rel="noopener noreferrer">
+            Dr. Denisa Boeck
+          </a>
+          {t("footer.legalReviewTrail")}
+        </span>
       </div>
     </footer>
   );

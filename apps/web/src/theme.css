@@ -2522,6 +2522,15 @@ select {
   font-size: 16px;
   margin: 0;
 }
+.templates-legal-review {
+  font-size: 13px !important;
+  margin-top: 16px !important;
+  opacity: 0.85;
+}
+.templates-legal-review a {
+  color: #ffffff;
+  text-decoration: underline;
+}
 .templates-search-wrap {
   margin-top: 28px;
   position: relative;

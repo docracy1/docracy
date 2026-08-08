@@ -134,6 +134,8 @@ const en: Messages = {
   "footer.esignUeta": "ESIGN & UETA",
   "footer.esignLine": "SES e-signatures designed to support the U.S. ESIGN Act and UETA.",
   "footer.esignLineLink": "Learn more",
+  "footer.legalReviewLead": "Free templates reviewed by attorney",
+  "footer.legalReviewTrail": ", BOECK Law (Liechtenstein Bar).",
   "footer.dpa": "DPA",
   "footer.terms": "Terms",
   "footer.copyright": "© {{year}} Docracy — a product of RELACON GmbH",
@@ -830,6 +832,8 @@ const en: Messages = {
   "freeTemplates.heroSub":
     "Browse our library of ready-to-sign templates — fill in your details and send for signature in minutes, completely free.",
   "freeTemplates.searchPlaceholder": "What template are you looking for?",
+  "freeTemplates.legalReviewLead": "Every template on this page has been reviewed by attorney",
+  "freeTemplates.legalReviewTrail": ", BOECK Law (Liechtenstein Bar), for legal clarity and correctness.",
   "freeTemplates.noResults": "No templates match \"{query}\". Try a different word, or browse all templates below.",
   "freeTemplates.sub": "Ready-to-sign documents — pick one, fill in your details, and send for signature in minutes.",
   "freeTemplates.title": "Free templates",
@@ -1159,6 +1163,8 @@ const en: Messages = {
   "tpl.detail.disclaimer": "This is a general template for informational purposes only and does not constitute legal advice. Consult a qualified attorney to review it for your specific situation and jurisdiction before use.",
   "tpl.detail.cta": "Use this template",
   "tpl.detail.freeNote": "Free for up to 2 signers, no account required.",
+  "tpl.detail.legalReviewLead": "Legally reviewed by attorney",
+  "tpl.detail.legalReviewTrail": ", BOECK Law (Liechtenstein Bar).",
   "tpl.detail.faqTitle": "FAQ",
   "tpl.detail.faq1.q": "Is this {{name}} legally binding?",
   "tpl.detail.faq1.a":

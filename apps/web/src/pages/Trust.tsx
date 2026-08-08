@@ -82,6 +82,18 @@ export default function Trust() {
         low-stakes business documents. We do not claim AES/QES under eIDAS.
       </p>
 
+      <h2 style={{ fontSize: 19, marginTop: 28 }}>Template legal review</h2>
+      <p>
+        Every free template in our{" "}
+        <Link to="/free-templates">template library</Link> has been reviewed by{" "}
+        <a href="https://www.boeck.law/about" target="_blank" rel="noopener noreferrer">
+          Dr. Denisa Boeck
+        </a>
+        , attorney at BOECK Law (Liechtenstein Bar), for legal clarity and correctness. That review
+        covers the template's own wording — it is not tailored legal advice for your specific
+        agreement, industry, or jurisdiction; for that, consult your own counsel.
+      </p>
+
       <h2 style={{ fontSize: 19, marginTop: 28 }}>Encryption &amp; transport</h2>
       <ul>
         <li>All traffic uses HTTPS / TLS in transit.</li>

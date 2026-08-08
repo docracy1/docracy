@@ -204,6 +204,8 @@ const es: Messages = {
   "footer.esignUeta": "ESIGN y UETA",
   "footer.esignLine": "Firmas SES diseñadas para respaldar la ESIGN Act y UETA de EE. UU.",
   "footer.esignLineLink": "Más información",
+  "footer.legalReviewLead": "Plantillas gratuitas revisadas por la abogada",
+  "footer.legalReviewTrail": ", BOECK Law (Colegio de Abogados de Liechtenstein).",
   "footer.vsAdobe": "vs Adobe Acrobat Sign",
   "footer.vsDocusign": "vs DocuSign",
   "footer.vsEversign": "vs eversign",
@@ -917,6 +919,8 @@ const es: Messages = {
   "freeTemplates.heroSub":
     "Explora nuestra biblioteca de plantillas listas para firmar — completa tus datos y envía a firma en minutos, totalmente gratis.",
   "freeTemplates.searchPlaceholder": "¿Qué plantilla estás buscando?",
+  "freeTemplates.legalReviewLead": "Cada plantilla de esta página ha sido revisada por la abogada",
+  "freeTemplates.legalReviewTrail": ", BOECK Law (Colegio de Abogados de Liechtenstein), para garantizar claridad y corrección legal.",
   "freeTemplates.noResults": "Ninguna plantilla coincide con \"{query}\". Prueba otra palabra o explora todas las plantillas abajo.",
   "freeTemplates.faqTitle": "Preguntas frecuentes",
   "freeTemplates.faq1.q": "¿Qué es una plantilla y en qué se diferencia de un documento?",
@@ -1219,6 +1223,8 @@ const es: Messages = {
   "tpl.detail.disclaimer": "Esta es una plantilla general solo con fines informativos y no constituye asesoramiento legal. Consulta a un abogado calificado para revisarla según tu situación y jurisdicción antes de usarla.",
   "tpl.detail.cta": "Usar esta plantilla",
   "tpl.detail.freeNote": "Gratis hasta 2 firmantes, sin cuenta.",
+  "tpl.detail.legalReviewLead": "Revisado legalmente por la abogada",
+  "tpl.detail.legalReviewTrail": ", BOECK Law (Colegio de Abogados de Liechtenstein).",
   "tpl.detail.faqTitle": "Preguntas frecuentes",
   "tpl.detail.faq1.q": "¿Este {{name}} tiene validez legal?",
   "tpl.detail.faq1.a":
