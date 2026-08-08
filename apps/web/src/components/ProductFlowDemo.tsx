@@ -14,6 +14,7 @@ export default function ProductFlowDemo() {
           <text x="190" y="220" textAnchor="middle" fontSize="13" fill="var(--mute)" fontFamily="inherit" fontWeight="600">
             {t("flow.dropPdf")}
           </text>
+          <image href="/integrations/whatsapp.svg" x="336" y="16" width="28" height="28" />
         </svg>
         <span className="product-flow-label">{t("flow.step1")}</span>
       </div>
@@ -57,6 +58,7 @@ export default function ProductFlowDemo() {
           <text x="223" y="222" textAnchor="middle" fontSize="11" fill="var(--primary)" fontFamily="inherit" fontWeight="700">
             {t("flow.date")}
           </text>
+          <image href="/integrations/whatsapp.svg" x="336" y="16" width="28" height="28" />
         </svg>
         <span className="product-flow-label">{t("flow.step2")}</span>
       </div>
@@ -76,7 +78,7 @@ export default function ProductFlowDemo() {
           <text x="190" y="220" textAnchor="middle" fontSize="12" fill="var(--mute)" fontFamily="inherit">
             {t("flow.linkEmailed")}
           </text>
-          <image href="/integrations/whatsapp.svg" x="177" y="232" width="16" height="16" />
+          <image href="/integrations/whatsapp.svg" x="336" y="16" width="28" height="28" />
         </svg>
         <span className="product-flow-label">{t("flow.step3")}</span>
       </div>
@@ -98,6 +100,7 @@ export default function ProductFlowDemo() {
           />
           <circle cx="332" cy="218" r="18" fill="#e3f3e9" />
           <path d="M324 218l5.5 5.5 11-11" fill="none" stroke="var(--success)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+          <image href="/integrations/whatsapp.svg" x="336" y="16" width="28" height="28" />
         </svg>
         <span className="product-flow-label">{t("flow.step4")}</span>
       </div>
