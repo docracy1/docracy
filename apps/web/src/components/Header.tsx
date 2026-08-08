@@ -17,6 +17,7 @@ function openSalesChat() {
 /** Real features only — mirrors Landing.tsx's CORE_FEATURES, not a wishlist. */
 const FEATURE_ITEMS = [
   { to: "/prepare", icon: "send", titleKey: "nav.mega.feature.send.title", descKey: "nav.mega.feature.send.desc" },
+  { to: "/whatsapp-signing", icon: "whatsapp", titleKey: "nav.mega.feature.whatsapp.title", descKey: "nav.mega.feature.whatsapp.desc" },
   { to: "/ai", icon: "sparkles", titleKey: "nav.mega.feature.ai.title", descKey: "nav.mega.feature.ai.desc" },
   { to: "/free-templates", icon: "duplicate", titleKey: "nav.mega.feature.templates.title", descKey: "nav.mega.feature.templates.desc" },
   { to: "/esign-ueta", icon: "scale", titleKey: "nav.mega.feature.esign.title", descKey: "nav.mega.feature.esign.desc" },

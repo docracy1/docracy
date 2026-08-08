@@ -54,6 +54,12 @@ const COMPARISON_ROWS: SeoComparisonRow[] = [
     competitorValue: "Templates typically tied to their own document builder",
     secondCompetitorValue: "Templates typically tied to their own document builder",
   },
+  {
+    feature: "WhatsApp signing",
+    docracyValue: "Yes — phone-bound, PIN-protected links. Free: 2/month. Paid: 10/month, then $0.50 each",
+    competitorValue: "Not offered",
+    secondCompetitorValue: "Not offered",
+  },
 ];
 
 export const SEO_FAQS: { question: string; answer: string }[] = [

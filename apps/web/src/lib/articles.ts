@@ -653,6 +653,48 @@ export const ARTICLES: ArticlePost[] = [
       ),
     ],
   },
+
+  // --- Product cluster ---
+  {
+    slug: "whatsapp-signing-now-available",
+    title: "WhatsApp signing is here — sign documents without an inbox",
+    description:
+      "Docracy can now deliver signing links over WhatsApp, phone-bound and PIN-protected, as a step toward Advanced Electronic Signature. Free: 2/month. Paid: 10/month, then $0.50 each.",
+    publishedDate: "2026-08-08",
+    cluster: "Product",
+    blocks: [
+      p(
+        "Email is still the default way to send a signing link, but it isn't always the fastest way to actually " +
+          "reach someone. A lot of signers — clients abroad, contractors in the field, anyone who checks WhatsApp " +
+          "before they check email — are easier to reach on a phone number than an inbox. Docracy can now deliver " +
+          "the same signing link over WhatsApp instead."
+      ),
+      h2("How it works"),
+      list([
+        "The preparer adds a signer's WhatsApp number when sending a document.",
+        "Docracy delivers the signing link to that number via WhatsApp, alongside the usual email invite.",
+        "A PIN set by the preparer is required before that signer can sign — proof of more than just having the phone in hand.",
+        "Delivery and read receipts are recorded in the audit trail, next to the existing tamper-evident hash of the signed PDF.",
+      ]),
+      h2("Why the PIN matters"),
+      p(
+        "Phone-bound delivery plus a required PIN is deliberate, not incidental. Together they're designed to meet " +
+          "the EU eIDAS criteria for an Advanced Electronic Signature (AES) — a signature uniquely linked to and " +
+          "capable of identifying the signatory, created under their sole control, and detectably tied to the " +
+          "signed data. It's a meaningful step up from a simple electronic signature (SES), which just proves what " +
+          "was signed and when, not who physically signed it."
+      ),
+      link("Read the full breakdown of WhatsApp signing", "/whatsapp-signing"),
+      link("How this relates to Advanced Electronic Signature (AES)", "/advanced-electronic-signature"),
+      h2("What it costs"),
+      p(
+        "Free, signed-up accounts get 2 WhatsApp-signed invites per month. Paid accounts get 10 per month included, " +
+          "with additional sends billed at $0.50 each. Anonymous, no-signup sends aren't eligible — WhatsApp signing " +
+          "requires a free Docracy account."
+      ),
+      link("See pricing", "/pricing"),
+    ],
+  },
 ];
 
 export function getArticle(slug: string): ArticlePost | undefined {

@@ -273,6 +273,14 @@ export default function Landing() {
       <div className="hero-band">
         <div className="hero-inner hero-split">
           <div>
+            <Link
+              to="/whatsapp-signing"
+              className="hero-new-badge"
+              onClick={() => track("landingpage_cta_clicked", { source: "hero_whatsapp_badge" })}
+            >
+              <img src="/integrations/whatsapp.svg" alt="" width={16} height={16} />
+              {t("hero.whatsappBadge")}
+            </Link>
             <h1>{t("hero.title")}</h1>
             <p className="hero-sub">{t("hero.sub")}</p>
             <div className="hero-cta-row">

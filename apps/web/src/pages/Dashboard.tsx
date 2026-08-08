@@ -342,6 +342,9 @@ export default function Dashboard() {
   const [disconnectingProvider, setDisconnectingProvider] = useState<CloudProvider | null>(null);
   const [connectorBanner, setConnectorBanner] = useState<"connected" | "error" | null>(null);
   const [claimBanner, setClaimBanner] = useState<string | null>(null);
+  const [whatsappBannerDismissed, setWhatsappBannerDismissed] = useState(
+    () => localStorage.getItem("docracy_whatsapp_announcement_dismissed") === "1"
+  );
   const [docActionError, setDocActionError] = useState<string | null>(null);
   const [voidingDocId, setVoidingDocId] = useState<string | null>(null);
   const [reassignDoc, setReassignDoc] = useState<DocumentSummary | null>(null);
@@ -1195,6 +1198,40 @@ export default function Dashboard() {
             <button className="btn-secondary" style={{ fontSize: 13, padding: "4px 10px" }} onClick={() => setClaimBanner(null)}>
               {t("common.dismiss")}
             </button>
+          </div>
+        )}
+        {!whatsappBannerDismissed && (
+          <div
+            className="card"
+            style={{
+              marginBottom: 16,
+              borderColor: "var(--primary)",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: 12,
+              flexWrap: "wrap",
+            }}
+          >
+            <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <img src="/integrations/whatsapp.svg" alt="" width={18} height={18} />
+              {t("dash.whatsappAnnouncement")}
+            </span>
+            <span style={{ display: "flex", gap: 8 }}>
+              <Link to="/prepare" className="btn-primary" style={{ fontSize: 13, padding: "4px 10px", textDecoration: "none" }}>
+                {t("dash.whatsappAnnouncementCta")}
+              </Link>
+              <button
+                className="btn-secondary"
+                style={{ fontSize: 13, padding: "4px 10px" }}
+                onClick={() => {
+                  localStorage.setItem("docracy_whatsapp_announcement_dismissed", "1");
+                  setWhatsappBannerDismissed(true);
+                }}
+              >
+                {t("common.dismiss")}
+              </button>
+            </span>
           </div>
         )}
         {activeTab === "dashboard" && (

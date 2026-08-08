@@ -129,6 +129,10 @@ export function NavIcon({ name }: { name: string }) {
           <path d="M8 21h8" />
         </svg>
       );
+    case "whatsapp":
+      // Full-color brand mark rather than a monochrome stroke icon like the others — this one's
+      // meant to be recognized at a glance, not blend in.
+      return <img src="/integrations/whatsapp.svg" alt="" width={22} height={22} aria-hidden="true" />;
     default:
       return null;
   }
