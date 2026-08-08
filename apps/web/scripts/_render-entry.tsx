@@ -66,6 +66,8 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/onboarding-documents" element={<FeaturePage slug="onboarding-documents" />} />
           <Route path="/vendor-agreements" element={<FeaturePage slug="vendor-agreements" />} />
           <Route path="/compliance-documentation" element={<FeaturePage slug="compliance-documentation" />} />
+          <Route path="/whatsapp-signing" element={<FeaturePage slug="whatsapp-signing" />} />
+          <Route path="/advanced-electronic-signature" element={<FeaturePage slug="advanced-electronic-signature" />} />
           <Route path="/eversign-alternative" element={<AlternativePage slug="eversign-alternative" />} />
           <Route path="/es/alternativa-a-eversign" element={<AlternativePage slug="eversign-alternative" />} />
           <Route path="/docusign-alternative" element={<AlternativePage slug="docusign-alternative" />} />

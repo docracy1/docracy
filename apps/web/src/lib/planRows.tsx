@@ -13,6 +13,7 @@ export const PLAN_ROWS: Array<{
   { labelKey: "plan.fieldTypes", free: true, paid: true },
   { labelKey: "plan.anchorTags", free: false, paid: true },
   { labelKey: "plan.smsLinks", free: true, paid: true },
+  { labelKey: "plan.whatsappLinks", free: "plan.val.whatsappFree", paid: "plan.val.whatsappPaid" },
   { labelKey: "plan.signerAttachments", free: false, paid: true },
   { labelKey: "plan.ccRecipients", free: "plan.val.upTo2", paid: "plan.val.unlimited" },
   { labelKey: "plan.declineCancel", free: true, paid: true },

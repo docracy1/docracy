@@ -182,6 +182,86 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       { label: "For small businesses", to: "/industry/small-business" },
     ],
   },
+  {
+    slug: "whatsapp-signing",
+    seoTitle: "Sign Documents via WhatsApp | Docracy",
+    seoDescription:
+      "Send and sign documents over WhatsApp — phone-bound delivery with a required PIN, a step toward advanced electronic signatures. Free: 2/month. Paid: 10/month included.",
+    heroHeadline: "Sign documents over WhatsApp, not just email.",
+    heroSubheadline:
+      "Deliver the signing link straight to a signer's WhatsApp — phone-bound, PIN-protected, and built toward the EU's Advanced Electronic Signature standard.",
+    problem:
+      "Email invites get lost in spam, forwarded to the wrong inbox, or just ignored. For a lot of signers — especially outside the US — WhatsApp is where they actually read messages.",
+    solution:
+      "Docracy can deliver the same secure signing link over WhatsApp instead of (or alongside) email, tied to the signer's own phone number and gated behind a required PIN.",
+    features: [
+      { title: "Phone-bound delivery", body: "The link only reaches the signer's own WhatsApp account — not a shared inbox." },
+      { title: "Mandatory PIN", body: "A preparer-set PIN is required on every WhatsApp link — proof of more than just phone possession." },
+      {
+        title: "Delivery & read receipts",
+        body: "Meta's delivery/read confirmations are recorded in the audit trail alongside the signed PDF's hash.",
+      },
+      { title: "Free to try", body: "Signed-up free accounts get 2 WhatsApp-signed invites per month." },
+      {
+        title: "10/month included on paid, then $0.50 each",
+        body: "Paid accounts get 10 WhatsApp-signed invites per month included, with extra sends billed at $0.50 per signer.",
+      },
+    ],
+    useCases: [
+      "International clients who live in WhatsApp, not email",
+      "Signers with unreliable email delivery",
+      "Field teams and on-site contractors",
+      "Personal agreements where a phone number is more reliable than an inbox",
+    ],
+    ctaLabel: "Try WhatsApp signing",
+    ctaTo: "/prepare",
+    relatedLinks: [
+      { label: "Advanced Electronic Signature (AES)", to: "/advanced-electronic-signature" },
+      { label: "See pricing", to: "/pricing" },
+      { label: "Trust & security", to: "/trust" },
+    ],
+  },
+  {
+    slug: "advanced-electronic-signature",
+    seoTitle: "Advanced Electronic Signature (AES) via WhatsApp | Docracy",
+    seoDescription:
+      "Docracy's default signing is SES. Paid accounts can add WhatsApp-verified signing — phone-bound identity, a required PIN, and delivery/read receipts — designed to meet the EU eIDAS Advanced Electronic Signature standard.",
+    heroHeadline: "Beyond a basic e-signature: Advanced Electronic Signature via WhatsApp.",
+    heroSubheadline:
+      "Paid accounts can require a WhatsApp-verified, PIN-protected signing link — designed to meet the EU eIDAS criteria for an Advanced Electronic Signature (AES).",
+    problem:
+      "A simple electronic signature (SES) — the industry default, including Docracy's free plan — proves what was signed and when, but not who physically signed. Anyone with the link can sign as the named party.",
+    solution:
+      "Docracy's WhatsApp-verified signing (paid accounts) binds the link to a specific phone number, requires a PIN unique to that signer, and records Meta's delivery/read receipts — evidence intended to meet the EU eIDAS AES bar: unique linkage, signatory identification, sole control, and tamper-evidence.",
+    features: [
+      {
+        title: "Uniquely linked & identifying",
+        body: "The signing link only reaches the phone number tied to that signer's own WhatsApp account.",
+      },
+      { title: "Sole control via a mandatory PIN", body: "A PIN set by the preparer is required before signing — phone possession alone isn't enough." },
+      {
+        title: "Tamper-evident by default",
+        body: "Every document already carries a SHA-256 hash of the signed PDF at each step, independent of channel.",
+      },
+      { title: "Delivery & read evidence", body: "Meta's delivery/read receipts are stamped into the audit trail." },
+      {
+        title: "10 included per month, $0.50 per extra",
+        body: "Bundled into every paid plan — 10 AES-track signers per month, then $0.50 each.",
+      },
+    ],
+    useCases: [
+      "Higher-stakes contracts that want more than SES",
+      "Cross-border agreements under EU eIDAS",
+      "Compliance-conscious teams not ready for a full QES/QTSP provider",
+      "Client-facing agreements where identity assurance matters",
+    ],
+    ctaLabel: "See paid plans",
+    ctaTo: "/pricing",
+    relatedLinks: [
+      { label: "Trust & security (SES vs AES disclosure)", to: "/trust" },
+      { label: "Try WhatsApp signing", to: "/whatsapp-signing" },
+    ],
+  },
 ];
 
 export function getNdaSigningPageEs(): FeaturePageContent {
