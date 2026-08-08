@@ -1405,6 +1405,7 @@ const es: Messages = {
   "prepare.whatsappPh": "Número de WhatsApp, p. ej. +14155551234",
   "prepare.whatsappQuotaHint": "Las cuentas gratis tienen {{max}} invitaciones firmadas por WhatsApp al mes — te quedan {{remaining}} este mes. Mejora el plan para tener {{paidMax}} al mes.",
   "prepare.whatsappQuotaHintPaid": "Tu plan incluye {{max}} invitaciones firmadas por WhatsApp al mes — te quedan {{remaining}} este mes. Los envíos adicionales cuestan $0.50 cada uno.",
+  "prepare.whatsappQuotaHintEnterprise": "Invitaciones por WhatsApp ilimitadas en tu plan Enterprise.",
   "prepare.whatsappRequiresAccount": "Firmar por WhatsApp añade una vinculación de identidad por teléfono — un paso hacia la firma electrónica avanzada. Requiere una cuenta gratis.",
   "prepare.whatsappAvailableHint": "También envía enlaces de firma por WhatsApp — inicia sesión para activarlo",
   "prepare.viewerEmailAria": "Correo del espectador {{n}}",

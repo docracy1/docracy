@@ -1874,16 +1874,18 @@ export default function Prepare() {
                     </label>
                     {whatsappInvites && (
                       <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 0, marginBottom: 0 }}>
-                        {account.isPaid
-                          ? t("prepare.whatsappQuotaHintPaid", {
-                              remaining: account.whatsappQuotaRemaining ?? WHATSAPP_PAID_MONTHLY_LIMIT,
-                              max: WHATSAPP_PAID_MONTHLY_LIMIT,
-                            })
-                          : t("prepare.whatsappQuotaHint", {
-                              remaining: account.whatsappQuotaRemaining ?? WHATSAPP_FREE_MONTHLY_LIMIT,
-                              max: WHATSAPP_FREE_MONTHLY_LIMIT,
-                              paidMax: WHATSAPP_PAID_MONTHLY_LIMIT,
-                            })}
+                        {account.isEnterprise
+                          ? t("prepare.whatsappQuotaHintEnterprise")
+                          : account.isPaid
+                            ? t("prepare.whatsappQuotaHintPaid", {
+                                remaining: account.whatsappQuotaRemaining ?? WHATSAPP_PAID_MONTHLY_LIMIT,
+                                max: WHATSAPP_PAID_MONTHLY_LIMIT,
+                              })
+                            : t("prepare.whatsappQuotaHint", {
+                                remaining: account.whatsappQuotaRemaining ?? WHATSAPP_FREE_MONTHLY_LIMIT,
+                                max: WHATSAPP_FREE_MONTHLY_LIMIT,
+                                paidMax: WHATSAPP_PAID_MONTHLY_LIMIT,
+                              })}
                       </p>
                     )}
                   </>

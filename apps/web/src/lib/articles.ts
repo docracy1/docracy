@@ -689,8 +689,8 @@ export const ARTICLES: ArticlePost[] = [
       h2("What it costs"),
       p(
         "Free, signed-up accounts get 2 WhatsApp-signed invites per month. Paid accounts get 10 per month included, " +
-          "with additional sends billed at $0.50 each. Anonymous, no-signup sends aren't eligible — WhatsApp signing " +
-          "requires a free Docracy account."
+          "with additional sends billed at $0.50 each. Enterprise accounts get unlimited WhatsApp signing. " +
+          "Anonymous, no-signup sends aren't eligible — WhatsApp signing requires a free Docracy account."
       ),
       link("See pricing", "/pricing"),
     ],

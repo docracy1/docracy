@@ -321,12 +321,13 @@ documents.post("/", optionalAccount, async (c) => {
   }
 
   // WhatsApp is the AES-track channel — gated to signed-up accounts (anonymous senders are
-  // rejected outright). Free accounts hard-stop at FREE_MONTHLY_LIMIT/month, no exceptions. Paid
-  // accounts get PAID_MONTHLY_LIMIT/month included; past that they either hard-stop too (if this
-  // deployment hasn't configured Stripe overage billing) or keep going with the excess billed at
-  // $0.50/unit (see lib/whatsappOverage.ts). Checked last, immediately before creation, so a
-  // request that fails any earlier validation or rate limit never consumes quota for a document
-  // that was never actually going to be created.
+  // rejected outright). Free accounts hard-stop at FREE_MONTHLY_LIMIT/month, no exceptions.
+  // Enterprise gets no cap at all. Paid (non-enterprise) accounts get PAID_MONTHLY_LIMIT/month
+  // included; past that they either hard-stop too (if this deployment hasn't configured Stripe
+  // overage billing) or keep going with the excess billed at $0.50/unit (see
+  // lib/whatsappOverage.ts). Checked last, immediately before creation, so a request that fails
+  // any earlier validation or rate limit never consumes quota for a document that was never
+  // actually going to be created.
   const whatsappSignerCount = meta.signers.filter((s) => s.whatsappPhone?.trim()).length;
   if (whatsappSignerCount > 0) {
     if (!account) {
@@ -337,7 +338,9 @@ documents.post("/", optionalAccount, async (c) => {
         "whatsapp_requires_account"
       );
     }
-    if (account.isPaid && whatsappOverageConfigured(c.env)) {
+    if (account.isEnterprise) {
+      // No quota consumption, no overage billing — unlimited is part of the negotiated plan.
+    } else if (account.isPaid && whatsappOverageConfigured(c.env)) {
       const overageUnits = await consumeWhatsappQuotaWithOverage(c.env, account.workspaceId, whatsappSignerCount);
       if (overageUnits > 0) {
         const stripeCustomerId = await getStripeCustomerId(c.env, account.workspaceId);

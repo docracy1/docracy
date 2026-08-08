@@ -204,7 +204,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       { title: "Free to try", body: "Signed-up free accounts get 2 WhatsApp-signed invites per month." },
       {
         title: "10/month included on paid, then $0.50 each",
-        body: "Paid accounts get 10 WhatsApp-signed invites per month included, with extra sends billed at $0.50 per signer.",
+        body: "Paid accounts get 10 WhatsApp-signed invites per month included, with extra sends billed at $0.50 per signer. Unlimited on Enterprise.",
       },
     ],
     useCases: [
@@ -246,7 +246,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       { title: "Delivery & read evidence", body: "Meta's delivery/read receipts are stamped into the audit trail." },
       {
         title: "10 included per month, $0.50 per extra",
-        body: "Bundled into every paid plan — 10 AES-track signers per month, then $0.50 each.",
+        body: "Bundled into every paid plan — 10 AES-track signers per month, then $0.50 each. Unlimited on Enterprise.",
       },
     ],
     useCases: [

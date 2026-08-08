@@ -56,7 +56,7 @@ const COMPARISON_ROWS: SeoComparisonRow[] = [
   },
   {
     feature: "WhatsApp signing",
-    docracyValue: "Yes — phone-bound, PIN-protected links. Free: 2/month. Paid: 10/month, then $0.50 each",
+    docracyValue: "Yes — phone-bound, PIN-protected links. Free: 2/month. Paid: 10/month, then $0.50 each. Unlimited on Enterprise",
     competitorValue: "Not offered",
     secondCompetitorValue: "Not offered",
   },

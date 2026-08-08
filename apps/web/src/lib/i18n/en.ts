@@ -1345,6 +1345,7 @@ const en: Messages = {
   "prepare.whatsappPh": "WhatsApp number, e.g. +14155551234",
   "prepare.whatsappQuotaHint": "Free accounts get {{max}} WhatsApp-signed invites per month — {{remaining}} left this month. Upgrade for {{paidMax}}/month.",
   "prepare.whatsappQuotaHintPaid": "Your plan includes {{max}} WhatsApp-signed invites per month — {{remaining}} left this month. Extra sends beyond that are $0.50 each.",
+  "prepare.whatsappQuotaHintEnterprise": "Unlimited WhatsApp-signed invites on your Enterprise plan.",
   "prepare.whatsappRequiresAccount": "WhatsApp signing adds phone-based identity binding — a step toward advanced electronic signatures. It requires a free account.",
   "prepare.whatsappAvailableHint": "Also send signing links via WhatsApp — sign in to turn it on",
   "prepare.viewerEmailAria": "Viewer {{n}} email",

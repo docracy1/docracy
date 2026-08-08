@@ -479,6 +479,27 @@ describe("POST /api/documents", () => {
     expect(stored.signers[0].whatsappPhone).toBeTruthy();
   });
 
+  it("lets an enterprise account send unlimited WhatsApp invites, no quota or overage billing", async () => {
+    const { env, kv } = makeMockEnv(); // no STRIPE_WHATSAPP_METER_NAME/PRICE_ID set — must not matter for enterprise
+    const ctx = makeCtx();
+    const fetchSpy = vi.spyOn(global, "fetch");
+    const sessionToken = await createSession(env, ctx, "acct-ent", "ent@example.com", true, true, null, null);
+    const pdf = await makeValidPdfBytes();
+    const meta = { ...validMeta, whatsappInvites: true, ...makeWhatsappSigners(15) }; // well past the 10/month paid cap
+    const res = await documents.request(
+      "/",
+      { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${sessionToken}` }, body: buildForm(pdf, meta) },
+      env,
+      ctx
+    );
+    expect(res.status).toBe(200);
+    const [, docValue] = [...kv._store.entries()].find(([k]) => k.startsWith("doc:"))!;
+    const stored = JSON.parse(docValue);
+    expect(stored.whatsappInvites).toBe(true);
+    expect(fetchSpy.mock.calls.some(([url]) => String(url).includes("/v1/billing/meter_events"))).toBe(false);
+    fetchSpy.mockRestore();
+  });
+
   it("hard-stops a paid account past its 10/month allowance when overage billing isn't configured", async () => {
     const { env, d1 } = makeMockEnv(); // no STRIPE_WHATSAPP_METER_NAME/PRICE_ID set
     const ctx = makeCtx();
