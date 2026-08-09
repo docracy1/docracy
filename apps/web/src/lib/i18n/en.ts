@@ -143,7 +143,7 @@ const en: Messages = {
   "footer.trust": "Trust & security",
   "footer.esignUeta": "ESIGN & UETA",
   "footer.esignLine": "SES e-signatures designed to support the U.S. ESIGN Act and UETA.",
-  "footer.esignLineLink": "Learn more",
+  "footer.esignLineLink": "Learn more about ESIGN & UETA",
   "footer.legalReviewLead": "Free templates reviewed by attorney",
   "footer.legalReviewTrail": ", BOECK Law (Liechtenstein Bar).",
   "footer.dpa": "DPA",

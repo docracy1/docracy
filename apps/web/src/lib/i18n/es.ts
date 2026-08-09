@@ -203,7 +203,7 @@ const es: Messages = {
   "footer.trust": "Confianza y seguridad",
   "footer.esignUeta": "ESIGN y UETA",
   "footer.esignLine": "Firmas SES diseñadas para respaldar la ESIGN Act y UETA de EE. UU.",
-  "footer.esignLineLink": "Más información",
+  "footer.esignLineLink": "Más información sobre ESIGN y UETA",
   "footer.legalReviewLead": "Plantillas gratuitas revisadas por la abogada",
   "footer.legalReviewTrail": ", BOECK Law (Colegio de Abogados de Liechtenstein).",
   "footer.vsAdobe": "vs Adobe Acrobat Sign",
