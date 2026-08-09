@@ -62,7 +62,8 @@ function HistoryBar({ record }: { record: DailyStatusRecord | null }) {
 export default function Uptime() {
   usePageMeta(
     "System Status — Docracy",
-    "Live status and uptime history for Docracy's signing, timestamping, billing, and MCP services."
+    "Live status and uptime history for Docracy's signing, timestamping, billing, and MCP services.",
+    { canonicalPath: "/uptime" }
   );
 
   const [data, setData] = useState<StatusResponse | null>(null);

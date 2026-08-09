@@ -248,7 +248,7 @@ const routes = [
   },
   ...INDUSTRY_PAGES.map((p) => ({
     urlPath: `/industry/${p.slug}`,
-    outFile: `industry-${p.slug}.html`,
+    outFile: `industry/${p.slug}.html`,
     title: p.seoTitle,
     description: p.seoDescription,
   })),
@@ -421,6 +421,24 @@ const routes = [
     title: "Data Processing Agreement — Docracy",
     description:
       "GDPR Art. 28 data processing terms between RELACON GmbH (Docracy) and customers who use paid or account features.",
+  },
+  {
+    urlPath: "/privacy",
+    outFile: "privacy.html",
+    title: "Privacy — Docracy",
+    description: "How Docracy collects, uses, and retains personal data for anonymous and account-based document signing.",
+  },
+  {
+    urlPath: "/terms",
+    outFile: "terms.html",
+    title: "Terms — Docracy",
+    description: "The terms of service governing use of Docracy's free and paid e-signature features.",
+  },
+  {
+    urlPath: "/uptime",
+    outFile: "uptime.html",
+    title: "System Status — Docracy",
+    description: "Live status and uptime history for Docracy's signing, timestamping, billing, and MCP services.",
   },
   {
     urlPath: "/blog",

@@ -1,7 +1,13 @@
 import { useT } from "../lib/i18n";
+import { usePageMeta } from "../lib/usePageMeta";
 
 export default function Terms() {
   const t = useT();
+  usePageMeta(
+    "Terms — Docracy",
+    "The terms of service governing use of Docracy's free and paid e-signature features.",
+    { canonicalPath: "/terms" }
+  );
   return (
     <div className="container">
       <h1>{t("terms.title")}</h1>

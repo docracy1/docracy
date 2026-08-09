@@ -1,9 +1,15 @@
 import { Link } from "react-router-dom";
 
 import { useT } from "../lib/i18n";
+import { usePageMeta } from "../lib/usePageMeta";
 
 export default function Privacy() {
   const t = useT();
+  usePageMeta(
+    "Privacy — Docracy",
+    "How Docracy collects, uses, and retains personal data for anonymous and account-based document signing.",
+    { canonicalPath: "/privacy" }
+  );
   return (
     <div className="container" style={{ maxWidth: 720 }}>
       <h1>{t("privacy.title")}</h1>
