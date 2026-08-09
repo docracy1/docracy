@@ -58,6 +58,12 @@ app.use("/api/*", async (c, next) => {
   await next();
 });
 
+// api.docracy.io serves no browsable pages — every route is a JSON API endpoint (many auth-gated,
+// returning 401/404 for unauthenticated or bare requests). Without this, Cloudflare's own default
+// robots.txt permits Googlebot to crawl the domain, which then reports those API responses as
+// indexing errors in Search Console for a page that was never meant to be indexed.
+app.get("/robots.txt", (c) => c.text("User-agent: *\nDisallow: /\n"));
+
 app.route("/api/documents", documents);
 app.route("/api", sign);
 app.route("/api/feedback", feedback);
