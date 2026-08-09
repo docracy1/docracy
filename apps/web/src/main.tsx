@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./theme.css";
@@ -8,43 +8,48 @@ import Footer from "./components/Footer";
 import ChatWidget from "./components/ChatWidget";
 import CookieConsentBanner from "./components/CookieConsentBanner";
 import MobilePricingBar from "./components/MobilePricingBar";
+// Landing stays eager — it's the single most-visited route, and lazy-loading it would add a
+// chunk-fetch roundtrip before the homepage can render at all. Every other route is fetched
+// on demand instead of shipping its code (pdf-lib, pdfjs, admin analytics, every SEO page, etc.)
+// to visitors who never touch it. Prerendering (scripts/_render-entry.tsx) is a separate,
+// eagerly-imported esbuild bundle unaffected by any of this.
 import Landing from "./pages/Landing";
-import Prepare from "./pages/Prepare";
-import PrepareSent from "./pages/PrepareSent";
-import Sign from "./pages/Sign";
-import EmbedSign from "./pages/EmbedSign";
-import BulkSend from "./pages/BulkSend";
-import Status from "./pages/Status";
-import Privacy from "./pages/Privacy";
-import Terms from "./pages/Terms";
-import Trust from "./pages/Trust";
-import Dpa from "./pages/Dpa";
-import Login from "./pages/Login";
-import AuthVerify from "./pages/AuthVerify";
-import Dashboard from "./pages/Dashboard";
-import TeamAccept from "./pages/TeamAccept";
-import FreeTemplates from "./pages/FreeTemplates";
-import FreeTemplateDetail from "./pages/FreeTemplateDetail";
-import Mcp from "./pages/Mcp";
-import AdminAnalytics from "./pages/AdminAnalytics";
-import About from "./pages/About";
-import Pricing from "./pages/Pricing";
-import Ai from "./pages/Ai";
-import EsignUeta from "./pages/EsignUeta";
-import Docs from "./pages/Docs";
-import Roadmap from "./pages/Roadmap";
-import Imprint from "./pages/Imprint";
-import Uptime from "./pages/Uptime";
-import Blog from "./pages/Blog";
-import BlogPostDetail from "./pages/BlogPostDetail";
-import FeaturePage from "./pages/FeaturePage";
-import AlternativePage from "./pages/AlternativePage";
-import ExplainerPage from "./pages/ExplainerPage";
-import ImportGuidePage from "./pages/ImportGuidePage";
-import IndustryPage from "./pages/IndustryPage";
-import OutreachLanding from "./pages/OutreachLanding";
+const Prepare = lazy(() => import("./pages/Prepare"));
+const PrepareSent = lazy(() => import("./pages/PrepareSent"));
+const Sign = lazy(() => import("./pages/Sign"));
+const EmbedSign = lazy(() => import("./pages/EmbedSign"));
+const BulkSend = lazy(() => import("./pages/BulkSend"));
+const Status = lazy(() => import("./pages/Status"));
+const Privacy = lazy(() => import("./pages/Privacy"));
+const Terms = lazy(() => import("./pages/Terms"));
+const Trust = lazy(() => import("./pages/Trust"));
+const Dpa = lazy(() => import("./pages/Dpa"));
+const Login = lazy(() => import("./pages/Login"));
+const AuthVerify = lazy(() => import("./pages/AuthVerify"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const TeamAccept = lazy(() => import("./pages/TeamAccept"));
+const FreeTemplates = lazy(() => import("./pages/FreeTemplates"));
+const FreeTemplateDetail = lazy(() => import("./pages/FreeTemplateDetail"));
+const Mcp = lazy(() => import("./pages/Mcp"));
+const AdminAnalytics = lazy(() => import("./pages/AdminAnalytics"));
+const About = lazy(() => import("./pages/About"));
+const Pricing = lazy(() => import("./pages/Pricing"));
+const Ai = lazy(() => import("./pages/Ai"));
+const EsignUeta = lazy(() => import("./pages/EsignUeta"));
+const Docs = lazy(() => import("./pages/Docs"));
+const Roadmap = lazy(() => import("./pages/Roadmap"));
+const Imprint = lazy(() => import("./pages/Imprint"));
+const Uptime = lazy(() => import("./pages/Uptime"));
+const Blog = lazy(() => import("./pages/Blog"));
+const BlogPostDetail = lazy(() => import("./pages/BlogPostDetail"));
+const FeaturePage = lazy(() => import("./pages/FeaturePage"));
+const AlternativePage = lazy(() => import("./pages/AlternativePage"));
+const ExplainerPage = lazy(() => import("./pages/ExplainerPage"));
+const ImportGuidePage = lazy(() => import("./pages/ImportGuidePage"));
+const IndustryPage = lazy(() => import("./pages/IndustryPage"));
+const OutreachLanding = lazy(() => import("./pages/OutreachLanding"));
 import NotFound from "./pages/NotFound";
-import SeoLandingTemplate from "./components/SeoLandingTemplate";
+const SeoLandingTemplate = lazy(() => import("./components/SeoLandingTemplate"));
 import { SEO_LANDING_PAGES } from "./lib/seoPages";
 import { ShortGoRedirect, ShortNdaRedirect, ShortPriceRedirect, ShortTryRedirect } from "./pages/ShortLinkRedirect";
 import { captureAttribution } from "./lib/attribution";
@@ -150,23 +155,25 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <LocaleProvider>
       <BrowserRouter>
         <RootErrorBoundary>
-          <Routes>
-            <Route path="/embed/sign/:token" element={<EmbedSign />} />
-            <Route
-              path="*"
-              element={
-                <>
-                  <LocalePathSync />
-                  <Header />
-                  <AppRoutes />
-                  <Footer />
-                  <MobilePricingBar />
-                  <ChatWidget />
-                  <CookieConsentBanner />
-                </>
-              }
-            />
-          </Routes>
+          <Suspense fallback={null}>
+            <Routes>
+              <Route path="/embed/sign/:token" element={<EmbedSign />} />
+              <Route
+                path="*"
+                element={
+                  <>
+                    <LocalePathSync />
+                    <Header />
+                    <AppRoutes />
+                    <Footer />
+                    <MobilePricingBar />
+                    <ChatWidget />
+                    <CookieConsentBanner />
+                  </>
+                }
+              />
+            </Routes>
+          </Suspense>
         </RootErrorBoundary>
       </BrowserRouter>
     </LocaleProvider>
