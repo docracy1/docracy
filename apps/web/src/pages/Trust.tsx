@@ -18,7 +18,49 @@ export default function Trust() {
         <Link to="/privacy">Privacy</Link>; for processing terms see the <Link to="/dpa">DPA</Link>.
       </p>
 
-      <h2 id="what-docracy-is" style={{ fontSize: 19, marginTop: 28 }}>What Docracy is (and isn't)</h2>
+      <div style={{ marginTop: 32 }}>
+        <p style={{ fontSize: 13, fontWeight: 700, letterSpacing: 0.3, textTransform: "uppercase", color: "var(--primary)", marginBottom: 4 }}>
+          🔒 Trust &amp; security, at a glance
+        </p>
+        <p style={{ fontSize: 20, fontWeight: 600, margin: "0 0 20px", maxWidth: 560 }}>
+          Secure documents. Signatures aligned with US and EU e-signature law. Full visibility into every
+          step.
+        </p>
+        <div className="core-features-grid" style={{ gap: 20, marginTop: 0 }}>
+          <div className="core-feature-card">
+            <h3 style={{ marginBottom: 8 }}>End-to-end security</h3>
+            <p style={{ fontSize: 13.5 }}>
+              TLS in transit; Cloudflare platform encryption at rest for documents and application data;
+              HMAC-signed signing links that can't be guessed; production secrets never ship in the client
+              bundle.
+            </p>
+          </div>
+          <div className="core-feature-card">
+            <h3 style={{ marginBottom: 8 }}>Legally-aligned signatures</h3>
+            <p style={{ fontSize: 13.5 }}>
+              SES workflows designed to support the US ESIGN Act &amp; UETA and EU eIDAS simple electronic
+              signatures — with an optional WhatsApp-verified Advanced Electronic Signature (AES) track for
+              paid accounts.
+            </p>
+          </div>
+          <div className="core-feature-card">
+            <h3 style={{ marginBottom: 8 }}>Full transparency &amp; control</h3>
+            <p style={{ fontSize: 13.5 }}>
+              Every view, consent, signature, and decline is timestamped with IP, user-agent, and a content
+              hash. Each completed chain gets a signed PDF plus a certificate of completion.
+            </p>
+          </div>
+          <div className="core-feature-card">
+            <h3 style={{ marginBottom: 8 }}>Attorney-reviewed templates</h3>
+            <p style={{ fontSize: 13.5 }}>
+              Every free template in our library has been reviewed by a licensed attorney for legal clarity
+              and correctness — <a href="#template-legal-review">details below</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <h2 id="what-docracy-is" style={{ fontSize: 19, marginTop: 40 }}>What Docracy is (and isn't)</h2>
       <p>
         Docracy provides <strong>simple electronic signatures (SES)</strong> with a timestamped audit trail
         and a certificate of completion. That model is designed to support everyday business documents under
@@ -85,7 +127,7 @@ export default function Trust() {
         higher eIDAS AES bar instead — see above — but we do not claim QES under eIDAS on any plan.
       </p>
 
-      <h2 style={{ fontSize: 19, marginTop: 28 }}>Template legal review</h2>
+      <h2 id="template-legal-review" style={{ fontSize: 19, marginTop: 28 }}>Template legal review</h2>
       <p>
         Every free template in our{" "}
         <Link to="/free-templates">template library</Link> has been reviewed by{" "}
