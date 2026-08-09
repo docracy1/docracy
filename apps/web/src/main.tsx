@@ -129,6 +129,11 @@ function AppRoutes() {
       <Route path="/industry/real-estate" element={<IndustryPage slug="real-estate" />} />
       <Route path="/industry/construction" element={<IndustryPage slug="construction" />} />
       <Route path="/industry/small-business" element={<IndustryPage slug="small-business" />} />
+      <Route path="/industry/hr" element={<IndustryPage slug="hr" />} />
+      <Route path="/industry/legal" element={<IndustryPage slug="legal" />} />
+      <Route path="/industry/sales" element={<IndustryPage slug="sales" />} />
+      <Route path="/industry/recruiting" element={<IndustryPage slug="recruiting" />} />
+      <Route path="/industry/consulting" element={<IndustryPage slug="consulting" />} />
       <Route path="/outreach/:persona" element={<OutreachLanding />} />
       <Route path="/what-is-an-nda" element={<ExplainerPage slug="what-is-an-nda" />} />
       <Route path="/are-electronic-signatures-legal" element={<ExplainerPage slug="are-electronic-signatures-legal" />} />

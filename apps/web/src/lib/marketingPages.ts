@@ -897,4 +897,136 @@ export const INDUSTRY_PAGES: IndustryPageContent[] = [
     ctaLabel: "Send a vendor agreement",
     ctaTo: "/prepare?ref=seo-industry-small-business",
   },
+  {
+    slug: "hr",
+    seoTitle: "E-Signatures for HR & People Teams | Docracy",
+    seoDescription:
+      "Free e-signing for offer letters, employment agreements, onboarding paperwork, and separation agreements. No account required for the candidate or employee to sign.",
+    heroHeadline: "E-signatures built for HR and people teams.",
+    heroSubheadline:
+      "Offer letters, onboarding paperwork, and separation agreements — signed in minutes, free for you and the candidate or employee.",
+    painPoints: [
+      "An offer needs to go out and come back signed the same day, before a candidate takes a competing offer.",
+      "Onboarding paperwork piles up on day one — policy acknowledgments, non-competes, remote work agreements — and chasing signatures by email is slow.",
+      "A separation agreement needs a clean, timestamped signature on the way out, not a verbal handshake.",
+      "Most HR e-sign tools are priced and bundled as part of a full HRIS suite — overkill for a small team just trying to get paperwork signed.",
+    ],
+    whyDocracy:
+      "Docracy is free for two-party signing — you and the candidate or employee — with no account required for them to sign. Start from an offer letter, employment agreement, onboarding paperwork, or separation agreement template, fill in the specifics, and send.",
+    honestLimit:
+      "What this is not: Docracy doesn't verify a signer's identity or replace the in-person I-9 document inspection U.S. federal law requires for new hires — our I-9 template is a fillable form, not a substitute for that physical check. For background checks, benefits enrollment, or payroll integration, you'll still need dedicated HR software; Docracy just handles the signature.",
+    relevantTemplates: [
+      "offer-letter",
+      "employment-agreement",
+      "employee-onboarding-agreement",
+      "remote-work-policy",
+      "non-compete-non-solicitation-agreement",
+      "separation-agreement",
+    ],
+    ctaLabel: "Send an offer letter",
+    ctaTo: "/prepare?ref=seo-industry-hr",
+  },
+  {
+    slug: "legal",
+    seoTitle: "E-Signatures for Solo Attorneys & Small Law Firms | Docracy",
+    seoDescription:
+      "Free e-signing for NDAs, letters of intent, powers of attorney, and cease-and-desist letters. Built for solo attorneys and small firms sending everyday documents.",
+    heroHeadline: "E-signatures for solo attorneys and small law firms.",
+    heroSubheadline:
+      "NDAs, letters of intent, powers of attorney, and demand letters — signed in minutes, free for you and your client or counterparty.",
+    painPoints: [
+      "A client needs to sign an engagement-adjacent document — an NDA, a letter of intent — before the substantive work starts.",
+      "Sending a cease-and-desist or demand letter for signature acknowledgment shouldn't require the recipient to create an account.",
+      "A power of attorney or similar document needs a clean, timestamped record of when it was signed.",
+      "Per-seat legal-tech pricing doesn't make sense for a solo practice or small firm sending a modest volume of documents.",
+    ],
+    whyDocracy:
+      "Docracy is free for two-party signing — you and your client or the other side — with no account required for them to sign. Start from an NDA, letter of intent, power of attorney, or cease-and-desist template, fill in the specifics, and send.",
+    honestLimit:
+      "What this is not: Docracy is not a practice-management or matter-management system, doesn't verify signer identity, and doesn't offer notarization or Qualified Electronic Signatures (QES) — see our Trust & security page for exactly what our audit trail does and doesn't prove. For notarized documents, QES-requiring matters, or filings with a court's own e-filing system, use the appropriate dedicated tool. This page is not legal advice about what signature type your specific matter requires.",
+    relevantTemplates: [
+      "mutual-nda",
+      "unilateral-nda",
+      "letter-of-intent",
+      "power-of-attorney",
+      "cease-and-desist-letter",
+      "llc-operating-agreement",
+    ],
+    ctaLabel: "Send an NDA",
+    ctaTo: "/prepare?ref=seo-industry-legal",
+  },
+  {
+    slug: "sales",
+    seoTitle: "E-Signatures for Sales Teams & Account Executives | Docracy",
+    seoDescription:
+      "Free e-signing for sales agreements, purchase orders, and referral agreements. Close deals without waiting on procurement to approve new software.",
+    heroHeadline: "E-signatures built for sales teams and account executives.",
+    heroSubheadline:
+      "Sales agreements, purchase orders, and referral deals — signed the moment a prospect says yes, free for two parties.",
+    painPoints: [
+      "A prospect is ready to sign right now, but the CRM's e-sign add-on is locked behind a plan the team hasn't bought yet.",
+      "A purchase order needs a real signature before it goes to fulfillment, not just a confirmation email.",
+      "Referral and partner agreements pile up as one-off documents that don't fit neatly into a CPQ or contract-management tool.",
+      "Per-envelope or per-seat e-sign pricing adds friction to closing smaller deals fast.",
+    ],
+    whyDocracy:
+      "Docracy is free for two-party signing — you and the buyer — with no account required for them to sign. Start from a sales agreement, purchase order, or referral agreement template, fill in the deal terms, and send while the prospect is still on the call.",
+    relevantTemplates: ["sales-agreement", "purchase-order", "referral-agreement", "installment-agreement", "bill-of-sale"],
+    ctaLabel: "Send a sales agreement",
+    ctaTo: "/prepare?ref=seo-industry-sales",
+  },
+  {
+    slug: "recruiting",
+    seoTitle: "E-Signatures for Recruiters & Staffing Agencies | Docracy",
+    seoDescription:
+      "Free e-signing for offer letters, contractor agreements, and non-compete acknowledgments. Built for recruiters and staffing agencies placing candidates fast.",
+    heroHeadline: "E-signatures built for recruiters and staffing agencies.",
+    heroSubheadline:
+      "Offer letters and contractor placements — signed the same day a candidate accepts, free for two parties.",
+    painPoints: [
+      "A candidate accepts verbally and the offer letter needs to go out and come back signed before they change their mind or another agency reaches them.",
+      "Placing a contractor means fresh onboarding paperwork for every assignment — enterprise ATS e-sign add-ons price that per placement.",
+      "Non-compete or non-solicitation acknowledgments need a clean, timestamped signature, separate from the offer letter itself.",
+      "A staffing agency juggles many small, one-off signing chains rather than a handful of huge contracts — most e-sign pricing doesn't fit that shape.",
+    ],
+    whyDocracy:
+      "Docracy is free for two-party signing — you and the candidate or contractor — with no account required for them to sign. Start from an offer letter, independent contractor agreement, or non-compete template, fill in the placement details, and send.",
+    honestLimit:
+      "What this is not: Docracy doesn't run background checks, verify a candidate's identity, or replace the in-person I-9 document inspection U.S. federal law requires for employees — it only handles the signature on the paperwork.",
+    relevantTemplates: [
+      "offer-letter",
+      "independent-contractor-agreement",
+      "contractor-onboarding-agreement",
+      "non-compete-non-solicitation-agreement",
+      "i-9-form",
+    ],
+    ctaLabel: "Send an offer letter",
+    ctaTo: "/prepare?ref=seo-industry-recruiting",
+  },
+  {
+    slug: "consulting",
+    seoTitle: "E-Signatures for Consulting Firms | Docracy",
+    seoDescription:
+      "Free e-signing for consulting agreements, statements of work, and client contracts. No account required, no per-seat pricing for two-party engagements.",
+    heroHeadline: "E-signatures built for consulting firms.",
+    heroSubheadline:
+      "Consulting agreements, scopes of work, and client contracts — signed before the engagement starts, free for two parties.",
+    painPoints: [
+      "A new engagement needs a signed consulting agreement or statement of work before billable work starts, not after.",
+      "Scope changes mid-engagement need a signed change order, not an email thread everyone interprets differently.",
+      "Bringing on a subcontracted specialist for one engagement means onboarding paperwork that most e-sign pricing treats like a full seat.",
+      "Payment terms need a real signature, especially for milestone- or retainer-based billing.",
+    ],
+    whyDocracy:
+      "Docracy is free for two-party signing — you and your client, or you and a subcontracted consultant — with no account required for whoever's signing. Start from a consulting agreement, scope of work, client contract, or payment-terms template, fill in the engagement details, and send.",
+    relevantTemplates: [
+      "consulting-agreement",
+      "scope-of-work",
+      "client-contract",
+      "service-agreement",
+      "payment-terms-agreement",
+    ],
+    ctaLabel: "Send a consulting agreement",
+    ctaTo: "/prepare?ref=seo-industry-consulting",
+  },
 ];

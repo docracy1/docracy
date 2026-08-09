@@ -32,14 +32,20 @@ const COMPARE_ITEMS = [
   { to: "/pandadoc-alternative", icon: "scale", titleKey: "footer.vsPandadoc", descKey: "nav.mega.compare.pandadoc.desc" },
 ] as const;
 
-/** Solo entrepreneurs, freelancers, and SMEs — not enterprise verticals like a bigger competitor
- *  would list (no "Legal"/"Finance" compliance-grade categories Docracy doesn't actually serve). */
+/** Each entry mirrors an IndustryPageContent in lib/marketingPages.ts. Legal/HR entries carry an
+ *  explicit honestLimit disclaimer on their page (no QES/notarization/identity verification claim)
+ *  the same way real-estate already does, so this isn't overselling into compliance-grade territory. */
 const INDUSTRY_ITEMS = [
   { to: "/industry/freelancers", icon: "briefcase", titleKey: "nav.mega.industry.freelancers.title", descKey: "nav.mega.industry.freelancers.desc" },
   { to: "/industry/creative-agencies", icon: "megaphone", titleKey: "nav.mega.industry.creative.title", descKey: "nav.mega.industry.creative.desc" },
   { to: "/industry/real-estate", icon: "building", titleKey: "nav.mega.industry.realEstate.title", descKey: "nav.mega.industry.realEstate.desc" },
   { to: "/industry/construction", icon: "hammer", titleKey: "nav.mega.industry.construction.title", descKey: "nav.mega.industry.construction.desc" },
   { to: "/industry/small-business", icon: "store", titleKey: "nav.mega.industry.smallBusiness.title", descKey: "nav.mega.industry.smallBusiness.desc" },
+  { to: "/industry/hr", icon: "users", titleKey: "nav.mega.industry.hr.title", descKey: "nav.mega.industry.hr.desc" },
+  { to: "/industry/legal", icon: "scale", titleKey: "nav.mega.industry.legal.title", descKey: "nav.mega.industry.legal.desc" },
+  { to: "/industry/sales", icon: "target", titleKey: "nav.mega.industry.sales.title", descKey: "nav.mega.industry.sales.desc" },
+  { to: "/industry/recruiting", icon: "handshake", titleKey: "nav.mega.industry.recruiting.title", descKey: "nav.mega.industry.recruiting.desc" },
+  { to: "/industry/consulting", icon: "lifering", titleKey: "nav.mega.industry.consulting.title", descKey: "nav.mega.industry.consulting.desc" },
 ] as const;
 
 const RESOURCE_ITEMS = [

@@ -28,8 +28,37 @@ export default function IndustryPage({ slug }: { slug: string }) {
 
   const otherIndustries = INDUSTRY_PAGES.filter((p) => p.slug !== page.slug);
 
+  const faqs = [
+    {
+      question: `Is Docracy free to use for ${page.heroHeadline.replace(/^E-signatures (built )?(for )?/i, "").replace(/\.$/, "")}?`,
+      answer:
+        "Yes — signing chains of up to two people are free, with no account required for whoever's signing. Paid plans add unlimited signers, saved templates, and team features once you outgrow that.",
+    },
+    {
+      question: "Which documents can I send?",
+      answer: `Free templates for this include ${templates.map((tpl) => tpl.name).join(", ")}. You can also upload your own PDF.`,
+    },
+    page.honestLimit
+      ? { question: "What doesn't Docracy do?", answer: page.honestLimit }
+      : {
+          question: "Are Docracy signatures legally binding?",
+          answer:
+            "Docracy's signing flow is designed to support the U.S. ESIGN Act and UETA, and EU eIDAS simple electronic signatures, for everyday business documents — see our Trust & security page for exactly what that does and doesn't cover.",
+        },
+  ];
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  };
+
   return (
     <div>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       <div className="hero-band">
         <div className="hero-inner" style={{ maxWidth: 720 }}>
           <h1>{page.heroHeadline}</h1>
@@ -88,6 +117,14 @@ export default function IndustryPage({ slug }: { slug: string }) {
             </Link>
           ))}
         </div>
+
+        <h2 style={{ fontSize: 19, marginTop: 36 }}>Frequently asked questions</h2>
+        {faqs.map((faq, i) => (
+          <details key={i} className="faq-item" style={{ marginTop: 12 }}>
+            <summary style={{ fontWeight: 700, cursor: "pointer" }}>{faq.question}</summary>
+            <p style={{ margin: "8px 0 0", color: "var(--body)" }}>{faq.answer}</p>
+          </details>
+        ))}
 
         <h2 style={{ fontSize: 18, marginTop: 36, marginBottom: 8 }}>Other industries</h2>
         <ul style={{ paddingLeft: 20, marginTop: 0 }}>

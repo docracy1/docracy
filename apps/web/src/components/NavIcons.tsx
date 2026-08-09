@@ -129,6 +129,21 @@ export function NavIcon({ name }: { name: string }) {
           <path d="M8 21h8" />
         </svg>
       );
+    case "target":
+      return (
+        <svg {...common}>
+          <circle cx="12" cy="12" r="8.5" />
+          <circle cx="12" cy="12" r="4.5" />
+          <circle cx="12" cy="12" r="0.75" fill="currentColor" stroke="none" />
+        </svg>
+      );
+    case "handshake":
+      return (
+        <svg {...common}>
+          <path d="M2.5 12l4-4 3 2 2.5-2.5 3 3-2.5 2.5 2 2 4-4" />
+          <path d="M14 15.5l2 2M11.5 13l2 2" />
+        </svg>
+      );
     case "whatsapp":
       // Full-color brand mark rather than a monochrome stroke icon like the others — this one's
       // meant to be recognized at a glance, not blend in.
