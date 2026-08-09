@@ -47,10 +47,9 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Allura&family=Dancing+Script:wght@500;600;700&family=Great+Vibes&family=Homemade+Apple&family=Marck+Script&family=Sacramento&family=Satisfy&display=swap"
-      rel="stylesheet"
-    />
+    <!-- Handwritten signature-style fonts load on demand from SignatureCaptureModal.tsx instead of
+         here — they're only used on the signing page, so shipping them render-blocking on every
+         page (including the whole marketing site) was pure waste. -->
 
     <link rel="canonical" href="https://docracy.io/" />
     <link rel="alternate" type="application/rss+xml" title="Docracy Blog" href="/blog/feed.xml" />

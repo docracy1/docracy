@@ -3,11 +3,24 @@ import SignatureCanvas from "react-signature-canvas";
 import { useT } from "../lib/i18n";
 import {
   DEFAULT_SIGNATURE_FONT_ID,
+  SIGNATURE_FONTS_STYLESHEET,
   SIGNATURE_FONT_STYLES,
   initialsFromName,
   renderTypedSignaturePng,
   signatureFontById,
 } from "../lib/signatureFonts";
+
+/** Loads the signature-font stylesheet the first time this modal opens, instead of shipping it
+ *  render-blocking in index.html for every page that never shows a signature picker. */
+function useSignatureFontsStylesheet() {
+  useEffect(() => {
+    if (document.querySelector(`link[href="${SIGNATURE_FONTS_STYLESHEET}"]`)) return;
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = SIGNATURE_FONTS_STYLESHEET;
+    document.head.appendChild(link);
+  }, []);
+}
 
 export type SignatureCaptureMode = "type" | "draw";
 
@@ -38,6 +51,7 @@ export default function SignatureCaptureModal({
   onCancel,
 }: SignatureCaptureModalProps) {
   const t = useT();
+  useSignatureFontsStylesheet();
   const isInitials = fieldKind === "initials";
   const [mode, setMode] = useState<SignatureCaptureMode>("type");
   const [typedText, setTypedText] = useState(() =>

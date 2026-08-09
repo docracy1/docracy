@@ -1,4 +1,4 @@
-/** Handwritten-style fonts for typed signatures (loaded via Google Fonts in index.html). */
+/** Handwritten-style fonts for typed signatures (loaded on demand — see SignatureCaptureModal.tsx). */
 export interface SignatureFontStyle {
   id: string;
   /** CSS font-family name (must match the loaded webfont). */
