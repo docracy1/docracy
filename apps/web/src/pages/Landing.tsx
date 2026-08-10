@@ -154,7 +154,7 @@ const TESTIMONIALS: Array<{ quoteKey: string; name: string; titleKey: string; co
     name: "Laurenz Gröbner",
     titleKey: "testimonial.4.title",
     company: null,
-    logo: null,
+    logo: "/testimonials/hellocash.png",
   },
 ];
 
