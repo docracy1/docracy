@@ -137,6 +137,8 @@ const TRUST_LOGOS: Array<{ name: string; logo: string | null; href: string }> = 
   { name: "culttech", logo: "/culttech-logo.png", href: "https://culttech.at" },
   { name: "hellocash", logo: "/testimonials/hellocash.png", href: "https://hellocash.at" },
   { name: "Volpini Verpackung GmbH", logo: null, href: "https://volpini.at" },
+  { name: "AE Entsorgungssysteme", logo: "/testimonials/ae-entsorgungssysteme.png", href: "https://www.ae-entsorgung.eu" },
+  { name: "Kapsch", logo: "/testimonials/kapsch.png", href: "https://www.kapsch.net" },
 ];
 
 const TESTIMONIALS: Array<{ quoteKey: string; name: string; titleKey: string; company: string | null; logo: string | null }> = [
@@ -173,7 +175,21 @@ const TESTIMONIALS: Array<{ quoteKey: string; name: string; titleKey: string; co
     name: "Dietmar Grünstäudl",
     titleKey: "testimonial.5.title",
     company: null,
+    logo: "/testimonials/ae-entsorgungssysteme.png",
+  },
+  {
+    quoteKey: "testimonial.6.quote",
+    name: "Otto Schweinzer",
+    titleKey: "testimonial.6.title",
+    company: null,
     logo: null,
+  },
+  {
+    quoteKey: "testimonial.7.quote",
+    name: "Johannes Sornig",
+    titleKey: "testimonial.7.title",
+    company: null,
+    logo: "/testimonials/kapsch.png",
   },
 ];
 

@@ -1471,9 +1471,11 @@ const en: Messages = {
   "testimonial.4.quote": "Clients sign in seconds. Perfect for quick NDAs and small agreements. Simple, reliable, and far cheaper than traditional e-sign tools.",
   "testimonial.4.title": "Owner, hellocash",
   "testimonial.5.quote": "I switched to Docracy.io because it removes all the friction from signing. My partners open the link and sign instantly. No logins, no setup, no upsells. It's the perfect tool for quick NDAs and small agreements — fast, clean, and dependable.",
-  "testimonial.5.title": "CEO, AE",
+  "testimonial.5.title": "CEO, AE Entsorgungssysteme",
   "testimonial.6.quote": "Docracy has become my go-to for quick agreements. I send NDAs and small contracts in seconds, and everyone signs without creating an account. It's fast, clean, and removes all the hassle of traditional e-signature tools. Exactly what I needed.",
   "testimonial.6.title": "CEO, Volpini Verpackung GmbH",
+  "testimonial.7.quote": "Docracy finally made contract signing painless for Kapsch. I send a link, they sign instantly, no accounts or setup. It's perfect for quick agreements. Fast, lightweight, and far easier than every e-sign tool I used before.",
+  "testimonial.7.title": "Product Owner, Kapsch",
 };
 
 export default en;

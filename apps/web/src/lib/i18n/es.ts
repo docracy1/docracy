@@ -1533,9 +1533,11 @@ const es: Messages = {
   "testimonial.4.quote": "Los clientes firman en segundos. Perfecto para NDAs rápidos y acuerdos pequeños. Simple, confiable y mucho más económico que las herramientas de firma electrónica tradicionales.",
   "testimonial.4.title": "Dueño, hellocash",
   "testimonial.5.quote": "Cambié a Docracy.io porque elimina toda la fricción al firmar. Mis socios abren el enlace y firman al instante. Sin inicios de sesión, sin configuración, sin ventas adicionales. Es la herramienta perfecta para NDAs rápidos y acuerdos pequeños: rápida, clara y confiable.",
-  "testimonial.5.title": "CEO, AE",
+  "testimonial.5.title": "CEO, AE Entsorgungssysteme",
   "testimonial.6.quote": "Docracy se convirtió en mi herramienta de referencia para acuerdos rápidos. Envío NDAs y contratos pequeños en segundos, y todos firman sin crear una cuenta. Es rápida, clara y elimina toda la molestia de las herramientas de firma electrónica tradicionales. Exactamente lo que necesitaba.",
   "testimonial.6.title": "CEO, Volpini Verpackung GmbH",
+  "testimonial.7.quote": "Docracy finalmente hizo que firmar contratos fuera sencillo para Kapsch. Envío un enlace, firman al instante, sin cuentas ni configuración. Es perfecto para acuerdos rápidos. Rápido, liviano y mucho más fácil que cualquier herramienta de firma electrónica que usé antes.",
+  "testimonial.7.title": "Product Owner, Kapsch",
 };
 
 export default es;
