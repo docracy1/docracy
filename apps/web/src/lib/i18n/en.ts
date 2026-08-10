@@ -1467,6 +1467,8 @@ const en: Messages = {
   "testimonial.2.title": "Artist director, entrepreneur",
   "testimonial.3.quote": "Docracy is a smart, frictionless e-signature tool: no signup, no clutter, just secure sequential signing with privacy built in. For culture and tech teams moving fast, it makes agreements simple, professional, and discreet.",
   "testimonial.3.title": "CEO of culttech, Investor",
+  "testimonial.4.quote": "Clients sign in seconds. Perfect for quick NDAs and small agreements. Simple, reliable, and far cheaper than traditional e-sign tools.",
+  "testimonial.4.title": "Owner, hellocash",
 };
 
 export default en;

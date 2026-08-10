@@ -149,6 +149,13 @@ const TESTIMONIALS: Array<{ quoteKey: string; name: string; titleKey: string; co
     company: null,
     logo: "/culttech-logo.png",
   },
+  {
+    quoteKey: "testimonial.4.quote",
+    name: "Laurenz Gröbner",
+    titleKey: "testimonial.4.title",
+    company: null,
+    logo: null,
+  },
 ];
 
 const USE_CASE_KEYS: Array<{ titleKey: string; bodyKey: string; to: string }> = [

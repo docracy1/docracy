@@ -1529,6 +1529,8 @@ const es: Messages = {
   "testimonial.2.title": "Directora artística, emprendedora",
   "testimonial.3.quote": "Docracy es una herramienta de firma electrónica inteligente y sin fricción: sin registro, sin ruido, solo firma secuencial segura con privacidad integrada. Para equipos de cultura y tecnología que van rápido, hace los acuerdos simples, profesionales y discretos.",
   "testimonial.3.title": "CEO de culttech, inversor",
+  "testimonial.4.quote": "Los clientes firman en segundos. Perfecto para NDAs rápidos y acuerdos pequeños. Simple, confiable y mucho más económico que las herramientas de firma electrónica tradicionales.",
+  "testimonial.4.title": "Dueño, hellocash",
 };
 
 export default es;
