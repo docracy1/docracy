@@ -1449,7 +1449,7 @@ select {
      but in Docracy's own blue palette: brighter --primary blending into the darker --hero-to. */
   background: linear-gradient(135deg, var(--primary) 0%, var(--hero-to) 100%);
   color: var(--hero-ink);
-  padding: 64px 24px;
+  padding: 40px 24px;
   overflow: hidden;
 }
 
@@ -1467,9 +1467,9 @@ select {
 
 .hero-band h1 {
   color: #ffffff;
-  font-size: clamp(36px, 4.6vw, 60px);
-  margin: 0 0 20px;
-  line-height: 1.12;
+  font-size: clamp(32px, 3.6vw, 48px);
+  margin: 0 0 14px;
+  line-height: 1.15;
   letter-spacing: -0.025em;
   white-space: pre-line;
   max-width: 14em;
@@ -1530,7 +1530,7 @@ select {
   font-weight: 700;
   padding: 6px 14px 6px 10px;
   border-radius: 999px;
-  margin-bottom: 18px;
+  margin-bottom: 12px;
   text-decoration: none;
   transition: background 0.15s var(--ease);
 }
@@ -1568,7 +1568,7 @@ select {
   color: var(--hero-body);
   font-size: 17px;
   line-height: 1.45;
-  margin: 0 0 22px;
+  margin: 0 0 16px;
   max-width: 34em;
 }
 
@@ -1577,7 +1577,7 @@ select {
   align-items: center;
   flex-wrap: wrap;
   gap: 18px 22px;
-  margin-top: 8px;
+  margin-top: 4px;
 }
 
 .hero-signup-form {
@@ -2244,7 +2244,7 @@ select {
    signal, not another content section competing for attention. */
 
 .trust-logos-band {
-  padding: 40px 24px 44px;
+  padding: 28px 24px 32px;
   text-align: center;
   background: #0b1440;
 }

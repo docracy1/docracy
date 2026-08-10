@@ -450,7 +450,11 @@ export default function Landing() {
         <p className="trust-logos-label">{t("landing.trustedBy")}</p>
         <div className="trust-logos-viewport">
           <div className="trust-logos-track">
-            {[...TRUST_LOGOS, ...TRUST_LOGOS].map((item, i) => (
+            {/* 10 copies, not 2 — on wide/ultrawide screens 2x isn't enough track width to fill the
+                viewport during the loop, which left a visible gap of blank navy on the right. */}
+            {Array.from({ length: 10 }, () => TRUST_LOGOS)
+              .flat()
+              .map((item, i) => (
               <a
                 key={`${item.name}-${i}`}
                 href={item.href}
