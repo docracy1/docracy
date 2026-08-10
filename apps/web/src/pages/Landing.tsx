@@ -139,6 +139,7 @@ const TRUST_LOGOS: Array<{ name: string; logo: string | null; href: string }> = 
   { name: "Volpini Verpackung GmbH", logo: null, href: "https://volpini.at" },
   { name: "AE Entsorgungssysteme", logo: "/testimonials/ae-entsorgungssysteme.png", href: "https://www.ae-entsorgung.eu" },
   { name: "Kapsch", logo: "/testimonials/kapsch.png", href: "https://www.kapsch.net" },
+  { name: "AKG Smart Polymer", logo: "/testimonials/akg.png", href: "https://akg.at" },
 ];
 
 const TESTIMONIALS: Array<{ quoteKey: string; name: string; titleKey: string; company: string | null; logo: string | null }> = [
@@ -190,6 +191,13 @@ const TESTIMONIALS: Array<{ quoteKey: string; name: string; titleKey: string; co
     titleKey: "testimonial.7.title",
     company: null,
     logo: "/testimonials/kapsch.png",
+  },
+  {
+    quoteKey: "testimonial.8.quote",
+    name: "Joachim Zimmel",
+    titleKey: "testimonial.8.title",
+    company: null,
+    logo: "/testimonials/akg.png",
   },
 ];
 

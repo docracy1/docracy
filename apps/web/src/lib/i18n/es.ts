@@ -1538,6 +1538,8 @@ const es: Messages = {
   "testimonial.6.title": "CEO, Volpini Verpackung GmbH",
   "testimonial.7.quote": "Docracy finalmente hizo que firmar contratos fuera sencillo para Kapsch. Envío un enlace, firman al instante, sin cuentas ni configuración. Es perfecto para acuerdos rápidos. Rápido, liviano y mucho más fácil que cualquier herramienta de firma electrónica que usé antes.",
   "testimonial.7.title": "Product Owner, Kapsch",
+  "testimonial.8.quote": "Docracy me ahorra tiempo cada semana. Envío contratos y NDAs con un solo enlace, y la gente firma de inmediato sin crear cuentas. Es simple, rápido y perfecto para acuerdos pequeños. Mucho más fácil que las pesadas herramientas de firma electrónica que usaba antes.",
+  "testimonial.8.title": "CFO, AKG Smart Polymer",
 };
 
 export default es;
