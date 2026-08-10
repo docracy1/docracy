@@ -128,6 +128,14 @@ export default function Trust() {
       </p>
 
       <h2 id="template-legal-review" style={{ fontSize: 19, marginTop: 28 }}>Template legal review</h2>
+      <a
+        href="https://www.boeck.law/"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ display: "inline-block", margin: "4px 0 14px" }}
+      >
+        <img src="/testimonials/boeck-law.png" alt="BOECK Attorneys at Law" style={{ height: 40, width: "auto", display: "block" }} />
+      </a>
       <p>
         Every free template in our{" "}
         <Link to="/free-templates">template library</Link> has been reviewed by{" "}

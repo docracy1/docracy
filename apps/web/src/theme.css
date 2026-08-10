@@ -2246,7 +2246,7 @@ select {
 .trust-logos-band {
   padding: 28px 24px 32px;
   text-align: center;
-  background: #0b1440;
+  background: var(--hero-to);
 }
 
 .trust-logos-label {
@@ -2275,7 +2275,7 @@ select {
   align-items: center;
   gap: 24px;
   width: max-content;
-  animation: trust-logos-scroll 32s linear infinite;
+  animation: trust-logos-scroll 140s linear infinite;
 }
 
 .trust-logos-track:hover {
