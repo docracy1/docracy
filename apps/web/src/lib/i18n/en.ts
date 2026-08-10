@@ -1469,6 +1469,8 @@ const en: Messages = {
   "testimonial.3.title": "CEO of culttech, Investor",
   "testimonial.4.quote": "Clients sign in seconds. Perfect for quick NDAs and small agreements. Simple, reliable, and far cheaper than traditional e-sign tools.",
   "testimonial.4.title": "Owner, hellocash",
+  "testimonial.5.quote": "I switched to Docracy.io because it removes all the friction from signing. My partners open the link and sign instantly. No logins, no setup, no upsells. It's the perfect tool for quick NDAs and small agreements — fast, clean, and dependable.",
+  "testimonial.5.title": "CEO, AE",
 };
 
 export default en;

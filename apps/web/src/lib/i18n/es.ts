@@ -1531,6 +1531,8 @@ const es: Messages = {
   "testimonial.3.title": "CEO de culttech, inversor",
   "testimonial.4.quote": "Los clientes firman en segundos. Perfecto para NDAs rápidos y acuerdos pequeños. Simple, confiable y mucho más económico que las herramientas de firma electrónica tradicionales.",
   "testimonial.4.title": "Dueño, hellocash",
+  "testimonial.5.quote": "Cambié a Docracy.io porque elimina toda la fricción al firmar. Mis socios abren el enlace y firman al instante. Sin inicios de sesión, sin configuración, sin ventas adicionales. Es la herramienta perfecta para NDAs rápidos y acuerdos pequeños: rápida, clara y confiable.",
+  "testimonial.5.title": "CEO, AE",
 };
 
 export default es;

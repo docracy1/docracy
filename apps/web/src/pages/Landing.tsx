@@ -156,6 +156,13 @@ const TESTIMONIALS: Array<{ quoteKey: string; name: string; titleKey: string; co
     company: null,
     logo: "/testimonials/hellocash.png",
   },
+  {
+    quoteKey: "testimonial.5.quote",
+    name: "Dietmar Grünstäudl",
+    titleKey: "testimonial.5.title",
+    company: null,
+    logo: null,
+  },
 ];
 
 const USE_CASE_KEYS: Array<{ titleKey: string; bodyKey: string; to: string }> = [
