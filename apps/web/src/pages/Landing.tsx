@@ -127,6 +127,18 @@ const FAQ_KEYS: Array<{ qKey: string; aKey: string }> = [
   { qKey: "landing.faq5.q", aKey: "landing.faq5.a" },
 ];
 
+// Subset of TESTIMONIALS with a real, recognizable company identity — shown as a compact logo
+// strip right below the hero so trust signal is visible without scrolling. Personal names
+// (Abaseh Mirvali) and ambiguous abbreviations ("AE") are left out of this strip since a bare
+// name or two letters reads as noise in a logo row — they still appear in the full testimonials
+// section below with their real quotes and context.
+const TRUST_LOGOS: Array<{ name: string; logo: string | null; href: string }> = [
+  { name: "DACH Advisory", logo: "/testimonials/dach-advisory.png", href: "https://dachadvisory.com" },
+  { name: "culttech", logo: "/culttech-logo.png", href: "https://culttech.at" },
+  { name: "hellocash", logo: "/testimonials/hellocash.png", href: "https://hellocash.at" },
+  { name: "Volpini Verpackung GmbH", logo: null, href: "https://volpini.at" },
+];
+
 const TESTIMONIALS: Array<{ quoteKey: string; name: string; titleKey: string; company: string | null; logo: string | null }> = [
   {
     quoteKey: "testimonial.1.quote",
@@ -385,6 +397,28 @@ export default function Landing() {
               <ProductFlowDemo />
             </div>
           </div>
+        </div>
+      </div>
+
+      <div className="trust-logos-band">
+        <p className="trust-logos-label">{t("landing.trustedBy")}</p>
+        <div className="trust-logos-row">
+          {TRUST_LOGOS.map((item) => (
+            <a
+              key={item.name}
+              href={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={item.logo ? "trust-logo-link" : "trust-logo-link trust-logo-link-text"}
+              aria-label={item.name}
+            >
+              {item.logo ? (
+                <img src={item.logo} alt={item.name} className="trust-logo-img" loading="lazy" />
+              ) : (
+                item.name
+              )}
+            </a>
+          ))}
         </div>
       </div>
 

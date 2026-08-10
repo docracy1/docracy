@@ -219,6 +219,7 @@ const es: Messages = {
   "hero.b4": "Firmas SES pensadas para respaldar la ESIGN Act, UETA y eIDAS",
   "hero.eyebrow": "Firmas en secuencia · Con IA",
   "hero.hint": "Sin tarjeta · te enviamos un enlace gratis para iniciar sesión.",
+  "landing.trustedBy": "Con la confianza de equipos en",
   "hero.emailPlaceholder": "¿Cuál es tu correo?",
   "hero.emailMissing": "Falta el correo",
   "hero.emailInvalid": "Introduce tu correo",
@@ -1533,6 +1534,8 @@ const es: Messages = {
   "testimonial.4.title": "Dueño, hellocash",
   "testimonial.5.quote": "Cambié a Docracy.io porque elimina toda la fricción al firmar. Mis socios abren el enlace y firman al instante. Sin inicios de sesión, sin configuración, sin ventas adicionales. Es la herramienta perfecta para NDAs rápidos y acuerdos pequeños: rápida, clara y confiable.",
   "testimonial.5.title": "CEO, AE",
+  "testimonial.6.quote": "Docracy se convirtió en mi herramienta de referencia para acuerdos rápidos. Envío NDAs y contratos pequeños en segundos, y todos firman sin crear una cuenta. Es rápida, clara y elimina toda la molestia de las herramientas de firma electrónica tradicionales. Exactamente lo que necesitaba.",
+  "testimonial.6.title": "CEO, Volpini Verpackung GmbH",
 };
 
 export default es;

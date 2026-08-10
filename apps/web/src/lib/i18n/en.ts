@@ -76,6 +76,7 @@ const en: Messages = {
   "hero.b3": "Encrypted storage with short automatic retention",
   "hero.b4": "SES e-signatures designed to support the U.S. ESIGN Act, UETA, and eIDAS",
   "hero.hint": "No credit card · we'll email you a free sign-in link.",
+  "landing.trustedBy": "Trusted by teams at",
   "hero.emailPlaceholder": "What's your email?",
   "hero.emailMissing": "Email is missing",
   "hero.emailInvalid": "Enter your email",
@@ -1471,6 +1472,8 @@ const en: Messages = {
   "testimonial.4.title": "Owner, hellocash",
   "testimonial.5.quote": "I switched to Docracy.io because it removes all the friction from signing. My partners open the link and sign instantly. No logins, no setup, no upsells. It's the perfect tool for quick NDAs and small agreements — fast, clean, and dependable.",
   "testimonial.5.title": "CEO, AE",
+  "testimonial.6.quote": "Docracy has become my go-to for quick agreements. I send NDAs and small contracts in seconds, and everyone signs without creating an account. It's fast, clean, and removes all the hassle of traditional e-signature tools. Exactly what I needed.",
+  "testimonial.6.title": "CEO, Volpini Verpackung GmbH",
 };
 
 export default en;
