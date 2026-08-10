@@ -140,6 +140,7 @@ const TRUST_LOGOS: Array<{ name: string; logo: string | null; href: string }> = 
   { name: "AE Entsorgungssysteme", logo: "/testimonials/ae-entsorgungssysteme.png", href: "https://www.ae-entsorgung.eu" },
   { name: "Kapsch", logo: "/testimonials/kapsch.png", href: "https://www.kapsch.net" },
   { name: "AKG Smart Polymer", logo: "/testimonials/akg.png", href: "https://akg.at" },
+  { name: "FAUN Austria", logo: "/testimonials/faun-austria.png", href: "https://www.faun.com" },
 ];
 
 const TESTIMONIALS: Array<{
@@ -213,6 +214,14 @@ const TESTIMONIALS: Array<{
     company: null,
     logo: "/testimonials/akg.png",
     linkedin: "https://www.linkedin.com/in/joachim-zimmel/",
+  },
+  {
+    quoteKey: "testimonial.9.quote",
+    name: "Herbert Utz",
+    titleKey: "testimonial.9.title",
+    company: null,
+    logo: "/testimonials/faun-austria.png",
+    linkedin: "https://www.linkedin.com/in/herbert-utz-43816190/",
   },
 ];
 

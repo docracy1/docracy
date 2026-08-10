@@ -1481,6 +1481,8 @@ const en: Messages = {
   "testimonial.7.title": "Product Owner, Kapsch",
   "testimonial.8.quote": "Docracy saves me time every week. I send contracts and NDAs with one link, and people sign immediately without creating accounts. It's simple, fast, and perfect for small agreements. Way easier than the heavy e-signature tools I used before.",
   "testimonial.8.title": "CFO, AKG Smart Polymer",
+  "testimonial.9.quote": "Our company uses Docracy, and we've saved time and money while getting everything we want. Especially since we store our data and nobody else can access it. Highly recommended.",
+  "testimonial.9.title": "CEO and owner, FAUN Austria",
 };
 
 export default en;
