@@ -220,6 +220,8 @@ const es: Messages = {
   "hero.eyebrow": "Firmas en secuencia · Con IA",
   "hero.hint": "Sin tarjeta · te enviamos un enlace gratis para iniciar sesión.",
   "landing.trustedBy": "Con la confianza de equipos en",
+  "landing.linkedinLink": "LinkedIn",
+  "hero.calculateSavings": "Calcular ahorro",
   "hero.emailPlaceholder": "¿Cuál es tu correo?",
   "hero.emailMissing": "Falta el correo",
   "hero.emailInvalid": "Introduce tu correo",
@@ -253,8 +255,9 @@ const es: Messages = {
   "integrations.detail":
     "Dropbox, OneDrive, Box y Google Drive suben PDFs firmados automáticamente. Zapier y webhooks automatizan tu stack. MCP conecta Claude, ChatGPT, Grok, Perplexity y Cursor a tus documentos.",
   "integrations.learnMore": "Saber más →",
+  "integrations.comingSoon": "Próximamente",
   "integrations.sub":
-    "Integra las plataformas que ya usas — almacenamiento en la nube, automatización y asistentes de IA. Las cuentas de pago desbloquean conectores nativos; todo lo listado aquí es real hoy.",
+    "Integra las plataformas que ya usas — almacenamiento en la nube, automatización y asistentes de IA. Las cuentas de pago desbloquean conectores nativos; todo lo listado aquí es real hoy, excepto la subida automática vía WhatsApp (próximamente) — WhatsApp ya funciona para enviar enlaces de firma.",
   "integrations.title": "Conecta Docracy con las herramientas que ya usas",
   "landing.ai1.body": "Sube un PDF y coloca campos de firma, fecha e iniciales por ti.",
   "landing.ai1.title": "Detectar campos automáticamente",

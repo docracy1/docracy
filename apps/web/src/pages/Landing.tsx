@@ -136,19 +136,27 @@ const TRUST_LOGOS: Array<{ name: string; logo: string | null; href: string }> = 
   { name: "DACH Advisory", logo: "/testimonials/dach-advisory.png", href: "https://dachadvisory.com" },
   { name: "culttech", logo: "/culttech-logo.png", href: "https://culttech.at" },
   { name: "hellocash", logo: "/testimonials/hellocash.png", href: "https://hellocash.at" },
-  { name: "Volpini Verpackung GmbH", logo: null, href: "https://volpini.at" },
+  { name: "Volpini Verpackung GmbH", logo: "/testimonials/volpini.png", href: "https://volpini.at" },
   { name: "AE Entsorgungssysteme", logo: "/testimonials/ae-entsorgungssysteme.png", href: "https://www.ae-entsorgung.eu" },
   { name: "Kapsch", logo: "/testimonials/kapsch.png", href: "https://www.kapsch.net" },
   { name: "AKG Smart Polymer", logo: "/testimonials/akg.png", href: "https://akg.at" },
 ];
 
-const TESTIMONIALS: Array<{ quoteKey: string; name: string; titleKey: string; company: string | null; logo: string | null }> = [
+const TESTIMONIALS: Array<{
+  quoteKey: string;
+  name: string;
+  titleKey: string;
+  company: string | null;
+  logo: string | null;
+  linkedin: string | null;
+}> = [
   {
     quoteKey: "testimonial.1.quote",
     name: "DACH Advisory",
     titleKey: "testimonial.1.title",
     company: null,
     logo: "/testimonials/dach-advisory.png",
+    linkedin: null,
   },
   {
     quoteKey: "testimonial.2.quote",
@@ -156,6 +164,7 @@ const TESTIMONIALS: Array<{ quoteKey: string; name: string; titleKey: string; co
     titleKey: "testimonial.2.title",
     company: null,
     logo: null,
+    linkedin: null,
   },
   {
     quoteKey: "testimonial.3.quote",
@@ -163,6 +172,7 @@ const TESTIMONIALS: Array<{ quoteKey: string; name: string; titleKey: string; co
     titleKey: "testimonial.3.title",
     company: null,
     logo: "/culttech-logo.png",
+    linkedin: null,
   },
   {
     quoteKey: "testimonial.4.quote",
@@ -170,6 +180,7 @@ const TESTIMONIALS: Array<{ quoteKey: string; name: string; titleKey: string; co
     titleKey: "testimonial.4.title",
     company: null,
     logo: "/testimonials/hellocash.png",
+    linkedin: "https://www.linkedin.com/in/laurenz-gr%C3%B6bner-87179566/",
   },
   {
     quoteKey: "testimonial.5.quote",
@@ -177,13 +188,15 @@ const TESTIMONIALS: Array<{ quoteKey: string; name: string; titleKey: string; co
     titleKey: "testimonial.5.title",
     company: null,
     logo: "/testimonials/ae-entsorgungssysteme.png",
+    linkedin: "https://www.linkedin.com/in/dietmar-gr%C3%BCnst%C3%A4udl-869931114/",
   },
   {
     quoteKey: "testimonial.6.quote",
     name: "Otto Schweinzer",
     titleKey: "testimonial.6.title",
     company: null,
-    logo: null,
+    logo: "/testimonials/volpini.png",
+    linkedin: null,
   },
   {
     quoteKey: "testimonial.7.quote",
@@ -191,6 +204,7 @@ const TESTIMONIALS: Array<{ quoteKey: string; name: string; titleKey: string; co
     titleKey: "testimonial.7.title",
     company: null,
     logo: "/testimonials/kapsch.png",
+    linkedin: "https://www.linkedin.com/in/joesonic/",
   },
   {
     quoteKey: "testimonial.8.quote",
@@ -198,6 +212,7 @@ const TESTIMONIALS: Array<{ quoteKey: string; name: string; titleKey: string; co
     titleKey: "testimonial.8.title",
     company: null,
     logo: "/testimonials/akg.png",
+    linkedin: "https://www.linkedin.com/in/joachim-zimmel/",
   },
 ];
 
@@ -405,6 +420,13 @@ export default function Landing() {
                 </span>
                 {t("hero.watchHow")}
               </button>
+              <a
+                href="#compare-price"
+                className="hero-calc-savings-link"
+                onClick={() => track("landingpage_cta_clicked", { source: "hero_calculate_savings" })}
+              >
+                {t("hero.calculateSavings")}
+              </a>
             </div>
             {!heroSent && <p className="hero-cta-hint">{t("hero.hint")}</p>}
             <p className="hero-secondary-link">
@@ -426,23 +448,27 @@ export default function Landing() {
 
       <div className="trust-logos-band">
         <p className="trust-logos-label">{t("landing.trustedBy")}</p>
-        <div className="trust-logos-row">
-          {TRUST_LOGOS.map((item) => (
-            <a
-              key={item.name}
-              href={item.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={item.logo ? "trust-logo-link" : "trust-logo-link trust-logo-link-text"}
-              aria-label={item.name}
-            >
-              {item.logo ? (
-                <img src={item.logo} alt={item.name} className="trust-logo-img" loading="lazy" />
-              ) : (
-                item.name
-              )}
-            </a>
-          ))}
+        <div className="trust-logos-viewport">
+          <div className="trust-logos-track">
+            {[...TRUST_LOGOS, ...TRUST_LOGOS].map((item, i) => (
+              <a
+                key={`${item.name}-${i}`}
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={item.logo ? "trust-logo-link" : "trust-logo-link trust-logo-link-text"}
+                aria-label={item.name}
+                tabIndex={i < TRUST_LOGOS.length ? 0 : -1}
+                aria-hidden={i < TRUST_LOGOS.length ? undefined : true}
+              >
+                {item.logo ? (
+                  <img src={item.logo} alt={item.name} className="trust-logo-img" loading="lazy" />
+                ) : (
+                  item.name
+                )}
+              </a>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -589,6 +615,14 @@ export default function Landing() {
               <p style={{ fontSize: 15, fontStyle: "italic", color: "var(--body-strong)", margin: 0, flex: 1, lineHeight: 1.5 }}>
                 "{t(testimonial.quoteKey)}"
               </p>
+              {testimonial.logo && (
+                <img
+                  src={testimonial.logo}
+                  alt={testimonial.company ?? testimonial.name}
+                  loading="lazy"
+                  style={{ height: 36, width: "auto", alignSelf: "flex-start", objectFit: "contain", borderRadius: "var(--r-sm)" }}
+                />
+              )}
               <div>
                 <p style={{ margin: 0, fontSize: 13.5, fontWeight: 600, color: "var(--ink)" }}>{testimonial.name}</p>
                 {(title || testimonial.company) && (
@@ -598,15 +632,17 @@ export default function Landing() {
                     {testimonial.company ?? ""}
                   </p>
                 )}
+                {testimonial.linkedin && (
+                  <a
+                    href={testimonial.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="testimonial-linkedin-link"
+                  >
+                    {t("landing.linkedinLink")} ↗
+                  </a>
+                )}
               </div>
-              {testimonial.logo && (
-                <img
-                  src={testimonial.logo}
-                  alt={testimonial.company ?? testimonial.name}
-                  loading="lazy"
-                  style={{ height: 36, width: "auto", alignSelf: "flex-start", objectFit: "contain", borderRadius: "var(--r-sm)" }}
-                />
-              )}
             </div>
             );
           })}
@@ -677,7 +713,7 @@ export default function Landing() {
       />
 
       <div className="container">
-        <div style={{ marginTop: 40 }}>
+        <div id="compare-price" style={{ marginTop: 40, scrollMarginTop: 90 }}>
           <PricingCalculator />
         </div>
 

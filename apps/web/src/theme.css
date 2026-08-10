@@ -60,6 +60,13 @@ html {
      browsers that don't support it (currently just older Safari), which already use overlay
      scrollbars and never had this problem. */
   scrollbar-gutter: stable;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 body {
@@ -1706,6 +1713,19 @@ select {
   line-height: 0;
 }
 
+.hero-calc-savings-link {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  flex-shrink: 0;
+}
+
+.hero-calc-savings-link:hover {
+  color: #ffffff;
+}
+
 .hero-secondary-link {
   margin: 14px 0 0;
   font-size: 14px;
@@ -2103,6 +2123,7 @@ select {
 }
 
 .integrations-tile {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2114,6 +2135,23 @@ select {
   border-radius: var(--r-md);
   box-shadow: var(--shadow-sm);
   min-height: 96px;
+}
+
+.integrations-tile-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+  color: var(--mute);
+  background: var(--canvas-soft);
+  border: 1px solid var(--hairline);
+  border-radius: 999px;
+  padding: 2px 6px;
+  line-height: 1.4;
+  white-space: nowrap;
 }
 
 .integrations-tile-logo {
@@ -2146,6 +2184,19 @@ select {
 .core-feature-card h3 {
   font-size: 17px;
   margin: 0 0 24px;
+}
+
+.testimonial-linkedin-link {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.testimonial-linkedin-link:hover {
+  text-decoration: underline;
 }
 
 .core-feature-card a {
@@ -2216,19 +2267,52 @@ select {
   color: var(--mute);
 }
 
-.trust-logos-row {
+/* Auto-scrolling marquee (eversign-style) instead of a wrapped flex row — the wrapped row broke
+   awkwardly on mobile once there were enough logos to need 2+ lines. A single continuously
+   scrolling track works at any viewport width with no layout logic. TRUST_LOGOS is rendered
+   twice back-to-back in the JSX; animating exactly -50% loops seamlessly between the two copies. */
+
+.trust-logos-viewport {
+  overflow: hidden;
+  max-width: 100%;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 48px, #000 calc(100% - 48px), transparent);
+  mask-image: linear-gradient(to right, transparent, #000 48px, #000 calc(100% - 48px), transparent);
+}
+
+.trust-logos-track {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
-  gap: 32px;
-  max-width: 760px;
-  margin: 0 auto;
+  gap: 48px;
+  width: max-content;
+  animation: trust-logos-scroll 28s linear infinite;
+}
+
+.trust-logos-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes trust-logos-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trust-logos-track {
+    animation: none;
+  }
+  .trust-logos-viewport {
+    overflow-x: auto;
+  }
 }
 
 .trust-logo-link {
   display: flex;
   align-items: center;
+  flex-shrink: 0;
   opacity: 0.75;
   transition: opacity 0.15s ease;
   text-decoration: none;

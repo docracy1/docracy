@@ -38,6 +38,10 @@ export default function IntegrationsBand({ learnMoreTo = "/docs", compact = fals
         <div className="integrations-grid" role="list">
           {INTEGRATION_LOGOS.map((item) => (
             <div key={item.name} className="integrations-tile" role="listitem">
+              {/* WhatsApp already delivers signing links (see /whatsapp-signing) — what it doesn't
+                  do yet is auto-upload completed PDFs the way the storage connectors here do, so
+                  showing it as an equal, ready-today tile in this specific grid would overclaim. */}
+              {item.name === "WhatsApp" && <span className="integrations-tile-badge">{t("integrations.comingSoon")}</span>}
               <img src={`/integrations/${item.file}`} alt="" width={32} height={32} className="integrations-tile-logo" />
               <span className="integrations-tile-name">{item.name}</span>
             </div>
