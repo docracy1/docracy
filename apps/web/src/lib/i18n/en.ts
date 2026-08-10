@@ -610,7 +610,7 @@ const en: Messages = {
   "firstDoc.uploadPdf": "Upload PDF",
   "integrations.title": "Connect Docracy with the tools you already use",
   "integrations.sub": "Plug into the platforms you already use — cloud storage, automation, and AI assistants. Paid accounts unlock native connectors; everything listed here is real today, except WhatsApp auto-upload (coming soon) — WhatsApp is already live for delivering signing links.",
-  "integrations.comingSoon": "Coming soon",
+  "integrations.comingSoon": "will be live soon",
   "integrations.detail": "Dropbox, OneDrive, Box, and Google Drive auto-upload signed PDFs. Zapier and webhooks automate your stack. MCP connects Claude, ChatGPT, Grok, Perplexity, and Cursor to your documents.",
   "integrations.learnMore": "Learn more →",
   "calc.title": "How Docracy compares on price",

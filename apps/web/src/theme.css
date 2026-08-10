@@ -2137,21 +2137,11 @@ select {
   min-height: 96px;
 }
 
-.integrations-tile-badge {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  font-size: 8.5px;
-  font-weight: 700;
-  letter-spacing: 0.2px;
-  text-transform: uppercase;
+.integrations-tile-soon {
+  font-size: 10.5px;
+  font-weight: 500;
+  font-style: italic;
   color: var(--mute);
-  background: var(--canvas-soft);
-  border: 1px solid var(--hairline);
-  border-radius: 999px;
-  padding: 2px 6px;
-  line-height: 1.4;
-  white-space: nowrap;
 }
 
 .integrations-tile-logo {
@@ -2254,17 +2244,18 @@ select {
    signal, not another content section competing for attention. */
 
 .trust-logos-band {
-  padding: 20px 24px 32px;
+  padding: 40px 24px 44px;
   text-align: center;
+  background: #0b1440;
 }
 
 .trust-logos-label {
-  margin: 0 0 14px;
-  font-size: 12px;
+  margin: 0 0 22px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.4px;
   text-transform: uppercase;
-  color: var(--mute);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 /* Auto-scrolling marquee (eversign-style) instead of a wrapped flex row — the wrapped row broke
@@ -2282,9 +2273,9 @@ select {
 .trust-logos-track {
   display: flex;
   align-items: center;
-  gap: 48px;
+  gap: 24px;
   width: max-content;
-  animation: trust-logos-scroll 28s linear infinite;
+  animation: trust-logos-scroll 32s linear infinite;
 }
 
 .trust-logos-track:hover {
@@ -2313,17 +2304,21 @@ select {
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  opacity: 0.75;
-  transition: opacity 0.15s ease;
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px 18px;
+  opacity: 0.92;
+  transition: opacity 0.15s ease, transform 0.15s ease;
   text-decoration: none;
 }
 
 .trust-logo-link:hover {
   opacity: 1;
+  transform: translateY(-1px);
 }
 
 .trust-logo-img {
-  height: 28px;
+  height: 44px;
   width: auto;
   object-fit: contain;
   display: block;
