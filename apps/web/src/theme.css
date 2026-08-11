@@ -1622,9 +1622,13 @@ select {
 }
 
 .hero-signup-sent-continue {
-  font-size: 13px;
-  font-weight: 700;
-  color: #fff;
+  display: inline-block;
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.72);
   text-decoration: underline;
   text-underline-offset: 3px;
 }

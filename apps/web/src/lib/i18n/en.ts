@@ -86,7 +86,7 @@ const en: Messages = {
   "hero.startFree": "Start free",
   "hero.sentTitle": "Check your email",
   "hero.sentBody": "We sent a sign-in link to {{email}}. Click it to create your free account — it expires in 15 minutes.",
-  "hero.continuePrepare": "Or continue without signing in",
+  "hero.continuePrepare": "Don't want to wait? Start without an account",
   "hero.orTemplates": "or browse free templates",
   "hero.watchHow": "Watch how it works",
   "how.title": "How it works",

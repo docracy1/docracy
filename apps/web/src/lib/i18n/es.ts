@@ -230,7 +230,7 @@ const es: Messages = {
   "hero.sentTitle": "Revisa tu correo",
   "hero.sentBody":
     "Enviamos un enlace de acceso a {{email}}. Haz clic para crear tu cuenta gratis — caduca en 15 minutos.",
-  "hero.continuePrepare": "O continúa sin iniciar sesión",
+  "hero.continuePrepare": "¿No quieres esperar? Empieza sin cuenta",
   "hero.orTemplates": "o explora plantillas gratis",
   "hero.watchHow": "Mira cómo funciona",
   "hero.sub": "Sube, agrega firmantes, envía — firmas sin suscripciones ni configuración.",
