@@ -68,7 +68,7 @@ const en: Messages = {
   "nav.mega.resource.contact.title": "Contact",
   "nav.mega.resource.contact.desc": "Questions before you sign up? Ask sales@docracy.io.",
   "hero.eyebrow": "Sequential e-signatures · AI-assisted",
-  "hero.whatsappBadge": "New: Sign documents via WhatsApp",
+  "hero.whatsappBadge": "New: Sign documents via WhatsApp (coming soon)",
   "hero.title": "Close deals in minutes.\nAI auto-detect places every field.",
   "hero.sub": "Upload, add signers, send — signatures without subscriptions or setup.",
   "hero.b1": "Fast and frictionless document signing",
@@ -602,7 +602,7 @@ const en: Messages = {
   "sent.saveAccountSubFuture": "Heads up: this document and its signing history are deleted after 9 days — the status link above stops working then too. Create a free account so this send (and every future one) stays in your dashboard for good — no password, just a magic link.",
   "sent.sendAnother": "Send another",
   "dash.claimSuccess": "Saved to your dashboard: {{title}}",
-  "dash.whatsappAnnouncement": "New: send signing links via WhatsApp — phone-bound, PIN-protected, a step toward Advanced Electronic Signature.",
+  "dash.whatsappAnnouncement": "Coming soon: send signing links via WhatsApp — phone-bound, PIN-protected, a step toward Advanced Electronic Signature.",
   "dash.whatsappAnnouncementCta": "Try it",
   "firstDoc.prompt": "Send your first document — it takes 30 seconds.",
   "firstDoc.upload": "Upload document",
@@ -1484,6 +1484,8 @@ const en: Messages = {
   "testimonial.8.title": "CFO, AKG Smart Polymer",
   "testimonial.9.quote": "Our company uses Docracy, and we've saved time and money while getting everything we want. Especially since we store our data and nobody else can access it. Highly recommended.",
   "testimonial.9.title": "CEO and owner, FAUN Austria",
+  "testimonial.10.quote": "I checked Docracy, and the templates are great, and the simple and advanced signatures are working well. For my work, everything is perfect.",
+  "testimonial.10.title": "Attorney, BOECK Law — reviewed Docracy's free template library",
 };
 
 export default en;

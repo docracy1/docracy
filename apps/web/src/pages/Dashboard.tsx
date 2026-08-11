@@ -1218,9 +1218,6 @@ export default function Dashboard() {
               {t("dash.whatsappAnnouncement")}
             </span>
             <span style={{ display: "flex", gap: 8 }}>
-              <Link to="/prepare" className="btn-primary" style={{ fontSize: 13, padding: "4px 10px", textDecoration: "none" }}>
-                {t("dash.whatsappAnnouncementCta")}
-              </Link>
               <button
                 className="btn-secondary"
                 style={{ fontSize: 13, padding: "4px 10px" }}

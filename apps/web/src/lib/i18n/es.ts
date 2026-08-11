@@ -104,7 +104,7 @@ const es: Messages = {
   "dash.connector": "Conector y clave API",
   "dash.connectorConnected": "Conectado — los documentos firmados se subirán allí automáticamente.",
   "dash.claimSuccess": "Guardado en tu panel: {{title}}",
-  "dash.whatsappAnnouncement": "Nuevo: envía enlaces de firma por WhatsApp — vinculados al teléfono, protegidos con PIN, un paso hacia la firma electrónica avanzada.",
+  "dash.whatsappAnnouncement": "Próximamente: envía enlaces de firma por WhatsApp — vinculados al teléfono, protegidos con PIN, un paso hacia la firma electrónica avanzada.",
   "dash.whatsappAnnouncementCta": "Probarlo",
   "dash.connectorFailed": "No se pudo conectar ese proveedor. Inténtalo de nuevo.",
   "dash.toolsPaid": "Las herramientas son una función de pago",
@@ -235,7 +235,7 @@ const es: Messages = {
   "hero.orTemplates": "o explora plantillas gratis",
   "hero.watchHow": "Mira cómo funciona",
   "hero.sub": "Sube, agrega firmantes, envía — firmas sin suscripciones ni configuración.",
-  "hero.whatsappBadge": "Nuevo: firma por WhatsApp",
+  "hero.whatsappBadge": "Nuevo: firma por WhatsApp (próximamente)",
   "hero.title": "Cierra acuerdos en minutos.\nLa detección automática con IA coloca cada campo.",
   "how.s1.body": "Agrega el PDF que quieres firmar, o empieza desde una plantilla gratis.",
   "how.s1.title": "Subir",
@@ -1546,6 +1546,8 @@ const es: Messages = {
   "testimonial.8.title": "CFO, AKG Smart Polymer",
   "testimonial.9.quote": "Nuestra empresa usa Docracy y hemos ahorrado tiempo y dinero mientras obtenemos todo lo que necesitamos. Sobre todo porque almacenamos nuestros datos y nadie más puede acceder a ellos. Muy recomendable.",
   "testimonial.9.title": "CEO y propietario, FAUN Austria",
+  "testimonial.10.quote": "Revisé Docracy, y las plantillas son excelentes, y las firmas simples y avanzadas funcionan bien. Para mi trabajo, todo es perfecto.",
+  "testimonial.10.title": "Abogada, BOECK Law — revisó la biblioteca de plantillas gratuitas de Docracy",
 };
 
 export default es;

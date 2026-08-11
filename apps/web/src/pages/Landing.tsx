@@ -141,6 +141,7 @@ const TRUST_LOGOS: Array<{ name: string; logo: string | null; href: string }> = 
   { name: "Kapsch", logo: "/testimonials/kapsch.png", href: "https://www.kapsch.net" },
   { name: "AKG Smart Polymer", logo: "/testimonials/akg.png", href: "https://akg.at" },
   { name: "FAUN Austria", logo: "/testimonials/faun-austria.png", href: "https://www.faun.com" },
+  { name: "BOECK Attorneys at Law", logo: "/testimonials/boeck-law.png", href: "https://www.boeck.law/" },
 ];
 
 const TESTIMONIALS: Array<{
@@ -222,6 +223,14 @@ const TESTIMONIALS: Array<{
     company: null,
     logo: "/testimonials/faun-austria.png",
     linkedin: "https://www.linkedin.com/in/herbert-utz-43816190/",
+  },
+  {
+    quoteKey: "testimonial.10.quote",
+    name: "Dr. Denisa Böck",
+    titleKey: "testimonial.10.title",
+    company: null,
+    logo: "/testimonials/boeck-law.png",
+    linkedin: "https://www.linkedin.com/in/dr-denisa-boeck-373424123/",
   },
 ];
 
