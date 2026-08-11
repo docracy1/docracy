@@ -151,6 +151,11 @@ const TESTIMONIALS: Array<{
   company: string | null;
   logo: string | null;
   linkedin: string | null;
+  /** Personal headshot for testimonials from an individual professional rather than a company
+   *  representative — rendered as a round avatar next to the name instead of the wide company
+   *  logo strip, since a photo at that 36px-tall/auto-width treatment would render as an
+   *  unrecognizable sliver. */
+  avatar?: string;
 }> = [
   {
     quoteKey: "testimonial.1.quote",
@@ -229,8 +234,9 @@ const TESTIMONIALS: Array<{
     name: "Dr. Denisa Böck",
     titleKey: "testimonial.10.title",
     company: null,
-    logo: "/testimonials/boeck-law.png",
+    logo: null,
     linkedin: "https://www.linkedin.com/in/dr-denisa-boeck-373424123/",
+    avatar: "/testimonials/denisa-boeck.jpg",
   },
 ];
 
@@ -662,25 +668,35 @@ export default function Landing() {
                   style={{ height: 36, width: "auto", alignSelf: "flex-start", objectFit: "contain", borderRadius: "var(--r-sm)" }}
                 />
               )}
-              <div>
-                <p style={{ margin: 0, fontSize: 13.5, fontWeight: 600, color: "var(--ink)" }}>{testimonial.name}</p>
-                {(title || testimonial.company) && (
-                  <p style={{ margin: 0, fontSize: 12.5, color: "var(--mute)" }}>
-                    {title}
-                    {title && testimonial.company ? ", " : ""}
-                    {testimonial.company ?? ""}
-                  </p>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                {testimonial.avatar && (
+                  <img
+                    src={testimonial.avatar}
+                    alt={testimonial.name}
+                    loading="lazy"
+                    style={{ width: 44, height: 44, borderRadius: "50%", objectFit: "cover", flexShrink: 0 }}
+                  />
                 )}
-                {testimonial.linkedin && (
-                  <a
-                    href={testimonial.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="testimonial-linkedin-link"
-                  >
-                    {t("landing.linkedinLink")} ↗
-                  </a>
-                )}
+                <div>
+                  <p style={{ margin: 0, fontSize: 13.5, fontWeight: 600, color: "var(--ink)" }}>{testimonial.name}</p>
+                  {(title || testimonial.company) && (
+                    <p style={{ margin: 0, fontSize: 12.5, color: "var(--mute)" }}>
+                      {title}
+                      {title && testimonial.company ? ", " : ""}
+                      {testimonial.company ?? ""}
+                    </p>
+                  )}
+                  {testimonial.linkedin && (
+                    <a
+                      href={testimonial.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="testimonial-linkedin-link"
+                    >
+                      {t("landing.linkedinLink")} ↗
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
             );
