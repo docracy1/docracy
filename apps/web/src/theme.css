@@ -1572,6 +1572,33 @@ select {
   max-width: 34em;
 }
 
+/* Compact, honest trust signals — deliberately only claims we can back up (no "24/7 support" or
+   "EU hosting" badges here; see Trust.tsx for the full, nuanced disclosure). */
+.hero-trust-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  list-style: none;
+  margin: 0 0 18px;
+  padding: 0;
+}
+
+.hero-trust-badges li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--hero-body);
+}
+
+.hero-trust-badges svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
 .hero-cta-row {
   display: flex;
   align-items: center;

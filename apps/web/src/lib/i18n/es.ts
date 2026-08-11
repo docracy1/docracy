@@ -235,6 +235,9 @@ const es: Messages = {
   "hero.orTemplates": "o explora plantillas gratis",
   "hero.watchHow": "Mira cómo funciona",
   "hero.sub": "Sube, agrega firmantes, envía — firmas sin suscripciones ni configuración.",
+  "hero.badge.legal": "Revisado por un abogado",
+  "hero.badge.ssl": "Seguridad SSL",
+  "hero.badge.noSignup": "Sin necesidad de registrarse",
   "hero.whatsappBadge": "Nuevo: firma por WhatsApp (próximamente)",
   "hero.title": "Cierra acuerdos en minutos.\nLa detección automática con IA coloca cada campo.",
   "how.s1.body": "Agrega el PDF que quieres firmar, o empieza desde una plantilla gratis.",
@@ -328,6 +331,10 @@ const es: Messages = {
     "La firma secuencial mantiene el orden, o elige todos a la vez para que cada uno firme en cuanto lo inviten.",
   "landing.feat8.link": "Leer la documentación",
   "landing.feat8.title": "Flujos rápidos",
+  "landing.feat9.body":
+    "Cada plantilla gratuita ha sido revisada por un abogado con licencia para garantizar claridad y corrección legal antes de llegar a ti.",
+  "landing.feat9.link": "Ver la revisión legal",
+  "landing.feat9.title": "Plantillas revisadas por un abogado",
   "landing.featuresSub":
     "Docracy.io se centra en claridad, velocidad y confiabilidad — sin complejidad innecesaria.",
   "landing.featuresTitle": "Todo lo que necesitas para flujos de documentos simples y seguros",

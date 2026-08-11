@@ -21,7 +21,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 function FeatureIcon({
   name,
 }: {
-  name: "bolt" | "workflow" | "shield" | "users" | "duplicate" | "send" | "pen" | "sparkles" | "single";
+  name: "bolt" | "workflow" | "shield" | "users" | "duplicate" | "send" | "pen" | "sparkles" | "single" | "scale";
 }) {
   const common = {
     width: 24,
@@ -99,11 +99,20 @@ function FeatureIcon({
           <path d="M9 8h6M9 12h6M9 16h3" />
         </svg>
       );
+    case "scale":
+      return (
+        <svg {...common}>
+          <path d="M12 3v18M8 21h8" />
+          <path d="M5 7h5M14 7h5" />
+          <path d="M2 7l3 6a3 3 0 0 0 6 0L8 7" />
+          <path d="M13 7l3 6a3 3 0 0 0 6 0l-3-6" />
+        </svg>
+      );
   }
 }
 
 const CORE_FEATURES: Array<{
-  icon: "bolt" | "workflow" | "shield" | "users" | "duplicate" | "send" | "pen" | "sparkles" | "single";
+  icon: "bolt" | "workflow" | "shield" | "users" | "duplicate" | "send" | "pen" | "sparkles" | "single" | "scale";
   titleKey: string;
   bodyKey: string;
   to: string;
@@ -113,6 +122,13 @@ const CORE_FEATURES: Array<{
   { icon: "pen", titleKey: "landing.feat2.title", bodyKey: "landing.feat2.body", to: "/docs", linkKey: "landing.feat2.link" },
   { icon: "sparkles", titleKey: "landing.feat3.title", bodyKey: "landing.feat3.body", to: "/ai", linkKey: "landing.feat3.link" },
   { icon: "duplicate", titleKey: "landing.feat4.title", bodyKey: "landing.feat4.body", to: "/free-templates", linkKey: "landing.feat4.link" },
+  {
+    icon: "scale",
+    titleKey: "landing.feat9.title",
+    bodyKey: "landing.feat9.body",
+    to: "/trust#template-legal-review",
+    linkKey: "landing.feat9.link",
+  },
   { icon: "users", titleKey: "landing.feat5.title", bodyKey: "landing.feat5.body", to: "/pricing", linkKey: "landing.feat5.link" },
   { icon: "single", titleKey: "landing.feat6.title", bodyKey: "landing.feat6.body", to: "/prepare", linkKey: "landing.feat6.link" },
   { icon: "shield", titleKey: "landing.feat7.title", bodyKey: "landing.feat7.body", to: "/privacy", linkKey: "landing.feat7.link" },
@@ -389,6 +405,20 @@ export default function Landing() {
             </Link>
             <h1>{t("hero.title")}</h1>
             <p className="hero-sub">{t("hero.sub")}</p>
+            <ul className="hero-trust-badges">
+              <li>
+                <FeatureIcon name="scale" />
+                {t("hero.badge.legal")}
+              </li>
+              <li>
+                <FeatureIcon name="shield" />
+                {t("hero.badge.ssl")}
+              </li>
+              <li>
+                <FeatureIcon name="pen" />
+                {t("hero.badge.noSignup")}
+              </li>
+            </ul>
             <div className="hero-cta-row">
               {heroSent ? (
                 <div className="hero-signup-sent" role="status">
