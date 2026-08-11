@@ -263,6 +263,7 @@ export default function Landing() {
   const [heroError, setHeroError] = useState<string | null>(null);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [turnstileResetKey, setTurnstileResetKey] = useState(0);
+  const [pendingSubmit, setPendingSubmit] = useState(false);
   const [watchOpen, setWatchOpen] = useState(false);
   const heroEmailRef = useRef<HTMLInputElement>(null);
   useSeoMeta("home");
@@ -280,7 +281,6 @@ export default function Landing() {
   // Keep the button clickable with an empty field so we can show "Email is missing" instead of
   // silently routing to /prepare (the previous empty-submit path).
   const needsTurnstile = turnstileRequired();
-  const heroNeedsTurnstileToken = !!emailTrimmed && needsTurnstile;
 
   useEffect(() => {
     if (window.location.hash === "#faq") {
@@ -310,6 +310,33 @@ export default function Landing() {
     heroEmailRef.current?.focus();
   };
 
+  const submitHeroStart = async (email: string, token: string | null) => {
+    setHeroSubmitting(true);
+    setHeroError(null);
+    try {
+      await requestMagicLink(email, token ?? undefined, prepareSampleTo, locale);
+      setHeroSent(true);
+    } catch (err) {
+      setHeroError(err instanceof Error ? err.message : t("common.error"));
+      setTurnstileToken(null);
+      setTurnstileResetKey((k) => k + 1);
+    } finally {
+      setHeroSubmitting(false);
+      setPendingSubmit(false);
+    }
+  };
+
+  // Turnstile mounts as soon as typing starts, but on a slow network it may not have resolved by
+  // the time the user hits "Start free" — the button used to just stay disabled through that
+  // window, so the click had no visible effect and a returning visitor would assume it was broken.
+  // Queue the intent instead and fire it the moment a token lands.
+  useEffect(() => {
+    if (pendingSubmit && turnstileToken) {
+      submitHeroStart(heroEmail.trim(), turnstileToken);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [turnstileToken, pendingSubmit]);
+
   const onHeroStart = async (e: FormEvent) => {
     e.preventDefault();
     track("landingpage_cta_clicked", { source: "hero_email_start" });
@@ -325,21 +352,11 @@ export default function Landing() {
       return;
     }
     if (needsTurnstile && !turnstileToken) {
-      setHeroError(t("hero.turnstileRequired"));
+      setHeroError(null);
+      setPendingSubmit(true);
       return;
     }
-    setHeroSubmitting(true);
-    setHeroError(null);
-    try {
-      await requestMagicLink(email, turnstileToken ?? undefined, prepareSampleTo, locale);
-      setHeroSent(true);
-    } catch (err) {
-      setHeroError(err instanceof Error ? err.message : t("common.error"));
-      setTurnstileToken(null);
-      setTurnstileResetKey((k) => k + 1);
-    } finally {
-      setHeroSubmitting(false);
-    }
+    await submitHeroStart(email, turnstileToken);
   };
 
   return (
@@ -389,14 +406,14 @@ export default function Landing() {
                         if (e.target.value.trim()) setHeroEmailStarted(true);
                         if (heroError) setHeroError(null);
                       }}
-                      disabled={heroSubmitting}
+                      disabled={heroSubmitting || pendingSubmit}
                     />
-                    <button
-                      type="submit"
-                      className="hero-signup-btn"
-                      disabled={heroSubmitting || (heroNeedsTurnstileToken && !turnstileToken)}
-                    >
-                      {heroSubmitting ? t("common.sending") : `${t("hero.startFree")} →`}
+                    <button type="submit" className="hero-signup-btn" disabled={heroSubmitting || pendingSubmit}>
+                      {heroSubmitting
+                        ? t("common.sending")
+                        : pendingSubmit
+                          ? t("common.verifying")
+                          : `${t("hero.startFree")} →`}
                     </button>
                   </div>
                   {needsTurnstile && heroEmailStarted && (

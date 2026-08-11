@@ -157,6 +157,7 @@ const en: Messages = {
   "common.save": "Save",
   "common.copy": "Copy",
   "common.sending": "Sending…",
+  "common.verifying": "Verifying…",
   "common.upgrade": "Upgrade",
   "common.signingIn": "Signing in…",
   "notFound.title": "Page not found",

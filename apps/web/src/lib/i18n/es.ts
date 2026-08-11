@@ -89,6 +89,7 @@ const es: Messages = {
   "common.save": "Guardar",
   "common.saving": "Guardando…",
   "common.sending": "Enviando…",
+  "common.verifying": "Verificando…",
   "common.signingIn": "Iniciando sesión…",
   "common.upgrade": "Mejorar plan",
   "dash.admin": "Admin",

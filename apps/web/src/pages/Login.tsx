@@ -41,6 +41,7 @@ export default function Login() {
   const [sent, setSent] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [turnstileResetKey, setTurnstileResetKey] = useState(0);
+  const [pendingSubmit, setPendingSubmit] = useState(false);
 
   const [showPasswordLogin, setShowPasswordLogin] = useState(false);
   const [password, setPassword] = useState("");
@@ -59,12 +60,11 @@ export default function Login() {
     }
   }, [isAdminEmail]);
 
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const submitLogin = async (targetEmail: string, token: string | null) => {
     setSubmitting(true);
     setError(null);
     try {
-      await requestMagicLink(email, turnstileToken ?? undefined, nextParam || undefined, locale);
+      await requestMagicLink(targetEmail, token ?? undefined, nextParam || undefined, locale);
       setSent(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : t("common.error"));
@@ -72,7 +72,29 @@ export default function Login() {
       setTurnstileResetKey((k) => k + 1);
     } finally {
       setSubmitting(false);
+      setPendingSubmit(false);
     }
+  };
+
+  // Turnstile mounts on page load but on a slow network may not have resolved by the time the
+  // user submits — the button used to just stay disabled through that window, so the click had no
+  // visible effect and a returning visitor would assume the form was broken. Queue the intent and
+  // fire it the moment a token lands instead.
+  useEffect(() => {
+    if (pendingSubmit && turnstileToken) {
+      submitLogin(email, turnstileToken);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [turnstileToken, pendingSubmit]);
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (turnstileRequired() && !turnstileToken) {
+      setError(null);
+      setPendingSubmit(true);
+      return;
+    }
+    await submitLogin(email, turnstileToken);
   };
 
   const onPasswordSubmit = async (e: React.FormEvent) => {
@@ -143,12 +165,8 @@ export default function Login() {
           style={{ width: "100%", maxWidth: 360, marginBottom: 12, display: "block" }}
         />
         <TurnstileWidget onToken={setTurnstileToken} resetKey={turnstileResetKey} />
-        <button
-          className="btn-primary"
-          type="submit"
-          disabled={submitting || (turnstileRequired() && !turnstileToken)}
-        >
-          {submitting ? t("common.sending") : ctaLabel}
+        <button className="btn-primary" type="submit" disabled={submitting || pendingSubmit}>
+          {submitting ? t("common.sending") : pendingSubmit ? t("common.verifying") : ctaLabel}
         </button>
       </form>
 
