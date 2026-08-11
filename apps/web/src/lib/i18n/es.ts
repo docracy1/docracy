@@ -633,9 +633,9 @@ const es: Messages = {
   "sent.parallel": "Cada firmante recibió su enlace por correo — pueden firmar en cualquier orden.",
   "sent.saveAccount": "Guardar este envío en una cuenta",
   "sent.saveAccountSub":
-    "Crea una cuenta gratis y moveremos este documento a tu panel — sin contraseña, solo un enlace mágico.",
+    "Este documento y su historial de firma se eliminan después de 9 días a menos que lo guardes. Crea una cuenta gratis y lo moveremos a tu panel — sin contraseña, solo un enlace mágico.",
   "sent.saveAccountSubFuture":
-    "Crea una cuenta gratis para que cada envío futuro aparezca en tu panel — sin contraseña, solo un enlace mágico. Este envío sigue disponible con el enlace de estado de arriba.",
+    "Aviso: este documento y su historial de firma se eliminan después de 9 días — el enlace de estado de arriba también dejará de funcionar. Crea una cuenta gratis para que este envío (y cada futuro) se quede en tu panel para siempre — sin contraseña, solo un enlace mágico.",
   "sent.sendAnother": "Enviar otro",
   "sent.sequential":
     "El primer firmante recibió su enlace. Los demás en la cadena serán notificados en turno.",
