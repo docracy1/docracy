@@ -148,6 +148,7 @@ const en: Messages = {
   "footer.privacy": "Privacy",
   "footer.trust": "Trust & security",
   "footer.esignUeta": "ESIGN & UETA",
+  "footer.guide": "Complete guide",
   "footer.esignLine": "SES e-signatures designed to support the U.S. ESIGN Act and UETA.",
   "footer.esignLineLink": "Learn more about ESIGN & UETA",
   "footer.legalReviewLead": "Free templates reviewed by attorney",

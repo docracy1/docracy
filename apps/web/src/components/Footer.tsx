@@ -72,6 +72,7 @@ export default function Footer() {
         { label: t("footer.privacy"), to: "/privacy" },
         { label: t("footer.trust"), to: "/trust" },
         { label: t("footer.esignUeta"), to: localizePath("/esign-ueta", locale) },
+        { label: t("footer.guide"), to: "/electronic-signature-guide" },
         { label: t("footer.dpa"), to: "/dpa" },
         { label: t("footer.terms"), to: "/terms" },
       ],

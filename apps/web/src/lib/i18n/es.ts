@@ -203,6 +203,7 @@ const es: Messages = {
   "footer.terms": "Términos",
   "footer.trust": "Confianza y seguridad",
   "footer.esignUeta": "ESIGN y UETA",
+  "footer.guide": "Guía completa",
   "footer.esignLine": "Firmas SES diseñadas para respaldar la ESIGN Act y UETA de EE. UU.",
   "footer.esignLineLink": "Más información sobre ESIGN y UETA",
   "footer.legalReviewLead": "Plantillas gratuitas revisadas por la abogada",
