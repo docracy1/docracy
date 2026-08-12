@@ -405,7 +405,7 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
   },
   {
     slug: "hellosign-alternative",
-    seoTitle: "HelloSign / Dropbox Sign Alternative — Free & Simple | Docracy",
+    seoTitle: "HelloSign / Dropbox Sign Alternative | Docracy",
     seoDescription:
       "Looking for a HelloSign or Dropbox Sign alternative for NDAs and client contracts? Free for up to 2 signers, no account required. Paid $10/mo flat.",
     heroHeadline: "A simpler alternative to HelloSign / Dropbox Sign.",
@@ -500,7 +500,7 @@ export const IMPORT_GUIDE_PAGES: ImportGuideContent[] = [
   {
     slug: "docusign",
     competitorName: "DocuSign",
-    seoTitle: "Import Your DocuSign Documents to Docracy — Step-by-Step Guide",
+    seoTitle: "Import DocuSign Documents to Docracy",
     seoDescription:
       "Bring your existing DocuSign documents and templates over to Docracy. No account-linking, no password sharing — just the export steps DocuSign already gives you for free.",
     heroHeadline: "Bring your DocuSign documents to Docracy",
@@ -520,7 +520,7 @@ export const IMPORT_GUIDE_PAGES: ImportGuideContent[] = [
   {
     slug: "eversign",
     competitorName: "eversign",
-    seoTitle: "Import Your eversign Documents to Docracy — Step-by-Step Guide",
+    seoTitle: "Import eversign Documents to Docracy",
     seoDescription:
       "Bring your existing eversign documents over to Docracy. No account-linking required — just the free per-document export eversign already offers.",
     heroHeadline: "Bring your eversign documents to Docracy",
@@ -540,7 +540,7 @@ export const IMPORT_GUIDE_PAGES: ImportGuideContent[] = [
   {
     slug: "hellosign",
     competitorName: "HelloSign (Dropbox Sign)",
-    seoTitle: "Import Your HelloSign / Dropbox Sign Documents to Docracy",
+    seoTitle: "Import HelloSign Documents to Docracy",
     seoDescription:
       "Bring your existing HelloSign (Dropbox Sign) documents over to Docracy. No account-linking — just the free per-document export already built into Dropbox Sign.",
     heroHeadline: "Bring your HelloSign documents to Docracy",
@@ -560,7 +560,7 @@ export const IMPORT_GUIDE_PAGES: ImportGuideContent[] = [
   {
     slug: "pandadoc",
     competitorName: "PandaDoc",
-    seoTitle: "Import Your PandaDoc Documents to Docracy — Step-by-Step Guide",
+    seoTitle: "Import PandaDoc Documents to Docracy",
     seoDescription:
       "Bring your existing PandaDoc documents and templates over to Docracy. No account-linking required — PandaDoc's own DocX export makes this the easiest of the five to migrate from.",
     heroHeadline: "Bring your PandaDoc documents to Docracy",
@@ -580,7 +580,7 @@ export const IMPORT_GUIDE_PAGES: ImportGuideContent[] = [
   {
     slug: "adobe-sign",
     competitorName: "Adobe Acrobat Sign",
-    seoTitle: "Import Your Adobe Acrobat Sign Documents to Docracy",
+    seoTitle: "Import Adobe Sign Documents to Docracy",
     seoDescription:
       "Bring your existing Adobe Acrobat Sign agreements over to Docracy. No account-linking — just the manual per-document download Adobe already provides.",
     heroHeadline: "Bring your Adobe Sign documents to Docracy",
@@ -831,7 +831,7 @@ export const INDUSTRY_PAGES: IndustryPageContent[] = [
   },
   {
     slug: "real-estate",
-    seoTitle: "E-Signatures for Small Landlords & Property Managers | Docracy",
+    seoTitle: "E-Signatures for Landlords & Property Managers | Docracy",
     seoDescription:
       "Free e-signing for leases, subleases, roommate agreements, and vendor paperwork. Built for small landlords and independent property managers — not closings.",
     heroHeadline: "E-signatures for small landlords and property managers.",

@@ -254,7 +254,7 @@ export const ARTICLES: ArticlePost[] = [
   },
   {
     slug: "how-to-send-a-document-for-signature",
-    title: "How to send a document for signature in under a minute",
+    title: "How to send a document for signature quickly",
     description: "The simplest possible flow for sending a document out for signature: upload, add fields, send.",
     publishedDate: PUBLISHED,
     cluster: "Signing",
@@ -478,7 +478,7 @@ export const ARTICLES: ArticlePost[] = [
   },
   {
     slug: "best-tools-for-quick-signatures",
-    title: "Best tools for quick signatures (simple alternatives)",
+    title: "Best tools for quick signatures",
     description: "Signing tools differ in complexity — some are enterprise-grade, others are built for fast, frictionless signing.",
     publishedDate: PUBLISHED,
     cluster: "Signing",
@@ -491,7 +491,7 @@ export const ARTICLES: ArticlePost[] = [
   },
   {
     slug: "why-simple-signing-tools-matter",
-    title: "Why simple signing tools matter for small businesses",
+    title: "Why simple signing tools matter for small business",
     description: "Complex signing tools slow down workflows — simple tools increase completion rates and reduce onboarding friction.",
     publishedDate: PUBLISHED,
     cluster: "Signing",
@@ -514,7 +514,7 @@ export const ARTICLES: ArticlePost[] = [
   },
   {
     slug: "how-freelancers-can-protect-their-work",
-    title: "How freelancers protect their work with simple agreements",
+    title: "How freelancers protect their work with agreements",
     description: "NDAs, clear contracts, and defined deliverables — the basics of protecting freelance work.",
     publishedDate: PUBLISHED,
     cluster: "Freelancer",
@@ -643,7 +643,7 @@ export const ARTICLES: ArticlePost[] = [
   // --- Comparison cluster ---
   {
     slug: "best-alternatives-to-docusign",
-    title: "Best alternatives to DocuSign for simple agreements",
+    title: "Best DocuSign alternatives for simple agreements",
     description: "DocuSign is built for enterprise-scale signing — here's what to look for in a simpler alternative.",
     publishedDate: PUBLISHED,
     cluster: "Comparison",
@@ -657,7 +657,7 @@ export const ARTICLES: ArticlePost[] = [
   // --- Product cluster ---
   {
     slug: "whatsapp-signing-now-available",
-    title: "WhatsApp signing is here — sign documents without an inbox",
+    title: "WhatsApp signing is here — sign without an inbox",
     description:
       "Docracy can now deliver signing links over WhatsApp, phone-bound and PIN-protected, as a step toward Advanced Electronic Signature. Free: 2/month. Paid: 10/month, then $0.50 each.",
     publishedDate: "2026-08-08",

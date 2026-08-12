@@ -125,7 +125,7 @@ const ES_TEMPLATE_META = {
       "Un acuerdo de confidencialidad mutuo (NDA) estándar — también llamado acuerdo de no divulgación — para dos partes que exploran una relación comercial.",
   },
   "independent-contractor-agreement": {
-    title: "Plantilla gratis de contratista independiente (1099)",
+    title: "Plantilla gratis de contratista (1099)",
     description:
       "Define alcance, pago y propiedad intelectual cuando una empresa contrata a un contratista independiente (1099) — no un empleado.",
   },
@@ -140,7 +140,7 @@ const ES_TEMPLATE_META = {
       "Un contrato freelance que cubre alcance, honorarios, revisiones y propiedad cuando un cliente contrata a un freelancer por proyecto.",
   },
   "remote-work-policy": {
-    title: "Plantilla gratis de política de trabajo remoto / desde casa",
+    title: "Plantilla gratis de política de trabajo remoto",
     description:
       "Una política breve de trabajo desde casa que cubre horarios, seguridad y expectativas del espacio de trabajo para que firmen los empleados remotos.",
   },
@@ -173,7 +173,7 @@ const routes = [
     // straight to free-templates.html with no redirect; dir/index.html style instead 308-redirects
     // the extensionless path to add a trailing slash first, an extra hop simpler bots may not follow.
     outFile: "free-templates.html",
-    title: "Free Business Document Templates — NDA, Offer Letter | Docracy",
+    title: "Free Business Document Templates | Docracy",
     description:
       "Free, ready-to-sign templates for the most common business documents — mutual NDA, independent contractor " +
       "agreement, offer letter, remote work policy, and freelance service agreement. Fill in your details and send " +
@@ -184,7 +184,7 @@ const routes = [
   {
     urlPath: "/mcp",
     outFile: "mcp.html",
-    title: "Connect Docracy to Your AI Assistant — MCP Connector | Docracy",
+    title: "MCP Connector for AI Assistants | Docracy",
     description:
       "Connect Docracy to Claude, ChatGPT, Grok, or Perplexity as an MCP connector on a paid account — check signing " +
       "status and search your documents from chat. Also automates with Zapier.",
@@ -194,7 +194,7 @@ const routes = [
   {
     urlPath: "/ai",
     outFile: "ai.html",
-    title: "AI Auto-Detect for E-Signatures — Place Fields Instantly | Docracy",
+    title: "AI Auto-Detect for E-Signatures | Docracy",
     description:
       "Docracy AI auto-detects signature and date fields, explains contracts in plain English, flags risky clauses, " +
       "and generates signable PDFs. Plus an MCP connector for Claude and ChatGPT.",
@@ -204,7 +204,7 @@ const routes = [
   {
     urlPath: "/esign-ueta",
     outFile: "esign-ueta.html",
-    title: "ESIGN Act & UETA E-Signatures — Designed for US Law | Docracy",
+    title: "ESIGN Act & UETA E-Signatures | Docracy",
     description:
       "Docracy SES electronic signatures are designed to support the U.S. ESIGN Act and UETA: consent, intent to sign, " +
       "audit trail, and a certificate of completion. No AES/QES or identity verification.",
@@ -225,14 +225,14 @@ const routes = [
   {
     urlPath: "/import-from-docusign",
     outFile: "import-from-docusign.html",
-    title: "Import Your DocuSign Documents to Docracy — Step-by-Step Guide",
+    title: "Import DocuSign Documents to Docracy",
     description:
       "Bring your existing DocuSign documents and templates over to Docracy. No account-linking, no password sharing — just the export steps DocuSign already gives you for free.",
   },
   {
     urlPath: "/import-from-eversign",
     outFile: "import-from-eversign.html",
-    title: "Import Your eversign Documents to Docracy — Step-by-Step Guide",
+    title: "Import eversign Documents to Docracy",
     description:
       "Bring your existing eversign documents over to Docracy. No account-linking required — just the free per-document export eversign already offers.",
   },
@@ -246,7 +246,7 @@ const routes = [
   {
     urlPath: "/import-from-pandadoc",
     outFile: "import-from-pandadoc.html",
-    title: "Import Your PandaDoc Documents to Docracy — Step-by-Step Guide",
+    title: "Import PandaDoc Documents to Docracy",
     description:
       "Bring your existing PandaDoc documents and templates over to Docracy. No account-linking required — PandaDoc's own DocX export makes this the easiest of the five to migrate from.",
   },
@@ -282,7 +282,7 @@ const routes = [
   {
     urlPath: "/es",
     outFile: "es.html",
-    title: "Docracy.io – Firmas electrónicas simples y seguras para negocios",
+    title: "Docracy.io – Firmas electrónicas simples y seguras",
     description:
       "Crea, envía y firma documentos en minutos — gratis hasta dos firmantes, sin necesidad de cuenta. Mira cómo funciona Docracy y empieza con una plantilla o tu propio PDF.",
     locale: "es",
@@ -300,7 +300,7 @@ const routes = [
   {
     urlPath: "/es/plantillas-gratis",
     outFile: "es/plantillas-gratis.html",
-    title: "Plantillas gratis de documentos de negocio — NDA y más | Docracy",
+    title: "Plantillas gratis de documentos | Docracy",
     description:
       "Plantillas gratis listas para firmar para los documentos de negocio más comunes — NDA mutuo, acuerdo de contratista independiente, carta de oferta, política de trabajo remoto y acuerdo de servicios freelance. Completa tus datos y envía a firma en minutos.",
     locale: "es",
@@ -318,7 +318,7 @@ const routes = [
   {
     urlPath: "/es/alternativa-a-hellosign",
     outFile: "es/alternativa-a-hellosign.html",
-    title: "Alternativa a HelloSign / Dropbox Sign — Gratis y simple | Docracy",
+    title: "Alternativa a HelloSign / Dropbox Sign | Docracy",
     description:
       "¿Buscas una alternativa a HelloSign o Dropbox Sign para NDAs y contratos? Gratis hasta 2 firmantes, sin cuenta. Plan de pago $10/mes fijo.",
     locale: "es",
@@ -327,7 +327,7 @@ const routes = [
   {
     urlPath: "/es/alternativa-a-adobe-sign",
     outFile: "es/alternativa-a-adobe-sign.html",
-    title: "Alternativa a Adobe Sign — Firma electrónica ligera | Docracy",
+    title: "Alternativa a Adobe Sign | Docracy",
     description:
       "Alternativa a Adobe Acrobat Sign para freelancers y equipos pequeños. Gratis hasta 2 firmantes, sin cuenta. Plan de pago $10/mes fijo.",
     locale: "es",
@@ -378,7 +378,7 @@ const routes = [
   {
     urlPath: "/es/mcp",
     outFile: "es/mcp.html",
-    title: "Conecta Docracy a tu asistente de IA — Conector MCP | Docracy",
+    title: "Conector MCP para asistentes de IA | Docracy",
     description:
       "Conecta Docracy a Claude, ChatGPT, Grok o Perplexity como conector MCP en una cuenta de pago — consulta el estado de firma y busca documentos desde el chat. También automatiza con Zapier.",
     locale: "es",
@@ -387,7 +387,7 @@ const routes = [
   {
     urlPath: "/es/ia",
     outFile: "es/ia.html",
-    title: "Detección IA para firmas electrónicas — Campos al instante | Docracy",
+    title: "Detección IA para firmas electrónicas | Docracy",
     description:
       "La IA de Docracy detecta campos de firma y fecha, resume contratos en lenguaje claro, marca cláusulas de riesgo y genera PDFs listos para firmar. Incluye conector MCP para Claude y ChatGPT.",
     locale: "es",
@@ -396,7 +396,7 @@ const routes = [
   {
     urlPath: "/es/esign-ueta",
     outFile: "es/esign-ueta.html",
-    title: "Firmas electrónicas ESIGN Act y UETA — Ley de EE. UU. | Docracy",
+    title: "Firmas electrónicas ESIGN Act y UETA | Docracy",
     description:
       "Las firmas SES de Docracy están diseñadas para respaldar la ESIGN Act y UETA de EE. UU.: consentimiento, " +
       "intención de firmar, registro de auditoría y certificado de finalización. Sin AES/QES ni verificación de identidad.",

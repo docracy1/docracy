@@ -938,7 +938,7 @@ const en: Messages = {
   "seo.pricing.title": "Pricing — Docracy",
   "seo.pricing.description":
     "Free for signing chains of up to 2 signers. Paid is $10/month flat per workspace — unlimited signers, templates, AI tools, connectors, and team accounts.",
-  "seo.freeTemplates.title": "Free Business Document Templates — NDA, Offer Letter | Docracy",
+  "seo.freeTemplates.title": "Free Business Document Templates | Docracy",
   "seo.freeTemplates.description":
     "Free, ready-to-sign templates for the most common business documents — mutual NDA, independent contractor agreement, offer letter, remote work policy, and freelance service agreement. Fill in your details and send for signature in minutes.",
   "seo.prepare.title": "Prepare a document — Docracy",
@@ -967,13 +967,13 @@ const en: Messages = {
   "seo.docs.title": "Documentation — Docracy",
   "seo.docs.description":
     "How Docracy's free signing flow, paid features (bulk send, embed, contacts, attachments, SMS gateways, Dropbox/OneDrive/Box/Google Drive, AI), Enterprise options, templates, webhooks, and MCP/Zapier automation work.",
-  "seo.mcp.title": "Connect Docracy to Your AI Assistant — MCP Connector | Docracy",
+  "seo.mcp.title": "MCP Connector for AI Assistants | Docracy",
   "seo.mcp.description":
     "Connect Docracy to Claude, ChatGPT, Grok, or Perplexity as an MCP connector on a paid account — check signing status and search your documents from chat.",
-  "seo.ai.title": "AI Auto-Detect for E-Signatures — Place Fields Instantly | Docracy",
+  "seo.ai.title": "AI Auto-Detect for E-Signatures | Docracy",
   "seo.ai.description":
     "Docracy AI auto-detects signature and date fields, explains contracts in plain English, flags risky clauses, and generates signable PDFs. Plus an MCP connector for Claude and ChatGPT.",
-  "seo.esignUeta.title": "ESIGN Act & UETA E-Signatures — Designed for US Law | Docracy",
+  "seo.esignUeta.title": "ESIGN Act & UETA E-Signatures | Docracy",
   "seo.esignUeta.description":
     "Docracy SES electronic signatures are designed to support the U.S. ESIGN Act and UETA: consent, intent to sign, audit trail, and a certificate of completion. Paid/Enterprise accounts can add WhatsApp-verified Advanced Electronic Signature (AES) — still no QES or identity verification.",
 

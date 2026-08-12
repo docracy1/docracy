@@ -1024,7 +1024,7 @@ const es: Messages = {
   "seo.pricing.title": "Precios — Docracy",
   "seo.pricing.description":
     "Gratis para cadenas de hasta 2 firmantes. El plan de pago es $10/mes fijo por espacio de trabajo — firmantes ilimitados, plantillas, herramientas de IA, conectores y cuentas de equipo.",
-  "seo.freeTemplates.title": "Plantillas gratis de documentos de negocio — NDA y más | Docracy",
+  "seo.freeTemplates.title": "Plantillas gratis de documentos | Docracy",
   "seo.freeTemplates.description":
     "Plantillas gratis listas para firmar para los documentos de negocio más comunes — NDA mutuo, acuerdo de contratista independiente, carta de oferta, política de trabajo remoto y acuerdo de servicios freelance. Completa tus datos y envía a firma en minutos.",
   "seo.prepare.title": "Preparar un documento — Docracy",
@@ -1054,13 +1054,13 @@ const es: Messages = {
   "seo.docs.title": "Documentación — Docracy",
   "seo.docs.description":
     "Cómo funciona el flujo gratis de firma de Docracy, las funciones de pago (envío masivo, embed, contactos, adjuntos, SMS, Dropbox/OneDrive/Box/Google Drive, IA), opciones Enterprise, plantillas, webhooks y automatización MCP/Zapier.",
-  "seo.mcp.title": "Conecta Docracy a tu asistente de IA — Conector MCP | Docracy",
+  "seo.mcp.title": "Conector MCP para asistentes de IA | Docracy",
   "seo.mcp.description":
     "Conecta Docracy a Claude, ChatGPT, Grok o Perplexity como conector MCP en una cuenta de pago — consulta el estado de firma y busca tus documentos desde el chat. También automatiza con Zapier.",
-  "seo.ai.title": "Detección IA para firmas electrónicas — Campos al instante | Docracy",
+  "seo.ai.title": "Detección IA para firmas electrónicas | Docracy",
   "seo.ai.description":
     "La IA de Docracy detecta campos de firma y fecha, resume contratos en lenguaje claro, marca cláusulas de riesgo y genera PDFs listos para firmar. Incluye conector MCP para Claude y ChatGPT.",
-  "seo.esignUeta.title": "Firmas electrónicas ESIGN Act y UETA — Ley de EE. UU. | Docracy",
+  "seo.esignUeta.title": "Firmas electrónicas ESIGN Act y UETA | Docracy",
   "seo.esignUeta.description":
     "Las firmas SES de Docracy están diseñadas para respaldar la ESIGN Act y UETA de EE. UU.: consentimiento, intención de firmar, registro de auditoría y certificado de finalización. Las cuentas de pago/Enterprise pueden añadir firma avanzada (AES) verificada por WhatsApp — sigue sin QES ni verificación de identidad.",
 
@@ -1276,7 +1276,7 @@ const es: Messages = {
   "tpl.mutual-nda.description": "Un acuerdo de confidencialidad mutuo (NDA) estándar — también llamado acuerdo de no divulgación — para dos partes que exploran una relación comercial.",
   "tpl.mutual-nda.useCase": "Úsalo cuando tú y otra empresa estén a punto de compartir información confidencial — precios, planes de producto, datos de clientes — al evaluar un posible trato, alianza o relación con un proveedor, y ambos lados necesitan protección, no solo uno.",
   "tpl.independent-contractor-agreement.name": "Acuerdo de contratista independiente",
-  "tpl.independent-contractor-agreement.seoTitle": "Plantilla gratis de contratista independiente (1099)",
+  "tpl.independent-contractor-agreement.seoTitle": "Plantilla gratis de contratista (1099)",
   "tpl.independent-contractor-agreement.description": "Define alcance, pago y propiedad intelectual cuando una empresa contrata a un contratista independiente (1099) — no un empleado.",
   "tpl.independent-contractor-agreement.useCase": "Úsalo cuando incorporas a un contratista para trabajo continuo o por proyecto y necesitas dejar claro que no es empleado, quién es dueño del trabajo resultante y cómo se le paga.",
   "tpl.offer-letter.name": "Carta de oferta",
@@ -1288,7 +1288,7 @@ const es: Messages = {
   "tpl.freelance-service-agreement.description": "Un contrato freelance que cubre alcance, honorarios, revisiones y propiedad cuando un cliente contrata a un freelancer por proyecto.",
   "tpl.freelance-service-agreement.useCase": "Úsalo cuando un cliente te contrata (o tú contratas a un freelancer) para un proyecto definido — diseño, redacción, desarrollo — y necesitas términos claros sobre entregables, pago y quién es dueño del trabajo final.",
   "tpl.remote-work-policy.name": "Política de trabajo remoto",
-  "tpl.remote-work-policy.seoTitle": "Plantilla gratis de política de trabajo remoto / desde casa",
+  "tpl.remote-work-policy.seoTitle": "Plantilla gratis de política de trabajo remoto",
   "tpl.remote-work-policy.description": "Una política breve de trabajo desde casa que cubre horarios, seguridad y expectativas del espacio de trabajo para que firmen los empleados remotos.",
   "tpl.remote-work-policy.useCase": "Úsala cuando tienes empleados trabajando de forma remota (tiempo completo, híbrido u ocasional) y quieres un registro firmado de que leyeron y aceptaron tus expectativas de disponibilidad, seguridad y equipo.",
   "common.connect": "Conectar",

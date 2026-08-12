@@ -18,6 +18,9 @@ import Blog from "../src/pages/Blog";
 import BlogPostDetail from "../src/pages/BlogPostDetail";
 import Trust from "../src/pages/Trust";
 import Dpa from "../src/pages/Dpa";
+import Privacy from "../src/pages/Privacy";
+import Terms from "../src/pages/Terms";
+import Uptime from "../src/pages/Uptime";
 import FeaturePage from "../src/pages/FeaturePage";
 import AlternativePage from "../src/pages/AlternativePage";
 import ExplainerPage from "../src/pages/ExplainerPage";
@@ -58,6 +61,9 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/imprint" element={<Imprint />} />
           <Route path="/trust" element={<Trust />} />
           <Route path="/dpa" element={<Dpa />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/uptime" element={<Uptime />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPostDetail />} />
           <Route path="/simple-agreements" element={<FeaturePage slug="simple-agreements" />} />

@@ -84,7 +84,7 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
   {
     slug: "independent-contractor-agreement",
     name: "Independent Contractor Agreement",
-    seoTitle: "Free Independent Contractor Agreement Template (1099)",
+    seoTitle: "Free Independent Contractor Template (1099)",
     description:
       "Defines scope, pay, and IP ownership for a company hiring an independent contractor (1099 worker) — not " +
       "an employee.",
@@ -98,7 +98,7 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
   {
     slug: "offer-letter",
     name: "Offer Letter",
-    seoTitle: "Free Employment Offer Letter Template (Job Offer Letter)",
+    seoTitle: "Free Employment Offer Letter Template",
     description: "A straightforward job offer letter covering title, pay, start date, and at-will employment terms.",
     useCase:
       "Use this when you've decided on a candidate and need a clean, professional letter confirming the role, " +
@@ -162,7 +162,7 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
   {
     slug: "non-compete-non-solicitation-agreement",
     name: "Non-Compete / Non-Solicitation Agreement",
-    seoTitle: "Free Non-Compete and Non-Solicitation Agreement Template",
+    seoTitle: "Free Non-Compete Agreement Template",
     description: "Restricts a departing employee or contractor from competing or poaching clients/staff for a set period.",
     useCase:
       "Use this when someone with access to your clients, staff, or trade secrets is leaving or being engaged, " +
@@ -174,7 +174,7 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
   {
     slug: "consulting-agreement",
     name: "Consulting Agreement",
-    seoTitle: "Free Consulting Agreement Template (Consultant Agreement)",
+    seoTitle: "Free Consulting Agreement Template",
     description:
       "Terms for an ongoing advisory/consultant relationship — fees, confidentiality, and ownership of recommendations.",
     useCase:
@@ -214,7 +214,7 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
   {
     slug: "equipment-rental-agreement",
     name: "Equipment Rental Agreement",
-    seoTitle: "Free Equipment Rental Agreement Template (Equipment Lease)",
+    seoTitle: "Free Equipment Rental Agreement Template",
     description:
       "Covers rental fee, deposit, and responsibility for loss or damage when lending, renting, or leasing equipment.",
     useCase:
