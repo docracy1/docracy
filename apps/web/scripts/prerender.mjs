@@ -419,13 +419,6 @@ const routes = [
     description: "Legal entity behind Docracy.",
   },
   {
-    urlPath: "/electronic-signature-guide",
-    outFile: "electronic-signature-guide.html",
-    title: "Electronic Signatures: The Complete Guide (ESIGN, UETA, eIDAS, GDPR, Security, Pricing)",
-    description:
-      "A plain-English guide to electronic signatures: US ESIGN Act & UETA, EU eIDAS SES/AES/QES tiers, GDPR data protection, security architecture, SOC 2, and how e-signature pricing actually works.",
-  },
-  {
     urlPath: "/trust",
     outFile: "trust.html",
     title: "Trust & security — Docracy",
