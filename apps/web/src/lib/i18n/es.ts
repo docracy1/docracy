@@ -1024,8 +1024,7 @@ const es: Messages = {
   "seo.pricing.title": "Precios — Docracy",
   "seo.pricing.description":
     "Gratis para cadenas de hasta 2 firmantes. El plan de pago es $10/mes fijo por espacio de trabajo — firmantes ilimitados, plantillas, herramientas de IA, conectores y cuentas de equipo.",
-  "seo.freeTemplates.title":
-    "Plantillas gratis de documentos de negocio — NDA, contrato de contratista, carta de oferta | Docracy",
+  "seo.freeTemplates.title": "Plantillas gratis de documentos de negocio — NDA y más | Docracy",
   "seo.freeTemplates.description":
     "Plantillas gratis listas para firmar para los documentos de negocio más comunes — NDA mutuo, acuerdo de contratista independiente, carta de oferta, política de trabajo remoto y acuerdo de servicios freelance. Completa tus datos y envía a firma en minutos.",
   "seo.prepare.title": "Preparar un documento — Docracy",
@@ -1061,7 +1060,7 @@ const es: Messages = {
   "seo.ai.title": "Detección IA para firmas electrónicas — Campos al instante | Docracy",
   "seo.ai.description":
     "La IA de Docracy detecta campos de firma y fecha, resume contratos en lenguaje claro, marca cláusulas de riesgo y genera PDFs listos para firmar. Incluye conector MCP para Claude y ChatGPT.",
-  "seo.esignUeta.title": "Firmas electrónicas ESIGN Act y UETA — Diseñadas para la ley de EE. UU. | Docracy",
+  "seo.esignUeta.title": "Firmas electrónicas ESIGN Act y UETA — Ley de EE. UU. | Docracy",
   "seo.esignUeta.description":
     "Las firmas SES de Docracy están diseñadas para respaldar la ESIGN Act y UETA de EE. UU.: consentimiento, intención de firmar, registro de auditoría y certificado de finalización. Las cuentas de pago/Enterprise pueden añadir firma avanzada (AES) verificada por WhatsApp — sigue sin QES ni verificación de identidad.",
 
@@ -1273,11 +1272,11 @@ const es: Messages = {
   "tpl.detail.faq4.q": "¿Necesito una cuenta para enviar este {{name}}?",
   "tpl.detail.faq4.a": "No — es gratis hasta 2 firmantes, sin cuenta. Crea una cuenta gratuita solo si quieres guardarlo en un panel o reutilizarlo después.",
   "tpl.mutual-nda.name": "NDA mutuo",
-  "tpl.mutual-nda.seoTitle": "Plantilla gratis de NDA mutuo — Completa, firma y envía en línea",
+  "tpl.mutual-nda.seoTitle": "Plantilla gratis de NDA mutuo",
   "tpl.mutual-nda.description": "Un acuerdo de confidencialidad mutuo (NDA) estándar — también llamado acuerdo de no divulgación — para dos partes que exploran una relación comercial.",
   "tpl.mutual-nda.useCase": "Úsalo cuando tú y otra empresa estén a punto de compartir información confidencial — precios, planes de producto, datos de clientes — al evaluar un posible trato, alianza o relación con un proveedor, y ambos lados necesitan protección, no solo uno.",
   "tpl.independent-contractor-agreement.name": "Acuerdo de contratista independiente",
-  "tpl.independent-contractor-agreement.seoTitle": "Plantilla gratis de acuerdo de contratista independiente (1099)",
+  "tpl.independent-contractor-agreement.seoTitle": "Plantilla gratis de contratista independiente (1099)",
   "tpl.independent-contractor-agreement.description": "Define alcance, pago y propiedad intelectual cuando una empresa contrata a un contratista independiente (1099) — no un empleado.",
   "tpl.independent-contractor-agreement.useCase": "Úsalo cuando incorporas a un contratista para trabajo continuo o por proyecto y necesitas dejar claro que no es empleado, quién es dueño del trabajo resultante y cómo se le paga.",
   "tpl.offer-letter.name": "Carta de oferta",
@@ -1285,7 +1284,7 @@ const es: Messages = {
   "tpl.offer-letter.description": "Una carta de oferta de empleo directa que cubre puesto, salario, fecha de inicio y términos de empleo a voluntad.",
   "tpl.offer-letter.useCase": "Úsala cuando ya elegiste a un candidato y necesitas una carta limpia y profesional que confirme el rol, la compensación y la fecha de inicio antes de que acepte formalmente.",
   "tpl.freelance-service-agreement.name": "Acuerdo de servicios freelance",
-  "tpl.freelance-service-agreement.seoTitle": "Plantilla gratis de contrato freelance (acuerdo de servicios)",
+  "tpl.freelance-service-agreement.seoTitle": "Plantilla gratis de contrato freelance",
   "tpl.freelance-service-agreement.description": "Un contrato freelance que cubre alcance, honorarios, revisiones y propiedad cuando un cliente contrata a un freelancer por proyecto.",
   "tpl.freelance-service-agreement.useCase": "Úsalo cuando un cliente te contrata (o tú contratas a un freelancer) para un proyecto definido — diseño, redacción, desarrollo — y necesitas términos claros sobre entregables, pago y quién es dueño del trabajo final.",
   "tpl.remote-work-policy.name": "Política de trabajo remoto",

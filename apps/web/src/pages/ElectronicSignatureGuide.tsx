@@ -41,7 +41,7 @@ const FAQS = [
  *  English-only (US-focused audience); deep dives on each subtopic already live on /esign-ueta, /trust, /dpa. */
 export default function ElectronicSignatureGuide() {
   usePageMeta(
-    "Electronic Signatures: The Complete Guide (ESIGN, UETA, eIDAS, GDPR, Security, Pricing)",
+    "Electronic Signatures: The Complete Guide — Docracy",
     "A plain-English guide to electronic signatures: US ESIGN Act & UETA, EU eIDAS SES/AES/QES tiers, GDPR data protection, security architecture, SOC 2, and how e-signature pricing actually works.",
     { canonicalPath: "/electronic-signature-guide" }
   );

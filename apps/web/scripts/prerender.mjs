@@ -120,12 +120,12 @@ const SEO_TEMPLATE_SLUGS = new Set([
 ]);
 const ES_TEMPLATE_META = {
   "mutual-nda": {
-    title: "Plantilla gratis de NDA mutuo — Completa, firma y envía en línea",
+    title: "Plantilla gratis de NDA mutuo",
     description:
       "Un acuerdo de confidencialidad mutuo (NDA) estándar — también llamado acuerdo de no divulgación — para dos partes que exploran una relación comercial.",
   },
   "independent-contractor-agreement": {
-    title: "Plantilla gratis de acuerdo de contratista independiente (1099)",
+    title: "Plantilla gratis de contratista independiente (1099)",
     description:
       "Define alcance, pago y propiedad intelectual cuando una empresa contrata a un contratista independiente (1099) — no un empleado.",
   },
@@ -135,7 +135,7 @@ const ES_TEMPLATE_META = {
       "Una carta de oferta de empleo directa que cubre puesto, salario, fecha de inicio y términos de empleo a voluntad.",
   },
   "freelance-service-agreement": {
-    title: "Plantilla gratis de contrato freelance (acuerdo de servicios)",
+    title: "Plantilla gratis de contrato freelance",
     description:
       "Un contrato freelance que cubre alcance, honorarios, revisiones y propiedad cuando un cliente contrata a un freelancer por proyecto.",
   },
@@ -173,7 +173,7 @@ const routes = [
     // straight to free-templates.html with no redirect; dir/index.html style instead 308-redirects
     // the extensionless path to add a trailing slash first, an extra hop simpler bots may not follow.
     outFile: "free-templates.html",
-    title: "Free Business Document Templates — NDA, Contractor Agreement, Offer Letter | Docracy",
+    title: "Free Business Document Templates — NDA, Offer Letter | Docracy",
     description:
       "Free, ready-to-sign templates for the most common business documents — mutual NDA, independent contractor " +
       "agreement, offer letter, remote work policy, and freelance service agreement. Fill in your details and send " +
@@ -210,6 +210,17 @@ const routes = [
       "audit trail, and a certificate of completion. No AES/QES or identity verification.",
     locale: "en",
     alternates: { en: "/esign-ueta", es: "/es/esign-ueta" },
+  },
+  {
+    // Registered in _render-entry.tsx and linked from Footer + sitemap.xml, but was missing here —
+    // without a routes[] entry it never got a prerendered file, so crawlers hitting the sitemapped
+    // URL saw only the empty `<div id="root"></div>` shell (no title, no h1, no content).
+    urlPath: "/electronic-signature-guide",
+    outFile: "electronic-signature-guide.html",
+    title: "Electronic Signatures: The Complete Guide — Docracy",
+    description:
+      "A plain-English guide to electronic signatures: US ESIGN Act & UETA, EU eIDAS SES/AES/QES tiers, GDPR data " +
+      "protection, security architecture, SOC 2, and how e-signature pricing actually works.",
   },
   {
     urlPath: "/import-from-docusign",
@@ -289,8 +300,7 @@ const routes = [
   {
     urlPath: "/es/plantillas-gratis",
     outFile: "es/plantillas-gratis.html",
-    title:
-      "Plantillas gratis de documentos de negocio — NDA, contrato de contratista, carta de oferta | Docracy",
+    title: "Plantillas gratis de documentos de negocio — NDA y más | Docracy",
     description:
       "Plantillas gratis listas para firmar para los documentos de negocio más comunes — NDA mutuo, acuerdo de contratista independiente, carta de oferta, política de trabajo remoto y acuerdo de servicios freelance. Completa tus datos y envía a firma en minutos.",
     locale: "es",
@@ -386,7 +396,7 @@ const routes = [
   {
     urlPath: "/es/esign-ueta",
     outFile: "es/esign-ueta.html",
-    title: "Firmas electrónicas ESIGN Act y UETA — Diseñadas para la ley de EE. UU. | Docracy",
+    title: "Firmas electrónicas ESIGN Act y UETA — Ley de EE. UU. | Docracy",
     description:
       "Las firmas SES de Docracy están diseñadas para respaldar la ESIGN Act y UETA de EE. UU.: consentimiento, " +
       "intención de firmar, registro de auditoría y certificado de finalización. Sin AES/QES ni verificación de identidad.",

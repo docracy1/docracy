@@ -938,7 +938,7 @@ const en: Messages = {
   "seo.pricing.title": "Pricing — Docracy",
   "seo.pricing.description":
     "Free for signing chains of up to 2 signers. Paid is $10/month flat per workspace — unlimited signers, templates, AI tools, connectors, and team accounts.",
-  "seo.freeTemplates.title": "Free Business Document Templates — NDA, Contractor Agreement, Offer Letter | Docracy",
+  "seo.freeTemplates.title": "Free Business Document Templates — NDA, Offer Letter | Docracy",
   "seo.freeTemplates.description":
     "Free, ready-to-sign templates for the most common business documents — mutual NDA, independent contractor agreement, offer letter, remote work policy, and freelance service agreement. Fill in your details and send for signature in minutes.",
   "seo.prepare.title": "Prepare a document — Docracy",

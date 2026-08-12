@@ -67,7 +67,7 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
   {
     slug: "mutual-nda",
     name: "Mutual NDA",
-    seoTitle: "Free Mutual NDA Template — Fill, Sign, and Send Online",
+    seoTitle: "Free Mutual NDA Template",
     description:
       "A standard mutual non-disclosure agreement (NDA) — also called a confidentiality agreement — for two " +
       "parties exploring a business relationship.",
@@ -84,7 +84,7 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
   {
     slug: "independent-contractor-agreement",
     name: "Independent Contractor Agreement",
-    seoTitle: "Free Independent Contractor Agreement Template (1099 Agreement)",
+    seoTitle: "Free Independent Contractor Agreement Template (1099)",
     description:
       "Defines scope, pay, and IP ownership for a company hiring an independent contractor (1099 worker) — not " +
       "an employee.",
@@ -123,7 +123,7 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
   {
     slug: "freelance-service-agreement",
     name: "Freelance Service Agreement",
-    seoTitle: "Free Freelance Contract Template (Freelance Service Agreement)",
+    seoTitle: "Free Freelance Contract Template",
     description:
       "A freelance contract covering scope, fees, revisions, and ownership for a client hiring a freelancer on a " +
       "project basis.",
@@ -200,7 +200,7 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
   {
     slug: "separation-agreement",
     name: "Separation Agreement",
-    seoTitle: "Free Employee Separation Agreement Template (Severance Agreement)",
+    seoTitle: "Free Employee Separation Agreement Template",
     description:
       "Covers final pay, severance, return of property, and release terms when an employee leaves — sometimes " +
       "called a severance agreement.",
@@ -270,7 +270,7 @@ FREE_TEMPLATES.push(
   {
     slug: "employment-agreement",
     name: "Employment Agreement",
-    seoTitle: "Free Employment Agreement Template — Fill, Sign, and Send Online",
+    seoTitle: "Free Employment Agreement Template",
     description: "Covers position, pay, work schedule, confidentiality, and termination terms for a new hire.",
     useCase:
       "Use this when you're formally hiring an employee and need a signed record of their role, pay, schedule, " +
@@ -287,7 +287,7 @@ FREE_TEMPLATES.push(
   {
     slug: "rental-agreement",
     name: "Rental Agreement",
-    seoTitle: "Free Rental Agreement Template — Fill, Sign, and Send Online",
+    seoTitle: "Free Rental Agreement Template",
     description: "Covers rent, deposit, term, and liability terms for renting out property or equipment.",
     useCase:
       "Use this when you're renting out (or renting) property or an item and want clear, signed terms on rent, " +
@@ -305,7 +305,7 @@ FREE_TEMPLATES.push(
   {
     slug: "authorization-form",
     name: "Authorization Form",
-    seoTitle: "Free Authorization Form Template — Fill, Sign, and Send Online",
+    seoTitle: "Free Authorization Form Template",
     description: "Grants a named individual specific, time-limited authority to act on someone else's behalf.",
     useCase:
       "Use this when you need to formally authorize someone — a family member, employee, or representative — to " +
@@ -322,7 +322,7 @@ FREE_TEMPLATES.push(
   {
     slug: "purchase-order",
     name: "Purchase Order",
-    seoTitle: "Free Purchase Order Template — Fill, Sign, and Send Online",
+    seoTitle: "Free Purchase Order Template",
     description: "An itemized order form covering items, pricing, delivery, and payment terms between buyer and seller.",
     useCase:
       "Use this when you're formally ordering goods from a supplier and want an itemized, signed record of what " +
@@ -339,7 +339,7 @@ FREE_TEMPLATES.push(
   {
     slug: "work-order",
     name: "Work Order",
-    seoTitle: "Free Work Order Template — Fill, Sign, and Send Online",
+    seoTitle: "Free Work Order Template",
     description: "Covers scope, materials, estimated cost, and completion date for a service job.",
     useCase:
       "Use this when a service provider is doing work for a client and you want a signed record of the scope, " +
@@ -357,7 +357,7 @@ FREE_TEMPLATES.push(
   {
     slug: "delivery-confirmation",
     name: "Delivery Confirmation",
-    seoTitle: "Free Delivery Confirmation Template — Fill, Sign, and Send Online",
+    seoTitle: "Free Delivery Confirmation Template",
     description: "A signed record that goods were delivered, received, and in what condition.",
     useCase:
       "Use this when you need proof that a delivery actually happened — for a shipment, handoff, or drop-off — " +
@@ -381,7 +381,7 @@ FREE_TEMPLATES.push(
   {
     slug: "client-contract",
     name: "Client Contract",
-    seoTitle: "Free Client Contract Template — Fill, Sign, and Send Online",
+    seoTitle: "Free Client Contract Template",
     description: "Covers scope, timeline, payment terms, and confidentiality for a client engagement.",
     useCase:
       "Use this when you're taking on a new client and want a signed record of what you're delivering, by when, " +
@@ -399,7 +399,7 @@ FREE_TEMPLATES.push(
   {
     slug: "service-agreement",
     name: "Service Agreement",
-    seoTitle: "Free Service Agreement Template — Fill, Sign, and Send Online",
+    seoTitle: "Free Service Agreement Template",
     description: "Covers services provided, schedule, fees, and term for an ongoing service relationship.",
     useCase:
       "Use this when you're providing an ongoing service (not a one-off project) and want clear, signed terms on " +
@@ -417,7 +417,7 @@ FREE_TEMPLATES.push(
   {
     slug: "scope-of-work",
     name: "Scope of Work",
-    seoTitle: "Free Scope of Work Template — Fill, Sign, and Send Online",
+    seoTitle: "Free Scope of Work Template",
     description: "An itemized deliverables schedule with due dates and fees for a defined project.",
     useCase:
       "Use this alongside (or instead of) a full contract when you need a precise, signed list of deliverables, " +
@@ -435,7 +435,7 @@ FREE_TEMPLATES.push(
   {
     slug: "supplier-terms",
     name: "Supplier Terms",
-    seoTitle: "Free Supplier Terms Template — Fill, Sign, and Send Online",
+    seoTitle: "Free Supplier Terms Template",
     description: "Covers pricing, delivery, payment, and quality terms for a supplier relationship.",
     useCase:
       "Use this when you're formalizing standard terms with a supplier you'll order from repeatedly, beyond a " +
@@ -489,7 +489,7 @@ FREE_TEMPLATES.push(
   {
     slug: "payment-terms-agreement",
     name: "Payment Terms Agreement",
-    seoTitle: "Free Payment Terms Agreement Template — Fill, Sign, and Send Online",
+    seoTitle: "Free Payment Terms Agreement Template",
     description: "A signed record of an amount owed, due date, and payment method between two parties.",
     useCase:
       "Use this when you need a simple, signed record of what's owed, by when, and how it'll be paid — without " +
@@ -507,7 +507,7 @@ FREE_TEMPLATES.push(
   {
     slug: "installment-agreement",
     name: "Installment Agreement",
-    seoTitle: "Free Installment Agreement Template — Fill, Sign, and Send Online",
+    seoTitle: "Free Installment Agreement Template",
     description: "Splits an amount owed into a scheduled series of installments, with terms for missed payments.",
     useCase:
       "Use this when a debt or invoice will be paid off over several installments instead of all at once, and you " +
@@ -525,7 +525,7 @@ FREE_TEMPLATES.push(
   {
     slug: "privacy-acknowledgement",
     name: "Privacy Acknowledgement",
-    seoTitle: "Free Privacy Acknowledgement Template — Fill, Sign, and Send Online",
+    seoTitle: "Free Privacy Acknowledgement Template",
     description: "A signed confirmation that someone has received and understood your privacy policy.",
     useCase:
       "Use this when you need a signed record that someone has reviewed and consented to your privacy policy — " +
@@ -567,7 +567,7 @@ FREE_TEMPLATES.push(
   {
     slug: "promissory-note",
     name: "Promissory Note",
-    seoTitle: "Free Promissory Note Template — Fill, Sign, and Send Online",
+    seoTitle: "Free Promissory Note Template",
     description: "A borrower's written promise to repay a loan, covering principal, interest, and repayment schedule.",
     useCase:
       "Use this when you're lending or borrowing money between individuals or small businesses and want a signed, " +
@@ -583,7 +583,7 @@ FREE_TEMPLATES.push(
   {
     slug: "llc-operating-agreement",
     name: "LLC Operating Agreement",
-    seoTitle: "Free LLC Operating Agreement Template — Fill, Sign, and Send Online",
+    seoTitle: "Free LLC Operating Agreement Template",
     description: "Sets ownership percentages, management, and profit-sharing terms for an LLC's members.",
     useCase:
       "Use this when you're forming an LLC with one or more co-founders and need a signed record of who owns " +
@@ -601,7 +601,7 @@ FREE_TEMPLATES.push(
   {
     slug: "sublease-agreement",
     name: "Sublease Agreement",
-    seoTitle: "Free Sublease Agreement Template — Fill, Sign, and Send Online",
+    seoTitle: "Free Sublease Agreement Template",
     description: "Covers rent, term, and landlord consent when a tenant subleases their unit to a subtenant.",
     useCase:
       "Use this when an existing tenant wants to sublet their space to someone else for part or all of the " +
@@ -619,7 +619,7 @@ FREE_TEMPLATES.push(
   {
     slug: "liability-waiver",
     name: "Liability Waiver",
-    seoTitle: "Free Liability Waiver Template — Fill, Sign, and Send Online",
+    seoTitle: "Free Liability Waiver Template",
     description: "A participant's signed release of claims against an organization for risks in an activity or event.",
     useCase:
       "Use this before someone takes part in an activity with inherent risk — a class, event, or rental — so you " +
@@ -635,7 +635,7 @@ FREE_TEMPLATES.push(
   {
     slug: "roommate-agreement",
     name: "Roommate Agreement",
-    seoTitle: "Free Roommate Agreement Template — Fill, Sign, and Send Online",
+    seoTitle: "Free Roommate Agreement Template",
     description: "Splits rent and utilities and sets house rules between co-tenants sharing a home.",
     useCase:
       "Use this when you're moving in with a roommate and want a written, signed understanding of how rent and " +
@@ -653,7 +653,7 @@ FREE_TEMPLATES.push(
   {
     slug: "cash-receipt",
     name: "Cash Receipt",
-    seoTitle: "Free Cash Receipt Template — Fill, Sign, and Send Online",
+    seoTitle: "Free Cash Receipt Template",
     description: "A signed confirmation that a cash payment was received, for how much, and what it was for.",
     useCase:
       "Use this when you receive a cash payment — rent, a deposit, an informal sale — and want a signed, dated " +
@@ -669,7 +669,7 @@ FREE_TEMPLATES.push(
   {
     slug: "construction-contract",
     name: "Construction Contract",
-    seoTitle: "Free Construction Contract Template — Fill, Sign, and Send Online",
+    seoTitle: "Free Construction Contract Template",
     description: "Covers scope, schedule, payment milestones, and warranty for a construction or renovation job.",
     useCase:
       "Use this when hiring (or working as) a contractor for a construction or renovation project and want a " +
@@ -687,7 +687,7 @@ FREE_TEMPLATES.push(
   {
     slug: "cease-and-desist-letter",
     name: "Cease and Desist Letter",
-    seoTitle: "Free Cease and Desist Letter Template — Fill, Sign, and Send Online",
+    seoTitle: "Free Cease and Desist Letter Template",
     description: "A formal demand that someone stop specific conduct, with a deadline to respond.",
     useCase:
       "Use this when you need to formally demand that someone stop conduct — harassment, infringement, breach of " +
@@ -709,7 +709,7 @@ FREE_TEMPLATES.push(
   {
     slug: "letter-of-intent",
     name: "Letter of Intent",
-    seoTitle: "Free Letter of Intent (LOI) Template — Fill, Sign, and Send Online",
+    seoTitle: "Free Letter of Intent (LOI) Template",
     description:
       "A non-binding letter outlining the proposed terms of a deal — price, structure, and timeline — before a " +
       "definitive agreement is signed.",
@@ -730,7 +730,7 @@ FREE_TEMPLATES.push(
   {
     slug: "bill-of-sale",
     name: "Bill of Sale",
-    seoTitle: "Free Bill of Sale Template — Fill, Sign, and Send Online",
+    seoTitle: "Free Bill of Sale Template",
     description:
       "A simple record of a one-time sale of personal property — a vehicle, equipment, or other goods — from " +
       "seller to buyer, sold as-is.",
@@ -751,7 +751,7 @@ FREE_TEMPLATES.push(
   {
     slug: "loan-agreement",
     name: "Loan Agreement",
-    seoTitle: "Free Loan Agreement Template — Fill, Sign, and Send Online",
+    seoTitle: "Free Loan Agreement Template",
     description:
       "A fuller bilateral loan contract covering principal, interest, repayment schedule, collateral, and " +
       "default terms.",
@@ -773,7 +773,7 @@ FREE_TEMPLATES.push(
   {
     slug: "power-of-attorney",
     name: "Power of Attorney",
-    seoTitle: "Free Power of Attorney Template — Fill, Sign, and Send Online",
+    seoTitle: "Free Power of Attorney Template",
     description:
       "Grants a named agent authority to act on your behalf, with a fillable scope-of-authority section and a " +
       "durability option.",
@@ -803,7 +803,7 @@ FREE_TEMPLATES.push(
   {
     slug: "w-9-form",
     name: "W-9 Form",
-    seoTitle: "Free W-9 Form — Fill Out and Sign the Official IRS Form Online",
+    seoTitle: "Free W-9 Form — Sign the IRS Form Online",
     description:
       "The official IRS Form W-9 (Rev. March 2024) — collect a contractor or vendor's taxpayer ID before you pay them.",
     useCase:
@@ -821,7 +821,7 @@ FREE_TEMPLATES.push(
   {
     slug: "i-9-form",
     name: "I-9 Form",
-    seoTitle: "Free I-9 Form — Fill Out and Sign the Official USCIS Employment Eligibility Form",
+    seoTitle: "Free I-9 Form — Sign the USCIS Eligibility Form",
     description:
       "The official USCIS Form I-9 (Edition 01/20/25) — verify a new hire's identity and authorization to work in the U.S.",
     useCase:

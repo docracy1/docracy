@@ -18,7 +18,7 @@ export interface BlogPost {
 export const BLOG_POSTS: BlogPost[] = [
   {
     slug: "docracy-vs-eversign",
-    title: "Docracy vs eversign (Xodo Sign): which e-signature tool fits you?",
+    title: "Docracy vs eversign (Xodo Sign): which one fits you?",
     description:
       "A straight comparison of Docracy and eversign (now Xodo Sign) on price, signup friction, and features — for quick agreements vs. small-business document workflows.",
     publishedDate: "2026-07-24",
@@ -64,7 +64,7 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: "docracy-vs-docusign",
-    title: "Docracy vs DocuSign: for quick agreements, not enterprise contracts",
+    title: "Docracy vs DocuSign: quick agreements, not enterprise deals",
     description:
       "How Docracy compares to DocuSign eSignature on price, identity verification, and who each tool is actually built for.",
     publishedDate: "2026-07-24",
@@ -154,7 +154,7 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: "docracy-vs-adobe-acrobat-sign",
-    title: "Docracy vs Adobe Acrobat Sign: lightweight signing vs. full PDF suite",
+    title: "Docracy vs Adobe Acrobat Sign: e-signature vs. PDF suite",
     description:
       "Adobe Acrobat Sign bundles e-signature into Adobe's full PDF/creative ecosystem. Here's how it compares to Docracy's free, no-signup signing flow.",
     publishedDate: "2026-07-24",

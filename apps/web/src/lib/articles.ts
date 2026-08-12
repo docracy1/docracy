@@ -578,7 +578,7 @@ export const ARTICLES: ArticlePost[] = [
   },
   {
     slug: "ai-contract-management-small-business",
-    title: "Do You Need \"AI Agreement Management\" Software? What a New Deloitte Study Really Means for Small Businesses",
+    title: "Do Small Businesses Need AI Agreement Management?",
     description:
       "A 2026 Deloitte/Docusign study found AI contract platforms drive big efficiency gains — but it studied enterprises with thousands of contracts a year. Here's what actually applies if you're small.",
     publishedDate: "2026-08-01",

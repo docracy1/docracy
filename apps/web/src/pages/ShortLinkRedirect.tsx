@@ -64,7 +64,7 @@ function ShortRedirect({ entry }: { entry: { to: string; source: string; campaig
   }, [entry, navigate]);
   return (
     <div className="container">
-      <p>Taking you to Docracy…</p>
+      <h1>Taking you to Docracy…</h1>
     </div>
   );
 }
