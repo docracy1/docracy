@@ -148,16 +148,16 @@ const FAQ_KEYS: Array<{ qKey: string; aKey: string }> = [
 // (Abaseh Mirvali) and ambiguous abbreviations ("AE") are left out of this strip since a bare
 // name or two letters reads as noise in a logo row — they still appear in the full testimonials
 // section below with their real quotes and context.
-const TRUST_LOGOS: Array<{ name: string; logo: string | null; href: string }> = [
-  { name: "DACH Advisory", logo: "/testimonials/dach-advisory.png", href: "https://dachadvisory.com" },
-  { name: "culttech", logo: "/culttech-logo.png", href: "https://culttech.at" },
-  { name: "hellocash", logo: "/testimonials/hellocash.png", href: "https://hellocash.at" },
-  { name: "Volpini Verpackung GmbH", logo: "/testimonials/volpini.png", href: "https://volpini.at" },
-  { name: "AE Entsorgungssysteme", logo: "/testimonials/ae-entsorgungssysteme.png", href: "https://www.ae-entsorgung.eu" },
-  { name: "Kapsch", logo: "/testimonials/kapsch.png", href: "https://www.kapsch.net" },
-  { name: "AKG Smart Polymer", logo: "/testimonials/akg.png", href: "https://akg.at" },
-  { name: "FAUN Austria", logo: "/testimonials/faun-austria.png", href: "https://www.faun.com" },
-  { name: "BOECK Attorneys at Law", logo: "/testimonials/boeck-law.png", href: "https://www.boeck.law/" },
+const TRUST_LOGOS: Array<{ name: string; logo: string | null; href: string; w: number; h: number }> = [
+  { name: "DACH Advisory", logo: "/testimonials/dach-advisory.png", href: "https://dachadvisory.com", w: 72, h: 72 },
+  { name: "culttech", logo: "/culttech-logo.png", href: "https://culttech.at", w: 72, h: 52 },
+  { name: "hellocash", logo: "/testimonials/hellocash.png", href: "https://hellocash.at", w: 465, h: 140 },
+  { name: "Volpini Verpackung GmbH", logo: "/testimonials/volpini.png", href: "https://volpini.at", w: 71, h: 72 },
+  { name: "AE Entsorgungssysteme", logo: "/testimonials/ae-entsorgungssysteme.png", href: "https://www.ae-entsorgung.eu", w: 119, h: 72 },
+  { name: "Kapsch", logo: "/testimonials/kapsch.png", href: "https://www.kapsch.net", w: 873, h: 140 },
+  { name: "AKG Smart Polymer", logo: "/testimonials/akg.png", href: "https://akg.at", w: 167, h: 72 },
+  { name: "FAUN Austria", logo: "/testimonials/faun-austria.png", href: "https://www.faun.com", w: 756, h: 140 },
+  { name: "BOECK Attorneys at Law", logo: "/testimonials/boeck-law.png", href: "https://www.boeck.law/", w: 280, h: 140 },
 ];
 
 const TESTIMONIALS: Array<{
@@ -537,7 +537,13 @@ export default function Landing() {
                 aria-hidden={i < TRUST_LOGOS.length ? undefined : true}
               >
                 {item.logo ? (
-                  <img src={item.logo} alt={item.name} className="trust-logo-img" loading="lazy" />
+                  <img
+                    src={item.logo}
+                    alt={item.name}
+                    className="trust-logo-img"
+                    width={item.w}
+                    height={item.h}
+                  />
                 ) : (
                   item.name
                 )}
