@@ -143,7 +143,8 @@ export default function ElectronicSignatureGuide() {
           wills, court filings) require more, or aren't eligible for electronic signature at all in some
           jurisdictions. See our dedicated page on{" "}
           <Link to="/are-electronic-signatures-legal">whether electronic signatures are legally valid</Link>{" "}
-          for the caveats.
+          for the caveats. Ready to actually make one? See{" "}
+          <Link to="/create-a-digital-signature">how to create a digital signature</Link>.
         </p>
       </div>
 

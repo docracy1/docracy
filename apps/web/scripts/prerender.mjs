@@ -212,6 +212,26 @@ const routes = [
     alternates: { en: "/esign-ueta", es: "/es/esign-ueta" },
   },
   {
+    urlPath: "/create-a-digital-signature",
+    outFile: "create-a-digital-signature.html",
+    title: "How to Create a Digital Signature | Docracy",
+    description:
+      "\"Digital signature\" and \"electronic signature\" aren't quite the same thing. Here's the difference, and " +
+      "how to actually get a document signed — free, no account needed.",
+    locale: "en",
+    alternates: { en: "/create-a-digital-signature", es: "/es/crear-firma-digital" },
+  },
+  {
+    urlPath: "/ai-contract-analysis",
+    outFile: "ai-contract-analysis.html",
+    title: "AI Contract Analysis | Docracy",
+    description:
+      "Get a plain-English summary of what a contract says and a flag on clauses worth a second look, before you " +
+      "sign or send. Paid-plan AI tools built into the Docracy signing flow.",
+    locale: "en",
+    alternates: { en: "/ai-contract-analysis", es: "/es/analisis-de-contratos-ia" },
+  },
+  {
     // Registered in _render-entry.tsx and linked from Footer + sitemap.xml, but was missing here —
     // without a routes[] entry it never got a prerendered file, so crawlers hitting the sitemapped
     // URL saw only the empty `<div id="root"></div>` shell (no title, no h1, no content).
@@ -402,6 +422,26 @@ const routes = [
       "intención de firmar, registro de auditoría y certificado de finalización. Sin AES/QES ni verificación de identidad.",
     locale: "es",
     alternates: { en: "/esign-ueta", es: "/es/esign-ueta" },
+  },
+  {
+    urlPath: "/es/crear-firma-digital",
+    outFile: "es/crear-firma-digital.html",
+    title: "Cómo crear una firma digital | Docracy",
+    description:
+      "\"Firma digital\" y \"firma electrónica\" no son exactamente lo mismo. Aquí está la diferencia, y cómo firmar " +
+      "un documento hoy — gratis, sin cuenta.",
+    locale: "es",
+    alternates: { en: "/create-a-digital-signature", es: "/es/crear-firma-digital" },
+  },
+  {
+    urlPath: "/es/analisis-de-contratos-ia",
+    outFile: "es/analisis-de-contratos-ia.html",
+    title: "Análisis de contratos con IA | Docracy",
+    description:
+      "Obtén un resumen en lenguaje claro de lo que dice un contrato y una alerta sobre cláusulas que merecen una " +
+      "segunda mirada, antes de firmar o enviar. Herramientas de IA del plan de pago integradas en Docracy.",
+    locale: "es",
+    alternates: { en: "/ai-contract-analysis", es: "/es/analisis-de-contratos-ia" },
   },
   {
     urlPath: "/es/documentacion",

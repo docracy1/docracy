@@ -40,6 +40,8 @@ export default function Footer() {
         { label: t("footer.pricing"), to: localizePath("/pricing", locale) },
         { label: t("footer.templates"), to: localizePath("/free-templates", locale) },
         { label: t("footer.ai"), to: localizePath("/ai", locale) },
+        { label: t("footer.aiAnalysis"), to: localizePath("/ai-contract-analysis", locale) },
+        { label: t("footer.createSignature"), to: localizePath("/create-a-digital-signature", locale) },
         { label: t("footer.mcp"), to: localizePath("/mcp", locale) },
         { label: t("footer.industries"), to: "/industry/small-business" },
         { label: t("footer.docs"), to: localizePath("/docs", locale) },

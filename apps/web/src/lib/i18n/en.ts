@@ -129,6 +129,8 @@ const en: Messages = {
   "footer.pricing": "Pricing",
   "footer.templates": "Free templates",
   "footer.mcp": "MCP connector",
+  "footer.aiAnalysis": "AI contract analysis",
+  "footer.createSignature": "Create a digital signature",
   "footer.industries": "Industries",
   "footer.ai": "AI Auto-Detect",
   "footer.docs": "Docs",
@@ -974,6 +976,12 @@ const en: Messages = {
   "seo.ai.description":
     "Docracy AI auto-detects signature and date fields, explains contracts in plain English, flags risky clauses, and generates signable PDFs. Plus an MCP connector for Claude and ChatGPT.",
   "seo.esignUeta.title": "ESIGN Act & UETA E-Signatures | Docracy",
+  "seo.createDigitalSignature.title": "How to Create a Digital Signature | Docracy",
+  "seo.createDigitalSignature.description":
+    "\"Digital signature\" and \"electronic signature\" aren't quite the same thing. Here's the difference, and how to actually get a document signed — free, no account needed.",
+  "seo.aiContractAnalysis.title": "AI Contract Analysis | Docracy",
+  "seo.aiContractAnalysis.description":
+    "Get a plain-English summary of what a contract says and a flag on clauses worth a second look, before you sign or send. Paid-plan AI tools built into the Docracy signing flow.",
   "seo.esignUeta.description":
     "Docracy SES electronic signatures are designed to support the U.S. ESIGN Act and UETA: consent, intent to sign, audit trail, and a certificate of completion. Paid/Enterprise accounts can add WhatsApp-verified Advanced Electronic Signature (AES) — still no QES or identity verification.",
 
@@ -1046,6 +1054,82 @@ const en: Messages = {
   "esign.prepareLink": "Start free",
   "esign.footerCta": "Send your first document free — no account needed.",
 
+  "createSig.eyebrow": "How-to guide",
+  "createSig.heroTitle": "How to Create a Digital Signature",
+  "createSig.heroSub":
+    "\"Digital signature\" and \"electronic signature\" get used interchangeably, but they're not quite the same thing. Here's the difference — and how to actually get a document signed today.",
+  "createSig.ctaTry": "Create a signature now →",
+  "createSig.termsTitle": "Digital signature vs. electronic signature",
+  "createSig.termsBody1":
+    "A digital signature is a specific cryptographic technique — it uses a certificate and a private key to mathematically bind a signature to a document, usually issued by a certificate authority. An electronic signature is the broader legal term: any electronic sound, symbol, or process a person uses to indicate they agree to sign, recognized by laws like the U.S. ESIGN Act and UETA, and the EU's eIDAS regulation.",
+  "createSig.termsBody2":
+    "In everyday use, \"create a digital signature\" almost always means the second thing — getting a legally valid signature on a document without printing, signing by hand, and scanning it back in. That's what Docracy does: a simple electronic signature (SES) with a timestamped, tamper-evident audit trail, not a certificate-based cryptographic signature.",
+  "createSig.termsLinkLead": "For the full legal breakdown of what tier of signature you actually need, see our",
+  "createSig.termsLink": "complete electronic signature guide",
+  "createSig.howTitle": "Create a signature in under a minute",
+  "createSig.how.1": "Upload the PDF you need signed, or start from a free template.",
+  "createSig.how.2": "Place a signature field (and date, initials, or text fields if needed) anywhere on the document.",
+  "createSig.how.3": "Add the signer's email — or your own, if you're signing it yourself.",
+  "createSig.how.4": "Send it. The signer opens the link, draws or types their signature, and everyone gets the completed, signed PDF by email.",
+  "createSig.trustTitle": "What actually happens when you sign",
+  "createSig.trustBody":
+    "Every view, consent, and signature is timestamped with IP address, user-agent, and a cryptographic hash of the document at that moment. When the chain completes, everyone gets the signed PDF plus a certificate of completion summarizing that trail — this is what makes the signature legally meaningful, not the visual squiggle itself.",
+  "createSig.faqTitle": "Frequently asked questions",
+  "createSig.faq.q1": "Is a typed or drawn signature legally valid?",
+  "createSig.faq.a1":
+    "Yes, in most jurisdictions, under laws like the U.S. ESIGN Act, UETA, and the EU's eIDAS regulation — what makes it valid is the signer's consent and intent plus a retainable record, not the specific visual style of the signature.",
+  "createSig.faq.q2": "Do I need to create an account to sign something?",
+  "createSig.faq.a2":
+    "No — Docracy's free flow needs no account for chains of up to 2 signers. Create a free account only if you want a dashboard, templates, or team features later.",
+  "createSig.faq.q3": "Is this the same as a \"digital signature\" with a certificate?",
+  "createSig.faq.a3":
+    "Not exactly — Docracy provides simple electronic signatures (SES), not certificate-based cryptographic digital signatures. For most everyday business documents (NDAs, offer letters, service agreements) SES is what the law actually requires. If your specific document needs a certificate-based or Qualified Electronic Signature (QES), use a compliance-grade QTSP provider instead.",
+  "createSig.faq.q4": "Can I sign on my phone?",
+  "createSig.faq.a4": "Yes — the signing page works in any mobile browser, no app download required.",
+  "createSig.guideLink": "Read the complete electronic signature guide",
+  "createSig.trustLink": "Trust & security",
+  "createSig.footerCta": "Ready to sign your document?",
+
+  "aiAnalysis.eyebrow": "Docracy AI",
+  "aiAnalysis.heroTitle": "AI Contract Analysis",
+  "aiAnalysis.heroSub":
+    "Before you sign — or before you send — get a plain-English summary of what a contract actually says, and a flag on clauses worth a second look.",
+  "aiAnalysis.ctaTry": "Try it on a document →",
+  "aiAnalysis.ctaPricing": "See Paid pricing",
+  "aiAnalysis.featuresTitle": "Two AI tools, one job: read the contract for you",
+  "aiAnalysis.featuresSub": "Built into the prepare flow — not a separate chatbot you have to copy-paste into.",
+  "aiAnalysis.feat.explain.title": "Plain-English explainer",
+  "aiAnalysis.feat.explain.body":
+    "A short, jargon-free summary of what each party is agreeing to — handy before you hit send, or when a signer asks \"what am I actually signing?\"",
+  "aiAnalysis.feat.risk.title": "Risk & clause highlighter",
+  "aiAnalysis.feat.risk.body":
+    "Flags terms that often deserve a second look — unusual liability, auto-renewals, one-sided IP assignment — so surprises don't land after signing.",
+  "aiAnalysis.feat.detect.title": "AI Auto-Detect",
+  "aiAnalysis.feat.detect.body":
+    "The same AI pass that reads your contract can also find where the signature and date fields belong, so you don't place them by hand.",
+  "aiAnalysis.howTitle": "How it fits into sending a document",
+  "aiAnalysis.how.1": "Upload your contract or start from a free template.",
+  "aiAnalysis.how.2": "Open the explainer or risk check before you send — read the summary, review flagged clauses.",
+  "aiAnalysis.how.3": "Add signers and send. Nothing about the AI review changes the document itself.",
+  "aiAnalysis.aiPageLink": "See all Docracy AI tools →",
+  "aiAnalysis.honestyTitle": "What this is — and isn't",
+  "aiAnalysis.honestyBody":
+    "This is an AI-generated summary and clause flagger, meant to help you read faster — it is not legal advice, and it doesn't replace a lawyer's review for anything high-stakes or unfamiliar. The AI explainer and risk highlighter are Paid-plan features ($10/month); the underlying document is never modified or signed by AI.",
+  "aiAnalysis.faqTitle": "Frequently asked questions",
+  "aiAnalysis.faq.q1": "Is AI contract analysis free?",
+  "aiAnalysis.faq.a1":
+    "No — the plain-English explainer and risk highlighter are included on the Paid plan ($10/month, flat, unlimited signers). The free tier covers signing chains of up to 2 signers without an account.",
+  "aiAnalysis.faq.q2": "Does the AI change or sign my document?",
+  "aiAnalysis.faq.a2":
+    "No. It only reads and summarizes — the underlying PDF is untouched, and nothing is signed or sent without you choosing to.",
+  "aiAnalysis.faq.q3": "Can I trust the risk highlighter instead of a lawyer?",
+  "aiAnalysis.faq.a3":
+    "No — treat it as a first pass that catches common red flags, not a substitute for legal review on anything unfamiliar, high-value, or high-stakes.",
+  "aiAnalysis.faq.q4": "What kind of documents does it work on?",
+  "aiAnalysis.faq.a4":
+    "Any PDF you upload — NDAs, service agreements, offer letters, vendor contracts — or one of Docracy's own free templates.",
+  "aiAnalysis.footerCta": "See what your next contract actually says.",
+
   "ai.eyebrow": "Docracy AI",
   "ai.heroTitle": "AI Auto-Detect.\nFields place themselves.",
   "ai.heroSub":
@@ -1089,6 +1173,7 @@ const en: Messages = {
     "It is a strong starting point on common business PDFs — always review placements before sending. You stay in control of every field and every send.",
   "ai.mcpLinkLead": "Need the connector setup for Claude, ChatGPT, Grok, or Perplexity?",
   "ai.mcpLink": "Open the MCP connector guide →",
+  "ai.analysisPageLink": "More on AI contract analysis: the explainer and risk highlighter, in depth →",
   "ai.footerCta": "Ready to stop placing fields by hand?",
   "ai.schemaOffer": "Paid plan with AI Auto-Detect and related AI tools",
   "alt.problem": "The problem",

@@ -189,6 +189,8 @@ const es: Messages = {
   "footer.imprint": "Aviso legal",
   "footer.legal": "Legal",
   "footer.mcp": "Conector MCP",
+  "footer.aiAnalysis": "Análisis de contratos con IA",
+  "footer.createSignature": "Crear una firma digital",
   "footer.industries": "Industrias",
   "footer.ai": "Detección IA",
   "footer.pricing": "Precios",
@@ -1061,6 +1063,12 @@ const es: Messages = {
   "seo.ai.description":
     "La IA de Docracy detecta campos de firma y fecha, resume contratos en lenguaje claro, marca cláusulas de riesgo y genera PDFs listos para firmar. Incluye conector MCP para Claude y ChatGPT.",
   "seo.esignUeta.title": "Firmas electrónicas ESIGN Act y UETA | Docracy",
+  "seo.createDigitalSignature.title": "Cómo crear una firma digital | Docracy",
+  "seo.createDigitalSignature.description":
+    "\"Firma digital\" y \"firma electrónica\" no son exactamente lo mismo. Aquí está la diferencia, y cómo firmar un documento hoy — gratis, sin cuenta.",
+  "seo.aiContractAnalysis.title": "Análisis de contratos con IA | Docracy",
+  "seo.aiContractAnalysis.description":
+    "Obtén un resumen en lenguaje claro de lo que dice un contrato y una alerta sobre cláusulas que merecen una segunda mirada, antes de firmar o enviar. Herramientas de IA del plan de pago integradas en Docracy.",
   "seo.esignUeta.description":
     "Las firmas SES de Docracy están diseñadas para respaldar la ESIGN Act y UETA de EE. UU.: consentimiento, intención de firmar, registro de auditoría y certificado de finalización. Las cuentas de pago/Enterprise pueden añadir firma avanzada (AES) verificada por WhatsApp — sigue sin QES ni verificación de identidad.",
 
@@ -1133,6 +1141,82 @@ const es: Messages = {
   "esign.prepareLink": "Empezar gratis",
   "esign.footerCta": "Envía tu primer documento gratis — sin cuenta.",
 
+  "createSig.eyebrow": "Guía práctica",
+  "createSig.heroTitle": "Cómo crear una firma digital",
+  "createSig.heroSub":
+    "\"Firma digital\" y \"firma electrónica\" se usan como sinónimos, pero no son exactamente lo mismo. Aquí está la diferencia — y cómo firmar un documento hoy mismo.",
+  "createSig.ctaTry": "Crear una firma ahora →",
+  "createSig.termsTitle": "Firma digital vs. firma electrónica",
+  "createSig.termsBody1":
+    "Una firma digital es una técnica criptográfica específica — usa un certificado y una clave privada para vincular matemáticamente una firma a un documento, normalmente emitido por una autoridad certificadora. Una firma electrónica es el término legal más amplio: cualquier sonido, símbolo o proceso electrónico que una persona usa para indicar que acepta firmar, reconocido por leyes como la ESIGN Act y UETA de EE. UU., y el reglamento eIDAS de la UE.",
+  "createSig.termsBody2":
+    "En el uso cotidiano, \"crear una firma digital\" casi siempre significa lo segundo — obtener una firma legalmente válida en un documento sin imprimir, firmar a mano y volver a escanear. Eso es lo que hace Docracy: una firma electrónica simple (SES) con un registro de auditoría con marca de tiempo e inviolable, no una firma criptográfica basada en certificado.",
+  "createSig.termsLinkLead": "Para el desglose legal completo de qué nivel de firma necesitas realmente, consulta nuestra",
+  "createSig.termsLink": "guía completa de firmas electrónicas",
+  "createSig.howTitle": "Crea una firma en menos de un minuto",
+  "createSig.how.1": "Sube el PDF que necesitas firmar, o empieza desde una plantilla gratis.",
+  "createSig.how.2": "Coloca un campo de firma (y fecha, iniciales o texto si lo necesitas) en cualquier parte del documento.",
+  "createSig.how.3": "Agrega el correo del firmante — o el tuyo, si lo vas a firmar tú mismo.",
+  "createSig.how.4": "Envíalo. El firmante abre el enlace, dibuja o escribe su firma, y todos reciben el PDF firmado por correo.",
+  "createSig.trustTitle": "Qué pasa realmente cuando firmas",
+  "createSig.trustBody":
+    "Cada vista, consentimiento y firma queda registrada con marca de tiempo, dirección IP, user-agent y un hash criptográfico del documento en ese momento. Al completarse la cadena, todos reciben el PDF firmado más un certificado de finalización que resume ese registro — esto es lo que hace la firma legalmente significativa, no el trazo visual en sí.",
+  "createSig.faqTitle": "Preguntas frecuentes",
+  "createSig.faq.q1": "¿Es válida legalmente una firma escrita o dibujada?",
+  "createSig.faq.a1":
+    "Sí, en la mayoría de las jurisdicciones, bajo leyes como la ESIGN Act y UETA de EE. UU., y el reglamento eIDAS de la UE — lo que la hace válida es el consentimiento e intención del firmante más un registro conservable, no el estilo visual específico de la firma.",
+  "createSig.faq.q2": "¿Necesito crear una cuenta para firmar algo?",
+  "createSig.faq.a2":
+    "No — el flujo gratis de Docracy no requiere cuenta para cadenas de hasta 2 firmantes. Crea una cuenta gratis solo si más adelante quieres un panel, plantillas o funciones de equipo.",
+  "createSig.faq.q3": "¿Es lo mismo que una \"firma digital\" con certificado?",
+  "createSig.faq.a3":
+    "No exactamente — Docracy ofrece firmas electrónicas simples (SES), no firmas criptográficas basadas en certificado. Para la mayoría de los documentos de negocio cotidianos (NDAs, cartas de oferta, acuerdos de servicio) el SES es lo que realmente exige la ley. Si tu documento específico necesita una firma basada en certificado o una Firma Electrónica Cualificada (QES), usa un proveedor QTSP de nivel de cumplimiento.",
+  "createSig.faq.q4": "¿Puedo firmar desde mi teléfono?",
+  "createSig.faq.a4": "Sí — la página de firma funciona en cualquier navegador móvil, sin descargar ninguna app.",
+  "createSig.guideLink": "Lee la guía completa de firmas electrónicas",
+  "createSig.trustLink": "Confianza y seguridad",
+  "createSig.footerCta": "¿Listo para firmar tu documento?",
+
+  "aiAnalysis.eyebrow": "Docracy IA",
+  "aiAnalysis.heroTitle": "Análisis de contratos con IA",
+  "aiAnalysis.heroSub":
+    "Antes de firmar — o antes de enviar — obtén un resumen en lenguaje claro de lo que realmente dice un contrato, y una alerta sobre cláusulas que merecen una segunda mirada.",
+  "aiAnalysis.ctaTry": "Pruébalo en un documento →",
+  "aiAnalysis.ctaPricing": "Ver precios del plan de pago",
+  "aiAnalysis.featuresTitle": "Dos herramientas de IA, un solo trabajo: leer el contrato por ti",
+  "aiAnalysis.featuresSub": "Integradas en el flujo de preparación — no un chatbot aparte al que tengas que copiar y pegar.",
+  "aiAnalysis.feat.explain.title": "Explicación en lenguaje claro",
+  "aiAnalysis.feat.explain.body":
+    "Un resumen corto y sin jerga de lo que cada parte está aceptando — útil antes de enviar, o cuando un firmante pregunta \"¿qué estoy firmando exactamente?\"",
+  "aiAnalysis.feat.risk.title": "Detector de cláusulas de riesgo",
+  "aiAnalysis.feat.risk.body":
+    "Señala términos que suelen merecer una segunda mirada — responsabilidad inusual, renovaciones automáticas, cesión unilateral de propiedad intelectual — para que las sorpresas no aparezcan después de firmar.",
+  "aiAnalysis.feat.detect.title": "Auto-detección con IA",
+  "aiAnalysis.feat.detect.body":
+    "El mismo análisis de IA que lee tu contrato también puede encontrar dónde van los campos de firma y fecha, para que no los coloques a mano.",
+  "aiAnalysis.howTitle": "Cómo encaja al enviar un documento",
+  "aiAnalysis.how.1": "Sube tu contrato o empieza desde una plantilla gratis.",
+  "aiAnalysis.how.2": "Abre la explicación o el análisis de riesgo antes de enviar — lee el resumen, revisa las cláusulas marcadas.",
+  "aiAnalysis.how.3": "Agrega firmantes y envía. Nada de la revisión con IA cambia el documento en sí.",
+  "aiAnalysis.aiPageLink": "Ver todas las herramientas de IA de Docracy →",
+  "aiAnalysis.honestyTitle": "Qué es esto — y qué no es",
+  "aiAnalysis.honestyBody":
+    "Esto es un resumen generado por IA y un detector de cláusulas, pensado para ayudarte a leer más rápido — no es asesoría legal, y no reemplaza la revisión de un abogado para nada de alto riesgo o poco familiar. La explicación y el detector de riesgo son funciones del plan de pago ($10/mes); el documento subyacente nunca es modificado ni firmado por la IA.",
+  "aiAnalysis.faqTitle": "Preguntas frecuentes",
+  "aiAnalysis.faq.q1": "¿El análisis de contratos con IA es gratis?",
+  "aiAnalysis.faq.a1":
+    "No — la explicación en lenguaje claro y el detector de riesgo están incluidos en el plan de pago ($10/mes, fijo, firmantes ilimitados). El plan gratis cubre cadenas de firma de hasta 2 firmantes sin cuenta.",
+  "aiAnalysis.faq.q2": "¿La IA cambia o firma mi documento?",
+  "aiAnalysis.faq.a2":
+    "No. Solo lee y resume — el PDF subyacente queda intacto, y nada se firma ni se envía sin que tú lo decidas.",
+  "aiAnalysis.faq.q3": "¿Puedo confiar en el detector de riesgo en lugar de un abogado?",
+  "aiAnalysis.faq.a3":
+    "No — trátalo como una primera revisión que detecta señales comunes, no como un sustituto de la revisión legal para algo poco familiar, de alto valor o alto riesgo.",
+  "aiAnalysis.faq.q4": "¿En qué tipo de documentos funciona?",
+  "aiAnalysis.faq.a4":
+    "Cualquier PDF que subas — NDAs, acuerdos de servicio, cartas de oferta, contratos con proveedores — o una de las plantillas gratis de Docracy.",
+  "aiAnalysis.footerCta": "Descubre lo que realmente dice tu próximo contrato.",
+
   "ai.eyebrow": "Docracy IA",
   "ai.heroTitle": "Detección IA.\nLos campos se colocan solos.",
   "ai.heroSub":
@@ -1177,6 +1261,7 @@ const es: Messages = {
     "Es un buen punto de partida en PDFs empresariales habituales — siempre revisa los campos antes de enviar. Tú controlas cada campo y cada envío.",
   "ai.mcpLinkLead": "¿Necesitas la guía del conector para Claude, ChatGPT, Grok o Perplexity?",
   "ai.mcpLink": "Abrir la guía del conector MCP →",
+  "ai.analysisPageLink": "Más sobre el análisis de contratos con IA: la explicación y el detector de riesgo, a fondo →",
   "ai.footerCta": "¿Listo para dejar de colocar campos a mano?",
   "ai.schemaOffer": "Plan Paid con detección IA y herramientas relacionadas",
 

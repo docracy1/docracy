@@ -15,6 +15,7 @@ export default function Ai() {
   const prepareTo = `${localizePath("/prepare", locale)}?ref=seo-ai`;
   const pricingTo = localizePath("/pricing", locale);
   const mcpTo = localizePath("/mcp", locale);
+  const analysisTo = localizePath("/ai-contract-analysis", locale);
 
   const onCta = (placement: string) => {
     track("landingpage_cta_clicked", { source: `seo:ai:${placement}` });
@@ -117,6 +118,9 @@ export default function Ai() {
         <p style={{ marginTop: 28, fontSize: 14 }}>
           {t("ai.mcpLinkLead")}{" "}
           <Link to={mcpTo}>{t("ai.mcpLink")}</Link>
+        </p>
+        <p style={{ fontSize: 14 }}>
+          <Link to={analysisTo}>{t("ai.analysisPageLink")}</Link>
         </p>
       </div>
 

@@ -17,6 +17,8 @@ export const ES_PATH_BY_EN: Record<string, string> = {
   "/mcp": "/es/mcp",
   "/ai": "/es/ia",
   "/esign-ueta": "/es/esign-ueta",
+  "/create-a-digital-signature": "/es/crear-firma-digital",
+  "/ai-contract-analysis": "/es/analisis-de-contratos-ia",
 };
 
 export const EN_PATH_BY_ES: Record<string, string> = Object.fromEntries(
@@ -56,7 +58,9 @@ export type SeoPage =
   | "docs"
   | "mcp"
   | "ai"
-  | "esignUeta";
+  | "esignUeta"
+  | "createDigitalSignature"
+  | "aiContractAnalysis";
 
 export const SEO_EN_PATH: Record<SeoPage, string> = {
   home: "/",
@@ -74,6 +78,8 @@ export const SEO_EN_PATH: Record<SeoPage, string> = {
   mcp: "/mcp",
   ai: "/ai",
   esignUeta: "/esign-ueta",
+  createDigitalSignature: "/create-a-digital-signature",
+  aiContractAnalysis: "/ai-contract-analysis",
 };
 
 /** Catalog suffix under `seo.*` / `alt.*` for bilingual alternative pages. */

@@ -10,6 +10,8 @@ import Mcp from "../src/pages/Mcp";
 import Ai from "../src/pages/Ai";
 import EsignUeta from "../src/pages/EsignUeta";
 import ElectronicSignatureGuide from "../src/pages/ElectronicSignatureGuide";
+import CreateDigitalSignature from "../src/pages/CreateDigitalSignature";
+import AiContractAnalysis from "../src/pages/AiContractAnalysis";
 import About from "../src/pages/About";
 import Pricing from "../src/pages/Pricing";
 import Docs from "../src/pages/Docs";
@@ -53,6 +55,10 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/esign-ueta" element={<EsignUeta />} />
           <Route path="/es/esign-ueta" element={<EsignUeta />} />
           <Route path="/electronic-signature-guide" element={<ElectronicSignatureGuide />} />
+          <Route path="/create-a-digital-signature" element={<CreateDigitalSignature />} />
+          <Route path="/es/crear-firma-digital" element={<CreateDigitalSignature />} />
+          <Route path="/ai-contract-analysis" element={<AiContractAnalysis />} />
+          <Route path="/es/analisis-de-contratos-ia" element={<AiContractAnalysis />} />
           <Route path="/about" element={<About />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/es/precios" element={<Pricing />} />

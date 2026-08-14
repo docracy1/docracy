@@ -101,6 +101,38 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/esign-ueta" />
   </url>
   <url>
+    <loc>https://docracy.io/create-a-digital-signature</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/create-a-digital-signature" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/crear-firma-digital" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/create-a-digital-signature" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/crear-firma-digital</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/create-a-digital-signature" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/crear-firma-digital" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/create-a-digital-signature" />
+  </url>
+  <url>
+    <loc>https://docracy.io/ai-contract-analysis</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/ai-contract-analysis" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/analisis-de-contratos-ia" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/ai-contract-analysis" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/analisis-de-contratos-ia</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/ai-contract-analysis" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/analisis-de-contratos-ia" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/ai-contract-analysis" />
+  </url>
+  <url>
     <loc>https://docracy.io/pricing</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

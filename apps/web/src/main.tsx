@@ -37,6 +37,8 @@ const Pricing = lazy(() => import("./pages/Pricing"));
 const Ai = lazy(() => import("./pages/Ai"));
 const EsignUeta = lazy(() => import("./pages/EsignUeta"));
 const ElectronicSignatureGuide = lazy(() => import("./pages/ElectronicSignatureGuide"));
+const CreateDigitalSignature = lazy(() => import("./pages/CreateDigitalSignature"));
+const AiContractAnalysis = lazy(() => import("./pages/AiContractAnalysis"));
 const Docs = lazy(() => import("./pages/Docs"));
 const Roadmap = lazy(() => import("./pages/Roadmap"));
 const Imprint = lazy(() => import("./pages/Imprint"));
@@ -92,6 +94,10 @@ function AppRoutes() {
       <Route path="/esign-ueta" element={<EsignUeta />} />
       <Route path="/es/esign-ueta" element={<EsignUeta />} />
       <Route path="/electronic-signature-guide" element={<ElectronicSignatureGuide />} />
+      <Route path="/create-a-digital-signature" element={<CreateDigitalSignature />} />
+      <Route path="/es/crear-firma-digital" element={<CreateDigitalSignature />} />
+      <Route path="/ai-contract-analysis" element={<AiContractAnalysis />} />
+      <Route path="/es/analisis-de-contratos-ia" element={<AiContractAnalysis />} />
       <Route path="/admin/analytics" element={<AdminAnalytics />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/bulk-send" element={<BulkSend />} />
