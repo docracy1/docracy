@@ -82,8 +82,15 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     seoDescription: "Send client contracts without friction. Clean signing flow, no accounts required.",
     heroHeadline: "Send client contracts without friction.",
     heroSubheadline: "Clients sign instantly — no accounts, no confusing flows.",
-    problem: "Clients hate creating accounts just to sign a simple contract. This slows down deals and hurts conversion.",
-    solution: "Docracy.io gives clients a clean, instant signing experience.",
+    problem:
+      "Clients hate creating accounts just to sign a simple contract. This slows down deals and hurts conversion — " +
+      "the moment a prospect has to register for software before they can even read what they're agreeing to, some " +
+      "share of them will simply put it off. That delay is often the difference between a deal that closes today " +
+      "and one that quietly stalls.",
+    solution:
+      "Docracy.io gives clients a clean, instant signing experience: no account, no download, just a link they can " +
+      "open and sign from a phone or laptop. You keep the parts that matter — a real signature, a timestamped audit " +
+      "trail, a completed PDF you can store — without asking the client to do anything more than review and sign.",
     features: [
       { title: "Simple contract sending", body: "Upload your contract and send it for signature in seconds." },
       { title: "AI field placement", body: "Signature and date fields placed automatically — on a paid account." },
@@ -91,10 +98,23 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
         title: "Reusable client contract templates",
         body: "Save your standard contract once and reuse it for every new client — on a paid account.",
       },
-      { title: "Secure storage", body: "Encrypted, safe, and fully traceable." },
+      {
+        title: "Secure storage",
+        body: "Documents are encrypted in transit and at rest, with a timestamped audit trail of who signed and when.",
+      },
       { title: "Fast signing flow", body: "Clients sign from any device — no software or account needed." },
+      {
+        title: "Sequential or all-at-once signing",
+        body: "For contracts with more than one signer, choose whether they sign in order or all at once.",
+      },
     ],
-    useCases: ["Freelancers", "Consultants", "Agencies", "Small teams", "One-off client agreements"],
+    useCases: [
+      "Freelancers sending a service agreement before work starts",
+      "Consultants closing a new engagement",
+      "Agencies getting a scope of work signed off quickly",
+      "Small teams that don't want per-seat e-signature pricing",
+      "One-off client agreements that don't justify a full contract-management platform",
+    ],
     ctaLabel: "Send your next contract",
     ctaTo: "/prepare?freeTemplate=freelance-service-agreement",
     relatedLinks: [
@@ -137,16 +157,34 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     heroHeadline: "Manage vendor agreements without complexity.",
     heroSubheadline: "Fast workflows for suppliers, service providers, and partners.",
     problem:
-      "Vendor agreements often require signatures from multiple parties — traditional tools slow this down with accounts and heavy workflows.",
-    solution: "Docracy.io makes vendor agreement signing simple and fast.",
+      "Vendor agreements often require signatures from multiple parties — traditional tools slow this down with " +
+      "accounts and heavy workflows. A supplier who has to register for your e-signature platform before signing a " +
+      "simple pricing agreement is a supplier who's more likely to ask you to just email a PDF back and forth instead.",
+    solution:
+      "Docracy.io makes vendor agreement signing simple and fast: start from a ready-made template, add every party " +
+      "that needs to sign, and send. No one on the vendor's side needs an account, and you still get a clean, " +
+      "timestamped record of the final signed agreement for your files.",
     features: [
       { title: "Vendor agreement templates", body: "Start from a ready-made vendor agreement template — free to use." },
       { title: "AI field placement", body: "Signature and date fields placed automatically — on a paid account." },
       { title: "Multi-party signing", body: "Add every signer and choose sequential or all-at-once signing order." },
-      { title: "Secure storage", body: "Encrypted, safe, and fully traceable." },
+      {
+        title: "Secure storage",
+        body: "Documents are encrypted in transit and at rest, with a timestamped audit trail of who signed and when.",
+      },
       { title: "Clean signing flow", body: "Every party signs from any device — no software or account needed." },
+      {
+        title: "Reusable for recurring suppliers",
+        body: "Save a vendor agreement once and reuse it for every renewal or new supplier — on a paid account.",
+      },
     ],
-    useCases: ["Supplier contracts", "Service agreements", "Partnership agreements", "Renewal documents", "One-off vendor deals"],
+    useCases: [
+      "Supplier contracts covering pricing and delivery terms",
+      "Service agreements with ongoing vendors",
+      "Partnership agreements between two businesses",
+      "Renewal documents for recurring vendor relationships",
+      "One-off vendor deals that don't need a full procurement process",
+    ],
     ctaLabel: "Send vendor agreement",
     ctaTo: "/prepare?freeTemplate=vendor-agreement",
     relatedLinks: [
@@ -161,19 +199,40 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     seoDescription: "Collect compliance signatures with Docracy.io. Clean workflows, secure audit trails, no complexity.",
     heroHeadline: "Collect compliance signatures with a clean, traceable workflow.",
     heroSubheadline: "Perfect for HR, operations, and small teams.",
-    problem: "Compliance documents require clear audit trails — but most tools are too heavy for small teams.",
-    solution: "Docracy.io provides fast signing with full traceability.",
+    problem:
+      "Compliance documents require clear audit trails — but most tools built for that are too heavy for small " +
+      "teams, bundling policy management, approval chains, and per-seat licensing that a five-person team doesn't " +
+      "need just to prove a policy was read and acknowledged.",
+    solution:
+      "Docracy.io provides fast signing with full traceability: send the policy, collect a signed acknowledgment, " +
+      "and keep a timestamped record of who signed and when — without the compliance-suite overhead built for much " +
+      "larger organizations.",
     features: [
       { title: "Policy acknowledgment signing", body: "Send policies and collect signed acknowledgements in minutes." },
       {
         title: "Compliance form templates",
         body: "Save a compliance form once and reuse it for every employee or contractor — on a paid account.",
       },
-      { title: "Secure audit trail", body: "Every signature gets a timestamped, traceable record." },
+      {
+        title: "Secure audit trail",
+        body: "Every signature gets a timestamped, traceable record of who signed, when, and from where.",
+      },
       { title: "No account required for recipients", body: "Signers open the link and sign — nothing to install or register." },
       { title: "Team access", body: "Invite teammates to share templates under one paid workspace." },
+      {
+        title: "Honest scope",
+        body:
+          "This covers acknowledgment signing with a solid audit trail — it isn't a substitute for SOC 2 or ISO " +
+          "27001 certification, or a full compliance-management platform.",
+      },
     ],
-    useCases: ["HR compliance", "Safety policies", "Mandatory acknowledgements", "Internal documentation", "Contractor compliance"],
+    useCases: [
+      "HR compliance acknowledgments",
+      "Safety policy sign-off for staff and contractors",
+      "Mandatory acknowledgements tied to a policy update",
+      "Internal documentation that needs a signed record",
+      "Contractor compliance forms before work begins",
+    ],
     ctaLabel: "Send compliance document",
     ctaTo: "/prepare",
     relatedLinks: [
@@ -367,8 +426,13 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
     seoDescription: "A lightweight alternative to Eversign for quick agreements. No subscriptions, no complexity.",
     heroHeadline: "A lightweight alternative to Eversign.",
     heroSubheadline: "Built for quick, low-stakes agreements — not enterprise workflows.",
-    problem: "Eversign is powerful, but heavy. If you only need simple agreements, it's too slow and too complex.",
-    solution: "Docracy.io focuses on speed, simplicity, and clean signing.",
+    problem:
+      "Eversign (now rebranded Xodo Sign) is a genuinely solid tool, but it requires an account on every plan, " +
+      "including the free tier, and its Professional plan prices per user — a cost that grows with your team even " +
+      "if your actual signing volume doesn't.",
+    solution:
+      "Docracy.io focuses on speed, simplicity, and clean signing: a free tier with no account required for a short " +
+      "signing chain, and a flat per-workspace price on paid plans instead of a per-seat one.",
     comparison: [
       "No subscriptions for simple agreements — up to 2 signers, completely free",
       "No account required for recipients",
@@ -376,6 +440,7 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
       "AI-assisted field placement (paid accounts)",
       "WhatsApp signing links — Eversign doesn't offer this; Docracy includes 2 free/month",
       "Perfect for NDAs, client contracts, and onboarding docs",
+      "Flat $10/month paid plan regardless of team size — not per user",
     ],
     ctaLabel: "Try free — send a sample NDA",
     ctaTo: "/prepare?freeTemplate=mutual-nda&ref=seo-eversign-alternative",
@@ -388,8 +453,13 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
     seoDescription: "A simple alternative to DocuSign for quick agreements. Fast, clean, no account required.",
     heroHeadline: "DocuSign is too heavy for simple agreements.",
     heroSubheadline: "Docracy.io is built for fast, lightweight signing.",
-    problem: "DocuSign is great for enterprise workflows — but overkill for NDAs, client contracts, and one-off agreements.",
-    solution: "Docracy.io removes the friction and focuses on speed.",
+    problem:
+      "DocuSign is great for enterprise workflows — identity verification, deep integrations, compliance " +
+      "certifications — but that's overkill for NDAs, client contracts, and one-off agreements. Its commercial " +
+      "plans also carry a per-seat minimum, so a two-person team can end up paying for licenses it doesn't use.",
+    solution:
+      "Docracy.io removes the friction and focuses on speed: no account required to send or sign a short chain of " +
+      "documents, and flat per-workspace pricing on the paid plan instead of a per-seat one with a minimum.",
     comparison: [
       "Faster signing — no accounts, no delays",
       "No account required for recipients",
@@ -397,6 +467,7 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
       "AI-assisted field placement (paid accounts)",
       "WhatsApp signing links — DocuSign doesn't offer this; Docracy includes 2 free/month",
       "Clean, distraction-free workflow",
+      "No 5-seat minimum — Docracy's paid plan covers unlimited team members at one flat price",
     ],
     ctaLabel: "Try free — send a sample NDA",
     ctaTo: "/prepare?freeTemplate=mutual-nda&ref=seo-docusign-alternative",
@@ -435,9 +506,13 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
     heroHeadline: "PandaDoc is overkill if you only need a signature.",
     heroSubheadline: "Docracy skips proposals and CPQ — just send the PDF and get it signed.",
     problem:
-      "PandaDoc shines for quotes and proposals. If your job is “please sign this NDA / contractor agreement,” you’re paying for a sales stack you don’t use.",
+      "PandaDoc shines for quotes and proposals — CRM integrations, a content library, built-in payment collection. " +
+      "If your job is “please sign this NDA / contractor agreement,” you’re paying for a sales stack you don’t use, " +
+      "priced per seat on top of it.",
     solution:
-      "Docracy is a lightweight signing path: upload or start from a free template, place fields, send. Free for 2 signers; paid is $10/mo when you outgrow that.",
+      "Docracy is a lightweight signing path: upload or start from a free template, place fields, send. Free for 2 " +
+      "signers with no account required on either side; paid is a flat $10/mo per workspace when you outgrow that, " +
+      "with no per-seat math.",
     comparison: [
       "No proposal editor required for simple agreements",
       "Free ≤2 signers, no accounts",
@@ -445,6 +520,7 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
       "Templates for NDAs, contractor docs, client contracts",
       "WhatsApp signing links — PandaDoc doesn't offer this; Docracy includes 2 free/month",
       "Skip if you need full proposal + payments in one tool",
+      "An MCP connector so AI assistants can create and send documents directly — PandaDoc has no equivalent",
     ],
     ctaLabel: "Try free — send a sample NDA",
     ctaTo: "/prepare?freeTemplate=mutual-nda&ref=seo-pandadoc-alternative",
@@ -459,9 +535,12 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
     heroHeadline: "Adobe Sign without the Acrobat baggage.",
     heroSubheadline: "When you need a signature — not another Adobe seat in the stack.",
     problem:
-      "Adobe Acrobat Sign makes sense inside Acrobat workflows. For occasional NDAs and client agreements, it’s heavy and priced for teams living in Adobe every day.",
+      "Adobe Acrobat Sign makes sense inside Acrobat workflows — deep PDF editing, Creative Cloud integration, " +
+      "identity verification options. For occasional NDAs and client agreements, it’s heavy and priced for teams " +
+      "living in Adobe every day, with an annual commitment and a per-user transaction cap on top.",
     solution:
-      "Docracy is a focused signing product: free for simple two-party docs, flat $10/mo when you need more — no Creative Cloud required.",
+      "Docracy is a focused signing product: free for simple two-party docs with no account required, flat $10/mo " +
+      "when you need more — no Creative Cloud subscription, annual lock-in, or transaction cap required.",
     comparison: [
       "No Adobe account for signers",
       "Free for up to 2 signers",
@@ -469,6 +548,7 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
       "Works from any browser on phone or desktop",
       "WhatsApp signing links — Adobe Sign doesn't offer this; Docracy includes 2 free/month",
       "Not a full Acrobat replacement — deliberately lighter",
+      "No annual commitment or per-user transaction cap",
     ],
     ctaLabel: "Try free — send a sample NDA",
     ctaTo: "/prepare?freeTemplate=mutual-nda&ref=seo-adobe-sign-alternative",
@@ -628,18 +708,42 @@ export const EXPLAINER_PAGES: ExplainerPageContent[] = [
       {
         heading: "What is an NDA?",
         body:
-          "An NDA (Non-Disclosure Agreement) is a legal document used to protect confidential information. It defines what " +
-          "information is confidential, how it can be used, and what happens if it's shared improperly.",
+          "An NDA (Non-Disclosure Agreement) is a legal document used to protect confidential information. It defines " +
+          "what information is confidential, how it can be used, and what happens if it's shared improperly. Most " +
+          "NDAs are short — a page or two — because the goal is clarity, not legal complexity.",
       },
-      { heading: "Types of NDAs", list: ["Mutual NDA", "One-way NDA", "Contractor NDA", "Employee NDA"] },
+      {
+        heading: "Types of NDAs",
+        list: ["Mutual NDA — both sides share confidential information", "One-way NDA — only one side does", "Contractor NDA", "Employee NDA"],
+      },
+      {
+        heading: "What a good NDA actually includes",
+        list: [
+          "A specific definition of what counts as confidential",
+          "How long the confidentiality obligation lasts",
+          "What the receiving party is allowed to do with the information",
+          "What happens if the agreement is broken",
+        ],
+      },
       {
         heading: "Why NDAs matter",
-        body: "NDAs protect business ideas, client information, internal processes, and sensitive data.",
+        body:
+          "NDAs protect business ideas, client information, internal processes, and sensitive data. The value isn't " +
+          "just legal — signing one before a sensitive conversation also sets a clear expectation for both sides " +
+          "about what's being shared and why.",
+      },
+      {
+        heading: "When you don't strictly need one",
+        body:
+          "Not every conversation needs an NDA. Casual discussions with no real sensitive detail, or information " +
+          "that's already public, usually don't require one. NDAs earn their keep specifically when real confidential " +
+          "information — pricing, source code, unreleased plans — is about to change hands.",
       },
       {
         heading: "Sign NDAs online",
         body:
-          "Docracy.io lets you send and sign NDAs fast — no subscriptions, no account required for recipients, no complexity.",
+          "Docracy.io lets you send and sign NDAs fast — no subscriptions, no account required for recipients, no " +
+          "complexity. A mutual or one-way NDA template covers most situations; fill in the specifics and send.",
       },
     ],
     ctaLabel: "Sign NDA online",
@@ -648,6 +752,7 @@ export const EXPLAINER_PAGES: ExplainerPageContent[] = [
       { label: "Free mutual NDA template", to: "/free-templates/mutual-nda" },
       { label: "Free one-way NDA template", to: "/free-templates/unilateral-nda" },
       { label: "More about NDA signing", to: "/nda-signing" },
+      { label: "One-way vs. mutual NDA", to: "/blog/one-way-vs-mutual-nda" },
     ],
   },
   {
