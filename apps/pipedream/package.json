@@ -1,0 +1,9 @@
+{
+  "name": "docracy-pipedream",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Docracy components for the Pipedream platform (app definition, actions, event sources)",
+  "dependencies": {
+    "@pipedream/platform": "^3.0.3"
+  }
+}
