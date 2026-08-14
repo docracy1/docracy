@@ -12,6 +12,10 @@ import EsignUeta from "../src/pages/EsignUeta";
 import ElectronicSignatureGuide from "../src/pages/ElectronicSignatureGuide";
 import CreateDigitalSignature from "../src/pages/CreateDigitalSignature";
 import AiContractAnalysis from "../src/pages/AiContractAnalysis";
+import EsignatureSoftware from "../src/pages/EsignatureSoftware";
+import SignPdfOnline from "../src/pages/SignPdfOnline";
+import SecureElectronicSignature from "../src/pages/SecureElectronicSignature";
+import FreeElectronicSignature from "../src/pages/FreeElectronicSignature";
 import About from "../src/pages/About";
 import Pricing from "../src/pages/Pricing";
 import Docs from "../src/pages/Docs";
@@ -59,6 +63,14 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/es/crear-firma-digital" element={<CreateDigitalSignature />} />
           <Route path="/ai-contract-analysis" element={<AiContractAnalysis />} />
           <Route path="/es/analisis-de-contratos-ia" element={<AiContractAnalysis />} />
+          <Route path="/esignature-software" element={<EsignatureSoftware />} />
+          <Route path="/es/software-de-firma-electronica" element={<EsignatureSoftware />} />
+          <Route path="/sign-pdf-online" element={<SignPdfOnline />} />
+          <Route path="/es/firmar-pdf-en-linea" element={<SignPdfOnline />} />
+          <Route path="/secure-electronic-signature" element={<SecureElectronicSignature />} />
+          <Route path="/es/firma-electronica-segura" element={<SecureElectronicSignature />} />
+          <Route path="/free-electronic-signature" element={<FreeElectronicSignature />} />
+          <Route path="/es/firma-electronica-gratis" element={<FreeElectronicSignature />} />
           <Route path="/about" element={<About />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/es/precios" element={<Pricing />} />

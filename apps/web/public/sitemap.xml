@@ -133,6 +133,70 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/ai-contract-analysis" />
   </url>
   <url>
+    <loc>https://docracy.io/esignature-software</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/esignature-software" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/software-de-firma-electronica" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/esignature-software" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/software-de-firma-electronica</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/esignature-software" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/software-de-firma-electronica" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/esignature-software" />
+  </url>
+  <url>
+    <loc>https://docracy.io/sign-pdf-online</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/sign-pdf-online" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/firmar-pdf-en-linea" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/sign-pdf-online" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/firmar-pdf-en-linea</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/sign-pdf-online" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/firmar-pdf-en-linea" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/sign-pdf-online" />
+  </url>
+  <url>
+    <loc>https://docracy.io/secure-electronic-signature</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/secure-electronic-signature" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/firma-electronica-segura" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/secure-electronic-signature" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/firma-electronica-segura</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/secure-electronic-signature" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/firma-electronica-segura" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/secure-electronic-signature" />
+  </url>
+  <url>
+    <loc>https://docracy.io/free-electronic-signature</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-electronic-signature" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/firma-electronica-gratis" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-electronic-signature" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/firma-electronica-gratis</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-electronic-signature" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/firma-electronica-gratis" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-electronic-signature" />
+  </url>
+  <url>
     <loc>https://docracy.io/pricing</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

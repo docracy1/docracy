@@ -131,6 +131,10 @@ const en: Messages = {
   "footer.mcp": "MCP connector",
   "footer.aiAnalysis": "AI contract analysis",
   "footer.createSignature": "Create a digital signature",
+  "footer.esignSoftware": "E-signature software guide",
+  "footer.signPdf": "Sign a PDF online",
+  "footer.secureSig": "Secure electronic signature",
+  "footer.freeSig": "Free electronic signature",
   "footer.industries": "Industries",
   "footer.ai": "AI Auto-Detect",
   "footer.docs": "Docs",
@@ -982,6 +986,18 @@ const en: Messages = {
   "seo.aiContractAnalysis.title": "AI Contract Analysis | Docracy",
   "seo.aiContractAnalysis.description":
     "Get a plain-English summary of what a contract says and a flag on clauses worth a second look, before you sign or send. Paid-plan AI tools built into the Docracy signing flow.",
+  "seo.esignatureSoftware.title": "E-Signature Software: What to Look For | Docracy",
+  "seo.esignatureSoftware.description":
+    "What actually matters when choosing e-signature software — legal validity, audit trail depth, pricing model, signer friction — and where a flat-rate, no-signup tool like Docracy fits.",
+  "seo.signPdfOnline.title": "How to Sign a PDF Online | Docracy",
+  "seo.signPdfOnline.description":
+    "Upload, edit (redact, reorder, fix text), and sign a PDF online free — no account, no software to install. Step-by-step guide.",
+  "seo.secureElectronicSignature.title": "Secure Electronic Signatures | Docracy",
+  "seo.secureElectronicSignature.description":
+    "What actually makes an e-signature secure: encryption, a tamper-evident audit trail, unguessable signing links, and deliberate retention limits — plus an honest look at what \"secure\" doesn't mean.",
+  "seo.freeElectronicSignature.title": "Free Electronic Signature — No Account | Docracy",
+  "seo.freeElectronicSignature.description":
+    "A genuinely free way to send and sign a document — no account, no card, no trial countdown. What's included free, and when you'd actually need to upgrade.",
   "seo.esignUeta.description":
     "Docracy SES electronic signatures are designed to support the U.S. ESIGN Act and UETA: consent, intent to sign, audit trail, and a certificate of completion. Paid/Enterprise accounts can add WhatsApp-verified Advanced Electronic Signature (AES) — still no QES or identity verification.",
 
@@ -1129,6 +1145,163 @@ const en: Messages = {
   "aiAnalysis.faq.a4":
     "Any PDF you upload — NDAs, service agreements, offer letters, vendor contracts — or one of Docracy's own free templates.",
   "aiAnalysis.footerCta": "See what your next contract actually says.",
+
+  "esignSoftware.eyebrow": "Buyer's guide",
+  "esignSoftware.heroTitle": "E-Signature Software: What to Actually Look For",
+  "esignSoftware.heroSub":
+    "Not every e-signature tool is built for the same job. Here's what matters when you're choosing one — and where a flat-rate, no-signup tool like Docracy fits.",
+  "esignSoftware.ctaTry": "Try it free →",
+  "esignSoftware.ctaPricing": "See pricing",
+  "esignSoftware.checklistTitle": "Four things worth checking before you commit",
+  "esignSoftware.checklistSub": "Skip the feature-list marketing and check these instead.",
+  "esignSoftware.check.legal.title": "Legal validity",
+  "esignSoftware.check.legal.body":
+    "Does it record consent, intent to sign, and a retainable audit trail — the three things ESIGN, UETA, and eIDAS actually require? Most tools do; a few cut corners on the audit trail.",
+  "esignSoftware.check.audit.title": "Audit trail depth",
+  "esignSoftware.check.audit.body":
+    "A timestamp isn't enough. Look for IP address, user-agent, and a content hash logged at every view, consent, and signature — the record that actually holds up if a signature is ever disputed.",
+  "esignSoftware.check.pricing.title": "Pricing model",
+  "esignSoftware.check.pricing.body":
+    "Per-seat pricing punishes a growing team. A flat rate for unlimited signers and team members scales better for most small businesses.",
+  "esignSoftware.check.friction.title": "Signer friction",
+  "esignSoftware.check.friction.body":
+    "Can the person you're sending it to sign without creating an account? If not, expect a meaningful share of them to put it off — or not sign at all.",
+  "esignSoftware.pricingModelsTitle": "The pricing model most tools don't advertise clearly",
+  "esignSoftware.pricingModelsBody1":
+    "Most e-signature software charges per seat, per month — meaning the price climbs every time you add a team member, whether or not they sign frequently. That model makes sense at enterprise scale, less so for a small team or a solo freelancer.",
+  "esignSoftware.pricingModelsBody2":
+    "It's worth asking directly: does the price change if I add a teammate? For many tools, the honest answer is yes.",
+  "esignSoftware.fitTitle": "Where Docracy fits",
+  "esignSoftware.fitBody1":
+    "Docracy is built for quick, low-stakes agreements — NDAs, offer letters, service agreements, vendor contracts — not enterprise contract-lifecycle management. Free tier: no account, no card, up to 2 signers. Paid: $10/month flat, unlimited signers and team members, never per seat.",
+  "esignSoftware.fitBody2":
+    "If you need enterprise features — SSO, dedicated account management, custom SLAs — our Enterprise plan covers that too. If you need heavier document-workflow automation than a small team requires, a bigger platform may genuinely fit better; see the comparisons below.",
+  "esignSoftware.compareLead": "Considering something else? See how Docracy compares to:",
+  "esignSoftware.guideLead": "For the full legal and compliance breakdown (ESIGN, UETA, eIDAS, GDPR):",
+  "esignSoftware.guideLink": "read the complete electronic signature guide",
+  "esignSoftware.faqTitle": "Frequently asked questions",
+  "esignSoftware.faq.q1": "Is free e-signature software actually free, or a trial?",
+  "esignSoftware.faq.a1":
+    "Depends on the tool. Docracy's free tier has no time limit and no card required — it's free for signing chains of up to 2 signers, indefinitely, not a trial.",
+  "esignSoftware.faq.q2": "Do I need to install software?",
+  "esignSoftware.faq.a2":
+    "No — Docracy runs entirely in the browser, for both the sender and every signer. Nothing to download.",
+  "esignSoftware.faq.q3": "What's the difference between e-signature software and a PDF editor with a signature feature?",
+  "esignSoftware.faq.a3":
+    "A PDF editor's signature tool typically just draws an image onto a page. Real e-signature software adds a legally-relevant record: consent, timestamped audit trail, and a certificate of completion that shows what was agreed to and when.",
+  "esignSoftware.faq.q4": "Can I switch from another e-signature tool?",
+  "esignSoftware.faq.a4":
+    "Yes — see our import guides for bringing existing documents over from DocuSign, eversign, HelloSign, PandaDoc, or Adobe Sign.",
+  "esignSoftware.footerCta": "Try Docracy free — no account needed.",
+
+  "signPdf.eyebrow": "How-to guide",
+  "signPdf.heroTitle": "How to Sign a PDF Online",
+  "signPdf.heroSub":
+    "Whether you just need to add a signature or first need to redact, reorder, or edit the PDF itself — here's how to do both, free.",
+  "signPdf.ctaTry": "Upload a PDF now →",
+  "signPdf.editTitle": "Sometimes \"sign a PDF\" means \"edit a PDF\" first",
+  "signPdf.editBody":
+    "A lot of PDFs aren't sign-ready as-is — a page needs removing, a line needs redacting, a typo needs fixing before anyone signs. Docracy's editor handles this directly on the PDF you upload, before you send it:",
+  "signPdf.edit.1": "Reorder or delete pages",
+  "signPdf.edit.2": "Redact sensitive text or images permanently",
+  "signPdf.edit.3": "Add new text anywhere on the page",
+  "signPdf.edit.4": "Edit existing text directly on the PDF (whiteout-and-redraw, not just an overlay)",
+  "signPdf.howTitle": "Sign a PDF in under a minute",
+  "signPdf.how.1": "Upload the PDF — drag and drop, or choose a free template instead.",
+  "signPdf.how.2": "Edit it if needed: reorder pages, redact, or fix text.",
+  "signPdf.how.3": "Place signature, date, or text fields wherever they belong.",
+  "signPdf.how.4": "Send it. Signers open the link and sign — no account, no software to install.",
+  "signPdf.createSigLead": "Need to actually create a signature first, not just place one on a document?",
+  "signPdf.createSigLink": "See how to create a digital signature",
+  "signPdf.noAccountTitle": "No account needed — for you or your signer",
+  "signPdf.noAccountBody":
+    "Docracy's free tier lets you upload, edit, and send a PDF for signature without creating an account, for chains of up to 2 signers. The person you send it to doesn't need an account either — they open the link and sign directly.",
+  "signPdf.faqTitle": "Frequently asked questions",
+  "signPdf.faq.q1": "Can I sign a PDF without downloading any software?",
+  "signPdf.faq.a1": "Yes — the entire flow runs in your browser, from upload to signing, on desktop or mobile.",
+  "signPdf.faq.q2": "Can I edit a PDF's existing text, not just add new fields?",
+  "signPdf.faq.a2":
+    "Yes — Docracy can directly edit existing text on a PDF page (not just paste something over it), plus redact, reorder, and delete pages.",
+  "signPdf.faq.q3": "Is signing a PDF online legally valid?",
+  "signPdf.faq.a3":
+    "Generally yes, under laws like the U.S. ESIGN Act, UETA, and the EU's eIDAS regulation, provided there's consent, intent to sign, and a retainable record — which is exactly what Docracy's audit trail captures.",
+  "signPdf.faq.q4": "What file types can I upload?",
+  "signPdf.faq.a4": "PDF is the primary format. If you don't already have a document, start from one of Docracy's free templates instead.",
+  "signPdf.footerCta": "Upload your PDF and get it signed today.",
+
+  "secureSig.eyebrow": "Security",
+  "secureSig.heroTitle": "Secure Electronic Signatures",
+  "secureSig.heroSub":
+    "What actually makes an e-signature secure isn't the visual squiggle — it's the encryption, the audit trail, and what happens if something's ever disputed. Here's exactly how Docracy handles all three.",
+  "secureSig.ctaTry": "Sign securely, free →",
+  "secureSig.pillarsTitle": "Four things that make a signature secure",
+  "secureSig.pillarsSub": "Not marketing claims — the actual mechanics.",
+  "secureSig.pillar.encryption.title": "Encryption in transit and at rest",
+  "secureSig.pillar.encryption.body":
+    "All traffic runs over TLS. Document bytes and application data are encrypted at rest via Cloudflare's platform defaults for R2, KV, and D1.",
+  "secureSig.pillar.audit.title": "Tamper-evident audit trail",
+  "secureSig.pillar.audit.body":
+    "Every view, consent, and signature is logged with a timestamp, IP address, user-agent, and a cryptographic hash of the document content at that exact moment.",
+  "secureSig.pillar.links.title": "Unguessable signing links",
+  "secureSig.pillar.links.body":
+    "Signing links are HMAC-signed tokens, not account passwords — they can't be brute-forced or guessed, and paid plans can add a required PIN on top.",
+  "secureSig.pillar.retention.title": "Deliberate retention limits",
+  "secureSig.pillar.retention.body":
+    "Anonymous signing chains use a short retention window (9 days by default) so documents don't sit on our infrastructure longer than needed to complete signing and deliver final copies.",
+  "secureSig.honestyTitle": "What \"secure\" doesn't mean here",
+  "secureSig.honestyBody1":
+    "We're direct about this: Docracy (RELACON GmbH) does not hold its own SOC 2 or ISO 27001 attestation. Our infrastructure runs on Cloudflare, which does maintain SOC 2 Type II and ISO 27001 — but that's shared-responsibility infrastructure evidence, not a Docracy-issued certificate for the application layer.",
+  "secureSig.honestyBody2":
+    "We'd rather publish exactly what we do and don't have than make a compliance claim we can't back up. Our full security questionnaire answers are public, not gated behind a sales call.",
+  "secureSig.identityTitle": "Secure ≠ identity-verified, by default",
+  "secureSig.identityBody":
+    "By default, Docracy does not verify who is signing — anyone holding a signing link can sign as the name on it. The audit trail proves what was signed and when, not who physically clicked. Paid and Enterprise accounts can add a required PIN and WhatsApp-bound delivery (coming soon) for a stronger, identity-linked tier.",
+  "secureSig.faqTitle": "Frequently asked questions",
+  "secureSig.faq.q1": "Does Docracy have SOC 2 or ISO 27001?",
+  "secureSig.faq.a1":
+    "Not on its own — our infrastructure (Cloudflare) does, which is shared-responsibility evidence, not a Docracy-issued certificate. See our full Trust & security page for the complete questionnaire.",
+  "secureSig.faq.q2": "Is my data encrypted?",
+  "secureSig.faq.a2": "Yes — TLS in transit, and Cloudflare's platform-level encryption at rest for documents and application data.",
+  "secureSig.faq.q3": "Does Docracy verify who's signing?",
+  "secureSig.faq.a3":
+    "Not by default. The audit trail proves what was signed and when, not a verified identity. An optional PIN and WhatsApp-bound delivery (coming soon, paid plans) add stronger signer verification.",
+  "secureSig.faq.q4": "How long are my documents kept?",
+  "secureSig.faq.a4": "Anonymous signing chains use a 9-day default retention window. Paid workspaces keep history according to their plan until deleted.",
+  "secureSig.footerCta": "See exactly how your document is protected.",
+  "secureSig.trustLink": "Full Trust & security page",
+  "secureSig.dpaLink": "Data Processing Agreement",
+
+  "freeSig.eyebrow": "Free tier",
+  "freeSig.heroTitle": "Free Electronic Signature — No Account, No Card",
+  "freeSig.heroSub":
+    "Not a free trial. Not a watermarked demo. A genuinely free way to send and sign a document, indefinitely, for chains of up to 2 signers.",
+  "freeSig.ctaTry": "Send a document free →",
+  "freeSig.includedTitle": "What's actually included, free",
+  "freeSig.included.1": "No account, no password, no credit card — upload a document and send it",
+  "freeSig.included.2": "Up to 2 signers per document, unlimited documents",
+  "freeSig.included.3": "A timestamped audit trail and a signed PDF for every party",
+  "freeSig.included.4": "A certificate of completion summarizing who signed, when, and how",
+  "freeSig.upgradeTitle": "When you'd actually need to upgrade",
+  "freeSig.upgradeBody": "The free tier covers most one-off agreements. You'd need the $10/month flat Paid plan if you need:",
+  "freeSig.upgrade.1": "More than 2 signers on a single document",
+  "freeSig.upgrade.2": "Reusable templates, a team dashboard, or bulk sending",
+  "freeSig.upgrade.3": "AI tools (contract explainer, risk highlighter, auto-detect) or the MCP connector",
+  "freeSig.pricingLink": "See the full plan comparison",
+  "freeSig.catchTitle": "What's the catch?",
+  "freeSig.catchBody":
+    "None that costs you anything: we don't sell your data or run advertising trackers, and there's no hidden per-signature fee. The free tier is funded by people who upgrade for team features — anonymous documents are deleted after a short retention window (9 days by default) rather than kept indefinitely, which keeps the free flow genuinely free to run at scale.",
+  "freeSig.faqTitle": "Frequently asked questions",
+  "freeSig.faq.q1": "Is this free forever, or a trial period?",
+  "freeSig.faq.a1": "Forever, for chains of up to 2 signers — no trial countdown, no credit card required to start.",
+  "freeSig.faq.q2": "Do my signers need an account too?",
+  "freeSig.faq.a2": "No — nobody needs an account to sign. They open the link from their email and sign directly.",
+  "freeSig.faq.q3": "Is a free electronic signature legally valid?",
+  "freeSig.faq.a3":
+    "Yes, generally — under the U.S. ESIGN Act, UETA, and the EU's eIDAS regulation, what matters is consent, intent, and a retainable record, all of which the free tier provides. It's not tied to whether you paid for the tool.",
+  "freeSig.faq.q4": "What happens to my document after everyone signs?",
+  "freeSig.faq.a4":
+    "Everyone gets the signed PDF and a certificate of completion by email. The anonymous copy on Docracy's servers is deleted after a short retention window (9 days by default).",
+  "freeSig.footerCta": "Send your first document free.",
 
   "ai.eyebrow": "Docracy AI",
   "ai.heroTitle": "AI Auto-Detect.\nFields place themselves.",

@@ -191,6 +191,10 @@ const es: Messages = {
   "footer.mcp": "Conector MCP",
   "footer.aiAnalysis": "Análisis de contratos con IA",
   "footer.createSignature": "Crear una firma digital",
+  "footer.esignSoftware": "Guía de software de firma electrónica",
+  "footer.signPdf": "Firmar un PDF en línea",
+  "footer.secureSig": "Firma electrónica segura",
+  "footer.freeSig": "Firma electrónica gratis",
   "footer.industries": "Industrias",
   "footer.ai": "Detección IA",
   "footer.pricing": "Precios",
@@ -1069,6 +1073,18 @@ const es: Messages = {
   "seo.aiContractAnalysis.title": "Análisis de contratos con IA | Docracy",
   "seo.aiContractAnalysis.description":
     "Obtén un resumen en lenguaje claro de lo que dice un contrato y una alerta sobre cláusulas que merecen una segunda mirada, antes de firmar o enviar. Herramientas de IA del plan de pago integradas en Docracy.",
+  "seo.esignatureSoftware.title": "Software de firma electrónica: qué buscar | Docracy",
+  "seo.esignatureSoftware.description":
+    "Lo que realmente importa al elegir software de firma electrónica — validez legal, profundidad del registro de auditoría, modelo de precios, fricción para el firmante — y dónde encaja una herramienta de precio fijo y sin registro como Docracy.",
+  "seo.signPdfOnline.title": "Cómo firmar un PDF en línea | Docracy",
+  "seo.signPdfOnline.description":
+    "Sube, edita (tacha, reordena, corrige texto) y firma un PDF en línea gratis — sin cuenta, sin instalar software. Guía paso a paso.",
+  "seo.secureElectronicSignature.title": "Firmas electrónicas seguras | Docracy",
+  "seo.secureElectronicSignature.description":
+    "Lo que realmente hace segura a una firma electrónica: cifrado, registro de auditoría inviolable, enlaces de firma imposibles de adivinar y límites de retención deliberados — más una mirada honesta a lo que \"seguro\" no significa.",
+  "seo.freeElectronicSignature.title": "Firma electrónica gratis — sin cuenta | Docracy",
+  "seo.freeElectronicSignature.description":
+    "Una forma genuinamente gratis de enviar y firmar un documento — sin cuenta, sin tarjeta, sin cuenta regresiva de prueba. Qué incluye gratis, y cuándo realmente necesitarías actualizar.",
   "seo.esignUeta.description":
     "Las firmas SES de Docracy están diseñadas para respaldar la ESIGN Act y UETA de EE. UU.: consentimiento, intención de firmar, registro de auditoría y certificado de finalización. Las cuentas de pago/Enterprise pueden añadir firma avanzada (AES) verificada por WhatsApp — sigue sin QES ni verificación de identidad.",
 
@@ -1216,6 +1232,162 @@ const es: Messages = {
   "aiAnalysis.faq.a4":
     "Cualquier PDF que subas — NDAs, acuerdos de servicio, cartas de oferta, contratos con proveedores — o una de las plantillas gratis de Docracy.",
   "aiAnalysis.footerCta": "Descubre lo que realmente dice tu próximo contrato.",
+
+  "esignSoftware.eyebrow": "Guía de compra",
+  "esignSoftware.heroTitle": "Software de firma electrónica: qué buscar realmente",
+  "esignSoftware.heroSub":
+    "No todas las herramientas de firma electrónica están hechas para el mismo trabajo. Esto es lo que importa al elegir una — y dónde encaja una herramienta de precio fijo y sin registro como Docracy.",
+  "esignSoftware.ctaTry": "Pruébalo gratis →",
+  "esignSoftware.ctaPricing": "Ver precios",
+  "esignSoftware.checklistTitle": "Cuatro cosas que vale la pena revisar antes de decidirte",
+  "esignSoftware.checklistSub": "Olvida el marketing de lista de funciones y revisa esto en su lugar.",
+  "esignSoftware.check.legal.title": "Validez legal",
+  "esignSoftware.check.legal.body":
+    "¿Registra el consentimiento, la intención de firmar y un registro de auditoría conservable — las tres cosas que realmente exigen ESIGN, UETA y eIDAS? La mayoría de las herramientas sí; algunas recortan en el registro de auditoría.",
+  "esignSoftware.check.audit.title": "Profundidad del registro de auditoría",
+  "esignSoftware.check.audit.body":
+    "Una marca de tiempo no basta. Busca dirección IP, user-agent y un hash del contenido registrados en cada vista, consentimiento y firma — el registro que realmente sostiene una firma si alguna vez se disputa.",
+  "esignSoftware.check.pricing.title": "Modelo de precios",
+  "esignSoftware.check.pricing.body":
+    "El precio por asiento castiga a un equipo que crece. Una tarifa fija con firmantes y miembros de equipo ilimitados escala mejor para la mayoría de las pequeñas empresas.",
+  "esignSoftware.check.friction.title": "Fricción para el firmante",
+  "esignSoftware.check.friction.body":
+    "¿Puede firmar sin crear una cuenta la persona a la que le envías el documento? Si no, espera que una parte importante lo posponga — o no firme nunca.",
+  "esignSoftware.pricingModelsTitle": "El modelo de precios que la mayoría no anuncia con claridad",
+  "esignSoftware.pricingModelsBody1":
+    "La mayoría del software de firma electrónica cobra por asiento, por mes — el precio sube cada vez que agregas a alguien del equipo, firme seguido o no. Ese modelo tiene sentido a escala empresarial, menos para un equipo pequeño o un freelancer.",
+  "esignSoftware.pricingModelsBody2":
+    "Vale la pena preguntar directamente: ¿cambia el precio si agrego a alguien del equipo? Para muchas herramientas, la respuesta honesta es sí.",
+  "esignSoftware.fitTitle": "Dónde encaja Docracy",
+  "esignSoftware.fitBody1":
+    "Docracy está hecho para acuerdos rápidos y de bajo riesgo — NDAs, cartas de oferta, acuerdos de servicio, contratos con proveedores — no para gestión empresarial del ciclo de vida de contratos. Plan gratis: sin cuenta, sin tarjeta, hasta 2 firmantes. Plan de pago: $10/mes fijo, firmantes y miembros de equipo ilimitados, nunca por asiento.",
+  "esignSoftware.fitBody2":
+    "Si necesitas funciones empresariales — SSO, gestión de cuenta dedicada, SLAs personalizados — nuestro plan Enterprise también las cubre. Si necesitas más automatización de flujo de documentos de la que requiere un equipo pequeño, una plataforma más grande puede encajar mejor; mira las comparaciones abajo.",
+  "esignSoftware.compareLead": "¿Estás considerando otra opción? Mira cómo se compara Docracy con:",
+  "esignSoftware.guideLead": "Para el desglose legal y de cumplimiento completo (ESIGN, UETA, eIDAS, GDPR):",
+  "esignSoftware.guideLink": "lee la guía completa de firmas electrónicas",
+  "esignSoftware.faqTitle": "Preguntas frecuentes",
+  "esignSoftware.faq.q1": "¿El software de firma electrónica gratis es realmente gratis, o una prueba?",
+  "esignSoftware.faq.a1":
+    "Depende de la herramienta. El plan gratis de Docracy no tiene límite de tiempo ni requiere tarjeta — es gratis para cadenas de firma de hasta 2 firmantes, indefinidamente, no es una prueba.",
+  "esignSoftware.faq.q2": "¿Necesito instalar algún software?",
+  "esignSoftware.faq.a2": "No — Docracy funciona completamente en el navegador, tanto para quien envía como para cada firmante. Nada que descargar.",
+  "esignSoftware.faq.q3": "¿Cuál es la diferencia entre software de firma electrónica y un editor de PDF con función de firma?",
+  "esignSoftware.faq.a3":
+    "La función de firma de un editor de PDF normalmente solo dibuja una imagen sobre la página. El software de firma electrónica real agrega un registro legalmente relevante: consentimiento, registro de auditoría con marca de tiempo y un certificado de finalización que muestra qué se acordó y cuándo.",
+  "esignSoftware.faq.q4": "¿Puedo cambiarme desde otra herramienta de firma electrónica?",
+  "esignSoftware.faq.a4":
+    "Sí — mira nuestras guías de importación para traer documentos existentes desde DocuSign, eversign, HelloSign, PandaDoc o Adobe Sign.",
+  "esignSoftware.footerCta": "Prueba Docracy gratis — sin necesidad de cuenta.",
+
+  "signPdf.eyebrow": "Guía práctica",
+  "signPdf.heroTitle": "Cómo firmar un PDF en línea",
+  "signPdf.heroSub":
+    "Ya sea que solo necesites agregar una firma o primero necesites tachar, reordenar o editar el PDF en sí — aquí está cómo hacer ambas cosas, gratis.",
+  "signPdf.ctaTry": "Sube un PDF ahora →",
+  "signPdf.editTitle": "A veces \"firmar un PDF\" significa \"editar un PDF\" primero",
+  "signPdf.editBody":
+    "Muchos PDFs no están listos para firmar tal como están — hay que quitar una página, tachar una línea, corregir un error antes de que alguien firme. El editor de Docracy hace esto directamente sobre el PDF que subes, antes de enviarlo:",
+  "signPdf.edit.1": "Reordena o elimina páginas",
+  "signPdf.edit.2": "Tacha texto o imágenes sensibles de forma permanente",
+  "signPdf.edit.3": "Agrega texto nuevo en cualquier parte de la página",
+  "signPdf.edit.4": "Edita texto existente directamente en el PDF (borrado y reescritura, no solo una superposición)",
+  "signPdf.howTitle": "Firma un PDF en menos de un minuto",
+  "signPdf.how.1": "Sube el PDF — arrástralo y suéltalo, o elige una plantilla gratis en su lugar.",
+  "signPdf.how.2": "Edítalo si es necesario: reordena páginas, tacha texto o corrige errores.",
+  "signPdf.how.3": "Coloca campos de firma, fecha o texto donde correspondan.",
+  "signPdf.how.4": "Envíalo. Los firmantes abren el enlace y firman — sin cuenta, sin instalar nada.",
+  "signPdf.createSigLead": "¿Necesitas crear una firma primero, no solo colocarla en un documento?",
+  "signPdf.createSigLink": "Mira cómo crear una firma digital",
+  "signPdf.noAccountTitle": "Sin cuenta necesaria — ni para ti ni para tu firmante",
+  "signPdf.noAccountBody":
+    "El plan gratis de Docracy te permite subir, editar y enviar un PDF a firma sin crear una cuenta, para cadenas de hasta 2 firmantes. La persona a la que se lo envías tampoco necesita cuenta — abre el enlace y firma directamente.",
+  "signPdf.faqTitle": "Preguntas frecuentes",
+  "signPdf.faq.q1": "¿Puedo firmar un PDF sin descargar ningún software?",
+  "signPdf.faq.a1": "Sí — todo el flujo funciona en tu navegador, desde subir el archivo hasta firmarlo, en computadora o celular.",
+  "signPdf.faq.q2": "¿Puedo editar el texto existente de un PDF, no solo agregar campos nuevos?",
+  "signPdf.faq.a2":
+    "Sí — Docracy puede editar directamente el texto existente en una página del PDF (no solo pegar algo encima), además de tachar, reordenar y eliminar páginas.",
+  "signPdf.faq.q3": "¿Es legalmente válido firmar un PDF en línea?",
+  "signPdf.faq.a3":
+    "Generalmente sí, bajo leyes como la ESIGN Act y UETA de EE. UU., y el reglamento eIDAS de la UE, siempre que haya consentimiento, intención de firmar y un registro conservable — que es exactamente lo que captura el registro de auditoría de Docracy.",
+  "signPdf.faq.q4": "¿Qué tipos de archivo puedo subir?",
+  "signPdf.faq.a4": "PDF es el formato principal. Si aún no tienes un documento, empieza desde una de las plantillas gratis de Docracy.",
+  "signPdf.footerCta": "Sube tu PDF y fírmalo hoy mismo.",
+
+  "secureSig.eyebrow": "Seguridad",
+  "secureSig.heroTitle": "Firmas electrónicas seguras",
+  "secureSig.heroSub":
+    "Lo que realmente hace segura a una firma electrónica no es el trazo visual — es el cifrado, el registro de auditoría y qué pasa si algo se disputa alguna vez. Así es exactamente cómo maneja Docracy las tres cosas.",
+  "secureSig.ctaTry": "Firma de forma segura, gratis →",
+  "secureSig.pillarsTitle": "Cuatro cosas que hacen segura a una firma",
+  "secureSig.pillarsSub": "No son afirmaciones de marketing — es el mecanismo real.",
+  "secureSig.pillar.encryption.title": "Cifrado en tránsito y en reposo",
+  "secureSig.pillar.encryption.body":
+    "Todo el tráfico usa TLS. Los bytes del documento y los datos de la aplicación se cifran en reposo con los valores predeterminados de la plataforma de Cloudflare para R2, KV y D1.",
+  "secureSig.pillar.audit.title": "Registro de auditoría inviolable",
+  "secureSig.pillar.audit.body":
+    "Cada vista, consentimiento y firma queda registrada con marca de tiempo, dirección IP, user-agent y un hash criptográfico del contenido del documento en ese momento exacto.",
+  "secureSig.pillar.links.title": "Enlaces de firma imposibles de adivinar",
+  "secureSig.pillar.links.body":
+    "Los enlaces de firma son tokens firmados con HMAC, no contraseñas de cuenta — no se pueden adivinar ni forzar, y los planes de pago pueden agregar un PIN obligatorio adicional.",
+  "secureSig.pillar.retention.title": "Límites de retención deliberados",
+  "secureSig.pillar.retention.body":
+    "Las cadenas de firma anónimas usan una ventana de retención corta (9 días por defecto) para que los documentos no permanezcan en nuestra infraestructura más tiempo del necesario para completar la firma y entregar las copias finales.",
+  "secureSig.honestyTitle": "Lo que \"seguro\" no significa aquí",
+  "secureSig.honestyBody1":
+    "Somos directos sobre esto: Docracy (RELACON GmbH) no tiene su propia certificación SOC 2 ni ISO 27001. Nuestra infraestructura corre sobre Cloudflare, que sí mantiene SOC 2 Type II e ISO 27001 — pero eso es evidencia de infraestructura de responsabilidad compartida, no un certificado emitido por Docracy para la capa de aplicación.",
+  "secureSig.honestyBody2":
+    "Preferimos publicar exactamente lo que tenemos y lo que no, en lugar de hacer una afirmación de cumplimiento que no podamos respaldar. Nuestras respuestas completas al cuestionario de seguridad son públicas, no están detrás de una llamada de ventas.",
+  "secureSig.identityTitle": "Seguro ≠ verificado por identidad, por defecto",
+  "secureSig.identityBody":
+    "Por defecto, Docracy no verifica quién firma — cualquiera que tenga un enlace de firma puede firmar con el nombre que aparece en él. El registro de auditoría prueba qué se firmó y cuándo, no quién lo hizo físicamente. Las cuentas de pago y Enterprise pueden agregar un PIN obligatorio y entrega vinculada a WhatsApp (próximamente) para un nivel más fuerte, ligado a la identidad.",
+  "secureSig.faqTitle": "Preguntas frecuentes",
+  "secureSig.faq.q1": "¿Docracy tiene SOC 2 o ISO 27001?",
+  "secureSig.faq.a1":
+    "No por sí sola — nuestra infraestructura (Cloudflare) sí, lo cual es evidencia de responsabilidad compartida, no un certificado emitido por Docracy. Consulta nuestra página completa de Confianza y seguridad para el cuestionario completo.",
+  "secureSig.faq.q2": "¿Mis datos están cifrados?",
+  "secureSig.faq.a2": "Sí — TLS en tránsito, y cifrado en reposo a nivel de plataforma de Cloudflare para documentos y datos de la aplicación.",
+  "secureSig.faq.q3": "¿Docracy verifica quién firma?",
+  "secureSig.faq.a3":
+    "No por defecto. El registro de auditoría prueba qué se firmó y cuándo, no una identidad verificada. Un PIN opcional y la entrega vinculada a WhatsApp (próximamente, planes de pago) agregan una verificación más fuerte del firmante.",
+  "secureSig.faq.q4": "¿Cuánto tiempo se guardan mis documentos?",
+  "secureSig.faq.a4": "Las cadenas de firma anónimas usan una ventana de retención por defecto de 9 días. Los espacios de trabajo de pago conservan el historial según su plan hasta que se elimine.",
+  "secureSig.footerCta": "Mira exactamente cómo se protege tu documento.",
+  "secureSig.trustLink": "Página completa de Confianza y seguridad",
+  "secureSig.dpaLink": "Acuerdo de procesamiento de datos",
+
+  "freeSig.eyebrow": "Plan gratis",
+  "freeSig.heroTitle": "Firma electrónica gratis — sin cuenta, sin tarjeta",
+  "freeSig.heroSub":
+    "No es una prueba gratuita. No es una demo con marca de agua. Es una forma genuinamente gratis de enviar y firmar un documento, indefinidamente, para cadenas de hasta 2 firmantes.",
+  "freeSig.ctaTry": "Envía un documento gratis →",
+  "freeSig.includedTitle": "Qué incluye realmente, gratis",
+  "freeSig.included.1": "Sin cuenta, sin contraseña, sin tarjeta de crédito — sube un documento y envíalo",
+  "freeSig.included.2": "Hasta 2 firmantes por documento, documentos ilimitados",
+  "freeSig.included.3": "Un registro de auditoría con marca de tiempo y un PDF firmado para cada parte",
+  "freeSig.included.4": "Un certificado de finalización que resume quién firmó, cuándo y cómo",
+  "freeSig.upgradeTitle": "Cuándo realmente necesitarías actualizar",
+  "freeSig.upgradeBody": "El plan gratis cubre la mayoría de los acuerdos puntuales. Necesitarías el plan de pago de $10/mes fijo si necesitas:",
+  "freeSig.upgrade.1": "Más de 2 firmantes en un solo documento",
+  "freeSig.upgrade.2": "Plantillas reutilizables, un panel de equipo o envío masivo",
+  "freeSig.upgrade.3": "Herramientas de IA (explicación de contratos, detector de riesgo, auto-detección) o el conector MCP",
+  "freeSig.pricingLink": "Ver la comparación completa de planes",
+  "freeSig.catchTitle": "¿Cuál es el truco?",
+  "freeSig.catchBody":
+    "Ninguno que te cueste algo: no vendemos tus datos ni usamos rastreadores publicitarios, y no hay una tarifa oculta por firma. El plan gratis se financia con quienes actualizan por funciones de equipo — los documentos anónimos se eliminan después de una ventana de retención corta (9 días por defecto) en lugar de guardarse indefinidamente, lo que mantiene el flujo gratis genuinamente gratis de operar a escala.",
+  "freeSig.faqTitle": "Preguntas frecuentes",
+  "freeSig.faq.q1": "¿Esto es gratis para siempre, o es un período de prueba?",
+  "freeSig.faq.a1": "Para siempre, para cadenas de hasta 2 firmantes — sin cuenta regresiva de prueba, sin tarjeta de crédito para empezar.",
+  "freeSig.faq.q2": "¿Mis firmantes también necesitan una cuenta?",
+  "freeSig.faq.a2": "No — nadie necesita una cuenta para firmar. Abren el enlace desde su correo y firman directamente.",
+  "freeSig.faq.q3": "¿Es legalmente válida una firma electrónica gratis?",
+  "freeSig.faq.a3":
+    "Sí, generalmente — bajo la ESIGN Act y UETA de EE. UU., y el reglamento eIDAS de la UE, lo que importa es el consentimiento, la intención y un registro conservable, todo lo cual ofrece el plan gratis. No depende de si pagaste por la herramienta.",
+  "freeSig.faq.q4": "¿Qué pasa con mi documento después de que todos firman?",
+  "freeSig.faq.a4":
+    "Todos reciben el PDF firmado y un certificado de finalización por correo. La copia anónima en los servidores de Docracy se elimina después de una ventana de retención corta (9 días por defecto).",
+  "freeSig.footerCta": "Envía tu primer documento gratis.",
 
   "ai.eyebrow": "Docracy IA",
   "ai.heroTitle": "Detección IA.\nLos campos se colocan solos.",

@@ -19,6 +19,10 @@ export const ES_PATH_BY_EN: Record<string, string> = {
   "/esign-ueta": "/es/esign-ueta",
   "/create-a-digital-signature": "/es/crear-firma-digital",
   "/ai-contract-analysis": "/es/analisis-de-contratos-ia",
+  "/esignature-software": "/es/software-de-firma-electronica",
+  "/sign-pdf-online": "/es/firmar-pdf-en-linea",
+  "/secure-electronic-signature": "/es/firma-electronica-segura",
+  "/free-electronic-signature": "/es/firma-electronica-gratis",
 };
 
 export const EN_PATH_BY_ES: Record<string, string> = Object.fromEntries(
@@ -60,7 +64,11 @@ export type SeoPage =
   | "ai"
   | "esignUeta"
   | "createDigitalSignature"
-  | "aiContractAnalysis";
+  | "aiContractAnalysis"
+  | "esignatureSoftware"
+  | "signPdfOnline"
+  | "secureElectronicSignature"
+  | "freeElectronicSignature";
 
 export const SEO_EN_PATH: Record<SeoPage, string> = {
   home: "/",
@@ -80,6 +88,10 @@ export const SEO_EN_PATH: Record<SeoPage, string> = {
   esignUeta: "/esign-ueta",
   createDigitalSignature: "/create-a-digital-signature",
   aiContractAnalysis: "/ai-contract-analysis",
+  esignatureSoftware: "/esignature-software",
+  signPdfOnline: "/sign-pdf-online",
+  secureElectronicSignature: "/secure-electronic-signature",
+  freeElectronicSignature: "/free-electronic-signature",
 };
 
 /** Catalog suffix under `seo.*` / `alt.*` for bilingual alternative pages. */

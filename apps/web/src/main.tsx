@@ -39,6 +39,10 @@ const EsignUeta = lazy(() => import("./pages/EsignUeta"));
 const ElectronicSignatureGuide = lazy(() => import("./pages/ElectronicSignatureGuide"));
 const CreateDigitalSignature = lazy(() => import("./pages/CreateDigitalSignature"));
 const AiContractAnalysis = lazy(() => import("./pages/AiContractAnalysis"));
+const EsignatureSoftware = lazy(() => import("./pages/EsignatureSoftware"));
+const SignPdfOnline = lazy(() => import("./pages/SignPdfOnline"));
+const SecureElectronicSignature = lazy(() => import("./pages/SecureElectronicSignature"));
+const FreeElectronicSignature = lazy(() => import("./pages/FreeElectronicSignature"));
 const Docs = lazy(() => import("./pages/Docs"));
 const Roadmap = lazy(() => import("./pages/Roadmap"));
 const Imprint = lazy(() => import("./pages/Imprint"));
@@ -98,6 +102,14 @@ function AppRoutes() {
       <Route path="/es/crear-firma-digital" element={<CreateDigitalSignature />} />
       <Route path="/ai-contract-analysis" element={<AiContractAnalysis />} />
       <Route path="/es/analisis-de-contratos-ia" element={<AiContractAnalysis />} />
+      <Route path="/esignature-software" element={<EsignatureSoftware />} />
+      <Route path="/es/software-de-firma-electronica" element={<EsignatureSoftware />} />
+      <Route path="/sign-pdf-online" element={<SignPdfOnline />} />
+      <Route path="/es/firmar-pdf-en-linea" element={<SignPdfOnline />} />
+      <Route path="/secure-electronic-signature" element={<SecureElectronicSignature />} />
+      <Route path="/es/firma-electronica-segura" element={<SecureElectronicSignature />} />
+      <Route path="/free-electronic-signature" element={<FreeElectronicSignature />} />
+      <Route path="/es/firma-electronica-gratis" element={<FreeElectronicSignature />} />
       <Route path="/admin/analytics" element={<AdminAnalytics />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/bulk-send" element={<BulkSend />} />

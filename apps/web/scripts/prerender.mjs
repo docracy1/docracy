@@ -232,6 +232,46 @@ const routes = [
     alternates: { en: "/ai-contract-analysis", es: "/es/analisis-de-contratos-ia" },
   },
   {
+    urlPath: "/esignature-software",
+    outFile: "esignature-software.html",
+    title: "E-Signature Software: What to Look For | Docracy",
+    description:
+      "What actually matters when choosing e-signature software — legal validity, audit trail depth, pricing " +
+      "model, signer friction — and where a flat-rate, no-signup tool like Docracy fits.",
+    locale: "en",
+    alternates: { en: "/esignature-software", es: "/es/software-de-firma-electronica" },
+  },
+  {
+    urlPath: "/sign-pdf-online",
+    outFile: "sign-pdf-online.html",
+    title: "How to Sign a PDF Online | Docracy",
+    description:
+      "Upload, edit (redact, reorder, fix text), and sign a PDF online free — no account, no software to " +
+      "install. Step-by-step guide.",
+    locale: "en",
+    alternates: { en: "/sign-pdf-online", es: "/es/firmar-pdf-en-linea" },
+  },
+  {
+    urlPath: "/secure-electronic-signature",
+    outFile: "secure-electronic-signature.html",
+    title: "Secure Electronic Signatures | Docracy",
+    description:
+      "What actually makes an e-signature secure: encryption, a tamper-evident audit trail, unguessable " +
+      "signing links, and deliberate retention limits — plus an honest look at what \"secure\" doesn't mean.",
+    locale: "en",
+    alternates: { en: "/secure-electronic-signature", es: "/es/firma-electronica-segura" },
+  },
+  {
+    urlPath: "/free-electronic-signature",
+    outFile: "free-electronic-signature.html",
+    title: "Free Electronic Signature — No Account | Docracy",
+    description:
+      "A genuinely free way to send and sign a document — no account, no card, no trial countdown. What's " +
+      "included free, and when you'd actually need to upgrade.",
+    locale: "en",
+    alternates: { en: "/free-electronic-signature", es: "/es/firma-electronica-gratis" },
+  },
+  {
     // Registered in _render-entry.tsx and linked from Footer + sitemap.xml, but was missing here —
     // without a routes[] entry it never got a prerendered file, so crawlers hitting the sitemapped
     // URL saw only the empty `<div id="root"></div>` shell (no title, no h1, no content).
@@ -442,6 +482,46 @@ const routes = [
       "segunda mirada, antes de firmar o enviar. Herramientas de IA del plan de pago integradas en Docracy.",
     locale: "es",
     alternates: { en: "/ai-contract-analysis", es: "/es/analisis-de-contratos-ia" },
+  },
+  {
+    urlPath: "/es/software-de-firma-electronica",
+    outFile: "es/software-de-firma-electronica.html",
+    title: "Software de firma electrónica: qué buscar | Docracy",
+    description:
+      "Lo que realmente importa al elegir software de firma electrónica — validez legal, profundidad del " +
+      "registro de auditoría, modelo de precios, fricción para el firmante — y dónde encaja Docracy.",
+    locale: "es",
+    alternates: { en: "/esignature-software", es: "/es/software-de-firma-electronica" },
+  },
+  {
+    urlPath: "/es/firmar-pdf-en-linea",
+    outFile: "es/firmar-pdf-en-linea.html",
+    title: "Cómo firmar un PDF en línea | Docracy",
+    description:
+      "Sube, edita (tacha, reordena, corrige texto) y firma un PDF en línea gratis — sin cuenta, sin instalar " +
+      "software. Guía paso a paso.",
+    locale: "es",
+    alternates: { en: "/sign-pdf-online", es: "/es/firmar-pdf-en-linea" },
+  },
+  {
+    urlPath: "/es/firma-electronica-segura",
+    outFile: "es/firma-electronica-segura.html",
+    title: "Firmas electrónicas seguras | Docracy",
+    description:
+      "Lo que realmente hace segura a una firma electrónica: cifrado, registro de auditoría inviolable, " +
+      "enlaces de firma imposibles de adivinar y límites de retención deliberados.",
+    locale: "es",
+    alternates: { en: "/secure-electronic-signature", es: "/es/firma-electronica-segura" },
+  },
+  {
+    urlPath: "/es/firma-electronica-gratis",
+    outFile: "es/firma-electronica-gratis.html",
+    title: "Firma electrónica gratis — sin cuenta | Docracy",
+    description:
+      "Una forma genuinamente gratis de enviar y firmar un documento — sin cuenta, sin tarjeta, sin cuenta " +
+      "regresiva de prueba. Qué incluye gratis, y cuándo actualizar.",
+    locale: "es",
+    alternates: { en: "/free-electronic-signature", es: "/es/firma-electronica-gratis" },
   },
   {
     urlPath: "/es/documentacion",
