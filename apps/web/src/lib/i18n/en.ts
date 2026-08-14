@@ -935,7 +935,7 @@ const en: Messages = {
   "seo.video.name": "How Docracy works — sign documents in under a minute",
   "seo.video.description":
     "A short walkthrough of Docracy: upload a PDF, place signature fields, email signing links, and download the signed document — free for up to two signers, no account needed.",
-  "seo.pricing.title": "Pricing — Docracy",
+  "seo.pricing.title": "Docracy Pricing — Free, Paid & Enterprise Plans",
   "seo.pricing.description":
     "Free for signing chains of up to 2 signers. Paid is $10/month flat per workspace — unlimited signers, templates, AI tools, connectors, and team accounts.",
   "seo.freeTemplates.title": "Free Business Document Templates | Docracy",
@@ -964,7 +964,7 @@ const en: Messages = {
     "Sign NDAs online in minutes. Free NDA template, no subscriptions, no account required.",
   "seo.clientContracts.title": "Client Contract Signing — Fast & Simple | Docracy",
   "seo.clientContracts.description": "Send client contracts without friction. Clean signing flow, no accounts required.",
-  "seo.docs.title": "Documentation — Docracy",
+  "seo.docs.title": "Docracy Documentation — Setup, API & Features",
   "seo.docs.description":
     "How Docracy's free signing flow, paid features (bulk send, embed, contacts, attachments, SMS gateways, Dropbox/OneDrive/Box/Google Drive, AI), Enterprise options, templates, webhooks, and MCP/Zapier automation work.",
   "seo.mcp.title": "MCP Connector for AI Assistants | Docracy",

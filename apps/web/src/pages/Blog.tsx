@@ -37,7 +37,7 @@ function PostCard({ post }: { post: MergedPost }) {
 export default function Blog() {
   const t = useT();
   usePageMeta(
-    "Blog — Docracy",
+    "Docracy Blog — E-Signature & Contract Guides",
     "Guides on NDAs, contracts, and online signatures, plus honest comparisons between Docracy and the other e-signature tools people ask us about."
   );
 

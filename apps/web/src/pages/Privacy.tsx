@@ -6,7 +6,7 @@ import { usePageMeta } from "../lib/usePageMeta";
 export default function Privacy() {
   const t = useT();
   usePageMeta(
-    "Privacy — Docracy",
+    "Privacy Policy — How Docracy Handles Your Data",
     "How Docracy collects, uses, and retains personal data for anonymous and account-based document signing.",
     { canonicalPath: "/privacy" }
   );

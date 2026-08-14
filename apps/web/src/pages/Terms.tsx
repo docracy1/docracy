@@ -4,7 +4,7 @@ import { usePageMeta } from "../lib/usePageMeta";
 export default function Terms() {
   const t = useT();
   usePageMeta(
-    "Terms — Docracy",
+    "Terms of Service — Docracy E-Signatures",
     "The terms of service governing use of Docracy's free and paid e-signature features.",
     { canonicalPath: "/terms" }
   );

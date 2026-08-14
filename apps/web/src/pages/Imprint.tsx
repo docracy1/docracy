@@ -3,7 +3,7 @@ import { usePageMeta } from "../lib/usePageMeta";
 
 export default function Imprint() {
   const t = useT();
-  usePageMeta("Imprint — Docracy", "Legal entity behind Docracy.");
+  usePageMeta("Imprint — Docracy (RELACON GmbH, Austria)", "Legal entity behind Docracy.");
 
   return (
     <div className="container">

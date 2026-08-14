@@ -831,7 +831,7 @@ export const INDUSTRY_PAGES: IndustryPageContent[] = [
   },
   {
     slug: "real-estate",
-    seoTitle: "E-Signatures for Landlords & Property Managers | Docracy",
+    seoTitle: "E-Signatures for Real Estate — Landlords & Property Managers",
     seoDescription:
       "Free e-signing for leases, subleases, roommate agreements, and vendor paperwork. Built for small landlords and independent property managers — not closings.",
     heroHeadline: "E-signatures for small landlords and property managers.",
@@ -928,7 +928,7 @@ export const INDUSTRY_PAGES: IndustryPageContent[] = [
   },
   {
     slug: "legal",
-    seoTitle: "E-Signatures for Solo Attorneys & Small Law Firms | Docracy",
+    seoTitle: "E-Signatures for Legal — Attorneys & Law Firms | Docracy",
     seoDescription:
       "Free e-signing for NDAs, letters of intent, powers of attorney, and cease-and-desist letters. Built for solo attorneys and small firms sending everyday documents.",
     heroHeadline: "E-signatures for solo attorneys and small law firms.",
@@ -977,7 +977,7 @@ export const INDUSTRY_PAGES: IndustryPageContent[] = [
   },
   {
     slug: "recruiting",
-    seoTitle: "E-Signatures for Recruiters & Staffing Agencies | Docracy",
+    seoTitle: "E-Signatures for Recruiting — Staffing Agencies | Docracy",
     seoDescription:
       "Free e-signing for offer letters, contractor agreements, and non-compete acknowledgments. Built for recruiters and staffing agencies placing candidates fast.",
     heroHeadline: "E-signatures built for recruiters and staffing agencies.",

@@ -5,7 +5,7 @@ import { usePageMeta } from "../lib/usePageMeta";
 export default function About() {
   const t = useT();
   usePageMeta(
-    "About Docracy",
+    "About Docracy — Free, No-Signup E-Signatures",
     "Why Docracy exists: free, no-signup e-signatures for quick, low-stakes agreements — built by RELACON GmbH."
   );
 

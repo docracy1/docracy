@@ -4,7 +4,7 @@ import { usePageMeta } from "../lib/usePageMeta";
 /** Phase 0 trust center — honest SES posture, infra inheritance, subprocessors, questionnaire answers. */
 export default function Trust() {
   usePageMeta(
-    "Trust & security — Docracy",
+    "Trust & Security — Docracy E-Signature Platform",
     "How Docracy protects documents: encryption, retention, audit trails, ESIGN Act and UETA alignment for SES e-signatures, eIDAS SES and WhatsApp-verified AES for paid accounts, subprocessors, and Cloudflare infrastructure certifications."
   );
 

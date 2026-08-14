@@ -7,7 +7,7 @@ import { usePageMeta } from "../lib/usePageMeta";
  */
 export default function Dpa() {
   usePageMeta(
-    "Data Processing Agreement — Docracy",
+    "Data Processing Agreement (DPA) — Docracy",
     "GDPR Art. 28 data processing terms between RELACON GmbH (Docracy) and customers who use paid or account features."
   );
 

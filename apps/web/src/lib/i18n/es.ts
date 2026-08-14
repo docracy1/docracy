@@ -1021,7 +1021,7 @@ const es: Messages = {
   "seo.video.name": "Cómo funciona Docracy — firma documentos en menos de un minuto",
   "seo.video.description":
     "Un recorrido breve de Docracy: sube un PDF, coloca campos de firma, envía enlaces por correo y descarga el documento firmado — gratis hasta dos firmantes, sin cuenta.",
-  "seo.pricing.title": "Precios — Docracy",
+  "seo.pricing.title": "Precios de Docracy — Planes gratis y de pago",
   "seo.pricing.description":
     "Gratis para cadenas de hasta 2 firmantes. El plan de pago es $10/mes fijo por espacio de trabajo — firmantes ilimitados, plantillas, herramientas de IA, conectores y cuentas de equipo.",
   "seo.freeTemplates.title": "Plantillas gratis de documentos | Docracy",
@@ -1051,7 +1051,7 @@ const es: Messages = {
   "seo.clientContracts.title": "Firma de contratos con clientes — Rápida y simple | Docracy",
   "seo.clientContracts.description":
     "Envía contratos con clientes sin fricción. Flujo de firma limpio, sin cuentas requeridas.",
-  "seo.docs.title": "Documentación — Docracy",
+  "seo.docs.title": "Documentación de Docracy — Guías y funciones",
   "seo.docs.description":
     "Cómo funciona el flujo gratis de firma de Docracy, las funciones de pago (envío masivo, embed, contactos, adjuntos, SMS, Dropbox/OneDrive/Box/Google Drive, IA), opciones Enterprise, plantillas, webhooks y automatización MCP/Zapier.",
   "seo.mcp.title": "Conector MCP para asistentes de IA | Docracy",

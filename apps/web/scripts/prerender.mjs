@@ -266,13 +266,13 @@ const routes = [
   {
     urlPath: "/about",
     outFile: "about.html",
-    title: "About Docracy",
+    title: "About Docracy — Free, No-Signup E-Signatures",
     description: "Why Docracy exists: free, no-signup e-signatures for quick, low-stakes agreements — built by RELACON GmbH.",
   },
   {
     urlPath: "/pricing",
     outFile: "pricing.html",
-    title: "Pricing — Docracy",
+    title: "Docracy Pricing — Free, Paid & Enterprise Plans",
     description:
       "Free for signing chains of up to 2 signers, no account required. Paid is $10/month and adds AI tools, an " +
       "MCP connector, unlimited signers, templates, webhooks, and team accounts.",
@@ -291,7 +291,7 @@ const routes = [
   {
     urlPath: "/es/precios",
     outFile: "es/precios.html",
-    title: "Precios — Docracy",
+    title: "Precios de Docracy — Planes gratis y de pago",
     description:
       "Gratis para cadenas de hasta 2 firmantes. El plan de pago es $10/mes fijo por espacio de trabajo — firmantes ilimitados, plantillas, herramientas de IA, conectores y cuentas de equipo.",
     locale: "es",
@@ -369,7 +369,7 @@ const routes = [
   {
     urlPath: "/docs",
     outFile: "docs.html",
-    title: "Documentation — Docracy",
+    title: "Docracy Documentation — Setup, API & Features",
     description:
       "How Docracy's free signing flow, paid features (bulk send, embed, contacts, attachments, SMS gateways, Dropbox/OneDrive/Box/Google Drive, AI), Enterprise options, templates, webhooks, and MCP/Zapier automation work.",
     locale: "en",
@@ -406,7 +406,7 @@ const routes = [
   {
     urlPath: "/es/documentacion",
     outFile: "es/documentacion.html",
-    title: "Documentación — Docracy",
+    title: "Documentación de Docracy — Guías y funciones",
     description:
       "Cómo funcionan el flujo gratis de firma, las funciones de pago (envío masivo, integración, contactos, adjuntos, SMS, Dropbox/OneDrive/Box/Google Drive, IA), opciones Enterprise, plantillas, webhooks y automatización MCP/Zapier.",
     locale: "es",
@@ -415,45 +415,45 @@ const routes = [
   {
     urlPath: "/imprint",
     outFile: "imprint.html",
-    title: "Imprint — Docracy",
+    title: "Imprint — Docracy (RELACON GmbH, Austria)",
     description: "Legal entity behind Docracy.",
   },
   {
     urlPath: "/trust",
     outFile: "trust.html",
-    title: "Trust & security — Docracy",
+    title: "Trust & Security — Docracy E-Signature Platform",
     description:
       "How Docracy protects documents: encryption, retention, audit trails, ESIGN Act and UETA alignment for SES e-signatures, eIDAS SES, subprocessors, and Cloudflare infrastructure certifications.",
   },
   {
     urlPath: "/dpa",
     outFile: "dpa.html",
-    title: "Data Processing Agreement — Docracy",
+    title: "Data Processing Agreement (DPA) — Docracy",
     description:
       "GDPR Art. 28 data processing terms between RELACON GmbH (Docracy) and customers who use paid or account features.",
   },
   {
     urlPath: "/privacy",
     outFile: "privacy.html",
-    title: "Privacy — Docracy",
+    title: "Privacy Policy — How Docracy Handles Your Data",
     description: "How Docracy collects, uses, and retains personal data for anonymous and account-based document signing.",
   },
   {
     urlPath: "/terms",
     outFile: "terms.html",
-    title: "Terms — Docracy",
+    title: "Terms of Service — Docracy E-Signatures",
     description: "The terms of service governing use of Docracy's free and paid e-signature features.",
   },
   {
     urlPath: "/uptime",
     outFile: "uptime.html",
-    title: "System Status — Docracy",
+    title: "System Status & Uptime History — Docracy",
     description: "Live status and uptime history for Docracy's signing, timestamping, billing, and MCP services.",
   },
   {
     urlPath: "/blog",
     outFile: "blog.html",
-    title: "Blog — Docracy",
+    title: "Docracy Blog — E-Signature & Contract Guides",
     description:
       "How Docracy compares to eversign, DocuSign, PandaDoc, and Adobe Acrobat Sign — honest, sourced comparisons on price and features.",
   },
