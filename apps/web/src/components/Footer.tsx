@@ -60,6 +60,7 @@ export default function Footer() {
       heading: t("footer.company"),
       links: [
         { label: t("footer.about"), to: "/about" },
+        { label: "Chasa — AI invoice follow-up", to: "https://chasa.io?utm_source=docracy&utm_medium=footer", external: true },
         { label: t("footer.roadmap"), to: "/roadmap" },
         { label: t("footer.status"), to: "/uptime" },
         { label: t("footer.imprint"), to: "/imprint" },
