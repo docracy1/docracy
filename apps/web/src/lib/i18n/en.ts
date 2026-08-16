@@ -1001,6 +1001,9 @@ const en: Messages = {
   "seo.freeElectronicSignature.title": "Free Electronic Signature — No Account | Docracy",
   "seo.freeElectronicSignature.description":
     "A genuinely free way to send and sign a document — no account, no card, no trial countdown. What's included free, and when you'd actually need to upgrade.",
+  "seo.docracyAlternative.title": "Whatever Happened to Docracy? | Docracy",
+  "seo.docracyAlternative.description":
+    "The original Docracy.com was acquired by eversign in 2019 and discontinued. This Docracy is a separate, independently built free e-signature tool — not affiliated with eversign or the original team.",
   "seo.esignUeta.description":
     "Docracy SES electronic signatures are designed to support the U.S. ESIGN Act and UETA: consent, intent to sign, audit trail, and a certificate of completion. Paid/Enterprise accounts can add WhatsApp-verified Advanced Electronic Signature (AES) — still no QES or identity verification.",
 
@@ -1305,6 +1308,37 @@ const en: Messages = {
   "freeSig.faq.a4":
     "Everyone gets the signed PDF and a certificate of completion by email. The anonymous copy on Docracy's servers is deleted after a short retention window (9 days by default).",
   "freeSig.footerCta": "Send your first document free.",
+
+  "docracyAlt.eyebrow": "Looking for Docracy?",
+  "docracyAlt.heroTitle": "Whatever Happened\nto Docracy?",
+  "docracyAlt.heroSub":
+    "The original Docracy.com — free legal document templates and e-signing — was acquired by eversign in 2019 and discontinued. This Docracy is a separate, independently built product with the same idea: free, no-signup e-signing.",
+  "docracyAlt.ctaTry": "Try it free — no account needed →",
+  "docracyAlt.historyTitle": "A quick history",
+  "docracyAlt.historyBody":
+    "Docracy launched in New York around 2011 (Matt Hall and John Watkinson), starting as an open, free repository of legal document templates and growing to add e-signing — eventually reaching over 500,000 users and 25,000+ templates. In March 2019, eversign announced it had acquired Docracy. The standalone product was discontinued, and docracy.com now redirects visitors to eversign's own signup page.",
+  "docracyAlt.disclaimerTitle": "Is this the same company?",
+  "docracyAlt.disclaimerBody":
+    "No. This site is not affiliated with, endorsed by, or connected to eversign, Xodo Sign, or the original Docracy team. We're a separate, independently built product that simply liked the idea of free, no-signup e-signing enough to build it again.",
+  "docracyAlt.todayTitle": "What free e-signing looks like today",
+  "docracyAlt.today.1": "No account or card required to send or sign a document",
+  "docracyAlt.today.2": "Free sequential signing chains for up to two people",
+  "docracyAlt.today.3": "Upload any PDF — add signature, date, text, and initials fields",
+  "docracyAlt.today.4": "Anonymous documents auto-delete after 9 days by default",
+  "docracyAlt.faqTitle": "Common questions",
+  "docracyAlt.faq.q1": "Is this the original Docracy?",
+  "docracyAlt.faq.a1":
+    "No — this is a separate, independently built product, not affiliated with eversign, Xodo Sign, or the original Docracy team.",
+  "docracyAlt.faq.q2": "What happened to my documents from the original Docracy?",
+  "docracyAlt.faq.a2":
+    "We don't have access to the original company's data. eversign (now Xodo Sign) acquired Docracy's assets in 2019 — reach out to their support for anything from the original service.",
+  "docracyAlt.faq.q3": "Why did the original Docracy shut down?",
+  "docracyAlt.faq.a3":
+    "eversign announced its acquisition of Docracy in March 2019 and discontinued the standalone product, redirecting former users to its own platform.",
+  "docracyAlt.faq.q4": "Is today's Docracy actually free?",
+  "docracyAlt.faq.a4":
+    "Yes — sending and signing a document with up to two signers is free, with no account or card required. Paid plans add templates, teams, and more signers.",
+  "docracyAlt.footerCta": "Send your first document free — no account needed.",
 
   "ai.eyebrow": "Docracy AI",
   "ai.heroTitle": "AI Auto-Detect.\nFields place themselves.",

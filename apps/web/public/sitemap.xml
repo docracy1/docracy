@@ -197,6 +197,22 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-electronic-signature" />
   </url>
   <url>
+    <loc>https://docracy.io/docracy-alternative</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/docracy-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-docracy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/docracy-alternative" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/alternativa-a-docracy</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/docracy-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-docracy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/docracy-alternative" />
+  </url>
+  <url>
     <loc>https://docracy.io/pricing</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

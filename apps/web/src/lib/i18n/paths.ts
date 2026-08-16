@@ -23,6 +23,7 @@ export const ES_PATH_BY_EN: Record<string, string> = {
   "/sign-pdf-online": "/es/firmar-pdf-en-linea",
   "/secure-electronic-signature": "/es/firma-electronica-segura",
   "/free-electronic-signature": "/es/firma-electronica-gratis",
+  "/docracy-alternative": "/es/alternativa-a-docracy",
 };
 
 export const EN_PATH_BY_ES: Record<string, string> = Object.fromEntries(
@@ -68,7 +69,8 @@ export type SeoPage =
   | "esignatureSoftware"
   | "signPdfOnline"
   | "secureElectronicSignature"
-  | "freeElectronicSignature";
+  | "freeElectronicSignature"
+  | "docracyAlternative";
 
 export const SEO_EN_PATH: Record<SeoPage, string> = {
   home: "/",
@@ -92,6 +94,7 @@ export const SEO_EN_PATH: Record<SeoPage, string> = {
   signPdfOnline: "/sign-pdf-online",
   secureElectronicSignature: "/secure-electronic-signature",
   freeElectronicSignature: "/free-electronic-signature",
+  docracyAlternative: "/docracy-alternative",
 };
 
 /** Catalog suffix under `seo.*` / `alt.*` for bilingual alternative pages. */

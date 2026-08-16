@@ -272,6 +272,16 @@ const routes = [
     alternates: { en: "/free-electronic-signature", es: "/es/firma-electronica-gratis" },
   },
   {
+    urlPath: "/docracy-alternative",
+    outFile: "docracy-alternative.html",
+    title: "Whatever Happened to Docracy? | Docracy",
+    description:
+      "The original Docracy.com was acquired by eversign in 2019 and discontinued. This Docracy is a separate, " +
+      "independently built free e-signature tool — not affiliated with eversign or the original team.",
+    locale: "en",
+    alternates: { en: "/docracy-alternative", es: "/es/alternativa-a-docracy" },
+  },
+  {
     // Registered in _render-entry.tsx and linked from Footer + sitemap.xml, but was missing here —
     // without a routes[] entry it never got a prerendered file, so crawlers hitting the sitemapped
     // URL saw only the empty `<div id="root"></div>` shell (no title, no h1, no content).
@@ -522,6 +532,16 @@ const routes = [
       "regresiva de prueba. Qué incluye gratis, y cuándo actualizar.",
     locale: "es",
     alternates: { en: "/free-electronic-signature", es: "/es/firma-electronica-gratis" },
+  },
+  {
+    urlPath: "/es/alternativa-a-docracy",
+    outFile: "es/alternativa-a-docracy.html",
+    title: "¿Qué pasó con Docracy? | Docracy",
+    description:
+      "El Docracy.com original fue adquirido por eversign en 2019 y descontinuado. Este Docracy es un producto " +
+      "separado, creado de forma independiente — no afiliado a eversign ni al equipo original.",
+    locale: "es",
+    alternates: { en: "/docracy-alternative", es: "/es/alternativa-a-docracy" },
   },
   {
     urlPath: "/es/documentacion",

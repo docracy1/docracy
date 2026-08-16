@@ -33,7 +33,9 @@ export default function About() {
       <h3>{t("about.who")}</h3>
       <p>
         Docracy is built and operated by RELACON GmbH, based in Vienna, Austria. See the{" "}
-        <Link to="/imprint">Imprint</Link> for the legal details.
+        <Link to="/imprint">Imprint</Link> for the legal details. This is a separate, independently
+        built product — not affiliated with the earlier Docracy.com, which was acquired by eversign
+        in 2019 (see <Link to="/docracy-alternative">what happened to the original Docracy</Link>).
       </p>
 
       <h3>{t("about.contact")}</h3>

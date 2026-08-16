@@ -1088,6 +1088,9 @@ const es: Messages = {
   "seo.freeElectronicSignature.title": "Firma electrónica gratis — sin cuenta | Docracy",
   "seo.freeElectronicSignature.description":
     "Una forma genuinamente gratis de enviar y firmar un documento — sin cuenta, sin tarjeta, sin cuenta regresiva de prueba. Qué incluye gratis, y cuándo realmente necesitarías actualizar.",
+  "seo.docracyAlternative.title": "¿Qué pasó con Docracy? | Docracy",
+  "seo.docracyAlternative.description":
+    "El Docracy.com original fue adquirido por eversign en 2019 y descontinuado. Este Docracy es un producto separado, creado de forma independiente — no afiliado a eversign ni al equipo original.",
   "seo.esignUeta.description":
     "Las firmas SES de Docracy están diseñadas para respaldar la ESIGN Act y UETA de EE. UU.: consentimiento, intención de firmar, registro de auditoría y certificado de finalización. Las cuentas de pago/Enterprise pueden añadir firma avanzada (AES) verificada por WhatsApp — sigue sin QES ni verificación de identidad.",
 
@@ -1391,6 +1394,37 @@ const es: Messages = {
   "freeSig.faq.a4":
     "Todos reciben el PDF firmado y un certificado de finalización por correo. La copia anónima en los servidores de Docracy se elimina después de una ventana de retención corta (9 días por defecto).",
   "freeSig.footerCta": "Envía tu primer documento gratis.",
+
+  "docracyAlt.eyebrow": "¿Buscas Docracy?",
+  "docracyAlt.heroTitle": "¿Qué pasó\ncon Docracy?",
+  "docracyAlt.heroSub":
+    "El Docracy.com original — plantillas legales gratis y firma electrónica — fue adquirido por eversign en 2019 y descontinuado. Este Docracy es un producto separado, creado de forma independiente, con la misma idea: firma electrónica gratis y sin registro.",
+  "docracyAlt.ctaTry": "Pruébalo gratis — sin cuenta →",
+  "docracyAlt.historyTitle": "Un poco de historia",
+  "docracyAlt.historyBody":
+    "Docracy nació en Nueva York alrededor de 2011 (Matt Hall y John Watkinson), como un repositorio abierto y gratuito de plantillas legales que luego sumó firma electrónica — llegando a más de 500,000 usuarios y 25,000+ plantillas. En marzo de 2019, eversign anunció la adquisición de Docracy. El producto independiente se descontinuó, y docracy.com ahora redirige a los visitantes a la página de registro de eversign.",
+  "docracyAlt.disclaimerTitle": "¿Es la misma empresa?",
+  "docracyAlt.disclaimerBody":
+    "No. Este sitio no está afiliado, respaldado ni conectado con eversign, Xodo Sign, ni el equipo original de Docracy. Somos un producto separado, creado de forma independiente, que simplemente creyó en la idea de la firma electrónica gratis y sin registro lo suficiente como para construirla de nuevo.",
+  "docracyAlt.todayTitle": "Cómo es la firma electrónica gratis hoy",
+  "docracyAlt.today.1": "No necesitas cuenta ni tarjeta para enviar o firmar un documento",
+  "docracyAlt.today.2": "Cadenas de firma secuencial gratis para hasta dos personas",
+  "docracyAlt.today.3": "Sube cualquier PDF — agrega firma, fecha, texto y campos de iniciales",
+  "docracyAlt.today.4": "Los documentos anónimos se eliminan automáticamente después de 9 días por defecto",
+  "docracyAlt.faqTitle": "Preguntas frecuentes",
+  "docracyAlt.faq.q1": "¿Es este el Docracy original?",
+  "docracyAlt.faq.a1":
+    "No — este es un producto separado, creado de forma independiente, no afiliado a eversign, Xodo Sign, ni al equipo original de Docracy.",
+  "docracyAlt.faq.q2": "¿Qué pasó con mis documentos del Docracy original?",
+  "docracyAlt.faq.a2":
+    "No tenemos acceso a los datos de la empresa original. eversign (ahora Xodo Sign) adquirió los activos de Docracy en 2019 — contacta a su soporte para cualquier cosa del servicio original.",
+  "docracyAlt.faq.q3": "¿Por qué cerró el Docracy original?",
+  "docracyAlt.faq.a3":
+    "eversign anunció la adquisición de Docracy en marzo de 2019 y descontinuó el producto independiente, redirigiendo a los antiguos usuarios a su propia plataforma.",
+  "docracyAlt.faq.q4": "¿El Docracy de hoy es realmente gratis?",
+  "docracyAlt.faq.a4":
+    "Sí — enviar y firmar un documento con hasta dos firmantes es gratis, sin necesidad de cuenta ni tarjeta. Los planes de pago añaden plantillas, equipos y más firmantes.",
+  "docracyAlt.footerCta": "Envía tu primer documento gratis — sin necesidad de cuenta.",
 
   "ai.eyebrow": "Docracy IA",
   "ai.heroTitle": "Detección IA.\nLos campos se colocan solos.",

@@ -43,6 +43,7 @@ const EsignatureSoftware = lazy(() => import("./pages/EsignatureSoftware"));
 const SignPdfOnline = lazy(() => import("./pages/SignPdfOnline"));
 const SecureElectronicSignature = lazy(() => import("./pages/SecureElectronicSignature"));
 const FreeElectronicSignature = lazy(() => import("./pages/FreeElectronicSignature"));
+const DocracyAlternative = lazy(() => import("./pages/DocracyAlternative"));
 const Docs = lazy(() => import("./pages/Docs"));
 const Roadmap = lazy(() => import("./pages/Roadmap"));
 const Imprint = lazy(() => import("./pages/Imprint"));
@@ -110,6 +111,8 @@ function AppRoutes() {
       <Route path="/es/firma-electronica-segura" element={<SecureElectronicSignature />} />
       <Route path="/free-electronic-signature" element={<FreeElectronicSignature />} />
       <Route path="/es/firma-electronica-gratis" element={<FreeElectronicSignature />} />
+      <Route path="/docracy-alternative" element={<DocracyAlternative />} />
+      <Route path="/es/alternativa-a-docracy" element={<DocracyAlternative />} />
       <Route path="/admin/analytics" element={<AdminAnalytics />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/bulk-send" element={<BulkSend />} />
