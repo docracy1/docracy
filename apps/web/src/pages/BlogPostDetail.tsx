@@ -230,6 +230,20 @@ function ArticleBlocks({ blocks }: { blocks: ArticleBlock[] }) {
             </p>
           );
         }
+        if (block.type === "video") {
+          return (
+            <div key={i} style={{ position: "relative", paddingBottom: "56.25%", height: 0, margin: "20px 0" }}>
+              <iframe
+                src={`https://www.youtube.com/embed/${block.youtubeId}`}
+                title={block.title}
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: 0, borderRadius: 8 }}
+              />
+            </div>
+          );
+        }
         return <p key={i}>{block.text}</p>;
       })}
     </>

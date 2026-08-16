@@ -10,6 +10,9 @@ export type ArticleBlock =
   | { type: "h2"; text: string }
   | { type: "h3"; text: string }
   | { type: "img"; src: string; alt: string; caption?: string }
+  /** An embedded YouTube video (responsive 16:9 iframe). `youtubeId` is the video ID from the
+   *  share URL (e.g. youtu.be/H8LlazgJyTA -> "H8LlazgJyTA"). */
+  | { type: "video"; youtubeId: string; title: string }
   /** A standalone contextual link to another internal page (a feature/industry/explainer page,
    *  a template, etc.) — for linking a cluster article to the product page its topic matches,
    *  not for arbitrary external links. */
@@ -48,6 +51,10 @@ function link(text: string, to: string): ArticleBlock {
 
 function img(src: string, alt: string, caption?: string): ArticleBlock {
   return { type: "img", src, alt, caption };
+}
+
+function video(youtubeId: string, title: string): ArticleBlock {
+  return { type: "video", youtubeId, title };
 }
 
 const PUBLISHED = "2026-07-26";
@@ -1632,6 +1639,40 @@ export const ARTICLES: ArticlePost[] = [
           "Anonymous, no-signup sends aren't eligible — WhatsApp signing requires a free Docracy account."
       ),
       link("See pricing", "/pricing"),
+    ],
+  },
+  {
+    slug: "introducing-the-docracy-marketplace",
+    title: "Introducing the Docracy Marketplace — free templates, shared by everyone",
+    description:
+      "A quick tour of the Docracy Marketplace: how to find a template, fill it in, and share your own with the community — free, no account needed.",
+    publishedDate: "2026-08-16",
+    cluster: "Product",
+    blocks: [
+      p(
+        "The Docracy Marketplace is a free library of document templates — NDAs, lease agreements, offer letters, " +
+          "wills, and dozens more — some written and reviewed by Docracy, others submitted by the community. Anyone " +
+          "can browse it, fill in a template, and send it for signature without creating an account. Here's a quick " +
+          "walkthrough of how it works, start to finish."
+      ),
+      video("H8LlazgJyTA", "The Docracy Marketplace, explained"),
+      h2("Finding a template"),
+      p(
+        "Templates are organized by category — Business, Real Estate, Employment, Personal, and more — so you can " +
+          "browse instead of guessing what a document is called. Each template shows whether it's an official " +
+          "Docracy template or a community submission before you open it."
+      ),
+      h2("Sharing your own"),
+      p(
+        "If you've already drafted something useful — a vendor agreement, a roommate contract, an onboarding " +
+          "checklist — you can submit the blank version to the Marketplace directly from the editor. Nothing " +
+          "publishes automatically: every submission is reviewed by a real person first, then goes live credited to " +
+          "the community."
+      ),
+      link("Browse the Marketplace", "/free-templates"),
+      link("Submit a template", "/submit-template"),
+      h2("What it costs"),
+      p("Nothing, in either direction. Using a template is free, and submitting one is free — no plan required for either."),
     ],
   },
 ];
