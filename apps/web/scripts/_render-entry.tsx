@@ -125,6 +125,10 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/industry/sales" element={<IndustryPage slug="sales" />} />
           <Route path="/industry/recruiting" element={<IndustryPage slug="recruiting" />} />
           <Route path="/industry/consulting" element={<IndustryPage slug="consulting" />} />
+          <Route path="/industry/developers" element={<IndustryPage slug="developers" />} />
+          <Route path="/industry/startups" element={<IndustryPage slug="startups" />} />
+          <Route path="/industry/photographers" element={<IndustryPage slug="photographers" />} />
+          <Route path="/industry/personal" element={<IndustryPage slug="personal" />} />
           <Route path="/what-is-an-nda" element={<ExplainerPage slug="what-is-an-nda" />} />
           <Route path="/are-electronic-signatures-legal" element={<ExplainerPage slug="are-electronic-signatures-legal" />} />
           {SEO_LANDING_PAGES.map((page) => (

@@ -1134,4 +1134,92 @@ export const INDUSTRY_PAGES: IndustryPageContent[] = [
     ctaLabel: "Send a consulting agreement",
     ctaTo: "/prepare?ref=seo-industry-consulting",
   },
+  {
+    slug: "developers",
+    seoTitle: "E-Signatures for Software Developers & Engineers | Docracy",
+    seoDescription:
+      "Free e-signing for developer contracts, NDAs, and non-competes. No account required for the client or employer to sign — built for freelance and contract engineers.",
+    heroHeadline: "E-signatures built for freelance developers and engineers.",
+    heroSubheadline:
+      "Contractor agreements, NDAs, and non-competes — signed before you see the repo or they see your code, free for two parties.",
+    painPoints: [
+      "A client wants an NDA signed before you get access to their codebase or product roadmap, and asking them to make an account first stalls the whole thing.",
+      "A contract engagement needs a signed independent contractor agreement before the first sprint starts, not after invoice time.",
+      "A former employer or client wants a non-compete or non-solicitation acknowledgment on file, separate from the main contract.",
+      "Per-seat e-sign pricing makes no sense for one developer sending a handful of contracts a month between gigs.",
+    ],
+    whyDocracy:
+      "Docracy is free for two-party signing — you and the client or employer — with no account required for whoever's signing. Start from an independent contractor agreement, NDA, or non-compete template, fill in the engagement details, and send before you touch their codebase.",
+    honestLimit:
+      "What this is not: Docracy doesn't have a dedicated IP-assignment template yet — for now, the confidentiality templates below cover access and disclosure, not code ownership transfer. If your contract needs explicit IP-assignment language, add it to the document before sending, or use a lawyer-drafted one.",
+    relevantTemplates: ["independent-contractor-agreement", "freelance-service-agreement", "mutual-nda", "non-compete-non-solicitation-agreement"],
+    ctaLabel: "Send a contractor agreement",
+    ctaTo: "/prepare?ref=seo-industry-developers",
+  },
+  {
+    slug: "startups",
+    seoTitle: "E-Signatures for Startup Founders | Docracy",
+    seoDescription:
+      "Free e-signing for co-founder agreements, LLC formation, promissory notes, and NDAs before a pitch. No account required, no per-seat pricing for a two-person startup.",
+    heroHeadline: "E-signatures built for startup founders.",
+    heroSubheadline:
+      "Formation paperwork, co-founder terms, early loans, and NDAs before a pitch — signed in minutes, free for two parties.",
+    painPoints: [
+      "Two co-founders agree on how the company will be run, but it isn't real until it's signed and dated, not just discussed over coffee.",
+      "An advisor or early investor wants an NDA signed before you walk them through the deck.",
+      "A friends-and-family loan needs a real promissory note, not a Venmo note that says \"loan.\"",
+      "Formation paperwork for an LLC or partnership needs a signed record between co-founders before you open a bank account.",
+    ],
+    whyDocracy:
+      "Docracy is free for two-party signing — you and a co-founder, advisor, or early lender — with no account required for whoever's signing. Start from an LLC operating agreement, partnership agreement, promissory note, or NDA template, fill in the terms, and send.",
+    honestLimit:
+      "What this is not: Docracy doesn't have a dedicated equity/cap-table or SAFE template yet, and this isn't legal advice on how to structure your formation or your first raise. For anything with real equity or investment terms, have a lawyer review the document before it's the final version you send.",
+    relevantTemplates: ["llc-operating-agreement", "partnership-agreement", "promissory-note", "mutual-nda", "letter-of-intent"],
+    ctaLabel: "Send a founder agreement",
+    ctaTo: "/prepare?ref=seo-industry-startups",
+  },
+  {
+    slug: "photographers",
+    seoTitle: "E-Signatures for Photographers & Videographers | Docracy",
+    seoDescription:
+      "Free e-signing for shoot agreements, payment terms, and liability waivers. No account required for the client to sign — built for solo photographers and small studios.",
+    heroHeadline: "E-signatures built for photographers and videographers.",
+    heroSubheadline:
+      "Shoot agreements, payment terms, and liability waivers — signed before the shoot, free for you and your client.",
+    painPoints: [
+      "A client books a shoot and needs to sign off on deliverables, usage terms, and payment before you show up with a camera.",
+      "A deposit or milestone payment needs a real signature, not just a paid invoice with no terms attached.",
+      "A shoot at a venue or with props or equipment often needs a signed liability waiver on file, just in case.",
+      "Most e-sign tools are priced for teams — overkill for one photographer booking a few clients a month.",
+    ],
+    whyDocracy:
+      "Docracy is free for two-party signing — you and your client — with no account required for them to sign. Start from a service agreement, client contract, payment-terms template, or liability waiver, fill in the shoot details, and send.",
+    honestLimit:
+      "What this is not: Docracy doesn't have a dedicated model-release template yet — the service and client-contract templates below cover the booking and payment side, not image-usage/model-release language. Add that separately if your shoot needs it.",
+    relevantTemplates: ["service-agreement", "client-contract", "payment-terms-agreement", "liability-waiver"],
+    ctaLabel: "Send a shoot agreement",
+    ctaTo: "/prepare?ref=seo-industry-photographers",
+  },
+  {
+    slug: "personal",
+    seoTitle: "E-Signatures for Personal & Everyday Agreements | Docracy",
+    seoDescription:
+      "Free e-signing for roommate agreements, personal loans, and power of attorney — for individuals, not businesses. No account required for the other person to sign.",
+    heroHeadline: "E-signatures for personal, everyday agreements.",
+    heroSubheadline:
+      "Roommate agreements, loans between people who know each other, and power of attorney — signed in minutes, free for both of you.",
+    painPoints: [
+      "A new roommate move-in needs a clear, signed understanding of rent splits and house rules, not an assumption everyone remembers the same way.",
+      "Lending money to a friend or family member goes smoother with a real, signed record of the terms, not just a text message.",
+      "A family member needs power of attorney set up, with a clean, timestamped signature from everyone involved.",
+      "Letting someone borrow or use something of real value works better with a signed liability waiver, especially anything with risk involved.",
+    ],
+    whyDocracy:
+      "Docracy is free for two-party signing — you and the other person — with no account required for them to sign. Start from a roommate agreement, personal loan agreement, power of attorney, or liability waiver template, fill in the details, and send.",
+    honestLimit:
+      "What this is not: Docracy doesn't verify anyone's identity or offer notarization — for a power of attorney or any document your state requires to be notarized, this covers the signature and audit trail, not the notarization step itself. Check your state's requirements before relying on it alone.",
+    relevantTemplates: ["roommate-agreement", "loan-agreement", "power-of-attorney", "liability-waiver", "authorization-form"],
+    ctaLabel: "Send a roommate agreement",
+    ctaTo: "/prepare?ref=seo-industry-personal",
+  },
 ];
