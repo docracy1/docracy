@@ -3,6 +3,13 @@ main = "src/index.ts"
 compatibility_date = "2024-12-01"
 compatibility_flags = ["nodejs_compat"]
 
+# Time-boxed test (started 2026-08-16): serves check_status for free to unauthenticated callers,
+# to see whether a genuinely free hook drives adoption through AI-agent discovery channels
+# (MCP registry, awesome-mcp-servers, Docker MCP registry). Set to "false" or delete this line —
+# then redeploy — to revert to fully paid-only. Not intended to run indefinitely.
+[vars]
+FREE_CHECK_STATUS_TEST = "true"
+
 # Same KV namespace as docracy-worker — the connector only ever reads it (status lookups),
 # never writes. A bug here can't corrupt signing state, only misreport it.
 [[kv_namespaces]]

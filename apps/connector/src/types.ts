@@ -11,4 +11,7 @@ export interface ConnectorEnv {
    *  Optional so local/dev can run without D1 (find_documents then returns []). Auth still
    *  requires a valid paid API token via KV (+ D1 is_paid when this binding exists). */
   DOCRACY_DB?: D1Database;
+  /** Time-boxed test — see index.ts. "true" serves check_status for free to unauthenticated
+   *  callers; anything else (including unset) keeps the connector fully paid-only. */
+  FREE_CHECK_STATUS_TEST?: string;
 }

@@ -43,6 +43,16 @@ export async function findDocuments(env: Env, accountId: string, query: string):
   return results.map((r) => ({ docId: r.doc_id, title: r.title, status: r.status, createdAt: r.created_at }));
 }
 
+/** Free-tier server for anonymous callers — check_status only, no accountId needed since it just
+ *  resolves whatever link/token the caller already has. See index.ts's FREE_CHECK_STATUS_TEST
+ *  flag: this is a time-boxed experiment to test whether a genuinely free hook drives adoption
+ *  through AI-agent discovery channels, not a permanent pricing change. */
+export function buildFreeServer(env: Env) {
+  const server = new McpServer(SERVER_INFO);
+  registerCheckStatus(server, env);
+  return server;
+}
+
 /** Paid tool set, scoped to a single already-resolved account (see index.ts). */
 export function buildPaidServer(env: Env, accountId: string) {
   const server = new McpServer(SERVER_INFO);

@@ -1,5 +1,5 @@
 import { createMcpHandler } from "agents/mcp";
-import { buildPaidServer } from "./paidTools";
+import { buildFreeServer, buildPaidServer } from "./paidTools";
 import { resolvePaidAccountId } from "./tokenAuth";
 import type { ConnectorEnv as Env } from "./types";
 
@@ -15,6 +15,14 @@ export default {
 
     const accountId = await resolvePaidAccountId(request, env);
     if (!accountId) {
+      // Time-boxed test (see paidTools.ts's buildFreeServer): serves check_status only, so an
+      // anonymous AI-agent caller gets one real, useful tool instead of an immediate 401. Remove
+      // this branch (and the FREE_CHECK_STATUS_TEST var in wrangler.toml) to revert to paid-only.
+      if (env.FREE_CHECK_STATUS_TEST === "true") {
+        const freeServer = buildFreeServer(env);
+        const freeHandler = createMcpHandler(freeServer, { route: "/mcp" });
+        return freeHandler(request, env, ctx);
+      }
       return Response.json(
         {
           error:
