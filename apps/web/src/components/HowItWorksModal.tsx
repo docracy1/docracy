@@ -43,7 +43,6 @@ export default function HowItWorksModal({ onClose }: { onClose: () => void }) {
           poster={HOW_IT_WORKS_VIDEO.posterPath}
           controls
           autoPlay
-          muted
           playsInline
           preload="metadata"
           title={t("seo.video.name")}
