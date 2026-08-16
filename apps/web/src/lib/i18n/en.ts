@@ -1325,6 +1325,19 @@ const en: Messages = {
   "docracyAlt.today.2": "Free sequential signing chains for up to two people",
   "docracyAlt.today.3": "Upload any PDF — add signature, date, text, and initials fields",
   "docracyAlt.today.4": "Anonymous documents auto-delete after 9 days by default",
+  "docracyAlt.timelineTitle": "A quick timeline",
+  "docracyAlt.timeline.1":
+    "2011 — Docracy launches in New York (Matt Hall, John Watkinson) as an open, free repository of legal document templates.",
+  "docracyAlt.timeline.2":
+    "2012 — Wins the TechCrunch Disrupt Hackathon; adds collaborative editing and e-signing on top of the template library.",
+  "docracyAlt.timeline.3": "Grows to over 500,000 users and 25,000+ templates.",
+  "docracyAlt.timeline.4": "March 2019 — eversign announces its acquisition of Docracy.",
+  "docracyAlt.timeline.5":
+    "Today — the standalone product is discontinued; docracy.com redirects visitors to eversign's own signup page.",
+  "docracyAlt.templatesLinkText": "Looking specifically for free templates like Docracy's original library?",
+  "docracyAlt.templatesLinkCta": "Browse our free templates →",
+  "docracyAlt.eversignLinkText": "Currently on eversign and want something simpler?",
+  "docracyAlt.eversignLinkCta": "See how Docracy compares →",
   "docracyAlt.faqTitle": "Common questions",
   "docracyAlt.faq.q1": "Is this the original Docracy?",
   "docracyAlt.faq.a1":
@@ -1338,6 +1351,12 @@ const en: Messages = {
   "docracyAlt.faq.q4": "Is today's Docracy actually free?",
   "docracyAlt.faq.a4":
     "Yes — sending and signing a document with up to two signers is free, with no account or card required. Paid plans add templates, teams, and more signers.",
+  "docracyAlt.faq.q5": "How do I log into my old Docracy account or get my old documents?",
+  "docracyAlt.faq.a5":
+    "We don't have access to the original company's data or accounts. eversign (now Xodo Sign) acquired Docracy's assets in 2019 — their support team is the right place to ask about anything from the original service.",
+  "docracyAlt.faq.q6": "Is Docracy still around in any form?",
+  "docracyAlt.faq.a6":
+    "The original standalone product is gone — docracy.com now redirects to eversign. This site (docracy.io) is a separate, independently built product with a similar free, no-signup idea, not a continuation of the original.",
   "docracyAlt.footerCta": "Send your first document free — no account needed.",
 
   "ai.eyebrow": "Docracy AI",
@@ -1752,6 +1771,7 @@ const en: Messages = {
   "alt.related.hellosign": "HelloSign / Dropbox Sign alternative",
   "alt.related.adobeSign": "Adobe Sign alternative",
   "alt.related.mutualNda": "Free mutual NDA template",
+  "alt.related.docracyHistory": "What happened to the original Docracy",
 
   "sent.checkEmail": "Your document was created. Check your email for status updates.",
   "sent.shareBlurb": "I just sent a document for signature with Docracy (free, no signup). Try it: https://docracy.io/try",

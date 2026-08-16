@@ -12,6 +12,8 @@ export default function DocracyAlternative() {
   useSeoMeta("docracyAlternative");
 
   const prepareTo = `${localizePath("/prepare", locale)}?ref=seo-docracy-alt`;
+  const templatesTo = localizePath("/free-templates", locale);
+  const eversignAltTo = localizePath("/eversign-alternative", locale);
 
   const onCta = (placement: string) => {
     track("landingpage_cta_clicked", { source: `seo:docracy-alt:${placement}` });
@@ -20,7 +22,7 @@ export default function DocracyAlternative() {
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: [1, 2, 3, 4].map((n) => ({
+    mainEntity: [1, 2, 3, 4, 5, 6].map((n) => ({
       "@type": "Question",
       name: t(`docracyAlt.faq.q${n}`),
       acceptedAnswer: { "@type": "Answer", text: t(`docracyAlt.faq.a${n}`) },
@@ -52,6 +54,15 @@ export default function DocracyAlternative() {
       <div className="container" style={{ maxWidth: 720, paddingTop: 40, paddingBottom: 8 }}>
         <h2 style={{ fontSize: 22, marginTop: 0 }}>{t("docracyAlt.historyTitle")}</h2>
         <p>{t("docracyAlt.historyBody")}</p>
+
+        <h3 style={{ fontSize: 18, marginTop: 24 }}>{t("docracyAlt.timelineTitle")}</h3>
+        <ul style={{ paddingLeft: 20, lineHeight: 1.6 }}>
+          <li style={{ marginBottom: 8 }}>{t("docracyAlt.timeline.1")}</li>
+          <li style={{ marginBottom: 8 }}>{t("docracyAlt.timeline.2")}</li>
+          <li style={{ marginBottom: 8 }}>{t("docracyAlt.timeline.3")}</li>
+          <li style={{ marginBottom: 8 }}>{t("docracyAlt.timeline.4")}</li>
+          <li>{t("docracyAlt.timeline.5")}</li>
+        </ul>
       </div>
 
       <div className="spotlight-band">
@@ -69,11 +80,23 @@ export default function DocracyAlternative() {
           <li style={{ marginBottom: 8 }}>{t("docracyAlt.today.3")}</li>
           <li>{t("docracyAlt.today.4")}</li>
         </ul>
+        <p style={{ fontSize: 14, marginTop: 20 }}>
+          {t("docracyAlt.templatesLinkText")}{" "}
+          <Link to={templatesTo} onClick={() => onCta("templates_link")}>
+            {t("docracyAlt.templatesLinkCta")}
+          </Link>
+        </p>
+        <p style={{ fontSize: 14 }}>
+          {t("docracyAlt.eversignLinkText")}{" "}
+          <Link to={eversignAltTo} onClick={() => onCta("eversign_link")}>
+            {t("docracyAlt.eversignLinkCta")}
+          </Link>
+        </p>
       </div>
 
       <div className="container" style={{ maxWidth: 720, paddingTop: 24, paddingBottom: 16 }}>
         <h2 style={{ fontSize: 22, marginTop: 0 }}>{t("docracyAlt.faqTitle")}</h2>
-        {[1, 2, 3, 4].map((n) => (
+        {[1, 2, 3, 4, 5, 6].map((n) => (
           <details key={n} className="faq-item" style={{ marginTop: 12 }}>
             <summary style={{ fontWeight: 700, cursor: "pointer" }}>{t(`docracyAlt.faq.q${n}`)}</summary>
             <p style={{ margin: "8px 0 0", color: "var(--body)" }}>{t(`docracyAlt.faq.a${n}`)}</p>

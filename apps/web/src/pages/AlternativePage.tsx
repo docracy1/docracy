@@ -111,6 +111,11 @@ export default function AlternativePage({ slug }: { slug: string }) {
           <li style={{ marginBottom: 6 }}>
             <Link to={localizePath("/free-templates/mutual-nda", locale)}>{t("alt.related.mutualNda")}</Link>
           </li>
+          {slug === "eversign-alternative" && (
+            <li style={{ marginBottom: 6 }}>
+              <Link to={localizePath("/docracy-alternative", locale)}>{t("alt.related.docracyHistory")}</Link>
+            </li>
+          )}
           <li style={{ marginBottom: 6 }}>
             <Link to={localizePath("/pricing", locale)}>{t("alt.seePricing")}</Link>
           </li>
