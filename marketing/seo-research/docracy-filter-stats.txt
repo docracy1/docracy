@@ -1,0 +1,6 @@
+Raw URLs processed: 159297
+Unique document IDs recovered: 9486
+  ...with a real slug/title: 9369
+  ...docId only, no slug found: 117
+Non-document URLs (app routes, assets, junk): 112531
+  (of which excluded as reserved-route first segments: 91701)

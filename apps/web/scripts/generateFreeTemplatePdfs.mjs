@@ -5595,6 +5595,793 @@ const TEMPLATES = [
       { type: "section", text: "Signatures" },
       { type: "signatures", signers: [{ label: "Party A", order: 1 }, { label: "Party B", order: 2 }] },
     ],
+  },  {
+    slug: "web-design-services-agreement",
+    title: "WEB DESIGN SERVICES AGREEMENT",
+    signerLabels: ["Client", "Designer"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Client: ", blank: TEXT_BLANK },
+      { type: "field", label: "Designer: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Project Overview" },
+      {
+        type: "paragraph",
+        text: "The Designer agrees to provide website design services for the project described below. This Agreement covers the design phase only and does not include ongoing hosting, domain registration, or software development beyond what is expressly described in the Scope of Design Services.",
+      },
+      { type: "field", label: "Project / Website Name: ", blank: TEXT_BLANK },
+      { type: "field", label: "Project Description: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Scope of Design Services" },
+      {
+        type: "paragraph",
+        text: "The Designer will provide the following design deliverables as part of this engagement:",
+      },
+      {
+        type: "table",
+        widths: [0.7, 0.3],
+        headers: ["Deliverable", "Included / Notes"],
+        rows: [
+          ["Homepage mockup", TEXT_BLANK],
+          ["Interior/inner page mockups", TEXT_BLANK],
+          ["Mobile-responsive design", TEXT_BLANK],
+          ["Style guide (colors, fonts, icons)", TEXT_BLANK],
+        ],
+      },
+      { type: "field", label: "Number of Included Revision Rounds: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Revisions" },
+      {
+        type: "paragraph",
+        text: "The fee described in this Agreement includes the number of revision rounds specified above. Additional revision requests beyond that number will be billed at an hourly or flat rate agreed upon by the parties in writing before the additional work begins.",
+      },
+
+      { type: "section", text: "Project Timeline" },
+      { type: "field", label: "Start Date: ", blank: DATE_BLANK },
+      { type: "field", label: "Target Completion Date: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Fees and Payment" },
+      { type: "field", label: "Total Design Fee: ", blank: TEXT_BLANK },
+      { type: "field", label: "Deposit Due on Signing: ", blank: TEXT_BLANK },
+      { type: "field", label: "Balance Due Upon Completion: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Client Responsibilities" },
+      {
+        type: "paragraph",
+        text: "The Client is responsible for providing text content, images, logos, and other materials needed for the design in a timely manner. Delays in providing these materials may extend the project timeline accordingly.",
+      },
+
+      { type: "section", text: "Ownership and Intellectual Property" },
+      {
+        type: "paragraph",
+        text: "Upon receipt of full and final payment, ownership of the final approved design files will transfer to the Client. Until full payment is received, all design work, drafts, and concepts remain the property of the Designer. The Designer retains the right to display the completed design in their portfolio and promotional materials unless the parties agree otherwise in writing.",
+      },
+
+      { type: "section", text: "Hosting and Domain Registration" },
+      {
+        type: "paragraph",
+        text: "This Agreement covers design services only. Website hosting, domain name registration, and ongoing technical maintenance are not included and remain the sole responsibility of the Client unless separately agreed in writing.",
+      },
+
+      { type: "section", text: "Confidentiality" },
+      {
+        type: "paragraph",
+        text: "Each party agrees to keep confidential any non-public business, technical, or design information shared during the course of this engagement, and not to disclose it to third parties without prior written consent.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text: "The parties agree to first attempt to resolve any dispute arising from this Agreement through good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Client", order: 1 }, { label: "Designer", order: 2 }] },
+    ],
+  },
+  {
+    slug: "web-development-agreement",
+    title: "WEB DEVELOPMENT AGREEMENT",
+    signerLabels: ["Client", "Developer"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Client: ", blank: TEXT_BLANK },
+      { type: "field", label: "Developer: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Project Overview" },
+      {
+        type: "paragraph",
+        text: "The Developer agrees to build, test, and deploy a website or web application for the Client as described below. This Agreement governs the development work only; ongoing hosting fees, third-party software licenses, and content creation are the Client's responsibility unless stated otherwise.",
+      },
+      { type: "field", label: "Project Name: ", blank: TEXT_BLANK },
+      { type: "field", label: "Project Description: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Technology Stack" },
+      {
+        type: "paragraph",
+        text: "The website or application will be built using the following technologies, frameworks, and platforms:",
+      },
+      { type: "field", label: "Technology Stack: ", blank: TEXT_BLANK },
+      { type: "field", label: "Hosting Environment: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Scope of Development Services" },
+      {
+        type: "paragraph",
+        text: "The Developer's services include building the agreed functionality, conducting functional and cross-browser testing, and deploying the completed work to the Client's chosen hosting environment. Features not described in the Project Description are considered out of scope and may require a separate change order and additional fee.",
+      },
+
+      { type: "section", text: "Project Milestones and Timeline" },
+      { type: "field", label: "Start Date: ", blank: DATE_BLANK },
+      { type: "field", label: "Target Launch Date: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Fees and Payment" },
+      { type: "field", label: "Total Development Fee: ", blank: TEXT_BLANK },
+      { type: "field", label: "Deposit Due on Signing: ", blank: TEXT_BLANK },
+      { type: "field", label: "Remaining Balance Schedule: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Testing and Acceptance" },
+      {
+        type: "paragraph",
+        text: "Prior to launch, the Developer will provide the Client a testing or staging environment for review. The Client will have a reasonable period, not to exceed 10 business days unless otherwise agreed, to report any defects for correction before the work is considered accepted.",
+      },
+
+      { type: "section", text: "Post-Launch Maintenance and Support" },
+      {
+        type: "paragraph",
+        text: "Following launch, the Developer will provide bug-fix support for defects in the delivered work at no additional charge for the period specified below. Support beyond this period, including new features, content updates, and third-party plugin updates, is available under a separate maintenance agreement.",
+      },
+      { type: "field", label: "Included Support Period After Launch: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Source Code and Ownership" },
+      {
+        type: "paragraph",
+        text: "Upon receipt of full and final payment, the Developer will transfer ownership of the custom source code created for this project to the Client. Pre-existing tools, libraries, frameworks, and reusable code owned by the Developer prior to this engagement remain the Developer's property and are licensed to the Client for use with the delivered project.",
+      },
+
+      { type: "section", text: "Third-Party Services and Costs" },
+      {
+        type: "paragraph",
+        text: "Any third-party software licenses, hosting fees, domain registration costs, or API subscription fees required for the project are the responsibility of the Client and are not included in the Development Fee unless expressly stated.",
+      },
+
+      { type: "section", text: "Confidentiality" },
+      {
+        type: "paragraph",
+        text: "Each party agrees to keep confidential any non-public business or technical information disclosed during this engagement and not to share it with third parties without prior written consent.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text: "The parties agree to first attempt to resolve any dispute arising from this Agreement through good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Client", order: 1 }, { label: "Developer", order: 2 }] },
+    ],
+  },
+  {
+    slug: "wedding-photography-contract",
+    title: "WEDDING PHOTOGRAPHY CONTRACT",
+    signerLabels: ["Client", "Photographer"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Client(s): ", blank: TEXT_BLANK },
+      { type: "field", label: "Photographer: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Event Details" },
+      { type: "field", label: "Wedding Date: ", blank: DATE_BLANK },
+      { type: "field", label: "Ceremony Venue and Address: ", blank: TEXT_BLANK },
+      { type: "field", label: "Reception Venue and Address: ", blank: TEXT_BLANK },
+      { type: "field", label: "Coverage Start Time: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Coverage" },
+      { type: "field", label: "Total Hours of Coverage: ", blank: TEXT_BLANK },
+      { type: "field", label: "Number of Photographers Provided: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Deliverables" },
+      {
+        type: "paragraph",
+        text: "The Photographer will provide professionally edited digital photographs from the event. The approximate number of final edited images and the delivery timeline are as follows:",
+      },
+      { type: "field", label: "Approximate Number of Edited Images: ", blank: TEXT_BLANK },
+      { type: "field", label: "Delivery Timeline After Event (e.g. weeks): ", blank: TEXT_BLANK },
+      {
+        type: "paragraph",
+        text: "The Client will receive digital copies of the final edited images and may use them for personal purposes, including printing, sharing, and posting on personal social media accounts. Any print rights beyond personal use, or licensing of images for commercial purposes, must be separately agreed in writing.",
+      },
+
+      { type: "section", text: "Payment and Retainer" },
+      { type: "field", label: "Total Package Price: ", blank: TEXT_BLANK },
+      { type: "field", label: "Retainer/Deposit Due on Signing: ", blank: TEXT_BLANK },
+      { type: "field", label: "Remaining Balance Due Date: ", blank: TEXT_BLANK },
+      {
+        type: "paragraph",
+        text: "The retainer is paid to secure the Photographer's services for the date listed above and is non-refundable except as required by law.",
+      },
+
+      { type: "section", text: "Cancellation and Rescheduling" },
+      {
+        type: "paragraph",
+        text: "If the Client cancels the event, any amounts paid to date, other than the non-refundable retainer, will be refunded only if the Photographer is able to rebook the date. If the event is rescheduled, the Photographer will make reasonable efforts to accommodate the new date, but availability is not guaranteed. If the Photographer becomes unable to attend the event due to illness, emergency, or other circumstances beyond their control, the Photographer will make reasonable efforts to arrange a qualified substitute, or otherwise will refund all payments made for services not rendered.",
+      },
+
+      { type: "section", text: "Model Release and Portfolio Use" },
+      {
+        type: "paragraph",
+        text: "The Client acknowledges and agrees that the Photographer may use images from the event for the Photographer's professional portfolio, website, social media, and other promotional and marketing materials, unless the Client opts out below.",
+      },
+      { type: "field", label: "Client Opts Out of Portfolio/Marketing Use (Yes/No): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Liability" },
+      {
+        type: "paragraph",
+        text: "The Photographer will use commercially reasonable efforts to capture and preserve all images but is not liable for lost, damaged, or corrupted images resulting from equipment failure, memory card corruption, or other circumstances beyond the Photographer's reasonable control. In such an event, the Photographer's liability is limited to a refund of fees paid for the affected portion of coverage.",
+      },
+
+      { type: "section", text: "Copyright" },
+      {
+        type: "paragraph",
+        text: "The Photographer retains copyright ownership of all images taken during the event. The Client is granted a license to use the delivered images as described in the Deliverables section above.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text: "The parties agree to first attempt to resolve any dispute arising from this Agreement through good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Client", order: 1 }, { label: "Photographer", order: 2 }] },
+    ],
+  },
+  {
+    slug: "photography-services-agreement",
+    title: "PHOTOGRAPHY SERVICES AGREEMENT",
+    signerLabels: ["Client", "Photographer"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Client: ", blank: TEXT_BLANK },
+      { type: "field", label: "Photographer: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Session Details" },
+      { type: "field", label: "Type of Session (e.g. portrait, commercial, product, event): ", blank: TEXT_BLANK },
+      { type: "field", label: "Session Date: ", blank: DATE_BLANK },
+      { type: "field", label: "Session Location: ", blank: TEXT_BLANK },
+      { type: "field", label: "Estimated Session Length: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Scope of Services" },
+      {
+        type: "paragraph",
+        text: "The Photographer agrees to provide photography services for the session described above, including reasonable direction during the session and post-production editing of the selected final images.",
+      },
+
+      { type: "section", text: "Usage Rights Granted to Client" },
+      {
+        type: "paragraph",
+        text: "Upon delivery and payment in full, the Client is granted the following usage rights in the final images:",
+      },
+      { type: "field", label: "Scope of Use (personal, editorial, or commercial — specify): ", blank: TEXT_BLANK },
+      {
+        type: "paragraph",
+        text: "Commercial use, including advertising, resale, or use in paid marketing campaigns, is permitted only if specified above and may be subject to an additional licensing fee. Any use beyond what is specified above requires the Photographer's prior written consent.",
+      },
+
+      { type: "section", text: "Photographer's Reserved Rights" },
+      {
+        type: "paragraph",
+        text: "The Photographer retains copyright ownership of all images produced and may use the images for the Photographer's portfolio, website, social media, and self-promotion, unless the Client requests otherwise in writing prior to the session.",
+      },
+
+      { type: "section", text: "Fees and Payment" },
+      { type: "field", label: "Session Fee: ", blank: TEXT_BLANK },
+      { type: "field", label: "Deposit Due on Booking: ", blank: TEXT_BLANK },
+      { type: "field", label: "Balance Due Date: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Image Selection and Delivery" },
+      {
+        type: "paragraph",
+        text: "The Photographer will provide the Client a selection of proofs from which the Client may choose final images for editing, unless otherwise agreed. Final edited images will be delivered digitally within the timeline specified below.",
+      },
+      { type: "field", label: "Delivery Timeline After Session: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Cancellation and Rescheduling" },
+      {
+        type: "paragraph",
+        text: "Either party may reschedule the session with reasonable advance notice, subject to the Photographer's availability. Deposits are non-refundable but may be applied to a rescheduled session date. Cancellations made with less than 48 hours' notice may forfeit the full session fee.",
+      },
+
+      { type: "section", text: "Model Releases" },
+      {
+        type: "paragraph",
+        text: "Where the session includes identifiable people other than the Client, the Client is responsible for ensuring appropriate model releases have been obtained before any commercial use of the images, unless the Photographer separately arranges for model releases as part of this engagement.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text: "The parties agree to first attempt to resolve any dispute arising from this Agreement through good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Client", order: 1 }, { label: "Photographer", order: 2 }] },
+    ],
+  },
+  {
+    slug: "model-release-form",
+    title: "MODEL RELEASE FORM",
+    signerLabels: ["Photographer", "Model"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Photographer: ", blank: TEXT_BLANK },
+      { type: "field", label: "Model: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Grant of Rights" },
+      {
+        type: "paragraph",
+        text: "The Model grants the Photographer, and the Photographer's assigns and licensees, the irrevocable right to use, reproduce, edit, and publish photographs, video, and other likenesses of the Model taken on the date(s) below, in any medium now known or later developed, for the purpose(s) described in this release.",
+      },
+      { type: "field", label: "Date(s) of Photo/Video Session: ", blank: DATE_BLANK },
+      { type: "field", label: "Location of Session: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Permitted Uses" },
+      {
+        type: "paragraph",
+        text: "The images and likeness described above may be used for the following purpose(s):",
+      },
+      { type: "field", label: "Permitted Use (commercial, editorial, portfolio, social media, or other — specify): ", blank: TEXT_BLANK },
+      {
+        type: "paragraph",
+        text: "Any use materially different from the purpose specified above requires a separate written agreement between the parties.",
+      },
+
+      { type: "section", text: "Compensation" },
+      { type: "field", label: "Compensation (enter 'Paid' or 'Unpaid'): ", blank: TEXT_BLANK },
+      { type: "field", label: "If Paid, Compensation Amount: ", blank: TEXT_BLANK },
+      {
+        type: "paragraph",
+        text: "If this release is unpaid, the Model acknowledges that participation in the session itself is the sole consideration for the rights granted, and no further compensation will be due.",
+      },
+
+      { type: "section", text: "Term" },
+      {
+        type: "paragraph",
+        text: "Unless a specific time limit is stated below, the rights granted in this release are perpetual and are not limited in duration.",
+      },
+      { type: "field", label: "Time Limit, if any (leave blank for no limit): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Model's Representations" },
+      {
+        type: "paragraph",
+        text: "The Model represents that they are at least 18 years of age and have the legal right to enter into this release, or that a parent or legal guardian has provided consent below on the Model's behalf.",
+      },
+
+      { type: "section", text: "Parent/Guardian Consent (if Model is a Minor)" },
+      { type: "field", label: "Parent/Guardian Name (if applicable): ", blank: TEXT_BLANK },
+      {
+        type: "paragraph",
+        text: "If the Model is under the age of majority in their jurisdiction, the parent or legal guardian identified above confirms they have the legal authority to consent on the Model's behalf and agrees to be bound by the terms of this release.",
+      },
+
+      { type: "section", text: "Waiver of Approval Rights" },
+      {
+        type: "paragraph",
+        text: "The Model waives any right to inspect or approve the finished images, video, or related materials, and waives any claim to royalties or additional compensation beyond what is specified above, except as required by law.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text: "The parties agree to first attempt to resolve any dispute arising from this Agreement through good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Photographer", order: 1 }, { label: "Model", order: 2 }] },
+    ],
+  },
+  {
+    slug: "website-terms-of-service-acknowledgment",
+    title: "WEBSITE TERMS OF SERVICE ACKNOWLEDGMENT",
+    signerLabels: ["Company", "User"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Company: ", blank: TEXT_BLANK },
+      { type: "field", label: "User: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Purpose" },
+      {
+        type: "paragraph",
+        text:
+          "The Company operates a website and/or online service (the \"Service\") that is governed by a separately " +
+          "published Terms of Service. This Acknowledgment is not itself the Terms of Service and does not restate " +
+          "its provisions; it confirms that the User has read, understood, and agreed to be bound by the Terms of " +
+          "Service currently in effect for the Service.",
+      },
+
+      { type: "section", text: "Terms of Service Reference" },
+      { type: "field", label: "Terms of Service URL / Reference: ", blank: TEXT_BLANK },
+      { type: "field", label: "Version / Effective Date of Terms Reviewed: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Acknowledgment of Review" },
+      {
+        type: "paragraph",
+        text:
+          "The User confirms having had a reasonable opportunity to access, read, and ask questions about the " +
+          "Terms of Service referenced above prior to signing this Acknowledgment, and understands that continued " +
+          "use of the Service is subject to those Terms.",
+      },
+
+      { type: "section", text: "Acceptance" },
+      {
+        type: "paragraph",
+        text:
+          "By signing below, the User agrees to comply with the Terms of Service and acknowledges that failure to " +
+          "do so may result in suspension or termination of access to the Service, in accordance with the Terms " +
+          "of Service.",
+      },
+
+      { type: "section", text: "Updates to the Terms of Service" },
+      {
+        type: "paragraph",
+        text:
+          "The User understands that the Company may update the Terms of Service from time to time, that the " +
+          "current version will be made available at the reference above or a successor location, and that " +
+          "continued use of the Service after an update constitutes acceptance of the revised Terms, as described " +
+          "in the Terms of Service itself.",
+      },
+
+      { type: "section", text: "No Separate Agreement Created" },
+      {
+        type: "paragraph",
+        text:
+          "This Acknowledgment is a record confirming the User's acceptance of the Terms of Service and does not " +
+          "modify, supersede, or add any terms beyond those set out in the Terms of Service.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Acknowledgment shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Acknowledgment through " +
+          "good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding " +
+          "arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Company", order: 1 }, { label: "User", order: 2 }] },
+    ],
+  },
+  {
+    slug: "acceptable-use-policy-acknowledgment",
+    title: "ACCEPTABLE USE POLICY ACKNOWLEDGMENT",
+    signerLabels: ["Company", "User"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Company: ", blank: TEXT_BLANK },
+      { type: "field", label: "User: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Purpose" },
+      {
+        type: "paragraph",
+        text:
+          "The Company has adopted an Acceptable Use Policy governing what the User may and may not do when " +
+          "accessing or using the Company's service (the \"Service\"). This Acknowledgment confirms that the User " +
+          "has received, read, and agreed to comply with that policy.",
+      },
+
+      { type: "section", text: "Acceptable Use Policy Reference" },
+      { type: "field", label: "Acceptable Use Policy URL / Reference: ", blank: TEXT_BLANK },
+      { type: "field", label: "Version / Effective Date of Policy Reviewed: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Examples of Prohibited Uses" },
+      {
+        type: "paragraph",
+        text:
+          "Without limiting the full scope of the Acceptable Use Policy, prohibited uses of the Service include, " +
+          "for example: sending unsolicited bulk messages or spam; uploading, storing, or transmitting content " +
+          "that is illegal or infringes another party's rights; attempting to circumvent, disable, or interfere " +
+          "with security features, access controls, or usage limits of the Service; and any use that disrupts or " +
+          "places unreasonable load on the Service or its underlying infrastructure.",
+      },
+
+      { type: "section", text: "Acknowledgment of Review" },
+      {
+        type: "paragraph",
+        text:
+          "The User confirms having had a reasonable opportunity to access, read, and ask questions about the " +
+          "Acceptable Use Policy referenced above prior to signing this Acknowledgment.",
+      },
+
+      { type: "section", text: "Consequences of Violation" },
+      {
+        type: "paragraph",
+        text:
+          "The User understands that violation of the Acceptable Use Policy may result in warning, suspension, or " +
+          "termination of access to the Service, and may result in other consequences described in the Acceptable " +
+          "Use Policy or applicable agreement with the Company.",
+      },
+
+      { type: "section", text: "Updates to the Policy" },
+      {
+        type: "paragraph",
+        text:
+          "The User understands that the Company may update the Acceptable Use Policy from time to time, that the " +
+          "current version will be made available at the reference above or a successor location, and that " +
+          "continued use of the Service after an update constitutes acceptance of the revised policy.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Acknowledgment shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Acknowledgment through " +
+          "good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding " +
+          "arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Company", order: 1 }, { label: "User", order: 2 }] },
+    ],
+  },
+  {
+    slug: "proprietary-information-and-inventions-agreement",
+    title: "PROPRIETARY INFORMATION AND INVENTIONS AGREEMENT (PIIA)",
+    signerLabels: ["Company", "Employee"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Company: ", blank: TEXT_BLANK },
+      { type: "field", label: "Employee: ", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "Position: ", blank: TEXT_BLANK },
+      { type: "field", label: "Start Date: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Purpose" },
+      {
+        type: "paragraph",
+        text:
+          "In connection with the Employee's employment with the Company, this Agreement sets out the Employee's " +
+          "obligations regarding the Company's proprietary information and the ownership of inventions and other " +
+          "work product created in connection with that employment.",
+      },
+
+      { type: "section", text: "Definition of Proprietary Information" },
+      {
+        type: "paragraph",
+        text:
+          "\"Proprietary Information\" means non-public information belonging to the Company or disclosed to the " +
+          "Company by others, including business plans, financial information, customer and supplier data, product " +
+          "and technical designs, source code, algorithms, and other confidential business or technical information " +
+          "the Employee learns or has access to during employment.",
+      },
+
+      { type: "section", text: "Confidentiality Obligations" },
+      {
+        type: "paragraph",
+        text:
+          "The Employee agrees to use Proprietary Information only to perform their duties for the Company, to " +
+          "hold it in confidence during and after employment, and not to disclose it to any third party without " +
+          "the Company's prior written consent, except as required by law.",
+      },
+
+      { type: "section", text: "Assignment of Inventions" },
+      {
+        type: "paragraph",
+        text:
+          "The Employee agrees to promptly disclose to the Company, and hereby assigns to the Company, all right, " +
+          "title, and interest in any invention, discovery, design, work of authorship, or other work product that " +
+          "the Employee conceives, develops, or reduces to practice, alone or with others, during the period of " +
+          "employment, that (a) relates to the Company's actual or reasonably anticipated business, research, or " +
+          "development, or (b) is created using the Company's equipment, facilities, time, or Proprietary " +
+          "Information.",
+      },
+
+      { type: "section", text: "Prior Inventions" },
+      {
+        type: "paragraph",
+        text:
+          "Listed below are inventions the Employee made prior to employment that the Employee wishes to exclude " +
+          "from this Agreement. If no inventions are listed, the Employee represents that there are none to " +
+          "disclose.",
+      },
+      {
+        type: "table",
+        widths: [0.7, 0.3],
+        headers: ["Title / Brief Description", "Approximate Date"],
+        rows: [
+          [TEXT_BLANK, DATE_BLANK],
+          [TEXT_BLANK, DATE_BLANK],
+          [TEXT_BLANK, DATE_BLANK],
+        ],
+      },
+
+      { type: "section", text: "Duty to Disclose" },
+      {
+        type: "paragraph",
+        text:
+          "The Employee agrees to promptly and fully disclose to the Company any invention covered by this " +
+          "Agreement, so that the Company may determine whether it wishes to claim rights under this Agreement.",
+      },
+
+      { type: "section", text: "Return of Materials" },
+      {
+        type: "paragraph",
+        text:
+          "Upon request or at the end of employment, the Employee agrees to return or destroy all materials " +
+          "containing Proprietary Information, and all models, prototypes, and other embodiments of assigned " +
+          "inventions, in the Employee's possession.",
+      },
+
+      { type: "section", text: "Important Notice Regarding Applicable Law" },
+      {
+        type: "paragraph",
+        text:
+          "This is a general-purpose template and is not a substitute for advice from a qualified attorney. The " +
+          "scope of inventions and intellectual property that an employer may lawfully require an employee to " +
+          "assign varies significantly by jurisdiction, and the laws of the state or country where the Employee " +
+          "works (for example, statutes limiting assignment of inventions developed entirely on an employee's own " +
+          "time, without use of the employer's resources, and unrelated to the employer's business) may narrow or " +
+          "otherwise affect the scope of assignment described above. The parties should confirm the enforceability " +
+          "of this Agreement in the relevant jurisdiction with qualified counsel before relying on it.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles, subject to the notice above regarding jurisdiction-specific limits on invention assignment.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Agreement through " +
+          "good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding " +
+          "arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Company", order: 1 }, { label: "Employee", order: 2 }] },
+    ],
+  },
+  {
+    slug: "short-form-mutual-nda",
+    title: "SHORT-FORM MUTUAL NDA",
+    signerLabels: ["Party A", "Party B"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Party A: ", blank: TEXT_BLANK },
+      { type: "field", label: "Party B: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Purpose" },
+      {
+        type: "paragraph",
+        text: `The parties wish to exchange confidential information for the purpose of ${TEXT_BLANK} (the "Purpose"), and each party may disclose confidential information to the other in connection with that Purpose.`,
+      },
+
+      { type: "section", text: "Confidential Information" },
+      {
+        type: "paragraph",
+        text:
+          "\"Confidential Information\" means any non-public information disclosed by one party to the other, in " +
+          "any form, that is identified as confidential or that a reasonable person would understand to be " +
+          "confidential given its nature and the circumstances of disclosure.",
+      },
+
+      { type: "section", text: "Obligations" },
+      {
+        type: "paragraph",
+        text:
+          "Each party agrees to keep the other party's Confidential Information confidential and to use it only " +
+          "for the Purpose, and not to disclose it to any third party without the disclosing party's prior written " +
+          "consent, except as required by law.",
+      },
+
+      { type: "section", text: "Term" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement, and each party's confidentiality obligations under it, remain in effect for 2 years " +
+          "from the date of signing, unless earlier terminated by mutual written agreement of the parties.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Party A", order: 1 }, { label: "Party B", order: 2 }] },
+    ],
+  },
+  {
+    slug: "reference-letter",
+    title: "REFERENCE LETTER",
+    signerLabels: ["Reference Provider"],
+    blocks: [
+      { type: "section", text: "Reference Provider" },
+      { type: "field", label: "Reference Provider Name: ", blank: TEXT_BLANK },
+      { type: "field", label: "Title / Organization: ", blank: TEXT_BLANK },
+      { type: "field", label: "Contact Information: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Person Being Referenced" },
+      { type: "field", label: "Full Name: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Relationship" },
+      {
+        type: "paragraph",
+        text:
+          "Describe your relationship to the person being referenced (for example: employer, supervisor, " +
+          "colleague, landlord, client, or other capacity), and how long you have known them.",
+      },
+      { type: "field", label: "Relationship (e.g., employer, colleague, landlord): ", blank: TEXT_BLANK },
+      { type: "field", label: "Known Since: ", blank: DATE_BLANK },
+      { type: "field", label: "Known Until (or \"Present\"): ", blank: DATE_BLANK },
+
+      { type: "section", text: "Recommendation" },
+      {
+        type: "paragraph",
+        text:
+          "Provide your assessment of the person named above, including relevant skills, character, conduct, and " +
+          "any other observations that support this reference:",
+      },
+      { type: "field", label: "", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Closing Statement" },
+      {
+        type: "paragraph",
+        text:
+          "The Reference Provider offers this reference in good faith, based on personal knowledge and experience, " +
+          "and is willing to be contacted using the information above to answer further questions if needed.",
+      },
+
+      { type: "section", text: "Signature" },
+      { type: "signatures", signers: [{ label: "Reference Provider", order: 1 }] },
+    ],
   },
 ];
 

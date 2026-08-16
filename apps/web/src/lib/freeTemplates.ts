@@ -1724,6 +1724,187 @@ FREE_TEMPLATES.push(
   },
 );
 
+FREE_TEMPLATES.push(
+  {
+    slug: "web-design-services-agreement",
+    name: "Web Design Services Agreement",
+    seoTitle: "Free Web Design Services Agreement Template",
+    description: "Covers design deliverables, revision rounds, ownership handoff on payment, and what's excluded (hosting, domain).",
+    useCase:
+      "Use this when a freelance or agency designer is building website mockups and design assets for a client, " +
+      "separate from any development or ongoing hosting work.",
+    signerLabels: ["Client", "Designer"],
+    recurringCategory: "Consulting",
+    pdfPath: "/free-templates/web-design-services-agreement.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 2, xFrac: 0.24776143790849672, yFrac: 0.3111111111111112, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 2, xFrac: 0.15376960784313726, yFrac: 0.4064898989898991, wFrac: 0.16, hFrac: 0.04, type: "date" },
+      { id: "ft2", signerOrder: 2, page: 2, xFrac: 0.2749142156862745, yFrac: 0.47679292929292943, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft3", signerOrder: 2, page: 2, xFrac: 0.15376960784313726, yFrac: 0.5721717171717173, wFrac: 0.16, hFrac: 0.04, type: "date" },
+    ],
+  },
+  {
+    slug: "web-development-agreement",
+    name: "Web Development Agreement",
+    seoTitle: "Free Web Development Agreement Template",
+    description: "Covers scope, tech stack, testing/acceptance, post-launch support window, and source code ownership.",
+    useCase:
+      "Use this when a freelance or agency developer is building and deploying a website or web application for a " +
+      "client, distinct from the design work itself.",
+    signerLabels: ["Client", "Developer"],
+    recurringCategory: "Consulting",
+    pdfPath: "/free-templates/web-development-agreement.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 2, xFrac: 0.24776143790849672, yFrac: 0.3314393939393941, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 2, xFrac: 0.15376960784313726, yFrac: 0.426818181818182, wFrac: 0.16, hFrac: 0.04, type: "date" },
+      { id: "ft2", signerOrder: 2, page: 2, xFrac: 0.28432843137254904, yFrac: 0.4971212121212123, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft3", signerOrder: 2, page: 2, xFrac: 0.15376960784313726, yFrac: 0.5925000000000002, wFrac: 0.16, hFrac: 0.04, type: "date" },
+    ],
+  },
+  {
+    slug: "wedding-photography-contract",
+    name: "Wedding Photography Contract",
+    seoTitle: "Free Wedding Photography Contract Template",
+    description: "Covers event details, coverage hours, deliverables, retainer/cancellation terms, and portfolio-use consent.",
+    useCase:
+      "Use this when booking wedding photography services, to set clear expectations on coverage, delivery " +
+      "timeline, and what happens if either side needs to reschedule.",
+    signerLabels: ["Client", "Photographer"],
+    recurringCategory: "Consulting",
+    pdfPath: "/free-templates/wedding-photography-contract.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 2, xFrac: 0.24776143790849672, yFrac: 0.2604797979797981, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 2, xFrac: 0.15376960784313726, yFrac: 0.35585858585858604, wFrac: 0.16, hFrac: 0.04, type: "date" },
+      { id: "ft2", signerOrder: 2, page: 2, xFrac: 0.31320996732026146, yFrac: 0.42616161616161635, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft3", signerOrder: 2, page: 2, xFrac: 0.15376960784313726, yFrac: 0.5215404040404042, wFrac: 0.16, hFrac: 0.04, type: "date" },
+    ],
+  },
+  {
+    slug: "photography-services-agreement",
+    name: "Photography Services Agreement",
+    seoTitle: "Free Photography Services Agreement Template",
+    description: "Covers session details, usage rights granted to the client, and the photographer's portfolio rights.",
+    useCase:
+      "Use this for portrait, commercial, or product photography sessions where you need to spell out who can use " +
+      "the final images and for what purposes.",
+    signerLabels: ["Client", "Photographer"],
+    recurringCategory: "Consulting",
+    pdfPath: "/free-templates/photography-services-agreement.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 2, xFrac: 0.24776143790849672, yFrac: 0.06060606060606061, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 2, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" },
+      { id: "ft2", signerOrder: 2, page: 2, xFrac: 0.31320996732026146, yFrac: 0.22628787878787882, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft3", signerOrder: 2, page: 2, xFrac: 0.15376960784313726, yFrac: 0.3216666666666668, wFrac: 0.16, hFrac: 0.04, type: "date" },
+    ],
+  },
+  {
+    slug: "model-release-form",
+    name: "Model Release Form",
+    seoTitle: "Free Model Release Form Template",
+    description: "Grants a photographer rights to use a model's likeness, with permitted-use scope and minor-consent option.",
+    useCase:
+      "Use this whenever a photographer or videographer needs written permission to use someone's image or " +
+      "likeness — for commercial, editorial, portfolio, or social media use.",
+    signerLabels: ["Photographer", "Model"],
+    recurringCategory: "Intellectual Property",
+    pdfPath: "/free-templates/model-release-form.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 2, xFrac: 0.31320996732026146, yFrac: 0.06060606060606061, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 2, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" },
+      { id: "ft2", signerOrder: 2, page: 2, xFrac: 0.25089950980392156, yFrac: 0.22628787878787882, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft3", signerOrder: 2, page: 2, xFrac: 0.15376960784313726, yFrac: 0.3216666666666668, wFrac: 0.16, hFrac: 0.04, type: "date" },
+    ],
+  },
+  {
+    slug: "website-terms-of-service-acknowledgment",
+    name: "Website Terms of Service Acknowledgment",
+    seoTitle: "Free Terms of Service Acknowledgment Template",
+    description: "A short cover document where a user formally confirms they've read and agreed to your published Terms of Service.",
+    useCase:
+      "Use this when you want a signed, dated record that a specific user accepted your Terms of Service — this " +
+      "doesn't replace your actual Terms of Service, which you publish separately.",
+    signerLabels: ["Company", "User"],
+    recurringCategory: "Compliance Documents",
+    pdfPath: "/free-templates/website-terms-of-service-acknowledgment.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 1, xFrac: 0.2798562091503268, yFrac: 0.5060606060606063, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.6014393939393942, wFrac: 0.16, hFrac: 0.04, type: "date" },
+      { id: "ft2", signerOrder: 2, page: 1, xFrac: 0.23939950980392155, yFrac: 0.6717424242424245, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft3", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.7671212121212123, wFrac: 0.16, hFrac: 0.04, type: "date" },
+    ],
+  },
+  {
+    slug: "acceptable-use-policy-acknowledgment",
+    name: "Acceptable Use Policy Acknowledgment",
+    seoTitle: "Free Acceptable Use Policy Acknowledgment Template",
+    description: "A short cover document where a user confirms they've read and will comply with your Acceptable Use Policy.",
+    useCase:
+      "Use this when you want a signed record that a user acknowledged the rules governing what they may and may " +
+      "not do with your service, before granting or continuing access.",
+    signerLabels: ["Company", "User"],
+    recurringCategory: "Compliance Documents",
+    pdfPath: "/free-templates/acceptable-use-policy-acknowledgment.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 1, xFrac: 0.2798562091503268, yFrac: 0.5263888888888891, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.6217676767676771, wFrac: 0.16, hFrac: 0.04, type: "date" },
+      { id: "ft2", signerOrder: 2, page: 1, xFrac: 0.23939950980392155, yFrac: 0.6920707070707074, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft3", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.7874494949494952, wFrac: 0.16, hFrac: 0.04, type: "date" },
+    ],
+  },
+  {
+    slug: "proprietary-information-and-inventions-agreement",
+    name: "Proprietary Information and Inventions Agreement (PIIA)",
+    seoTitle: "Free PIIA (Invention Assignment Agreement) Template",
+    description: "Standard new-hire agreement assigning work-related inventions to the company, with a prior-inventions carve-out.",
+    useCase:
+      "Use this when onboarding a new employee at a startup or company, to establish confidentiality obligations " +
+      "and assign ownership of inventions created during employment.",
+    signerLabels: ["Company", "Employee"],
+    recurringCategory: "Intellectual Property",
+    pdfPath: "/free-templates/proprietary-information-and-inventions-agreement.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 2, xFrac: 0.2798562091503268, yFrac: 0.2604797979797981, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 2, xFrac: 0.15376960784313726, yFrac: 0.35585858585858604, wFrac: 0.16, hFrac: 0.04, type: "date" },
+      { id: "ft2", signerOrder: 2, page: 2, xFrac: 0.2823366013071895, yFrac: 0.42616161616161635, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft3", signerOrder: 2, page: 2, xFrac: 0.15376960784313726, yFrac: 0.5215404040404042, wFrac: 0.16, hFrac: 0.04, type: "date" },
+    ],
+  },
+  {
+    slug: "short-form-mutual-nda",
+    name: "Short-Form Mutual NDA",
+    seoTitle: "Free Short-Form Mutual NDA Template",
+    description: "A lighter, faster one-pager NDA — just the essentials, for when a full mutual NDA is more than you need.",
+    useCase:
+      "Use this for a quick exploratory conversation or early-stage discussion where both sides need basic " +
+      "confidentiality but don't want to negotiate a lengthy agreement.",
+    signerLabels: ["Party A", "Party B"],
+    recurringCategory: "Non-Disclosure",
+    pdfPath: "/free-templates/short-form-mutual-nda.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 1, xFrac: 0.26134722222222223, yFrac: 0.06060606060606061, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" },
+      { id: "ft2", signerOrder: 2, page: 1, xFrac: 0.26134722222222223, yFrac: 0.22628787878787882, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft3", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.3216666666666668, wFrac: 0.16, hFrac: 0.04, type: "date" },
+    ],
+  },
+  {
+    slug: "reference-letter",
+    name: "Reference Letter",
+    seoTitle: "Free Reference Letter Template",
+    description: "A signed reference letter with fields for the relationship, duration known, and the recommendation itself.",
+    useCase:
+      "Use this to give a former employee, tenant, colleague, or contractor a signed, dated reference they can " +
+      "share with whoever's asking.",
+    signerLabels: ["Reference Provider"],
+    recurringCategory: "Employment",
+    pdfPath: "/free-templates/reference-letter.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 1, xFrac: 0.360750816993464, yFrac: 0.1275252525252525, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.2229040404040405, wFrac: 0.16, hFrac: 0.04, type: "date" },
+    ],
+  },
+);
+
 export function getFreeTemplate(slug: string): FreeTemplate | undefined {
   return FREE_TEMPLATES.find((t) => t.slug === slug);
 }
