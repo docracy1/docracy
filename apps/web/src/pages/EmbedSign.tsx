@@ -58,11 +58,33 @@ export default function EmbedSign() {
   }
 
   return (
-    <Sign
-      overrideToken={signToken}
-      embedMode
-      allowedOrigins={allowedOrigins}
-      returnUrl={returnUrl}
-    />
+    <>
+      <Sign
+        overrideToken={signToken}
+        embedMode
+        allowedOrigins={allowedOrigins}
+        returnUrl={returnUrl}
+      />
+      <a
+        href="https://docracy.io?utm_source=embed&utm_medium=widget&utm_campaign=powered_by"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          position: "fixed",
+          bottom: 8,
+          right: 8,
+          fontSize: 11,
+          color: "var(--mute)",
+          background: "var(--canvas)",
+          border: "1px solid var(--hairline)",
+          borderRadius: 6,
+          padding: "3px 8px",
+          textDecoration: "none",
+          zIndex: 1000,
+        }}
+      >
+        Powered by Docracy
+      </a>
+    </>
   );
 }
