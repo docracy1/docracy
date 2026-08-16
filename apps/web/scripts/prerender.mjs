@@ -282,6 +282,16 @@ const routes = [
     alternates: { en: "/docracy-alternative", es: "/es/alternativa-a-docracy" },
   },
   {
+    urlPath: "/template-marketplace",
+    outFile: "template-marketplace.html",
+    title: "Docracy Marketplace — Free Legal & Business Templates",
+    description:
+      "Free document templates, reviewed by Docracy and shared by the community. Find a template, fill it in, " +
+      "and send it for signature — free, no account needed.",
+    locale: "en",
+    alternates: { en: "/template-marketplace", es: "/es/marketplace-de-plantillas" },
+  },
+  {
     // Registered in _render-entry.tsx and linked from Footer + sitemap.xml, but was missing here —
     // without a routes[] entry it never got a prerendered file, so crawlers hitting the sitemapped
     // URL saw only the empty `<div id="root"></div>` shell (no title, no h1, no content).
@@ -542,6 +552,16 @@ const routes = [
       "separado, creado de forma independiente — no afiliado a eversign ni al equipo original.",
     locale: "es",
     alternates: { en: "/docracy-alternative", es: "/es/alternativa-a-docracy" },
+  },
+  {
+    urlPath: "/es/marketplace-de-plantillas",
+    outFile: "es/marketplace-de-plantillas.html",
+    title: "Marketplace de Docracy — Plantillas legales y de negocio gratis",
+    description:
+      "Plantillas de documentos gratis, revisadas por Docracy y compartidas por la comunidad. Encuentra una " +
+      "plantilla, complétala y envíala para firma — gratis, sin necesidad de cuenta.",
+    locale: "es",
+    alternates: { en: "/template-marketplace", es: "/es/marketplace-de-plantillas" },
   },
   {
     urlPath: "/es/documentacion",

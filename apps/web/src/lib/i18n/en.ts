@@ -871,6 +871,8 @@ const en: Messages = {
   "freeTemplates.heroHeadline": "The Docracy Marketplace",
   "freeTemplates.heroSub":
     "Free, ready-to-sign templates — Docracy's own lawyer-reviewed set, plus templates shared by the community. Fill in your details and send for signature in minutes, completely free.",
+  "freeTemplates.templateCount": "{{count}} templates and counting",
+  "freeTemplates.howItWorksLink": "How the Marketplace works, and how to submit your own →",
   "freeTemplates.searchPlaceholder": "What template are you looking for?",
   "freeTemplates.legalReviewLead": "Every Docracy template below has been reviewed by attorney",
   "freeTemplates.legalReviewTrail": ", BOECK Law (Liechtenstein Bar), for legal clarity and correctness.",
@@ -883,6 +885,7 @@ const en: Messages = {
   "freeTemplates.communityIntro":
     "Shared by other Docracy users and reviewed by our team for appropriateness before publishing — these aren't attorney-reviewed like Docracy's own templates above, so read carefully before using one.",
   "freeTemplates.communityEmpty": "No community templates yet — be the first to submit one from your Dashboard.",
+  "freeTemplates.newestTitle": "Newest templates",
   "freeTemplates.faqTitle": "FAQ",
   "freeTemplates.faq1.q": "What is a template and how is it different from a document?",
   "freeTemplates.faq1.a":
@@ -1022,6 +1025,9 @@ const en: Messages = {
   "seo.docracyAlternative.title": "Whatever Happened to Docracy? | Docracy",
   "seo.docracyAlternative.description":
     "The original Docracy.com was acquired by eversign in 2019 and discontinued. This Docracy is a separate, independently built free e-signature tool — not affiliated with eversign or the original team.",
+  "seo.templateMarketplace.title": "Docracy Marketplace — Free Legal & Business Templates",
+  "seo.templateMarketplace.description":
+    "Free document templates, reviewed by Docracy and shared by the community. Find a template, fill it in, and send it for signature — free, no account needed.",
   "seo.esignUeta.description":
     "Docracy SES electronic signatures are designed to support the U.S. ESIGN Act and UETA: consent, intent to sign, audit trail, and a certificate of completion. Paid/Enterprise accounts can add WhatsApp-verified Advanced Electronic Signature (AES) — still no QES or identity verification.",
 
@@ -1376,6 +1382,49 @@ const en: Messages = {
   "docracyAlt.faq.a6":
     "The original standalone product is gone — docracy.com now redirects to eversign. This site (docracy.io) is a separate, independently built product with a similar free, no-signup idea, not a continuation of the original.",
   "docracyAlt.footerCta": "Send your first document free — no account needed.",
+  "templateMarketplace.eyebrow": "How the Marketplace works",
+  "templateMarketplace.heroTitle": "The Docracy Template Marketplace",
+  "templateMarketplace.heroSub":
+    "A free, growing library of ready-to-sign document templates — Docracy's own attorney-reviewed set, plus templates shared by the community. Find one, fill in your details, and send it for signature in minutes.",
+  "templateMarketplace.ctaBrowse": "Browse the Marketplace →",
+  "templateMarketplace.ctaSubmit": "Submit a template →",
+  "templateMarketplace.howTitle": "How it works",
+  "templateMarketplace.how1.title": "Browse or search",
+  "templateMarketplace.how1.body":
+    "Look through categories like NDAs, leases, employment, and IP, or search for the document you need. Every template is free to use — no account or card required.",
+  "templateMarketplace.how2.title": "Fill it in and send",
+  "templateMarketplace.how2.body":
+    "Pick a template, add your details in Docracy's editor, and send it for sequential e-signature — the same free flow as any document you'd upload yourself.",
+  "templateMarketplace.how3.title": "Or submit your own",
+  "templateMarketplace.how3.body":
+    "Have a document you'd like other people to be able to use? Prepare it in Docracy and submit it to the Marketplace directly from the editor — anyone can submit, no paid plan required.",
+  "templateMarketplace.reviewTitle": "Every submission is reviewed before it goes live",
+  "templateMarketplace.reviewBody":
+    "Nothing is published automatically. Our team checks each submitted template for appropriateness before it appears in the Marketplace, so what you find there has actually been looked at by a person — not just uploaded and forgotten.",
+  "templateMarketplace.mixTitle": "Two kinds of templates, clearly labeled",
+  "templateMarketplace.mixOfficial.title": "Docracy templates",
+  "templateMarketplace.mixOfficial.body":
+    "Drafted and maintained by Docracy, reviewed by attorney for legal clarity and correctness. Marked with a \"Docracy\" badge.",
+  "templateMarketplace.mixCommunity.title": "Community templates",
+  "templateMarketplace.mixCommunity.body":
+    "Submitted by other Docracy users and checked by our team for appropriateness before publishing — not attorney-reviewed, so read carefully before using one. Marked with a \"Community\" badge.",
+  "templateMarketplace.faqTitle": "Common questions",
+  "templateMarketplace.faq.q1": "What is the Docracy Template Marketplace?",
+  "templateMarketplace.faq.a1":
+    "It's a free, public library of document templates — Docracy's own attorney-reviewed templates plus templates submitted by other users. Anyone can browse and use any template for free; anyone can also submit one of their own.",
+  "templateMarketplace.faq.q2": "Is it really free to use a template?",
+  "templateMarketplace.faq.a2":
+    "Yes. Filling in a template and sending it for signature uses Docracy's free, no-account sequential signing flow — the same one available for any document.",
+  "templateMarketplace.faq.q3": "Can I submit my own template?",
+  "templateMarketplace.faq.a3":
+    "Yes. Prepare your document in Docracy's editor, then use \"Submit to Marketplace\" to add a title and category. No account, signup, or paid plan is required to submit.",
+  "templateMarketplace.faq.q4": "Are submitted templates checked before they're published?",
+  "templateMarketplace.faq.a4":
+    "Yes, every single one. Submissions go into a review queue and only appear in the Marketplace once our team has approved them — there's no automatic publishing path.",
+  "templateMarketplace.faq.q5": "What's the difference between a Docracy template and a Community template?",
+  "templateMarketplace.faq.a5":
+    "Docracy templates are drafted in-house and reviewed by attorney for legal clarity. Community templates are submitted by other users and reviewed only for appropriateness, not legal accuracy — read one carefully before relying on it, and each is clearly badged so you always know which kind you're looking at.",
+  "templateMarketplace.footerCta": "Ready to find your next document? Browse the Marketplace, free.",
 
   "ai.eyebrow": "Docracy AI",
   "ai.heroTitle": "AI Auto-Detect.\nFields place themselves.",

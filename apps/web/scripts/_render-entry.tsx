@@ -17,6 +17,7 @@ import SignPdfOnline from "../src/pages/SignPdfOnline";
 import SecureElectronicSignature from "../src/pages/SecureElectronicSignature";
 import FreeElectronicSignature from "../src/pages/FreeElectronicSignature";
 import DocracyAlternative from "../src/pages/DocracyAlternative";
+import TemplateMarketplace from "../src/pages/TemplateMarketplace";
 import About from "../src/pages/About";
 import Pricing from "../src/pages/Pricing";
 import Docs from "../src/pages/Docs";
@@ -74,6 +75,8 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/es/firma-electronica-gratis" element={<FreeElectronicSignature />} />
           <Route path="/docracy-alternative" element={<DocracyAlternative />} />
           <Route path="/es/alternativa-a-docracy" element={<DocracyAlternative />} />
+          <Route path="/template-marketplace" element={<TemplateMarketplace />} />
+          <Route path="/es/marketplace-de-plantillas" element={<TemplateMarketplace />} />
           <Route path="/about" element={<About />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/es/precios" element={<Pricing />} />

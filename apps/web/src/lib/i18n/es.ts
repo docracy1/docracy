@@ -962,6 +962,8 @@ const es: Messages = {
   "freeTemplates.heroHeadline": "El Marketplace de Docracy",
   "freeTemplates.heroSub":
     "Plantillas gratis y listas para firmar — el conjunto propio de Docracy revisado por abogados, más plantillas compartidas por la comunidad. Completa tus datos y envía a firma en minutos, totalmente gratis.",
+  "freeTemplates.templateCount": "{{count}} plantillas y sumando",
+  "freeTemplates.howItWorksLink": "Cómo funciona el Marketplace y cómo enviar tu propia plantilla →",
   "freeTemplates.searchPlaceholder": "¿Qué plantilla estás buscando?",
   "freeTemplates.legalReviewLead": "Cada plantilla de Docracy abajo ha sido revisada por la abogada",
   "freeTemplates.legalReviewTrail": ", BOECK Law (Colegio de Abogados de Liechtenstein), para garantizar claridad y corrección legal.",
@@ -971,6 +973,7 @@ const es: Messages = {
   "freeTemplates.communityIntro":
     "Compartidas por otros usuarios de Docracy y revisadas por nuestro equipo antes de publicarlas — no están revisadas por un abogado como las plantillas propias de Docracy, así que léelas con cuidado antes de usarlas.",
   "freeTemplates.communityEmpty": "Aún no hay plantillas de la comunidad — sé el primero en enviar una desde tu Dashboard.",
+  "freeTemplates.newestTitle": "Plantillas más recientes",
   "freeTemplates.noResults": "Ninguna plantilla coincide con \"{query}\". Prueba otra palabra o explora todas las plantillas abajo.",
   "freeTemplates.faqTitle": "Preguntas frecuentes",
   "freeTemplates.faq1.q": "¿Qué es una plantilla y en qué se diferencia de un documento?",
@@ -1109,6 +1112,9 @@ const es: Messages = {
   "seo.docracyAlternative.title": "¿Qué pasó con Docracy? | Docracy",
   "seo.docracyAlternative.description":
     "El Docracy.com original fue adquirido por eversign en 2019 y descontinuado. Este Docracy es un producto separado, creado de forma independiente — no afiliado a eversign ni al equipo original.",
+  "seo.templateMarketplace.title": "Marketplace de Docracy — Plantillas legales y de negocio gratis",
+  "seo.templateMarketplace.description":
+    "Plantillas de documentos gratis, revisadas por Docracy y compartidas por la comunidad. Encuentra una plantilla, complétala y envíala para firma — gratis, sin necesidad de cuenta.",
   "seo.esignUeta.description":
     "Las firmas SES de Docracy están diseñadas para respaldar la ESIGN Act y UETA de EE. UU.: consentimiento, intención de firmar, registro de auditoría y certificado de finalización. Las cuentas de pago/Enterprise pueden añadir firma avanzada (AES) verificada por WhatsApp — sigue sin QES ni verificación de identidad.",
 
@@ -1462,6 +1468,49 @@ const es: Messages = {
   "docracyAlt.faq.a6":
     "El producto independiente original ya no existe — docracy.com ahora redirige a eversign. Este sitio (docracy.io) es un producto separado, creado de forma independiente, con una idea similar de firma gratis y sin registro, no una continuación del original.",
   "docracyAlt.footerCta": "Envía tu primer documento gratis — sin necesidad de cuenta.",
+  "templateMarketplace.eyebrow": "Cómo funciona el Marketplace",
+  "templateMarketplace.heroTitle": "El Marketplace de Plantillas de Docracy",
+  "templateMarketplace.heroSub":
+    "Una biblioteca gratuita y en crecimiento de plantillas de documentos listas para firmar — el conjunto propio de Docracy, revisado por abogado, más plantillas compartidas por la comunidad. Encuentra una, completa tus datos y envíala para firma en minutos.",
+  "templateMarketplace.ctaBrowse": "Explorar el Marketplace →",
+  "templateMarketplace.ctaSubmit": "Enviar una plantilla →",
+  "templateMarketplace.howTitle": "Cómo funciona",
+  "templateMarketplace.how1.title": "Explora o busca",
+  "templateMarketplace.how1.body":
+    "Recorre categorías como NDAs, arrendamientos, empleo y propiedad intelectual, o busca el documento que necesitas. Cada plantilla es gratis — sin cuenta ni tarjeta.",
+  "templateMarketplace.how2.title": "Complétala y envíala",
+  "templateMarketplace.how2.body":
+    "Elige una plantilla, agrega tus datos en el editor de Docracy y envíala para firma electrónica secuencial — el mismo flujo gratuito que cualquier documento que subas tú mismo.",
+  "templateMarketplace.how3.title": "O envía la tuya",
+  "templateMarketplace.how3.body":
+    "¿Tienes un documento que te gustaría que otras personas pudieran usar? Prepáralo en Docracy y envíalo al Marketplace directamente desde el editor — cualquiera puede enviarlo, sin necesidad de plan de pago.",
+  "templateMarketplace.reviewTitle": "Cada envío se revisa antes de publicarse",
+  "templateMarketplace.reviewBody":
+    "Nada se publica automáticamente. Nuestro equipo revisa cada plantilla enviada para verificar que sea apropiada antes de que aparezca en el Marketplace, así que lo que encuentras ahí realmente fue revisado por una persona — no solo subido y olvidado.",
+  "templateMarketplace.mixTitle": "Dos tipos de plantillas, claramente identificadas",
+  "templateMarketplace.mixOfficial.title": "Plantillas de Docracy",
+  "templateMarketplace.mixOfficial.body":
+    "Redactadas y mantenidas por Docracy, revisadas por abogado para claridad y corrección legal. Identificadas con una insignia \"Docracy\".",
+  "templateMarketplace.mixCommunity.title": "Plantillas de la comunidad",
+  "templateMarketplace.mixCommunity.body":
+    "Enviadas por otros usuarios de Docracy y revisadas por nuestro equipo para verificar que sean apropiadas antes de publicarse — no revisadas por abogado, así que léelas con atención antes de usarlas. Identificadas con una insignia \"Comunidad\".",
+  "templateMarketplace.faqTitle": "Preguntas frecuentes",
+  "templateMarketplace.faq.q1": "¿Qué es el Marketplace de Plantillas de Docracy?",
+  "templateMarketplace.faq.a1":
+    "Es una biblioteca pública y gratuita de plantillas de documentos — las plantillas propias de Docracy, revisadas por abogado, más plantillas enviadas por otros usuarios. Cualquiera puede explorar y usar cualquier plantilla gratis; cualquiera también puede enviar la suya.",
+  "templateMarketplace.faq.q2": "¿Realmente es gratis usar una plantilla?",
+  "templateMarketplace.faq.a2":
+    "Sí. Completar una plantilla y enviarla para firma usa el flujo de firma secuencial gratuito de Docracy, sin cuenta — el mismo disponible para cualquier documento.",
+  "templateMarketplace.faq.q3": "¿Puedo enviar mi propia plantilla?",
+  "templateMarketplace.faq.a3":
+    "Sí. Prepara tu documento en el editor de Docracy y usa \"Enviar al Marketplace\" para agregar un título y una categoría. No se necesita cuenta, registro ni plan de pago para enviarla.",
+  "templateMarketplace.faq.q4": "¿Se revisan las plantillas enviadas antes de publicarse?",
+  "templateMarketplace.faq.a4":
+    "Sí, todas y cada una. Los envíos entran en una cola de revisión y solo aparecen en el Marketplace una vez que nuestro equipo los aprueba — no hay una vía de publicación automática.",
+  "templateMarketplace.faq.q5": "¿Cuál es la diferencia entre una plantilla de Docracy y una de la comunidad?",
+  "templateMarketplace.faq.a5":
+    "Las plantillas de Docracy se redactan internamente y son revisadas por abogado para claridad legal. Las plantillas de la comunidad son enviadas por otros usuarios y solo se revisan por idoneidad, no por precisión legal — léelas con atención antes de confiar en ellas, y cada una está claramente identificada para que siempre sepas cuál estás viendo.",
+  "templateMarketplace.footerCta": "¿Listo para encontrar tu próximo documento? Explora el Marketplace, gratis.",
 
   "ai.eyebrow": "Docracy IA",
   "ai.heroTitle": "Detección IA.\nLos campos se colocan solos.",

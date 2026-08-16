@@ -230,6 +230,16 @@ export default function FreeTemplates() {
         <div className="templates-hero-inner">
           <h1>{t("freeTemplates.heroHeadline")}</h1>
           <p>{t("freeTemplates.heroSub")}</p>
+          <p style={{ fontWeight: 700, fontSize: 15 }}>
+            {t("freeTemplates.templateCount", {
+              count: FREE_TEMPLATES.length + (communityTemplates?.length ?? 0),
+            })}
+          </p>
+          <p style={{ fontSize: 14, marginTop: -8 }}>
+            <Link to={localizePath("/template-marketplace", locale)}>
+              {t("freeTemplates.howItWorksLink")}
+            </Link>
+          </p>
           <div className="templates-search-wrap">
             <svg className="templates-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
@@ -283,6 +293,30 @@ export default function FreeTemplates() {
           </div>
         ) : (
           <>
+            {/* Stable, bookmarkable link (/free-templates#newest) for the latest weekly batch —
+                relies on new templates always being appended at the end of FREE_TEMPLATES
+                (new .push() calls go last, never inserted earlier in the array). */}
+            <div id="newest" style={{ marginTop: 28, scrollMarginTop: 90 }}>
+              <h2 style={{ fontSize: 19 }}>{t("freeTemplates.newestTitle")}</h2>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
+                {FREE_TEMPLATES.slice(-10).map((tpl) => {
+                  const labels = labelFor(tpl.slug, tpl.name, tpl.description);
+                  const catKey = tpl.recurringCategory ? CATEGORY_KEYS[tpl.recurringCategory] : undefined;
+                  return (
+                    <TemplateCard
+                      key={tpl.slug}
+                      name={labels.name}
+                      description={labels.description}
+                      to={localizePath(`/free-templates/${tpl.slug}`, locale)}
+                      pdfPath={tpl.pdfPath}
+                      category={catKey ? t(catKey) : tpl.recurringCategory}
+                      badge="official"
+                    />
+                  );
+                })}
+              </div>
+            </div>
+
             <div style={{ marginTop: 28 }}>
               <h2 style={{ fontSize: 19 }}>{t("freeTemplates.featuredTitle")}</h2>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
