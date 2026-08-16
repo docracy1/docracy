@@ -1327,9 +1327,9 @@ const en: Messages = {
   "docracyAlt.today.4": "Anonymous documents auto-delete after 9 days by default",
   "docracyAlt.timelineTitle": "A quick timeline",
   "docracyAlt.timeline.1":
-    "2011 — Docracy launches in New York (Matt Hall, John Watkinson) as an open, free repository of legal document templates.",
+    "2011 — Docracy launches in New York (Matt Hall, John Watkinson), winning a hackathon and starting as an open, free repository of legal document templates.",
   "docracyAlt.timeline.2":
-    "2012 — Wins the TechCrunch Disrupt Hackathon; adds collaborative editing and e-signing on top of the template library.",
+    "2012 — Adds collaborative editing and e-signing on top of the template library.",
   "docracyAlt.timeline.3": "Grows to over 500,000 users and 25,000+ templates.",
   "docracyAlt.timeline.4": "March 2019 — eversign announces its acquisition of Docracy.",
   "docracyAlt.timeline.5":

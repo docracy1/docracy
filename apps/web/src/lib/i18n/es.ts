@@ -1413,9 +1413,9 @@ const es: Messages = {
   "docracyAlt.today.4": "Los documentos anónimos se eliminan automáticamente después de 9 días por defecto",
   "docracyAlt.timelineTitle": "Una breve línea de tiempo",
   "docracyAlt.timeline.1":
-    "2011 — Docracy nace en Nueva York (Matt Hall, John Watkinson) como un repositorio abierto y gratuito de plantillas legales.",
+    "2011 — Docracy nace en Nueva York (Matt Hall, John Watkinson), gana un hackathon y comienza como un repositorio abierto y gratuito de plantillas legales.",
   "docracyAlt.timeline.2":
-    "2012 — Gana el TechCrunch Disrupt Hackathon; suma edición colaborativa y firma electrónica a su biblioteca de plantillas.",
+    "2012 — Suma edición colaborativa y firma electrónica a su biblioteca de plantillas.",
   "docracyAlt.timeline.3": "Crece a más de 500,000 usuarios y 25,000+ plantillas.",
   "docracyAlt.timeline.4": "Marzo de 2019 — eversign anuncia la adquisición de Docracy.",
   "docracyAlt.timeline.5":
