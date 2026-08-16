@@ -866,6 +866,198 @@ FREE_TEMPLATES.push(
   }
 );
 
+// Round 4: filling the two categories that had zero templates (Will, Equity) plus real gaps
+// matching docracy.com's original document library (parking/month-to-month leases, equipment
+// loans, corporate resolutions, copyright assignment). Appended via .push() per the "Newest
+// templates" convention on /free-templates, which relies on array order to find the last 10.
+FREE_TEMPLATES.push(
+  {
+    slug: "last-will-and-testament",
+    name: "Last Will and Testament",
+    seoTitle: "Free Last Will and Testament Template",
+    description:
+      "A simple last will and testament — names an executor, a guardian for minor children, and how property " +
+      "should be distributed.",
+    useCase:
+      "Use this as a starting draft for a straightforward estate plan. Witness and notarization requirements " +
+      "vary significantly by state — most states require at least two witnesses — so have an attorney licensed " +
+      "in your state review the final document before it's executed.",
+    signerLabels: ["Testator", "Witness"],
+    pdfPath: "/free-templates/last-will-and-testament.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 1, xFrac: 0.2664019607843137, yFrac: 0.5608585858585862, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.656237373737374, wFrac: 0.16, hFrac: 0.04, type: "date" },
+      { id: "ft2", signerOrder: 2, page: 1, xFrac: 0.26655228758169935, yFrac: 0.7265404040404044, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft3", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.8219191919191923, wFrac: 0.16, hFrac: 0.04, type: "date" },
+    ],
+    recurringCategory: "Will",
+  },
+  {
+    slug: "restricted-stock-purchase-agreement",
+    name: "Restricted Stock Purchase Agreement",
+    seoTitle: "Free Restricted Stock Purchase Agreement Template",
+    description:
+      "Sets the purchase price, vesting schedule, and company repurchase right for restricted shares sold to a " +
+      "purchaser.",
+    useCase:
+      "Use this when a company is selling restricted shares — often to a founder or early employee — subject to " +
+      "vesting, and needs a signed record of the price and repurchase terms.",
+    signerLabels: ["Company", "Purchaser"],
+    pdfPath: "/free-templates/restricted-stock-purchase-agreement.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 1, xFrac: 0.2798562091503268, yFrac: 0.4440656565656568, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.5394444444444447, wFrac: 0.16, hFrac: 0.04, type: "date" },
+      { id: "ft2", signerOrder: 2, page: 1, xFrac: 0.28536192810457517, yFrac: 0.609747474747475, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft3", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.7051262626262628, wFrac: 0.16, hFrac: 0.04, type: "date" },
+    ],
+    recurringCategory: "Equity",
+  },
+  {
+    slug: "stock-option-grant-notice",
+    name: "Stock Option Grant Notice",
+    seoTitle: "Free Stock Option Grant Notice Template",
+    description: "Grants an option to purchase company shares, with exercise price, vesting, and expiration terms.",
+    useCase:
+      "Use this when granting an employee or early team member stock options and need a signed record of the " +
+      "share count, exercise price, and vesting schedule.",
+    signerLabels: ["Company", "Optionee"],
+    pdfPath: "/free-templates/stock-option-grant-notice.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 1, xFrac: 0.2798562091503268, yFrac: 0.3314393939393941, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.426818181818182, wFrac: 0.16, hFrac: 0.04, type: "date" },
+      { id: "ft2", signerOrder: 2, page: 1, xFrac: 0.27598529411764705, yFrac: 0.4971212121212123, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft3", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.5925000000000002, wFrac: 0.16, hFrac: 0.04, type: "date" },
+    ],
+    recurringCategory: "Equity",
+  },
+  {
+    slug: "parking-space-lease-agreement",
+    name: "Parking Space Lease Agreement",
+    seoTitle: "Free Parking Space Lease Agreement Template",
+    description: "Covers rent, term, and vehicle details for leasing a single parking space.",
+    useCase:
+      "Use this when renting out a parking space separately from a residential or commercial lease and want " +
+      "clear, signed terms on rent and which vehicle is authorized to use it.",
+    signerLabels: ["Landlord", "Tenant"],
+    pdfPath: "/free-templates/parking-space-lease-agreement.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 1, xFrac: 0.27284722222222224, yFrac: 0.3527777777777779, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.4481565656565658, wFrac: 0.16, hFrac: 0.04, type: "date" },
+      { id: "ft2", signerOrder: 2, page: 1, xFrac: 0.2559730392156863, yFrac: 0.5184595959595961, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft3", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.613838383838384, wFrac: 0.16, hFrac: 0.04, type: "date" },
+    ],
+    recurringCategory: "Real Estate",
+  },
+  {
+    slug: "month-to-month-rental-agreement",
+    name: "Month-to-Month Rental Agreement",
+    seoTitle: "Free Month-to-Month Rental Agreement Template",
+    description: "Covers rent, notice period, deposit, and utilities for an ongoing month-to-month tenancy.",
+    useCase:
+      "Use this for an open-ended rental with no fixed end date, where either side can end the tenancy with " +
+      "proper notice instead of waiting out a fixed lease term.",
+    signerLabels: ["Landlord", "Tenant"],
+    pdfPath: "/free-templates/month-to-month-rental-agreement.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 1, xFrac: 0.27284722222222224, yFrac: 0.4237373737373739, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.5191161616161618, wFrac: 0.16, hFrac: 0.04, type: "date" },
+      { id: "ft2", signerOrder: 2, page: 1, xFrac: 0.2559730392156863, yFrac: 0.5894191919191921, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft3", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.68479797979798, wFrac: 0.16, hFrac: 0.04, type: "date" },
+    ],
+    recurringCategory: "Real Estate",
+  },
+  {
+    slug: "equipment-loan-agreement",
+    name: "Equipment Loan Agreement",
+    seoTitle: "Free Equipment Loan Agreement Template",
+    description: "Covers loan period, condition, and liability for lending equipment to someone.",
+    useCase:
+      "Use this when lending a piece of equipment to someone for a set period and want a signed record of its " +
+      "condition, the return date, and who's responsible if it's damaged or lost.",
+    signerLabels: ["Lender", "Borrower"],
+    pdfPath: "/free-templates/equipment-loan-agreement.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 1, xFrac: 0.25822794117647063, yFrac: 0.3111111111111112, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.4064898989898991, wFrac: 0.16, hFrac: 0.04, type: "date" },
+      { id: "ft2", signerOrder: 2, page: 1, xFrac: 0.27547794117647056, yFrac: 0.47679292929292943, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft3", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.5721717171717173, wFrac: 0.16, hFrac: 0.04, type: "date" },
+    ],
+    recurringCategory: "Personal Property",
+  },
+  {
+    slug: "employee-non-disclosure-agreement",
+    name: "Employee Non-Disclosure Agreement",
+    seoTitle: "Free Employee Non-Disclosure Agreement Template",
+    description: "A one-way confidentiality agreement between an employer and an employee.",
+    useCase:
+      "Use this when hiring an employee who will have access to confidential business information and you need " +
+      "a signed, dedicated confidentiality agreement separate from the main employment contract.",
+    signerLabels: ["Employer", "Employee"],
+    pdfPath: "/free-templates/employee-non-disclosure-agreement.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 1, xFrac: 0.27814624183006537, yFrac: 0.3111111111111112, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.4064898989898991, wFrac: 0.16, hFrac: 0.04, type: "date" },
+      { id: "ft2", signerOrder: 2, page: 1, xFrac: 0.2823366013071895, yFrac: 0.47679292929292943, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft3", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.5721717171717173, wFrac: 0.16, hFrac: 0.04, type: "date" },
+    ],
+    recurringCategory: "Non-Disclosure",
+  },
+  {
+    slug: "retainer-agreement",
+    name: "Retainer Agreement",
+    seoTitle: "Free Retainer Agreement Template",
+    description: "Covers the monthly retainer fee, included scope, and terms for an ongoing consulting engagement.",
+    useCase:
+      "Use this when a client is paying a consultant a recurring monthly fee for ongoing availability, rather " +
+      "than a one-off project fee.",
+    signerLabels: ["Client", "Consultant"],
+    pdfPath: "/free-templates/retainer-agreement.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.3314393939393941, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.426818181818182, wFrac: 0.16, hFrac: 0.04, type: "date" },
+      { id: "ft2", signerOrder: 2, page: 1, xFrac: 0.2895522875816994, yFrac: 0.4971212121212123, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft3", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.5925000000000002, wFrac: 0.16, hFrac: 0.04, type: "date" },
+    ],
+    recurringCategory: "Consulting",
+  },
+  {
+    slug: "corporate-resolution",
+    name: "Corporate Resolution",
+    seoTitle: "Free Corporate Resolution Template",
+    description: "A director-signed record of formal company decisions, adopted at a meeting or by written consent.",
+    useCase:
+      "Use this to create a signed, dated record of a company decision — opening a bank account, approving a " +
+      "contract, authorizing a signatory — that the company's directors formally adopted.",
+    signerLabels: ["President", "Secretary"],
+    pdfPath: "/free-templates/corporate-resolution.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 1, xFrac: 0.2791045751633987, yFrac: 0.06060606060606061, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" },
+      { id: "ft2", signerOrder: 2, page: 1, xFrac: 0.2807017973856209, yFrac: 0.22628787878787882, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft3", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.3216666666666668, wFrac: 0.16, hFrac: 0.04, type: "date" },
+    ],
+    recurringCategory: "Incorporation",
+  },
+  {
+    slug: "copyright-assignment-agreement",
+    name: "Copyright Assignment Agreement",
+    seoTitle: "Free Copyright Assignment Agreement Template",
+    description: "Transfers all copyright ownership of a specific work from its creator to another party.",
+    useCase:
+      "Use this when someone who created a work — writing, code, design, artwork — is transferring full " +
+      "ownership of the copyright to a company or another person, in exchange for payment.",
+    signerLabels: ["Assignor", "Assignee"],
+    pdfPath: "/free-templates/copyright-assignment-agreement.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 1, xFrac: 0.27282843137254903, yFrac: 0.19848484848484854, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.2938636363636365, wFrac: 0.16, hFrac: 0.04, type: "date" },
+      { id: "ft2", signerOrder: 2, page: 1, xFrac: 0.27701879084967324, yFrac: 0.36416666666666675, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft3", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.45954545454545465, wFrac: 0.16, hFrac: 0.04, type: "date" },
+    ],
+    recurringCategory: "Intellectual Property",
+  }
+);
+
 export function getFreeTemplate(slug: string): FreeTemplate | undefined {
   return FREE_TEMPLATES.find((t) => t.slug === slug);
 }

@@ -2360,6 +2360,643 @@ const TEMPLATES = [
       { type: "signatures", signers: [{ label: "Principal", order: 1 }, { label: "Agent", order: 2 }] },
     ],
   },
+  {
+    slug: "last-will-and-testament",
+    title: "LAST WILL AND TESTAMENT",
+    signerLabels: ["Testator", "Witness"],
+    blocks: [
+      { type: "section", text: "Declaration" },
+      { type: "field", label: "I, ", blank: TEXT_BLANK },
+      {
+        type: "paragraph",
+        text:
+          "being of sound mind and legal age, declare this to be my Last Will and Testament, revoking all prior " +
+          "wills and codicils I have previously made.",
+      },
+
+      { type: "section", text: "Revocation of Prior Wills" },
+      {
+        type: "paragraph",
+        text: "I revoke all prior wills and codicils made by me at any time before this Will.",
+      },
+
+      { type: "section", text: "Appointment of Executor" },
+      { type: "paragraph", text: "I appoint the following person as Executor of this Will:" },
+      { type: "field", label: "Executor: ", blank: TEXT_BLANK },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+      {
+        type: "paragraph",
+        text:
+          "If this Executor is unable or unwilling to serve, I appoint the following person as alternate " +
+          "Executor:",
+      },
+      { type: "field", label: "Alternate Executor: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Guardian for Minor Children" },
+      {
+        type: "paragraph",
+        text:
+          "If I have minor children at the time of my death, I appoint the following person as their guardian:",
+      },
+      { type: "field", label: "Guardian: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Distribution of Property" },
+      {
+        type: "paragraph",
+        text:
+          "I direct that my property be distributed as follows, with any property not specifically listed below " +
+          "distributed as part of my residuary estate:",
+      },
+      { type: "field", label: "Specific Bequest 1: ", blank: TEXT_BLANK },
+      { type: "field", label: "Specific Bequest 2: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Residuary Estate" },
+      {
+        type: "paragraph",
+        text:
+          "I give the remainder of my estate, after payment of debts, taxes, and expenses, to the following " +
+          "person(s) or organization(s):",
+      },
+      { type: "field", label: "Residuary Beneficiary: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Will shall be governed by the laws of the State/Country of ${TEXT_BLANK}.`,
+      },
+
+      { type: "section", text: "Witness Attestation and State Requirements" },
+      {
+        type: "paragraph",
+        text:
+          "For this Will to be valid, it must be signed following the formalities your state requires — most " +
+          "states require it to be signed in the presence of at least two witnesses who are not beneficiaries, " +
+          "and some allow or require a self-proving affidavit signed before a notary. This template captures a " +
+          "testator and a single witness signature; confirm your state's exact witness count and notarization " +
+          "requirements and add additional witness signature lines before relying on this Will, or have an " +
+          "attorney licensed in your state review it. An improperly witnessed will may be invalid.",
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Testator", order: 1 }, { label: "Witness", order: 2 }] },
+    ],
+  },
+  {
+    slug: "restricted-stock-purchase-agreement",
+    title: "RESTRICTED STOCK PURCHASE AGREEMENT",
+    signerLabels: ["Company", "Purchaser"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Company: ", blank: TEXT_BLANK },
+      { type: "field", label: "Purchaser: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Purchase of Shares" },
+      {
+        type: "paragraph",
+        text: "The Company agrees to sell, and the Purchaser agrees to purchase, the following shares:",
+      },
+      { type: "field", label: "Number of Shares: ", blank: TEXT_BLANK },
+      { type: "field", label: "Class of Stock: ", blank: TEXT_BLANK },
+      { type: "field", label: "Purchase Price per Share: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Vesting Schedule" },
+      {
+        type: "paragraph",
+        text:
+          "The shares are subject to vesting. Unless stated otherwise below, unvested shares remain subject to " +
+          "the Company's repurchase right described in this Agreement.",
+      },
+      { type: "field", label: "Vesting Commencement Date: ", blank: DATE_BLANK },
+      { type: "field", label: "Vesting Schedule: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Company Repurchase Right" },
+      {
+        type: "paragraph",
+        text:
+          "If the Purchaser's service with the Company ends before all shares have vested, the Company has the " +
+          "right, but not the obligation, to repurchase any unvested shares at the original purchase price paid " +
+          "for those shares.",
+      },
+
+      { type: "section", text: "Restrictions on Transfer" },
+      {
+        type: "paragraph",
+        text:
+          "The Purchaser may not sell, transfer, pledge, or otherwise dispose of any unvested shares, or any " +
+          "vested shares still subject to a right of first refusal under the Company's governing documents, " +
+          "without the Company's prior written consent.",
+      },
+
+      { type: "section", text: "Representations" },
+      {
+        type: "paragraph",
+        text:
+          "The Purchaser represents that the shares are being purchased for their own account, for investment " +
+          "purposes, and not with a view toward resale or distribution, and acknowledges that the shares have " +
+          "not been registered under applicable securities laws.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Entire Agreement" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement, together with the Company's governing documents, constitutes the entire understanding " +
+          "between the parties regarding the shares and supersedes all prior discussions or agreements on the " +
+          "subject.",
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Company", order: 1 }, { label: "Purchaser", order: 2 }] },
+    ],
+  },
+  {
+    slug: "stock-option-grant-notice",
+    title: "STOCK OPTION GRANT NOTICE",
+    signerLabels: ["Company", "Optionee"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Company: ", blank: TEXT_BLANK },
+      { type: "field", label: "Optionee: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Grant of Option" },
+      {
+        type: "paragraph",
+        text:
+          "The Company grants the Optionee an option to purchase shares of the Company's stock, subject to the " +
+          "terms below and the Company's equity incentive plan, if any.",
+      },
+      { type: "field", label: "Number of Shares: ", blank: TEXT_BLANK },
+      { type: "field", label: "Exercise Price per Share: ", blank: TEXT_BLANK },
+      { type: "field", label: "Type of Option (ISO / NSO): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Vesting Schedule" },
+      { type: "field", label: "Vesting Commencement Date: ", blank: DATE_BLANK },
+      { type: "field", label: "Vesting Schedule: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Expiration" },
+      {
+        type: "paragraph",
+        text:
+          "This option expires on the earlier of the expiration date stated below, or a shorter period following " +
+          "termination of the Optionee's service, as set out in the Company's equity incentive plan.",
+      },
+      { type: "field", label: "Expiration Date: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Termination of Service" },
+      {
+        type: "paragraph",
+        text:
+          "Unvested shares are forfeited immediately if the Optionee's service with the Company ends for any " +
+          "reason, unless the Company's equity incentive plan or a separate written agreement states otherwise.",
+      },
+
+      { type: "section", text: "Tax Consequences" },
+      {
+        type: "paragraph",
+        text:
+          "The Optionee acknowledges that the tax treatment of this option depends on its type (ISO or NSO), the " +
+          "timing of exercise, and applicable law, and that the Company is not providing tax advice. The Optionee " +
+          "should consult their own tax advisor, including about whether an early-exercise 83(b) election may " +
+          "apply.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Grant Notice shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Company", order: 1 }, { label: "Optionee", order: 2 }] },
+    ],
+  },
+  {
+    slug: "parking-space-lease-agreement",
+    title: "PARKING SPACE LEASE AGREEMENT",
+    signerLabels: ["Landlord", "Tenant"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Landlord: ", blank: TEXT_BLANK },
+      { type: "field", label: "Tenant: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Parking Space" },
+      { type: "field", label: "Property Address: ", blank: TEXT_BLANK },
+      { type: "field", label: "Space Number / Description: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Term" },
+      { type: "field", label: "Start Date: ", blank: DATE_BLANK },
+      { type: "field", label: "End Date (or Month-to-Month): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Rent" },
+      { type: "field", label: "Monthly Rent: ", blank: TEXT_BLANK },
+      { type: "field", label: "Due Date Each Month: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Vehicle Information" },
+      { type: "field", label: "Make/Model: ", blank: TEXT_BLANK },
+      { type: "field", label: "License Plate: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Use of Space" },
+      {
+        type: "paragraph",
+        text:
+          "The Tenant may park only the vehicle described above in the assigned space, and may not sublease, " +
+          "store other items in, or block access to the space.",
+      },
+
+      { type: "section", text: "Liability" },
+      {
+        type: "paragraph",
+        text:
+          "The Landlord is not responsible for damage to, or theft from, the Tenant's vehicle while parked in the " +
+          "space, except where caused by the Landlord's own negligence.",
+      },
+
+      { type: "section", text: "Termination" },
+      {
+        type: "paragraph",
+        text:
+          "Either party may terminate this Agreement with written notice as required by local law or as stated " +
+          "in the Term section above.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Landlord", order: 1 }, { label: "Tenant", order: 2 }] },
+    ],
+  },
+  {
+    slug: "month-to-month-rental-agreement",
+    title: "MONTH-TO-MONTH RENTAL AGREEMENT",
+    signerLabels: ["Landlord", "Tenant"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Landlord: ", blank: TEXT_BLANK },
+      { type: "field", label: "Tenant: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Premises" },
+      { type: "field", label: "Property Address: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Term" },
+      {
+        type: "paragraph",
+        text:
+          "This tenancy begins on the date below and continues month-to-month until either party ends it with " +
+          "written notice, as required by local law.",
+      },
+      { type: "field", label: "Start Date: ", blank: DATE_BLANK },
+      { type: "field", label: "Notice Period Required to End Tenancy: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Rent" },
+      { type: "field", label: "Monthly Rent: ", blank: TEXT_BLANK },
+      { type: "field", label: "Due Date Each Month: ", blank: TEXT_BLANK },
+      { type: "field", label: "Late Fee (if any): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Security Deposit" },
+      { type: "field", label: "Deposit Amount: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Utilities" },
+      { type: "field", label: "Utilities Included in Rent: ", blank: TEXT_BLANK },
+      { type: "field", label: "Utilities Paid by Tenant: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Maintenance" },
+      {
+        type: "paragraph",
+        text:
+          "The Landlord is responsible for maintaining the property in a habitable condition. The Tenant agrees " +
+          "to report needed repairs promptly and to avoid causing damage beyond normal wear and tear.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Agreement through " +
+          "good-faith negotiation before resorting to litigation or, where applicable, the local landlord-tenant " +
+          "resolution process.",
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Landlord", order: 1 }, { label: "Tenant", order: 2 }] },
+    ],
+  },
+  {
+    slug: "equipment-loan-agreement",
+    title: "EQUIPMENT LOAN AGREEMENT",
+    signerLabels: ["Lender", "Borrower"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Lender: ", blank: TEXT_BLANK },
+      { type: "field", label: "Borrower: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Description of Equipment" },
+      { type: "field", label: "Equipment: ", blank: TEXT_BLANK },
+      { type: "field", label: "Serial / Identifying Number: ", blank: TEXT_BLANK },
+      { type: "field", label: "Estimated Value: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Loan Period" },
+      { type: "field", label: "Start Date: ", blank: DATE_BLANK },
+      { type: "field", label: "Return Date: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Condition of Equipment" },
+      {
+        type: "paragraph",
+        text:
+          "The Borrower acknowledges receiving the Equipment in good working condition, except as noted here:",
+      },
+      { type: "field", label: "Noted Condition Issues: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Use and Care" },
+      {
+        type: "paragraph",
+        text:
+          "The Borrower agrees to use the Equipment only for its intended purpose, to operate it safely and " +
+          "properly, and not to lend, sublease, or transfer it to any third party without the Lender's written " +
+          "consent.",
+      },
+
+      { type: "section", text: "Liability for Damage or Loss" },
+      {
+        type: "paragraph",
+        text:
+          "The Borrower is responsible for any damage to or loss of the Equipment while in their possession, " +
+          "beyond normal wear and tear, and agrees to reimburse the Lender for repair or replacement cost.",
+      },
+
+      { type: "section", text: "Return of Equipment" },
+      {
+        type: "paragraph",
+        text:
+          "The Borrower agrees to return the Equipment by the Return Date above, in the same condition it was " +
+          "received, except for normal wear and tear.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Lender", order: 1 }, { label: "Borrower", order: 2 }] },
+    ],
+  },
+  {
+    slug: "employee-non-disclosure-agreement",
+    title: "EMPLOYEE NON-DISCLOSURE AGREEMENT",
+    signerLabels: ["Employer", "Employee"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Employer: ", blank: TEXT_BLANK },
+      { type: "field", label: "Employee: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Definition of Confidential Information" },
+      {
+        type: "paragraph",
+        text:
+          "\"Confidential Information\" means any non-public information the Employee learns or has access to " +
+          "during employment, including business plans, customer data, pricing, source code, product plans, and " +
+          "other proprietary information, however it is disclosed.",
+      },
+
+      { type: "section", text: "Obligations of Employee" },
+      {
+        type: "paragraph",
+        text:
+          "The Employee agrees to use Confidential Information only to perform their job duties, to keep it " +
+          "confidential during and after employment, and not to disclose it to any third party without the " +
+          "Employer's written consent.",
+      },
+
+      { type: "section", text: "Exclusions" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement does not apply to information that is already public, becomes public through no fault " +
+          "of the Employee, or that the Employee is required to disclose by law, provided reasonable notice is " +
+          "given to the Employer where legally permitted.",
+      },
+
+      { type: "section", text: "Duration" },
+      {
+        type: "paragraph",
+        text:
+          "The Employee's confidentiality obligations under this Agreement continue during employment and " +
+          "indefinitely afterward, for as long as the information remains confidential.",
+      },
+
+      { type: "section", text: "Return of Materials" },
+      {
+        type: "paragraph",
+        text:
+          "Upon request or at the end of employment, the Employee agrees to return or destroy all materials " +
+          "containing Confidential Information in their possession.",
+      },
+
+      { type: "section", text: "Remedies" },
+      {
+        type: "paragraph",
+        text:
+          "The Employee acknowledges that a breach of this Agreement could cause the Employer irreparable harm, " +
+          "and that the Employer may seek injunctive relief in addition to any other available remedy.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Employer", order: 1 }, { label: "Employee", order: 2 }] },
+    ],
+  },
+  {
+    slug: "retainer-agreement",
+    title: "RETAINER AGREEMENT",
+    signerLabels: ["Client", "Consultant"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Client: ", blank: TEXT_BLANK },
+      { type: "field", label: "Consultant: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Services" },
+      {
+        type: "paragraph",
+        text: "The Consultant agrees to make themselves available to provide the following services on an ongoing basis:",
+      },
+      { type: "field", label: "Description of Services: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Retainer Fee" },
+      { type: "field", label: "Monthly Retainer Amount: ", blank: TEXT_BLANK },
+      { type: "field", label: "Hours / Scope Included: ", blank: TEXT_BLANK },
+      { type: "field", label: "Rate for Work Beyond Included Scope: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Term and Renewal" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement begins on the start date below and renews automatically each month unless either " +
+          "party gives written notice to end it, as described in Termination below.",
+      },
+      { type: "field", label: "Start Date: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Termination" },
+      { type: "field", label: "Notice Period to Terminate: ", blank: TEXT_BLANK },
+      {
+        type: "paragraph",
+        text: "Fees already paid for the current period are non-refundable, unless stated otherwise here.",
+      },
+
+      { type: "section", text: "Independent Contractor Status" },
+      {
+        type: "paragraph",
+        text:
+          "The Consultant is an independent contractor, not an employee of the Client, and is responsible for " +
+          "their own taxes, insurance, and benefits.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Agreement through " +
+          "good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding " +
+          "arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Client", order: 1 }, { label: "Consultant", order: 2 }] },
+    ],
+  },
+  {
+    slug: "corporate-resolution",
+    title: "CORPORATE RESOLUTION",
+    signerLabels: ["President", "Secretary"],
+    blocks: [
+      { type: "section", text: "Company Information" },
+      { type: "field", label: "Company Name: ", blank: TEXT_BLANK },
+      { type: "field", label: "State of Incorporation: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Meeting or Written Consent" },
+      {
+        type: "paragraph",
+        text:
+          "The undersigned, being the directors (or the sole director) of the Company, certify that the " +
+          "following resolutions were duly adopted, either at a meeting held on the date below or by unanimous " +
+          "written consent in lieu of a meeting:",
+      },
+      { type: "field", label: "Date: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Resolutions Adopted" },
+      { type: "field", label: "Resolution 1: ", blank: TEXT_BLANK },
+      { type: "field", label: "Resolution 2: ", blank: TEXT_BLANK },
+      { type: "field", label: "Resolution 3 (if any): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Effect" },
+      {
+        type: "paragraph",
+        text:
+          "These resolutions are effective as of the date above and remain in effect until amended or revoked by " +
+          "a subsequent resolution of the Company's directors.",
+      },
+
+      { type: "section", text: "Certification" },
+      {
+        type: "paragraph",
+        text:
+          "The Secretary certifies that the foregoing is a true and accurate record of the resolutions adopted " +
+          "by the Company's directors.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Resolution shall be governed by the laws of the State/Country of ${TEXT_BLANK}.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "President", order: 1 }, { label: "Secretary", order: 2 }] },
+    ],
+  },
+  {
+    slug: "copyright-assignment-agreement",
+    title: "COPYRIGHT ASSIGNMENT AGREEMENT",
+    signerLabels: ["Assignor", "Assignee"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Assignor: ", blank: TEXT_BLANK },
+      { type: "field", label: "Assignee: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Description of Work" },
+      {
+        type: "paragraph",
+        text: "This Agreement covers the assignment of all copyright interest in the following work:",
+      },
+      { type: "field", label: "Description of Work: ", blank: TEXT_BLANK },
+      { type: "field", label: "Date of Creation: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Assignment of Rights" },
+      {
+        type: "paragraph",
+        text:
+          "The Assignor irrevocably assigns to the Assignee all right, title, and interest in the copyright to " +
+          "the Work described above, including the exclusive rights to reproduce, distribute, display, perform, " +
+          "and create derivative works from it, throughout the world and for the full duration of the copyright.",
+      },
+
+      { type: "section", text: "Consideration" },
+      { type: "field", label: "Payment / Consideration: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Moral Rights" },
+      {
+        type: "paragraph",
+        text:
+          "To the extent permitted by applicable law, the Assignor waives any moral rights in the Work. In " +
+          "jurisdictions where moral rights cannot be waived, the Assignor agrees not to assert them against the " +
+          "Assignee's use of the Work.",
+      },
+
+      { type: "section", text: "Representations" },
+      {
+        type: "paragraph",
+        text:
+          "The Assignor represents that they are the sole author and owner of the Work, that it is original, and " +
+          "that it does not infringe any third party's rights.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Assignor", order: 1 }, { label: "Assignee", order: 2 }] },
+    ],
+  },
 ];
 
 fs.mkdirSync(outDir, { recursive: true });
