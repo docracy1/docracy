@@ -424,6 +424,85 @@ export async function deleteTemplate(id: string): Promise<{ ok: true }> {
   return asJson(res);
 }
 
+export interface MarketplaceSubmission {
+  id: string;
+  slug: string;
+  title: string;
+  category: string | null;
+  description: string;
+  signerCount: number;
+  pageCount: number;
+  status: "pending" | "approved" | "rejected";
+  rejectionReason: string | null;
+  submittedAt: string;
+  reviewedAt: string | null;
+}
+
+export async function submitTemplateToMarketplace(input: {
+  templateId: string;
+  title?: string;
+  category?: string;
+  description?: string;
+}): Promise<{ ok: true; id: string; slug: string }> {
+  const res = await apiFetch("/api/account/marketplace/submit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  return asJson(res);
+}
+
+export async function fetchMySubmissions(): Promise<{ submissions: MarketplaceSubmission[] }> {
+  const res = await apiFetch("/api/account/marketplace/submissions");
+  return asJson(res);
+}
+
+export interface MarketplaceTemplateDetail {
+  title: string;
+  category: string | null;
+  description: string;
+  signerCount: number;
+  fields: DocField[];
+  pdfBase64: string;
+}
+
+export async function fetchMarketplaceTemplates(category?: string): Promise<{ templates: MarketplaceSubmission[] }> {
+  const query = category ? `?category=${encodeURIComponent(category)}` : "";
+  const res = await apiFetch(`/api/marketplace${query}`);
+  return asJson(res);
+}
+
+export async function fetchMarketplaceTemplate(slug: string): Promise<MarketplaceTemplateDetail> {
+  const res = await apiFetch(`/api/marketplace/${encodeURIComponent(slug)}`);
+  return asJson(res);
+}
+
+export async function fetchAdminMarketplacePending(): Promise<{ pending: MarketplaceSubmission[] }> {
+  const res = await apiFetch("/api/admin/marketplace/pending");
+  return asJson(res);
+}
+
+export async function fetchAdminMarketplacePreview(
+  id: string
+): Promise<{ summary: MarketplaceSubmission; fields: DocField[]; pdfBase64: string }> {
+  const res = await apiFetch(`/api/admin/marketplace/${id}/preview`);
+  return asJson(res);
+}
+
+export async function approveMarketplaceSubmission(id: string): Promise<{ ok: true }> {
+  const res = await apiFetch(`/api/admin/marketplace/${id}/approve`, { method: "POST" });
+  return asJson(res);
+}
+
+export async function rejectMarketplaceSubmission(id: string, rejectionReason?: string): Promise<{ ok: true }> {
+  const res = await apiFetch(`/api/admin/marketplace/${id}/reject`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ rejectionReason }),
+  });
+  return asJson(res);
+}
+
 export interface BulkSendRecipient {
   signers: Array<{ name: string; email: string }>;
   title?: string;

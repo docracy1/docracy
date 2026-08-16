@@ -9,6 +9,7 @@ import {
   createTemplate,
   explainDocument,
   fetchContacts,
+  fetchMarketplaceTemplate,
   fetchMe,
   fetchTemplate,
   fetchTemplates,
@@ -92,6 +93,7 @@ export default function Prepare() {
   const [searchParams] = useSearchParams();
   const templateId = searchParams.get("template");
   const freeTemplateSlug = searchParams.get("freeTemplate");
+  const marketplaceTemplateSlug = searchParams.get("marketplaceTemplate");
   // Refs (not state) since these only need to be read once, in an unmount cleanup — a ref keeps
   // that cleanup's closure looking at the live value without adding either to a dependency array.
   const documentSentRef = useRef(false);
@@ -100,7 +102,9 @@ export default function Prepare() {
     ? { id: templateId }
     : freeTemplateSlug
       ? { id: freeTemplateSlug, category: getFreeTemplate(freeTemplateSlug)?.recurringCategory }
-      : null;
+      : marketplaceTemplateSlug
+        ? { id: marketplaceTemplateSlug }
+        : null;
 
   // template_abandoned: fires once, only if a template was actually active and the user never
   // completed a send before leaving — covers both client-side navigation away (cleanup runs) and
@@ -323,6 +327,26 @@ export default function Prepare() {
       .catch((err) => setTemplateLoadError(err instanceof Error ? err.message : t("prepare.loadTemplateError")))
       .finally(() => setLoadingTemplate(false));
   }, [freeTemplateSlug]);
+
+  // Community (Marketplace-submitted, admin-approved) templates — public, no auth, same shape as
+  // the free-template path above but fetched from the API instead of the static bundle.
+  useEffect(() => {
+    if (!marketplaceTemplateSlug) return;
+    setLoadingTemplate(true);
+    setTemplateLoadError(null);
+    fetchMarketplaceTemplate(marketplaceTemplateSlug)
+      .then((tpl) => {
+        const bytes = base64ToBytes(tpl.pdfBase64);
+        setPdfBytes(bytes);
+        setFields(tpl.fields);
+        setFile(new File([bytes as unknown as BlobPart], `${tpl.title}.pdf`, { type: "application/pdf" }));
+        setSigners(Array.from({ length: tpl.signerCount }, (_, i) => ({ order: i + 1, name: "", email: "" })));
+        track("template_used", { templateId: marketplaceTemplateSlug, templateCategory: tpl.category ?? undefined });
+        track("template_started", { templateId: marketplaceTemplateSlug, templateCategory: tpl.category ?? undefined });
+      })
+      .catch((err) => setTemplateLoadError(err instanceof Error ? err.message : t("prepare.loadTemplateError")))
+      .finally(() => setLoadingTemplate(false));
+  }, [marketplaceTemplateSlug]);
 
   const acceptFile = async (f: File) => {
     track("document_upload_started");

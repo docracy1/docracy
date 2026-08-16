@@ -4,7 +4,27 @@ import { FREE_TEMPLATES, RECURRING_CATEGORIES } from "../lib/freeTemplates";
 import { isSeoTemplateSlug, localizePath, useI18n, useT } from "../lib/i18n";
 import { useSeoMeta } from "../lib/useSeoMeta";
 import { track } from "../lib/track";
+import { apiUrl, fetchMarketplaceTemplates, type MarketplaceSubmission } from "../lib/api";
 import TemplateThumbnail from "../components/TemplateThumbnail";
+
+function ProvenanceBadge({ kind }: { kind: "official" | "community" }) {
+  const t = useT();
+  return (
+    <span
+      style={{
+        fontSize: 10,
+        fontWeight: 600,
+        padding: "1px 7px",
+        borderRadius: 999,
+        color: kind === "official" ? "var(--on-primary)" : "var(--on-accent)",
+        background: kind === "official" ? "var(--primary)" : "var(--accent)",
+        marginLeft: 6,
+      }}
+    >
+      {kind === "official" ? t("freeTemplates.officialBadge") : t("freeTemplates.communityBadge")}
+    </span>
+  );
+}
 
 const CATEGORY_KEYS: Record<string, string> = {
   NDAs: "freeTemplates.cat.ndas",
@@ -30,18 +50,20 @@ const CATEGORY_ANCHORS: Record<string, string> = {
   "Compliance Documents": "cat-compliance",
 };
 
-function TemplateCard({
+export function TemplateCard({
   name,
   description,
   to,
   pdfPath,
   category,
+  badge,
 }: {
   name: string;
   description: string;
   to: string;
   pdfPath: string;
   category?: string;
+  badge?: "official" | "community";
 }) {
   const [hovered, setHovered] = useState(false);
   return (
@@ -52,7 +74,10 @@ function TemplateCard({
         </div>
         <div className="template-tile-body">
           {category && <span className="template-tile-tag">{category}</span>}
-          <h3>{name}</h3>
+          <h3>
+            {name}
+            {badge && <ProvenanceBadge kind={badge} />}
+          </h3>
         </div>
       </Link>
 
@@ -83,8 +108,15 @@ export default function FreeTemplates() {
   // via conditional rendering — so prerender.mjs's static HTML still contains the full category
   // descriptions for crawlers, even though a first-time visitor sees it collapsed.
   const [categoriesOpen, setCategoriesOpen] = useState(false);
+  const [communityTemplates, setCommunityTemplates] = useState<MarketplaceSubmission[] | null>(null);
 
   useSeoMeta("freeTemplates");
+
+  useEffect(() => {
+    fetchMarketplaceTemplates()
+      .then((res) => setCommunityTemplates(res.templates))
+      .catch(() => setCommunityTemplates([]));
+  }, []);
 
   const labelFor = (slug: string, name: string, description: string) => {
     if (locale === "es" && isSeoTemplateSlug(slug)) {
@@ -228,6 +260,7 @@ export default function FreeTemplates() {
                       to={localizePath(`/free-templates/${tpl.slug}`, locale)}
                       pdfPath={tpl.pdfPath}
                       category={catKey ? t(catKey) : tpl.recurringCategory}
+                      badge="official"
                     />
                   );
                 })}
@@ -250,6 +283,7 @@ export default function FreeTemplates() {
                       to={localizePath(`/free-templates/${tpl.slug}`, locale)}
                       pdfPath={tpl.pdfPath}
                       category={catKey ? t(catKey) : tpl.recurringCategory}
+                      badge="official"
                     />
                   );
                 })}
@@ -274,6 +308,7 @@ export default function FreeTemplates() {
                           to={localizePath(`/free-templates/${tpl.slug}`, locale)}
                           pdfPath={tpl.pdfPath}
                           category={catKey ? t(catKey) : category}
+                          badge="official"
                         />
                       );
                     })}
@@ -296,10 +331,34 @@ export default function FreeTemplates() {
                       to={localizePath(`/free-templates/${tpl.slug}`, locale)}
                       pdfPath={tpl.pdfPath}
                       category={catKey ? t(catKey) : tpl.recurringCategory}
+                      badge="official"
                     />
                   );
                 })}
               </div>
+            </div>
+
+            <div style={{ marginTop: 32 }}>
+              <h2 style={{ fontSize: 19 }}>{t("freeTemplates.communityTitle")}</h2>
+              <p style={{ fontSize: 13, color: "var(--mute)", maxWidth: 640 }}>{t("freeTemplates.communityIntro")}</p>
+              {communityTemplates && communityTemplates.length === 0 && (
+                <p style={{ fontSize: 13, color: "var(--mute)" }}>{t("freeTemplates.communityEmpty")}</p>
+              )}
+              {communityTemplates && communityTemplates.length > 0 && (
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
+                  {communityTemplates.map((tpl) => (
+                    <TemplateCard
+                      key={tpl.slug}
+                      name={tpl.title}
+                      description={tpl.description}
+                      to={localizePath(`/free-templates/${tpl.slug}`, locale)}
+                      pdfPath={apiUrl(`/api/marketplace/${tpl.slug}/pdf`)}
+                      category={tpl.category ?? undefined}
+                      badge="community"
+                    />
+                  ))}
+                </div>
+              )}
             </div>
 
             <div className="templates-faq">

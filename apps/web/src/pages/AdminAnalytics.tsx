@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import {
+  approveMarketplaceSubmission,
   createBlogPost,
   createRoadmapFeature,
   deleteBlogPost,
@@ -10,9 +11,12 @@ import {
   fetchAdminBlogPosts,
   fetchAdminDocuments,
   fetchAdminEnterpriseAccounts,
+  fetchAdminMarketplacePending,
+  fetchAdminMarketplacePreview,
   fetchAdminRoadmapFeatures,
   fetchMarketingRecipientsCount,
   grantEnterprise,
+  rejectMarketplaceSubmission,
   sendMarketingEmail,
   setAnalyticsNoTrack,
   updateBlogPost,
@@ -20,12 +24,14 @@ import {
   type AdminDocumentRow,
   type AdminEnterpriseAccount,
   type DynamicBlogPostSummary,
+  type MarketplaceSubmission,
   type RoadmapFeature,
   type FunnelRow,
   type FunnelStepRow,
   type AttributionRow,
   type TrafficSourceRow,
 } from "../lib/api";
+import { base64ToBytes } from "../lib/base64";
 import { usePageMeta } from "../lib/usePageMeta";
 
 const HUMAN_COLOR = "#2f7ed8"; // var(--primary)
@@ -784,6 +790,136 @@ function BlogPostsCard() {
   );
 }
 
+const CATEGORY_COLOR: Record<string, string> = {
+  // Docracy's own lawyer-reviewed templates use the main brand color; community submissions use
+  // the existing accent teal — same distinction shown to visitors on /free-templates.
+  docracy: "#2f7ed8", // var(--primary)
+  community: "#00c898", // close to var(--accent), tuned down for readable text-on-white
+};
+
+function MarketplaceReviewCard() {
+  const [pending, setPending] = useState<MarketplaceSubmission[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [busyId, setBusyId] = useState<string | null>(null);
+  const [rejectReasonById, setRejectReasonById] = useState<Record<string, string>>({});
+
+  const refresh = () =>
+    fetchAdminMarketplacePending()
+      .then((res) => setPending(res.pending))
+      .catch((err) => setError(err instanceof Error ? err.message : "Failed to load submissions"));
+
+  useEffect(() => {
+    refresh();
+  }, []);
+
+  const onPreview = async (id: string) => {
+    try {
+      const { pdfBase64 } = await fetchAdminMarketplacePreview(id);
+      const bytes = base64ToBytes(pdfBase64);
+      const blob = new Blob([bytes.slice()], { type: "application/pdf" });
+      window.open(URL.createObjectURL(blob), "_blank", "noopener,noreferrer");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to load PDF");
+    }
+  };
+
+  const onApprove = async (id: string) => {
+    setBusyId(id);
+    try {
+      await approveMarketplaceSubmission(id);
+      await refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to approve");
+    } finally {
+      setBusyId(null);
+    }
+  };
+
+  const onReject = async (id: string) => {
+    setBusyId(id);
+    try {
+      await rejectMarketplaceSubmission(id, rejectReasonById[id]);
+      await refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to reject");
+    } finally {
+      setBusyId(null);
+    }
+  };
+
+  return (
+    <div className="card" style={{ marginBottom: 24 }}>
+      <h3 style={{ marginTop: 0, fontSize: 15 }}>Marketplace submissions</h3>
+      <p style={{ fontSize: 12, color: "var(--mute)", marginTop: -4 }}>
+        Review every submission's PDF before approving — check for real names, addresses, or
+        company details typed into the body text, not just the field placeholders. Approved
+        templates appear on /free-templates tagged "Community"; Docracy's own templates there
+        stay tagged separately.
+      </p>
+
+      {error && <p style={{ color: "var(--danger)", fontSize: 13 }}>{error}</p>}
+      {pending && pending.length === 0 && (
+        <p style={{ fontSize: 13, color: "var(--mute)" }}>Nothing waiting on review.</p>
+      )}
+      {pending?.map((sub) => (
+        <div key={sub.id} style={{ padding: "10px 0", borderBottom: "1px solid var(--hairline)" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", gap: 8, flexWrap: "wrap" }}>
+            <div style={{ minWidth: 0 }}>
+              <div style={{ fontSize: 13.5, overflowWrap: "anywhere" }}>
+                {sub.title}{" "}
+                <span
+                  style={{
+                    fontSize: 10,
+                    padding: "1px 6px",
+                    borderRadius: 999,
+                    background: CATEGORY_COLOR.community,
+                    color: "#fff",
+                  }}
+                >
+                  Community
+                </span>
+              </div>
+              <div style={{ fontSize: 11, color: "var(--mute)" }}>
+                {sub.category ?? "Uncategorized"} · {sub.signerCount} signer(s), {sub.pageCount} page(s) · submitted{" "}
+                {new Date(sub.submittedAt).toLocaleDateString()}
+              </div>
+              {sub.description && <div style={{ fontSize: 12, marginTop: 4 }}>{sub.description}</div>}
+            </div>
+            <div style={{ display: "flex", gap: 6, flexShrink: 0, alignItems: "flex-start" }}>
+              <button className="btn-secondary" style={{ fontSize: 12, padding: "4px 8px" }} onClick={() => onPreview(sub.id)}>
+                Preview PDF
+              </button>
+              <button
+                className="btn-primary"
+                style={{ fontSize: 12, padding: "4px 8px" }}
+                disabled={busyId === sub.id}
+                onClick={() => onApprove(sub.id)}
+              >
+                Approve
+              </button>
+              <button
+                className="btn-secondary"
+                style={{ fontSize: 12, padding: "4px 8px" }}
+                disabled={busyId === sub.id}
+                onClick={() => onReject(sub.id)}
+              >
+                Reject
+              </button>
+            </div>
+          </div>
+          <input
+            type="text"
+            placeholder="Rejection reason (optional, kept for the submitter's record)"
+            value={rejectReasonById[sub.id] ?? ""}
+            onChange={(e) => setRejectReasonById((prev) => ({ ...prev, [sub.id]: e.target.value }))}
+            style={{ fontSize: 12, marginTop: 6, width: "100%", maxWidth: 480 }}
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 const EMPTY_ROADMAP_FORM = { title: "", description: "" };
 
 /** Add/delete only, deliberately no edit — the public vote a feature already accumulated stays
@@ -1471,6 +1607,7 @@ const ADMIN_SECTIONS = [
   "analytics",
   "growth",
   "blog",
+  "marketplace",
   "roadmap",
   "signups",
   "activation",
@@ -1485,6 +1622,7 @@ const ADMIN_SECTION_LABEL: Record<AdminSection, string> = {
   analytics: "Analytics",
   growth: "Growth",
   blog: "Blog posts",
+  marketplace: "Marketplace",
   roadmap: "Roadmap",
   signups: "Signups",
   activation: "Activation",
@@ -1623,6 +1761,7 @@ export default function AdminAnalytics() {
               succeeded. Every other section reads rows/totals/stepsByEvent from that call and
               only makes sense once it has resolved. */}
           {section === "blog" && <BlogPostsCard />}
+          {section === "marketplace" && <MarketplaceReviewCard />}
           {section === "roadmap" && <RoadmapCard />}
 
           {section === "signups" && (

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getFreeTemplate } from "../lib/freeTemplates";
 import { isSeoTemplateSlug, localizePath, templateAlternates, useI18n, useT } from "../lib/i18n";
@@ -6,7 +6,104 @@ import { cleanPath } from "../lib/i18n/paths";
 import { usePageMeta } from "../lib/usePageMeta";
 import { track } from "../lib/track";
 import { useLocation } from "react-router-dom";
+import { apiUrl, fetchMarketplaceTemplate, type MarketplaceTemplateDetail } from "../lib/api";
 import TemplateThumbnail from "../components/TemplateThumbnail";
+
+/** A community (Marketplace-submitted) template — fetched from the API rather than the static
+ *  bundle. Deliberately its own, simpler render branch below: no attorney-review disclaimer (that
+ *  claim is only true for Docracy's own templates) and no per-slug i18n-catalog FAQ copy (that
+ *  only exists for the hand-authored static set). */
+function CommunityTemplateDetail({ slug }: { slug: string }) {
+  const t = useT();
+  const { locale } = useI18n();
+  const [template, setTemplate] = useState<MarketplaceTemplateDetail | null | undefined>(undefined);
+
+  useEffect(() => {
+    fetchMarketplaceTemplate(slug)
+      .then(setTemplate)
+      .catch(() => setTemplate(null));
+  }, [slug]);
+
+  useEffect(() => {
+    if (!template) return;
+    track("template_opened", { templateId: slug, templateCategory: template.category ?? undefined });
+    track("template_preview_opened", { templateId: slug, templateCategory: template.category ?? undefined });
+  }, [template, slug]);
+
+  usePageMeta(
+    template ? `${template.title} | Docracy Marketplace` : t("tpl.detail.notFoundTitle"),
+    template?.description ?? t("tpl.detail.notFoundDesc")
+  );
+
+  const indexTo = localizePath("/free-templates", locale);
+
+  if (template === undefined) return null; // loading
+  if (template === null) {
+    return (
+      <div className="container">
+        <h1>{t("tpl.detail.notFound")}</h1>
+        <p>
+          <Link to={indexTo}>{t("tpl.detail.back")}</Link>
+        </p>
+      </div>
+    );
+  }
+
+  const ctaTo = localizePath(`/prepare?marketplaceTemplate=${slug}&ref=seo-marketplace-${slug}`, locale);
+
+  return (
+    <div className="container" style={{ maxWidth: 720 }}>
+      <p style={{ fontSize: 13 }}>
+        <Link to={indexTo}>← {t("tpl.detail.backAll")}</Link>
+      </p>
+      <div style={{ display: "flex", gap: 20, alignItems: "flex-start", flexWrap: "wrap" }}>
+        <TemplateThumbnail pdfPath={apiUrl(`/api/marketplace/${slug}/pdf`)} width={280} />
+        <div style={{ flex: 1, minWidth: 240 }}>
+          <h1 style={{ marginTop: 0 }}>
+            {template.title}{" "}
+            <span
+              style={{
+                fontSize: 11,
+                fontWeight: 600,
+                padding: "2px 8px",
+                borderRadius: 999,
+                color: "var(--on-accent)",
+                background: "var(--accent)",
+                verticalAlign: "middle",
+              }}
+            >
+              {t("freeTemplates.communityBadge")}
+            </span>
+          </h1>
+          {template.category && <p style={{ color: "var(--mute)" }}>{template.category}</p>}
+          <p style={{ fontSize: 12, color: "var(--danger)" }}>{t("freeTemplates.communityIntro")}</p>
+        </div>
+      </div>
+
+      {template.description && (
+        <div className="card" style={{ marginTop: 16 }}>
+          <p style={{ margin: 0 }}>{template.description}</p>
+        </div>
+      )}
+
+      <Link
+        to={ctaTo}
+        className="btn-primary"
+        style={{ display: "inline-block", textDecoration: "none", marginTop: 20 }}
+        onClick={() =>
+          track("landingpage_cta_clicked", {
+            source: `seo:marketplace-template:${slug}`,
+            templateId: slug,
+            templateCategory: template.category ?? undefined,
+          })
+        }
+      >
+        {t("tpl.detail.cta")}
+      </Link>
+      <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 8 }}>{t("tpl.detail.freeNote")}</p>
+    </div>
+  );
+}
 
 export default function FreeTemplateDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -39,14 +136,19 @@ export default function FreeTemplateDetail() {
   const indexTo = localizePath("/free-templates", locale);
 
   if (!template) {
-    return (
-      <div className="container">
-        <h1>{t("tpl.detail.notFound")}</h1>
-        <p>
-          <Link to={indexTo}>{t("tpl.detail.back")}</Link>
-        </p>
-      </div>
-    );
+    if (!slug) {
+      return (
+        <div className="container">
+          <h1>{t("tpl.detail.notFound")}</h1>
+          <p>
+            <Link to={indexTo}>{t("tpl.detail.back")}</Link>
+          </p>
+        </div>
+      );
+    }
+    // Not in the static, Docracy-authored set — try the community (Marketplace) API before
+    // giving up and showing "not found".
+    return <CommunityTemplateDetail slug={slug} />;
   }
 
   const signers = template.signerLabels.join(` ${t("common.and")} `);

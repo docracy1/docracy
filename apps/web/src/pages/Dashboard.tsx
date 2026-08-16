@@ -37,6 +37,9 @@ import {
   setMarketingOptIn,
   setWorkspaceSlug,
   startCheckout,
+  fetchMarketplaceTemplates,
+  submitTemplateToMarketplace,
+  type MarketplaceSubmission,
   uploadBrandLogo,
   voidAccountDocument,
   claimDocument,
@@ -53,7 +56,7 @@ import {
   type WebhookSummary,
 } from "../lib/api";
 import { useNoIndex } from "../lib/useNoIndex";
-import { FREE_TEMPLATES } from "../lib/freeTemplates";
+import { FREE_TEMPLATES, RECURRING_CATEGORIES } from "../lib/freeTemplates";
 import { clearPendingClaim, readPendingClaim } from "../lib/pendingClaim";
 import { SignerAttachmentsList } from "../components/SignerAttachmentsList";
 import { track } from "../lib/track";
@@ -300,6 +303,19 @@ export default function Dashboard() {
   const [templates, setTemplates] = useState<TemplateSummary[]>([]);
   const [templateUsage, setTemplateUsage] = useState<TemplateUsageEntry[]>([]);
   const [deletingTemplateId, setDeletingTemplateId] = useState<string | null>(null);
+  const [marketplaceFormId, setMarketplaceFormId] = useState<string | null>(null);
+  const [marketplaceCategory, setMarketplaceCategory] = useState("");
+  const [marketplaceDescription, setMarketplaceDescription] = useState("");
+  const [submittingToMarketplace, setSubmittingToMarketplace] = useState(false);
+  const [marketplaceError, setMarketplaceError] = useState<string | null>(null);
+  const [marketplaceSubmittedSlug, setMarketplaceSubmittedSlug] = useState<string | null>(null);
+  const [communityTemplates, setCommunityTemplates] = useState<MarketplaceSubmission[]>([]);
+
+  useEffect(() => {
+    fetchMarketplaceTemplates()
+      .then((res) => setCommunityTemplates(res.templates))
+      .catch(() => setCommunityTemplates([]));
+  }, []);
   const [templateError, setTemplateError] = useState<string | null>(null);
   const [webhooks, setWebhooks] = useState<WebhookSummary[]>([]);
   const [deletingWebhookId, setDeletingWebhookId] = useState<string | null>(null);
@@ -556,6 +572,31 @@ export default function Dashboard() {
       setTemplateError(err instanceof Error ? err.message : t("common.error"));
     } finally {
       setDeletingTemplateId(null);
+    }
+  };
+
+  const openMarketplaceForm = (id: string) => {
+    setMarketplaceFormId(id);
+    setMarketplaceCategory("");
+    setMarketplaceDescription("");
+    setMarketplaceError(null);
+    setMarketplaceSubmittedSlug(null);
+  };
+
+  const onSubmitToMarketplace = async (id: string) => {
+    setSubmittingToMarketplace(true);
+    setMarketplaceError(null);
+    try {
+      const res = await submitTemplateToMarketplace({
+        templateId: id,
+        category: marketplaceCategory || undefined,
+        description: marketplaceDescription || undefined,
+      });
+      setMarketplaceSubmittedSlug(res.slug);
+    } catch (err) {
+      setMarketplaceError(err instanceof Error ? err.message : t("common.error"));
+    } finally {
+      setSubmittingToMarketplace(false);
     }
   };
 
@@ -1386,14 +1427,24 @@ export default function Dashboard() {
               {t("dash.freeTemplatesSub")}
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 8 }}>
-              {FREE_TEMPLATES.map((t) => (
+              {FREE_TEMPLATES.map((tpl) => (
                 <Link
-                  key={t.slug}
-                  to={`/prepare?freeTemplate=${t.slug}`}
+                  key={tpl.slug}
+                  to={`/prepare?freeTemplate=${tpl.slug}`}
                   className="btn-secondary"
                   style={{ textDecoration: "none", textAlign: "left", padding: "8px 10px", fontSize: 13 }}
                 >
-                  {t.name}
+                  {tpl.name}
+                </Link>
+              ))}
+              {communityTemplates.map((tpl) => (
+                <Link
+                  key={tpl.slug}
+                  to={`/prepare?marketplaceTemplate=${tpl.slug}`}
+                  className="btn-secondary"
+                  style={{ textDecoration: "none", textAlign: "left", padding: "8px 10px", fontSize: 13 }}
+                >
+                  {tpl.title}
                 </Link>
               ))}
             </div>
@@ -1645,42 +1696,113 @@ export default function Dashboard() {
             </>
           ) : (
             templates.map((tpl) => (
-              <div
-                key={tpl.id}
-                style={{
-                  padding: "8px 0",
-                  borderBottom: "1px solid var(--hairline)",
-                  display: "flex",
-                  flexWrap: "wrap",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  gap: 8,
-                }}
-              >
-                <span style={{ overflowWrap: "anywhere" }}>
-                  {tpl.name}{" "}
-                  <span style={{ fontSize: 12, color: "var(--mute)" }}>
-                    {t("dash.templateMeta", {
-                      signers: tpl.signerCount,
-                      sPlural: tpl.signerCount === 1 ? "" : "s",
-                      pages: tpl.pageCount,
-                      pPlural: tpl.pageCount === 1 ? "" : "s",
-                    })}
+              <div key={tpl.id} style={{ borderBottom: "1px solid var(--hairline)" }}>
+                <div
+                  style={{
+                    padding: "8px 0",
+                    display: "flex",
+                    flexWrap: "wrap",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: 8,
+                  }}
+                >
+                  <span style={{ overflowWrap: "anywhere" }}>
+                    {tpl.name}{" "}
+                    <span style={{ fontSize: 12, color: "var(--mute)" }}>
+                      {t("dash.templateMeta", {
+                        signers: tpl.signerCount,
+                        sPlural: tpl.signerCount === 1 ? "" : "s",
+                        pages: tpl.pageCount,
+                        pPlural: tpl.pageCount === 1 ? "" : "s",
+                      })}
+                    </span>
                   </span>
-                </span>
-                <span style={{ display: "flex", gap: 8 }}>
-                  <Link to={`/prepare?template=${tpl.id}`} className="btn-secondary" style={{ textDecoration: "none", padding: "4px 10px", fontSize: 13 }}>
-                    {t("common.use")}
-                  </Link>
-                  <button
-                    className="btn-secondary"
-                    style={{ fontSize: 13, padding: "4px 10px" }}
-                    disabled={deletingTemplateId === tpl.id}
-                    onClick={() => onDeleteTemplate(tpl.id)}
-                  >
-                    {deletingTemplateId === tpl.id ? t("common.deleting") : t("common.delete")}
-                  </button>
-                </span>
+                  <span style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                    <Link to={`/prepare?template=${tpl.id}`} className="btn-secondary" style={{ textDecoration: "none", padding: "4px 10px", fontSize: 13 }}>
+                      {t("common.use")}
+                    </Link>
+                    <button
+                      className="btn-secondary"
+                      style={{ fontSize: 13, padding: "4px 10px" }}
+                      onClick={() => (marketplaceFormId === tpl.id ? setMarketplaceFormId(null) : openMarketplaceForm(tpl.id))}
+                    >
+                      {t("dash.submitToMarketplace")}
+                    </button>
+                    <button
+                      className="btn-secondary"
+                      style={{ fontSize: 13, padding: "4px 10px" }}
+                      disabled={deletingTemplateId === tpl.id}
+                      onClick={() => onDeleteTemplate(tpl.id)}
+                    >
+                      {deletingTemplateId === tpl.id ? t("common.deleting") : t("common.delete")}
+                    </button>
+                  </span>
+                </div>
+
+                {marketplaceFormId === tpl.id && (
+                  <div className="card" style={{ margin: "0 0 12px", background: "var(--canvas-soft)" }}>
+                    {marketplaceSubmittedSlug ? (
+                      <p style={{ fontSize: 13, margin: 0 }}>
+                        {t("dash.marketplaceSuccess")}{" "}
+                        <button
+                          type="button"
+                          style={{ fontSize: 13, background: "none", border: "none", padding: 0, color: "var(--primary)", textDecoration: "underline", cursor: "pointer" }}
+                          onClick={() => setMarketplaceFormId(null)}
+                        >
+                          {t("common.close")}
+                        </button>
+                      </p>
+                    ) : (
+                      <>
+                        <p style={{ fontSize: 13, color: "var(--danger)", marginTop: 0 }}>{t("dash.marketplaceWarning")}</p>
+                        <label style={{ fontSize: 13, display: "block", marginBottom: 8 }}>
+                          {t("dash.marketplaceCategory")}
+                          <select
+                            value={marketplaceCategory}
+                            onChange={(e) => setMarketplaceCategory(e.target.value)}
+                            style={{ display: "block", marginTop: 4, width: "100%", maxWidth: 320 }}
+                          >
+                            <option value="">{t("dash.marketplaceCategoryPlaceholder")}</option>
+                            {RECURRING_CATEGORIES.map((c) => (
+                              <option key={c} value={c}>
+                                {c}
+                              </option>
+                            ))}
+                          </select>
+                        </label>
+                        <label style={{ fontSize: 13, display: "block", marginBottom: 8 }}>
+                          {t("dash.marketplaceDescription")}
+                          <textarea
+                            value={marketplaceDescription}
+                            onChange={(e) => setMarketplaceDescription(e.target.value)}
+                            placeholder={t("dash.marketplaceDescriptionPlaceholder")}
+                            rows={2}
+                            style={{ display: "block", marginTop: 4, width: "100%", maxWidth: 480, fontFamily: "inherit" }}
+                          />
+                        </label>
+                        {marketplaceError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{marketplaceError}</p>}
+                        <div style={{ display: "flex", gap: 8 }}>
+                          <button
+                            className="btn-primary"
+                            style={{ fontSize: 13, padding: "4px 10px" }}
+                            disabled={submittingToMarketplace}
+                            onClick={() => onSubmitToMarketplace(tpl.id)}
+                          >
+                            {submittingToMarketplace ? t("dash.marketplaceSubmitting") : t("dash.marketplaceConfirm")}
+                          </button>
+                          <button
+                            className="btn-secondary"
+                            style={{ fontSize: 13, padding: "4px 10px" }}
+                            onClick={() => setMarketplaceFormId(null)}
+                          >
+                            {t("common.cancel")}
+                          </button>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                )}
               </div>
             ))
           )}
