@@ -366,27 +366,6 @@ export default function FreeTemplates() {
             })}
 
             <div style={{ marginTop: 32 }}>
-              <h2 style={{ fontSize: 19 }}>{t("freeTemplates.allTemplates")}</h2>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
-                {FREE_TEMPLATES.map((tpl) => {
-                  const labels = labelFor(tpl.slug, tpl.name, tpl.description);
-                  const catKey = tpl.recurringCategory ? CATEGORY_KEYS[tpl.recurringCategory] : undefined;
-                  return (
-                    <TemplateCard
-                      key={tpl.slug}
-                      name={labels.name}
-                      description={labels.description}
-                      to={localizePath(`/free-templates/${tpl.slug}`, locale)}
-                      pdfPath={tpl.pdfPath}
-                      category={catKey ? t(catKey) : tpl.recurringCategory}
-                      badge="official"
-                    />
-                  );
-                })}
-              </div>
-            </div>
-
-            <div style={{ marginTop: 32 }}>
               <h2 style={{ fontSize: 19 }}>{t("freeTemplates.communityTitle")}</h2>
               <p style={{ fontSize: 13, color: "var(--mute)", maxWidth: 640 }}>{t("freeTemplates.communityIntro")}</p>
               {communityTemplates && communityTemplates.length === 0 && (

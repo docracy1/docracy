@@ -20,6 +20,8 @@ function shouldHideDock(pathname: string): boolean {
     "/team",
     "/pricing",
     "/es/precios",
+    "/free-templates",
+    "/es/plantillas-gratis",
   ];
   return prefixes.some((p) => pathname === p || pathname.startsWith(`${p}/`));
 }
