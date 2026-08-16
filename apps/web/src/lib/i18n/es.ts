@@ -393,7 +393,10 @@ const es: Messages = {
   "login.titleSave": "Guarda el documento que acabas de enviar",
   "login.titleUpgrade": "Inicia sesión para mejorar tu plan",
   "mcp.eyebrow": "Para desarrolladores y usuarios avanzados de IA",
-  "mcp.paidRequired": "Se requiere cuenta de pago",
+  "mcp.freeToolTitle": "check_status es gratis — sin necesidad de registrarte",
+  "mcp.freeToolBody":
+    "Cualquiera puede pedirle a su asistente de IA que revise un enlace de firma o estado de Docracy — sin clave API, sin cuenta. Agrega https://mcp.docracy.io/mcp como conector, o simplemente pega el enlace en un chat que ya tenga Docracy conectado.",
+  "mcp.paidRequired": "¿Quieres buscar tus propios documentos?",
   "mcp.title": "Conecta Docracy a tu asistente de IA",
   "nav.blog": "Blog",
   "nav.closeMenu": "Cerrar menú",
@@ -1003,17 +1006,17 @@ const es: Messages = {
   "mcp.ideTitle": "Cursor, Claude Code y otros clientes IDE/agente",
   "mcp.intro1": "Docracy ejecuta un",
   "mcp.intro2":
-    " servidor — un estándar abierto para dar a un asistente de IA herramientas que puede invocar directamente. Con una cuenta de pago, agrega tu URL de conector personal a Claude, ChatGPT, Grok o Perplexity y pregunta sobre tus documentos en lenguaje claro en lugar de abrir un panel.",
+    " servidor — un estándar abierto para dar a un asistente de IA herramientas que puede invocar directamente. check_status funciona para cualquiera, sin cuenta. Con una cuenta de pago, agrega tu URL de conector personal a Claude, ChatGPT, Grok o Perplexity para además buscar tus documentos en lenguaje claro en lugar de abrir un panel.",
   "mcp.paidBody":
-    "El conector MCP usa la clave API de tu espacio de trabajo. Inicia sesión, mejora el plan si hace falta, y copia la URL del conector personal desde Panel → Conector y clave API. Si termina la suscripción, esa clave se revoca y el conector deja de funcionar.",
+    "find_documents usa la clave API de tu espacio de trabajo. Inicia sesión, mejora el plan si hace falta, y copia la URL del conector personal desde Panel → Conector y clave API. Si termina la suscripción, esa clave se revoca y el conector deja de funcionar.",
   "mcp.readOnlyNote":
     "Nunca se firma ni cambia nada a través de MCP — cada herramienta aquí es de solo lectura. (Las herramientas de IA para PDF como detectar campos y el resumen de contratos viven en la app web, no en MCP.)",
   "mcp.setupLabel": "Configuración:",
   "mcp.signInCta": "Inicia sesión para obtener tu URL de conector",
   "mcp.toolCheckStatus":
-    "check_status — quién firmó / quién sigue pendiente en un enlace de firma o estado.",
+    "check_status (gratis, sin cuenta) — quién firmó / quién sigue pendiente en un enlace de firma o estado.",
   "mcp.toolFindDocuments":
-    "find_documents — busca tus propios documentos por título, nombre del firmante, correo o empresa.",
+    "find_documents (cuenta de pago) — busca tus propios documentos por título, nombre del firmante, correo o empresa.",
   "mcp.toolsIntro": "Una vez conectado, tu asistente obtiene dos herramientas de solo lectura:",
   "mcp.useLabel": "Úsalo:",
   "mcp.zapierBody":

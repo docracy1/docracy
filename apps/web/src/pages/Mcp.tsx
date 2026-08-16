@@ -35,7 +35,12 @@ export default function Mcp() {
 
       <IntegrationsBand learnMoreTo="/docs#automation" compact />
 
-      <div className="card" style={{ marginTop: 24, background: "var(--primary-soft)", border: "1px solid var(--primary-soft-strong)" }}>
+      <div className="card" style={{ marginTop: 24 }}>
+        <h3 style={{ marginTop: 0, fontSize: 16 }}>{t("mcp.freeToolTitle")}</h3>
+        <p style={{ marginBottom: 0 }}>{t("mcp.freeToolBody")}</p>
+      </div>
+
+      <div className="card" style={{ marginTop: 16, background: "var(--primary-soft)", border: "1px solid var(--primary-soft-strong)" }}>
         <h3 style={{ marginTop: 0, fontSize: 16 }}>{t("mcp.paidRequired")}</h3>
         <p style={{ marginBottom: 12 }}>{t("mcp.paidBody")}</p>
         <p style={{ marginBottom: 12, fontSize: 13.5 }}>{t("mcp.toolsIntro")}</p>

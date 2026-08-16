@@ -918,17 +918,20 @@ const en: Messages = {
   "mcp.ideTitle": "Cursor, Claude Code, and other IDE/agent clients",
   "mcp.intro1": "Docracy runs an",
   "mcp.intro2":
-    " server — an open standard for giving an AI assistant tools it can call directly. On a paid account, add your personal connector URL to Claude, ChatGPT, Grok, or Perplexity and ask about your documents in plain English instead of opening a dashboard.",
+    " server — an open standard for giving an AI assistant tools it can call directly. check_status works for anyone, no account needed. On a paid account, add your personal connector URL to Claude, ChatGPT, Grok, or Perplexity to also search your own documents in plain English instead of opening a dashboard.",
+  "mcp.freeToolTitle": "check_status is free — no sign-up needed",
+  "mcp.freeToolBody":
+    "Anyone can ask their AI assistant to check a Docracy sign or status link — no API key, no account. Add https://mcp.docracy.io/mcp as a connector, or just paste the link into a chat that already has Docracy connected.",
   "mcp.paidBody":
-    "The MCP connector uses your workspace API key. Sign in, upgrade if needed, then copy the personal connector URL from Dashboard → Connector & API key. If the subscription ends, that key is revoked and the connector stops working.",
-  "mcp.paidRequired": "Paid account required",
+    "find_documents uses your workspace API key. Sign in, upgrade if needed, then copy the personal connector URL from Dashboard → Connector & API key. If the subscription ends, that key is revoked and the connector stops working.",
+  "mcp.paidRequired": "Want to search your own documents?",
   "mcp.readOnlyNote":
     "Nothing is ever signed or changed through MCP — every tool here is read-only. (PDF AI tools like auto-detect fields and contract explainer live in the web app, not in MCP.)",
   "mcp.setupLabel": "Set up:",
   "mcp.signInCta": "Sign in to get your connector URL",
   "mcp.title": "Connect Docracy to your AI assistant",
-  "mcp.toolCheckStatus": "check_status — who's signed / who's still pending on a signing or status link.",
-  "mcp.toolFindDocuments": "find_documents — search your own documents by title, signer name, email, or company.",
+  "mcp.toolCheckStatus": "check_status (free, no account) — who's signed / who's still pending on a signing or status link.",
+  "mcp.toolFindDocuments": "find_documents (paid account) — search your own documents by title, signer name, email, or company.",
   "mcp.toolsIntro": "Once connected, your assistant gets two read-only tools:",
   "mcp.useLabel": "Use it:",
   "mcp.zapierBody":
