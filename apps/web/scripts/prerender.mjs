@@ -648,6 +648,7 @@ const routes = [
     outFile: `blog/${a.slug}.html`,
     title: `${a.title} | Docracy`,
     description: a.description,
+    ...(a.ogImage ? { image: a.ogImage } : {}),
   })),
   ...FREE_TEMPLATES.map((t) => {
     const bilingual = SEO_TEMPLATE_SLUGS.has(t.slug);
@@ -748,7 +749,7 @@ function writeIndexNowKey() {
   fs.writeFileSync(path.join(distDir, `${INDEXNOW_KEY}.txt`), INDEXNOW_KEY);
 }
 
-function withMeta(html, { title, description, urlPath, locale = "en", alternates }) {
+function withMeta(html, { title, description, urlPath, locale = "en", alternates, image }) {
   const canonical = `${SITE}${urlPath === "/" ? "/" : urlPath}`;
   // Use function replacers — string replacements treat `$10` in copy as a capture-group token.
   let out = html
@@ -761,6 +762,12 @@ function withMeta(html, { title, description, urlPath, locale = "en", alternates
     .replace(/(<meta name="twitter:title" content=")[^"]*(")/, (_, a, b) => `${a}${title}${b}`)
     .replace(/(<meta\s+name="twitter:description"\s+content=")[^"]*(")/, (_, a, b) => `${a}${description}${b}`)
     .replace(/(<link rel="canonical" href=")[^"]*(")/, (_, a, b) => `${a}${canonical}${b}`);
+
+  if (image) {
+    out = out
+      .replace(/(<meta property="og:image" content=")[^"]*(")/, (_, a, b) => `${a}${image}${b}`)
+      .replace(/(<meta name="twitter:image" content=")[^"]*(")/, (_, a, b) => `${a}${image}${b}`);
+  }
 
   if (alternates) {
     const enHref = `${SITE}${alternates.en === "/" ? "/" : alternates.en}`;

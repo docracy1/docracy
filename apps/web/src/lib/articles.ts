@@ -27,6 +27,10 @@ export interface ArticlePost {
   publishedDate: string;
   cluster: string;
   blocks: ArticleBlock[];
+  /** Overrides the sitewide default og:image/twitter:image for link previews (Facebook, X,
+   *  Slack, etc.) — e.g. a post's embedded video's own thumbnail. Falls back to /og-image.png
+   *  when omitted (see scripts/prerender.mjs withMeta()). */
+  ogImage?: string;
 }
 
 function p(text: string): ArticleBlock {
@@ -1648,6 +1652,7 @@ export const ARTICLES: ArticlePost[] = [
       "A quick tour of the Docracy Marketplace: how to find a template, fill it in, and share your own with the community — free, no account needed.",
     publishedDate: "2026-08-16",
     cluster: "Product",
+    ogImage: "https://img.youtube.com/vi/H8LlazgJyTA/maxresdefault.jpg",
     blocks: [
       p(
         "The Docracy Marketplace is a free library of document templates — NDAs, lease agreements, offer letters, " +
