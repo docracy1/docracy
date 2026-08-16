@@ -137,3 +137,13 @@ const ADMIN_LOGIN_MAX_PER_WINDOW = 10;
 export async function checkAdminLoginRateLimit(env: Env, email: string): Promise<boolean> {
   return checkLimit(env, `adminlogin:${email.toLowerCase()}`, ADMIN_LOGIN_MAX_PER_WINDOW, ADMIN_LOGIN_WINDOW_SECONDS);
 }
+
+const MARKETPLACE_SUBMIT_WINDOW_SECONDS = 60 * 60; // 1 hour
+const MARKETPLACE_SUBMIT_MAX_PER_WINDOW = 3;
+
+/** Soft per-IP limit on the anonymous Marketplace submission endpoint — every submission still
+ *  needs admin approval before going live, but without an account to cap by, a single IP could
+ *  otherwise flood the review queue. */
+export async function checkMarketplaceSubmitRateLimit(env: Env, ip: string): Promise<boolean> {
+  return checkLimit(env, `marketplacesubmit:${ip}`, MARKETPLACE_SUBMIT_MAX_PER_WINDOW, MARKETPLACE_SUBMIT_WINDOW_SECONDS);
+}

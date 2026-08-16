@@ -117,6 +117,92 @@ describe("POST /api/account/marketplace/submit", () => {
   });
 });
 
+describe("POST /api/marketplace/submit (anonymous, open to everyone)", () => {
+  const anonMeta = {
+    title: "Anonymous Roommate Agreement",
+    signerCount: 2,
+    fields: [
+      { id: "f1", signerOrder: 1, page: 0, xFrac: 0.1, yFrac: 0.1, wFrac: 0.2, hFrac: 0.05 },
+      { id: "f2", signerOrder: 2, page: 0, xFrac: 0.1, yFrac: 0.3, wFrac: 0.2, hFrac: 0.05 },
+    ],
+  };
+
+  it("accepts a submission with no session at all", async () => {
+    const { env } = makeMockEnv();
+    const pdf = await makeValidPdfBytes();
+    const res = await marketplacePublic.request(
+      "/submit",
+      { method: "POST", body: buildForm(pdf, anonMeta) },
+      env,
+      MOCK_CTX
+    );
+    expect(res.status).toBe(200);
+    const body: { ok: true; slug: string } = await res.json();
+    expect(body.slug).toContain("anonymous-roommate-agreement");
+
+    // Still pending — not publicly visible until admin approval, same as the paid path.
+    const publicRes = await marketplacePublic.request(`/${body.slug}`, {}, env, MOCK_CTX);
+    expect(publicRes.status).toBe(404);
+  });
+
+  it("rejects a missing title", async () => {
+    const { env } = makeMockEnv();
+    const pdf = await makeValidPdfBytes();
+    const res = await marketplacePublic.request(
+      "/submit",
+      { method: "POST", body: buildForm(pdf, { ...anonMeta, title: "" }) },
+      env,
+      MOCK_CTX
+    );
+    expect(res.status).toBe(400);
+  });
+
+  it("rejects a field placed outside the document", async () => {
+    const { env } = makeMockEnv();
+    const pdf = await makeValidPdfBytes();
+    const badMeta = { ...anonMeta, fields: [{ id: "f1", signerOrder: 1, page: 0, xFrac: 0.9, yFrac: 0.1, wFrac: 0.5, hFrac: 0.05 }], signerCount: 1 };
+    const res = await marketplacePublic.request("/submit", { method: "POST", body: buildForm(pdf, badMeta) }, env, MOCK_CTX);
+    expect(res.status).toBe(400);
+  });
+
+  it("rate-limits repeated anonymous submissions from the same IP", async () => {
+    const { env } = makeMockEnv();
+    const headers = { "CF-Connecting-IP": "203.0.113.9" };
+    for (let i = 0; i < 3; i++) {
+      const pdf = await makeValidPdfBytes();
+      const res = await marketplacePublic.request(
+        "/submit",
+        { method: "POST", body: buildForm(pdf, { ...anonMeta, title: `Doc ${i}` }), headers },
+        env,
+        MOCK_CTX
+      );
+      expect(res.status).toBe(200);
+    }
+    const pdf = await makeValidPdfBytes();
+    const res = await marketplacePublic.request(
+      "/submit",
+      { method: "POST", body: buildForm(pdf, { ...anonMeta, title: "One too many" }), headers },
+      env,
+      MOCK_CTX
+    );
+    expect(res.status).toBe(429);
+  });
+
+  it("also works for a signed-in (even non-paid) account, attributing the submission", async () => {
+    const { env } = makeMockEnv();
+    const token = await createSession(env, MOCK_CTX, "acct-free", "free@example.com", false, false, null, null);
+    const headers = { Cookie: `${SESSION_COOKIE_NAME}=${token}` };
+    const pdf = await makeValidPdfBytes();
+    const res = await marketplacePublic.request(
+      "/submit",
+      { method: "POST", body: buildForm(pdf, anonMeta), headers },
+      env,
+      MOCK_CTX
+    );
+    expect(res.status).toBe(200);
+  });
+});
+
 describe("marketplace admin review flow", () => {
   it("rejects a non-admin from the pending queue", async () => {
     const { env } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com" });

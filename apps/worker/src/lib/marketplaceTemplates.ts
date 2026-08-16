@@ -86,7 +86,7 @@ export async function countPendingForAccount(env: Env, accountId: string): Promi
 
 export async function submitTemplate(
   env: Env,
-  accountId: string,
+  accountId: string | null,
   input: {
     sourceTemplateId: string | null;
     title: string;
@@ -98,9 +98,13 @@ export async function submitTemplate(
     pdfBytes: Uint8Array;
   }
 ): Promise<{ ok: true; id: string; slug: string } | { ok: false; error: string }> {
-  const pending = await countPendingForAccount(env, accountId);
-  if (pending >= MAX_PENDING_PER_ACCOUNT) {
-    return { ok: false, error: `You already have ${MAX_PENDING_PER_ACCOUNT} submissions awaiting review.` };
+  // Anonymous submitters have no account to cap by — the route layer enforces a per-IP rate
+  // limit instead (see checkMarketplaceSubmitRateLimit).
+  if (accountId) {
+    const pending = await countPendingForAccount(env, accountId);
+    if (pending >= MAX_PENDING_PER_ACCOUNT) {
+      return { ok: false, error: `You already have ${MAX_PENDING_PER_ACCOUNT} submissions awaiting review.` };
+    }
   }
 
   const db = requireDb(env);

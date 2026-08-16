@@ -438,6 +438,35 @@ export interface MarketplaceSubmission {
   reviewedAt: string | null;
 }
 
+/** Open to everyone — signed in or not — unlike submitTemplateToMarketplace below, which only
+ *  works from an existing paid-tier saved template. Takes the PDF+fields straight out of
+ *  Prepare.tsx and submits it for review directly. */
+export async function submitDocumentToMarketplace(input: {
+  pdf: File;
+  title: string;
+  signerCount: number;
+  fields: DocField[];
+  category?: string;
+  description?: string;
+  turnstileToken?: string;
+}): Promise<{ ok: true; id: string; slug: string }> {
+  const form = new FormData();
+  form.set("pdf", input.pdf);
+  form.set(
+    "meta",
+    JSON.stringify({
+      title: input.title,
+      signerCount: input.signerCount,
+      fields: input.fields,
+      category: input.category,
+      description: input.description,
+      turnstileToken: input.turnstileToken,
+    })
+  );
+  const res = await apiFetch("/api/marketplace/submit", { method: "POST", body: form });
+  return asJson(res);
+}
+
 export async function submitTemplateToMarketplace(input: {
   templateId: string;
   title?: string;

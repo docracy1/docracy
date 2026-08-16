@@ -15,6 +15,7 @@ import {
   fetchTemplates,
   fetchTemplateUsage,
   generateContract,
+  submitDocumentToMarketplace,
 } from "../lib/api";
 import type { Account, ContactSummary, ContractRisk, TemplateSummary, TemplateUsageEntry } from "../lib/api";
 import { base64ToBytes } from "../lib/base64";
@@ -201,6 +202,11 @@ export default function Prepare() {
   const [savingTemplate, setSavingTemplate] = useState(false);
   const [templateSaveError, setTemplateSaveError] = useState<string | null>(null);
   const [templateSavedName, setTemplateSavedName] = useState<string | null>(null);
+  const [showMarketplaceInput, setShowMarketplaceInput] = useState(false);
+  const [marketplaceTitleInput, setMarketplaceTitleInput] = useState("");
+  const [submittingToMarketplace, setSubmittingToMarketplace] = useState(false);
+  const [marketplaceSubmitError, setMarketplaceSubmitError] = useState<string | null>(null);
+  const [marketplaceSubmittedSlug, setMarketplaceSubmittedSlug] = useState<string | null>(null);
   /** Paid custom retention — default matches free/hard-coded DOC_EXPIRY_DAYS. */
   const [ttlDays, setTtlDays] = useState(DOC_EXPIRY_DAYS);
 
@@ -950,6 +956,27 @@ export default function Prepare() {
       setTemplateSaveError(err instanceof Error ? err.message : t("common.error"));
     } finally {
       setSavingTemplate(false);
+    }
+  };
+
+  const onSubmitToMarketplace = async () => {
+    if (!file || fields.length === 0 || !marketplaceTitleInput.trim() || signersWithoutFields.length > 0) return;
+    setSubmittingToMarketplace(true);
+    setMarketplaceSubmitError(null);
+    try {
+      const result = await submitDocumentToMarketplace({
+        pdf: file,
+        title: marketplaceTitleInput.trim(),
+        signerCount: signers.length,
+        fields,
+      });
+      setMarketplaceSubmittedSlug(result.slug);
+      setShowMarketplaceInput(false);
+      setMarketplaceTitleInput("");
+    } catch (err) {
+      setMarketplaceSubmitError(err instanceof Error ? err.message : t("common.error"));
+    } finally {
+      setSubmittingToMarketplace(false);
     }
   };
 
@@ -2229,6 +2256,51 @@ export default function Prepare() {
                 <p style={{ fontSize: 11, marginTop: 8, marginBottom: 0 }}>
                   {t("prepare.saveTemplateHint")}
                 </p>
+              </div>
+            )}
+
+            {viewMode === "fields" && fields.length > 0 && (
+              <div className="card">
+                <h3 className="prepare-sidebar-heading">{t("prepare.submitMarketplace")}</h3>
+                {marketplaceSubmittedSlug ? (
+                  <p style={{ marginBottom: 0 }}>{t("prepare.marketplaceSubmitted")}</p>
+                ) : showMarketplaceInput ? (
+                  <>
+                    <p style={{ fontSize: 12, color: "var(--danger)", marginTop: 0 }}>
+                      {t("dash.marketplaceWarning")}
+                    </p>
+                    <input
+                      className="form-input"
+                      style={{ width: "100%", marginBottom: 8 }}
+                      placeholder={t("prepare.templateNamePh")}
+                      value={marketplaceTitleInput}
+                      onChange={(e) => setMarketplaceTitleInput(e.target.value)}
+                    />
+                    {marketplaceSubmitError && (
+                      <p style={{ color: "var(--danger)", fontSize: 13 }}>{marketplaceSubmitError}</p>
+                    )}
+                    {signersWithoutFields.length > 0 && (
+                      <p style={{ color: "var(--danger)", fontSize: 13 }}>
+                        {t("prepare.templateMissingField", {
+                          names: signersWithoutFields.map((s) => signerLabel(s.order)).join(", "),
+                        })}
+                      </p>
+                    )}
+                    <button
+                      className="btn-secondary"
+                      style={{ width: "100%" }}
+                      disabled={submittingToMarketplace || !marketplaceTitleInput.trim() || signersWithoutFields.length > 0}
+                      onClick={onSubmitToMarketplace}
+                    >
+                      {submittingToMarketplace ? t("dash.marketplaceSubmitting") : t("dash.marketplaceConfirm")}
+                    </button>
+                  </>
+                ) : (
+                  <button className="btn-secondary" style={{ width: "100%" }} onClick={() => setShowMarketplaceInput(true)}>
+                    {t("prepare.submitMarketplace")}
+                  </button>
+                )}
+                <p style={{ fontSize: 11, marginTop: 8, marginBottom: 0 }}>{t("prepare.submitMarketplaceHint")}</p>
               </div>
             )}
 

@@ -1,6 +1,9 @@
 import { Hono } from "hono";
-import { requirePaidAccount, requireAdminAccount, type AccountContext } from "../lib/auth";
+import { PDFDocument } from "pdf-lib";
+import { requirePaidAccount, requireAdminAccount, optionalAccount, type AccountContext } from "../lib/auth";
 import { getTemplate } from "../lib/templates";
+import { checkMarketplaceSubmitRateLimit } from "../lib/ratelimit";
+import { verifyTurnstile } from "../lib/turnstile";
 import {
   submitTemplate,
   listSubmissionsForAccount,
@@ -11,12 +14,13 @@ import {
   reviewSubmission,
 } from "../lib/marketplaceTemplates";
 import { bytesToBase64 } from "../lib/base64";
-import type { Env } from "@docracy/shared";
+import type { DocField, Env } from "@docracy/shared";
 
 type Variables = { account: AccountContext | null };
 
 const MAX_TITLE_LENGTH = 100;
 const MAX_DESCRIPTION_LENGTH = 400;
+const MAX_PDF_BYTES = 15 * 1024 * 1024; // 15MB, same limit as document creation and saved templates
 
 // Mounted at /api/account/marketplace — paid accounts submitting/checking their own submissions.
 export const marketplaceAccount = new Hono<{ Bindings: Env; Variables: Variables }>();
@@ -77,6 +81,111 @@ marketplacePublic.get("/", async (c) => {
   const category = c.req.query("category") || undefined;
   const templates = await listApproved(c.env, category);
   return c.json({ templates });
+});
+
+interface AnonymousSubmitMeta {
+  title: string;
+  category?: string;
+  description?: string;
+  signerCount: number;
+  fields: DocField[];
+  turnstileToken?: string;
+}
+
+/** Open to everyone — signed in or not — unlike POST /api/account/marketplace/submit above,
+ *  which only works from an *existing* paid-tier saved template. This takes a document straight
+ *  out of Prepare.tsx (any user, any tier) and submits it for review directly, using the same
+ *  geometry/signer validation as apps/worker/src/routes/templates.ts's save-a-template endpoint. */
+marketplacePublic.post("/submit", optionalAccount, async (c) => {
+  if (!c.env.DOCRACY_DB) return c.json({ error: "Not available on this deployment yet." }, 501);
+
+  const ip = c.req.header("CF-Connecting-IP") ?? "unknown";
+  const allowed = await checkMarketplaceSubmitRateLimit(c.env, ip);
+  if (!allowed) return c.json({ error: "Too many submissions from this address. Try again later." }, 429);
+
+  const form = await c.req.parseBody();
+  const pdfFile = form["pdf"];
+  const metaRaw = form["meta"];
+  if (!(pdfFile instanceof File) || typeof metaRaw !== "string") {
+    return c.json({ error: "Expected multipart form with 'pdf' file and 'meta' JSON field" }, 400);
+  }
+  if (pdfFile.size > MAX_PDF_BYTES) {
+    return c.json({ error: `PDF must be under ${MAX_PDF_BYTES / (1024 * 1024)}MB` }, 400);
+  }
+
+  const pdfBytes = new Uint8Array(await pdfFile.arrayBuffer());
+  const header = new TextDecoder().decode(pdfBytes.slice(0, 5));
+  if (header !== "%PDF-") {
+    return c.json({ error: "That file doesn't look like a valid PDF" }, 400);
+  }
+
+  let pageCount: number;
+  try {
+    const probe = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
+    pageCount = probe.getPageCount();
+  } catch {
+    return c.json({ error: "That PDF couldn't be read — it may be corrupted" }, 400);
+  }
+
+  let meta: AnonymousSubmitMeta;
+  try {
+    meta = JSON.parse(metaRaw);
+  } catch {
+    return c.json({ error: "Invalid 'meta' JSON" }, 400);
+  }
+
+  const turnstileOk = await verifyTurnstile(c.env, meta.turnstileToken, ip);
+  if (!turnstileOk) return c.json({ error: "Verification failed — please try again." }, 400);
+
+  const title = meta.title?.trim() ?? "";
+  if (!title) return c.json({ error: "A title is required" }, 400);
+  if (title.length > MAX_TITLE_LENGTH) return c.json({ error: `Title must be under ${MAX_TITLE_LENGTH} characters` }, 400);
+  const description = (meta.description ?? "").trim();
+  if (description.length > MAX_DESCRIPTION_LENGTH) {
+    return c.json({ error: `Description must be under ${MAX_DESCRIPTION_LENGTH} characters` }, 400);
+  }
+  if (!Number.isInteger(meta.signerCount) || meta.signerCount < 1) {
+    return c.json({ error: "signerCount must be a positive integer" }, 400);
+  }
+  if (!meta.fields?.every((f) => f.signerOrder >= 1 && f.signerOrder <= meta.signerCount)) {
+    return c.json({ error: "A field is assigned to a signer that doesn't exist" }, 400);
+  }
+  const isFrac = (n: unknown): n is number => typeof n === "number" && n >= 0 && n <= 1;
+  const geometryOk = meta.fields?.every(
+    (f) =>
+      Number.isInteger(f.page) &&
+      f.page >= 0 &&
+      f.page < pageCount &&
+      isFrac(f.xFrac) &&
+      isFrac(f.yFrac) &&
+      isFrac(f.wFrac) &&
+      isFrac(f.hFrac) &&
+      f.xFrac + f.wFrac <= 1 &&
+      f.yFrac + f.hFrac <= 1
+  );
+  if (!geometryOk) {
+    return c.json({ error: "A signature field is positioned outside the document" }, 400);
+  }
+  const signerOrdersWithFields = new Set(meta.fields.map((f) => f.signerOrder));
+  for (let order = 1; order <= meta.signerCount; order++) {
+    if (!signerOrdersWithFields.has(order)) {
+      return c.json({ error: `Signer ${order} doesn't have a signature field placed yet` }, 400);
+    }
+  }
+
+  const account = c.get("account");
+  const result = await submitTemplate(c.env, account?.workspaceId ?? null, {
+    sourceTemplateId: null,
+    title,
+    category: meta.category?.trim() || null,
+    description,
+    signerCount: meta.signerCount,
+    pageCount,
+    fields: meta.fields,
+    pdfBytes,
+  });
+  if (!result.ok) return c.json({ error: result.error }, 400);
+  return c.json({ ok: true, id: result.id, slug: result.slug });
 });
 
 marketplacePublic.get("/:slug/pdf", async (c) => {
