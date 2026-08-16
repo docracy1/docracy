@@ -919,30 +919,39 @@ const es: Messages = {
   "docs.templatesFree.title": "Plantillas gratis",
   "freeTemplates.allTemplates": "Todas las plantillas",
   "freeTemplates.featuredTitle": "Plantillas destacadas",
-  "freeTemplates.cat.clientContracts": "Contratos con clientes",
-  "freeTemplates.cat.clientContracts.desc":
-    "Las plantillas de contrato con clientes definen alcance, plazos y condiciones de pago para que ambas partes sepan exactamente qué se entrega y cuándo.",
+  "freeTemplates.cat.realEstate": "Bienes Raíces",
+  "freeTemplates.cat.realEstate.desc":
+    "Las plantillas de arrendamiento, alquiler y subarriendo cubren renta, depósito y responsabilidades para que propietarios e inquilinos empiecen con las mismas reglas claras.",
+  "freeTemplates.cat.will": "Testamento",
+  "freeTemplates.cat.will.desc": "Las plantillas de testamento registran cómo quieres que se maneje tu patrimonio — un documento base, no un sustituto de asesoría en planificación patrimonial.",
+  "freeTemplates.cat.poa": "Poder Notarial",
+  "freeTemplates.cat.poa.desc":
+    "Las plantillas de poder notarial y autorización otorgan a una persona designada la autoridad para actuar en tu nombre, con límites claros y fecha de vencimiento.",
+  "freeTemplates.cat.personalProperty": "Propiedad Personal",
+  "freeTemplates.cat.personalProperty.desc": "Plantillas para prestar, alquilar o gestionar objetos y equipo personal que posees.",
+  "freeTemplates.cat.nonDisclosure": "Confidencialidad",
+  "freeTemplates.cat.nonDisclosure.desc":
+    "Las plantillas de confidencialidad protegen información compartida — precios, planes de producto, estrategia — mientras dos partes evalúan un acuerdo o alianza.",
+  "freeTemplates.cat.employment": "Empleo",
+  "freeTemplates.cat.employment.desc":
+    "Las plantillas de empleo cubren cartas de oferta, incorporación, política de trabajo remoto, no competencia y separación — el papeleo de contratar y gestionar personal.",
+  "freeTemplates.cat.salePurchase": "Compraventa",
+  "freeTemplates.cat.salePurchase.desc":
+    "Las plantillas de compraventa fijan precio, entrega y condiciones de pago al comprar o vender bienes y servicios.",
+  "freeTemplates.cat.consulting": "Consultoría",
+  "freeTemplates.cat.consulting.desc":
+    "Las plantillas de consultoría y servicios definen alcance, plazos y condiciones de pago para que ambas partes sepan exactamente qué se entrega y cuándo.",
+  "freeTemplates.cat.incorporation": "Constitución de Empresas",
+  "freeTemplates.cat.incorporation.desc": "Plantillas de constitución empresarial para sociedades y LLC que definen cómo se estructura y opera la empresa.",
+  "freeTemplates.cat.funding": "Financiamiento",
+  "freeTemplates.cat.funding.desc": "Las plantillas de préstamo y pagaré dejan por escrito el principal, los intereses y las condiciones de pago entre prestamista y prestatario.",
+  "freeTemplates.cat.ip": "Propiedad Intelectual",
+  "freeTemplates.cat.ip.desc": "Plantillas para proteger o hacer valer derechos sobre lo que has creado — incluyendo cartas de cese y desistimiento.",
+  "freeTemplates.cat.equity": "Participación Accionaria",
+  "freeTemplates.cat.equity.desc": "Plantillas sobre participaciones y acuerdos de capital entre fundadores, socios o inversionistas.",
   "freeTemplates.cat.compliance": "Documentos de cumplimiento",
   "freeTemplates.cat.compliance.desc":
     "Las plantillas de cumplimiento dejan un registro firmado y fechado de que alguien revisó y aceptó una política u obligación de manejo de datos.",
-  "freeTemplates.cat.ndas": "NDAs",
-  "freeTemplates.cat.ndas.desc":
-    "Las plantillas de confidencialidad protegen información compartida — precios, planes de producto, estrategia — mientras dos partes evalúan un acuerdo o alianza.",
-  "freeTemplates.cat.onboarding": "Documentos de incorporación",
-  "freeTemplates.cat.onboarding.desc":
-    "Las plantillas de incorporación confirman que un nuevo empleado o contratista recibió políticas, equipo y accesos antes de su primer día.",
-  "freeTemplates.cat.payment": "Acuerdos de pago",
-  "freeTemplates.cat.payment.desc":
-    "Las plantillas de acuerdo de pago dejan por escrito un monto adeudado, la fecha de vencimiento y el método de pago — con o sin calendario de cuotas.",
-  "freeTemplates.cat.rentalLease": "Arrendamientos y contratos de alquiler",
-  "freeTemplates.cat.rentalLease.desc":
-    "Las plantillas de arrendamiento cubren renta, depósito y responsabilidades para que propietarios e inquilinos empiecen con las mismas reglas claras.",
-  "freeTemplates.cat.vendorAgreements": "Acuerdos con proveedores",
-  "freeTemplates.cat.vendorAgreements.desc":
-    "Las plantillas de acuerdo con proveedores fijan precio, entrega y condiciones de calidad al comprar bienes o servicios a un proveedor.",
-  "freeTemplates.cat.workOrders": "Órdenes de trabajo",
-  "freeTemplates.cat.workOrders.desc":
-    "Las plantillas de orden de trabajo confirman el trabajo, los materiales y el costo estimado antes de que el proveedor de servicios empiece.",
   "freeTemplates.categoriesToggle": "Categorías",
   "freeTemplates.utilityBarLabel": "Marketplace",
   "freeTemplates.categoriesIntro": "Ve directo al tipo de acuerdo que necesitas.",

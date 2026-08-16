@@ -26,27 +26,41 @@ function ProvenanceBadge({ kind }: { kind: "official" | "community" }) {
   );
 }
 
+// Category taxonomy deliberately matches the original docracy.com's own tag list (Real Estate,
+// Will, Power of Attorney, Personal Property, Non-Disclosure, Employment, Sale and Purchase,
+// Consulting, Incorporation, Funding, Intellectual Property, Equity), plus "Compliance Documents"
+// kept as an addition since nothing in that set fits privacy/tax-compliance paperwork well.
 const CATEGORY_KEYS: Record<string, string> = {
-  NDAs: "freeTemplates.cat.ndas",
-  "Client Contracts": "freeTemplates.cat.clientContracts",
-  "Work Orders": "freeTemplates.cat.workOrders",
-  "Vendor Agreements": "freeTemplates.cat.vendorAgreements",
-  "Rental & Lease Agreements": "freeTemplates.cat.rentalLease",
-  "Onboarding Documents": "freeTemplates.cat.onboarding",
-  "Payment Agreements": "freeTemplates.cat.payment",
+  "Real Estate": "freeTemplates.cat.realEstate",
+  Will: "freeTemplates.cat.will",
+  "Power of Attorney": "freeTemplates.cat.poa",
+  "Personal Property": "freeTemplates.cat.personalProperty",
+  "Non-Disclosure": "freeTemplates.cat.nonDisclosure",
+  Employment: "freeTemplates.cat.employment",
+  "Sale and Purchase": "freeTemplates.cat.salePurchase",
+  Consulting: "freeTemplates.cat.consulting",
+  Incorporation: "freeTemplates.cat.incorporation",
+  Funding: "freeTemplates.cat.funding",
+  "Intellectual Property": "freeTemplates.cat.ip",
+  Equity: "freeTemplates.cat.equity",
   "Compliance Documents": "freeTemplates.cat.compliance",
 };
 
 // Anchor ids for the category-description grid's links to jump straight to that category's real
 // template cards further down the page — same key suffix as CATEGORY_KEYS, just slug-cased.
 const CATEGORY_ANCHORS: Record<string, string> = {
-  NDAs: "cat-ndas",
-  "Client Contracts": "cat-client-contracts",
-  "Work Orders": "cat-work-orders",
-  "Vendor Agreements": "cat-vendor-agreements",
-  "Rental & Lease Agreements": "cat-rental-lease",
-  "Onboarding Documents": "cat-onboarding",
-  "Payment Agreements": "cat-payment",
+  "Real Estate": "cat-real-estate",
+  Will: "cat-will",
+  "Power of Attorney": "cat-poa",
+  "Personal Property": "cat-personal-property",
+  "Non-Disclosure": "cat-non-disclosure",
+  Employment: "cat-employment",
+  "Sale and Purchase": "cat-sale-purchase",
+  Consulting: "cat-consulting",
+  Incorporation: "cat-incorporation",
+  Funding: "cat-funding",
+  "Intellectual Property": "cat-ip",
+  Equity: "cat-equity",
   "Compliance Documents": "cat-compliance",
 };
 

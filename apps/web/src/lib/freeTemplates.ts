@@ -28,13 +28,18 @@ export interface FreeTemplate {
 /** Display order for the Template Library's "Recurring templates" section (Dashboard.tsx's
  *  Quick Actions and the in-editor template picker use the same list). */
 export const RECURRING_CATEGORIES = [
-  "NDAs",
-  "Client Contracts",
-  "Work Orders",
-  "Vendor Agreements",
-  "Rental & Lease Agreements",
-  "Onboarding Documents",
-  "Payment Agreements",
+  "Real Estate",
+  "Will",
+  "Power of Attorney",
+  "Personal Property",
+  "Non-Disclosure",
+  "Employment",
+  "Sale and Purchase",
+  "Consulting",
+  "Incorporation",
+  "Funding",
+  "Intellectual Property",
+  "Equity",
   "Compliance Documents",
 ];
 
@@ -79,7 +84,7 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
     pdfPath: "/free-templates/mutual-nda.pdf",
     fields: standardSignatureFields(2, 2),
     featured: true,
-    recurringCategory: "NDAs",
+    recurringCategory: "Non-Disclosure",
   },
   {
     slug: "independent-contractor-agreement",
@@ -94,6 +99,7 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
     signerLabels: ["Company", "Contractor"],
     pdfPath: "/free-templates/independent-contractor-agreement.pdf",
     fields: standardSignatureFields(2, 2),
+    recurringCategory: "Consulting",
   },
   {
     slug: "offer-letter",
@@ -106,6 +112,7 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
     signerLabels: ["Candidate", "Company Representative"],
     pdfPath: "/free-templates/offer-letter.pdf",
     fields: standardSignatureFields(2, 2),
+    recurringCategory: "Employment",
   },
   {
     slug: "remote-work-policy",
@@ -119,6 +126,7 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
     signerLabels: ["Employee"],
     pdfPath: "/free-templates/remote-work-policy.pdf",
     fields: standardSignatureFields(1, 2),
+    recurringCategory: "Employment",
   },
   {
     slug: "freelance-service-agreement",
@@ -133,6 +141,7 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
     signerLabels: ["Client", "Freelancer"],
     pdfPath: "/free-templates/freelance-service-agreement.pdf",
     fields: standardSignatureFields(2, 2),
+    recurringCategory: "Consulting",
   },
   {
     slug: "unilateral-nda",
@@ -145,7 +154,7 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
     signerLabels: ["Disclosing Party", "Receiving Party"],
     pdfPath: "/free-templates/unilateral-nda.pdf",
     fields: standardSignatureFields(2, 2),
-    recurringCategory: "NDAs",
+    recurringCategory: "Non-Disclosure",
   },
   {
     slug: "simple-commercial-lease-agreement",
@@ -158,6 +167,7 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
     signerLabels: ["Landlord", "Tenant"],
     pdfPath: "/free-templates/simple-commercial-lease-agreement.pdf",
     fields: standardSignatureFields(2, 2),
+    recurringCategory: "Real Estate",
   },
   {
     slug: "non-compete-non-solicitation-agreement",
@@ -170,6 +180,7 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
     signerLabels: ["Company", "Individual"],
     pdfPath: "/free-templates/non-compete-non-solicitation-agreement.pdf",
     fields: standardSignatureFields(2, 2),
+    recurringCategory: "Employment",
   },
   {
     slug: "consulting-agreement",
@@ -183,6 +194,7 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
     signerLabels: ["Client", "Consultant"],
     pdfPath: "/free-templates/consulting-agreement.pdf",
     fields: standardSignatureFields(2, 2),
+    recurringCategory: "Consulting",
   },
   {
     slug: "vendor-agreement",
@@ -195,7 +207,7 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
     signerLabels: ["Company", "Vendor"],
     pdfPath: "/free-templates/vendor-agreement.pdf",
     fields: standardSignatureFields(2, 2),
-    recurringCategory: "Vendor Agreements",
+    recurringCategory: "Sale and Purchase",
   },
   {
     slug: "separation-agreement",
@@ -210,6 +222,7 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
     signerLabels: ["Company Representative", "Employee"],
     pdfPath: "/free-templates/separation-agreement.pdf",
     fields: standardSignatureFields(2, 2),
+    recurringCategory: "Employment",
   },
   {
     slug: "equipment-rental-agreement",
@@ -223,7 +236,7 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
     signerLabels: ["Owner", "Renter"],
     pdfPath: "/free-templates/equipment-rental-agreement.pdf",
     fields: standardSignatureFields(2, 2),
-    recurringCategory: "Rental & Lease Agreements",
+    recurringCategory: "Personal Property",
   },
   {
     slug: "partnership-agreement",
@@ -236,6 +249,7 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
     signerLabels: ["Partner A", "Partner B"],
     pdfPath: "/free-templates/partnership-agreement.pdf",
     fields: standardSignatureFields(2, 2),
+    recurringCategory: "Incorporation",
   },
   {
     slug: "sales-agreement",
@@ -248,6 +262,7 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
     signerLabels: ["Seller", "Buyer"],
     pdfPath: "/free-templates/sales-agreement.pdf",
     fields: standardSignatureFields(2, 1),
+    recurringCategory: "Sale and Purchase",
   },
   {
     slug: "referral-agreement",
@@ -260,6 +275,7 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
     signerLabels: ["Company", "Referrer"],
     pdfPath: "/free-templates/referral-agreement.pdf",
     fields: standardSignatureFields(2, 2),
+    recurringCategory: "Consulting",
   },
 ];
 
@@ -283,6 +299,7 @@ FREE_TEMPLATES.push(
       { id: "ft2", signerOrder: 2, page: 2, xFrac: 0.2823366013071895, yFrac: 0.06060606060606061, wFrac: 0.26, hFrac: 0.07, type: "signature" },
       { id: "ft3", signerOrder: 2, page: 2, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" },
     ],
+    recurringCategory: "Employment",
   },
   {
     slug: "rental-agreement",
@@ -300,7 +317,7 @@ FREE_TEMPLATES.push(
       { id: "ft2", signerOrder: 2, page: 2, xFrac: 0.2561233660130719, yFrac: 0.06060606060606061, wFrac: 0.26, hFrac: 0.07, type: "signature" },
       { id: "ft3", signerOrder: 2, page: 2, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" },
     ],
-    recurringCategory: "Rental & Lease Agreements",
+    recurringCategory: "Real Estate",
   },
   {
     slug: "authorization-form",
@@ -318,6 +335,7 @@ FREE_TEMPLATES.push(
       { id: "ft2", signerOrder: 2, page: 1, xFrac: 0.4571290849673203, yFrac: 0.5894191919191921, wFrac: 0.26, hFrac: 0.07, type: "signature" },
       { id: "ft3", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.68479797979798, wFrac: 0.16, hFrac: 0.04, type: "date" },
     ],
+    recurringCategory: "Power of Attorney",
   },
   {
     slug: "purchase-order",
@@ -335,6 +353,7 @@ FREE_TEMPLATES.push(
       { id: "ft2", signerOrder: 2, page: 1, xFrac: 0.24776143790849672, yFrac: 0.7427020202020205, wFrac: 0.26, hFrac: 0.07, type: "signature" },
       { id: "ft3", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.8380808080808083, wFrac: 0.16, hFrac: 0.04, type: "date" },
     ],
+    recurringCategory: "Sale and Purchase",
   },
   {
     slug: "work-order",
@@ -352,7 +371,7 @@ FREE_TEMPLATES.push(
       { id: "ft2", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.7223737373737377, wFrac: 0.26, hFrac: 0.07, type: "signature" },
       { id: "ft3", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.8177525252525255, wFrac: 0.16, hFrac: 0.04, type: "date" },
     ],
-    recurringCategory: "Work Orders",
+    recurringCategory: "Consulting",
   },
   {
     slug: "delivery-confirmation",
@@ -370,7 +389,7 @@ FREE_TEMPLATES.push(
       { id: "ft2", signerOrder: 2, page: 1, xFrac: 0.27805228758169936, yFrac: 0.29320707070707075, wFrac: 0.26, hFrac: 0.07, type: "signature" },
       { id: "ft3", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38858585858585865, wFrac: 0.16, hFrac: 0.04, type: "date" },
     ],
-    recurringCategory: "Work Orders",
+    recurringCategory: "Sale and Purchase",
   }
 );
 
@@ -394,7 +413,7 @@ FREE_TEMPLATES.push(
       { id: "ft2", signerOrder: 2, page: 2, xFrac: 0.24776143790849672, yFrac: 0.06060606060606061, wFrac: 0.26, hFrac: 0.07, type: "signature" },
       { id: "ft3", signerOrder: 2, page: 2, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" },
     ],
-    recurringCategory: "Client Contracts",
+    recurringCategory: "Consulting",
   },
   {
     slug: "service-agreement",
@@ -412,7 +431,7 @@ FREE_TEMPLATES.push(
       { id: "ft2", signerOrder: 2, page: 2, xFrac: 0.24776143790849672, yFrac: 0.06060606060606061, wFrac: 0.26, hFrac: 0.07, type: "signature" },
       { id: "ft3", signerOrder: 2, page: 2, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" },
     ],
-    recurringCategory: "Client Contracts",
+    recurringCategory: "Consulting",
   },
   {
     slug: "scope-of-work",
@@ -430,7 +449,7 @@ FREE_TEMPLATES.push(
       { id: "ft2", signerOrder: 2, page: 1, xFrac: 0.28725980392156863, yFrac: 0.6717424242424245, wFrac: 0.26, hFrac: 0.07, type: "signature" },
       { id: "ft3", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.7671212121212123, wFrac: 0.16, hFrac: 0.04, type: "date" },
     ],
-    recurringCategory: "Client Contracts",
+    recurringCategory: "Consulting",
   },
   {
     slug: "supplier-terms",
@@ -448,7 +467,7 @@ FREE_TEMPLATES.push(
       { id: "ft2", signerOrder: 2, page: 2, xFrac: 0.26865686274509804, yFrac: 0.06060606060606061, wFrac: 0.26, hFrac: 0.07, type: "signature" },
       { id: "ft3", signerOrder: 2, page: 2, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" },
     ],
-    recurringCategory: "Vendor Agreements",
+    recurringCategory: "Sale and Purchase",
   },
   {
     slug: "employee-onboarding-agreement",
@@ -466,7 +485,7 @@ FREE_TEMPLATES.push(
       { id: "ft2", signerOrder: 2, page: 1, xFrac: 0.2823366013071895, yFrac: 0.609747474747475, wFrac: 0.26, hFrac: 0.07, type: "signature" },
       { id: "ft3", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.7051262626262628, wFrac: 0.16, hFrac: 0.04, type: "date" },
     ],
-    recurringCategory: "Onboarding Documents",
+    recurringCategory: "Employment",
   },
   {
     slug: "contractor-onboarding-agreement",
@@ -484,7 +503,7 @@ FREE_TEMPLATES.push(
       { id: "ft2", signerOrder: 2, page: 1, xFrac: 0.28725980392156863, yFrac: 0.6717424242424245, wFrac: 0.26, hFrac: 0.07, type: "signature" },
       { id: "ft3", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.7671212121212123, wFrac: 0.16, hFrac: 0.04, type: "date" },
     ],
-    recurringCategory: "Onboarding Documents",
+    recurringCategory: "Consulting",
   },
   {
     slug: "payment-terms-agreement",
@@ -502,7 +521,7 @@ FREE_TEMPLATES.push(
       { id: "ft2", signerOrder: 2, page: 1, xFrac: 0.251312908496732, yFrac: 0.4058333333333335, wFrac: 0.26, hFrac: 0.07, type: "signature" },
       { id: "ft3", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.5012121212121214, wFrac: 0.16, hFrac: 0.04, type: "date" },
     ],
-    recurringCategory: "Payment Agreements",
+    recurringCategory: "Sale and Purchase",
   },
   {
     slug: "installment-agreement",
@@ -520,7 +539,7 @@ FREE_TEMPLATES.push(
       { id: "ft2", signerOrder: 2, page: 1, xFrac: 0.26655228758169935, yFrac: 0.4971212121212123, wFrac: 0.26, hFrac: 0.07, type: "signature" },
       { id: "ft3", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.5925000000000002, wFrac: 0.16, hFrac: 0.04, type: "date" },
     ],
-    recurringCategory: "Payment Agreements",
+    recurringCategory: "Sale and Purchase",
   },
   {
     slug: "privacy-acknowledgement",
@@ -579,6 +598,7 @@ FREE_TEMPLATES.push(
       { id: "ft1", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.4481565656565658, wFrac: 0.16, hFrac: 0.04, type: "date" },
     ],
     featured: true,
+    recurringCategory: "Funding",
   },
   {
     slug: "llc-operating-agreement",
@@ -597,6 +617,7 @@ FREE_TEMPLATES.push(
       { id: "ft3", signerOrder: 2, page: 2, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" },
     ],
     featured: true,
+    recurringCategory: "Incorporation",
   },
   {
     slug: "sublease-agreement",
@@ -614,7 +635,7 @@ FREE_TEMPLATES.push(
       { id: "ft2", signerOrder: 2, page: 2, xFrac: 0.2853995098039216, yFrac: 0.06060606060606061, wFrac: 0.26, hFrac: 0.07, type: "signature" },
       { id: "ft3", signerOrder: 2, page: 2, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" },
     ],
-    recurringCategory: "Rental & Lease Agreements",
+    recurringCategory: "Real Estate",
   },
   {
     slug: "liability-waiver",
@@ -648,7 +669,7 @@ FREE_TEMPLATES.push(
       { id: "ft2", signerOrder: 2, page: 1, xFrac: 0.3093766339869281, yFrac: 0.6717424242424245, wFrac: 0.26, hFrac: 0.07, type: "signature" },
       { id: "ft3", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.7671212121212123, wFrac: 0.16, hFrac: 0.04, type: "date" },
     ],
-    recurringCategory: "Rental & Lease Agreements",
+    recurringCategory: "Real Estate",
   },
   {
     slug: "cash-receipt",
@@ -664,7 +685,7 @@ FREE_TEMPLATES.push(
       { id: "ft0", signerOrder: 1, page: 1, xFrac: 0.27805228758169936, yFrac: 0.06060606060606061, wFrac: 0.26, hFrac: 0.07, type: "signature" },
       { id: "ft1", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" },
     ],
-    recurringCategory: "Payment Agreements",
+    recurringCategory: "Sale and Purchase",
   },
   {
     slug: "construction-contract",
@@ -682,7 +703,7 @@ FREE_TEMPLATES.push(
       { id: "ft2", signerOrder: 2, page: 2, xFrac: 0.28725980392156863, yFrac: 0.06060606060606061, wFrac: 0.26, hFrac: 0.07, type: "signature" },
       { id: "ft3", signerOrder: 2, page: 2, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" },
     ],
-    recurringCategory: "Work Orders",
+    recurringCategory: "Consulting",
   },
   {
     slug: "cease-and-desist-letter",
@@ -698,6 +719,7 @@ FREE_TEMPLATES.push(
       { id: "ft0", signerOrder: 1, page: 1, xFrac: 0.2603137254901961, yFrac: 0.06060606060606061, wFrac: 0.26, hFrac: 0.07, type: "signature" },
       { id: "ft1", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" },
     ],
+    recurringCategory: "Intellectual Property",
   }
 );
 
@@ -726,6 +748,7 @@ FREE_TEMPLATES.push(
       { id: "ft3", signerOrder: 2, page: 2, xFrac: 0.15376960784313726, yFrac: 0.3216666666666668, wFrac: 0.16, hFrac: 0.04, type: "date" },
     ],
     featured: true,
+    recurringCategory: "Sale and Purchase",
   },
   {
     slug: "bill-of-sale",
@@ -747,6 +770,7 @@ FREE_TEMPLATES.push(
       { id: "ft3", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.6341666666666669, wFrac: 0.16, hFrac: 0.04, type: "date" },
     ],
     featured: true,
+    recurringCategory: "Sale and Purchase",
   },
   {
     slug: "loan-agreement",
@@ -767,7 +791,7 @@ FREE_TEMPLATES.push(
       { id: "ft2", signerOrder: 2, page: 2, xFrac: 0.27547794117647056, yFrac: 0.06060606060606061, wFrac: 0.26, hFrac: 0.07, type: "signature" },
       { id: "ft3", signerOrder: 2, page: 2, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" },
     ],
-    recurringCategory: "Payment Agreements",
+    recurringCategory: "Funding",
     featured: true,
   },
   {
@@ -790,6 +814,7 @@ FREE_TEMPLATES.push(
       { id: "ft3", signerOrder: 2, page: 2, xFrac: 0.15376960784313726, yFrac: 0.3216666666666668, wFrac: 0.16, hFrac: 0.04, type: "date" },
     ],
     featured: true,
+    recurringCategory: "Power of Attorney",
   }
 );
 
@@ -836,7 +861,7 @@ FREE_TEMPLATES.push(
       { id: "ft2", signerOrder: 2, page: 0, xFrac: 0.47386, yFrac: 0.875, wFrac: 0.31863, hFrac: 0.028, type: "signature" },
       { id: "ft3", signerOrder: 2, page: 0, xFrac: 0.79248, yFrac: 0.875, wFrac: 0.14706, hFrac: 0.028, type: "date" },
     ],
-    recurringCategory: "Onboarding Documents",
+    recurringCategory: "Employment",
     featured: true,
   }
 );

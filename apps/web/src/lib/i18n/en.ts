@@ -828,30 +828,39 @@ const en: Messages = {
   "feature.related": "Related",
   "freeTemplates.allTemplates": "All templates",
   "freeTemplates.featuredTitle": "Featured templates",
-  "freeTemplates.cat.clientContracts": "Client Contracts",
-  "freeTemplates.cat.clientContracts.desc":
-    "Client contract templates define scope, timeline, and payment terms so both sides know exactly what's being delivered and when.",
+  "freeTemplates.cat.realEstate": "Real Estate",
+  "freeTemplates.cat.realEstate.desc":
+    "Lease, rental, and sublease templates cover rent, deposit, and responsibilities so landlords and tenants — or owners and renters — start on the same page.",
+  "freeTemplates.cat.will": "Will",
+  "freeTemplates.cat.will.desc": "Will templates record how you want your estate handled — a foundational document, not a substitute for estate-planning advice.",
+  "freeTemplates.cat.poa": "Power of Attorney",
+  "freeTemplates.cat.poa.desc":
+    "Power of attorney and authorization templates grant a named person authority to act on your behalf, with clear limits and an expiration date.",
+  "freeTemplates.cat.personalProperty": "Personal Property",
+  "freeTemplates.cat.personalProperty.desc": "Templates for lending, renting, or handling personal items and equipment you own.",
+  "freeTemplates.cat.nonDisclosure": "Non-Disclosure",
+  "freeTemplates.cat.nonDisclosure.desc":
+    "Confidentiality templates protect shared information — pricing, product plans, or strategy — while two parties evaluate a deal or partnership.",
+  "freeTemplates.cat.employment": "Employment",
+  "freeTemplates.cat.employment.desc":
+    "Employment templates cover offer letters, onboarding, remote-work policy, non-competes, and separation — the paperwork around hiring and managing staff.",
+  "freeTemplates.cat.salePurchase": "Sale and Purchase",
+  "freeTemplates.cat.salePurchase.desc":
+    "Sale and purchase templates set pricing, delivery, and payment terms for buying or selling goods and services.",
+  "freeTemplates.cat.consulting": "Consulting",
+  "freeTemplates.cat.consulting.desc":
+    "Consulting and service templates define scope, timeline, and payment terms so both sides know exactly what's being delivered and when.",
+  "freeTemplates.cat.incorporation": "Incorporation",
+  "freeTemplates.cat.incorporation.desc": "Business-formation templates for partnerships and LLCs setting up how the company itself is structured and run.",
+  "freeTemplates.cat.funding": "Funding",
+  "freeTemplates.cat.funding.desc": "Loan and promissory note templates put principal, interest, and repayment terms in writing between lender and borrower.",
+  "freeTemplates.cat.ip": "Intellectual Property",
+  "freeTemplates.cat.ip.desc": "Templates for protecting or enforcing rights over what you've created — including cease-and-desist letters.",
+  "freeTemplates.cat.equity": "Equity",
+  "freeTemplates.cat.equity.desc": "Templates covering ownership stakes and equity arrangements between founders, partners, or investors.",
   "freeTemplates.cat.compliance": "Compliance Documents",
   "freeTemplates.cat.compliance.desc":
     "Compliance templates give you a signed, dated record that someone reviewed and agreed to a policy or data-handling obligation.",
-  "freeTemplates.cat.ndas": "NDAs",
-  "freeTemplates.cat.ndas.desc":
-    "Confidentiality templates protect shared information — pricing, product plans, or strategy — while two parties evaluate a deal or partnership.",
-  "freeTemplates.cat.onboarding": "Onboarding Documents",
-  "freeTemplates.cat.onboarding.desc":
-    "Onboarding templates confirm a new hire or contractor has received policies, equipment, and access before day one.",
-  "freeTemplates.cat.payment": "Payment Agreements",
-  "freeTemplates.cat.payment.desc":
-    "Payment agreement templates put an amount owed, due date, and payment method in writing — with or without an installment schedule.",
-  "freeTemplates.cat.rentalLease": "Rental & Lease Agreements",
-  "freeTemplates.cat.rentalLease.desc":
-    "Lease and rental templates cover rent, deposit, and responsibilities so landlords and tenants — or owners and renters — start on the same page.",
-  "freeTemplates.cat.vendorAgreements": "Vendor Agreements",
-  "freeTemplates.cat.vendorAgreements.desc":
-    "Vendor agreement templates set pricing, delivery, and quality terms for buying goods or services from a supplier.",
-  "freeTemplates.cat.workOrders": "Work Orders",
-  "freeTemplates.cat.workOrders.desc":
-    "Work order templates confirm the job, materials, and cost estimate before a service provider starts the work.",
   "freeTemplates.categoriesToggle": "Categories",
   "freeTemplates.utilityBarLabel": "Marketplace",
   "freeTemplates.categoriesIntro": "Jump straight to the kind of agreement you need.",
