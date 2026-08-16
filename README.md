@@ -2,9 +2,10 @@
 
 Free, fast e-signatures for simple agreements, with a paid workspace for automation, AI, templates, embedded signing, and cloud integrations.
 
-- Live app: [docracy.pages.dev](https://docracy.pages.dev)
-- Worker API: [docracy-worker.rl-d77.workers.dev](https://docracy-worker.rl-d77.workers.dev)
-- MCP server: [docracy-connector.rl-d77.workers.dev/mcp](https://docracy-connector.rl-d77.workers.dev/mcp)
+- Live app: [docracy.io](https://docracy.io)
+- API: [api.docracy.io](https://api.docracy.io)
+- MCP server: [docracy.io/mcp](https://docracy.io/mcp) — connect from Claude, ChatGPT, Grok, Perplexity, or Cursor
+- Templates (open source): [github.com/docracy1/docracy-templates](https://github.com/docracy1/docracy-templates)
 
 ## What Docracy does
 
