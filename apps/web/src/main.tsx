@@ -45,6 +45,7 @@ const SecureElectronicSignature = lazy(() => import("./pages/SecureElectronicSig
 const FreeElectronicSignature = lazy(() => import("./pages/FreeElectronicSignature"));
 const DocracyAlternative = lazy(() => import("./pages/DocracyAlternative"));
 const TemplateMarketplace = lazy(() => import("./pages/TemplateMarketplace"));
+const SubmitTemplate = lazy(() => import("./pages/SubmitTemplate"));
 const Docs = lazy(() => import("./pages/Docs"));
 const Roadmap = lazy(() => import("./pages/Roadmap"));
 const Imprint = lazy(() => import("./pages/Imprint"));
@@ -116,6 +117,8 @@ function AppRoutes() {
       <Route path="/es/alternativa-a-docracy" element={<DocracyAlternative />} />
       <Route path="/template-marketplace" element={<TemplateMarketplace />} />
       <Route path="/es/marketplace-de-plantillas" element={<TemplateMarketplace />} />
+      <Route path="/submit-template" element={<SubmitTemplate />} />
+      <Route path="/es/enviar-plantilla" element={<SubmitTemplate />} />
       <Route path="/admin/analytics" element={<AdminAnalytics />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/bulk-send" element={<BulkSend />} />

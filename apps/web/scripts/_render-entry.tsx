@@ -18,6 +18,7 @@ import SecureElectronicSignature from "../src/pages/SecureElectronicSignature";
 import FreeElectronicSignature from "../src/pages/FreeElectronicSignature";
 import DocracyAlternative from "../src/pages/DocracyAlternative";
 import TemplateMarketplace from "../src/pages/TemplateMarketplace";
+import SubmitTemplate from "../src/pages/SubmitTemplate";
 import About from "../src/pages/About";
 import Pricing from "../src/pages/Pricing";
 import Docs from "../src/pages/Docs";
@@ -77,6 +78,8 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/es/alternativa-a-docracy" element={<DocracyAlternative />} />
           <Route path="/template-marketplace" element={<TemplateMarketplace />} />
           <Route path="/es/marketplace-de-plantillas" element={<TemplateMarketplace />} />
+          <Route path="/submit-template" element={<SubmitTemplate />} />
+          <Route path="/es/enviar-plantilla" element={<SubmitTemplate />} />
           <Route path="/about" element={<About />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/es/precios" element={<Pricing />} />

@@ -1028,6 +1028,9 @@ const en: Messages = {
   "seo.templateMarketplace.title": "Docracy Marketplace — Free Legal & Business Templates",
   "seo.templateMarketplace.description":
     "Free document templates, reviewed by Docracy and shared by the community. Find a template, fill it in, and send it for signature — free, no account needed.",
+  "seo.submitTemplate.title": "Submit a Template to the Docracy Marketplace — Free",
+  "seo.submitTemplate.description":
+    "Share a document template with everyone, free — no account needed. Every submission is reviewed by a real person before it goes live on the Docracy Marketplace.",
   "seo.esignUeta.description":
     "Docracy SES electronic signatures are designed to support the U.S. ESIGN Act and UETA: consent, intent to sign, audit trail, and a certificate of completion. Paid/Enterprise accounts can add WhatsApp-verified Advanced Electronic Signature (AES) — still no QES or identity verification.",
 
@@ -1425,6 +1428,52 @@ const en: Messages = {
   "templateMarketplace.faq.a5":
     "Docracy templates are drafted in-house and reviewed by attorney for legal clarity. Community templates are submitted by other users and reviewed only for appropriateness, not legal accuracy — read one carefully before relying on it, and each is clearly badged so you always know which kind you're looking at.",
   "templateMarketplace.footerCta": "Ready to find your next document? Browse the Marketplace, free.",
+  "submitTemplate.eyebrow": "Share your work",
+  "submitTemplate.heroTitle": "Submit a Template to the Docracy Marketplace",
+  "submitTemplate.heroSub":
+    "Already drafted an NDA, a lease, or an onboarding checklist? Share the blank version with everyone — free, no account needed. Every submission is reviewed by a real person before it goes live.",
+  "submitTemplate.ctaBrowse": "Browse templates",
+  "submitTemplate.ctaSubmit": "Submit a template →",
+  "submitTemplate.whyTitle": "Why share a template",
+  "submitTemplate.why1.title": "Someone else has the same problem",
+  "submitTemplate.why1.body":
+    "You already solved the annoying part — figuring out what a good vendor agreement or roommate agreement should say. Sharing it saves the next person that work.",
+  "submitTemplate.why2.title": "It takes about two minutes",
+  "submitTemplate.why2.body":
+    "You're already preparing the document in Docracy. Submitting it is one extra step in the same editor — no separate form, no new account.",
+  "submitTemplate.why3.title": "It's free, both ways",
+  "submitTemplate.why3.body":
+    "Submitting costs nothing, and using someone else's shared template costs nothing. No paid plan required on either side.",
+  "submitTemplate.howTitle": "How submitting works",
+  "submitTemplate.how1.title": "Prepare your document",
+  "submitTemplate.how1.body":
+    "Upload the document like you normally would in Docracy, and place the signature and date fields.",
+  "submitTemplate.how2.title": "Click \"Submit to Marketplace\"",
+  "submitTemplate.how2.body":
+    "Right in the editor, below the signing setup — give it a short title and pick the closest category.",
+  "submitTemplate.how3.title": "A real person reviews it",
+  "submitTemplate.how3.body":
+    "Nothing publishes automatically. Our team checks every submission for appropriateness before it appears in the Marketplace.",
+  "submitTemplate.how4.title": "It's live, credited to the community",
+  "submitTemplate.how4.body":
+    "Once approved, it shows up in the Marketplace with a \"Community\" badge, free for anyone to use.",
+  "submitTemplate.faqTitle": "Common questions",
+  "submitTemplate.faq.q1": "Do I need an account to submit a template?",
+  "submitTemplate.faq.a1":
+    "No. Anyone can submit a template, signed in or not — the same as using one. If you do have a paid account, submissions are just attributed to your workspace.",
+  "submitTemplate.faq.q2": "Is submitting really free?",
+  "submitTemplate.faq.a2":
+    "Yes, completely — no paid plan is required to submit a template, and none is required to use one either.",
+  "submitTemplate.faq.q3": "What happens after I submit?",
+  "submitTemplate.faq.a3":
+    "Your submission goes into a review queue. Our team checks it for appropriateness, then either publishes it to the Marketplace with a \"Community\" badge or lets you know if it needs changes.",
+  "submitTemplate.faq.q4": "Can I submit more than one template?",
+  "submitTemplate.faq.a4":
+    "Yes — submit as many as you like. Each one goes through the same review process before publishing.",
+  "submitTemplate.faq.q5": "Who can see my document before it's approved?",
+  "submitTemplate.faq.a5":
+    "Only Docracy's review team, until it's approved and published. It's never visible in the public Marketplace before that.",
+  "submitTemplate.footerCta": "Have something worth sharing? Submit it — free, in about two minutes.",
 
   "ai.eyebrow": "Docracy AI",
   "ai.heroTitle": "AI Auto-Detect.\nFields place themselves.",

@@ -46,6 +46,7 @@ Allow: /electronic-signature-guide$
 Allow: /advanced-electronic-signature$
 Allow: /whatsapp-signing$
 Allow: /template-marketplace$
+Allow: /submit-template$
 Allow: /import-from-docusign$
 Allow: /import-from-eversign$
 Allow: /import-from-hellosign$

@@ -25,6 +25,7 @@ export const ES_PATH_BY_EN: Record<string, string> = {
   "/free-electronic-signature": "/es/firma-electronica-gratis",
   "/docracy-alternative": "/es/alternativa-a-docracy",
   "/template-marketplace": "/es/marketplace-de-plantillas",
+  "/submit-template": "/es/enviar-plantilla",
 };
 
 export const EN_PATH_BY_ES: Record<string, string> = Object.fromEntries(
@@ -72,7 +73,8 @@ export type SeoPage =
   | "secureElectronicSignature"
   | "freeElectronicSignature"
   | "docracyAlternative"
-  | "templateMarketplace";
+  | "templateMarketplace"
+  | "submitTemplate";
 
 export const SEO_EN_PATH: Record<SeoPage, string> = {
   home: "/",
@@ -98,6 +100,7 @@ export const SEO_EN_PATH: Record<SeoPage, string> = {
   freeElectronicSignature: "/free-electronic-signature",
   docracyAlternative: "/docracy-alternative",
   templateMarketplace: "/template-marketplace",
+  submitTemplate: "/submit-template",
 };
 
 /** Catalog suffix under `seo.*` / `alt.*` for bilingual alternative pages. */

@@ -27,6 +27,7 @@ const SEO_CATALOG_KEY: Record<SeoPage, string> = {
   freeElectronicSignature: "freeElectronicSignature",
   docracyAlternative: "docracyAlternative",
   templateMarketplace: "templateMarketplace",
+  submitTemplate: "submitTemplate",
 };
 
 /** Title + description from `seo.<page>.*` catalogs, with canonical + hreflang for bilingual SEO pages. */

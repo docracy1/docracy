@@ -229,6 +229,22 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/template-marketplace" />
   </url>
   <url>
+    <loc>https://docracy.io/submit-template</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/submit-template" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/enviar-plantilla" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/submit-template" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/enviar-plantilla</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/submit-template" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/enviar-plantilla" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/submit-template" />
+  </url>
+  <url>
     <loc>https://docracy.io/pricing</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

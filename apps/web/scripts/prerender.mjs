@@ -292,6 +292,16 @@ const routes = [
     alternates: { en: "/template-marketplace", es: "/es/marketplace-de-plantillas" },
   },
   {
+    urlPath: "/submit-template",
+    outFile: "submit-template.html",
+    title: "Submit a Template to the Docracy Marketplace — Free",
+    description:
+      "Already drafted an NDA, a lease, or an onboarding checklist? Share the blank version with everyone — " +
+      "free, no account needed. Every submission is reviewed before it goes live.",
+    locale: "en",
+    alternates: { en: "/submit-template", es: "/es/enviar-plantilla" },
+  },
+  {
     // Registered in _render-entry.tsx and linked from Footer + sitemap.xml, but was missing here —
     // without a routes[] entry it never got a prerendered file, so crawlers hitting the sitemapped
     // URL saw only the empty `<div id="root"></div>` shell (no title, no h1, no content).
@@ -562,6 +572,16 @@ const routes = [
       "plantilla, complétala y envíala para firma — gratis, sin necesidad de cuenta.",
     locale: "es",
     alternates: { en: "/template-marketplace", es: "/es/marketplace-de-plantillas" },
+  },
+  {
+    urlPath: "/es/enviar-plantilla",
+    outFile: "es/enviar-plantilla.html",
+    title: "Envía una plantilla al Marketplace de Docracy — Gratis",
+    description:
+      "¿Ya redactaste un NDA, un contrato de alquiler o una lista de incorporación? Comparte la versión en " +
+      "blanco con todos — gratis, sin necesidad de cuenta. Cada envío es revisado antes de publicarse.",
+    locale: "es",
+    alternates: { en: "/submit-template", es: "/es/enviar-plantilla" },
   },
   {
     urlPath: "/es/documentacion",

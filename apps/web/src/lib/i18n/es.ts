@@ -1115,6 +1115,9 @@ const es: Messages = {
   "seo.templateMarketplace.title": "Marketplace de Docracy — Plantillas legales y de negocio gratis",
   "seo.templateMarketplace.description":
     "Plantillas de documentos gratis, revisadas por Docracy y compartidas por la comunidad. Encuentra una plantilla, complétala y envíala para firma — gratis, sin necesidad de cuenta.",
+  "seo.submitTemplate.title": "Envía una plantilla al Marketplace de Docracy — Gratis",
+  "seo.submitTemplate.description":
+    "Comparte una plantilla de documento con todos, gratis — sin necesidad de cuenta. Cada envío es revisado por una persona real antes de publicarse en el Marketplace de Docracy.",
   "seo.esignUeta.description":
     "Las firmas SES de Docracy están diseñadas para respaldar la ESIGN Act y UETA de EE. UU.: consentimiento, intención de firmar, registro de auditoría y certificado de finalización. Las cuentas de pago/Enterprise pueden añadir firma avanzada (AES) verificada por WhatsApp — sigue sin QES ni verificación de identidad.",
 
@@ -1511,6 +1514,52 @@ const es: Messages = {
   "templateMarketplace.faq.a5":
     "Las plantillas de Docracy se redactan internamente y son revisadas por abogado para claridad legal. Las plantillas de la comunidad son enviadas por otros usuarios y solo se revisan por idoneidad, no por precisión legal — léelas con atención antes de confiar en ellas, y cada una está claramente identificada para que siempre sepas cuál estás viendo.",
   "templateMarketplace.footerCta": "¿Listo para encontrar tu próximo documento? Explora el Marketplace, gratis.",
+  "submitTemplate.eyebrow": "Comparte tu trabajo",
+  "submitTemplate.heroTitle": "Envía una Plantilla al Marketplace de Docracy",
+  "submitTemplate.heroSub":
+    "¿Ya redactaste un NDA, un contrato de alquiler o una lista de incorporación? Comparte la versión en blanco con todos — gratis, sin necesidad de cuenta. Cada envío es revisado por una persona real antes de publicarse.",
+  "submitTemplate.ctaBrowse": "Explorar plantillas",
+  "submitTemplate.ctaSubmit": "Enviar una plantilla →",
+  "submitTemplate.whyTitle": "Por qué compartir una plantilla",
+  "submitTemplate.why1.title": "Otra persona tiene el mismo problema",
+  "submitTemplate.why1.body":
+    "Ya resolviste la parte molesta — decidir qué debería decir un buen acuerdo con proveedores o entre compañeros de piso. Compartirlo le ahorra ese trabajo a la próxima persona.",
+  "submitTemplate.why2.title": "Toma unos dos minutos",
+  "submitTemplate.why2.body":
+    "Ya estás preparando el documento en Docracy. Enviarlo es un paso más en el mismo editor — sin formulario aparte, sin cuenta nueva.",
+  "submitTemplate.why3.title": "Es gratis, en ambos sentidos",
+  "submitTemplate.why3.body":
+    "Enviar no cuesta nada, y usar la plantilla de otra persona tampoco. No se necesita plan de pago en ningún lado.",
+  "submitTemplate.howTitle": "Cómo funciona el envío",
+  "submitTemplate.how1.title": "Prepara tu documento",
+  "submitTemplate.how1.body":
+    "Sube el documento como lo harías normalmente en Docracy, y coloca los campos de firma y fecha.",
+  "submitTemplate.how2.title": "Haz clic en \"Enviar al Marketplace\"",
+  "submitTemplate.how2.body":
+    "Justo en el editor, debajo de la configuración de firma — agrega un título breve y elige la categoría más cercana.",
+  "submitTemplate.how3.title": "Una persona real lo revisa",
+  "submitTemplate.how3.body":
+    "Nada se publica automáticamente. Nuestro equipo revisa cada envío para verificar que sea apropiado antes de que aparezca en el Marketplace.",
+  "submitTemplate.how4.title": "Se publica, acreditado a la comunidad",
+  "submitTemplate.how4.body":
+    "Una vez aprobado, aparece en el Marketplace con una insignia \"Comunidad\", gratis para que cualquiera lo use.",
+  "submitTemplate.faqTitle": "Preguntas frecuentes",
+  "submitTemplate.faq.q1": "¿Necesito una cuenta para enviar una plantilla?",
+  "submitTemplate.faq.a1":
+    "No. Cualquiera puede enviar una plantilla, con o sin sesión iniciada — igual que al usar una. Si tienes una cuenta de pago, los envíos simplemente se atribuyen a tu espacio de trabajo.",
+  "submitTemplate.faq.q2": "¿Realmente es gratis enviar una plantilla?",
+  "submitTemplate.faq.a2":
+    "Sí, completamente — no se necesita plan de pago para enviar una plantilla, ni tampoco para usar una.",
+  "submitTemplate.faq.q3": "¿Qué pasa después de enviarla?",
+  "submitTemplate.faq.a3":
+    "Tu envío entra en una cola de revisión. Nuestro equipo la revisa para verificar que sea apropiada, y luego la publica en el Marketplace con una insignia \"Comunidad\" o te avisa si necesita cambios.",
+  "submitTemplate.faq.q4": "¿Puedo enviar más de una plantilla?",
+  "submitTemplate.faq.a4":
+    "Sí — envía las que quieras. Cada una pasa por el mismo proceso de revisión antes de publicarse.",
+  "submitTemplate.faq.q5": "¿Quién puede ver mi documento antes de que se apruebe?",
+  "submitTemplate.faq.a5":
+    "Solo el equipo de revisión de Docracy, hasta que se apruebe y publique. Nunca es visible en el Marketplace público antes de eso.",
+  "submitTemplate.footerCta": "¿Tienes algo que valga la pena compartir? Envíalo — gratis, en unos dos minutos.",
 
   "ai.eyebrow": "Docracy IA",
   "ai.heroTitle": "Detección IA.\nLos campos se colocan solos.",
