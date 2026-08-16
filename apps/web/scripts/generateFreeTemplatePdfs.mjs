@@ -2997,6 +2997,2605 @@ const TEMPLATES = [
       { type: "signatures", signers: [{ label: "Assignor", order: 1 }, { label: "Assignee", order: 2 }] },
     ],
   },
+  {
+    slug: "living-will-advance-directive",
+    title: "LIVING WILL / ADVANCE HEALTHCARE DIRECTIVE",
+    signerLabels: ["Principal", "Witness"],
+    blocks: [
+      { type: "section", text: "Declarant" },
+      { type: "field", label: "Principal (Declarant): ", blank: TEXT_BLANK },
+      { type: "field", label: "Date of Birth: ", blank: DATE_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Statement of Intent" },
+      {
+        type: "paragraph",
+        text:
+          "I, the undersigned Principal, being of sound mind, willingly and voluntarily make this declaration to " +
+          "express my wishes regarding the medical care I want, or do not want, to receive if I become unable to " +
+          "communicate my own healthcare decisions — whether because of a terminal condition, permanent " +
+          "unconsciousness, or another condition that leaves me unable to participate meaningfully in decisions " +
+          "about my own care. This declaration states my own directions to my physicians, caregivers, and family. " +
+          "It does not, by itself, appoint another person to make decisions on my behalf.",
+      },
+
+      { type: "section", text: "Life-Sustaining Treatment" },
+      {
+        type: "paragraph",
+        text:
+          "If my attending physician and at least one other qualified physician determine that I have a terminal " +
+          "condition, or am permanently unconscious, and I am no longer able to make or communicate decisions " +
+          "regarding my medical care, I direct that the following instructions be followed regarding the use, " +
+          "continuation, or withdrawal of life-sustaining treatment, including mechanical ventilation, dialysis, " +
+          "and cardiopulmonary resuscitation:",
+      },
+      { type: "field", label: "My Directions Regarding Life-Sustaining Treatment: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Artificial Nutrition and Hydration" },
+      {
+        type: "paragraph",
+        text:
+          "Artificially administered nutrition and hydration (such as feeding tubes and intravenous fluids) are " +
+          "addressed separately from other life-sustaining treatment because they involve distinct medical and " +
+          "personal considerations. My directions on this point are:",
+      },
+      { type: "field", label: "My Directions Regarding Artificial Nutrition and Hydration: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Pain Relief and Comfort Care" },
+      {
+        type: "paragraph",
+        text:
+          "Regardless of any other direction in this declaration, I direct that I be given medication and other " +
+          "care needed to keep me comfortable and to relieve pain, even if doing so may hasten the moment of " +
+          "death, unless I state an exception below:",
+      },
+      { type: "field", label: "Exceptions (if any): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Organ and Tissue Donation (Optional)" },
+      { type: "field", label: "My Wishes Regarding Organ and Tissue Donation: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Revocation of Prior Directives" },
+      {
+        type: "paragraph",
+        text:
+          "I revoke any prior living will or advance healthcare directive I may have signed. This declaration " +
+          "reflects my current wishes and remains in effect until I revoke or replace it in writing.",
+      },
+
+      { type: "section", text: "Signing and Witnessing Requirements" },
+      {
+        type: "paragraph",
+        text:
+          "Most states require a living will to be signed in the presence of one or more disinterested witnesses, " +
+          "and some require or permit notarization instead of or in addition to witnesses. Many states also " +
+          "restrict who may serve as a witness — for example, excluding the Principal's healthcare providers, " +
+          "prospective heirs, or anyone named as a healthcare agent. Confirm the witnessing and notarization rules " +
+          "that apply where the Principal lives before relying on this document, and complete those formalities " +
+          "accordingly.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This declaration shall be interpreted under the laws of the State/Country of ${TEXT_BLANK}.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Principal", order: 1 }, { label: "Witness", order: 2 }] },
+    ],
+  },
+  {
+    slug: "codicil-to-will",
+    title: "CODICIL TO WILL",
+    signerLabels: ["Testator", "Witness"],
+    blocks: [
+      { type: "section", text: "Testator and Original Will" },
+      { type: "field", label: "Testator: ", blank: TEXT_BLANK },
+      { type: "field", label: "Date Original Will Was Signed: ", blank: DATE_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Purpose of This Codicil" },
+      {
+        type: "paragraph",
+        text:
+          "I, the Testator named above, declare this to be a codicil to my will identified above (the " +
+          "\"Original Will\"). This codicil amends the Original Will only as set out below. Except as expressly " +
+          "amended by this codicil, I ratify and confirm the Original Will in all other respects.",
+      },
+
+      { type: "section", text: "Amendment" },
+      { type: "field", label: "Article/Section of Original Will Being Amended: ", blank: TEXT_BLANK },
+      {
+        type: "paragraph",
+        text:
+          "The provision identified above is amended to read as follows, and to the extent of any conflict this " +
+          "amended language controls over the corresponding provision of the Original Will:",
+      },
+      { type: "field", label: "Amended Provision: ", blank: TEXT_BLANK },
+      { type: "field", label: "Additional Amendment (if any): ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Ratification of Remaining Provisions" },
+      {
+        type: "paragraph",
+        text:
+          "All other terms, appointments, and dispositions in the Original Will not specifically amended by this " +
+          "codicil remain in full force and effect as originally written.",
+      },
+
+      { type: "section", text: "Effect on Prior Codicils" },
+      {
+        type: "paragraph",
+        text:
+          "I revoke any prior codicil to the Original Will to the extent it conflicts with this codicil. This " +
+          "codicil, together with the Original Will and any other codicil not revoked by this one, constitutes my " +
+          "entire testamentary plan as of the date below.",
+      },
+
+      { type: "section", text: "Signing and Witnessing Requirements" },
+      {
+        type: "paragraph",
+        text:
+          "A codicil generally must be executed with the same formalities the relevant state requires for a valid " +
+          "will — typically signing in the presence of a required number of disinterested witnesses, and in some " +
+          "states a self-proving affidavit or notarization to simplify probate. Requirements vary by state. " +
+          "Confirm and complete the formalities that apply where the Testator lives before relying on this " +
+          "codicil, and store it with the Original Will so both are found together.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This codicil shall be interpreted under the laws of the State/Country of ${TEXT_BLANK}.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Testator", order: 1 }, { label: "Witness", order: 2 }] },
+    ],
+  },
+  {
+    slug: "simple-will-small-estate",
+    title: "SIMPLE WILL FOR SMALL ESTATE",
+    signerLabels: ["Testator", "Witness"],
+    blocks: [
+      { type: "section", text: "Testator and Revocation" },
+      { type: "field", label: "Testator: ", blank: TEXT_BLANK },
+      { type: "field", label: "City/State of Residence: ", blank: TEXT_BLANK, gapBefore: 12 },
+      {
+        type: "paragraph",
+        text:
+          "I, the Testator named above, being of sound mind, declare this to be my will, intended for a modest " +
+          "and straightforward estate. I revoke all prior wills and codicils I have made.",
+      },
+
+      { type: "section", text: "Family Status" },
+      { type: "field", label: "Marital Status: ", blank: TEXT_BLANK },
+      { type: "field", label: "Names of Children (if any): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Appointment of Executor" },
+      { type: "field", label: "Executor: ", blank: TEXT_BLANK },
+      { type: "field", label: "Alternate Executor: ", blank: TEXT_BLANK, gapBefore: 12 },
+      {
+        type: "paragraph",
+        text:
+          "I appoint the Executor named above to collect my assets, pay my debts and expenses, and distribute " +
+          "the remainder of my estate as set out below, using any simplified or small-estate procedures available " +
+          "under applicable law.",
+      },
+
+      { type: "section", text: "Specific Gifts of Personal Property" },
+      {
+        type: "paragraph",
+        text:
+          "I make the following specific gifts of personal property, if any; all other property not specifically " +
+          "listed here passes as part of my residuary estate below.",
+      },
+      { type: "field", label: "Specific Gifts (item and recipient): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Residuary Estate" },
+      {
+        type: "paragraph",
+        text:
+          "I give the remainder of my estate not otherwise specifically disposed of above (my residuary estate) " +
+          "to the beneficiary or beneficiaries named below, in the shares indicated:",
+      },
+      { type: "field", label: "Residuary Beneficiary(ies) and Shares: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Guardian for Minor Children (If Applicable)" },
+      { type: "field", label: "Guardian: ", blank: TEXT_BLANK },
+      { type: "field", label: "Alternate Guardian: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Payment of Debts, Expenses, and Taxes" },
+      {
+        type: "paragraph",
+        text:
+          "I direct my Executor to pay my legally enforceable debts, funeral expenses, and estate administration " +
+          "expenses from my estate before distributing the remainder as provided above.",
+      },
+
+      { type: "section", text: "Signing and Witnessing Requirements" },
+      {
+        type: "paragraph",
+        text:
+          "To be valid, a will typically must be signed in the presence of a required number of disinterested " +
+          "witnesses, and some states allow a self-proving affidavit signed before a notary to simplify probate " +
+          "later. Requirements vary by state, including who may serve as a witness. Confirm and complete the " +
+          "formalities that apply where the Testator lives before relying on this will.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This will shall be interpreted under the laws of the State/Country of ${TEXT_BLANK}.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Testator", order: 1 }, { label: "Witness", order: 2 }] },
+    ],
+  },
+  {
+    slug: "durable-power-of-attorney",
+    title: "DURABLE POWER OF ATTORNEY",
+    signerLabels: ["Principal", "Agent"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Principal: ", blank: TEXT_BLANK },
+      { type: "field", label: "Agent: ", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "Successor Agent (if the Agent is unable or unwilling to serve): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Durability — Effect of Incapacity" },
+      {
+        type: "paragraph",
+        text:
+          "This power of attorney is intended to be durable. The authority granted to the Agent under this " +
+          "document shall not be affected by, and shall continue notwithstanding, the later incapacity or " +
+          "disability of the Principal, to the extent permitted by the durable power of attorney statute of the " +
+          "state whose law governs this document.",
+      },
+
+      { type: "section", text: "Effective Date" },
+      { type: "field", label: "Effective Date: ", blank: DATE_BLANK },
+      {
+        type: "paragraph",
+        text:
+          "This power of attorney is effective immediately upon signing unless the Principal instead specifies " +
+          "below that it should only become effective upon a determination that the Principal is incapacitated " +
+          "(a \"springing\" power of attorney), and describes how that determination is to be made:",
+      },
+      { type: "field", label: "Springing Condition (if any): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Scope of Authority Granted" },
+      {
+        type: "paragraph",
+        text:
+          "The Principal grants the Agent broad authority to act on the Principal's behalf regarding the " +
+          "Principal's financial and legal affairs generally, including banking and financial accounts, real " +
+          "property transactions, tax matters, insurance and retirement or government benefits, and routine " +
+          "business decisions, except as limited below.",
+      },
+      { type: "field", label: "Additional Instructions or Limitations: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Agent's Duties and Compensation" },
+      {
+        type: "paragraph",
+        text:
+          "The Agent shall act in good faith, within the scope of authority granted, and in the Principal's best " +
+          "interest, and shall keep records of significant transactions undertaken on the Principal's behalf.",
+      },
+      { type: "field", label: "Agent's Compensation (if any): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Reliance by Third Parties" },
+      {
+        type: "paragraph",
+        text:
+          "Any third party who acts in good faith reliance on this document, or a copy of it, without actual " +
+          "knowledge that it has been revoked or terminated, may rely on it as if it remained in full force and " +
+          "effect.",
+      },
+
+      { type: "section", text: "Revocation" },
+      {
+        type: "paragraph",
+        text:
+          "The Principal may revoke this power of attorney at any time while competent to do so by delivering " +
+          "written notice of revocation to the Agent and to any third party relying on it.",
+      },
+
+      { type: "section", text: "Notarization and State Requirements" },
+      {
+        type: "paragraph",
+        text:
+          "Durable powers of attorney frequently must be notarized, and some states require specific statutory " +
+          "wording or a statutory form before banks, title companies, or government agencies will honor them. " +
+          "Requirements vary by state and by the scope of authority granted. Confirm the notarization and any " +
+          "statutory-form requirements that apply where the Principal lives and where the Agent will use this " +
+          "document, and arrange for notarization accordingly before relying on it.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Power of Attorney shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Principal", order: 1 }, { label: "Agent", order: 2 }] },
+    ],
+  },
+  {
+    slug: "limited-power-of-attorney",
+    title: "LIMITED POWER OF ATTORNEY",
+    signerLabels: ["Principal", "Agent"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Principal: ", blank: TEXT_BLANK },
+      { type: "field", label: "Agent: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Limited Purpose" },
+      {
+        type: "paragraph",
+        text:
+          "The Principal appoints the Agent to act on the Principal's behalf solely for the specific act or " +
+          "transaction described below. This power of attorney grants no general, ongoing, or continuing " +
+          "authority of any kind.",
+      },
+      { type: "field", label: "Specific Act or Transaction Authorized: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Scope Limitations" },
+      {
+        type: "paragraph",
+        text:
+          "The Agent's authority under this document is strictly limited to completing the matter described " +
+          "above. The Agent has no authority over any other property, account, or affair of the Principal, and " +
+          "may not use this document to undertake any unrelated transaction.",
+      },
+
+      { type: "section", text: "Effective Period" },
+      { type: "field", label: "Effective Date: ", blank: DATE_BLANK },
+      { type: "field", label: "Expiration Date or Completion Event: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Automatic Termination" },
+      {
+        type: "paragraph",
+        text:
+          "This power of attorney terminates automatically on the earliest of: completion of the specific act or " +
+          "transaction described above, the stated expiration date, the Principal's death, or the Principal's " +
+          "written revocation. Unless the Principal expressly states otherwise below, this limited power of " +
+          "attorney does not continue if the Principal becomes incapacitated.",
+      },
+      { type: "field", label: "Instructions Regarding Incapacity (if any): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Revocation" },
+      {
+        type: "paragraph",
+        text:
+          "The Principal may revoke this power of attorney at any time by delivering written notice of revocation " +
+          "to the Agent and to any third party relying on it.",
+      },
+
+      { type: "section", text: "Notarization and State Requirements" },
+      {
+        type: "paragraph",
+        text:
+          "Whether this document needs to be notarized or witnessed depends on the specific transaction and the " +
+          "state involved — real estate, vehicle title, and certain financial transactions commonly require " +
+          "notarization before third parties will accept a power of attorney. Confirm the requirements that apply " +
+          "to the specific transaction and to the states where the Principal lives and where the Agent will use " +
+          "this document, and arrange for notarization or witnesses accordingly before relying on it.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Power of Attorney shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Principal", order: 1 }, { label: "Agent", order: 2 }] },
+    ],
+  },
+  {
+    slug: "medical-power-of-attorney",
+    title: "MEDICAL POWER OF ATTORNEY (HEALTHCARE PROXY)",
+    signerLabels: ["Principal", "Agent"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Principal: ", blank: TEXT_BLANK },
+      { type: "field", label: "Healthcare Agent: ", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "Alternate Healthcare Agent: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Grant of Healthcare Decision-Making Authority" },
+      {
+        type: "paragraph",
+        text:
+          "The Principal appoints the Healthcare Agent named above to make healthcare decisions on the " +
+          "Principal's behalf if the Principal's attending physician determines that the Principal is unable to " +
+          "make or communicate those decisions personally. This authority covers healthcare decisions only and " +
+          "does not grant the Agent any authority over the Principal's finances, property, or other legal " +
+          "affairs.",
+      },
+
+      { type: "section", text: "Scope of Authority" },
+      {
+        type: "paragraph",
+        text:
+          "The Agent's authority includes consenting to, refusing, or withdrawing medical treatment; selecting or " +
+          "dismissing physicians and other healthcare providers; and choosing among available healthcare " +
+          "facilities and care settings, consistent with the Principal's known wishes and best interests.",
+      },
+      { type: "field", label: "Additional Instructions or Limitations: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Authorization to Access Medical Information" },
+      {
+        type: "paragraph",
+        text:
+          "The Principal authorizes healthcare providers to disclose the Principal's protected health information " +
+          "to the Agent (and any named alternate) to the extent necessary for the Agent to make informed " +
+          "healthcare decisions under this document.",
+      },
+
+      { type: "section", text: "Guidance on Life-Sustaining Treatment" },
+      {
+        type: "paragraph",
+        text:
+          "In making decisions about life-sustaining treatment, the Agent should follow the directions in any " +
+          "separate living will or advance healthcare directive the Principal has signed. Where no such document " +
+          "addresses the situation, the Agent should act according to the Principal's known wishes or, if those " +
+          "are unknown, in the Principal's best interest.",
+      },
+      { type: "field", label: "Reference to Separate Living Will/Advance Directive (if any): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Effective Date" },
+      {
+        type: "paragraph",
+        text:
+          "This medical power of attorney becomes effective only upon a determination, consistent with applicable " +
+          "law, that the Principal is unable to make or communicate healthcare decisions, and remains effective " +
+          "for as long as that incapacity continues.",
+      },
+
+      { type: "section", text: "Revocation" },
+      {
+        type: "paragraph",
+        text:
+          "The Principal may revoke this document at any time while able to do so, by written notice, by " +
+          "destroying it, or by executing a later medical power of attorney.",
+      },
+
+      { type: "section", text: "Notarization and Witnessing Requirements" },
+      {
+        type: "paragraph",
+        text:
+          "Requirements for a valid medical power of attorney vary by state — many require one or more " +
+          "disinterested witnesses, some require notarization, and some restrict who may serve as a witness or " +
+          "as the Agent (for example, excluding the Principal's own healthcare providers). Confirm the " +
+          "requirements that apply where the Principal lives and complete them before relying on this document.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This document shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Principal", order: 1 }, { label: "Agent", order: 2 }] },
+    ],
+  },
+  {
+    slug: "convertible-promissory-note",
+    title: "CONVERTIBLE PROMISSORY NOTE",
+    signerLabels: ["Company", "Investor"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Company: ", blank: TEXT_BLANK },
+      { type: "field", label: "Investor: ", blank: TEXT_BLANK, gapBefore: 12 },
+      {
+        type: "paragraph",
+        text:
+          "This Convertible Promissory Note (this \"Note\") evidences a loan from the Investor to the Company " +
+          "on the terms below. Unlike a standard promissory note, the amount owed under this Note is intended to " +
+          "convert into equity of the Company upon the events described below, rather than being repaid solely " +
+          "in cash.",
+      },
+
+      { type: "section", text: "Principal and Interest" },
+      { type: "field", label: "Principal Amount: ", blank: TEXT_BLANK },
+      { type: "field", label: "Annual Interest Rate: ", blank: TEXT_BLANK },
+      {
+        type: "paragraph",
+        text:
+          "Interest accrues on the outstanding principal from the date of this Note until the principal and " +
+          "accrued interest are converted or repaid in full, calculated on the basis stated above.",
+      },
+
+      { type: "section", text: "Maturity Date" },
+      { type: "field", label: "Maturity Date: ", blank: DATE_BLANK },
+      {
+        type: "paragraph",
+        text:
+          "If the outstanding principal and accrued interest have not converted into equity under this Note " +
+          "before the Maturity Date, the provisions of the \"Treatment at Maturity\" section below apply.",
+      },
+
+      { type: "section", text: "Conversion Upon Qualified Financing" },
+      {
+        type: "paragraph",
+        text:
+          "If, before repayment or earlier conversion, the Company completes a bona fide equity financing in " +
+          "which it sells preferred or other equity securities primarily for cash to one or more investors " +
+          "resulting in gross proceeds to the Company of at least the amount stated below (a \"Qualified " +
+          "Financing\"), the outstanding principal and accrued interest under this Note will automatically " +
+          "convert into the same class of securities issued in that financing, on the same terms as those paid " +
+          "by the other investors in the Qualified Financing, subject to the discount and/or valuation cap " +
+          "described below.",
+      },
+      { type: "field", label: "Minimum Qualified Financing Amount: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Discount Rate and Valuation Cap" },
+      {
+        type: "paragraph",
+        text:
+          "The price per share at which this Note converts in a Qualified Financing will be the lower of (a) the " +
+          "price per share paid by other investors in that financing, reduced by the discount rate stated below, " +
+          "and (b) the price per share obtained by dividing the valuation cap stated below by the Company's fully " +
+          "diluted capitalization immediately before the Qualified Financing. If only one of the discount rate or " +
+          "valuation cap is filled in below, conversion is based solely on whichever mechanism applies.",
+      },
+      { type: "field", label: "Discount Rate (if any): ", blank: TEXT_BLANK },
+      { type: "field", label: "Valuation Cap (if any): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Treatment at Maturity" },
+      {
+        type: "paragraph",
+        text:
+          "If no Qualified Financing has occurred by the Maturity Date, the parties will proceed as indicated " +
+          "below (check or describe the option the parties intend in the blank): the Company repays the " +
+          "outstanding principal and accrued interest in cash, the Note converts into equity at the valuation " +
+          "cap described above as if a Qualified Financing had occurred, or the maturity date is extended by " +
+          "mutual written agreement of the parties.",
+      },
+      { type: "field", label: "Treatment at Maturity if No Conversion: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Prepayment" },
+      {
+        type: "paragraph",
+        text:
+          "Unless the parties agree otherwise in writing, the Company may not prepay this Note before maturity " +
+          "without the Investor's written consent, since early repayment would deprive the Investor of the " +
+          "conversion right described above.",
+      },
+
+      { type: "section", text: "Representations" },
+      {
+        type: "paragraph",
+        text:
+          "The Investor represents that it is acquiring this Note for its own account, for investment purposes, " +
+          "and not with a view toward resale or distribution, and acknowledges that neither this Note nor any " +
+          "securities issuable upon its conversion have been registered under applicable securities laws.",
+      },
+
+      { type: "section", text: "Tax and Securities Law Note" },
+      {
+        type: "paragraph",
+        text:
+          "This document is a starting draft, not tax or securities-law advice. Convertible notes raise " +
+          "securities-law, valuation, and tax issues that depend on the jurisdiction, the parties' status, and " +
+          "the eventual terms of any financing round. The parties should have a lawyer and accountant review the " +
+          "final terms of this Note, and confirm compliance with applicable securities-law exemptions, before " +
+          "signing or exchanging any funds.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Note shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Company", order: 1 }, { label: "Investor", order: 2 }] },
+    ],
+  },
+  {
+    slug: "loan-modification-agreement",
+    title: "LOAN MODIFICATION AGREEMENT",
+    signerLabels: ["Lender", "Borrower"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Lender: ", blank: TEXT_BLANK },
+      { type: "field", label: "Borrower: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Original Loan" },
+      {
+        type: "paragraph",
+        text:
+          "This Loan Modification Agreement (this \"Agreement\") amends the loan described below (the \"Original " +
+          "Loan\"). Except as expressly modified by this Agreement, all terms of the Original Loan remain in " +
+          "full force and effect.",
+      },
+      { type: "field", label: "Date of Original Loan Document: ", blank: DATE_BLANK },
+      { type: "field", label: "Original Principal Amount: ", blank: TEXT_BLANK },
+      { type: "field", label: "Outstanding Balance as of This Agreement: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Reason for Modification" },
+      {
+        type: "paragraph",
+        text:
+          "The parties are entering into this Agreement for the reason described below, and agree that the " +
+          "modified terms set out here replace the corresponding terms of the Original Loan as of the effective " +
+          "date of this Agreement.",
+      },
+      { type: "field", label: "Reason for Modification: ", blank: TEXT_BLANK },
+      { type: "field", label: "Effective Date of This Agreement: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Modified Interest Rate" },
+      {
+        type: "paragraph",
+        text:
+          "As of the effective date above, the annual interest rate on the outstanding balance is changed to the " +
+          "rate stated below, replacing the interest rate stated in the Original Loan.",
+      },
+      { type: "field", label: "New Annual Interest Rate: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Modified Maturity Date and Term" },
+      {
+        type: "paragraph",
+        text:
+          "The maturity date of the Original Loan is changed to the date below. Any extension of the repayment " +
+          "period is intended to give the Borrower additional time to repay and does not, by itself, forgive any " +
+          "portion of the outstanding balance.",
+      },
+      { type: "field", label: "New Maturity Date: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Revised Payment Schedule" },
+      {
+        type: "paragraph",
+        text: "The Borrower will repay the outstanding balance, as modified, according to the schedule described below.",
+      },
+      { type: "field", label: "New Payment Amount: ", blank: TEXT_BLANK },
+      { type: "field", label: "New Payment Frequency: ", blank: TEXT_BLANK },
+      { type: "field", label: "First Payment Due Under This Schedule: ", blank: DATE_BLANK },
+
+      { type: "section", text: "No Novation" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement modifies, but does not replace or extinguish, the Original Loan. The Borrower's " +
+          "obligation to repay the outstanding balance, as modified here, continues without interruption, and " +
+          "any security or guaranty given for the Original Loan continues to secure the loan as modified unless " +
+          "the parties state otherwise in writing.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles. This is a starting draft, not legal or tax advice — loan modifications can affect lien priority and tax treatment, so review with a professional before signing.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Lender", order: 1 }, { label: "Borrower", order: 2 }] },
+    ],
+  },
+  {
+    slug: "line-of-credit-agreement",
+    title: "LINE OF CREDIT AGREEMENT",
+    signerLabels: ["Lender", "Borrower"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Lender: ", blank: TEXT_BLANK },
+      { type: "field", label: "Borrower: ", blank: TEXT_BLANK, gapBefore: 12 },
+      {
+        type: "paragraph",
+        text:
+          "This Line of Credit Agreement (this \"Agreement\") sets up a revolving credit arrangement under which " +
+          "the Borrower may draw, repay, and re-draw funds up to the credit limit stated below, rather than " +
+          "receiving a single lump-sum loan.",
+      },
+
+      { type: "section", text: "Credit Limit" },
+      { type: "field", label: "Maximum Credit Limit: ", blank: TEXT_BLANK },
+      {
+        type: "paragraph",
+        text:
+          "At no time may the total outstanding principal drawn under this line of credit exceed the Maximum " +
+          "Credit Limit stated above.",
+      },
+
+      { type: "section", text: "Draws" },
+      {
+        type: "paragraph",
+        text:
+          "The Borrower may request draws against the available credit from time to time in the manner described " +
+          "below. Each draw reduces the credit then available, and each repayment of principal restores " +
+          "availability by the amount repaid, up to the Maximum Credit Limit.",
+      },
+      { type: "field", label: "How Draws May Be Requested: ", blank: TEXT_BLANK },
+      { type: "field", label: "Draw Period End Date (if any): ", blank: DATE_BLANK },
+
+      { type: "section", text: "Interest on Outstanding Balance" },
+      { type: "field", label: "Annual Interest Rate: ", blank: TEXT_BLANK },
+      {
+        type: "paragraph",
+        text:
+          "Interest accrues only on the principal amount actually drawn and outstanding from time to time, not " +
+          "on the full Maximum Credit Limit, calculated on the basis stated above.",
+      },
+
+      { type: "section", text: "Repayment" },
+      { type: "field", label: "Minimum Periodic Payment: ", blank: TEXT_BLANK },
+      { type: "field", label: "Payment Frequency: ", blank: TEXT_BLANK },
+      { type: "field", label: "Final Repayment Date for All Amounts Outstanding: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Fees" },
+      {
+        type: "paragraph",
+        text:
+          "Any commitment fee, draw fee, or late-payment fee that applies to this line of credit is described " +
+          "below. If none apply, the parties may leave this blank.",
+      },
+      { type: "field", label: "Fees (if any): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Default" },
+      {
+        type: "paragraph",
+        text:
+          "If the Borrower fails to make a required payment when due, or otherwise breaches this Agreement, the " +
+          "Lender may suspend further draws and may declare the outstanding balance, together with accrued " +
+          "interest, immediately due and payable, subject to any notice or cure period the parties agree to in " +
+          "writing.",
+      },
+
+      { type: "section", text: "Termination" },
+      {
+        type: "paragraph",
+        text:
+          "Either party may terminate the availability of further draws under this line of credit by written " +
+          "notice to the other, though termination does not relieve the Borrower of the obligation to repay " +
+          "amounts already drawn, with interest, according to this Agreement.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles. This is a starting draft, not legal or tax advice — revolving credit arrangements can be subject to lending-license and interest-rate rules that vary by jurisdiction, so review with a lawyer before signing.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Lender", order: 1 }, { label: "Borrower", order: 2 }] },
+    ],
+  },
+  {
+    slug: "simple-investment-agreement",
+    title: "INVESTMENT AGREEMENT",
+    signerLabels: ["Company", "Investor"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Company: ", blank: TEXT_BLANK },
+      { type: "field", label: "Investor: ", blank: TEXT_BLANK, gapBefore: 12 },
+      {
+        type: "paragraph",
+        text:
+          "This Investment Agreement (this \"Agreement\") sets out the terms on which the Investor will invest " +
+          "cash in the Company in exchange for the equity or other interest described below.",
+      },
+
+      { type: "section", text: "Investment Amount" },
+      { type: "field", label: "Total Investment Amount: ", blank: TEXT_BLANK },
+      { type: "field", label: "Closing Date: ", blank: DATE_BLANK },
+
+      { type: "section", text: "What the Investor Receives" },
+      {
+        type: "paragraph",
+        text:
+          "In exchange for the Investment Amount, the Company will issue or transfer to the Investor the equity " +
+          "or other interest described below, on or promptly after the Closing Date.",
+      },
+      { type: "field", label: "Type and Class of Interest Issued: ", blank: TEXT_BLANK },
+      { type: "field", label: "Number of Shares or Units (if applicable): ", blank: TEXT_BLANK },
+      { type: "field", label: "Price per Share or Unit (if applicable): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Conditions to Closing" },
+      {
+        type: "paragraph",
+        text:
+          "The Company's obligation to issue the interest described above, and the Investor's obligation to fund " +
+          "the Investment Amount, are conditioned on delivery of the funds and, where applicable, on any board or " +
+          "shareholder approvals needed to authorize the issuance.",
+      },
+
+      { type: "section", text: "Company Representations" },
+      {
+        type: "paragraph",
+        text:
+          "The Company represents that it has the authority to enter into this Agreement and to issue the " +
+          "interest described above, and that it will provide the Investor with reasonably requested information " +
+          "about the Company's business and finances relevant to the investment.",
+      },
+
+      { type: "section", text: "Investor Representations" },
+      {
+        type: "paragraph",
+        text:
+          "The Investor represents that it is investing for its own account and not with a view toward resale or " +
+          "distribution, that it has had the opportunity to ask questions about the Company and this investment, " +
+          "and that it understands the interest received has not been registered under applicable securities " +
+          "laws and may be subject to resale restrictions.",
+      },
+
+      { type: "section", text: "Tax and Securities Law Note" },
+      {
+        type: "paragraph",
+        text:
+          "This document is a starting draft, not tax or securities-law advice. Issuing equity or other interests " +
+          "in exchange for an investment can trigger securities-law filings or exemptions, and can carry tax " +
+          "consequences, that depend on the jurisdiction, the amount raised, and the type of investor involved. " +
+          "The parties should have a lawyer and accountant review the final terms and confirm compliance with " +
+          "applicable securities laws before signing or exchanging any funds.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Company", order: 1 }, { label: "Investor", order: 2 }] },
+    ],
+  },
+  {
+    slug: "founder-vesting-agreement",
+    title: "FOUNDER VESTING AGREEMENT",
+    signerLabels: ["Company", "Founder"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Company: ", blank: TEXT_BLANK },
+      { type: "field", label: "Founder: ", blank: TEXT_BLANK, gapBefore: 12 },
+      {
+        type: "paragraph",
+        text:
+          "This Founder Vesting Agreement (this \"Agreement\") applies a vesting schedule to shares already held " +
+          "by, or being issued to, the Founder (the \"Shares\"), sometimes called reverse vesting, so that the " +
+          "Shares are earned over time rather than fully owned outright from the start.",
+      },
+
+      { type: "section", text: "Shares Subject to Vesting" },
+      { type: "field", label: "Number of Shares Subject to This Agreement: ", blank: TEXT_BLANK },
+      { type: "field", label: "Class of Shares: ", blank: TEXT_BLANK },
+      {
+        type: "paragraph",
+        text:
+          "Except as this Agreement provides, the Founder holds full voting and other rights of a shareholder " +
+          "with respect to the Shares, including unvested Shares, but unvested Shares remain subject to the " +
+          "Company's repurchase right described below.",
+      },
+
+      { type: "section", text: "Vesting Schedule and Cliff" },
+      { type: "field", label: "Vesting Commencement Date: ", blank: DATE_BLANK },
+      { type: "field", label: "Cliff Period (if any): ", blank: TEXT_BLANK },
+      { type: "field", label: "Vesting Schedule After Cliff: ", blank: TEXT_BLANK },
+      {
+        type: "paragraph",
+        text:
+          "If a cliff period applies, no Shares vest until the cliff period has elapsed, at which point the " +
+          "portion of Shares attributable to that period vests at once, with the remaining Shares vesting " +
+          "according to the schedule stated above.",
+      },
+
+      { type: "section", text: "Acceleration" },
+      {
+        type: "paragraph",
+        text:
+          "Any acceleration of vesting upon a sale of the Company, termination without cause, or other event is " +
+          "described below. If the parties do not intend any acceleration, this may be left blank.",
+      },
+      { type: "field", label: "Acceleration Terms (if any): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Company Repurchase Right" },
+      {
+        type: "paragraph",
+        text:
+          "If the Founder's service with the Company ends for any reason before all Shares have vested, the " +
+          "Company has the right, but not the obligation, to repurchase all unvested Shares at the price stated " +
+          "below, exercisable for the period stated below following the end of service.",
+      },
+      { type: "field", label: "Repurchase Price per Unvested Share: ", blank: TEXT_BLANK },
+      { type: "field", label: "Period to Exercise Repurchase Right: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Tax Note" },
+      {
+        type: "paragraph",
+        text:
+          "Founders receiving shares subject to vesting may wish to consider whether an early tax election (such " +
+          "as a Section 83(b) election in the United States, or an equivalent election elsewhere) is available " +
+          "and time-sensitive. This document is a starting draft, not tax or legal advice, and does not make any " +
+          "election on the Founder's behalf.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles. Vesting and repurchase arrangements can carry significant tax and securities-law consequences, so have a lawyer or accountant review the final terms before signing.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Company", order: 1 }, { label: "Founder", order: 2 }] },
+    ],
+  },
+  {
+    slug: "stock-transfer-agreement",
+    title: "STOCK TRANSFER AGREEMENT",
+    signerLabels: ["Transferor", "Transferee"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Transferor (Seller): ", blank: TEXT_BLANK },
+      { type: "field", label: "Transferee (Buyer): ", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "Company Whose Shares Are Being Transferred: ", blank: TEXT_BLANK, gapBefore: 12 },
+      {
+        type: "paragraph",
+        text:
+          "This Stock Transfer Agreement (this \"Agreement\") documents the Transferor's sale and transfer of " +
+          "shares already held by the Transferor in the above Company to the Transferee. This is a transfer of " +
+          "existing shares between shareholders, not a new issuance of shares by the Company.",
+      },
+
+      { type: "section", text: "Shares Being Transferred" },
+      { type: "field", label: "Number of Shares: ", blank: TEXT_BLANK },
+      { type: "field", label: "Class of Shares: ", blank: TEXT_BLANK },
+      { type: "field", label: "Certificate Number(s) (if any): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Purchase Price" },
+      { type: "field", label: "Total Purchase Price: ", blank: TEXT_BLANK },
+      { type: "field", label: "Closing Date: ", blank: DATE_BLANK },
+      {
+        type: "paragraph",
+        text:
+          "The Transferee will pay the Transferor the Total Purchase Price above in exchange for the Shares, and " +
+          "the Transferor will deliver the Shares, or take the steps needed to record the transfer, on or " +
+          "promptly after the Closing Date.",
+      },
+
+      { type: "section", text: "Company and Board Consent" },
+      {
+        type: "paragraph",
+        text:
+          "Many companies restrict transfers of their shares by right of first refusal, board approval " +
+          "requirement, or other transfer restriction in their governing documents. The parties confirm below " +
+          "whether such consent is required and, if so, that it has been obtained.",
+      },
+      { type: "field", label: "Is Company or Board Consent Required?: ", blank: TEXT_BLANK },
+      { type: "field", label: "If Required, Date Consent Was Obtained: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Representations of the Transferor" },
+      {
+        type: "paragraph",
+        text:
+          "The Transferor represents that it is the sole owner of the Shares, free and clear of any lien or " +
+          "competing claim except as disclosed to the Transferee, and has the full right to transfer the Shares " +
+          "on the terms of this Agreement.",
+      },
+
+      { type: "section", text: "Representations of the Transferee" },
+      {
+        type: "paragraph",
+        text:
+          "The Transferee represents that it is acquiring the Shares for its own account, for investment " +
+          "purposes, and not with a view toward resale or distribution, and acknowledges that the Shares may not " +
+          "be registered under applicable securities laws and may carry resale restrictions.",
+      },
+
+      { type: "section", text: "Tax and Securities Law Note" },
+      {
+        type: "paragraph",
+        text:
+          "This document is a starting draft, not tax or securities-law advice. Secondary transfers of shares can " +
+          "trigger tax consequences for both parties and may be subject to securities-law resale restrictions " +
+          "that depend on the jurisdiction and the Company's own governing documents. The parties should have a " +
+          "lawyer and accountant review the final terms before closing.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Transferor", order: 1 }, { label: "Transferee", order: 2 }] },
+    ],
+  },
+  {
+    slug: "equity-buy-sell-agreement",
+    title: "BUY-SELL AGREEMENT",
+    signerLabels: ["Shareholder A", "Shareholder B"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Shareholder A: ", blank: TEXT_BLANK },
+      { type: "field", label: "Shareholder B: ", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "Company: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Purpose" },
+      {
+        type: "paragraph",
+        text:
+          "Shareholder A and Shareholder B are co-owners of the Company and enter into this Buy-Sell Agreement " +
+          "(this \"Agreement\") to agree in advance on what happens to a shareholder's equity in the Company if a " +
+          "triggering event described below occurs, so that ownership can pass in an orderly way rather than " +
+          "being contested later.",
+      },
+
+      { type: "section", text: "Triggering Events" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement applies if, with respect to either shareholder, any of the following occurs: death, " +
+          "permanent disability preventing the shareholder from participating in the business, a proposed " +
+          "voluntary sale or transfer of the shareholder's equity to a third party, or another event the parties " +
+          "describe below.",
+      },
+      { type: "field", label: "Additional Triggering Events (if any): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Right of First Refusal" },
+      {
+        type: "paragraph",
+        text:
+          "If a triggering event occurs, the remaining shareholder (or the Company, if the parties so choose) " +
+          "has the right, but not the obligation, to purchase all or part of the affected shareholder's equity " +
+          "before it may be transferred to anyone else, for the period stated below after notice of the " +
+          "triggering event.",
+      },
+      { type: "field", label: "Period to Exercise Right of First Refusal: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Valuation Method" },
+      {
+        type: "paragraph",
+        text:
+          "The purchase price for equity acquired under this Agreement will be determined using the method " +
+          "described below — for example, a fixed price updated periodically, a formula based on the Company's " +
+          "financials, or an independent appraisal.",
+      },
+      { type: "field", label: "Valuation Method: ", blank: TEXT_BLANK },
+      { type: "field", label: "Date Valuation Was Last Updated (if fixed price): ", blank: DATE_BLANK },
+
+      { type: "section", text: "Payment Terms" },
+      {
+        type: "paragraph",
+        text:
+          "The purchase price determined above will be paid according to the terms described below — for " +
+          "example, in a lump sum at closing, in installments over a stated period, or funded in whole or part " +
+          "by life or disability insurance proceeds where a triggering event is death or disability.",
+      },
+      { type: "field", label: "Payment Terms: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Insurance Funding" },
+      {
+        type: "paragraph",
+        text:
+          "If the parties intend to fund a purchase on death or disability with insurance, the policy details " +
+          "and any obligation to maintain the policy are described below. If no insurance funding is intended, " +
+          "this may be left blank.",
+      },
+      { type: "field", label: "Insurance Funding Details (if any): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Tax and Legal Note" },
+      {
+        type: "paragraph",
+        text:
+          "This document is a starting draft, not tax or legal advice. Buy-sell arrangements interact with " +
+          "estate planning, insurance, and securities-law considerations that vary by jurisdiction and by the " +
+          "shareholders' personal circumstances. The parties should have a lawyer and accountant review the " +
+          "final terms before signing.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Shareholder A", order: 1 }, { label: "Shareholder B", order: 2 }] },
+    ],
+  },
+  {
+    slug: "personal-property-bill-of-sale",
+    title: "PERSONAL PROPERTY BILL OF SALE",
+    signerLabels: ["Seller", "Buyer"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Seller: ", blank: TEXT_BLANK },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+      { type: "field", label: "Buyer: ", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Item(s) Sold" },
+      {
+        type: "paragraph",
+        text:
+          "This is a private sale of personal property between individuals, not a commercial transaction. The " +
+          "Seller agrees to sell, and the Buyer agrees to buy, the following item(s):",
+      },
+      { type: "field", label: "Description of Item(s): ", blank: TEXT_BLANK },
+      { type: "field", label: "Make / Model / Year (if applicable): ", blank: TEXT_BLANK },
+      { type: "field", label: "Serial Number / VIN (if applicable): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Purchase Price and Payment" },
+      { type: "field", label: "Purchase Price: ", blank: TEXT_BLANK },
+      { type: "field", label: "Payment Method: ", blank: TEXT_BLANK },
+      {
+        type: "paragraph",
+        text: `Payment is due in full on or before ${DATE_BLANK}, unless the parties agree in writing to a different arrangement.`,
+      },
+
+      { type: "section", text: "Condition of Item(s)" },
+      {
+        type: "paragraph",
+        text:
+          "Unless otherwise noted below, the item(s) are sold in their current condition, \"as is\" and \"where is,\" " +
+          "with no warranty of merchantability, fitness for a particular purpose, or any other condition, express or implied.",
+      },
+      { type: "field", label: "Known Defects or Issues Disclosed by Seller (if any): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Ownership and Right to Sell" },
+      {
+        type: "paragraph",
+        text:
+          "The Seller represents that the Seller is the lawful owner of the item(s) and that they are free of any " +
+          "liens, loans, or third-party claims, except as disclosed below.",
+      },
+      { type: "field", label: "Liens or Claims Disclosed (if any): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Delivery and Risk of Loss" },
+      {
+        type: "paragraph",
+        text: `The item(s) will be delivered to, or made available for pickup by, the Buyer on ${DATE_BLANK} at the following location:`,
+      },
+      { type: "field", label: "Delivery / Pickup Location: ", blank: TEXT_BLANK },
+      {
+        type: "paragraph",
+        text: "Once the Buyer takes possession of the item(s), all risk of loss, theft, or damage transfers to the Buyer.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "If a dispute arises out of this Agreement, the parties agree to first attempt to resolve it through " +
+          "good-faith discussion before pursuing mediation, arbitration, or any other legal remedy.",
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Seller", order: 1 }, { label: "Buyer", order: 2 }] },
+    ],
+  },
+  {
+    slug: "pet-custody-care-agreement",
+    title: "PET CUSTODY AND CARE AGREEMENT",
+    signerLabels: ["Party A", "Party B"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Party A: ", blank: TEXT_BLANK },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+      { type: "field", label: "Party B: ", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "The Pet" },
+      { type: "paragraph", text: "This Agreement covers the following pet, currently shared or co-owned by the parties:" },
+      { type: "field", label: "Pet's Name: ", blank: TEXT_BLANK },
+      { type: "field", label: "Species / Breed: ", blank: TEXT_BLANK },
+      { type: "field", label: "Age / Description: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Ownership" },
+      { type: "paragraph", text: "The parties agree on the following ownership arrangement for the pet named above:" },
+      { type: "field", label: "Legal / Primary Owner (if applicable): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Custody Schedule" },
+      { type: "paragraph", text: "The parties agree to share time with the pet according to the following schedule:" },
+      { type: "field", label: "Custody Schedule: ", blank: TEXT_BLANK },
+      {
+        type: "paragraph",
+        text: "Any changes to this schedule must be agreed to in advance by both parties, whether in writing, by text message, or by email.",
+      },
+
+      { type: "section", text: "Expenses" },
+      {
+        type: "paragraph",
+        text: "The parties agree to divide the pet's ongoing expenses, including food, grooming, supplies, and routine veterinary care, as follows:",
+      },
+      { type: "field", label: "Expense Split: ", blank: TEXT_BLANK },
+      { type: "paragraph", text: "Receipts for shared expenses should be kept and made available to the other party upon request." },
+
+      { type: "section", text: "Veterinary Care and Major Decisions" },
+      {
+        type: "paragraph",
+        text:
+          "Routine veterinary care will be arranged by whichever party has custody at the time. Non-routine or costly " +
+          "medical decisions, including major treatment, surgery, or end-of-life decisions, require mutual agreement " +
+          "of both parties wherever reasonably possible.",
+      },
+      { type: "field", label: "Preferred Veterinarian / Clinic: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Relocation and Travel" },
+      {
+        type: "paragraph",
+        text:
+          "A party who plans to move to a new home, or travel with the pet for an extended period, agrees to give the " +
+          "other party reasonable advance notice and to discuss any impact on the custody schedule in good faith.",
+      },
+
+      { type: "section", text: "If the Arrangement No Longer Works" },
+      {
+        type: "paragraph",
+        text:
+          "If either party is no longer able to keep to this arrangement, both parties agree to discuss the pet's " +
+          "care and, where possible, agree on new terms in good faith before making any unilateral change to custody or ownership.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any disagreement about the pet's care or custody through " +
+          "good-faith discussion, and if needed, mediation, before pursuing any other remedy.",
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Party A", order: 1 }, { label: "Party B", order: 2 }] },
+    ],
+  },
+  {
+    slug: "personal-property-storage-agreement",
+    title: "PERSONAL PROPERTY STORAGE AGREEMENT",
+    signerLabels: ["Owner", "Storage Provider"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Owner: ", blank: TEXT_BLANK },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+      { type: "field", label: "Storage Provider: ", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Property Being Stored" },
+      {
+        type: "paragraph",
+        text: "The Storage Provider agrees to allow the Owner to store the following personal belongings at the Storage Provider's property:",
+      },
+      { type: "field", label: "Description of Stored Items: ", blank: TEXT_BLANK },
+      { type: "field", label: "Approximate Quantity / Volume: ", blank: TEXT_BLANK },
+      { type: "field", label: "Storage Location (address / specific area, e.g. garage, basement): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Term" },
+      {
+        type: "paragraph",
+        text: `This storage arrangement begins on ${DATE_BLANK} and continues until ${DATE_BLANK}, unless ended earlier as described below.`,
+      },
+
+      { type: "section", text: "Storage Fee" },
+      { type: "field", label: "Fee (if any): ", blank: TEXT_BLANK },
+      { type: "field", label: "Payment Schedule: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Access to Stored Items" },
+      {
+        type: "paragraph",
+        text:
+          "The Owner may access the stored items at reasonable times agreed with the Storage Provider in advance. " +
+          "The Storage Provider agrees not to move, use, or dispose of the stored items without the Owner's consent.",
+      },
+
+      { type: "section", text: "Condition and Liability" },
+      {
+        type: "paragraph",
+        text:
+          "The Owner is responsible for reasonably packing and protecting items before storage. The Storage " +
+          "Provider agrees to take reasonable care of the stored items but is not an insurer of them. Except in " +
+          "cases of the Storage Provider's gross negligence or intentional misconduct, the Storage Provider is not " +
+          "responsible for loss, theft, or damage to the stored items, and the Owner is encouraged to maintain " +
+          "their own insurance covering the stored property.",
+      },
+
+      { type: "section", text: "Ending the Arrangement and Removal of Property" },
+      {
+        type: "paragraph",
+        text:
+          "Either party may end this arrangement by giving the other party reasonable written notice. Upon ending " +
+          "the arrangement, the Owner agrees to remove all stored items within a reasonable time, as agreed by the parties.",
+      },
+      { type: "field", label: "Notice Period: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Agreement through " +
+          "good-faith discussion before pursuing mediation, arbitration, or litigation.",
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Owner", order: 1 }, { label: "Storage Provider", order: 2 }] },
+    ],
+  },
+  {
+    slug: "property-management-agreement",
+    title: "PROPERTY MANAGEMENT AGREEMENT",
+    signerLabels: ["Property Owner", "Property Manager"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Property Owner: ", blank: TEXT_BLANK },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+      { type: "field", label: "Property Manager: ", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Managed Property" },
+      { type: "field", label: "Property Address: ", blank: TEXT_BLANK },
+      { type: "field", label: "Description of Property (e.g. number of units): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Term" },
+      {
+        type: "paragraph",
+        text: `This Agreement begins on ${DATE_BLANK} and continues until ${DATE_BLANK}, unless ended earlier as described below.`,
+      },
+
+      { type: "section", text: "Property Manager's Duties" },
+      {
+        type: "paragraph",
+        text:
+          "The Property Manager agrees to manage the property on the Property Owner's behalf, including advertising " +
+          "vacancies, screening and communicating with tenants, collecting rent, coordinating repairs and " +
+          "maintenance, and handling day-to-day tenant relations.",
+      },
+      { type: "field", label: "Additional Duties (if any): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Rent Collection and Disbursement" },
+      {
+        type: "paragraph",
+        text:
+          "The Property Manager agrees to collect rent from tenants on the Property Owner's behalf and to remit " +
+          "collected rent, less any agreed fees and approved expenses, to the Property Owner according to the following schedule:",
+      },
+      { type: "field", label: "Disbursement Schedule: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Management Fee" },
+      { type: "field", label: "Management Fee: ", blank: TEXT_BLANK },
+      { type: "field", label: "Fee Basis (e.g. flat fee, percentage of rent collected): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Maintenance and Repairs" },
+      {
+        type: "paragraph",
+        text:
+          "The Property Manager may authorize routine maintenance and repairs up to the amount below without prior " +
+          "approval from the Property Owner. Repairs above this amount require the Property Owner's prior approval, " +
+          "except in the case of an emergency affecting health, safety, or property damage.",
+      },
+      { type: "field", label: "Repair Authorization Limit Without Prior Approval: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Insurance and Liability" },
+      {
+        type: "paragraph",
+        text:
+          "The Property Owner is responsible for maintaining adequate property insurance. The Property Manager " +
+          "agrees to act in good faith and in the Property Owner's best interest, but is not liable for losses that " +
+          "result from the Property Owner's own instructions, tenant actions, or events beyond the Property " +
+          "Manager's reasonable control.",
+      },
+
+      { type: "section", text: "Termination" },
+      {
+        type: "paragraph",
+        text:
+          "Either party may terminate this Agreement by giving the other party written notice as specified below. " +
+          "Upon termination, the Property Manager agrees to provide a final accounting and to turn over any funds, " +
+          "keys, and records held on the Property Owner's behalf.",
+      },
+      { type: "field", label: "Notice Period Required to Terminate: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Agreement through good-faith " +
+          "negotiation. If unresolved, either party may pursue mediation or another mutually agreed method before " +
+          "resorting to litigation.",
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Property Owner", order: 1 }, { label: "Property Manager", order: 2 }] },
+    ],
+  },
+  {
+    slug: "room-rental-agreement",
+    title: "ROOM RENTAL AGREEMENT",
+    signerLabels: ["Landlord", "Tenant"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Landlord: ", blank: TEXT_BLANK },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+      { type: "field", label: "Tenant: ", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "The Room and Property" },
+      {
+        type: "paragraph",
+        text:
+          "The Landlord owns or leases the property described below and agrees to rent a single room within it to " +
+          "the Tenant. This is not an agreement between co-tenants sharing a lease; the Landlord retains control of " +
+          "the rest of the property.",
+      },
+      { type: "field", label: "Property Address: ", blank: TEXT_BLANK },
+      { type: "field", label: "Room Rented (e.g. \"upstairs bedroom\"): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Term" },
+      {
+        type: "paragraph",
+        text: `This Agreement begins on ${DATE_BLANK} and continues on a month-to-month basis, or until ${DATE_BLANK}, as agreed by the parties.`,
+      },
+
+      { type: "section", text: "Rent" },
+      { type: "field", label: "Monthly Rent: ", blank: TEXT_BLANK },
+      { type: "field", label: "Due Date: ", blank: TEXT_BLANK },
+      { type: "field", label: "Payment Method: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Security Deposit" },
+      { type: "field", label: "Security Deposit Amount: ", blank: TEXT_BLANK },
+      {
+        type: "paragraph",
+        text:
+          "The security deposit will be returned to the Tenant after move-out, less any reasonable deductions for " +
+          "damage beyond normal wear and tear or unpaid rent, as allowed by applicable law.",
+      },
+
+      { type: "section", text: "Shared Spaces and House Rules" },
+      {
+        type: "paragraph",
+        text: "The Tenant may use the shared areas of the property, such as the kitchen, bathroom, and common living areas, subject to the house rules below.",
+      },
+      { type: "field", label: "Shared Spaces Included: ", blank: TEXT_BLANK },
+      { type: "field", label: "House Rules (e.g. quiet hours, guests, smoking, pets): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Utilities and Services" },
+      { type: "field", label: "Utilities Included in Rent: ", blank: TEXT_BLANK },
+      { type: "field", label: "Utilities Paid Separately by Tenant (if any): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Landlord's Access" },
+      {
+        type: "paragraph",
+        text:
+          "The Landlord may enter the rented room with reasonable advance notice to inspect the premises, make " +
+          "repairs, or show the room to prospective tenants or buyers, except in the case of an emergency.",
+      },
+
+      { type: "section", text: "Ending the Tenancy" },
+      {
+        type: "paragraph",
+        text:
+          "Either party may end this Agreement by giving the other party written notice as specified below, " +
+          "subject to any minimum notice period required by applicable law.",
+      },
+      { type: "field", label: "Notice Period Required: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Agreement through good-faith " +
+          "discussion before pursuing mediation or any other remedy.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Landlord", order: 1 }, { label: "Tenant", order: 2 }] },
+    ],
+  },
+  {
+    slug: "remote-work-equipment-agreement",
+    title: "REMOTE WORK EQUIPMENT AGREEMENT",
+    signerLabels: ["Employer", "Employee"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Employer: ", blank: TEXT_BLANK },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+      { type: "field", label: "Employee: ", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Equipment Provided" },
+      { type: "paragraph", text: "The Employer agrees to provide the Employee with the following equipment for use while working remotely:" },
+      { type: "field", label: "Equipment Description (e.g. laptop, monitor, chair): ", blank: TEXT_BLANK },
+      { type: "field", label: "Make / Model / Serial Number: ", blank: TEXT_BLANK },
+      { type: "field", label: "Estimated Value: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Ownership" },
+      {
+        type: "paragraph",
+        text:
+          "All equipment provided under this Agreement remains the property of the Employer at all times. The " +
+          "Employee has no ownership interest in the equipment and may not sell, lend, pledge, or otherwise " +
+          "transfer it to any third party.",
+      },
+
+      { type: "section", text: "Permitted Use" },
+      {
+        type: "paragraph",
+        text:
+          "The equipment is provided solely for the Employee's use in performing work duties. Reasonable incidental " +
+          "personal use is permitted unless the Employer's policies state otherwise, but the Employee agrees not to " +
+          "use the equipment for unlawful purposes or in a way that violates the Employer's policies.",
+      },
+
+      { type: "section", text: "Condition, Care, and Security" },
+      {
+        type: "paragraph",
+        text:
+          "The Employee agrees to keep the equipment in good working condition, use reasonable care to protect it " +
+          "from damage or theft, and follow any security requirements set by the Employer, including password " +
+          "protection, software updates, and data security practices.",
+      },
+
+      { type: "section", text: "Loss, Damage, and Repairs" },
+      {
+        type: "paragraph",
+        text:
+          "The Employee agrees to promptly notify the Employer of any loss, theft, or damage to the equipment. The " +
+          "Employee may be responsible for the cost of repair or replacement in cases of negligence, misuse, or " +
+          "failure to report loss or theft in a timely manner, except where prohibited by applicable law.",
+      },
+
+      { type: "section", text: "Return of Equipment" },
+      {
+        type: "paragraph",
+        text:
+          "The Employee agrees to return all equipment provided under this Agreement in good condition, ordinary " +
+          "wear and tear excepted, upon request by the Employer or upon separation from employment, whichever comes first.",
+      },
+      { type: "field", label: "Return Deadline (if separation occurs): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Agreement through good-faith " +
+          "discussion between the Employee and the Employer's designated representative before pursuing any other remedy.",
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Employer", order: 1 }, { label: "Employee", order: 2 }] },
+    ],
+  },
+  {
+    slug: "performance-improvement-plan-acknowledgment",
+    title: "PERFORMANCE IMPROVEMENT PLAN ACKNOWLEDGMENT",
+    signerLabels: ["Employer", "Employee"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Employer: ", blank: TEXT_BLANK },
+      { type: "field", label: "Employee: ", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "Position / Title: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Purpose of This Acknowledgment" },
+      {
+        type: "paragraph",
+        text:
+          "This document confirms that the Employee has received and reviewed a formal Performance Improvement " +
+          "Plan (\"PIP\") from the Employer. Signing this Acknowledgment confirms receipt and understanding of the " +
+          "plan below; it is not, by itself, a notice of termination or disciplinary action beyond what is " +
+          "described in the plan.",
+      },
+      { type: "field", label: "Date PIP Presented to Employee: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Performance Concerns Identified" },
+      {
+        type: "paragraph",
+        text: "The Employer has identified the following areas where the Employee's performance does not currently meet expectations:",
+      },
+      { type: "field", label: "Performance Concerns: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Goals and Expectations" },
+      {
+        type: "paragraph",
+        text: "To address the concerns above, the Employee is expected to meet the following specific, measurable goals during the review period:",
+      },
+      { type: "field", label: "Goals and Expectations: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Support and Resources" },
+      {
+        type: "paragraph",
+        text:
+          "The Employer agrees to provide the following support to help the Employee meet the goals above, which " +
+          "may include additional training, check-ins, mentoring, or adjusted resources:",
+      },
+      { type: "field", label: "Support Provided: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Review Timeline" },
+      {
+        type: "paragraph",
+        text: `The Employee's progress will be reviewed on an ongoing basis, with a formal review scheduled for ${DATE_BLANK}. The overall improvement period is expected to conclude on or around ${DATE_BLANK}, unless extended or shortened by the Employer.`,
+      },
+      { type: "field", label: "Check-in Frequency (e.g. weekly, biweekly): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Possible Outcomes" },
+      {
+        type: "paragraph",
+        text:
+          "At the conclusion of the review period, the Employer will assess whether the goals above have been met. " +
+          "Depending on the outcome, this may result in the plan ending successfully, an extension of the review " +
+          "period, or further employment action, up to and including termination, in accordance with the " +
+          "Employer's policies.",
+      },
+
+      { type: "section", text: "Employee Acknowledgment" },
+      {
+        type: "paragraph",
+        text:
+          "By signing below, the Employee acknowledges having received, read, and discussed this Performance " +
+          "Improvement Plan with the Employer. Signing does not necessarily mean the Employee agrees with every " +
+          "concern raised, only that the plan was received and reviewed. The Employee may attach written comments " +
+          "to this Acknowledgment if desired.",
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Employer", order: 1 }, { label: "Employee", order: 2 }] },
+    ],
+  },
+  {
+    slug: "bylaws-adoption-resolution",
+    title: "BYLAWS ADOPTION RESOLUTION",
+    signerLabels: ["President", "Secretary"],
+    blocks: [
+      { type: "section", text: "Company Information" },
+      { type: "field", label: "Company Name: ", blank: TEXT_BLANK },
+      { type: "field", label: "State of Incorporation: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Meeting or Written Consent" },
+      {
+        type: "paragraph",
+        text:
+          "The undersigned, being the President and Secretary of the Company, certify that at a meeting of the " +
+          "board of directors held on the date below, or by unanimous written consent of the directors in lieu " +
+          "of a meeting, the following resolution regarding the Company's bylaws was duly adopted:",
+      },
+      { type: "field", label: "Date: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Recitals" },
+      {
+        type: "paragraph",
+        text:
+          "The board of directors has reviewed a proposed set of bylaws governing the internal affairs of the " +
+          "Company, including the roles and duties of officers and directors, meeting and voting procedures, " +
+          "and other matters of corporate governance.",
+      },
+
+      { type: "section", text: "Resolution to Adopt Bylaws" },
+      {
+        type: "paragraph",
+        text:
+          "RESOLVED, that the bylaws reviewed by the board of directors and identified below are hereby adopted " +
+          "as the official bylaws of the Company, and shall govern the internal affairs of the Company until " +
+          "amended, restated, or repealed in accordance with their own terms.",
+      },
+      { type: "field", label: "Description or Title of Adopted Bylaws Document: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Effective Date" },
+      { type: "field", label: "Effective Date of Bylaws: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Filing and Recordkeeping" },
+      {
+        type: "paragraph",
+        text:
+          "The Secretary is directed to retain a copy of the adopted bylaws among the Company's official records " +
+          "and to make the bylaws available to directors, officers, and shareholders upon reasonable request.",
+      },
+
+      { type: "section", text: "Future Amendments" },
+      {
+        type: "paragraph",
+        text:
+          "Any future amendment, restatement, or repeal of the bylaws shall be adopted only in accordance with " +
+          "the amendment procedures set forth within the bylaws themselves.",
+      },
+
+      { type: "section", text: "Certification" },
+      {
+        type: "paragraph",
+        text:
+          "The Secretary certifies that the foregoing is a true and accurate record of the resolution adopted " +
+          "by the Company's directors regarding the adoption of its bylaws.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Resolution shall be governed by the laws of the State/Country of ${TEXT_BLANK}.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "President", order: 1 }, { label: "Secretary", order: 2 }] },
+    ],
+  },
+  {
+    slug: "operating-agreement-amendment",
+    title: "OPERATING AGREEMENT AMENDMENT",
+    signerLabels: ["Member A", "Member B"],
+    blocks: [
+      { type: "section", text: "Company Information" },
+      { type: "field", label: "Company Name: ", blank: TEXT_BLANK },
+      { type: "field", label: "State of Formation: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Original Agreement Being Amended" },
+      { type: "field", label: "Date of Original Operating Agreement: ", blank: DATE_BLANK },
+      {
+        type: "paragraph",
+        text:
+          "This Amendment modifies certain provisions of the operating agreement referenced above (the " +
+          "\"Original Agreement\") entered into by the members of the Company. Except as expressly amended " +
+          "below, all terms, conditions, and provisions of the Original Agreement remain unchanged and in full " +
+          "force and effect.",
+      },
+
+      { type: "section", text: "Members Executing This Amendment" },
+      { type: "field", label: "Member A Name: ", blank: TEXT_BLANK },
+      { type: "field", label: "Member B Name: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Effective Date of Amendment" },
+      { type: "field", label: "Effective Date: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Provisions Being Amended" },
+      { type: "field", label: "Section(s) of Original Agreement Being Amended: ", blank: TEXT_BLANK },
+      {
+        type: "paragraph",
+        text:
+          "The section(s) identified above are hereby deleted in their entirety, to the extent inconsistent " +
+          "with this Amendment, and replaced with the amended language set forth below.",
+      },
+
+      { type: "section", text: "Amended Language" },
+      { type: "field", label: "New or Amended Provision (1): ", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "New or Amended Provision (2): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Reason for Amendment" },
+      { type: "field", label: "Brief Description of Reason for Amendment (optional): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Ratification of Remaining Terms" },
+      {
+        type: "paragraph",
+        text:
+          "Except as specifically amended by this Amendment, the members ratify and confirm all other terms, " +
+          "conditions, and provisions of the Original Agreement, which shall continue to govern the affairs of " +
+          "the Company without interruption.",
+      },
+
+      { type: "section", text: "Counterparts" },
+      {
+        type: "paragraph",
+        text:
+          "This Amendment may be executed in counterparts, each of which shall be deemed an original, and all " +
+          "of which together shall constitute one and the same instrument.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Amendment shall be governed by the laws of the State/Country of ${TEXT_BLANK}.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Member A", order: 1 }, { label: "Member B", order: 2 }] },
+    ],
+  },
+  {
+    slug: "buy-sell-agreement",
+    title: "LLC/CORPORATION BUY-SELL AGREEMENT",
+    signerLabels: ["Member A", "Member B"],
+    blocks: [
+      { type: "section", text: "Company Information" },
+      { type: "field", label: "Company Name: ", blank: TEXT_BLANK },
+      { type: "field", label: "Entity Type (LLC or Corporation): ", blank: TEXT_BLANK },
+      { type: "field", label: "State of Formation: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Owners" },
+      { type: "field", label: "Member A / Shareholder A Name: ", blank: TEXT_BLANK },
+      { type: "field", label: "Member A Ownership Percentage: ", blank: TEXT_BLANK },
+      { type: "field", label: "Member B / Shareholder B Name: ", blank: TEXT_BLANK },
+      { type: "field", label: "Member B Ownership Percentage: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Purpose" },
+      {
+        type: "paragraph",
+        text:
+          "The owners of the Company desire to establish an orderly, predictable process for handling the " +
+          "transfer of an ownership interest upon certain triggering events, in order to preserve continuity of " +
+          "management and to protect both the Company and its remaining owners.",
+      },
+
+      { type: "section", text: "Triggering Events" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement governs the disposition of an owner's interest in the Company upon the occurrence of " +
+          "any of the following triggering events: death; permanent disability; divorce or legal separation " +
+          "resulting in an award of an ownership interest to a former spouse; bankruptcy, insolvency, or an " +
+          "involuntary transfer by operation of law; or a voluntary decision by an owner to withdraw from and " +
+          "sell their interest.",
+      },
+
+      { type: "section", text: "Right of First Refusal" },
+      {
+        type: "paragraph",
+        text:
+          "Before an owner may sell, pledge, transfer, or otherwise dispose of any ownership interest to a " +
+          "third party, that owner must first offer the interest to the Company and then to the remaining " +
+          "owner(s), on the same terms offered to the third party, giving the Company and remaining owner(s) " +
+          "the opportunity to purchase the interest before it may be transferred outside the ownership group.",
+      },
+      { type: "field", label: "Notice Period for Right of First Refusal (days): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Valuation of Interest" },
+      { type: "field", label: "Valuation Method (e.g., independent appraisal, formula, fixed price): ", blank: TEXT_BLANK },
+      {
+        type: "paragraph",
+        text:
+          "The value determined under the method selected above shall be used to establish the purchase price " +
+          "of an owner's interest for any purchase arising under this Agreement, unless the owners agree in " +
+          "writing to a different value at the time of the triggering event.",
+      },
+
+      { type: "section", text: "Death or Disability" },
+      {
+        type: "paragraph",
+        text:
+          "Upon the death or permanent disability of an owner, the Company and/or the remaining owner(s) shall " +
+          "have the option, but not the obligation, to purchase all or a portion of the affected owner's " +
+          "interest at the value determined under this Agreement.",
+      },
+      { type: "field", label: "Funding Source, if any (e.g., life or disability insurance): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Divorce or Involuntary Transfer" },
+      {
+        type: "paragraph",
+        text:
+          "If an owner's interest becomes subject to a property settlement, divorce decree, judgment, " +
+          "garnishment, or other involuntary transfer, the affected owner (or the transferee, as applicable) " +
+          "shall promptly notify the Company, and the Company and/or remaining owner(s) shall have the right to " +
+          "purchase the affected interest under the terms of this Agreement.",
+      },
+
+      { type: "section", text: "Purchase Price and Payment Terms" },
+      { type: "field", label: "Payment Terms (e.g., lump sum, installment schedule): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Closing" },
+      { type: "field", label: "Closing Period Following Determination of Purchase Price (days): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Member A", order: 1 }, { label: "Member B", order: 2 }] },
+    ],
+  },
+  {
+    slug: "code-of-conduct-acknowledgment",
+    title: "CODE OF CONDUCT ACKNOWLEDGMENT",
+    signerLabels: ["Company", "Employee"],
+    blocks: [
+      { type: "section", text: "Company and Employee Information" },
+      { type: "field", label: "Company Name: ", blank: TEXT_BLANK },
+      { type: "field", label: "Employee Name: ", blank: TEXT_BLANK },
+      { type: "field", label: "Employee Position/Title: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Purpose" },
+      {
+        type: "paragraph",
+        text:
+          "The Company has adopted a Code of Conduct setting out the standards of behavior, ethics, and " +
+          "professionalism expected of all employees. This Acknowledgment confirms that the Employee has " +
+          "received, read, and understood the Code of Conduct.",
+      },
+
+      { type: "section", text: "Acknowledgment of Receipt" },
+      { type: "field", label: "Date Code of Conduct Was Provided to Employee: ", blank: DATE_BLANK },
+      {
+        type: "paragraph",
+        text:
+          "The Employee acknowledges receipt of a copy of the Company's Code of Conduct and confirms having had " +
+          "the opportunity to review its contents and ask questions about it before signing this Acknowledgment.",
+      },
+
+      { type: "section", text: "Employee's Commitment" },
+      {
+        type: "paragraph",
+        text:
+          "The Employee agrees to comply with the standards, policies, and expectations described in the Code " +
+          "of Conduct throughout the course of employment with the Company, and understands that the Company " +
+          "may update the Code of Conduct from time to time.",
+      },
+
+      { type: "section", text: "Reporting Concerns" },
+      {
+        type: "paragraph",
+        text:
+          "The Employee understands that any concerns regarding possible violations of the Code of Conduct " +
+          "should be reported promptly to the person, role, or department identified below.",
+      },
+      { type: "field", label: "Reporting Contact or Department: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Consequences of Non-Compliance" },
+      {
+        type: "paragraph",
+        text:
+          "The Employee understands that failure to comply with the Code of Conduct may result in disciplinary " +
+          "action, up to and including termination of employment, in accordance with the Company's policies.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Acknowledgment shall be governed by the laws of the State/Country of ${TEXT_BLANK}.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Company", order: 1 }, { label: "Employee", order: 2 }] },
+    ],
+  },
+  {
+    slug: "data-breach-notification-acknowledgment",
+    title: "DATA BREACH NOTIFICATION ACKNOWLEDGMENT",
+    signerLabels: ["Company", "Recipient"],
+    blocks: [
+      { type: "section", text: "Company and Recipient Information" },
+      { type: "field", label: "Company Name: ", blank: TEXT_BLANK },
+      { type: "field", label: "Recipient Name: ", blank: TEXT_BLANK },
+      { type: "field", label: "Recipient Address or Contact Information: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Notice of Data Breach" },
+      {
+        type: "paragraph",
+        text:
+          "This notice is provided to inform the Recipient that the Company has identified a data security " +
+          "incident that may have affected information associated with the Recipient's account or relationship " +
+          "with the Company.",
+      },
+      { type: "field", label: "Date the Incident Was Discovered: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Description of the Incident" },
+      { type: "field", label: "Description of How the Incident Occurred: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Information Involved" },
+      { type: "field", label: "Categories of Information Potentially Affected: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Remedial Measures Taken" },
+      {
+        type: "paragraph",
+        text:
+          "The Company has taken, or is taking, the following measures to contain the incident, secure its " +
+          "systems, and reduce the risk of a similar incident occurring in the future:",
+      },
+      { type: "field", label: "Remedial Measures: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Recommended Steps for Recipient" },
+      {
+        type: "paragraph",
+        text:
+          "The Company recommends that the Recipient review account activity, update relevant passwords, and " +
+          "remain alert to unexpected communications. Additional recommended precautions specific to this " +
+          "incident are described below.",
+      },
+      { type: "field", label: "Additional Recommended Actions: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Company Contact for Questions" },
+      { type: "field", label: "Contact Name or Department: ", blank: TEXT_BLANK },
+      { type: "field", label: "Contact Phone or Email: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Acknowledgment of Receipt" },
+      {
+        type: "paragraph",
+        text:
+          "By signing below, the Recipient acknowledges receipt of this notification and confirms having had " +
+          "the opportunity to review its contents and ask the Company any questions before signing.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This notice shall be governed by the laws of the State/Country of ${TEXT_BLANK}.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Company", order: 1 }, { label: "Recipient", order: 2 }] },
+    ],
+  },
+  {
+    slug: "whistleblower-policy-acknowledgment",
+    title: "WHISTLEBLOWER POLICY ACKNOWLEDGMENT",
+    signerLabels: ["Company", "Employee"],
+    blocks: [
+      { type: "section", text: "Company and Employee Information" },
+      { type: "field", label: "Company Name: ", blank: TEXT_BLANK },
+      { type: "field", label: "Employee Name: ", blank: TEXT_BLANK },
+      { type: "field", label: "Employee Position/Title: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Purpose of the Whistleblower Policy" },
+      {
+        type: "paragraph",
+        text:
+          "The Company has adopted a whistleblower policy to encourage employees to report suspected " +
+          "misconduct, fraud, illegal activity, or violations of Company policy without fear of retaliation. " +
+          "This Acknowledgment confirms that the Employee has received and understands the policy.",
+      },
+
+      { type: "section", text: "Acknowledgment of Receipt" },
+      { type: "field", label: "Date Whistleblower Policy Was Provided to Employee: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Reporting Procedures" },
+      {
+        type: "paragraph",
+        text:
+          "The Employee understands that concerns may be reported through the channel(s) identified below, and " +
+          "that reports may generally be made without disclosing the reporter's identity, where permitted.",
+      },
+      { type: "field", label: "Reporting Contact or Channel (e.g., hotline, email, manager): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Non-Retaliation Protection" },
+      {
+        type: "paragraph",
+        text:
+          "The Company prohibits retaliation of any kind against any employee who, in good faith, reports " +
+          "suspected misconduct or participates in an investigation into a report made under this policy. Any " +
+          "employee who believes they have experienced retaliation should report it immediately using the " +
+          "reporting channel identified above.",
+      },
+
+      { type: "section", text: "Confidentiality" },
+      {
+        type: "paragraph",
+        text:
+          "The Company will make reasonable efforts to keep the identity of a reporting employee confidential " +
+          "to the extent possible, consistent with the need to conduct a fair and thorough investigation and " +
+          "any applicable legal requirements.",
+      },
+
+      { type: "section", text: "Employee's Understanding" },
+      {
+        type: "paragraph",
+        text:
+          "The Employee acknowledges having had the opportunity to review the whistleblower policy and ask " +
+          "questions about it before signing, and understands that reports made in bad faith or known to be " +
+          "false are not protected under this policy.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Acknowledgment shall be governed by the laws of the State/Country of ${TEXT_BLANK}.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Company", order: 1 }, { label: "Employee", order: 2 }] },
+    ],
+  },
+  {
+    slug: "trademark-license-agreement",
+    title: "TRADEMARK LICENSE AGREEMENT",
+    signerLabels: ["Licensor", "Licensee"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Licensor: ", blank: TEXT_BLANK },
+      { type: "field", label: "Licensee: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "The Licensed Mark" },
+      {
+        type: "paragraph",
+        text: "This Agreement covers the license of the following trademark, brand name, or logo (the \"Mark\"):",
+      },
+      { type: "field", label: "Description of Mark: ", blank: TEXT_BLANK },
+      { type: "field", label: "Registration Number (if any): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Grant of License" },
+      {
+        type: "paragraph",
+        text:
+          "The Licensor grants the Licensee a license to use the Mark solely in connection with the goods, " +
+          "services, or business activities described below, and subject to the terms of this Agreement. No " +
+          "rights in the Mark are granted beyond those expressly stated here.",
+      },
+      { type: "field", label: "Permitted Use / Goods or Services: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Exclusivity and Territory" },
+      {
+        type: "paragraph",
+        text:
+          "The license granted is non-exclusive unless the parties indicate otherwise below, and applies only " +
+          "within the territory specified.",
+      },
+      { type: "field", label: "Exclusive / Non-Exclusive: ", blank: TEXT_BLANK },
+      { type: "field", label: "Territory: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Quality Control" },
+      {
+        type: "paragraph",
+        text:
+          "The Licensee agrees that all goods and services offered under the Mark will meet quality standards at " +
+          "least equal to those the Licensor already maintains, and will not damage the reputation or goodwill " +
+          "associated with the Mark. The Licensor may request samples of materials bearing the Mark and may " +
+          "require reasonable corrections if quality standards are not met.",
+      },
+
+      { type: "section", text: "Royalty or Fee" },
+      {
+        type: "paragraph",
+        text: "In consideration for the license granted, the Licensee will pay the Licensor as follows:",
+      },
+      { type: "field", label: "Royalty / Fee Amount and Schedule: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Term and Termination" },
+      {
+        type: "paragraph",
+        text: `This Agreement begins on ${DATE_BLANK} and continues until terminated. Either party may terminate this Agreement upon written notice if the other party materially breaches its terms and fails to correct the breach within a reasonable period after notice. Upon termination, the Licensee will immediately stop using the Mark and remove it from any materials, signage, products, or marketing still in use.`,
+      },
+
+      { type: "section", text: "Ownership and Goodwill" },
+      {
+        type: "paragraph",
+        text:
+          "The Licensee acknowledges that the Licensor owns all right, title, and interest in the Mark, including " +
+          "any goodwill generated by the Licensee's use of it, and that nothing in this Agreement transfers " +
+          "ownership of the Mark to the Licensee.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Licensor", order: 1 }, { label: "Licensee", order: 2 }] },
+    ],
+  },
+  {
+    slug: "work-made-for-hire-agreement",
+    title: "WORK MADE FOR HIRE AGREEMENT",
+    signerLabels: ["Company", "Creator"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Company: ", blank: TEXT_BLANK },
+      { type: "field", label: "Creator: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Description of Engagement" },
+      {
+        type: "paragraph",
+        text: "The Creator has been engaged to perform the following work or services on behalf of the Company:",
+      },
+      { type: "field", label: "Description of Work/Services: ", blank: TEXT_BLANK },
+      { type: "field", label: "Expected Completion Date: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Work Made for Hire" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree that all deliverables, materials, and other work product created by the Creator in " +
+          "connection with this engagement (the \"Work\") are intended to constitute \"work made for hire\" under " +
+          "applicable copyright law, and that the Company is deemed the author and owner of the Work from the " +
+          "moment of its creation.",
+      },
+
+      { type: "section", text: "Fallback Assignment" },
+      {
+        type: "paragraph",
+        text:
+          "To the extent any portion of the Work is found not to qualify as a work made for hire under applicable " +
+          "law, the Creator hereby assigns, and agrees to assign, all right, title, and interest in that portion " +
+          "of the Work to the Company, effective as of its creation, including all copyright and other " +
+          "intellectual property rights in it.",
+      },
+
+      { type: "section", text: "Moral Rights" },
+      {
+        type: "paragraph",
+        text:
+          "To the extent permitted by law, the Creator waives any moral rights in the Work, including rights of " +
+          "attribution and integrity, in favor of the Company.",
+      },
+
+      { type: "section", text: "Further Assurances" },
+      {
+        type: "paragraph",
+        text:
+          "The Creator agrees to sign any additional documents and take any further actions reasonably requested " +
+          "by the Company to confirm or perfect the Company's ownership of the Work.",
+      },
+
+      { type: "section", text: "Consideration" },
+      { type: "field", label: "Payment / Consideration: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Representations" },
+      {
+        type: "paragraph",
+        text:
+          "The Creator represents that the Work will be original, that it will not infringe any third party's " +
+          "rights, and that the Creator has not granted any conflicting rights in the Work to any other party.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Company", order: 1 }, { label: "Creator", order: 2 }] },
+    ],
+  },
+  {
+    slug: "patent-assignment-agreement",
+    title: "PATENT ASSIGNMENT AGREEMENT",
+    signerLabels: ["Assignor", "Assignee"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Assignor: ", blank: TEXT_BLANK },
+      { type: "field", label: "Assignee: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Description of Invention" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement covers the assignment of all rights in the following invention and any related patent " +
+          "or patent application (the \"Patent Rights\"):",
+      },
+      { type: "field", label: "Title of Invention: ", blank: TEXT_BLANK },
+      { type: "field", label: "Patent / Application Number (if any): ", blank: TEXT_BLANK },
+      { type: "field", label: "Filing / Issue Date (if any): ", blank: DATE_BLANK },
+
+      { type: "section", text: "Assignment of Rights" },
+      {
+        type: "paragraph",
+        text:
+          "The Assignor irrevocably assigns to the Assignee all right, title, and interest in and to the " +
+          "invention described above, including the Patent Rights, any resulting patents anywhere in the world, " +
+          "all priority rights, and the right to sue for and collect damages for past, present, and future " +
+          "infringement.",
+      },
+
+      { type: "section", text: "Consideration" },
+      { type: "field", label: "Payment / Consideration: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Cooperation with Prosecution" },
+      {
+        type: "paragraph",
+        text:
+          "The Assignor agrees to reasonably cooperate with the Assignee, at the Assignee's request and expense, " +
+          "in the preparation, filing, and prosecution of patent applications covering the invention, including " +
+          "signing documents and providing information needed to secure, maintain, or enforce the Patent Rights.",
+      },
+
+      { type: "section", text: "Representations" },
+      {
+        type: "paragraph",
+        text:
+          "The Assignor represents that they are the original inventor (or the current lawful owner) of the " +
+          "invention, that they have full authority to assign the Patent Rights, and that the Patent Rights are " +
+          "free of any liens, licenses, or competing claims of ownership except as disclosed to the Assignee in " +
+          "writing.",
+      },
+
+      { type: "section", text: "Future Improvements" },
+      {
+        type: "paragraph",
+        text:
+          "Unless the parties agree otherwise in writing, this Agreement covers only the invention described " +
+          "above and does not extend to any separate inventions or improvements the Assignor develops " +
+          "independently after the date of this Agreement.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Assignor", order: 1 }, { label: "Assignee", order: 2 }] },
+    ],
+  },
+  {
+    slug: "ip-licensing-agreement",
+    title: "IP LICENSING AGREEMENT",
+    signerLabels: ["Licensor", "Licensee"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Licensor: ", blank: TEXT_BLANK },
+      { type: "field", label: "Licensee: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Licensed IP" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement covers the license of the following intellectual property (the \"IP\"), which may " +
+          "include software, content, a process, or other proprietary material:",
+      },
+      { type: "field", label: "Description of IP: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Grant of License" },
+      {
+        type: "paragraph",
+        text:
+          "The Licensor grants the Licensee a license to use, and where indicated below to reproduce, distribute, " +
+          "or modify, the IP solely for the purposes described below.",
+      },
+      { type: "field", label: "Permitted Use: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Exclusivity and Territory" },
+      {
+        type: "paragraph",
+        text:
+          "The license granted is non-exclusive unless the parties indicate otherwise below, and applies only " +
+          "within the territory specified.",
+      },
+      { type: "field", label: "Exclusive / Non-Exclusive: ", blank: TEXT_BLANK },
+      { type: "field", label: "Territory: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Fees or Royalty" },
+      {
+        type: "paragraph",
+        text: "In consideration for the license granted, the Licensee will pay the Licensor as follows:",
+      },
+      { type: "field", label: "Fee / Royalty Amount and Schedule: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Term and Termination" },
+      {
+        type: "paragraph",
+        text: `This Agreement begins on ${DATE_BLANK} and continues until terminated. Either party may terminate this Agreement upon written notice if the other party materially breaches its terms and fails to correct the breach within a reasonable period after notice. Upon termination, the Licensee will stop using the IP and, if requested, return or destroy any copies in its possession.`,
+      },
+
+      { type: "section", text: "Ownership" },
+      {
+        type: "paragraph",
+        text:
+          "The Licensor retains all right, title, and interest in the IP, including any modifications or " +
+          "derivative works the Licensee creates under this Agreement, except to the extent the parties expressly " +
+          "agree otherwise in writing. Nothing in this Agreement transfers ownership of the IP to the Licensee.",
+      },
+
+      { type: "section", text: "Representations" },
+      {
+        type: "paragraph",
+        text:
+          "The Licensor represents that it owns or otherwise has the right to license the IP, and that granting " +
+          "this license does not violate any agreement with a third party.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Licensor", order: 1 }, { label: "Licensee", order: 2 }] },
+    ],
+  },
+  {
+    slug: "vendor-non-disclosure-agreement",
+    title: "VENDOR NON-DISCLOSURE AGREEMENT",
+    signerLabels: ["Company", "Vendor"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Company: ", blank: TEXT_BLANK },
+      { type: "field", label: "Vendor: ", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Purpose" },
+      {
+        type: "paragraph",
+        text:
+          "The Company intends to share certain confidential information with the Vendor in connection with " +
+          "evaluating, negotiating, or carrying out a potential supply, procurement, or vendor relationship (the " +
+          "\"Purpose\"):",
+      },
+      { type: "field", label: "Description of Purpose: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Confidential Information" },
+      {
+        type: "paragraph",
+        text:
+          "\"Confidential Information\" means any business, technical, financial, or other information disclosed " +
+          "by the Company to the Vendor in connection with the Purpose, including specifications, pricing, " +
+          "forecasts, business plans, and supplier or customer information, whether disclosed orally, in " +
+          "writing, or in any other form, and whether or not marked as confidential.",
+      },
+
+      { type: "section", text: "Vendor's Obligations" },
+      {
+        type: "paragraph",
+        text:
+          "The Vendor agrees to keep the Confidential Information confidential, to use it only for the Purpose, " +
+          "and not to disclose it to any third party without the Company's prior written consent. The Vendor " +
+          "will limit access to the Confidential Information to its employees, subcontractors, and advisors who " +
+          "need it for the Purpose and who are bound by confidentiality obligations at least as protective as " +
+          "those in this Agreement.",
+      },
+
+      { type: "section", text: "Exclusions" },
+      {
+        type: "paragraph",
+        text:
+          "Confidential Information does not include information that is or becomes publicly available through " +
+          "no fault of the Vendor, was already lawfully known to the Vendor before disclosure, is independently " +
+          "developed by the Vendor without use of the Confidential Information, or is lawfully received from a " +
+          "third party without restriction.",
+      },
+
+      { type: "section", text: "No License or Commitment" },
+      {
+        type: "paragraph",
+        text:
+          "Nothing in this Agreement obligates the Company to enter into any further business relationship with " +
+          "the Vendor, and nothing grants the Vendor any license or rights in the Confidential Information beyond " +
+          "the limited use permitted for the Purpose.",
+      },
+
+      { type: "section", text: "Term" },
+      {
+        type: "paragraph",
+        text: `This Agreement is effective as of ${DATE_BLANK} and the Vendor's confidentiality obligations will continue for ${TEXT_BLANK} after that date, or until the Confidential Information no longer qualifies for protection under the Exclusions above, whichever comes first.`,
+      },
+
+      { type: "section", text: "Return or Destruction of Materials" },
+      {
+        type: "paragraph",
+        text:
+          "Upon the Company's written request, or upon completion of the Purpose, the Vendor will promptly " +
+          "return or destroy all materials containing Confidential Information and confirm that it has done so.",
+      },
+
+      { type: "section", text: "Remedies" },
+      {
+        type: "paragraph",
+        text:
+          "The Vendor acknowledges that unauthorized disclosure of Confidential Information may cause the " +
+          "Company irreparable harm for which monetary damages alone may not be an adequate remedy, and that the " +
+          "Company may seek injunctive relief in addition to any other remedies available at law.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Company", order: 1 }, { label: "Vendor", order: 2 }] },
+    ],
+  },
+  {
+    slug: "multi-party-non-disclosure-agreement",
+    title: "MULTI-PARTY NON-DISCLOSURE AGREEMENT",
+    signerLabels: ["Party A", "Party B"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement is entered into by the following parties (each a \"Party\" and collectively the " +
+          "\"Parties\"). Additional parties may be added to this Agreement by signing a counterpart or a joinder " +
+          "page listing their name below; once added, an additional party is bound by, and entitled to the " +
+          "protections of, this Agreement to the same extent as the Parties named here.",
+      },
+      { type: "field", label: "Party A: ", blank: TEXT_BLANK },
+      { type: "field", label: "Party B: ", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "Additional Party (if any): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Purpose" },
+      {
+        type: "paragraph",
+        text: "The Parties intend to share confidential information with one another in connection with the following matter (the \"Purpose\"):",
+      },
+      { type: "field", label: "Description of Purpose: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Confidential Information" },
+      {
+        type: "paragraph",
+        text:
+          "\"Confidential Information\" means any business, technical, financial, or other information disclosed " +
+          "by one Party (the \"Disclosing Party\") to any other Party (the \"Receiving Party\") in connection " +
+          "with the Purpose, whether disclosed orally, in writing, or in any other form, and whether or not " +
+          "marked as confidential.",
+      },
+
+      { type: "section", text: "Mutual Obligations" },
+      {
+        type: "paragraph",
+        text:
+          "Each Party agrees that, when acting as a Receiving Party, it will keep the Confidential Information of " +
+          "any other Party confidential, use it only for the Purpose, and not disclose it to anyone outside the " +
+          "Parties without the Disclosing Party's prior written consent. These obligations run between each pair " +
+          "of Parties individually — every Party owes confidentiality duties directly to every other Party, not " +
+          "only to a single lead company.",
+      },
+
+      { type: "section", text: "Exclusions" },
+      {
+        type: "paragraph",
+        text:
+          "Confidential Information does not include information that is or becomes publicly available through " +
+          "no fault of the Receiving Party, was already lawfully known to the Receiving Party before disclosure, " +
+          "is independently developed by the Receiving Party without use of the Confidential Information, or is " +
+          "lawfully received from a third party without restriction.",
+      },
+
+      { type: "section", text: "Access Within Each Party's Organization" },
+      {
+        type: "paragraph",
+        text:
+          "Each Receiving Party may share Confidential Information with its own employees, contractors, and " +
+          "advisors who need it for the Purpose, provided they are bound by confidentiality obligations at least " +
+          "as protective as those in this Agreement. Each Party remains responsible for any breach of this " +
+          "Agreement by those it shares information with.",
+      },
+
+      { type: "section", text: "Term" },
+      {
+        type: "paragraph",
+        text: `This Agreement is effective as of ${DATE_BLANK} and each Party's confidentiality obligations will continue for ${TEXT_BLANK} after that date, regardless of whether the Parties' discussions or collaboration under the Purpose end sooner.`,
+      },
+
+      { type: "section", text: "No License or Commitment" },
+      {
+        type: "paragraph",
+        text:
+          "Nothing in this Agreement obligates any Party to enter into any further business relationship with " +
+          "any other Party, and nothing grants any Party rights in another Party's Confidential Information " +
+          "beyond the limited use permitted for the Purpose.",
+      },
+
+      { type: "section", text: "Remedies" },
+      {
+        type: "paragraph",
+        text:
+          "Each Party acknowledges that unauthorized disclosure of another Party's Confidential Information may " +
+          "cause irreparable harm for which monetary damages alone may not be an adequate remedy, and that the " +
+          "harmed Party may seek injunctive relief in addition to any other remedies available at law.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Signatures" },
+      { type: "signatures", signers: [{ label: "Party A", order: 1 }, { label: "Party B", order: 2 }] },
+    ],
+  },
 ];
 
 fs.mkdirSync(outDir, { recursive: true });
