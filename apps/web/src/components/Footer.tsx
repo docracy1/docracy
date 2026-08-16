@@ -70,6 +70,9 @@ export default function Footer() {
           openSalesChat: true,
         },
         { label: t("footer.github"), to: "https://github.com/docracy1/docracy-templates", external: true },
+        { label: "LinkedIn", to: "https://www.linkedin.com/company/docracy-io", external: true },
+        { label: "X", to: "https://x.com/docracyHQ", external: true },
+        { label: "Facebook", to: "https://www.facebook.com/profile.php?id=61593490016379", external: true },
       ],
     },
     {
