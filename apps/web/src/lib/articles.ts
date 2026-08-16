@@ -1680,6 +1680,44 @@ export const ARTICLES: ArticlePost[] = [
       p("Nothing, in either direction. Using a template is free, and submitting one is free — no plan required for either."),
     ],
   },
+  {
+    slug: "10-new-free-templates",
+    title: "10 new free templates: web design, photography, PIIA, and more",
+    description:
+      "10 new free templates just landed on the Docracy Marketplace — web design and development agreements, " +
+      "photography contracts, a model release, an invention assignment agreement, and more.",
+    publishedDate: "2026-08-16",
+    cluster: "Product",
+    blocks: [
+      p(
+        "The Marketplace just grew by 10 templates, bringing the total to 97 — all free, all reviewed, no account " +
+          "needed to use them. Here's what's new:"
+      ),
+      h2("For freelancers and creatives"),
+      list([
+        "Web Design Services Agreement — scope, revision rounds, and ownership handoff on final payment",
+        "Web Development Agreement — tech stack, testing/acceptance, and a post-launch support window",
+        "Wedding Photography Contract — coverage hours, deliverables, retainer terms, and cancellation policy",
+        "Photography Services Agreement — usage rights for portrait, commercial, or product sessions",
+        "Model Release Form — grants a photographer rights to use someone's likeness, with a minor-consent option",
+      ]),
+      h2("For businesses"),
+      list([
+        "Website Terms of Service Acknowledgment — a signed record that a user accepted your published Terms",
+        "Acceptable Use Policy Acknowledgment — same idea, for what users may and may not do with your service",
+        "Proprietary Information and Inventions Agreement (PIIA) — the standard new-hire invention-assignment agreement",
+        "Short-Form Mutual NDA — a lighter, faster one-pager for when a full NDA is more than you need",
+        "Reference Letter — a signed reference for a former employee, tenant, or colleague",
+      ]),
+      link("Browse all templates on the Marketplace", "/free-templates"),
+      h2("Have one to add?"),
+      p(
+        "If you've already drafted something useful, you can submit the blank version to the Marketplace directly " +
+          "from the editor — free, reviewed by a real person before it goes live."
+      ),
+      link("Submit a template", "/submit-template"),
+    ],
+  },
 ];
 
 export function getArticle(slug: string): ArticlePost | undefined {

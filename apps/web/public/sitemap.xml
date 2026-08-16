@@ -447,6 +447,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://docracy.io/blog/10-new-free-templates</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://docracy.io/free-templates/mutual-nda</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
