@@ -229,6 +229,7 @@ const es: Messages = {
   "hero.hint": "Sin tarjeta · te enviamos un enlace gratis para iniciar sesión.",
   "landing.trustedBy": "Con la confianza de equipos en",
   "landing.linkedinLink": "LinkedIn",
+  "landing.xingLink": "Xing",
   "hero.calculateSavings": "Calcular ahorro",
   "hero.emailPlaceholder": "¿Cuál es tu correo?",
   "hero.emailMissing": "Falta el correo",
@@ -1997,6 +1998,8 @@ const es: Messages = {
   "testimonial.9.title": "CEO y propietario, FAUN Austria",
   "testimonial.10.quote": "Revisé Docracy, y las plantillas son excelentes, y las firmas simples y avanzadas funcionan bien. Para mi trabajo, todo es perfecto.",
   "testimonial.10.title": "Abogada, BOECK Law — revisó la biblioteca de plantillas gratuitas de Docracy",
+  "testimonial.11.quote": "Llevamos unos meses usando Docracy y es increíble, especialmente las plantillas. Es muy fácil de usar.",
+  "testimonial.11.title": "Contador público y asesor fiscal, GHZ",
 };
 
 export default es;

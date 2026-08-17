@@ -81,6 +81,7 @@ const en: Messages = {
   "hero.hint": "No credit card · we'll email you a free sign-in link.",
   "landing.trustedBy": "Trusted by teams at",
   "landing.linkedinLink": "LinkedIn",
+  "landing.xingLink": "Xing",
   "hero.calculateSavings": "Calculate savings",
   "hero.emailPlaceholder": "What's your email?",
   "hero.emailMissing": "Email is missing",
@@ -1934,6 +1935,8 @@ const en: Messages = {
   "testimonial.9.title": "CEO and owner, FAUN Austria",
   "testimonial.10.quote": "I checked Docracy, and the templates are great, and the simple and advanced signatures are working well. For my work, everything is perfect.",
   "testimonial.10.title": "Attorney, BOECK Law — reviewed Docracy's free template library",
+  "testimonial.11.quote": "We've been using Docracy for a few months now and it's awesome — especially the templates. It's so easy to use.",
+  "testimonial.11.title": "Chartered accountant and tax advisor, GHZ",
 };
 
 export default en;

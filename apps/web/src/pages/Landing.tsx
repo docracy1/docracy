@@ -158,6 +158,7 @@ const TRUST_LOGOS: Array<{ name: string; logo: string | null; href: string; w: n
   { name: "AKG Smart Polymer", logo: "/testimonials/akg.png", href: "https://akg.at", w: 167, h: 72 },
   { name: "FAUN Austria", logo: "/testimonials/faun-austria.png", href: "https://www.faun.com", w: 756, h: 140 },
   { name: "BOECK Attorneys at Law", logo: "/testimonials/boeck-law.png", href: "https://www.boeck.law/", w: 280, h: 140 },
+  { name: "Grohmann Hienert Zierhut", logo: "/testimonials/grohmann-hienert-zierhut.jpg", href: "https://www.xing.com/profile/Stephan_Orasch", w: 436, h: 96 },
 ];
 
 const TESTIMONIALS: Array<{
@@ -167,6 +168,9 @@ const TESTIMONIALS: Array<{
   company: string | null;
   logo: string | null;
   linkedin: string | null;
+  /** Xing (not LinkedIn) profile link — kept separate since the LinkedIn link below is rendered
+   *  with a hardcoded "LinkedIn" label, which would be wrong for a Xing URL. */
+  xing?: string;
   /** Personal headshot for testimonials from an individual professional rather than a company
    *  representative — rendered as a round avatar next to the name instead of the wide company
    *  logo strip, since a photo at that 36px-tall/auto-width treatment would render as an
@@ -253,6 +257,15 @@ const TESTIMONIALS: Array<{
     logo: null,
     linkedin: "https://www.linkedin.com/in/dr-denisa-boeck-373424123/",
     avatar: "/testimonials/denisa-boeck.jpg",
+  },
+  {
+    quoteKey: "testimonial.11.quote",
+    name: "Stephan Orasch",
+    titleKey: "testimonial.11.title",
+    company: null,
+    logo: "/testimonials/grohmann-hienert-zierhut.jpg",
+    linkedin: null,
+    xing: "https://www.xing.com/profile/Stephan_Orasch",
   },
 ];
 
@@ -730,6 +743,16 @@ export default function Landing() {
                       className="testimonial-linkedin-link"
                     >
                       {t("landing.linkedinLink")} ↗
+                    </a>
+                  )}
+                  {testimonial.xing && (
+                    <a
+                      href={testimonial.xing}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="testimonial-linkedin-link"
+                    >
+                      {t("landing.xingLink")} ↗
                     </a>
                   )}
                 </div>
