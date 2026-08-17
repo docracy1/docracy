@@ -76,6 +76,16 @@ export interface Signer {
   /** Set from the WhatsApp Cloud API webhook's "read" status callback — same rationale as
    *  whatsappDeliveredAt, one step further (the message was actually opened on that device). */
   whatsappReadAt?: string | null;
+  /** How the preparer wants this signer's PIN (if any) actually delivered to them — Docracy never
+   *  auto-sends a PIN over the same message as the signing link (that would defeat the point of a
+   *  second factor), so when `pinHash` is set this must be too. Required whenever whatsappPhone is
+   *  set (the WhatsApp AES-track channel needs the signer to actually receive the PIN somehow).
+   *  Sent ~30 seconds after the signing link (see lib/pinDelivery.ts) — the delay, plus a distinct
+   *  message/channel, is what makes the PIN a real second factor rather than security theater. */
+  pinDeliveryChannel?: "email" | "whatsapp" | "sms";
+  /** Set once the delayed PIN-delivery send has actually fired, so a reassignment or resend never
+   *  double-sends it. Optional/absent means not sent yet. */
+  pinSentAt?: string | null;
 }
 
 export interface SignerAttachment {
@@ -106,7 +116,8 @@ export type AuditEventType =
   | "cc_invite_sent"
   | "attachment_uploaded"
   | "whatsapp_delivered"
-  | "whatsapp_read";
+  | "whatsapp_read"
+  | "pin_sent";
 
 /**
  * One entry in a document's append-only event log — this is what gives an anonymous, no-account
@@ -324,4 +335,8 @@ export interface Env {
    *  Absent means signature verification is skipped, same degrade-safe pattern as
    *  RESEND_WEBHOOK_SECRET. */
   WHATSAPP_APP_SECRET?: string;
+  /** Name of the separate pre-approved WhatsApp template used for PIN delivery (distinct content
+   *  from the signing-invite template — see lib/whatsapp.ts's sendWhatsAppPin). Defaults to
+   *  "signing_pin" when unset. */
+  WHATSAPP_PIN_TEMPLATE_NAME?: string;
 }

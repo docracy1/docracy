@@ -192,10 +192,10 @@ export default function ElectronicSignatureGuide() {
           everyday business documents.
         </p>
         <p>
-          For signers who need a stronger tier, Docracy is rolling out WhatsApp-verified signing for paid
-          and Enterprise accounts (coming soon, pending our WhatsApp Business API integration): a signer's
-          link is delivered only to a phone number tied to their own WhatsApp account, with a required PIN
-          before signing. That combination is designed to meet the eIDAS criteria for an{" "}
+          For signers who need a stronger tier, Docracy offers WhatsApp-verified signing for paid and
+          Enterprise accounts: a signer's link is delivered only to a phone number tied to their own
+          WhatsApp account, with a required PIN before signing. That combination is designed to meet the
+          eIDAS criteria for an{" "}
           <strong>Advanced Electronic Signature (AES)</strong>. It is <strong>not</strong> a Qualified
           Electronic Signature — Docracy is not a Qualified Trust Service Provider (QTSP), doesn't issue
           qualified certificates, and hasn't sought third-party AES certification. For agreements that

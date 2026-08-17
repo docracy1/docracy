@@ -37,8 +37,9 @@ import { track } from "../lib/track";
 
 const FREE_TIER_MAX_SIGNERS = 2;
 const FREE_TIER_MAX_CCS = 2;
-const WHATSAPP_FREE_MONTHLY_LIMIT = 2;
+const WHATSAPP_FREE_MONTHLY_LIMIT = 1;
 const WHATSAPP_PAID_MONTHLY_LIMIT = 10;
+const WHATSAPP_ENTERPRISE_MONTHLY_LIMIT = 50;
 const MAX_PDF_BYTES = 15 * 1024 * 1024;
 
 // Signature/initials are taller to leave room for the auto-printed "email · date" caption text/date
@@ -1926,7 +1927,10 @@ export default function Prepare() {
                     {whatsappInvites && (
                       <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 0, marginBottom: 0 }}>
                         {account.isEnterprise
-                          ? t("prepare.whatsappQuotaHintEnterprise")
+                          ? t("prepare.whatsappQuotaHintEnterprise", {
+                              remaining: account.whatsappQuotaRemaining ?? WHATSAPP_ENTERPRISE_MONTHLY_LIMIT,
+                              max: WHATSAPP_ENTERPRISE_MONTHLY_LIMIT,
+                            })
                           : account.isPaid
                             ? t("prepare.whatsappQuotaHintPaid", {
                                 remaining: account.whatsappQuotaRemaining ?? WHATSAPP_PAID_MONTHLY_LIMIT,

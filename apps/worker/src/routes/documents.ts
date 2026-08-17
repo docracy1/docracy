@@ -4,7 +4,7 @@ import { PDFDocument } from "pdf-lib";
 import { createDocumentCore } from "../lib/documentCreation";
 import { isSmsCarrier, normalizeUsPhone } from "../lib/sms";
 import { normalizeE164 } from "../lib/whatsapp";
-import { consumeWhatsappQuota, consumeWhatsappQuotaWithOverage, FREE_MONTHLY_LIMIT, PAID_MONTHLY_LIMIT } from "../lib/whatsappQuota";
+import { consumeWhatsappQuota, consumeWhatsappQuotaWithOverage, ENTERPRISE_MONTHLY_LIMIT, FREE_MONTHLY_LIMIT, PAID_MONTHLY_LIMIT } from "../lib/whatsappQuota";
 import { reportWhatsappOverageUsage, whatsappOverageConfigured } from "../lib/whatsappOverage";
 import { getStripeCustomerId } from "../lib/billing";
 import { NOTRACK_COOKIE_NAME, trackEvent } from "../lib/analytics";
@@ -41,7 +41,7 @@ interface CreateDocumentBody {
   ttlDays?: number;
   /** Also text signing links via US carrier gateways (Resend — no extra SMS vendor). */
   smsInvites?: boolean;
-  /** Also send signing links via WhatsApp — requires a signed-up account (free-tier: 2/month, paid: unlimited). */
+  /** Also send signing links via WhatsApp — requires a signed-up account (free: 1/month, paid: 10/month, enterprise: 50/month fair-use). */
   whatsappInvites?: boolean;
   /** Paid — require signers to upload attachments before signing. */
   signerAttachments?: { enabled: boolean; maxFiles?: number; maxBytesPerFile?: number };
@@ -321,13 +321,14 @@ documents.post("/", optionalAccount, async (c) => {
   }
 
   // WhatsApp is the AES-track channel — gated to signed-up accounts (anonymous senders are
-  // rejected outright). Free accounts hard-stop at FREE_MONTHLY_LIMIT/month, no exceptions.
-  // Enterprise gets no cap at all. Paid (non-enterprise) accounts get PAID_MONTHLY_LIMIT/month
-  // included; past that they either hard-stop too (if this deployment hasn't configured Stripe
-  // overage billing) or keep going with the excess billed at $0.50/unit (see
-  // lib/whatsappOverage.ts). Checked last, immediately before creation, so a request that fails
-  // any earlier validation or rate limit never consumes quota for a document that was never
-  // actually going to be created.
+  // rejected outright). Every tier has a real, hard-costed cap now: Meta charges Docracy per
+  // message with no free tier of its own. Free hard-stops at FREE_MONTHLY_LIMIT/month, enterprise
+  // at ENTERPRISE_MONTHLY_LIMIT/month (a fair-use ceiling — past it is a sales conversation, not a
+  // self-serve charge). Paid gets PAID_MONTHLY_LIMIT/month included, then either hard-stops too (if
+  // this deployment hasn't configured Stripe overage billing) or keeps going with the excess billed
+  // at $0.50/unit (see lib/whatsappOverage.ts). Checked last, immediately before creation, so a
+  // request that fails any earlier validation or rate limit never consumes quota for a document
+  // that was never actually going to be created.
   const whatsappSignerCount = meta.signers.filter((s) => s.whatsappPhone?.trim()).length;
   if (whatsappSignerCount > 0) {
     if (!account) {
@@ -338,9 +339,7 @@ documents.post("/", optionalAccount, async (c) => {
         "whatsapp_requires_account"
       );
     }
-    if (account.isEnterprise) {
-      // No quota consumption, no overage billing — unlimited is part of the negotiated plan.
-    } else if (account.isPaid && whatsappOverageConfigured(c.env)) {
+    if (!account.isEnterprise && account.isPaid && whatsappOverageConfigured(c.env)) {
       const overageUnits = await consumeWhatsappQuotaWithOverage(c.env, account.workspaceId, whatsappSignerCount);
       if (overageUnits > 0) {
         const stripeCustomerId = await getStripeCustomerId(c.env, account.workspaceId);
@@ -359,15 +358,17 @@ documents.post("/", optionalAccount, async (c) => {
         }
       }
     } else {
-      const allowed = await consumeWhatsappQuota(c.env, account.workspaceId, account.isPaid, whatsappSignerCount);
+      const allowed = await consumeWhatsappQuota(c.env, account.workspaceId, account.isPaid, account.isEnterprise, whatsappSignerCount);
       if (!allowed) {
-        const limit = account.isPaid ? PAID_MONTHLY_LIMIT : FREE_MONTHLY_LIMIT;
+        const limit = account.isEnterprise ? ENTERPRISE_MONTHLY_LIMIT : account.isPaid ? PAID_MONTHLY_LIMIT : FREE_MONTHLY_LIMIT;
         return failWith(
           "send_failed",
           {
-            error: account.isPaid
-              ? `Paid accounts get ${limit} WhatsApp-signed invites per month — you've used them all this month.`
-              : `Free accounts get ${limit} WhatsApp-signed invites per month — you've used them all. Upgrade for ${PAID_MONTHLY_LIMIT}/month.`,
+            error: account.isEnterprise
+              ? `Your Enterprise plan's fair-use limit is ${limit} WhatsApp-signed invites per month — you've used them all this month. Contact sales@docracy.io for more.`
+              : account.isPaid
+                ? `Paid accounts get ${limit} WhatsApp-signed invites per month — you've used them all this month.`
+                : `Free accounts get ${limit} WhatsApp-signed invite per month — you've used it. Upgrade for ${PAID_MONTHLY_LIMIT}/month.`,
           },
           402,
           "whatsapp_quota_exceeded"

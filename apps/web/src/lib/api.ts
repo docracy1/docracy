@@ -52,7 +52,7 @@ export interface CreateDocumentOptions {
   /** Paid only — retention days (1–90). Omitted / free always uses the default (9). */
   ttlDays?: number;
   smsInvites?: boolean;
-  /** Also send signing links via WhatsApp — requires a signed-up account (free: 2/month, paid: unlimited). */
+  /** Also send signing links via WhatsApp — requires a signed-up account (free: 1/month, paid: 10/month, enterprise: 50/month). */
   whatsappInvites?: boolean;
   signerAttachments?: { enabled: boolean; maxFiles?: number; maxBytesPerFile?: number };
   /** Set when these fields came from a saved (paid-tier) template id or a free-template slug —
@@ -306,8 +306,8 @@ export interface Account {
   paymentFailedAt: string | null;
   /** Whether this account opted in to occasional product-news emails (accounts.marketing_opt_in). */
   marketingOptIn: boolean;
-  /** WhatsApp-invited signers left this calendar month — free accounts get 2/month, paid 10/month
-   *  (see WHATSAPP_FREE_MONTHLY_LIMIT/WHATSAPP_PAID_MONTHLY_LIMIT in Prepare.tsx). Present for any
+  /** WhatsApp-invited signers left this calendar month — free accounts get 1/month, paid 10/month,
+   *  enterprise 50/month fair-use (see WHATSAPP_*_MONTHLY_LIMIT in Prepare.tsx). Present for any
    *  signed-in account; undefined only when signed out entirely. */
   whatsappQuotaRemaining?: number;
 }

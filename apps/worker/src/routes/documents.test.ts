@@ -3,14 +3,15 @@ import documents from "./documents";
 import { createSession, SESSION_COOKIE_NAME } from "../lib/auth";
 import { makeMockEnv, makeValidPdfBytes } from "../test/mockEnv";
 
-/** Builds `count` distinct WhatsApp-enabled, PIN-protected signers with fields, for cap/overage tests. */
+/** Builds `count` distinct WhatsApp-enabled, PIN-protected signers with fields, for cap/overage tests.
+ *  Fields are laid out in columns of 17 rows so counts well past the alphabet (e.g. the 50/month
+ *  enterprise cap) still produce in-bounds (0..1) fractional coordinates. */
 function makeWhatsappSigners(count: number) {
-  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   return {
     signers: Array.from({ length: count }, (_, i) => ({
       order: i + 1,
-      name: letters[i],
-      email: `${letters[i].toLowerCase()}@example.com`,
+      name: `Signer${i}`,
+      email: `signer${i}@example.com`,
       whatsappPhone: `+1415555${String(1000 + i).slice(-4)}`,
       pin: "1234",
     })),
@@ -18,8 +19,8 @@ function makeWhatsappSigners(count: number) {
       id: `f${i + 1}`,
       signerOrder: i + 1,
       page: 0,
-      xFrac: 0.1,
-      yFrac: 0.05 + i * 0.05,
+      xFrac: 0.1 + Math.floor(i / 17) * 0.3,
+      yFrac: 0.05 + (i % 17) * 0.05,
       wFrac: 0.2,
       hFrac: 0.04,
     })),
@@ -422,7 +423,7 @@ describe("POST /api/documents", () => {
     expect(body.error).toMatch(/free Docracy account/);
   });
 
-  it("rejects WhatsApp signers past the free tier's monthly cap of 2", async () => {
+  it("rejects WhatsApp signers past the free tier's monthly cap of 1", async () => {
     const { env, d1 } = makeMockEnv({ FREE_TIER_MAX_SIGNERS: "5" });
     const ctx = makeCtx();
     const sessionToken = await createSession(env, ctx, "acct-free", "free@example.com", false, false, null, null);
@@ -437,12 +438,10 @@ describe("POST /api/documents", () => {
       signers: [
         { order: 1, name: "A", email: "a@example.com", whatsappPhone: "+14155551234", pin: "1234" },
         { order: 2, name: "B", email: "b@example.com", whatsappPhone: "+14155551235", pin: "1234" },
-        { order: 3, name: "C", email: "c@example.com", whatsappPhone: "+14155551236", pin: "1234" },
       ],
       fields: [
         { id: "f1", signerOrder: 1, page: 0, xFrac: 0.1, yFrac: 0.1, wFrac: 0.2, hFrac: 0.05 },
         { id: "f2", signerOrder: 2, page: 0, xFrac: 0.1, yFrac: 0.3, wFrac: 0.2, hFrac: 0.05 },
-        { id: "f3", signerOrder: 3, page: 0, xFrac: 0.1, yFrac: 0.5, wFrac: 0.2, hFrac: 0.05 },
       ],
     };
     const res = await documents.request(
@@ -453,7 +452,7 @@ describe("POST /api/documents", () => {
     );
     expect(res.status).toBe(402);
     const body: { error: string } = await res.json();
-    expect(body.error).toMatch(/2 WhatsApp-signed invites/);
+    expect(body.error).toMatch(/1 WhatsApp-signed invite/);
   });
 
   it("lets a paid account send WhatsApp invites within its 10/month included allowance", async () => {
@@ -479,7 +478,7 @@ describe("POST /api/documents", () => {
     expect(stored.signers[0].whatsappPhone).toBeTruthy();
   });
 
-  it("lets an enterprise account send unlimited WhatsApp invites, no quota or overage billing", async () => {
+  it("lets an enterprise account send WhatsApp invites within its 50/month fair-use cap, no overage billing", async () => {
     const { env, kv } = makeMockEnv(); // no STRIPE_WHATSAPP_METER_NAME/PRICE_ID set — must not matter for enterprise
     const ctx = makeCtx();
     const fetchSpy = vi.spyOn(global, "fetch");
@@ -498,6 +497,23 @@ describe("POST /api/documents", () => {
     expect(stored.whatsappInvites).toBe(true);
     expect(fetchSpy.mock.calls.some(([url]) => String(url).includes("/v1/billing/meter_events"))).toBe(false);
     fetchSpy.mockRestore();
+  });
+
+  it("hard-stops an enterprise account past its 50/month fair-use cap", async () => {
+    const { env } = makeMockEnv();
+    const ctx = makeCtx();
+    const sessionToken = await createSession(env, ctx, "acct-ent", "ent@example.com", true, true, null, null);
+    const pdf = await makeValidPdfBytes();
+    const meta = { ...validMeta, whatsappInvites: true, ...makeWhatsappSigners(51) };
+    const res = await documents.request(
+      "/",
+      { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${sessionToken}` }, body: buildForm(pdf, meta) },
+      env,
+      ctx
+    );
+    expect(res.status).toBe(402);
+    const body: { error: string } = await res.json();
+    expect(body.error).toMatch(/fair-use limit is 50/);
   });
 
   it("hard-stops a paid account past its 10/month allowance when overage billing isn't configured", async () => {

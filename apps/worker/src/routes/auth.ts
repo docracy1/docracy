@@ -184,12 +184,12 @@ auth.get("/me", optionalAccount, async (c) => {
     marketingOptIn = !!row?.marketing_opt_in;
   }
 
-  // Free and paid both have a real (if different) cap — 2/month free, 10/month paid — so both
-  // need the "X left this month" nudge on Prepare. Enterprise has no cap at all, so there's
-  // nothing meaningful to show it. Same low-stakes fresh-D1-read posture as marketingOptIn above,
-  // not part of the cached session record.
-  const whatsappQuotaRemaining =
-    account && !account.isEnterprise ? await peekWhatsappQuotaRemaining(c.env, account.workspaceId, account.isPaid) : undefined;
+  // Every tier now has a real cap — 1/month free, 10/month paid, 50/month enterprise fair-use —
+  // so all three need the "X left this month" nudge on Prepare. Same low-stakes fresh-D1-read
+  // posture as marketingOptIn above, not part of the cached session record.
+  const whatsappQuotaRemaining = account
+    ? await peekWhatsappQuotaRemaining(c.env, account.workspaceId, account.isPaid, account.isEnterprise)
+    : undefined;
 
   return c.json({
     account: account ? { ...account, marketingOptIn, ...(whatsappQuotaRemaining !== undefined ? { whatsappQuotaRemaining } : {}) } : null,

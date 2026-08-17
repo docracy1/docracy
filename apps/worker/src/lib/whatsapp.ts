@@ -50,7 +50,9 @@ export async function sendWhatsAppSigningLink(env: Env, doc: DocState, signerOrd
     template: {
       name: templateName,
       language: { code: templateLang },
-      components: [{ type: "body", parameters: [{ type: "text", text: signUrl }] }],
+      // Named body variable ({{signing_link}}, not positional {{1}}) — "parameter_name" is the
+      // Meta-documented field for this; confirmed correct against the official Cloud API docs.
+      components: [{ type: "body", parameters: [{ type: "text", parameter_name: "signing_link", text: signUrl }] }],
     },
     biz_opaque_callback_data: `${doc.docId}:${signerOrder}`,
   };

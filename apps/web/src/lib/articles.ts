@@ -1609,7 +1609,7 @@ export const ARTICLES: ArticlePost[] = [
     slug: "whatsapp-signing-now-available",
     title: "WhatsApp signing is here — sign without an inbox",
     description:
-      "Docracy can now deliver signing links over WhatsApp, phone-bound and PIN-protected, as a step toward Advanced Electronic Signature. Free: 2/month. Paid: 10/month, then $0.50 each.",
+      "Docracy can now deliver signing links over WhatsApp, phone-bound and PIN-protected, as a step toward Advanced Electronic Signature. Free: 1/month. Paid: 10/month, then $0.50 each.",
     publishedDate: "2026-08-08",
     cluster: "Product",
     blocks: [
@@ -1638,8 +1638,8 @@ export const ARTICLES: ArticlePost[] = [
       link("How this relates to Advanced Electronic Signature (AES)", "/advanced-electronic-signature"),
       h2("What it costs"),
       p(
-        "Free, signed-up accounts get 2 WhatsApp-signed invites per month. Paid accounts get 10 per month included, " +
-          "with additional sends billed at $0.50 each. Enterprise accounts get unlimited WhatsApp signing. " +
+        "Free, signed-up accounts get 1 WhatsApp-signed invite per month. Paid accounts get 10 per month included, " +
+          "with additional sends billed at $0.50 each. Enterprise accounts get 50 per month on a fair-use basis. " +
           "Anonymous, no-signup sends aren't eligible — WhatsApp signing requires a free Docracy account."
       ),
       link("See pricing", "/pricing"),
