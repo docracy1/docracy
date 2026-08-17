@@ -7,6 +7,7 @@ import {
   sendCompletionEmails,
   sendFeedback,
   sendMagicLink,
+  sendPinEmail,
 } from "./email";
 import { makeMockEnv } from "../test/mockEnv";
 import type { DocState } from "@docracy/shared";
@@ -84,6 +85,30 @@ describe("email HTML escaping", () => {
     await sendSigningInvite(env, makeDoc("Anna Müller"), 1, "tok");
 
     expect(capture.logged()).toContain("Dear Anna Müller,");
+  });
+});
+
+describe("sendPinEmail", () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  it("includes the PIN and the signer's name, escaped", async () => {
+    const { env } = makeMockEnv();
+    const capture = captureDevEmailLog();
+
+    await sendPinEmail(env, makeDoc("<b>Anna</b>"), 1, "4242");
+
+    expect(capture.logged()).toContain("4242");
+    expect(capture.logged()).not.toContain("<b>Anna</b>");
+    expect(capture.logged()).toContain("&lt;b&gt;Anna&lt;/b&gt;");
+  });
+
+  it("no-ops for an order with no matching signer", async () => {
+    const { env } = makeMockEnv();
+    const capture = captureDevEmailLog();
+
+    await sendPinEmail(env, makeDoc("Anna"), 99, "4242");
+
+    expect(capture.logged()).toBe("");
   });
 });
 

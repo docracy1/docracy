@@ -23,6 +23,10 @@ export interface SignerInput {
   email: string;
   /** Optional 4-8 digit PIN gating this signer's link — never sent back to the client once set. */
   pin?: string;
+  /** How Docracy should deliver `pin` to this signer, ~30 seconds after the signing link — omitted
+   *  means the preparer will tell them the PIN themselves (the original, still-default behavior).
+   *  Required whenever whatsappPhone is set. */
+  pinDeliveryChannel?: "email" | "whatsapp" | "sms";
   phone?: string;
   smsCarrier?: "att" | "tmobile" | "verizon" | "sprint" | "uscc";
   /** International phone number for the WhatsApp channel — requires a signed-up account. */

@@ -16,30 +16,23 @@ export function normalizeE164(raw: string): string | null {
 }
 
 /**
- * Sends the signing link as a pre-approved WhatsApp template message via Meta's Cloud API.
- * No-ops (never throws) if the doc has WhatsApp invites off, the signer has no whatsappPhone, or
- * the number doesn't normalize. Falls back to a console.log dev line when WHATSAPP_ACCESS_TOKEN /
- * WHATSAPP_PHONE_NUMBER_ID aren't configured, matching email.ts's send()/lib/sms.ts's dev-fallback
- * convention.
- *
- * biz_opaque_callback_data carries "{docId}:{signerOrder}" — Meta echoes this back verbatim on the
- * delivery/read status callbacks (see routes/whatsappWebhook.ts), so that webhook can attribute a
- * receipt to the right signer without needing a separate message-id lookup index.
+ * POSTs a single-variable template message to Meta's Cloud API — shared by sendWhatsAppSigningLink
+ * and sendWhatsAppPin, which differ only in template name, variable name/value, and the
+ * biz_opaque_callback_data suffix. Never throws; falls back to a console.log dev line when
+ * WHATSAPP_ACCESS_TOKEN / WHATSAPP_PHONE_NUMBER_ID aren't configured, matching email.ts's send()/
+ * lib/sms.ts's dev-fallback convention.
  */
-export async function sendWhatsAppSigningLink(env: Env, doc: DocState, signerOrder: number, signUrl: string): Promise<void> {
-  if (!doc.whatsappInvites) return;
-
-  const signer = doc.signers.find((s) => s.order === signerOrder);
-  if (!signer?.whatsappPhone) return;
-
-  const to = normalizeE164(signer.whatsappPhone);
-  if (!to) return;
-
-  const templateName = env.WHATSAPP_TEMPLATE_NAME || "signing_invite";
-  const templateLang = env.WHATSAPP_TEMPLATE_LANG || (doc.locale === "es" ? "es" : "en_US");
-
+async function sendWhatsAppTemplate(
+  env: Env,
+  to: string,
+  templateName: string,
+  templateLang: string,
+  parameterName: string,
+  parameterValue: string,
+  bizOpaqueCallbackData: string
+): Promise<void> {
   if (!env.WHATSAPP_ACCESS_TOKEN || !env.WHATSAPP_PHONE_NUMBER_ID) {
-    console.log(`[whatsapp:dev] to=${to} template=${templateName}/${templateLang} link=${signUrl}`);
+    console.log(`[whatsapp:dev] to=${to} template=${templateName}/${templateLang} ${parameterName}=${parameterValue}`);
     return;
   }
 
@@ -50,11 +43,11 @@ export async function sendWhatsAppSigningLink(env: Env, doc: DocState, signerOrd
     template: {
       name: templateName,
       language: { code: templateLang },
-      // Named body variable ({{signing_link}}, not positional {{1}}) — "parameter_name" is the
-      // Meta-documented field for this; confirmed correct against the official Cloud API docs.
-      components: [{ type: "body", parameters: [{ type: "text", parameter_name: "signing_link", text: signUrl }] }],
+      // Named body variable, not positional {{1}} — "parameter_name" is the Meta-documented field
+      // for this; confirmed correct against the official Cloud API docs.
+      components: [{ type: "body", parameters: [{ type: "text", parameter_name: parameterName, text: parameterValue }] }],
     },
-    biz_opaque_callback_data: `${doc.docId}:${signerOrder}`,
+    biz_opaque_callback_data: bizOpaqueCallbackData,
   };
 
   const controller = new AbortController();
@@ -77,4 +70,52 @@ export async function sendWhatsAppSigningLink(env: Env, doc: DocState, signerOrd
   } finally {
     clearTimeout(timeout);
   }
+}
+
+function whatsappTemplateLang(env: Env, doc: DocState): string {
+  return env.WHATSAPP_TEMPLATE_LANG || (doc.locale === "es" ? "es" : "en_US");
+}
+
+/**
+ * Sends the signing link as a pre-approved WhatsApp template message via Meta's Cloud API.
+ * No-ops (never throws) if the doc has WhatsApp invites off, the signer has no whatsappPhone, or
+ * the number doesn't normalize.
+ *
+ * biz_opaque_callback_data carries "{docId}:{signerOrder}" — Meta echoes this back verbatim on the
+ * delivery/read status callbacks (see routes/whatsappWebhook.ts), so that webhook can attribute a
+ * receipt to the right signer without needing a separate message-id lookup index.
+ */
+export async function sendWhatsAppSigningLink(env: Env, doc: DocState, signerOrder: number, signUrl: string): Promise<void> {
+  if (!doc.whatsappInvites) return;
+
+  const signer = doc.signers.find((s) => s.order === signerOrder);
+  if (!signer?.whatsappPhone) return;
+
+  const to = normalizeE164(signer.whatsappPhone);
+  if (!to) return;
+
+  const templateName = env.WHATSAPP_TEMPLATE_NAME || "signing_invite";
+  await sendWhatsAppTemplate(env, to, templateName, whatsappTemplateLang(env, doc), "signing_link", signUrl, `${doc.docId}:${signerOrder}`);
+}
+
+/**
+ * Sends a signer's PIN as a separate, pre-approved WhatsApp template message — always via a
+ * distinct template from the signing-invite one (WHATSAPP_PIN_TEMPLATE_NAME, default
+ * "signing_pin"), since re-using the invite template's approved wording for a different variable's
+ * meaning would misrepresent the message to Meta's review. Called ~30 seconds after the signing
+ * link by lib/pinDelivery.ts, for signers who chose "whatsapp" as their pinDeliveryChannel.
+ *
+ * biz_opaque_callback_data gets a ":pin" suffix so routes/whatsappWebhook.ts can tell this receipt
+ * apart from the signing-link one and skip it — whatsappDeliveredAt/whatsappReadAt track receipt of
+ * the signing link specifically, not of this follow-up message.
+ */
+export async function sendWhatsAppPin(env: Env, doc: DocState, signerOrder: number, pin: string): Promise<void> {
+  const signer = doc.signers.find((s) => s.order === signerOrder);
+  if (!signer?.whatsappPhone) return;
+
+  const to = normalizeE164(signer.whatsappPhone);
+  if (!to) return;
+
+  const templateName = env.WHATSAPP_PIN_TEMPLATE_NAME || "signing_pin";
+  await sendWhatsAppTemplate(env, to, templateName, whatsappTemplateLang(env, doc), "pin_code", pin, `${doc.docId}:${signerOrder}:pin`);
 }

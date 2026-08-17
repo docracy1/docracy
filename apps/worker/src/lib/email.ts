@@ -236,6 +236,47 @@ export async function sendSigningInvite(env: Env, doc: DocState, order: number, 
   }
 }
 
+/**
+ * Sends a signer's PIN as its own email, ~30 seconds after the signing-invite email (see
+ * lib/pinDelivery.ts) — a distinct message, not a line added to the invite itself, so the PIN is a
+ * real second factor rather than something sitting right next to the link it's supposed to gate.
+ */
+export async function sendPinEmail(env: Env, doc: DocState, signerOrder: number, pin: string): Promise<void> {
+  const locale: Locale = doc.locale ?? "en";
+  const signer = doc.signers.find((s) => s.order === signerOrder);
+  if (!signer) return;
+  const docLabel = doc.title ? `"${escapeHtml(doc.title)}"` : locale === "es" ? "el documento" : "the document";
+  const subject = locale === "es" ? "Tu PIN para firmar" : "Your PIN to sign";
+  const customLogoUrl = await resolveEmailLogoUrl(env, doc.accountId);
+  const body =
+    locale === "es"
+      ? `
+    ${emailHeadline(`Tu PIN para firmar`)}
+    <p style="margin:0;font-size:15px;font-weight:700;color:${INK};">Hola ${escapeHtml(signer.name)},</p>
+    <p style="margin:12px 0 0 0;font-size:15px;color:${INK};line-height:1.55;">
+      Este es tu PIN para firmar ${docLabel} a través de Docracy. Ingrésalo en la página de firma para continuar.
+    </p>
+    <p style="margin:24px 0 0 0;font-size:32px;font-weight:700;color:${PRIMARY};text-align:center;letter-spacing:4px;">${escapeHtml(pin)}</p>
+    <p style="margin:24px 0 0 0;font-size:13px;color:${MUTED};line-height:1.5;">
+      Si no esperabas este correo, puedes ignorarlo con seguridad.
+    </p>
+    ${signOff(locale)}
+  `
+      : `
+    ${emailHeadline(`Your PIN to sign`)}
+    <p style="margin:0;font-size:15px;font-weight:700;color:${INK};">Dear ${escapeHtml(signer.name)},</p>
+    <p style="margin:12px 0 0 0;font-size:15px;color:${INK};line-height:1.55;">
+      Here's your PIN to sign ${docLabel} through Docracy. Enter it on the signing page to continue.
+    </p>
+    <p style="margin:24px 0 0 0;font-size:32px;font-weight:700;color:${PRIMARY};text-align:center;letter-spacing:4px;">${escapeHtml(pin)}</p>
+    <p style="margin:24px 0 0 0;font-size:13px;color:${MUTED};line-height:1.5;">
+      If you weren't expecting this email, you can safely ignore it.
+    </p>
+    ${signOff(locale)}
+  `;
+  await send(env, signer.email, subject, emailShell(env.PUBLIC_APP_URL, body, customLogoUrl), { emailType: "signing_pin" });
+}
+
 export async function sendPreparerStatusLink(
   env: Env,
   preparerEmail: string,

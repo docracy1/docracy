@@ -14,6 +14,7 @@ function makeWhatsappSigners(count: number) {
       email: `signer${i}@example.com`,
       whatsappPhone: `+1415555${String(1000 + i).slice(-4)}`,
       pin: "1234",
+      pinDeliveryChannel: "email" as const,
     })),
     fields: Array.from({ length: count }, (_, i) => ({
       id: `f${i + 1}`,
@@ -409,13 +410,160 @@ describe("POST /api/documents", () => {
     expect(body.error).toMatch(/PIN is required/);
   });
 
-  it("rejects a WhatsApp signer for an anonymous (signed-out) sender", async () => {
+  it("rejects a WhatsApp signer with a PIN but no delivery channel chosen", async () => {
     const { env } = makeMockEnv();
     const pdf = await makeValidPdfBytes();
     const meta = {
       ...validMeta,
       whatsappInvites: true,
       signers: [{ ...validMeta.signers[0], whatsappPhone: "+14155551234", pin: "1234" }, validMeta.signers[1]],
+    };
+    const res = await documents.request("/", { method: "POST", body: buildForm(pdf, meta) }, env, MOCK_CTX);
+    expect(res.status).toBe(400);
+    const body: { error: string } = await res.json();
+    expect(body.error).toMatch(/Choose how to deliver the PIN/);
+  });
+
+  it("rejects an unrecognized pinDeliveryChannel value", async () => {
+    const { env } = makeMockEnv();
+    const pdf = await makeValidPdfBytes();
+    const meta = {
+      ...validMeta,
+      whatsappInvites: true,
+      signers: [
+        { ...validMeta.signers[0], whatsappPhone: "+14155551234", pin: "1234", pinDeliveryChannel: "carrier_pigeon" },
+        validMeta.signers[1],
+      ],
+    };
+    const res = await documents.request("/", { method: "POST", body: buildForm(pdf, meta) }, env, MOCK_CTX);
+    expect(res.status).toBe(400);
+    const body: { error: string } = await res.json();
+    expect(body.error).toMatch(/PIN delivery channel must be/);
+  });
+
+  it("rejects a pinDeliveryChannel set with no PIN on that signer", async () => {
+    const { env } = makeMockEnv();
+    const pdf = await makeValidPdfBytes();
+    const meta = {
+      ...validMeta,
+      signers: [{ ...validMeta.signers[0], pinDeliveryChannel: "email" }, validMeta.signers[1]],
+    };
+    const res = await documents.request("/", { method: "POST", body: buildForm(pdf, meta) }, env, MOCK_CTX);
+    expect(res.status).toBe(400);
+    const body: { error: string } = await res.json();
+    expect(body.error).toMatch(/no PIN/);
+  });
+
+  it("rejects pinDeliveryChannel 'whatsapp' for a signer with no WhatsApp number", async () => {
+    const { env, d1 } = makeMockEnv();
+    const ctx = makeCtx();
+    const sessionToken = await createSession(env, ctx, "acct-paid", "paid@example.com", true, false, null, null);
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 1)`)
+      .bind("acct-paid", "paid@example.com", new Date().toISOString())
+      .run();
+    const pdf = await makeValidPdfBytes();
+    const meta = {
+      ...validMeta,
+      signers: [{ ...validMeta.signers[0], pin: "1234", pinDeliveryChannel: "whatsapp" }, validMeta.signers[1]],
+    };
+    const res = await documents.request(
+      "/",
+      { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${sessionToken}` }, body: buildForm(pdf, meta) },
+      env,
+      ctx
+    );
+    expect(res.status).toBe(400);
+    const body: { error: string } = await res.json();
+    expect(body.error).toMatch(/PIN delivery via WhatsApp requires a WhatsApp number/);
+  });
+
+  it("rejects pinDeliveryChannel 'sms' for a signer with no US phone+carrier", async () => {
+    const { env, d1 } = makeMockEnv();
+    const ctx = makeCtx();
+    const sessionToken = await createSession(env, ctx, "acct-paid", "paid@example.com", true, false, null, null);
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 1)`)
+      .bind("acct-paid", "paid@example.com", new Date().toISOString())
+      .run();
+    const pdf = await makeValidPdfBytes();
+    const meta = {
+      ...validMeta,
+      signers: [{ ...validMeta.signers[0], pin: "1234", pinDeliveryChannel: "sms" }, validMeta.signers[1]],
+    };
+    const res = await documents.request(
+      "/",
+      { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${sessionToken}` }, body: buildForm(pdf, meta) },
+      env,
+      ctx
+    );
+    expect(res.status).toBe(400);
+    const body: { error: string } = await res.json();
+    expect(body.error).toMatch(/PIN delivery via SMS requires/);
+  });
+
+  it("accepts a non-WhatsApp PIN-protected signer with no delivery channel (preparer tells them manually)", async () => {
+    const { env, d1, kv } = makeMockEnv();
+    const ctx = makeCtx();
+    const sessionToken = await createSession(env, ctx, "acct-paid", "paid@example.com", true, false, null, null);
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 1)`)
+      .bind("acct-paid", "paid@example.com", new Date().toISOString())
+      .run();
+    const pdf = await makeValidPdfBytes();
+    const meta = { ...validMeta, signers: [{ ...validMeta.signers[0], pin: "1234" }, validMeta.signers[1]] };
+    const res = await documents.request(
+      "/",
+      { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${sessionToken}` }, body: buildForm(pdf, meta) },
+      env,
+      ctx
+    );
+    expect(res.status).toBe(200);
+    await ctx.flush();
+    const [, docValue] = [...kv._store.entries()].find(([k]) => k.startsWith("doc:"))!;
+    expect(JSON.parse(docValue).signers[0].pinHash).toBeTruthy();
+  });
+
+  it("counts a WhatsApp-delivered PIN as a second WhatsApp message against quota", async () => {
+    const { env, d1 } = makeMockEnv();
+    const ctx = makeCtx();
+    const sessionToken = await createSession(env, ctx, "acct-free", "free@example.com", false, false, null, null);
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 0)`)
+      .bind("acct-free", "free@example.com", new Date().toISOString())
+      .run();
+    const pdf = await makeValidPdfBytes();
+    // Free tier gets 1 WhatsApp message/month total. One signer with both the link AND a
+    // WhatsApp-delivered PIN is 2 messages — over the cap even though there's only one signer.
+    const meta = {
+      ...validMeta,
+      whatsappInvites: true,
+      signers: [
+        { ...validMeta.signers[0], whatsappPhone: "+14155551234", pin: "1234", pinDeliveryChannel: "whatsapp" },
+        validMeta.signers[1],
+      ],
+    };
+    const res = await documents.request(
+      "/",
+      { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${sessionToken}` }, body: buildForm(pdf, meta) },
+      env,
+      ctx
+    );
+    expect(res.status).toBe(402);
+    const body: { error: string } = await res.json();
+    expect(body.error).toMatch(/1 WhatsApp-signed invite/);
+  });
+
+  it("rejects a WhatsApp signer for an anonymous (signed-out) sender", async () => {
+    const { env } = makeMockEnv();
+    const pdf = await makeValidPdfBytes();
+    const meta = {
+      ...validMeta,
+      whatsappInvites: true,
+      signers: [
+        { ...validMeta.signers[0], whatsappPhone: "+14155551234", pin: "1234", pinDeliveryChannel: "email" },
+        validMeta.signers[1],
+      ],
     };
     const res = await documents.request("/", { method: "POST", body: buildForm(pdf, meta) }, env, MOCK_CTX);
     expect(res.status).toBe(402);
@@ -436,8 +584,8 @@ describe("POST /api/documents", () => {
       ...validMeta,
       whatsappInvites: true,
       signers: [
-        { order: 1, name: "A", email: "a@example.com", whatsappPhone: "+14155551234", pin: "1234" },
-        { order: 2, name: "B", email: "b@example.com", whatsappPhone: "+14155551235", pin: "1234" },
+        { order: 1, name: "A", email: "a@example.com", whatsappPhone: "+14155551234", pin: "1234", pinDeliveryChannel: "email" },
+        { order: 2, name: "B", email: "b@example.com", whatsappPhone: "+14155551235", pin: "1234", pinDeliveryChannel: "email" },
       ],
       fields: [
         { id: "f1", signerOrder: 1, page: 0, xFrac: 0.1, yFrac: 0.1, wFrac: 0.2, hFrac: 0.05 },
@@ -552,6 +700,10 @@ describe("POST /api/documents", () => {
     const pdf = await makeValidPdfBytes();
     const meta = { ...validMeta, whatsappInvites: true, ...makeWhatsappSigners(13) }; // 10 included + 3 overage
     const ctxWithFlush = makeCtx();
+    // These signers all carry a pinDeliveryChannel (makeWhatsappSigners' default), so each schedules
+    // a real 30s-delayed PIN send (lib/pinDelivery.ts) via ctx.waitUntil — fake timers let flush()
+    // resolve those without an actual 30-second wait.
+    vi.useFakeTimers();
     const res = await documents.request(
       "/",
       { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${sessionToken}` }, body: buildForm(pdf, meta) },
@@ -559,7 +711,10 @@ describe("POST /api/documents", () => {
       ctxWithFlush
     );
     expect(res.status).toBe(200);
-    await ctxWithFlush.flush();
+    const flushed = ctxWithFlush.flush();
+    await vi.advanceTimersByTimeAsync(30_000);
+    await flushed;
+    vi.useRealTimers();
 
     const meterCall = fetchSpy.mock.calls.find(([url]) => String(url).includes("/v1/billing/meter_events"));
     expect(meterCall).toBeTruthy();

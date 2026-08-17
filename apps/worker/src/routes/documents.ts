@@ -25,6 +25,9 @@ interface CreateDocumentBody {
     name: string;
     email: string;
     pin?: string;
+    /** How the preparer wants this signer's PIN (if set) actually delivered — omitted means the
+     *  preparer will tell the signer themselves, same as before this feature existed. */
+    pinDeliveryChannel?: "email" | "whatsapp" | "sms";
     phone?: string;
     smsCarrier?: string;
     whatsappPhone?: string;
@@ -187,6 +190,29 @@ documents.post("/", optionalAccount, async (c) => {
         400
       );
     }
+    if (s.pinDeliveryChannel && !["email", "whatsapp", "sms"].includes(s.pinDeliveryChannel)) {
+      return c.json({ error: "PIN delivery channel must be email, WhatsApp, or SMS" }, 400);
+    }
+    if (s.pinDeliveryChannel && !s.pin?.trim()) {
+      return c.json({ error: "A PIN delivery channel is set but this signer has no PIN" }, 400);
+    }
+    if (s.pinDeliveryChannel === "whatsapp" && !s.whatsappPhone?.trim()) {
+      return c.json({ error: "PIN delivery via WhatsApp requires a WhatsApp number for this signer" }, 400);
+    }
+    if (s.pinDeliveryChannel === "sms" && !(s.phone?.trim() && s.smsCarrier)) {
+      return c.json({ error: "PIN delivery via SMS requires a US phone number and carrier for this signer" }, 400);
+    }
+    // WhatsApp signers must have an actual delivery channel for the PIN — the whole point of the
+    // PIN there is a verifiable, Docracy-controlled second factor (the AES-track "sole control"
+    // evidence), which a preparer telling them the PIN out-of-band can't provide or audit. Non-
+    // WhatsApp PIN-protected links keep the old "preparer tells them somehow" default (channel
+    // omitted) since that link isn't making any AES claim.
+    if (s.whatsappPhone?.trim() && !s.pinDeliveryChannel) {
+      return c.json(
+        { error: "Choose how to deliver the PIN (email, WhatsApp, or SMS) for signers using WhatsApp" },
+        400
+      );
+    }
   }
   if (meta.smsInvites && !meta.signers.some((s) => s.phone?.trim() && s.smsCarrier)) {
     return c.json({ error: "SMS is on but no signer has a phone number and carrier" }, 400);
@@ -329,7 +355,16 @@ documents.post("/", optionalAccount, async (c) => {
   // at $0.50/unit (see lib/whatsappOverage.ts). Checked last, immediately before creation, so a
   // request that fails any earlier validation or rate limit never consumes quota for a document
   // that was never actually going to be created.
+  //
+  // Each WhatsApp signer costs at least one real Meta message (the signing link); a signer who also
+  // chose "whatsapp" as their PIN delivery channel costs a second, separate one — so that counts as
+  // 2 units against quota/overage, not 1. (whatsappSignerCount, used only to decide whether the
+  // WhatsApp gate applies at all, stays based on presence of a WhatsApp number.)
   const whatsappSignerCount = meta.signers.filter((s) => s.whatsappPhone?.trim()).length;
+  const whatsappMessageCount = meta.signers.reduce(
+    (sum, s) => sum + (s.whatsappPhone?.trim() ? 1 : 0) + (s.pinDeliveryChannel === "whatsapp" ? 1 : 0),
+    0
+  );
   if (whatsappSignerCount > 0) {
     if (!account) {
       return failWith(
@@ -340,7 +375,7 @@ documents.post("/", optionalAccount, async (c) => {
       );
     }
     if (!account.isEnterprise && account.isPaid && whatsappOverageConfigured(c.env)) {
-      const overageUnits = await consumeWhatsappQuotaWithOverage(c.env, account.workspaceId, whatsappSignerCount);
+      const overageUnits = await consumeWhatsappQuotaWithOverage(c.env, account.workspaceId, whatsappMessageCount);
       if (overageUnits > 0) {
         const stripeCustomerId = await getStripeCustomerId(c.env, account.workspaceId);
         if (stripeCustomerId) {
@@ -358,7 +393,7 @@ documents.post("/", optionalAccount, async (c) => {
         }
       }
     } else {
-      const allowed = await consumeWhatsappQuota(c.env, account.workspaceId, account.isPaid, account.isEnterprise, whatsappSignerCount);
+      const allowed = await consumeWhatsappQuota(c.env, account.workspaceId, account.isPaid, account.isEnterprise, whatsappMessageCount);
       if (!allowed) {
         const limit = account.isEnterprise ? ENTERPRISE_MONTHLY_LIMIT : account.isPaid ? PAID_MONTHLY_LIMIT : FREE_MONTHLY_LIMIT;
         return failWith(

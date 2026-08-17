@@ -55,3 +55,19 @@ export async function sendSigningSmsLink(
 
   await sendPlainText(env, gatewayTo, text, "signing_invite_sms");
 }
+
+/**
+ * Sends a signer's PIN via the same US carrier email-to-SMS gateway as sendSigningSmsLink — a
+ * separate text, ~30 seconds later (see lib/pinDelivery.ts), so it's a distinct message rather than
+ * the PIN riding along with the link. No-ops if the signer has no phone+carrier on file.
+ */
+export async function sendPinSms(env: Env, doc: DocState, signerOrder: number, pin: string): Promise<void> {
+  const signer = doc.signers.find((s) => s.order === signerOrder);
+  if (!signer?.phone || !signer.smsCarrier || !isSmsCarrier(signer.smsCarrier)) return;
+
+  const gatewayTo = smsGatewayAddress(signer.phone, signer.smsCarrier);
+  if (!gatewayTo) return;
+
+  const text = `Docracy: Your PIN to sign the document is ${pin}. Enter it on the signing page to continue.`;
+  await sendPlainText(env, gatewayTo, text, "signing_pin_sms");
+}

@@ -1747,8 +1747,36 @@ export default function Prepare() {
                       inputMode="numeric"
                       maxLength={8}
                       value={s.pin ?? ""}
-                      onChange={(e) => updateSigner(s.order, { pin: e.target.value.replace(/\D/g, "") })}
+                      onChange={(e) =>
+                        updateSigner(s.order, {
+                          pin: e.target.value.replace(/\D/g, ""),
+                          ...(e.target.value.trim() ? {} : { pinDeliveryChannel: undefined }),
+                        })
+                      }
                     />
+                  )}
+                  {s.pin?.trim() && (
+                    <>
+                      <select
+                        className="form-input"
+                        style={{ width: "100%", marginTop: 6 }}
+                        aria-label={t("prepare.signerPinChannelAria", { n: s.order })}
+                        value={s.pinDeliveryChannel ?? ""}
+                        onChange={(e) =>
+                          updateSigner(s.order, {
+                            pinDeliveryChannel: e.target.value ? (e.target.value as SignerInput["pinDeliveryChannel"]) : undefined,
+                          })
+                        }
+                      >
+                        {!s.whatsappPhone?.trim() && <option value="">{t("prepare.pinChannelManual")}</option>}
+                        <option value="email">{t("prepare.pinChannelEmail")}</option>
+                        {s.whatsappPhone?.trim() && <option value="whatsapp">{t("prepare.pinChannelWhatsapp")}</option>}
+                        {s.phone?.trim() && s.smsCarrier && <option value="sms">{t("prepare.pinChannelSms")}</option>}
+                      </select>
+                      <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 4, marginBottom: 0 }}>
+                        {s.whatsappPhone?.trim() ? t("prepare.pinChannelHintWhatsapp") : t("prepare.pinChannelHint")}
+                      </p>
+                    </>
                   )}
                   {smsInvites && (
                     <>
@@ -1759,7 +1787,12 @@ export default function Prepare() {
                         aria-label={t("prepare.signerMobileAria", { n: s.order })}
                         type="tel"
                         value={s.phone ?? ""}
-                        onChange={(e) => updateSigner(s.order, { phone: e.target.value })}
+                        onChange={(e) =>
+                          updateSigner(s.order, {
+                            phone: e.target.value,
+                            ...(e.target.value.trim() || s.pinDeliveryChannel !== "sms" ? {} : { pinDeliveryChannel: undefined }),
+                          })
+                        }
                       />
                       <select
                         className="form-input"
@@ -1769,6 +1802,7 @@ export default function Prepare() {
                         onChange={(e) =>
                           updateSigner(s.order, {
                             smsCarrier: e.target.value ? (e.target.value as SignerInput["smsCarrier"]) : undefined,
+                            ...(e.target.value || s.pinDeliveryChannel !== "sms" ? {} : { pinDeliveryChannel: undefined }),
                           })
                         }
                       >
@@ -1789,7 +1823,12 @@ export default function Prepare() {
                       aria-label={t("prepare.signerWhatsappAria", { n: s.order })}
                       type="tel"
                       value={s.whatsappPhone ?? ""}
-                      onChange={(e) => updateSigner(s.order, { whatsappPhone: e.target.value })}
+                      onChange={(e) =>
+                        updateSigner(s.order, {
+                          whatsappPhone: e.target.value,
+                          ...(e.target.value.trim() || s.pinDeliveryChannel !== "whatsapp" ? {} : { pinDeliveryChannel: undefined }),
+                        })
+                      }
                     />
                   )}
                   <div className="prepare-signer-actions">

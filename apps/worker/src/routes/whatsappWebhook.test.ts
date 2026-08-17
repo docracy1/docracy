@@ -137,6 +137,33 @@ describe("POST /api/webhooks/whatsapp (delivery/read receipts)", () => {
     expect(doc?.signers[0].whatsappDeliveredAt).toBeFalsy();
   });
 
+  it("ignores a PIN-delivery receipt (':pin' suffix) without touching whatsappDeliveredAt", async () => {
+    const { env } = makeMockEnv();
+    await putDoc(env, makeDoc("doc-5"));
+
+    const pinReceipt = JSON.stringify({
+      entry: [
+        {
+          changes: [
+            {
+              value: {
+                statuses: [
+                  { status: "delivered", timestamp: String(Math.floor(Date.now() / 1000)), biz_opaque_callback_data: "doc-5:1:pin" },
+                ],
+              },
+            },
+          ],
+        },
+      ],
+    });
+    const res = await whatsappWebhook.request("/", { method: "POST", body: pinReceipt }, env, MOCK_CTX);
+    expect(res.status).toBe(200);
+
+    const doc = await getDoc(env, "doc-5");
+    expect(doc?.signers[0].whatsappDeliveredAt).toBeFalsy();
+    expect(doc?.events ?? []).toHaveLength(0);
+  });
+
   it("processes the receipt when the signature verifies", async () => {
     const secret = "shh";
     const { env } = makeMockEnv({ WHATSAPP_APP_SECRET: secret });

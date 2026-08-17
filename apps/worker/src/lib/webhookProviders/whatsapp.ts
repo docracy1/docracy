@@ -61,7 +61,12 @@ export async function verifyAndExtractStatuses(
         if (status.status !== "delivered" && status.status !== "read") continue;
         const callbackData = status.biz_opaque_callback_data;
         if (!callbackData) continue;
-        const [docId, orderStr] = callbackData.split(":");
+        const parts = callbackData.split(":");
+        // A ":pin" third segment marks a PIN-delivery message (lib/whatsapp.ts's sendWhatsAppPin) —
+        // whatsappDeliveredAt/whatsappReadAt track receipt of the signing link specifically, so its
+        // receipts are intentionally not recorded here.
+        if (parts.length !== 2) continue;
+        const [docId, orderStr] = parts;
         const signerOrder = Number(orderStr);
         if (!docId || !Number.isInteger(signerOrder)) continue;
         const timestamp = status.timestamp ? new Date(Number(status.timestamp) * 1000).toISOString() : new Date().toISOString();

@@ -1,5 +1,6 @@
 import { putDoc } from "./kv";
 import { sendSigningInvite, sendPreparerStatusLink, sendCcInvite } from "./email";
+import { scheduleDelayedPinDelivery } from "./pinDelivery";
 import { indexDocumentCreated } from "./index-d1";
 import { sha256Hex } from "./hash";
 import { deliverWebhookEvent } from "./webhooks";
@@ -36,6 +37,9 @@ export interface CreateDocumentCoreParams {
     phone?: string;
     smsCarrier?: string;
     whatsappPhone?: string;
+    /** Preparer's choice of how to deliver `pin` (if set) — see Signer.pinDeliveryChannel's doc
+     *  comment. Already validated by the caller (routes/documents.ts) before this is set. */
+    pinDeliveryChannel?: "email" | "whatsapp" | "sms";
   }>;
   fields: DocField[];
   /** Notify-only recipients — validated by the caller. */
@@ -112,6 +116,7 @@ export async function createDocumentCore(
       phone: s.phone?.trim() || undefined,
       smsCarrier: s.smsCarrier as Signer["smsCarrier"] | undefined,
       whatsappPhone: s.whatsappPhone?.trim() || undefined,
+      pinDeliveryChannel: s.pin ? (s.pinDeliveryChannel as Signer["pinDeliveryChannel"] | undefined) : undefined,
     }))
   );
 
@@ -224,6 +229,22 @@ export async function createDocumentCore(
       )
     );
   }
+
+  // PIN delivery, if the preparer chose a channel for it — fires ~30 seconds after the signing
+  // link (see lib/pinDelivery.ts), for every signer with one, not just the ones invited above (a
+  // sequential doc's later signers get their PIN scheduled now too, well before their turn ever
+  // comes up). Raw pins only ever exist here, in params.signers — signers[] above only carries the
+  // hash — so this is the only place that can still schedule the send.
+  params.signers.forEach((s, i) => {
+    if (!s.pin || !s.pinDeliveryChannel) return;
+    const order = i + 1;
+    const pin = s.pin;
+    ctx.waitUntil(
+      scheduleDelayedPinDelivery(env, docId, order, pin).catch((err) =>
+        console.error(`Delayed PIN delivery failed for doc ${docId} signer ${order} (non-fatal):`, err)
+      )
+    );
+  });
 
   // Order 0 = preparer status link (can void). CCs get a separate order -1 viewer token so they
   // can watch progress / download when complete, but cannot cancel the document.
