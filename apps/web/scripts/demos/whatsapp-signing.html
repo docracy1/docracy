@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Docracy — WhatsApp signing (AES-track)</title>
+  <link rel="stylesheet" href="shared.css" />
+  <style>
+    .scene {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+    .scene.active { opacity: 1; pointer-events: auto; }
+    .scene-shell { position: relative; width: 1280px; height: 720px; }
+
+    .title-scene {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      background: linear-gradient(145deg, #0c1e36 0%, #1a3a62 55%, #163552 100%);
+      color: #fff;
+      text-align: center;
+      font-family: Inter, system-ui, sans-serif;
+    }
+    .title-scene .logo { font-size: 42px; font-weight: 800; color: #5ba3f0; }
+    .title-scene h1 { font-size: 32px; font-weight: 750; margin: 0; max-width: 18em; line-height: 1.2; }
+    .title-scene p { font-size: 18px; color: rgba(255,255,255,0.75); margin: 0; }
+
+    .checkbox-row.active { color: var(--primary); font-weight: 600; }
+    .checkbox-row input:checked { accent-color: var(--primary); }
+
+    .pin-select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--hairline);
+      border-radius: var(--r-sm);
+      font-size: 12px;
+      font-family: inherit;
+      color: var(--ink);
+      background: var(--canvas);
+      margin-top: 6px;
+    }
+    .pin-select.picked { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(47,126,216,0.15); }
+
+    .field-highlight {
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: opacity 0.4s, transform 0.4s;
+    }
+    .field-highlight.show { opacity: 1; transform: none; }
+
+    /* Phone mockup for the "message arrives" scenes */
+    .phone-stage {
+      width: 1280px;
+      height: 720px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(160deg, #eef3f8 0%, #dbe6f0 100%);
+    }
+    .phone {
+      width: 340px;
+      height: 620px;
+      background: #111;
+      border-radius: 40px;
+      padding: 10px;
+      box-shadow: 0 30px 60px rgba(16,24,40,0.25);
+    }
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      background: #e5ddd5;
+      border-radius: 30px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .wa-header {
+      background: #075e54;
+      color: #fff;
+      padding: 16px 18px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: Inter, system-ui, sans-serif;
+    }
+    .wa-avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: #25d366; display: grid; place-items: center;
+      font-weight: 700; font-size: 14px;
+    }
+    .wa-header strong { font-size: 14px; display: block; }
+    .wa-header span { font-size: 11px; opacity: 0.75; }
+    .wa-chat {
+      flex: 1;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow: hidden;
+    }
+    .wa-bubble {
+      max-width: 82%;
+      background: #fff;
+      border-radius: 10px;
+      padding: 9px 11px;
+      font-size: 12.5px;
+      line-height: 1.45;
+      color: #1a2b3c;
+      box-shadow: 0 1px 1px rgba(0,0,0,0.08);
+      opacity: 0;
+      transform: translateY(10px) scale(0.98);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+      font-family: Inter, system-ui, sans-serif;
+    }
+    .wa-bubble.show { opacity: 1; transform: none; }
+    .wa-bubble .wa-link {
+      display: block;
+      margin-top: 6px;
+      color: #2f7ed8;
+      font-weight: 600;
+      word-break: break-all;
+      font-size: 11.5px;
+    }
+    .wa-bubble .wa-pin {
+      display: block;
+      margin-top: 6px;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 3px;
+      color: #1a2b3c;
+    }
+    .wa-bubble .wa-time { display: block; margin-top: 4px; font-size: 10px; color: #8a97a3; text-align: right; }
+    .wa-typing {
+      align-self: flex-start;
+      background: #fff;
+      border-radius: 10px;
+      padding: 9px 13px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      display: flex;
+      gap: 4px;
+    }
+    .wa-typing.show { opacity: 1; }
+    .wa-typing span {
+      width: 6px; height: 6px; border-radius: 50%; background: #b6bdc4;
+      animation: bounce 1.1s infinite ease-in-out;
+    }
+    .wa-typing span:nth-child(2) { animation-delay: 0.15s; }
+    .wa-typing span:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes bounce { 0%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-4px); } }
+
+    .delay-badge {
+      position: absolute;
+      top: 26px;
+      right: 26px;
+      background: rgba(26,43,60,0.9);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: 999px;
+      opacity: 0;
+      transition: opacity 0.4s;
+      font-family: Inter, system-ui, sans-serif;
+    }
+    .delay-badge.show { opacity: 1; }
+
+    /* Signing + PIN entry scene */
+    .sign-shell {
+      width: 1280px;
+      height: 720px;
+      display: flex;
+      flex-direction: column;
+      background: var(--canvas-soft);
+    }
+    .sign-main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 16px;
+      padding: 16px 24px 24px;
+      min-height: 0;
+    }
+    .sign-panel { padding: 16px; }
+    .sign-panel h3 { margin: 0 0 12px; font-size: 14px; }
+    .pin-entry {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .pin-digit {
+      width: 40px;
+      height: 48px;
+      border: 1.5px solid var(--hairline);
+      border-radius: var(--r-sm);
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ink);
+      background: var(--canvas);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .pin-digit.filled { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(47,126,216,0.15); }
+    .sig-preview {
+      border: 2px dashed var(--primary);
+      border-radius: var(--r-sm);
+      height: 64px;
+      display: grid;
+      place-items: center;
+      background: var(--primary-soft);
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .sig-preview svg { width: 80%; opacity: 0; transition: opacity 0.6s; }
+    .sig-preview.draw svg { opacity: 1; }
+    .sig-preview svg path {
+      fill: none;
+      stroke: var(--primary);
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-dasharray: 300;
+      stroke-dashoffset: 300;
+    }
+    .sig-preview.draw svg path { animation: ink 1s ease forwards; }
+    @keyframes ink { to { stroke-dashoffset: 0; } }
+    .btn-sign {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: var(--r-sm);
+      background: var(--primary);
+      color: #fff;
+      font: inherit;
+      font-weight: 700;
+      font-size: 14px;
+      opacity: 0.5;
+      transition: opacity 0.35s;
+    }
+    .btn-sign.go { opacity: 1; }
+
+    /* Audit / done scene */
+    .audit-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--hairline);
+      font-size: 12.5px;
+      color: var(--body);
+      opacity: 0;
+      transform: translateX(-8px);
+      transition: opacity 0.4s, transform 0.4s;
+    }
+    .audit-row.show { opacity: 1; transform: none; }
+    .audit-row:last-child { border-bottom: none; }
+    .audit-check {
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--success); color: #fff;
+      display: grid; place-items: center; font-size: 11px; flex-shrink: 0;
+    }
+    .done-banner {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px;
+      border-radius: var(--r-sm);
+      background: #e8f5ee;
+      border: 1px solid #b8dfc8;
+      margin-top: 12px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.45s, transform 0.45s;
+    }
+    .done-banner.show { opacity: 1; transform: none; }
+    .done-icon {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--success); color: #fff;
+      display: grid; place-items: center; font-size: 20px; flex-shrink: 0;
+    }
+    .done-banner strong { display: block; font-size: 14px; color: var(--ink); }
+    .done-banner span { font-size: 12px; color: var(--body); }
+
+    .step-caption {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 10px 24px;
+      background: rgba(26,43,60,0.92);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      z-index: 15;
+      opacity: 0;
+      transition: opacity 0.35s;
+    }
+    .step-caption.show { opacity: 1; }
+  </style>
+</head>
+<body>
+  <div class="scene-shell">
+    <!-- 0 · Intro -->
+    <section class="scene title-scene active" id="sc0">
+      <div class="logo">Docracy</div>
+      <h1>Sign documents over WhatsApp.<br>Phone-bound. PIN-protected.</h1>
+      <p>A step toward Advanced Electronic Signature (AES)</p>
+    </section>
+
+    <!-- 1 · Prepare: toggle WhatsApp -->
+    <section class="scene" id="sc1">
+      <div class="demo-shell">
+        <header class="demo-header">
+          <span class="demo-logo">Docracy</span>
+          <span class="demo-badge">Prepare document</span>
+        </header>
+        <div class="demo-main">
+          <div class="card pdf-pane">
+            <div class="pdf-toolbar">Vendor-Agreement.pdf · Page 1 of 1</div>
+            <div class="pdf-doc">
+              <h1 class="doc-title">Vendor Agreement</h1>
+              <p class="doc-p">Client engages Vendor to supply the goods and services described in Exhibit A, under the payment terms below.</p>
+              <div class="sig-block"><div><strong>Vendor</strong></div><div style="margin-top:10px">Signature: <span class="doc-line"></span></div></div>
+            </div>
+          </div>
+          <aside class="sidebar">
+            <div class="card" style="padding:14px">
+              <h3>Delivery channels</h3>
+              <label class="checkbox-row"><input type="checkbox" checked disabled /> Email (always included)</label>
+              <label class="checkbox-row" id="waRow" style="margin-top:8px"><input type="checkbox" id="waCheck" /> Also send via WhatsApp</label>
+            </div>
+          </aside>
+        </div>
+      </div>
+      <div class="step-caption show" id="cap1">1 · Toggle "Also send via WhatsApp" when preparing a document</div>
+    </section>
+
+    <!-- 2 · Signer WhatsApp number + PIN + delivery channel -->
+    <section class="scene" id="sc2">
+      <div class="demo-shell">
+        <header class="demo-header">
+          <span class="demo-logo">Docracy</span>
+          <span class="demo-badge">Prepare document</span>
+        </header>
+        <div class="demo-main">
+          <div class="card pdf-pane">
+            <div class="pdf-toolbar">Vendor-Agreement.pdf · Page 1 of 1</div>
+            <div class="pdf-doc">
+              <h1 class="doc-title">Vendor Agreement</h1>
+              <p class="doc-p">Client engages Vendor to supply the goods and services described in Exhibit A, under the payment terms below.</p>
+              <div class="sig-block"><div><strong>Vendor</strong></div><div style="margin-top:10px">Signature: <span class="doc-line"></span></div></div>
+            </div>
+          </div>
+          <aside class="sidebar">
+            <div class="card" style="padding:14px">
+              <h3>Signer 1 · Vendor</h3>
+              <div class="form-row"><div><span class="form-label">Name</span><input class="form-input" value="Priya Nandan" readonly /></div>
+              <div><span class="form-label">Email</span><input class="form-input" value="priya@vendor.co" readonly /></div></div>
+              <span class="form-label" style="margin-top:8px">WhatsApp number</span>
+              <input class="form-input" id="waPhone" value="" readonly />
+              <span class="form-label" style="margin-top:10px">PIN <span style="color:var(--primary)">(required for WhatsApp)</span></span>
+              <input class="form-input" id="pinInput" value="" readonly />
+              <span class="form-label" style="margin-top:10px">PIN delivery channel</span>
+              <select class="pin-select" id="pinChannel" disabled>
+                <option>Choose…</option>
+              </select>
+            </div>
+          </aside>
+        </div>
+      </div>
+      <div class="step-caption show" id="cap2">2 · Add their WhatsApp number, a PIN, and how to deliver it</div>
+    </section>
+
+    <!-- 3 · Send + link arrives on WhatsApp -->
+    <section class="scene" id="sc3">
+      <div class="phone-stage">
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="wa-header">
+              <div class="wa-avatar">D</div>
+              <div><strong>Docracy</strong><span>Business account</span></div>
+            </div>
+            <div class="wa-chat">
+              <div class="wa-typing" id="typing1"><span></span><span></span><span></span></div>
+              <div class="wa-bubble" id="bubbleLink">
+                You've been invited to sign "Vendor Agreement" through Docracy.
+                <span class="wa-link">docracy.io/sign/8f3a…</span>
+                <span class="wa-time">10:46 ✓✓</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="step-caption show" id="cap3">3 · Send — the link goes straight to their own WhatsApp, not a shared inbox</div>
+    </section>
+
+    <!-- 4 · 30 seconds later — PIN arrives separately -->
+    <section class="scene" id="sc4">
+      <div class="phone-stage">
+        <div class="delay-badge" id="delayBadge">⏱ ~30 seconds later</div>
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="wa-header">
+              <div class="wa-avatar">D</div>
+              <div><strong>Docracy</strong><span>Business account</span></div>
+            </div>
+            <div class="wa-chat">
+              <div class="wa-bubble show">
+                You've been invited to sign "Vendor Agreement" through Docracy.
+                <span class="wa-link">docracy.io/sign/8f3a…</span>
+                <span class="wa-time">10:46 ✓✓</span>
+              </div>
+              <div class="wa-typing" id="typing2"><span></span><span></span><span></span></div>
+              <div class="wa-bubble" id="bubblePin">
+                Your PIN to sign the document via Docracy is:
+                <span class="wa-pin">7241</span>
+                <span class="wa-time">10:47 ✓✓</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="step-caption show" id="cap4">4 · The PIN arrives as its own message — a real second factor</div>
+    </section>
+
+    <!-- 5 · Signer enters PIN and signs -->
+    <section class="scene" id="sc5">
+      <div class="sign-shell">
+        <header class="demo-header">
+          <span class="demo-logo">Docracy</span>
+          <span class="demo-badge">Sign document</span>
+        </header>
+        <div class="sign-main">
+          <div class="card pdf-pane">
+            <div class="pdf-toolbar">Vendor Agreement · Priya Nandan</div>
+            <div class="pdf-doc" style="padding:32px">
+              <h1 class="doc-title" style="font-size:16px">Vendor Agreement</h1>
+              <p class="doc-p">Enter your PIN to unlock signing.</p>
+            </div>
+          </div>
+          <div class="card sign-panel">
+            <h3>Enter your PIN</h3>
+            <div class="pin-entry" id="pinEntry">
+              <div class="pin-digit" data-i="0"></div>
+              <div class="pin-digit" data-i="1"></div>
+              <div class="pin-digit" data-i="2"></div>
+              <div class="pin-digit" data-i="3"></div>
+            </div>
+            <div class="sig-preview" id="sigPreview">
+              <svg viewBox="0 0 240 60"><path d="M8 38c20-28 38 12 58-6 18-16 28-20 52-8s42 24 64 6 38-22 58-4"/></svg>
+            </div>
+            <button type="button" class="btn-sign" id="signBtn">Sign &amp; continue</button>
+          </div>
+        </div>
+      </div>
+      <div class="step-caption show" id="cap5">5 · The signer enters the PIN, then signs — sole control, proven</div>
+    </section>
+
+    <!-- 6 · Audit trail -->
+    <section class="scene" id="sc6">
+      <div class="demo-shell">
+        <header class="demo-header">
+          <span class="demo-logo">Docracy</span>
+          <span class="demo-badge">Audit trail</span>
+        </header>
+        <div class="demo-main" style="grid-template-columns: 1fr;">
+          <div class="card" style="padding:24px 32px">
+            <h3 style="margin-top:0">Vendor Agreement — audit trail</h3>
+            <div class="audit-row" id="a1"><div class="audit-check">✓</div> Signing link delivered to WhatsApp — 10:46:03</div>
+            <div class="audit-row" id="a2"><div class="audit-check">✓</div> Signing link read on WhatsApp — 10:46:41</div>
+            <div class="audit-row" id="a3"><div class="audit-check">✓</div> PIN delivered to WhatsApp — 10:46:33</div>
+            <div class="audit-row" id="a4"><div class="audit-check">✓</div> Signed by Priya Nandan, PIN-verified — 10:48:12</div>
+            <div class="done-banner show" id="doneBanner">
+              <div class="done-icon">✓</div>
+              <div><strong>Evidence trail complete</strong><span>Designed to meet the EU eIDAS Advanced Electronic Signature criteria</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="step-caption show" id="cap6">6 · Every delivery and read receipt lands in the audit trail</div>
+    </section>
+
+    <!-- 7 · Outro -->
+    <section class="scene title-scene" id="sc7">
+      <div class="logo">Docracy</div>
+      <h1>WhatsApp signing — live today.</h1>
+      <p>docracy.io</p>
+    </section>
+
+    <div class="cursor-ring" id="cursor"></div>
+  </div>
+
+  <script>
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    const cursor = document.getElementById("cursor");
+
+    function show(id) {
+      document.querySelectorAll(".scene").forEach((s) => s.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+    }
+
+    function moveCursor(x, y, click) {
+      cursor.style.left = x + "px";
+      cursor.style.top = y + "px";
+      cursor.classList.add("show");
+      cursor.classList.toggle("click", !!click);
+    }
+
+    async function typeInto(el, text, msPerChar) {
+      for (let i = 1; i <= text.length; i++) {
+        el.value = text.slice(0, i);
+        await sleep(msPerChar);
+      }
+    }
+
+    async function run() {
+      // 0 intro (~5s)
+      await sleep(5000);
+
+      // 1 toggle WhatsApp (~7s)
+      show("sc1");
+      await sleep(1600);
+      const waCheck = document.getElementById("waCheck");
+      const waRow = document.getElementById("waRow");
+      const rect = waCheck.getBoundingClientRect();
+      moveCursor(rect.left + 8, rect.top + 8);
+      await sleep(700);
+      moveCursor(rect.left + 8, rect.top + 8, true);
+      waCheck.checked = true;
+      waRow.classList.add("active");
+      await sleep(4700);
+      cursor.classList.remove("show");
+
+      // 2 signer WhatsApp number + PIN + channel (~10s)
+      show("sc2");
+      await sleep(900);
+      await typeInto(document.getElementById("waPhone"), "+1 415 555 0134", 55);
+      await sleep(500);
+      await typeInto(document.getElementById("pinInput"), "7241", 160);
+      await sleep(500);
+      const sel = document.getElementById("pinChannel");
+      sel.innerHTML = '<option>Email</option><option selected>WhatsApp</option><option>SMS</option>';
+      sel.classList.add("picked");
+      await sleep(4700);
+
+      // 3 send + link arrives (~9s)
+      show("sc3");
+      document.getElementById("typing1").classList.add("show");
+      await sleep(1400);
+      document.getElementById("typing1").classList.remove("show");
+      document.getElementById("bubbleLink").classList.add("show");
+      await sleep(7600);
+
+      // 4 30s later — PIN arrives (~9.5s)
+      show("sc4");
+      document.getElementById("delayBadge").classList.add("show");
+      await sleep(1500);
+      document.getElementById("typing2").classList.add("show");
+      await sleep(1400);
+      document.getElementById("typing2").classList.remove("show");
+      document.getElementById("bubblePin").classList.add("show");
+      await sleep(6600);
+
+      // 5 enter PIN + sign (~9.5s)
+      show("sc5");
+      await sleep(1200);
+      const digits = document.querySelectorAll(".pin-digit");
+      const pin = "7241";
+      for (let i = 0; i < digits.length; i++) {
+        digits[i].textContent = pin[i];
+        digits[i].classList.add("filled");
+        await sleep(350);
+      }
+      await sleep(600);
+      document.getElementById("sigPreview").classList.add("draw");
+      document.getElementById("signBtn").classList.add("go");
+      await sleep(4300);
+
+      // 6 audit trail (~8.5s)
+      show("sc6");
+      for (const id of ["a1", "a2", "a3", "a4"]) {
+        document.getElementById(id).classList.add("show");
+        await sleep(550);
+      }
+      document.getElementById("doneBanner").classList.add("show");
+      await sleep(5500);
+
+      // 7 outro (~5s)
+      show("sc7");
+      await sleep(5000);
+    }
+
+    window.jumpTo = show;
+    if (!location.search.includes("norun")) run();
+  </script>
+</body>
+</html>
