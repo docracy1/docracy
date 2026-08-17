@@ -14,6 +14,8 @@
 /try    /prepare?freeTemplate=mutual-nda&ref=try  302
 /nda    /prepare?freeTemplate=mutual-nda&ref=nda  302
 /price  /pricing?ref=price                        302
+/submit       /submit-template?ref=submit         302
+/marketplace  /free-templates?ref=marketplace      302
 /go/ph  /prepare?freeTemplate=mutual-nda&utm_source=producthunt&utm_medium=launch&utm_campaign=launch  302
 /go/hn  /prepare?freeTemplate=mutual-nda&utm_source=hackernews&utm_medium=showhn&utm_campaign=showhn  302
 /go/li  /prepare?freeTemplate=mutual-nda&ref=linkedin  302

@@ -61,7 +61,14 @@ const OutreachLanding = lazy(() => import("./pages/OutreachLanding"));
 import NotFound from "./pages/NotFound";
 const SeoLandingTemplate = lazy(() => import("./components/SeoLandingTemplate"));
 import { SEO_LANDING_PAGES } from "./lib/seoPages";
-import { ShortGoRedirect, ShortNdaRedirect, ShortPriceRedirect, ShortTryRedirect } from "./pages/ShortLinkRedirect";
+import {
+  ShortGoRedirect,
+  ShortMarketplaceRedirect,
+  ShortNdaRedirect,
+  ShortPriceRedirect,
+  ShortSubmitRedirect,
+  ShortTryRedirect,
+} from "./pages/ShortLinkRedirect";
 import { captureAttribution } from "./lib/attribution";
 import { LocaleProvider } from "./lib/i18n";
 import LocalePathSync from "./components/LocalePathSync";
@@ -77,6 +84,8 @@ function AppRoutes() {
       <Route path="/try" element={<ShortTryRedirect />} />
       <Route path="/nda" element={<ShortNdaRedirect />} />
       <Route path="/price" element={<ShortPriceRedirect />} />
+      <Route path="/submit" element={<ShortSubmitRedirect />} />
+      <Route path="/marketplace" element={<ShortMarketplaceRedirect />} />
       <Route path="/go/:campaign" element={<ShortGoRedirect />} />
       <Route path="/prepare" element={<Prepare />} />
       <Route path="/es/preparar" element={<Prepare />} />

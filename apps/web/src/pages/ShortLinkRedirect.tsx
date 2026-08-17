@@ -12,6 +12,8 @@ const SHORT_LINKS: Record<string, { to: string; source: string; campaign?: strin
   try: { to: "/prepare?freeTemplate=mutual-nda", source: "try" },
   nda: { to: "/prepare?freeTemplate=mutual-nda", source: "nda" },
   price: { to: "/pricing", source: "price" },
+  submit: { to: "/submit-template", source: "submit" },
+  marketplace: { to: "/free-templates", source: "marketplace" },
   ph: { to: "/prepare?freeTemplate=mutual-nda", source: "producthunt", campaign: "launch" },
   hn: { to: "/prepare?freeTemplate=mutual-nda", source: "hackernews", campaign: "showhn" },
   li: { to: "/prepare?freeTemplate=mutual-nda", source: "linkedin" },
@@ -45,6 +47,14 @@ export function ShortNdaRedirect() {
 
 export function ShortPriceRedirect() {
   return <ShortRedirect entry={SHORT_LINKS.price} />;
+}
+
+export function ShortSubmitRedirect() {
+  return <ShortRedirect entry={SHORT_LINKS.submit} />;
+}
+
+export function ShortMarketplaceRedirect() {
+  return <ShortRedirect entry={SHORT_LINKS.marketplace} />;
 }
 
 export function ShortGoRedirect() {
