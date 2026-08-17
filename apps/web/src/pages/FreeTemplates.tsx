@@ -261,6 +261,13 @@ export default function FreeTemplates() {
             </a>
             {t("freeTemplates.legalReviewTrail")}
           </p>
+          <p className="templates-legal-review">
+            {t("freeTemplates.accountantReviewLead")}{" "}
+            <a href="https://www.xing.com/profile/Stephan_Orasch" target="_blank" rel="noopener noreferrer">
+              Stephan Orasch
+            </a>
+            {t("freeTemplates.accountantReviewTrail")}
+          </p>
         </div>
       </div>
 

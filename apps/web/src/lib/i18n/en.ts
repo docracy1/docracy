@@ -160,6 +160,8 @@ const en: Messages = {
   "footer.esignLineLink": "Learn more about ESIGN & UETA",
   "footer.legalReviewLead": "Free templates reviewed by attorney",
   "footer.legalReviewTrail": ", BOECK Law (Liechtenstein Bar).",
+  "footer.accountantReviewLead": "Checked by chartered accountant",
+  "footer.accountantReviewTrail": ", Grohmann Hienert Zierhut.",
   "footer.dpa": "DPA",
   "footer.terms": "Terms",
   "footer.copyright": "© {{year}} Docracy — a product of RELACON GmbH",
@@ -877,6 +879,8 @@ const en: Messages = {
   "freeTemplates.searchPlaceholder": "What template are you looking for?",
   "freeTemplates.legalReviewLead": "Every Docracy template below has been reviewed by attorney",
   "freeTemplates.legalReviewTrail": ", BOECK Law (Liechtenstein Bar), for legal clarity and correctness.",
+  "freeTemplates.accountantReviewLead": "Financial and tax-related templates checked by chartered accountant",
+  "freeTemplates.accountantReviewTrail": ", Grohmann Hienert Zierhut.",
   "freeTemplates.noResults": "No templates match \"{query}\". Try a different word, or browse all templates below.",
   "freeTemplates.sub": "Ready-to-sign documents — pick one, fill in your details, and send for signature in minutes.",
   "freeTemplates.title": "Marketplace",
@@ -1632,6 +1636,8 @@ const en: Messages = {
   "tpl.detail.freeNote": "Free for up to 2 signers, no account required.",
   "tpl.detail.legalReviewLead": "Legally reviewed by attorney",
   "tpl.detail.legalReviewTrail": ", BOECK Law (Liechtenstein Bar).",
+  "tpl.detail.accountantReviewLead": "Checked by chartered accountant",
+  "tpl.detail.accountantReviewTrail": ", Grohmann Hienert Zierhut.",
   "tpl.detail.faqTitle": "FAQ",
   "tpl.detail.faq1.q": "Is this {{name}} legally binding?",
   "tpl.detail.faq1.a":
@@ -1937,6 +1943,8 @@ const en: Messages = {
   "testimonial.10.title": "Attorney, BOECK Law — reviewed Docracy's free template library",
   "testimonial.11.quote": "We've been using Docracy for a few months now and it's awesome — especially the templates. It's so easy to use.",
   "testimonial.11.title": "Chartered accountant and tax advisor, GHZ",
+  "testimonial.12.quote": "We started using Docracy a few weeks ago and it saves us a lot of time for our clients. Great tool, especially the templates.",
+  "testimonial.12.title": "Tax advisor, Schaler und Authried",
 };
 
 export default en;

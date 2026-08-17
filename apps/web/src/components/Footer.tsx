@@ -148,6 +148,13 @@ export default function Footer() {
           </a>
           {t("footer.legalReviewTrail")}
         </span>
+        <span className="site-footer-esign">
+          {t("footer.accountantReviewLead")}{" "}
+          <a href="https://www.xing.com/profile/Stephan_Orasch" target="_blank" rel="noopener noreferrer">
+            Stephan Orasch
+          </a>
+          {t("footer.accountantReviewTrail")}
+        </span>
       </div>
     </footer>
   );

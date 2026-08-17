@@ -214,6 +214,8 @@ const es: Messages = {
   "footer.esignLineLink": "Más información sobre ESIGN y UETA",
   "footer.legalReviewLead": "Plantillas gratuitas revisadas por la abogada",
   "footer.legalReviewTrail": ", BOECK Law (Colegio de Abogados de Liechtenstein).",
+  "footer.accountantReviewLead": "Revisado por el contador público",
+  "footer.accountantReviewTrail": ", Grohmann Hienert Zierhut.",
   "footer.vsAdobe": "vs Adobe Acrobat Sign",
   "footer.vsDocusign": "vs DocuSign",
   "footer.vsEversign": "vs eversign",
@@ -968,6 +970,8 @@ const es: Messages = {
   "freeTemplates.searchPlaceholder": "¿Qué plantilla estás buscando?",
   "freeTemplates.legalReviewLead": "Cada plantilla de Docracy abajo ha sido revisada por la abogada",
   "freeTemplates.legalReviewTrail": ", BOECK Law (Colegio de Abogados de Liechtenstein), para garantizar claridad y corrección legal.",
+  "freeTemplates.accountantReviewLead": "Plantillas financieras y fiscales revisadas por el contador público",
+  "freeTemplates.accountantReviewTrail": ", Grohmann Hienert Zierhut.",
   "freeTemplates.officialBadge": "Docracy",
   "freeTemplates.communityBadge": "Comunidad",
   "freeTemplates.communityTitle": "De la comunidad",
@@ -1693,6 +1697,8 @@ const es: Messages = {
   "tpl.detail.freeNote": "Gratis hasta 2 firmantes, sin cuenta.",
   "tpl.detail.legalReviewLead": "Revisado legalmente por la abogada",
   "tpl.detail.legalReviewTrail": ", BOECK Law (Colegio de Abogados de Liechtenstein).",
+  "tpl.detail.accountantReviewLead": "Revisado por el contador público",
+  "tpl.detail.accountantReviewTrail": ", Grohmann Hienert Zierhut.",
   "tpl.detail.faqTitle": "Preguntas frecuentes",
   "tpl.detail.faq1.q": "¿Este {{name}} tiene validez legal?",
   "tpl.detail.faq1.a":
@@ -2000,6 +2006,8 @@ const es: Messages = {
   "testimonial.10.title": "Abogada, BOECK Law — revisó la biblioteca de plantillas gratuitas de Docracy",
   "testimonial.11.quote": "Llevamos unos meses usando Docracy y es increíble, especialmente las plantillas. Es muy fácil de usar.",
   "testimonial.11.title": "Contador público y asesor fiscal, GHZ",
+  "testimonial.12.quote": "Empezamos a usar Docracy hace unas semanas y nos ahorra mucho tiempo con nuestros clientes. Excelente herramienta, especialmente las plantillas.",
+  "testimonial.12.title": "Asesora fiscal, Schaler und Authried",
 };
 
 export default es;

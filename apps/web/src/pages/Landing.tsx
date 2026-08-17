@@ -159,6 +159,7 @@ const TRUST_LOGOS: Array<{ name: string; logo: string | null; href: string; w: n
   { name: "FAUN Austria", logo: "/testimonials/faun-austria.png", href: "https://www.faun.com", w: 756, h: 140 },
   { name: "BOECK Attorneys at Law", logo: "/testimonials/boeck-law.png", href: "https://www.boeck.law/", w: 280, h: 140 },
   { name: "Grohmann Hienert Zierhut", logo: "/testimonials/grohmann-hienert-zierhut.jpg", href: "https://www.xing.com/profile/Stephan_Orasch", w: 436, h: 96 },
+  { name: "Schaler und Authried", logo: "/testimonials/schaller-authried.png", href: "http://www.schaler.at/", w: 1090, h: 130 },
 ];
 
 const TESTIMONIALS: Array<{
@@ -266,6 +267,14 @@ const TESTIMONIALS: Array<{
     logo: "/testimonials/grohmann-hienert-zierhut.jpg",
     linkedin: null,
     xing: "https://www.xing.com/profile/Stephan_Orasch",
+  },
+  {
+    quoteKey: "testimonial.12.quote",
+    name: "Bettina Authried",
+    titleKey: "testimonial.12.title",
+    company: null,
+    logo: "/testimonials/schaller-authried.png",
+    linkedin: null,
   },
 ];
 

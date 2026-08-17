@@ -187,6 +187,13 @@ export default function FreeTemplateDetail() {
             </a>
             {t("tpl.detail.legalReviewTrail")}
           </p>
+          <p style={{ fontSize: 12, color: "var(--mute)" }}>
+            ✓ {t("tpl.detail.accountantReviewLead")}{" "}
+            <a href="https://www.xing.com/profile/Stephan_Orasch" target="_blank" rel="noopener noreferrer">
+              Stephan Orasch
+            </a>
+            {t("tpl.detail.accountantReviewTrail")}
+          </p>
         </div>
       </div>
 
