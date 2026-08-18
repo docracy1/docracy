@@ -69,7 +69,7 @@ const en: Messages = {
   "nav.mega.resource.contact.desc": "Questions before you sign up? Ask sales@docracy.io.",
   "hero.eyebrow": "Sequential e-signatures · AI-assisted",
   "hero.whatsappBadge": "New: Sign documents via WhatsApp",
-  "hero.title": "Close deals in minutes.\nAI auto-detect places every field.",
+  "hero.title": "Sign documents in minutes.\nCompletely free — no account needed.",
   "hero.sub": "Upload, add signers, send — signatures without subscriptions or setup.",
   "hero.badge.legal": "Attorney-reviewed",
   "hero.badge.ssl": "SSL-secured",
