@@ -13,7 +13,7 @@ const FAQS = [
   },
   {
     q: "Does Docracy verify who is actually signing?",
-    a: "Not by default. Anyone holding a Docracy signing link can sign as the name on it — the platform records what was signed and when, not a verified identity check on who physically clicked. Paid and Enterprise accounts can add a required PIN to a signing link, and can deliver that link over WhatsApp so it only reaches a phone number tied to that signer's own WhatsApp account (a feature rolling out as our WhatsApp Business integration goes live) — together those are designed to meet the EU eIDAS bar for an Advanced Electronic Signature (AES), but Docracy is not a Qualified Trust Service Provider and does not issue QES. Full detail on our exact posture is on the Trust & security page.",
+    a: "Not by default. Anyone holding a Docracy signing link can sign as the name on it — the platform records what was signed and when, not a verified identity check on who physically clicked. Paid and Enterprise accounts can add a required PIN to a signing link, and can deliver that link over WhatsApp so it only reaches a phone number tied to that signer's own WhatsApp account — together those are designed to meet the EU eIDAS bar for an Advanced Electronic Signature (AES), but Docracy is not a Qualified Trust Service Provider and does not issue QES. Full detail on our exact posture is on the Trust & security page.",
   },
   {
     q: "Is Docracy GDPR compliant?",
