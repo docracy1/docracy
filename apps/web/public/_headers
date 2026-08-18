@@ -21,12 +21,17 @@
 
 # Vite-built assets are content-hashed (index-<hash>.js), but deliberately NOT marked `immutable`
 # with a year-long max-age: Cloudflare Pages' deploy propagation isn't atomic across edge nodes, and
-# a request landing on a not-yet-updated node can transiently get the SPA-fallback HTML (still a 200)
-# for a brand new asset path. `immutable` would make a browser that caught that bad response cache it
-# permanently with no way to self-correct. A moderate max-age bounds the worst case to a few hours
-# instead of a year, while still avoiding a refetch on every load.
+# a request landing on a not-yet-updated node can transiently get a 404 (see _redirects' explicit
+# `/assets/* -> 404` rule) or the SPA-fallback HTML for a brand new asset path. Cloudflare Pages
+# applies this same Cache-Control to that response regardless of its status code, so a long max-age
+# here doesn't just cache a good file efficiently — it also caches a bad transient 404/200 for that
+# same duration in any browser or CDN that fetches during the propagation window, with react never
+# booting until it expires. Confirmed in production: a browser that hit the 404 window kept re-serving
+# it from its own HTTP cache long after the file was live everywhere else, break login/signup for
+# that user. A short max-age bounds that worst case to a couple minutes instead of hours, at the cost
+# of a bit more revalidation traffic for an unremarkable, rarely-refetched hashed asset.
 /assets/*
-  Cache-Control: public, max-age=14400, must-revalidate
+  Cache-Control: public, max-age=120, must-revalidate
 
 # Favicons: short cache so a bad prior response (e.g. SPA HTML for /favicon.ico) can recover,
 # and so ?v= cache-bust query bumps take effect quickly across browsers.
