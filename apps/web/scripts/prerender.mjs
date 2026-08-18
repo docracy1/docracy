@@ -98,6 +98,18 @@ await build({
 const { FEATURE_PAGES, ALTERNATIVE_PAGES, EXPLAINER_PAGES, INDUSTRY_PAGES, getFeaturePageContent } = require(marketingBundleFile);
 fs.unlinkSync(marketingBundleFile);
 
+const partnerPagesBundleFile = path.join(__dirname, "_partnerPages.bundle.cjs");
+await build({
+  entryPoints: [path.join(root, "src/lib/partnerPages.ts")],
+  outfile: partnerPagesBundleFile,
+  bundle: true,
+  platform: "node",
+  format: "cjs",
+  logLevel: "warning",
+});
+const { PARTNER_PAGES } = require(partnerPagesBundleFile);
+fs.unlinkSync(partnerPagesBundleFile);
+
 const seoPagesBundleFile = path.join(__dirname, "_seoPages.bundle.cjs");
 await build({
   entryPoints: [path.join(root, "src/lib/seoPages.ts")],
@@ -697,6 +709,12 @@ const routes = [
   ...SEO_LANDING_PAGES.map((p) => ({
     urlPath: `/${p.slug}`,
     outFile: `${p.slug}.html`,
+    title: p.seoTitle,
+    description: p.seoDescription,
+  })),
+  ...PARTNER_PAGES.map((p) => ({
+    urlPath: `/for/${p.slug}`,
+    outFile: `for/${p.slug}.html`,
     title: p.seoTitle,
     description: p.seoDescription,
   })),

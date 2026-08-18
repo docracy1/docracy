@@ -1106,6 +1106,35 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
     compareBlogSlug: "docracy-vs-adobe-acrobat-sign",
     compareLabel: "See the full price comparison vs. Adobe Sign",
   },
+  {
+    slug: "contractbook-alternative",
+    seoTitle: "Contractbook Alternative — Sign Without the Full CLM | Docracy",
+    seoDescription:
+      "Need a document signed, not a full contract lifecycle platform? Docracy is a focused, WhatsApp-native signing tool with reusable templates and a full audit trail.",
+    heroHeadline: "Contractbook is a contract platform. Sometimes you just need a signature.",
+    heroSubheadline: "Docracy is the focused signing step — reusable templates, WhatsApp delivery, a real audit trail.",
+    problem:
+      "Contractbook bundles contract lifecycle management into every plan — workspaces, automations, integrations, " +
+      "a full contract repository. That's genuinely useful if you're managing a contract portfolio, but it's a lot " +
+      "of platform to adopt (and pay for, by contract volume) when the actual job in front of you is getting one " +
+      "document signed.",
+    solution:
+      "Docracy focuses on that one step: upload or start from a reusable template, place fields, send. Signers " +
+      "never need an account, delivery can go by email, SMS, or a phone-bound, PIN-protected WhatsApp message, and " +
+      "every step lands in an audit trail — without adopting a contract-management platform to get there.",
+    comparison: [
+      "No CLM to learn — upload and sign in under a minute",
+      "WhatsApp-native signing (phone-bound, PIN-protected, delivery/read receipts) — Contractbook has no equivalent",
+      "Signers never need an account, on any plan",
+      "Reusable templates, plus a marketplace of community-submitted ones",
+      "Flat $10/month on paid plans — not contract-volume-based pricing",
+      "Honest limit: no contract repository, lifecycle automation, or clause library — for full CLM, Contractbook is the more complete tool",
+    ],
+    ctaLabel: "Try free — send a sample NDA",
+    ctaTo: "/prepare?freeTemplate=mutual-nda&ref=seo-contractbook-alternative",
+    compareBlogSlug: "docracy-vs-pandadoc",
+    compareLabel: "See how Docracy compares to full-featured contract platforms",
+  },
 ];
 
 /** One page per competitor: no "connect your account" button anywhere — confirmed via direct

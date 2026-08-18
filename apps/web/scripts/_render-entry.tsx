@@ -35,8 +35,10 @@ import AlternativePage from "../src/pages/AlternativePage";
 import ExplainerPage from "../src/pages/ExplainerPage";
 import ImportGuidePage from "../src/pages/ImportGuidePage";
 import IndustryPage from "../src/pages/IndustryPage";
+import PartnerPage from "../src/pages/PartnerPage";
 import SeoLandingTemplate from "../src/components/SeoLandingTemplate";
 import { SEO_LANDING_PAGES } from "../src/lib/seoPages";
+import { PARTNER_PAGES } from "../src/lib/partnerPages";
 
 /** Renders the real app components to static markup for a single path — same components a
  *  browser gets, minus effects (which never run during static rendering, so Header's login-check
@@ -131,6 +133,7 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/es/alternativa-a-pandadoc" element={<AlternativePage slug="pandadoc-alternative" />} />
           <Route path="/adobe-sign-alternative" element={<AlternativePage slug="adobe-sign-alternative" />} />
           <Route path="/es/alternativa-a-adobe-sign" element={<AlternativePage slug="adobe-sign-alternative" />} />
+          <Route path="/contractbook-alternative" element={<AlternativePage slug="contractbook-alternative" />} />
           <Route path="/import-from-docusign" element={<ImportGuidePage slug="docusign" />} />
           <Route path="/import-from-eversign" element={<ImportGuidePage slug="eversign" />} />
           <Route path="/import-from-hellosign" element={<ImportGuidePage slug="hellosign" />} />
@@ -154,6 +157,9 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/are-electronic-signatures-legal" element={<ExplainerPage slug="are-electronic-signatures-legal" />} />
           {SEO_LANDING_PAGES.map((page) => (
             <Route key={page.slug} path={`/${page.slug}`} element={<SeoLandingTemplate slug={page.slug} />} />
+          ))}
+          {PARTNER_PAGES.map((page) => (
+            <Route key={page.slug} path={`/for/${page.slug}`} element={<PartnerPage slug={page.slug} />} />
           ))}
         </Routes>
         <Footer />

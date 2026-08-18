@@ -57,10 +57,12 @@ const AlternativePage = lazy(() => import("./pages/AlternativePage"));
 const ExplainerPage = lazy(() => import("./pages/ExplainerPage"));
 const ImportGuidePage = lazy(() => import("./pages/ImportGuidePage"));
 const IndustryPage = lazy(() => import("./pages/IndustryPage"));
+const PartnerPage = lazy(() => import("./pages/PartnerPage"));
 const OutreachLanding = lazy(() => import("./pages/OutreachLanding"));
 import NotFound from "./pages/NotFound";
 const SeoLandingTemplate = lazy(() => import("./components/SeoLandingTemplate"));
 import { SEO_LANDING_PAGES } from "./lib/seoPages";
+import { PARTNER_PAGES } from "./lib/partnerPages";
 import {
   ShortGoRedirect,
   ShortMarketplaceRedirect,
@@ -179,6 +181,7 @@ function AppRoutes() {
       <Route path="/es/alternativa-a-pandadoc" element={<AlternativePage slug="pandadoc-alternative" />} />
       <Route path="/adobe-sign-alternative" element={<AlternativePage slug="adobe-sign-alternative" />} />
       <Route path="/es/alternativa-a-adobe-sign" element={<AlternativePage slug="adobe-sign-alternative" />} />
+      <Route path="/contractbook-alternative" element={<AlternativePage slug="contractbook-alternative" />} />
       <Route path="/import-from-docusign" element={<ImportGuidePage slug="docusign" />} />
       <Route path="/import-from-eversign" element={<ImportGuidePage slug="eversign" />} />
       <Route path="/import-from-hellosign" element={<ImportGuidePage slug="hellosign" />} />
@@ -204,6 +207,9 @@ function AppRoutes() {
       <Route path="/are-electronic-signatures-legal" element={<ExplainerPage slug="are-electronic-signatures-legal" />} />
       {SEO_LANDING_PAGES.map((page) => (
         <Route key={page.slug} path={`/${page.slug}`} element={<SeoLandingTemplate slug={page.slug} />} />
+      ))}
+      {PARTNER_PAGES.map((page) => (
+        <Route key={page.slug} path={`/for/${page.slug}`} element={<PartnerPage slug={page.slug} />} />
       ))}
       <Route path="*" element={<NotFound />} />
     </Routes>
