@@ -151,6 +151,24 @@ function AppRoutes() {
       <Route path="/compliance-documentation" element={<FeaturePage slug="compliance-documentation" />} />
       <Route path="/whatsapp-signing" element={<FeaturePage slug="whatsapp-signing" />} />
       <Route path="/advanced-electronic-signature" element={<FeaturePage slug="advanced-electronic-signature" />} />
+      <Route path="/artist-contracts" element={<FeaturePage slug="artist-contracts" />} />
+      <Route path="/creative-licensing" element={<FeaturePage slug="creative-licensing" />} />
+      <Route path="/music-collaboration-contracts" element={<FeaturePage slug="music-collaboration-contracts" />} />
+      <Route path="/freelancer-contracts" element={<FeaturePage slug="freelancer-contracts" />} />
+      <Route path="/web-design-contract" element={<FeaturePage slug="web-design-contract" />} />
+      <Route path="/developer-contracts" element={<FeaturePage slug="developer-contracts" />} />
+      <Route path="/llc-legal-templates" element={<FeaturePage slug="llc-legal-templates" />} />
+      <Route path="/startup-legal-templates" element={<FeaturePage slug="startup-legal-templates" />} />
+      <Route path="/founder-agreement" element={<FeaturePage slug="founder-agreement" />} />
+      <Route path="/seo-agency-contract" element={<FeaturePage slug="seo-agency-contract" />} />
+      <Route path="/marketing-service-agreement" element={<FeaturePage slug="marketing-service-agreement" />} />
+      <Route path="/education-forms" element={<FeaturePage slug="education-forms" />} />
+      <Route path="/student-agreements" element={<FeaturePage slug="student-agreements" />} />
+      <Route path="/import-google-doc" element={<FeaturePage slug="import-google-doc" />} />
+      <Route path="/anonymous-signing" element={<FeaturePage slug="anonymous-signing" />} />
+      <Route path="/quick-sign" element={<FeaturePage slug="quick-sign" />} />
+      <Route path="/upload-and-sign" element={<FeaturePage slug="upload-and-sign" />} />
+      <Route path="/simple-signing" element={<FeaturePage slug="simple-signing" />} />
       <Route path="/eversign-alternative" element={<AlternativePage slug="eversign-alternative" />} />
       <Route path="/es/alternativa-a-eversign" element={<AlternativePage slug="eversign-alternative" />} />
       <Route path="/docusign-alternative" element={<AlternativePage slug="docusign-alternative" />} />
