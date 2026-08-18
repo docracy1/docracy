@@ -18,12 +18,37 @@ function fetchPdfBytes(pdfPath: string): Promise<Uint8Array> {
 /** Real, honest preview of a free template — renders the actual first page of the actual PDF
  *  (the same file /prepare loads), not a stock photo or a fabricated mockup. Card-grid callers use
  *  a small width; the template detail page uses a larger one for a genuine "here's what you get"
- *  look before the visitor commits to /prepare. */
+ *  look before the visitor commits to /prepare.
+ *
+ *  Rendering is deferred until the tile scrolls near the viewport: pdf.js spins up a dedicated
+ *  Worker per document, and the Marketplace grid has 90+ of these — mounting them all eagerly fired
+ *  90+ concurrent Worker threads (and worker-script fetches) on page load, which was enough load to
+ *  hang or stutter the page, especially on mobile. Deferring to IntersectionObserver caps how many
+ *  are ever in flight at once to roughly what's actually on screen. */
 export default function TemplateThumbnail({ pdfPath, width = 160 }: { pdfPath: string; width?: number }) {
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [visible, setVisible] = useState(false);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
 
   useEffect(() => {
+    const el = wrapperRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "300px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!visible) return;
     let cancelled = false;
     let pdfRef: Awaited<ReturnType<typeof import("../lib/pdfjs")["loadPdf"]>> | null = null;
     setStatus("loading");
@@ -59,12 +84,13 @@ export default function TemplateThumbnail({ pdfPath, width = 160 }: { pdfPath: s
       pdfRef?.destroy();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pdfPath, width]);
+  }, [visible, pdfPath, width]);
 
   if (status === "error") return null;
 
   return (
     <div
+      ref={wrapperRef}
       style={{
         width,
         aspectRatio: "8.5 / 11",
