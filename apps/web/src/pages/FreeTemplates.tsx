@@ -255,15 +255,11 @@ export default function FreeTemplates() {
             />
           </div>
           <p className="templates-legal-review">
-            {t("freeTemplates.legalReviewLead")}
-            {t("freeTemplates.legalReviewTrail")}
-          </p>
-          <p className="templates-legal-review">
-            {t("freeTemplates.accountantReviewLead")}{" "}
+            {t("freeTemplates.legalReviewLead")}{" "}
             <a href="https://www.xing.com/profile/Stephan_Orasch" target="_blank" rel="noopener noreferrer">
               Stephan Orasch
             </a>
-            {t("freeTemplates.accountantReviewTrail")}
+            {t("freeTemplates.legalReviewTrail")}
           </p>
         </div>
       </div>

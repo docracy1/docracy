@@ -181,15 +181,11 @@ export default function FreeTemplateDetail() {
           <h1 style={{ marginTop: 0 }}>{name}</h1>
           <p style={{ color: "var(--mute)" }}>{useCase}</p>
           <p style={{ fontSize: 12, color: "var(--mute)" }}>
-            ✓ {t("tpl.detail.legalReviewLead")}
-            {t("tpl.detail.legalReviewTrail")}
-          </p>
-          <p style={{ fontSize: 12, color: "var(--mute)" }}>
-            ✓ {t("tpl.detail.accountantReviewLead")}{" "}
+            ✓ {t("tpl.detail.legalReviewLead")}{" "}
             <a href="https://www.xing.com/profile/Stephan_Orasch" target="_blank" rel="noopener noreferrer">
               Stephan Orasch
             </a>
-            {t("tpl.detail.accountantReviewTrail")}
+            {t("tpl.detail.legalReviewTrail")}
           </p>
         </div>
       </div>
