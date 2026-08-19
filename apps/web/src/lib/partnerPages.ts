@@ -458,4 +458,627 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
       { label: "Trust & security", to: "/trust" },
     ],
   },
+  {
+    slug: "aircall",
+    seoTitle: "Docracy for Aircall — Send the Agreement Before the Call Goes Cold",
+    seoDescription:
+      "Turn an Aircall sales or support call into a signed agreement in minutes — WhatsApp-native signing, reusable templates, no account required for the signer.",
+    heroHeadline: "You just hung up on Aircall. Get it signed while it's still fresh.",
+    heroSubheadline: "A signing step for teams who close verbal agreement on the phone but lose momentum waiting for someone to draft the paperwork.",
+    namedTools: ["Aircall"],
+    painPoints: [
+      "A prospect verbally agrees on the call, but the follow-up document doesn't go out until hours later — by then the moment's gone",
+      "Support and success calls end in a verbal authorization (a plan change, a refund, a service addendum) that nobody captures in writing",
+      "Reps take the same call over and over and rebuild the same agreement or authorization form each time instead of reusing one",
+    ],
+    whyDocracy:
+      "Docracy is the signing step you trigger the moment an Aircall call wraps. Save your standard agreement or " +
+      "authorization form once as a reusable template, then send it by WhatsApp or email straight after the call — " +
+      "or automate it with Zapier so a call outcome (tagged, transferred to a stage, logged as won) fires off the " +
+      "signing request on its own. The customer signs from their phone with no account to create; you keep a timestamped " +
+      "audit trail of when it was delivered, opened, and signed.",
+    features: [
+      { title: "Send it before you hang up the next call", body: "Reusable templates mean the agreement is one click away, not a fresh draft every time." },
+      { title: "Zapier automation", body: "Trigger a signing request from a call disposition or tag instead of doing it by hand." },
+      { title: "WhatsApp delivery", body: "Phone-first customers who just talked to you on the phone sign on the same device, PIN-protected." },
+      { title: "Audit trail per document", body: "Delivery, read, and signature timestamps — a paper trail for a verbal agreement that used to have none." },
+    ],
+    honestLimit: "There's no installed Aircall app or click-to-sign integration today — this is an external signing step you trigger after the call, via Zapier or a manual link, not something embedded in the Aircall dialer itself.",
+    relevantTemplates: ["service-agreement", "authorization-form"],
+    ctaLabel: "Try free — send a sample authorization form",
+    ctaTo: "/prepare?freeTemplate=authorization-form&ref=partner-aircall",
+    relatedLinks: [
+      { label: "Docracy for Salesforce", to: "/for/salesforce" },
+      { label: "Docracy for CRM & Workflow Tools", to: "/for/crm-tools" },
+    ],
+  },
+  {
+    slug: "amocrm",
+    seoTitle: "Docracy for amoCRM — Sign the Deal Without Leaving the Pipeline",
+    seoDescription:
+      "Close amoCRM deals faster with a WhatsApp-native signing step built for phone-first customers — reusable templates, no account required to sign.",
+    heroHeadline: "The deal card moved to 'won' in amoCRM. Now get it signed.",
+    heroSubheadline: "A signing step for pipeline-driven sales teams whose customers live on WhatsApp, not email.",
+    namedTools: ["amoCRM"],
+    painPoints: [
+      "A deal card reaches the final pipeline stage, but sending the contract means exporting to yet another tool",
+      "Customers in amoCRM's core markets expect to be reached and to respond over WhatsApp, not a signature portal that emails a login link",
+      "Sales teams rebuild the same sales agreement or invoice terms for every deal card instead of reusing one structure",
+    ],
+    whyDocracy:
+      "Docracy is the signing step your amoCRM pipeline hands off to right as a deal card crosses into its closing " +
+      "stage. Save your standard sales agreement or payment terms once as a reusable template, then send it over " +
+      "WhatsApp — phone-bound and PIN-protected — or by email when that fits the customer better. Wire it to fire " +
+      "automatically with Zapier when a deal hits a given stage, or send it manually from the deal. The customer " +
+      "signs without registering anywhere; you keep the signed PDF and a full delivery/read/signature audit trail.",
+    features: [
+      { title: "Zapier stage triggers", body: "Send a signing request automatically the moment a deal card reaches your closing stage." },
+      { title: "WhatsApp-native signing", body: "Reach customers on the channel amoCRM's own market already uses, PIN-protected for accountability." },
+      { title: "Reusable deal templates", body: "One saved sales agreement or payment-terms template, reused across every pipeline." },
+      { title: "Sequential or parallel signers", body: "Route through your side and the customer's side in whatever order the deal needs." },
+    ],
+    honestLimit: "There's no installed amoCRM widget or marketplace integration today — this is an external signing step linked from (or automated out of) amoCRM, not an embedded panel inside the deal card.",
+    relevantTemplates: ["sales-agreement", "payment-terms-agreement"],
+    ctaLabel: "Try free — send a sample sales agreement",
+    ctaTo: "/prepare?freeTemplate=sales-agreement&ref=partner-amocrm",
+    relatedLinks: [{ label: "Docracy for CRM & Workflow Tools", to: "/for/crm-tools" }],
+  },
+  {
+    slug: "crosstrax",
+    seoTitle: "Docracy for Crosstrax — Sign Engagement Letters Before the Case Starts",
+    seoDescription:
+      "Get investigation engagement letters and client authorization forms signed before work begins — WhatsApp-native signing, no account required for clients.",
+    heroHeadline: "The case is open in Crosstrax. Get the engagement letter signed first.",
+    heroSubheadline: "A signing step for investigation and background-screening firms who can't start billable work without a signed authorization on file.",
+    namedTools: ["Crosstrax"],
+    painPoints: [
+      "Work can't ethically or legally start on a case until the client has signed an engagement letter and, often, a background-check authorization",
+      "Clients are frequently remote or referred in urgently — waiting on a mailed or emailed signature delays intake",
+      "Every case type (infidelity, background screening, corporate due diligence) needs its own consistent engagement and authorization paperwork, not a one-off draft",
+    ],
+    whyDocracy:
+      "Docracy is the signing step you run before a case opens in Crosstrax. Save your standard engagement letter, " +
+      "client intake agreement, and authorization form once as reusable templates, then send them the moment a new " +
+      "case comes in — by WhatsApp for a fast, phone-bound signature or by email when that's more appropriate for " +
+      "the client. Nothing is signed until you have consent on file, and the client never needs to create an account " +
+      "to give it. Every document carries a timestamped audit trail of delivery, viewing, and signature.",
+    features: [
+      { title: "Engagement letter templates", body: "Save your standard intake agreement once per case type, reuse it for every new client." },
+      { title: "Client authorization forms", body: "Get signed consent for background checks or investigative work before billable time starts." },
+      { title: "WhatsApp delivery with a PIN", body: "Phone-bound signing for clients who need to authorize work quickly, wherever they are." },
+      { title: "Audit trail on every document", body: "Delivery, read, and signature timestamps — a clear record that consent was obtained before work began." },
+    ],
+    honestLimit: "There's no installed Crosstrax app or case-management sync today — this is an external signing step you send before or alongside opening a case file, not a feature inside Crosstrax itself.",
+    relevantTemplates: ["authorization-form", "consulting-agreement", "mutual-nda"],
+    ctaLabel: "Try free — send a sample authorization form",
+    ctaTo: "/prepare?freeTemplate=authorization-form&ref=partner-crosstrax",
+    relatedLinks: [{ label: "Docracy for CRM & Workflow Tools", to: "/for/crm-tools" }],
+  },
+  {
+    slug: "pipefy",
+    seoTitle: "Docracy for Pipefy — Turn an Approval Phase Into a Real Signature",
+    seoDescription:
+      "When a Pipefy card hits its approval phase, send a real signature instead of a checkbox — reusable templates, no account required for the signer.",
+    heroHeadline: "The card hit 'Approval' in Pipefy. Make it an actual signature.",
+    heroSubheadline: "A signing step for ops, HR, and procurement pipes that need a binding signature, not just a checkbox field.",
+    namedTools: ["Pipefy"],
+    painPoints: [
+      "A Pipefy approval phase gets marked done with a checkbox or an internal approve button — there's no signed document to point to later",
+      "HR onboarding, procurement, and vendor-approval pipes all need a real signature at some phase, not just a status change",
+      "The same purchase order, vendor agreement, or offer letter gets rebuilt by hand every time a card reaches that phase",
+    ],
+    whyDocracy:
+      "Docracy is the signing step you attach to a Pipefy pipe's approval phase. Save your standard purchase order, " +
+      "vendor agreement, or offer letter once as a reusable template, then trigger a real signing request via Zapier " +
+      "when a card enters that phase — or send it manually from the card. The signer opens a link and signs without " +
+      "creating an account on Pipefy or Docracy; the signed document and its audit trail move with the card as proof " +
+      "the approval was real, not just a status flip.",
+    features: [
+      { title: "Zapier phase triggers", body: "Fire a signing request automatically when a card moves into your approval phase." },
+      { title: "Reusable process templates", body: "One saved purchase order, vendor agreement, or offer letter, reused across every pipe." },
+      { title: "A real signature, not a checkbox", body: "Binding, timestamped signatures replace an internal approve button with an actual audit trail." },
+      { title: "Sequential approval chains", body: "Route a document through multiple approvers or both sides of a vendor deal in order." },
+    ],
+    honestLimit: "There's no installed Pipefy app or native connector field today — this is an external signing step triggered via Zapier or a manual link from the card, not a built-in Pipefy integration.",
+    relevantTemplates: ["purchase-order", "vendor-agreement", "offer-letter"],
+    ctaLabel: "Try free — send a sample purchase order",
+    ctaTo: "/prepare?freeTemplate=purchase-order&ref=partner-pipefy",
+    relatedLinks: [{ label: "Docracy for CRM & Workflow Tools", to: "/for/crm-tools" }],
+  },
+  {
+    slug: "freshdesk",
+    seoTitle: "Docracy for Freshdesk — Close the Ticket, Not Just Reply to It",
+    seoDescription:
+      "Send a refund waiver or authorization form for signature right from a Freshdesk reply — no customer portal account, no separate e-signature tool holding up your SLA clock.",
+    heroHeadline: "The ticket's stuck on \"waiting for signature.\" Fix that from inside the reply.",
+    heroSubheadline: "Drop a signing link straight into a Freshdesk ticket — the customer signs from their phone, no portal login required.",
+    namedTools: ["Freshdesk"],
+    painPoints: [
+      "A refund waiver, account-change authorization, or service confirmation is the only thing keeping a ticket in \"Pending\" instead of \"Resolved\"",
+      "Asking a customer mid-ticket to log into a portal or create a new account to sign something resets the conversation and risks breaching your SLA timer",
+      "Agents rebuild the same authorization text into a canned response instead of sending one consistent, reusable document",
+    ],
+    whyDocracy:
+      "Docracy gives Freshdesk agents a signing link they can paste straight into a ticket reply or canned response — " +
+      "sent by email, SMS, or WhatsApp, with WhatsApp signing phone-bound and PIN-protected so it's clear the actual " +
+      "customer signed. The customer never creates a portal account; they open the link from the ticket thread and " +
+      "sign in under a minute, so the ticket can actually close. Save a refund-waiver or authorization template once " +
+      "and every agent sends the same clean document. For teams on Freshdesk's Zapier integration, automate the " +
+      "handoff entirely: when a ticket hits a certain status or tag, fire off the signing request automatically.",
+    features: [
+      { title: "Paste-into-reply signing links", body: "Send from a canned response or macro — no separate tool to open." },
+      { title: "WhatsApp delivery with PIN", body: "Phone-bound, PIN-protected signing for customers who won't check email mid-ticket." },
+      { title: "Zapier automation", body: "Trigger a signing request when a ticket reaches a given status or tag." },
+      { title: "Audit trail tied to the resolution", body: "Timestamped delivery, read, and signature — evidence for what closed the ticket." },
+    ],
+    honestLimit: "There's no native Freshdesk marketplace app — this is an external signing step you link to from a ticket, not an installed integration.",
+    relevantTemplates: ["authorization-form", "service-agreement"],
+    ctaLabel: "Try free — send a sample authorization form",
+    ctaTo: "/prepare?freeTemplate=authorization-form&ref=partner-freshdesk",
+    relatedLinks: [{ label: "Docracy for Help Desk & Support Teams", to: "/for/helpdesk-support" }],
+  },
+  {
+    slug: "bullhorn",
+    seoTitle: "Docracy for Bullhorn — Lock In the Placement Before It Slips",
+    seoDescription:
+      "Get offer letters and contractor agreements signed by WhatsApp or SMS the moment a candidate accepts — before a competing agency's paperwork gets there first.",
+    heroHeadline: "The candidate said yes. Now get it signed before another agency reaches them.",
+    heroSubheadline: "Offer letters and contractor agreements sent to a candidate's phone, signed in minutes — fast enough to matter in a competitive placement.",
+    namedTools: ["Bullhorn"],
+    painPoints: [
+      "A candidate can verbally accept a placement and still take a counter-offer from another agency while the paperwork is stuck in an email attachment",
+      "Recruiters reach and screen candidates by phone and text, then switch to email for the one step that actually locks the deal in",
+      "Every job order reuses the same offer-letter or contractor-agreement structure, but it gets retyped or reformatted for each submission",
+    ],
+    whyDocracy:
+      "Docracy sends the offer letter or independent-contractor agreement straight to the candidate's phone — over " +
+      "WhatsApp, phone-bound and PIN-protected, or by SMS — so signing happens in the same conversation the recruiter " +
+      "is already having, not after a delay to check email. Save one template per job type or client and reuse it for " +
+      "every submission; sequential signing routes the candidate's signature first, then the agency's countersignature, " +
+      "in order. A timestamped audit trail backs up exactly when the candidate accepted, which matters when a " +
+      "placement is contested.",
+    features: [
+      { title: "WhatsApp & SMS delivery", body: "Reach candidates on the channel recruiters already use to close them." },
+      { title: "Reusable offer & contractor templates", body: "Save once per job type or client, reuse for every placement." },
+      { title: "Sequential signing", body: "Candidate signs, then the agency countersigns, in order." },
+      { title: "Timestamped acceptance record", body: "Proof of exactly when a candidate accepted — useful if a placement is disputed." },
+    ],
+    honestLimit: "There's no installed Bullhorn Marketplace app today — this is an external signing step you hand off to from Bullhorn, not an embedded integration.",
+    relevantTemplates: ["offer-letter", "independent-contractor-agreement"],
+    ctaLabel: "Try free — send a sample offer letter",
+    ctaTo: "/prepare?freeTemplate=offer-letter&ref=partner-bullhorn",
+    relatedLinks: [{ label: "Docracy for Staffing & Recruiting", to: "/for/staffing-recruiting" }],
+  },
+  {
+    slug: "akken",
+    seoTitle: "Docracy for AkkenCloud — Paperwork Signed Before the First Shift",
+    seoDescription:
+      "Get contractor agreements and onboarding paperwork signed on a worker's phone before their first shift — reusable templates for staffing agencies running on AkkenCloud.",
+    heroHeadline: "The shift starts tomorrow. The paperwork can't still be pending.",
+    heroSubheadline: "Contractor agreements and onboarding forms, signed on a worker's phone with enough time to spare before their first shift.",
+    namedTools: ["Akken", "AkkenCloud"],
+    painPoints: [
+      "A worker can be assigned to a shift within days — sometimes hours — of being onboarded, leaving little room for paperwork delays",
+      "Onboarding coordinators track a checklist of contractor agreements and authorization forms per worker, often rebuilt by hand for each classification",
+      "Many temp and contract workers only have a phone, not a computer, to review and sign onboarding documents",
+    ],
+    whyDocracy:
+      "Docracy sends onboarding paperwork directly to a worker's phone — over WhatsApp, phone-bound and " +
+      "PIN-protected, or by SMS — so a coordinator can get a contractor agreement or authorization form signed the " +
+      "same day it's needed, not after it sits unopened in an inbox. Save a separate template per worker " +
+      "classification (W-2 temp vs. 1099 contractor) and reuse it for every assignment; sequential signing routes " +
+      "the worker's signature first, then the coordinator's sign-off. A timestamped audit trail gives you proof the " +
+      "paperwork was actually completed before the worker's first shift.",
+    features: [
+      { title: "Same-day mobile signing", body: "WhatsApp and SMS delivery for workers who may only have a phone." },
+      { title: "Per-classification templates", body: "Separate reusable templates for W-2 temps and 1099 contractors." },
+      { title: "Sequential sign-off", body: "Worker signs, then the coordinator countersigns, in order." },
+      { title: "Pre-shift audit trail", body: "Timestamped proof paperwork was signed before the worker's start date." },
+    ],
+    honestLimit: "There's no native AkkenCloud integration — this is an external signing step you hand off to from Akken, not an installed package.",
+    relevantTemplates: ["contractor-onboarding-agreement", "independent-contractor-agreement", "authorization-form"],
+    ctaLabel: "Try free — send a sample contractor onboarding agreement",
+    ctaTo: "/prepare?freeTemplate=contractor-onboarding-agreement&ref=partner-akken",
+    relatedLinks: [{ label: "Docracy for Staffing & Recruiting", to: "/for/staffing-recruiting" }],
+  },
+  {
+    slug: "trainual",
+    seoTitle: "Docracy for Trainual — Signed Acknowledgments for SOPs & Policies",
+    seoDescription:
+      "Trainual tracks who finished a course; it doesn't collect a signature. Send the acknowledgment as a real signed document after the SOP is marked complete.",
+    heroHeadline: "\"Marked complete\" in Trainual isn't a signature.",
+    heroSubheadline: "When an SOP, safety policy, or code of conduct needs a real acknowledgment on file, hand that step to Docracy.",
+    namedTools: ["Trainual"],
+    painPoints: [
+      "Trainual's completion tracking shows an employee viewed and clicked through a topic, not that they signed anything",
+      "Some SOPs — safety procedures, confidentiality terms, disciplinary policies — need a dated signature for compliance or a personnel file, not just a completion percentage",
+      "There's no built-in way to turn a finished Trainual course into a signed PDF a manager can attach to an employee record",
+      "Small businesses running onboarding through Trainual often still chase down paper or emailed acknowledgment forms separately",
+    ],
+    whyDocracy:
+      "Docracy isn't a Trainual integration — it's the signing step you hand off to once a course or SOP is marked complete. Save the " +
+      "policy or SOP acknowledgment as a reusable template, then send the link to the new hire (or the whole onboarding cohort at " +
+      "once) right after they finish the Trainual topic. They sign from the link with no account of their own, and you get a " +
+      "timestamped record — sender, signer, and signature — to keep alongside the Trainual completion log.",
+    features: [
+      { title: "Acknowledgment templates", body: "Save a policy or SOP acknowledgment once, reuse it for every new hire." },
+      { title: "Send right after completion", body: "Share the signing link as the last step once a Trainual topic is marked done." },
+      { title: "No account for the signer", body: "New hires and existing staff just open a link and sign." },
+      { title: "Timestamped audit trail", body: "A dated signature record to keep alongside the Trainual completion log." },
+    ],
+    honestLimit:
+      "There's no native Trainual app, plugin, or API integration — this is a manual or Zapier-automated hand-off, not an embedded " +
+      "signing step inside Trainual itself. Docracy also has no education- or training-specific features: no gradebook sync, no " +
+      "LMS-style completion tracking, and no school or org SSO. It's a general-purpose e-signature tool that fits well after Trainual, " +
+      "not a Trainual add-on.",
+    relevantTemplates: ["employee-onboarding-agreement", "code-of-conduct-acknowledgment", "acceptable-use-policy-acknowledgment"],
+    ctaLabel: "Try free — send a sample acknowledgment",
+    ctaTo: "/prepare?freeTemplate=employee-onboarding-agreement&ref=partner-trainual",
+    relatedLinks: [
+      { label: "Docracy for SOPs, Training & Online Courses", to: "/for/sop-training" },
+      { label: "Docracy for Enterprise IT & Security Teams", to: "/for/enterprise-it" },
+    ],
+  },
+  {
+    slug: "moodle",
+    seoTitle: "Docracy for Moodle — Signed Statements for Courses & Cohorts",
+    seoDescription:
+      "Moodle can track quiz attempts and grades, but it has no e-signature. Collect a real signed academic integrity or lab safety statement per course.",
+    heroHeadline: "Moodle can grade an assignment. It can't collect a signature.",
+    heroSubheadline: "For academic integrity statements, lab safety waivers, or enrollment agreements tied to a course, add the signing step Moodle skips.",
+    namedTools: ["Moodle"],
+    painPoints: [
+      "Moodle has no native e-signature — a \"tick this box to agree\" checkbox activity isn't a signed, attributable record",
+      "Academic integrity statements, lab or field-trip safety waivers, and course enrollment agreements often need an actual signature, not a form submission logged in the gradebook",
+      "Instructors managing this outside Moodle usually resort to printed forms or an emailed PDF with no consistent trail back to the course",
+      "A cohort can be dozens or hundreds of students; collecting individual signed statements without a batch workflow is its own project",
+    ],
+    whyDocracy:
+      "Docracy sits outside Moodle as the signing step you link to from the course page, not an installed Moodle plugin. Save the " +
+      "integrity statement, safety waiver, or enrollment agreement as a reusable template once per course, then post the signing " +
+      "link in the course itself or send it to the whole enrolled cohort at once with parallel signing. Each student signs with no " +
+      "account required, and a timestamped audit trail shows exactly who signed which version and when — useful if a program or " +
+      "accreditation review ever asks for evidence.",
+    features: [
+      { title: "One template per course", body: "Save the integrity statement or waiver once, reuse it every term." },
+      { title: "Whole-cohort parallel signing", body: "Send to an entire class roster at once instead of chasing individuals." },
+      { title: "No student account needed", body: "Students open a link and sign — nothing to register for in Moodle or Docracy." },
+      { title: "Exportable audit trail", body: "A dated signature record per student, separate from the Moodle gradebook." },
+    ],
+    honestLimit:
+      "Docracy has no Moodle plugin, block, or API integration — the signing link lives outside the course shell, shared manually or via " +
+      "Zapier (for example, when a Moodle activity is marked complete). There are also no education-specific features: no FERPA-specific " +
+      "claims, no gradebook integration, and no school or campus SSO. This is a general-purpose signing tool, not an LMS module.",
+    relevantTemplates: ["code-of-conduct-acknowledgment", "liability-waiver", "acceptable-use-policy-acknowledgment"],
+    ctaLabel: "Try free — send a sample statement",
+    ctaTo: "/prepare?freeTemplate=liability-waiver&ref=partner-moodle",
+    relatedLinks: [
+      { label: "Docracy for SOPs, Training & Online Courses", to: "/for/sop-training" },
+    ],
+  },
+  {
+    slug: "online-courses",
+    seoTitle: "Docracy for Online Course Creators — Signed Waivers & Agreements",
+    seoDescription:
+      "Cohort-based courses on EditRepublic and similar platforms rarely have built-in e-signature. Collect a signed waiver or code of conduct before day one.",
+    heroHeadline: "Before a cohort starts, get it in writing.",
+    heroSubheadline: "Course platforms like EditRepublic handle payment and content — not signed waivers, codes of conduct, or terms acknowledgments. Add that step separately.",
+    namedTools: ["EditRepublic"],
+    painPoints: [
+      "Most course-hosting platforms collect payment and track lesson progress, but have no built-in way to collect a signed waiver or agreement",
+      "Cohort-based courses with live coaching, group calls, or physical activity often need a liability waiver or code of conduct signed before day one, not buried in checkout terms",
+      "\"I agree\" checkboxes at checkout don't produce the kind of individually attributable, timestamped record a dispute or refund request might call for",
+      "Course creators running multiple cohorts need to re-send the same agreement to a new group each time without rebuilding it",
+    ],
+    whyDocracy:
+      "Docracy isn't built into any course platform — it's the signing step a creator links to from the welcome email or first module, " +
+      "separate from checkout. Save the waiver, code of conduct, or terms acknowledgment as a reusable template once, then send it to " +
+      "each new cohort in one batch with parallel signing so everyone signs before the course starts. Students sign from a link with " +
+      "no account needed, and a timestamped audit trail gives the creator a real record independent of whatever the course platform logs.",
+    features: [
+      { title: "Reusable per-cohort template", body: "Save the waiver or agreement once, re-send it to every new cohort." },
+      { title: "Parallel signing before day one", body: "Send to the whole cohort at once and track who's signed so far." },
+      { title: "No student account required", body: "Students sign from a link — no new login for your course platform or Docracy." },
+      { title: "Independent audit trail", body: "A signed, timestamped record kept outside the course platform itself." },
+    ],
+    honestLimit:
+      "There's no native app or installed integration with EditRepublic or any other course-hosting platform — this is a link shared " +
+      "alongside the course, optionally automated with Zapier (for example, when a student enrolls or a module is marked complete). " +
+      "Docracy also has no education-specific features: no FERPA-specific claims, no gradebook or completion sync, and no school or " +
+      "platform SSO. It's a general-purpose signing tool that happens to fit well before a cohort starts.",
+    relevantTemplates: ["liability-waiver", "code-of-conduct-acknowledgment", "website-terms-of-service-acknowledgment"],
+    ctaLabel: "Try free — send a sample waiver",
+    ctaTo: "/prepare?freeTemplate=liability-waiver&ref=partner-online-courses",
+    relatedLinks: [
+      { label: "Docracy for SOPs, Training & Online Courses", to: "/for/sop-training" },
+      { label: "Docracy for Moodle", to: "/for/moodle" },
+    ],
+  },
+  {
+    slug: "evernote",
+    seoTitle: "Docracy for Evernote — Turn a Drafted Proposal Into a Signed PDF",
+    seoDescription:
+      "Finish a proposal or scope of work in Evernote, export it as a PDF, and get it signed the same day — sequential signing, no account required for the client.",
+    heroHeadline: "The proposal's finished in Evernote. Getting it signed is still a separate step.",
+    heroSubheadline: "Export the note as a PDF and send it for signature in minutes — no new tool to learn, no account for the client.",
+    namedTools: ["Evernote"],
+    painPoints: [
+      "A proposal or scope of work goes through several rounds of edits inside the same Evernote note, but finalizing it still means turning it into something a client can actually sign, not just read",
+      "Evernote's Share Note link lets a client view the draft, but there's no signature, timestamp, or audit trail attached to that link",
+      "Freelancers and consultants keep client work spread across notebooks and tags; every proposal still needs its own clean, signable PDF before it counts as accepted",
+    ],
+    whyDocracy:
+      "Docracy picks up right where Evernote leaves off: export your finished proposal or scope-of-work note as a PDF, " +
+      "upload it, and send it out for signature the same day. Save the structure once as a reusable template so the " +
+      "next scope of work doesn't start from a blank note. The client signs from a link with no account to create, " +
+      "and you keep a timestamped record of delivery, viewing, and signature on your side.",
+    features: [
+      { title: "Reusable SOW & proposal templates", body: "Save your standard structure once, reuse it for every new client." },
+      { title: "Sequential signing", body: "You sign first, then the client — or route it however the engagement requires." },
+      { title: "WhatsApp delivery", body: "Send the signing link somewhere a busy client will actually see it." },
+      { title: "Audit trail per document", body: "Delivery, read, and signature timestamps — proof the note became a real agreement." },
+    ],
+    honestLimit: "There's no Evernote plugin or direct export — Docracy doesn't pull notes from Evernote automatically. You export the note as a PDF yourself (Evernote's own Export/Print as PDF option) and upload that file to Docracy.",
+    relevantTemplates: ["scope-of-work", "freelance-service-agreement", "consulting-agreement"],
+    ctaLabel: "Try free — send a sample scope of work",
+    ctaTo: "/prepare?freeTemplate=scope-of-work&ref=partner-evernote",
+    relatedLinks: [{ label: "Docracy for Notes, Docs & Design Tools", to: "/for/productivity-tools" }],
+  },
+  {
+    slug: "canva",
+    seoTitle: "Docracy for Canva — Get a Designed Proposal or Release Form Signed",
+    seoDescription:
+      "Export your Canva proposal, contract, or model release as a PDF and get it signed without losing the design — no account required for the signer.",
+    heroHeadline: "The design's done in Canva. Signing it shouldn't flatten it into a plain form.",
+    heroSubheadline: "Upload the PDF you exported from Canva as-is and get it signed while it still looks like your work.",
+    namedTools: ["Canva"],
+    painPoints: [
+      "A proposal, one-page contract, or brand guideline built in Canva loses its polish the moment it has to be retyped into a generic signature tool",
+      "Photographers and designers need a model or client to sign a release on location, from a phone, without redoing the document from scratch",
+      "Canva has no built-in way to collect a signature that means anything legally — sharing a design link only confirms someone opened it, not that they agreed to it",
+    ],
+    whyDocracy:
+      "Docracy takes the PDF you already exported from Canva and uploads it exactly as designed — brand colors, layout, " +
+      "and all — instead of forcing you into a plain-text contract template. Save your standard proposal or release " +
+      "form once as a reusable template, then send it for signature by WhatsApp when you're shooting on location or " +
+      "closing a design engagement. The signer opens a link and signs, no account needed, and you keep a timestamped " +
+      "audit trail of the whole exchange.",
+    features: [
+      { title: "Design stays intact", body: "Upload the exported PDF as-is — no reformatting into a generic contract." },
+      { title: "Model release & proposal templates", body: "Ready-made templates for creative and photography sign-off." },
+      { title: "WhatsApp delivery", body: "Get a release signed on-site, phone-bound and PIN-protected." },
+      { title: "Audit trail per document", body: "Timestamped delivery, view, and signature record for every send." },
+    ],
+    honestLimit: "There's no Canva app or in-editor \"send to Docracy\" button — Docracy doesn't import designs from Canva directly. You use Canva's own Download as PDF option and upload that file to Docracy.",
+    relevantTemplates: ["model-release-form", "photography-services-agreement", "web-design-services-agreement"],
+    ctaLabel: "Try free — send a sample model release",
+    ctaTo: "/prepare?freeTemplate=model-release-form&ref=partner-canva",
+    relatedLinks: [{ label: "Docracy for Notes, Docs & Design Tools", to: "/for/productivity-tools" }],
+  },
+  {
+    slug: "smartmoving",
+    seoTitle: "Docracy for SmartMoving — Sign Change Orders Before the Crew Leaves",
+    seoDescription:
+      "Get SmartMoving estimates and day-of change orders signed on the truck — WhatsApp delivery, phone-bound PIN verification, and a reusable template for every job.",
+    heroHeadline: "The SmartMoving estimate is set. Get the change order signed before the crew moves on.",
+    heroSubheadline: "A fast signing step for the paperwork SmartMoving doesn't close out on its own — change orders, extra-item waivers, and bills of sale, signed on the customer's phone.",
+    namedTools: ["SmartMoving"],
+    painPoints: [
+      "SmartMoving builds the estimate and schedules the crew, but the day almost never goes exactly as quoted — extra stairs, a long carry, an added stop — and that change in scope still needs a real signature",
+      "Dispatchers are running several jobs at once and can't stop to build a new document by hand every time a job's scope changes mid-move",
+      "High-value items left behind, storage add-ons, or partial-shipment handoffs need their own signed record, separate from the original SmartMoving quote",
+    ],
+    whyDocracy:
+      "Docracy picks up where the SmartMoving estimate leaves off. When a job's scope changes on-site — an extra " +
+      "stop, a long carry, additional packing materials — send a change order over WhatsApp for a phone-bound, " +
+      "PIN-protected signature right in the driveway, no laptop required. Save a change-order or bill-of-sale " +
+      "template once and reuse it across your whole crew roster; every signature comes with its own delivery and " +
+      "read timestamp.",
+    features: [
+      { title: "Day-of change orders", body: "Turn a scope change into a signed document from a phone, without leaving the job." },
+      { title: "WhatsApp delivery with a PIN", body: "Phone-bound, PIN-protected signing — stronger than hoping someone signs an emailed PDF later." },
+      { title: "Reusable templates per job type", body: "Save a change order or bill-of-sale template once, reuse it for every crew." },
+      { title: "Audit trail", body: "Delivery, read, and signature timestamps, useful if the final charges are disputed." },
+    ],
+    honestLimit: "There's no installed SmartMoving integration today — Docracy is the signing step you hand off to after the estimate is built in SmartMoving, not a feature embedded inside it.",
+    relevantTemplates: ["service-agreement", "personal-property-bill-of-sale"],
+    ctaLabel: "Try free — send a sample change order",
+    ctaTo: "/prepare?freeTemplate=service-agreement&ref=partner-smartmoving",
+    relatedLinks: [{ label: "Docracy for Moving Companies", to: "/for/moving-companies" }],
+  },
+  {
+    slug: "nhsp",
+    seoTitle: "Docracy for NHS Professionals — Bank Worker Paperwork Signed Between Shifts",
+    seoDescription:
+      "Get bank-staff authorization and compliance paperwork signed between shifts, not just during office hours — WhatsApp delivery, no account required for NHSP bank workers.",
+    heroHeadline: "A bank shift starts at 6am. The paperwork shouldn't wait for office hours.",
+    heroSubheadline: "Authorization forms and compliance sign-offs for NHS Professionals bank workers, signed from a phone between shifts.",
+    namedTools: ["NHS Professionals", "NHSP"],
+    painPoints: [
+      "NHSP bank workers pick up shifts at short notice, often overnight or early morning, well outside the office hours when paperwork usually gets chased down",
+      "Compliance sign-offs — mandatory training attestations, right-to-work confirmations, bank-terms updates — need a signature before a shift starts, not after it",
+      "A bank worker moving between multiple trusts shouldn't need to create a new account or remember another login just to confirm one form",
+    ],
+    whyDocracy:
+      "Docracy sends a bank worker's authorization or compliance form straight to their phone — over WhatsApp, " +
+      "phone-bound and PIN-protected, or by SMS — so it can be signed between shifts, at any hour, without an " +
+      "account. Save a bank-worker authorization or onboarding template once and reuse it across your whole " +
+      "staff bank; a timestamped audit trail confirms exactly when each form went out and came back signed. This " +
+      "is strictly for staffing and administrative paperwork, not clinical or patient-facing documents.",
+    features: [
+      { title: "Sign between shifts, any hour", body: "A link a bank worker can open and sign at 5am before a shift, not just during office hours." },
+      { title: "No account for bank staff", body: "One less login for staff already juggling shifts across multiple trusts." },
+      { title: "Reusable compliance templates", body: "Save an authorization or onboarding form once, reuse it for every bank worker." },
+      { title: "Audit trail", body: "Timestamped proof of delivery, viewing, and signature for every form." },
+    ],
+    honestLimit: "Docracy has no native integration with NHS Professionals' staff bank platform, isn't HIPAA/NHS-DSPT certified, and isn't built for clinical or patient records — it's a fit for staffing and administrative paperwork only, sent alongside NHSP, not inside it.",
+    relevantTemplates: ["authorization-form", "contractor-onboarding-agreement"],
+    ctaLabel: "Try free — send a sample authorization form",
+    ctaTo: "/prepare?freeTemplate=authorization-form&ref=partner-nhsp",
+    relatedLinks: [{ label: "Docracy for Healthcare & Care Services", to: "/for/healthcare" }],
+  },
+  {
+    slug: "dentco",
+    seoTitle: "Docracy for Dentco — Work Orders Signed Off On-Site, Every Property",
+    seoDescription:
+      "Get work orders and service agreements signed by property managers across every site Dentco services — one reusable template, no portal for the client to log into.",
+    heroHeadline: "The repair's done. Get the property manager's sign-off before you're back in the van.",
+    heroSubheadline: "Work orders and service agreements for facility maintenance crews working across dozens of different properties and property managers.",
+    namedTools: ["Dentco"],
+    painPoints: [
+      "A maintenance crew like Dentco's works across many different properties, each with its own property manager and its own way of confirming a job's done",
+      "Getting sign-off on a completed work order shouldn't mean logging into a different client portal for every building",
+      "A new client relationship starts with its own service agreement, but it usually gets retyped instead of reused from a standard template",
+    ],
+    whyDocracy:
+      "Docracy lets a facility maintenance vendor standardize its work-order and service-agreement paperwork once, " +
+      "then reuse it across every property and property manager. A technician finishing a job sends the work " +
+      "order for signature over WhatsApp or SMS on the way out — phone-bound and PIN-protected, no portal or " +
+      "account for the property manager to set up. New client relationships start from the same saved " +
+      "service-agreement template every time.",
+    features: [
+      { title: "One template, every property", body: "Standardize work orders and service agreements across every site you service." },
+      { title: "Sign-off from the van", body: "Send a completed work order for signature on the way to the next job." },
+      { title: "No client portal", body: "Property managers sign from a link — nothing to log into." },
+      { title: "Per-job audit trail", body: "Delivery and signature timestamps for every property, useful if a completed job is ever disputed." },
+    ],
+    honestLimit: "There's no installed integration with Dentco's own dispatch or work-order system — Docracy is the signing step you hand off to once a job's done, not a feature built into it.",
+    relevantTemplates: ["work-order", "service-agreement"],
+    ctaLabel: "Try free — send a sample work order",
+    ctaTo: "/prepare?freeTemplate=work-order&ref=partner-dentco",
+    relatedLinks: [{ label: "Docracy for Facility & Property Management", to: "/for/facility-management" }],
+  },
+  {
+    slug: "hungrypanda",
+    seoTitle: "Docracy for Hungrypanda — Onboard Riders & Restaurant Partners by Phone",
+    seoDescription:
+      "Get rider agreements and restaurant partnership terms signed before a first delivery or menu goes live — signed from a phone, no account required, any market.",
+    heroHeadline: "Before a rider's first delivery or a restaurant's first order, get the agreement signed.",
+    heroSubheadline: "Onboarding paperwork for delivery riders and restaurant partners, signed on a phone in whatever market you're launching in.",
+    namedTools: ["Hungrypanda"],
+    painPoints: [
+      "New riders sign up to start delivering the same day, often from a phone with no printer or scanner nearby",
+      "Restaurant partners need a signed partnership agreement before their menu goes live, and every new market adds its own paperwork variant",
+      "A platform operating across multiple countries can't force every rider or restaurant into a full account signup just to accept terms",
+    ],
+    whyDocracy:
+      "Docracy lets a rider or restaurant partner sign onboarding paperwork straight from a link — no account, no " +
+      "download — over WhatsApp, phone-bound and PIN-protected, or by email. Save a courier-agreement or " +
+      "restaurant-partnership template once per market and reuse it for every new sign-up; a full audit trail " +
+      "confirms exactly when each rider or restaurant accepted their terms, which matters when onboarding moves " +
+      "this fast.",
+    features: [
+      { title: "No account for riders or restaurants", body: "Sign from a link on a phone — nothing to install or register for." },
+      { title: "WhatsApp-native delivery", body: "Reach riders and restaurant owners on the channel they already use to communicate." },
+      { title: "Reusable templates per market", body: "Save a courier or partnership agreement once, adapt it per market, reuse it for every sign-up." },
+      { title: "Audit trail", body: "Timestamped proof of exactly when a rider or restaurant accepted their terms." },
+    ],
+    honestLimit: "Docracy has no native app or installed integration inside Hungrypanda's rider or restaurant platform — it's the signing step you hand off to during onboarding, not a feature embedded in the app.",
+    relevantTemplates: ["contractor-onboarding-agreement", "vendor-agreement", "authorization-form"],
+    ctaLabel: "Try free — send a sample rider agreement",
+    ctaTo: "/prepare?freeTemplate=contractor-onboarding-agreement&ref=partner-hungrypanda",
+    relatedLinks: [{ label: "Docracy for Delivery & Logistics Platforms", to: "/for/delivery-logistics" }],
+  },
+  {
+    slug: "barracuda",
+    seoTitle: "Docracy for Barracuda Networks Admins — Sign Off Your Security Rollout",
+    seoDescription:
+      "Just deployed Barracuda Email Protection, Backup, or Security Awareness Training? Get every employee's acknowledgment signed and tracked, with a real audit trail.",
+    heroHeadline: "You rolled out Barracuda. Now get everyone to sign off on it.",
+    heroSubheadline: "A parallel-signing step for the acceptable-use policy or security-awareness acknowledgment that comes with a new security tool rollout.",
+    namedTools: ["Barracuda Networks"],
+    painPoints: [
+      "A new Barracuda deployment — email gateway, backup, or security awareness training — usually comes with a policy update that compliance wants everyone to formally acknowledge",
+      "Barracuda's own console tells you about mail flow and threats, not who has actually signed off on the policy behind the rollout",
+      "Chasing the last few holdouts after an org-wide rollout by email thread and spreadsheet wastes days IT doesn't have",
+    ],
+    whyDocracy:
+      "Docracy runs as the attestation step right after a Barracuda rollout: send the updated acceptable-use policy or " +
+      "security-awareness acknowledgment to the whole org at once with parallel signing, and watch who's signed and who " +
+      "hasn't in real time instead of guessing from an inbox. For staff who aren't glued to email — warehouse, field, or " +
+      "shop-floor teams affected by a new backup or access policy — send the same acknowledgment over WhatsApp instead.",
+    features: [
+      { title: "Security acknowledgment templates", body: "Acceptable-use and code-of-conduct templates ready to send the moment a rollout finishes." },
+      { title: "Org-wide parallel signing", body: "Send the same acknowledgment to an entire team or department at once." },
+      { title: "Live signed/unsigned tracking", body: "See exactly who's acknowledged the new policy without chasing an email thread." },
+      { title: "WhatsApp delivery for non-desk staff", body: "Reach employees who don't check email as part of their job." },
+    ],
+    honestLimit: "Docracy has no native Barracuda integration or console plugin — this is a standalone signing step you link to from your rollout communication, not something embedded in Barracuda itself.",
+    relevantTemplates: ["acceptable-use-policy-acknowledgment", "code-of-conduct-acknowledgment"],
+    ctaLabel: "Try free — send a sample policy acknowledgment",
+    ctaTo: "/prepare?freeTemplate=acceptable-use-policy-acknowledgment&ref=partner-barracuda",
+    relatedLinks: [{ label: "Docracy for Enterprise IT & Security Teams", to: "/for/enterprise-it" }],
+  },
+  {
+    slug: "germany",
+    seoTitle: "Docracy for German Businesses & Freiberufler — Sign Contracts Fast",
+    seoDescription:
+      "NDAs, freelance agreements, and consulting contracts signed the same day — built for German Freiberufler and GmbHs, without routing through enterprise procurement.",
+    heroHeadline: "Most contracts in Germany don't need a wet signature. Yours doesn't either.",
+    heroSubheadline: "A fast signing step for the NDAs, freelance agreements, and consulting contracts German businesses handle every week.",
+    namedTools: [],
+    painPoints: [
+      "Freiberufler and small GmbHs need NDAs, freelance agreements, and service contracts signed quickly — not routed through an enterprise procurement process built for teams ten times their size",
+      "Most everyday business contracts under German law need no particular form, or just Textform, but habit still means printing, signing by hand, and scanning \"to be safe\"",
+      "International clients expect a signing link, not a scanned PDF mailed back and forth across time zones",
+    ],
+    whyDocracy:
+      "For the contracts that make up most day-to-day business in Germany — NDAs, freelance agreements, consulting " +
+      "contracts, service agreements — no particular form or just Textform is legally sufficient, and Docracy's " +
+      "standard signing flow covers that. Save your standard contract once as a reusable template, send it by email " +
+      "or WhatsApp, and the other side signs without creating an account. When a document calls for stronger " +
+      "assurance, the WhatsApp-verified track binds the signing link to a phone number and requires a PIN.",
+    features: [
+      { title: "Templates for common contracts", body: "NDAs, freelance agreements, and consulting contracts ready to reuse." },
+      { title: "No account for the other side", body: "Clients and contractors sign from a link — nothing to register for." },
+      { title: "WhatsApp-verified track when it matters", body: "Phone-bound delivery and a required PIN for documents that need stronger assurance." },
+      { title: "Full audit trail", body: "Delivery, read, and signature timestamps kept with the signed document." },
+    ],
+    honestLimit:
+      "A handful of German contracts require strict written form (Schriftform, § 126 BGB), which under § 126a BGB can only be satisfied by a " +
+      "Qualified Electronic Signature (QES) — examples include employment terminations, guarantees given by private individuals, residential " +
+      "leases over a year, and consumer credit agreements. Docracy is not a Qualified Trust Service Provider and doesn't issue QES, so those " +
+      "need a certified QTSP or a wet-ink signature. Real estate transfers require notarization regardless of signature method.",
+    relevantTemplates: ["mutual-nda", "freelance-service-agreement", "consulting-agreement"],
+    ctaLabel: "Try free — send a sample freelance agreement",
+    ctaTo: "/prepare?freeTemplate=freelance-service-agreement&ref=partner-germany",
+    relatedLinks: [{ label: "Docracy for the German & EU Market", to: "/for/germany-eu" }],
+  },
+  {
+    slug: "digital-unterschreiben",
+    seoTitle: "Digital Unterschreiben — How to Actually Sign a Document Online",
+    seoDescription:
+      "Skip the jargon: upload a PDF, send a link, and get it signed digitally today — no account needed for the other side, with an audit trail as proof.",
+    heroHeadline: "Digital unterschreiben, without the detour through legal jargon first.",
+    heroSubheadline: "Upload the document, send a link, and it's signed — the straightforward path to a digital signature in Germany.",
+    namedTools: [],
+    painPoints: [
+      "Searching \"digital unterschreiben\" turns up a maze of SES, AES, and QES terminology before you've actually signed anything",
+      "Most people signing an NDA, freelance contract, or service agreement just need it done today, not a compliance deep-dive",
+      "The other party shouldn't have to create an account or install anything just to sign something back",
+    ],
+    whyDocracy:
+      "Docracy keeps the actual task simple: upload a PDF as-is, place the signature field, and send it by email or " +
+      "WhatsApp. The other side opens the link, reviews, and signs — no account required on either end. Every " +
+      "document gets a delivery/read/signature audit trail as proof it was actually seen and signed, and for cases " +
+      "that call for stronger assurance, a WhatsApp-verified track binds the signature to a specific phone number " +
+      "with a required PIN.",
+    features: [
+      { title: "Upload and send in minutes", body: "No template design work required — use your own PDF as-is." },
+      { title: "No account for the signer", body: "The other side opens a link, reviews, and signs — nothing to register for." },
+      { title: "WhatsApp-verified track", body: "Phone-bound delivery and a required PIN when a document needs stronger assurance." },
+      { title: "Audit trail as proof", body: "Delivery, read, and signature timestamps kept alongside the signed document." },
+    ],
+    honestLimit:
+      "The standard signature is a Simple Electronic Signature with no identity verification — fine for most everyday agreements, but Docracy " +
+      "is not a Qualified Trust Service Provider and doesn't issue a Qualified Electronic Signature (QES), which some specific German contracts " +
+      "legally require instead.",
+    relevantTemplates: ["mutual-nda", "service-agreement", "freelance-service-agreement"],
+    ctaLabel: "Try free — send a sample NDA",
+    ctaTo: "/prepare?freeTemplate=mutual-nda&ref=partner-digital-unterschreiben",
+    relatedLinks: [
+      { label: "Docracy for the German & EU Market", to: "/for/germany-eu" },
+      { label: "Docracy for German Businesses & Freiberufler", to: "/for/germany" },
+    ],
+  },
 ];
