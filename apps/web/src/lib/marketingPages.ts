@@ -1109,6 +1109,37 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
     compareLabel: "See the full price comparison vs. eversign",
   },
   {
+    slug: "onlinesignature-alternative",
+    seoTitle: "OnlineSignature.com Alternative — Free, No Account | Docracy",
+    seoDescription:
+      "OnlineSignature.com still routes you into a Xodo Sign / Eversign account to actually send or track a document. Docracy is free for up to 2 signers, no account, ever.",
+    heroHeadline: "OnlineSignature.com still wants you to create an account. Docracy doesn't.",
+    heroSubheadline: "It's a free front door to Xodo Sign (formerly Eversign) — the moment you want to send or track a document, you're signing up for an account.",
+    problem:
+      "OnlineSignature.com markets itself as a free way to sign PDFs, Word docs, and images, but it's actually a " +
+      "landing page for Xodo Sign (the product formerly known as Eversign). Basic signing works without much " +
+      "friction, but sending a document, tracking its status, or getting notified when someone signs all push you " +
+      "into creating a full Xodo Sign account — the exact step someone looking for a genuinely free, no-signup " +
+      "signing tool was trying to avoid.",
+    solution:
+      "Docracy.io skips that entirely: documents with up to 2 signers are free forever, with no account required " +
+      "for either the sender or the signer, not just for a one-time basic signature. You only need an account if " +
+      "you want saved templates, team features, or more than 2 signers on a single document — and even then, " +
+      "it's a flat $10/month, not a seat-based Xodo Sign plan.",
+    comparison: [
+      "No account required to send, track, or sign — not just for a one-off basic signature",
+      "Free for up to 2 signers, permanently — not a trial funnel into a paid Xodo Sign account",
+      "AI-assisted field placement (paid accounts)",
+      "WhatsApp signing links — 1 free per month, then flat pricing, no equivalent on OnlineSignature/Xodo Sign",
+      "Sequential or parallel signing built in, without a plan upgrade",
+      "Flat $10/month if you outgrow the free tier — not per-seat",
+    ],
+    ctaLabel: "Try free — send a sample NDA",
+    ctaTo: "/prepare?freeTemplate=mutual-nda&ref=seo-onlinesignature-alternative",
+    compareBlogSlug: "docracy-vs-eversign",
+    compareLabel: "See the full price comparison vs. Xodo Sign / Eversign (OnlineSignature's parent product)",
+  },
+  {
     slug: "docusign-alternative",
     seoTitle: "DocuSign Alternative — Simple Signing | Docracy",
     seoDescription: "A simple alternative to DocuSign for quick agreements. Fast, clean, no account required.",

@@ -205,7 +205,7 @@ export default function Docs() {
             </tr>
             <tr>
               <td style={{ padding: "6px 8px 6px 0", whiteSpace: "nowrap" }}>
-                <code>POST /api/embed/sessions</code>
+                <code>POST /api/embed/api-token/sessions</code>
               </td>
               <td style={{ padding: "6px 8px" }}>{t("docs.api.embed")}</td>
             </tr>
