@@ -8,6 +8,7 @@ import { usePageMeta } from "../lib/usePageMeta";
 import { track } from "../lib/track";
 import { useT } from "../lib/i18n";
 import { BlogHeroArt, CompetitorHeroArt, gradientForSlug, topicForCluster, type BlogTopic } from "../components/BlogHeroArt";
+import TrustSection from "../components/TrustSection";
 
 function BlogHero({ slug, topic, competitorKey }: { slug: string; topic: BlogTopic; competitorKey?: string }) {
   return (
@@ -40,23 +41,26 @@ function BlogCta({ slug }: { slug: string }) {
   const prepareLabel = isW9 ? t("blog.uploadW9") : t("blog.tryFreeSampleNda");
 
   return (
-    <div style={{ display: "flex", gap: 12, marginTop: 24, flexWrap: "wrap" }}>
-      <Link
-        to={prepareTo}
-        className="btn-primary"
-        style={{ textDecoration: "none" }}
-        onClick={() => track("blog_cta_clicked", { source: slug })}
-      >
-        {prepareLabel}
-      </Link>
-      <Link
-        to={`/pricing?ref=blog-${slug}`}
-        className="btn-secondary"
-        style={{ textDecoration: "none" }}
-        onClick={() => track("blog_cta_clicked", { source: slug })}
-      >
-        {t("blog.seePricing")}
-      </Link>
+    <div style={{ marginTop: 24 }}>
+      <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+        <Link
+          to={prepareTo}
+          className="btn-primary"
+          style={{ textDecoration: "none" }}
+          onClick={() => track("blog_cta_clicked", { source: slug })}
+        >
+          {prepareLabel}
+        </Link>
+        <Link
+          to={`/pricing?ref=blog-${slug}`}
+          className="btn-secondary"
+          style={{ textDecoration: "none" }}
+          onClick={() => track("blog_cta_clicked", { source: slug })}
+        >
+          {t("blog.seePricing")}
+        </Link>
+      </div>
+      <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 8 }}>{t("blog.ctaNoAccount")}</p>
     </div>
   );
 }
@@ -333,6 +337,7 @@ export default function BlogPostDetail() {
         <BlogHero slug={article.slug} topic={topicForCluster(article.cluster)} />
         <BlogByline date={article.publishedDate} />
         <ArticleBlocks blocks={article.blocks} />
+        <TrustSection />
         <BlogCta slug={article.slug} />
       </div>
     );
@@ -386,6 +391,7 @@ export default function BlogPostDetail() {
           <p>{staticPost.verdict}</p>
         </div>
 
+        <TrustSection />
         <BlogCta slug={staticPost.slug} />
 
         <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 32 }}>

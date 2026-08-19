@@ -148,7 +148,7 @@ const FAQ_KEYS: Array<{ qKey: string; aKey: string }> = [
 // (Abaseh Mirvali) and ambiguous abbreviations ("AE") are left out of this strip since a bare
 // name or two letters reads as noise in a logo row — they still appear in the full testimonials
 // section below with their real quotes and context.
-const TRUST_LOGOS: Array<{ name: string; logo: string | null; href: string; w: number; h: number }> = [
+export const TRUST_LOGOS: Array<{ name: string; logo: string | null; href: string; w: number; h: number }> = [
   { name: "DACH Advisory", logo: "/testimonials/dach-advisory.png", href: "https://dachadvisory.com", w: 72, h: 72 },
   { name: "culttech", logo: "/culttech-logo.png", href: "https://culttech.at", w: 72, h: 52 },
   { name: "hellocash", logo: "/testimonials/hellocash.png", href: "https://hellocash.at", w: 465, h: 140 },

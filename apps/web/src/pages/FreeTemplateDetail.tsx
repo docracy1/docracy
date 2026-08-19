@@ -8,6 +8,7 @@ import { track } from "../lib/track";
 import { useLocation } from "react-router-dom";
 import { apiUrl, fetchMarketplaceTemplate, type MarketplaceTemplateDetail } from "../lib/api";
 import TemplateThumbnail from "../components/TemplateThumbnail";
+import TrustSection from "../components/TrustSection";
 
 /** A community (Marketplace-submitted) template — fetched from the API rather than the static
  *  bundle. Deliberately its own, simpler render branch below: no attorney-review disclaimer (that
@@ -219,6 +220,26 @@ export default function FreeTemplateDetail() {
           <p style={{ margin: "8px 0 0", color: "var(--body)" }}>{faq.answer}</p>
         </details>
       ))}
+
+      <TrustSection />
+
+      <div style={{ marginTop: 24, textAlign: "center" }}>
+        <Link
+          to={ctaTo}
+          className="btn-primary btn-lg"
+          style={{ display: "inline-block", textDecoration: "none" }}
+          onClick={() =>
+            track("landingpage_cta_clicked", {
+              source: `seo:template:footer:${template.slug}`,
+              templateId: template.slug,
+              templateCategory: template.recurringCategory,
+            })
+          }
+        >
+          {t("tpl.detail.cta")}
+        </Link>
+        <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 8 }}>{t("tpl.detail.freeNote")}</p>
+      </div>
     </div>
   );
 }
