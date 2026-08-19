@@ -159,7 +159,6 @@ const TRUST_LOGOS: Array<{ name: string; logo: string | null; href: string; w: n
   { name: "FAUN Austria", logo: "/testimonials/faun-austria.png", href: "https://www.faun.com", w: 756, h: 140 },
   { name: "BOECK Attorneys at Law", logo: "/testimonials/boeck-law.png", href: "https://www.boeck.law/", w: 280, h: 140 },
   { name: "Grohmann Hienert Zierhut", logo: "/testimonials/grohmann-hienert-zierhut.jpg", href: "https://www.xing.com/profile/Stephan_Orasch", w: 436, h: 96 },
-  { name: "Schaler und Authried", logo: "/testimonials/schaller-authried.png", href: "http://www.schaler.at/", w: 1090, h: 130 },
 ];
 
 const TESTIMONIALS: Array<{
@@ -168,10 +167,6 @@ const TESTIMONIALS: Array<{
   titleKey: string;
   company: string | null;
   logo: string | null;
-  linkedin: string | null;
-  /** Xing (not LinkedIn) profile link — kept separate since the LinkedIn link below is rendered
-   *  with a hardcoded "LinkedIn" label, which would be wrong for a Xing URL. */
-  xing?: string;
   /** Personal headshot for testimonials from an individual professional rather than a company
    *  representative — rendered as a round avatar next to the name instead of the wide company
    *  logo strip, since a photo at that 36px-tall/auto-width treatment would render as an
@@ -184,7 +179,6 @@ const TESTIMONIALS: Array<{
     titleKey: "testimonial.1.title",
     company: null,
     logo: "/testimonials/dach-advisory.png",
-    linkedin: null,
   },
   {
     quoteKey: "testimonial.2.quote",
@@ -192,7 +186,6 @@ const TESTIMONIALS: Array<{
     titleKey: "testimonial.2.title",
     company: null,
     logo: null,
-    linkedin: null,
   },
   {
     quoteKey: "testimonial.3.quote",
@@ -200,7 +193,6 @@ const TESTIMONIALS: Array<{
     titleKey: "testimonial.3.title",
     company: null,
     logo: "/culttech-logo.png",
-    linkedin: null,
   },
   {
     quoteKey: "testimonial.4.quote",
@@ -208,7 +200,6 @@ const TESTIMONIALS: Array<{
     titleKey: "testimonial.4.title",
     company: null,
     logo: "/testimonials/hellocash.png",
-    linkedin: "https://www.linkedin.com/in/laurenz-gr%C3%B6bner-87179566/",
   },
   {
     quoteKey: "testimonial.5.quote",
@@ -216,7 +207,6 @@ const TESTIMONIALS: Array<{
     titleKey: "testimonial.5.title",
     company: null,
     logo: "/testimonials/ae-entsorgungssysteme.png",
-    linkedin: "https://www.linkedin.com/in/dietmar-gr%C3%BCnst%C3%A4udl-869931114/",
   },
   {
     quoteKey: "testimonial.6.quote",
@@ -224,7 +214,6 @@ const TESTIMONIALS: Array<{
     titleKey: "testimonial.6.title",
     company: null,
     logo: "/testimonials/volpini.png",
-    linkedin: null,
   },
   {
     quoteKey: "testimonial.7.quote",
@@ -232,7 +221,6 @@ const TESTIMONIALS: Array<{
     titleKey: "testimonial.7.title",
     company: null,
     logo: "/testimonials/kapsch.png",
-    linkedin: "https://www.linkedin.com/in/joesonic/",
   },
   {
     quoteKey: "testimonial.8.quote",
@@ -240,7 +228,6 @@ const TESTIMONIALS: Array<{
     titleKey: "testimonial.8.title",
     company: null,
     logo: "/testimonials/akg.png",
-    linkedin: "https://www.linkedin.com/in/joachim-zimmel/",
   },
   {
     quoteKey: "testimonial.9.quote",
@@ -248,7 +235,6 @@ const TESTIMONIALS: Array<{
     titleKey: "testimonial.9.title",
     company: null,
     logo: "/testimonials/faun-austria.png",
-    linkedin: "https://www.linkedin.com/in/herbert-utz-43816190/",
   },
   {
     quoteKey: "testimonial.11.quote",
@@ -256,16 +242,13 @@ const TESTIMONIALS: Array<{
     titleKey: "testimonial.11.title",
     company: null,
     logo: "/testimonials/grohmann-hienert-zierhut.jpg",
-    linkedin: null,
-    xing: "https://www.xing.com/profile/Stephan_Orasch",
   },
   {
     quoteKey: "testimonial.12.quote",
     name: "Bettina Authried",
     titleKey: "testimonial.12.title",
     company: null,
-    logo: "/testimonials/schaller-authried.png",
-    linkedin: null,
+    logo: null,
   },
 ];
 
@@ -734,26 +717,6 @@ export default function Landing() {
                       {title && testimonial.company ? ", " : ""}
                       {testimonial.company ?? ""}
                     </p>
-                  )}
-                  {testimonial.linkedin && (
-                    <a
-                      href={testimonial.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="testimonial-linkedin-link"
-                    >
-                      {t("landing.linkedinLink")} ↗
-                    </a>
-                  )}
-                  {testimonial.xing && (
-                    <a
-                      href={testimonial.xing}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="testimonial-linkedin-link"
-                    >
-                      {t("landing.xingLink")} ↗
-                    </a>
                   )}
                 </div>
               </div>

@@ -2207,19 +2207,6 @@ select {
   margin: 0 0 24px;
 }
 
-.testimonial-linkedin-link {
-  display: inline-block;
-  margin-top: 4px;
-  font-size: 12.5px;
-  font-weight: 600;
-  color: var(--primary);
-  text-decoration: none;
-}
-
-.testimonial-linkedin-link:hover {
-  text-decoration: underline;
-}
-
 .core-feature-card a {
   display: inline-block;
   margin-top: 12px;

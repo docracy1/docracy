@@ -230,8 +230,6 @@ const es: Messages = {
   "hero.eyebrow": "Firmas en secuencia · Con IA",
   "hero.hint": "Sin tarjeta · te enviamos un enlace gratis para iniciar sesión.",
   "landing.trustedBy": "Con la confianza de equipos en",
-  "landing.linkedinLink": "LinkedIn",
-  "landing.xingLink": "Xing",
   "hero.calculateSavings": "Calcular ahorro",
   "hero.emailPlaceholder": "¿Cuál es tu correo?",
   "hero.emailMissing": "Falta el correo",

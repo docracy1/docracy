@@ -80,8 +80,6 @@ const en: Messages = {
   "hero.b4": "SES e-signatures designed to support the U.S. ESIGN Act, UETA, and eIDAS",
   "hero.hint": "No credit card · we'll email you a free sign-in link.",
   "landing.trustedBy": "Trusted by teams at",
-  "landing.linkedinLink": "LinkedIn",
-  "landing.xingLink": "Xing",
   "hero.calculateSavings": "Calculate savings",
   "hero.emailPlaceholder": "What's your email?",
   "hero.emailMissing": "Email is missing",
