@@ -95,6 +95,7 @@ const en: Messages = {
   "hero.watchHow": "Watch how it works",
   "how.title": "How it works",
   "login.title": "Sign in",
+  "login.heading": "Sign in / Sign up",
   "login.titleSave": "Save the document you just sent",
   "login.titleUpgrade": "Sign in to upgrade",
   "login.sub": "No password — we'll email you a link. First time here? This creates your account too.",

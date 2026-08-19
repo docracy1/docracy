@@ -30,7 +30,7 @@ export default function Login() {
           : "default";
 
   const headline =
-    intent === "save-doc" ? t("login.titleSave") : intent === "upgrade" ? t("login.titleUpgrade") : t("login.title");
+    intent === "save-doc" ? t("login.titleSave") : intent === "upgrade" ? t("login.titleUpgrade") : t("login.heading");
   const subcopy =
     intent === "save-doc" ? t("login.subSave") : intent === "upgrade" ? t("login.subUpgrade") : t("login.sub");
   const ctaLabel = intent === "save-doc" ? t("login.ctaSave") : t("login.cta");

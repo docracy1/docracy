@@ -392,6 +392,7 @@ const es: Messages = {
   "login.subUpgrade":
     "Inicia sesión (o crea una cuenta) y luego mejora el plan para firmantes ilimitados, plantillas e historial.",
   "login.title": "Iniciar sesión",
+  "login.heading": "Iniciar sesión / Registrarse",
   "login.titleSave": "Guarda el documento que acabas de enviar",
   "login.titleUpgrade": "Inicia sesión para mejorar tu plan",
   "mcp.eyebrow": "Para desarrolladores y usuarios avanzados de IA",
