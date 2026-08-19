@@ -255,10 +255,7 @@ export default function FreeTemplates() {
             />
           </div>
           <p className="templates-legal-review">
-            {t("freeTemplates.legalReviewLead")}{" "}
-            <a href="https://www.linkedin.com/in/dr-denisa-boeck-373424123/" target="_blank" rel="noopener noreferrer">
-              Dr. Denisa Boeck
-            </a>
+            {t("freeTemplates.legalReviewLead")}
             {t("freeTemplates.legalReviewTrail")}
           </p>
           <p className="templates-legal-review">

@@ -138,11 +138,8 @@ export default function Trust() {
       </a>
       <p>
         Every free template in our{" "}
-        <Link to="/free-templates">template library</Link> has been reviewed by{" "}
-        <a href="https://www.linkedin.com/in/dr-denisa-boeck-373424123/" target="_blank" rel="noopener noreferrer">
-          Dr. Denisa Boeck
-        </a>
-        , attorney at BOECK Law (Liechtenstein Bar), for legal clarity and correctness. That review
+        <Link to="/free-templates">template library</Link> has been reviewed by BOECK Law
+        (Liechtenstein Bar), for legal clarity and correctness. That review
         covers the template's own wording — it is not tailored legal advice for your specific
         agreement, industry, or jurisdiction; for that, consult your own counsel.
       </p>

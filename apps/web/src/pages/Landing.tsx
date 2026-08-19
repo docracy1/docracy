@@ -251,15 +251,6 @@ const TESTIMONIALS: Array<{
     linkedin: "https://www.linkedin.com/in/herbert-utz-43816190/",
   },
   {
-    quoteKey: "testimonial.10.quote",
-    name: "Dr. Denisa Böck",
-    titleKey: "testimonial.10.title",
-    company: null,
-    logo: null,
-    linkedin: "https://www.linkedin.com/in/dr-denisa-boeck-373424123/",
-    avatar: "/testimonials/denisa-boeck.jpg",
-  },
-  {
     quoteKey: "testimonial.11.quote",
     name: "Stephan Orasch",
     titleKey: "testimonial.11.title",

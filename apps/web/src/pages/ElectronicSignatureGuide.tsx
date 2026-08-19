@@ -357,11 +357,7 @@ export default function ElectronicSignatureGuide() {
           Every free template in our{" "}
           <Link to="/free-templates" onClick={() => onCta("templates_library")}>template library</Link>{" "}
           — NDAs, service agreements, contractor agreements, W-9 and I-9 forms, and more — has been
-          reviewed by{" "}
-          <a href="https://www.linkedin.com/in/dr-denisa-boeck-373424123/" target="_blank" rel="noopener noreferrer">
-            Dr. Denisa Boeck
-          </a>
-          , attorney at BOECK Law (Liechtenstein Bar), for legal clarity and correctness. That review
+          reviewed by BOECK Law (Liechtenstein Bar), for legal clarity and correctness. That review
           covers the template's own wording — it isn't tailored legal advice for your specific agreement,
           industry, or jurisdiction.
         </p>

@@ -181,10 +181,7 @@ export default function FreeTemplateDetail() {
           <h1 style={{ marginTop: 0 }}>{name}</h1>
           <p style={{ color: "var(--mute)" }}>{useCase}</p>
           <p style={{ fontSize: 12, color: "var(--mute)" }}>
-            ✓ {t("tpl.detail.legalReviewLead")}{" "}
-            <a href="https://www.linkedin.com/in/dr-denisa-boeck-373424123/" target="_blank" rel="noopener noreferrer">
-              Dr. Denisa Boeck
-            </a>
+            ✓ {t("tpl.detail.legalReviewLead")}
             {t("tpl.detail.legalReviewTrail")}
           </p>
           <p style={{ fontSize: 12, color: "var(--mute)" }}>
