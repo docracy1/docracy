@@ -3,11 +3,16 @@ main = "src/index.ts"
 compatibility_date = "2024-12-01"
 compatibility_flags = ["nodejs_compat"]
 
-# Daily reminder/cleanup/health (08:00 UTC) plus Monday SEO blog publish inside that handler,
-# and hourly onboarding/completion nudges + SPA smoke (Sign in / Start free).
+# Daily reminder/cleanup/health (~08:22 UTC) plus Monday SEO blog publish inside that handler,
+# and hourly onboarding/completion nudges + SPA smoke (Sign in / Start free), offset to :07.
 # (Account cron-trigger limit — avoid a third schedule; SPA smoke rides the hourly cron.)
+# Deliberately NOT on the hour/half-hour: "0 * * * *" is the single most common cron schedule in
+# existence, and the SPA smoke check kept firing a genuine (retry-confirmed) 522 within ~1 second
+# of the exact hour mark on two separate hours, in production, even after two internal-contention
+# fixes — consistent with platform-wide thundering-herd congestion at round cron marks rather than
+# anything Docracy's own code controls. Offsetting past that mark is the standard mitigation.
 [triggers]
-crons = ["0 8 * * *", "0 * * * *"]
+crons = ["22 8 * * *", "7 * * * *"]
 
 [[kv_namespaces]]
 binding = "DOCRACY_KV"

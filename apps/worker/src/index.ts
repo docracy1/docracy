@@ -99,7 +99,9 @@ app.route("/api/webhooks/whatsapp", whatsappWebhook);
 // Hourly cron runs onboarding drip + completion nudges. Daily cron runs reminders/cleanup/health,
 // and on Mondays (UTC) also publishes one queued SEO blog post. Branch on event.cron so the
 // hourly schedule does not re-fire daily sweeps. (No separate Monday cron — account trigger limit.)
-const HOURLY_CRON = "0 * * * *";
+// Offset to :07, not :00 — see wrangler.toml's [triggers] comment for why (thundering-herd 522s
+// observed right at the hour mark). Must exactly match the hourly entry in wrangler.toml's crons.
+const HOURLY_CRON = "7 * * * *";
 
 export default {
   fetch: app.fetch,
