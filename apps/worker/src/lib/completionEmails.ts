@@ -71,44 +71,61 @@ async function maybeSendCompletionNudge(env: Env, doc: DocState, signer: Signer)
   signer.completionNudgesSent = [...(signer.completionNudgesSent ?? sent), "viewed_not_signed"];
 }
 
+async function processCompletionCandidate(env: Env, docId: string): Promise<void> {
+  const doc = await getDoc(env, docId);
+  if (!doc || doc.status !== "pending") return;
+
+  let candidates: Signer[];
+  if ((doc.signingMode ?? "sequential") === "parallel") {
+    candidates = doc.signers.filter((s) => s.status === "pending");
+  } else {
+    const order = currentTurnOrder(doc);
+    const signer = order === null ? undefined : doc.signers.find((s) => s.order === order);
+    candidates = signer ? [signer] : [];
+  }
+
+  let anyChange = false;
+  for (const signer of candidates) {
+    const before = signer.completionNudgesSent?.length ?? 0;
+
+    maybeTrackAnalyticsCheckpoints(env, doc, signer);
+
+    if (doc.preparerEmail) {
+      try {
+        await maybeSendCompletionNudge(env, doc, signer);
+      } catch (err) {
+        console.error(`Completion-email nudge failed for doc ${docId} signer ${signer.order} (non-fatal):`, err);
+      }
+    }
+
+    if ((signer.completionNudgesSent?.length ?? 0) !== before) anyChange = true;
+  }
+  if (anyChange) await putDoc(env, doc);
+}
+
+/** Bounded-concurrency batches, not a plain Promise.all — this can run over hundreds of docIds,
+ *  and firing every getDoc/putDoc at once would be its own way to strain the same shared cron
+ *  invocation this is trying to lighten up. 10 concurrent is a conservative multiplier over the
+ *  fully-sequential version this replaced, well inside Workers' subrequest concurrency headroom. */
+const SWEEP_CONCURRENCY = 10;
+
 /**
- * Runs hourly (see index.ts's scheduled handler, same cron entry the onboarding drip uses —
- * hour-scale thresholds don't need sub-hour granularity; listing every KV doc more often burned
- * the free-tier list budget). Mirrors runReminderSweep's sequential/parallel candidate selection, but nudges the *preparer* about a
- * specific signer's inaction instead of nudging the signer themselves — and, independent of that,
- * logs the Completion funnel's own timing checkpoints for every pending document.
+ * Runs hourly (see index.ts's scheduled handler, same cron entry the onboarding drip and SPA smoke
+ * check use — hour-scale thresholds don't need sub-hour granularity; listing every KV doc more
+ * often burned the free-tier list budget). Nudges the *preparer* about a specific signer's
+ * inaction instead of nudging the signer themselves — and, independent of that, logs the
+ * Completion funnel's own timing checkpoints for every pending document.
+ *
+ * Processes docIds in concurrent batches rather than one at a time: this scales with how many
+ * documents are currently stored (up to ~12 days of accumulation given the 9-day TTL + 3-day
+ * cleanup grace), not with live traffic, so it can take real wall-clock time even on a low-traffic
+ * deployment — exactly the kind of same-invocation cost that starved the SPA smoke check's own
+ * fetches of their subrequest/CPU budget on at least one observed occasion.
  */
 export async function runCompletionEmailSweep(env: Env): Promise<void> {
   const docIds = await listActiveDocIds(env);
-  for (const docId of docIds) {
-    const doc = await getDoc(env, docId);
-    if (!doc || doc.status !== "pending") continue;
-
-    let candidates: Signer[];
-    if ((doc.signingMode ?? "sequential") === "parallel") {
-      candidates = doc.signers.filter((s) => s.status === "pending");
-    } else {
-      const order = currentTurnOrder(doc);
-      const signer = order === null ? undefined : doc.signers.find((s) => s.order === order);
-      candidates = signer ? [signer] : [];
-    }
-
-    let anyChange = false;
-    for (const signer of candidates) {
-      const before = signer.completionNudgesSent?.length ?? 0;
-
-      maybeTrackAnalyticsCheckpoints(env, doc, signer);
-
-      if (doc.preparerEmail) {
-        try {
-          await maybeSendCompletionNudge(env, doc, signer);
-        } catch (err) {
-          console.error(`Completion-email nudge failed for doc ${docId} signer ${signer.order} (non-fatal):`, err);
-        }
-      }
-
-      if ((signer.completionNudgesSent?.length ?? 0) !== before) anyChange = true;
-    }
-    if (anyChange) await putDoc(env, doc);
+  for (let i = 0; i < docIds.length; i += SWEEP_CONCURRENCY) {
+    const batch = docIds.slice(i, i + SWEEP_CONCURRENCY);
+    await Promise.all(batch.map((docId) => processCompletionCandidate(env, docId)));
   }
 }
