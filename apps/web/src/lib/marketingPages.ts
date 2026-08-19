@@ -12,6 +12,8 @@ export interface FeaturePageContent {
   solution: string;
   features: Array<{ title: string; body: string }>;
   useCases: string[];
+  /** Optional — pages without it just skip the FAQ section. */
+  faqs?: Array<{ question: string; answer: string }>;
   ctaLabel: string;
   ctaTo: string;
   relatedLinks: Array<{ label: string; to: string }>;
@@ -343,6 +345,12 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       "Muralists documenting project scope and payment schedule",
       "Studio assistants signing work-for-hire agreements",
     ],
+    faqs: [
+      { question: "Is Docracy really free for artists?", answer: "Yes — documents with up to 2 signers are free forever, which covers most single-client commission or consignment agreements. A flat $10/month unlocks reusable templates and covers agreements with more signers." },
+      { question: "Does my client need to create an account to sign?", answer: "No. They open the link you send and sign directly — no account, no app to install." },
+      { question: "Can I use my own commission or consignment contract?", answer: "Yes — upload the PDF you already use and place signature fields on it, instead of starting from a template." },
+      { question: "How do I prove a client actually agreed to the terms?", answer: "Every signed contract includes a timestamped audit trail recording when it was sent, opened, and signed — useful if payment terms or scope are ever disputed later." },
+    ],
     ctaLabel: "Start free — no account required",
     ctaTo: "/prepare",
     relatedLinks: [
@@ -373,6 +381,12 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       "Artists granting one-time reproduction rights for a magazine feature",
       "Musicians licensing a track for sync in video or advertising",
       "Print and stock sellers formalizing usage terms with buyers",
+    ],
+    faqs: [
+      { question: "Is this legally binding?", answer: "Yes — Docracy's signing flow is designed to support the U.S. ESIGN Act and UETA for everyday licensing agreements. See the Trust & security page for full detail." },
+      { question: "Do I need an account to license a single piece?", answer: "No signup is required to send a document with up to 2 signers, which covers most one-off licensing deals." },
+      { question: "Can I use my own licensing agreement instead of a template?", answer: "Yes — upload your own PDF and add signature fields, or start from a free template in the Marketplace." },
+      { question: "What if the licensee doesn't respect the terms later?", answer: "The timestamped audit trail records exactly what was signed and when, giving you a clear record of the rights actually granted if a dispute comes up." },
     ],
     ctaLabel: "Start free — no account required",
     ctaTo: "/prepare",
@@ -405,6 +419,12 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       "Session musicians signing a one-off agreement before a recording date",
       "Independent artists assigning rights to a collaborator or engineer",
     ],
+    faqs: [
+      { question: "Do all band members need a Docracy account to sign?", answer: "No — each collaborator opens the signing link and signs on their own device, no account required." },
+      { question: "Can I get everyone in the band to sign in order?", answer: "Yes — sequential signing routes the document to each collaborator one at a time, so it's not signed out of order." },
+      { question: "Is it free for a two-person collaboration?", answer: "Yes, documents with up to 2 signers are free forever. A full band or larger session costs a flat $10/month, never per seat." },
+      { question: "Can I send the agreement over WhatsApp?", answer: "Yes — WhatsApp delivery is available and works well for touring musicians and session players who may not check email." },
+    ],
     ctaLabel: "Start free — no account required",
     ctaTo: "/prepare",
     relatedLinks: [
@@ -435,6 +455,12 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       "Independent contractor agreement for a longer engagement",
       "Retainer agreement with a recurring client",
       "Quick NDA before a discovery call, contract right after",
+    ],
+    faqs: [
+      { question: "How fast can a client actually sign?", answer: "Usually under a minute — they open the emailed link, review the terms, and sign. No account or software install required." },
+      { question: "Can I reuse the same contract for every new client?", answer: "Yes — save your standard agreement as a reusable template (on a paid account) and send it again without rebuilding it each time." },
+      { question: "Do I have to use Docracy's templates?", answer: "No — upload the contract you already use as a PDF and place signature fields on it directly." },
+      { question: "What proof do I have that the client agreed to the terms?", answer: "Every contract includes a timestamped audit trail showing exactly when it was sent, opened, and signed." },
     ],
     ctaLabel: "Start free — no account required",
     ctaTo: "/prepare",
@@ -467,6 +493,12 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       "IP and file-ownership handoff once final payment clears",
       "NDA before sharing early concepts or brand strategy",
     ],
+    faqs: [
+      { question: "Can I limit scope creep with a signed contract?", answer: "Yes — the free Web Design Services Agreement template covers revision limits and deliverables, so both sides have something to point back to." },
+      { question: "Does the client need an account to sign?", answer: "No — they open the link and sign, nothing to register for." },
+      { question: "Can I route the contract to a subcontractor too?", answer: "Yes — sequential signing lets you route a contract through the client first, then a project lead or subcontractor, in order." },
+      { question: "Is it free to use for a single client?", answer: "Yes, documents with up to 2 signers are free forever." },
+    ],
     ctaLabel: "Start free — no account required",
     ctaTo: "/free-templates/web-design-services-agreement",
     relatedLinks: [
@@ -497,6 +529,12 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       "Statement of work for a scoped feature or sprint",
       "NDA before a technical discovery call or code review",
       "Retainer agreement for ongoing maintenance work",
+    ],
+    faqs: [
+      { question: "Can I get a contract signed before an API integration project starts?", answer: "Yes — start from the free Web Development Agreement or Independent Contractor Agreement template, or upload your own, and send it the same day." },
+      { question: "Is it free for a solo developer with one client?", answer: "Yes — documents with up to 2 signers are free forever." },
+      { question: "Can I automate sending contracts from my own tools?", answer: "On a paid account, yes — connect Docracy via MCP or Zapier to trigger contract sends from your existing workflow." },
+      { question: "Does the client need to create an account to sign?", answer: "No — they open the emailed link and sign, no signup required." },
     ],
     ctaLabel: "Start free — no account required",
     ctaTo: "/free-templates/web-development-agreement",
@@ -529,6 +567,12 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       "Signing a corporate resolution alongside your operating agreement",
       "Small business partners who formed an LLC without a lawyer",
     ],
+    faqs: [
+      { question: "Does Docracy file my LLC with the state?", answer: "No — Docracy isn't a formation service and doesn't file with any Secretary of State. It only handles getting your operating agreement and related documents signed." },
+      { question: "Is the LLC Operating Agreement template really free?", answer: "Yes — it's available in the Marketplace, and sending it for signature is free for up to 2 signers." },
+      { question: "Can multiple LLC members sign in a specific order?", answer: "Yes — sequential signing lets members sign one after another when that matters." },
+      { question: "Can I upload the operating agreement my lawyer already drafted?", answer: "Yes — upload it as a PDF and add signature fields, no need to rebuild it in Docracy's editor." },
+    ],
     ctaLabel: "Sign your LLC documents free",
     ctaTo: "/free-templates/llc-operating-agreement",
     relatedLinks: [
@@ -559,6 +603,12 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       "Independent contractor agreements for early freelance hires",
       "Corporate resolutions after incorporating",
       "Getting signatures from advisors and early investors on basic paperwork",
+    ],
+    faqs: [
+      { question: "Does Docracy replace a lawyer or incorporation service?", answer: "No — Docracy doesn't incorporate your company or give legal advice. It handles turning documents you already have (or pull from the Marketplace) into signed, dated agreements." },
+      { question: "Is it free for a two-person founding team?", answer: "Yes — documents with up to 2 signers are free forever. Once your team grows, it's a flat $10/month, never per seat." },
+      { question: "Can contractors and new hires sign without creating an account?", answer: "Yes — anyone you send a document to can sign immediately from the link, no account required." },
+      { question: "Can I reuse the same PIIA or contractor agreement for every new hire?", answer: "Yes — save it once as a reusable template on a paid account and send it again for each new person." },
     ],
     ctaLabel: "Start free — no account required",
     ctaTo: "/prepare",
@@ -592,6 +642,12 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       "Documenting roles and decision-making authority in writing",
       "Getting a founder agreement signed before pitching investors",
     ],
+    faqs: [
+      { question: "Can co-founders sign in a specific order?", answer: "Yes — sequential signing lets founders sign one after another when the agreement calls for it." },
+      { question: "Is it free to get a founder agreement signed?", answer: "Yes — documents with up to 2 signers are free forever, which covers most two-founder agreements." },
+      { question: "Do co-founders need a Docracy account to sign?", answer: "No — each founder signs from their email link, even if they've never used Docracy before." },
+      { question: "Can I also get a PIIA signed alongside the founder agreement?", answer: "Yes — send a Proprietary Information and Inventions Agreement alongside it to also cover IP assignment." },
+    ],
     ctaLabel: "Sign your founder agreement free",
     ctaTo: "/free-templates/founder-vesting-agreement",
     relatedLinks: [
@@ -622,6 +678,12 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       "Getting sign-off on a deliverables list before the first monthly report",
       "Onboarding several new clients on the same contract template",
       "Adding a signed scope-change addendum when a project grows mid-retainer",
+    ],
+    faqs: [
+      { question: "Can I use the SEO contract I already have?", answer: "Yes — upload it as a PDF and place signature fields on it directly, no need to rebuild it." },
+      { question: "Is it free for onboarding a new client?", answer: "Yes — documents with up to 2 signers are free forever." },
+      { question: "Can I reuse the same contract for every new client?", answer: "Yes — save your standard SEO contract once as a reusable template (on a paid account) and reuse it for every client you sign." },
+      { question: "Does the client need an account to sign?", answer: "No — they open the emailed link and sign, no software or signup required." },
     ],
     ctaLabel: "Start free — no account required",
     ctaTo: "/free-templates/retainer-agreement",
@@ -654,6 +716,12 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       "Getting a co-marketing or referral partnership agreement signed",
       "Formalizing a short-term marketing consulting engagement",
     ],
+    faqs: [
+      { question: "How fast can a client sign after they say yes?", answer: "Right away — send the free service agreement template or your own contract, and the client signs from the link with no account needed." },
+      { question: "Can I reuse the agreement for every new campaign?", answer: "Yes — save it once as a reusable template on a paid account and send it again for the next engagement." },
+      { question: "Is it free for a single-client agreement?", answer: "Yes, documents with up to 2 signers are free forever." },
+      { question: "What if scope gets disputed later?", answer: "Every agreement includes a timestamped audit trail of who signed and when, which helps if the agreed scope is ever questioned." },
+    ],
     ctaLabel: "Start free — no account required",
     ctaTo: "/free-templates/service-agreement",
     relatedLinks: [
@@ -684,6 +752,12 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       "Sending enrollment paperwork to incoming families",
       "Getting a photo or media consent release signed",
       "Circulating a volunteer waiver ahead of a school event",
+    ],
+    faqs: [
+      { question: "Does Docracy have education-specific features?", answer: "No — it's a general-purpose e-signing tool, not a dedicated EdTech product. It has no FERPA-specific certification, LMS integration, or school SSO." },
+      { question: "Is it free for a school to send a permission slip?", answer: "Yes — documents with up to 2 signers, like a parent-signed permission slip, are free." },
+      { question: "Do parents need to create an account to sign?", answer: "No — they open the emailed link and sign, nothing to install or register for." },
+      { question: "What if a school needs to send forms to many parents at once?", answer: "Larger forms with more signers, saved templates, or multiple staff accounts run a flat $10/month, never per seat." },
     ],
     ctaLabel: "Start free — no account required",
     ctaTo: "/free-templates/authorization-form",
@@ -716,6 +790,12 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       "Housing or dormitory agreement sign-off",
       "An internship or practicum agreement between student, school, and host organization",
     ],
+    faqs: [
+      { question: "Is Docracy built specifically for schools?", answer: "No — it's a general e-signing tool whose pricing and workflow happen to fit this well, not an education-specific platform." },
+      { question: "Is it free for a single student agreement?", answer: "Yes — a student-and-institution agreement with up to 2 signers is free to send and sign." },
+      { question: "Can I reuse the same enrollment agreement every term?", answer: "Yes — save it once as a template on a paid account and reuse it for every new student." },
+      { question: "Do students need to create an account to sign?", answer: "No — they sign directly from the link, no registration required." },
+    ],
     ctaLabel: "Start free — no account required",
     ctaTo: "/prepare",
     relatedLinks: [
@@ -747,6 +827,12 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       "Pulling a saved agreement template out of Drive to send to a new client",
       "Cutting the download-then-upload step once your team is sending several documents a week",
     ],
+    faqs: [
+      { question: "Does this edit my Google Doc live inside Docracy?", answer: "No — it's a file picker/import: you connect Google Drive and pick a file, which is readied as a signable PDF. It's not a live, in-place editor for a shared Google Doc." },
+      { question: "Is the Google Drive connector free?", answer: "No — it's a paid feature. You can always upload a PDF manually for free instead." },
+      { question: "Does the signer need a Google account?", answer: "No — however the document gets into Docracy, the person you send it to signs from a link with nothing to install or register." },
+      { question: "Can I use Dropbox, OneDrive, or Box instead?", answer: "Yes — the same connector setup also supports Dropbox, OneDrive, and Box." },
+    ],
     ctaLabel: "Start free — no account required",
     ctaTo: "/prepare",
     relatedLinks: [
@@ -776,6 +862,12 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       "Countersigning a private sale agreement with a stranger",
       "Signing a permission or consent form you don't want tied to a permanent account",
       "A quick agreement you don't want showing up in some vendor's CRM later",
+    ],
+    faqs: [
+      { question: "Does Docracy verify who actually signed?", answer: "No — this is basic e-signature without identity verification. A timestamp and IP address are still recorded in the audit trail, so the signature holds up if it's ever questioned, but it isn't identity-verified." },
+      { question: "How long is my document stored?", answer: "Documents and their data are automatically deleted 9 days after the signing flow completes." },
+      { question: "Do I need to create an account to sign a one-off document?", answer: "No — sign or send a one-off document without registering for anything." },
+      { question: "Will I be added to a mailing list?", answer: "No — using Docracy once for a document doesn't add you to any marketing list." },
     ],
     ctaLabel: "Sign a document now — no account required",
     ctaTo: "/prepare",
@@ -807,6 +899,12 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       "Getting a permission form back minutes before a deadline",
       "Closing out a same-day vendor agreement",
     ],
+    faqs: [
+      { question: "How long does it actually take to sign something?", answer: "Most people are done in under a minute — upload the PDF, place fields, and send. The recipient just opens the link and signs." },
+      { question: "Do I need an account to send a one-off document?", answer: "No — sending a single document doesn't require signing up." },
+      { question: "Can the fields be placed automatically?", answer: "Yes — on a paid account, AI-assisted field placement finds where signatures and dates belong." },
+      { question: "Is there a record of when it was signed?", answer: "Yes — every signed document includes an automatically generated, timestamped audit trail." },
+    ],
     ctaLabel: "Sign your document in under a minute",
     ctaTo: "/prepare",
     relatedLinks: [
@@ -836,6 +934,12 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       "Countersign a quote or estimate",
       "Have a roommate co-sign a lease",
     ],
+    faqs: [
+      { question: "Can I upload any PDF?", answer: "Yes — use the document you already have, no conversion or reformatting needed." },
+      { question: "Is it really free?", answer: "Yes — there's no cost for documents with up to 2 signers, and no account required to send." },
+      { question: "Does the signer need to install anything?", answer: "No — they sign from any browser, on any device, directly from the link." },
+      { question: "Is there proof the document was signed?", answer: "Yes — every signed document comes with a timestamped audit trail." },
+    ],
     ctaLabel: "Upload your PDF now",
     ctaTo: "/prepare",
     relatedLinks: [
@@ -864,6 +968,12 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       "Get a permission slip signed",
       "Sign a quick one-off contract",
       "Countersign a quote or agreement",
+    ],
+    faqs: [
+      { question: "Is there a dashboard or settings I need to configure first?", answer: "No — there's a page to upload your document and a page to sign it. That's the whole tool." },
+      { question: "Does it work on mobile?", answer: "Yes — it works in any browser, on desktop or mobile, with no app to install." },
+      { question: "Is it free for a simple document?", answer: "Yes — no cost for documents with up to 2 signers." },
+      { question: "Will uploading my PDF change its formatting?", answer: "No — your document is uploaded and used as-is, with no rebuilding in an editor." },
     ],
     ctaLabel: "Just sign it",
     ctaTo: "/prepare",

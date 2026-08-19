@@ -34,7 +34,20 @@ export default function PartnerPage({ slug }: { slug: string }) {
     },
     {
       question: "Which documents can I send?",
-      answer: `Ready-made templates for this include ${templates.map((tpl) => tpl.name).join(", ")}. You can also upload your own PDF.`,
+      answer:
+        templates.length > 0
+          ? `Ready-made templates for this include ${templates.map((tpl) => tpl.name).join(", ")}. You can also upload your own PDF.`
+          : "Upload any PDF you already use, or start from one of Docracy's free templates — either way, you place signature fields and send it.",
+    },
+    {
+      question: "How much does it cost?",
+      answer:
+        "Free for documents with up to 2 signers. Beyond that it's a flat $10/month — never priced per seat — which also unlocks reusable templates, team accounts, and the integrations mentioned above.",
+    },
+    {
+      question: "How fast can someone actually sign?",
+      answer:
+        "Under a minute in most cases: they open the link, review the document, and sign — no account to create, no app to install. WhatsApp delivery adds a phone-bound PIN step for extra assurance when that matters.",
     },
     page.honestLimit
       ? { question: "What doesn't Docracy do here?", answer: page.honestLimit }
@@ -75,13 +88,7 @@ export default function PartnerPage({ slug }: { slug: string }) {
       </div>
 
       <div className="container" style={{ maxWidth: 720 }}>
-        {page.namedTools.length > 0 && (
-          <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 32 }}>
-            Built for teams using tools like {page.namedTools.join(", ")} — or anything similar.
-          </p>
-        )}
-
-        <h2 style={{ fontSize: 22, marginTop: 24, marginBottom: 8 }}>Where this fits</h2>
+        <h2 style={{ fontSize: 22, marginTop: 32, marginBottom: 8 }}>Where this fits</h2>
         <ul style={{ paddingLeft: 20 }}>
           {page.painPoints.map((point) => (
             <li key={point} style={{ marginBottom: 6 }}>
@@ -89,6 +96,20 @@ export default function PartnerPage({ slug }: { slug: string }) {
             </li>
           ))}
         </ul>
+
+        {page.namedTools.length > 0 && (
+          <>
+            <h2 style={{ fontSize: 22, marginTop: 32, marginBottom: 8 }}>Who uses this</h2>
+            <ul style={{ paddingLeft: 20 }}>
+              {page.namedTools.map((tool) => (
+                <li key={tool} style={{ marginBottom: 6 }}>
+                  Teams running on {tool}
+                </li>
+              ))}
+              <li style={{ marginBottom: 6 }}>Or anything similar — the signing step works the same regardless of which one you use</li>
+            </ul>
+          </>
+        )}
 
         <h2 style={{ fontSize: 22, marginTop: 32 }}>Why Docracy</h2>
         <p>{page.whyDocracy}</p>
