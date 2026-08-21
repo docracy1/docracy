@@ -8,11 +8,13 @@ const PROBE_UA =
 const ALERT_STATE_KEY = "spa-smoke:alert";
 /** Reminder while still down — don't email every hourly tick. */
 const REMIND_AFTER_MS = 6 * 60 * 60 * 1000;
-/** A failing first pass is often a transient Cloudflare-origin blip (522, cold start) rather than
- *  a real outage — re-run after each of these delays and only alert if the failure survives every
- *  retry. A single 5s retry still wasn't enough to ride out some observed multi-second 522 blips
- *  (this check is hourly, so a few extra seconds before alerting costs nothing on a real outage). */
-const RETRY_DELAYS_MS = [5000, 15000];
+/** A failing first pass is often a transient Cloudflare-origin blip (522, cold start) or a Pages
+ *  deploy still propagating across edge PoPs, rather than a real outage — re-run after each of
+ *  these delays and only alert if the failure survives every retry. [5000, 15000] (~20s total)
+ *  still wasn't enough to ride out observed deploy-propagation windows on days with several
+ *  back-to-back deploys (this check is hourly, so up to ~2 extra minutes before alerting costs
+ *  nothing on a real outage, but meaningfully cuts false alerts from routine deploys). */
+const RETRY_DELAYS_MS = [10000, 30000, 60000];
 
 async function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
