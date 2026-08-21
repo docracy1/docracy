@@ -1632,6 +1632,11 @@ const en: Messages = {
   "tpl.detail.freeNote": "Free for up to 2 signers, no account required.",
   "tpl.detail.legalReviewLead": "Legally reviewed by BOECK Law (Liechtenstein Bar) and",
   "tpl.detail.legalReviewTrail": ", chartered accountant.",
+  "tpl.detail.keyClausesTitle": "Key clauses",
+  "tpl.detail.fillInTitle": "What you'll fill in",
+  "tpl.detail.legalSummaryTitle": "Legal summary",
+  "tpl.detail.promptsTitle": "Try it with an AI assistant",
+  "tpl.detail.promptsIntro": "Paste one of these into ChatGPT, Claude, or your assistant of choice:",
   "tpl.detail.faqTitle": "FAQ",
   "tpl.detail.faq1.q": "Is this {{name}} legally binding?",
   "tpl.detail.faq1.a":

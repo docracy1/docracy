@@ -1693,6 +1693,11 @@ const es: Messages = {
   "tpl.detail.freeNote": "Gratis hasta 2 firmantes, sin cuenta.",
   "tpl.detail.legalReviewLead": "Revisado legalmente por BOECK Law (Colegio de Abogados de Liechtenstein) y",
   "tpl.detail.legalReviewTrail": ", contador público.",
+  "tpl.detail.keyClausesTitle": "Cláusulas clave",
+  "tpl.detail.fillInTitle": "Lo que vas a completar",
+  "tpl.detail.legalSummaryTitle": "Resumen legal",
+  "tpl.detail.promptsTitle": "Pruébalo con un asistente de IA",
+  "tpl.detail.promptsIntro": "Copia uno de estos en ChatGPT, Claude o tu asistente favorito:",
   "tpl.detail.faqTitle": "Preguntas frecuentes",
   "tpl.detail.faq1.q": "¿Este {{name}} tiene validez legal?",
   "tpl.detail.faq1.a":

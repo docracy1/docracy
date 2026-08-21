@@ -180,7 +180,10 @@ export default function FreeTemplateDetail() {
         <TemplateThumbnail pdfPath={template.pdfPath} width={280} />
         <div style={{ flex: 1, minWidth: 240 }}>
           <h1 style={{ marginTop: 0 }}>{name}</h1>
-          <p style={{ color: "var(--mute)" }}>{useCase}</p>
+          <p style={{ color: "var(--mute)" }}>
+            {template.definition ? `${template.definition} ` : ""}
+            {useCase}
+          </p>
           <p style={{ fontSize: 12, color: "var(--mute)" }}>
             ✓ {t("tpl.detail.legalReviewLead")}{" "}
             <a href="https://www.xing.com/profile/Stephan_Orasch" target="_blank" rel="noopener noreferrer">
@@ -196,6 +199,45 @@ export default function FreeTemplateDetail() {
         <p style={{ marginBottom: 8 }}>{t("tpl.detail.includedBody", { name: name.toLowerCase(), signers })}</p>
         <p style={{ fontSize: 12, color: "var(--mute)", marginBottom: 0 }}>{t("tpl.detail.disclaimer")}</p>
       </div>
+
+      {!!template.keyClauses?.length && (
+        <div className="card" style={{ marginTop: 16 }}>
+          <h3 style={{ marginTop: 0 }}>{t("tpl.detail.keyClausesTitle")}</h3>
+          <ul style={{ margin: 0, paddingLeft: 20 }}>
+            {template.keyClauses.map((clause, i) => (
+              <li key={i}>{clause}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {!!template.fillInFields?.length && (
+        <div className="card" style={{ marginTop: 16 }}>
+          <h3 style={{ marginTop: 0 }}>{t("tpl.detail.fillInTitle")}</h3>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            {template.fillInFields.map((field, i) => (
+              <code
+                key={i}
+                style={{
+                  fontSize: 13,
+                  padding: "4px 10px",
+                  borderRadius: 6,
+                  background: "var(--surface-2, rgba(127,127,127,0.12))",
+                }}
+              >
+                {field}
+              </code>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {template.legalSummary && (
+        <div className="card" style={{ marginTop: 16 }}>
+          <h3 style={{ marginTop: 0 }}>{t("tpl.detail.legalSummaryTitle")}</h3>
+          <p style={{ margin: 0 }}>{template.legalSummary}</p>
+        </div>
+      )}
 
       <Link
         to={ctaTo}
@@ -220,6 +262,28 @@ export default function FreeTemplateDetail() {
           <p style={{ margin: "8px 0 0", color: "var(--body)" }}>{faq.answer}</p>
         </details>
       ))}
+
+      {!!template.chatgptPrompts?.length && (
+        <div style={{ marginTop: 32 }}>
+          <h2 style={{ fontSize: 19 }}>{t("tpl.detail.promptsTitle")}</h2>
+          <p style={{ fontSize: 13, color: "var(--mute)" }}>{t("tpl.detail.promptsIntro")}</p>
+          {template.chatgptPrompts.map((prompt, i) => (
+            <p
+              key={i}
+              style={{
+                fontSize: 14,
+                fontStyle: "italic",
+                padding: "10px 14px",
+                borderRadius: 8,
+                background: "var(--surface-2, rgba(127,127,127,0.08))",
+                marginTop: 8,
+              }}
+            >
+              “{prompt}”
+            </p>
+          ))}
+        </div>
+      )}
 
       <TrustSection />
 
