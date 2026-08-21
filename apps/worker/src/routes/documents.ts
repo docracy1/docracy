@@ -9,7 +9,7 @@ import { reportWhatsappOverageUsage, whatsappOverageConfigured } from "../lib/wh
 import { getStripeCustomerId } from "../lib/billing";
 import { NOTRACK_COOKIE_NAME, trackEvent } from "../lib/analytics";
 import { checkRateLimit, checkInviteRateLimit } from "../lib/ratelimit";
-import { optionalAccount, type AccountContext } from "../lib/auth";
+import { isAdminEmail, optionalAccount, type AccountContext } from "../lib/auth";
 import { resolveTtlDays } from "../lib/docTtl";
 import { schedulePreparerLeadEmails } from "../lib/onboardingEmails";
 import { clampAttachmentLimits } from "../lib/signerAttachments";
@@ -74,15 +74,21 @@ documents.post("/", optionalAccount, async (c) => {
   // for conversion analysis (a PDF that can't be used at all, rate limits, paid-tier gating) — not
   // for plain malformed-request shapes (bad JSON, missing multipart fields), which represent a
   // broken client rather than a real visitor hitting a real funnel obstacle.
+  // Founder/admin testing and notrack opt-outs shouldn't inflate the error funnel — mirrors
+  // routes/analytics.ts's shouldSkipAnalytics() for the pageview/track routes.
+  const skipFunnelTracking =
+    getCookie(c, NOTRACK_COOKIE_NAME) === "1" || (!!account && isAdminEmail(c.env, account.email));
   const failWith = <T>(event: "upload_failed" | "send_failed", body: T, status: 400 | 402 | 429, errorCode: string) => {
-    trackEvent(c.env, {
-      event,
-      route: "prepare",
-      userAgent: c.req.header("user-agent"),
-      country: c.req.header("CF-IPCountry"),
-      userId: account?.workspaceId ?? null,
-      errorCode,
-    });
+    if (!skipFunnelTracking) {
+      trackEvent(c.env, {
+        event,
+        route: "prepare",
+        userAgent: c.req.header("user-agent"),
+        country: c.req.header("CF-IPCountry"),
+        userId: account?.workspaceId ?? null,
+        errorCode,
+      });
+    }
     return c.json(body, status);
   };
 
@@ -425,7 +431,7 @@ documents.post("/", optionalAccount, async (c) => {
     accountId,
     creatorIp: ip,
     creatorCountry: c.req.header("CF-IPCountry"),
-    skipFunnelTracking: getCookie(c, NOTRACK_COOKIE_NAME) === "1",
+    skipFunnelTracking,
     customSubject: meta.customSubject?.trim() || undefined,
     customMessage: meta.customMessage?.trim() || undefined,
     locale: meta.locale,
