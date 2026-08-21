@@ -107,7 +107,7 @@ export default function ElectronicSignatureGuide() {
             <li><a href="#security">Security architecture &amp; SOC 2</a></li>
             <li><a href="#choosing-a-tool">Choosing the right tool</a></li>
             <li><a href="#pricing">Docracy pricing</a></li>
-            <li><a href="#templates">Attorney-reviewed templates</a></li>
+            <li><a href="#templates">Free templates</a></li>
             <li><a href="#faq">FAQ</a></li>
           </ul>
         </nav>
@@ -344,22 +344,13 @@ export default function ElectronicSignatureGuide() {
       </div>
 
       <div className="container" style={{ maxWidth: 720, paddingTop: 8, paddingBottom: 8 }}>
-        <h2 id="templates" style={{ fontSize: 22 }}>Attorney-reviewed templates</h2>
-        <a
-          href="https://www.boeck.law/"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ display: "inline-block", margin: "4px 0 14px" }}
-        >
-          <img src="/testimonials/boeck-law.png" alt="BOECK Attorneys at Law" style={{ height: 36, width: "auto", display: "block" }} />
-        </a>
+        <h2 id="templates" style={{ fontSize: 22 }}>Free templates</h2>
         <p>
-          Every free template in our{" "}
+          Docracy's{" "}
           <Link to="/free-templates" onClick={() => onCta("templates_library")}>template library</Link>{" "}
-          — NDAs, service agreements, contractor agreements, W-9 and I-9 forms, and more — has been
-          reviewed by BOECK Law (Liechtenstein Bar), for legal clarity and correctness. That review
-          covers the template's own wording — it isn't tailored legal advice for your specific agreement,
-          industry, or jurisdiction.
+          covers NDAs, service agreements, contractor agreements, W-9 and I-9 forms, and more — free to use,
+          with no account required. These are general-purpose starting points, not tailored legal advice for
+          your specific agreement, industry, or jurisdiction.
         </p>
         <p style={{ fontSize: 14 }}>
           Popular starting points:{" "}

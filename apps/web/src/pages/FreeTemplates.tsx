@@ -254,13 +254,6 @@ export default function FreeTemplates() {
               aria-label={t("freeTemplates.searchPlaceholder")}
             />
           </div>
-          <p className="templates-legal-review">
-            {t("freeTemplates.legalReviewLead")}{" "}
-            <a href="https://www.xing.com/profile/Stephan_Orasch" target="_blank" rel="noopener noreferrer">
-              Stephan Orasch
-            </a>
-            {t("freeTemplates.legalReviewTrail")}
-          </p>
         </div>
       </div>
 

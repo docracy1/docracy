@@ -184,13 +184,6 @@ export default function FreeTemplateDetail() {
             {template.definition ? `${template.definition} ` : ""}
             {useCase}
           </p>
-          <p style={{ fontSize: 12, color: "var(--mute)" }}>
-            ✓ {t("tpl.detail.legalReviewLead")}{" "}
-            <a href="https://www.xing.com/profile/Stephan_Orasch" target="_blank" rel="noopener noreferrer">
-              Stephan Orasch
-            </a>
-            {t("tpl.detail.legalReviewTrail")}
-          </p>
         </div>
       </div>
 

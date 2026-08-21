@@ -50,13 +50,6 @@ export default function Trust() {
               hash. Each completed chain gets a signed PDF plus a certificate of completion.
             </p>
           </div>
-          <div className="core-feature-card">
-            <h3 style={{ marginBottom: 8 }}>Attorney-reviewed templates</h3>
-            <p style={{ fontSize: 13.5 }}>
-              Every free template in our library has been reviewed by a licensed attorney for legal clarity
-              and correctness — <a href="#template-legal-review">details below</a>.
-            </p>
-          </div>
         </div>
       </div>
 
@@ -125,23 +118,6 @@ export default function Trust() {
         EU note: the free-tier SES model is consistent with eIDAS simple electronic signatures for many
         low-stakes business documents. WhatsApp-verified signing (paid/Enterprise) is designed to meet the
         higher eIDAS AES bar instead — see above — but we do not claim QES under eIDAS on any plan.
-      </p>
-
-      <h2 id="template-legal-review" style={{ fontSize: 19, marginTop: 28 }}>Template legal review</h2>
-      <a
-        href="https://www.boeck.law/"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{ display: "inline-block", margin: "4px 0 14px" }}
-      >
-        <img src="/testimonials/boeck-law.png" alt="BOECK Attorneys at Law" style={{ height: 40, width: "auto", display: "block" }} />
-      </a>
-      <p>
-        Every free template in our{" "}
-        <Link to="/free-templates">template library</Link> has been reviewed by BOECK Law
-        (Liechtenstein Bar), for legal clarity and correctness. That review
-        covers the template's own wording — it is not tailored legal advice for your specific
-        agreement, industry, or jurisdiction; for that, consult your own counsel.
       </p>
 
       <h2 style={{ fontSize: 19, marginTop: 28 }}>Encryption &amp; transport</h2>

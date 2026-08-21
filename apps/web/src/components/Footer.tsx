@@ -141,13 +141,6 @@ export default function Footer() {
           {t("footer.esignLine")}{" "}
           <Link to={localizePath("/esign-ueta", locale)}>{t("footer.esignLineLink")}</Link>
         </span>
-        <span className="site-footer-esign">
-          {t("footer.legalReviewLead")}{" "}
-          <a href="https://www.xing.com/profile/Stephan_Orasch" target="_blank" rel="noopener noreferrer">
-            Stephan Orasch
-          </a>
-          {t("footer.legalReviewTrail")}
-        </span>
       </div>
     </footer>
   );
