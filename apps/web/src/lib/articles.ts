@@ -2569,6 +2569,39 @@ export const ARTICLES: ArticlePost[] = [
           "version for you — built into the same free signing flow, with no separate platform, seat licenses, " +
           "or IT integration project required."
       ),
+      h2("What this looks like on an actual document"),
+      p(
+        "The enterprise version of \"AI contract review\" usually means a dedicated legal-ops team running " +
+          "clause libraries and risk-scoring dashboards across thousands of agreements a year. The small-business " +
+          "version is smaller in scope but solves the same underlying problem: before sending a contract, " +
+          "understanding what it actually says. A freelancer about to sign a client's own contract (rather than " +
+          "one they drafted themselves) can run it through a plain-English explainer to see what each clause " +
+          "means in practice, then use a risk highlighter to flag anything unusual — an indemnification clause " +
+          "that's broader than typical, a payment term buried three paragraphs in, an auto-renewal with a short " +
+          "cancellation window. None of that requires a platform purchase or a procurement process; it's the " +
+          "same free tools available on any document already in Docracy's editor."
+      ),
+      h2("Where AI-assisted contract tools actually fall short"),
+      p(
+        "It's worth being honest about the limits, since overselling this would be its own kind of dishonesty. A " +
+          "clause explainer or risk highlighter is pattern-based analysis — genuinely useful for catching " +
+          "unusual language or summarizing what a clause does, but it isn't legal advice and it won't catch every " +
+          "issue a lawyer would, especially anything that depends on the specific jurisdiction, industry " +
+          "regulation, or the surrounding business relationship. For a routine freelance contract or NDA, that " +
+          "level of review is proportionate to the stakes. For a contract with real money or real liability on " +
+          "the line, AI-assisted review is a helpful first pass, not a substitute for a lawyer's actual review."
+      ),
+      h2("A worked example: reviewing an inbound contract in minutes"),
+      p(
+        "Say a client sends a freelancer their own service agreement to sign, rather than the freelancer's usual " +
+          "template. Instead of reading three pages of unfamiliar legal language cold, the freelancer uploads it " +
+          "to Docracy, runs the plain-English explainer to get a section-by-section summary, and checks the risk " +
+          "highlighter for anything that stands out — say, a clause requiring the freelancer to indemnify the " +
+          "client for any third-party claim \"regardless of cause,\" which is broader than the mutual, " +
+          "negligence-based indemnification language freelance contracts typically use. That's a concrete, " +
+          "actionable flag to raise before signing — not the AI making a legal judgment call, but doing the " +
+          "unglamorous work of surfacing the sentence worth a second look."
+      ),
       h2("The honest takeaway"),
       p(
         "If you're running a small business, the lesson from a report like this isn't \"go buy an agreement " +
@@ -2579,6 +2612,26 @@ export const ARTICLES: ArticlePost[] = [
       p(
         "You can read the original 2026 Deloitte/Docusign report at " +
           "docusign.com/blog/capitalizing-on-AI-deloitte-2026."
+      ),
+      h2("Frequently asked questions"),
+      h3("Does Docracy's AI actually draft contracts, or just review them?"),
+      p(
+        "Both, within the same free toolset — a prompt-to-agreement generator drafts a first version of common " +
+          "documents from a plain description, while the explainer and risk highlighter work on documents you've " +
+          "already uploaded, whether you wrote them or a client sent them to you."
+      ),
+      h3("Is this the same thing enterprise \"agentic AI\" contract platforms do?"),
+      p(
+        "Not really — those platforms typically automate multi-step approval workflows across a large contract " +
+          "volume (routing, escalation, renewal tracking across thousands of agreements). Docracy's AI tools solve " +
+          "a narrower, more immediate problem: understanding and drafting a single document quickly, which is " +
+          "usually the actual bottleneck for a freelancer or small team."
+      ),
+      h3("Do I need a paid plan to use the AI tools?"),
+      p(
+        "No — the explainer, risk highlighter, and prompt-to-agreement generator are free to use regardless of " +
+          "plan, on documents with two or fewer signers. They're tools for understanding and drafting a document, " +
+          "separate from paid features like saved templates or WhatsApp signing."
       ),
     ],
   },
@@ -2925,6 +2978,804 @@ export const ARTICLES: ArticlePost[] = [
       p(
         "Yes — the Marketplace grows through both official additions and community submissions, and every one of " +
           "them goes through the same human review before it's published."
+      ),
+    ],
+  },
+  {
+    slug: "how-to-form-an-llc",
+    title: "How to form an LLC: the basics",
+    description: "What an LLC actually protects, the general formation steps most states share, and why an operating agreement matters even for a single owner.",
+    publishedDate: PUBLISHED,
+    cluster: "Small Business",
+    blocks: [
+      p(
+        "A limited liability company (LLC) is the structure most small businesses reach for when they outgrow " +
+          "operating as a sole proprietor or informal partnership. The appeal is straightforward: it separates the " +
+          "business from the person running it, at least on paper, without the extra paperwork and formality a " +
+          "corporation requires. That said, the exact steps, fees, and forms to form one vary significantly by " +
+          "state — this is a general overview of how the process works, not a substitute for checking your own " +
+          "state's specific requirements."
+      ),
+      h2("What an LLC actually does for you"),
+      p(
+        "Two things make an LLC worth the paperwork. First, liability protection: in most cases, if the business " +
+          "gets sued or can't pay a debt, the owner's personal assets — their house, personal bank account, car — " +
+          "are shielded from that liability. The business's debts stay the business's debts. Second, pass-through " +
+          "taxation: by default, an LLC doesn't pay corporate income tax itself. Profit and loss pass through to " +
+          "the owner's personal tax return, avoiding the double taxation a traditional corporation can face. Both " +
+          "of these are defaults, not guarantees — they depend on actually treating the LLC as a separate entity, " +
+          "which is a theme worth returning to below."
+      ),
+      h2("The general formation steps"),
+      p(
+        "Every state's process differs in the details, but most follow the same rough sequence:"
+      ),
+      list([
+        "Choose a state to form in — usually the state where the business actually operates, since forming elsewhere " +
+          "(a popular move for Delaware or Wyoming) often just adds a second state's paperwork and fees if you're " +
+          "doing business somewhere else",
+        "Pick a business name and check availability — most states require the name to be distinguishable from " +
+          "existing registered businesses and to include an LLC designator like \"LLC\" or \"Limited Liability Company\"",
+        "File Articles of Organization (sometimes called a Certificate of Formation) with the state — this is the " +
+          "document that actually creates the LLC, typically filed with the Secretary of State's office along with " +
+          "a filing fee that ranges widely by state",
+        "Get an Employer Identification Number (EIN) from the IRS — free, done directly through the IRS website, " +
+          "and needed to open a business bank account or hire employees even if the LLC has no employees yet",
+        "Draft an operating agreement — not always legally required, but the document that actually governs how " +
+          "the business runs internally (more on why this matters below)",
+        "Handle any required business licenses or permits — these depend on the industry and location, not the " +
+          "LLC filing itself, and are easy to overlook because they're not part of the state formation paperwork",
+      ]),
+      p(
+        "Most states also require an ongoing step after formation — an annual report, a franchise tax, or a " +
+          "renewal fee — to keep the LLC in good standing. Skipping this is a common way an LLC quietly lapses " +
+          "without the owner realizing it until a lender or client asks for proof of good standing."
+      ),
+      h2("Single-member vs. multi-member LLCs"),
+      p(
+        "An LLC with one owner is a single-member LLC; one with two or more owners is a multi-member LLC. The " +
+          "formation paperwork is nearly identical either way, but the internal agreement looks different. A " +
+          "multi-member LLC needs to spell out how ownership percentages, profit splits, voting rights, and " +
+          "exit scenarios work between the owners — without that, state default rules fill the gap, and those " +
+          "defaults are rarely what a specific group of owners would have chosen for themselves."
+      ),
+      p(
+        "A single-member LLC skips the ownership-split questions, but that doesn't make the operating agreement " +
+          "optional in practice. This is the part that surprises a lot of first-time owners."
+      ),
+      h2("Why a single-member LLC still needs an operating agreement"),
+      p(
+        "The liability protection an LLC provides isn't automatic just because the state approved the filing. " +
+          "Courts have \"pierced the corporate veil\" — the legal term for disregarding an LLC's liability shield " +
+          "and holding the owner personally responsible — in cases where a single-member LLC never documented any " +
+          "real separation between the business and the owner's personal finances. Commingled bank accounts, " +
+          "personal expenses paid directly from the business account, and no written record of how the business " +
+          "is actually supposed to operate all make it easier for a court to conclude the LLC was never treated " +
+          "as a separate entity in the first place — which undermines the entire point of forming one."
+      ),
+      p(
+        "An operating agreement doesn't fix commingled bank accounts by itself, but it's a documented record that " +
+          "the owner set up formal rules for the business — how funds are handled, how the owner is compensated " +
+          "for their work, what happens if the business is sold or dissolved. Combined with actually keeping " +
+          "business and personal finances separate day to day, it's one of the more concrete things a single " +
+          "owner can point to if the LLC's separateness is ever challenged."
+      ),
+      link("Free LLC operating agreement template", "/free-templates/llc-operating-agreement"),
+      h2("What formation doesn't cover"),
+      p(
+        "Filing Articles of Organization creates the LLC on paper, but it doesn't open a business bank account, " +
+          "get a resale certificate, register for state sales tax, or secure whatever industry-specific license " +
+          "the business needs to legally operate. It's easy to treat the state filing as the finish line and " +
+          "then discover months later that a required local permit was never applied for. Checking with the " +
+          "specific state and local government where the business operates is the only reliable way to get the " +
+          "full list — it genuinely varies too much to generalize."
+      ),
+      h2("Frequently asked questions"),
+      h3("Do I need a lawyer to form an LLC?"),
+      p(
+        "Not for a straightforward single-owner or small-partner LLC in most states — many owners file directly " +
+          "through their Secretary of State's website. It's worth a lawyer's or accountant's time when ownership " +
+          "is complex, the business is raising outside investment, or the tax situation isn't simple pass-through."
+      ),
+      h3("How long does it take to form an LLC?"),
+      p(
+        "It varies by state, from same-day online approval to several weeks for a mailed filing. Some states also " +
+          "offer expedited processing for an extra fee if the timeline matters."
+      ),
+      h3("Can I convert a sole proprietorship into an LLC later?"),
+      p(
+        "Yes — this is a common path. Many businesses start as a sole proprietorship, then form an LLC once there's " +
+          "real revenue, a partner joining, or a specific liability concern worth addressing. There's no requirement " +
+          "to get the structure right on day one."
+      ),
+      h3("Does forming an LLC protect me from every kind of liability?"),
+      p(
+        "No. It generally protects personal assets from business debts and most lawsuits against the business, but " +
+          "it doesn't shield an owner from their own negligence, fraud, or a personally guaranteed loan. It also " +
+          "won't help if the business and personal finances were never actually kept separate."
+      ),
+      link("Browse all free templates", "/free-templates"),
+    ],
+  },
+  {
+    slug: "why-nobody-reads-your-terms-of-service",
+    title: "Why nobody reads your Terms of Service (and what to do about it)",
+    description: "Almost no one reads a Terms of Service before clicking accept — why it's still enforceable, and what actually matters most inside one.",
+    publishedDate: PUBLISHED,
+    cluster: "Small Business",
+    blocks: [
+      p(
+        "Nearly everyone who signs up for an online product clicks past the Terms of Service without reading a " +
+          "word of it. This isn't a secret, and it isn't unique to any one company — it's just how people use the " +
+          "internet. The natural next question for anyone running a small SaaS product or online business is: if " +
+          "nobody reads it, does it even matter what's in there?"
+      ),
+      h2("Unread doesn't mean unenforceable"),
+      p(
+        "A Terms of Service someone never read can still bind them, under the general legal concept of " +
+          "\"clickwrap\" agreements — where a user actively clicks \"I agree\" (or an equivalent action) before " +
+          "using a service. Courts have generally enforced these, on the theory that the user had a reasonable " +
+          "opportunity to read the terms and chose to proceed regardless. This is different from \"browsewrap,\" " +
+          "where terms are simply linked somewhere on a site with no explicit acceptance step — courts have been " +
+          "considerably more skeptical of browsewrap enforceability, since there's no clear moment where the user " +
+          "did anything indicating they agreed to anything."
+      ),
+      p(
+        "Enforceability specifics vary by jurisdiction and by how a particular court has ruled on a particular " +
+          "presentation, so this isn't a guarantee that any clickwrap flow is automatically bulletproof. But the " +
+          "general pattern holds broadly: a clear, affirmative acceptance step matters more for enforceability " +
+          "than whether the user actually read the text underneath it."
+      ),
+      h2("What actually needs to hold up in a small business ToS"),
+      p(
+        "Given that almost nobody reads the full document, the handful of clauses that actually get tested — in a " +
+          "dispute, a refund request, or an outage — deserve more attention than the rest combined:"
+      ),
+      list([
+        "Limitation of liability — what the business is and isn't responsible for if something goes wrong, and a " +
+          "cap on damages if the worst case happens",
+        "What happens if the service goes down — whether there's any credit, refund, or guarantee tied to " +
+          "uptime, and what counts as the business's responsibility versus a third-party outage outside its control",
+        "How disputes get resolved — whether disagreements go to arbitration, small claims, or standard litigation, " +
+          "and where (which matters a lot if the business and the customer are in different states or countries)",
+        "How the terms themselves can change — most services reserve the right to update their ToS, but how much " +
+          "notice users get, and whether continued use counts as acceptance of the new version, varies a lot " +
+          "between services and matters if a court ever asks whether a change was properly communicated",
+      ]),
+      p(
+        "Everything else — a friendly intro paragraph, a restatement of what the product does, boilerplate " +
+          "definitions — is filler that doesn't do much work in an actual dispute. It's fine to include for " +
+          "clarity, but it's not where the legal weight sits."
+      ),
+      h2("Plain language matters more than it sounds like it should"),
+      p(
+        "There's a temptation to write a ToS in dense legal language on the theory that it sounds more official " +
+          "or more protective. In practice, courts examining clickwrap enforceability have sometimes scrutinized " +
+          "not just whether a user clicked \"agree,\" but whether the terms were presented in a way a reasonable " +
+          "person could actually notice and understand — tiny font, a link buried at the bottom of an unrelated " +
+          "page, or terms that contradict what the product's marketing plainly claims can all work against a " +
+          "business trying to rely on those terms later. A ToS that's genuinely readable — short sentences, plain " +
+          "words, headers that describe what each section covers — isn't just friendlier to users. It's also " +
+          "harder to argue was hidden or deceptive if it's ever challenged."
+      ),
+      h2("What belongs in a ToS vs. a Privacy Policy"),
+      p(
+        "Small businesses frequently combine these into one document, or write one and assume it covers both " +
+          "purposes. They answer different questions and often need to be treated separately:"
+      ),
+      list([
+        "Terms of Service — the rules for using the product itself: what's allowed, what's prohibited, payment " +
+          "terms, liability limits, termination rights, and how disputes are handled. It's a contract governing " +
+          "the relationship between the business and the user.",
+        "Privacy Policy — what personal data the business collects, why, how it's stored, who it's shared with, " +
+          "and what rights a user has over their own data. In many jurisdictions this is a legal disclosure " +
+          "requirement, not just good practice, separate from any contractual terms about product usage.",
+      ]),
+      p(
+        "A user disputing a refund is a Terms of Service question. A user asking what happens to their email " +
+          "address after they delete their account is a Privacy Policy question. Keeping the two documents " +
+          "distinct — even if they're linked from the same signup page — makes it clearer which rules apply to " +
+          "which kind of issue, for the business and the user alike."
+      ),
+      h2("Getting terms actually agreed to"),
+      p(
+        "However carefully a ToS is written, it still needs a clean record that a specific version was presented " +
+          "and accepted by a specific user at a specific time — especially if terms change later and a dispute " +
+          "hinges on which version applied. A signed acknowledgment tied to a timestamp and an audit trail gives a " +
+          "business something concrete to point back to, rather than relying on a checkbox log buried in a " +
+          "database that's hard to explain outside an engineering team."
+      ),
+      h2("Frequently asked questions"),
+      h3("Can I just copy another company's Terms of Service?"),
+      p(
+        "It's a common shortcut, but a copied ToS often includes clauses that don't apply to your actual product " +
+          "or business model, and won't reflect your specific liability concerns, refund policy, or dispute " +
+          "process. It's a reasonable starting point for structure, not a substitute for terms written for your " +
+          "own situation."
+      ),
+      h3("How often should a Terms of Service be updated?"),
+      p(
+        "Whenever the underlying product, pricing, or policies materially change — there's no fixed schedule. " +
+          "What matters more than frequency is having a clear process for notifying users of changes and recording " +
+          "when each version took effect."
+      ),
+      h3("Does a ToS need to be reviewed by a lawyer?"),
+      p(
+        "For a low-stakes product with minimal liability exposure, a carefully written general-purpose template " +
+          "can be a reasonable starting point. It's worth paying for legal review once real money, sensitive data, " +
+          "or meaningful liability risk is involved — the cost of a bad limitation-of-liability clause tends to " +
+          "far exceed the cost of having it checked."
+      ),
+      h3("Is a clickwrap agreement always enforceable?"),
+      p(
+        "Not automatically — enforceability depends on the terms being reasonably presented and the acceptance " +
+          "step being clear and unavoidable, and it can still vary by jurisdiction and by the specific facts of a " +
+          "case. It's a meaningfully stronger position than browsewrap, but \"always enforceable\" overstates it."
+      ),
+      link("Browse all free templates", "/free-templates"),
+    ],
+  },
+  {
+    slug: "how-freelancers-get-paid-on-time",
+    title: "How freelancers get paid on time (without burning the relationship)",
+    description: "Practical steps for setting payment terms that stick, following up on late invoices, and deciding when a late fee — or a firmer letter — is the right move.",
+    publishedDate: PUBLISHED,
+    cluster: "Freelancer",
+    blocks: [
+      p(
+        "Getting paid late is close to a universal freelance experience, but a surprising amount of it is " +
+          "preventable — not through legal threats, but through payment terms that are specific from the start and " +
+          "a follow-up process that doesn't rely on hoping the client remembers on their own. None of this is legal " +
+          "advice; it's a practical playbook for the everyday version of the problem, where a client is just slow " +
+          "rather than acting in bad faith."
+      ),
+      h2("Set terms that actually get followed"),
+      p(
+        "Vague payment terms are the single biggest reason invoices go late. \"Payment due upon completion\" leaves " +
+          "room for a client to decide, in good faith, that \"completion\" means something different than you " +
+          "meant. Specific terms leave much less room for that kind of drift:"
+      ),
+      list([
+        "A deposit before work starts — even 25-50% up front filters out clients who were never going to pay " +
+          "reliably, and it means an unpaid balance is never the full project value",
+        "Net-15 vs. net-30 — pick one and put the exact number of days on every invoice; \"net-30\" written down " +
+          "is enforceable in a way \"pay me soon\" never is",
+        "Milestone billing for larger projects — splitting a big project into paid phases (kickoff, midpoint, " +
+          "delivery) means a slow-paying client only ever holds up a fraction of the total, not the whole " +
+          "engagement",
+      ]),
+      p(
+        "The best time to set these terms is before the project starts, in writing, as part of the contract or " +
+          "proposal — not as a line added to the first invoice after the client has already started treating " +
+          "\"whenever\" as the deadline."
+      ),
+      h2("What to actually do when an invoice goes past due"),
+      p(
+        "Most late payments aren't a client refusing to pay — they're a client who deprioritized an invoice that " +
+          "isn't urgent to them the way it is to you. A predictable escalation sequence handles the common case " +
+          "without jumping straight to confrontation:"
+      ),
+      list([
+        "Day 1-3 past due — a friendly, low-friction reminder: \"just following up on invoice #___, wanted to " +
+          "make sure it didn't get buried.\" Assume good faith; most invoices at this stage get paid within a day " +
+          "or two of the nudge",
+        "Around day 15 — a firmer follow-up that restates the original due date and the amount, and asks directly " +
+          "for a specific payment date rather than a vague acknowledgment. This is also the point to mention any " +
+          "late fee that applies, if the contract includes one",
+        "Beyond that — if the second follow-up gets silence or repeated non-answers, a formal written demand is " +
+          "the right next step: a clear, dated letter stating the amount owed, the original terms, and a specific " +
+          "deadline before further action",
+      ]),
+      link("Free late payment demand letter template", "/free-templates/late-payment-demand-letter"),
+      h2("Late fees: worth including or not"),
+      p(
+        "A stated late fee — commonly something like 1.5% per month on the overdue balance — is worth putting in " +
+          "the contract up front, even for freelancers who never expect to actually enforce it. Its real value " +
+          "isn't the extra money; it's that it turns an awkward, personal guilt-trip conversation (\"can you " +
+          "please just pay me\") into a neutral reference to a term the client already agreed to (\"per section 4, " +
+          "a late fee applies after 30 days\"). That's a meaningfully easier conversation to have, and a meaningfully " +
+          "easier one for the client to receive without feeling singled out."
+      ),
+      p(
+        "The fee only works if it's written into the agreement before the project starts — adding one " +
+          "retroactively to an already-overdue invoice tends to read as punitive and rarely gets paid without a " +
+          "fight."
+      ),
+      h2("When to cut a client loose instead of chasing them"),
+      p(
+        "Not every unpaid invoice is worth the effort of collecting. Chasing a small balance — the time spent " +
+          "drafting follow-ups, the mental overhead of an open dispute, the strain on a relationship you might " +
+          "still want for future work — can cost more than the invoice is worth, especially for a client who's " +
+          "shown a pattern of being slow every single time. A reasonable line: if a client has needed the full " +
+          "escalation sequence more than once, or the amount owed is small relative to the time it would take to " +
+          "formally pursue it, it's often more valuable to write it off, stop taking new work from that client, " +
+          "and put the energy into clients who pay on the terms they agreed to."
+      ),
+      p(
+        "This isn't about giving up on getting paid fairly — it's about recognizing that collections have a cost " +
+          "too, and a freelancer's time is the resource actually in short supply."
+      ),
+      h2("Preventing the problem earlier"),
+      p(
+        "Payment terms are only one piece of protecting freelance work overall — scope creep, ownership of " +
+          "deliverables, and what happens if a client disappears mid-project all interact with how and when you " +
+          "get paid. Getting the broader agreement right upfront tends to prevent more payment disputes than any " +
+          "follow-up sequence can fix after the fact."
+      ),
+      link("How freelancers protect their work", "/blog/how-freelancers-can-protect-their-work"),
+      h2("Frequently asked questions"),
+      h3("Is a late fee actually enforceable?"),
+      p(
+        "Generally, if it's a reasonable rate and it was clearly stated in the agreement both parties signed " +
+          "before the work began. A fee sprung on a client after the fact, with no prior written agreement, is on " +
+          "much shakier ground and is more likely to just create a fight than to get paid."
+      ),
+      h3("Should I stop working for a client while an invoice is overdue?"),
+      p(
+        "For an ongoing relationship, many freelancers pause new work once an invoice passes a certain point " +
+          "(commonly 30 days) rather than continuing to add unpaid work on top of unpaid work. It's a judgment " +
+          "call based on the relationship and how much is already outstanding, not a universal rule."
+      ),
+      h3("What if the client disputes the invoice instead of just ignoring it?"),
+      p(
+        "That's a different situation than slow payment — it means there's a disagreement about the work itself, " +
+          "not just the timing of paying for it. That's usually worth resolving directly and specifically (what " +
+          "exactly is disputed, and against what part of the original agreement) before escalating to a formal " +
+          "demand, since a demand letter answers \"you owe this and haven't paid,\" not \"we disagree about what's " +
+          "owed.\""
+      ),
+      h3("How much should a deposit be?"),
+      p(
+        "There's no fixed rule, but 25-50% of the total project value up front is common for project-based " +
+          "freelance work. Smaller deposits are typical for short, low-risk engagements; larger ones make sense " +
+          "for bigger projects or first-time clients with no payment history."
+      ),
+      link("Browse all free templates", "/free-templates"),
+    ],
+  },
+  {
+    slug: "trademark-basics-for-small-business",
+    title: "Trademark basics every small business should know",
+    description:
+      "What a trademark actually protects, ™ vs. ®, and how to think about registration for a small business.",
+    publishedDate: PUBLISHED,
+    cluster: "Intellectual Property",
+    blocks: [
+      p(
+        "A trademark is one of the most misunderstood pieces of small-business paperwork. People confuse it with " +
+          "copyright, assume registering a business name automatically covers it, or wait until a competitor is " +
+          "already using a confusingly similar name before thinking about it at all. None of that is unusual — " +
+          "trademark law solves a narrow, specific problem, and it's easy to mix it up with the other kinds of " +
+          "protection a growing business collects along the way."
+      ),
+      h2("What a trademark actually protects"),
+      p(
+        "A trademark protects a brand identifier — a name, logo, slogan, or sometimes a distinctive sound or color " +
+          "scheme — that customers use to tell your goods or services apart from a competitor's. The point isn't " +
+          "to protect the idea behind a product or the creative work itself; it's to protect the signal that tells " +
+          "a buyer where a product came from. That's a narrower job than people expect, and it's worth separating " +
+          "from two things it commonly gets confused with."
+      ),
+      h3("Trademark vs. copyright"),
+      p(
+        "Copyright protects a specific creative work — the text of a brochure, the code in an app, the design of " +
+          "a logo as a piece of artwork. A trademark protects the use of that logo, name, or slogan as a source " +
+          "identifier in commerce. The same logo can carry both: copyright in the artwork itself, and a trademark " +
+          "in how it's used to identify your business. They're granted differently, expire differently, and " +
+          "protect different things, even when they're sitting on top of the same piece of art."
+      ),
+      h3("Trademark vs. business name registration"),
+      p(
+        "Registering an LLC or a \"doing business as\" name with a state or county tells the government your " +
+          "business exists under that name for tax and legal purposes. It does not give you any exclusive right " +
+          "to stop someone else from using a similar name to sell similar goods or services, even in the same " +
+          "state. A trademark is a completely separate layer, and a fair number of small businesses never realize " +
+          "the gap exists until a dispute forces the issue."
+      ),
+      h2("™ vs. ®: what the symbols actually mean"),
+      p(
+        "The ™ symbol can be used by anyone, anytime, on any name or logo they're using to identify their goods or " +
+          "services — no registration, application, or government approval required. It's a public claim that " +
+          "you're using this mark as a brand identifier, and it can help put others on notice even without formal " +
+          "registration. The ® symbol is different: it can only be used once a trademark is actually registered " +
+          "with the relevant national authority — in the US, that's the United States Patent and Trademark Office " +
+          "(USPTO). Using ® before registration is completed isn't just premature, it can undermine the strength " +
+          "of the application and create problems down the line."
+      ),
+      list([
+        "™ — usable immediately, no registration required, signals a claim to the mark",
+        "℠ — the service-mark equivalent of ™, used for services rather than physical goods",
+        "® — usable only after formal registration is granted, signals a legally registered mark",
+      ]),
+      h2("A plain-language look at US federal registration"),
+      p(
+        "Registering a trademark with the USPTO is a formal process with several distinct stages. This isn't a " +
+          "step-by-step legal guide — the details vary by mark, industry, and circumstances, and an attorney or " +
+          "the USPTO's own resources are the right place for anything specific to a real application — but the " +
+          "shape of the process is useful to understand before deciding whether it's worth pursuing."
+      ),
+      list([
+        "Search — checking existing federal and state registrations, plus common-law use, for anything confusingly similar",
+        "Filing basis — registering based on a mark already in use in commerce, or an intent to use it soon",
+        "Examination — a USPTO attorney reviews the application for conflicts and compliance with trademark rules",
+        "Publication — the mark is published for a window during which others can formally oppose the registration",
+        "Registration — if nothing derails the process, the mark is registered and the ® symbol becomes available",
+      ]),
+      p(
+        "The whole process commonly takes many months to over a year, and costs vary based on how the application " +
+          "is filed and whether an attorney is involved. None of that means it's not worth doing — it means it's " +
+          "worth planning for as a deliberate step rather than something to squeeze in the week before a product " +
+          "launch."
+      ),
+      h2("Why a trademark search matters before you commit to a name"),
+      p(
+        "The single most avoidable trademark problem is picking a name, printing it on signage, building a " +
+          "website around it, and only then discovering someone else already has rights to something confusingly " +
+          "similar in your industry. A basic search — checking the USPTO's database, common web searches, and " +
+          "existing businesses in your space — before finalizing a name doesn't guarantee safety, but it catches " +
+          "the obvious conflicts before they turn into a rebrand. Rebrands are expensive in ways that go well " +
+          "beyond legal fees: new signage, new domain, lost search rankings, and confused existing customers."
+      ),
+      h2("Should a small business actually register, or is ™ enough?"),
+      p(
+        "For a lot of very small or purely local businesses, using ™ consistently and simply operating under a " +
+          "distinctive name is a reasonable starting point — it costs nothing and still signals a claim to the " +
+          "mark. Formal registration starts to make more sense once a business is expanding beyond a single " +
+          "location, selling online to a national audience, building a brand it plans to license or franchise, or " +
+          "operating in a competitive space where a similar name showing up would cause real customer confusion. " +
+          "Registration also gives you standing to act faster and more decisively if someone else starts using a " +
+          "similar mark later — which is often the actual trigger that pushes a growing business to finally file."
+      ),
+      p(
+        "Once a trademark is registered — or even while it's just being used informally — licensing it to a " +
+          "partner, franchisee, or affiliated business is its own agreement, separate from the registration " +
+          "itself."
+      ),
+      link("Free trademark license agreement template", "/free-templates/trademark-license-agreement"),
+      h2("Frequently asked questions"),
+      h3("Do I need a lawyer to register a trademark?"),
+      p(
+        "It's not strictly required — an applicant can file directly with the USPTO — but the examination process " +
+          "involves legal judgment calls that trip up a lot of first-time filers. Many small businesses use an " +
+          "attorney for the filing itself while handling the earlier search and name-selection process on their " +
+          "own."
+      ),
+      h3("Can I use ™ on a name I haven't registered yet?"),
+      p(
+        "Yes. ™ doesn't require any registration or government filing — it's a public claim that you're using a " +
+          "mark to identify your goods or services. It's the ® symbol that's restricted to marks that have " +
+          "actually completed federal registration."
+      ),
+      h3("What happens if someone else is already using a similar name?"),
+      p(
+        "It depends on who used it first, in what geographic area, and for what kind of goods or services — this " +
+          "is exactly the kind of question a proper trademark search and, often, an attorney's judgment are " +
+          "designed to answer before you commit to a name rather than after."
+      ),
+      h3("Does trademark registration ever expire?"),
+      p(
+        "US federal registrations require periodic maintenance filings and proof of continued use to stay active " +
+          "— they don't last forever automatically. As long as those maintenance requirements are met and the " +
+          "mark stays in use, registration can be renewed indefinitely."
+      ),
+    ],
+  },
+  {
+    slug: "what-is-a-patent",
+    title: "What is a patent, and does your business need one?",
+    description:
+      "What patents protect, what they don't, realistic cost and timeline, and when a small business should consider one.",
+    publishedDate: PUBLISHED,
+    cluster: "Intellectual Property",
+    blocks: [
+      p(
+        "Patents get treated as the default answer to \"how do I protect my idea,\" but they're a narrower, " +
+          "slower, and more expensive tool than most small businesses and freelancers actually need. Understanding " +
+          "what a patent covers — and what it doesn't — makes it much easier to tell whether pursuing one is worth " +
+          "the time and cost, or whether a faster and cheaper form of protection fits the situation better."
+      ),
+      h2("What a patent actually protects"),
+      p(
+        "A patent protects a novel, useful, and non-obvious invention — something new that didn't already exist in " +
+          "that form, that does something functionally useful, and that wouldn't have been an obvious next step to " +
+          "someone skilled in the relevant field. In exchange for publicly disclosing exactly how the invention " +
+          "works, the patent holder gets the exclusive right to make, use, or sell it for a limited period."
+      ),
+      h3("Utility patents vs. design patents"),
+      p(
+        "A utility patent covers how something works — its function, mechanism, or process. A design patent covers " +
+          "how something looks — its ornamental appearance, separate from how it functions. A single physical " +
+          "product can sometimes qualify for both: a utility patent on a novel mechanism inside it, and a design " +
+          "patent on its distinctive shape. The two are examined differently and protect genuinely different " +
+          "things, even when they apply to the same object."
+      ),
+      h2("What a patent does not protect"),
+      p(
+        "This is where a lot of confusion happens, and it's worth being direct about it in general terms — the " +
+          "specifics always depend on the jurisdiction and the particular invention, and this isn't legal advice " +
+          "for any specific idea."
+      ),
+      list([
+        "An idea by itself, with no concrete, workable implementation behind it",
+        "A software algorithm described only in the abstract, disconnected from a specific technical implementation",
+        "A business method alone, unless it's tied to a genuinely novel technical implementation rather than just a new way of doing something people already do",
+        "Something that's already publicly known, used, or described before the application is filed",
+      ]),
+      p(
+        "The common thread is that patents protect a specific, disclosed way of solving a technical problem — not " +
+          "the underlying goal, the market opportunity, or a general concept that other people could implement " +
+          "differently to reach the same result."
+      ),
+      h2("The realistic cost and timeline"),
+      p(
+        "Patents are genuinely expensive and slow compared to almost every other form of business paperwork. Costs " +
+          "commonly run from roughly $5,000 to $15,000 or more by the time attorney fees, filing fees, and " +
+          "examination responses are all accounted for, and that range climbs fast for anything mechanically or " +
+          "technically complex. Timelines of one to three years from filing to grant are common, and it's not rare " +
+          "for the process to take longer. Both numbers vary enormously by country, technology area, and how " +
+          "contested the application turns out to be — treat these as a rough sense of scale, not a quote."
+      ),
+      h2("When a patent is actually worth it — and when it isn't"),
+      p(
+        "A patent tends to make sense when an invention is genuinely novel at a technical level, when it's central " +
+          "enough to the business that exclusivity materially changes the competitive picture, and when the " +
+          "business can absorb the cost and multi-year timeline without that being the thing standing between it " +
+          "and revenue. It makes much less sense for most early-stage small businesses and freelancers, where speed " +
+          "to market and iteration matter more than a legal monopoly that might not be granted for years."
+      ),
+      h3("Trade secret protection as the practical alternative"),
+      p(
+        "Keeping an invention or process confidential — a trade secret — costs nothing to establish beyond good " +
+          "internal practices, protects indefinitely as long as secrecy is maintained, and doesn't require public " +
+          "disclosure the way a patent application does. The tradeoff is that trade secret protection only works " +
+          "against people who obtain the information improperly — it does nothing to stop someone who " +
+          "independently invents the same thing or reverse-engineers it from a publicly sold product. Choosing " +
+          "between a patent and a trade secret often comes down to whether the invention is easy to reverse-engineer " +
+          "once it's out in the world."
+      ),
+      h3("Moving fast as an alternative to formal protection"),
+      p(
+        "For a lot of small businesses, the realistic competitive advantage isn't a legal monopoly at all — it's " +
+          "execution speed, brand, and customer relationships built before a competitor can catch up. That's not a " +
+          "legal protection in the formal sense, but it's often the more relevant strategy for a business that " +
+          "can't justify a multi-year, five-figure patent process for its current stage."
+      ),
+      p(
+        "When a patent — or a pending application — does exist, transferring or assigning rights to it, whether " +
+          "to a co-founder, employer, or acquirer, is its own agreement, separate from the patent filing itself."
+      ),
+      link("Free patent assignment agreement template", "/free-templates/patent-assignment-agreement"),
+      h2("Frequently asked questions"),
+      h3("Can I patent a business idea?"),
+      p(
+        "Not on its own. A business idea or method generally needs to be tied to a novel, non-obvious technical " +
+          "implementation to be eligible — the underlying business concept by itself typically isn't patentable, " +
+          "regardless of how original it feels."
+      ),
+      h3("Is it cheaper to file a patent application myself?"),
+      p(
+        "Filing fees alone are much lower than total costs, but most of the expense and value in a patent " +
+          "application comes from how it's drafted and how the examination process is navigated — work that " +
+          "generally benefits from a patent attorney's experience, especially for anything technically nontrivial."
+      ),
+      h3("What's the difference between a provisional and a full patent application?"),
+      p(
+        "A provisional application is a lower-cost, faster way to establish an early filing date and secure " +
+          "roughly a year to develop the invention further before filing the full, examined application. It's not " +
+          "itself examined or granted — it's a placeholder that buys time."
+      ),
+      h3("Does a patent protect me internationally?"),
+      p(
+        "No single patent covers the whole world. Patents are granted on a country-by-country (or regional) basis, " +
+          "so international protection means separate filings or applications in each market that matters to the " +
+          "business, which adds meaningfully to both cost and complexity."
+      ),
+    ],
+  },
+  {
+    slug: "software-licensing-types-explained",
+    title: "Software licensing types, explained simply",
+    description:
+      "Proprietary, open-source, SaaS, and white-label licensing — the major categories and where businesses get them wrong.",
+    publishedDate: PUBLISHED,
+    cluster: "Intellectual Property",
+    blocks: [
+      p(
+        "\"Software license\" covers a wide range of very different arrangements, from a one-time purchase of " +
+          "shrink-wrapped software to a subscription that only grants access for as long as payments continue. " +
+          "Picking the wrong category — or not realizing which category a piece of code you're using actually " +
+          "falls into — is one of the more common ways small businesses create legal exposure without meaning to."
+      ),
+      h2("Proprietary and commercial licenses"),
+      p(
+        "A proprietary license is the traditional model: the software owner keeps all rights and grants the " +
+          "customer a limited, defined right to use the software under specific conditions — a certain number of " +
+          "seats, a particular installation, a time period, or a specific use case. The customer never owns the " +
+          "underlying code and typically can't modify, redistribute, or reverse-engineer it. Most commercial " +
+          "desktop software, enterprise tools, and custom-built business software fall into this category."
+      ),
+      h2("Open-source licenses: permissive vs. copyleft"),
+      p(
+        "Open-source licenses grant much broader rights — to view, modify, and often redistribute the source code " +
+          "— but they come in meaningfully different flavors, and the difference matters a lot more than most " +
+          "people assume when they're just trying to ship a product."
+      ),
+      list([
+        "Permissive licenses (like MIT or Apache-style licenses) — generally allow the code to be used, modified, and incorporated into proprietary products with minimal obligations, often just preserving a copyright notice",
+        "Copyleft licenses (like GPL-style licenses) — generally require that products built using the licensed code, or that incorporate it in certain ways, also be released under the same or a compatible open license",
+      ]),
+      p(
+        "Both categories include real variation within them, and the exact obligations of any specific license " +
+          "depend on its precise terms — this is a general orientation, not a substitute for reading the actual " +
+          "license text of a component before shipping it."
+      ),
+      h2("SaaS and subscription licensing"),
+      p(
+        "When a business sells access to software as a service, customers typically aren't licensing the software " +
+          "itself at all — they're licensing ongoing access to a hosted service for as long as they keep paying. " +
+          "There's usually no copy of the software changing hands, no installation, and no residual rights once a " +
+          "subscription lapses. This distinction matters for how a SaaS agreement should actually be written: " +
+          "terms around uptime, data handling, and what happens to a customer's data after cancellation matter more " +
+          "here than the kind of usage restrictions that dominate a traditional software license."
+      ),
+      h2("White-label and reseller licensing"),
+      p(
+        "White-label licensing lets another business rebrand and resell software as if it were their own product, " +
+          "usually for a fee, a revenue share, or both. A reseller license is closely related but typically keeps " +
+          "the original branding intact — the reseller is distributing the product, not relabeling it. Both " +
+          "arrangements need clear terms about who owns the underlying code, what support obligations exist, how " +
+          "revenue is split, and what happens to the reseller's or white-label partner's customers if the " +
+          "underlying agreement ends."
+      ),
+      h2("Why picking the wrong license type causes real problems"),
+      p(
+        "The most common and most expensive mistake is incorporating a copyleft-licensed open-source component " +
+          "into a proprietary product without realizing what that license actually requires. Depending on the " +
+          "specific license and how the component is integrated, that can create an obligation to release parts of " +
+          "an otherwise proprietary codebase under the same open license — a consequence that's often discovered " +
+          "only during due diligence for a funding round or acquisition, at which point unwinding it is far more " +
+          "disruptive than checking license terms up front would have been."
+      ),
+      p(
+        "A second common problem is a mismatch between the license type and how customers actually use the " +
+          "product — for example, licensing terms written for a single-installation desktop tool being applied " +
+          "unchanged to a multi-tenant SaaS product, leaving gaps around data ownership, uptime, and account " +
+          "termination that a traditional software license was never designed to address. The fix in both cases " +
+          "is the same: match the license type to what's actually being distributed and how it's actually being " +
+          "used, rather than defaulting to whatever template is easiest to find."
+      ),
+      p(
+        "Choosing the right structure matters whether you're licensing your own software to a customer, licensing " +
+          "someone else's technology into your product, or setting up a white-label arrangement with a partner."
+      ),
+      link("Free IP licensing agreement template", "/free-templates/ip-licensing-agreement"),
+      p(
+        "Software built around a genuinely novel technical mechanism sometimes raises the separate question of " +
+          "whether that mechanism itself is patentable, which is a different kind of protection from any license."
+      ),
+      link("What is a patent, and does your business need one?", "/blog/what-is-a-patent"),
+      h2("Frequently asked questions"),
+      h3("Can I use open-source code in a commercial product?"),
+      p(
+        "Often yes, but it depends entirely on the specific license attached to that component. Permissive " +
+          "licenses generally make this straightforward; copyleft licenses can impose real obligations on the " +
+          "rest of the product, so it's worth checking before code from an unfamiliar license ends up shipped."
+      ),
+      h3("What's the real difference between a license and selling software outright?"),
+      p(
+        "Selling software outright transfers ownership of the code itself. A license, even a broad or permanent " +
+          "one, grants a defined right to use the software while the underlying ownership stays with the " +
+          "licensor — the two look similar day-to-day but behave very differently if a dispute ever arises."
+      ),
+      h3("Do I need a different license for each customer?"),
+      p(
+        "Not usually — most businesses use one license template with variables (seats, term, price, use case) " +
+          "filled in per customer, rather than drafting a new agreement from scratch for each deal."
+      ),
+      h3("What happens to a customer's license if my company is acquired?"),
+      p(
+        "That depends on the assignment terms written into the original license agreement — well-drafted licenses " +
+          "address this directly, which is exactly why relying on a solid template rather than an ad hoc agreement " +
+          "matters."
+      ),
+    ],
+  },
+  {
+    slug: "can-i-use-that-image",
+    title: "Can I use that image? A freelancer's guide to licensing",
+    description:
+      "Royalty-free vs. rights-managed stock, what Creative Commons actually allows, and a practical checklist before using an image.",
+    publishedDate: PUBLISHED,
+    cluster: "Intellectual Property",
+    blocks: [
+      p(
+        "\"I found it on Google\" is not a license. It's the single most common misunderstanding behind accidental " +
+          "copyright problems for freelancers and small businesses, and it's an easy one to fix once the actual " +
+          "categories of image licensing are clear."
+      ),
+      h2("Royalty-free vs. rights-managed stock"),
+      p(
+        "Royalty-free doesn't mean free — it means you pay once for a license that then covers broad, ongoing use " +
+          "within the terms of that license, rather than paying royalties every time the image is used. Most " +
+          "stock photo subscriptions and single-image purchases work this way. Rights-managed licensing is " +
+          "narrower and usually more expensive: it grants rights for a specific use, duration, geography, or " +
+          "print run, and using the same image beyond those specific terms — a bigger print run, a different " +
+          "market, a longer campaign — can require a new license or an additional fee."
+      ),
+      h2("What a Creative Commons license actually permits"),
+      p(
+        "Creative Commons isn't a single license — it's a family of licenses, and they grant meaningfully " +
+          "different rights depending on which variant is attached to a given image. Some allow commercial use " +
+          "outright; others restrict use to non-commercial purposes only. Some require only attribution; others " +
+          "require that anything built using the image be shared under the same license. The common mistake is " +
+          "treating \"Creative Commons\" as shorthand for \"free to use however I want\" — the specific variant " +
+          "attached to an individual image is what actually determines what's allowed, and it needs to be checked " +
+          "for that image specifically, not assumed from having seen a Creative Commons badge somewhere before."
+      ),
+      h3("Attribution requirements"),
+      p(
+        "Many open licenses, including several Creative Commons variants, require crediting the original creator " +
+          "in a specific way — often the creator's name, the source, and a link to the license itself. Skipping " +
+          "attribution isn't a minor formality under these licenses; it's typically a condition of the license, " +
+          "and using the image without meeting it can mean the use falls outside the license altogether."
+      ),
+      h2("The real risk of using an unlicensed image commercially"),
+      p(
+        "Using an image without a valid license — including one found through a general search with no license " +
+          "information attached at all — carries real, practical consequences, not just theoretical risk. Image " +
+          "owners and the agencies that represent them increasingly use automated tools to scan the web for " +
+          "unlicensed use of their catalogs, and the two most common outcomes are a takedown notice demanding the " +
+          "image be removed, or an invoice-style demand letter from an image-monitoring or licensing-enforcement " +
+          "service seeking payment for the unauthorized use — sometimes for amounts well beyond what a proper " +
+          "license would have cost in the first place. These demands can arrive months or years after the image " +
+          "was first used, once it's been indexed and matched against a rights database."
+      ),
+      h2("A practical checklist before using any image commercially"),
+      list([
+        "Confirm exactly where the image came from and what license, if any, is actually attached to it",
+        "If it's stock, confirm whether the license is royalty-free or rights-managed, and whether your intended use fits within its terms",
+        "If it's Creative Commons, check the specific variant attached to that image — not just the general reputation of Creative Commons",
+        "Note any attribution requirements and follow them exactly, including where and how the credit needs to appear",
+        "Keep a record of the license or purchase — a screenshot, receipt, or saved license page — in case the use is ever questioned later",
+        "When in doubt, default to a source with unambiguous commercial licensing rather than gambling on an image with no visible license information",
+      ]),
+      p(
+        "None of this is a substitute for legal advice about a specific image or a specific demand letter that's " +
+          "already landed — it's a practical way to avoid the situation in the first place, which is far cheaper " +
+          "than resolving it after the fact."
+      ),
+      p(
+        "The same care about where a visual asset comes from applies to a business's own brand assets — a logo or " +
+          "wordmark can carry both copyright in the artwork and separate trademark rights in how it's used to " +
+          "identify the business."
+      ),
+      link("Trademark basics every small business should know", "/blog/trademark-basics-for-small-business"),
+      h2("Frequently asked questions"),
+      h3("Is an image free to use if there's no copyright notice on it?"),
+      p(
+        "No. Copyright generally applies automatically to original creative work the moment it's created, whether " +
+          "or not a notice is attached. The absence of a visible copyright symbol says nothing about whether the " +
+          "image is actually free to use."
+      ),
+      h3("Can I use a stock image I paid for in any project I want?"),
+      p(
+        "Only within the terms of the specific license purchased. Even royalty-free licenses commonly restrict " +
+          "certain uses — reselling the image standalone, using it in a way that implies endorsement, or exceeding " +
+          "a print or distribution cap on some plans — so it's worth checking the license terms for anything " +
+          "beyond routine use."
+      ),
+      h3("What should I do if I get a demand letter for an image I already used?"),
+      p(
+        "Don't ignore it, but don't assume the first letter received is the final word on the amount owed either. " +
+          "These situations are common enough that it's worth a brief consultation with an attorney familiar with " +
+          "copyright demand letters before responding or paying, since the appropriate response varies a lot by " +
+          "the specifics of the claim."
+      ),
+      h3("Does crediting the photographer protect me even without a license?"),
+      p(
+        "Generally no. Attribution is often a condition of a specific license, not a substitute for having one. " +
+          "Crediting a creator without any underlying license or permission doesn't generally make otherwise " +
+          "unauthorized use of an image lawful."
       ),
     ],
   },

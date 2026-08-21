@@ -4988,6 +4988,320 @@ FREE_TEMPLATES.push(
   },
 );
 
+FREE_TEMPLATES.push(
+  {
+    slug: "request-for-proposal",
+    name: "Request for Proposal (RFP)",
+    seoTitle: "Free Request for Proposal (RFP) Template",
+    description:
+      "A structured document a business issues to solicit competing proposals from vendors for a defined " +
+      "project, service, or purchase.",
+    useCase:
+      "Use this when you need to solicit bids from multiple vendors for a project — a website build, a " +
+      "marketing campaign, a construction job, a software implementation — and want every bidder responding " +
+      "to the same scope, timeline, and evaluation criteria so their proposals can be compared fairly.",
+    signerLabels: ["Issuing Organization"],
+    definition:
+      "A Request for Proposal (RFP) is a formal solicitation document an organization issues to invite " +
+      "qualified vendors to submit competing proposals describing how they would perform a defined scope of " +
+      "work, along with pricing and timeline.",
+    keyClauses: [
+      "Project background and objectives",
+      "Scope of work and deliverables",
+      "Proposal submission requirements and format",
+      "Evaluation criteria and selection process",
+      "Key dates and submission deadline",
+      "Terms governing the RFP process itself",
+    ],
+    fillInFields: [
+      "[Issuing Organization Name]",
+      "[Project Title]",
+      "[Project Background/Objectives]",
+      "[Scope of Work Summary]",
+      "[Proposal Due Date]",
+      "[Anticipated Project Start Date]",
+      "[Contact Name and Email]",
+      "[Budget Range (optional)]",
+    ],
+    legalSummary:
+      "Signing an RFP authenticates it as an official solicitation from the issuing organization, but the RFP " +
+      "itself is not a binding contract — it invites offers rather than accepting one. The actual contractual " +
+      "obligations only arise later, once the organization selects a vendor and both sides sign a separate " +
+      "agreement.",
+    chatgptPrompts: [
+      "Generate a filled Request for Proposal using this template for a company sourcing a new website build.",
+      "Review this RFP's scope of work section and suggest evaluation criteria I'm missing.",
+      "Adapt this Request for Proposal for a construction project instead of a software project.",
+    ],
+    pdfPath: "/free-templates/request-for-proposal.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 2, xFrac: 0.3710106209150327, yFrac: 0.1833333333333334, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 2, xFrac: 0.15376960784313726, yFrac: 0.27871212121212136, wFrac: 0.16, hFrac: 0.04, type: "date" },
+    ],
+  },
+  {
+    slug: "byod-policy",
+    name: "BYOD Policy",
+    seoTitle: "Free Bring Your Own Device (BYOD) Policy Template",
+    description:
+      "An employer's policy — plus a signed employee acknowledgment — governing personal phones, laptops, and " +
+      "tablets used for work.",
+    useCase:
+      "Use this when employees use their own phones, laptops, or tablets to access company email, files, or " +
+      "systems, and you need documented security requirements, usage limits, and an acknowledgment on file " +
+      "before granting that access.",
+    signerLabels: ["Employer", "Employee"],
+    recurringCategory: "Employment",
+    definition:
+      "A Bring Your Own Device (BYOD) Policy is an employer's written policy, acknowledged in writing by the " +
+      "employee, that sets the security requirements, permitted uses, and company rights that apply when an " +
+      "employee uses a personally owned device to access work systems or data.",
+    keyClauses: [
+      "Approved device types and eligibility",
+      "Minimum security requirements (passcodes, encryption, updates)",
+      "Company access to and monitoring of work-related data on the device",
+      "Reimbursement for business-related use",
+      "Acceptable use and prohibited activities",
+      "Data removal and device requirements upon termination",
+    ],
+    fillInFields: [
+      "[Employer Name]",
+      "[Employee Name]",
+      "[Effective Date]",
+      "[Approved Device Types]",
+      "[Minimum Security Requirements]",
+      "[Reimbursement Amount/Policy]",
+      "[Data Removal Procedure Upon Termination]",
+    ],
+    legalSummary:
+      "Signing this policy puts the employee on notice of the security and use requirements attached to using " +
+      "a personal device for work, and confirms their agreement to the company's right to remove company data " +
+      "from that device. It does not transfer ownership of the device itself, but it does establish grounds " +
+      "for restricting access if the employee doesn't comply.",
+    chatgptPrompts: [
+      "Generate a filled BYOD Policy using this template for a 15-person remote company.",
+      "Explain what security requirements are reasonable to require in a BYOD Policy for personal phones.",
+      "Adapt this BYOD Policy to also cover employee-owned laptops, not just phones.",
+    ],
+    pdfPath: "/free-templates/byod-policy.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 2, xFrac: 0.27814624183006537, yFrac: 0.14166666666666672, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 2, xFrac: 0.15376960784313726, yFrac: 0.2370454545454547, wFrac: 0.16, hFrac: 0.04, type: "date" },
+      { id: "ft2", signerOrder: 2, page: 2, xFrac: 0.2823366013071895, yFrac: 0.3073484848484849, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft3", signerOrder: 2, page: 2, xFrac: 0.15376960784313726, yFrac: 0.4027272727272728, wFrac: 0.16, hFrac: 0.04, type: "date" },
+    ],
+  },
+  {
+    slug: "contributor-license-agreement",
+    name: "Individual Contributor License Agreement (CLA)",
+    seoTitle: "Free Individual Contributor License Agreement (CLA) Template",
+    description:
+      "An individual open-source contributor licenses their code contributions to a project or company under " +
+      "defined copyright and patent terms.",
+    useCase:
+      "Use this when an individual contributes code, documentation, or other work to your open-source project " +
+      "or codebase, and you need clear, written confirmation of what rights the project receives to use, " +
+      "modify, and redistribute that contribution.",
+    signerLabels: ["Project/Company", "Contributor"],
+    recurringCategory: "Intellectual Property",
+    definition:
+      "An Individual Contributor License Agreement (CLA) is an agreement in which an individual grants a " +
+      "project or company a license to use, modify, and redistribute their contributed work, and confirms " +
+      "they have the right to make that grant.",
+    keyClauses: [
+      "Definition of \"contribution\"",
+      "Grant of copyright license to the project",
+      "Grant of patent license covering the contribution",
+      "Contributor's representations of originality and authority to contribute",
+      "Disclaimer of warranty on the contributed work",
+      "Governing law",
+    ],
+    fillInFields: [
+      "[Project/Company Name]",
+      "[Contributor Name]",
+      "[Contributor Email or Username]",
+      "[Project Name/Repository]",
+      "[Effective Date]",
+      "[Governing State/Jurisdiction]",
+    ],
+    legalSummary:
+      "Signing this CLA grants the named project or company a license to use and redistribute the " +
+      "contributor's submitted work and confirms the contributor had the right to make that contribution. " +
+      "Copyright and patent assignments carry real legal and tax complexity that varies by jurisdiction and " +
+      "by what's actually being contributed, so any project relying on this at scale should have it reviewed " +
+      "by a lawyer rather than treating this template as a complete answer.",
+    chatgptPrompts: [
+      "Generate a filled Individual Contributor License Agreement using this template for a new open-source contributor.",
+      "Explain in plain language what rights this CLA gives the project over my code contribution.",
+      "Compare this CLA's patent license grant to what a typical open-source project might require.",
+    ],
+    pdfPath: "/free-templates/contributor-license-agreement.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 1, xFrac: 0.34355718954248365, yFrac: 0.6734848484848489, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.7688636363636367, wFrac: 0.16, hFrac: 0.04, type: "date" },
+      { id: "ft2", signerOrder: 2, page: 2, xFrac: 0.29257761437908497, yFrac: 0.06060606060606061, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft3", signerOrder: 2, page: 2, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" },
+    ],
+  },
+  {
+    slug: "late-payment-demand-letter",
+    name: "Late Payment Demand Letter",
+    seoTitle: "Free Late Payment Demand Letter Template",
+    description:
+      "A firm, professional letter demanding payment of a specific overdue invoice before pursuing more " +
+      "aggressive collection action.",
+    useCase:
+      "Use this when a client or customer's invoice is significantly overdue, you've already sent normal " +
+      "reminders, and you need a formal, dated demand for payment on record before considering collections, " +
+      "late fees, or legal action.",
+    signerLabels: ["Sender"],
+    definition:
+      "A Late Payment Demand Letter is a formal written notice from a business or freelancer to a client " +
+      "demanding payment of a specific overdue invoice by a stated deadline, and describing the consequences " +
+      "of continued non-payment.",
+    keyClauses: [
+      "Reference to the specific overdue invoice and amount",
+      "Number of days the payment is past due",
+      "Firm demand for payment by a new deadline",
+      "Consequences of continued non-payment (late fees, interest, collections, legal action)",
+      "Offer to discuss a payment arrangement",
+      "Sender's contact information",
+    ],
+    fillInFields: [
+      "[Sender/Business Name]",
+      "[Recipient/Client Name]",
+      "[Invoice Number]",
+      "[Invoice Date]",
+      "[Amount Due]",
+      "[Original Payment Due Date]",
+      "[Days Overdue]",
+      "[New Payment Deadline]",
+    ],
+    legalSummary:
+      "Signing and sending this letter creates a dated, written record that formal demand for payment was " +
+      "made, which can matter later if the sender pursues late fees, collections, or legal action. It does " +
+      "not by itself change the underlying contract or invoice terms, and any late fees or interest charged " +
+      "must already be authorized by the original agreement or applicable law.",
+    chatgptPrompts: [
+      "Generate a filled Late Payment Demand Letter using this template for a freelance invoice that's 45 days overdue.",
+      "Make this Late Payment Demand Letter firmer without sounding threatening or unprofessional.",
+      "Explain what I should do if the client still doesn't pay after this demand letter.",
+    ],
+    pdfPath: "/free-templates/late-payment-demand-letter.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 1, xFrac: 0.2603137254901961, yFrac: 0.4785353535353538, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.5739141414141418, wFrac: 0.16, hFrac: 0.04, type: "date" },
+    ],
+  },
+  {
+    slug: "advisor-equity-agreement",
+    name: "Advisor Equity Agreement",
+    seoTitle: "Free Advisor Equity Agreement Template",
+    description:
+      "A startup grants a small equity stake to an advisor in exchange for defined advisory services over a " +
+      "vesting period.",
+    useCase:
+      "Use this when a startup wants to bring on an advisor — for expertise, introductions, or guidance — and " +
+      "compensate them with equity that vests over time instead of, or in addition to, cash.",
+    signerLabels: ["Company", "Advisor"],
+    recurringCategory: "Equity",
+    definition:
+      "An Advisor Equity Agreement is a contract in which a company grants an individual advisor the right to " +
+      "a defined equity stake, subject to a vesting schedule, in exchange for ongoing advisory services over " +
+      "a set term.",
+    keyClauses: [
+      "Description of advisory services to be provided",
+      "Equity grant amount and type",
+      "Vesting schedule and cliff period",
+      "Confidentiality obligations",
+      "Assignment of IP created as part of the advisory work",
+      "Term, termination, and treatment of unvested equity",
+      "Advisor's independent contractor status",
+    ],
+    fillInFields: [
+      "[Company Name]",
+      "[Advisor Name]",
+      "[Effective Date]",
+      "[Advisory Services Description]",
+      "[Equity Amount/Percentage]",
+      "[Vesting Period]",
+      "[Cliff Period]",
+      "[Termination Notice Period]",
+    ],
+    legalSummary:
+      "Signing this agreement obligates the advisor to provide the described services and, in exchange, gives " +
+      "them a contractual right to the granted equity as it vests — not immediate outright ownership. Equity " +
+      "grants carry real tax consequences (including for the company's cap table and the advisor's personal " +
+      "tax situation) and interact with corporate formation documents in ways that vary by entity type and " +
+      "jurisdiction, so this template is a starting point, not a substitute for review by a lawyer and " +
+      "accountant before signing.",
+    chatgptPrompts: [
+      "Generate a filled Advisor Equity Agreement using this template for a startup advisor granted 0.25% equity.",
+      "Explain the difference between a cliff period and a vesting schedule in this Advisor Equity Agreement.",
+      "What questions should I ask a lawyer before signing this Advisor Equity Agreement as the advisor?",
+    ],
+    pdfPath: "/free-templates/advisor-equity-agreement.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 2, xFrac: 0.2798562091503268, yFrac: 0.06060606060606061, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 2, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" },
+      { id: "ft2", signerOrder: 2, page: 2, xFrac: 0.26238071895424836, yFrac: 0.22628787878787882, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft3", signerOrder: 2, page: 2, xFrac: 0.15376960784313726, yFrac: 0.3216666666666668, wFrac: 0.16, hFrac: 0.04, type: "date" },
+    ],
+  },
+  {
+    slug: "hackathon-participation-agreement",
+    name: "Hackathon Participation & IP Agreement",
+    seoTitle: "Free Hackathon Participation & IP Agreement Template",
+    description:
+      "Event organizers use this to define code/IP ownership, a liability waiver, and a code-of-conduct " +
+      "acknowledgment for hackathon participants.",
+    useCase:
+      "Use this when organizing a hackathon and you need participants to agree upfront on who owns the code " +
+      "and other work product built during the event, to accept a liability waiver for participating, and to " +
+      "acknowledge the event's code of conduct.",
+    signerLabels: ["Organizer", "Participant"],
+    recurringCategory: "Intellectual Property",
+    definition:
+      "A Hackathon Participation & IP Agreement is a contract between event organizers and a participant that " +
+      "sets the ownership of work created during the event, waives certain liability for participating, and " +
+      "records the participant's acknowledgment of the event's code of conduct.",
+    keyClauses: [
+      "Ownership of code and other IP created during the event",
+      "License granted to organizer for demo, judging, and promotional use",
+      "Liability waiver and assumption of risk",
+      "Code of conduct acknowledgment",
+      "Eligibility requirements and grounds for disqualification",
+      "Media and publicity release",
+    ],
+    fillInFields: [
+      "[Event Name]",
+      "[Organizer Name]",
+      "[Participant Name]",
+      "[Event Dates]",
+      "[Team Name (if applicable)]",
+      "[Code of Conduct Reference]",
+      "[Effective Date]",
+    ],
+    legalSummary:
+      "Signing this agreement confirms the participant's acceptance of the stated IP ownership terms, the " +
+      "liability waiver for participating in the event, and the event's code of conduct. It does not by " +
+      "itself resolve IP disputes between team members on a multi-person team — those are typically addressed " +
+      "separately in a team agreement.",
+    chatgptPrompts: [
+      "Generate a filled Hackathon Participation & IP Agreement using this template for a weekend hackathon.",
+      "Explain what IP ownership terms are typical for hackathon participants versus the organizing company.",
+      "Adapt this Hackathon Participation & IP Agreement for a hackathon where teams keep their own IP.",
+    ],
+    pdfPath: "/free-templates/hackathon-participation-agreement.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 1, xFrac: 0.2819419934640523, yFrac: 0.5770202020202023, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.6723989898989902, wFrac: 0.16, hFrac: 0.04, type: "date" },
+      { id: "ft2", signerOrder: 2, page: 1, xFrac: 0.28850000000000003, yFrac: 0.7427020202020205, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft3", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.8380808080808083, wFrac: 0.16, hFrac: 0.04, type: "date" },
+    ],
+  },
+);
+
 export function getFreeTemplate(slug: string): FreeTemplate | undefined {
   return FREE_TEMPLATES.find((t) => t.slug === slug);
 }

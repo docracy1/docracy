@@ -6383,6 +6383,570 @@ const TEMPLATES = [
       { type: "signatures", signers: [{ label: "Reference Provider", order: 1 }] },
     ],
   },
+  {
+    slug: "request-for-proposal",
+    title: "REQUEST FOR PROPOSAL (RFP)",
+    signerLabels: ["Issuing Organization"],
+    blocks: [
+      { type: "section", text: "Issuing Organization" },
+      { type: "field", label: "Organization Name: ", blank: TEXT_BLANK },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+      { type: "field", label: "Contact Name: ", blank: TEXT_BLANK },
+      { type: "field", label: "Contact Email: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Project Overview" },
+      { type: "field", label: "Project Title: ", blank: TEXT_BLANK },
+      {
+        type: "paragraph",
+        text:
+          "Describe the background of this project and the objectives the Issuing Organization is trying to " +
+          "achieve:",
+      },
+      { type: "field", label: "", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Scope of Work" },
+      {
+        type: "paragraph",
+        text:
+          "Describe the specific work, deliverables, and any technical, functional, or performance " +
+          "requirements the selected vendor will be responsible for:",
+      },
+      { type: "field", label: "", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "", blank: TEXT_BLANK, gapBefore: 12 },
+
+      { type: "section", text: "Proposal Submission Requirements" },
+      {
+        type: "paragraph",
+        text:
+          "Each proposal submitted in response to this RFP must include, at minimum: a company overview and " +
+          "relevant experience, a detailed approach to the scope of work above, an itemized price quote, a " +
+          "proposed project timeline, and at least two client references from comparable projects.",
+      },
+
+      { type: "section", text: "Evaluation Criteria" },
+      {
+        type: "table",
+        widths: [0.7, 0.3],
+        headers: ["Criteria", "Weight"],
+        rows: [
+          ["Relevant experience and past performance", TEXT_BLANK],
+          ["Technical approach and understanding of scope", TEXT_BLANK],
+          ["Pricing and overall value", TEXT_BLANK],
+          ["Proposed timeline", TEXT_BLANK],
+          ["References", TEXT_BLANK],
+        ],
+      },
+
+      { type: "section", text: "Key Dates" },
+      { type: "field", label: "RFP Issue Date: ", blank: DATE_BLANK },
+      { type: "field", label: "Deadline for Vendor Questions: ", blank: DATE_BLANK },
+      { type: "field", label: "Proposal Submission Deadline: ", blank: DATE_BLANK },
+      { type: "field", label: "Anticipated Award Date: ", blank: DATE_BLANK },
+      { type: "field", label: "Anticipated Project Start Date: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Budget" },
+      {
+        type: "paragraph",
+        text: "The Issuing Organization's estimated budget range for this project (if disclosed) is:",
+      },
+      { type: "field", label: "Estimated Budget Range: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Terms of the RFP Process" },
+      {
+        type: "paragraph",
+        text:
+          "Submitting a proposal in response to this RFP does not create a contract between the vendor and the " +
+          "Issuing Organization. The Issuing Organization reserves the right to reject any or all proposals, " +
+          "to request clarification or revised proposals from any vendor, to negotiate terms with one or more " +
+          "vendors, and to cancel or reissue this RFP at any time, without liability to any vendor for costs " +
+          "incurred in preparing a response. Proposals submitted may be treated as confidential business " +
+          "information and will not be shared with competing vendors.",
+      },
+
+      { type: "section", text: "Questions and Contact" },
+      {
+        type: "paragraph",
+        text: "All questions regarding this RFP must be submitted in writing to the contact listed above by the deadline stated.",
+      },
+
+      { type: "section", text: "Authorization" },
+      {
+        type: "paragraph",
+        text: "The undersigned confirms this RFP is issued on behalf of the Issuing Organization named above.",
+      },
+
+      { type: "signatures", signers: [{ label: "Issuing Organization", order: 1 }] },
+    ],
+  },
+  {
+    slug: "byod-policy",
+    title: "BRING YOUR OWN DEVICE (BYOD) POLICY",
+    signerLabels: ["Employer", "Employee"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Employer: ", blank: TEXT_BLANK },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+      { type: "field", label: "Employee: ", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "Effective Date: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Purpose and Scope" },
+      {
+        type: "paragraph",
+        text:
+          "This policy sets the terms under which the Employee may use a personally owned phone, laptop, " +
+          "tablet, or other device (a \"Personal Device\") to access the Employer's email, files, applications, " +
+          "or other work systems.",
+      },
+
+      { type: "section", text: "Approved Devices" },
+      {
+        type: "paragraph",
+        text:
+          "Only devices meeting the Employer's approved operating systems and specifications may be connected " +
+          "to work systems. The Employer may decline or revoke approval for any device at its discretion.",
+      },
+      { type: "field", label: "Approved Device Types: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Security Requirements" },
+      {
+        type: "paragraph",
+        text:
+          "The Employee agrees to keep each Personal Device protected with a passcode or biometric lock, keep " +
+          "its operating system and security patches up to date, enable encryption where available, and " +
+          "install only the security or management software the Employer reasonably requires as a condition " +
+          "of access.",
+      },
+      { type: "field", label: "Minimum Security Standard: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Company Access and Monitoring" },
+      {
+        type: "paragraph",
+        text:
+          "The Employer may access, back up, and remove company data and company-issued applications residing " +
+          "on a Personal Device, including through a remote wipe limited to company data. The Employer will " +
+          "not access, copy, or delete the Employee's personal files, photos, messages, or accounts.",
+      },
+
+      { type: "section", text: "Acceptable Use" },
+      {
+        type: "paragraph",
+        text:
+          "The Employee agrees not to use a Personal Device connected to work systems for unlawful activity, " +
+          "to share company data with unauthorized third parties, or to circumvent the security controls " +
+          "described in this policy.",
+      },
+
+      { type: "section", text: "Reimbursement" },
+      {
+        type: "paragraph",
+        text: "Any reimbursement for business-related use of a Personal Device is limited to the amount and schedule stated below, if any.",
+      },
+      { type: "field", label: "Reimbursement Amount/Policy: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Data Ownership and Privacy" },
+      {
+        type: "paragraph",
+        text:
+          "Company data accessed or stored on a Personal Device remains the property of the Employer at all " +
+          "times. The Personal Device itself, and all personal data on it, remains the property of the " +
+          "Employee.",
+      },
+
+      { type: "section", text: "Lost or Stolen Devices" },
+      {
+        type: "paragraph",
+        text:
+          "The Employee must report a lost or stolen Personal Device that has been used to access company data " +
+          "to the Employer as soon as reasonably possible, so the Employer can remove company data from the " +
+          "device remotely.",
+      },
+
+      { type: "section", text: "Termination and Return of Data" },
+      {
+        type: "paragraph",
+        text:
+          "Upon termination of employment, or upon request, the Employee agrees to allow the Employer to " +
+          "remove all company data, accounts, and company-issued applications from each Personal Device using " +
+          "the procedure below.",
+      },
+      { type: "field", label: "Data Removal Procedure: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Policy Violations" },
+      {
+        type: "paragraph",
+        text:
+          "Failure to comply with this policy may result in revocation of the Employee's ability to access " +
+          "work systems from a Personal Device, and may be treated as grounds for discipline under the " +
+          "Employer's other workplace policies.",
+      },
+
+      { type: "section", text: "Employee Acknowledgment" },
+      {
+        type: "paragraph",
+        text:
+          "By signing below, the Employee confirms they have read, understand, and agree to comply with this " +
+          "Bring Your Own Device Policy.",
+      },
+
+      { type: "signatures", signers: [{ label: "Employer", order: 1 }, { label: "Employee", order: 2 }] },
+    ],
+  },
+  {
+    slug: "contributor-license-agreement",
+    title: "INDIVIDUAL CONTRIBUTOR LICENSE AGREEMENT",
+    signerLabels: ["Project/Company", "Contributor"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Project/Company: ", blank: TEXT_BLANK },
+      { type: "field", label: "Project Name/Repository: ", blank: TEXT_BLANK },
+      { type: "field", label: "Contributor Name: ", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "Contributor Email/Username: ", blank: TEXT_BLANK },
+      { type: "field", label: "Effective Date: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Definitions" },
+      {
+        type: "paragraph",
+        text:
+          "\"Contribution\" means any original code, documentation, or other material the Contributor " +
+          "intentionally submits to the Project/Company for inclusion in the project identified above. " +
+          "\"Work\" means the project's software and related materials that a Contribution is submitted to.",
+      },
+
+      { type: "section", text: "Grant of Copyright License" },
+      {
+        type: "paragraph",
+        text:
+          "The Contributor grants the Project/Company a perpetual, worldwide, non-exclusive, royalty-free, " +
+          "irrevocable license to reproduce, prepare derivative works of, publicly display, publicly perform, " +
+          "sublicense, and distribute each Contribution and derivative works of it, under any license terms " +
+          "the Project/Company chooses for the Work, including open-source licenses.",
+      },
+
+      { type: "section", text: "Grant of Patent License" },
+      {
+        type: "paragraph",
+        text:
+          "The Contributor grants the Project/Company a perpetual, worldwide, non-exclusive, royalty-free, " +
+          "irrevocable patent license to make, use, sell, and otherwise transfer each Contribution, for any " +
+          "patent claims the Contributor owns or controls that are necessarily infringed by the Contribution " +
+          "alone or in combination with the Work it was submitted to.",
+      },
+
+      { type: "section", text: "Contributor Representations" },
+      {
+        type: "paragraph",
+        text:
+          "The Contributor represents that each Contribution is their own original creation, or that they " +
+          "otherwise have the right to submit it under the terms of this Agreement, and that submitting it " +
+          "does not violate any agreement with a third party, including any current or former employer.",
+      },
+
+      { type: "section", text: "No Obligation to Use" },
+      {
+        type: "paragraph",
+        text:
+          "The Project/Company is under no obligation to use, incorporate, or maintain any Contribution, and " +
+          "may decline or remove a Contribution at its discretion.",
+      },
+
+      { type: "section", text: "Disclaimer of Warranty" },
+      {
+        type: "paragraph",
+        text:
+          "Except for the representations stated above, the Contribution is provided \"as is,\" without " +
+          "warranty of any kind, and the Contributor is not obligated to provide support, maintenance, or " +
+          "updates for it.",
+      },
+
+      { type: "section", text: "Retained Rights" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement does not require the Contributor to give up ownership of their Contribution. The " +
+          "Contributor may continue to use, license, or distribute their own Contribution elsewhere, subject " +
+          "to any separate agreements that may apply.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Advisory Note" },
+      {
+        type: "paragraph",
+        text:
+          "Copyright and patent assignments can carry meaningful legal and tax consequences depending on the " +
+          "size and nature of the contribution and the Contributor's own obligations to other parties. Both " +
+          "sides are encouraged to have significant contributions reviewed by a lawyer before relying on this " +
+          "Agreement alone.",
+      },
+
+      { type: "signatures", signers: [{ label: "Project/Company", order: 1 }, { label: "Contributor", order: 2 }] },
+    ],
+  },
+  {
+    slug: "late-payment-demand-letter",
+    title: "LATE PAYMENT DEMAND LETTER",
+    signerLabels: ["Sender"],
+    blocks: [
+      { type: "section", text: "Sender" },
+      { type: "field", label: "Sender/Business Name: ", blank: TEXT_BLANK },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+      { type: "field", label: "Date of Letter: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Recipient" },
+      { type: "field", label: "Recipient/Client Name: ", blank: TEXT_BLANK },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Re: Overdue Invoice" },
+      { type: "field", label: "Invoice Number: ", blank: TEXT_BLANK },
+      { type: "field", label: "Invoice Date: ", blank: DATE_BLANK },
+      { type: "field", label: "Amount Due: ", blank: TEXT_BLANK },
+      { type: "field", label: "Original Payment Due Date: ", blank: DATE_BLANK },
+      { type: "field", label: "Days Overdue: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Demand for Payment" },
+      {
+        type: "paragraph",
+        text:
+          "This letter is formal notice that the invoice referenced above remains unpaid. Despite prior " +
+          "reminders, payment in full has not been received. We request that the full amount due be paid no " +
+          "later than the date below.",
+      },
+      { type: "field", label: "Payment Due By: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Consequences of Non-Payment" },
+      {
+        type: "paragraph",
+        text:
+          "If payment in full is not received by the date above, we may apply any late fees or interest " +
+          "already authorized under our agreement or invoice terms, refer this matter to a collections agency " +
+          "or attorney, report the delinquency where permitted, and pursue any other remedy available under " +
+          "applicable law. We would prefer to resolve this matter directly and avoid taking those steps.",
+      },
+
+      { type: "section", text: "Payment Instructions" },
+      {
+        type: "paragraph",
+        text: "Payment may be sent using the method below. Please reference the invoice number with your payment.",
+      },
+      { type: "field", label: "Payment Method/Instructions: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Willingness to Resolve" },
+      {
+        type: "paragraph",
+        text:
+          "If there is a dispute about this invoice, or if a payment plan would help resolve this balance, " +
+          "please contact us using the information below before the deadline stated above so we can discuss " +
+          "it.",
+      },
+      { type: "field", label: "Sender Contact Information: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Closing" },
+      {
+        type: "paragraph",
+        text:
+          "We value the relationship between our businesses and would like to resolve this matter promptly and " +
+          "without further action. Thank you for your immediate attention to this overdue balance.",
+      },
+
+      { type: "signatures", signers: [{ label: "Sender", order: 1 }] },
+    ],
+  },
+  {
+    slug: "advisor-equity-agreement",
+    title: "ADVISOR EQUITY AGREEMENT",
+    signerLabels: ["Company", "Advisor"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Company: ", blank: TEXT_BLANK },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+      { type: "field", label: "Advisor: ", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "Address: ", blank: TEXT_BLANK },
+      { type: "field", label: "Effective Date: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Advisory Services" },
+      {
+        type: "paragraph",
+        text:
+          "The Advisor agrees to provide the Company with advice and assistance in the areas described below, " +
+          "at a level of time commitment the parties agree to separately (for example, a set number of hours " +
+          "per month or availability for periodic calls and introductions).",
+      },
+      { type: "field", label: "Description of Services: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Term" },
+      { type: "field", label: "Start Date: ", blank: DATE_BLANK },
+      { type: "field", label: "Term Length: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Equity Grant" },
+      {
+        type: "paragraph",
+        text:
+          "In exchange for the Advisory Services, the Company will grant the Advisor equity in the Company as " +
+          "described below, subject to approval by the Company's board of directors (or equivalent governing " +
+          "body) and to the vesting schedule in this Agreement.",
+      },
+      { type: "field", label: "Equity Amount/Percentage: ", blank: TEXT_BLANK },
+      { type: "field", label: "Equity Type (e.g., stock options, restricted stock): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Vesting Schedule" },
+      {
+        type: "paragraph",
+        text:
+          "The granted equity vests over the vesting period below, subject to the cliff period stated. If the " +
+          "Advisor's engagement ends before the cliff period is reached, no equity vests. After the cliff, " +
+          "equity vests in periodic installments over the remainder of the vesting period.",
+      },
+      { type: "field", label: "Vesting Period: ", blank: TEXT_BLANK },
+      { type: "field", label: "Cliff Period: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Confidentiality" },
+      {
+        type: "paragraph",
+        text:
+          "The Advisor agrees to keep confidential all non-public information about the Company learned in " +
+          "connection with the Advisory Services, both during and after the term of this Agreement.",
+      },
+
+      { type: "section", text: "Intellectual Property" },
+      {
+        type: "paragraph",
+        text:
+          "Any work product the Advisor creates specifically for the Company as part of the Advisory Services " +
+          "belongs to the Company. This Agreement does not affect the Advisor's ownership of their own " +
+          "pre-existing intellectual property or of general knowledge, skills, and experience.",
+      },
+
+      { type: "section", text: "Independent Contractor Status" },
+      {
+        type: "paragraph",
+        text:
+          "The Advisor is an independent contractor, not an employee, of the Company. Nothing in this " +
+          "Agreement creates a partnership, joint venture, or employment relationship between the parties.",
+      },
+
+      { type: "section", text: "Termination" },
+      {
+        type: "paragraph",
+        text:
+          "Either party may terminate this Agreement with written notice as described below. Upon termination, " +
+          "any equity that has not yet vested is forfeited, and any vested equity is retained by the Advisor " +
+          "subject to the Company's governing documents.",
+      },
+      { type: "field", label: "Termination Notice Period: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Tax and Legal Acknowledgment" },
+      {
+        type: "paragraph",
+        text:
+          "Both parties acknowledge that equity compensation carries tax consequences that depend on the " +
+          "Advisor's individual circumstances and on how the equity is structured, and that this Agreement " +
+          "does not constitute tax or legal advice. Each party is encouraged to consult its own lawyer and " +
+          "accountant before signing.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "signatures", signers: [{ label: "Company", order: 1 }, { label: "Advisor", order: 2 }] },
+    ],
+  },
+  {
+    slug: "hackathon-participation-agreement",
+    title: "HACKATHON PARTICIPATION & IP AGREEMENT",
+    signerLabels: ["Organizer", "Participant"],
+    blocks: [
+      { type: "section", text: "Parties and Event" },
+      { type: "field", label: "Organizer: ", blank: TEXT_BLANK },
+      { type: "field", label: "Participant: ", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "Event Name: ", blank: TEXT_BLANK },
+      { type: "field", label: "Event Dates: ", blank: TEXT_BLANK },
+      { type: "field", label: "Team Name (if applicable): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Eligibility" },
+      {
+        type: "paragraph",
+        text:
+          "The Participant confirms they meet any eligibility requirements published for the Event and that " +
+          "the information provided during registration is accurate.",
+      },
+
+      { type: "section", text: "Intellectual Property Ownership" },
+      {
+        type: "paragraph",
+        text:
+          "As between the Organizer and the Participant, the Participant (or, for a team project, the team " +
+          "members collectively) owns the code and other work product they create during the Event, except as " +
+          "expressly stated otherwise in the Event's published rules.",
+      },
+
+      { type: "section", text: "License to Organizer" },
+      {
+        type: "paragraph",
+        text:
+          "The Participant grants the Organizer a non-exclusive, royalty-free license to use, display, and " +
+          "reproduce the Participant's Event project and a description of it for judging, demonstration, and " +
+          "reasonable promotional purposes related to the Event.",
+      },
+
+      { type: "section", text: "Pre-Existing IP" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement does not transfer ownership of any code, tools, or materials the Participant brings " +
+          "into the Event that were created before the Event began.",
+      },
+
+      { type: "section", text: "Liability Waiver and Assumption of Risk" },
+      {
+        type: "paragraph",
+        text:
+          "The Participant voluntarily assumes all risk of participating in the Event and releases the " +
+          "Organizer from liability for injury, loss, or damage arising from participation, except to the " +
+          "extent caused by the Organizer's gross negligence or willful misconduct.",
+      },
+
+      { type: "section", text: "Code of Conduct" },
+      {
+        type: "paragraph",
+        text:
+          "The Participant acknowledges having read and agrees to follow the Event's code of conduct, and " +
+          "understands that violating it may result in removal from the Event.",
+      },
+      { type: "field", label: "Code of Conduct Reference/Link: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Media and Publicity Release" },
+      {
+        type: "paragraph",
+        text:
+          "The Participant grants the Organizer permission to use photos, video, or recordings taken during " +
+          "the Event that include the Participant for reasonable promotional purposes related to the Event.",
+      },
+
+      { type: "section", text: "Disqualification" },
+      {
+        type: "paragraph",
+        text:
+          "The Organizer may disqualify a Participant or team for violating the code of conduct, the Event's " +
+          "eligibility rules, or this Agreement.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "signatures", signers: [{ label: "Organizer", order: 1 }, { label: "Participant", order: 2 }] },
+    ],
+  },
 ];
 
 fs.mkdirSync(outDir, { recursive: true });
