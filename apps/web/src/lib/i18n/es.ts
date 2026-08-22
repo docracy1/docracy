@@ -336,6 +336,10 @@ const es: Messages = {
     "La firma secuencial mantiene el orden, o elige todos a la vez para que cada uno firme en cuanto lo inviten.",
   "landing.feat8.link": "Leer la documentación",
   "landing.feat8.title": "Flujos rápidos",
+  "landing.feat9.body":
+    "Cualquiera con el documento terminado — no solo quien lo envió o lo firmó — puede confirmar que realmente se completó a través de Docracy, gratis y sin necesidad de cuenta.",
+  "landing.feat9.link": "Verificar un documento",
+  "landing.feat9.title": "Verificación de documentos",
   "landing.featuresSub":
     "Docracy.io se centra en claridad, velocidad y confiabilidad — sin complejidad innecesaria.",
   "landing.featuresTitle": "Todo lo que necesitas para flujos de documentos simples y seguros",
@@ -424,6 +428,8 @@ const es: Messages = {
   "nav.mega.feature.storage.desc": "Cifrado, con retención automática corta.",
   "nav.mega.feature.workflows.title": "Flujos rápidos",
   "nav.mega.feature.workflows.desc": "Firma secuencial o todos a la vez, tú eliges.",
+  "nav.mega.feature.verify.title": "Verificación de documentos",
+  "nav.mega.feature.verify.desc": "Confirma que un PDF firmado es auténtico y no fue alterado — gratis, sin cuenta.",
   "nav.mega.feature.esign.title": "ESIGN y UETA",
   "nav.mega.feature.esign.desc": "Firmas SES diseñadas para respaldar la ESIGN Act y UETA de EE. UU.",
   "nav.mega.compare.docusign.desc": "Más ligero, sin precio por asiento.",
@@ -917,6 +923,14 @@ const es: Messages = {
     " — NDAs, cartas de oferta, acuerdos freelance, arrendamientos y más — con campos ya colocados. Elige una, completa los detalles entre corchetes y envíala igual que un PDF subido.",
   "docs.templatesFree.link": "{{count}} plantillas listas para usar",
   "docs.templatesFree.title": "Plantillas gratis",
+  "docs.verification.body1":
+    "Cada documento que Docracy completa recibe una huella SHA-256 de sus bytes finales exactos, y esa huella se conserva indefinidamente — incluso después de que el documento mismo se elimine al final de su periodo de retención. Cualquiera con el PDF terminado, o el código QR del certificado, puede usar",
+  "docs.verification.body2":
+    "para confirmar que coincide con un documento genuino y sin alterar — gratis, sin necesidad de cuenta. Los archivos subidos se procesan en el navegador y nunca se envían a Docracy; solo se verifica la huella resultante.",
+  "docs.verification.body3":
+    "Esto confirma el contenido del documento y su fecha de finalización — no la identidad de quien firmó. La firma predeterminada de Docracy es una Firma Electrónica Simple (SES), que no verifica identidad.",
+  "docs.verification.link": "Verificar un documento",
+  "docs.verification.title": "Verificar un documento completado (gratis)",
   "freeTemplates.allTemplates": "Todas las plantillas",
   "freeTemplates.featuredTitle": "Plantillas destacadas",
   "freeTemplates.cat.realEstate": "Bienes Raíces",

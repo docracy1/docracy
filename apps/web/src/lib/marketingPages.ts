@@ -982,6 +982,55 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       { label: "See pricing", to: "/pricing" },
     ],
   },
+  {
+    slug: "document-verification",
+    seoTitle: "Verify a Signed Document Is Authentic | Docracy",
+    seoDescription:
+      "Free tool to confirm a PDF was really completed through Docracy's signing flow and hasn't been altered since — no account needed, file never leaves your browser.",
+    heroHeadline: "Prove a signed document is the real thing.",
+    heroSubheadline:
+      "Anyone with a finished PDF — not just the sender or signers — can confirm it was actually completed through Docracy, free, with no account.",
+    problem:
+      "Once a signed PDF leaves the platform it was created on, there's usually no way for anyone else to check it's genuine. A recipient, auditor, or counterparty just has to trust that no one edited a date, a dollar figure, or a signature afterward.",
+    solution:
+      "Every document Docracy completes gets a SHA-256 fingerprint of its exact final bytes, kept on record indefinitely. Upload the file (it's fingerprinted in your own browser and never uploaded) or paste the hash from its certificate, and Docracy tells you instantly whether it matches an untouched, genuinely-completed record.",
+    features: [
+      { title: "Free, for anyone", body: "No account or paid plan required — the sender, a signer, or any third party can check a document." },
+      { title: "File never leaves your browser", body: "The PDF is fingerprinted locally with SHA-256; only the resulting hash is sent to Docracy's servers." },
+      { title: "Detects any tampering", body: "Changing even one character — a date, a number, a signature — produces a completely different hash, so a match means the file is untouched." },
+      { title: "Built into every certificate", body: "Each certificate of completion includes a QR code that links straight to this check for that exact document." },
+      { title: "Outlives the source document", body: "Verification records are kept indefinitely, even after the original document itself is deleted at the end of its retention window." },
+    ],
+    useCases: [
+      "A landlord double-checking a lease before relying on it in a dispute",
+      "An auditor confirming a vendor contract hasn't been altered since signing",
+      "A counterparty verifying a countersigned NDA received by email",
+      "Anyone confirming a Docracy certificate of completion is genuine",
+    ],
+    faqs: [
+      {
+        question: "Does verification prove who signed the document?",
+        answer:
+          "No. It confirms the document's exact content was completed through Docracy's signing flow, and when — not the signer's identity. Docracy's default signature is a Simple Electronic Signature (SES), which isn't identity-verified.",
+      },
+      { question: "Do I need an account to verify a document?", answer: "No. Verification is free and open to anyone with the completed file or its SHA-256 hash — no login required." },
+      {
+        question: "What does it mean if a document shows no matching record?",
+        answer:
+          "It means that exact file doesn't match anything completed through Docracy. That doesn't necessarily mean it's fraudulent — it may simply have been created or signed elsewhere, or edited even slightly since it was completed.",
+      },
+      {
+        question: "Is my document uploaded to Docracy's servers when I verify it?",
+        answer: "No. The file is fingerprinted (SHA-256) directly in your browser; only that fingerprint, not the document itself, is sent to check against Docracy's records.",
+      },
+    ],
+    ctaLabel: "Verify a document",
+    ctaTo: "/verify",
+    relatedLinks: [
+      { label: "Trust & security", to: "/trust" },
+      { label: "See pricing", to: "/pricing" },
+    ],
+  },
 ];
 
 export function getNdaSigningPageEs(): FeaturePageContent {

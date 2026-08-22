@@ -144,6 +144,13 @@ export function NavIcon({ name }: { name: string }) {
           <path d="M14 15.5l2 2M11.5 13l2 2" />
         </svg>
       );
+    case "badge":
+      return (
+        <svg {...common}>
+          <path d="M12 2.5l2.1 2.1 2.9-.4.9 2.8 2.8.9-.4 2.9 2.1 2.1-2.1 2.1.4 2.9-2.8.9-.9 2.8-2.9-.4L12 21.5l-2.1-2.1-2.9.4-.9-2.8-2.8-.9.4-2.9L2.5 12l2.1-2.1-.4-2.9 2.8-.9.9-2.8 2.9.4L12 2.5z" />
+          <path d="M8.5 12.2l2.2 2.2 4.3-4.6" />
+        </svg>
+      );
     case "whatsapp":
       // Full-color brand mark rather than a monochrome stroke icon like the others — this one's
       // meant to be recognized at a glance, not blend in.

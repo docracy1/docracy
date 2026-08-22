@@ -98,6 +98,15 @@ export default function Docs() {
         <p>{t("docs.expiry.body")}</p>
       </Section>
 
+      <Section id="verification" title={t("docs.verification.title")}>
+        <p>
+          {t("docs.verification.body1")}{" "}
+          <Link to="/verify">{t("docs.verification.link")}</Link>
+          {t("docs.verification.body2")}
+        </p>
+        <p style={{ color: "var(--mute)" }}>{t("docs.verification.body3")}</p>
+      </Section>
+
       <Section id="embed" title={t("docs.embed.title")}>
         <p>{t("docs.embed.body")}</p>
       </Section>

@@ -125,6 +125,7 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/quick-sign" element={<FeaturePage slug="quick-sign" />} />
           <Route path="/upload-and-sign" element={<FeaturePage slug="upload-and-sign" />} />
           <Route path="/simple-signing" element={<FeaturePage slug="simple-signing" />} />
+          <Route path="/document-verification" element={<FeaturePage slug="document-verification" />} />
           <Route path="/eversign-alternative" element={<AlternativePage slug="eversign-alternative" />} />
           <Route path="/es/alternativa-a-eversign" element={<AlternativePage slug="eversign-alternative" />} />
           <Route path="/onlinesignature-alternative" element={<AlternativePage slug="onlinesignature-alternative" />} />

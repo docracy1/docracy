@@ -21,7 +21,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 function FeatureIcon({
   name,
 }: {
-  name: "bolt" | "workflow" | "shield" | "users" | "duplicate" | "send" | "pen" | "sparkles" | "single" | "scale";
+  name: "bolt" | "workflow" | "shield" | "users" | "duplicate" | "send" | "pen" | "sparkles" | "single" | "scale" | "badge";
 }) {
   const common = {
     width: 24,
@@ -108,11 +108,18 @@ function FeatureIcon({
           <path d="M13 7l3 6a3 3 0 0 0 6 0l-3-6" />
         </svg>
       );
+    case "badge":
+      return (
+        <svg {...common}>
+          <path d="M12 2.5l2.1 2.1 2.9-.4.9 2.8 2.8.9-.4 2.9 2.1 2.1-2.1 2.1.4 2.9-2.8.9-.9 2.8-2.9-.4L12 21.5l-2.1-2.1-2.9.4-.9-2.8-2.8-.9.4-2.9L2.5 12l2.1-2.1-.4-2.9 2.8-.9.9-2.8 2.9.4L12 2.5z" />
+          <path d="M8.5 12.2l2.2 2.2 4.3-4.6" />
+        </svg>
+      );
   }
 }
 
 const CORE_FEATURES: Array<{
-  icon: "bolt" | "workflow" | "shield" | "users" | "duplicate" | "send" | "pen" | "sparkles" | "single" | "scale";
+  icon: "bolt" | "workflow" | "shield" | "users" | "duplicate" | "send" | "pen" | "sparkles" | "single" | "scale" | "badge";
   titleKey: string;
   bodyKey: string;
   to: string;
@@ -126,6 +133,7 @@ const CORE_FEATURES: Array<{
   { icon: "single", titleKey: "landing.feat6.title", bodyKey: "landing.feat6.body", to: "/prepare", linkKey: "landing.feat6.link" },
   { icon: "shield", titleKey: "landing.feat7.title", bodyKey: "landing.feat7.body", to: "/privacy", linkKey: "landing.feat7.link" },
   { icon: "bolt", titleKey: "landing.feat8.title", bodyKey: "landing.feat8.body", to: "/docs", linkKey: "landing.feat8.link" },
+  { icon: "badge", titleKey: "landing.feat9.title", bodyKey: "landing.feat9.body", to: "/document-verification", linkKey: "landing.feat9.link" },
 ];
 
 const FAQ_KEYS: Array<{ qKey: string; aKey: string }> = [

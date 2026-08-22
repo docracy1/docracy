@@ -34,6 +34,8 @@ const en: Messages = {
   "nav.mega.feature.storage.desc": "Encrypted, with short automatic retention.",
   "nav.mega.feature.workflows.title": "Fast workflows",
   "nav.mega.feature.workflows.desc": "Sequential or all-at-once signing, your choice.",
+  "nav.mega.feature.verify.title": "Document verification",
+  "nav.mega.feature.verify.desc": "Confirm a signed PDF is genuine and untampered — free, no account.",
   "nav.mega.feature.esign.title": "ESIGN & UETA",
   "nav.mega.feature.esign.desc": "SES e-signatures designed to support U.S. ESIGN Act and UETA.",
   "nav.mega.compare.docusign.desc": "Lighter, no per-seat pricing.",
@@ -210,6 +212,9 @@ const en: Messages = {
   "landing.feat8.title": "Fast workflows",
   "landing.feat8.body": "Sequential signing keeps deals moving in order, or switch to all-at-once so everyone can sign the moment they're invited.",
   "landing.feat8.link": "Read the docs",
+  "landing.feat9.title": "Document verification",
+  "landing.feat9.body": "Anyone with a finished document — not just the sender or signers — can confirm it was really completed through Docracy, free, no account needed.",
+  "landing.feat9.link": "Verify a document",
   "landing.aiTitle": "AI tools, and an MCP connector for your AI assistant",
   "landing.aiSub": "Beyond the free chain-signing flow above, a paid account adds AI that does the busywork and a connector so Claude, ChatGPT, Grok, or Perplexity can check status and search your documents directly from chat.",
   "landing.ai1.title": "Auto-detect fields",
@@ -820,6 +825,14 @@ const en: Messages = {
     " — NDAs, offer letters, freelance agreements, leases, and more — with fields already placed. Pick one, fill in the bracketed details, and send it the same way as an uploaded PDF.",
   "docs.templatesFree.link": "{{count}} ready-to-use templates",
   "docs.templatesFree.title": "Free templates",
+  "docs.verification.body1":
+    "Every document Docracy completes is fingerprinted with a SHA-256 hash of its exact final bytes, and that fingerprint is kept on record indefinitely — even after the document itself is deleted at the end of its retention window. Anyone with the finished PDF, or the certificate's QR code, can run",
+  "docs.verification.body2":
+    "to confirm it matches an untouched, genuinely-completed document — free, with no account needed. Uploaded files are hashed in the browser and never sent to Docracy; only the resulting fingerprint is checked.",
+  "docs.verification.body3":
+    "This confirms the document's content and completion date — not the signer's identity. Docracy's default signature is a Simple Electronic Signature (SES), which isn't identity-verified.",
+  "docs.verification.link": "Verify a document",
+  "docs.verification.title": "Verifying a completed document (free)",
   "docs.title": "Documentation",
   "feature.problem": "The problem",
   "feature.solution": "The Docracy way",
