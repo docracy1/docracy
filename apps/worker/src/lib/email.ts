@@ -633,6 +633,7 @@ export async function sendCompletionEmails(
   env: Env,
   doc: DocState,
   finalPdf: Uint8Array,
+  finalPdfSha256: string,
   certificatePdf?: Uint8Array
 ): Promise<void> {
   const locale: Locale = doc.locale ?? "en";
@@ -659,6 +660,17 @@ export async function sendCompletionEmails(
       Sent with Docracy — free e-signatures for simple agreements.
     </p>
     ${ctaButton(`${env.PUBLIC_APP_URL}/try`, "Send your own free")}`;
+  const verifyUrl = `${env.PUBLIC_APP_URL}/verify?hash=${finalPdfSha256}`;
+  const verifyLine =
+    locale === "es"
+      ? `<p style="margin:12px 0 0 0;font-size:12px;color:${MUTED};line-height:1.5;">
+      Cualquiera puede confirmar que este documento se completó a través de Docracy en
+      <a href="${verifyUrl}" style="color:${MUTED};">docracy.io/verify</a>, sin necesidad de una cuenta.
+    </p>`
+      : `<p style="margin:12px 0 0 0;font-size:12px;color:${MUTED};line-height:1.5;">
+      Anyone can confirm this document was completed through Docracy at
+      <a href="${verifyUrl}" style="color:${MUTED};">docracy.io/verify</a> — no account needed.
+    </p>`;
   const body =
     locale === "es"
       ? `
@@ -667,6 +679,7 @@ export async function sendCompletionEmails(
       El documento firmado, junto con un certificado de finalización, está adjunto.
     </p>
     <p style="margin:0;font-size:13px;color:${MUTED};line-height:1.5;">${statusLines(doc, locale)}</p>
+    ${verifyLine}
     ${viralCta}
     ${signOff(locale)}
   `
@@ -676,6 +689,7 @@ export async function sendCompletionEmails(
       The signed document, including a certificate of completion, is attached.
     </p>
     <p style="margin:0;font-size:13px;color:${MUTED};line-height:1.5;">${statusLines(doc, locale)}</p>
+    ${verifyLine}
     ${viralCta}
     ${signOff(locale)}
   `;

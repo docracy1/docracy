@@ -144,6 +144,10 @@ const INK = rgb(0.1, 0.1, 0.12);
 /** Matches the Docracy seal mark (#2F7ED8). */
 const BRAND = rgb(47 / 255, 126 / 255, 216 / 255);
 const FOOTER_INK = rgb(0.45, 0.45, 0.48);
+/** Hardcoded rather than threaded through from Env — this file has no access to PUBLIC_APP_URL,
+ *  and the certificate is a fixed artifact regardless of which environment (prod/staging)
+ *  generated it, so pointing every certificate at the canonical production domain is correct. */
+const VERIFY_BASE_URL = "https://docracy.io/verify";
 
 /** Bottom safe zone for the per-page audit strip — keep clear of typical signature fields. */
 const FOOTER_BOTTOM = 8;
@@ -562,17 +566,19 @@ export async function generateCertificate(doc: DocState, finalPdfSha256: string)
       { x: cardX + pad, y: cy, size: 7.5, font, color: MUTED }
     );
 
-    // Verification string is a manual cross-reference (doc + signer + hash prefix) — Docracy has
-    // no public "scan to verify" lookup page today, so this deliberately isn't a URL.
+    // Links to the public verification page (docracy.io/verify), which looks up this exact hash
+    // in a record that deliberately outlives the source document's own retention window — see
+    // lib/verification.ts. Same URL on every signer's card since verification is per-document,
+    // not per-signer; the QR is per-card purely to match the reference layout's per-signer seal.
     drawQrCode(
       page,
-      `docracy:${doc.docId}:s${signer.order}:${finalPdfSha256.slice(0, 16)}`,
+      `${VERIFY_BASE_URL}?hash=${finalPdfSha256}`,
       cardX + cardWidth - pad - qrSize,
       cardY + pad,
       qrSize,
       INK
     );
-    page.drawText("Hash ref", { x: cardX + cardWidth - pad - qrSize, y: cardY + pad - 8, size: 6, font, color: MUTED });
+    page.drawText("Scan to verify", { x: cardX + cardWidth - pad - qrSize - 6, y: cardY + pad - 8, size: 6, font, color: MUTED });
   });
 
   const cardRows = Math.ceil(signers.length / 2);

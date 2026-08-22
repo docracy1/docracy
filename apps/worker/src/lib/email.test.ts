@@ -171,7 +171,7 @@ describe("emailShell branding — the 3 templates that used to bypass it", () =>
     });
     const finalPdf = await makePdfWithPages(1);
 
-    await sendCompletionEmails(env, makeDoc("Anna"), finalPdf);
+    await sendCompletionEmails(env, makeDoc("Anna"), finalPdf, "deadbeef");
 
     expect(bodies[0]).toContain("docracy-wordmark.png");
   });
@@ -186,7 +186,7 @@ describe("sendCompletionEmails", () => {
     const finalPdf = await makePdfWithPages(2);
     const certificatePdf = await makePdfWithPages(1);
 
-    await sendCompletionEmails(env, makeDoc("Anna"), finalPdf, certificatePdf);
+    await sendCompletionEmails(env, makeDoc("Anna"), finalPdf, "deadbeef", certificatePdf);
 
     const match = capture.logged().match(/combined PDF attached, (\d+) bytes/);
     expect(match).toBeTruthy();
@@ -199,7 +199,7 @@ describe("sendCompletionEmails", () => {
     const capture = captureDevEmailLog();
     const finalPdf = await makePdfWithPages(2);
 
-    await sendCompletionEmails(env, makeDoc("Anna"), finalPdf);
+    await sendCompletionEmails(env, makeDoc("Anna"), finalPdf, "deadbeef");
 
     expect(capture.logged()).toContain(`combined PDF attached, ${finalPdf.byteLength} bytes`);
   });
@@ -219,7 +219,7 @@ describe("sendCompletionEmails", () => {
     const finalPdf = await makePdfWithPages(1);
     const doc = { ...makeDoc("Anna"), preparerEmail: "preparer@example.com" };
 
-    await sendCompletionEmails(env, doc, finalPdf);
+    await sendCompletionEmails(env, doc, finalPdf, "deadbeef");
 
     expect(recipients).toContain("preparer@example.com");
     expect(subjects).toContain("Everyone has signed — your document is ready");
@@ -238,7 +238,7 @@ describe("sendCompletionEmails", () => {
     const finalPdf = await makePdfWithPages(1);
     const doc = { ...makeDoc("Anna"), preparerEmail: "victim@example.com" };
 
-    await sendCompletionEmails(env, doc, finalPdf);
+    await sendCompletionEmails(env, doc, finalPdf, "deadbeef");
 
     expect(recipients.filter((r) => r === "victim@example.com")).toHaveLength(1);
   });

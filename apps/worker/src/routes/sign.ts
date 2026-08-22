@@ -19,6 +19,7 @@ import {
 import { recordViewedOnce, indexSignerSigned, indexInviteSent, indexCompleted, indexVoided } from "../lib/index-d1";
 import { checkTokenAccessRateLimit, checkPinAttemptRateLimit } from "../lib/ratelimit";
 import { sha256Hex } from "../lib/hash";
+import { recordVerification } from "../lib/verification";
 import { requestTimestamp } from "../lib/timestamp";
 import { verifyPin, issueUnlockToken, verifyUnlockToken } from "../lib/signUnlock";
 import { deliverWebhookEvent } from "../lib/webhooks";
@@ -760,6 +761,13 @@ sign.post("/sign/:token", async (c) => {
       throw err;
     }
     const finalHash = await sha256Hex(finalBytes);
+    // Independent of putDoc below — this record deliberately outlives the document itself (see
+    // lib/verification.ts) so /verify keeps working after the source document's retention TTL
+    // has passed and deleted the rest of this doc's state.
+    await recordVerification(c.env, finalHash, {
+      signerCount: freshDoc.signers.length,
+      completedAt: freshDoc.completedAt,
+    });
 
     events.push({
       type: "completed",
@@ -796,7 +804,7 @@ sign.post("/sign/:token", async (c) => {
     await c.env.DOCRACY_DOCS.put(`docs/${freshDoc.docId}/certificate.pdf`, certificateBytes);
 
     await putDoc(c.env, freshDoc);
-    await sendCompletionEmails(c.env, freshDoc, finalBytes, certificateBytes);
+    await sendCompletionEmails(c.env, freshDoc, finalBytes, finalHash, certificateBytes);
 
     if (freshDoc.accountId) {
       indexNonFatal(c.executionCtx, freshDoc.docId, "completed", indexCompleted(c.env, freshDoc));
