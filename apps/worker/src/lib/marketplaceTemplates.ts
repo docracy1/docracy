@@ -13,6 +13,14 @@ export interface MarketplaceTemplateSummary {
   rejectionReason: string | null;
   submittedAt: string;
   reviewedAt: string | null;
+  /** Same optional LLM/ChatGPT-optimization fields as FreeTemplate (freeTemplates.ts) — see the
+   *  0025 migration's comment. Absent on most human submissions; set by the automated weekly
+   *  content routine. */
+  definition: string | null;
+  keyClauses: string[] | null;
+  fillInFields: string[] | null;
+  legalSummary: string | null;
+  chatgptPrompts: string[] | null;
 }
 
 interface MarketplaceTemplateRow {
@@ -31,6 +39,11 @@ interface MarketplaceTemplateRow {
   submitted_at: string;
   reviewed_at: string | null;
   reviewed_by: string | null;
+  definition: string | null;
+  key_clauses: string | null;
+  fill_in_fields: string | null;
+  legal_summary: string | null;
+  chatgpt_prompts: string | null;
 }
 
 function rowToSummary(row: MarketplaceTemplateRow): MarketplaceTemplateSummary {
@@ -46,6 +59,11 @@ function rowToSummary(row: MarketplaceTemplateRow): MarketplaceTemplateSummary {
     rejectionReason: row.rejection_reason,
     submittedAt: row.submitted_at,
     reviewedAt: row.reviewed_at,
+    definition: row.definition,
+    keyClauses: row.key_clauses ? JSON.parse(row.key_clauses) : null,
+    fillInFields: row.fill_in_fields ? JSON.parse(row.fill_in_fields) : null,
+    legalSummary: row.legal_summary,
+    chatgptPrompts: row.chatgpt_prompts ? JSON.parse(row.chatgpt_prompts) : null,
   };
 }
 
@@ -96,6 +114,11 @@ export async function submitTemplate(
     pageCount: number;
     fields: DocField[];
     pdfBytes: Uint8Array;
+    definition?: string | null;
+    keyClauses?: string[] | null;
+    fillInFields?: string[] | null;
+    legalSummary?: string | null;
+    chatgptPrompts?: string[] | null;
   }
 ): Promise<{ ok: true; id: string; slug: string } | { ok: false; error: string }> {
   // Anonymous submitters have no account to cap by — the route layer enforces a per-IP rate
@@ -114,8 +137,9 @@ export async function submitTemplate(
   await db
     .prepare(
       `INSERT INTO marketplace_templates
-        (id, account_id, source_template_id, slug, title, category, description, signer_count, page_count, fields, status, submitted_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?)`
+        (id, account_id, source_template_id, slug, title, category, description, signer_count, page_count, fields,
+         status, submitted_at, definition, key_clauses, fill_in_fields, legal_summary, chatgpt_prompts)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?, ?, ?, ?, ?)`
     )
     .bind(
       id,
@@ -128,7 +152,12 @@ export async function submitTemplate(
       input.signerCount,
       input.pageCount,
       JSON.stringify(input.fields),
-      new Date().toISOString()
+      new Date().toISOString(),
+      input.definition ?? null,
+      input.keyClauses ? JSON.stringify(input.keyClauses) : null,
+      input.fillInFields ? JSON.stringify(input.fillInFields) : null,
+      input.legalSummary ?? null,
+      input.chatgptPrompts ? JSON.stringify(input.chatgptPrompts) : null
     )
     .run();
   await env.DOCRACY_DOCS.put(r2Key(id), input.pdfBytes);

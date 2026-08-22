@@ -204,6 +204,11 @@ marketplacePublic.get("/:slug", async (c) => {
     signerCount: result.summary.signerCount,
     fields: result.fields,
     pdfBase64: bytesToBase64(result.pdfBytes),
+    definition: result.summary.definition,
+    keyClauses: result.summary.keyClauses,
+    fillInFields: result.summary.fillInFields,
+    legalSummary: result.summary.legalSummary,
+    chatgptPrompts: result.summary.chatgptPrompts,
   });
 });
 

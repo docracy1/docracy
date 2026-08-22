@@ -10,10 +10,93 @@ import { apiUrl, fetchMarketplaceTemplate, type MarketplaceTemplateDetail } from
 import TemplateThumbnail from "../components/TemplateThumbnail";
 import TrustSection from "../components/TrustSection";
 
+/** The 4 optional LLM/ChatGPT-optimization sections (key clauses, fill-in fields, legal summary,
+ *  suggested prompts) — shared between the static Docracy-authored branch and the community
+ *  (Marketplace) branch below, since a template approved through admin review now carries the
+ *  same fields (see the 0025 migration). Each section renders only when its field is present. */
+function SeoTemplateSections({
+  keyClauses,
+  fillInFields,
+  legalSummary,
+  chatgptPrompts,
+}: {
+  keyClauses?: string[] | null;
+  fillInFields?: string[] | null;
+  legalSummary?: string | null;
+  chatgptPrompts?: string[] | null;
+}) {
+  const t = useT();
+  return (
+    <>
+      {!!keyClauses?.length && (
+        <div className="card" style={{ marginTop: 16 }}>
+          <h3 style={{ marginTop: 0 }}>{t("tpl.detail.keyClausesTitle")}</h3>
+          <ul style={{ margin: 0, paddingLeft: 20 }}>
+            {keyClauses.map((clause, i) => (
+              <li key={i}>{clause}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {!!fillInFields?.length && (
+        <div className="card" style={{ marginTop: 16 }}>
+          <h3 style={{ marginTop: 0 }}>{t("tpl.detail.fillInTitle")}</h3>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            {fillInFields.map((field, i) => (
+              <code
+                key={i}
+                style={{
+                  fontSize: 13,
+                  padding: "4px 10px",
+                  borderRadius: 6,
+                  background: "var(--surface-2, rgba(127,127,127,0.12))",
+                }}
+              >
+                {field}
+              </code>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {legalSummary && (
+        <div className="card" style={{ marginTop: 16 }}>
+          <h3 style={{ marginTop: 0 }}>{t("tpl.detail.legalSummaryTitle")}</h3>
+          <p style={{ margin: 0 }}>{legalSummary}</p>
+        </div>
+      )}
+
+      {!!chatgptPrompts?.length && (
+        <div style={{ marginTop: 32 }}>
+          <h2 style={{ fontSize: 19 }}>{t("tpl.detail.promptsTitle")}</h2>
+          <p style={{ fontSize: 13, color: "var(--mute)" }}>{t("tpl.detail.promptsIntro")}</p>
+          {chatgptPrompts.map((prompt, i) => (
+            <p
+              key={i}
+              style={{
+                fontSize: 14,
+                fontStyle: "italic",
+                padding: "10px 14px",
+                borderRadius: 8,
+                background: "var(--surface-2, rgba(127,127,127,0.08))",
+                marginTop: 8,
+              }}
+            >
+              “{prompt}”
+            </p>
+          ))}
+        </div>
+      )}
+    </>
+  );
+}
+
 /** A community (Marketplace-submitted) template — fetched from the API rather than the static
  *  bundle. Deliberately its own, simpler render branch below: no attorney-review disclaimer (that
  *  claim is only true for Docracy's own templates) and no per-slug i18n-catalog FAQ copy (that
- *  only exists for the hand-authored static set). */
+ *  only exists for the hand-authored static set). Templates approved through the Marketplace
+ *  review queue can still carry the same SEO sections as a static one — see SeoTemplateSections. */
 function CommunityTemplateDetail({ slug }: { slug: string }) {
   const t = useT();
   const { locale } = useI18n();
@@ -86,6 +169,13 @@ function CommunityTemplateDetail({ slug }: { slug: string }) {
           <p style={{ margin: 0 }}>{template.description}</p>
         </div>
       )}
+
+      <SeoTemplateSections
+        keyClauses={template.keyClauses}
+        fillInFields={template.fillInFields}
+        legalSummary={template.legalSummary}
+        chatgptPrompts={template.chatgptPrompts}
+      />
 
       <Link
         to={ctaTo}
@@ -193,44 +283,11 @@ export default function FreeTemplateDetail() {
         <p style={{ fontSize: 12, color: "var(--mute)", marginBottom: 0 }}>{t("tpl.detail.disclaimer")}</p>
       </div>
 
-      {!!template.keyClauses?.length && (
-        <div className="card" style={{ marginTop: 16 }}>
-          <h3 style={{ marginTop: 0 }}>{t("tpl.detail.keyClausesTitle")}</h3>
-          <ul style={{ margin: 0, paddingLeft: 20 }}>
-            {template.keyClauses.map((clause, i) => (
-              <li key={i}>{clause}</li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {!!template.fillInFields?.length && (
-        <div className="card" style={{ marginTop: 16 }}>
-          <h3 style={{ marginTop: 0 }}>{t("tpl.detail.fillInTitle")}</h3>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-            {template.fillInFields.map((field, i) => (
-              <code
-                key={i}
-                style={{
-                  fontSize: 13,
-                  padding: "4px 10px",
-                  borderRadius: 6,
-                  background: "var(--surface-2, rgba(127,127,127,0.12))",
-                }}
-              >
-                {field}
-              </code>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {template.legalSummary && (
-        <div className="card" style={{ marginTop: 16 }}>
-          <h3 style={{ marginTop: 0 }}>{t("tpl.detail.legalSummaryTitle")}</h3>
-          <p style={{ margin: 0 }}>{template.legalSummary}</p>
-        </div>
-      )}
+      <SeoTemplateSections
+        keyClauses={template.keyClauses}
+        fillInFields={template.fillInFields}
+        legalSummary={template.legalSummary}
+      />
 
       <Link
         to={ctaTo}
@@ -256,27 +313,7 @@ export default function FreeTemplateDetail() {
         </details>
       ))}
 
-      {!!template.chatgptPrompts?.length && (
-        <div style={{ marginTop: 32 }}>
-          <h2 style={{ fontSize: 19 }}>{t("tpl.detail.promptsTitle")}</h2>
-          <p style={{ fontSize: 13, color: "var(--mute)" }}>{t("tpl.detail.promptsIntro")}</p>
-          {template.chatgptPrompts.map((prompt, i) => (
-            <p
-              key={i}
-              style={{
-                fontSize: 14,
-                fontStyle: "italic",
-                padding: "10px 14px",
-                borderRadius: 8,
-                background: "var(--surface-2, rgba(127,127,127,0.08))",
-                marginTop: 8,
-              }}
-            >
-              “{prompt}”
-            </p>
-          ))}
-        </div>
-      )}
+      <SeoTemplateSections chatgptPrompts={template.chatgptPrompts} />
 
       <TrustSection />
 

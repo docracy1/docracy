@@ -447,6 +447,17 @@ export const requireAdminAccount: MiddlewareHandler<AuthEnv> = async (c, next) =
   await next();
 };
 
+/** Gates /api/automation/* (routes/automation.ts) — a headless caller (the scheduled weekly
+ *  content routine) has no way to hold an admin session cookie, so it authenticates with a
+ *  single static bearer token instead. See AUTOMATION_API_TOKEN's doc comment in
+ *  packages/shared/src/types.ts for why this is safe to keep narrow rather than session-based. */
+export const requireAutomationToken: MiddlewareHandler<{ Bindings: Env }> = async (c, next) => {
+  if (!c.env.AUTOMATION_API_TOKEN) return c.json({ error: "Not configured on this deployment yet." }, 501);
+  const bearer = c.req.header("Authorization")?.match(/^Bearer (.+)$/)?.[1];
+  if (bearer !== c.env.AUTOMATION_API_TOKEN) return c.json({ error: "Invalid or missing token" }, 401);
+  await next();
+};
+
 const GOOGLE_LOGIN_STATE_TTL_SECONDS = 10 * 60;
 
 interface GoogleLoginStateRecord {

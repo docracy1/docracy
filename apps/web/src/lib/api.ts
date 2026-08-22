@@ -493,6 +493,11 @@ export interface MarketplaceTemplateDetail {
   signerCount: number;
   fields: DocField[];
   pdfBase64: string;
+  definition: string | null;
+  keyClauses: string[] | null;
+  fillInFields: string[] | null;
+  legalSummary: string | null;
+  chatgptPrompts: string[] | null;
 }
 
 export async function fetchMarketplaceTemplates(category?: string): Promise<{ templates: MarketplaceSubmission[] }> {

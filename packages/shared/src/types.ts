@@ -278,6 +278,13 @@ export interface Env {
    *  instead of waiting on a magic-link email — set with `wrangler secret put ADMIN_PASSWORD`,
    *  never committed to wrangler.toml. Absent means that route always 501s. */
   ADMIN_PASSWORD?: string;
+  /** Bearer token for the small set of /api/automation/* routes (routes/automation.ts) used by
+   *  the scheduled weekly content-generation routine — a headless caller with no way to hold an
+   *  admin session cookie. Deliberately narrow: these routes can only ever create a draft blog
+   *  post or a pending Marketplace submission, never publish/approve/delete anything, so a leaked
+   *  token's worst case is spam sitting invisibly in a review queue. Set with `wrangler secret put
+   *  AUTOMATION_API_TOKEN`. Absent means those routes always 501. */
+  AUTOMATION_API_TOKEN?: string;
   /** Cloudflare account id — needed only for the Analytics Engine SQL HTTP API (see
    *  lib/analyticsQuery.ts). Not secret, just an identifier. */
   CF_ACCOUNT_ID?: string;
