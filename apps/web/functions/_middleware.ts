@@ -3,8 +3,13 @@
 // this is meant to measure (GPTBot, ClaudeBot, PerplexityBot, CCBot, etc.) never execute
 // JavaScript and would otherwise never be counted at all. Fire-and-forget via ctx.waitUntil so a
 // slow/failing analytics call never delays the actual page response.
+import { FEATURE_PAGES, ALTERNATIVE_PAGES } from "../src/lib/marketingPages";
+
 const WORKER_URL = "https://api.docracy.io";
 
+// Fixed top-level routes with no shared prefix to pattern-match on, plus the handful of bilingual
+// (/es/...) aliases for pages that have a translated slug — those can't be derived from
+// marketingPages.ts since it only stores the canonical English slug per entry.
 const TRACKED_ROUTES = new Set([
   "/",
   "/es",
@@ -25,36 +30,31 @@ const TRACKED_ROUTES = new Set([
   "/es/documentacion",
   "/trust",
   "/dpa",
-  "/simple-agreements",
-  "/nda-signing",
-  "/es/firma-de-nda",
-  "/client-contracts",
-  "/es/contratos-con-clientes",
-  "/onboarding-documents",
-  "/vendor-agreements",
-  "/compliance-documentation",
-  "/eversign-alternative",
-  "/es/alternativa-a-eversign",
-  "/docusign-alternative",
-  "/es/alternativa-a-docusign",
-  "/hellosign-alternative",
-  "/es/alternativa-a-hellosign",
-  "/pandadoc-alternative",
-  "/es/alternativa-a-pandadoc",
-  "/adobe-sign-alternative",
-  "/es/alternativa-a-adobe-sign",
+  "/verify",
   "/what-is-an-nda",
   "/are-electronic-signatures-legal",
-  "/document-verification",
-  "/verify",
+  "/es/firma-de-nda",
+  "/es/contratos-con-clientes",
+  "/es/alternativa-a-eversign",
+  "/es/alternativa-a-docusign",
+  "/es/alternativa-a-hellosign",
+  "/es/alternativa-a-pandadoc",
+  "/es/alternativa-a-adobe-sign",
+  // Every FeaturePage/AlternativePage slug is a bare "/<slug>" route (see main.tsx) — derived
+  // here so a new marketingPages.ts entry is tracked automatically, with no second file to edit.
+  ...FEATURE_PAGES.map((p) => `/${p.slug}`),
+  ...ALTERNATIVE_PAGES.map((p) => `/${p.slug}`),
 ]);
 
 // Blog posts are published via the self-serve CMS (no deploy needed), so their slugs can't be
-// enumerated in a fixed set the way the routes above are — matched by prefix instead. Free
-// templates are matched by prefix too: this used to be a hardcoded per-slug list, which quietly
-// fell out of sync with the actual template library (round 2's 6 templates were never added to
-// it). The worker's own isTrackedRoute (routes/analytics.ts) applies the identical rule as a
-// second gate.
+// enumerated in a fixed set the way the routes above are — matched by prefix instead, like
+// PartnerPage (/for/*), IndustryPage (/industry/*), and ImportGuidePage (/import-from-*), whose
+// routes are also generated from a slug list at render time rather than listed individually.
+// Free templates used to be a hardcoded per-slug list, which quietly fell out of sync with the
+// actual template library (round 2's 6 templates were never added to it) — prefix-matched now
+// for the same reason. The worker's own isTrackedRoute (routes/analytics.ts) is a second gate on
+// the same public endpoint; it can't import from this app, so its literal TRACKED_ROUTES list
+// must be kept in sync by hand whenever a route here is added outside these prefix patterns.
 function isTrackedRoute(pathname: string): boolean {
   // Static files served from these same path prefixes (e.g. /free-templates/mutual-nda.pdf,
   // fetched client-side by TemplateThumbnail to render a preview) must never count as a page
@@ -65,7 +65,10 @@ function isTrackedRoute(pathname: string): boolean {
     pathname === "/blog" ||
     pathname.startsWith("/blog/") ||
     pathname.startsWith("/free-templates/") ||
-    pathname.startsWith("/es/plantillas-gratis/")
+    pathname.startsWith("/es/plantillas-gratis/") ||
+    pathname.startsWith("/for/") ||
+    pathname.startsWith("/industry/") ||
+    pathname.startsWith("/import-from-")
   );
 }
 

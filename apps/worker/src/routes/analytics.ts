@@ -7,8 +7,14 @@ import type { FunnelEvent } from "../lib/analytics";
 import type { Env } from "@docracy/shared";
 import type { Context } from "hono";
 
-// Core marketing + prerendered SEO landings (lib/marketingPages.ts). SEO pages were previously
-// omitted, so search/social traffic to /nda-signing or /docusign-alternative produced no page_view.
+// Core marketing + prerendered SEO landings (lib/marketingPages.ts, apps/web/src). This worker
+// can't import that file (separate app), so this list is a hand-maintained mirror of
+// apps/web/functions/_middleware.ts's TRACKED_ROUTES — which derives its own FeaturePage/
+// AlternativePage entries from marketingPages.ts directly. Whenever a new FeaturePage or
+// AlternativePage slug is added there, add it here too, or its page_view will 400 at this second
+// gate even though the client-side gate already let it through. Routes generated from a slug list
+// at render time (PartnerPage /for/*, IndustryPage /industry/*, ImportGuidePage /import-from-*)
+// are prefix-matched below instead, same as blog/free-templates — no per-slug entry needed.
 const TRACKED_ROUTES = new Set([
   "/",
   "/es",
@@ -29,28 +35,52 @@ const TRACKED_ROUTES = new Set([
   "/es/documentacion",
   "/trust",
   "/dpa",
+  "/verify",
+  "/what-is-an-nda",
+  "/are-electronic-signatures-legal",
+  "/es/firma-de-nda",
+  "/es/contratos-con-clientes",
+  "/es/alternativa-a-eversign",
+  "/es/alternativa-a-docusign",
+  "/es/alternativa-a-hellosign",
+  "/es/alternativa-a-pandadoc",
+  "/es/alternativa-a-adobe-sign",
+  // FeaturePage slugs
   "/simple-agreements",
   "/nda-signing",
-  "/es/firma-de-nda",
   "/client-contracts",
-  "/es/contratos-con-clientes",
   "/onboarding-documents",
   "/vendor-agreements",
   "/compliance-documentation",
-  "/eversign-alternative",
-  "/es/alternativa-a-eversign",
-  "/docusign-alternative",
-  "/es/alternativa-a-docusign",
-  "/hellosign-alternative",
-  "/es/alternativa-a-hellosign",
-  "/pandadoc-alternative",
-  "/es/alternativa-a-pandadoc",
-  "/adobe-sign-alternative",
-  "/es/alternativa-a-adobe-sign",
-  "/what-is-an-nda",
-  "/are-electronic-signatures-legal",
+  "/whatsapp-signing",
+  "/advanced-electronic-signature",
+  "/artist-contracts",
+  "/creative-licensing",
+  "/music-collaboration-contracts",
+  "/freelancer-contracts",
+  "/web-design-contract",
+  "/developer-contracts",
+  "/llc-legal-templates",
+  "/startup-legal-templates",
+  "/founder-agreement",
+  "/seo-agency-contract",
+  "/marketing-service-agreement",
+  "/education-forms",
+  "/student-agreements",
+  "/import-google-doc",
+  "/anonymous-signing",
+  "/quick-sign",
+  "/upload-and-sign",
+  "/simple-signing",
   "/document-verification",
-  "/verify",
+  // AlternativePage slugs
+  "/eversign-alternative",
+  "/onlinesignature-alternative",
+  "/docusign-alternative",
+  "/hellosign-alternative",
+  "/pandadoc-alternative",
+  "/adobe-sign-alternative",
+  "/contractbook-alternative",
 ]);
 
 function isTrackedRoute(route: string): boolean {
@@ -63,7 +93,10 @@ function isTrackedRoute(route: string): boolean {
     route === "/blog" ||
     route.startsWith("/blog/") ||
     route.startsWith("/free-templates/") ||
-    route.startsWith("/es/plantillas-gratis/")
+    route.startsWith("/es/plantillas-gratis/") ||
+    route.startsWith("/for/") ||
+    route.startsWith("/industry/") ||
+    route.startsWith("/import-from-")
   );
 }
 
