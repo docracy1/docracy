@@ -45,6 +45,8 @@ const TRACKED_ROUTES = new Set([
   "/es/alternativa-a-adobe-sign",
   "/what-is-an-nda",
   "/are-electronic-signatures-legal",
+  "/document-verification",
+  "/verify",
 ]);
 
 // Blog posts are published via the self-serve CMS (no deploy needed), so their slugs can't be

@@ -49,6 +49,8 @@ const TRACKED_ROUTES = new Set([
   "/es/alternativa-a-adobe-sign",
   "/what-is-an-nda",
   "/are-electronic-signatures-legal",
+  "/document-verification",
+  "/verify",
 ]);
 
 function isTrackedRoute(route: string): boolean {
