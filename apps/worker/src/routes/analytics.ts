@@ -169,6 +169,7 @@ analytics.post("/pageview", async (c) => {
 });
 
 const CLIENT_TRACKABLE_EVENTS = new Set<FunnelEvent>([
+  "page_view_js",
   "document_upload_started",
   "document_uploaded",
   "fields_added",

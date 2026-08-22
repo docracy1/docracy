@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { track } from "./track";
 
 const SITE = "https://docracy.io";
 
@@ -33,6 +34,13 @@ export function usePageMeta(title: string, description: string, options: PageMet
   const { canonicalPath, alternates } = options;
 
   useEffect(() => {
+    // Confirms this hit actually ran a browser's JS engine — paired with the server-side
+    // `page_view` the edge middleware writes for every request (bots included, by design, so AI
+    // crawlers still get counted). Comparing the two counts per route/day is the same pattern
+    // already used for landingpage_loaded vs. landingpage_cta_clicked; a route where this trails
+    // page_view by a lot is either heavy non-JS bot traffic or a lot of JS-disabled visitors.
+    track("page_view_js");
+
     const prevTitle = document.title;
     const meta = document.querySelector('meta[name="description"]');
     const prevDescription = meta?.getAttribute("content") ?? null;

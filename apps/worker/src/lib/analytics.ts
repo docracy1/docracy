@@ -29,6 +29,7 @@ export type FunnelEvent =
   | "template_completed"
   // Traffic
   | "page_view"
+  | "page_view_js"
   | "landingpage_loaded"
   | "landingpage_cta_clicked"
   | "referral_source_detected"

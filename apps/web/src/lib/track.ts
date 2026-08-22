@@ -5,6 +5,7 @@ import { attributionLabel } from "./attribution";
  *  CLIENT_TRACKABLE_EVENTS in apps/worker/src/routes/analytics.ts (that allow-list is the one
  *  that actually matters; this is just so callers here get autocomplete/typo-checking). */
 export type ClientTrackableEvent =
+  | "page_view_js"
   | "document_upload_started"
   | "document_uploaded"
   | "fields_added"

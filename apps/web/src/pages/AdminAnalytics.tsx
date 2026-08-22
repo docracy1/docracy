@@ -90,6 +90,7 @@ const TRAFFIC_STEPS: FunnelStepDef[] = [
   { event: "blog_article_loaded", label: "Blog article loaded" },
   { event: "blog_cta_clicked", label: "Blog CTA clicked" },
   { event: "page_view", label: "Page viewed" },
+  { event: "page_view_js", label: "— confirmed by JS (real browser)" },
 ];
 
 /** The single "north star" event for a funnel — called out with a badge in the card header and
@@ -1904,6 +1905,7 @@ export default function AdminAnalytics() {
                   {section === "traffic" && (
                     <FunnelCard
                       title="Traffic events"
+                      note="The last row's “% of previous” is the JS-confirmation rate: page_view fires server-side for every request (bots included, on purpose); page_view_js only fires from a real browser executing our JS. A big gap between them on a given route means non-JS bot traffic or JS-disabled visitors."
                       steps={TRAFFIC_STEPS}
                       countKey="totalCount"
                       stepsByEvent={stepsByEvent}
