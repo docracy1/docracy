@@ -1,4 +1,5 @@
 import { PDFDocument, StandardFonts, degrees, rgb, type PDFFont, type PDFPage, type PDFImage, type RGB } from "pdf-lib";
+import qrcode from "qrcode-generator";
 import type { DocField, DocState } from "@docracy/shared";
 import { docracySealPngBytes } from "./docracySealPng";
 
@@ -350,6 +351,45 @@ function drawCircularSeal(
   });
 }
 
+/** Dashed rectangle border — used for the info box and per-signer cards, matching a common
+ *  signature-certificate convention of setting the "record" sections visually apart from the
+ *  document's normal content. pdf-lib has no native dash support on drawRectangle, so this draws
+ *  four dashed edges as separate lines. */
+function drawDashedRect(page: PDFPage, x: number, y: number, width: number, height: number, color: RGB) {
+  const dashArray = [3, 2];
+  const opts = { color, thickness: 0.75, dashArray };
+  page.drawLine({ start: { x, y: y + height }, end: { x: x + width, y: y + height }, ...opts });
+  page.drawLine({ start: { x, y }, end: { x: x + width, y }, ...opts });
+  page.drawLine({ start: { x, y }, end: { x, y: y + height }, ...opts });
+  page.drawLine({ start: { x: x + width, y }, end: { x: x + width, y: y + height }, ...opts });
+}
+
+/** Renders a QR code as filled squares (one per dark module) — pdf-lib has no image codec for
+ *  QR/barcode formats, but a QR code is just a boolean matrix, so this is drawn directly rather
+ *  than going through an image embed. Encodes a short verification string (doc ID, signer order,
+ *  and a hash prefix) rather than a URL — Docracy has no public document-lookup page today, so a
+ *  link would point nowhere; the encoded string is honest about being a manual cross-reference,
+ *  not a "scan to verify" web flow. */
+function drawQrCode(page: PDFPage, data: string, x: number, y: number, size: number, color: RGB) {
+  const qr = qrcode(0, "M");
+  qr.addData(data);
+  qr.make();
+  const moduleCount = qr.getModuleCount();
+  const cell = size / moduleCount;
+  for (let row = 0; row < moduleCount; row++) {
+    for (let col = 0; col < moduleCount; col++) {
+      if (!qr.isDark(row, col)) continue;
+      page.drawRectangle({
+        x: x + col * cell,
+        y: y + size - (row + 1) * cell,
+        width: cell,
+        height: cell,
+        color,
+      });
+    }
+  }
+}
+
 /**
  * A standalone one-page PDF documenting who signed, from where, when, and a hash of the final
  * signed document — deliberately separate from the signed PDF itself (not appended to it), so
@@ -363,37 +403,81 @@ export async function generateCertificate(doc: DocState, finalPdfSha256: string)
   const cert = await PDFDocument.create();
   const page = cert.addPage([612, 792]); // US Letter, points
   const font = await cert.embedFont(StandardFonts.Helvetica);
+  const italic = await cert.embedFont(StandardFonts.HelveticaOblique);
   const bold = await cert.embedFont(StandardFonts.HelveticaBold);
   const seal = await cert.embedPng(docracySealPngBytes());
+  const sealScaled = seal.scaleToFit(28, 28);
 
   const left = 56;
-  let y = 740;
+  const right = 556;
+  const contentWidth = right - left;
+  const events = doc.events ?? [];
+  const signers = [...doc.signers].sort((a, b) => a.order - b.order);
 
-  const write = (text: string, size: number, f: PDFFont, color = INK) => {
-    page.drawText(text, { x: left, y, size, font: f, color });
-    y -= size + 8;
+  // --- Header: brand mark + title + subtitle ---
+  let y = 736;
+  page.drawImage(seal, { x: left, y: y - sealScaled.height + 6, width: sealScaled.width, height: sealScaled.height });
+  page.drawText("DOCRACY", { x: left + sealScaled.width + 10, y: y - 16, size: 12, font: bold, color: BRAND });
+
+  y -= 40;
+  page.drawText("Signature Certificate", { x: left, y, size: 24, font: bold, color: INK });
+  y -= 20;
+  page.drawText("Technical record of this document's electronic signatures", { x: left, y, size: 11, font, color: MUTED });
+  y -= 26;
+
+  // --- Info box: what was signed, by/for whom, when ---
+  const infoBoxTop = y;
+  const infoBoxHeight = 74;
+  drawDashedRect(page, left, infoBoxTop - infoBoxHeight, contentWidth, infoBoxHeight, BRAND);
+  const col2X = left + contentWidth / 2 + 12;
+  const labelSize = 8.5;
+  const valueSize = 9;
+
+  const infoField = (x: number, labelY: number, label: string, value: string) => {
+    page.drawText(label, { x, y: labelY, size: labelSize, font: bold, color: INK });
+    page.drawText(value, { x, y: labelY - 12, size: valueSize, font, color: MUTED });
   };
+  const row1Y = infoBoxTop - 20;
+  const row2Y = infoBoxTop - 50;
+  infoField(left + 12, row1Y, "Certificate for document:", doc.title ?? `Document ${doc.docId}`);
+  infoField(col2X, row1Y, "Created by:", doc.preparerEmail ?? "Anonymous sender (no account)");
+  infoField(left + 12, row2Y, "Created on:", doc.completedAt ? new Date(doc.completedAt).toLocaleString() : "-");
+  infoField(
+    col2X,
+    row2Y,
+    "Delivered to:",
+    signers.length === 1 ? signers[0]!.email : `${signers.length} signers — see below`
+  );
 
-  write("Certificate of Completion", 16, bold);
-  write(`Document ID: ${doc.docId}`, 10, font, MUTED);
-  write(`Completed: ${doc.completedAt ? new Date(doc.completedAt).toLocaleString() : "-"}`, 10, font, MUTED);
-  y -= 6;
+  y = infoBoxTop - infoBoxHeight - 20;
+  page.drawText(
+    "This document was signed through Docracy's Simple Electronic Signature (SES) flow, aligned with the",
+    { x: left, y, size: 8, font: italic, color: MUTED }
+  );
+  y -= 10;
+  page.drawText(
+    "U.S. ESIGN Act, UETA, and EU eIDAS — not identity-verified, and not a Qualified Electronic Signature.",
+    { x: left, y, size: 8, font: italic, color: MUTED }
+  );
+  y -= 18;
 
-  // Seal row: Docracy brand + SES + ESIGN + UETA (no PDF/A, LTV, QES, or AES).
+  // --- Seal row: Docracy brand + SES + ESIGN + UETA (no PDF/A, LTV, QES, or AES) ---
+  // Must stay >= ~50: the UETA seal's two-line arc text ("Uniform Electronic" / "Transactions
+  // Act") collides with the center label at smaller radii — confirmed by rendering a real sample.
   const badgeSize = 52;
-  const gap = 18;
-  const brandSize = 44;
-  const rowWidth = brandSize + gap + badgeSize * 3 + gap * 2;
-  const rowLeft = left + Math.max(0, (500 - rowWidth) / 2);
+  const sealGap = 16;
+  const brandBadgeSize = 38;
+  const rowWidth = brandBadgeSize + sealGap + badgeSize * 3 + sealGap * 2;
+  const rowLeft = left + Math.max(0, (contentWidth - rowWidth) / 2);
   const badgeCy = y - badgeSize / 2;
 
-  const brandScaled = seal.scaleToFit(brandSize, brandSize);
-  const brandCx = rowLeft + brandSize / 2;
+  const brandRowScaled = seal.scaleToFit(brandBadgeSize, brandBadgeSize);
+  const brandCx = rowLeft + brandBadgeSize / 2;
   page.drawImage(seal, {
-    x: brandCx - brandScaled.width / 2,
-    y: badgeCy - brandScaled.height / 2,
-    width: brandScaled.width,
-    height: brandScaled.height,
+    x: brandCx - brandRowScaled.width / 2,
+    y: badgeCy - brandRowScaled.height / 2,
+    width: brandRowScaled.width,
+    height: brandRowScaled.height,
   });
 
   const lawSeals: { center: string; top: string; bottom?: string }[] = [
@@ -402,78 +486,160 @@ export async function generateCertificate(doc: DocState, finalPdfSha256: string)
     { center: "UETA", top: "Uniform Electronic", bottom: "Transactions Act" },
   ];
   lawSeals.forEach((spec, i) => {
-    const cx = rowLeft + brandSize + gap + badgeSize / 2 + i * (badgeSize + gap);
+    const cx = rowLeft + brandBadgeSize + sealGap + badgeSize / 2 + i * (badgeSize + sealGap);
     drawCircularSeal(page, cx, badgeCy, badgeSize, bold, spec.center, spec.top, spec.bottom);
   });
 
-  // Captions under each seal
-  const captionY = badgeCy - badgeSize / 2 - 12;
+  const captionY = badgeCy - badgeSize / 2 - 11;
   const captionSize = 6.5;
   const captions = ["Signed with Docracy", "eIDAS SES", "US ESIGN Act", "US UETA"];
   const centers = [
     brandCx,
-    ...lawSeals.map((_, i) => rowLeft + brandSize + gap + badgeSize / 2 + i * (badgeSize + gap)),
+    ...lawSeals.map((_, i) => rowLeft + brandBadgeSize + sealGap + badgeSize / 2 + i * (badgeSize + sealGap)),
   ];
   captions.forEach((label, i) => {
     const tw = font.widthOfTextAtSize(label, captionSize);
-    page.drawText(label, {
-      x: centers[i]! - tw / 2,
-      y: captionY,
-      size: captionSize,
+    page.drawText(label, { x: centers[i]! - tw / 2, y: captionY, size: captionSize, font, color: MUTED });
+  });
+
+  y = captionY - 20;
+  page.drawText("Aligns with eIDAS SES and US ESIGN & UETA for many business documents.", {
+    x: left,
+    y,
+    size: 8,
+    font,
+    color: MUTED,
+  });
+  y -= 10;
+  page.drawText("No identity verification · Not AES/QES · Not PDF/A or PAdES-LTV", {
+    x: left,
+    y,
+    size: 8,
+    font,
+    color: MUTED,
+  });
+  y -= 22;
+
+  // --- Signer cards: one dashed-border card per signer, 2 per row ---
+  page.drawText("Signers", { x: left, y, size: 13, font: bold, color: INK });
+  y -= 18;
+
+  const cardGap = 16;
+  const cardWidth = (contentWidth - cardGap) / 2;
+  const cardHeight = 92;
+  const qrSize = 34;
+
+  signers.forEach((signer, i) => {
+    const col = i % 2;
+    const row = Math.floor(i / 2);
+    const cardX = left + col * (cardWidth + cardGap);
+    const cardTop = y - row * (cardHeight + cardGap);
+    const cardY = cardTop - cardHeight;
+    drawDashedRect(page, cardX, cardY, cardWidth, cardHeight, BRAND);
+
+    const pad = 10;
+    let cy = cardTop - pad - 10;
+    page.drawText(`${signer.name}`, { x: cardX + pad, y: cy, size: 11, font: bold, color: INK });
+    cy -= 13;
+    page.drawText(signer.email, { x: cardX + pad, y: cy, size: 8, font, color: MUTED });
+    cy -= 14;
+
+    const cardSeal = seal.scaleToFit(18, 18);
+    page.drawImage(seal, {
+      x: cardX + cardWidth - pad - cardSeal.width,
+      y: cardTop - pad - cardSeal.height + 4,
+      width: cardSeal.width,
+      height: cardSeal.height,
+    });
+
+    page.drawText("Simple Electronic Signature", { x: cardX + pad, y: cy, size: 8.5, font: bold, color: BRAND });
+    cy -= 11;
+    const signedEvent = events.find((e) => e.type === "signed" && e.signerOrder === signer.order);
+    page.drawText(`Signer ID: ${doc.docId}-s${signer.order}`, { x: cardX + pad, y: cy, size: 7.5, font, color: MUTED });
+    cy -= 10;
+    page.drawText(
+      `Signed: ${signer.signedAt ? new Date(signer.signedAt).toLocaleString() : "-"}${signedEvent?.ip ? ` · IP ${signedEvent.ip}` : ""}`,
+      { x: cardX + pad, y: cy, size: 7.5, font, color: MUTED }
+    );
+
+    // Verification string is a manual cross-reference (doc + signer + hash prefix) — Docracy has
+    // no public "scan to verify" lookup page today, so this deliberately isn't a URL.
+    drawQrCode(
+      page,
+      `docracy:${doc.docId}:s${signer.order}:${finalPdfSha256.slice(0, 16)}`,
+      cardX + cardWidth - pad - qrSize,
+      cardY + pad,
+      qrSize,
+      INK
+    );
+    page.drawText("Hash ref", { x: cardX + cardWidth - pad - qrSize, y: cardY + pad - 8, size: 6, font, color: MUTED });
+  });
+
+  const cardRows = Math.ceil(signers.length / 2);
+  y -= cardRows * (cardHeight + cardGap) + 4;
+
+  // --- Footer: legal language + integrity hash + company info ---
+  page.drawLine({ start: { x: left, y }, end: { x: right, y }, thickness: 0.5, color: rgb(0.85, 0.85, 0.87) });
+  y -= 16;
+
+  page.drawText("Finalizing this document locks it — the signed PDF's contents cannot change without", {
+    x: left,
+    y,
+    size: 8.5,
+    font: bold,
+    color: INK,
+  });
+  y -= 11;
+  page.drawText("invalidating the hash below, which is how any later tampering would be detected.", {
+    x: left,
+    y,
+    size: 8.5,
+    font: bold,
+    color: INK,
+  });
+  y -= 16;
+
+  const legalLines = [
+    "Each signer confirmed their consent to sign electronically and the accuracy of the information used",
+    "to sign, per the event log Docracy retains for this document. Processed under Docracy's Terms of",
+    "Service (docracy.io/terms) and Privacy Policy (docracy.io/privacy). This signature is a Simple",
+    "Electronic Signature aligned with the US ESIGN Act, UETA, and EU eIDAS — Docracy is not a Qualified",
+    "Trust Service Provider and does not issue Qualified or Advanced Electronic Signatures. Documents are",
+    "retained only for a limited period; see docracy.io/trust for the current retention window.",
+  ];
+  for (const line of legalLines) {
+    page.drawText(line, { x: left, y, size: 7.5, font, color: MUTED });
+    y -= 10;
+  }
+  if (doc.timestampGenTime) {
+    page.drawText(`Trusted timestamp (RFC 3161, FreeTSA.org): ${new Date(doc.timestampGenTime).toLocaleString()}`, {
+      x: left,
+      y,
+      size: 7.5,
       font,
       color: MUTED,
     });
+    y -= 10;
+  }
+  y -= 6;
+
+  // Company info (left) + integrity hash (right) — footer split matches the sidebar convention on
+  // most signature-certificate templates: who operates this, and the technical proof, side by side.
+  const footerTop = y;
+  page.drawText("A service by docracy.io — free, no-signup electronic signatures", {
+    x: left,
+    y: footerTop,
+    size: 7.5,
+    font: bold,
+    color: INK,
   });
+  page.drawText("RELACON GmbH", { x: left, y: footerTop - 11, size: 7.5, font, color: MUTED });
+  page.drawText("Elisabethstraße 15/5b, 1010 Vienna, Austria", { x: left, y: footerTop - 21, size: 7.5, font, color: MUTED });
+  page.drawText("founder@docracy.io", { x: left, y: footerTop - 31, size: 7.5, font, color: MUTED });
 
-  y = captionY - 16;
-  write("Aligns with eIDAS SES and US ESIGN & UETA for many business documents.", 8, font, MUTED);
-  write("No identity verification · Not AES/QES · Not PDF/A or PAdES-LTV", 8, font, MUTED);
-  y -= 4;
-
-  write("What this certificate records", 13, bold);
-  write("HMAC-signed signing links (not guessable account passwords)", 9, font, MUTED);
-  write("Per-event audit trail: consent, sign, timestamp, IP, user-agent", 9, font, MUTED);
-  write("SHA-256 hash of the final signed PDF (integrity check)", 9, font, MUTED);
-  if (doc.timestampGenTime) {
-    write("Optional RFC 3161 trusted timestamp from a third-party TSA (when obtained)", 9, font, MUTED);
-  }
-  write("Short retention TTL — documents are deleted after the retention window", 9, font, MUTED);
-  write("Does not prove who physically signed — only what was signed and when", 9, font, MUTED);
-  y -= 6;
-
-  write("Signers", 13, bold);
-  const events = doc.events ?? [];
-  for (const signer of [...doc.signers].sort((a, b) => a.order - b.order)) {
-    const signedEvent = events.find((e) => e.type === "signed" && e.signerOrder === signer.order);
-    write(`${signer.order}. ${signer.name} <${signer.email}>`, 11, font);
-    write(
-      `   Signed ${signer.signedAt ? new Date(signer.signedAt).toLocaleString() : "-"} from IP ${signedEvent?.ip ?? "unknown"}`,
-      9,
-      font,
-      MUTED
-    );
-  }
-  y -= 6;
-
-  write("Each signer explicitly confirmed their consent to sign electronically", 9, font, MUTED);
-  write("before submitting a signature — see the event log below.", 9, font, MUTED);
-  y -= 6;
-
-  write("Integrity", 13, bold);
-  write("SHA-256 of the final signed document:", 9, font, MUTED);
-  write(finalPdfSha256, 8, font, INK);
-  if (doc.timestampGenTime) {
-    write("Trusted timestamp (RFC 3161, FreeTSA.org):", 9, font, MUTED);
-    write(new Date(doc.timestampGenTime).toLocaleString(), 9, font, INK);
-  }
-  y -= 6;
-
-  write("Event log", 13, bold);
-  for (const e of events) {
-    const who = e.signerOrder != null ? doc.signers.find((s) => s.order === e.signerOrder)?.name ?? `signer ${e.signerOrder}` : "system";
-    const ipSuffix = e.ip ? ` from ${e.ip}` : "";
-    write(`${new Date(e.timestamp).toLocaleString()} — ${e.type} (${who})${ipSuffix}`, 8, font, MUTED);
-  }
+  page.drawText(`Document ID: ${doc.docId}`, { x: col2X, y: footerTop, size: 7.5, font: bold, color: INK });
+  page.drawText("SHA-256 of the final signed document:", { x: col2X, y: footerTop - 11, size: 7.5, font, color: MUTED });
+  page.drawText(finalPdfSha256, { x: col2X, y: footerTop - 21, size: 7, font, color: INK });
 
   return cert.save();
 }

@@ -185,7 +185,7 @@ describe("generateCertificate", () => {
   it("embeds honest SES / ESIGN / UETA seals and brand caption, not PDF/A LTV QES AES seals", async () => {
     const text = pdfSearchableText(await generateCertificate(doc, "bbb"));
     expect(text).toContain("Signed with Docracy");
-    expect(text).toContain("Certificate of Completion");
+    expect(text).toContain("Signature Certificate");
     // Center acronyms + under-seal captions (whole strings); arc letters are one glyph each
     expect(text).toContain("SES");
     expect(text).toContain("ESIGN");
@@ -197,8 +197,12 @@ describe("generateCertificate", () => {
     expect(text).toContain("No identity verification");
     expect(text).toContain("Not AES/QES");
     expect(text).toContain("Not PDF/A or PAdES-LTV");
-    expect(text).not.toContain("Qualified Electronic Signature");
-    expect(text).not.toContain("Advanced Electronic Signature");
+    // The cert explicitly DISCLAIMS QES/AES status ("not a Qualified..."), so the substring
+    // legitimately appears — what must never appear is an affirmative claim of QES/AES status.
+    expect(text).not.toContain("This is a Qualified Electronic Signature");
+    expect(text).not.toContain("This is an Advanced Electronic Signature");
+    expect(text).toContain("not a Qualified Electronic Signature");
+    expect(text).toContain("does not issue Qualified or Advanced Electronic Signatures");
     expect(text).not.toContain("PDF/A-2");
     expect(text).not.toContain("PDF/A-3");
   });
