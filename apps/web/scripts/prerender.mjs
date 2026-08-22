@@ -806,6 +806,16 @@ function withMeta(html, { title, description, urlPath, locale = "en", alternates
     out = out.replace("</head>", `    ${hreflang}\n  </head>`);
   }
 
+  // The base index.html hardcodes og:video/twitter:player tags for the homepage's demo video —
+  // withMeta() never cleared them for every other route, so all ~280 other pages inherited them
+  // unchanged. Google discovered video markup on every one of those pages via Open Graph/Twitter
+  // Card tags (not just the XML sitemap) and correctly flagged most as "video isn't on a watch
+  // page" in Search Console, since the video isn't actually that page's content. Only the routes
+  // that also carry a <video:video> sitemap entry (home page, "/" and "/es") should keep them.
+  if (urlPath !== "/" && urlPath !== "/es") {
+    out = out.replace(/\s*<meta\s+(?:property="og:video[^"]*"|name="twitter:player[^"]*")\s+content="[^"]*"\s*\/?>/g, "");
+  }
+
   return out;
 }
 
