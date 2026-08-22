@@ -128,7 +128,11 @@ describe("runSpaSmokeAndAlert", () => {
     expect(email.sendSpaSmokeAlert).not.toHaveBeenCalled();
   });
 
-  it("emails founder when the failure survives every retry", async () => {
+  // Two strikes: a single hourly run's confirmed failure (survives every in-run retry) still
+  // isn't enough to alert by itself — a day with several back-to-back deploys can exceed even a
+  // generous in-run retry budget on its own. Only a SECOND consecutive hourly run seeing the
+  // failure persist should actually page anyone.
+  it("does not email on the first confirmed failure (first strike)", async () => {
     vi.useFakeTimers();
     mockBrokenFetch();
     const { env } = makeMockEnv({ FEEDBACK_EMAIL: "founder@docracy.io" });
@@ -137,12 +141,11 @@ describe("runSpaSmokeAndAlert", () => {
     await vi.advanceTimersByTimeAsync(30000);
     await vi.advanceTimersByTimeAsync(60000);
     await promise;
-    expect(email.sendSpaSmokeAlert).toHaveBeenCalledTimes(1);
-    expect(vi.mocked(email.sendSpaSmokeAlert).mock.calls[0][1]).toBe("founder@docracy.io");
+    expect(email.sendSpaSmokeAlert).not.toHaveBeenCalled();
     vi.useRealTimers();
   });
 
-  it("dedupes: second failure within 6h does not re-email", async () => {
+  it("emails founder when the same failure is confirmed on a second consecutive run", async () => {
     vi.useFakeTimers();
     mockBrokenFetch();
     const { env } = makeMockEnv({ FEEDBACK_EMAIL: "founder@docracy.io" });
@@ -151,11 +154,63 @@ describe("runSpaSmokeAndAlert", () => {
     await vi.advanceTimersByTimeAsync(30000);
     await vi.advanceTimersByTimeAsync(60000);
     await first;
+    expect(email.sendSpaSmokeAlert).not.toHaveBeenCalled();
+
+    vi.setSystemTime(Date.now() + 60 * 60 * 1000); // next hourly cron tick
     const second = runSpaSmokeAndAlert(env);
     await vi.advanceTimersByTimeAsync(10000);
     await vi.advanceTimersByTimeAsync(30000);
     await vi.advanceTimersByTimeAsync(60000);
     await second;
+    expect(email.sendSpaSmokeAlert).toHaveBeenCalledTimes(1);
+    expect(vi.mocked(email.sendSpaSmokeAlert).mock.calls[0][1]).toBe("founder@docracy.io");
+    vi.useRealTimers();
+  });
+
+  it("treats a first strike older than 90 minutes as stale, not confirming", async () => {
+    vi.useFakeTimers();
+    mockBrokenFetch();
+    const { env } = makeMockEnv({ FEEDBACK_EMAIL: "founder@docracy.io" });
+    const first = runSpaSmokeAndAlert(env);
+    await vi.advanceTimersByTimeAsync(10000);
+    await vi.advanceTimersByTimeAsync(30000);
+    await vi.advanceTimersByTimeAsync(60000);
+    await first;
+
+    vi.setSystemTime(Date.now() + 91 * 60 * 1000); // stale — well past one hourly tick + slack
+    const second = runSpaSmokeAndAlert(env);
+    await vi.advanceTimersByTimeAsync(10000);
+    await vi.advanceTimersByTimeAsync(30000);
+    await vi.advanceTimersByTimeAsync(60000);
+    await second;
+    expect(email.sendSpaSmokeAlert).not.toHaveBeenCalled();
+    vi.useRealTimers();
+  });
+
+  it("dedupes: second alert within 6h of the confirming alert does not re-email", async () => {
+    vi.useFakeTimers();
+    mockBrokenFetch();
+    const { env } = makeMockEnv({ FEEDBACK_EMAIL: "founder@docracy.io" });
+    const first = runSpaSmokeAndAlert(env);
+    await vi.advanceTimersByTimeAsync(10000);
+    await vi.advanceTimersByTimeAsync(30000);
+    await vi.advanceTimersByTimeAsync(60000);
+    await first;
+
+    vi.setSystemTime(Date.now() + 60 * 60 * 1000);
+    const second = runSpaSmokeAndAlert(env);
+    await vi.advanceTimersByTimeAsync(10000);
+    await vi.advanceTimersByTimeAsync(30000);
+    await vi.advanceTimersByTimeAsync(60000);
+    await second;
+    expect(email.sendSpaSmokeAlert).toHaveBeenCalledTimes(1);
+
+    vi.setSystemTime(Date.now() + 60 * 60 * 1000); // still within the 6h reminder window
+    const third = runSpaSmokeAndAlert(env);
+    await vi.advanceTimersByTimeAsync(10000);
+    await vi.advanceTimersByTimeAsync(30000);
+    await vi.advanceTimersByTimeAsync(60000);
+    await third;
     expect(email.sendSpaSmokeAlert).toHaveBeenCalledTimes(1);
     vi.useRealTimers();
   });

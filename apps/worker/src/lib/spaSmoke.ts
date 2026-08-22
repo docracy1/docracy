@@ -29,7 +29,17 @@ interface AlertState {
   failing: boolean;
   lastAlertAt: number;
   fingerprint: string;
+  /** Set when a run's failure survives every in-run retry but hasn't yet been confirmed by a
+   *  second consecutive hourly run — see the two-strikes note on runSpaSmokeAndAlert. */
+  pendingSince?: number;
+  pendingFingerprint?: string;
 }
+
+/** How stale a "pending" failure from a prior hourly run can be and still count toward
+ *  confirming this run's failure as real, rather than two unrelated blips an hour+ apart. The
+ *  cron itself runs hourly, so this just needs headroom over that interval for a slightly late
+ *  invocation. */
+const PENDING_MAX_AGE_MS = 90 * 60 * 1000;
 
 const CRITICAL_PATHS = ["/", "/login", "/prepare"] as const;
 
@@ -211,7 +221,13 @@ async function writeState(env: Env, state: AlertState | null): Promise<void> {
 
 /**
  * Hourly SPA smoke: Sign in (/login) + Start free (/prepare) must hydrate.
- * Alerts FEEDBACK_EMAIL (founder@docracy.io) on transition to failing, then every 6h while down.
+ *
+ * Two strikes before alerting: a failure surviving every in-run retry still isn't enough to page
+ * anyone by itself — a busy day with several back-to-back Pages deploys can exceed the in-run
+ * retry budget on its own. Real outages persist for a full hour; deploy churn essentially never
+ * does. So the FIRST hourly run to see a confirmed failure just records it as "pending" and stays
+ * quiet; only a SECOND consecutive hourly run seeing the same (or a new) confirmed failure
+ * actually alerts. Once alerting, reminds FEEDBACK_EMAIL (founder@docracy.io) every 6h while down.
  */
 export async function runSpaSmokeAndAlert(env: Env): Promise<void> {
   const firstPass = await runSpaSmokeChecks(env);
@@ -245,17 +261,39 @@ export async function runSpaSmokeAndAlert(env: Env): Promise<void> {
   }
 
   const fp = fingerprint(failures);
-  const shouldAlert =
-    !prev?.failing ||
-    prev.fingerprint !== fp ||
-    now - (prev.lastAlertAt ?? 0) >= REMIND_AFTER_MS;
 
-  if (shouldAlert) {
+  // Already alerting on this failure — just handle the 6h reminder cadence.
+  if (prev?.failing) {
+    const shouldRemind = prev.fingerprint !== fp || now - (prev.lastAlertAt ?? 0) >= REMIND_AFTER_MS;
+    if (shouldRemind) {
+      const to = env.FEEDBACK_EMAIL || "founder@docracy.io";
+      await sendSpaSmokeAlert(env, to, failures);
+      await writeState(env, { failing: true, lastAlertAt: now, fingerprint: fp });
+      console.error(`[spa-smoke] alerted ${to}: ${failures.map((f) => f.name).join(", ")}`);
+    } else {
+      console.error(`[spa-smoke] still failing (suppressed): ${failures.map((f) => f.name).join(", ")}`);
+    }
+    return;
+  }
+
+  // Not yet alerting — this run's confirmed failure only counts as real if a prior run's pending
+  // failure is still fresh enough to call this "consecutive hours failing" rather than two
+  // isolated blips.
+  const confirmedByPriorRun = prev?.pendingSince != null && now - prev.pendingSince <= PENDING_MAX_AGE_MS;
+
+  if (confirmedByPriorRun) {
     const to = env.FEEDBACK_EMAIL || "founder@docracy.io";
     await sendSpaSmokeAlert(env, to, failures);
     await writeState(env, { failing: true, lastAlertAt: now, fingerprint: fp });
-    console.error(`[spa-smoke] alerted ${to}: ${failures.map((f) => f.name).join(", ")}`);
+    console.error(`[spa-smoke] confirmed by second consecutive run, alerted ${to}: ${failures.map((f) => f.name).join(", ")}`);
   } else {
-    console.error(`[spa-smoke] still failing (suppressed): ${failures.map((f) => f.name).join(", ")}`);
+    await writeState(env, {
+      failing: false,
+      lastAlertAt: 0,
+      fingerprint: "",
+      pendingSince: now,
+      pendingFingerprint: fp,
+    });
+    console.log(`[spa-smoke] failure survived retries but is a first strike — waiting for a second consecutive run: ${failures.map((f) => f.name).join(", ")}`);
   }
 }
