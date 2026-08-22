@@ -18,6 +18,7 @@ export const PLAN_ROWS: Array<{
   { labelKey: "plan.ccRecipients", free: "plan.val.upTo2", paid: "plan.val.unlimited" },
   { labelKey: "plan.declineCancel", free: true, paid: true },
   { labelKey: "plan.auditCert", free: true, paid: true },
+  { labelKey: "plan.docVerification", free: true, paid: true },
   { labelKey: "plan.dashboard", free: true, paid: true },
   { labelKey: "plan.templates", free: false, paid: true },
   { labelKey: "plan.bulkSend", free: false, paid: true },

@@ -426,6 +426,7 @@ const en: Messages = {
   "plan.ccRecipients": "CC / viewer recipients",
   "plan.declineCancel": "Decline or cancel a document",
   "plan.auditCert": "Audit trail + completion certificate",
+  "plan.docVerification": "Free document verification (anyone, no account)",
   "plan.dashboard": "Dashboard with document history (free account)",
   "plan.templates": "Reusable templates",
   "plan.bulkSend": "Bulk send",

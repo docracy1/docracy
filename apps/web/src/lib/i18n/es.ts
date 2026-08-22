@@ -475,6 +475,7 @@ const es: Messages = {
   "plan.customExpiry": "Ventana de firma (luego se elimina)",
   "plan.dashboard": "Panel con historial de documentos (cuenta gratis)",
   "plan.declineCancel": "Rechazar o cancelar un documento",
+  "plan.docVerification": "Verificación de documentos gratis (cualquiera, sin cuenta)",
   "plan.dropbox": "Conector Dropbox (carga automática de PDFs firmados)",
   "plan.embedded": "Firma integrada",
   "plan.fieldTypes": "Campos de texto, fecha, iniciales, casilla y desplegable",
