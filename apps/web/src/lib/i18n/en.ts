@@ -153,6 +153,7 @@ const en: Messages = {
   "footer.github": "GitHub",
   "footer.privacy": "Privacy",
   "footer.trust": "Trust & security",
+  "footer.verify": "Verify a document",
   "footer.esignUeta": "ESIGN & UETA",
   "footer.guide": "Complete guide",
   "footer.esignLine": "SES e-signatures designed to support the U.S. ESIGN Act and UETA.",

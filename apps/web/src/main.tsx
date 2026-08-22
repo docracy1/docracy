@@ -23,6 +23,7 @@ const Status = lazy(() => import("./pages/Status"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
 const Trust = lazy(() => import("./pages/Trust"));
+const Verify = lazy(() => import("./pages/Verify"));
 const Dpa = lazy(() => import("./pages/Dpa"));
 const Login = lazy(() => import("./pages/Login"));
 const AuthVerify = lazy(() => import("./pages/AuthVerify"));
@@ -97,6 +98,7 @@ function AppRoutes() {
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />
       <Route path="/trust" element={<Trust />} />
+      <Route path="/verify" element={<Verify />} />
       <Route path="/dpa" element={<Dpa />} />
       <Route path="/login" element={<Login />} />
       <Route path="/auth/verify" element={<AuthVerify />} />

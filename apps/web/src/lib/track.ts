@@ -19,6 +19,7 @@ export type ClientTrackableEvent =
   | "blog_cta_clicked"
   | "upgrade_clicked"
   | "viral_cta_clicked"
+  | "verify_checked"
   | "upload_failed"
   | "field_error";
 

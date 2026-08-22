@@ -81,6 +81,7 @@ export default function Footer() {
       links: [
         { label: t("footer.privacy"), to: "/privacy" },
         { label: t("footer.trust"), to: "/trust" },
+        { label: t("footer.verify"), to: "/verify" },
         { label: t("footer.esignUeta"), to: localizePath("/esign-ueta", locale) },
         { label: t("footer.guide"), to: "/electronic-signature-guide" },
         { label: t("footer.dpa"), to: "/dpa" },

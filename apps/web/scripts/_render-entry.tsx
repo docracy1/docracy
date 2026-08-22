@@ -26,6 +26,7 @@ import Imprint from "../src/pages/Imprint";
 import Blog from "../src/pages/Blog";
 import BlogPostDetail from "../src/pages/BlogPostDetail";
 import Trust from "../src/pages/Trust";
+import Verify from "../src/pages/Verify";
 import Dpa from "../src/pages/Dpa";
 import Privacy from "../src/pages/Privacy";
 import Terms from "../src/pages/Terms";
@@ -89,6 +90,7 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/es/documentacion" element={<Docs />} />
           <Route path="/imprint" element={<Imprint />} />
           <Route path="/trust" element={<Trust />} />
+          <Route path="/verify" element={<Verify />} />
           <Route path="/dpa" element={<Dpa />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />

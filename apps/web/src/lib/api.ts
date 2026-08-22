@@ -1049,3 +1049,15 @@ export async function deleteRoadmapFeature(id: string): Promise<{ ok: true }> {
   const res = await apiFetch(`/api/admin/roadmap/${id}`, { method: "DELETE" });
   return asJson(res);
 }
+
+export interface VerificationResult {
+  found: boolean;
+  signerCount?: number;
+  completedAt?: string;
+}
+
+/** Public, no-auth — the hash itself is the access gate (see routes/verify.ts). */
+export async function verifyDocumentHash(hash: string): Promise<VerificationResult> {
+  const res = await apiFetch(`/api/verify/${encodeURIComponent(hash)}`);
+  return asJson(res);
+}

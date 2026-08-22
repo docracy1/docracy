@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { TRUST_LOGOS } from "../pages/Landing";
 
 /** Compact trust block for high-traffic blog posts and template pages, where a visitor lands
@@ -6,12 +7,13 @@ import { TRUST_LOGOS } from "../pages/Landing";
  *  or compliance status the /trust page doesn't actually claim. See Trust.tsx: Docracy does not
  *  hold its own SOC 2/ISO 27001 attestation, so this deliberately doesn't say "SOC 2 in progress"
  *  — only that the infrastructure (Cloudflare) does. */
-const REASONS = [
+const REASONS: Array<{ title: string; body: string; to?: string }> = [
   { title: "Legally binding", body: "Built to support the U.S. ESIGN Act, UETA, and EU eIDAS." },
   { title: "No account required", body: "Signers open a link and sign — nothing to install or register." },
   { title: "Fast", body: "Upload, add fields, and send in under a minute." },
   { title: "Works on any device", body: "No app to install — sign from a phone, tablet, or desktop browser." },
   { title: "Secure by default", body: "Timestamped audit trail on every document; infrastructure runs on Cloudflare (SOC 2 Type II, ISO 27001)." },
+  { title: "Independently verifiable", body: "Anyone with the finished document can confirm it was really signed here.", to: "/verify" },
   { title: "API & integrations", body: "Zapier and an MCP connector for Claude, ChatGPT, and other AI assistants." },
 ];
 
@@ -23,7 +25,9 @@ export default function TrustSection() {
         {REASONS.map((r) => (
           <div key={r.title}>
             <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 2 }}>✓ {r.title}</div>
-            <div style={{ fontSize: 13, color: "var(--mute)" }}>{r.body}</div>
+            <div style={{ fontSize: 13, color: "var(--mute)" }}>
+              {r.body} {r.to && <Link to={r.to}>Verify a document →</Link>}
+            </div>
           </div>
         ))}
       </div>

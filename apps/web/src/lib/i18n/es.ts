@@ -209,6 +209,7 @@ const es: Messages = {
   "footer.templates": "Marketplace",
   "footer.terms": "Términos",
   "footer.trust": "Confianza y seguridad",
+  "footer.verify": "Verificar un documento",
   "footer.esignUeta": "ESIGN y UETA",
   "footer.guide": "Guía completa",
   "footer.esignLine": "Firmas SES diseñadas para respaldar la ESIGN Act y UETA de EE. UU.",

@@ -50,6 +50,14 @@ export default function Trust() {
               hash. Each completed chain gets a signed PDF plus a certificate of completion.
             </p>
           </div>
+          <div className="core-feature-card">
+            <h3 style={{ marginBottom: 8 }}>Independently verifiable</h3>
+            <p style={{ fontSize: 13.5 }}>
+              Anyone with a completed document — not just the sender or signers — can confirm it was really
+              completed through Docracy and when, without needing an account.{" "}
+              <Link to="/verify">Verify a document</Link>.
+            </p>
+          </div>
         </div>
       </div>
 

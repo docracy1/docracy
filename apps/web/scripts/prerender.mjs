@@ -618,6 +618,13 @@ const routes = [
       "How Docracy protects documents: encryption, retention, audit trails, ESIGN Act and UETA alignment for SES e-signatures, eIDAS SES, subprocessors, and Cloudflare infrastructure certifications.",
   },
   {
+    urlPath: "/verify",
+    outFile: "verify.html",
+    title: "Verify a Signed Document | Docracy",
+    description:
+      "Confirm a PDF was really completed through Docracy's signing flow — upload the file or paste its SHA-256 hash. Your file never leaves your browser.",
+  },
+  {
     urlPath: "/dpa",
     outFile: "dpa.html",
     title: "Data Processing Agreement (DPA) — Docracy",
