@@ -2832,7 +2832,7 @@ export const ARTICLES: ArticlePost[] = [
   },
   {
     slug: "introducing-the-docracy-marketplace",
-    title: "Introducing the Docracy Marketplace — free templates, shared by everyone",
+    title: "Introducing the Template Marketplace",
     description: "A quick tour of the Docracy Marketplace: how to find a template, fill it in, and share your own with the community — free, no account needed.",
     publishedDate: "2026-08-16",
     cluster: "Product",
@@ -2910,7 +2910,7 @@ export const ARTICLES: ArticlePost[] = [
   },
   {
     slug: "10-new-free-templates",
-    title: "10 new free templates: web design, photography, PIIA, and more",
+    title: "10 new free templates: web design & photography",
     description: "10 new free templates just landed on the Docracy Marketplace — web design and development agreements, photography contracts, a model release, an invention assignment agreement, and more.",
     publishedDate: "2026-08-16",
     cluster: "Product",

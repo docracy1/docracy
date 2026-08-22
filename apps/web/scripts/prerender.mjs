@@ -769,16 +769,22 @@ function writeIndexNowKey() {
 
 function withMeta(html, { title, description, urlPath, locale = "en", alternates, image }) {
   const canonical = `${SITE}${urlPath === "/" ? "/" : urlPath}`;
+  // Escape before interpolating into raw HTML — a title/description containing a literal `"`
+  // (e.g. a quoted term like "digital signature") would otherwise terminate the content="..."
+  // attribute early, silently truncating or blanking the tag for every downstream tool/crawler
+  // that parses the static HTML rather than executing usePageMeta's DOM-API version.
+  const safeTitle = escapeXml(title);
+  const safeDescription = escapeXml(description);
   // Use function replacers — string replacements treat `$10` in copy as a capture-group token.
   let out = html
     .replace(/<html lang="[^"]*"/, `<html lang="${locale}"`)
-    .replace(/<title>.*?<\/title>/, () => `<title>${title}</title>`)
-    .replace(/(<meta\s+name="description"\s+content=")[^"]*(")/, (_, a, b) => `${a}${description}${b}`)
-    .replace(/(<meta property="og:title" content=")[^"]*(")/, (_, a, b) => `${a}${title}${b}`)
-    .replace(/(<meta\s+property="og:description"\s+content=")[^"]*(")/, (_, a, b) => `${a}${description}${b}`)
+    .replace(/<title>.*?<\/title>/, () => `<title>${safeTitle}</title>`)
+    .replace(/(<meta\s+name="description"\s+content=")[^"]*(")/, (_, a, b) => `${a}${safeDescription}${b}`)
+    .replace(/(<meta property="og:title" content=")[^"]*(")/, (_, a, b) => `${a}${safeTitle}${b}`)
+    .replace(/(<meta\s+property="og:description"\s+content=")[^"]*(")/, (_, a, b) => `${a}${safeDescription}${b}`)
     .replace(/(<meta property="og:url" content=")[^"]*(")/, (_, a, b) => `${a}${canonical}${b}`)
-    .replace(/(<meta name="twitter:title" content=")[^"]*(")/, (_, a, b) => `${a}${title}${b}`)
-    .replace(/(<meta\s+name="twitter:description"\s+content=")[^"]*(")/, (_, a, b) => `${a}${description}${b}`)
+    .replace(/(<meta name="twitter:title" content=")[^"]*(")/, (_, a, b) => `${a}${safeTitle}${b}`)
+    .replace(/(<meta\s+name="twitter:description"\s+content=")[^"]*(")/, (_, a, b) => `${a}${safeDescription}${b}`)
     .replace(/(<link rel="canonical" href=")[^"]*(")/, (_, a, b) => `${a}${canonical}${b}`);
 
   if (image) {
