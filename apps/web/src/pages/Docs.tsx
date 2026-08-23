@@ -107,6 +107,17 @@ export default function Docs() {
         <p style={{ color: "var(--mute)" }}>{t("docs.verification.body3")}</p>
       </Section>
 
+      <Section id="blockchain" title={t("docs.blockchain.title")}>
+        <p>
+          {t("docs.blockchain.body1")}{" "}
+          <a href="https://opentimestamps.org" target="_blank" rel="noopener noreferrer">
+            {t("docs.blockchain.link")}
+          </a>
+          {t("docs.blockchain.body2")}
+        </p>
+        <p style={{ color: "var(--mute)" }}>{t("docs.blockchain.body3")}</p>
+      </Section>
+
       <Section id="embed" title={t("docs.embed.title")}>
         <p>{t("docs.embed.body")}</p>
       </Section>

@@ -1027,8 +1027,55 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     ctaLabel: "Verify a document",
     ctaTo: "/verify",
     relatedLinks: [
+      { label: "Blockchain timestamp", to: "/blockchain-timestamp" },
       { label: "Trust & security", to: "/trust" },
       { label: "See pricing", to: "/pricing" },
+    ],
+  },
+  {
+    slug: "blockchain-timestamp",
+    seoTitle: "Free Blockchain Document Timestamping | Docracy",
+    seoDescription:
+      "Every document signed on Docracy is also anchored to the Bitcoin blockchain via the free, public OpenTimestamps protocol — provable even if Docracy disappears. No wallet, no fees, no extra step.",
+    heroHeadline: "Every signed document, timestamped to the Bitcoin blockchain. Free.",
+    heroSubheadline:
+      "Docracy anchors a fingerprint of every completed document to Bitcoin via the free, public OpenTimestamps protocol — proof that survives even if Docracy itself goes away.",
+    problem:
+      "A signature platform's own database is the one thing every proof ultimately depends on. If that company disappears, gets hacked, or simply changes its story, there's no way for an outside party to check anything independently.",
+    solution:
+      "Docracy submits every completed document's SHA-256 hash to the OpenTimestamps calendar network at no cost — free, public servers that batch everyone's hashes together and commit the result to the Bitcoin blockchain. The resulting proof file can be checked by anyone, with any standard OpenTimestamps tool, independent of Docracy staying online or honest.",
+    features: [
+      { title: "Free, on every document", body: "No paid plan, no wallet, no gas fees — this runs automatically the moment a document is completed." },
+      { title: "Independent of Docracy", body: "Checked against the Bitcoin blockchain itself, not our database — it still works even if Docracy disappears." },
+      { title: "Open, standard format", body: "A .ots proof file, readable by any OpenTimestamps-compatible tool — not a proprietary format only we can check." },
+      { title: "Detects any tampering", body: "The anchored hash is tied to the document's exact bytes — change one character and it no longer matches." },
+      { title: "No extra step", body: "Nothing to turn on — it happens automatically in the background the moment a document completes." },
+    ],
+    useCases: [
+      "High-stakes agreements where you want proof that outlives any one company",
+      "Cross-border contracts where a counterparty won't just take your word for it",
+      "Compliance teams that need evidence outside a single vendor's own systems",
+      "Anyone who wants to double-check a completed document years later",
+    ],
+    faqs: [
+      { question: "Does this cost anything?", answer: "No. OpenTimestamps is a free, public protocol — submitting a hash costs nothing, and there's no wallet or cryptocurrency required on your end." },
+      {
+        question: "How is this different from Docracy's own verification page?",
+        answer:
+          "Docracy's /verify tool checks a hash against Docracy's own records. This blockchain anchor is a second, independent proof that doesn't rely on Docracy at all — checkable with any standard OpenTimestamps tool even if Docracy is gone.",
+      },
+      {
+        question: "How long until the proof is confirmed?",
+        answer:
+          "A freshly-submitted proof is \"pending\" until the calendar network's next batch commits to Bitcoin, which typically takes a few hours. It's still a valid receipt in the meantime — just not yet independently confirmable on-chain.",
+      },
+      { question: "Do I have to do anything to get this?", answer: "No — it happens automatically for every document completed on Docracy, free or paid." },
+    ],
+    ctaLabel: "Verify a document",
+    ctaTo: "/verify",
+    relatedLinks: [
+      { label: "Document verification", to: "/document-verification" },
+      { label: "Trust & security", to: "/trust" },
     ],
   },
 ];

@@ -73,6 +73,7 @@ const TRACKED_ROUTES = new Set([
   "/upload-and-sign",
   "/simple-signing",
   "/document-verification",
+  "/blockchain-timestamp",
   // AlternativePage slugs
   "/eversign-alternative",
   "/onlinesignature-alternative",

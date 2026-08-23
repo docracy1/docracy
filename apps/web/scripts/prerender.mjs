@@ -620,9 +620,9 @@ const routes = [
   {
     urlPath: "/verify",
     outFile: "verify.html",
-    title: "Verify a Signed Document | Docracy",
+    title: "Verify a Signed Document — Independently, via Blockchain | Docracy",
     description:
-      "Confirm a PDF was really completed through Docracy's signing flow — upload the file or paste its SHA-256 hash. Your file never leaves your browser.",
+      "Confirm a PDF was really completed through Docracy's signing flow — and check it independently on the Bitcoin blockchain via OpenTimestamps, without needing to trust Docracy at all. Upload the file or paste its SHA-256 hash; it never leaves your browser.",
   },
   {
     urlPath: "/dpa",

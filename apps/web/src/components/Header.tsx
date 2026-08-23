@@ -25,6 +25,7 @@ const FEATURE_ITEMS = [
   { to: "/privacy", icon: "shield", titleKey: "nav.mega.feature.storage.title", descKey: "nav.mega.feature.storage.desc" },
   { to: "/docs", icon: "bolt", titleKey: "nav.mega.feature.workflows.title", descKey: "nav.mega.feature.workflows.desc" },
   { to: "/document-verification", icon: "badge", titleKey: "nav.mega.feature.verify.title", descKey: "nav.mega.feature.verify.desc" },
+  { to: "/blockchain-timestamp", icon: "chainLink", titleKey: "nav.mega.feature.blockchain.title", descKey: "nav.mega.feature.blockchain.desc" },
 ] as const;
 
 const COMPARE_ITEMS = [

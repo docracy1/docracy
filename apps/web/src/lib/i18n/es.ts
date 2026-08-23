@@ -227,6 +227,7 @@ const es: Messages = {
   "hero.b4": "Firmas SES pensadas para respaldar la ESIGN Act, UETA y eIDAS",
   "hero.eyebrow": "Firmas en secuencia · Con IA",
   "hero.hint": "Sin tarjeta · te enviamos un enlace gratis para iniciar sesión.",
+  "hero.uploadNow": "O simplemente sube un PDF — sin registro",
   "landing.trustedBy": "Con la confianza de equipos en",
   "hero.calculateSavings": "Calcular ahorro",
   "hero.emailPlaceholder": "¿Cuál es tu correo?",
@@ -340,6 +341,10 @@ const es: Messages = {
     "Cualquiera con el documento terminado — no solo quien lo envió o lo firmó — puede confirmar que realmente se completó a través de Docracy, gratis y sin necesidad de cuenta.",
   "landing.feat9.link": "Verificar un documento",
   "landing.feat9.title": "Verificación de documentos",
+  "landing.feat10.body":
+    "Cada documento completado también se ancla a la blockchain de Bitcoin mediante el protocolo gratuito OpenTimestamps — verificable incluso si Docracy desapareciera.",
+  "landing.feat10.link": "Ver cómo funciona",
+  "landing.feat10.title": "Sello de tiempo en blockchain",
   "landing.featuresSub":
     "Docracy.io se centra en claridad, velocidad y confiabilidad — sin complejidad innecesaria.",
   "landing.featuresTitle": "Todo lo que necesitas para flujos de documentos simples y seguros",
@@ -430,6 +435,8 @@ const es: Messages = {
   "nav.mega.feature.workflows.desc": "Firma secuencial o todos a la vez, tú eliges.",
   "nav.mega.feature.verify.title": "Verificación de documentos",
   "nav.mega.feature.verify.desc": "Confirma que un PDF firmado es auténtico y no fue alterado — gratis, sin cuenta.",
+  "nav.mega.feature.blockchain.title": "Sello de tiempo en blockchain",
+  "nav.mega.feature.blockchain.desc": "Cada documento se ancla a Bitcoin mediante OpenTimestamps — gratis y automático.",
   "nav.mega.feature.esign.title": "ESIGN y UETA",
   "nav.mega.feature.esign.desc": "Firmas SES diseñadas para respaldar la ESIGN Act y UETA de EE. UU.",
   "nav.mega.compare.docusign.desc": "Más ligero, sin precio por asiento.",
@@ -474,6 +481,7 @@ const es: Messages = {
   "plan.aiRisk": "IA: resaltador de riesgos y cláusulas",
   "plan.anchorTags": "Etiquetas ancla en PDFs ({{sig1}}, etc.)",
   "plan.auditCert": "Registro de auditoría + certificado de finalización",
+  "plan.blockchainTimestamp": "Sello de tiempo en la blockchain de Bitcoin en cada documento (vía OpenTimestamps)",
   "plan.box": "Conector Box (carga automática de PDFs firmados)",
   "plan.bulkSend": "Envío masivo",
   "plan.ccRecipients": "Destinatarios CC / espectadores",
@@ -865,6 +873,14 @@ const es: Messages = {
   "docs.automation.webhooks": "Webhooks",
   "docs.automation.zapierNote":
     "Nota de compatibilidad con Zapier Free: configura un Zap simple de 2 pasos (un disparador + una acción) y evita pasos extra para mejor compatibilidad con los límites del plan Free.",
+  "docs.blockchain.body1":
+    "La huella de cada documento completado también se envía automáticamente y gratis al protocolo",
+  "docs.blockchain.body2":
+    "— una red pública de servidores calendario que agrupan las huellas de todos en una sola transacción de Bitcoin. No hay nada que activar: ocurre en segundo plano en el momento en que un documento se completa, sin costo para ti.",
+  "docs.blockchain.body3":
+    "Esta es una segunda prueba, independiente del registro de verificación propio de Docracy descrito arriba — verificable con cualquier herramienta estándar de OpenTimestamps, incluso si Docracy no estuviera disponible. Una prueba recién enviada queda \"pendiente\" durante algunas horas hasta que el siguiente lote de la red se confirme en la cadena; el enlace de descarga en la página de verificación funciona en ambos casos.",
+  "docs.blockchain.link": "OpenTimestamps",
+  "docs.blockchain.title": "Sello de tiempo en blockchain (gratis, automático)",
   "docs.bulkSend.body":
     "Desde el Panel (Plantillas → Envío masivo, o /bulk-send), elige una plantilla guardada y envíala a muchos grupos de destinatarios a la vez — un documento por fila. Pega una lista de nombres/correos o completa el formulario; cada fila se convierte en su propia cadena de firma con el mismo diseño de campos. Opcionalmente establece un vencimiento personalizado (ver abajo). Solo pago.",
   "docs.bulkSend.title": "Envío masivo (pago)",

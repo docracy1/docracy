@@ -151,6 +151,13 @@ export function NavIcon({ name }: { name: string }) {
           <path d="M8.5 12.2l2.2 2.2 4.3-4.6" />
         </svg>
       );
+    case "chainLink":
+      return (
+        <svg {...common}>
+          <rect x="3" y="8" width="8" height="8" rx="3.5" transform="rotate(-45 7 12)" />
+          <rect x="13" y="8" width="8" height="8" rx="3.5" transform="rotate(-45 17 12)" />
+        </svg>
+      );
     case "whatsapp":
       // Full-color brand mark rather than a monochrome stroke icon like the others — this one's
       // meant to be recognized at a glance, not blend in.

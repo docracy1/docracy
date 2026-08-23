@@ -174,6 +174,7 @@ function AppRoutes() {
       <Route path="/upload-and-sign" element={<FeaturePage slug="upload-and-sign" />} />
       <Route path="/simple-signing" element={<FeaturePage slug="simple-signing" />} />
       <Route path="/document-verification" element={<FeaturePage slug="document-verification" />} />
+      <Route path="/blockchain-timestamp" element={<FeaturePage slug="blockchain-timestamp" />} />
       <Route path="/eversign-alternative" element={<AlternativePage slug="eversign-alternative" />} />
       <Route path="/es/alternativa-a-eversign" element={<AlternativePage slug="eversign-alternative" />} />
       <Route path="/onlinesignature-alternative" element={<AlternativePage slug="onlinesignature-alternative" />} />
