@@ -21,7 +21,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 function FeatureIcon({
   name,
 }: {
-  name: "bolt" | "workflow" | "shield" | "users" | "duplicate" | "send" | "pen" | "sparkles" | "single" | "scale" | "badge";
+  name: "bolt" | "workflow" | "shield" | "users" | "duplicate" | "send" | "pen" | "sparkles" | "single" | "scale" | "badge" | "chainLink";
 }) {
   const common = {
     width: 24,
@@ -115,11 +115,18 @@ function FeatureIcon({
           <path d="M8.5 12.2l2.2 2.2 4.3-4.6" />
         </svg>
       );
+    case "chainLink":
+      return (
+        <svg {...common}>
+          <rect x="3" y="8" width="8" height="8" rx="3.5" transform="rotate(-45 7 12)" />
+          <rect x="13" y="8" width="8" height="8" rx="3.5" transform="rotate(-45 17 12)" />
+        </svg>
+      );
   }
 }
 
 const CORE_FEATURES: Array<{
-  icon: "bolt" | "workflow" | "shield" | "users" | "duplicate" | "send" | "pen" | "sparkles" | "single" | "scale" | "badge";
+  icon: "bolt" | "workflow" | "shield" | "users" | "duplicate" | "send" | "pen" | "sparkles" | "single" | "scale" | "badge" | "chainLink";
   titleKey: string;
   bodyKey: string;
   to: string;
@@ -134,6 +141,7 @@ const CORE_FEATURES: Array<{
   { icon: "shield", titleKey: "landing.feat7.title", bodyKey: "landing.feat7.body", to: "/privacy", linkKey: "landing.feat7.link" },
   { icon: "bolt", titleKey: "landing.feat8.title", bodyKey: "landing.feat8.body", to: "/docs", linkKey: "landing.feat8.link" },
   { icon: "badge", titleKey: "landing.feat9.title", bodyKey: "landing.feat9.body", to: "/document-verification", linkKey: "landing.feat9.link" },
+  { icon: "chainLink", titleKey: "landing.feat10.title", bodyKey: "landing.feat10.body", to: "/blockchain-timestamp", linkKey: "landing.feat10.link" },
 ];
 
 const FAQ_KEYS: Array<{ qKey: string; aKey: string }> = [
@@ -303,6 +311,10 @@ export default function Landing() {
   // homepage need to get a client agreement signed, not protect confidential info. NDA stays the
   // default only for outreach personas/short-links that are specifically about that use case.
   const prepareSampleTo = localizePath("/prepare?freeTemplate=freelance-service-agreement", locale);
+  // Bring-your-own-PDF path — no email, no sample template, no session created. Sits next to the
+  // email-capture CTA above so the hero's own first action doesn't contradict "no signup needed":
+  // that promise should be visible on the one screen where it matters most.
+  const prepareTo = localizePath("/prepare", locale);
   const templatesTo = localizePath("/free-templates", locale);
   const emailTrimmed = heroEmail.trim();
   // Match Login: mount Turnstile whenever the site key is set so a token is ready before submit.
@@ -467,6 +479,21 @@ export default function Landing() {
                     </p>
                   )}
                 </form>
+              )}
+              {!heroSent && (
+                <Link
+                  to={prepareTo}
+                  className="hero-watch-btn"
+                  onClick={() => track("landingpage_cta_clicked", { source: "hero_upload_now" })}
+                >
+                  <span className="hero-watch-icon" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="12" r="10" fill="rgba(255,255,255,0.18)" />
+                      <path d="M12 16V8M12 8l-3 3M12 8l3 3M8 16h8" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                  {t("hero.uploadNow")}
+                </Link>
               )}
               <button
                 type="button"
