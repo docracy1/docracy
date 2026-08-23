@@ -1519,6 +1519,54 @@ select {
   width: 100%;
 }
 
+/* Real, countable numbers only (template count comes from FREE_TEMPLATES.length) — same stat-pill
+   format as the reference layout, never its actual claims (no SSL-automation feature here, since
+   Docracy doesn't have one — swapped for the real blockchain-timestamp feature instead). */
+.hero-stat-pill {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px 28px;
+  margin-top: 24px;
+  padding: 16px 28px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.hero-stat-pill span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: nowrap;
+}
+
+.hero-stat-pill svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+.hero-stat-pill strong {
+  color: #ffffff;
+}
+
+@media (max-width: 640px) {
+  .hero-stat-pill {
+    border-radius: 20px;
+    padding: 16px 20px;
+  }
+
+  .hero-stat-pill span {
+    white-space: normal;
+    justify-content: center;
+  }
+}
+
 .hero-band-decorated {
   position: relative;
 }

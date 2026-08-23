@@ -575,6 +575,21 @@ export default function Landing() {
             </Link>
           </div>
 
+          <div className="hero-stat-pill">
+            <span>
+              <FeatureIcon name="duplicate" />
+              <strong>{FREE_TEMPLATES.length}+</strong> {t("hero.stat.templates")}
+            </span>
+            <span>
+              <NavIcon name="badge" />
+              <strong>{t("hero.stat.verifyLabel")}</strong> {t("hero.stat.verify")}
+            </span>
+            <span>
+              <NavIcon name="chainLink" />
+              <strong>{t("hero.stat.blockchainLabel")}</strong> {t("hero.stat.blockchain")}
+            </span>
+          </div>
+
           <ul className="hero-trust-badges hero-trust-badges-bottom">
             <li>
               <FeatureIcon name="scale" />

@@ -57,6 +57,13 @@ const RESOURCE_ITEMS = [
   { to: SALES_MAILTO, icon: "mail", titleKey: "nav.mega.resource.contact.title", descKey: "nav.mega.resource.contact.desc" },
 ] as const;
 
+/** Everything that isn't Features or Marketplace lives under one "More" menu — mirrors a minimal
+ *  top-level nav (a couple of items + a single catch-all) rather than a long row of triggers. */
+const MORE_PANEL_ITEMS = [
+  { to: "/pricing", icon: "scale", titleKey: "nav.pricing", descKey: "nav.mega.more.pricing.desc" },
+  { to: "/ai", icon: "sparkles", titleKey: "nav.ai", descKey: "nav.mega.more.ai.desc" },
+] as const;
+
 export default function Header() {
   const t = useT();
   const { locale } = useI18n();
@@ -65,11 +72,7 @@ export default function Header() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const NAV_AFTER_PRICING = [
-    { to: localizePath("/free-templates", locale), label: t("nav.templates") },
-    { to: localizePath("/ai", locale), label: t("nav.ai") },
-  ];
-  const pricingTo = localizePath("/pricing", locale);
+  const marketplaceTo = localizePath("/free-templates", locale);
 
   const featureItems = FEATURE_ITEMS.map((f) => ({
     to: localizePath(f.to, locale),
@@ -95,6 +98,12 @@ export default function Header() {
     title: t(r.titleKey),
     description: t(r.descKey),
   }));
+  const morePanelItems = MORE_PANEL_ITEMS.map((m) => ({
+    to: localizePath(m.to, locale),
+    icon: <NavIcon name={m.icon} />,
+    title: t(m.titleKey),
+    description: t(m.descKey),
+  }));
   // Titles-only lists for mobile accordion (no icons/descriptions).
   const featureMobile = FEATURE_ITEMS.map((f) => ({ to: localizePath(f.to, locale), title: t(f.titleKey) }));
   const industryMobile = INDUSTRY_ITEMS.map((i) => ({ to: localizePath(i.to, locale), title: t(i.titleKey) }));
@@ -102,6 +111,7 @@ export default function Header() {
     to: r.to.startsWith("mailto:") ? r.to : localizePath(r.to, locale),
     title: t(r.titleKey),
   }));
+  const morePanelMobile = MORE_PANEL_ITEMS.map((m) => ({ to: localizePath(m.to, locale), title: t(m.titleKey) }));
 
   useEffect(() => {
     setMenuOpen(false);
@@ -174,24 +184,20 @@ export default function Header() {
               footerTo: localizePath("/blog", locale),
             }}
           />
-          <NavMegaMenu
-            label={t("nav.industry")}
-            items={industryItems}
-            columns={2}
-          />
-          <Link to={pricingTo} className="header-templates-link header-nav-link">
-            {t("nav.pricing")}
+          <Link to={marketplaceTo} className="header-templates-link header-nav-link">
+            {t("nav.templates")}
           </Link>
           <NavMegaMenu
-            label={t("nav.resources")}
-            items={resourceItems}
+            label={t("nav.more")}
+            items={industryItems}
             columns={2}
+            panel={{
+              title: t("nav.resources"),
+              items: [...morePanelItems, ...resourceItems.filter((r) => !r.to.endsWith("/blog"))],
+              footerLabel: t("nav.mega.resource.blog.title"),
+              footerTo: localizePath("/blog", locale),
+            }}
           />
-          {NAV_AFTER_PRICING.map((link) => (
-            <Link key={link.to} to={link.to} className="header-templates-link header-nav-link">
-              {link.label}
-            </Link>
-          ))}
           <LanguageSwitcher className="lang-switcher-on-dark header-templates-link" />
           <div className="header-cta-group">
             <a
@@ -253,22 +259,22 @@ export default function Header() {
               ))}
             </div>
           </details>
+          <Link to={marketplaceTo} className="header-mobile-nav-link" onClick={() => setMenuOpen(false)}>
+            {t("nav.templates")}
+          </Link>
           <details className="header-mobile-accordion">
-            <summary>{t("nav.industry")}</summary>
+            <summary>{t("nav.more")}</summary>
             <div className="header-mobile-accordion-sublist">
               {industryMobile.map((i) => (
                 <Link key={i.to} to={i.to} className="header-mobile-accordion-sublink" onClick={() => setMenuOpen(false)}>
                   {i.title}
                 </Link>
               ))}
-            </div>
-          </details>
-          <Link to={pricingTo} className="header-mobile-nav-link" onClick={() => setMenuOpen(false)}>
-            {t("nav.pricing")}
-          </Link>
-          <details className="header-mobile-accordion">
-            <summary>{t("nav.resources")}</summary>
-            <div className="header-mobile-accordion-sublist">
+              {morePanelMobile.map((m) => (
+                <Link key={m.to} to={m.to} className="header-mobile-accordion-sublink" onClick={() => setMenuOpen(false)}>
+                  {m.title}
+                </Link>
+              ))}
               {resourceMobile.map((r) =>
                 r.to.startsWith("mailto:") || r.to.startsWith("http") ? (
                   <a
@@ -295,11 +301,6 @@ export default function Header() {
               )}
             </div>
           </details>
-          {NAV_AFTER_PRICING.map((link) => (
-            <Link key={link.to} to={link.to} className="header-mobile-nav-link" onClick={() => setMenuOpen(false)}>
-              {link.label}
-            </Link>
-          ))}
         </nav>
         <div style={{ margin: "16px 0" }}>
           <LanguageSwitcher />
