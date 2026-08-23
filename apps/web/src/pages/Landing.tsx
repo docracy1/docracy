@@ -557,7 +557,7 @@ export default function Landing() {
               }}
             >
               <span className="hero-upload-circle-icon">
-                <NavIcon name="badge" />
+                <NavIcon name="uploadArrow" />
               </span>
               <p className="hero-upload-circle-title">{t("hero.uploadCircleTitle")}</p>
               <p className="hero-upload-circle-sub">{t("hero.uploadCircleSub")}</p>

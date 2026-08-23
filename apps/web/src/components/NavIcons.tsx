@@ -21,6 +21,13 @@ export function NavIcon({ name }: { name: string }) {
           <path d="M3 11l18-8-8 18-2-8-8-2z" />
         </svg>
       );
+    case "uploadArrow":
+      return (
+        <svg {...common}>
+          <path d="M12 15V4M12 4l-4.5 4.5M12 4l4.5 4.5" />
+          <path d="M4 15v3.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V15" />
+        </svg>
+      );
     case "sparkles":
       return (
         <svg {...common}>

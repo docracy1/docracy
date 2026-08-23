@@ -2000,14 +2000,17 @@ select {
   height: 26px;
 }
 
-.hero-upload-circle-title {
+.hero-upload-circle p.hero-upload-circle-title {
+  /* Beats `.hero-band p` (color: var(--hero-body), meant for text directly on the blue gradient)
+     on specificity — without this it silently wins and the title renders white-on-white,
+     invisible against this circle's white background. */
   margin: 0;
   font-size: 17px;
   font-weight: 700;
   color: var(--body-strong);
 }
 
-.hero-upload-circle-sub {
+.hero-upload-circle p.hero-upload-circle-sub {
   margin: 0;
   font-size: 12.5px;
   color: var(--mute);
