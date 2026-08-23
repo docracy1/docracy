@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { usePageMeta } from "../lib/usePageMeta";
-import { verifyDocumentHash, type VerificationResult } from "../lib/api";
+import { verifyDocumentHash, apiUrl, type VerificationResult } from "../lib/api";
 import { track } from "../lib/track";
 
 const HASH_RE = /^[0-9a-f]{64}$/i;
@@ -141,6 +141,27 @@ export default function Verify() {
             {status.result.completedAt ? new Date(status.result.completedAt).toLocaleString() : "an unknown date"}, signed
             by {status.result.signerCount} {status.result.signerCount === 1 ? "signer" : "signers"}.
           </p>
+          {status.result.hasOtsProof ? (
+            <p style={{ margin: "12px 0 0", fontSize: 13 }}>
+              This hash is also anchored to the Bitcoin blockchain via the free, public{" "}
+              <a href="https://opentimestamps.org" target="_blank" rel="noopener noreferrer">
+                OpenTimestamps
+              </a>{" "}
+              protocol — provable even if Docracy itself disappeared.{" "}
+              <a href={apiUrl(`/api/verify/${status.hash}/ots`)}>Download the proof (.ots)</a>, then verify it
+              independently at{" "}
+              <a href="https://opentimestamps.org" target="_blank" rel="noopener noreferrer">
+                opentimestamps.org
+              </a>
+              . New proofs take a few hours to be confirmed on the blockchain — until then, opentimestamps.org will
+              show it as pending.
+            </p>
+          ) : (
+            <p style={{ margin: "12px 0 0", fontSize: 13, color: "var(--mute)" }}>
+              A blockchain timestamp proof for this document isn't available yet — it's submitted in the background
+              right after signing and can take a minute to appear. Check back shortly.
+            </p>
+          )}
         </div>
       )}
 
@@ -161,9 +182,14 @@ export default function Verify() {
           A match confirms a document with these exact bytes was completed through Docracy's signing flow, and when —
           even one changed character produces a completely different hash, so this reliably detects tampering.
         </p>
-        <p style={{ fontSize: 13, color: "var(--mute)", margin: 0 }}>
+        <p style={{ fontSize: 13, color: "var(--mute)", marginBottom: 8 }}>
           It does not verify who physically signed — Docracy's default signature is a Simple Electronic Signature
           (SES), not identity-verified. See <Link to="/trust">Trust &amp; security</Link> for details.
+        </p>
+        <p style={{ fontSize: 13, color: "var(--mute)", margin: 0 }}>
+          Every completed document's hash is also submitted to the free, public OpenTimestamps protocol, which
+          anchors it to the Bitcoin blockchain — so this can be verified independently, without trusting Docracy's
+          own records at all.
         </p>
       </div>
     </div>

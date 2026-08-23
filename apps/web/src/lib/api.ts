@@ -1054,6 +1054,7 @@ export interface VerificationResult {
   found: boolean;
   signerCount?: number;
   completedAt?: string;
+  hasOtsProof?: boolean;
 }
 
 /** Public, no-auth — the hash itself is the access gate (see routes/verify.ts). */
