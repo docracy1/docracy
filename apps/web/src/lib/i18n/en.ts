@@ -1080,6 +1080,8 @@ const en: Messages = {
   "esign.laws.1": "Consent to do business electronically",
   "esign.laws.2": "Clear intent to sign the electronic record",
   "esign.laws.3": "A record that can be retained and accurately reproduced",
+  "esign.uetaDeepDiveLink": "Why a simple signature is enough under UETA specifically →",
+  "esign.uetaComplianceLink": "How Docracy meets UETA's requirements →",
   "esign.provideTitle": "What Docracy provides",
   "esign.provideSub":
     "Built for SES-style signing chains — free for up to two signers, no account required to start.",

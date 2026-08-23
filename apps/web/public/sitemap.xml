@@ -1044,6 +1044,16 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://docracy.io/ueta-electronic-signature</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/docracy-ueta-compliance</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://docracy.io/industry/freelancers</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

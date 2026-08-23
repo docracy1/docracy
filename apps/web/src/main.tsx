@@ -210,6 +210,8 @@ function AppRoutes() {
       <Route path="/outreach/:persona" element={<OutreachLanding />} />
       <Route path="/what-is-an-nda" element={<ExplainerPage slug="what-is-an-nda" />} />
       <Route path="/are-electronic-signatures-legal" element={<ExplainerPage slug="are-electronic-signatures-legal" />} />
+      <Route path="/ueta-electronic-signature" element={<ExplainerPage slug="ueta-electronic-signature" />} />
+      <Route path="/docracy-ueta-compliance" element={<ExplainerPage slug="docracy-ueta-compliance" />} />
       {SEO_LANDING_PAGES.map((page) => (
         <Route key={page.slug} path={`/${page.slug}`} element={<SeoLandingTemplate slug={page.slug} />} />
       ))}

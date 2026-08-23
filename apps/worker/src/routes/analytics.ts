@@ -38,6 +38,8 @@ const TRACKED_ROUTES = new Set([
   "/verify",
   "/what-is-an-nda",
   "/are-electronic-signatures-legal",
+  "/ueta-electronic-signature",
+  "/docracy-ueta-compliance",
   "/es/firma-de-nda",
   "/es/contratos-con-clientes",
   "/es/alternativa-a-eversign",

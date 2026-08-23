@@ -62,6 +62,11 @@ export default function EsignUeta() {
           <li style={{ marginBottom: 8 }}>{t("esign.laws.2")}</li>
           <li>{t("esign.laws.3")}</li>
         </ul>
+        <p style={{ fontSize: 14 }}>
+          <Link to="/ueta-electronic-signature">{t("esign.uetaDeepDiveLink")}</Link>
+          {" · "}
+          <Link to="/docracy-ueta-compliance">{t("esign.uetaComplianceLink")}</Link>
+        </p>
       </div>
 
       <div className="container" style={{ maxWidth: 860, paddingTop: 24, paddingBottom: 24 }}>

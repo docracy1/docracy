@@ -1509,6 +1509,8 @@ export interface ExplainerPageContent {
   heroHeadline: string;
   heroSubheadline: string;
   sections: ExplainerSection[];
+  /** Optional — pages without it just skip the FAQ section. */
+  faqs?: Array<{ question: string; answer: string }>;
   ctaLabel: string;
   ctaTo: string;
   relatedLinks: Array<{ label: string; to: string }>;
@@ -1607,8 +1609,173 @@ export const EXPLAINER_PAGES: ExplainerPageContent[] = [
     ctaTo: "/prepare",
     relatedLinks: [
       { label: "ESIGN Act & UETA (US)", to: "/esign-ueta" },
+      { label: "Why a simple signature is enough under UETA", to: "/ueta-electronic-signature" },
       { label: "Trust & security", to: "/trust" },
       { label: "How Docracy's signing flow works", to: "/docs" },
+    ],
+  },
+  {
+    // UETA is a distinct, state-adopted law, not just "the other half of ESIGN" — every other
+    // ESIGN/UETA mention on the site (esign-ueta, electronic-signature-guide, Trust.tsx) bundles
+    // the two together and never argues UETA's own attribution/retention sections on their own
+    // terms. This page exists specifically to make that argument that nothing else on the site
+    // makes, not to restate the consent/intent/record summary those pages already cover.
+    slug: "ueta-electronic-signature",
+    seoTitle: "Is a Simple Electronic Signature Legal Under UETA? | Docracy",
+    seoDescription:
+      "UETA doesn't require identity verification, biometrics, or special software — just intent to sign, attribution, and a retrievable record. Here's why a simple electronic signature already clears that bar.",
+    heroHeadline: "Is a simple electronic signature legal under UETA? Yes — here's why.",
+    heroSubheadline:
+      "UETA sets a lower, technology-neutral bar than most people assume. A basic e-signature with a tamper-evident audit trail already meets it.",
+    sections: [
+      {
+        heading: "UETA is state law, not federal law",
+        body:
+          "Unlike the ESIGN Act — a federal law — the Uniform Electronic Transactions Act is a model law each US state " +
+          "adopts on its own. Every state except New York has adopted some version of UETA; New York instead uses its " +
+          "own Electronic Signatures and Records Act (ESRA), which sets a broadly similar bar. If a specific state's " +
+          "law governs your agreement, that state's UETA (or New York's ESRA) is usually what actually applies — not " +
+          "the federal ESIGN Act.",
+      },
+      {
+        heading: "What UETA requires: attribution (Section 9)",
+        body:
+          "UETA §9 says an electronic signature is legally attributable to a person if it was \"the act of the " +
+          "person\" — and that can be shown by any surrounding circumstances, including how a security procedure " +
+          "was used. It doesn't require biometrics, a certified identity check, or cryptographic signing. A " +
+          "timestamped audit trail — who clicked, from what IP, at what time, in response to a link sent to a " +
+          "specific email — is exactly the kind of circumstantial evidence UETA §9 contemplates.",
+      },
+      {
+        heading: "What UETA requires: record retention (Section 12)",
+        body:
+          "UETA §12 treats an electronic record as satisfying any legal retention requirement if it accurately " +
+          "reflects the information and remains accessible for later reference. A tamper-evident PDF — hashed so " +
+          "any edit after signing is immediately detectable — plus a certificate of completion satisfies this " +
+          "without needing a specialized records-management system.",
+      },
+      {
+        heading: "What UETA does not require",
+        list: [
+          "Identity verification of the signer",
+          "A specific signature technology or vendor",
+          "Biometric or cryptographic certificates",
+          "A notary or witness",
+        ],
+      },
+      {
+        heading: "Where a simple signature isn't enough",
+        body:
+          "UETA has carve-outs: wills, codicils, testamentary trusts, and certain family-law and court documents are " +
+          "typically excluded from electronic execution entirely, regardless of signature strength. For anything " +
+          "outside UETA's scope, or where a counterparty specifically requires notarization or a Qualified " +
+          "Electronic Signature, use the appropriate dedicated process instead.",
+      },
+    ],
+    faqs: [
+      {
+        question: "Does UETA require identity verification?",
+        answer:
+          "No. UETA's attribution standard (§9) can be satisfied by circumstantial evidence like an audit trail — it doesn't mandate biometric or government-ID verification.",
+      },
+      {
+        question: "Is UETA the same as the ESIGN Act?",
+        answer:
+          "No — ESIGN is federal law, while UETA is a model law each state adopts on its own (New York uses its own ESRA instead). They're similar in substance but are legally distinct statutes.",
+      },
+      {
+        question: "Does a simple electronic signature satisfy UETA for a business contract?",
+        answer:
+          "In the states that have adopted UETA, yes, for the everyday business agreements UETA covers. Wills, certain court filings, and a handful of other document types are excluded by UETA itself, regardless of signature type.",
+      },
+      {
+        question: "Do I need special software to comply with UETA?",
+        answer:
+          "No. UETA is technology-neutral — it doesn't mandate a specific signature vendor or method, only that there's clear intent to sign, attribution, and a retrievable record.",
+      },
+    ],
+    ctaLabel: "Sign a document under UETA",
+    ctaTo: "/prepare",
+    relatedLinks: [
+      { label: "How Docracy meets UETA's requirements", to: "/docracy-ueta-compliance" },
+      { label: "ESIGN Act & UETA overview", to: "/esign-ueta" },
+      { label: "Trust & security", to: "/trust" },
+    ],
+  },
+  {
+    slug: "docracy-ueta-compliance",
+    seoTitle: "How Docracy Meets UETA's Requirements | Docracy",
+    seoDescription:
+      "A section-by-section look at how Docracy's signing flow — consent, audit trail, tamper-evident hashing, and retention — maps to UETA's actual legal requirements.",
+    heroHeadline: "How Docracy meets UETA's requirements, section by section.",
+    heroSubheadline:
+      "Not a marketing claim — an actual walkthrough of which part of Docracy's signing flow satisfies which part of UETA.",
+    sections: [
+      {
+        heading: "Consent to sign electronically (UETA §5)",
+        body:
+          "UETA requires that parties agree to conduct the transaction electronically. Docracy makes signers " +
+          "explicitly acknowledge and consent before they can sign — this isn't implied just by opening the link.",
+      },
+      {
+        heading: "Intent to sign (UETA §2, §7)",
+        body:
+          "UETA requires a clear signing action, not passive agreement. Signers actively draw or type their " +
+          "signature and submit it — a deliberate act, not a default or pre-filled state.",
+      },
+      {
+        heading: "Attribution (UETA §9)",
+        body:
+          "Docracy's audit trail records the signer's email, IP address, and timestamp for every action in the " +
+          "chain, plus — optionally — a PIN the preparer sets that the signer must enter. Together, that's the kind " +
+          "of circumstantial record UETA §9 treats as sufficient to attribute a signature to a specific person.",
+      },
+      {
+        heading: "Record integrity and retention (UETA §12)",
+        body:
+          "Every completed document gets a SHA-256 hash — change even one character afterward and the hash no " +
+          "longer matches, so tampering is immediately detectable. That hash is also anchored to the Bitcoin " +
+          "blockchain for free via the OpenTimestamps protocol, and a certificate of completion is generated " +
+          "alongside the signed PDF, so the record stays both accurate and independently verifiable.",
+      },
+      {
+        heading: "What this doesn't cover",
+        body:
+          "UETA doesn't require identity verification, and neither does Docracy's default signature (a Simple " +
+          "Electronic Signature). If a document needs stronger signer-identity assurance, paid accounts can add a " +
+          "WhatsApp-verified signature track designed to meet the EU eIDAS Advanced Electronic Signature (AES) bar " +
+          "— see Trust & security for exactly what that does and doesn't prove. Docracy is not a Qualified Trust " +
+          "Service Provider and doesn't issue Qualified Electronic Signatures (QES).",
+      },
+    ],
+    faqs: [
+      {
+        question: "Does Docracy verify who's actually signing?",
+        answer:
+          "Not by default — Docracy's Simple Electronic Signature proves what was signed and when, not who physically signed. Paid accounts can add WhatsApp-verified signing for stronger identity assurance.",
+      },
+      {
+        question: "Is Docracy's audit trail enough to satisfy UETA's attribution requirement?",
+        answer:
+          "For the everyday business documents UETA covers, the audit trail (email, IP, timestamp, optional PIN) is the kind of circumstantial evidence UETA §9 treats as sufficient — though this isn't a substitute for your own legal advice on a specific document.",
+      },
+      {
+        question: "What happens to my document after everyone signs?",
+        answer:
+          "Docracy generates a hash-verified, tamper-evident PDF and certificate of completion, deletes the working copy after a short retention window (free tier: 9 days), and keeps a hash-based verification record indefinitely so the document can still be checked long after it's gone.",
+      },
+      {
+        question: "Does this apply in New York?",
+        answer:
+          "New York hasn't adopted UETA — it uses its own Electronic Signatures and Records Act (ESRA), which sets a broadly similar bar. This page isn't legal advice about which law applies to your specific document.",
+      },
+    ],
+    ctaLabel: "Sign a document",
+    ctaTo: "/prepare",
+    relatedLinks: [
+      { label: "Why a simple signature is enough under UETA", to: "/ueta-electronic-signature" },
+      { label: "ESIGN Act & UETA overview", to: "/esign-ueta" },
+      { label: "Trust & security", to: "/trust" },
     ],
   },
 ];

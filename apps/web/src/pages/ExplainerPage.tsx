@@ -2,8 +2,10 @@ import { Link } from "react-router-dom";
 import { usePageMeta } from "../lib/usePageMeta";
 import { EXPLAINER_PAGES } from "../lib/marketingPages";
 import { track } from "../lib/track";
+import { useT } from "../lib/i18n";
 
 export default function ExplainerPage({ slug }: { slug: string }) {
+  const t = useT();
   const page = EXPLAINER_PAGES.find((p) => p.slug === slug);
   if (!page) return null;
 
@@ -17,8 +19,21 @@ export default function ExplainerPage({ slug }: { slug: string }) {
     track("landingpage_cta_clicked", { source: `seo:${page.slug}:${placement}` });
   };
 
+  const faqJsonLd = page.faqs
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: page.faqs.map((faq) => ({
+          "@type": "Question",
+          name: faq.question,
+          acceptedAnswer: { "@type": "Answer", text: faq.answer },
+        })),
+      }
+    : null;
+
   return (
     <div>
+      {faqJsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />}
       <div className="hero-band">
         <div className="hero-inner" style={{ maxWidth: 720 }}>
           <h1>{page.heroHeadline}</h1>
@@ -52,6 +67,18 @@ export default function ExplainerPage({ slug }: { slug: string }) {
             )}
           </div>
         ))}
+
+        {page.faqs && page.faqs.length > 0 && (
+          <>
+            <h2 style={{ fontSize: 19, marginTop: 36 }}>{t("tpl.detail.faqTitle")}</h2>
+            {page.faqs.map((faq, i) => (
+              <details key={i} className="faq-item" style={{ marginTop: 12 }}>
+                <summary style={{ fontWeight: 700, cursor: "pointer" }}>{faq.question}</summary>
+                <p style={{ margin: "8px 0 0", color: "var(--body)" }}>{faq.answer}</p>
+              </details>
+            ))}
+          </>
+        )}
 
         {page.relatedLinks.length > 0 && (
           <p style={{ marginTop: 24, fontSize: 14 }}>
