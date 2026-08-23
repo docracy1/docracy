@@ -103,6 +103,16 @@ export async function checkTrackEventRateLimit(env: Env, ip: string): Promise<bo
   return checkLimit(env, `track:${ip}`, TRACK_EVENT_MAX_PER_WINDOW, TRACK_EVENT_WINDOW_SECONDS);
 }
 
+const GOOGLE_DOC_IMPORT_WINDOW_SECONDS = 60 * 60; // 1 hour
+const GOOGLE_DOC_IMPORT_MAX_PER_WINDOW = 10;
+
+/** Soft per-IP limit on the no-auth Google Docs import endpoint — it's a public proxy to an
+ *  outbound fetch with no account behind it, so this bounds how much bandwidth/abuse one IP can
+ *  generate rather than gating the feature behind a paid plan. */
+export async function checkGoogleDocImportRateLimit(env: Env, ip: string): Promise<boolean> {
+  return checkLimit(env, `gdocimport:${ip}`, GOOGLE_DOC_IMPORT_MAX_PER_WINDOW, GOOGLE_DOC_IMPORT_WINDOW_SECONDS);
+}
+
 const MAGIC_LINK_WINDOW_SECONDS = 60 * 60; // 1 hour
 const MAGIC_LINK_MAX_PER_WINDOW = 5;
 

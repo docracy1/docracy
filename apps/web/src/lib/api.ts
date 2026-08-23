@@ -1062,3 +1062,18 @@ export async function verifyDocumentHash(hash: string): Promise<VerificationResu
   const res = await apiFetch(`/api/verify/${encodeURIComponent(hash)}`);
   return asJson(res);
 }
+
+/** Public, no-auth import of a Google Doc as a PDF (must be shared "Anyone with the link can
+ *  view") — returns raw PDF bytes on success, so this can't use asJson's assume-JSON error path. */
+export async function importGoogleDoc(url: string): Promise<Blob> {
+  const res = await apiFetch("/api/import/google-doc", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ url }),
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error((body as { error?: string }).error ?? `Import failed (${res.status})`);
+  }
+  return res.blob();
+}

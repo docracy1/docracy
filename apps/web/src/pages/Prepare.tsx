@@ -15,6 +15,7 @@ import {
   fetchTemplates,
   fetchTemplateUsage,
   generateContract,
+  importGoogleDoc,
   submitDocumentToMarketplace,
 } from "../lib/api";
 import type { Account, ContactSummary, ContractRisk, TemplateSummary, TemplateUsageEntry } from "../lib/api";
@@ -125,6 +126,9 @@ export default function Prepare() {
   }, []);
   const [file, setFile] = useState<File | null>(null);
   const [pdfBytes, setPdfBytes] = useState<Uint8Array | null>(null);
+  const [googleDocUrl, setGoogleDocUrl] = useState("");
+  const [importingGoogleDoc, setImportingGoogleDoc] = useState(false);
+  const [googleDocError, setGoogleDocError] = useState<string | null>(null);
   const [preparerSigns, setPreparerSigns] = useState(false);
   const [preparerEmail, setPreparerEmail] = useState("");
   const [preparerMarketingOptIn, setPreparerMarketingOptIn] = useState(false);
@@ -368,6 +372,23 @@ export default function Prepare() {
     setPdfBytes(new Uint8Array(await f.arrayBuffer()));
     setFields([]);
     track("document_uploaded");
+  };
+
+  const onGoogleDocImport = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const url = googleDocUrl.trim();
+    if (!url) return;
+    setGoogleDocError(null);
+    setImportingGoogleDoc(true);
+    try {
+      const blob = await importGoogleDoc(url);
+      await acceptFile(new File([blob], "google-doc.pdf", { type: "application/pdf" }));
+      setGoogleDocUrl("");
+    } catch (err) {
+      setGoogleDocError(err instanceof Error ? err.message : t("prepare.googleDocImportError"));
+    } finally {
+      setImportingGoogleDoc(false);
+    }
   };
 
   // Picks up a file dropped on the homepage hero's upload widget, if any — skips the extra
@@ -1122,6 +1143,23 @@ export default function Prepare() {
                   {t("prepare.whatsappAvailableHint")}
                 </Link>
               </p>
+              <form onSubmit={onGoogleDocImport} style={{ marginTop: 12, display: "flex", gap: 6 }}>
+                <input
+                  type="text"
+                  value={googleDocUrl}
+                  onChange={(e) => setGoogleDocUrl(e.target.value)}
+                  placeholder={t("prepare.googleDocPlaceholder")}
+                  style={{ flex: 1, fontSize: 12.5 }}
+                  disabled={importingGoogleDoc}
+                />
+                <button type="submit" className="btn-secondary" disabled={importingGoogleDoc || !googleDocUrl.trim()}>
+                  {importingGoogleDoc ? t("prepare.googleDocImporting") : t("prepare.googleDocImportBtn")}
+                </button>
+              </form>
+              <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 4, marginBottom: 0 }}>
+                {t("prepare.googleDocHint")}
+              </p>
+              {googleDocError && <p style={{ color: "var(--danger)", fontSize: 12, marginTop: 6 }}>{googleDocError}</p>}
               {error && <p style={{ color: "var(--danger)", marginTop: 8 }}>{error}</p>}
 
               {account?.isPaid ? (
