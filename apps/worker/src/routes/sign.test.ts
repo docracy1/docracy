@@ -7,6 +7,11 @@ import { makeMockEnv, makeValidPdfBytes } from "../test/mockEnv";
 import { signToken, hashOpaqueToken } from "@docracy/shared";
 import type { DocState } from "@docracy/shared";
 
+// Only needed on requests that reach document completion (recordVerification's background
+// OpenTimestamps submission uses c.executionCtx.waitUntil) — Hono's own .request() helper throws
+// "This context has no ExecutionContext" if code under test touches it without one supplied.
+const MOCK_CTX = { waitUntil: () => {}, passThroughOnException: () => {} } as unknown as ExecutionContext;
+
 // A real minimal 1x1 PNG — needed because pdf-lib's embedPng actually decodes the image.
 const TINY_PNG =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=";
@@ -245,7 +250,8 @@ describe("sign routes", () => {
     const res = await sign.request(
       `/sign/${token2}`,
       { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ values: [{ fieldId: "f2", value: TINY_PNG }], consent: true }) },
-      env
+      env,
+      MOCK_CTX
     );
     expect(res.status).toBe(200);
     const body: any = await res.json();
@@ -314,7 +320,8 @@ describe("sign routes", () => {
     await sign.request(
       `/sign/${token2}`,
       { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ values: [{ fieldId: "f2", value: TINY_PNG }], consent: true }) },
-      env
+      env,
+      MOCK_CTX
     );
 
     const stored = JSON.parse((await env.DOCRACY_KV.get(`doc:${docId}`)) as string) as DocState;
@@ -449,7 +456,8 @@ describe("parallel signing mode", () => {
     const res = await sign.request(
       `/sign/${token1}`,
       { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ values: [{ fieldId: "f1", value: TINY_PNG }], consent: true }) },
-      env
+      env,
+      MOCK_CTX
     );
     expect(res.status).toBe(200);
     const body: any = await res.json();

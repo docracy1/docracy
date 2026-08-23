@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { isValidSha256Hex, recordVerification, lookupVerification } from "./verification";
+import { isValidSha256Hex, recordVerification, lookupVerification, recordOtsProof, lookupOtsProof } from "./verification";
 import { makeMockEnv } from "../test/mockEnv";
 
 describe("isValidSha256Hex", () => {
@@ -46,5 +46,28 @@ describe("recordVerification / lookupVerification", () => {
   it("returns null for a malformed hash without touching KV", async () => {
     const { env } = makeMockEnv();
     expect(await lookupVerification(env, "not-a-hash")).toBeNull();
+  });
+});
+
+describe("recordOtsProof / lookupOtsProof", () => {
+  it("round-trips proof bytes written for a hash", async () => {
+    const { env } = makeMockEnv();
+    const hash = "e".repeat(64);
+    const proof = new Uint8Array([0, 79, 112, 101, 110, 84, 105, 109, 101]);
+
+    await recordOtsProof(env, hash, proof);
+    const found = await lookupOtsProof(env, hash);
+
+    expect(found).toEqual(proof);
+  });
+
+  it("returns null when no proof has been stored for a hash", async () => {
+    const { env } = makeMockEnv();
+    expect(await lookupOtsProof(env, "f".repeat(64))).toBeNull();
+  });
+
+  it("returns null for a malformed hash without touching KV", async () => {
+    const { env } = makeMockEnv();
+    expect(await lookupOtsProof(env, "not-a-hash")).toBeNull();
   });
 });

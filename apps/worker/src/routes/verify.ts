@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { isValidSha256Hex, lookupVerification } from "../lib/verification";
+import { isValidSha256Hex, lookupVerification, lookupOtsProof } from "../lib/verification";
 import type { Env } from "@docracy/shared";
 
 /** Public, no-auth lookup — mounted at /api/verify. The hash itself is the access gate: it's
@@ -14,5 +14,25 @@ verifyPublic.get("/:hash", async (c) => {
   }
   const record = await lookupVerification(c.env, hash);
   if (!record) return c.json({ found: false });
-  return c.json({ found: true, ...record });
+  const hasOtsProof = (await lookupOtsProof(c.env, hash)) !== null;
+  return c.json({ found: true, ...record, hasOtsProof });
+});
+
+// A standard OpenTimestamps .ots proof — verifiable by anyone via opentimestamps.org or the `ots`
+// CLI, independent of Docracy staying up. Submitted as a background step at completion (see
+// lib/opentimestamps.ts), so it can be briefly absent right after signing even when found=true
+// above; a 404 here just means "not yet available," not "never was."
+verifyPublic.get("/:hash/ots", async (c) => {
+  const hash = c.req.param("hash");
+  if (!isValidSha256Hex(hash)) {
+    return c.json({ error: "Not a valid SHA-256 hash (expected 64 hex characters)" }, 400);
+  }
+  const proof = await lookupOtsProof(c.env, hash);
+  if (!proof) return c.json({ error: "No blockchain timestamp proof available yet for this hash" }, 404);
+  return new Response(proof, {
+    headers: {
+      "content-type": "application/octet-stream",
+      "content-disposition": `attachment; filename="${hash}.ots"`,
+    },
+  });
 });

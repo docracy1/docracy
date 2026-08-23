@@ -7,14 +7,18 @@ import { resetRateLimitMemoryForTests } from "../lib/ratelimit";
 
 /** Minimal in-memory stand-ins for the KV/R2 methods this app actually uses. */
 function createMockKV() {
-  const store = new Map<string, string>();
+  const store = new Map<string, string | Uint8Array>();
   return {
-    async get(key: string, type?: "json") {
+    async get(key: string, type?: "json" | "arrayBuffer") {
       const raw = store.get(key);
       if (raw === undefined) return null;
-      return type === "json" ? JSON.parse(raw) : raw;
+      if (type === "arrayBuffer") {
+        const bytes = raw instanceof Uint8Array ? raw : new TextEncoder().encode(raw);
+        return bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength);
+      }
+      return type === "json" ? JSON.parse(raw as string) : raw;
     },
-    async put(key: string, value: string, _opts?: { expirationTtl?: number }) {
+    async put(key: string, value: string | Uint8Array, _opts?: { expirationTtl?: number }) {
       store.set(key, value);
     },
     async list({ prefix, cursor }: { prefix?: string; cursor?: string } = {}) {
@@ -26,7 +30,10 @@ function createMockKV() {
     async delete(key: string) {
       store.delete(key);
     },
-    _store: store,
+    // Existing tests poke at this directly assuming string values (every non-binary KV key) —
+    // the widened Map above only exists so recordOtsProof/lookupOtsProof (verification.ts) can
+    // round-trip raw bytes through the same mock via the typed get/put methods above.
+    _store: store as Map<string, string>,
   };
 }
 

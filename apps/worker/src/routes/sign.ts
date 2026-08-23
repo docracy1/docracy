@@ -19,7 +19,8 @@ import {
 import { recordViewedOnce, indexSignerSigned, indexInviteSent, indexCompleted, indexVoided } from "../lib/index-d1";
 import { checkTokenAccessRateLimit, checkPinAttemptRateLimit } from "../lib/ratelimit";
 import { sha256Hex } from "../lib/hash";
-import { recordVerification } from "../lib/verification";
+import { recordVerification, recordOtsProof } from "../lib/verification";
+import { stampHash } from "../lib/opentimestamps";
 import { requestTimestamp } from "../lib/timestamp";
 import { verifyPin, issueUnlockToken, verifyUnlockToken } from "../lib/signUnlock";
 import { deliverWebhookEvent } from "../lib/webhooks";
@@ -75,6 +76,16 @@ function connectorNonFatal(ctx: { waitUntil(promise: Promise<unknown>): void }, 
 
 function emailNonFatal(ctx: { waitUntil(promise: Promise<unknown>): void }, docId: string, label: string, work: Promise<void>) {
   ctx.waitUntil(work.catch((err) => console.error(`${label} email failed for doc ${docId} (non-fatal):`, err)));
+}
+
+// Calendar submission is a few external round-trips (a handful of seconds) — never worth making a
+// signer wait for it, and a slow/unreachable calendar must never affect document completion.
+function otsNonFatal(ctx: { waitUntil(promise: Promise<unknown>): void }, env: Env, docId: string, hash: string) {
+  ctx.waitUntil(
+    stampHash(hash)
+      .then((proofBytes) => (proofBytes ? recordOtsProof(env, hash, proofBytes) : undefined))
+      .catch((err) => console.error(`OpenTimestamps stamping failed for doc ${docId} (non-fatal):`, err))
+  );
 }
 
 const sign = new Hono<{ Bindings: Env }>();
@@ -768,6 +779,10 @@ sign.post("/sign/:token", async (c) => {
       signerCount: freshDoc.signers.length,
       completedAt: freshDoc.completedAt,
     });
+    // Anchors the same hash to Bitcoin via the free OpenTimestamps calendar network — independent
+    // of Docracy's own KV record above, so verification doesn't have to rely on trusting us at
+    // all. Background/best-effort: see otsNonFatal.
+    otsNonFatal(c.executionCtx, c.env, freshDoc.docId, finalHash);
 
     events.push({
       type: "completed",
