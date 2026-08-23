@@ -413,122 +413,18 @@ export default function Landing() {
   return (
     <div>
       <div className="hero-band">
-        <div className="hero-inner hero-split">
-          <div>
-            <Link
-              to="/whatsapp-signing"
-              className="hero-new-badge"
-              onClick={() => track("landingpage_cta_clicked", { source: "hero_whatsapp_badge" })}
-            >
-              <img src="/integrations/whatsapp.svg" alt="" width={16} height={16} />
-              {t("hero.whatsappBadge")}
-            </Link>
-            <h1>{t("hero.title")}</h1>
-            <p className="hero-sub">{t("hero.sub")}</p>
-            <ul className="hero-trust-badges">
-              <li>
-                <FeatureIcon name="scale" />
-                {t("hero.badge.legal")}
-              </li>
-              <li>
-                <FeatureIcon name="shield" />
-                {t("hero.badge.ssl")}
-              </li>
-              <li>
-                <FeatureIcon name="pen" />
-                {t("hero.badge.noSignup")}
-              </li>
-            </ul>
-            <div className="hero-cta-row">
-              {heroSent ? (
-                <div className="hero-signup-sent" role="status">
-                  <p className="hero-signup-sent-title">{t("hero.sentTitle")}</p>
-                  <p className="hero-signup-sent-body">{t("hero.sentBody", { email: emailTrimmed })}</p>
-                  <Link
-                    to={prepareSampleTo}
-                    className="hero-signup-sent-continue"
-                    onClick={() => track("landingpage_cta_clicked", { source: "hero_continue_prepare" })}
-                  >
-                    {t("hero.continuePrepare")} →
-                  </Link>
-                </div>
-              ) : (
-                <form className="hero-signup-form" onSubmit={onHeroStart} noValidate>
-                  <div className="hero-signup">
-                    <input
-                      ref={heroEmailRef}
-                      className="hero-signup-input"
-                      type="email"
-                      name="email"
-                      autoComplete="email"
-                      placeholder={t("hero.emailPlaceholder")}
-                      aria-label={t("hero.emailPlaceholder")}
-                      aria-invalid={!!heroError}
-                      aria-describedby={heroError ? "hero-signup-error" : undefined}
-                      value={heroEmail}
-                      onChange={(e) => {
-                        setHeroEmail(e.target.value);
-                        if (e.target.value.trim()) setHeroEmailStarted(true);
-                        if (heroError) setHeroError(null);
-                      }}
-                      disabled={heroSubmitting || pendingSubmit}
-                    />
-                    <button type="submit" className="hero-signup-btn" disabled={heroSubmitting || pendingSubmit}>
-                      {heroSubmitting
-                        ? t("common.sending")
-                        : pendingSubmit
-                          ? t("common.verifying")
-                          : `${t("hero.startFree")} →`}
-                    </button>
-                  </div>
-                  {needsTurnstile && heroEmailStarted && (
-                    <TurnstileWidget onToken={setTurnstileToken} resetKey={turnstileResetKey} />
-                  )}
-                  {heroError && (
-                    <p id="hero-signup-error" className="hero-signup-error" role="alert">
-                      {heroError}
-                    </p>
-                  )}
-                </form>
-              )}
-              <button
-                type="button"
-                className="hero-watch-btn"
-                id="watch-how-it-works"
-                onClick={() => {
-                  track("landingpage_cta_clicked", { source: "hero_watch_how" });
-                  setWatchOpen(true);
-                  if (window.location.hash !== "#watch-how-it-works") {
-                    history.replaceState(null, "", "#watch-how-it-works");
-                  }
-                }}
-              >
-                <span className="hero-watch-icon" aria-hidden="true">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                    <circle cx="12" cy="12" r="10" fill="rgba(255,255,255,0.18)" />
-                    <path d="M10 8.5v7l6-3.5-6-3.5z" fill="#fff" />
-                  </svg>
-                </span>
-                {t("hero.watchHow")}
-              </button>
-              <a
-                href="#compare-price"
-                className="hero-calc-savings-link"
-                onClick={() => track("landingpage_cta_clicked", { source: "hero_calculate_savings" })}
-              >
-                {t("hero.calculateSavings")}
-              </a>
-            </div>
-            {!heroSent && <p className="hero-cta-hint">{t("hero.hint")}</p>}
-            <p className="hero-secondary-link">
-              <Link
-                to={templatesTo}
-                onClick={() => track("landingpage_cta_clicked", { source: "hero_browse_templates" })}
-              >
-                {t("hero.orTemplates")}
-              </Link>
-            </p>
-          </div>
+        <div className="hero-inner hero-stack">
+          <Link
+            to="/whatsapp-signing"
+            className="hero-new-badge"
+            onClick={() => track("landingpage_cta_clicked", { source: "hero_whatsapp_badge" })}
+          >
+            <img src="/integrations/whatsapp.svg" alt="" width={16} height={16} />
+            {t("hero.whatsappBadge")}
+          </Link>
+          <h1>{t("hero.title")}</h1>
+          <p className="hero-sub">{t("hero.sub")}</p>
+
           <div className="hero-upload-circle-wrap">
             <input
               type="file"
@@ -564,6 +460,113 @@ export default function Landing() {
             </label>
             <p className="hero-upload-circle-caption">{t("hero.uploadCircleCaption")}</p>
           </div>
+
+          {heroSent ? (
+            <div className="hero-signup-sent" role="status">
+              <p className="hero-signup-sent-title">{t("hero.sentTitle")}</p>
+              <p className="hero-signup-sent-body">{t("hero.sentBody", { email: emailTrimmed })}</p>
+              <Link
+                to={prepareSampleTo}
+                className="hero-signup-sent-continue"
+                onClick={() => track("landingpage_cta_clicked", { source: "hero_continue_prepare" })}
+              >
+                {t("hero.continuePrepare")} →
+              </Link>
+            </div>
+          ) : (
+            <form className="hero-signup-form" onSubmit={onHeroStart} noValidate>
+              <div className="hero-signup">
+                <input
+                  ref={heroEmailRef}
+                  className="hero-signup-input"
+                  type="email"
+                  name="email"
+                  autoComplete="email"
+                  placeholder={t("hero.emailPlaceholder")}
+                  aria-label={t("hero.emailPlaceholder")}
+                  aria-invalid={!!heroError}
+                  aria-describedby={heroError ? "hero-signup-error" : undefined}
+                  value={heroEmail}
+                  onChange={(e) => {
+                    setHeroEmail(e.target.value);
+                    if (e.target.value.trim()) setHeroEmailStarted(true);
+                    if (heroError) setHeroError(null);
+                  }}
+                  disabled={heroSubmitting || pendingSubmit}
+                />
+                <button type="submit" className="hero-signup-btn" disabled={heroSubmitting || pendingSubmit}>
+                  {heroSubmitting
+                    ? t("common.sending")
+                    : pendingSubmit
+                      ? t("common.verifying")
+                      : `${t("hero.startFree")} →`}
+                </button>
+              </div>
+              {needsTurnstile && heroEmailStarted && (
+                <TurnstileWidget onToken={setTurnstileToken} resetKey={turnstileResetKey} />
+              )}
+              {heroError && (
+                <p id="hero-signup-error" className="hero-signup-error" role="alert">
+                  {heroError}
+                </p>
+              )}
+            </form>
+          )}
+          {!heroSent && <p className="hero-cta-hint">{t("hero.hint")}</p>}
+
+          <div className="hero-cta-row hero-cta-row-center">
+            <button
+              type="button"
+              className="hero-watch-btn"
+              id="watch-how-it-works"
+              onClick={() => {
+                track("landingpage_cta_clicked", { source: "hero_watch_how" });
+                setWatchOpen(true);
+                if (window.location.hash !== "#watch-how-it-works") {
+                  history.replaceState(null, "", "#watch-how-it-works");
+                }
+              }}
+            >
+              <span className="hero-watch-icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="10" fill="rgba(255,255,255,0.18)" />
+                  <path d="M10 8.5v7l6-3.5-6-3.5z" fill="#fff" />
+                </svg>
+              </span>
+              {t("hero.watchHow")}
+            </button>
+            <span className="hero-cta-row-sep">·</span>
+            <Link
+              to={templatesTo}
+              className="hero-secondary-link"
+              onClick={() => track("landingpage_cta_clicked", { source: "hero_browse_templates" })}
+            >
+              {t("hero.orTemplates")}
+            </Link>
+          </div>
+
+          <ul className="hero-trust-badges hero-trust-badges-bottom">
+            <li>
+              <FeatureIcon name="scale" />
+              {t("hero.badge.legal")}
+            </li>
+            <li>
+              <FeatureIcon name="shield" />
+              {t("hero.badge.ssl")}
+            </li>
+            <li>
+              <FeatureIcon name="pen" />
+              {t("hero.badge.noSignup")}
+            </li>
+            <li>
+              <a
+                href="#compare-price"
+                onClick={() => track("landingpage_cta_clicked", { source: "hero_calculate_savings" })}
+              >
+                {t("hero.calculateSavings")}
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
 
