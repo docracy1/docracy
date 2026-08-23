@@ -4,6 +4,7 @@ import { getFeaturePageContent } from "../lib/marketingPages";
 import { localizePath, useI18n, useT } from "../lib/i18n";
 import { BILINGUAL_FEATURE_BY_SLUG, cleanPath, seoAlternates } from "../lib/i18n/paths";
 import { track } from "../lib/track";
+import { NavIcon } from "../components/NavIcons";
 
 /** Renders one of the FEATURE_PAGES entries — mounted at a distinct literal route per slug (see
  *  main.tsx), not a `:slug` param, so each gets its own static path for SEO/backlinks. */
@@ -46,11 +47,21 @@ export default function FeaturePage({ slug }: { slug: string }) {
   return (
     <div>
       {faqJsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />}
-      <div className="hero-band">
-        <div className="hero-inner" style={{ maxWidth: 720 }}>
-          <h1>{page.heroHeadline}</h1>
-          <p>{page.heroSubheadline}</p>
-          <div style={{ marginTop: 20 }}>
+      {page.darkHero ? (
+        <div className="verify-dark-hero verify-dark-hero-compact">
+          <div className="verify-dark-hero-inner">
+            <h1>{page.heroHeadline}</h1>
+            <p>{page.heroSubheadline}</p>
+            <ul className="verify-dark-trust-row">
+              <li>
+                <NavIcon name="badge" />
+                Checked against Docracy's records
+              </li>
+              <li>
+                <NavIcon name="chainLink" />
+                Independently checkable on Bitcoin
+              </li>
+            </ul>
             <Link
               to={ctaTo}
               className="btn-primary btn-lg"
@@ -61,7 +72,24 @@ export default function FeaturePage({ slug }: { slug: string }) {
             </Link>
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="hero-band">
+          <div className="hero-inner" style={{ maxWidth: 720 }}>
+            <h1>{page.heroHeadline}</h1>
+            <p>{page.heroSubheadline}</p>
+            <div style={{ marginTop: 20 }}>
+              <Link
+                to={ctaTo}
+                className="btn-primary btn-lg"
+                style={{ display: "inline-block", textDecoration: "none" }}
+                onClick={() => onCta("hero")}
+              >
+                {page.ctaLabel}
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="container" style={{ maxWidth: 720 }}>
         <h2 style={{ fontSize: 22, marginTop: 40 }}>{t("feature.problem")}</h2>

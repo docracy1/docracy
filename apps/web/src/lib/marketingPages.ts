@@ -8,6 +8,11 @@ export interface FeaturePageContent {
   seoDescription: string;
   heroHeadline: string;
   heroSubheadline: string;
+  /** Opt into the dark, moody hero treatment used on the actual tool page this feature links to
+   *  (see `.verify-dark-hero` in theme.css and Verify.tsx) instead of the shared light gradient
+   *  `.hero-band` every other FeaturePage uses. Only for pages whose CTA leads to a page that
+   *  already established that visual identity — not a general-purpose style knob. */
+  darkHero?: boolean;
   problem: string;
   solution: string;
   features: Array<{ title: string; body: string }>;
@@ -994,6 +999,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     heroHeadline: "Prove a signed document is the real thing.",
     heroSubheadline:
       "Anyone with a finished PDF — not just the sender or signers — can confirm it was actually completed through Docracy, free, with no account.",
+    darkHero: true,
     problem:
       "Once a signed PDF leaves the platform it was created on, there's usually no way for anyone else to check it's genuine. A recipient, auditor, or counterparty just has to trust that no one edited a date, a dollar figure, or a signature afterward.",
     solution:

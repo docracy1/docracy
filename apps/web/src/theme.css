@@ -2504,6 +2504,12 @@ select {
   text-align: center;
 }
 
+/* For dark heroes without the /verify page's upload circle (e.g. a FeaturePage CTA'ing to it) —
+   the plain 120px bottom padding above was sized to balance that circle's own weight. */
+.verify-dark-hero-compact {
+  padding-bottom: 64px;
+}
+
 .verify-dark-hero-inner {
   max-width: 620px;
   margin: 0 auto;
