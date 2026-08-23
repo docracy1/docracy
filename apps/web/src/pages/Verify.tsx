@@ -3,6 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { usePageMeta } from "../lib/usePageMeta";
 import { verifyDocumentHash, apiUrl, type VerificationResult } from "../lib/api";
 import { track } from "../lib/track";
+import { NavIcon } from "../components/NavIcons";
 
 const HASH_RE = /^[0-9a-f]{64}$/i;
 
@@ -20,13 +21,14 @@ type Status =
 
 export default function Verify() {
   usePageMeta(
-    "Verify a Signed Document | Docracy",
-    "Confirm a PDF was really completed through Docracy's signing flow — upload the file or paste its SHA-256 hash. Your file never leaves your browser."
+    "Verify a Signed Document — Independently, via Blockchain | Docracy",
+    "Confirm a PDF was really completed through Docracy's signing flow — and check it independently on the Bitcoin blockchain via OpenTimestamps, without needing to trust Docracy at all. Upload the file or paste its SHA-256 hash; it never leaves your browser."
   );
 
   const [searchParams] = useSearchParams();
   const [status, setStatus] = useState<Status>({ state: "idle" });
   const [hashInput, setHashInput] = useState("");
+  const [isDragging, setIsDragging] = useState(false);
 
   const runCheck = async (hash: string) => {
     setStatus({ state: "checking" });
@@ -73,124 +75,163 @@ export default function Verify() {
   };
 
   return (
-    <div className="container" style={{ maxWidth: 640 }}>
-      <h1>Verify a signed document</h1>
-      <p style={{ color: "var(--mute)" }}>
-        Confirm a PDF was really completed through Docracy's signing flow, and when. Upload the file below — it's
-        hashed in your browser and never uploaded anywhere; only the resulting hash is sent to check against our
-        records.
-      </p>
-
-      <div
-        className="card"
-        style={{ marginTop: 20, padding: 24, textAlign: "center", border: "2px dashed var(--hairline)" }}
-      >
-        <input
-          type="file"
-          accept="application/pdf,.pdf"
-          id="verify-file-input"
-          style={{ display: "none" }}
-          onChange={(e) => {
-            const file = e.target.files?.[0];
-            if (file) onFile(file);
-            e.target.value = "";
-          }}
-        />
-        <label htmlFor="verify-file-input" className="btn-primary" style={{ cursor: "pointer", display: "inline-block" }}>
-          Upload a signed PDF
-        </label>
-        <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 10, marginBottom: 0 }}>
-          Works with the signed document itself or its certificate of completion.
-        </p>
-      </div>
-
-      <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "20px 0" }}>
-        <div style={{ flex: 1, height: 1, background: "var(--hairline)" }} />
-        <span style={{ fontSize: 12, color: "var(--mute)" }}>or paste a hash</span>
-        <div style={{ flex: 1, height: 1, background: "var(--hairline)" }} />
-      </div>
-
-      <form onSubmit={onHashSubmit} style={{ display: "flex", gap: 8 }}>
-        <input
-          type="text"
-          value={hashInput}
-          onChange={(e) => setHashInput(e.target.value)}
-          placeholder="SHA-256 hash from the certificate (64 hex characters)"
-          style={{ flex: 1, fontFamily: "monospace", fontSize: 13 }}
-        />
-        <button type="submit" className="btn-secondary">
-          Check
-        </button>
-      </form>
-
-      {status.state === "checking" && (
-        <p style={{ marginTop: 20, color: "var(--mute)" }}>Checking…</p>
-      )}
-
-      {status.state === "error" && (
-        <div className="card" style={{ marginTop: 20, borderColor: "var(--danger)" }}>
-          <p style={{ margin: 0, color: "var(--danger)" }}>{status.message}</p>
-        </div>
-      )}
-
-      {status.state === "result" && status.result.found && (
-        <div className="card" style={{ marginTop: 20, borderColor: "var(--success, #2e8b57)" }}>
-          <p style={{ margin: 0, fontWeight: 700 }}>✓ Verified</p>
-          <p style={{ margin: "8px 0 0" }}>
-            A document with this exact content was completed through Docracy on{" "}
-            {status.result.completedAt ? new Date(status.result.completedAt).toLocaleString() : "an unknown date"}, signed
-            by {status.result.signerCount} {status.result.signerCount === 1 ? "signer" : "signers"}.
+    <div>
+      <div className="hero-band" style={{ paddingBottom: 96, textAlign: "center" }}>
+        <div className="hero-inner" style={{ maxWidth: 640 }}>
+          <h1 style={{ maxWidth: "none" }}>Verify a signed document</h1>
+          <p>
+            Confirm a PDF was really completed through Docracy's signing flow, and when — then check it a second
+            way, independently of Docracy, on the Bitcoin blockchain.
           </p>
-          {status.result.hasOtsProof ? (
-            <p style={{ margin: "12px 0 0", fontSize: 13 }}>
-              This hash is also anchored to the Bitcoin blockchain via the free, public{" "}
-              <a href="https://opentimestamps.org" target="_blank" rel="noopener noreferrer">
-                OpenTimestamps
-              </a>{" "}
-              protocol — provable even if Docracy itself disappeared.{" "}
-              <a href={apiUrl(`/api/verify/${status.hash}/ots`)}>Download the proof (.ots)</a>, then verify it
-              independently at{" "}
-              <a href="https://opentimestamps.org" target="_blank" rel="noopener noreferrer">
-                opentimestamps.org
-              </a>
-              . New proofs take a few hours to be confirmed on the blockchain — until then, opentimestamps.org will
-              show it as pending.
+          <ul className="hero-trust-badges" style={{ justifyContent: "center", marginBottom: 0 }}>
+            <li>
+              <NavIcon name="badge" />
+              Checked against Docracy's records
+            </li>
+            <li>
+              <NavIcon name="chainLink" />
+              Independently checkable on Bitcoin
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="container">
+        <div className="verify-panel">
+          <div className="verify-hero-icon">
+            <NavIcon name="badge" />
+          </div>
+
+          <div
+            className={`verify-dropzone${isDragging ? " is-dragging" : ""}`}
+            onDragOver={(e) => {
+              e.preventDefault();
+              setIsDragging(true);
+            }}
+            onDragLeave={() => setIsDragging(false)}
+            onDrop={(e) => {
+              e.preventDefault();
+              setIsDragging(false);
+              const file = e.dataTransfer.files?.[0];
+              if (file) onFile(file);
+            }}
+          >
+            <input
+              type="file"
+              accept="application/pdf,.pdf"
+              id="verify-file-input"
+              style={{ display: "none" }}
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) onFile(file);
+                e.target.value = "";
+              }}
+            />
+            <label
+              htmlFor="verify-file-input"
+              className="btn-primary"
+              style={{ cursor: "pointer", display: "inline-block" }}
+            >
+              Upload a signed PDF
+            </label>
+            <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 10, marginBottom: 0 }}>
+              Or drag and drop it here. Works with the signed document itself or its certificate of completion.
             </p>
-          ) : (
-            <p style={{ margin: "12px 0 0", fontSize: 13, color: "var(--mute)" }}>
-              A blockchain timestamp proof for this document isn't available yet — it's submitted in the background
-              right after signing and can take a minute to appear. Check back shortly.
-            </p>
+          </div>
+
+          <div className="verify-divider">
+            <span>or paste a hash</span>
+          </div>
+
+          <form onSubmit={onHashSubmit} style={{ display: "flex", gap: 8 }}>
+            <input
+              type="text"
+              value={hashInput}
+              onChange={(e) => setHashInput(e.target.value)}
+              placeholder="SHA-256 hash from the certificate (64 hex characters)"
+              style={{ flex: 1, fontFamily: "monospace", fontSize: 13 }}
+            />
+            <button type="submit" className="btn-secondary">
+              Check
+            </button>
+          </form>
+
+          {status.state === "checking" && <p style={{ marginTop: 20, color: "var(--mute)" }}>Checking…</p>}
+
+          {status.state === "error" && (
+            <div className="verify-result-card is-danger">
+              <span className="verify-result-icon">!</span>
+              <p style={{ margin: 0, color: "var(--danger)" }}>{status.message}</p>
+            </div>
+          )}
+
+          {status.state === "result" && status.result.found && (
+            <div className="verify-result-card is-success">
+              <span className="verify-result-icon">✓</span>
+              <div>
+                <p style={{ margin: 0, fontWeight: 700 }}>Verified</p>
+                <p style={{ margin: "8px 0 0" }}>
+                  A document with this exact content was completed through Docracy on{" "}
+                  {status.result.completedAt ? new Date(status.result.completedAt).toLocaleString() : "an unknown date"}
+                  , signed by {status.result.signerCount} {status.result.signerCount === 1 ? "signer" : "signers"}.
+                </p>
+                {status.result.hasOtsProof ? (
+                  <p style={{ margin: "12px 0 0", fontSize: 13 }}>
+                    This hash is also anchored to the Bitcoin blockchain via the free, public{" "}
+                    <a href="https://opentimestamps.org" target="_blank" rel="noopener noreferrer">
+                      OpenTimestamps
+                    </a>{" "}
+                    protocol — provable even if Docracy itself disappeared.{" "}
+                    <a href={apiUrl(`/api/verify/${status.hash}/ots`)}>Download the proof (.ots)</a>, then verify it
+                    independently at{" "}
+                    <a href="https://opentimestamps.org" target="_blank" rel="noopener noreferrer">
+                      opentimestamps.org
+                    </a>
+                    . New proofs take a few hours to be confirmed on the blockchain — until then, opentimestamps.org
+                    will show it as pending.
+                  </p>
+                ) : (
+                  <p style={{ margin: "12px 0 0", fontSize: 13, color: "var(--mute)" }}>
+                    A blockchain timestamp proof for this document isn't available yet — it's submitted in the
+                    background right after signing and can take a minute to appear. Check back shortly.
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+
+          {status.state === "result" && !status.result.found && (
+            <div className="verify-result-card is-neutral">
+              <span className="verify-result-icon">?</span>
+              <div>
+                <p style={{ margin: 0, fontWeight: 700 }}>No matching record found</p>
+                <p style={{ margin: "8px 0 0", color: "var(--mute)" }}>
+                  This hash doesn't match any document completed through Docracy — or the file has been modified
+                  even slightly since it was signed, which changes its hash entirely. This doesn't necessarily mean
+                  the document is fraudulent; it may simply not have been signed here.
+                </p>
+              </div>
+            </div>
           )}
         </div>
-      )}
 
-      {status.state === "result" && !status.result.found && (
-        <div className="card" style={{ marginTop: 20 }}>
-          <p style={{ margin: 0, fontWeight: 700 }}>No matching record found</p>
-          <p style={{ margin: "8px 0 0", color: "var(--mute)" }}>
-            This hash doesn't match any document completed through Docracy — or the file has been modified even
-            slightly since it was signed, which changes its hash entirely. This doesn't necessarily mean the document
-            is fraudulent; it may simply not have been signed here.
+        <div className="card" style={{ marginTop: 32, marginBottom: 40, padding: "20px 24px", maxWidth: 560, marginLeft: "auto", marginRight: "auto" }}>
+          <h3 style={{ marginTop: 0, fontSize: 14 }}>What this does and doesn't prove</h3>
+          <p style={{ fontSize: 13, color: "var(--mute)", marginBottom: 8 }}>
+            A match confirms a document with these exact bytes was completed through Docracy's signing flow, and
+            when — even one changed character produces a completely different hash, so this reliably detects
+            tampering.
+          </p>
+          <p style={{ fontSize: 13, color: "var(--mute)", marginBottom: 8 }}>
+            It does not verify who physically signed — Docracy's default signature is a Simple Electronic Signature
+            (SES), not identity-verified. See <Link to="/trust">Trust &amp; security</Link> for details.
+          </p>
+          <p style={{ fontSize: 13, color: "var(--mute)", margin: 0 }}>
+            Every completed document's hash is also submitted to the free, public OpenTimestamps protocol, which
+            anchors it to the Bitcoin blockchain — so this can be verified independently, without trusting Docracy's
+            own records at all.
           </p>
         </div>
-      )}
-
-      <div className="card" style={{ marginTop: 32, padding: "16px 20px" }}>
-        <h3 style={{ marginTop: 0, fontSize: 14 }}>What this does and doesn't prove</h3>
-        <p style={{ fontSize: 13, color: "var(--mute)", marginBottom: 8 }}>
-          A match confirms a document with these exact bytes was completed through Docracy's signing flow, and when —
-          even one changed character produces a completely different hash, so this reliably detects tampering.
-        </p>
-        <p style={{ fontSize: 13, color: "var(--mute)", marginBottom: 8 }}>
-          It does not verify who physically signed — Docracy's default signature is a Simple Electronic Signature
-          (SES), not identity-verified. See <Link to="/trust">Trust &amp; security</Link> for details.
-        </p>
-        <p style={{ fontSize: 13, color: "var(--mute)", margin: 0 }}>
-          Every completed document's hash is also submitted to the free, public OpenTimestamps protocol, which
-          anchors it to the Bitcoin blockchain — so this can be verified independently, without trusting Docracy's
-          own records at all.
-        </p>
       </div>
     </div>
   );
