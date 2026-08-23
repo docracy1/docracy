@@ -334,7 +334,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     features: [
       { title: "Free for you and your client", body: "Documents with up to 2 signers are free forever — no subscription needed for a simple commission or consignment agreement." },
       { title: "No account required for the other side", body: "Your client, gallery contact, or collector just opens the link and signs — nothing to install or register." },
-      { title: "Upload the contract you already use", body: "Already have a commission or consignment agreement you like? Upload the PDF as-is and place signature fields on it." },
+      { title: "Upload the contract you already use", body: "Already have a commission or consignment agreement you like? Upload it as-is (PDF or Google Doc) and place signature fields on it." },
       { title: "Reusable templates for repeat clients", body: "Save your standard commission agreement once and reuse it for every new client — on a paid account." },
       { title: "Secure, timestamped audit trail", body: "Every signed contract gets a record of who signed and when — useful if payment terms or scope are ever disputed." },
     ],
@@ -348,7 +348,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     faqs: [
       { question: "Is Docracy really free for artists?", answer: "Yes — documents with up to 2 signers are free forever, which covers most single-client commission or consignment agreements. A flat $10/month unlocks reusable templates and covers agreements with more signers." },
       { question: "Does my client need to create an account to sign?", answer: "No. They open the link you send and sign directly — no account, no app to install." },
-      { question: "Can I use my own commission or consignment contract?", answer: "Yes — upload the PDF you already use and place signature fields on it, instead of starting from a template." },
+      { question: "Can I use my own commission or consignment contract?", answer: "Yes — upload the PDF (or paste a Google Docs link) you already use and place signature fields on it, instead of starting from a template." },
       { question: "How do I prove a client actually agreed to the terms?", answer: "Every signed contract includes a timestamped audit trail recording when it was sent, opened, and signed — useful if payment terms or scope are ever disputed later." },
     ],
     ctaLabel: "Start free — no account required",
@@ -371,7 +371,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     features: [
       { title: "Free for straightforward licensing deals", body: "Up to 2 signers is free forever — no subscription needed to license a single piece or image." },
       { title: "No account needed for the licensee", body: "They open the emailed link and sign directly — no signup wall to talk them out of it." },
-      { title: "Upload the agreement you already use", body: "Have licensing language you trust? Upload the PDF as-is and add signature fields — no rebuilding it in a new editor." },
+      { title: "Upload the agreement you already use", body: "Have licensing language you trust? Upload it as-is (PDF or Google Doc) and add signature fields — no rebuilding it in a new editor." },
       { title: "AI-assisted field placement", body: "Drop in a longer licensing contract and let Docracy find where signatures and dates belong — on a paid account." },
       { title: "Timestamped audit trail", body: "A permanent record of what usage rights were granted and when — useful if a licensee oversteps the agreement." },
     ],
@@ -385,7 +385,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     faqs: [
       { question: "Is this legally binding?", answer: "Yes — Docracy's signing flow is designed to support the U.S. ESIGN Act and UETA for everyday licensing agreements. See the Trust & security page for full detail." },
       { question: "Do I need an account to license a single piece?", answer: "No signup is required to send a document with up to 2 signers, which covers most one-off licensing deals." },
-      { question: "Can I use my own licensing agreement instead of a template?", answer: "Yes — upload your own PDF and add signature fields, or start from a free template in the Marketplace." },
+      { question: "Can I use my own licensing agreement instead of a template?", answer: "Yes — upload your own PDF (or a Google Doc) and add signature fields, or start from a free template in the Marketplace." },
       { question: "What if the licensee doesn't respect the terms later?", answer: "The timestamped audit trail records exactly what was signed and when, giving you a clear record of the rights actually granted if a dispute comes up." },
     ],
     ctaLabel: "Start free — no account required",
@@ -408,7 +408,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     features: [
       { title: "Free for you and your collaborator", body: "Up to 2 signers is free forever — a flat $10/month covers full bands or bigger sessions." },
       { title: "No account needed for co-writers or session players", body: "They open the emailed link on any device and sign — nothing to install or register." },
-      { title: "Upload the agreement you already use", body: "Your own collaboration, split, or session contract works as-is — just add signature fields to the PDF." },
+      { title: "Upload the agreement you already use", body: "Your own collaboration, split, or session contract works as-is (PDF or Google Doc) — just add signature fields to it." },
       { title: "Ordered signing for full bands", body: "Route an agreement to every band member or collaborator in sequence, so it's not signed out of order or left half-done." },
       { title: "Send signing links over WhatsApp", body: "Useful for touring musicians and session players — get a signature without a back-and-forth email thread." },
     ],
@@ -444,7 +444,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     solution: "Docracy.io lets you upload the agreement you already have — or start from a free scope-of-work or service agreement template — drop in signature fields, and send a link. Your client opens it, signs, done. No account, no app download, no \"create a password to continue.\"",
     features: [
       { title: "Free contract templates", body: "Freelance Service Agreement, Scope of Work, and Independent Contractor Agreement templates ready to fill in — no paywall on the basics." },
-      { title: "Upload your own contract as-is", body: "Already have a template from a lawyer or a past client? Upload the PDF and place fields on it directly — no rebuilding it in someone else's editor." },
+      { title: "Upload your own contract as-is", body: "Already have a template from a lawyer or a past client? Upload it (PDF or Google Doc) and place fields on it directly — no rebuilding it in someone else's editor." },
       { title: "No account required for clients", body: "They get a link by email, review the terms, and sign. That's the whole flow." },
       { title: "Timestamped audit trail", body: "Every signed contract comes with a record of who signed, when, and from where — useful if a payment dispute ever comes up." },
       { title: "Reusable templates for repeat clients", body: "Save your standard agreement once and send it again for the next gig without rebuilding it — on a paid account." },
@@ -459,7 +459,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     faqs: [
       { question: "How fast can a client actually sign?", answer: "Usually under a minute — they open the emailed link, review the terms, and sign. No account or software install required." },
       { question: "Can I reuse the same contract for every new client?", answer: "Yes — save your standard agreement as a reusable template (on a paid account) and send it again without rebuilding it each time." },
-      { question: "Do I have to use Docracy's templates?", answer: "No — upload the contract you already use as a PDF and place signature fields on it directly." },
+      { question: "Do I have to use Docracy's templates?", answer: "No — upload the contract you already use as a PDF (or paste a Google Docs link) and place signature fields on it directly." },
       { question: "What proof do I have that the client agreed to the terms?", answer: "Every contract includes a timestamped audit trail showing exactly when it was sent, opened, and signed." },
     ],
     ctaLabel: "Start free — no account required",
@@ -481,7 +481,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     solution: "Docracy.io gives you a free Web Design Services Agreement template to start from, or you can upload your own. Fill in the scope, deliverables, and payment schedule, place signature fields, and send it — your client signs from the email link with no account, no software to install, no delay before you can start.",
     features: [
       { title: "Free Web Design Services Agreement", body: "Covers scope, revisions, deliverables, and payment terms — ready to customize, no paywall." },
-      { title: "Upload your own design contract", body: "If you already have a template you like, upload it as a PDF and place signature fields directly on it." },
+      { title: "Upload your own design contract", body: "If you already have a template you like, upload it as a PDF (or Google Doc) and place signature fields directly on it." },
       { title: "No account required for clients", body: "Clients open the link, review the terms, and sign — nothing to download or register for." },
       { title: "Sequential signing for multi-party projects", body: "Route the contract to the client first, then a project lead or subcontractor, in the order it needs to happen." },
       { title: "Reusable templates for every new client", body: "Save your standard design agreement once and reuse it for each new project — on a paid account." },
@@ -518,7 +518,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     solution: "Docracy.io skips the account setup entirely. Start from a free Web Development Agreement or Independent Contractor Agreement template, or upload the contract you already use, add signature fields, and send a link. Your client signs from their inbox — no account, no install. It's free for agreements with up to two signers, so most solo dev contracts cost nothing.",
     features: [
       { title: "Free developer contract templates", body: "Web Development Agreement and Independent Contractor Agreement templates covering scope, IP assignment, and payment terms." },
-      { title: "Upload your own MSA or SOW", body: "Already have a master service agreement or statement of work you reuse? Upload the PDF and place fields on it as-is." },
+      { title: "Upload your own MSA or SOW", body: "Already have a master service agreement or statement of work you reuse? Upload it as a PDF (or paste a Google Docs link) and place fields on it as-is." },
       { title: "No account required for clients", body: "They open the emailed link, read the terms, and sign — no signup flow to abandon." },
       { title: "Reusable templates for every engagement", body: "Save your standard contract once and send it again for the next client or sprint — on a paid account." },
       { title: "Automate the paperwork with MCP or Zapier", body: "If you're already scripting your workflow, connect Docracy via MCP or Zapier to trigger contract sends from your own tools — on a paid account." },
@@ -571,7 +571,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       { question: "Does Docracy file my LLC with the state?", answer: "No — Docracy isn't a formation service and doesn't file with any Secretary of State. It only handles getting your operating agreement and related documents signed." },
       { question: "Is the LLC Operating Agreement template really free?", answer: "Yes — it's available in the Marketplace, and sending it for signature is free for up to 2 signers." },
       { question: "Can multiple LLC members sign in a specific order?", answer: "Yes — sequential signing lets members sign one after another when that matters." },
-      { question: "Can I upload the operating agreement my lawyer already drafted?", answer: "Yes — upload it as a PDF and add signature fields, no need to rebuild it in Docracy's editor." },
+      { question: "Can I upload the operating agreement my lawyer already drafted?", answer: "Yes — upload it as a PDF (or paste a Google Docs link) and add signature fields, no need to rebuild it in Docracy's editor." },
     ],
     ctaLabel: "Sign your LLC documents free",
     ctaTo: "/free-templates/llc-operating-agreement",
@@ -667,7 +667,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     solution: "Docracy.io lets you upload the SEO contract or retainer agreement you already use, drop in signature and date fields, and send a link — your client signs from their inbox with no account, no software, and no delay. Start from a free retainer or consulting agreement template if you don't have your own yet, and keep the same document on file as a timestamped, signed record for every client.",
     features: [
       { title: "Free retainer and consulting templates", body: "Start from a ready-made retainer or consulting agreement instead of writing scope language from scratch." },
-      { title: "Upload your own contract as-is", body: "Already have a contract you like? Upload the PDF and place fields on it directly — no rebuilding in a proprietary editor." },
+      { title: "Upload your own contract as-is", body: "Already have a contract you like? Upload it as a PDF (or paste a Google Docs link) and place fields on it directly — no rebuilding in a proprietary editor." },
       { title: "No account required for clients", body: "Clients open the emailed link and sign immediately — nothing to install, register, or configure." },
       { title: "Reusable templates for recurring onboarding", body: "Save your standard SEO contract once and reuse it for every new client you sign — on a paid account." },
       { title: "Secure, timestamped audit trail", body: "Every signed contract keeps a record of who signed and when, in case scope ever gets disputed." },
@@ -680,7 +680,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       "Adding a signed scope-change addendum when a project grows mid-retainer",
     ],
     faqs: [
-      { question: "Can I use the SEO contract I already have?", answer: "Yes — upload it as a PDF and place signature fields on it directly, no need to rebuild it." },
+      { question: "Can I use the SEO contract I already have?", answer: "Yes — upload it as a PDF (or paste a Google Docs link) and place signature fields on it directly, no need to rebuild it." },
       { question: "Is it free for onboarding a new client?", answer: "Yes — documents with up to 2 signers are free forever." },
       { question: "Can I reuse the same contract for every new client?", answer: "Yes — save your standard SEO contract once as a reusable template (on a paid account) and reuse it for every client you sign." },
       { question: "Does the client need an account to sign?", answer: "No — they open the emailed link and sign, no software or signup required." },
@@ -704,7 +704,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     solution: "Docracy.io gives you a free service agreement template to send the moment a client says yes, or lets you upload the agreement you already use. Your client signs from a link with no account needed, so there's no excuse for the paperwork to lag behind the work. Save your go-to agreement as a reusable template on a paid account so every new client engagement starts the same clean way.",
     features: [
       { title: "Free service agreement template", body: "Cover scope, deliverables, and payment terms without drafting from a blank page." },
-      { title: "Upload your own agreement", body: "Keep using the contract language you've already refined — just upload the PDF and place fields." },
+      { title: "Upload your own agreement", body: "Keep using the contract language you've already refined — just upload it as a PDF (or paste a Google Docs link) and place fields." },
       { title: "No account required for clients", body: "Clients sign directly from the emailed link, whether it's their first project with you or their fifth." },
       { title: "Reusable templates for repeat clients", body: "Save your standard agreement and send it again for every new campaign or retainer — on a paid account." },
       { title: "Secure, timestamped audit trail", body: "Every agreement keeps a record of who signed and when, so scope disputes have a paper trail." },
@@ -812,7 +812,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     heroHeadline: "Sign a document straight from Google Drive — no download, no re-upload.",
     heroSubheadline: "For anyone who drafts contracts and forms in Google Docs and just needs them signed.",
     problem: "The document lives in Google Drive because that's where you write everything, but the moment it needs a signature, the workflow breaks: download it as a PDF, find the file in your downloads folder, upload it to a separate signing tool, and hope you grabbed the latest version and not one from three edits ago. It's a small tax, but it's one you pay on every single contract, proposal, or form you send out.",
-    solution: "Docracy.io's Google Drive connector lets you connect your Drive account once and then pick a file directly from Drive when preparing a document to sign — skipping the download-and-re-upload step entirely. If the file is a native Google Doc, it gets pulled in and readied as a signable PDF so you can place signature and date fields on it, the same as any uploaded document. This is a file picker and import, not a live, in-place editor for a shared Google Doc — but it removes the manual export step that slows everyone down. The Drive connector is a paid feature; you can always upload a PDF manually for free.",
+    solution: "Docracy.io's Google Drive connector lets you connect your Drive account once and then pick a file directly from Drive when preparing a document to sign — skipping the download-and-re-upload step entirely. If the file is a native Google Doc, it gets pulled in and readied as a signable PDF so you can place signature and date fields on it, the same as any uploaded document. This is a file picker and import, not a live, in-place editor for a shared Google Doc — but it removes the manual export step that slows everyone down. The Drive connector (browsing your Drive without leaving Docracy) is a paid feature; on the free plan, you can paste the share link of any Google Doc set to \"Anyone with the link can view\" directly on the Prepare page, and it's converted automatically at no cost.",
     features: [
       { title: "Pick files directly from Drive", body: "Connect your Google Drive account and choose a file to sign without downloading it first — on a paid account." },
       { title: "Works alongside other cloud connectors", body: "The same connector setup also supports Dropbox, OneDrive, and Box, if your files are spread across more than one place." },
@@ -829,7 +829,11 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     ],
     faqs: [
       { question: "Does this edit my Google Doc live inside Docracy?", answer: "No — it's a file picker/import: you connect Google Drive and pick a file, which is readied as a signable PDF. It's not a live, in-place editor for a shared Google Doc." },
-      { question: "Is the Google Drive connector free?", answer: "No — it's a paid feature. You can always upload a PDF manually for free instead." },
+      {
+        question: "Is the Google Drive connector free?",
+        answer:
+          "The Drive picker itself (browsing your connected Drive without leaving Docracy) is a paid feature. But you don't need it just to sign a Google Doc for free — paste its share link on the Prepare page instead, as long as it's shared as \"Anyone with the link can view,\" and it converts automatically at no cost.",
+      },
       { question: "Does the signer need a Google account?", answer: "No — however the document gets into Docracy, the person you send it to signs from a link with nothing to install or register." },
       { question: "Can I use Dropbox, OneDrive, or Box instead?", answer: "Yes — the same connector setup also supports Dropbox, OneDrive, and Box." },
     ],
@@ -846,9 +850,9 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     seoTitle: "Sign Documents Without an Account | Docracy",
     seoDescription: "Sign a PDF without creating an account or building a profile. No signup, minimal data collected, documents auto-delete after 9 days.",
     heroHeadline: "Sign a document without creating an account.",
-    heroSubheadline: "No signup, no profile, no marketing list. Upload a PDF, sign it, and you're done — and the document doesn't sit on a server forever.",
+    heroSubheadline: "No signup, no profile, no marketing list. Upload a PDF or Google Doc, sign it, and you're done — and the document doesn't sit on a server forever.",
     problem: "Most e-signature tools want an account before you can sign anything: an email, a password, a profile that gets used to market other products to you later. If you just need to sign one document once, that's a lot to hand over for something that should take thirty seconds.",
-    solution: "Docracy.io lets you sign a one-off document without creating an account — on either end. You upload the PDF, place the signature fields, and send it; the person signing just opens the link and signs, no login required. We collect the minimum needed to make the signature valid, and documents are automatically deleted 9 days after the signing flow completes — they don't linger in storage indefinitely.",
+    solution: "Docracy.io lets you sign a one-off document without creating an account — on either end. You upload a PDF (or paste a Google Docs link), place the signature fields, and send it; the person signing just opens the link and signs, no login required. We collect the minimum needed to make the signature valid, and documents are automatically deleted 9 days after the signing flow completes — they don't linger in storage indefinitely.",
     features: [
       { title: "No account required", body: "Sign or send a one-off document without registering for anything." },
       { title: "Minimal data collected", body: "Just what's needed to send the document and record a valid signature — no profile-building." },
@@ -882,11 +886,11 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     seoTitle: "Quick Sign — Get a Document Signed in Minutes | Docracy",
     seoDescription: "The fastest way to get a document signed online. Upload a PDF, add fields, send — no account, no onboarding, no wasted time.",
     heroHeadline: "Have a document. Get it signed. That's it.",
-    heroSubheadline: "No account setup, no product tour, no wizard. Upload your PDF, drop in the fields, and send it — most people are done in under a minute.",
+    heroSubheadline: "No account setup, no product tour, no wizard. Upload your PDF (or paste a Google Docs link), drop in the fields, and send it — most people are done in under a minute.",
     problem: "You don't want a signing platform. You want this one document signed, right now. But most e-signature tools put an account wall, a pricing page, and an onboarding checklist between you and the thing you actually came to do.",
-    solution: "Docracy.io cuts straight to the task: upload your PDF as-is, place the signature and date fields, and send. There's no account required to send a one-off document, and the person signing just opens their email link and signs — no software, no login, no waiting around.",
+    solution: "Docracy.io cuts straight to the task: upload your PDF as-is (or paste a Google Docs link), place the signature and date fields, and send. There's no account required to send a one-off document, and the person signing just opens their email link and signs — no software, no login, no waiting around.",
     features: [
-      { title: "Upload any PDF as-is", body: "No rebuilding your document in someone else's editor." },
+      { title: "Upload any PDF as-is", body: "No rebuilding your document in someone else's editor. Have a Google Doc instead? Paste the link — it converts automatically." },
       { title: "No account needed", body: "Send a one-off document and skip signup entirely." },
       { title: "AI-assisted field placement", body: "Signature and date fields placed automatically — on a paid account." },
       { title: "Signers open and sign instantly", body: "They click the emailed link and sign — nothing to install or register." },
@@ -900,7 +904,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       "Closing out a same-day vendor agreement",
     ],
     faqs: [
-      { question: "How long does it actually take to sign something?", answer: "Most people are done in under a minute — upload the PDF, place fields, and send. The recipient just opens the link and signs." },
+      { question: "How long does it actually take to sign something?", answer: "Most people are done in under a minute — upload a PDF (or paste a Google Docs link), place fields, and send. The recipient just opens the link and signs." },
       { question: "Do I need an account to send a one-off document?", answer: "No — sending a single document doesn't require signing up." },
       { question: "Can the fields be placed automatically?", answer: "Yes — on a paid account, AI-assisted field placement finds where signatures and dates belong." },
       { question: "Is there a record of when it was signed?", answer: "Yes — every signed document includes an automatically generated, timestamped audit trail." },
@@ -919,9 +923,9 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     heroHeadline: "Upload a PDF. Get it signed.",
     heroSubheadline: "A free tool that does exactly what it sounds like — no account, no software, nothing to learn.",
     problem: "You have a PDF that needs a signature and you don't want to install anything, create a login, or figure out a new piece of software just to do it.",
-    solution: "Docracy.io is a straightforward tool: upload your PDF, drop in a signature field (and a date field if you need one), and send it. The person signing opens the link in their browser and signs — no app, no account, no download.",
+    solution: "Docracy.io is a straightforward tool: upload your PDF, drop in a signature field (and a date field if you need one), and send it. The person signing opens the link in their browser and signs — no app, no account, no download. Have a Google Doc instead of a PDF? Paste its share link and it converts automatically, free.",
     features: [
-      { title: "Upload any PDF", body: "Use the document you already have — no conversion or reformatting." },
+      { title: "Upload any PDF", body: "Use the document you already have — no conversion or reformatting. Or paste a Google Docs link and it's converted for you." },
       { title: "Drag-and-drop fields", body: "Place signature and date fields directly on the page." },
       { title: "Send a signing link", body: "The recipient signs from any browser, on any device." },
       { title: "Automatic audit trail", body: "Every signed document comes with a timestamped record." },
@@ -935,7 +939,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       "Have a roommate co-sign a lease",
     ],
     faqs: [
-      { question: "Can I upload any PDF?", answer: "Yes — use the document you already have, no conversion or reformatting needed." },
+      { question: "Can I upload any PDF?", answer: "Yes — use the document you already have, no conversion or reformatting needed. You can also paste a Google Docs link instead, and it's converted automatically at no cost." },
       { question: "Is it really free?", answer: "Yes — there's no cost for documents with up to 2 signers, and no account required to send." },
       { question: "Does the signer need to install anything?", answer: "No — they sign from any browser, on any device, directly from the link." },
       { question: "Is there proof the document was signed?", answer: "Yes — every signed document comes with a timestamped audit trail." },

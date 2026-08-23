@@ -172,7 +172,7 @@ const es: Messages = {
   "feature.solution": "La forma Docracy",
   "feature.useCases": "Casos de uso",
   "firstDoc.modalSub": "No necesitas cuenta para enviar o firmar.",
-  "firstDoc.modalTitle": "Sube tu PDF",
+  "firstDoc.modalTitle": "Sube tu PDF o Google Doc",
   "firstDoc.prompt": "Envía tu primer documento — toma 30 segundos.",
   "firstDoc.upload": "Subir documento",
   "firstDoc.uploadPdf": "Subir PDF",
@@ -229,7 +229,7 @@ const es: Messages = {
   "hero.hint": "Sin tarjeta · te enviamos un enlace gratis para iniciar sesión.",
   "hero.uploadCircleTitle": "Haz clic o arrastra tu PDF aquí",
   "hero.uploadCircleSub": "Firmas electrónicas gratis, sin registro",
-  "hero.uploadCircleCaption": "Después agregas los firmantes — nada se envía hasta que estés listo",
+  "hero.uploadCircleCaption": "Después agregas los firmantes — nada se envía hasta que estés listo. ¿Tienes un Google Doc? Puedes pegar un enlace en el siguiente paso.",
   "hero.stat.templates": "plantillas legales gratis",
   "hero.stat.verifyLabel": "SHA-256",
   "hero.stat.verify": "verificación de documentos, gratis",
@@ -254,7 +254,7 @@ const es: Messages = {
   "hero.badge.noSignup": "Sin necesidad de registrarse",
   "hero.whatsappBadge": "Nuevo: firma por WhatsApp",
   "hero.title": "La forma más rápida de crear y firmar acuerdos.",
-  "how.s1.body": "Agrega el PDF que quieres firmar, o empieza desde una plantilla gratis.",
+  "how.s1.body": "Agrega el PDF que quieres firmar (o pega un enlace de Google Docs), o empieza desde una plantilla gratis.",
   "how.s1.title": "Subir",
   "how.s2.body":
     "Indica quién debe firmar, en qué orden, y coloca campos de firma y fecha en el documento.",
@@ -276,7 +276,7 @@ const es: Messages = {
   "integrations.sub":
     "Integra las plataformas que ya usas — almacenamiento en la nube, automatización y asistentes de IA. Las cuentas de pago desbloquean conectores nativos, y WhatsApp ya funciona para enviar enlaces de firma.",
   "integrations.title": "Conecta Docracy con las herramientas que ya usas",
-  "landing.ai1.body": "Sube un PDF y coloca campos de firma, fecha e iniciales por ti.",
+  "landing.ai1.body": "Sube un PDF o Google Doc y coloca campos de firma, fecha e iniciales por ti.",
   "landing.ai1.title": "Detectar campos automáticamente",
   "landing.ai2.body": "Un resumen de 3 puntos de lo que cada parte acuerda, sin jerga legal.",
   "landing.ai2.title": "Resumen en lenguaje claro",
@@ -313,7 +313,7 @@ const es: Messages = {
   "landing.faq5.q": "¿Docracy.io admite equipos?",
   "landing.faqTitle": "Preguntas frecuentes",
   "landing.feat1.body":
-    "Sube un PDF, agrega destinatarios y envíalo a firmar en segundos — sin configuración complicada.",
+    "Sube un PDF o pega un enlace de Google Docs, agrega destinatarios y envíalo a firmar en segundos — sin configuración complicada.",
   "landing.feat1.link": "Enviar un documento",
   "landing.feat1.title": "Envío simple de documentos",
   "landing.feat2.body":
@@ -430,7 +430,7 @@ const es: Messages = {
   "nav.tryFree": "Probar gratis",
   "nav.templates": "Marketplace",
   "nav.mega.feature.send.title": "Envío simple de documentos",
-  "nav.mega.feature.send.desc": "Sube un PDF y envíalo a firmar en segundos.",
+  "nav.mega.feature.send.desc": "Sube un PDF o pega un enlace de Google Docs, y envíalo a firmar en segundos.",
   "nav.mega.feature.whatsapp.title": "Firma por WhatsApp",
   "nav.mega.feature.whatsapp.desc": "Enlaces de firma vinculados al teléfono y protegidos con PIN — un paso hacia la firma electrónica avanzada.",
   "nav.mega.feature.ai.title": "Detección IA",
@@ -606,7 +606,7 @@ const es: Messages = {
   "prepare.title": "Preparar un documento",
   "prepare.untitled": "Documento sin título",
   "prepare.upgradeMonthly": "Mejorar plan — $10/mes",
-  "prepare.uploadHint": "Sube el PDF que quieres firmar, o arrástralo abajo.",
+  "prepare.uploadHint": "Sube el PDF que quieres firmar, arrástralo abajo, o pega un enlace de Google Docs.",
   "prepare.viewerN": "Espectador {{n}}",
   "prepare.you": "Tú",
   "pricing.bestValue": "Mejor valor",
@@ -938,6 +938,8 @@ const es: Messages = {
   "docs.privacy.body2": "para el panorama completo.",
   "docs.privacy.title": "Privacidad e identidad",
   "docs.sending.body1": "Ve a",
+  "docs.sending.googleDocs":
+    "¿Tienes un Google Doc en lugar de un PDF? Pega su enlace en la misma pantalla — gratis, sin necesidad de cuenta — siempre que esté compartido como \"Cualquier persona con el enlace puede ver\". Los documentos de Word no se admiten directamente; expórtalos primero a PDF (Archivo → Descargar → PDF) y luego súbelo.",
   "docs.sending.body2":
     ", sube un PDF, agrega firmantes en el orden en que deben firmar y coloca campos para cada uno — firma, iniciales, texto, fecha, casilla o desplegable. Las cuentas gratis admiten cadenas de hasta 2 firmantes, sin inicio de sesión. También puedes agregar hasta 2 espectadores CC, rechazar o cancelar un documento pendiente, y opcionalmente enviar enlaces de firma por SMS a números móviles de EE. UU. (ver abajo). Una vez enviado, el primer firmante recibe un correo con un enlace — tampoco necesita cuenta. Cada firmante recibe su turno automáticamente; el documento (y todos sus datos) se elimina 9 días después de crearse, o en cuanto todos hayan firmado y se haya enviado la copia final por correo — lo que ocurra primero.",
   "docs.sending.title": "Enviar un documento (gratis)",
@@ -1245,7 +1247,7 @@ const es: Messages = {
   "createSig.termsLinkLead": "Para el desglose legal completo de qué nivel de firma necesitas realmente, consulta nuestra",
   "createSig.termsLink": "guía completa de firmas electrónicas",
   "createSig.howTitle": "Crea una firma en menos de un minuto",
-  "createSig.how.1": "Sube el PDF que necesitas firmar, o empieza desde una plantilla gratis.",
+  "createSig.how.1": "Sube el PDF que necesitas firmar (o pega un enlace de Google Docs), o empieza desde una plantilla gratis.",
   "createSig.how.2": "Coloca un campo de firma (y fecha, iniciales o texto si lo necesitas) en cualquier parte del documento.",
   "createSig.how.3": "Agrega el correo del firmante — o el tuyo, si lo vas a firmar tú mismo.",
   "createSig.how.4": "Envíalo. El firmante abre el enlace, dibuja o escribe su firma, y todos reciben el PDF firmado por correo.",
@@ -1305,7 +1307,7 @@ const es: Messages = {
     "No — trátalo como una primera revisión que detecta señales comunes, no como un sustituto de la revisión legal para algo poco familiar, de alto valor o alto riesgo.",
   "aiAnalysis.faq.q4": "¿En qué tipo de documentos funciona?",
   "aiAnalysis.faq.a4":
-    "Cualquier PDF que subas — NDAs, acuerdos de servicio, cartas de oferta, contratos con proveedores — o una de las plantillas gratis de Docracy.",
+    "Cualquier PDF que subas (o Google Doc — pega el enlace) — NDAs, acuerdos de servicio, cartas de oferta, contratos con proveedores — o una de las plantillas gratis de Docracy.",
   "aiAnalysis.footerCta": "Descubre lo que realmente dice tu próximo contrato.",
 
   "esignSoftware.eyebrow": "Guía de compra",
@@ -1368,7 +1370,7 @@ const es: Messages = {
   "signPdf.edit.3": "Agrega texto nuevo en cualquier parte de la página",
   "signPdf.edit.4": "Edita texto existente directamente en el PDF (borrado y reescritura, no solo una superposición)",
   "signPdf.howTitle": "Firma un PDF en menos de un minuto",
-  "signPdf.how.1": "Sube el PDF — arrástralo y suéltalo, o elige una plantilla gratis en su lugar.",
+  "signPdf.how.1": "Sube el PDF — arrástralo y suéltalo, pega un enlace de Google Docs, o elige una plantilla gratis en su lugar.",
   "signPdf.how.2": "Edítalo si es necesario: reordena páginas, tacha texto o corrige errores.",
   "signPdf.how.3": "Coloca campos de firma, fecha o texto donde correspondan.",
   "signPdf.how.4": "Envíalo. Los firmantes abren el enlace y firman — sin cuenta, sin instalar nada.",
@@ -1387,7 +1389,7 @@ const es: Messages = {
   "signPdf.faq.a3":
     "Generalmente sí, bajo leyes como la ESIGN Act y UETA de EE. UU., y el reglamento eIDAS de la UE, siempre que haya consentimiento, intención de firmar y un registro conservable — que es exactamente lo que captura el registro de auditoría de Docracy.",
   "signPdf.faq.q4": "¿Qué tipos de archivo puedo subir?",
-  "signPdf.faq.a4": "PDF es el formato principal. Si aún no tienes un documento, empieza desde una de las plantillas gratis de Docracy.",
+  "signPdf.faq.a4": "PDF es el formato principal — también puedes pegar un enlace de Google Docs y se convierte automáticamente, gratis, siempre que esté compartido como \"Cualquier persona con el enlace puede ver\". Los documentos de Word no se admiten directamente; expórtalos primero a PDF. Si aún no tienes un documento, empieza desde una de las plantillas gratis de Docracy.",
   "signPdf.footerCta": "Sube tu PDF y fírmalo hoy mismo.",
 
   "secureSig.eyebrow": "Seguridad",
@@ -1478,7 +1480,7 @@ const es: Messages = {
   "docracyAlt.todayTitle": "Cómo es la firma electrónica gratis hoy",
   "docracyAlt.today.1": "No necesitas cuenta ni tarjeta para enviar o firmar un documento",
   "docracyAlt.today.2": "Cadenas de firma secuencial gratis para hasta dos personas",
-  "docracyAlt.today.3": "Sube cualquier PDF — agrega firma, fecha, texto y campos de iniciales",
+  "docracyAlt.today.3": "Sube cualquier PDF (o Google Doc) — agrega firma, fecha, texto y campos de iniciales",
   "docracyAlt.today.4": "Los documentos anónimos se eliminan automáticamente después de 9 días por defecto",
   "docracyAlt.timelineTitle": "Una breve línea de tiempo",
   "docracyAlt.timeline.1":
@@ -1606,7 +1608,7 @@ const es: Messages = {
   "ai.eyebrow": "Docracy IA",
   "ai.heroTitle": "Detección IA.\nLos campos se colocan solos.",
   "ai.heroSub":
-    "Sube un PDF y deja que la IA encuentre cada firma y fecha, resuma el acuerdo en lenguaje claro y señale cláusulas a revisar — luego envía a firmar.",
+    "Sube un PDF o Google Doc y deja que la IA encuentre cada firma y fecha, resuma el acuerdo en lenguaje claro y señale cláusulas a revisar — luego envía a firmar.",
   "ai.ctaTry": "Probar la IA en un documento →",
   "ai.ctaPricing": "Ver precios Paid",
   "ai.featuresTitle": "IA que cierra el trato de verdad",
@@ -1614,7 +1616,7 @@ const es: Messages = {
     "Integrada en Preparar — no es un chatbot aparte. Cada herramienta tiene un trabajo: firmar el documento correcto más rápido.",
   "ai.feat.detect.title": "Detección automática con IA",
   "ai.feat.detect.body":
-    "Analiza tu PDF y coloca campos de firma, fecha e iniciales donde corresponden — sin arrastrar cajas a mano.",
+    "Analiza tu PDF o Google Doc y coloca campos de firma, fecha e iniciales donde corresponden — sin arrastrar cajas a mano.",
   "ai.feat.explain.title": "Resumen en lenguaje claro",
   "ai.feat.explain.body":
     "Un resumen corto sin jerga legal de lo que cada parte acepta — útil antes de enviar o cuando un firmante pregunta “¿qué firmo?”",
@@ -1628,7 +1630,7 @@ const es: Messages = {
   "ai.feat.mcp.body":
     "Conecta un espacio de pago para que tu asistente de IA consulte el estado de firma y encuentre documentos desde el chat — solo lectura, con clave API.",
   "ai.howTitle": "Cómo funciona la detección IA",
-  "ai.how.1": "Sube un PDF o empieza desde una plantilla gratis.",
+  "ai.how.1": "Sube un PDF, pega un enlace de Google Docs, o empieza desde una plantilla gratis.",
   "ai.how.2": "Ejecuta la detección inteligente — aparecen campos en firmas y fechas.",
   "ai.how.3": "Opcionalmente abre el resumen o la revisión de riesgos antes de enviar.",
   "ai.how.4": "Agrega firmantes y envía — firman con un enlace, sin cuenta.",
@@ -1823,7 +1825,7 @@ const es: Messages = {
   "dash.noContacts": "Aún no hay contactos.",
   "dash.noPendingEmbed": "No hay firmantes pendientes — el embebido solo está disponible mientras alguien deba firmar.",
   "dash.noPendingReassign": "No hay firmantes pendientes para reasignar.",
-  "dash.noTemplatesYet": "Aún no hay plantillas — sube un PDF, coloca un campo por cada firmante y usa el botón \"Guardar como plantilla\" del panel lateral.",
+  "dash.noTemplatesYet": "Aún no hay plantillas — sube un PDF (o Google Doc), coloca un campo por cada firmante y usa el botón \"Guardar como plantilla\" del panel lateral.",
   "dash.noWebhooks": "Aún no hay webhooks.",
   "dash.prepareDoc": "Preparar un documento",
   "dash.reassign": "Reasignar",
@@ -1899,7 +1901,7 @@ const es: Messages = {
   "prepare.nameOptionalPh": "Nombre (opcional)",
   "prepare.noAnchors": "No se encontraron etiquetas ancla — inserta antes en tu PDF etiquetas como {{sig1}}, {{date_2}} o {{dropdown_1:Yes|No}}.",
   "prepare.oneOptionPerLine": "Una opción por línea",
-  "prepare.pdfOnly": "Solo se admiten archivos PDF.",
+  "prepare.pdfOnly": "Solo se admiten archivos PDF aquí — para un Google Doc, pega su enlace en el campo de abajo.",
   "prepare.pdfTooBig": "El PDF debe ser menor de {{max}}MB — este pesa {{size}}MB.",
   "prepare.pinPh": "PIN (opcional) — 4-8 dígitos, protección extra para este enlace",
   "prepare.pinRequiredForWhatsappPh": "PIN (obligatorio para WhatsApp) — 4-8 dígitos, prueba el control exclusivo del enlace",
@@ -2018,11 +2020,11 @@ const es: Messages = {
   "sent.shareBlurb": "Acabo de enviar un documento a firmar con Docracy (gratis, sin registro). Pruébalo: https://docracy.io/try",
   "dash.firstRunTitle": "Envía tu primer documento",
   "dash.firstRunSub": "Tres pasos rápidos — luego el progreso aparece aquí.",
-  "dash.firstRunStep1": "Sube un PDF o empieza desde una plantilla gratis",
+  "dash.firstRunStep1": "Sube un PDF o Google Doc, o empieza desde una plantilla gratis",
   "dash.firstRunStep2": "Agrega firmantes y coloca campos de firma",
   "dash.firstRunStep3": "Envía — cada uno recibe un enlace por correo; no necesitan cuenta para firmar",
   "dash.firstRunCta": "Empezar con un NDA de ejemplo",
-  "dash.firstRunUpload": "O sube tu propio PDF",
+  "dash.firstRunUpload": "O sube tu propio PDF o Google Doc",
   "dash.emptyDocs": "Aún no hay nada — envía un documento y aparecerá en esta lista.",
   "dash.emptyDocsCta": "Nuevo documento",
 

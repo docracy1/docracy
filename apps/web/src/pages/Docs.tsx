@@ -27,6 +27,7 @@ export default function Docs() {
           <Link to="/prepare">{t("prepare.title")}</Link>
           {t("docs.sending.body2")}
         </p>
+        <p style={{ color: "var(--mute)" }}>{t("docs.sending.googleDocs")}</p>
       </Section>
 
       <Section id="fields" title={t("docs.fields.title")}>
