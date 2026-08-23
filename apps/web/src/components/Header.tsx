@@ -172,32 +172,36 @@ export default function Header() {
   return (
     <header className="site-header">
       <div className="container header-bar">
-        {brand}
-        <nav className="header-nav-right" aria-label="Primary">
-          <NavMegaMenu
-            label={t("nav.features")}
-            items={featureItems}
-            panel={{
-              title: t("footer.compare"),
-              items: compareItems,
-              footerLabel: t("footer.allComparisons"),
-              footerTo: localizePath("/blog", locale),
-            }}
-          />
-          <Link to={marketplaceTo} className="header-templates-link header-nav-link">
-            {t("nav.templates")}
-          </Link>
-          <NavMegaMenu
-            label={t("nav.more")}
-            items={industryItems}
-            columns={2}
-            panel={{
-              title: t("nav.resources"),
-              items: [...morePanelItems, ...resourceItems.filter((r) => !r.to.endsWith("/blog"))],
-              footerLabel: t("nav.mega.resource.blog.title"),
-              footerTo: localizePath("/blog", locale),
-            }}
-          />
+        <div className="header-left">
+          {brand}
+          <nav className="header-primary-nav" aria-label="Primary">
+            <NavMegaMenu
+              label={t("nav.features")}
+              items={featureItems}
+              panel={{
+                title: t("footer.compare"),
+                items: compareItems,
+                footerLabel: t("footer.allComparisons"),
+                footerTo: localizePath("/blog", locale),
+              }}
+            />
+            <Link to={marketplaceTo} className="header-templates-link header-nav-link">
+              {t("nav.templates")}
+            </Link>
+            <NavMegaMenu
+              label={t("nav.more")}
+              items={industryItems}
+              columns={2}
+              panel={{
+                title: t("nav.resources"),
+                items: [...morePanelItems, ...resourceItems.filter((r) => !r.to.endsWith("/blog"))],
+                footerLabel: t("nav.mega.resource.blog.title"),
+                footerTo: localizePath("/blog", locale),
+              }}
+            />
+          </nav>
+        </div>
+        <nav className="header-nav-right" aria-label="Account">
           <LanguageSwitcher className="lang-switcher-on-dark header-templates-link" />
           <div className="header-cta-group">
             <a

@@ -314,8 +314,24 @@ select {
   opacity: 1;
 }
 
+/* Brand + primary nav grouped together on the left (Features/Marketplace/More sit right next to
+   the logo) — the account/CTA cluster is the only thing pushed to the far right, via .header-bar's
+   own justify-content: space-between between these two groups. */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  min-width: 0;
+}
+
+.header-primary-nav {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  flex-wrap: nowrap;
+}
+
 .header-nav-right {
-  margin-left: auto;
   display: flex;
   align-items: center;
   gap: 22px;
@@ -819,12 +835,13 @@ select {
 }
 
 /* One breakpoint for the whole desktop nav (megamenus, plain links, language switcher, Contact
-   sales, Sign in, Start free) — previously this was split across 960px (megamenus) and 480px
-   (everything else), leaving a dead zone in between where megamenus vanished but the hamburger
-   hadn't appeared yet, and above 960px the full item list still didn't reliably fit one row on a
-   typical laptop width and wrapped. Below 1180px, the mobile panel (which already duplicates
-   Start free / Sign in) takes over entirely instead. */
-@media (max-width: 1180px) {
+   sales, Sign in, Start free). Was 1180px, tuned for the old six-item nav (Features, Industry,
+   Pricing, Resources, Marketplace, AI Auto-Detect) — now down to Features/Marketplace/More, the
+   whole bar measures clean with room to spare at 900px and only starts visibly overlapping around
+   820px (measured directly), so 860px keeps a safety margin without giving up real estate the
+   shorter nav no longer needs. Below it, the mobile panel (which already duplicates Start free /
+   Sign in) takes over entirely instead. */
+@media (max-width: 860px) {
   .nav-megamenu,
   .header-templates-link,
   .header-nav-link,
