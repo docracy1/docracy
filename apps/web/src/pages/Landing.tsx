@@ -152,6 +152,34 @@ function HeroDecorCard({ className, rotate }: { className: string; rotate: numbe
   );
 }
 
+/** Real images (saved to public/decor/) tinted into Docracy's own blue via a CSS duotone filter —
+ *  grayscale strips the source color, sepia+hue-rotate re-tints it, saturate keeps the result
+ *  reading as a deliberate brand color instead of a washed-out photo. crop lets the astronaut
+ *  illustration show only its left half (the source image's right half is old contact-info text
+ *  for the original docracy.com, no longer accurate). */
+function HeroDecorPhoto({
+  className,
+  rotate,
+  src,
+  alt,
+  crop,
+}: {
+  className: string;
+  rotate: number;
+  src: string;
+  alt: string;
+  crop?: boolean;
+}) {
+  return (
+    <div
+      className={`hero-decor-card hero-decor-photo ${className}${crop ? " is-cropped" : ""}`}
+      style={{ transform: `rotate(${rotate}deg)` }}
+    >
+      <img src={src} alt={alt} />
+    </div>
+  );
+}
+
 const CORE_FEATURES: Array<{
   icon: "bolt" | "workflow" | "shield" | "users" | "duplicate" | "send" | "pen" | "sparkles" | "single" | "scale" | "badge" | "chainLink";
   titleKey: string;
@@ -439,9 +467,9 @@ export default function Landing() {
   return (
     <div>
       <div className="hero-band hero-band-decorated">
-        <HeroDecorCard className="hero-decor-card-1" rotate={-14} />
-        <HeroDecorCard className="hero-decor-card-2" rotate={10} />
-        <HeroDecorCard className="hero-decor-card-3" rotate={16} />
+        <HeroDecorPhoto className="hero-decor-card-1" rotate={-8} src="/decor/lady-justice.jpg" alt="" />
+        <HeroDecorPhoto className="hero-decor-card-2" rotate={10} src="/decor/docracy-seal.png" alt="" />
+        <HeroDecorPhoto className="hero-decor-card-3" rotate={7} src="/decor/legal-for-the-people.png" alt="" crop />
         <HeroDecorCard className="hero-decor-card-4" rotate={-9} />
         <div className="hero-inner hero-stack">
           <Link
