@@ -1591,15 +1591,16 @@ export const EXPLAINER_PAGES: ExplainerPageContent[] = [
       },
       {
         heading: "Where Docracy.io fits in",
-        // Deliberately not the same "verified signing flow" framing floated for this page —
-        // Docracy explicitly doesn't verify signer identity (see About.tsx/Docs.tsx/Terms.tsx),
-        // so claiming a verified flow here would contradict what the rest of the site says and
-        // overstate what a basic audit-trail e-signature actually proves.
+        // By default Docracy doesn't verify signer identity (see About.tsx/Docs.tsx/Terms.tsx) —
+        // but paid/Enterprise accounts can add WhatsApp-verified AES-track signing (see Trust.tsx),
+        // so this body must say "by default" and mention that option rather than stating a flat,
+        // unqualified "doesn't verify identity" as if there were no upgrade path at all.
         body:
           "Docracy records a full audit trail — who signed, when, and from where — and keeps the signed document's " +
-          "integrity intact. What it doesn't do is verify signer identity: anyone with the link can sign as the name on " +
-          "it. That makes it a great fit for low-stakes agreements, but not for contracts that legally require " +
-          "identity-verified signatures — for those, use a qualified, compliance-grade e-signature provider instead.",
+          "integrity intact. By default it doesn't verify signer identity: anyone with the link can sign as the name " +
+          "on it. Paid and Enterprise accounts can add a stronger, WhatsApp-verified signature track designed to meet " +
+          "the EU eIDAS Advanced Electronic Signature (AES) bar. Either way, it's not a Qualified Electronic Signature " +
+          "(QES) — for contracts that legally require one, use a qualified, compliance-grade e-signature provider instead.",
       },
     ],
     ctaLabel: "Sign documents online",
@@ -1865,7 +1866,7 @@ export const INDUSTRY_PAGES: IndustryPageContent[] = [
     whyDocracy:
       "Docracy is free for two-party signing — you and your client or the other side — with no account required for them to sign. Start from an NDA, letter of intent, power of attorney, or cease-and-desist template, fill in the specifics, and send.",
     honestLimit:
-      "What this is not: Docracy is not a practice-management or matter-management system, doesn't verify signer identity, and doesn't offer notarization or Qualified Electronic Signatures (QES) — see our Trust & security page for exactly what our audit trail does and doesn't prove. For notarized documents, QES-requiring matters, or filings with a court's own e-filing system, use the appropriate dedicated tool. This page is not legal advice about what signature type your specific matter requires.",
+      "What this is not: Docracy is not a practice-management or matter-management system, doesn't verify signer identity by default (paid/Enterprise accounts can add a WhatsApp-verified AES-track signature — see Trust & security), and doesn't offer notarization or Qualified Electronic Signatures (QES). For notarized documents, QES-requiring matters, or filings with a court's own e-filing system, use the appropriate dedicated tool. This page is not legal advice about what signature type your specific matter requires.",
     relevantTemplates: [
       "mutual-nda",
       "unilateral-nda",

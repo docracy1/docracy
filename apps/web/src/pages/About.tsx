@@ -24,10 +24,13 @@ export default function About() {
 
       <h3>{t("about.whatNot")}</h3>
       <p>
-        Docracy doesn't verify who's actually signing — the audit trail proves what was signed and when,
-        not who a signer really is. For contracts that need identity-verified, legally binding signatures,
-        use a compliance-grade e-signature service instead. See <Link to="/trust">Trust &amp; security</Link>{" "}
-        and the <Link to="/terms">Terms</Link> for the full picture.
+        By default, Docracy doesn't verify who's actually signing — the audit trail proves what was signed
+        and when, not who a signer really is. Paid and Enterprise accounts can add a stronger, WhatsApp-verified
+        signature track designed to meet the EU eIDAS Advanced Electronic Signature (AES) bar — see{" "}
+        <Link to="/trust">Trust &amp; security</Link> for exactly what that does and doesn't cover. It's still
+        not a Qualified Electronic Signature (QES); for contracts that specifically require one, use a
+        compliance-grade e-signature service instead. See the <Link to="/terms">Terms</Link> for the full
+        picture.
       </p>
 
       <h3>{t("about.who")}</h3>

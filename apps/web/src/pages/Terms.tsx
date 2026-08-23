@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useT } from "../lib/i18n";
 import { usePageMeta } from "../lib/usePageMeta";
 
@@ -24,10 +25,12 @@ export default function Terms() {
 
       <h3>{t("terms.noVerify")}</h3>
       <p>
-        Docracy does not verify who's signing — anyone holding a document's link can sign as the name on
-        it. The audit trail records what was signed and when, not who a signer actually is. Don't use
-        Docracy for anything that requires identity-verified, legally binding signatures — use a
-        compliance-grade e-signature service for that instead.
+        By default, Docracy does not verify who's signing — anyone holding a document's link can sign as
+        the name on it. The audit trail records what was signed and when, not who a signer actually is.
+        Paid and Enterprise accounts can add a stronger, WhatsApp-verified signature track designed to meet
+        the EU eIDAS Advanced Electronic Signature (AES) bar (see <Link to="/trust">Trust &amp; security</Link>)
+        — it's still not a Qualified Electronic Signature (QES). For anything that specifically requires a
+        QES or a fully identity-verified signature, use a compliance-grade e-signature service instead.
       </p>
 
       <h3>{t("terms.noGuarantees")}</h3>
