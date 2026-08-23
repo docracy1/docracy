@@ -1940,6 +1940,96 @@ select {
   aspect-ratio: 4 / 3;
 }
 
+/* Homepage hero's own upload widget — same glowing-circle idea as /verify's, sized for sitting in
+   the hero-split's right column instead of bridging out of the hero. Docracy's own tokens only. */
+.hero-upload-circle-wrap {
+  position: relative;
+  text-align: center;
+  padding: 20px;
+}
+
+.hero-upload-circle-wrap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 232, 168, 0.3) 0%, rgba(0, 232, 168, 0) 70%);
+  z-index: 0;
+}
+
+.hero-upload-circle {
+  position: relative;
+  z-index: 1;
+  width: 260px;
+  height: 260px;
+  max-width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 5px solid var(--accent);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 auto;
+  cursor: pointer;
+  box-shadow: 0 20px 50px rgba(10, 30, 60, 0.25);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.hero-upload-circle:hover,
+.hero-upload-circle.is-dragging {
+  border-color: var(--accent-hover);
+  transform: scale(1.02);
+}
+
+.hero-upload-circle-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--primary-soft);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-upload-circle-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.hero-upload-circle-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--body-strong);
+}
+
+.hero-upload-circle-sub {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--mute);
+  padding: 0 24px;
+  text-align: center;
+}
+
+.hero-upload-circle-caption {
+  position: relative;
+  z-index: 1;
+  margin: 16px 0 0;
+  font-size: 12.5px;
+  color: var(--hero-body);
+}
+
+@media (max-width: 760px) {
+  .hero-upload-circle {
+    width: 220px;
+    height: 220px;
+  }
+}
+
 /* Animated hero product demo — cycles upload → fields → send → signed. */
 .product-flow-demo {
   position: relative;

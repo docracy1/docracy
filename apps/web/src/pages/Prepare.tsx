@@ -34,6 +34,7 @@ import { getFreeTemplate } from "../lib/freeTemplates";
 import { assignFieldsToSigners, detectAnchorFields, detectFieldCandidates } from "../lib/fieldDetection";
 import type { CcRecipientInput, DocField, DocFieldType, SignerInput } from "../lib/types";
 import { track } from "../lib/track";
+import { takePendingUploadFile } from "../lib/pendingUpload";
 
 const FREE_TIER_MAX_SIGNERS = 2;
 const FREE_TIER_MAX_CCS = 2;
@@ -368,6 +369,14 @@ export default function Prepare() {
     setFields([]);
     track("document_uploaded");
   };
+
+  // Picks up a file dropped on the homepage hero's upload widget, if any — skips the extra
+  // "now upload it again" step for someone who already chose a file before landing here.
+  useEffect(() => {
+    const handoff = takePendingUploadFile();
+    if (handoff) acceptFile(handoff);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];

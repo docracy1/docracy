@@ -1,18 +1,19 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PricingCalculator from "../components/PricingCalculator";
 import FirstDocumentPrompt from "../components/FirstDocumentPrompt";
 import HowItWorksModal from "../components/HowItWorksModal";
 import IntegrationsBand from "../components/IntegrationsBand";
-import ProductFlowDemo from "../components/ProductFlowDemo";
 import TurnstileWidget, { turnstileRequired } from "../components/TurnstileWidget";
 import DetectMockup from "../components/DetectMockup";
+import { NavIcon } from "../components/NavIcons";
 import { requestMagicLink } from "../lib/api";
 import { track } from "../lib/track";
 import { FREE_TEMPLATES } from "../lib/freeTemplates";
 import { HOW_IT_WORKS_VIDEO } from "../lib/howItWorksVideo";
 import { localizePath, useI18n, useT } from "../lib/i18n";
 import { useSeoMeta } from "../lib/useSeoMeta";
+import { setPendingUploadFile } from "../lib/pendingUpload";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -292,6 +293,7 @@ const AI_FEATURE_KEYS: Array<{ titleKey: string; bodyKey: string }> = [
 export default function Landing() {
   const t = useT();
   const { locale } = useI18n();
+  const navigate = useNavigate();
   const [heroEmail, setHeroEmail] = useState("");
   const [heroEmailStarted, setHeroEmailStarted] = useState(false);
   const [heroSubmitting, setHeroSubmitting] = useState(false);
@@ -301,6 +303,7 @@ export default function Landing() {
   const [turnstileResetKey, setTurnstileResetKey] = useState(0);
   const [pendingSubmit, setPendingSubmit] = useState(false);
   const [watchOpen, setWatchOpen] = useState(false);
+  const [heroDragging, setHeroDragging] = useState(false);
   const heroEmailRef = useRef<HTMLInputElement>(null);
   useSeoMeta("home");
   const faqItems = FAQ_KEYS.map((item) => ({
@@ -399,6 +402,14 @@ export default function Landing() {
     await submitHeroStart(email, turnstileToken);
   };
 
+  // The hero's real primary action for a visitor who just wants to sign something now: hand the
+  // file to /prepare (see lib/pendingUpload.ts) instead of making them choose it again there.
+  const onHeroFile = (file: File) => {
+    track("landingpage_cta_clicked", { source: "hero_upload_circle" });
+    setPendingUploadFile(file);
+    navigate(prepareTo);
+  };
+
   return (
     <div>
       <div className="hero-band">
@@ -480,21 +491,6 @@ export default function Landing() {
                   )}
                 </form>
               )}
-              {!heroSent && (
-                <Link
-                  to={prepareTo}
-                  className="hero-watch-btn"
-                  onClick={() => track("landingpage_cta_clicked", { source: "hero_upload_now" })}
-                >
-                  <span className="hero-watch-icon" aria-hidden="true">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                      <circle cx="12" cy="12" r="10" fill="rgba(255,255,255,0.18)" />
-                      <path d="M12 16V8M12 8l-3 3M12 8l3 3M8 16h8" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </span>
-                  {t("hero.uploadNow")}
-                </Link>
-              )}
               <button
                 type="button"
                 className="hero-watch-btn"
@@ -533,10 +529,40 @@ export default function Landing() {
               </Link>
             </p>
           </div>
-          <div className="doc-mockup-glow">
-            <div className="doc-mockup-card">
-              <ProductFlowDemo />
-            </div>
+          <div className="hero-upload-circle-wrap">
+            <input
+              type="file"
+              accept="application/pdf,.pdf"
+              id="hero-file-input"
+              style={{ display: "none" }}
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) onHeroFile(file);
+                e.target.value = "";
+              }}
+            />
+            <label
+              htmlFor="hero-file-input"
+              className={`hero-upload-circle${heroDragging ? " is-dragging" : ""}`}
+              onDragOver={(e) => {
+                e.preventDefault();
+                setHeroDragging(true);
+              }}
+              onDragLeave={() => setHeroDragging(false)}
+              onDrop={(e) => {
+                e.preventDefault();
+                setHeroDragging(false);
+                const file = e.dataTransfer.files?.[0];
+                if (file) onHeroFile(file);
+              }}
+            >
+              <span className="hero-upload-circle-icon">
+                <NavIcon name="badge" />
+              </span>
+              <p className="hero-upload-circle-title">{t("hero.uploadCircleTitle")}</p>
+              <p className="hero-upload-circle-sub">{t("hero.uploadCircleSub")}</p>
+            </label>
+            <p className="hero-upload-circle-caption">{t("hero.uploadCircleCaption")}</p>
           </div>
         </div>
       </div>
