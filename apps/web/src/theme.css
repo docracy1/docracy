@@ -1519,6 +1519,44 @@ select {
   width: 100%;
 }
 
+.hero-band-decorated {
+  position: relative;
+}
+
+.hero-decor-card {
+  position: absolute;
+  pointer-events: none;
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.2));
+}
+
+.hero-decor-card-1 {
+  top: 8%;
+  left: 4%;
+}
+
+.hero-decor-card-2 {
+  bottom: 10%;
+  left: 9%;
+}
+
+.hero-decor-card-3 {
+  top: 12%;
+  right: 5%;
+}
+
+.hero-decor-card-4 {
+  bottom: 8%;
+  right: 10%;
+}
+
+/* Only worth floating these in the margins once there's real margin to float in — below that
+   they'd sit on top of the centered column instead of beside it. */
+@media (max-width: 900px) {
+  .hero-decor-card {
+    display: none;
+  }
+}
+
 .hero-band h1 {
   color: #ffffff;
   font-size: clamp(32px, 3.6vw, 48px);

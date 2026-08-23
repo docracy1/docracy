@@ -126,6 +126,32 @@ function FeatureIcon({
   }
 }
 
+/** Purely decorative floating document cards for the hero's left/right margins — same idea as the
+ *  reference layouts (docstoc, LimeWire) pointed to, drawn from scratch in Docracy's own tokens
+ *  rather than reusing anything from them. Hidden on narrow viewports where there's no margin to
+ *  float in without colliding with the actual centered content (see the max-width:900px rule). */
+function HeroDecorCard({ className, rotate }: { className: string; rotate: number }) {
+  return (
+    <svg
+      className={`hero-decor-card ${className}`}
+      style={{ transform: `rotate(${rotate}deg)` }}
+      width="72"
+      height="92"
+      viewBox="0 0 72 92"
+      fill="none"
+      aria-hidden="true"
+    >
+      <rect x="1" y="1" width="70" height="90" rx="10" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.28)" strokeWidth="1.5" />
+      <rect x="14" y="20" width="30" height="5" rx="2.5" fill="rgba(255,255,255,0.35)" />
+      <rect x="14" y="33" width="44" height="4" rx="2" fill="rgba(255,255,255,0.2)" />
+      <rect x="14" y="43" width="44" height="4" rx="2" fill="rgba(255,255,255,0.2)" />
+      <rect x="14" y="53" width="30" height="4" rx="2" fill="rgba(255,255,255,0.2)" />
+      <circle cx="52" cy="72" r="9" fill="var(--accent)" fillOpacity="0.35" />
+      <path d="M48 72l3 3 5.5-5.5" stroke="var(--accent)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 const CORE_FEATURES: Array<{
   icon: "bolt" | "workflow" | "shield" | "users" | "duplicate" | "send" | "pen" | "sparkles" | "single" | "scale" | "badge" | "chainLink";
   titleKey: string;
@@ -412,7 +438,11 @@ export default function Landing() {
 
   return (
     <div>
-      <div className="hero-band">
+      <div className="hero-band hero-band-decorated">
+        <HeroDecorCard className="hero-decor-card-1" rotate={-14} />
+        <HeroDecorCard className="hero-decor-card-2" rotate={10} />
+        <HeroDecorCard className="hero-decor-card-3" rotate={16} />
+        <HeroDecorCard className="hero-decor-card-4" rotate={-9} />
         <div className="hero-inner hero-stack">
           <Link
             to="/whatsapp-signing"
