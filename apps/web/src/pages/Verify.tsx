@@ -76,14 +76,14 @@ export default function Verify() {
 
   return (
     <div>
-      <div className="hero-band" style={{ paddingBottom: 96, textAlign: "center" }}>
-        <div className="hero-inner" style={{ maxWidth: 640 }}>
-          <h1 style={{ maxWidth: "none" }}>Verify a signed document</h1>
+      <div className="verify-dark-hero">
+        <div className="verify-dark-hero-inner">
+          <h1>Verify a signed document</h1>
           <p>
             Confirm a PDF was really completed through Docracy's signing flow, and when — then check it a second
             way, independently of Docracy, on the Bitcoin blockchain.
           </p>
-          <ul className="hero-trust-badges" style={{ justifyContent: "center", marginBottom: 0 }}>
+          <ul className="verify-dark-trust-row">
             <li>
               <NavIcon name="badge" />
               Checked against Docracy's records
@@ -93,29 +93,8 @@ export default function Verify() {
               Independently checkable on Bitcoin
             </li>
           </ul>
-        </div>
-      </div>
 
-      <div className="container">
-        <div className="verify-panel">
-          <div className="verify-hero-icon">
-            <NavIcon name="badge" />
-          </div>
-
-          <div
-            className={`verify-dropzone${isDragging ? " is-dragging" : ""}`}
-            onDragOver={(e) => {
-              e.preventDefault();
-              setIsDragging(true);
-            }}
-            onDragLeave={() => setIsDragging(false)}
-            onDrop={(e) => {
-              e.preventDefault();
-              setIsDragging(false);
-              const file = e.dataTransfer.files?.[0];
-              if (file) onFile(file);
-            }}
-          >
+          <div className="verify-circle-wrap">
             <input
               type="file"
               accept="application/pdf,.pdf"
@@ -129,92 +108,95 @@ export default function Verify() {
             />
             <label
               htmlFor="verify-file-input"
-              className="btn-primary"
-              style={{ cursor: "pointer", display: "inline-block" }}
+              className={`verify-circle${isDragging ? " is-dragging" : ""}`}
+              onDragOver={(e) => {
+                e.preventDefault();
+                setIsDragging(true);
+              }}
+              onDragLeave={() => setIsDragging(false)}
+              onDrop={(e) => {
+                e.preventDefault();
+                setIsDragging(false);
+                const file = e.dataTransfer.files?.[0];
+                if (file) onFile(file);
+              }}
             >
-              Upload a signed PDF
+              <span className="verify-circle-icon">
+                <NavIcon name="badge" />
+              </span>
+              <p className="verify-circle-title">Click or drag your PDF here</p>
+              <p className="verify-circle-sub">Free, tamper-evident verification</p>
             </label>
-            <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 10, marginBottom: 0 }}>
-              Or drag and drop it here. Works with the signed document itself or its certificate of completion.
-            </p>
           </div>
+          <p className="verify-circle-caption">SHA-256 · computed in your browser · nothing ever uploaded</p>
 
-          <div className="verify-divider">
-            <span>or paste a hash</span>
-          </div>
-
-          <form onSubmit={onHashSubmit} style={{ display: "flex", gap: 8 }}>
+          <form className="verify-hash-form" onSubmit={onHashSubmit}>
             <input
               type="text"
               value={hashInput}
               onChange={(e) => setHashInput(e.target.value)}
-              placeholder="SHA-256 hash from the certificate (64 hex characters)"
-              style={{ flex: 1, fontFamily: "monospace", fontSize: 13 }}
+              placeholder="Or paste a SHA-256 hash"
             />
-            <button type="submit" className="btn-secondary">
-              Check
-            </button>
+            <button type="submit">Check</button>
           </form>
 
-          {status.state === "checking" && <p style={{ marginTop: 20, color: "var(--mute)" }}>Checking…</p>}
+          {status.state === "checking" && (
+            <p style={{ marginTop: 20, color: "rgba(255,255,255,0.7)" }}>Checking…</p>
+          )}
 
           {status.state === "error" && (
-            <div className="verify-result-card is-danger">
-              <span className="verify-result-icon">!</span>
-              <p style={{ margin: 0, color: "var(--danger)" }}>{status.message}</p>
+            <div className="verify-reveal is-danger">
+              <p className="verify-reveal-label">Error</p>
+              <p>{status.message}</p>
             </div>
           )}
 
           {status.state === "result" && status.result.found && (
-            <div className="verify-result-card is-success">
-              <span className="verify-result-icon">✓</span>
-              <div>
-                <p style={{ margin: 0, fontWeight: 700 }}>Verified</p>
-                <p style={{ margin: "8px 0 0" }}>
-                  A document with this exact content was completed through Docracy on{" "}
-                  {status.result.completedAt ? new Date(status.result.completedAt).toLocaleString() : "an unknown date"}
-                  , signed by {status.result.signerCount} {status.result.signerCount === 1 ? "signer" : "signers"}.
+            <div className="verify-reveal">
+              <p className="verify-reveal-label">✓ Verified</p>
+              <p>
+                A document with this exact content was completed through Docracy on{" "}
+                {status.result.completedAt ? new Date(status.result.completedAt).toLocaleString() : "an unknown date"}
+                , signed by {status.result.signerCount} {status.result.signerCount === 1 ? "signer" : "signers"}.
+              </p>
+              {status.result.hasOtsProof ? (
+                <p>
+                  This hash is also anchored to the Bitcoin blockchain via the free, public{" "}
+                  <a href="https://opentimestamps.org" target="_blank" rel="noopener noreferrer">
+                    OpenTimestamps
+                  </a>{" "}
+                  protocol — provable even if Docracy itself disappeared.{" "}
+                  <a href={apiUrl(`/api/verify/${status.hash}/ots`)}>Download the proof (.ots)</a>, then verify it
+                  independently at{" "}
+                  <a href="https://opentimestamps.org" target="_blank" rel="noopener noreferrer">
+                    opentimestamps.org
+                  </a>
+                  . New proofs take a few hours to be confirmed on the blockchain — until then, opentimestamps.org
+                  will show it as pending.
                 </p>
-                {status.result.hasOtsProof ? (
-                  <p style={{ margin: "12px 0 0", fontSize: 13 }}>
-                    This hash is also anchored to the Bitcoin blockchain via the free, public{" "}
-                    <a href="https://opentimestamps.org" target="_blank" rel="noopener noreferrer">
-                      OpenTimestamps
-                    </a>{" "}
-                    protocol — provable even if Docracy itself disappeared.{" "}
-                    <a href={apiUrl(`/api/verify/${status.hash}/ots`)}>Download the proof (.ots)</a>, then verify it
-                    independently at{" "}
-                    <a href="https://opentimestamps.org" target="_blank" rel="noopener noreferrer">
-                      opentimestamps.org
-                    </a>
-                    . New proofs take a few hours to be confirmed on the blockchain — until then, opentimestamps.org
-                    will show it as pending.
-                  </p>
-                ) : (
-                  <p style={{ margin: "12px 0 0", fontSize: 13, color: "var(--mute)" }}>
-                    A blockchain timestamp proof for this document isn't available yet — it's submitted in the
-                    background right after signing and can take a minute to appear. Check back shortly.
-                  </p>
-                )}
-              </div>
+              ) : (
+                <p>
+                  A blockchain timestamp proof for this document isn't available yet — it's submitted in the
+                  background right after signing and can take a minute to appear. Check back shortly.
+                </p>
+              )}
             </div>
           )}
 
           {status.state === "result" && !status.result.found && (
-            <div className="verify-result-card is-neutral">
-              <span className="verify-result-icon">?</span>
-              <div>
-                <p style={{ margin: 0, fontWeight: 700 }}>No matching record found</p>
-                <p style={{ margin: "8px 0 0", color: "var(--mute)" }}>
-                  This hash doesn't match any document completed through Docracy — or the file has been modified
-                  even slightly since it was signed, which changes its hash entirely. This doesn't necessarily mean
-                  the document is fraudulent; it may simply not have been signed here.
-                </p>
-              </div>
+            <div className="verify-reveal is-neutral">
+              <p className="verify-reveal-label">No matching record found</p>
+              <p>
+                This hash doesn't match any document completed through Docracy — or the file has been modified
+                even slightly since it was signed, which changes its hash entirely. This doesn't necessarily mean
+                the document is fraudulent; it may simply not have been signed here.
+              </p>
             </div>
           )}
         </div>
+      </div>
 
+      <div className="container">
         <div className="card" style={{ marginTop: 32, marginBottom: 40, padding: "20px 24px", maxWidth: 560, marginLeft: "auto", marginRight: "auto" }}>
           <h3 style={{ marginTop: 0, fontSize: 14 }}>What this does and doesn't prove</h3>
           <p style={{ fontSize: 13, color: "var(--mute)", marginBottom: 8 }}>
