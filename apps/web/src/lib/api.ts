@@ -1063,6 +1063,20 @@ export async function verifyDocumentHash(hash: string): Promise<VerificationResu
   return asJson(res);
 }
 
+export interface OtsStatusResult {
+  available: boolean;
+  confirmed: boolean;
+  confirmedAt: string | null;
+}
+
+/** Live check, not just "a proof file exists" — the worker fetches the actual Bitcoin block from
+ *  a public explorer and confirms its Merkle root matches this hash right now. Slower than the
+ *  plain lookup above, so it's called separately once a match is already found. */
+export async function checkOtsStatus(hash: string): Promise<OtsStatusResult> {
+  const res = await apiFetch(`/api/verify/${encodeURIComponent(hash)}/ots-status`);
+  return asJson(res);
+}
+
 /** Public, no-auth import of a Google Doc as a PDF (must be shared "Anyone with the link can
  *  view") — returns raw PDF bytes on success, so this can't use asJson's assume-JSON error path. */
 export async function importGoogleDoc(url: string): Promise<Blob> {

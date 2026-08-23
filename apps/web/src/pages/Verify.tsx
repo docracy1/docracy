@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { usePageMeta } from "../lib/usePageMeta";
-import { verifyDocumentHash, apiUrl, type VerificationResult } from "../lib/api";
+import { verifyDocumentHash, checkOtsStatus, apiUrl, type VerificationResult, type OtsStatusResult } from "../lib/api";
 import { track } from "../lib/track";
 import { NavIcon } from "../components/NavIcons";
 
@@ -19,6 +19,12 @@ type Status =
   | { state: "result"; hash: string; result: VerificationResult }
   | { state: "error"; message: string };
 
+type OtsCheck =
+  | { state: "idle" }
+  | { state: "checking" }
+  | { state: "done"; result: OtsStatusResult }
+  | { state: "error" };
+
 export default function Verify() {
   usePageMeta(
     "Verify a Signed Document — Independently, via Blockchain | Docracy",
@@ -27,15 +33,26 @@ export default function Verify() {
 
   const [searchParams] = useSearchParams();
   const [status, setStatus] = useState<Status>({ state: "idle" });
+  const [otsCheck, setOtsCheck] = useState<OtsCheck>({ state: "idle" });
   const [hashInput, setHashInput] = useState("");
   const [isDragging, setIsDragging] = useState(false);
 
   const runCheck = async (hash: string) => {
     setStatus({ state: "checking" });
+    setOtsCheck({ state: "idle" });
     try {
       const result = await verifyDocumentHash(hash);
       track("verify_checked", { source: "verify_page" });
       setStatus({ state: "result", hash, result });
+      if (result.found && result.hasOtsProof) {
+        setOtsCheck({ state: "checking" });
+        try {
+          const otsResult = await checkOtsStatus(hash);
+          setOtsCheck({ state: "done", result: otsResult });
+        } catch {
+          setOtsCheck({ state: "error" });
+        }
+      }
     } catch (err) {
       setStatus({ state: "error", message: err instanceof Error ? err.message : "Something went wrong." });
     }
@@ -160,20 +177,62 @@ export default function Verify() {
                 , signed by {status.result.signerCount} {status.result.signerCount === 1 ? "signer" : "signers"}.
               </p>
               {status.result.hasOtsProof ? (
-                <p>
-                  This hash is also anchored to the Bitcoin blockchain via the free, public{" "}
-                  <a href="https://opentimestamps.org" target="_blank" rel="noopener noreferrer">
-                    OpenTimestamps
-                  </a>{" "}
-                  protocol — provable even if Docracy itself disappeared.{" "}
-                  <a href={apiUrl(`/api/verify/${status.hash}/ots`)}>Download the proof (.ots)</a>, then verify it
-                  independently at{" "}
-                  <a href="https://opentimestamps.org" target="_blank" rel="noopener noreferrer">
-                    opentimestamps.org
-                  </a>
-                  . New proofs take a few hours to be confirmed on the blockchain — until then, opentimestamps.org
-                  will show it as pending.
-                </p>
+                <>
+                  {otsCheck.state === "checking" && (
+                    <p>Checking the Bitcoin blockchain for an independent confirmation…</p>
+                  )}
+                  {otsCheck.state === "done" && otsCheck.result.confirmed && (
+                    <p>
+                      <strong>
+                        ✓ Independently confirmed on the Bitcoin blockchain
+                        {otsCheck.result.confirmedAt
+                          ? ` on ${new Date(otsCheck.result.confirmedAt).toLocaleDateString()}`
+                          : ""}
+                        .
+                      </strong>{" "}
+                      Docracy just fetched the actual Bitcoin block from a public explorer and confirmed its Merkle
+                      root matches this exact document's hash right now — so this holds even if Docracy itself
+                      disappeared, via the free, public{" "}
+                      <a href="https://opentimestamps.org" target="_blank" rel="noopener noreferrer">
+                        OpenTimestamps
+                      </a>{" "}
+                      protocol.{" "}
+                      <a href={apiUrl(`/api/verify/${status.hash}/ots`)}>Download the raw proof (.ots)</a> to check it
+                      yourself, with any tool, any time.
+                    </p>
+                  )}
+                  {otsCheck.state === "done" && !otsCheck.result.confirmed && (
+                    <p>
+                      This hash is anchored to the Bitcoin blockchain via the free, public{" "}
+                      <a href="https://opentimestamps.org" target="_blank" rel="noopener noreferrer">
+                        OpenTimestamps
+                      </a>{" "}
+                      protocol, but the submission hasn't been confirmed in a mined block yet — calendars batch
+                      commits every few hours, so a proof from a recent signing is normal to see as still pending.{" "}
+                      <a href={apiUrl(`/api/verify/${status.hash}/ots`)}>Download the proof (.ots)</a> and check back
+                      at{" "}
+                      <a href="https://opentimestamps.org" target="_blank" rel="noopener noreferrer">
+                        opentimestamps.org
+                      </a>{" "}
+                      later, or reload this page in a few hours.
+                    </p>
+                  )}
+                  {otsCheck.state === "error" && (
+                    <p>
+                      This hash is anchored to the Bitcoin blockchain via the free, public{" "}
+                      <a href="https://opentimestamps.org" target="_blank" rel="noopener noreferrer">
+                        OpenTimestamps
+                      </a>{" "}
+                      protocol, but Docracy couldn't reach a block explorer just now to confirm it live.{" "}
+                      <a href={apiUrl(`/api/verify/${status.hash}/ots`)}>Download the proof (.ots)</a> and verify it
+                      independently at{" "}
+                      <a href="https://opentimestamps.org" target="_blank" rel="noopener noreferrer">
+                        opentimestamps.org
+                      </a>
+                      .
+                    </p>
+                  )}
+                </>
               ) : (
                 <p>
                   A blockchain timestamp proof for this document isn't available yet — it's submitted in the

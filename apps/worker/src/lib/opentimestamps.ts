@@ -1,4 +1,4 @@
-import { submit, write } from "@lacrypta/typescript-opentimestamps";
+import { read, submit, upgrade, verify, verifiers, write } from "@lacrypta/typescript-opentimestamps";
 
 // Passed explicitly rather than relying on the library's own `defaultCalendarUrls` (its .d.ts
 // declares one, but it isn't actually re-exported from the package's runtime entry point) — these
@@ -39,6 +39,38 @@ export async function stampHash(hashHex: string): Promise<Uint8Array | null> {
   } catch (err) {
     console.error("OpenTimestamps stamping failed (non-fatal):", err);
     return null;
+  }
+}
+
+export interface OtsCheckResult {
+  /** True only once a Bitcoin block explorer independently confirms the exact Merkle root this
+   *  proof commits to — i.e. the original hash really is embedded in a specific mined block, not
+   *  just "we hold a file that claims so." */
+  confirmed: boolean;
+  /** ISO timestamp of the confirming block, when `confirmed` is true. */
+  confirmedAt: string | null;
+}
+
+/** Live, independent confirmation of a stored `.ots` proof — not just "does the file exist."
+ *  `upgrade()` re-contacts the calendar servers in case a still-"pending" proof has since been
+ *  committed to Bitcoin (calendars batch every few hours, so a proof stamped minutes ago won't
+ *  resolve yet — that's normal, not an error). `verify()` then asks public Bitcoin block explorers
+ *  (blockchain.info, blockstream.info) to fetch the block at the attested height and checks that
+ *  its actual Merkle root byte-for-byte matches the root this proof's operation chain produces
+ *  from the original file hash — the same check the `ots` CLI or opentimestamps.org would run.
+ *  A mismatch throws inside the library itself (see its verifiers), so getting `confirmed: true`
+ *  back here means a real Bitcoin block, fetched live, agrees with this exact hash right now. */
+export async function checkOtsProof(proofBytes: Uint8Array): Promise<OtsCheckResult> {
+  try {
+    const parsed = read(proofBytes);
+    const { timestamp } = await upgrade(parsed);
+    const { attestations } = await verify(timestamp, verifiers);
+    const blockTimes = Object.keys(attestations).map(Number).filter((n) => Number.isFinite(n));
+    if (blockTimes.length === 0) return { confirmed: false, confirmedAt: null };
+    return { confirmed: true, confirmedAt: new Date(Math.min(...blockTimes) * 1000).toISOString() };
+  } catch (err) {
+    console.error("OpenTimestamps live verification failed (non-fatal):", err);
+    return { confirmed: false, confirmedAt: null };
   }
 }
 
