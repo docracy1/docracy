@@ -3,8 +3,10 @@ import { useSearchParams } from "react-router-dom";
 import TurnstileWidget, { turnstileRequired } from "../components/TurnstileWidget";
 import { adminLogin, requestMagicLink } from "../lib/api";
 import { useI18n } from "../lib/i18n";
+import { useNoIndex } from "../lib/useNoIndex";
 
 export default function Login() {
+  useNoIndex();
   const { t, locale } = useI18n();
   const [searchParams] = useSearchParams();
   const ref = searchParams.get("ref") ?? "";

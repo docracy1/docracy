@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { usePageMeta } from "../lib/usePageMeta";
 import { fetchRoadmapFeatures, voteRoadmapFeature, type RoadmapFeature } from "../lib/api";
+import { useNoIndex } from "../lib/useNoIndex";
 
 function FeatureRow({ feature, onVoted }: { feature: RoadmapFeature; onVoted: (updated: RoadmapFeature) => void }) {
   const [voting, setVoting] = useState(false);
@@ -61,6 +62,7 @@ function FeatureRow({ feature, onVoted }: { feature: RoadmapFeature; onVoted: (u
 }
 
 export default function Roadmap() {
+  useNoIndex();
   usePageMeta(
     "Roadmap — Docracy",
     "Vote yes or no on what Docracy should build next — no account needed. Real votes decide the next 12 months."

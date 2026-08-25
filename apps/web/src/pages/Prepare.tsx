@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useI18n } from "../lib/i18n";
+import { useNoIndex } from "../lib/useNoIndex";
 import { useSeoMeta } from "../lib/useSeoMeta";
 import PdfViewer from "../components/PdfViewer";
 import {
@@ -91,6 +92,8 @@ function SidebarHeading({ label, count }: { label: string; count?: number }) {
 
 export default function Prepare() {
   const { t, locale } = useI18n();
+  // App surface (not prerendered) — noindex so SPA/homepage shell can't be indexed as /prepare.
+  useNoIndex();
   useSeoMeta("prepare");
   const navigate = useNavigate();
   const location = useLocation();

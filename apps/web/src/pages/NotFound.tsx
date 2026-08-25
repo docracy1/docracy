@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import { usePageMeta } from "../lib/usePageMeta";
 import { useT } from "../lib/i18n";
+import { useNoIndex } from "../lib/useNoIndex";
 
 export default function NotFound() {
+  useNoIndex();
   const t = useT();
   usePageMeta(`${t("notFound.title")} — Docracy`, t("notFound.body"));
 
