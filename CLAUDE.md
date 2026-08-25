@@ -49,18 +49,25 @@ Lightweight catalogs — no i18next. Locales: `en` | `es` (US Spanish, tú-form)
 
 **Phased:** P1 landing/pricing/login/sign (Docracy) + login/shell/welcome (Chasa) → P2 rest of app → P3 emails → P4 docs/blog. Add keys to both `en.ts` and `es.ts`, then `t("key")` in components.
 
-## Weekly SEO blog (Monday cron)
+## Weekly SEO blog + templates (Monday cron)
 
-Daily Worker cron `0 8 * * *` (UTC) calls `runWeeklyBlogPublish` on Mondays (`apps/worker/src/lib/blogWeekly.ts`):
+Daily Worker cron `22 8 * * *` (UTC, ~08:22 — offset past the hour for thundering-herd reasons) calls on Mondays:
 
-1. Publish oldest **draft** in `blog_posts` if any (admin-prepared).
-2. Else take next `queued` row from `blog_topic_queue` (migration `0018`), draft with Workers AI, publish to `blog_posts`.
+1. `runWeeklyBlogPublish` (`apps/worker/src/lib/blogWeekly.ts`):
+   - Publish oldest **draft** in `blog_posts` if any (admin-prepared).
+   - Else take next `queued` row from `blog_topic_queue` (migrations `0018` / `0027`), draft with Workers AI, publish to `blog_posts`.
+2. `runWeeklyTemplatePublish` (`apps/worker/src/lib/templateWeekly.ts`):
+   - Take next **10** `queued` rows from `template_topic_queue` (migration `0026`, docracy.com category taxonomy).
+   - Draft **FreeTemplate-parity** JSON (full SEO catalog + multi-section PDF blocks — not thin).
+   - Render with the same PDF layout standard as `generateFreeTemplatePdfs.mjs`, publish as approved Marketplace rows with `origin='weekly'`.
+   - Thin/invalid AI drafts are marked `skipped` and do not publish.
 
-Local test: `curl "http://127.0.0.1:8787/__scheduled?cron=0+8+*+*+*"` on a Monday, or temporarily force the Monday branch.
+Local test: `curl "http://127.0.0.1:8787/__scheduled?cron=22+8+*+*+*"` on a Monday, or temporarily force the Monday branch.
 
-Dynamic posts appear on `/blog` via API. Sitemap: `https://api.docracy.io/api/blog-posts/sitemap.xml` (also in `robots.txt`). Static `ARTICLES` / prerender remain for handcrafted posts (e.g. W-9 with screenshots).
+Dynamic blog posts appear on `/blog` via API. Weekly templates appear on `/free-templates#newest`. Sitemap: `https://api.docracy.io/api/blog-posts/sitemap.xml` (also in `robots.txt`). Static `ARTICLES` / prerender remain for handcrafted posts (e.g. W-9 with screenshots).
 
-Add topics: insert into `blog_topic_queue` (`status='queued'`) or create admin drafts with `publish:false`.
+Add blog topics: insert into `blog_topic_queue` (`status='queued'`) or create admin drafts with `publish:false`.
+Add template topics: insert into `template_topic_queue` (`status='queued'`) with a docracy.com taxonomy `category`.
 
 ## Git workflow (Cursor + Claude Code)
 
