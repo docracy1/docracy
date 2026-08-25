@@ -1490,21 +1490,26 @@ select {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  max-width: 640px;
-  gap: 6px;
+  max-width: 680px;
+  gap: 8px;
 }
 
 .hero-stack .hero-new-badge {
-  margin-bottom: 10px;
+  margin-bottom: 6px;
+}
+
+.hero-stack h1 {
+  max-width: 16em;
 }
 
 .hero-stack .hero-sub {
-  margin: 0 0 8px;
+  margin: 0 0 4px;
+  max-width: 34em;
 }
 
 .hero-stack .hero-upload-circle-wrap,
 .hero-stack .pdf-upload-circle-wrap {
-  margin: 20px 0 4px;
+  margin: 12px 0 2px;
 }
 
 .hero-stack .hero-signup-form {
@@ -2228,37 +2233,43 @@ select {
   }
 }
 
-/* Shared PDF upload circle (Landing / Prepare / FirstDocumentPrompt) — Google Docs paste lives
-   *inside* the circle as a compact column, not a full-width bar underneath. */
+/* Shared PDF upload orb (Landing / Prepare / FirstDocumentPrompt).
+   PDF drop is the hero CTA — large type, never clipped. With Google Docs, the orb becomes a
+   tall capsule so both zones fit with breathing room (still inside the glow, not a page-wide bar). */
 .pdf-upload-circle-wrap {
   position: relative;
   text-align: center;
-  padding: 16px;
+  padding: 20px;
 }
 
 .pdf-upload-circle-wrap::before {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: 4px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(0, 232, 168, 0.28) 0%, rgba(0, 232, 168, 0) 70%);
   z-index: 0;
   pointer-events: none;
 }
 
+.pdf-upload-circle-with-gdoc.pdf-upload-circle-wrap::before {
+  border-radius: 999px;
+  inset: 0;
+}
+
 .pdf-upload-circle-hero.pdf-upload-circle-wrap::before {
-  background: radial-gradient(circle, rgba(0, 232, 168, 0.3) 0%, rgba(0, 232, 168, 0) 70%);
+  background: radial-gradient(circle, rgba(0, 232, 168, 0.32) 0%, rgba(0, 232, 168, 0) 68%);
 }
 
 .pdf-upload-circle-light.pdf-upload-circle-wrap::before {
-  background: radial-gradient(circle, rgba(26, 86, 219, 0.12) 0%, rgba(26, 86, 219, 0) 72%);
+  background: radial-gradient(circle, rgba(26, 86, 219, 0.14) 0%, rgba(26, 86, 219, 0) 72%);
 }
 
 .pdf-upload-circle {
   position: relative;
   z-index: 1;
-  width: min(300px, 92vw);
-  height: min(300px, 92vw);
+  width: min(300px, 88vw);
+  height: min(300px, 88vw);
   border-radius: 50%;
   background: #ffffff;
   border: 5px solid var(--accent);
@@ -2266,31 +2277,49 @@ select {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 10px;
   margin: 0 auto;
   box-shadow: 0 20px 50px rgba(10, 30, 60, 0.18);
-  transition: border-color 0.15s ease, transform 0.15s ease;
-  padding: 22px 20px 20px;
+  transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  padding: 28px 24px;
   box-sizing: border-box;
   overflow: hidden;
 }
 
+/* Tall capsule: PDF CTA on top, Google Docs strip below — nothing clipped. */
 .pdf-upload-circle-with-gdoc .pdf-upload-circle {
-  width: min(340px, 92vw);
-  height: min(340px, 92vw);
-  padding: 26px 24px 22px;
+  width: min(340px, 90vw);
+  height: auto;
+  min-height: 390px;
+  border-radius: 999px;
+  padding: 36px 32px 28px;
+  justify-content: flex-start;
+  gap: 0;
+}
+
+.pdf-upload-circle-hero.pdf-upload-circle-with-gdoc .pdf-upload-circle {
+  width: min(360px, 92vw);
+  min-height: 420px;
+  padding: 40px 36px 32px;
+  border-width: 6px;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.35),
+    0 24px 60px rgba(10, 30, 60, 0.22);
 }
 
 .pdf-upload-circle-size-sm .pdf-upload-circle {
   width: min(260px, 86vw);
   height: min(260px, 86vw);
-  padding: 18px 16px 16px;
+  padding: 22px 18px;
   border-width: 4px;
+  gap: 8px;
 }
 
 .pdf-upload-circle-size-sm.pdf-upload-circle-with-gdoc .pdf-upload-circle {
-  width: min(300px, 88vw);
-  height: min(300px, 88vw);
+  width: min(300px, 90vw);
+  height: auto;
+  min-height: 340px;
+  padding: 28px 24px 22px;
 }
 
 .pdf-upload-circle-light .pdf-upload-circle {
@@ -2301,7 +2330,7 @@ select {
 .pdf-upload-circle:hover,
 .pdf-upload-circle.is-dragging {
   border-color: var(--accent-hover);
-  transform: scale(1.015);
+  transform: scale(1.012);
 }
 
 .pdf-upload-circle-light .pdf-upload-circle:hover,
@@ -2314,14 +2343,23 @@ select {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   cursor: pointer;
   width: 100%;
+  flex: 1 1 auto;
+  justify-content: center;
+  min-height: 0;
+  padding: 4px 0 8px;
+}
+
+.pdf-upload-circle-with-gdoc .pdf-upload-circle-main {
+  flex: 0 0 auto;
+  padding-bottom: 18px;
 }
 
 .pdf-upload-circle-icon {
-  width: 48px;
-  height: 48px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   background: var(--primary-soft);
   color: var(--primary);
@@ -2331,25 +2369,39 @@ select {
   flex-shrink: 0;
 }
 
+.pdf-upload-circle-hero .pdf-upload-circle-icon {
+  width: 64px;
+  height: 64px;
+  background: rgba(26, 86, 219, 0.1);
+}
+
 .pdf-upload-circle-icon svg {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
+}
+
+.pdf-upload-circle-hero .pdf-upload-circle-icon svg {
+  width: 30px;
+  height: 30px;
 }
 
 .pdf-upload-circle-title {
   margin: 0;
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   color: var(--body-strong);
-  line-height: 1.25;
-  max-width: 12em;
+  line-height: 1.2;
+  max-width: 11em;
 }
 
-/* Beat `.hero-band p` (hero-body color) so title/sub stay dark on the white circle. */
-.hero-band .pdf-upload-circle-title,
-.hero-band .pdf-upload-circle-sub,
-.hero-band .pdf-upload-circle-or,
-.hero-band .pdf-upload-circle-gdoc-hint {
+.pdf-upload-circle-hero .pdf-upload-circle-title {
+  font-size: 20px;
+  max-width: 10.5em;
+}
+
+/* Beat `.hero-band p` so title/sub stay dark on the white orb. */
+.hero-band .pdf-upload-circle-title {
   color: var(--body-strong);
 }
 
@@ -2361,23 +2413,30 @@ select {
 
 .pdf-upload-circle-sub {
   margin: 0;
-  font-size: 11.5px;
+  font-size: 13.5px;
   color: var(--mute);
-  line-height: 1.3;
-  max-width: 14em;
+  line-height: 1.35;
+  max-width: 16em;
+}
+
+.pdf-upload-circle-hero .pdf-upload-circle-sub {
+  font-size: 14px;
 }
 
 .pdf-upload-circle-gdoc {
   width: 100%;
-  max-width: 200px;
-  margin-top: 4px;
+  max-width: 240px;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid rgba(15, 40, 80, 0.1);
+  flex-shrink: 0;
 }
 
 .pdf-upload-circle-or {
-  margin: 0 0 6px;
-  font-size: 10.5px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
+  margin: 0 0 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--mute);
 }
@@ -2385,29 +2444,37 @@ select {
 .pdf-upload-circle-gdoc-form {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 6px;
   width: 100%;
 }
 
 .pdf-upload-circle-gdoc-form input {
   width: 100%;
   box-sizing: border-box;
-  font-size: 11.5px;
-  padding: 6px 8px;
-  border-radius: 8px;
-  border: 1px solid var(--hairline);
+  font-size: 13px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1.5px solid var(--hairline);
   background: #fff;
+  color: var(--body-strong);
+}
+
+.pdf-upload-circle-gdoc-form input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.12);
 }
 
 .pdf-upload-circle-gdoc-form .btn-secondary {
-  font-size: 11.5px;
-  padding: 5px 8px;
+  font-size: 13px;
+  padding: 7px 10px;
   width: 100%;
+  border-radius: 10px;
 }
 
 .pdf-upload-circle-gdoc-hint {
-  margin: 5px 0 0;
-  font-size: 9.5px;
+  margin: 8px 0 0;
+  font-size: 11px;
   line-height: 1.35;
   color: var(--mute);
 }
@@ -2439,20 +2506,32 @@ select {
   .pdf-upload-circle {
     width: min(270px, 88vw);
     height: min(270px, 88vw);
-    padding: 18px 16px 16px;
+    padding: 22px 18px;
   }
 
   .pdf-upload-circle-with-gdoc .pdf-upload-circle {
-    width: min(300px, 90vw);
-    height: min(300px, 90vw);
+    width: min(320px, 92vw);
+    height: auto;
+    min-height: 380px;
+    padding: 32px 26px 26px;
+  }
+
+  .pdf-upload-circle-hero.pdf-upload-circle-with-gdoc .pdf-upload-circle {
+    width: min(340px, 94vw);
+    min-height: 400px;
+    padding: 36px 28px 28px;
   }
 
   .pdf-upload-circle-title {
-    font-size: 14px;
+    font-size: 17px;
+  }
+
+  .pdf-upload-circle-hero .pdf-upload-circle-title {
+    font-size: 18px;
   }
 
   .pdf-upload-circle-gdoc {
-    max-width: 180px;
+    max-width: 220px;
   }
 }
 
@@ -4976,8 +5055,8 @@ select {
   }
 }
 
-/* Footer — a dark, multi-column layout bookending the hero band's navy gradient at the top of
-   the page, so the two dark sections read as one deliberate brand color rather than a one-off. */
+/* Footer — dark band mirroring the hero. Brand on the left; link columns in two balanced rows
+   (Product / Solutions / Resources, then Compare / Company / Legal) so no column dumps ~18 links. */
 
 .site-footer {
   margin-top: 64px;
@@ -4988,17 +5067,46 @@ select {
 
 .site-footer-inner {
   display: grid;
-  grid-template-columns: 1.4fr repeat(4, 1fr);
-  gap: 32px;
+  grid-template-columns: minmax(180px, 1.15fr) minmax(0, 3.2fr);
+  gap: 40px 48px;
   padding: 0;
+  align-items: start;
+}
+
+.site-footer-link-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  min-width: 0;
+}
+
+.site-footer-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px 32px;
+}
+
+.site-footer-row + .site-footer-row {
+  padding-top: 28px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 900px) {
+  .site-footer-inner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
 }
 
 @media (max-width: 760px) {
-  .site-footer-inner {
-    grid-template-columns: repeat(2, 1fr);
+  .site-footer-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .site-footer-brand {
-    grid-column: 1 / -1;
+}
+
+@media (max-width: 480px) {
+  .site-footer-row {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -5006,8 +5114,28 @@ select {
   color: var(--hero-body);
   font-size: 13px;
   margin: 12px 0 0;
-  max-width: 220px;
+  max-width: 240px;
   opacity: 0.85;
+}
+
+.site-footer-social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin-top: 16px;
+}
+
+.site-footer-social a {
+  color: var(--hero-body);
+  font-size: 13px;
+  text-decoration: none;
+  opacity: 0.85;
+  transition: color 0.15s var(--ease), opacity 0.15s var(--ease);
+}
+
+.site-footer-social a:hover {
+  color: #ffffff;
+  opacity: 1;
 }
 
 .site-footer-col {

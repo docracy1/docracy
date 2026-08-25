@@ -13,8 +13,9 @@ function isPdf(file: File) {
 }
 
 /**
- * Shared glowing PDF upload circle (Landing hero, Prepare, FirstDocumentPrompt).
- * Google Docs paste sits *inside* the circle as a compact column — not a full-width bar below.
+ * Shared glowing PDF upload drop-zone (Landing hero, Prepare, FirstDocumentPrompt).
+ * PDF drop is the primary, readable CTA. Google Docs sits in a compact secondary strip
+ * inside the same orb — never a full-width bar under the page.
  */
 export default function PdfUploadCircle({
   variant = "light",
@@ -30,7 +31,7 @@ export default function PdfUploadCircle({
   size?: Size;
   onFile: (file: File) => void | Promise<void>;
   showGoogleDocs?: boolean;
-  /** Optional text under the circle (outside). */
+  /** Optional text under the orb (outside). */
   caption?: string;
   title?: string;
   subtitle?: string;
@@ -112,11 +113,11 @@ export default function PdfUploadCircle({
         }}
       >
         <label htmlFor={fileInputId} className="pdf-upload-circle-main">
-          <span className="pdf-upload-circle-icon">
+          <span className="pdf-upload-circle-icon" aria-hidden="true">
             <NavIcon name="uploadArrow" />
           </span>
-          <p className="pdf-upload-circle-title">{title ?? t("hero.uploadCircleTitle")}</p>
-          <p className="pdf-upload-circle-sub">{subtitle ?? t("hero.uploadCircleSub")}</p>
+          <span className="pdf-upload-circle-title">{title ?? t("hero.uploadCircleTitle")}</span>
+          <span className="pdf-upload-circle-sub">{subtitle ?? t("hero.uploadCircleSub")}</span>
         </label>
 
         {showGoogleDocs && (
