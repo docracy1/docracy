@@ -40,6 +40,10 @@ const EsignUeta = lazy(() => import("./pages/EsignUeta"));
 const ElectronicSignatureGuide = lazy(() => import("./pages/ElectronicSignatureGuide"));
 const CreateDigitalSignature = lazy(() => import("./pages/CreateDigitalSignature"));
 const AiContractAnalysis = lazy(() => import("./pages/AiContractAnalysis"));
+const Developers = lazy(() => import("./pages/Developers"));
+const AiContractDrafting = lazy(() => import("./pages/AiContractDrafting"));
+const Enterprise = lazy(() => import("./pages/Enterprise"));
+const IntegrationsAiAssistants = lazy(() => import("./pages/IntegrationsAiAssistants"));
 const EsignatureSoftware = lazy(() => import("./pages/EsignatureSoftware"));
 const SignPdfOnline = lazy(() => import("./pages/SignPdfOnline"));
 const SecureElectronicSignature = lazy(() => import("./pages/SecureElectronicSignature"));
@@ -132,6 +136,14 @@ function AppRoutes() {
       <Route path="/es/marketplace-de-plantillas" element={<TemplateMarketplace />} />
       <Route path="/submit-template" element={<SubmitTemplate />} />
       <Route path="/es/enviar-plantilla" element={<SubmitTemplate />} />
+      <Route path="/developers" element={<Developers />} />
+      <Route path="/es/desarrolladores" element={<Developers />} />
+      <Route path="/solutions/ai-contract-drafting" element={<AiContractDrafting />} />
+      <Route path="/es/soluciones/redaccion-contratos-ia" element={<AiContractDrafting />} />
+      <Route path="/enterprise" element={<Enterprise />} />
+      <Route path="/es/empresas" element={<Enterprise />} />
+      <Route path="/integrations/ai-assistants" element={<IntegrationsAiAssistants />} />
+      <Route path="/es/integraciones/asistentes-ia" element={<IntegrationsAiAssistants />} />
       <Route path="/admin/analytics" element={<AdminAnalytics />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/bulk-send" element={<BulkSend />} />

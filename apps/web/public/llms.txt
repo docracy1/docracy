@@ -16,8 +16,12 @@
 
 ## AI & automation
 
-- [AI Auto-Detect](https://docracy.io/ai): Product landing for AI field placement, plain-English explainer, risk highlighter, contract generator, and MCP overview.
-- [Connect an AI assistant (MCP)](https://docracy.io/mcp): Docracy runs a Model Context Protocol server at `https://mcp.docracy.io/mcp`. `check_status` (signing-link status) works for anyone, no account needed. `find_documents` (search your own documents) requires a paid account API key (`?token=` or Bearer), revoked when the subscription ends.
+- [AI Auto-Detect](https://docracy.io/ai): Product landing for AI field placement, plain-English explainer, risk highlighter, contract generator, open templates, and MCP overview.
+- [Connect an AI assistant (MCP)](https://docracy.io/mcp): Model Context Protocol at `https://mcp.docracy.io/mcp`. Free: `list_templates`, `get_template`, `draft_from_template`, `check_status`. Paid API key: `find_documents`. Agents never auto-send.
+- [Developers](https://docracy.io/developers): Marketplace API, MCP, Zapier — embed templates and e-sign in your stack.
+- [AI contract drafting](https://docracy.io/solutions/ai-contract-drafting): Draft from verified open templates, then send for signature.
+- [AI assistant integrations](https://docracy.io/integrations/ai-assistants): Claude, ChatGPT, Gemini-class agents, Cursor — template catalog in chat.
+- [Enterprise](https://docracy.io/enterprise): Flat workspace pricing, DPA path, connectors, MCP for legal ops.
 - [Full LLM context](https://docracy.io/llms-full.txt): Complete template index and MCP tool schema.
 - Open-source template library (Markdown, MIT license): https://github.com/docracy1/docracy-templates
 

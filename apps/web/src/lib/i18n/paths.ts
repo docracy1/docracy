@@ -26,6 +26,10 @@ export const ES_PATH_BY_EN: Record<string, string> = {
   "/docracy-alternative": "/es/alternativa-a-docracy",
   "/template-marketplace": "/es/marketplace-de-plantillas",
   "/submit-template": "/es/enviar-plantilla",
+  "/developers": "/es/desarrolladores",
+  "/solutions/ai-contract-drafting": "/es/soluciones/redaccion-contratos-ia",
+  "/enterprise": "/es/empresas",
+  "/integrations/ai-assistants": "/es/integraciones/asistentes-ia",
 };
 
 export const EN_PATH_BY_ES: Record<string, string> = Object.fromEntries(
@@ -74,7 +78,11 @@ export type SeoPage =
   | "freeElectronicSignature"
   | "docracyAlternative"
   | "templateMarketplace"
-  | "submitTemplate";
+  | "submitTemplate"
+  | "developers"
+  | "aiContractDrafting"
+  | "enterprise"
+  | "integrationsAi";
 
 export const SEO_EN_PATH: Record<SeoPage, string> = {
   home: "/",
@@ -101,6 +109,10 @@ export const SEO_EN_PATH: Record<SeoPage, string> = {
   docracyAlternative: "/docracy-alternative",
   templateMarketplace: "/template-marketplace",
   submitTemplate: "/submit-template",
+  developers: "/developers",
+  aiContractDrafting: "/solutions/ai-contract-drafting",
+  enterprise: "/enterprise",
+  integrationsAi: "/integrations/ai-assistants",
 };
 
 /** Catalog suffix under `seo.*` / `alt.*` for bilingual alternative pages. */

@@ -15,10 +15,13 @@
   },
   "authentication": {
     "required": false,
-    "note": "No authentication needed for the free tool. A Bearer API key (or ?token= query param), issued from the Docracy Dashboard, unlocks the paid tool.",
+    "note": "No authentication needed for free template tools and check_status. A Bearer API key (or ?token= query param), issued from the Docracy Dashboard, unlocks find_documents.",
     "schemes": ["none", "bearer"]
   },
   "tools": [
+    { "name": "list_templates", "tier": "free", "description": "Browse free-library and Marketplace templates by keyword." },
+    { "name": "get_template", "tier": "free", "description": "Metadata, drafting hints, and prepare URL for one template slug." },
+    { "name": "draft_from_template", "tier": "free", "description": "Return a drafting brief and prepare link; never auto-sends." },
     { "name": "check_status", "tier": "free", "description": "Look up the status of a Docracy signing chain from a sign or status link." },
     { "name": "find_documents", "tier": "paid", "description": "Search your own Docracy documents by title or a signer's name/email/company." }
   ],

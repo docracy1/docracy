@@ -6,7 +6,7 @@ import { useSeoMeta } from "../lib/useSeoMeta";
 
 const EXAMPLE_URL = "https://mcp.docracy.io/mcp?token=dk_YOUR_API_KEY";
 
-const CLIENT_IDS = ["claude", "chatgpt", "grok", "perplexity"] as const;
+const CLIENT_IDS = ["claude", "chatgpt", "grok", "perplexity", "gemini"] as const;
 
 export default function Mcp() {
   const t = useT();
@@ -37,7 +37,13 @@ export default function Mcp() {
 
       <div className="card" style={{ marginTop: 24 }}>
         <h3 style={{ marginTop: 0, fontSize: 16 }}>{t("mcp.freeToolTitle")}</h3>
-        <p style={{ marginBottom: 0 }}>{t("mcp.freeToolBody")}</p>
+        <p style={{ marginBottom: 12 }}>{t("mcp.freeToolBody")}</p>
+        <ul style={{ marginTop: 0, paddingLeft: 20, fontSize: 13.5, marginBottom: 0 }}>
+          <li>{t("mcp.toolListTemplates")}</li>
+          <li>{t("mcp.toolGetTemplate")}</li>
+          <li>{t("mcp.toolDraftFromTemplate")}</li>
+          <li>{t("mcp.toolCheckStatus")}</li>
+        </ul>
       </div>
 
       <div className="card" style={{ marginTop: 16, background: "var(--primary-soft)", border: "1px solid var(--primary-soft-strong)" }}>
@@ -45,7 +51,6 @@ export default function Mcp() {
         <p style={{ marginBottom: 12 }}>{t("mcp.paidBody")}</p>
         <p style={{ marginBottom: 12, fontSize: 13.5 }}>{t("mcp.toolsIntro")}</p>
         <ul style={{ marginTop: 0, paddingLeft: 20, fontSize: 13.5, marginBottom: 16 }}>
-          <li>{t("mcp.toolCheckStatus")}</li>
           <li>{t("mcp.toolFindDocuments")}</li>
         </ul>
         <Link to="/login" className="btn-primary" style={{ display: "inline-block", textDecoration: "none" }}>

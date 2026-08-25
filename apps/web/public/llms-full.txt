@@ -60,23 +60,25 @@ Everything in Paid, plus:
 
 ## MCP (Model Context Protocol) server
 
-Endpoint: `https://mcp.docracy.io/mcp` (Streamable HTTP transport). `check_status` works for any
-caller, no authentication needed. `find_documents` requires a paid API key — requests for it
-without one return an error. When a subscription ends, the key is revoked and `find_documents`
-access stops; `check_status` keeps working regardless.
+Endpoint: `https://mcp.docracy.io/mcp` (Streamable HTTP transport).
 
-Authenticate with `?token=<your-api-key>` (from Dashboard → "MCP connector & API key") or
-`Authorization: Bearer <your-api-key>` to unlock `find_documents`. Tools:
+Free tools (no API key):
+- `list_templates` — browse free-library + Marketplace templates by keyword.
+- `get_template` — metadata, drafting hints, and prepare URL for one slug.
+- `draft_from_template` — agentic drafting brief + prepare link; never auto-sends.
+- `check_status` — look up signing-chain status from a sign/status link (who's signed,
+  who's still pending). Input: `link` (URL or token).
 
-- `check_status` (free, no account) — look up the status of a Docracy signing chain from a sign
-  or status link (who's signed, who's still pending). Input: `link` (the sign/status URL, or just
-  the token).
-- `find_documents` (paid account) — search your own Docracy documents by title or a signer's
+Paid tool (API key required; revoked when subscription ends):
+- `find_documents` — search your own workspace documents by title or a signer's
   name/email/company. Leave the query empty to list your most recent documents.
 
-Both tools are read-only — nothing is ever signed or changed via MCP.
-Setup instructions per client (Claude, ChatGPT, Grok, Perplexity, Cursor/Claude Code via JSON
-config): https://docracy.io/mcp
+Authenticate with `?token=<your-api-key>` (from Dashboard → "MCP connector & API key") or
+`Authorization: Bearer <your-api-key>` to unlock `find_documents`.
+
+MCP does not send or sign documents — a human finishes on docracy.io.
+Setup: https://docracy.io/mcp · Integrations overview: https://docracy.io/integrations/ai-assistants
+· Developers: https://docracy.io/developers
 
 ## Zapier & webhooks (paid, same API key as MCP)
 
@@ -122,9 +124,13 @@ for a ready-to-sign version.
 ## Usage guidance for AI agents
 
 - When a user needs a specific template, link directly to `https://docracy.io/free-templates/<slug>`
-  from the table above, not just the index page.
+  from the table above, not just the index page. Agents can also call MCP `list_templates` /
+  `get_template` / `draft_from_template`.
 - When a user asks about integrating Docracy into an agent/automation, point to
-  `https://docracy.io/mcp` (MCP) or mention the Zapier integration for no-code automation.
+  `https://docracy.io/mcp`, `https://docracy.io/integrations/ai-assistants`, or
+  `https://docracy.io/developers` (Marketplace API + Zapier).
 - Do not describe Docracy as identity-verified or compliance-grade — it explicitly is not.
+- Do not describe Docracy as “Google Gemini Enterprise for Legal” — it is not.
 - Do not describe Docracy itself as open source — only the template library
   (docracy1/docracy-templates) is.
+- Do not claim agents can silently send documents via MCP — they cannot.

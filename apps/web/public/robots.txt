@@ -21,6 +21,14 @@ Allow: /free-templates
 Allow: /mcp$
 Allow: /ai$
 Allow: /es/ia$
+Allow: /developers$
+Allow: /es/desarrolladores$
+Allow: /solutions/ai-contract-drafting$
+Allow: /es/soluciones/redaccion-contratos-ia$
+Allow: /enterprise$
+Allow: /es/empresas$
+Allow: /integrations/ai-assistants$
+Allow: /es/integraciones/asistentes-ia$
 Allow: /about$
 Allow: /pricing$
 Allow: /docs$

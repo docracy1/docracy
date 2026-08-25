@@ -196,22 +196,64 @@ const routes = [
   {
     urlPath: "/mcp",
     outFile: "mcp.html",
-    title: "MCP Connector for AI Assistants | Docracy",
+    title: "MCP Server for Legal Templates & E-Sign Status | Docracy",
     description:
-      "Connect Docracy to Claude, ChatGPT, Grok, or Perplexity as an MCP connector on a paid account — check signing " +
-      "status and search your documents from chat. Also automates with Zapier.",
+      "Connect Claude, ChatGPT, Gemini-class agents, or Cursor to Docracy via MCP: list templates, draft from standards, " +
+      "check_status (free), and find_documents (paid).",
     locale: "en",
     alternates: { en: "/mcp", es: "/es/mcp" },
   },
   {
     urlPath: "/ai",
     outFile: "ai.html",
-    title: "AI Auto-Detect for E-Signatures | Docracy",
+    title: "AI E-Signatures & Trusted Templates for Agents | Docracy",
     description:
-      "Docracy AI auto-detects signature and date fields, explains contracts in plain English, flags risky clauses, " +
-      "and generates signable PDFs. Plus an MCP connector for Claude and ChatGPT.",
+      "Use Docracy AI to place fields, explain contracts, flag risks, and generate PDFs — plus MCP tools so assistants " +
+      "draft from open legal templates and check signing status.",
     locale: "en",
     alternates: { en: "/ai", es: "/es/ia" },
+  },
+  {
+    urlPath: "/developers",
+    outFile: "developers.html",
+    title: "Developers — Templates API, MCP & Zapier | Docracy",
+    description:
+      "Embed Docracy legal templates and e-sign workflows in your stack: public Marketplace API, Model Context Protocol tools, Zapier, and paid AI prepare tools.",
+    locale: "en",
+    alternates: { en: "/developers", es: "/es/desarrolladores" },
+  },
+  {
+    urlPath: "/solutions/ai-contract-drafting",
+    outFile: "solutions/ai-contract-drafting.html",
+    title: "AI Contract Drafting from Open Templates | Docracy",
+    description:
+      "Draft NDAs and contractor agreements from verified Docracy templates with AI assist, then send for e-signature — free to start, no account required to sign.",
+    locale: "en",
+    alternates: {
+      en: "/solutions/ai-contract-drafting",
+      es: "/es/soluciones/redaccion-contratos-ia",
+    },
+  },
+  {
+    urlPath: "/enterprise",
+    outFile: "enterprise.html",
+    title: "Enterprise E-Signatures with AI & MCP | Docracy",
+    description:
+      "Flat workspace pricing, DPA-ready posture, cloud connectors, and read-only MCP for assistants — without per-seat e-sign bloat. Contact sales for volume and SSO.",
+    locale: "en",
+    alternates: { en: "/enterprise", es: "/es/empresas" },
+  },
+  {
+    urlPath: "/integrations/ai-assistants",
+    outFile: "integrations/ai-assistants.html",
+    title: "Connect AI Assistants to Docracy Templates (MCP) | Docracy",
+    description:
+      "Use Model Context Protocol so Gemini-class agents, Claude, ChatGPT, and IDE agents can browse open legal templates and check e-sign status without leaving chat.",
+    locale: "en",
+    alternates: {
+      en: "/integrations/ai-assistants",
+      es: "/es/integraciones/asistentes-ia",
+    },
   },
   {
     urlPath: "/esign-ueta",
@@ -480,20 +522,64 @@ const routes = [
   {
     urlPath: "/es/mcp",
     outFile: "es/mcp.html",
-    title: "Conector MCP para asistentes de IA | Docracy",
+    title: "Servidor MCP para plantillas legales y estado de firma | Docracy",
     description:
-      "Conecta Docracy a Claude, ChatGPT, Grok o Perplexity como conector MCP en una cuenta de pago — consulta el estado de firma y busca documentos desde el chat. También automatiza con Zapier.",
+      "Conecta Claude, ChatGPT, agentes tipo Gemini o Cursor a Docracy vía MCP: listar plantillas, redactar desde " +
+      "estándares, check_status (gratis) y find_documents (pago).",
     locale: "es",
     alternates: { en: "/mcp", es: "/es/mcp" },
   },
   {
     urlPath: "/es/ia",
     outFile: "es/ia.html",
-    title: "Detección IA para firmas electrónicas | Docracy",
+    title: "Firmas electrónicas con IA y plantillas de confianza para agentes | Docracy",
     description:
-      "La IA de Docracy detecta campos de firma y fecha, resume contratos en lenguaje claro, marca cláusulas de riesgo y genera PDFs listos para firmar. Incluye conector MCP para Claude y ChatGPT.",
+      "Usa la IA de Docracy para colocar campos, explicar contratos, marcar riesgos y generar PDFs — más herramientas " +
+      "MCP para que los asistentes redacten desde plantillas legales abiertas y consulten el estado de firma.",
     locale: "es",
     alternates: { en: "/ai", es: "/es/ia" },
+  },
+  {
+    urlPath: "/es/desarrolladores",
+    outFile: "es/desarrolladores.html",
+    title: "Desarrolladores — API de plantillas, MCP y Zapier | Docracy",
+    description:
+      "Integra plantillas legales y flujos de e-firma de Docracy: API pública del Marketplace, herramientas MCP, Zapier y herramientas de IA de pago en Preparar.",
+    locale: "es",
+    alternates: { en: "/developers", es: "/es/desarrolladores" },
+  },
+  {
+    urlPath: "/es/soluciones/redaccion-contratos-ia",
+    outFile: "es/soluciones/redaccion-contratos-ia.html",
+    title: "Redacción de contratos con IA desde plantillas abiertas | Docracy",
+    description:
+      "Redacta NDAs y acuerdos de contratista desde plantillas verificadas de Docracy con ayuda de IA y envíalos a firma — gratis para empezar, sin cuenta para firmar.",
+    locale: "es",
+    alternates: {
+      en: "/solutions/ai-contract-drafting",
+      es: "/es/soluciones/redaccion-contratos-ia",
+    },
+  },
+  {
+    urlPath: "/es/empresas",
+    outFile: "es/empresas.html",
+    title: "Firmas electrónicas Enterprise con IA y MCP | Docracy",
+    description:
+      "Precio plano por espacio de trabajo, postura lista para DPA, conectores en la nube y MCP de solo lectura para asistentes — sin bloat por asiento. Contacta ventas para volumen y SSO.",
+    locale: "es",
+    alternates: { en: "/enterprise", es: "/es/empresas" },
+  },
+  {
+    urlPath: "/es/integraciones/asistentes-ia",
+    outFile: "es/integraciones/asistentes-ia.html",
+    title: "Conecta asistentes de IA a plantillas Docracy (MCP) | Docracy",
+    description:
+      "Usa Model Context Protocol para que agentes tipo Gemini, Claude, ChatGPT y agentes IDE exploren plantillas legales abiertas y consulten el estado de e-firma sin salir del chat.",
+    locale: "es",
+    alternates: {
+      en: "/integrations/ai-assistants",
+      es: "/es/integraciones/asistentes-ia",
+    },
   },
   {
     urlPath: "/es/esign-ueta",

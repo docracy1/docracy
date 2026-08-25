@@ -4,9 +4,9 @@ import { localizePath, useI18n, useT } from "../lib/i18n";
 import { useSeoMeta } from "../lib/useSeoMeta";
 import { track } from "../lib/track";
 
-const FEATURE_IDS = ["detect", "explain", "risk", "generate", "mcp"] as const;
+const FEATURE_IDS = ["detect", "explain", "risk", "generate", "templates", "mcp"] as const;
 
-/** SEO landing for Docracy AI tools — auto-detect, explainer, risk, generator, MCP. */
+/** SEO landing for Docracy AI tools — auto-detect, explainer, risk, generator, templates, MCP. */
 export default function Ai() {
   const t = useT();
   const { locale } = useI18n();
@@ -16,6 +16,9 @@ export default function Ai() {
   const pricingTo = localizePath("/pricing", locale);
   const mcpTo = localizePath("/mcp", locale);
   const analysisTo = localizePath("/ai-contract-analysis", locale);
+  const templatesTo = localizePath("/free-templates", locale);
+  const developersTo = localizePath("/developers", locale);
+  const integrationsTo = localizePath("/integrations/ai-assistants", locale);
 
   const onCta = (placement: string) => {
     track("landingpage_cta_clicked", { source: `seo:ai:${placement}` });
@@ -24,7 +27,7 @@ export default function Ai() {
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: [1, 2, 3, 4].map((n) => ({
+    mainEntity: [1, 2, 3, 4, 5].map((n) => ({
       "@type": "Question",
       name: t(`ai.faq.q${n}`),
       acceptedAnswer: { "@type": "Answer", text: t(`ai.faq.a${n}`) },
@@ -109,7 +112,7 @@ export default function Ai() {
 
       <div className="container" style={{ maxWidth: 720, paddingTop: 40, paddingBottom: 16 }}>
         <h2 style={{ fontSize: 22, marginTop: 0 }}>{t("ai.faqTitle")}</h2>
-        {[1, 2, 3, 4].map((n) => (
+        {[1, 2, 3, 4, 5].map((n) => (
           <details key={n} className="faq-item" style={{ marginTop: 12 }}>
             <summary style={{ fontWeight: 700, cursor: "pointer" }}>{t(`ai.faq.q${n}`)}</summary>
             <p style={{ margin: "8px 0 0", color: "var(--body)" }}>{t(`ai.faq.a${n}`)}</p>
@@ -121,6 +124,15 @@ export default function Ai() {
         </p>
         <p style={{ fontSize: 14 }}>
           <Link to={analysisTo}>{t("ai.analysisPageLink")}</Link>
+        </p>
+        <p style={{ fontSize: 14 }}>
+          <Link to={templatesTo}>{t("ai.templatesLink")}</Link>
+        </p>
+        <p style={{ fontSize: 14 }}>
+          <Link to={developersTo}>{t("ai.developersLink")}</Link>
+        </p>
+        <p style={{ fontSize: 14 }}>
+          <Link to={integrationsTo}>{t("ai.integrationsLink")}</Link>
         </p>
       </div>
 

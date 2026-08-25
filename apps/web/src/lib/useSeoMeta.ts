@@ -28,6 +28,10 @@ const SEO_CATALOG_KEY: Record<SeoPage, string> = {
   docracyAlternative: "docracyAlternative",
   templateMarketplace: "templateMarketplace",
   submitTemplate: "submitTemplate",
+  developers: "developers",
+  aiContractDrafting: "aiContractDrafting",
+  enterprise: "enterprise",
+  integrationsAi: "integrationsAi",
 };
 
 /** Title + description from `seo.<page>.*` catalogs, with canonical + hreflang for bilingual SEO pages. */
