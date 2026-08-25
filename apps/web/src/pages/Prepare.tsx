@@ -4,6 +4,7 @@ import { useI18n } from "../lib/i18n";
 import { useNoIndex } from "../lib/useNoIndex";
 import { useSeoMeta } from "../lib/useSeoMeta";
 import PdfViewer from "../components/PdfViewer";
+import PdfUploadCircle from "../components/PdfUploadCircle";
 import {
   analyzeDocumentRisks,
   createDocument,
@@ -16,7 +17,6 @@ import {
   fetchTemplates,
   fetchTemplateUsage,
   generateContract,
-  importGoogleDoc,
   submitDocumentToMarketplace,
 } from "../lib/api";
 import type { Account, ContactSummary, ContractRisk, TemplateSummary, TemplateUsageEntry } from "../lib/api";
@@ -129,9 +129,6 @@ export default function Prepare() {
   }, []);
   const [file, setFile] = useState<File | null>(null);
   const [pdfBytes, setPdfBytes] = useState<Uint8Array | null>(null);
-  const [googleDocUrl, setGoogleDocUrl] = useState("");
-  const [importingGoogleDoc, setImportingGoogleDoc] = useState(false);
-  const [googleDocError, setGoogleDocError] = useState<string | null>(null);
   const [preparerSigns, setPreparerSigns] = useState(false);
   const [preparerEmail, setPreparerEmail] = useState("");
   const [preparerMarketingOptIn, setPreparerMarketingOptIn] = useState(false);
@@ -150,7 +147,6 @@ export default function Prepare() {
   const [placingFieldType, setPlacingFieldType] = useState<DocFieldType>("signature");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isDraggingUpload, setIsDraggingUpload] = useState(false);
   const [draggingFieldId, setDraggingFieldId] = useState<string | null>(null);
   const [creatingDrag, setCreatingDrag] = useState<{ x: number; y: number; overPage: boolean } | null>(null);
   /** Mobile: Place signature → tap PDF to drop; placed fields stay finger-draggable. */
@@ -377,23 +373,6 @@ export default function Prepare() {
     track("document_uploaded");
   };
 
-  const onGoogleDocImport = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const url = googleDocUrl.trim();
-    if (!url) return;
-    setGoogleDocError(null);
-    setImportingGoogleDoc(true);
-    try {
-      const blob = await importGoogleDoc(url);
-      await acceptFile(new File([blob], "google-doc.pdf", { type: "application/pdf" }));
-      setGoogleDocUrl("");
-    } catch (err) {
-      setGoogleDocError(err instanceof Error ? err.message : t("prepare.googleDocImportError"));
-    } finally {
-      setImportingGoogleDoc(false);
-    }
-  };
-
   // Picks up a file dropped on the homepage hero's upload widget, if any — skips the extra
   // "now upload it again" step for someone who already chose a file before landing here.
   useEffect(() => {
@@ -401,38 +380,6 @@ export default function Prepare() {
     if (handoff) acceptFile(handoff);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const f = e.target.files?.[0];
-    if (!f) return;
-    await acceptFile(f);
-    if (f.size > MAX_PDF_BYTES) e.target.value = "";
-  };
-
-  const onUploadDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    if (!isDraggingUpload) setIsDraggingUpload(true);
-  };
-
-  const onUploadDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
-    // Only clear once the pointer actually leaves the drop zone itself — children re-firing
-    // dragenter/dragleave as the pointer crosses their boundaries would otherwise flicker this off
-    // and on while still hovering the same zone.
-    if (e.currentTarget.contains(e.relatedTarget as Node | null)) return;
-    setIsDraggingUpload(false);
-  };
-
-  const onUploadDrop = async (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDraggingUpload(false);
-    const f = e.dataTransfer.files?.[0];
-    if (!f) return;
-    if (f.type !== "application/pdf") {
-      setError(t("prepare.pdfOnly"));
-      return;
-    }
-    await acceptFile(f);
-  };
 
   // FirstDocumentPrompt's upload modal (on the homepage) hands its file in via router state
   // rather than a shared upload endpoint — simplest way to carry a live File object across a
@@ -1121,48 +1068,19 @@ export default function Prepare() {
                 </div>
               )}
               <p>{t("prepare.uploadHint")}</p>
-              <div
-                onDragOver={onUploadDragOver}
-                onDragLeave={onUploadDragLeave}
-                onDrop={onUploadDrop}
-                style={{
-                  border: `2px dashed ${isDraggingUpload ? "var(--primary)" : "var(--hairline)"}`,
-                  borderRadius: "var(--r-md)",
-                  padding: 20,
-                  textAlign: "center",
-                  background: isDraggingUpload ? "var(--primary-soft)" : "transparent",
-                  transition: "border-color 0.15s var(--ease), background 0.15s var(--ease)",
-                }}
-              >
-                <p style={{ margin: "0 0 10px 0", fontSize: 13, color: "var(--mute)" }}>
-                  {isDraggingUpload ? t("prepare.dropPdf") : t("prepare.dragOr")}
-                </p>
-                <input type="file" accept="application/pdf" onChange={onFileChange} />
-              </div>
-              <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 6, marginBottom: 0 }}>{t("prepare.maxSize")}</p>
-              <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 6, marginBottom: 0, display: "flex", alignItems: "center", gap: 5 }}>
+              <PdfUploadCircle
+                variant="light"
+                inputId="prepare-file-input"
+                title={t("hero.uploadCircleTitle")}
+                subtitle={t("prepare.maxSize")}
+                onFile={acceptFile}
+              />
+              <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 10, marginBottom: 0, display: "flex", alignItems: "center", justifyContent: "center", gap: 5 }}>
                 <img src="/integrations/whatsapp.svg" alt="" width={14} height={14} style={{ display: "block" }} />
                 <Link to="/whatsapp-signing" style={{ color: "var(--mute)" }}>
                   {t("prepare.whatsappAvailableHint")}
                 </Link>
               </p>
-              <form onSubmit={onGoogleDocImport} style={{ marginTop: 12, display: "flex", gap: 6 }}>
-                <input
-                  type="text"
-                  value={googleDocUrl}
-                  onChange={(e) => setGoogleDocUrl(e.target.value)}
-                  placeholder={t("prepare.googleDocPlaceholder")}
-                  style={{ flex: 1, fontSize: 12.5 }}
-                  disabled={importingGoogleDoc}
-                />
-                <button type="submit" className="btn-secondary" disabled={importingGoogleDoc || !googleDocUrl.trim()}>
-                  {importingGoogleDoc ? t("prepare.googleDocImporting") : t("prepare.googleDocImportBtn")}
-                </button>
-              </form>
-              <p style={{ fontSize: 11, color: "var(--mute)", marginTop: 4, marginBottom: 0 }}>
-                {t("prepare.googleDocHint")}
-              </p>
-              {googleDocError && <p style={{ color: "var(--danger)", fontSize: 12, marginTop: 6 }}>{googleDocError}</p>}
               {error && <p style={{ color: "var(--danger)", marginTop: 8 }}>{error}</p>}
 
               {account?.isPaid ? (

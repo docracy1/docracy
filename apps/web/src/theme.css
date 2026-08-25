@@ -1502,7 +1502,8 @@ select {
   margin: 0 0 8px;
 }
 
-.hero-stack .hero-upload-circle-wrap {
+.hero-stack .hero-upload-circle-wrap,
+.hero-stack .pdf-upload-circle-wrap {
   margin: 20px 0 4px;
 }
 
@@ -2166,7 +2167,7 @@ select {
   gap: 10px;
   margin: 0 auto;
   cursor: pointer;
-  box-shadow: 0 20px 50px rgba(10, 30, 60, 0.25);
+  box-shadow: 0 20px 50px rgba(10, 30, 60, 0.18);
   transition: border-color 0.15s ease, transform 0.15s ease;
 }
 
@@ -2193,35 +2194,265 @@ select {
 }
 
 .hero-upload-circle p.hero-upload-circle-title {
-  /* Beats `.hero-band p` (color: var(--hero-body), meant for text directly on the blue gradient)
-     on specificity — without this it silently wins and the title renders white-on-white,
-     invisible against this circle's white background. */
   margin: 0;
-  font-size: 17px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--body-strong);
+  line-height: 1.25;
+  max-width: 11em;
 }
 
 .hero-upload-circle p.hero-upload-circle-sub {
   margin: 0;
-  font-size: 12.5px;
+  font-size: 12px;
   color: var(--mute);
-  padding: 0 24px;
-  text-align: center;
+  line-height: 1.3;
+  max-width: 14em;
 }
 
 .hero-upload-circle-caption {
   position: relative;
   z-index: 1;
-  margin: 16px 0 0;
+  margin: 14px 0 0;
   font-size: 12.5px;
   color: var(--hero-body);
+  max-width: 280px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 @media (max-width: 760px) {
   .hero-upload-circle {
     width: 220px;
     height: 220px;
+  }
+}
+
+/* Shared PDF upload circle (Landing / Prepare / FirstDocumentPrompt) — Google Docs paste lives
+   *inside* the circle as a compact column, not a full-width bar underneath. */
+.pdf-upload-circle-wrap {
+  position: relative;
+  text-align: center;
+  padding: 16px;
+}
+
+.pdf-upload-circle-wrap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 232, 168, 0.28) 0%, rgba(0, 232, 168, 0) 70%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.pdf-upload-circle-hero.pdf-upload-circle-wrap::before {
+  background: radial-gradient(circle, rgba(0, 232, 168, 0.3) 0%, rgba(0, 232, 168, 0) 70%);
+}
+
+.pdf-upload-circle-light.pdf-upload-circle-wrap::before {
+  background: radial-gradient(circle, rgba(26, 86, 219, 0.12) 0%, rgba(26, 86, 219, 0) 72%);
+}
+
+.pdf-upload-circle {
+  position: relative;
+  z-index: 1;
+  width: min(300px, 92vw);
+  height: min(300px, 92vw);
+  border-radius: 50%;
+  background: #ffffff;
+  border: 5px solid var(--accent);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 0 auto;
+  box-shadow: 0 20px 50px rgba(10, 30, 60, 0.18);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+  padding: 22px 20px 20px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.pdf-upload-circle-with-gdoc .pdf-upload-circle {
+  width: min(340px, 92vw);
+  height: min(340px, 92vw);
+  padding: 26px 24px 22px;
+}
+
+.pdf-upload-circle-size-sm .pdf-upload-circle {
+  width: min(260px, 86vw);
+  height: min(260px, 86vw);
+  padding: 18px 16px 16px;
+  border-width: 4px;
+}
+
+.pdf-upload-circle-size-sm.pdf-upload-circle-with-gdoc .pdf-upload-circle {
+  width: min(300px, 88vw);
+  height: min(300px, 88vw);
+}
+
+.pdf-upload-circle-light .pdf-upload-circle {
+  border-color: var(--primary);
+  box-shadow: 0 12px 36px rgba(10, 30, 60, 0.1);
+}
+
+.pdf-upload-circle:hover,
+.pdf-upload-circle.is-dragging {
+  border-color: var(--accent-hover);
+  transform: scale(1.015);
+}
+
+.pdf-upload-circle-light .pdf-upload-circle:hover,
+.pdf-upload-circle-light .pdf-upload-circle.is-dragging {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+}
+
+.pdf-upload-circle-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.pdf-upload-circle-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--primary-soft);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pdf-upload-circle-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.pdf-upload-circle-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--body-strong);
+  line-height: 1.25;
+  max-width: 12em;
+}
+
+/* Beat `.hero-band p` (hero-body color) so title/sub stay dark on the white circle. */
+.hero-band .pdf-upload-circle-title,
+.hero-band .pdf-upload-circle-sub,
+.hero-band .pdf-upload-circle-or,
+.hero-band .pdf-upload-circle-gdoc-hint {
+  color: var(--body-strong);
+}
+
+.hero-band .pdf-upload-circle-sub,
+.hero-band .pdf-upload-circle-or,
+.hero-band .pdf-upload-circle-gdoc-hint {
+  color: var(--mute);
+}
+
+.pdf-upload-circle-sub {
+  margin: 0;
+  font-size: 11.5px;
+  color: var(--mute);
+  line-height: 1.3;
+  max-width: 14em;
+}
+
+.pdf-upload-circle-gdoc {
+  width: 100%;
+  max-width: 200px;
+  margin-top: 4px;
+}
+
+.pdf-upload-circle-or {
+  margin: 0 0 6px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+
+.pdf-upload-circle-gdoc-form {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}
+
+.pdf-upload-circle-gdoc-form input {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 11.5px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid var(--hairline);
+  background: #fff;
+}
+
+.pdf-upload-circle-gdoc-form .btn-secondary {
+  font-size: 11.5px;
+  padding: 5px 8px;
+  width: 100%;
+}
+
+.pdf-upload-circle-gdoc-hint {
+  margin: 5px 0 0;
+  font-size: 9.5px;
+  line-height: 1.35;
+  color: var(--mute);
+}
+
+.pdf-upload-circle-caption {
+  position: relative;
+  z-index: 1;
+  margin: 14px 0 0;
+  font-size: 12.5px;
+  color: var(--mute);
+  max-width: 280px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pdf-upload-circle-hero .pdf-upload-circle-caption {
+  color: var(--hero-body);
+}
+
+.pdf-upload-circle-error {
+  position: relative;
+  z-index: 1;
+  margin: 8px 0 0;
+  font-size: 12.5px;
+  color: var(--danger);
+}
+
+@media (max-width: 760px) {
+  .pdf-upload-circle {
+    width: min(270px, 88vw);
+    height: min(270px, 88vw);
+    padding: 18px 16px 16px;
+  }
+
+  .pdf-upload-circle-with-gdoc .pdf-upload-circle {
+    width: min(300px, 90vw);
+    height: min(300px, 90vw);
+  }
+
+  .pdf-upload-circle-title {
+    font-size: 14px;
+  }
+
+  .pdf-upload-circle-gdoc {
+    max-width: 180px;
   }
 }
 
@@ -2989,6 +3220,12 @@ select {
   width: min(420px, 100%);
   box-shadow: var(--shadow-lg);
   text-align: left;
+}
+
+.upload-modal-card--circle {
+  width: min(380px, 100%);
+  text-align: center;
+  padding-bottom: 20px;
 }
 
 .upload-modal-file-label {
