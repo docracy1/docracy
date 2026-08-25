@@ -1502,7 +1502,8 @@ select {
   margin: 0 0 8px;
 }
 
-.hero-stack .hero-upload-circle-wrap {
+.hero-stack .hero-upload-circle-wrap,
+.hero-stack .pdf-upload-circle-wrap {
   margin: 20px 0 4px;
 }
 
