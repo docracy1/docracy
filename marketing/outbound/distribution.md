@@ -31,7 +31,7 @@ Open each link → answer with copy from `community-answers.md` (Answer A–E). 
 | 7   | Indie Hackers          | [15 free DocuSign alternatives](https://www.indiehackers.com/post/15-free-docusign-alternatives-cheap-solution-for-e-signatures-agreements-contract-b8c60b652a) | Comment once with free ≤2 signers + `/try`                      | See §A2 below               | [ yes]                           |
 | 8   | Indie Hackers          | [Add product](https://www.indiehackers.com/submit) → Products → Add a Product                                                                                   | List Docracy; website `https://docracy.io/try`                  | Tagline from directories.md | [ not possibel with the account] |
 | 9   | IndieFamily Discord    | [indiefamily.io](https://indiefamily.io/) → join Discord                                                                                                        | Introduce in intros; offer free NDA try link when tools come up | Soft, not spam              | [x]                              |
-| 10  | Design Buddies Discord | Search “Design Buddies Discord invite” (invite rotates)                                                                                                         | Answer contract/NDA questions only                              | Answer B                    | [ ]                              |
+| 10  | Design Buddies Discord | Search “Design Buddies Discord invite” (invite rotates)                                                                                                         | Answer contract/NDA questions only                              | Answer B                    | [x] closed                       |
 
 
 
