@@ -9,6 +9,7 @@ import {
   listSubmissionsForAccount,
   listPending,
   listApproved,
+  listWeeklyOfficial,
   getApprovedBySlug,
   getSubmissionForReview,
   reviewSubmission,
@@ -79,6 +80,12 @@ export const marketplacePublic = new Hono<{ Bindings: Env; Variables: Variables 
 
 marketplacePublic.get("/", async (c) => {
   const category = c.req.query("category") || undefined;
+  const origin = c.req.query("origin");
+  if (origin === "weekly") {
+    const limit = Math.min(50, Math.max(1, Number(c.req.query("limit") || 10) || 10));
+    const templates = await listWeeklyOfficial(c.env, limit);
+    return c.json({ templates });
+  }
   const templates = await listApproved(c.env, category);
   return c.json({ templates });
 });
@@ -204,6 +211,9 @@ marketplacePublic.get("/:slug", async (c) => {
     signerCount: result.summary.signerCount,
     fields: result.fields,
     pdfBase64: bytesToBase64(result.pdfBytes),
+    origin: result.summary.origin,
+    seoTitle: result.summary.seoTitle,
+    useCase: result.summary.useCase,
     definition: result.summary.definition,
     keyClauses: result.summary.keyClauses,
     fillInFields: result.summary.fillInFields,

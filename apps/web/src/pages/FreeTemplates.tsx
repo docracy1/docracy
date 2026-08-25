@@ -4,7 +4,7 @@ import { FREE_TEMPLATES, RECURRING_CATEGORIES } from "../lib/freeTemplates";
 import { isSeoTemplateSlug, localizePath, useI18n, useT } from "../lib/i18n";
 import { useSeoMeta } from "../lib/useSeoMeta";
 import { track } from "../lib/track";
-import { apiUrl, fetchMarketplaceTemplates, type MarketplaceSubmission } from "../lib/api";
+import { apiUrl, fetchMarketplaceTemplates, fetchWeeklyTemplates, type MarketplaceSubmission } from "../lib/api";
 import TemplateThumbnail from "../components/TemplateThumbnail";
 
 function ProvenanceBadge({ kind }: { kind: "official" | "community" }) {
@@ -123,13 +123,17 @@ export default function FreeTemplates() {
   // descriptions for crawlers, even though a first-time visitor sees it collapsed.
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [communityTemplates, setCommunityTemplates] = useState<MarketplaceSubmission[] | null>(null);
+  const [weeklyTemplates, setWeeklyTemplates] = useState<MarketplaceSubmission[] | null>(null);
 
   useSeoMeta("freeTemplates");
 
   useEffect(() => {
     fetchMarketplaceTemplates()
-      .then((res) => setCommunityTemplates(res.templates))
+      .then((res) => setCommunityTemplates(res.templates.filter((t) => t.origin !== "weekly")))
       .catch(() => setCommunityTemplates([]));
+    fetchWeeklyTemplates(10)
+      .then((res) => setWeeklyTemplates(res.templates))
+      .catch(() => setWeeklyTemplates([]));
   }, []);
 
   const labelFor = (slug: string, name: string, description: string) => {
@@ -232,7 +236,7 @@ export default function FreeTemplates() {
           <p>{t("freeTemplates.heroSub")}</p>
           <p style={{ fontWeight: 700, fontSize: 15 }}>
             {t("freeTemplates.templateCount", {
-              count: FREE_TEMPLATES.length + (communityTemplates?.length ?? 0),
+              count: FREE_TEMPLATES.length + (communityTemplates?.length ?? 0) + (weeklyTemplates?.length ?? 0),
             })}
           </p>
           <p style={{ fontSize: 14, marginTop: -8 }}>
@@ -287,26 +291,38 @@ export default function FreeTemplates() {
         ) : (
           <>
             {/* Stable, bookmarkable link (/free-templates#newest) for the latest weekly batch —
-                relies on new templates always being appended at the end of FREE_TEMPLATES
-                (new .push() calls go last, never inserted earlier in the array). */}
+                prefers Monday-cron FreeTemplate-parity Marketplace rows (origin=weekly); falls
+                back to the last 10 static FREE_TEMPLATES when the queue hasn't published yet. */}
             <div id="newest" style={{ marginTop: 28, scrollMarginTop: 90 }}>
               <h2 style={{ fontSize: 19 }}>{t("freeTemplates.newestTitle")}</h2>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
-                {FREE_TEMPLATES.slice(-10).map((tpl) => {
-                  const labels = labelFor(tpl.slug, tpl.name, tpl.description);
-                  const catKey = tpl.recurringCategory ? CATEGORY_KEYS[tpl.recurringCategory] : undefined;
-                  return (
-                    <TemplateCard
-                      key={tpl.slug}
-                      name={labels.name}
-                      description={labels.description}
-                      to={localizePath(`/free-templates/${tpl.slug}`, locale)}
-                      pdfPath={tpl.pdfPath}
-                      category={catKey ? t(catKey) : tpl.recurringCategory}
-                      badge="official"
-                    />
-                  );
-                })}
+                {(weeklyTemplates && weeklyTemplates.length > 0
+                  ? weeklyTemplates.map((tpl) => (
+                      <TemplateCard
+                        key={tpl.slug}
+                        name={tpl.title}
+                        description={tpl.description}
+                        to={localizePath(`/free-templates/${tpl.slug}`, locale)}
+                        pdfPath={apiUrl(`/api/marketplace/${tpl.slug}/pdf`)}
+                        category={tpl.category ?? undefined}
+                        badge="official"
+                      />
+                    ))
+                  : FREE_TEMPLATES.slice(-10).map((tpl) => {
+                      const labels = labelFor(tpl.slug, tpl.name, tpl.description);
+                      const catKey = tpl.recurringCategory ? CATEGORY_KEYS[tpl.recurringCategory] : undefined;
+                      return (
+                        <TemplateCard
+                          key={tpl.slug}
+                          name={labels.name}
+                          description={labels.description}
+                          to={localizePath(`/free-templates/${tpl.slug}`, locale)}
+                          pdfPath={tpl.pdfPath}
+                          category={catKey ? t(catKey) : tpl.recurringCategory}
+                          badge="official"
+                        />
+                      );
+                    }))}
               </div>
             </div>
 

@@ -38,6 +38,7 @@ import { runOnboardingEmailSweep } from "./lib/onboardingEmails";
 import { runCompletionEmailSweep } from "./lib/completionEmails";
 import { runSpaSmokeAndAlert } from "./lib/spaSmoke";
 import { BLOG_WEEKLY_CRON, runWeeklyBlogPublish, isWeeklyBlogMondayUtc } from "./lib/blogWeekly";
+import { runWeeklyTemplatePublish } from "./lib/templateWeekly";
 import type { Env } from "@docracy/shared";
 
 const app = new Hono<{ Bindings: Env }>();
@@ -103,8 +104,9 @@ app.route("/api/webhooks/resend", resendWebhook);
 app.route("/api/webhooks/whatsapp", whatsappWebhook);
 
 // Hourly cron runs onboarding drip + completion nudges. Daily cron runs reminders/cleanup/health,
-// and on Mondays (UTC) also publishes one queued SEO blog post. Branch on event.cron so the
-// hourly schedule does not re-fire daily sweeps. (No separate Monday cron — account trigger limit.)
+// and on Mondays (UTC) also publishes one queued SEO blog post plus up to 10 FreeTemplate-quality
+// Marketplace templates (docracy.com taxonomy). Branch on event.cron so the hourly schedule does
+// not re-fire daily sweeps. (No separate Monday cron — account trigger limit.)
 // Offset to :07, not :00 — see wrangler.toml's [triggers] comment for why (thundering-herd 522s
 // observed right at the hour mark). Must exactly match the hourly entry in wrangler.toml's crons.
 const HOURLY_CRON = "7 * * * *";
@@ -135,6 +137,7 @@ export default {
     // Daily path (and any unmatched cron string — keep previous behavior for safety).
     if (isWeeklyBlogMondayUtc(new Date()) || event.cron === BLOG_WEEKLY_CRON) {
       ctx.waitUntil(runWeeklyBlogPublish(env).catch((err) => console.error("Weekly blog publish failed:", err)));
+      ctx.waitUntil(runWeeklyTemplatePublish(env).catch((err) => console.error("Weekly template publish failed:", err)));
     }
 
     ctx.waitUntil(runReminderSweep(env));

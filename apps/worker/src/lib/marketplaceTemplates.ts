@@ -13,9 +13,12 @@ export interface MarketplaceTemplateSummary {
   rejectionReason: string | null;
   submittedAt: string;
   reviewedAt: string | null;
+  /** 'community' = human Marketplace submit; 'weekly' = Monday cron (FreeTemplate-parity). */
+  origin: "community" | "weekly";
   /** Same optional LLM/ChatGPT-optimization fields as FreeTemplate (freeTemplates.ts) — see the
-   *  0025 migration's comment. Absent on most human submissions; set by the automated weekly
-   *  content routine. */
+   *  0025/0026 migrations. Required on weekly-cron rows; often null on human submissions. */
+  seoTitle: string | null;
+  useCase: string | null;
   definition: string | null;
   keyClauses: string[] | null;
   fillInFields: string[] | null;
@@ -25,7 +28,7 @@ export interface MarketplaceTemplateSummary {
 
 interface MarketplaceTemplateRow {
   id: string;
-  account_id: string;
+  account_id: string | null;
   source_template_id: string | null;
   slug: string;
   title: string;
@@ -39,6 +42,9 @@ interface MarketplaceTemplateRow {
   submitted_at: string;
   reviewed_at: string | null;
   reviewed_by: string | null;
+  origin: "community" | "weekly" | null;
+  seo_title: string | null;
+  use_case: string | null;
   definition: string | null;
   key_clauses: string | null;
   fill_in_fields: string | null;
@@ -59,6 +65,9 @@ function rowToSummary(row: MarketplaceTemplateRow): MarketplaceTemplateSummary {
     rejectionReason: row.rejection_reason,
     submittedAt: row.submitted_at,
     reviewedAt: row.reviewed_at,
+    origin: row.origin === "weekly" ? "weekly" : "community",
+    seoTitle: row.seo_title,
+    useCase: row.use_case,
     definition: row.definition,
     keyClauses: row.key_clauses ? JSON.parse(row.key_clauses) : null,
     fillInFields: row.fill_in_fields ? JSON.parse(row.fill_in_fields) : null,
@@ -184,12 +193,23 @@ export async function listPending(env: Env): Promise<MarketplaceTemplateSummary[
 
 export async function listApproved(env: Env, category?: string): Promise<MarketplaceTemplateSummary[]> {
   const db = requireDb(env);
+  // Human community submissions only — Monday-cron official rows use listWeeklyOfficial / ?origin=weekly.
   const { results } = category
     ? await db
-        .prepare(`SELECT * FROM marketplace_templates WHERE status = 'approved' AND category = ? ORDER BY reviewed_at DESC`)
+        .prepare(
+          `SELECT * FROM marketplace_templates
+           WHERE status = 'approved' AND origin = 'community' AND category = ?
+           ORDER BY reviewed_at DESC`
+        )
         .bind(category)
         .all<MarketplaceTemplateRow>()
-    : await db.prepare(`SELECT * FROM marketplace_templates WHERE status = 'approved' ORDER BY reviewed_at DESC`).all<MarketplaceTemplateRow>();
+    : await db
+        .prepare(
+          `SELECT * FROM marketplace_templates
+           WHERE status = 'approved' AND origin = 'community'
+           ORDER BY reviewed_at DESC`
+        )
+        .all<MarketplaceTemplateRow>();
   return results.map(rowToSummary);
 }
 
@@ -236,4 +256,84 @@ export async function reviewSubmission(
     .bind(decision.status, decision.rejectionReason ?? null, new Date().toISOString(), decision.reviewedBy, id)
     .run();
   return true;
+}
+
+/**
+ * Monday-cron path: insert already-approved with origin='weekly' and the full FreeTemplate SEO
+ * catalog (seoTitle, useCase, definition, …). Never used for human Marketplace submits.
+ */
+export async function publishOfficialTemplate(
+  env: Env,
+  input: {
+    slugHint: string;
+    title: string;
+    seoTitle: string;
+    category: string;
+    description: string;
+    useCase: string;
+    signerCount: number;
+    pageCount: number;
+    fields: DocField[];
+    pdfBytes: Uint8Array;
+    definition: string;
+    keyClauses: string[];
+    fillInFields: string[];
+    legalSummary: string;
+    chatgptPrompts: string[];
+  }
+): Promise<{ ok: true; id: string; slug: string } | { ok: false; error: string }> {
+  const db = requireDb(env);
+  const id = crypto.randomUUID();
+  // Prefer the queue slug when free; uniqueSlug() still dedupes on collision.
+  const base = slugify(input.slugHint) || slugify(input.title) || "template";
+  let slug = base;
+  if (await db.prepare(`SELECT id FROM marketplace_templates WHERE slug = ?`).bind(slug).first()) {
+    slug = await uniqueSlug(env, input.title);
+  }
+  const now = new Date().toISOString();
+
+  await db
+    .prepare(
+      `INSERT INTO marketplace_templates
+        (id, account_id, source_template_id, slug, title, category, description, signer_count, page_count, fields,
+         status, submitted_at, reviewed_at, reviewed_by, origin, seo_title, use_case,
+         definition, key_clauses, fill_in_fields, legal_summary, chatgpt_prompts)
+       VALUES (?, NULL, NULL, ?, ?, ?, ?, ?, ?, ?, 'approved', ?, ?, 'weekly-cron', 'weekly', ?, ?, ?, ?, ?, ?, ?)`
+    )
+    .bind(
+      id,
+      slug,
+      input.title,
+      input.category,
+      input.description,
+      input.signerCount,
+      input.pageCount,
+      JSON.stringify(input.fields),
+      now,
+      now,
+      input.seoTitle,
+      input.useCase,
+      input.definition,
+      JSON.stringify(input.keyClauses),
+      JSON.stringify(input.fillInFields),
+      input.legalSummary,
+      JSON.stringify(input.chatgptPrompts)
+    )
+    .run();
+  await env.DOCRACY_DOCS.put(r2Key(id), input.pdfBytes);
+  return { ok: true, id, slug };
+}
+
+/** Newest Monday-cron (origin=weekly) templates — powers /free-templates#newest. */
+export async function listWeeklyOfficial(env: Env, limit = 10): Promise<MarketplaceTemplateSummary[]> {
+  const db = requireDb(env);
+  const { results } = await db
+    .prepare(
+      `SELECT * FROM marketplace_templates
+       WHERE status = 'approved' AND origin = 'weekly'
+       ORDER BY reviewed_at DESC LIMIT ?`
+    )
+    .bind(limit)
+    .all<MarketplaceTemplateRow>();
+  return results.map(rowToSummary);
 }

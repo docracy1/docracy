@@ -114,10 +114,17 @@ function CommunityTemplateDetail({ slug }: { slug: string }) {
     track("template_preview_opened", { templateId: slug, templateCategory: template.category ?? undefined });
   }, [template, slug]);
 
-  usePageMeta(
-    template ? `${template.title} | Docracy Marketplace` : t("tpl.detail.notFoundTitle"),
-    template?.description ?? t("tpl.detail.notFoundDesc")
-  );
+  const isWeeklyOfficial = template?.origin === "weekly";
+  const seoTitle = template?.seoTitle || (template ? `${template.title}` : "");
+  const pageTitle = template
+    ? isWeeklyOfficial
+      ? `${seoTitle} | Docracy`
+      : `${template.title} | Docracy Marketplace`
+    : t("tpl.detail.notFoundTitle");
+
+  usePageMeta(pageTitle, template?.description ?? t("tpl.detail.notFoundDesc"), {
+    canonicalPath: `/free-templates/${slug}`,
+  });
 
   const indexTo = localizePath("/free-templates", locale);
 
@@ -134,6 +141,102 @@ function CommunityTemplateDetail({ slug }: { slug: string }) {
   }
 
   const ctaTo = localizePath(`/prepare?marketplaceTemplate=${slug}&ref=seo-marketplace-${slug}`, locale);
+  const name = template.title;
+  const signers = Array.from({ length: template.signerCount }, (_, i) => `Signer ${i + 1}`).join(
+    ` ${t("common.and")} `
+  );
+
+  // Monday-cron rows use the same FreeTemplate detail scheme (definition + useCase + FAQ +
+  // official badge). Human community submits stay on the lighter Marketplace layout.
+  if (isWeeklyOfficial) {
+    const faqVars = { name, signers };
+    const faqs = [1, 2, 3, 4].map((n) => ({
+      question: t(`tpl.detail.faq${n}.q`, faqVars),
+      answer: t(`tpl.detail.faq${n}.a`, faqVars),
+    }));
+    const faqJsonLd = {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: { "@type": "Answer", text: faq.answer },
+      })),
+    };
+
+    return (
+      <div className="container" style={{ maxWidth: 720 }}>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+        <p style={{ fontSize: 13 }}>
+          <Link to={indexTo}>← {t("tpl.detail.backAll")}</Link>
+        </p>
+        <div style={{ display: "flex", gap: 20, alignItems: "flex-start", flexWrap: "wrap" }}>
+          <TemplateThumbnail pdfPath={apiUrl(`/api/marketplace/${slug}/pdf`)} width={280} />
+          <div style={{ flex: 1, minWidth: 240 }}>
+            <h1 style={{ marginTop: 0 }}>
+              {name}{" "}
+              <span
+                style={{
+                  fontSize: 11,
+                  fontWeight: 600,
+                  padding: "2px 8px",
+                  borderRadius: 999,
+                  color: "var(--on-primary)",
+                  background: "var(--primary)",
+                  verticalAlign: "middle",
+                }}
+              >
+                {t("freeTemplates.officialBadge")}
+              </span>
+            </h1>
+            <p style={{ color: "var(--mute)" }}>
+              {template.definition ? `${template.definition} ` : ""}
+              {template.useCase ?? ""}
+            </p>
+          </div>
+        </div>
+
+        <div className="card" style={{ marginTop: 16 }}>
+          <h3 style={{ marginTop: 0 }}>{t("tpl.detail.includedTitle")}</h3>
+          <p style={{ marginBottom: 8 }}>{t("tpl.detail.includedBody", { name: name.toLowerCase(), signers })}</p>
+          <p style={{ fontSize: 12, color: "var(--mute)", marginBottom: 0 }}>{t("tpl.detail.disclaimer")}</p>
+        </div>
+
+        <SeoTemplateSections
+          keyClauses={template.keyClauses}
+          fillInFields={template.fillInFields}
+          legalSummary={template.legalSummary}
+        />
+
+        <Link
+          to={ctaTo}
+          className="btn-primary"
+          style={{ display: "inline-block", textDecoration: "none", marginTop: 20 }}
+          onClick={() =>
+            track("landingpage_cta_clicked", {
+              source: `seo:weekly-template:${slug}`,
+              templateId: slug,
+              templateCategory: template.category ?? undefined,
+            })
+          }
+        >
+          {t("tpl.detail.cta")}
+        </Link>
+        <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 8 }}>{t("tpl.detail.freeNote")}</p>
+
+        <h2 style={{ fontSize: 19, marginTop: 32 }}>{t("tpl.detail.faqTitle")}</h2>
+        {faqs.map((faq, i) => (
+          <details key={i} className="faq-item" style={{ marginTop: 12 }}>
+            <summary style={{ fontWeight: 700, cursor: "pointer" }}>{faq.question}</summary>
+            <p style={{ margin: "8px 0 0", color: "var(--body)" }}>{faq.answer}</p>
+          </details>
+        ))}
+
+        <SeoTemplateSections chatgptPrompts={template.chatgptPrompts} />
+        <TrustSection />
+      </div>
+    );
+  }
 
   return (
     <div className="container" style={{ maxWidth: 720 }}>

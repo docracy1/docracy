@@ -436,6 +436,14 @@ export interface MarketplaceSubmission {
   rejectionReason: string | null;
   submittedAt: string;
   reviewedAt: string | null;
+  origin?: "community" | "weekly";
+  seoTitle?: string | null;
+  useCase?: string | null;
+  definition?: string | null;
+  keyClauses?: string[] | null;
+  fillInFields?: string[] | null;
+  legalSummary?: string | null;
+  chatgptPrompts?: string[] | null;
 }
 
 /** Open to everyone — signed in or not — unlike submitTemplateToMarketplace below, which only
@@ -493,6 +501,9 @@ export interface MarketplaceTemplateDetail {
   signerCount: number;
   fields: DocField[];
   pdfBase64: string;
+  origin?: "community" | "weekly";
+  seoTitle?: string | null;
+  useCase?: string | null;
   definition: string | null;
   keyClauses: string[] | null;
   fillInFields: string[] | null;
@@ -503,6 +514,12 @@ export interface MarketplaceTemplateDetail {
 export async function fetchMarketplaceTemplates(category?: string): Promise<{ templates: MarketplaceSubmission[] }> {
   const query = category ? `?category=${encodeURIComponent(category)}` : "";
   const res = await apiFetch(`/api/marketplace${query}`);
+  return asJson(res);
+}
+
+/** Monday-cron FreeTemplate-parity batch — powers /free-templates#newest. */
+export async function fetchWeeklyTemplates(limit = 10): Promise<{ templates: MarketplaceSubmission[] }> {
+  const res = await apiFetch(`/api/marketplace?origin=weekly&limit=${limit}`);
   return asJson(res);
 }
 
