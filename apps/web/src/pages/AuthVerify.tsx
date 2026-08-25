@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useT } from "../lib/i18n";
 import { consumeMagicLinkToken } from "../lib/api";
+import { useNoIndex } from "../lib/useNoIndex";
 
 function safeClientNext(next: string | undefined): string {
   if (!next) return "/dashboard";
@@ -11,6 +12,7 @@ function safeClientNext(next: string | undefined): string {
 }
 
 export default function AuthVerify() {
+  useNoIndex();
   const t = useT();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();

@@ -1,3 +1,5 @@
+import { fetchIndexShell, sanitizeForNoIndex } from "../_spaShell";
+
 const WORKER_URL = "https://api.docracy.io";
 const SITE = "https://docracy.io";
 
@@ -49,7 +51,17 @@ export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => 
   }
 
   if (!post) {
-    return context.next();
+    // Do NOT fall through to `/* /index.html 200` — that serves the prerendered homepage
+    // (soft-404 / duplicate canonical `/` in GSC). Return a real 404 shell instead.
+    const shell = await fetchIndexShell(context.env, context.request, url);
+    const html = sanitizeForNoIndex(shell, "Post not found — Docracy");
+    return new Response(html, {
+      status: 404,
+      headers: {
+        "content-type": "text/html; charset=utf-8",
+        "cache-control": "public, max-age=60",
+      },
+    });
   }
 
   const title = `${post.title} | Docracy`;

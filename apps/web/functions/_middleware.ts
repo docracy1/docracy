@@ -4,6 +4,13 @@
 // JavaScript and would otherwise never be counted at all. Fire-and-forget via ctx.waitUntil so a
 // slow/failing analytics call never delays the actual page response.
 import { FEATURE_PAGES, ALTERNATIVE_PAGES } from "../src/lib/marketingPages";
+import {
+  fetchIndexShell,
+  hasFileExtension,
+  isSpaAppPath,
+  sanitizeForNoIndex,
+  staticHtmlExists,
+} from "./_spaShell";
 
 const WORKER_URL = "https://api.docracy.io";
 
@@ -133,6 +140,49 @@ export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => 
     } catch {
       // Falls through to context.next() below — an agent that asked for markdown and can't get it
       // should still get the normal page, not an error.
+    }
+  }
+
+  // --- Soft-404 / homepage-duplicate guard ---------------------------------
+  // Prerender overwrites index.html with the homepage body. The SPA fallback
+  // `/* /index.html 200` then serves that homepage (canonical `/`, hero h1) for
+  // /login, /dashboard, /prepare, unknown URLs, etc. Googlebot sees duplicates
+  // of the homepage — a common GSC Coverage failure.
+  //
+  // Blog SSR (`functions/blog/[slug].ts`) handles /blog/:slug before this runs
+  // via context.next(); missing posts return 404 there. Here we only fix paths
+  // that would otherwise hit the catch-all SPA rewrite.
+  if (
+    context.request.method === "GET" &&
+    !hasFileExtension(url.pathname) &&
+    url.pathname !== "/" &&
+    // API proxy + blog SSR have their own Functions — never rewrite those to a marketing 404.
+    !url.pathname.startsWith("/api/") &&
+    // Let the more-specific blog Function handle /blog/* (including missing slugs).
+    !url.pathname.startsWith("/blog/")
+  ) {
+    const hasPage = await staticHtmlExists(context.env, url.origin, url.pathname);
+    if (!hasPage) {
+      const shell = await fetchIndexShell(context.env, context.request, url);
+      if (isSpaAppPath(url.pathname)) {
+        const html = sanitizeForNoIndex(shell, "Docracy");
+        return new Response(html, {
+          status: 200,
+          headers: {
+            "content-type": "text/html; charset=utf-8",
+            "cache-control": "private, no-store",
+          },
+        });
+      }
+      // Unknown URL — real 404 (not homepage HTML as 200).
+      const html = sanitizeForNoIndex(shell, "Page not found — Docracy");
+      return new Response(html, {
+        status: 404,
+        headers: {
+          "content-type": "text/html; charset=utf-8",
+          "cache-control": "public, max-age=60",
+        },
+      });
     }
   }
 

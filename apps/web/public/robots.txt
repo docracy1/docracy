@@ -1,8 +1,20 @@
+# robots.txt for https://docracy.io
+#
+# NOTE: Cloudflare’s dashboard “AI Crawl Control” / Content-Signal managed block is
+# prepended live (User-agent: * + Content-Signal + Allow: /). Google merges both
+# User-agent: * groups and, at equal path length, prefers Allow over Disallow — so
+# the site-level `Disallow: /` alone does NOT hide /login, /dashboard, etc. from
+# Googlebot. App routes below use longer explicit Disallow paths so they still win.
+#
+# The allowlist + catch-all Disallow: / still matters for crawlers that only honor
+# this file’s group (or ignore Cloudflare’s managed Allow: /).
+
 User-agent: *
+
+# --- Public marketing / SEO (keep in sync with public/sitemap.xml) ---
 Allow: /$
 Allow: /es$
 Allow: /es/
-Allow: /prepare$
 Allow: /privacy$
 Allow: /terms$
 Allow: /free-templates
@@ -16,6 +28,9 @@ Allow: /imprint$
 Allow: /trust$
 Allow: /dpa$
 Allow: /uptime$
+Allow: /verify$
+Allow: /document-verification$
+Allow: /blockchain-timestamp$
 Allow: /blog
 Allow: /llms.txt$
 Allow: /llms-full.txt$
@@ -27,14 +42,38 @@ Allow: /client-contracts$
 Allow: /onboarding-documents$
 Allow: /vendor-agreements$
 Allow: /compliance-documentation$
+Allow: /whatsapp-signing$
+Allow: /advanced-electronic-signature$
+Allow: /artist-contracts$
+Allow: /creative-licensing$
+Allow: /music-collaboration-contracts$
+Allow: /freelancer-contracts$
+Allow: /web-design-contract$
+Allow: /developer-contracts$
+Allow: /llc-legal-templates$
+Allow: /startup-legal-templates$
+Allow: /founder-agreement$
+Allow: /seo-agency-contract$
+Allow: /marketing-service-agreement$
+Allow: /education-forms$
+Allow: /student-agreements$
+Allow: /import-google-doc$
+Allow: /anonymous-signing$
+Allow: /quick-sign$
+Allow: /upload-and-sign$
+Allow: /simple-signing$
 Allow: /eversign-alternative$
+Allow: /onlinesignature-alternative$
 Allow: /docusign-alternative$
 Allow: /hellosign-alternative$
 Allow: /pandadoc-alternative$
 Allow: /adobe-sign-alternative$
+Allow: /contractbook-alternative$
 Allow: /docracy-alternative$
 Allow: /what-is-an-nda$
 Allow: /are-electronic-signatures-legal$
+Allow: /ueta-electronic-signature$
+Allow: /docracy-ueta-compliance$
 Allow: /esign-ueta$
 Allow: /create-a-digital-signature$
 Allow: /ai-contract-analysis$
@@ -43,16 +82,11 @@ Allow: /sign-pdf-online$
 Allow: /secure-electronic-signature$
 Allow: /free-electronic-signature$
 Allow: /electronic-signature-guide$
-Allow: /advanced-electronic-signature$
-Allow: /whatsapp-signing$
 Allow: /template-marketplace$
 Allow: /submit-template$
-Allow: /import-from-docusign$
-Allow: /import-from-eversign$
-Allow: /import-from-hellosign$
-Allow: /import-from-pandadoc$
-Allow: /import-from-adobe-sign$
+Allow: /import-from-
 Allow: /industry/
+Allow: /for/
 Allow: /pandadoc-vs-docusign$
 Allow: /docusign-vs-pandadoc$
 Allow: /pandadoc-vs-hellosign$
@@ -74,10 +108,31 @@ Allow: /favicon-32.png$
 Allow: /apple-touch-icon.png$
 Allow: /og-image.png$
 Allow: /docracy-seal-icon.png$
-Disallow: /
+
+# --- App / private / attribution short-links (explicit; longer than CF Allow: /) ---
+Disallow: /login
+Disallow: /dashboard
+Disallow: /prepare
+Disallow: /es/preparar
+Disallow: /bulk-send
+Disallow: /roadmap
+Disallow: /auth/
+Disallow: /admin/
+Disallow: /embed/
 Disallow: /sign/
 Disallow: /status/
+Disallow: /team/
+Disallow: /go/
+Disallow: /outreach/
+Disallow: /try$
+Disallow: /nda$
+Disallow: /price$
+Disallow: /submit$
+Disallow: /marketplace$
 Disallow: /prepare/sent
+
+# Catch-all for crawlers that don't get Cloudflare's managed Allow: /
+Disallow: /
 
 Sitemap: https://docracy.io/sitemap.xml
 Sitemap: https://api.docracy.io/api/blog-posts/sitemap.xml

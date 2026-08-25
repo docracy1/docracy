@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useT } from "../lib/i18n";
 import { acceptTeamInvite } from "../lib/api";
+import { useNoIndex } from "../lib/useNoIndex";
 
 export default function TeamAccept() {
+  useNoIndex();
   const t = useT();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();

@@ -33,6 +33,7 @@ import {
 } from "../lib/api";
 import { base64ToBytes } from "../lib/base64";
 import { usePageMeta } from "../lib/usePageMeta";
+import { useNoIndex } from "../lib/useNoIndex";
 
 const HUMAN_COLOR = "#2f7ed8"; // var(--primary)
 const BOT_COLOR = "#d9822b";
@@ -1635,6 +1636,7 @@ const ADMIN_SECTION_LABEL: Record<AdminSection, string> = {
 };
 
 export default function AdminAnalytics() {
+  useNoIndex();
   usePageMeta("Analytics — Docracy", "Internal traffic and funnel analytics.");
 
   const [days, setDays] = useState(30);
