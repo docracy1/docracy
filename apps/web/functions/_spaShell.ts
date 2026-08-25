@@ -40,17 +40,37 @@ export function hasFileExtension(pathname: string): boolean {
   return /\.[a-z0-9]+$/i.test(pathname);
 }
 
-/** Probe ASSETS for a prerendered HTML file matching an extensionless URL. */
+/** Probe ASSETS for a prerendered HTML file matching an extensionless URL.
+ *  Important: Cloudflare may SPA-fallback missing paths to index.html with 200 —
+ *  so "ok" alone is not enough; we require a body that is not the homepage shell. */
 export async function staticHtmlExists(env: { ASSETS: Fetcher }, origin: string, pathname: string): Promise<boolean> {
   if (pathname === "/" || pathname === "") return true;
   const candidates = [`${pathname}.html`];
   if (pathname.endsWith("/")) candidates.push(`${pathname}index.html`);
   else candidates.push(`${pathname}/index.html`);
 
+  let indexBody: string | null = null;
+  const getIndexBody = async () => {
+    if (indexBody != null) return indexBody;
+    try {
+      const idx = await env.ASSETS.fetch(new Request(new URL("/index.html", origin)));
+      indexBody = idx.ok ? await idx.text() : "";
+    } catch {
+      indexBody = "";
+    }
+    return indexBody;
+  };
+
   for (const p of candidates) {
     try {
       const res = await env.ASSETS.fetch(new Request(new URL(p, origin)));
-      if (res.ok) return true;
+      if (!res.ok) continue;
+      const body = await res.text();
+      // Missing files that fall through `/* /index.html 200` look identical to the homepage.
+      if (!body || body === (await getIndexBody())) continue;
+      // Extra guard: homepage hero h1 must not appear on a real prerendered leaf page.
+      if (body.includes("The fastest way to create and sign agreements")) continue;
+      return true;
     } catch {
       // try next candidate
     }
