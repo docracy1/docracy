@@ -19,6 +19,8 @@ Attribution is recorded under the hood (`ref` / `utm_*`).
 
 ## Status
 
+**Outbound checklist: closed** (2026-08-25). Kits below are kept as historical reference — do not restart batch 1–3 or directory outreach unless opening a new campaign.
+
 - [x] Conversion CTAs + short links deployed
 - [x] Google Search Console domain verified
 - [x] Product Hunt (at go-live) — do not re-launch
@@ -31,31 +33,24 @@ Attribution is recorded under the hood (`ref` / `utm_*`).
 - [x] Mobile demo video (`linkedin/videos/mobile-sign.webm` + `outbound/mobile-video.md`)
 - [x] Deliverability OK (founder mail reaches inboxes) — 0 replies = offer/ICP, not spam
 - [x] Prospects batch 3 prepared (`outbound/prospects-batch-3.md` — 25 rematched + MX-OK; **no vendor/billing mentions**)
-- [ ] **Send batch 3** (spread over days; gift-product tone) — `outbound/prospects-batch-3.md`
-- [ ] **Pause cold email** after batch 3 — don’t clone batch 1–2 curiosity ask
-- [ ] Post mobile video (LinkedIn feed / X / Shorts — `outbound/mobile-video.md`)
-- [ ] Soft follow-up once only if not already sent (gift `/try`)
-- [ ] AlternativeTo — target ~2026-08-05
-- [ ] Watch Admin Growth: `/try`, document_sent, signups
-- [ ] Watch GSC queries when Performance has data
-- [ ] Ask 2–3 people you know to try `/try` and reply with one line (warm path)
+- [x] **Send batch 3** — closed (campaign ended; kit retained)
+- [x] **Pause cold email** after batch 3 — closed
+- [x] Post mobile video — closed
+- [x] Soft follow-up — closed
+- [x] AlternativeTo — closed
+- [x] Watch Admin Growth — closed (ongoing ops, not an open checklist item)
+- [x] Watch GSC queries — closed (ongoing ops)
+- [x] Warm path — closed
 
-## Current next actions (do in order)
+## Current next actions
 
-Partner + directory outreach already sent. Do **not** restart batch 1–2.
-
-1. **Send prospects batch 3** — `outbound/prospects-batch-3.md` (gift `/try`, spread over several days).
-2. **Post the mobile demo video** — `outbound/mobile-video.md` + `linkedin/videos/mobile-sign.webm`.
-3. **One soft follow-up** only where batch 1–2 never got a reply (gift `/try`, no pitch stack).
-4. **AlternativeTo listing** when the ~2026-08-05 window opens.
-5. **Weekly metric check** — Admin Growth (`/try`, document_sent, signups) + GSC Performance queries.
-6. **Warm path** — ask 2–3 people you know to try `/try` and reply with one honest line.
+None — outbound checklist closed. For product/SEO work see `/roadmap` and the Monday Worker cron (blog + templates).
 
 ## Reference files
 
 - `outbound/distribution.md` — communities / where to post
 - `outbound/partner-batch.md` — partners (sent)
 - `outbound/prospects-batch-2.md` — batch 2 (sent)
-- `outbound/prospects-batch-3.md` — batch 3 (ready to send)
+- `outbound/prospects-batch-3.md` — batch 3 (prepared; campaign closed)
 - `outbound/mobile-video.md` — video posting checklist
 - `outbound/followups.md` — soft follow-up copy (if present)
