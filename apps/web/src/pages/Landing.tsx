@@ -6,6 +6,7 @@ import HowItWorksModal from "../components/HowItWorksModal";
 import IntegrationsBand from "../components/IntegrationsBand";
 import TurnstileWidget, { turnstileRequired } from "../components/TurnstileWidget";
 import DetectMockup from "../components/DetectMockup";
+import PdfUploadCircle from "../components/PdfUploadCircle";
 import { NavIcon } from "../components/NavIcons";
 import { requestMagicLink } from "../lib/api";
 import { track } from "../lib/track";
@@ -357,7 +358,6 @@ export default function Landing() {
   const [turnstileResetKey, setTurnstileResetKey] = useState(0);
   const [pendingSubmit, setPendingSubmit] = useState(false);
   const [watchOpen, setWatchOpen] = useState(false);
-  const [heroDragging, setHeroDragging] = useState(false);
   const heroEmailRef = useRef<HTMLInputElement>(null);
   useSeoMeta("home");
   const faqItems = FAQ_KEYS.map((item) => ({
@@ -483,41 +483,12 @@ export default function Landing() {
           <h1>{t("hero.title")}</h1>
           <p className="hero-sub">{t("hero.sub")}</p>
 
-          <div className="hero-upload-circle-wrap">
-            <input
-              type="file"
-              accept="application/pdf,.pdf"
-              id="hero-file-input"
-              style={{ display: "none" }}
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) onHeroFile(file);
-                e.target.value = "";
-              }}
-            />
-            <label
-              htmlFor="hero-file-input"
-              className={`hero-upload-circle${heroDragging ? " is-dragging" : ""}`}
-              onDragOver={(e) => {
-                e.preventDefault();
-                setHeroDragging(true);
-              }}
-              onDragLeave={() => setHeroDragging(false)}
-              onDrop={(e) => {
-                e.preventDefault();
-                setHeroDragging(false);
-                const file = e.dataTransfer.files?.[0];
-                if (file) onHeroFile(file);
-              }}
-            >
-              <span className="hero-upload-circle-icon">
-                <NavIcon name="uploadArrow" />
-              </span>
-              <p className="hero-upload-circle-title">{t("hero.uploadCircleTitle")}</p>
-              <p className="hero-upload-circle-sub">{t("hero.uploadCircleSub")}</p>
-            </label>
-            <p className="hero-upload-circle-caption">{t("hero.uploadCircleCaption")}</p>
-          </div>
+          <PdfUploadCircle
+            variant="hero"
+            inputId="hero-file-input"
+            onFile={onHeroFile}
+            caption={t("hero.uploadCircleCaption")}
+          />
 
           {heroSent ? (
             <div className="hero-signup-sent" role="status">
