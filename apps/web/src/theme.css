@@ -5055,57 +5055,100 @@ select {
   }
 }
 
-/* Footer — dark band mirroring the hero. Brand on the left; link columns in two balanced rows
-   (Product / Solutions / Resources, then Compare / Company / Legal) so no column dumps ~18 links. */
+/* Footer — Xodo-style fat footer: top row Brand + Product + Features + Industry + Developers +
+   Connect; bottom row Company + Legal + Compare under the first three columns. */
 
 .site-footer {
   margin-top: 64px;
   background: var(--hero-to);
   color: var(--hero-body);
-  padding: 48px 24px 24px;
+  padding: 48px 24px 28px;
 }
 
-.site-footer-inner {
+.site-footer-grid {
   display: grid;
-  grid-template-columns: minmax(180px, 1.15fr) minmax(0, 3.2fr);
-  gap: 40px 48px;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  column-gap: 28px;
+  row-gap: 40px;
+  max-width: 1120px;
+  margin: 0 auto;
   padding: 0;
   align-items: start;
 }
 
-.site-footer-link-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 36px;
-  min-width: 0;
+.site-footer-brand {
+  grid-column: 1;
+  grid-row: 1;
 }
 
-.site-footer-row {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 28px 32px;
+.site-footer-grid > .site-footer-col:nth-child(2) {
+  grid-column: 2;
+  grid-row: 1;
+}
+.site-footer-grid > .site-footer-col:nth-child(3) {
+  grid-column: 3;
+  grid-row: 1;
+}
+.site-footer-grid > .site-footer-col:nth-child(4) {
+  grid-column: 4;
+  grid-row: 1;
+}
+.site-footer-grid > .site-footer-col:nth-child(5) {
+  grid-column: 5;
+  grid-row: 1;
+}
+.site-footer-grid > .site-footer-col:nth-child(6) {
+  grid-column: 6;
+  grid-row: 1;
 }
 
-.site-footer-row + .site-footer-row {
-  padding-top: 28px;
+/* Bottom row: Company / Legal / Compare under Brand / Product / Features */
+.site-footer-grid > .site-footer-col:nth-child(7) {
+  grid-column: 1;
+  grid-row: 2;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+.site-footer-grid > .site-footer-col:nth-child(8) {
+  grid-column: 2;
+  grid-row: 2;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+.site-footer-grid > .site-footer-col:nth-child(9) {
+  grid-column: 3;
+  grid-row: 2;
+  padding-top: 8px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-@media (max-width: 900px) {
-  .site-footer-inner {
-    grid-template-columns: 1fr;
-    gap: 32px;
+@media (max-width: 1100px) {
+  .site-footer-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: 32px;
+  }
+
+  .site-footer-brand {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+
+  .site-footer-grid > .site-footer-col:nth-child(n) {
+    grid-column: auto;
+    grid-row: auto;
+    padding-top: 0;
+    border-top: none;
   }
 }
 
-@media (max-width: 760px) {
-  .site-footer-row {
+@media (max-width: 640px) {
+  .site-footer-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 480px) {
-  .site-footer-row {
+@media (max-width: 420px) {
+  .site-footer-grid {
     grid-template-columns: 1fr;
   }
 }
@@ -5114,34 +5157,40 @@ select {
   color: var(--hero-body);
   font-size: 13px;
   margin: 12px 0 0;
-  max-width: 240px;
+  max-width: 200px;
   opacity: 0.85;
+  line-height: 1.45;
+}
+
+.site-footer-connect .site-footer-social {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 0;
 }
 
 .site-footer-social {
   display: flex;
   flex-wrap: wrap;
   gap: 10px 14px;
-  margin-top: 16px;
 }
 
 .site-footer-social a {
   color: var(--hero-body);
-  font-size: 13px;
+  font-size: 14px;
   text-decoration: none;
-  opacity: 0.85;
-  transition: color 0.15s var(--ease), opacity 0.15s var(--ease);
+  transition: color 0.15s var(--ease);
 }
 
 .site-footer-social a:hover {
   color: #ffffff;
-  opacity: 1;
 }
 
 .site-footer-col {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  min-width: 0;
 }
 
 .site-footer-col h4 {
@@ -5159,6 +5208,7 @@ select {
   font-size: 14px;
   text-decoration: none;
   transition: color 0.15s var(--ease);
+  line-height: 1.35;
 }
 
 .site-footer-col a:hover {
@@ -5166,9 +5216,9 @@ select {
 }
 
 .site-footer-bottom {
-  max-width: 1080px;
+  max-width: 1120px;
   margin: 40px auto 0;
-  padding-top: 20px;
+  padding: 20px 0 0;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   font-size: 12px;
   color: var(--hero-body);
