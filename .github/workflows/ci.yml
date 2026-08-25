@@ -34,11 +34,10 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - name: Apply D1 migrations
-        # Schema for the derived index (Marketplace weekly queue, blog topics, etc.). Safe to
-        # re-run — wrangler only applies pending migrations.
-        run: npx wrangler d1 migrations apply docracy-index --remote
-        working-directory: apps/worker
+      # D1 migrations are NOT applied here: CLOUDFLARE_API_TOKEN needs Account → D1:Edit
+      # (Workers Scripts:Edit alone returns 7403). Until the token includes D1, apply pending
+      # migrations locally: `npx wrangler d1 migrations apply docracy-index --remote`
+      # (from apps/worker). Then re-add this step.
       - name: Deploy worker
         run: npx wrangler deploy
         working-directory: apps/worker
