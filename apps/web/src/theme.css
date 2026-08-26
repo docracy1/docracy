@@ -2233,43 +2233,52 @@ select {
   }
 }
 
-/* Shared PDF upload orb (Landing / Prepare / FirstDocumentPrompt).
-   PDF drop is the hero CTA — large type, never clipped. With Google Docs, the orb becomes a
-   tall capsule so both zones fit with breathing room (still inside the glow, not a page-wide bar). */
+/* Shared PDF upload circle (Landing / Prepare / FirstDocumentPrompt).
+   Same idea as /verify: a true round circle with only the PDF CTA inside (readable, attractive).
+   Google Docs is a compact pill strip *under* the circle — never stuffed inside. */
 .pdf-upload-circle-wrap {
   position: relative;
   text-align: center;
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .pdf-upload-circle-wrap::before {
   content: "";
   position: absolute;
-  inset: 4px;
+  /* Glow halo — match /verify */
+  top: 0;
+  left: 50%;
+  width: 290px;
+  height: 290px;
+  transform: translate(-50%, -30px);
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 232, 168, 0.28) 0%, rgba(0, 232, 168, 0) 70%);
+  background: radial-gradient(circle, rgba(0, 232, 168, 0.35) 0%, rgba(0, 232, 168, 0) 70%);
   z-index: 0;
   pointer-events: none;
 }
 
-.pdf-upload-circle-with-gdoc.pdf-upload-circle-wrap::before {
-  border-radius: 999px;
-  inset: 0;
+.pdf-upload-circle-size-sm.pdf-upload-circle-wrap::before {
+  width: 250px;
+  height: 250px;
 }
 
 .pdf-upload-circle-hero.pdf-upload-circle-wrap::before {
-  background: radial-gradient(circle, rgba(0, 232, 168, 0.32) 0%, rgba(0, 232, 168, 0) 68%);
+  width: 310px;
+  height: 310px;
+  background: radial-gradient(circle, rgba(0, 232, 168, 0.38) 0%, rgba(0, 232, 168, 0) 70%);
 }
 
 .pdf-upload-circle-light.pdf-upload-circle-wrap::before {
-  background: radial-gradient(circle, rgba(26, 86, 219, 0.14) 0%, rgba(26, 86, 219, 0) 72%);
+  background: radial-gradient(circle, rgba(26, 86, 219, 0.16) 0%, rgba(26, 86, 219, 0) 72%);
 }
 
 .pdf-upload-circle {
   position: relative;
   z-index: 1;
-  width: min(300px, 88vw);
-  height: min(300px, 88vw);
+  width: 230px;
+  height: 230px;
   border-radius: 50%;
   background: #ffffff;
   border: 5px solid var(--accent);
@@ -2279,47 +2288,29 @@ select {
   justify-content: center;
   gap: 10px;
   margin: 0 auto;
-  box-shadow: 0 20px 50px rgba(10, 30, 60, 0.18);
-  transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
-  padding: 28px 24px;
+  cursor: pointer;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 20px 50px rgba(10, 30, 60, 0.22);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+  padding: 24px 20px;
   box-sizing: border-box;
   overflow: hidden;
 }
 
-/* Tall capsule: PDF CTA on top, Google Docs strip below — nothing clipped. */
-.pdf-upload-circle-with-gdoc .pdf-upload-circle {
-  width: min(340px, 90vw);
-  height: auto;
-  min-height: 390px;
-  border-radius: 999px;
-  padding: 36px 32px 28px;
-  justify-content: flex-start;
-  gap: 0;
-}
-
-.pdf-upload-circle-hero.pdf-upload-circle-with-gdoc .pdf-upload-circle {
-  width: min(360px, 92vw);
-  min-height: 420px;
-  padding: 40px 36px 32px;
-  border-width: 6px;
+.pdf-upload-circle-hero .pdf-upload-circle {
+  width: 250px;
+  height: 250px;
+  border-width: 5px;
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.35),
-    0 24px 60px rgba(10, 30, 60, 0.22);
+    0 20px 50px rgba(10, 30, 60, 0.28);
 }
 
 .pdf-upload-circle-size-sm .pdf-upload-circle {
-  width: min(260px, 86vw);
-  height: min(260px, 86vw);
-  padding: 22px 18px;
+  width: 200px;
+  height: 200px;
+  padding: 18px 16px;
   border-width: 4px;
   gap: 8px;
-}
-
-.pdf-upload-circle-size-sm.pdf-upload-circle-with-gdoc .pdf-upload-circle {
-  width: min(300px, 90vw);
-  height: auto;
-  min-height: 340px;
-  padding: 28px 24px 22px;
 }
 
 .pdf-upload-circle-light .pdf-upload-circle {
@@ -2330,7 +2321,7 @@ select {
 .pdf-upload-circle:hover,
 .pdf-upload-circle.is-dragging {
   border-color: var(--accent-hover);
-  transform: scale(1.012);
+  transform: scale(1.02);
 }
 
 .pdf-upload-circle-light .pdf-upload-circle:hover,
@@ -2339,27 +2330,9 @@ select {
   background: var(--primary-soft);
 }
 
-.pdf-upload-circle-main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  width: 100%;
-  flex: 1 1 auto;
-  justify-content: center;
-  min-height: 0;
-  padding: 4px 0 8px;
-}
-
-.pdf-upload-circle-with-gdoc .pdf-upload-circle-main {
-  flex: 0 0 auto;
-  padding-bottom: 18px;
-}
-
 .pdf-upload-circle-icon {
-  width: 56px;
-  height: 56px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   background: var(--primary-soft);
   color: var(--primary);
@@ -2370,66 +2343,74 @@ select {
 }
 
 .pdf-upload-circle-hero .pdf-upload-circle-icon {
-  width: 64px;
-  height: 64px;
-  background: rgba(26, 86, 219, 0.1);
+  width: 56px;
+  height: 56px;
+}
+
+.pdf-upload-circle-size-sm .pdf-upload-circle-icon {
+  width: 44px;
+  height: 44px;
 }
 
 .pdf-upload-circle-icon svg {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
 }
 
-.pdf-upload-circle-hero .pdf-upload-circle-icon svg {
-  width: 30px;
-  height: 30px;
+.pdf-upload-circle-size-sm .pdf-upload-circle-icon svg {
+  width: 22px;
+  height: 22px;
 }
 
 .pdf-upload-circle-title {
   margin: 0;
-  font-size: 18px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-size: 17px;
+  font-weight: 700;
   color: var(--body-strong);
-  line-height: 1.2;
+  line-height: 1.25;
+  text-align: center;
   max-width: 11em;
+  padding: 0 8px;
 }
 
 .pdf-upload-circle-hero .pdf-upload-circle-title {
-  font-size: 20px;
-  max-width: 10.5em;
+  font-size: 18px;
 }
 
-/* Beat `.hero-band p` so title/sub stay dark on the white orb. */
+.pdf-upload-circle-size-sm .pdf-upload-circle-title {
+  font-size: 15px;
+}
+
+/* Beat `.hero-band p` so title/sub stay dark on the white circle. */
 .hero-band .pdf-upload-circle-title {
   color: var(--body-strong);
 }
 
-.hero-band .pdf-upload-circle-sub,
-.hero-band .pdf-upload-circle-or,
-.hero-band .pdf-upload-circle-gdoc-hint {
+.hero-band .pdf-upload-circle-sub {
   color: var(--mute);
 }
 
 .pdf-upload-circle-sub {
   margin: 0;
-  font-size: 13.5px;
+  font-size: 12.5px;
   color: var(--mute);
   line-height: 1.35;
-  max-width: 16em;
+  text-align: center;
+  max-width: 14em;
+  padding: 0 18px;
 }
 
 .pdf-upload-circle-hero .pdf-upload-circle-sub {
-  font-size: 14px;
+  font-size: 13px;
 }
 
+/* Compact Google Docs strip under the circle — pill form like /verify's hash input. */
 .pdf-upload-circle-gdoc {
+  position: relative;
+  z-index: 1;
   width: 100%;
-  max-width: 240px;
-  margin-top: auto;
-  padding-top: 14px;
-  border-top: 1px solid rgba(15, 40, 80, 0.1);
-  flex-shrink: 0;
+  max-width: 360px;
+  margin-top: 18px;
 }
 
 .pdf-upload-circle-or {
@@ -2441,57 +2422,85 @@ select {
   color: var(--mute);
 }
 
+.hero-band .pdf-upload-circle-or {
+  color: rgba(255, 255, 255, 0.65);
+}
+
 .pdf-upload-circle-gdoc-form {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  gap: 0;
   width: 100%;
+  border-radius: 999px;
+  background: #ffffff;
+  padding: 5px;
+  box-shadow: 0 12px 30px rgba(10, 30, 60, 0.18);
+  box-sizing: border-box;
 }
 
 .pdf-upload-circle-gdoc-form input {
-  width: 100%;
-  box-sizing: border-box;
-  font-size: 13px;
-  padding: 8px 10px;
-  border-radius: 10px;
-  border: 1.5px solid var(--hairline);
-  background: #fff;
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  padding: 10px 14px;
+  font-size: 13.5px;
   color: var(--body-strong);
+  border-radius: 999px;
 }
 
 .pdf-upload-circle-gdoc-form input:focus {
   outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.12);
 }
 
-.pdf-upload-circle-gdoc-form .btn-secondary {
-  font-size: 13px;
-  padding: 7px 10px;
-  width: 100%;
-  border-radius: 10px;
+.pdf-upload-circle-gdoc-form button {
+  flex-shrink: 0;
+  border: none;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--body-strong);
+  font-size: 13.5px;
+  font-weight: 700;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+
+.pdf-upload-circle-gdoc-form button:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.pdf-upload-circle-gdoc-form button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.pdf-upload-circle-light .pdf-upload-circle-gdoc-form button {
+  background: var(--primary);
+  color: #ffffff;
 }
 
 .pdf-upload-circle-gdoc-hint {
   margin: 8px 0 0;
-  font-size: 11px;
+  font-size: 11.5px;
   line-height: 1.35;
   color: var(--mute);
+}
+
+.hero-band .pdf-upload-circle-gdoc-hint {
+  color: rgba(255, 255, 255, 0.55);
 }
 
 .pdf-upload-circle-caption {
   position: relative;
   z-index: 1;
-  margin: 14px 0 0;
+  margin: 16px 0 0;
   font-size: 12.5px;
   color: var(--mute);
-  max-width: 280px;
-  margin-left: auto;
-  margin-right: auto;
+  max-width: 320px;
 }
 
 .pdf-upload-circle-hero .pdf-upload-circle-caption {
-  color: var(--hero-body);
+  color: rgba(255, 255, 255, 0.55);
 }
 
 .pdf-upload-circle-error {
@@ -2504,36 +2513,30 @@ select {
 
 @media (max-width: 760px) {
   .pdf-upload-circle {
-    width: min(270px, 88vw);
-    height: min(270px, 88vw);
-    padding: 22px 18px;
+    width: 210px;
+    height: 210px;
   }
 
-  .pdf-upload-circle-with-gdoc .pdf-upload-circle {
-    width: min(320px, 92vw);
-    height: auto;
-    min-height: 380px;
-    padding: 32px 26px 26px;
-  }
-
-  .pdf-upload-circle-hero.pdf-upload-circle-with-gdoc .pdf-upload-circle {
-    width: min(340px, 94vw);
-    min-height: 400px;
-    padding: 36px 28px 28px;
+  .pdf-upload-circle-hero .pdf-upload-circle {
+    width: 230px;
+    height: 230px;
   }
 
   .pdf-upload-circle-title {
-    font-size: 17px;
-  }
-
-  .pdf-upload-circle-hero .pdf-upload-circle-title {
-    font-size: 18px;
+    font-size: 16px;
   }
 
   .pdf-upload-circle-gdoc {
-    max-width: 220px;
+    max-width: min(360px, 92vw);
+  }
+
+  .pdf-upload-circle-wrap::before,
+  .pdf-upload-circle-hero.pdf-upload-circle-wrap::before {
+    width: 280px;
+    height: 280px;
   }
 }
+
 
 /* Animated hero product demo — cycles upload → fields → send → signed. */
 .product-flow-demo {

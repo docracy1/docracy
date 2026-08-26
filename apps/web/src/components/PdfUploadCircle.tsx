@@ -13,9 +13,9 @@ function isPdf(file: File) {
 }
 
 /**
- * Shared glowing PDF upload drop-zone (Landing hero, Prepare, FirstDocumentPrompt).
- * PDF drop is the primary, readable CTA. Google Docs sits in a compact secondary strip
- * inside the same orb — never a full-width bar under the page.
+ * Shared glowing PDF upload circle (Landing / Prepare / FirstDocumentPrompt).
+ * Match /verify: a true round circle with only the PDF CTA inside so every word stays readable.
+ * Google Docs is a compact secondary strip *under* the circle — never crammed inside.
  */
 export default function PdfUploadCircle({
   variant = "light",
@@ -31,7 +31,7 @@ export default function PdfUploadCircle({
   size?: Size;
   onFile: (file: File) => void | Promise<void>;
   showGoogleDocs?: boolean;
-  /** Optional text under the orb (outside). */
+  /** Optional text under the circle (outside). */
   caption?: string;
   title?: string;
   subtitle?: string;
@@ -99,7 +99,8 @@ export default function PdfUploadCircle({
           e.target.value = "";
         }}
       />
-      <div
+      <label
+        htmlFor={fileInputId}
         className={`pdf-upload-circle${dragging ? " is-dragging" : ""}`}
         onDragOver={(e) => {
           e.preventDefault();
@@ -112,36 +113,35 @@ export default function PdfUploadCircle({
           void handFile(e.dataTransfer.files?.[0]);
         }}
       >
-        <label htmlFor={fileInputId} className="pdf-upload-circle-main">
-          <span className="pdf-upload-circle-icon" aria-hidden="true">
-            <NavIcon name="uploadArrow" />
-          </span>
-          <span className="pdf-upload-circle-title">{title ?? t("hero.uploadCircleTitle")}</span>
-          <span className="pdf-upload-circle-sub">{subtitle ?? t("hero.uploadCircleSub")}</span>
-        </label>
-
-        {showGoogleDocs && (
-          <div className="pdf-upload-circle-gdoc" onClick={(e) => e.stopPropagation()}>
-            <p className="pdf-upload-circle-or">{t("uploadCircle.orGoogle")}</p>
-            <form className="pdf-upload-circle-gdoc-form" onSubmit={onGoogleDocImport}>
-              <input
-                type="url"
-                value={googleDocUrl}
-                onChange={(e) => setGoogleDocUrl(e.target.value)}
-                placeholder={t("prepare.googleDocPlaceholder")}
-                disabled={importing}
-                aria-label={t("prepare.googleDocPlaceholder")}
-              />
-              <button type="submit" className="btn-secondary" disabled={importing || !googleDocUrl.trim()}>
-                {importing ? t("prepare.googleDocImporting") : t("prepare.googleDocImportBtn")}
-              </button>
-            </form>
-            <p className="pdf-upload-circle-gdoc-hint">{t("uploadCircle.googleHint")}</p>
-          </div>
-        )}
-      </div>
+        <span className="pdf-upload-circle-icon" aria-hidden="true">
+          <NavIcon name="uploadArrow" />
+        </span>
+        <span className="pdf-upload-circle-title">{title ?? t("hero.uploadCircleTitle")}</span>
+        <span className="pdf-upload-circle-sub">{subtitle ?? t("hero.uploadCircleSub")}</span>
+      </label>
 
       {caption && <p className="pdf-upload-circle-caption">{caption}</p>}
+
+      {showGoogleDocs && (
+        <div className="pdf-upload-circle-gdoc">
+          <p className="pdf-upload-circle-or">{t("uploadCircle.orGoogle")}</p>
+          <form className="pdf-upload-circle-gdoc-form" onSubmit={onGoogleDocImport}>
+            <input
+              type="url"
+              value={googleDocUrl}
+              onChange={(e) => setGoogleDocUrl(e.target.value)}
+              placeholder={t("prepare.googleDocPlaceholder")}
+              disabled={importing}
+              aria-label={t("prepare.googleDocPlaceholder")}
+            />
+            <button type="submit" disabled={importing || !googleDocUrl.trim()}>
+              {importing ? t("prepare.googleDocImporting") : t("prepare.googleDocImportBtn")}
+            </button>
+          </form>
+          <p className="pdf-upload-circle-gdoc-hint">{t("uploadCircle.googleHint")}</p>
+        </div>
+      )}
+
       {error && (
         <p className="pdf-upload-circle-error" role="alert">
           {error}
