@@ -491,15 +491,71 @@ export default function Landing() {
         <HeroDecorPhoto className="hero-decor-card-3" rotate={7} src="/decor/legal-for-the-people.png" alt="" crop />
         <HeroDecorCard className="hero-decor-card-4" rotate={-9} />
         <div className="hero-inner hero-stack">
-          <h1>{t("hero.title")}</h1>
+          <h1 className="hero-title">
+            {t("hero.title")
+              .split("\n")
+              .map((line, i, lines) => (
+                <span
+                  key={i}
+                  className={
+                    i === lines.length - 1 && lines.length > 1
+                      ? "hero-title-line hero-title-line-rest"
+                      : "hero-title-line"
+                  }
+                >
+                  {line}
+                </span>
+              ))}
+          </h1>
           <p className="hero-sub">{t("hero.sub")}</p>
 
-          <PdfUploadCircle
-            variant="hero"
-            inputId="hero-file-input"
-            onFile={onHeroFile}
-            caption={t("hero.uploadCircleCaption")}
-          />
+          {/* Trusted-by logos live in the Google Doc band (under the circle, above the email
+              form) so they read immediately mid-hero — not a separate strip below the fold. */}
+          <div className="hero-upload-trust-zone">
+            <PdfUploadCircle
+              variant="hero"
+              inputId="hero-file-input"
+              onFile={onHeroFile}
+              caption={t("hero.uploadCircleCaption")}
+              trustSlot={
+                <div className="trust-logos-band hero-trusted-by hero-trusted-by-gdoc-band">
+                  <p className="trust-logos-label">{t("landing.trustedBy")}</p>
+                  <div className="trust-logos-viewport">
+                    <div className="trust-logos-track">
+                      {/* 10 copies, not 2 — on wide/ultrawide screens 2x isn't enough track width to fill the
+                          viewport during the loop, which left a visible gap of blank navy on the right. */}
+                      {Array.from({ length: 10 }, () => TRUST_LOGOS)
+                        .flat()
+                        .map((item, i) => (
+                          <a
+                            key={`${item.name}-${i}`}
+                            href={item.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={item.logo ? "trust-logo-link" : "trust-logo-link trust-logo-link-text"}
+                            aria-label={item.name}
+                            tabIndex={i < TRUST_LOGOS.length ? 0 : -1}
+                            aria-hidden={i < TRUST_LOGOS.length ? undefined : true}
+                          >
+                            {item.logo ? (
+                              <img
+                                src={item.logo}
+                                alt={item.name}
+                                className="trust-logo-img"
+                                width={item.w}
+                                height={item.h}
+                              />
+                            ) : (
+                              item.name
+                            )}
+                          </a>
+                        ))}
+                    </div>
+                  </div>
+                </div>
+              }
+            />
+          </div>
 
           {heroSent ? (
             <div className="hero-signup-sent" role="status">
@@ -583,43 +639,6 @@ export default function Landing() {
             >
               {t("hero.orTemplates")}
             </Link>
-          </div>
-        </div>
-
-        {/* LimeWire-style closing strip on the first viewport — real customer logos only. */}
-        <div className="trust-logos-band hero-trusted-by">
-          <p className="trust-logos-label">{t("landing.trustedBy")}</p>
-          <div className="trust-logos-viewport">
-            <div className="trust-logos-track">
-              {/* 10 copies, not 2 — on wide/ultrawide screens 2x isn't enough track width to fill the
-                  viewport during the loop, which left a visible gap of blank navy on the right. */}
-              {Array.from({ length: 10 }, () => TRUST_LOGOS)
-                .flat()
-                .map((item, i) => (
-                <a
-                  key={`${item.name}-${i}`}
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={item.logo ? "trust-logo-link" : "trust-logo-link trust-logo-link-text"}
-                  aria-label={item.name}
-                  tabIndex={i < TRUST_LOGOS.length ? 0 : -1}
-                  aria-hidden={i < TRUST_LOGOS.length ? undefined : true}
-                >
-                  {item.logo ? (
-                    <img
-                      src={item.logo}
-                      alt={item.name}
-                      className="trust-logo-img"
-                      width={item.w}
-                      height={item.h}
-                    />
-                  ) : (
-                    item.name
-                  )}
-                </a>
-              ))}
-            </div>
           </div>
         </div>
       </div>
