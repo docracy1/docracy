@@ -1173,6 +1173,10 @@ export function getFeaturePageContent(slug: string, locale: "en" | "es"): Featur
 
 export interface AlternativePageContent {
   slug: string;
+  /** Short product name for Compare nav ("DocuSign", "OnlineSignature.com"). */
+  competitorName: string;
+  /** One-line mega-menu blurb. */
+  navDesc: string;
   seoTitle: string;
   seoDescription: string;
   heroHeadline: string;
@@ -1189,6 +1193,8 @@ export interface AlternativePageContent {
 export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
   {
     slug: "eversign-alternative",
+    competitorName: "eversign",
+    navDesc: "Faster, simpler signing flow.",
     seoTitle: "Eversign Alternative — Simple & Fast | Docracy",
     seoDescription: "A lightweight alternative to Eversign for quick agreements. No subscriptions, no complexity.",
     heroHeadline: "A lightweight alternative to Eversign.",
@@ -1216,6 +1222,8 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
   },
   {
     slug: "onlinesignature-alternative",
+    competitorName: "OnlineSignature",
+    navDesc: "No account funnel into Xodo Sign.",
     seoTitle: "OnlineSignature.com Alternative — Free, No Account | Docracy",
     seoDescription:
       "OnlineSignature.com still routes you into a Xodo Sign / Eversign account to actually send or track a document. Docracy is free for up to 2 signers, no account, ever.",
@@ -1247,6 +1255,8 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
   },
   {
     slug: "docusign-alternative",
+    competitorName: "DocuSign",
+    navDesc: "Lighter, no per-seat pricing.",
     seoTitle: "DocuSign Alternative — Simple Signing | Docracy",
     seoDescription: "A simple alternative to DocuSign for quick agreements. Fast, clean, no account required.",
     heroHeadline: "DocuSign is too heavy for simple agreements.",
@@ -1274,6 +1284,8 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
   },
   {
     slug: "hellosign-alternative",
+    competitorName: "HelloSign / Dropbox Sign",
+    navDesc: "Free for light NDA volume.",
     seoTitle: "HelloSign / Dropbox Sign Alternative | Docracy",
     seoDescription:
       "Looking for a HelloSign or Dropbox Sign alternative for NDAs and client contracts? Free for up to 2 signers, no account required. Paid $10/mo flat.",
@@ -1298,6 +1310,8 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
   },
   {
     slug: "pandadoc-alternative",
+    competitorName: "PandaDoc",
+    navDesc: "No proposal suite you don't need.",
     seoTitle: "PandaDoc Alternative for Simple Agreements | Docracy",
     seoDescription:
       "Need signatures without PandaDoc’s proposal suite? Docracy is free for up to 2 signers — built for NDAs and client contracts, not sales proposals.",
@@ -1327,6 +1341,8 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
   },
   {
     slug: "adobe-sign-alternative",
+    competitorName: "Adobe Acrobat Sign",
+    navDesc: "Sign without an Adobe seat.",
     seoTitle: "Adobe Sign Alternative — Lightweight E-Sign | Docracy",
     seoDescription:
       "Adobe Acrobat Sign alternative for freelancers and small teams. Free for up to 2 signers, no account required. Paid $10/mo flat.",
@@ -1355,6 +1371,8 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
   },
   {
     slug: "contractbook-alternative",
+    competitorName: "Contractbook",
+    navDesc: "Signature without full CLM.",
     seoTitle: "Contractbook Alternative — Sign Without the Full CLM | Docracy",
     seoDescription:
       "Need a document signed, not a full contract lifecycle platform? Docracy is a focused, WhatsApp-native signing tool with reusable templates and a full audit trail.",
@@ -1382,6 +1400,334 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
     compareBlogSlug: "docracy-vs-pandadoc",
     compareLabel: "See how Docracy compares to full-featured contract platforms",
   },
+  {
+    slug: "signnow-alternative",
+    competitorName: "SignNow",
+    navDesc: "Skip airSlate seat tiers for simple docs.",
+    seoTitle: "SignNow Alternative — Free Lightweight E-Sign | Docracy",
+    seoDescription: "Looking for a SignNow alternative without airSlate plan complexity? Docracy is free for up to 2 signers, no account required.",
+    heroHeadline: "SignNow is solid. It still wants an account and a plan.",
+    heroSubheadline: "Docracy is built for quick agreements — free for two signers, no signup required.",
+    problem:
+      "SignNow (airSlate) is a capable e-sign product, but free and entry plans still push accounts, feature gates, and upgrade paths that feel heavy when the job is an NDA or a client contract.",
+    solution:
+      "Docracy keeps the path short: upload or start from a free template, place fields, send. Up to 2 signers are free forever with no account for anyone; paid is a flat $10/mo workspace when you need more.",
+    comparison: [
+            "Free for up to 2 signers — no account for sender or signer",
+            "Flat $10/month paid plan — not per seat",
+            "WhatsApp signing links — SignNow doesn't offer this; Docracy includes 1 free/month",
+            "AI-assisted field placement on paid accounts",
+            "Sequential or parallel signing built in",
+            "Honest limit: not for ID-verified enterprise / QES workflows"
+    ],
+    ctaLabel: "Try free — send a sample NDA",
+    ctaTo: "/prepare?freeTemplate=mutual-nda&ref=seo-signnow-alternative",
+    compareBlogSlug: "docracy-vs-docusign",
+    compareLabel: "See how Docracy prices vs seat-based e-sign tools",
+  },
+  {
+    slug: "zoho-sign-alternative",
+    competitorName: "Zoho Sign",
+    navDesc: "Sign without living in Zoho CRM.",
+    seoTitle: "Zoho Sign Alternative — Simple Signing Outside Zoho | Docracy",
+    seoDescription: "Need signatures without the Zoho suite? Docracy is free for up to 2 signers with no account required — flat $10/mo when you grow.",
+    heroHeadline: "Zoho Sign makes sense inside Zoho. Outside it, maybe not.",
+    heroSubheadline: "Docracy is a focused signing tool — not another Zoho app to adopt.",
+    problem:
+      "Zoho Sign is strongest when you already live in Zoho CRM/Books. For freelancers and small teams who only need a PDF signed, the Zoho account model and suite pricing are extra surface area.",
+    solution:
+      "Docracy is signing-only: free ≤2 signers, no accounts, WhatsApp delivery, flat $10/mo paid — without requiring a Zoho org.",
+    comparison: [
+            "Free for up to 2 signers — no account for sender or signer",
+            "Flat $10/month paid plan — not per seat",
+            "WhatsApp signing links — Zoho Sign doesn't offer this; Docracy includes 1 free/month",
+            "AI-assisted field placement on paid accounts",
+            "Sequential or parallel signing built in",
+            "Honest limit: not for ID-verified enterprise / QES workflows",
+            "No Zoho org required for senders or signers"
+    ],
+    ctaLabel: "Try free — send a sample NDA",
+    ctaTo: "/prepare?freeTemplate=mutual-nda&ref=seo-zoho-sign-alternative",
+    compareBlogSlug: "docracy-vs-docusign",
+    compareLabel: "See how Docracy prices vs suite-tied e-sign tools",
+  },
+  {
+    slug: "onespan-alternative",
+    competitorName: "OneSpan Sign",
+    navDesc: "Lightweight path vs enterprise OneSpan.",
+    seoTitle: "OneSpan Sign Alternative — Lightweight E-Sign | Docracy",
+    seoDescription: "OneSpan Sign is built for regulated enterprise workflows. Docracy is the free, no-account path for everyday NDAs and client agreements.",
+    heroHeadline: "OneSpan Sign is enterprise-grade. Most NDAs are not.",
+    heroSubheadline: "Docracy is for the everyday agreement — not a digital banking compliance stack.",
+    problem:
+      "OneSpan Sign targets highly regulated industries with identity, compliance, and enterprise procurement. That depth is expensive and heavy for freelancers and small teams sending simple contracts.",
+    solution:
+      "Docracy stays SES-honest and fast: free for two-party docs, no account required, flat paid workspace pricing when you outgrow free.",
+    comparison: [
+            "Free for up to 2 signers — no account for sender or signer",
+            "Flat $10/month paid plan — not per seat",
+            "WhatsApp signing links — OneSpan Sign doesn't offer this; Docracy includes 1 free/month",
+            "AI-assisted field placement on paid accounts",
+            "Sequential or parallel signing built in",
+            "Honest limit: not for ID-verified enterprise / QES workflows"
+    ],
+    ctaLabel: "Try free — send a sample NDA",
+    ctaTo: "/prepare?freeTemplate=mutual-nda&ref=seo-onespan-alternative",
+    compareBlogSlug: "docracy-vs-docusign",
+    compareLabel: "See how Docracy compares to enterprise e-sign pricing",
+  },
+  {
+    slug: "docuseal-alternative",
+    competitorName: "DocuSeal",
+    navDesc: "Hosted simplicity vs self-host setup.",
+    seoTitle: "DocuSeal Alternative — Hosted E-Sign Without Self-Hosting | Docracy",
+    seoDescription: "Like DocuSeal’s openness but don’t want to self-host? Docracy is a free hosted path for up to 2 signers — no account, no server to run.",
+    heroHeadline: "DocuSeal is open-source. Docracy is zero-ops.",
+    heroSubheadline: "Get documents signed without standing up infrastructure.",
+    problem:
+      "DocuSeal is excellent if you want to self-host an open-source signing stack. If you just need a signature this afternoon, deploying and maintaining DocuSeal is the wrong kind of work.",
+    solution:
+      "Docracy is hosted and immediate: upload, send, done — free for ≤2 signers, no account, with WhatsApp delivery and a short retention window by design.",
+    comparison: [
+            "No server, Docker, or admin console to run",
+            "Free for up to 2 signers with no account",
+            "WhatsApp signing links — 1 free/month on Docracy",
+            "Flat $10/mo when you need templates / more signers / team",
+            "Honest limit: not a self-hosted / open-source product — DocuSeal wins if you need that"
+    ],
+    ctaLabel: "Try free — send a sample NDA",
+    ctaTo: "/prepare?freeTemplate=mutual-nda&ref=seo-docuseal-alternative",
+    compareBlogSlug: "docracy-vs-eversign",
+    compareLabel: "See how Docracy compares to other lightweight e-sign tools",
+  },
+  {
+    slug: "boldsign-alternative",
+    competitorName: "BoldSign",
+    navDesc: "Simpler path than Syncfusion BoldSign.",
+    seoTitle: "BoldSign Alternative — Free Simple E-Sign | Docracy",
+    seoDescription: "BoldSign alternative for freelancers and small teams. Free for up to 2 signers, no account required. Paid $10/mo flat.",
+    heroHeadline: "A lighter alternative to BoldSign.",
+    heroSubheadline: "Built for quick agreements — not developer-centric plan shopping.",
+    problem:
+      "BoldSign (Syncfusion) is a capable cloud e-sign product, but plan limits and account requirements still get in the way when you only need a short signing chain.",
+    solution:
+      "Docracy removes the account step for everyday docs: free ≤2 signers, flat $10/mo paid, WhatsApp delivery included.",
+    comparison: [
+            "Free for up to 2 signers — no account for sender or signer",
+            "Flat $10/month paid plan — not per seat",
+            "WhatsApp signing links — BoldSign doesn't offer this; Docracy includes 1 free/month",
+            "AI-assisted field placement on paid accounts",
+            "Sequential or parallel signing built in",
+            "Honest limit: not for ID-verified enterprise / QES workflows"
+    ],
+    ctaLabel: "Try free — send a sample NDA",
+    ctaTo: "/prepare?freeTemplate=mutual-nda&ref=seo-boldsign-alternative",
+    compareBlogSlug: "docracy-vs-eversign",
+    compareLabel: "See how Docracy compares to other cloud e-sign tools",
+  },
+  {
+    slug: "signrequest-alternative",
+    competitorName: "SignRequest",
+    navDesc: "Free two-signer path vs SignRequest plans.",
+    seoTitle: "SignRequest Alternative — Free No-Account E-Sign | Docracy",
+    seoDescription: "SignRequest alternative with a permanently free two-signer tier and no account required. Flat $10/mo when you need more.",
+    heroHeadline: "SignRequest is friendly. Docracy is freer for short chains.",
+    heroSubheadline: "No account for sender or signer on documents with up to two people.",
+    problem:
+      "SignRequest is approachable, but free/light plans still center on accounts and upgrade prompts once you leave the smallest volume.",
+    solution:
+      "Docracy keeps ≤2 signers free forever with no accounts, then a single flat paid workspace price.",
+    comparison: [
+            "Free for up to 2 signers — no account for sender or signer",
+            "Flat $10/month paid plan — not per seat",
+            "WhatsApp signing links — SignRequest doesn't offer this; Docracy includes 1 free/month",
+            "AI-assisted field placement on paid accounts",
+            "Sequential or parallel signing built in",
+            "Honest limit: not for ID-verified enterprise / QES workflows"
+    ],
+    ctaLabel: "Try free — send a sample NDA",
+    ctaTo: "/prepare?freeTemplate=mutual-nda&ref=seo-signrequest-alternative",
+    compareBlogSlug: "docracy-vs-eversign",
+    compareLabel: "See how Docracy prices vs SignRequest-style tools",
+  },
+  {
+    slug: "yousign-alternative",
+    competitorName: "Yousign",
+    navDesc: "Simple SES path vs EU Yousign tiers.",
+    seoTitle: "Yousign Alternative — Simple E-Sign | Docracy",
+    seoDescription: "Looking past Yousign for everyday agreements? Docracy is free for up to 2 signers, no account required — honest SES, not QES theater.",
+    heroHeadline: "Yousign is strong in Europe. Docracy stays simple.",
+    heroSubheadline: "When you need a signature — not a full EU e-sign product ladder.",
+    problem:
+      "Yousign offers polished EU e-sign tiers (including higher assurance options). For many freelancer and SMB NDAs, that ladder is more product than the job requires.",
+    solution:
+      "Docracy is deliberately SES-focused and fast: free two-party docs, no accounts, WhatsApp delivery, flat $10/mo paid.",
+    comparison: [
+            "Free for up to 2 signers — no account for sender or signer",
+            "Flat $10/month paid plan — not per seat",
+            "WhatsApp signing links — Yousign doesn't offer this; Docracy includes 1 free/month",
+            "AI-assisted field placement on paid accounts",
+            "Sequential or parallel signing built in",
+            "Honest limit: not for ID-verified enterprise / QES workflows",
+            "Honest SES positioning — we do not pretend to be QES"
+    ],
+    ctaLabel: "Try free — send a sample NDA",
+    ctaTo: "/prepare?freeTemplate=mutual-nda&ref=seo-yousign-alternative",
+    compareBlogSlug: "docracy-vs-docusign",
+    compareLabel: "See how Docracy compares to European e-sign tools",
+  },
+  {
+    slug: "nitro-sign-alternative",
+    competitorName: "Nitro Sign",
+    navDesc: "Sign without a Nitro PDF suite seat.",
+    seoTitle: "Nitro Sign Alternative — Lightweight E-Sign | Docracy",
+    seoDescription: "Nitro Sign alternative without buying into the Nitro PDF suite. Free for up to 2 signers, no account required.",
+    heroHeadline: "Nitro Sign sits inside a PDF suite. Docracy is signing-only.",
+    heroSubheadline: "Get the agreement signed without another productivity suite seat.",
+    problem:
+      "Nitro Sign is tied to Nitro’s broader PDF productivity story. If you only need signatures, suite packaging and seat pricing are noise.",
+    solution:
+      "Docracy is a focused signing product: free ≤2 signers, no accounts, flat paid workspace pricing.",
+    comparison: [
+            "Free for up to 2 signers — no account for sender or signer",
+            "Flat $10/month paid plan — not per seat",
+            "WhatsApp signing links — Nitro Sign doesn't offer this; Docracy includes 1 free/month",
+            "AI-assisted field placement on paid accounts",
+            "Sequential or parallel signing built in",
+            "Honest limit: not for ID-verified enterprise / QES workflows"
+    ],
+    ctaLabel: "Try free — send a sample NDA",
+    ctaTo: "/prepare?freeTemplate=mutual-nda&ref=seo-nitro-sign-alternative",
+    compareBlogSlug: "docracy-vs-adobe-acrobat-sign",
+    compareLabel: "See how Docracy compares to PDF-suite e-sign add-ons",
+  },
+  {
+    slug: "dochub-alternative",
+    competitorName: "DocHub",
+    navDesc: "No Google-account friction for signers.",
+    seoTitle: "DocHub Alternative — Sign Without Google Lock-In | Docracy",
+    seoDescription: "DocHub alternative for simple agreements. Free for up to 2 signers, no account required for senders or signers.",
+    heroHeadline: "DocHub is convenient in Google. Signers still feel the account gravity.",
+    heroSubheadline: "Docracy keeps recipients account-free for short signing chains.",
+    problem:
+      "DocHub works well for Google-centric editing and signing, but account and plan limits show up quickly for recurring client contracts outside that bubble.",
+    solution:
+      "Docracy skips Google-account assumptions: email/SMS/WhatsApp delivery, no account for ≤2-signer docs, flat $10/mo paid.",
+    comparison: [
+            "Free for up to 2 signers — no account for sender or signer",
+            "Flat $10/month paid plan — not per seat",
+            "WhatsApp signing links — DocHub doesn't offer this; Docracy includes 1 free/month",
+            "AI-assisted field placement on paid accounts",
+            "Sequential or parallel signing built in",
+            "Honest limit: not for ID-verified enterprise / QES workflows"
+    ],
+    ctaLabel: "Try free — send a sample NDA",
+    ctaTo: "/prepare?freeTemplate=mutual-nda&ref=seo-dochub-alternative",
+    compareBlogSlug: "docracy-vs-eversign",
+    compareLabel: "See how Docracy compares to DocHub-style tools",
+  },
+  {
+    slug: "signeasy-alternative",
+    competitorName: "SignEasy",
+    navDesc: "Mobile-friendly without SignEasy plans.",
+    seoTitle: "SignEasy Alternative — Free Mobile-Friendly E-Sign | Docracy",
+    seoDescription: "SignEasy alternative that works on phone browsers without pushing another subscription. Free for up to 2 signers.",
+    heroHeadline: "SignEasy is mobile-first. Docracy is account-light.",
+    heroSubheadline: "Sign from any phone browser — no app store trip required for recipients.",
+    problem:
+      "SignEasy markets mobile convenience, but plans and accounts still gate everyday freelancer volume.",
+    solution:
+      "Docracy is browser-native for senders and signers: free ≤2 signers, WhatsApp links, flat paid pricing.",
+    comparison: [
+            "Free for up to 2 signers — no account for sender or signer",
+            "Flat $10/month paid plan — not per seat",
+            "WhatsApp signing links — SignEasy doesn't offer this; Docracy includes 1 free/month",
+            "AI-assisted field placement on paid accounts",
+            "Sequential or parallel signing built in",
+            "Honest limit: not for ID-verified enterprise / QES workflows"
+    ],
+    ctaLabel: "Try free — send a sample NDA",
+    ctaTo: "/prepare?freeTemplate=mutual-nda&ref=seo-signeasy-alternative",
+    compareBlogSlug: "docracy-vs-eversign",
+    compareLabel: "See how Docracy compares to mobile e-sign apps",
+  },
+  {
+    slug: "blueink-alternative",
+    competitorName: "Blueink",
+    navDesc: "Simpler than Blueink for light volume.",
+    seoTitle: "Blueink Alternative — Free Simple E-Sign | Docracy",
+    seoDescription: "Blueink alternative for NDAs and client contracts. Free for up to 2 signers, no account required. Paid $10/mo flat.",
+    heroHeadline: "A simpler alternative to Blueink.",
+    heroSubheadline: "For teams who need signatures collected — not another mid-market e-sign stack.",
+    problem:
+      "Blueink targets growing teams with feature-rich e-sign. For light NDA and contractor volume, that mid-market packaging is more than you need.",
+    solution:
+      "Docracy covers the light path: free two-party docs, no accounts, WhatsApp delivery, flat $10/mo paid.",
+    comparison: [
+            "Free for up to 2 signers — no account for sender or signer",
+            "Flat $10/month paid plan — not per seat",
+            "WhatsApp signing links — Blueink doesn't offer this; Docracy includes 1 free/month",
+            "AI-assisted field placement on paid accounts",
+            "Sequential or parallel signing built in",
+            "Honest limit: not for ID-verified enterprise / QES workflows"
+    ],
+    ctaLabel: "Try free — send a sample NDA",
+    ctaTo: "/prepare?freeTemplate=mutual-nda&ref=seo-blueink-alternative",
+    compareBlogSlug: "docracy-vs-docusign",
+    compareLabel: "See how Docracy prices vs mid-market e-sign tools",
+  },
+  {
+    slug: "box-sign-alternative",
+    competitorName: "Box Sign",
+    navDesc: "Sign without living in Box storage.",
+    seoTitle: "Box Sign Alternative — E-Sign Outside Box | Docracy",
+    seoDescription: "Need signatures without a Box enterprise content cloud? Docracy is free for up to 2 signers with no account required.",
+    heroHeadline: "Box Sign assumes you live in Box. Many agreements don’t.",
+    heroSubheadline: "Docracy is signing without adopting an enterprise content platform.",
+    problem:
+      "Box Sign is natural if your files already live in Box. If they don’t, buying into Box for e-sign alone is a heavy detour.",
+    solution:
+      "Upload a PDF to Docracy and send — free ≤2 signers, no Box seats, WhatsApp optional delivery.",
+    comparison: [
+            "Free for up to 2 signers — no account for sender or signer",
+            "Flat $10/month paid plan — not per seat",
+            "WhatsApp signing links — Box Sign doesn't offer this; Docracy includes 1 free/month",
+            "AI-assisted field placement on paid accounts",
+            "Sequential or parallel signing built in",
+            "Honest limit: not for ID-verified enterprise / QES workflows",
+            "No Box storage plan required"
+    ],
+    ctaLabel: "Try free — send a sample NDA",
+    ctaTo: "/prepare?freeTemplate=mutual-nda&ref=seo-box-sign-alternative",
+    compareBlogSlug: "docracy-vs-docusign",
+    compareLabel: "See how Docracy compares to content-cloud e-sign add-ons",
+  },
+  {
+    slug: "getaccept-alternative",
+    competitorName: "GetAccept",
+    navDesc: "Signatures without sales-room theater.",
+    seoTitle: "GetAccept Alternative — Sign Without the Sales Room | Docracy",
+    seoDescription: "GetAccept alternative when you need a signature, not a digital sales room. Free for up to 2 signers, no account required.",
+    heroHeadline: "GetAccept is a sales platform. Sometimes you just need a signature.",
+    heroSubheadline: "Docracy skips the digital sales room — upload, send, done.",
+    problem:
+      "GetAccept bundles e-sign into buyer engagement / sales-room workflows. Useful for complex deals; overkill for an NDA or contractor agreement.",
+    solution:
+      "Docracy is the signing step only: free ≤2 signers, no accounts, flat $10/mo paid, WhatsApp delivery.",
+    comparison: [
+            "Free for up to 2 signers — no account for sender or signer",
+            "Flat $10/month paid plan — not per seat",
+            "WhatsApp signing links — GetAccept doesn't offer this; Docracy includes 1 free/month",
+            "AI-assisted field placement on paid accounts",
+            "Sequential or parallel signing built in",
+            "Honest limit: not for ID-verified enterprise / QES workflows",
+            "No sales-room or content engagement suite required"
+    ],
+    ctaLabel: "Try free — send a sample NDA",
+    ctaTo: "/prepare?freeTemplate=mutual-nda&ref=seo-getaccept-alternative",
+    compareBlogSlug: "docracy-vs-pandadoc",
+    compareLabel: "See how Docracy compares to sales-room e-sign tools",
+  }
 ];
 
 /** One page per competitor: no "connect your account" button anywhere — confirmed via direct
@@ -1644,7 +1990,478 @@ export const IMPORT_GUIDE_PAGES: ImportGuideContent[] = [
     ],
     alternativeSlug: "onlinesignature-alternative",
   },
+  {
+    slug: "signnow",
+    competitorName: "SignNow",
+    seoTitle: "Import SignNow Documents to Docracy — Free Export Guide",
+    seoDescription: "Step-by-step guide to export SignNow documents as PDFs and upload them to Docracy. No account linking — AI field detection places signatures for you.",
+    heroHeadline: "Bring your SignNow documents to Docracy",
+    heroSubheadline: "No account-linking, no handing over your SignNow password. Export the PDFs you already have, then re-send or turn them into Docracy templates.",
+    intro:
+      "Most people leaving SignNow do not need an enterprise migration project — they need the NDAs, offer letters, and client agreements they already use available in a lighter tool. This guide covers the free, built-in download path, what actually transfers, and how Docracy picks up once you have the PDF.",
+    whyNoConnect:
+      "SignNow does not offer a free, self-serve, general-purpose bulk-export API that a typical individual account can use to one-click migrate into another e-sign tool. We also will not ask for your SignNow password to “connect your account.” Use the product’s normal per-document PDF download, then upload to Docracy.",
+    exportSteps: [
+            "Sign in to SignNow and open Documents (or Manage / Agreements — wording varies).",
+            "Open the completed document or the template source you want to keep.",
+            "Choose Download / Download PDF (or Export).",
+            "Save the PDF locally or to Drive/Dropbox.",
+            "Repeat for each document — most individual plans do not offer a free bulk “download everything” button."
+    ],
+    templateNote:
+      "SignNow templates (when they exist) usually export the underlying PDF, not a portable field/routing package. Re-place fields in Docracy — AI Auto-Detect typically gets most of the way.",
+    whatTransfers: [
+            "Signed PDFs you download (signatures flattened into the file).",
+            "Source/draft PDFs when the product lets you download them.",
+            "Does not transfer: proprietary field layers, recipient routing automation, or in-app audit metadata as a live Docracy trail."
+    ],
+    tips: [
+            "Start with templates you reuse monthly — one upload + AI field detection turns them into a Docracy template on paid.",
+            "Keep important SignNow audit PDFs in your own Drive if the product offers them; Docracy’s retention window is short by design.",
+            "After upload, run AI Auto-Detect once, then tweak any missed fields before sending."
+    ],
+    alternativeSlug: "signnow-alternative",
+  },
+  {
+    slug: "zoho-sign",
+    competitorName: "Zoho Sign",
+    seoTitle: "Import Zoho Sign Documents to Docracy — Free Export Guide",
+    seoDescription: "Step-by-step guide to export Zoho Sign documents as PDFs and upload them to Docracy. No account linking — AI field detection places signatures for you.",
+    heroHeadline: "Bring your Zoho Sign documents to Docracy",
+    heroSubheadline: "No account-linking, no handing over your Zoho Sign password. Export the PDFs you already have, then re-send or turn them into Docracy templates.",
+    intro:
+      "Most people leaving Zoho Sign do not need an enterprise migration project — they need the NDAs, offer letters, and client agreements they already use available in a lighter tool. This guide covers the free, built-in download path, what actually transfers, and how Docracy picks up once you have the PDF.",
+    whyNoConnect:
+      "Zoho Sign does not offer a free, self-serve, general-purpose bulk-export API that a typical individual account can use to one-click migrate into another e-sign tool. We also will not ask for your Zoho Sign password to “connect your account.” Use the product’s normal per-document PDF download, then upload to Docracy.",
+    exportSteps: [
+            "Sign in to Zoho Sign and open Documents (or Manage / Agreements — wording varies).",
+            "Open the completed document or the template source you want to keep.",
+            "Choose Download / Download PDF (or Export).",
+            "Save the PDF locally or to Drive/Dropbox.",
+            "Repeat for each document — most individual plans do not offer a free bulk “download everything” button."
+    ],
+    templateNote:
+      "Zoho Sign templates (when they exist) usually export the underlying PDF, not a portable field/routing package. Re-place fields in Docracy — AI Auto-Detect typically gets most of the way.",
+    whatTransfers: [
+            "Signed PDFs you download (signatures flattened into the file).",
+            "Source/draft PDFs when the product lets you download them.",
+            "Does not transfer: proprietary field layers, recipient routing automation, or in-app audit metadata as a live Docracy trail."
+    ],
+    tips: [
+            "Start with templates you reuse monthly — one upload + AI field detection turns them into a Docracy template on paid.",
+            "Keep important Zoho Sign audit PDFs in your own Drive if the product offers them; Docracy’s retention window is short by design.",
+            "After upload, run AI Auto-Detect once, then tweak any missed fields before sending."
+    ],
+    alternativeSlug: "zoho-sign-alternative",
+  },
+  {
+    slug: "onespan",
+    competitorName: "OneSpan Sign",
+    seoTitle: "Import OneSpan Sign Documents to Docracy — Free Export Guide",
+    seoDescription: "Step-by-step guide to export OneSpan Sign documents as PDFs and upload them to Docracy. No account linking — AI field detection places signatures for you.",
+    heroHeadline: "Bring your OneSpan Sign documents to Docracy",
+    heroSubheadline: "No account-linking, no handing over your OneSpan Sign password. Export the PDFs you already have, then re-send or turn them into Docracy templates.",
+    intro:
+      "Most people leaving OneSpan Sign do not need an enterprise migration project — they need the NDAs, offer letters, and client agreements they already use available in a lighter tool. This guide covers the free, built-in download path, what actually transfers, and how Docracy picks up once you have the PDF.",
+    whyNoConnect:
+      "OneSpan Sign does not offer a free, self-serve, general-purpose bulk-export API that a typical individual account can use to one-click migrate into another e-sign tool. We also will not ask for your OneSpan Sign password to “connect your account.” Use the product’s normal per-document PDF download, then upload to Docracy.",
+    exportSteps: [
+            "Sign in to OneSpan Sign and open Documents (or Manage / Agreements — wording varies).",
+            "Open the completed document or the template source you want to keep.",
+            "Choose Download / Download PDF (or Export).",
+            "Save the PDF locally or to Drive/Dropbox.",
+            "Repeat for each document — most individual plans do not offer a free bulk “download everything” button."
+    ],
+    templateNote:
+      "OneSpan Sign templates (when they exist) usually export the underlying PDF, not a portable field/routing package. Re-place fields in Docracy — AI Auto-Detect typically gets most of the way.",
+    whatTransfers: [
+            "Signed PDFs you download (signatures flattened into the file).",
+            "Source/draft PDFs when the product lets you download them.",
+            "Does not transfer: proprietary field layers, recipient routing automation, or in-app audit metadata as a live Docracy trail."
+    ],
+    tips: [
+            "Start with templates you reuse monthly — one upload + AI field detection turns them into a Docracy template on paid.",
+            "Keep important OneSpan Sign audit PDFs in your own Drive if the product offers them; Docracy’s retention window is short by design.",
+            "After upload, run AI Auto-Detect once, then tweak any missed fields before sending."
+    ],
+    alternativeSlug: "onespan-alternative",
+  },
+  {
+    slug: "docuseal",
+    competitorName: "DocuSeal",
+    seoTitle: "Import DocuSeal Documents to Docracy — Free Export Guide",
+    seoDescription: "Step-by-step guide to export DocuSeal documents as PDFs and upload them to Docracy. No account linking — AI field detection places signatures for you.",
+    heroHeadline: "Bring your DocuSeal documents to Docracy",
+    heroSubheadline: "No account-linking, no handing over your DocuSeal password. Export the PDFs you already have, then re-send or turn them into Docracy templates.",
+    intro:
+      "Most people leaving DocuSeal do not need an enterprise migration project — they need the NDAs, offer letters, and client agreements they already use available in a lighter tool. This guide covers the free, built-in download path, what actually transfers, and how Docracy picks up once you have the PDF.",
+    whyNoConnect:
+      "DocuSeal does not offer a free, self-serve, general-purpose bulk-export API that a typical individual account can use to one-click migrate into another e-sign tool. We also will not ask for your DocuSeal password to “connect your account.” Use the product’s normal per-document PDF download, then upload to Docracy.",
+    exportSteps: [
+            "Sign in to DocuSeal and open Documents (or Manage / Agreements — wording varies).",
+            "Open the completed document or the template source you want to keep.",
+            "Choose Download / Download PDF (or Export).",
+            "Save the PDF locally or to Drive/Dropbox.",
+            "Repeat for each document — most individual plans do not offer a free bulk “download everything” button."
+    ],
+    templateNote:
+      "DocuSeal templates (when they exist) usually export the underlying PDF, not a portable field/routing package. Re-place fields in Docracy — AI Auto-Detect typically gets most of the way.",
+    whatTransfers: [
+            "Signed PDFs you download (signatures flattened into the file).",
+            "Source/draft PDFs when the product lets you download them.",
+            "Does not transfer: proprietary field layers, recipient routing automation, or in-app audit metadata as a live Docracy trail."
+    ],
+    tips: [
+            "Start with templates you reuse monthly — one upload + AI field detection turns them into a Docracy template on paid.",
+            "Keep important DocuSeal audit PDFs in your own Drive if the product offers them; Docracy’s retention window is short by design.",
+            "After upload, run AI Auto-Detect once, then tweak any missed fields before sending."
+    ],
+    alternativeSlug: "docuseal-alternative",
+  },
+  {
+    slug: "boldsign",
+    competitorName: "BoldSign",
+    seoTitle: "Import BoldSign Documents to Docracy — Free Export Guide",
+    seoDescription: "Step-by-step guide to export BoldSign documents as PDFs and upload them to Docracy. No account linking — AI field detection places signatures for you.",
+    heroHeadline: "Bring your BoldSign documents to Docracy",
+    heroSubheadline: "No account-linking, no handing over your BoldSign password. Export the PDFs you already have, then re-send or turn them into Docracy templates.",
+    intro:
+      "Most people leaving BoldSign do not need an enterprise migration project — they need the NDAs, offer letters, and client agreements they already use available in a lighter tool. This guide covers the free, built-in download path, what actually transfers, and how Docracy picks up once you have the PDF.",
+    whyNoConnect:
+      "BoldSign does not offer a free, self-serve, general-purpose bulk-export API that a typical individual account can use to one-click migrate into another e-sign tool. We also will not ask for your BoldSign password to “connect your account.” Use the product’s normal per-document PDF download, then upload to Docracy.",
+    exportSteps: [
+            "Sign in to BoldSign and open Documents (or Manage / Agreements — wording varies).",
+            "Open the completed document or the template source you want to keep.",
+            "Choose Download / Download PDF (or Export).",
+            "Save the PDF locally or to Drive/Dropbox.",
+            "Repeat for each document — most individual plans do not offer a free bulk “download everything” button."
+    ],
+    templateNote:
+      "BoldSign templates (when they exist) usually export the underlying PDF, not a portable field/routing package. Re-place fields in Docracy — AI Auto-Detect typically gets most of the way.",
+    whatTransfers: [
+            "Signed PDFs you download (signatures flattened into the file).",
+            "Source/draft PDFs when the product lets you download them.",
+            "Does not transfer: proprietary field layers, recipient routing automation, or in-app audit metadata as a live Docracy trail."
+    ],
+    tips: [
+            "Start with templates you reuse monthly — one upload + AI field detection turns them into a Docracy template on paid.",
+            "Keep important BoldSign audit PDFs in your own Drive if the product offers them; Docracy’s retention window is short by design.",
+            "After upload, run AI Auto-Detect once, then tweak any missed fields before sending."
+    ],
+    alternativeSlug: "boldsign-alternative",
+  },
+  {
+    slug: "signrequest",
+    competitorName: "SignRequest",
+    seoTitle: "Import SignRequest Documents to Docracy — Free Export Guide",
+    seoDescription: "Step-by-step guide to export SignRequest documents as PDFs and upload them to Docracy. No account linking — AI field detection places signatures for you.",
+    heroHeadline: "Bring your SignRequest documents to Docracy",
+    heroSubheadline: "No account-linking, no handing over your SignRequest password. Export the PDFs you already have, then re-send or turn them into Docracy templates.",
+    intro:
+      "Most people leaving SignRequest do not need an enterprise migration project — they need the NDAs, offer letters, and client agreements they already use available in a lighter tool. This guide covers the free, built-in download path, what actually transfers, and how Docracy picks up once you have the PDF.",
+    whyNoConnect:
+      "SignRequest does not offer a free, self-serve, general-purpose bulk-export API that a typical individual account can use to one-click migrate into another e-sign tool. We also will not ask for your SignRequest password to “connect your account.” Use the product’s normal per-document PDF download, then upload to Docracy.",
+    exportSteps: [
+            "Sign in to SignRequest and open Documents (or Manage / Agreements — wording varies).",
+            "Open the completed document or the template source you want to keep.",
+            "Choose Download / Download PDF (or Export).",
+            "Save the PDF locally or to Drive/Dropbox.",
+            "Repeat for each document — most individual plans do not offer a free bulk “download everything” button."
+    ],
+    templateNote:
+      "SignRequest templates (when they exist) usually export the underlying PDF, not a portable field/routing package. Re-place fields in Docracy — AI Auto-Detect typically gets most of the way.",
+    whatTransfers: [
+            "Signed PDFs you download (signatures flattened into the file).",
+            "Source/draft PDFs when the product lets you download them.",
+            "Does not transfer: proprietary field layers, recipient routing automation, or in-app audit metadata as a live Docracy trail."
+    ],
+    tips: [
+            "Start with templates you reuse monthly — one upload + AI field detection turns them into a Docracy template on paid.",
+            "Keep important SignRequest audit PDFs in your own Drive if the product offers them; Docracy’s retention window is short by design.",
+            "After upload, run AI Auto-Detect once, then tweak any missed fields before sending."
+    ],
+    alternativeSlug: "signrequest-alternative",
+  },
+  {
+    slug: "yousign",
+    competitorName: "Yousign",
+    seoTitle: "Import Yousign Documents to Docracy — Free Export Guide",
+    seoDescription: "Step-by-step guide to export Yousign documents as PDFs and upload them to Docracy. No account linking — AI field detection places signatures for you.",
+    heroHeadline: "Bring your Yousign documents to Docracy",
+    heroSubheadline: "No account-linking, no handing over your Yousign password. Export the PDFs you already have, then re-send or turn them into Docracy templates.",
+    intro:
+      "Most people leaving Yousign do not need an enterprise migration project — they need the NDAs, offer letters, and client agreements they already use available in a lighter tool. This guide covers the free, built-in download path, what actually transfers, and how Docracy picks up once you have the PDF.",
+    whyNoConnect:
+      "Yousign does not offer a free, self-serve, general-purpose bulk-export API that a typical individual account can use to one-click migrate into another e-sign tool. We also will not ask for your Yousign password to “connect your account.” Use the product’s normal per-document PDF download, then upload to Docracy.",
+    exportSteps: [
+            "Sign in to Yousign and open Documents (or Manage / Agreements — wording varies).",
+            "Open the completed document or the template source you want to keep.",
+            "Choose Download / Download PDF (or Export).",
+            "Save the PDF locally or to Drive/Dropbox.",
+            "Repeat for each document — most individual plans do not offer a free bulk “download everything” button."
+    ],
+    templateNote:
+      "Yousign templates (when they exist) usually export the underlying PDF, not a portable field/routing package. Re-place fields in Docracy — AI Auto-Detect typically gets most of the way.",
+    whatTransfers: [
+            "Signed PDFs you download (signatures flattened into the file).",
+            "Source/draft PDFs when the product lets you download them.",
+            "Does not transfer: proprietary field layers, recipient routing automation, or in-app audit metadata as a live Docracy trail."
+    ],
+    tips: [
+            "Start with templates you reuse monthly — one upload + AI field detection turns them into a Docracy template on paid.",
+            "Keep important Yousign audit PDFs in your own Drive if the product offers them; Docracy’s retention window is short by design.",
+            "After upload, run AI Auto-Detect once, then tweak any missed fields before sending."
+    ],
+    alternativeSlug: "yousign-alternative",
+  },
+  {
+    slug: "nitro-sign",
+    competitorName: "Nitro Sign",
+    seoTitle: "Import Nitro Sign Documents to Docracy — Free Export Guide",
+    seoDescription: "Step-by-step guide to export Nitro Sign documents as PDFs and upload them to Docracy. No account linking — AI field detection places signatures for you.",
+    heroHeadline: "Bring your Nitro Sign documents to Docracy",
+    heroSubheadline: "No account-linking, no handing over your Nitro Sign password. Export the PDFs you already have, then re-send or turn them into Docracy templates.",
+    intro:
+      "Most people leaving Nitro Sign do not need an enterprise migration project — they need the NDAs, offer letters, and client agreements they already use available in a lighter tool. This guide covers the free, built-in download path, what actually transfers, and how Docracy picks up once you have the PDF.",
+    whyNoConnect:
+      "Nitro Sign does not offer a free, self-serve, general-purpose bulk-export API that a typical individual account can use to one-click migrate into another e-sign tool. We also will not ask for your Nitro Sign password to “connect your account.” Use the product’s normal per-document PDF download, then upload to Docracy.",
+    exportSteps: [
+            "Sign in to Nitro Sign and open Documents (or Manage / Agreements — wording varies).",
+            "Open the completed document or the template source you want to keep.",
+            "Choose Download / Download PDF (or Export).",
+            "Save the PDF locally or to Drive/Dropbox.",
+            "Repeat for each document — most individual plans do not offer a free bulk “download everything” button."
+    ],
+    templateNote:
+      "Nitro Sign templates (when they exist) usually export the underlying PDF, not a portable field/routing package. Re-place fields in Docracy — AI Auto-Detect typically gets most of the way.",
+    whatTransfers: [
+            "Signed PDFs you download (signatures flattened into the file).",
+            "Source/draft PDFs when the product lets you download them.",
+            "Does not transfer: proprietary field layers, recipient routing automation, or in-app audit metadata as a live Docracy trail."
+    ],
+    tips: [
+            "Start with templates you reuse monthly — one upload + AI field detection turns them into a Docracy template on paid.",
+            "Keep important Nitro Sign audit PDFs in your own Drive if the product offers them; Docracy’s retention window is short by design.",
+            "After upload, run AI Auto-Detect once, then tweak any missed fields before sending."
+    ],
+    alternativeSlug: "nitro-sign-alternative",
+  },
+  {
+    slug: "dochub",
+    competitorName: "DocHub",
+    seoTitle: "Import DocHub Documents to Docracy — Free Export Guide",
+    seoDescription: "Step-by-step guide to export DocHub documents as PDFs and upload them to Docracy. No account linking — AI field detection places signatures for you.",
+    heroHeadline: "Bring your DocHub documents to Docracy",
+    heroSubheadline: "No account-linking, no handing over your DocHub password. Export the PDFs you already have, then re-send or turn them into Docracy templates.",
+    intro:
+      "Most people leaving DocHub do not need an enterprise migration project — they need the NDAs, offer letters, and client agreements they already use available in a lighter tool. This guide covers the free, built-in download path, what actually transfers, and how Docracy picks up once you have the PDF.",
+    whyNoConnect:
+      "DocHub does not offer a free, self-serve, general-purpose bulk-export API that a typical individual account can use to one-click migrate into another e-sign tool. We also will not ask for your DocHub password to “connect your account.” Use the product’s normal per-document PDF download, then upload to Docracy.",
+    exportSteps: [
+            "Sign in to DocHub and open Documents (or Manage / Agreements — wording varies).",
+            "Open the completed document or the template source you want to keep.",
+            "Choose Download / Download PDF (or Export).",
+            "Save the PDF locally or to Drive/Dropbox.",
+            "Repeat for each document — most individual plans do not offer a free bulk “download everything” button."
+    ],
+    templateNote:
+      "DocHub templates (when they exist) usually export the underlying PDF, not a portable field/routing package. Re-place fields in Docracy — AI Auto-Detect typically gets most of the way.",
+    whatTransfers: [
+            "Signed PDFs you download (signatures flattened into the file).",
+            "Source/draft PDFs when the product lets you download them.",
+            "Does not transfer: proprietary field layers, recipient routing automation, or in-app audit metadata as a live Docracy trail."
+    ],
+    tips: [
+            "Start with templates you reuse monthly — one upload + AI field detection turns them into a Docracy template on paid.",
+            "Keep important DocHub audit PDFs in your own Drive if the product offers them; Docracy’s retention window is short by design.",
+            "After upload, run AI Auto-Detect once, then tweak any missed fields before sending."
+    ],
+    alternativeSlug: "dochub-alternative",
+  },
+  {
+    slug: "signeasy",
+    competitorName: "SignEasy",
+    seoTitle: "Import SignEasy Documents to Docracy — Free Export Guide",
+    seoDescription: "Step-by-step guide to export SignEasy documents as PDFs and upload them to Docracy. No account linking — AI field detection places signatures for you.",
+    heroHeadline: "Bring your SignEasy documents to Docracy",
+    heroSubheadline: "No account-linking, no handing over your SignEasy password. Export the PDFs you already have, then re-send or turn them into Docracy templates.",
+    intro:
+      "Most people leaving SignEasy do not need an enterprise migration project — they need the NDAs, offer letters, and client agreements they already use available in a lighter tool. This guide covers the free, built-in download path, what actually transfers, and how Docracy picks up once you have the PDF.",
+    whyNoConnect:
+      "SignEasy does not offer a free, self-serve, general-purpose bulk-export API that a typical individual account can use to one-click migrate into another e-sign tool. We also will not ask for your SignEasy password to “connect your account.” Use the product’s normal per-document PDF download, then upload to Docracy.",
+    exportSteps: [
+            "Sign in to SignEasy and open Documents (or Manage / Agreements — wording varies).",
+            "Open the completed document or the template source you want to keep.",
+            "Choose Download / Download PDF (or Export).",
+            "Save the PDF locally or to Drive/Dropbox.",
+            "Repeat for each document — most individual plans do not offer a free bulk “download everything” button."
+    ],
+    templateNote:
+      "SignEasy templates (when they exist) usually export the underlying PDF, not a portable field/routing package. Re-place fields in Docracy — AI Auto-Detect typically gets most of the way.",
+    whatTransfers: [
+            "Signed PDFs you download (signatures flattened into the file).",
+            "Source/draft PDFs when the product lets you download them.",
+            "Does not transfer: proprietary field layers, recipient routing automation, or in-app audit metadata as a live Docracy trail."
+    ],
+    tips: [
+            "Start with templates you reuse monthly — one upload + AI field detection turns them into a Docracy template on paid.",
+            "Keep important SignEasy audit PDFs in your own Drive if the product offers them; Docracy’s retention window is short by design.",
+            "After upload, run AI Auto-Detect once, then tweak any missed fields before sending."
+    ],
+    alternativeSlug: "signeasy-alternative",
+  },
+  {
+    slug: "blueink",
+    competitorName: "Blueink",
+    seoTitle: "Import Blueink Documents to Docracy — Free Export Guide",
+    seoDescription: "Step-by-step guide to export Blueink documents as PDFs and upload them to Docracy. No account linking — AI field detection places signatures for you.",
+    heroHeadline: "Bring your Blueink documents to Docracy",
+    heroSubheadline: "No account-linking, no handing over your Blueink password. Export the PDFs you already have, then re-send or turn them into Docracy templates.",
+    intro:
+      "Most people leaving Blueink do not need an enterprise migration project — they need the NDAs, offer letters, and client agreements they already use available in a lighter tool. This guide covers the free, built-in download path, what actually transfers, and how Docracy picks up once you have the PDF.",
+    whyNoConnect:
+      "Blueink does not offer a free, self-serve, general-purpose bulk-export API that a typical individual account can use to one-click migrate into another e-sign tool. We also will not ask for your Blueink password to “connect your account.” Use the product’s normal per-document PDF download, then upload to Docracy.",
+    exportSteps: [
+            "Sign in to Blueink and open Documents (or Manage / Agreements — wording varies).",
+            "Open the completed document or the template source you want to keep.",
+            "Choose Download / Download PDF (or Export).",
+            "Save the PDF locally or to Drive/Dropbox.",
+            "Repeat for each document — most individual plans do not offer a free bulk “download everything” button."
+    ],
+    templateNote:
+      "Blueink templates (when they exist) usually export the underlying PDF, not a portable field/routing package. Re-place fields in Docracy — AI Auto-Detect typically gets most of the way.",
+    whatTransfers: [
+            "Signed PDFs you download (signatures flattened into the file).",
+            "Source/draft PDFs when the product lets you download them.",
+            "Does not transfer: proprietary field layers, recipient routing automation, or in-app audit metadata as a live Docracy trail."
+    ],
+    tips: [
+            "Start with templates you reuse monthly — one upload + AI field detection turns them into a Docracy template on paid.",
+            "Keep important Blueink audit PDFs in your own Drive if the product offers them; Docracy’s retention window is short by design.",
+            "After upload, run AI Auto-Detect once, then tweak any missed fields before sending."
+    ],
+    alternativeSlug: "blueink-alternative",
+  },
+  {
+    slug: "box-sign",
+    competitorName: "Box Sign",
+    seoTitle: "Import Box Sign Documents to Docracy — Free Export Guide",
+    seoDescription: "Step-by-step guide to export Box Sign documents as PDFs and upload them to Docracy. No account linking — AI field detection places signatures for you.",
+    heroHeadline: "Bring your Box Sign documents to Docracy",
+    heroSubheadline: "No account-linking, no handing over your Box Sign password. Export the PDFs you already have, then re-send or turn them into Docracy templates.",
+    intro:
+      "Most people leaving Box Sign do not need an enterprise migration project — they need the NDAs, offer letters, and client agreements they already use available in a lighter tool. This guide covers the free, built-in download path, what actually transfers, and how Docracy picks up once you have the PDF.",
+    whyNoConnect:
+      "Box Sign does not offer a free, self-serve, general-purpose bulk-export API that a typical individual account can use to one-click migrate into another e-sign tool. We also will not ask for your Box Sign password to “connect your account.” Use the product’s normal per-document PDF download, then upload to Docracy.",
+    exportSteps: [
+            "Sign in to Box Sign and open Documents (or Manage / Agreements — wording varies).",
+            "Open the completed document or the template source you want to keep.",
+            "Choose Download / Download PDF (or Export).",
+            "Save the PDF locally or to Drive/Dropbox.",
+            "Repeat for each document — most individual plans do not offer a free bulk “download everything” button."
+    ],
+    templateNote:
+      "Box Sign templates (when they exist) usually export the underlying PDF, not a portable field/routing package. Re-place fields in Docracy — AI Auto-Detect typically gets most of the way.",
+    whatTransfers: [
+            "Signed PDFs you download (signatures flattened into the file).",
+            "Source/draft PDFs when the product lets you download them.",
+            "Does not transfer: proprietary field layers, recipient routing automation, or in-app audit metadata as a live Docracy trail."
+    ],
+    tips: [
+            "Start with templates you reuse monthly — one upload + AI field detection turns them into a Docracy template on paid.",
+            "Keep important Box Sign audit PDFs in your own Drive if the product offers them; Docracy’s retention window is short by design.",
+            "After upload, run AI Auto-Detect once, then tweak any missed fields before sending."
+    ],
+    alternativeSlug: "box-sign-alternative",
+  },
+  {
+    slug: "getaccept",
+    competitorName: "GetAccept",
+    seoTitle: "Import GetAccept Documents to Docracy — Free Export Guide",
+    seoDescription: "Step-by-step guide to export GetAccept documents as PDFs and upload them to Docracy. No account linking — AI field detection places signatures for you.",
+    heroHeadline: "Bring your GetAccept documents to Docracy",
+    heroSubheadline: "No account-linking, no handing over your GetAccept password. Export the PDFs you already have, then re-send or turn them into Docracy templates.",
+    intro:
+      "Most people leaving GetAccept do not need an enterprise migration project — they need the NDAs, offer letters, and client agreements they already use available in a lighter tool. This guide covers the free, built-in download path, what actually transfers, and how Docracy picks up once you have the PDF.",
+    whyNoConnect:
+      "GetAccept does not offer a free, self-serve, general-purpose bulk-export API that a typical individual account can use to one-click migrate into another e-sign tool. We also will not ask for your GetAccept password to “connect your account.” Use the product’s normal per-document PDF download, then upload to Docracy.",
+    exportSteps: [
+            "Sign in to GetAccept and open Documents (or Manage / Agreements — wording varies).",
+            "Open the completed document or the template source you want to keep.",
+            "Choose Download / Download PDF (or Export).",
+            "Save the PDF locally or to Drive/Dropbox.",
+            "Repeat for each document — most individual plans do not offer a free bulk “download everything” button."
+    ],
+    templateNote:
+      "GetAccept templates (when they exist) usually export the underlying PDF, not a portable field/routing package. Re-place fields in Docracy — AI Auto-Detect typically gets most of the way.",
+    whatTransfers: [
+            "Signed PDFs you download (signatures flattened into the file).",
+            "Source/draft PDFs when the product lets you download them.",
+            "Does not transfer: proprietary field layers, recipient routing automation, or in-app audit metadata as a live Docracy trail."
+    ],
+    tips: [
+            "Start with templates you reuse monthly — one upload + AI field detection turns them into a Docracy template on paid.",
+            "Keep important GetAccept audit PDFs in your own Drive if the product offers them; Docracy’s retention window is short by design.",
+            "After upload, run AI Auto-Detect once, then tweak any missed fields before sending."
+    ],
+    alternativeSlug: "getaccept-alternative",
+  }
 ];
+
+/** Preferred Compare-nav order — majors first; Contractbook + OnlineSignature included whenever
+ *  they have pages (required whenever import guides exist). Unknown slugs append alphabetically. */
+const COMPARE_NAV_ORDER = [
+  "docusign-alternative",
+  "eversign-alternative",
+  "hellosign-alternative",
+  "pandadoc-alternative",
+  "adobe-sign-alternative",
+  "contractbook-alternative",
+  "onlinesignature-alternative",
+  "signnow-alternative",
+  "zoho-sign-alternative",
+  "onespan-alternative",
+  "docuseal-alternative",
+  "boldsign-alternative",
+  "signrequest-alternative",
+  "yousign-alternative",
+  "nitro-sign-alternative",
+  "dochub-alternative",
+  "signeasy-alternative",
+  "blueink-alternative",
+  "box-sign-alternative",
+  "getaccept-alternative",
+] as const;
+
+/** Alternatives in Compare-nav order (all competitor landing pages). */
+export function getOrderedAlternativePages(): AlternativePageContent[] {
+  const bySlug = new Map(ALTERNATIVE_PAGES.map((p) => [p.slug, p]));
+  const ordered: AlternativePageContent[] = [];
+  for (const slug of COMPARE_NAV_ORDER) {
+    const page = bySlug.get(slug);
+    if (page) {
+      ordered.push(page);
+      bySlug.delete(slug);
+    }
+  }
+  const rest = [...bySlug.values()].sort((a, b) => a.competitorName.localeCompare(b.competitorName));
+  return ordered.concat(rest);
+}
+
+/** Import guides aligned to Compare-nav order (one per alternative). */
+export function getOrderedImportGuidePages(): ImportGuideContent[] {
+  const byAlt = new Map(IMPORT_GUIDE_PAGES.map((p) => [p.alternativeSlug, p]));
+  const ordered: ImportGuideContent[] = [];
+  for (const page of getOrderedAlternativePages()) {
+    const guide = byAlt.get(page.slug);
+    if (guide) {
+      ordered.push(guide);
+      byAlt.delete(page.slug);
+    }
+  }
+  return ordered.concat([...byAlt.values()]);
+}
+
 
 export interface ExplainerSection {
   heading: string;

@@ -6,6 +6,7 @@ import LanguageSwitcher from "./LanguageSwitcher";
 import NavMegaMenu from "./NavMegaMenu";
 import NavListMenu, { type NavListEntry } from "./NavListMenu";
 import { NavIcon } from "./NavIcons";
+import { getOrderedAlternativePages, getOrderedImportGuidePages } from "../lib/marketingPages";
 
 /** Real <a href> — never React Router <Link>, which treats mailto as an SPA path. */
 const SALES_MAILTO = "mailto:sales@docracy.io?subject=Docracy%20inquiry";
@@ -29,11 +30,9 @@ const FEATURE_ITEMS = [
   { to: "/blockchain-timestamp", icon: "chainLink", titleKey: "nav.mega.feature.blockchain.title", descKey: "nav.mega.feature.blockchain.desc" },
 ] as const;
 
-const COMPARE_ITEMS = [
-  { to: "/docusign-alternative", icon: "scale", titleKey: "footer.vsDocusign", descKey: "nav.mega.compare.docusign.desc" },
-  { to: "/eversign-alternative", icon: "scale", titleKey: "footer.vsEversign", descKey: "nav.mega.compare.eversign.desc" },
-  { to: "/pandadoc-alternative", icon: "scale", titleKey: "footer.vsPandadoc", descKey: "nav.mega.compare.pandadoc.desc" },
-] as const;
+/** All competitor compare pages — derived from marketingPages so nav stays in sync. */
+const COMPARE_PAGES = getOrderedAlternativePages();
+const IMPORT_GUIDES = getOrderedImportGuidePages();
 
 /** Each entry mirrors an IndustryPageContent in lib/marketingPages.ts. Legal/HR entries carry an
  *  explicit honestLimit disclaimer on their page (no QES/notarization/identity verification claim)
@@ -76,12 +75,21 @@ export default function Header() {
     title: t(f.titleKey),
     description: t(f.descKey),
   }));
-  const compareItems = COMPARE_ITEMS.map((c) => ({
-    to: localizePath(c.to, locale),
-    icon: <NavIcon name={c.icon} />,
-    title: t(c.titleKey),
-    description: t(c.descKey),
+  // EN-only competitor pages use English labels even when the UI locale is ES (no ES alt routes
+  // for the expanded set). localizePath is a no-op for unknown EN paths.
+  const compareItems = COMPARE_PAGES.map((c) => ({
+    to: `/${c.slug}`,
+    icon: <NavIcon name="scale" />,
+    title: `vs ${c.competitorName}`,
+    description: c.navDesc,
   }));
+  const compareNavChildren = [
+    ...COMPARE_PAGES.map((c) => ({ to: `/${c.slug}`, label: `vs ${c.competitorName}` })),
+    ...IMPORT_GUIDES.map((g) => ({
+      to: `/import-from-${g.slug}`,
+      label: `Import from ${g.competitorName}`,
+    })),
+  ];
   // LimeWire-style More: important points first; Industry / Use cases / Compare expand in place.
   const moreListEntries: NavListEntry[] = [
     {
@@ -102,7 +110,7 @@ export default function Header() {
       kind: "group",
       id: "compare",
       label: t("footer.compare"),
-      children: COMPARE_ITEMS.map((c) => ({ to: localizePath(c.to, locale), label: t(c.titleKey) })),
+      children: compareNavChildren,
     },
     { kind: "link", label: t("footer.about"), to: localizePath("/about", locale) },
     { kind: "link", label: t("nav.docsApi"), to: localizePath("/docs", locale) },
@@ -113,7 +121,13 @@ export default function Header() {
   const featureMobile = FEATURE_ITEMS.map((f) => ({ to: localizePath(f.to, locale), title: t(f.titleKey) }));
   const industryMobile = INDUSTRY_ITEMS.map((i) => ({ to: localizePath(i.to, locale), title: t(i.titleKey) }));
   const useCaseMobile = USE_CASE_ITEMS.map((u) => ({ to: localizePath(u.to, locale), title: t(u.titleKey) }));
-  const compareMobile = COMPARE_ITEMS.map((c) => ({ to: localizePath(c.to, locale), title: t(c.titleKey) }));
+  const compareMobile = [
+    ...COMPARE_PAGES.map((c) => ({ to: `/${c.slug}`, title: `vs ${c.competitorName}` })),
+    ...IMPORT_GUIDES.map((g) => ({
+      to: `/import-from-${g.slug}`,
+      title: `Import from ${g.competitorName}`,
+    })),
+  ];
 
   useEffect(() => {
     setMenuOpen(false);

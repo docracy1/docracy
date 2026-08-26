@@ -240,6 +240,8 @@ const es: Messages = {
   "footer.esignLine": "Firmas SES diseñadas para respaldar la ESIGN Act y UETA de EE. UU.",
   "footer.esignLineLink": "Más información sobre ESIGN y UETA",
   "footer.vsAdobe": "vs Adobe Acrobat Sign",
+  "footer.vsContractbook": "vs Contractbook",
+  "footer.vsOnlinesignature": "vs OnlineSignature",
   "footer.vsDocusign": "vs DocuSign",
   "footer.vsEversign": "vs eversign",
   "footer.vsPandadoc": "vs PandaDoc",
