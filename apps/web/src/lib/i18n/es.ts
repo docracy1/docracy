@@ -439,6 +439,8 @@ const es: Messages = {
   "nav.industry": "Industria",
   "nav.resources": "Recursos",
   "nav.more": "Más",
+  "nav.useCases": "Casos de uso",
+  "nav.docsApi": "Docs y API",
   "nav.mega.more.pricing.desc": "Gratis hasta 2 firmantes, luego $10/mes fijo — nunca por asiento.",
   "nav.mega.more.ai.desc": "Encuentra y coloca automáticamente los campos de firma, fecha e iniciales.",
   "nav.logout": "Cerrar sesión",

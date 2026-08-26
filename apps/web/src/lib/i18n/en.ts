@@ -7,6 +7,8 @@ const en: Messages = {
   "nav.industry": "Industry",
   "nav.resources": "Resources",
   "nav.more": "More",
+  "nav.useCases": "Use cases",
+  "nav.docsApi": "Docs & API",
   "nav.mega.more.pricing.desc": "Free for up to 2 signers, then a flat $10/month — never per seat.",
   "nav.mega.more.ai.desc": "Automatically finds and places signature, date, and initial fields.",
   "nav.contactSales": "Contact sales",
