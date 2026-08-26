@@ -262,9 +262,11 @@ export async function runSpaSmokeAndAlert(env: Env): Promise<void> {
 
   const fp = fingerprint(failures);
 
-  // Already alerting on this failure — just handle the 6h reminder cadence.
+  // Already alerting on this failure — remind at most every 6h. Do NOT re-alert just because the
+  // fingerprint changed (e.g. API 522 one hour, missing module script the next): that was paging
+  // the founder several times a day while the underlying SPA shell stayed broken.
   if (prev?.failing) {
-    const shouldRemind = prev.fingerprint !== fp || now - (prev.lastAlertAt ?? 0) >= REMIND_AFTER_MS;
+    const shouldRemind = now - (prev.lastAlertAt ?? 0) >= REMIND_AFTER_MS;
     if (shouldRemind) {
       const to = env.FEEDBACK_EMAIL || "founder@docracy.io";
       await sendSpaSmokeAlert(env, to, failures);

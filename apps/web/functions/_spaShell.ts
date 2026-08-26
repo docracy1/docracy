@@ -131,12 +131,34 @@ export function sanitizeForNoIndex(html: string, title: string): string {
   return out;
 }
 
-export async function fetchIndexShell(env: { ASSETS: Fetcher }, request: Request, url: URL): Promise<string> {
-  try {
-    const indexRes = await env.ASSETS.fetch(new Request(new URL("/index.html", url), request));
-    if (indexRes.ok) return await indexRes.text();
-  } catch {
-    // fall through
+/** True when HTML includes the Vite SPA entry (`<script type="module" src="/assets/….js">`). */
+export function hasViteModuleScript(html: string): boolean {
+  return /<script[^>]*\btype=["']module["'][^>]*\bsrc=["'][^"']*\.js[^"']*["']/i.test(html)
+    || /<script[^>]*\bsrc=["'][^"']*\.js[^"']*["'][^>]*\btype=["']module["']/i.test(html);
+}
+
+/**
+ * Load the built index.html shell (with `/assets/*.js` module tag) from ASSETS.
+ * Never clone the inbound request into this fetch — Accept / cookies / bot headers from
+ * `/login` have been observed to make ASSETS miss the real index and fall through to the
+ * empty hardcoded fallback (no module script → Sign in / Start free never hydrate).
+ */
+export async function fetchIndexShell(env: { ASSETS: Fetcher }, _request: Request, url: URL): Promise<string> {
+  const candidates = ["/index.html", "/"];
+  for (const path of candidates) {
+    try {
+      const indexRes = await env.ASSETS.fetch(
+        new Request(new URL(path, url.origin), {
+          method: "GET",
+          headers: { Accept: "text/html" },
+        })
+      );
+      if (!indexRes.ok) continue;
+      const html = await indexRes.text();
+      if (html && hasViteModuleScript(html)) return html;
+    } catch {
+      // try next candidate
+    }
   }
   return `<!doctype html><html><head><meta charset="utf-8"/><title>Docracy</title></head><body><div id="root"></div></body></html>`;
 }

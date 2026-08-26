@@ -7,6 +7,7 @@ import { FEATURE_PAGES, ALTERNATIVE_PAGES } from "../src/lib/marketingPages";
 import {
   fetchIndexShell,
   hasFileExtension,
+  hasViteModuleScript,
   isSpaAppPath,
   sanitizeForNoIndex,
   staticHtmlExists,
@@ -173,7 +174,16 @@ export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => 
     if (!hasPage) {
       const shell = await fetchIndexShell(context.env, context.request, url);
       if (isSpaAppPath(url.pathname)) {
+        // Never ship a dead empty shell (no Vite module) — fall through to the SPA rewrite so
+        // Sign in / Start free still hydrate, even if that means a soft homepage body until the
+        // next edge passes a good index fetch.
+        if (!hasViteModuleScript(shell)) {
+          return context.next();
+        }
         const html = sanitizeForNoIndex(shell, "Docracy");
+        if (!hasViteModuleScript(html)) {
+          return context.next();
+        }
         return new Response(html, {
           status: 200,
           headers: {

@@ -889,7 +889,8 @@ export async function sendSpaSmokeAlert(
     </p>
     <ul style="margin:0;padding-left:20px;font-size:14px;color:${INK};line-height:1.6;">${lines}</ul>
     <p style="margin:20px 0 0 0;font-size:13px;color:${MUTED};line-height:1.5;">
-      Deduped: alert on new failure, then every 6 hours while still down.
+      Deduped: alert on confirmed failure, then at most every 6 hours while still down
+      (detail changes alone do not re-page).
     </p>
   `;
   await send(env, to, "Docracy: Sign in / Start free broken (SPA JS)", emailShell(env.PUBLIC_APP_URL, body), {

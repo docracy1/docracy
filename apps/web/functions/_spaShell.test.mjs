@@ -22,6 +22,7 @@ const {
   sanitizeForNoIndex,
   isSpaAppPath,
   hasFileExtension,
+  hasViteModuleScript,
 } = createRequire(import.meta.url)(out);
 
 const nested = `<!doctype html><html><head>
@@ -45,6 +46,8 @@ assert.equal(cleaned.includes('rel="canonical"'), false);
 assert.equal(cleaned.includes("SoftwareApplication"), false);
 assert.equal(cleaned.includes("The fastest way"), false);
 assert.equal(cleaned.includes('<div id="root"></div>'), true);
+assert.equal(hasViteModuleScript(cleaned), true, "sanitize must keep the Vite module script");
+assert.equal(hasViteModuleScript(`<!doctype html><html><body><div id="root"></div></body></html>`), false);
 
 assert.equal(isSpaAppPath("/login"), true);
 assert.equal(isSpaAppPath("/prepare"), true);
