@@ -6384,3 +6384,54 @@ select {
 .cookie-consent-decline:hover {
   border-color: rgba(255, 255, 255, 0.7);
 }
+
+/* Competitor import guides — same hero + narrow reading column as /import-from-docusign. */
+.import-guide-hero {
+  max-width: 720px;
+}
+.import-guide-body {
+  max-width: 720px;
+  padding-top: 8px;
+  padding-bottom: 48px;
+}
+.import-guide-intro {
+  font-size: 16.5px;
+  line-height: 1.55;
+  color: var(--body-strong);
+  margin: 32px 0 0;
+}
+.import-guide-body h2 {
+  font-size: 22px;
+  margin-top: 36px;
+  margin-bottom: 10px;
+}
+.import-guide-steps {
+  padding-left: 22px;
+  margin: 8px 0 12px;
+}
+.import-guide-steps li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+.import-guide-bullets {
+  padding-left: 22px;
+  margin: 8px 0 12px;
+}
+.import-guide-bullets li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+.import-guide-note {
+  font-size: 14px;
+  color: var(--mute);
+  line-height: 1.5;
+}
+.import-guide-crosslink {
+  margin-top: 28px;
+  font-size: 14px;
+}
+.import-guide-others {
+  margin-top: 10px;
+  line-height: 1.6;
+}
+

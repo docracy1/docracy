@@ -1385,7 +1385,7 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
 ];
 
 /** One page per competitor: no "connect your account" button anywhere — confirmed via direct
- *  research that none of these five offer a free, self-serve, general-purpose bulk-export API a
+ *  research that none of these platforms offer a free, self-serve, general-purpose bulk-export API a
  *  typical individual account actually has access to (see whyNoConnect per platform for the
  *  specific gate). Each page instead walks through that platform's real, existing manual
  *  per-document download, then routes into Docracy's upload flow (AI field detection does the
@@ -1397,9 +1397,15 @@ export interface ImportGuideContent {
   seoDescription: string;
   heroHeadline: string;
   heroSubheadline: string;
+  /** Longer intro under the hero — what this guide covers and who it's for. */
+  intro: string;
   whyNoConnect: string;
   exportSteps: string[];
   templateNote: string;
+  /** What actually comes with you as a PDF vs what stays locked in the old tool. */
+  whatTransfers: string[];
+  /** Practical tips unique to this platform. */
+  tips: string[];
   alternativeSlug: string;
 }
 
@@ -1407,102 +1413,236 @@ export const IMPORT_GUIDE_PAGES: ImportGuideContent[] = [
   {
     slug: "docusign",
     competitorName: "DocuSign",
-    seoTitle: "Import DocuSign Documents to Docracy",
+    seoTitle: "Import DocuSign Documents to Docracy — Free Export Guide",
     seoDescription:
-      "Bring your existing DocuSign documents and templates over to Docracy. No account-linking, no password sharing — just the export steps DocuSign already gives you for free.",
+      "Step-by-step guide to export DocuSign envelopes and templates as PDFs and upload them to Docracy. No account linking, no password sharing — AI field detection places signatures for you.",
     heroHeadline: "Bring your DocuSign documents to Docracy",
-    heroSubheadline: "No account-linking, no handing over your DocuSign password. Export the PDFs you already have.",
+    heroSubheadline:
+      "No account-linking, no handing over your DocuSign password. Export the PDFs you already have, then re-send or turn them into Docracy templates.",
+    intro:
+      "Most people leaving DocuSign don't need an enterprise migration project — they need the NDAs, offer letters, and client agreements they already signed (or the templates they reuse) available in a lighter tool. This guide covers the free, built-in DocuSign download path, what actually transfers, and how Docracy picks up once you have the PDF.",
     whyNoConnect:
-      "DocuSign's API only gets real access to your account once production API access is enabled on it — something most personal and small-business plans don't have by default. We also don't ask for your DocuSign password to \"connect your account\"; that's off-limits here regardless.",
+      "DocuSign's API only gets real access to your account once production API access is enabled on it — something most personal and small-business plans don't have by default. We also don't ask for your DocuSign password to \"connect your account\"; that's off-limits here regardless. So there's no one-click import button — and there shouldn't be.",
     exportSteps: [
-      "Sign in to DocuSign and open Manage.",
+      "Sign in to DocuSign and open Manage (or the Documents / Templates view on your plan).",
       "Open the completed envelope or reusable template you want to bring over.",
-      "Choose Download — for a completed envelope this gives you the signed PDF; for a template, DocuSign exports a package containing the source document.",
-      "Repeat for each document or template you want to keep using.",
+      "Choose Download — for a completed envelope this gives you the signed PDF (often with a certificate of completion attached); for a template, DocuSign exports a package containing the source document.",
+      "Save the PDF somewhere you can find it (Downloads, Drive, Dropbox).",
+      "Repeat for each document or template you want to keep using — DocuSign does not give individual accounts a free bulk \"download everything\" button.",
     ],
     templateNote:
-      "Templates export as a DocuSign-specific package — the underlying PDF comes with it, but the field and routing setup is proprietary and won't transfer directly.",
+      "Templates export as a DocuSign-specific package — the underlying PDF comes with it, but the field and routing setup is proprietary and won't transfer directly. You'll re-place fields in Docracy (AI Auto-Detect usually gets you most of the way).",
+    whatTransfers: [
+      "The signed PDF of completed envelopes — including the visual signature appearance DocuSign burned into the file.",
+      "The source PDF (or Word-derived PDF) from a reusable template package.",
+      "Does not transfer: DocuSign tabs/fields, recipient routing order, identity verification settings, or the DocuSign Certificate of Completion as a live Docracy audit trail (keep the PDF if you need that certificate).",
+    ],
+    tips: [
+      "Start with templates you reuse monthly (NDAs, offer letters) — one upload + AI field detection turns them into a Docracy template on a paid plan.",
+      "If an envelope has multiple documents, download each PDF you still need rather than assuming a single ZIP covers everything on every plan.",
+      "Completed DocuSign files are fine to re-upload for a new round of signatures; treat them as the source PDF, not a live DocuSign envelope.",
+    ],
     alternativeSlug: "docusign-alternative",
   },
   {
     slug: "eversign",
-    competitorName: "eversign",
-    seoTitle: "Import eversign Documents to Docracy",
+    competitorName: "eversign (Xodo Sign)",
+    seoTitle: "Import eversign / Xodo Sign Documents to Docracy",
     seoDescription:
-      "Bring your existing eversign documents over to Docracy. No account-linking required — just the free per-document export eversign already offers.",
-    heroHeadline: "Bring your eversign documents to Docracy",
-    heroSubheadline: "No account-linking, no handing over your eversign password. Export the PDFs you already have.",
+      "Export eversign (now Xodo Sign) documents as PDFs and bring them into Docracy. No account linking — free per-document download, then AI field detection on upload.",
+    heroHeadline: "Bring your eversign / Xodo Sign documents to Docracy",
+    heroSubheadline:
+      "No account-linking, no handing over your eversign password. Export the PDFs you already have from eversign or Xodo Sign.",
+    intro:
+      "eversign rebranded as Xodo Sign, but the product people still search for as \"eversign\" is the same signing workspace. If you're moving off a free or light eversign/Xodo plan because of account requirements or per-user pricing, this is the manual export path — then Docracy's upload + AI field detection for the next send.",
     whyNoConnect:
-      "eversign's API is free only for 2 test envelopes — real production access starts on a paid API plan, which most individual accounts don't carry. We also won't ask for your eversign password to link accounts.",
+      "eversign / Xodo Sign's API is free only for a tiny number of test envelopes — real production access starts on a paid API plan, which most individual accounts don't carry. We also won't ask for your password to link accounts.",
     exportSteps: [
-      "Sign in to eversign and open Documents.",
-      "Check both the Completed and Drafts tabs, depending on what you need.",
-      "Open the document and choose Download.",
-      "Repeat for each document — eversign doesn't offer a bulk \"download all\" button either.",
+      "Sign in to eversign or Xodo Sign and open Documents.",
+      "Check both the Completed and Drafts (or In Progress) tabs, depending on what you need.",
+      "Open the document and choose Download / Download PDF.",
+      "Save the file, then repeat for each document — there is no free bulk \"download all\" for typical individual accounts.",
     ],
     templateNote:
-      "No portable export path for templates — they live in eversign's own system, though the underlying source document downloads as a normal PDF.",
+      "No portable export path for templates — they live in eversign/Xodo's own system. The underlying source document usually downloads as a normal PDF; field placement does not.",
+    whatTransfers: [
+      "Completed document PDFs with signatures flattened into the file.",
+      "Draft/source PDFs you can re-upload and re-field in Docracy.",
+      "Does not transfer: eversign/Xodo templates, signer order automation, or in-app audit metadata as a live Docracy trail.",
+    ],
+    tips: [
+      "If you mainly used OnlineSignature.com, you're already in the Xodo Sign / eversign world — export from that signing account, then continue here or see the OnlineSignature import guide.",
+      "Reusable NDAs: download the cleanest unsigned source PDF if you have it, not only the last signed copy.",
+      "After upload in Docracy, run AI Auto-Detect once and save as a template on paid if you'll send it often.",
+    ],
     alternativeSlug: "eversign-alternative",
   },
   {
     slug: "hellosign",
     competitorName: "HelloSign (Dropbox Sign)",
-    seoTitle: "Import HelloSign Documents to Docracy",
+    seoTitle: "Import HelloSign / Dropbox Sign Documents to Docracy",
     seoDescription:
-      "Bring your existing HelloSign (Dropbox Sign) documents over to Docracy. No account-linking — just the free per-document export already built into Dropbox Sign.",
-    heroHeadline: "Bring your HelloSign documents to Docracy",
-    heroSubheadline: "No account-linking, no handing over your Dropbox Sign password. Export the PDFs you already have.",
+      "Export HelloSign (Dropbox Sign) signature requests as PDFs and upload them to Docracy. No account linking — free per-document download with clear steps.",
+    heroHeadline: "Bring your HelloSign / Dropbox Sign documents to Docracy",
+    heroSubheadline:
+      "No account-linking, no handing over your Dropbox Sign password. Export the PDFs you already have.",
+    intro:
+      "HelloSign is now Dropbox Sign. The UI moved to sign.dropbox.com, but the job is the same: get your signed PDFs (and the source files behind templates) out without buying an API plan. This guide is the free download path, then how Docracy continues the signing workflow.",
     whyNoConnect:
-      "Dropbox Sign's free API mode only produces watermarked, non-binding test documents — it can't pull your real signed files. Real production API access sits on separate paid API tiers, priced above the consumer plans most people are on.",
+      "Dropbox Sign's free API mode only produces watermarked, non-binding test documents — it can't pull your real signed files. Real production API access sits on separate paid API tiers, priced above the consumer plans most people are on. We won't ask for your Dropbox password either.",
     exportSteps: [
-      "Sign in at sign.dropbox.com.",
-      "Open a completed signature request.",
+      "Sign in at sign.dropbox.com (or the Dropbox Sign app you already use).",
+      "Open a completed signature request from your Documents / Activity list.",
       "Choose Download, Download PDF, or Download Signed ZIP.",
-      "Repeat for each document — one-click bulk export needs the Team Sync admin feature, not available on individual plans.",
+      "If you need the original template source, open the template and download the underlying PDF or Word file when the UI offers it.",
+      "Repeat for each document — one-click bulk export needs Team Sync / admin features, not available on typical individual plans.",
     ],
     templateNote:
-      "Templates are stored in Dropbox Sign's own template system with no documented one-click export — the source PDF or Word file is standard, but the reusable field layout is proprietary.",
+      "Templates are stored in Dropbox Sign's own template system with no documented one-click \"export template with fields\" for individuals — the source PDF or Word file is standard, but the reusable field layout is proprietary.",
+    whatTransfers: [
+      "Signed PDFs and signed ZIPs of completed requests.",
+      "Source PDF/Word files when you download them from a template or draft.",
+      "Does not transfer: Dropbox Sign template field layers, signer roles, or SMS/identity add-ons as live Docracy settings.",
+    ],
+    tips: [
+      "Prefer Download PDF when you only need the final signed file; use Signed ZIP if you also want attachments Dropbox Sign bundled.",
+      "For recurring NDAs, keep an unsigned master PDF in Drive/Dropbox and upload that to Docracy as your template source.",
+      "WhatsApp signing is available on Docracy after you migrate — Dropbox Sign has no equivalent WhatsApp delivery path.",
+    ],
     alternativeSlug: "hellosign-alternative",
   },
   {
     slug: "pandadoc",
     competitorName: "PandaDoc",
-    seoTitle: "Import PandaDoc Documents to Docracy",
+    seoTitle: "Import PandaDoc Documents to Docracy — PDF & DocX Export",
     seoDescription:
-      "Bring your existing PandaDoc documents and templates over to Docracy. No account-linking required — PandaDoc's own DocX export makes this the easiest of the five to migrate from.",
+      "Export PandaDoc documents and templates (PDF or DocX) and bring them into Docracy. Easiest of the major tools to migrate — no account linking required.",
     heroHeadline: "Bring your PandaDoc documents to Docracy",
-    heroSubheadline: "No account-linking, no handing over your PandaDoc password. Export the files you already have.",
+    heroSubheadline:
+      "No account-linking, no handing over your PandaDoc password. Export PDFs or Word files you already have — PandaDoc's DocX export is the most portable of the major tools.",
+    intro:
+      "PandaDoc mixes proposals, CPQ-ish content blocks, and e-sign. If you only need the signed agreement (or a reusable contract PDF) in a simpler signer tool, export from PandaDoc first. DocX Export is unusually helpful: you get a real Word file, not only a locked PDF package.",
     whyNoConnect:
-      "PandaDoc's free API sandbox is real but capped at 60 documents a year — production use beyond that needs a paid API Developer plan most free-plan accounts don't carry.",
+      "PandaDoc's free API sandbox is real but capped at a low annual document count — production use beyond that needs a paid API Developer plan most free-plan accounts don't carry. We won't ask for your PandaDoc password to \"connect\" anything.",
     exportSteps: [
-      "Sign in to PandaDoc and open Documents.",
-      "Open the completed document.",
-      "Download it as a PDF, or use DocX Export for a native Word file.",
-      "Repeat for each document — bulk download is a Business/Enterprise-only feature.",
+      "Sign in to PandaDoc and open Documents (or Templates).",
+      "Open the completed document or the template you want to reuse.",
+      "Download as PDF for a finished signed copy, or use DocX Export when you want an editable Word file.",
+      "Save the file locally or to your Drive.",
+      "Repeat for each document — bulk download is a Business/Enterprise-only feature on typical plans.",
     ],
     templateNote:
-      "Best portability of the five: PandaDoc's DocX Export turns a template into a native Word file that opens anywhere, not just PandaDoc.",
+      "Best portability of the major tools: PandaDoc's DocX Export turns a template into a native Word file that opens anywhere. Convert to PDF before upload if you prefer Docracy's PDF-first flow, or print-to-PDF from Word.",
+    whatTransfers: [
+      "Completed document PDFs with signatures.",
+      "DocX exports of templates/content you can edit outside PandaDoc.",
+      "Does not transfer: PandaDoc content library blocks, pricing tables as live editable PandaDoc objects, CRM-synced fields, or approval workflows.",
+    ],
+    tips: [
+      "Use DocX Export for templates you'll rewrite; use PDF for archives of already-signed deals.",
+      "Strip proposal-only pages before you upload if you only need the signature section in Docracy.",
+      "After upload, AI Auto-Detect works best on clean contract layouts — dense proposal designs may need a few manual field tweaks.",
+    ],
     alternativeSlug: "pandadoc-alternative",
   },
   {
     slug: "adobe-sign",
     competitorName: "Adobe Acrobat Sign",
-    seoTitle: "Import Adobe Sign Documents to Docracy",
+    seoTitle: "Import Adobe Acrobat Sign Documents to Docracy",
     seoDescription:
-      "Bring your existing Adobe Acrobat Sign agreements over to Docracy. No account-linking — just the manual per-document download Adobe already provides.",
+      "Export Adobe Acrobat Sign agreements as PDFs and upload them to Docracy. No account linking — manual per-document download with clear limits explained.",
     heroHeadline: "Bring your Adobe Sign documents to Docracy",
-    heroSubheadline: "No account-linking, no handing over your Adobe password. Export the PDFs you already have.",
+    heroSubheadline:
+      "No account-linking, no handing over your Adobe password. Export the PDFs you already have from Acrobat Sign.",
+    intro:
+      "Adobe Acrobat Sign is deeply tied to Adobe's document ecosystem and enterprise sales motion. Individuals and small teams often just need the signed PDF out — not an API integration. This guide is that download path, plus what you should expect when you re-field the document in Docracy.",
     whyNoConnect:
-      "Adobe reserves real production API access for enterprise and developer accounts behind a custom quote — there's no self-serve paid tier at all for individual accounts, which makes this the most closed of the five platforms here.",
+      "Adobe reserves real production API access for enterprise and developer accounts behind a custom quote — there's no self-serve paid tier for typical individual accounts, which makes this the most closed of the major platforms here. We also won't ask for your Adobe ID password.",
     exportSteps: [
-      "Sign in to Adobe Acrobat Sign and open Manage.",
+      "Sign in to Adobe Acrobat Sign and open Manage (or Documents).",
       "Open the completed agreement.",
-      "Choose Download PDF.",
-      "Repeat for each document — true bulk download is an Enterprise-only tool obtained by contacting Adobe support.",
+      "Choose Download PDF (or Download combined PDF if multiple files were sent).",
+      "Optionally download the audit report PDF if Adobe offers it on your plan — keep it with your records.",
+      "Repeat for each document — true bulk download is an Enterprise-oriented tool (often via support or admin features).",
     ],
     templateNote:
-      "A reusable form-field layer can transfer to a new document, but field data alone exports as CSV, not a full portable template — closer to full lock-in than the other four.",
+      "A reusable form-field layer can transfer to a new Adobe document inside Adobe, but field data alone exports as CSV, not a full portable template — closer to lock-in than PandaDoc or a plain PDF workflow.",
+    whatTransfers: [
+      "Signed agreement PDFs.",
+      "Audit report PDFs when your plan exposes them (store those yourself; they are not imported as a live Docracy trail).",
+      "Does not transfer: Acrobat Sign form-field templates as editable Docracy fields, Adobe Sign workflows, or Acrobat DC cloud settings.",
+    ],
+    tips: [
+      "If you only have the signed PDF, that's enough — upload to Docracy and place fields for a new signing round.",
+      "Keep Adobe's audit PDF alongside important contracts in your own Drive/Dropbox; Docracy's retention window is short by design.",
+      "Enterprise Adobe libraries rarely export cleanly — prefer the concrete agreements you still send.",
+    ],
     alternativeSlug: "adobe-sign-alternative",
+  },
+  {
+    slug: "contractbook",
+    competitorName: "Contractbook",
+    seoTitle: "Import Contractbook Documents to Docracy",
+    seoDescription:
+      "Export contracts from Contractbook as PDFs and bring them into Docracy for simple signing. No account linking — for when you need a signature, not a full CLM workspace.",
+    heroHeadline: "Bring your Contractbook documents to Docracy",
+    heroSubheadline:
+      "No account-linking, no handing over your Contractbook password. Export the PDFs you need to keep signing outside a full CLM suite.",
+    intro:
+      "Contractbook is a contract lifecycle platform (workspaces, repository, automations). If your actual job is getting one agreement signed without living in CLM, export the PDF and continue in Docracy — free for up to two signers, no account required for short chains.",
+    whyNoConnect:
+      "Contractbook is built around its own workspace and repository model, not a free public bulk-export API for individual \"download everything to another e-sign tool\" migrations. We won't ask for your Contractbook password to connect accounts. Use the product's normal document download / PDF export for each contract you still need.",
+    exportSteps: [
+      "Sign in to Contractbook and open the contract or document you want to keep.",
+      "Use Download / Export PDF (wording varies by workspace view) to save a PDF copy.",
+      "If the contract is still a draft with an attached source file, download that source as well when available.",
+      "Repeat for each contract you plan to re-send or archive outside Contractbook.",
+    ],
+    templateNote:
+      "CLM metadata, clause libraries, and Contractbook automations do not travel with a PDF. You get the document file; you rebuild signing fields in Docracy.",
+    whatTransfers: [
+      "PDF exports of contracts you download.",
+      "Any source files Contractbook lets you download alongside the contract.",
+      "Does not transfer: Contractbook repository structure, clause library, approval automations, or workspace permissions.",
+    ],
+    tips: [
+      "Honest split: keep Contractbook if you need full CLM; use Docracy when the remaining job is signature collection.",
+      "WhatsApp signing and no-account signers are the usual reason teams move a signing step to Docracy.",
+      "After upload, save high-frequency contracts as Docracy templates on paid ($10/mo flat).",
+    ],
+    alternativeSlug: "contractbook-alternative",
+  },
+  {
+    slug: "onlinesignature",
+    competitorName: "OnlineSignature.com",
+    seoTitle: "Import from OnlineSignature.com to Docracy",
+    seoDescription:
+      "OnlineSignature.com routes into Xodo Sign / eversign. Export your PDFs from that signing account and upload them to Docracy — free for up to 2 signers, no account required.",
+    heroHeadline: "Bring OnlineSignature.com documents to Docracy",
+    heroSubheadline:
+      "OnlineSignature.com is a front door to Xodo Sign (formerly eversign). Export from that signing account, then upload to Docracy — no password sharing with us.",
+    intro:
+      "If you started on OnlineSignature.com, the documents that matter usually live in the Xodo Sign / eversign account it funnels into once you send or track anything. This guide explains that relationship and the free PDF download path, then how Docracy takes over without requiring an account for short signing chains.",
+    whyNoConnect:
+      "There is no separate OnlineSignature \"connect your Docracy account\" API — and we wouldn't ask for those passwords anyway. OnlineSignature.com is not an independent document store with a free bulk migration API; export happens in the Xodo Sign / eversign product behind it, under the same API/paid gates as eversign.",
+    exportSteps: [
+      "Sign in to the Xodo Sign / eversign account you use with OnlineSignature.com (often the same login you were pushed into when sending or tracking).",
+      "Open Documents and find completed or draft files you still need.",
+      "Download each document as a PDF.",
+      "Upload the PDF to Docracy and continue with AI field detection + signers.",
+    ],
+    templateNote:
+      "Same limits as eversign/Xodo: templates stay in their system; you get the PDF, then rebuild fields in Docracy.",
+    whatTransfers: [
+      "PDFs you download from the underlying Xodo Sign / eversign account.",
+      "Does not transfer: OnlineSignature.com landing-page settings, Xodo templates, or account-based tracking history.",
+    ],
+    tips: [
+      "If you only ever \"signed a PDF\" once on the marketing site and never created a full account, you may only have local downloads — upload those directly to Docracy.",
+      "See also the eversign / Xodo Sign import guide for the same export UI with more product-specific notes.",
+      "Docracy stays free for up to 2 signers with no account — the usual reason people leave the OnlineSignature → Xodo funnel.",
+    ],
+    alternativeSlug: "onlinesignature-alternative",
   },
 ];
 

@@ -1050,6 +1050,16 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://docracy.io/import-from-contractbook</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/import-from-onlinesignature</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://docracy.io/hellosign-alternative</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

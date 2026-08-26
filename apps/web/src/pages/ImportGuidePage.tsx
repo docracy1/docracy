@@ -5,7 +5,7 @@ import { track } from "../lib/track";
 
 /** One dedicated import-guide page per competitor — mounted at a distinct literal route per
  *  slug (see main.tsx), not a `:slug` param, so each gets its own indexable URL. No "Connect
- *  your account" flow anywhere: none of the five platforms give a free, general-purpose bulk-
+ *  your account" flow anywhere: none of these platforms give a free, general-purpose bulk-
  *  export API a typical individual account can actually use (see IMPORT_GUIDE_PAGES.whyNoConnect
  *  per platform), so this walks through the manual export each one already supports for free. */
 export default function ImportGuidePage({ slug }: { slug: string }) {
@@ -25,9 +25,9 @@ export default function ImportGuidePage({ slug }: { slug: string }) {
   const otherGuides = IMPORT_GUIDE_PAGES.filter((p) => p.slug !== page.slug);
 
   return (
-    <div>
+    <div className="import-guide-page">
       <div className="hero-band">
-        <div className="hero-inner" style={{ maxWidth: 720 }}>
+        <div className="hero-inner import-guide-hero">
           <h1>{page.heroHeadline}</h1>
           <p>{page.heroSubheadline}</p>
           <div style={{ marginTop: 20 }}>
@@ -43,21 +43,35 @@ export default function ImportGuidePage({ slug }: { slug: string }) {
         </div>
       </div>
 
-      <div className="container" style={{ maxWidth: 720 }}>
-        <h2 style={{ fontSize: 22, marginTop: 40 }}>Why there's no "Connect your account" button</h2>
+      <div className="container import-guide-body">
+        <p className="import-guide-intro">{page.intro}</p>
+
+        <h2>Why there's no "Connect your account" button</h2>
         <p>{page.whyNoConnect}</p>
 
-        <h2 style={{ fontSize: 22, marginTop: 32, marginBottom: 8 }}>Exporting from {page.competitorName}</h2>
-        <ol style={{ paddingLeft: 20 }}>
+        <h2>Exporting from {page.competitorName}</h2>
+        <ol className="import-guide-steps">
           {page.exportSteps.map((step, i) => (
-            <li key={i} style={{ marginBottom: 6 }}>
-              {step}
-            </li>
+            <li key={i}>{step}</li>
           ))}
         </ol>
-        <p style={{ fontSize: 14, color: "var(--mute)" }}>{page.templateNote}</p>
+        <p className="import-guide-note">{page.templateNote}</p>
 
-        <h2 style={{ fontSize: 22, marginTop: 32, marginBottom: 8 }}>Once you have the PDF</h2>
+        <h2>What transfers (and what doesn't)</h2>
+        <ul className="import-guide-bullets">
+          {page.whatTransfers.map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
+        </ul>
+
+        <h2>Tips for {page.competitorName}</h2>
+        <ul className="import-guide-bullets">
+          {page.tips.map((tip, i) => (
+            <li key={i}>{tip}</li>
+          ))}
+        </ul>
+
+        <h2>Once you have the PDF</h2>
         <p>
           Upload it to Docracy the same way you'd upload any file. Our AI field detection scans the page
           and suggests where signature, date, and text fields probably go — usually faster than placing
@@ -80,7 +94,7 @@ export default function ImportGuidePage({ slug }: { slug: string }) {
           </div>
         </div>
 
-        <h2 style={{ fontSize: 22, marginTop: 32, marginBottom: 8 }}>Where your documents end up</h2>
+        <h2>Where your documents end up</h2>
         <p>
           Docracy isn't a long-term archive by design — completed documents and their audit trail are
           encrypted and automatically deleted after a short retention window (9 days by default), the same
@@ -93,14 +107,14 @@ export default function ImportGuidePage({ slug }: { slug: string }) {
           storage going forward. Zapier and webhooks cover any other destination (a CRM, a shared drive, an
           internal tool) if none of those four fit.
         </p>
-        <p style={{ fontSize: 14 }}>
+        <p className="import-guide-note">
           <Link to="/docs">See all connectors →</Link>
         </p>
 
-        <p style={{ marginTop: 32, fontSize: 14 }}>
+        <p className="import-guide-crosslink">
           <Link to={`/${page.alternativeSlug}`}>Why teams switch from {page.competitorName} →</Link>
         </p>
-        <p style={{ marginTop: 8, fontSize: 14 }}>
+        <p className="import-guide-crosslink import-guide-others">
           Importing from somewhere else?{" "}
           {otherGuides.map((g, i) => (
             <span key={g.slug}>

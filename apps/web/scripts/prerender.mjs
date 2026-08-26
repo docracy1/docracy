@@ -369,37 +369,51 @@ const routes = [
   {
     urlPath: "/import-from-docusign",
     outFile: "import-from-docusign.html",
-    title: "Import DocuSign Documents to Docracy",
+    title: "Import DocuSign Documents to Docracy — Free Export Guide",
     description:
-      "Bring your existing DocuSign documents and templates over to Docracy. No account-linking, no password sharing — just the export steps DocuSign already gives you for free.",
+      "Step-by-step guide to export DocuSign envelopes and templates as PDFs and upload them to Docracy. No account linking, no password sharing — AI field detection places signatures for you.",
   },
   {
     urlPath: "/import-from-eversign",
     outFile: "import-from-eversign.html",
-    title: "Import eversign Documents to Docracy",
+    title: "Import eversign / Xodo Sign Documents to Docracy",
     description:
-      "Bring your existing eversign documents over to Docracy. No account-linking required — just the free per-document export eversign already offers.",
+      "Export eversign (now Xodo Sign) documents as PDFs and bring them into Docracy. No account linking — free per-document download, then AI field detection on upload.",
   },
   {
     urlPath: "/import-from-hellosign",
     outFile: "import-from-hellosign.html",
-    title: "Import Your HelloSign / Dropbox Sign Documents to Docracy",
+    title: "Import HelloSign / Dropbox Sign Documents to Docracy",
     description:
-      "Bring your existing HelloSign (Dropbox Sign) documents over to Docracy. No account-linking — just the free per-document export already built into Dropbox Sign.",
+      "Export HelloSign (Dropbox Sign) signature requests as PDFs and upload them to Docracy. No account linking — free per-document download with clear steps.",
   },
   {
     urlPath: "/import-from-pandadoc",
     outFile: "import-from-pandadoc.html",
-    title: "Import PandaDoc Documents to Docracy",
+    title: "Import PandaDoc Documents to Docracy — PDF & DocX Export",
     description:
-      "Bring your existing PandaDoc documents and templates over to Docracy. No account-linking required — PandaDoc's own DocX export makes this the easiest of the five to migrate from.",
+      "Export PandaDoc documents and templates (PDF or DocX) and bring them into Docracy. Easiest of the major tools to migrate — no account linking required.",
   },
   {
     urlPath: "/import-from-adobe-sign",
     outFile: "import-from-adobe-sign.html",
-    title: "Import Your Adobe Acrobat Sign Documents to Docracy",
+    title: "Import Adobe Acrobat Sign Documents to Docracy",
     description:
-      "Bring your existing Adobe Acrobat Sign agreements over to Docracy. No account-linking — just the manual per-document download Adobe already provides.",
+      "Export Adobe Acrobat Sign agreements as PDFs and upload them to Docracy. No account linking — manual per-document download with clear limits explained.",
+  },
+  {
+    urlPath: "/import-from-contractbook",
+    outFile: "import-from-contractbook.html",
+    title: "Import Contractbook Documents to Docracy",
+    description:
+      "Export contracts from Contractbook as PDFs and bring them into Docracy for simple signing. No account linking — for when you need a signature, not a full CLM workspace.",
+  },
+  {
+    urlPath: "/import-from-onlinesignature",
+    outFile: "import-from-onlinesignature.html",
+    title: "Import from OnlineSignature.com to Docracy",
+    description:
+      "OnlineSignature.com routes into Xodo Sign / eversign. Export your PDFs from that signing account and upload them to Docracy — free for up to 2 signers, no account required.",
   },
   ...INDUSTRY_PAGES.map((p) => ({
     urlPath: `/industry/${p.slug}`,

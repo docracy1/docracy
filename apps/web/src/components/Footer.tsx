@@ -73,7 +73,13 @@ export default function Footer() {
           { label: t("footer.vsHellosign"), to: "/hellosign-alternative" },
           { label: t("footer.vsPandadoc"), to: "/pandadoc-alternative" },
           { label: t("footer.vsAdobe"), to: "/adobe-sign-alternative" },
-          { label: t("footer.importGuide"), to: "/import-from-docusign" },
+          { label: t("footer.importDocusign"), to: "/import-from-docusign" },
+          { label: t("footer.importEversign"), to: "/import-from-eversign" },
+          { label: t("footer.importHellosign"), to: "/import-from-hellosign" },
+          { label: t("footer.importPandadoc"), to: "/import-from-pandadoc" },
+          { label: t("footer.importAdobe"), to: "/import-from-adobe-sign" },
+          { label: t("footer.importContractbook"), to: "/import-from-contractbook" },
+          { label: t("footer.importOnlinesignature"), to: "/import-from-onlinesignature" },
           { label: t("footer.allComparisons"), to: "/blog" },
         ];
 
