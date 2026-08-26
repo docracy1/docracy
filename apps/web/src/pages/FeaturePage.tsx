@@ -44,9 +44,34 @@ export default function FeaturePage({ slug }: { slug: string }) {
       }
     : null;
 
+  const youtubeTitle = page.youtubeTitle ?? page.heroHeadline;
+  const videoJsonLd = page.youtubeId
+    ? {
+        "@context": "https://schema.org",
+        "@type": "VideoObject",
+        name: youtubeTitle,
+        description: page.seoDescription,
+        thumbnailUrl: [`https://img.youtube.com/vi/${page.youtubeId}/hqdefault.jpg`],
+        embedUrl: `https://www.youtube-nocookie.com/embed/${page.youtubeId}`,
+        contentUrl: `https://www.youtube.com/watch?v=${page.youtubeId}`,
+        publisher: {
+          "@type": "Organization",
+          name: "Docracy",
+          url: "https://docracy.io",
+          logo: {
+            "@type": "ImageObject",
+            url: "https://docracy.io/docracy-seal-icon.png",
+          },
+        },
+      }
+    : null;
+
   return (
     <div>
       {faqJsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />}
+      {videoJsonLd && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(videoJsonLd) }} />
+      )}
       {page.darkHero ? (
         <div className="verify-dark-hero verify-dark-hero-compact">
           <div className="verify-dark-hero-inner">
@@ -97,6 +122,19 @@ export default function FeaturePage({ slug }: { slug: string }) {
 
         <h2 style={{ fontSize: 22, marginTop: 32 }}>{t("feature.solution")}</h2>
         <p>{page.solution}</p>
+
+        {page.youtubeId ? (
+          <div style={{ position: "relative", paddingBottom: "56.25%", height: 0, margin: "28px 0 8px" }}>
+            <iframe
+              src={`https://www.youtube-nocookie.com/embed/${page.youtubeId}`}
+              title={youtubeTitle}
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: 0, borderRadius: 8 }}
+            />
+          </div>
+        ) : null}
 
         <h2 style={{ fontSize: 22, marginTop: 40, marginBottom: 8 }}>{t("feature.features")}</h2>
         <div className="core-features-grid">
