@@ -1576,59 +1576,58 @@ select {
   color: rgba(255, 255, 255, 0.4);
 }
 
-.hero-trust-badges-bottom {
+/* First viewport like LimeWire: one composition that fills the screen, with the trusted-by
+   strip pinned to the bottom of the blue field (not a separate band below). */
+.hero-band-first-page {
+  min-height: calc(100dvh - 64px);
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 0;
+  box-sizing: border-box;
+}
+
+.hero-band-first-page > .hero-inner {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
-  margin: 28px 0 0;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.14);
   width: 100%;
+  padding-bottom: 24px;
 }
 
-/* Real, countable numbers only (template count comes from FREE_TEMPLATES.length) — same stat-pill
-   format as the reference layout, never its actual claims (no SSL-automation feature here, since
-   Docracy doesn't have one — swapped for the real blockchain-timestamp feature instead). */
-.hero-stat-pill {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 10px 28px;
-  margin-top: 24px;
-  padding: 16px 28px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-}
-
-.hero-stat-pill span {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13.5px;
-  color: rgba(255, 255, 255, 0.85);
-  white-space: nowrap;
-}
-
-.hero-stat-pill svg {
-  width: 16px;
-  height: 16px;
+.hero-band-first-page .hero-trusted-by {
   flex-shrink: 0;
-  opacity: 0.85;
+  margin-top: auto;
+  width: 100%;
+  padding: 22px 24px 28px;
+  background: rgba(0, 0, 0, 0.18);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.hero-stat-pill strong {
-  color: #ffffff;
+.hero-band-first-page .hero-trusted-by .trust-logos-label {
+  margin-bottom: 16px;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 12px;
+  letter-spacing: 0.6px;
 }
 
-@media (max-width: 640px) {
-  .hero-stat-pill {
-    border-radius: 20px;
-    padding: 16px 20px;
+.hero-band-first-page .hero-trusted-by .trust-logo-img {
+  height: 36px;
+}
+
+.hero-band-first-page .hero-trusted-by .trust-logo-link {
+  padding: 8px 14px;
+}
+
+@media (max-width: 720px) {
+  .hero-band-first-page {
+    min-height: 0;
+    padding-bottom: 0;
   }
 
-  .hero-stat-pill span {
-    white-space: normal;
-    justify-content: center;
+  .hero-band-first-page > .hero-inner {
+    justify-content: flex-start;
+    padding-bottom: 8px;
   }
 }
 
@@ -3159,14 +3158,13 @@ select {
   font-size: 14px;
 }
 
-/* Compact "trusted by" logo strip right below the hero — real customers only, no fabricated
-   counts or stats. Deliberately lightweight (no cards/shadows) so it reads as a quiet trust
-   signal, not another content section competing for attention. */
+/* Compact "trusted by" logo strip — used inside the hero first viewport (LimeWire-style).
+   Real customers only, no fabricated counts. */
 
 .trust-logos-band {
   padding: 28px 24px 32px;
   text-align: center;
-  background: var(--hero-to);
+  background: transparent;
 }
 
 .trust-logos-label {
@@ -3263,6 +3261,45 @@ select {
 .audience-inner {
   max-width: 880px;
   margin: 0 auto;
+}
+
+/* Contracts pull on the landing page — thumbnail tiles (same as /free-templates), not text-only
+   accent cards, so the section attracts the same way the marketplace first page does. */
+.landing-templates-band {
+  background: linear-gradient(180deg, #eef4fb 0%, var(--canvas) 100%);
+  border-bottom: 1px solid var(--hairline);
+  padding: 56px 24px 64px;
+}
+
+.landing-templates-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.landing-templates-inner h2 {
+  font-size: clamp(22px, 3vw, 28px);
+  margin: 0 0 8px;
+  color: var(--ink);
+}
+
+.landing-templates-sub {
+  margin: 0 auto 28px;
+  max-width: 36em;
+  font-size: 15px;
+  color: var(--body);
+  line-height: 1.5;
+}
+
+.landing-templates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+  text-align: left;
+}
+
+.landing-templates-cta {
+  margin-top: 28px;
 }
 
 .accent-grid {
@@ -3564,22 +3601,65 @@ select {
 }
 
 .templates-hero {
-  padding: 56px 24px 64px;
+  /* LimeWire-style first page for contracts: tall blue field, centered search as the action. */
+  min-height: calc(100dvh - 64px);
+  display: flex;
+  align-items: center;
+  padding: 48px 24px 56px;
+  box-sizing: border-box;
 }
 .templates-hero-inner {
   max-width: 640px;
   margin: 0 auto;
   text-align: center;
+  width: 100%;
 }
 .templates-hero-inner h1 {
   color: #ffffff;
-  font-size: clamp(28px, 4vw, 42px);
+  font-size: clamp(32px, 5vw, 48px);
+  line-height: 1.15;
   margin: 0 0 14px;
+  letter-spacing: -0.02em;
 }
-.templates-hero-inner p {
+.templates-hero-inner > p {
   color: var(--hero-body);
-  font-size: 16px;
-  margin: 0;
+  font-size: 17px;
+  line-height: 1.45;
+  margin: 0 auto;
+  max-width: 34em;
+}
+.templates-hero-count {
+  margin-top: 12px !important;
+  font-size: 14px !important;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.92) !important;
+}
+.templates-hero-how {
+  margin-top: 18px !important;
+  font-size: 13.5px !important;
+}
+.templates-hero-how a {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.templates-hero-how a:hover {
+  color: #ffffff;
+}
+.templates-hero-inner .templates-search-wrap {
+  margin-top: 32px;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+}
+@media (max-width: 720px) {
+  .templates-hero {
+    min-height: 0;
+    padding: 40px 20px 48px;
+  }
+  .templates-hero-inner h1 {
+    font-size: clamp(26px, 7vw, 34px);
+  }
 }
 .templates-legal-review {
   font-size: 13px !important;
