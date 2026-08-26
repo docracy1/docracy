@@ -19,15 +19,16 @@ const DURATION_MS = 63000;
 
 async function loadPlaywright() {
   const candidates = [
-    path.join(root, "marketing/linkedin/node_modules/playwright/index.js"),
     path.join(root, "node_modules/playwright/index.js"),
+    "/tmp/node_modules/playwright/index.js",
+    path.join(root, "marketing/linkedin/node_modules/playwright/index.js"),
   ];
   for (const entry of candidates) {
     if (!fs.existsSync(entry)) continue;
     const req = createRequire(entry);
     return req("playwright");
   }
-  throw new Error("playwright not found — run: cd marketing/linkedin && npm install");
+  throw new Error("playwright not found — npm install playwright");
 }
 
 const { chromium } = await loadPlaywright();
