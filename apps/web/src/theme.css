@@ -1499,7 +1499,7 @@ select {
 }
 
 .hero-stack h1 {
-  max-width: 16em;
+  max-width: 22em;
 }
 
 .hero-stack .hero-sub {
@@ -1675,6 +1675,11 @@ select {
   letter-spacing: -0.025em;
   white-space: pre-line;
   max-width: 14em;
+}
+
+/* Landing hero: keep the forced break at two lines (brand / rest), not three. */
+.hero-band .hero-stack h1 {
+  max-width: 22em;
 }
 
 @media (max-width: 760px) {
