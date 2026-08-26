@@ -1,5 +1,6 @@
 import { Component, type ReactNode } from "react";
 import { translate } from "../lib/i18n";
+import { isStaleChunkError, reloadOnceOnStaleChunk } from "../lib/reloadOnStaleChunk";
 
 interface State {
   error: Error | null;
@@ -8,7 +9,10 @@ interface State {
 /** Top-level safety net around every route: without this, an uncaught render error anywhere in
  *  the tree unmounts the entire app to a blank white page with no visible signal of what went
  *  wrong — this shows the actual error message instead, and keeps it from taking down routes that
- *  didn't crash (the error still only replaces the reachable render, not the whole document). */
+ *  didn't crash (the error still only replaces the reachable render, not the whole document).
+ *
+ *  Stale Vite chunk errors (common right after a Pages deploy) auto-reload once so users don't
+ *  have to click Reload by hand. */
 export default class RootErrorBoundary extends Component<{ children: ReactNode }, State> {
   state: State = { error: null };
 
@@ -17,12 +21,18 @@ export default class RootErrorBoundary extends Component<{ children: ReactNode }
   }
 
   componentDidCatch(error: unknown, info: { componentStack?: string | null }) {
+    if (reloadOnceOnStaleChunk(error)) return;
     // eslint-disable-next-line no-console
     console.error("RootErrorBoundary caught:", error, info.componentStack);
   }
 
   render() {
     if (this.state.error) {
+      // Avoid flashing the error UI when we're about to reload for a stale chunk.
+      if (isStaleChunkError(this.state.error)) {
+        reloadOnceOnStaleChunk(this.state.error);
+        return null;
+      }
       return (
         <div className="container">
           <h1>{translate("error.title")}</h1>
