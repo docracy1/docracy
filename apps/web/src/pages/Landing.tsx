@@ -7,14 +7,14 @@ import IntegrationsBand from "../components/IntegrationsBand";
 import TurnstileWidget, { turnstileRequired } from "../components/TurnstileWidget";
 import DetectMockup from "../components/DetectMockup";
 import PdfUploadCircle from "../components/PdfUploadCircle";
-import { NavIcon } from "../components/NavIcons";
-import { requestMagicLink } from "../lib/api";
+import { fetchMarketplaceTemplates, fetchWeeklyTemplates, requestMagicLink } from "../lib/api";
 import { track } from "../lib/track";
 import { FREE_TEMPLATES } from "../lib/freeTemplates";
 import { HOW_IT_WORKS_VIDEO } from "../lib/howItWorksVideo";
 import { localizePath, useI18n, useT } from "../lib/i18n";
 import { useSeoMeta } from "../lib/useSeoMeta";
 import { setPendingUploadFile } from "../lib/pendingUpload";
+import { TemplateCard } from "./FreeTemplates";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -358,6 +358,7 @@ export default function Landing() {
   const [turnstileResetKey, setTurnstileResetKey] = useState(0);
   const [pendingSubmit, setPendingSubmit] = useState(false);
   const [watchOpen, setWatchOpen] = useState(false);
+  const [templateCount, setTemplateCount] = useState(FREE_TEMPLATES.length);
   const heroEmailRef = useRef<HTMLInputElement>(null);
   useSeoMeta("home");
   const faqItems = FAQ_KEYS.map((item) => ({
@@ -386,6 +387,24 @@ export default function Landing() {
     if (window.location.hash === "#watch-how-it-works") {
       setWatchOpen(true);
     }
+  }, []);
+
+  // Live library size = static free templates + Marketplace community + weekly cron batch.
+  useEffect(() => {
+    let cancelled = false;
+    Promise.all([
+      fetchMarketplaceTemplates().then((res) => res.templates.filter((tpl) => tpl.origin !== "weekly").length),
+      fetchWeeklyTemplates(50).then((res) => res.templates.length),
+    ])
+      .then(([community, weekly]) => {
+        if (!cancelled) setTemplateCount(FREE_TEMPLATES.length + community + weekly);
+      })
+      .catch(() => {
+        /* keep FREE_TEMPLATES.length fallback */
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
@@ -466,20 +485,12 @@ export default function Landing() {
 
   return (
     <div>
-      <div className="hero-band hero-band-decorated">
+      <div className="hero-band hero-band-decorated hero-band-first-page">
         <HeroDecorPhoto className="hero-decor-card-1" rotate={-8} src="/decor/lady-justice.jpg" alt="" />
         <HeroDecorPhoto className="hero-decor-card-2" rotate={10} src="/decor/docracy-seal.png" alt="" />
         <HeroDecorPhoto className="hero-decor-card-3" rotate={7} src="/decor/legal-for-the-people.png" alt="" crop />
         <HeroDecorCard className="hero-decor-card-4" rotate={-9} />
         <div className="hero-inner hero-stack">
-          <Link
-            to="/whatsapp-signing"
-            className="hero-new-badge"
-            onClick={() => track("landingpage_cta_clicked", { source: "hero_whatsapp_badge" })}
-          >
-            <img src="/integrations/whatsapp.svg" alt="" width={16} height={16} />
-            {t("hero.whatsappBadge")}
-          </Link>
           <h1>{t("hero.title")}</h1>
           <p className="hero-sub">{t("hero.sub")}</p>
 
@@ -573,79 +584,42 @@ export default function Landing() {
               {t("hero.orTemplates")}
             </Link>
           </div>
-
-          <div className="hero-stat-pill">
-            <span>
-              <FeatureIcon name="duplicate" />
-              <strong>{FREE_TEMPLATES.length}+</strong> {t("hero.stat.templates")}
-            </span>
-            <span>
-              <NavIcon name="badge" />
-              <strong>{t("hero.stat.verifyLabel")}</strong> {t("hero.stat.verify")}
-            </span>
-            <span>
-              <NavIcon name="chainLink" />
-              <strong>{t("hero.stat.blockchainLabel")}</strong> {t("hero.stat.blockchain")}
-            </span>
-          </div>
-
-          <ul className="hero-trust-badges hero-trust-badges-bottom">
-            <li>
-              <FeatureIcon name="scale" />
-              {t("hero.badge.legal")}
-            </li>
-            <li>
-              <FeatureIcon name="shield" />
-              {t("hero.badge.ssl")}
-            </li>
-            <li>
-              <FeatureIcon name="pen" />
-              {t("hero.badge.noSignup")}
-            </li>
-            <li>
-              <a
-                href="#compare-price"
-                onClick={() => track("landingpage_cta_clicked", { source: "hero_calculate_savings" })}
-              >
-                {t("hero.calculateSavings")}
-              </a>
-            </li>
-          </ul>
         </div>
-      </div>
 
-      <div className="trust-logos-band">
-        <p className="trust-logos-label">{t("landing.trustedBy")}</p>
-        <div className="trust-logos-viewport">
-          <div className="trust-logos-track">
-            {/* 10 copies, not 2 — on wide/ultrawide screens 2x isn't enough track width to fill the
-                viewport during the loop, which left a visible gap of blank navy on the right. */}
-            {Array.from({ length: 10 }, () => TRUST_LOGOS)
-              .flat()
-              .map((item, i) => (
-              <a
-                key={`${item.name}-${i}`}
-                href={item.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={item.logo ? "trust-logo-link" : "trust-logo-link trust-logo-link-text"}
-                aria-label={item.name}
-                tabIndex={i < TRUST_LOGOS.length ? 0 : -1}
-                aria-hidden={i < TRUST_LOGOS.length ? undefined : true}
-              >
-                {item.logo ? (
-                  <img
-                    src={item.logo}
-                    alt={item.name}
-                    className="trust-logo-img"
-                    width={item.w}
-                    height={item.h}
-                  />
-                ) : (
-                  item.name
-                )}
-              </a>
-            ))}
+        {/* LimeWire-style closing strip on the first viewport — real customer logos only. */}
+        <div className="trust-logos-band hero-trusted-by">
+          <p className="trust-logos-label">{t("landing.trustedBy")}</p>
+          <div className="trust-logos-viewport">
+            <div className="trust-logos-track">
+              {/* 10 copies, not 2 — on wide/ultrawide screens 2x isn't enough track width to fill the
+                  viewport during the loop, which left a visible gap of blank navy on the right. */}
+              {Array.from({ length: 10 }, () => TRUST_LOGOS)
+                .flat()
+                .map((item, i) => (
+                <a
+                  key={`${item.name}-${i}`}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={item.logo ? "trust-logo-link" : "trust-logo-link trust-logo-link-text"}
+                  aria-label={item.name}
+                  tabIndex={i < TRUST_LOGOS.length ? 0 : -1}
+                  aria-hidden={i < TRUST_LOGOS.length ? undefined : true}
+                >
+                  {item.logo ? (
+                    <img
+                      src={item.logo}
+                      alt={item.name}
+                      className="trust-logo-img"
+                      width={item.w}
+                      height={item.h}
+                    />
+                  ) : (
+                    item.name
+                  )}
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -755,27 +729,34 @@ export default function Landing() {
         </div>
       </div>
 
-      <div className="audience-band">
-        <div className="audience-inner">
-          <h2 style={{ fontSize: 22, marginBottom: 0 }}>{t("landing.templatesTitle")}</h2>
-          <div className="accent-grid">
-            {FEATURED_TEMPLATES.map((tmpl) => (
-              <div key={tmpl.slug} className="accent-item">
-                <h3 style={{ fontSize: 15, marginBottom: 3 }}>
-                  {locale === "es" ? t(`tpl.${tmpl.slug}.name`) : tmpl.name}
-                </h3>
-                <p style={{ margin: 0, fontSize: 13.5 }}>
-                  {locale === "es" ? t(`tpl.${tmpl.slug}.description`) : tmpl.description}
-                </p>
-                <Link to={localizePath(`/free-templates/${tmpl.slug}`, locale)} style={{ fontSize: 13, fontWeight: 600 }}>
-                  {t("landing.templateUse")} →
-                </Link>
-              </div>
-            ))}
+      <div className="landing-templates-band">
+        <div className="landing-templates-inner">
+          <h2>{t("landing.templatesTitle")}</h2>
+          <p className="landing-templates-sub">{t("landing.templatesSub")}</p>
+          <div className="landing-templates-grid">
+            {FEATURED_TEMPLATES.map((tmpl) => {
+              const name = locale === "es" ? t(`tpl.${tmpl.slug}.name`) : tmpl.name;
+              const description = locale === "es" ? t(`tpl.${tmpl.slug}.description`) : tmpl.description;
+              return (
+                <TemplateCard
+                  key={tmpl.slug}
+                  name={name}
+                  description={description}
+                  to={localizePath(`/free-templates/${tmpl.slug}`, locale)}
+                  pdfPath={tmpl.pdfPath}
+                  badge="official"
+                />
+              );
+            })}
           </div>
-          <div style={{ marginTop: 20 }}>
-            <Link to={templatesTo} style={{ fontSize: 13.5, fontWeight: 600 }}>
-              {t("landing.templatesBrowse", { count: FREE_TEMPLATES.length })} →
+          <div className="landing-templates-cta">
+            <Link
+              to={templatesTo}
+              className="btn-primary btn-lg"
+              style={{ display: "inline-block", textDecoration: "none" }}
+              onClick={() => track("landingpage_cta_clicked", { source: "landing_browse_templates" })}
+            >
+              {t("landing.templatesBrowse", { count: templateCount })} →
             </Link>
           </div>
         </div>
