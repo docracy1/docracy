@@ -491,7 +491,18 @@ export default function Landing() {
         <HeroDecorPhoto className="hero-decor-card-3" rotate={7} src="/decor/legal-for-the-people.png" alt="" crop />
         <HeroDecorCard className="hero-decor-card-4" rotate={-9} />
         <div className="hero-inner hero-stack">
-          <h1>{t("hero.title")}</h1>
+          <h1 className="hero-title">
+            {t("hero.title")
+              .split("\n")
+              .map((line, i, lines) => (
+                <span
+                  key={i}
+                  className={i === lines.length - 1 && lines.length > 1 ? "hero-title-line hero-title-line-rest" : "hero-title-line"}
+                >
+                  {line}
+                </span>
+              ))}
+          </h1>
           <p className="hero-sub">{t("hero.sub")}</p>
 
           <PdfUploadCircle

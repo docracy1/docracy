@@ -201,7 +201,7 @@ export default function Header() {
             />
           </nav>
         </div>
-        <nav className="header-nav-right" aria-label="Account">
+        <div className="header-center">
           <Link
             to={localizePath("/whatsapp-signing", locale)}
             className="header-whatsapp-badge"
@@ -210,6 +210,8 @@ export default function Header() {
             <img src="/integrations/whatsapp.svg" alt="" width={15} height={15} />
             <span className="header-whatsapp-badge-text">{t("hero.whatsappBadge")}</span>
           </Link>
+        </div>
+        <nav className="header-nav-right" aria-label="Account">
           <LanguageSwitcher className="lang-switcher-on-dark header-templates-link" />
           <div className="header-cta-group">
             <a
