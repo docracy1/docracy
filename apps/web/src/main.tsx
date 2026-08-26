@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./theme.css";
@@ -8,12 +8,34 @@ import Footer from "./components/Footer";
 import ChatWidget from "./components/ChatWidget";
 import CookieConsentBanner from "./components/CookieConsentBanner";
 import MobilePricingBar from "./components/MobilePricingBar";
+import { clearStaleChunkReloadGuard, reloadOnceOnStaleChunk } from "./lib/reloadOnStaleChunk";
 // Landing stays eager — it's the single most-visited route, and lazy-loading it would add a
 // chunk-fetch roundtrip before the homepage can render at all. Every other route is fetched
 // on demand instead of shipping its code (pdf-lib, pdfjs, admin analytics, every SEO page, etc.)
 // to visitors who never touch it. Prerendering (scripts/_render-entry.tsx) is a separate,
 // eagerly-imported esbuild bundle unaffected by any of this.
 import Landing from "./pages/Landing";
+
+// After a deploy, open tabs may still point at retired hashed chunks. Vite emits this event
+// for failed dynamic imports; one reload picks up the new HTML shell.
+window.addEventListener("vite:preloadError", (event) => {
+  event.preventDefault();
+  reloadOnceOnStaleChunk();
+});
+window.addEventListener("unhandledrejection", (event) => {
+  if (reloadOnceOnStaleChunk(event.reason)) {
+    event.preventDefault();
+  }
+});
+
+/** Clears the stale-chunk reload guard only after the shell mounts successfully — clearing at
+ *  module-eval time would allow an infinite reload loop if the new shell still can't load. */
+function StaleChunkRecovery() {
+  useEffect(() => {
+    clearStaleChunkReloadGuard();
+  }, []);
+  return null;
+}
 const Prepare = lazy(() => import("./pages/Prepare"));
 const PrepareSent = lazy(() => import("./pages/PrepareSent"));
 const Sign = lazy(() => import("./pages/Sign"));
@@ -235,6 +257,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <LocaleProvider>
       <BrowserRouter>
         <RootErrorBoundary>
+          <StaleChunkRecovery />
           <Suspense fallback={null}>
             <Routes>
               <Route path="/embed/sign/:token" element={<EmbedSign />} />

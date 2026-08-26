@@ -33,6 +33,15 @@
 /assets/*
   Cache-Control: public, max-age=120, must-revalidate
 
+# HTML shells embed hashed `/assets/*.js` URLs. Caching them across a deploy leaves open tabs
+# pointing at retired chunks ("Failed to fetch dynamically imported module"). Always revalidate.
+/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: </docs>; rel="service-doc", </privacy>; rel="privacy-policy", </terms>; rel="terms-of-service"
+
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
 # Favicons: short cache so a bad prior response (e.g. SPA HTML for /favicon.ico) can recover,
 # and so ?v= cache-bust query bumps take effect quickly across browsers.
 /favicon.ico
@@ -49,12 +58,6 @@
 
 /apple-touch-icon.png
   Cache-Control: public, max-age=86400, must-revalidate
-
-# RFC 8288 Link headers pointing agents/crawlers at real, existing resources — deliberately not an
-# api-catalog link, since there's no /.well-known/api-catalog file behind it yet; /docs now has a
-# genuine REST API reference section (see Docs.tsx), so service-doc is honest.
-/
-  Link: </docs>; rel="service-doc", </privacy>; rel="privacy-policy", </terms>; rel="terms-of-service"
 
 # Embedded signing must be iframe-able. Omit X-Frame-Options here so only CSP frame-ancestors *
 # applies (Cloudflare Pages may not honor ALLOWALL, and DENY from /* would block embeds).
