@@ -12,7 +12,7 @@
 # script-src/connect-src also allow www.clarity.ms + scripts.clarity.ms for Microsoft Clarity
 # (session recording/heatmaps, admin-only /admin/analytics dashboard — public/clarity-loader.js
 # is what actually decides whether to load it, this just permits the request once it does).
-# frame-src also allows www.youtube-nocookie.com for embedded videos on blog posts (see the
+# frame-src also allows www.youtube-nocookie.com for embedded videos on blog / feature pages (see the
 # "video" ArticleBlock type in lib/articles.ts) — the nocookie domain skips ad-tracking cookies
 # until the viewer actually plays the video.
 /*
