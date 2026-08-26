@@ -22,6 +22,10 @@ export interface FeaturePageContent {
   ctaLabel: string;
   ctaTo: string;
   relatedLinks: Array<{ label: string; to: string }>;
+  /** Optional YouTube video ID (youtube-nocookie embed + VideoObject JSON-LD). */
+  youtubeId?: string;
+  /** Accessible iframe / VideoObject title; defaults to heroHeadline when omitted. */
+  youtubeTitle?: string;
 }
 
 export const FEATURE_PAGES: FeaturePageContent[] = [
@@ -286,6 +290,8 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       { label: "See pricing", to: "/pricing" },
       { label: "Trust & security", to: "/trust" },
     ],
+    youtubeId: "LvnzCbPBRqY",
+    youtubeTitle: "Sign documents via WhatsApp — Docracy demo",
   },
   {
     slug: "advanced-electronic-signature",
