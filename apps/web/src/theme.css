@@ -2672,7 +2672,11 @@ select {
 }
 
 .hero-band .pdf-upload-circle-or {
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  margin-bottom: 4px;
 }
 
 .pdf-upload-circle-gdoc-form {
@@ -2714,6 +2718,28 @@ select {
   transition: background 0.15s ease, opacity 0.15s ease;
 }
 
+/* Hero: quieter, smaller Google Doc strip — utility, not a sales line. */
+.hero-band .pdf-upload-circle-gdoc {
+  max-width: 240px;
+  margin-top: 8px;
+}
+
+.hero-band .pdf-upload-circle-gdoc-form {
+  padding: 2px;
+  box-shadow: 0 4px 12px rgba(10, 30, 60, 0.12);
+}
+
+.hero-band .pdf-upload-circle-gdoc-form input {
+  padding: 4px 8px;
+  font-size: 10.5px;
+}
+
+.hero-band .pdf-upload-circle-gdoc-form button {
+  font-size: 10.5px;
+  font-weight: 650;
+  padding: 4px 10px;
+}
+
 .pdf-upload-circle-gdoc-form button:hover:not(:disabled) {
   background: var(--accent-hover);
 }
@@ -2736,7 +2762,9 @@ select {
 }
 
 .hero-band .pdf-upload-circle-gdoc-hint {
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(255, 255, 255, 0.38);
+  font-size: 9px;
+  margin-top: 4px;
 }
 
 .pdf-upload-circle-caption {
@@ -2749,7 +2777,11 @@ select {
 }
 
 .pdf-upload-circle-hero .pdf-upload-circle-caption {
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(255, 255, 255, 0.42);
+  font-size: 10.5px;
+  margin-top: 10px;
+  max-width: 280px;
+  line-height: 1.35;
 }
 
 .pdf-upload-circle-error {
