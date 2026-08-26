@@ -204,6 +204,8 @@ function AppRoutes() {
       <Route path="/import-from-hellosign" element={<ImportGuidePage slug="hellosign" />} />
       <Route path="/import-from-pandadoc" element={<ImportGuidePage slug="pandadoc" />} />
       <Route path="/import-from-adobe-sign" element={<ImportGuidePage slug="adobe-sign" />} />
+      <Route path="/import-from-contractbook" element={<ImportGuidePage slug="contractbook" />} />
+      <Route path="/import-from-onlinesignature" element={<ImportGuidePage slug="onlinesignature" />} />
 
       <Route path="/industry/freelancers" element={<IndustryPage slug="freelancers" />} />
       <Route path="/industry/creative-agencies" element={<IndustryPage slug="creative-agencies" />} />
