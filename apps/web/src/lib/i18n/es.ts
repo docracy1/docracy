@@ -282,7 +282,7 @@ const es: Messages = {
   "hero.badge.ssl": "Seguridad SSL",
   "hero.badge.noSignup": "Sin necesidad de registrarse",
   "hero.whatsappBadge": "Nuevo: firma por WhatsApp",
-  "hero.title": "Docracy —\nla forma más rápida de firmar acuerdos.",
+  "hero.title": "Docracy —\nla forma más rápida de firmar acuerdos",
   "how.s1.body": "Agrega el PDF que quieres firmar (o pega un enlace de Google Docs), o empieza desde una plantilla gratis.",
   "how.s1.title": "Subir",
   "how.s2.body":

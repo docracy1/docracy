@@ -78,7 +78,7 @@ const en: Messages = {
   "nav.mega.resource.contact.desc": "Questions before you sign up? Ask sales@docracy.io.",
   "hero.eyebrow": "Sequential e-signatures · AI-assisted",
   "hero.whatsappBadge": "New: Sign via WhatsApp",
-  "hero.title": "Docracy —\nthe fastest way to sign agreements.",
+  "hero.title": "Docracy —\nthe fastest way to sign agreements",
   "hero.sub": "Drop a PDF, add signers, done. Free legal templates. No per-seat pricing.",
   "hero.badge.legal": "ESIGN & UETA aligned",
   "hero.badge.ssl": "SSL-secured",
