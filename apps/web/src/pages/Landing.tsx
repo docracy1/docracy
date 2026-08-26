@@ -8,7 +8,7 @@ import TurnstileWidget, { turnstileRequired } from "../components/TurnstileWidge
 import DetectMockup from "../components/DetectMockup";
 import PdfUploadCircle from "../components/PdfUploadCircle";
 import { NavIcon } from "../components/NavIcons";
-import { requestMagicLink } from "../lib/api";
+import { fetchMarketplaceTemplates, fetchWeeklyTemplates, requestMagicLink } from "../lib/api";
 import { track } from "../lib/track";
 import { FREE_TEMPLATES } from "../lib/freeTemplates";
 import { HOW_IT_WORKS_VIDEO } from "../lib/howItWorksVideo";
@@ -358,6 +358,7 @@ export default function Landing() {
   const [turnstileResetKey, setTurnstileResetKey] = useState(0);
   const [pendingSubmit, setPendingSubmit] = useState(false);
   const [watchOpen, setWatchOpen] = useState(false);
+  const [templateCount, setTemplateCount] = useState(FREE_TEMPLATES.length);
   const heroEmailRef = useRef<HTMLInputElement>(null);
   useSeoMeta("home");
   const faqItems = FAQ_KEYS.map((item) => ({
@@ -386,6 +387,24 @@ export default function Landing() {
     if (window.location.hash === "#watch-how-it-works") {
       setWatchOpen(true);
     }
+  }, []);
+
+  // Live library size = static free templates + Marketplace community + weekly cron batch.
+  useEffect(() => {
+    let cancelled = false;
+    Promise.all([
+      fetchMarketplaceTemplates().then((res) => res.templates.filter((tpl) => tpl.origin !== "weekly").length),
+      fetchWeeklyTemplates(50).then((res) => res.templates.length),
+    ])
+      .then(([community, weekly]) => {
+        if (!cancelled) setTemplateCount(FREE_TEMPLATES.length + community + weekly);
+      })
+      .catch(() => {
+        /* keep FREE_TEMPLATES.length fallback */
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
@@ -472,14 +491,6 @@ export default function Landing() {
         <HeroDecorPhoto className="hero-decor-card-3" rotate={7} src="/decor/legal-for-the-people.png" alt="" crop />
         <HeroDecorCard className="hero-decor-card-4" rotate={-9} />
         <div className="hero-inner hero-stack">
-          <Link
-            to="/whatsapp-signing"
-            className="hero-new-badge"
-            onClick={() => track("landingpage_cta_clicked", { source: "hero_whatsapp_badge" })}
-          >
-            <img src="/integrations/whatsapp.svg" alt="" width={16} height={16} />
-            {t("hero.whatsappBadge")}
-          </Link>
           <h1>{t("hero.title")}</h1>
           <p className="hero-sub">{t("hero.sub")}</p>
 
@@ -577,7 +588,7 @@ export default function Landing() {
           <div className="hero-stat-pill">
             <span>
               <FeatureIcon name="duplicate" />
-              <strong>{FREE_TEMPLATES.length}+</strong> {t("hero.stat.templates")}
+              <strong>{templateCount}</strong> {t("hero.stat.templates")}
             </span>
             <span>
               <NavIcon name="badge" />

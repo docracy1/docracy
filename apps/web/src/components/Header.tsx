@@ -202,6 +202,14 @@ export default function Header() {
           </nav>
         </div>
         <nav className="header-nav-right" aria-label="Account">
+          <Link
+            to={localizePath("/whatsapp-signing", locale)}
+            className="header-whatsapp-badge"
+            title={t("hero.whatsappBadge")}
+          >
+            <img src="/integrations/whatsapp.svg" alt="" width={15} height={15} />
+            <span className="header-whatsapp-badge-text">{t("hero.whatsappBadge")}</span>
+          </Link>
           <LanguageSwitcher className="lang-switcher-on-dark header-templates-link" />
           <div className="header-cta-group">
             <a
@@ -265,6 +273,13 @@ export default function Header() {
           </details>
           <Link to={marketplaceTo} className="header-mobile-nav-link" onClick={() => setMenuOpen(false)}>
             {t("nav.templates")}
+          </Link>
+          <Link
+            to={localizePath("/whatsapp-signing", locale)}
+            className="header-mobile-nav-link"
+            onClick={() => setMenuOpen(false)}
+          >
+            {t("hero.whatsappBadge")}
           </Link>
           <details className="header-mobile-accordion">
             <summary>{t("nav.more")}</summary>
