@@ -4,6 +4,7 @@ import { fetchMe, logout } from "../lib/api";
 import { localizePath, useI18n, useT } from "../lib/i18n";
 import LanguageSwitcher from "./LanguageSwitcher";
 import NavMegaMenu from "./NavMegaMenu";
+import NavListMenu, { type NavListEntry } from "./NavListMenu";
 import { NavIcon } from "./NavIcons";
 
 /** Real <a href> — never React Router <Link>, which treats mailto as an SPA path. */
@@ -50,18 +51,13 @@ const INDUSTRY_ITEMS = [
   { to: "/industry/consulting", icon: "lifering", titleKey: "nav.mega.industry.consulting.title", descKey: "nav.mega.industry.consulting.desc" },
 ] as const;
 
-const RESOURCE_ITEMS = [
-  { to: "/blog", icon: "book", titleKey: "nav.mega.resource.blog.title", descKey: "nav.mega.resource.blog.desc" },
-  { to: "/docs", icon: "lifering", titleKey: "nav.mega.resource.docs.title", descKey: "nav.mega.resource.docs.desc" },
-  { to: "/about", icon: "info", titleKey: "nav.mega.resource.about.title", descKey: "nav.mega.resource.about.desc" },
-  { to: SALES_MAILTO, icon: "mail", titleKey: "nav.mega.resource.contact.title", descKey: "nav.mega.resource.contact.desc" },
-] as const;
-
-/** Everything that isn't Features or Marketplace lives under one "More" menu — mirrors a minimal
- *  top-level nav (a couple of items + a single catch-all) rather than a long row of triggers. */
-const MORE_PANEL_ITEMS = [
-  { to: "/pricing", icon: "scale", titleKey: "nav.pricing", descKey: "nav.mega.more.pricing.desc" },
-  { to: "/ai", icon: "sparkles", titleKey: "nav.ai", descKey: "nav.mega.more.ai.desc" },
+const USE_CASE_ITEMS = [
+  { to: "/client-contracts", titleKey: "landing.uc1.title" },
+  { to: "/onboarding-documents", titleKey: "landing.uc2.title" },
+  { to: "/simple-agreements", titleKey: "landing.uc3.title" },
+  { to: "/vendor-agreements", titleKey: "landing.uc4.title" },
+  { to: "/compliance-documentation", titleKey: "landing.uc5.title" },
+  { to: "/nda-signing", titleKey: "landing.uc6.title" },
 ] as const;
 
 export default function Header() {
@@ -86,32 +82,38 @@ export default function Header() {
     title: t(c.titleKey),
     description: t(c.descKey),
   }));
-  const industryItems = INDUSTRY_ITEMS.map((i) => ({
-    to: localizePath(i.to, locale),
-    icon: <NavIcon name={i.icon} />,
-    title: t(i.titleKey),
-    description: t(i.descKey),
-  }));
-  const resourceItems = RESOURCE_ITEMS.map((r) => ({
-    to: r.to.startsWith("mailto:") ? r.to : localizePath(r.to, locale),
-    icon: <NavIcon name={r.icon} />,
-    title: t(r.titleKey),
-    description: t(r.descKey),
-  }));
-  const morePanelItems = MORE_PANEL_ITEMS.map((m) => ({
-    to: localizePath(m.to, locale),
-    icon: <NavIcon name={m.icon} />,
-    title: t(m.titleKey),
-    description: t(m.descKey),
-  }));
+  // LimeWire-style More: important points first; Industry / Use cases / Compare expand in place.
+  const moreListEntries: NavListEntry[] = [
+    {
+      kind: "group",
+      id: "industry",
+      label: t("nav.industry"),
+      children: INDUSTRY_ITEMS.map((i) => ({ to: localizePath(i.to, locale), label: t(i.titleKey) })),
+    },
+    { kind: "link", label: t("nav.pricing"), to: localizePath("/pricing", locale) },
+    {
+      kind: "group",
+      id: "use-cases",
+      label: t("nav.useCases"),
+      children: USE_CASE_ITEMS.map((u) => ({ to: localizePath(u.to, locale), label: t(u.titleKey) })),
+    },
+    { kind: "link", label: t("nav.ai"), to: localizePath("/ai", locale) },
+    {
+      kind: "group",
+      id: "compare",
+      label: t("footer.compare"),
+      children: COMPARE_ITEMS.map((c) => ({ to: localizePath(c.to, locale), label: t(c.titleKey) })),
+    },
+    { kind: "link", label: t("footer.about"), to: localizePath("/about", locale) },
+    { kind: "link", label: t("nav.docsApi"), to: localizePath("/docs", locale) },
+    { kind: "link", label: t("nav.mega.resource.blog.title"), to: localizePath("/blog", locale) },
+    { kind: "link", label: t("nav.mega.resource.contact.title"), to: SALES_MAILTO },
+  ];
   // Titles-only lists for mobile accordion (no icons/descriptions).
   const featureMobile = FEATURE_ITEMS.map((f) => ({ to: localizePath(f.to, locale), title: t(f.titleKey) }));
   const industryMobile = INDUSTRY_ITEMS.map((i) => ({ to: localizePath(i.to, locale), title: t(i.titleKey) }));
-  const resourceMobile = RESOURCE_ITEMS.map((r) => ({
-    to: r.to.startsWith("mailto:") ? r.to : localizePath(r.to, locale),
-    title: t(r.titleKey),
-  }));
-  const morePanelMobile = MORE_PANEL_ITEMS.map((m) => ({ to: localizePath(m.to, locale), title: t(m.titleKey) }));
+  const useCaseMobile = USE_CASE_ITEMS.map((u) => ({ to: localizePath(u.to, locale), title: t(u.titleKey) }));
+  const compareMobile = COMPARE_ITEMS.map((c) => ({ to: localizePath(c.to, locale), title: t(c.titleKey) }));
 
   useEffect(() => {
     setMenuOpen(false);
@@ -188,17 +190,7 @@ export default function Header() {
             <Link to={marketplaceTo} className="header-templates-link header-nav-link">
               {t("nav.templates")}
             </Link>
-            <NavMegaMenu
-              label={t("nav.more")}
-              items={industryItems}
-              columns={2}
-              panel={{
-                title: t("nav.resources"),
-                items: [...morePanelItems, ...resourceItems.filter((r) => !r.to.endsWith("/blog"))],
-                footerLabel: t("nav.mega.resource.blog.title"),
-                footerTo: localizePath("/blog", locale),
-              }}
-            />
+            <NavListMenu label={t("nav.more")} entries={moreListEntries} />
           </nav>
         </div>
         <nav className="header-nav-right" aria-label="Account">
@@ -284,40 +276,61 @@ export default function Header() {
           <details className="header-mobile-accordion">
             <summary>{t("nav.more")}</summary>
             <div className="header-mobile-accordion-sublist">
-              {industryMobile.map((i) => (
-                <Link key={i.to} to={i.to} className="header-mobile-accordion-sublink" onClick={() => setMenuOpen(false)}>
-                  {i.title}
-                </Link>
-              ))}
-              {morePanelMobile.map((m) => (
-                <Link key={m.to} to={m.to} className="header-mobile-accordion-sublink" onClick={() => setMenuOpen(false)}>
-                  {m.title}
-                </Link>
-              ))}
-              {resourceMobile.map((r) =>
-                r.to.startsWith("mailto:") || r.to.startsWith("http") ? (
-                  <a
-                    key={r.to}
-                    href={r.to}
-                    className="header-mobile-accordion-sublink"
-                    onClick={() => {
-                      setMenuOpen(false);
-                      if (r.to.startsWith("mailto:")) openSalesChat();
-                    }}
-                  >
-                    {r.title}
-                  </a>
-                ) : (
-                  <Link
-                    key={r.to}
-                    to={r.to}
-                    className="header-mobile-accordion-sublink"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    {r.title}
-                  </Link>
-                )
-              )}
+              <details className="header-mobile-accordion header-mobile-accordion-nested">
+                <summary>{t("nav.industry")}</summary>
+                <div className="header-mobile-accordion-sublist">
+                  {industryMobile.map((i) => (
+                    <Link key={i.to} to={i.to} className="header-mobile-accordion-sublink" onClick={() => setMenuOpen(false)}>
+                      {i.title}
+                    </Link>
+                  ))}
+                </div>
+              </details>
+              <Link to={localizePath("/pricing", locale)} className="header-mobile-accordion-sublink" onClick={() => setMenuOpen(false)}>
+                {t("nav.pricing")}
+              </Link>
+              <details className="header-mobile-accordion header-mobile-accordion-nested">
+                <summary>{t("nav.useCases")}</summary>
+                <div className="header-mobile-accordion-sublist">
+                  {useCaseMobile.map((u) => (
+                    <Link key={u.to} to={u.to} className="header-mobile-accordion-sublink" onClick={() => setMenuOpen(false)}>
+                      {u.title}
+                    </Link>
+                  ))}
+                </div>
+              </details>
+              <Link to={localizePath("/ai", locale)} className="header-mobile-accordion-sublink" onClick={() => setMenuOpen(false)}>
+                {t("nav.ai")}
+              </Link>
+              <details className="header-mobile-accordion header-mobile-accordion-nested">
+                <summary>{t("footer.compare")}</summary>
+                <div className="header-mobile-accordion-sublist">
+                  {compareMobile.map((c) => (
+                    <Link key={c.to} to={c.to} className="header-mobile-accordion-sublink" onClick={() => setMenuOpen(false)}>
+                      {c.title}
+                    </Link>
+                  ))}
+                </div>
+              </details>
+              <Link to={localizePath("/about", locale)} className="header-mobile-accordion-sublink" onClick={() => setMenuOpen(false)}>
+                {t("footer.about")}
+              </Link>
+              <Link to={localizePath("/docs", locale)} className="header-mobile-accordion-sublink" onClick={() => setMenuOpen(false)}>
+                {t("nav.docsApi")}
+              </Link>
+              <Link to={localizePath("/blog", locale)} className="header-mobile-accordion-sublink" onClick={() => setMenuOpen(false)}>
+                {t("nav.mega.resource.blog.title")}
+              </Link>
+              <a
+                href={SALES_MAILTO}
+                className="header-mobile-accordion-sublink"
+                onClick={() => {
+                  setMenuOpen(false);
+                  openSalesChat();
+                }}
+              >
+                {t("nav.mega.resource.contact.title")}
+              </a>
             </div>
           </details>
         </nav>
