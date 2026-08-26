@@ -1,4 +1,4 @@
-import { useId, useState, type FormEvent } from "react";
+import { useId, useState, type FormEvent, type ReactNode } from "react";
 import { importGoogleDoc } from "../lib/api";
 import { useT } from "../lib/i18n";
 import { NavIcon } from "./NavIcons";
@@ -26,6 +26,7 @@ export default function PdfUploadCircle({
   title,
   subtitle,
   inputId,
+  trustSlot,
 }: {
   variant?: Variant;
   size?: Size;
@@ -36,6 +37,8 @@ export default function PdfUploadCircle({
   title?: string;
   subtitle?: string;
   inputId?: string;
+  /** Optional mid-band content (e.g. Trusted-by) between caption and Google Docs. */
+  trustSlot?: ReactNode;
 }) {
   const t = useT();
   const autoId = useId();
@@ -119,6 +122,8 @@ export default function PdfUploadCircle({
         <span className="pdf-upload-circle-title">{title ?? t("hero.uploadCircleTitle")}</span>
         <span className="pdf-upload-circle-sub">{subtitle ?? t("hero.uploadCircleSub")}</span>
       </label>
+
+      {trustSlot}
 
       {caption && <p className="pdf-upload-circle-caption">{caption}</p>}
 

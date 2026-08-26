@@ -509,49 +509,52 @@ export default function Landing() {
           </h1>
           <p className="hero-sub">{t("hero.sub")}</p>
 
-          <PdfUploadCircle
-            variant="hero"
-            inputId="hero-file-input"
-            onFile={onHeroFile}
-            caption={t("hero.uploadCircleCaption")}
-          />
-
-          {/* Trusted-by sits right under the upload / Google Docs block so it's visible in the
-              first viewport without scrolling past the email form. */}
-          <div className="trust-logos-band hero-trusted-by">
-            <p className="trust-logos-label">{t("landing.trustedBy")}</p>
-            <div className="trust-logos-viewport">
-              <div className="trust-logos-track">
-                {/* 10 copies, not 2 — on wide/ultrawide screens 2x isn't enough track width to fill the
-                    viewport during the loop, which left a visible gap of blank navy on the right. */}
-                {Array.from({ length: 10 }, () => TRUST_LOGOS)
-                  .flat()
-                  .map((item, i) => (
-                  <a
-                    key={`${item.name}-${i}`}
-                    href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={item.logo ? "trust-logo-link" : "trust-logo-link trust-logo-link-text"}
-                    aria-label={item.name}
-                    tabIndex={i < TRUST_LOGOS.length ? 0 : -1}
-                    aria-hidden={i < TRUST_LOGOS.length ? undefined : true}
-                  >
-                    {item.logo ? (
-                      <img
-                        src={item.logo}
-                        alt={item.name}
-                        className="trust-logo-img"
-                        width={item.w}
-                        height={item.h}
-                      />
-                    ) : (
-                      item.name
-                    )}
-                  </a>
-                ))}
-              </div>
-            </div>
+          {/* Trusted-by logos live in the Google Doc band (under the circle, above the email
+              form) so they read immediately mid-hero — not a separate strip below the fold. */}
+          <div className="hero-upload-trust-zone">
+            <PdfUploadCircle
+              variant="hero"
+              inputId="hero-file-input"
+              onFile={onHeroFile}
+              caption={t("hero.uploadCircleCaption")}
+              trustSlot={
+                <div className="trust-logos-band hero-trusted-by hero-trusted-by-gdoc-band">
+                  <p className="trust-logos-label">{t("landing.trustedBy")}</p>
+                  <div className="trust-logos-viewport">
+                    <div className="trust-logos-track">
+                      {/* 10 copies, not 2 — on wide/ultrawide screens 2x isn't enough track width to fill the
+                          viewport during the loop, which left a visible gap of blank navy on the right. */}
+                      {Array.from({ length: 10 }, () => TRUST_LOGOS)
+                        .flat()
+                        .map((item, i) => (
+                          <a
+                            key={`${item.name}-${i}`}
+                            href={item.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={item.logo ? "trust-logo-link" : "trust-logo-link trust-logo-link-text"}
+                            aria-label={item.name}
+                            tabIndex={i < TRUST_LOGOS.length ? 0 : -1}
+                            aria-hidden={i < TRUST_LOGOS.length ? undefined : true}
+                          >
+                            {item.logo ? (
+                              <img
+                                src={item.logo}
+                                alt={item.name}
+                                className="trust-logo-img"
+                                width={item.w}
+                                height={item.h}
+                              />
+                            ) : (
+                              item.name
+                            )}
+                          </a>
+                        ))}
+                    </div>
+                  </div>
+                </div>
+              }
+            />
           </div>
 
           {heroSent ? (
