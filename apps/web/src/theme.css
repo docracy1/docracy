@@ -3601,65 +3601,22 @@ select {
 }
 
 .templates-hero {
-  /* LimeWire-style first page for contracts: tall blue field, centered search as the action. */
-  min-height: calc(100dvh - 64px);
-  display: flex;
-  align-items: center;
-  padding: 48px 24px 56px;
-  box-sizing: border-box;
+  padding: 56px 24px 64px;
 }
 .templates-hero-inner {
   max-width: 640px;
   margin: 0 auto;
   text-align: center;
-  width: 100%;
 }
 .templates-hero-inner h1 {
   color: #ffffff;
-  font-size: clamp(32px, 5vw, 48px);
-  line-height: 1.15;
+  font-size: clamp(28px, 4vw, 42px);
   margin: 0 0 14px;
-  letter-spacing: -0.02em;
 }
-.templates-hero-inner > p {
+.templates-hero-inner p {
   color: var(--hero-body);
-  font-size: 17px;
-  line-height: 1.45;
-  margin: 0 auto;
-  max-width: 34em;
-}
-.templates-hero-count {
-  margin-top: 12px !important;
-  font-size: 14px !important;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.92) !important;
-}
-.templates-hero-how {
-  margin-top: 18px !important;
-  font-size: 13.5px !important;
-}
-.templates-hero-how a {
-  color: rgba(255, 255, 255, 0.85);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-.templates-hero-how a:hover {
-  color: #ffffff;
-}
-.templates-hero-inner .templates-search-wrap {
-  margin-top: 32px;
-  max-width: 520px;
-  margin-left: auto;
-  margin-right: auto;
-}
-@media (max-width: 720px) {
-  .templates-hero {
-    min-height: 0;
-    padding: 40px 20px 48px;
-  }
-  .templates-hero-inner h1 {
-    font-size: clamp(26px, 7vw, 34px);
-  }
+  font-size: 16px;
+  margin: 0;
 }
 .templates-legal-review {
   font-size: 13px !important;

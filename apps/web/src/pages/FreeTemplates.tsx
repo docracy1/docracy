@@ -198,37 +198,6 @@ export default function FreeTemplates() {
 
   return (
     <div>
-      <div className="hero-band templates-hero">
-        <div className="templates-hero-inner">
-          <h1>{t("freeTemplates.heroHeadline")}</h1>
-          <p>{t("freeTemplates.heroSub")}</p>
-          <p className="templates-hero-count">
-            {t("freeTemplates.templateCount", {
-              count: FREE_TEMPLATES.length + (communityTemplates?.length ?? 0) + (weeklyTemplates?.length ?? 0),
-            })}
-          </p>
-          <div className="templates-search-wrap">
-            <svg className="templates-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
-              <path d="M21 21l-4.3-4.3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-            <input
-              type="search"
-              className="templates-search-input"
-              placeholder={t("freeTemplates.searchPlaceholder")}
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              aria-label={t("freeTemplates.searchPlaceholder")}
-            />
-          </div>
-          <p className="templates-hero-how">
-            <Link to={localizePath("/template-marketplace", locale)}>
-              {t("freeTemplates.howItWorksLink")}
-            </Link>
-          </p>
-        </div>
-      </div>
-
       <div className="templates-utility-bar">
         <span className="templates-utility-label">{t("freeTemplates.utilityBarLabel")}</span>
         <button
@@ -258,6 +227,37 @@ export default function FreeTemplates() {
               </a>
             );
           })}
+        </div>
+      </div>
+
+      <div className="hero-band templates-hero">
+        <div className="templates-hero-inner">
+          <h1>{t("freeTemplates.heroHeadline")}</h1>
+          <p>{t("freeTemplates.heroSub")}</p>
+          <p style={{ fontWeight: 700, fontSize: 15 }}>
+            {t("freeTemplates.templateCount", {
+              count: FREE_TEMPLATES.length + (communityTemplates?.length ?? 0) + (weeklyTemplates?.length ?? 0),
+            })}
+          </p>
+          <p style={{ fontSize: 14, marginTop: -8 }}>
+            <Link to={localizePath("/template-marketplace", locale)}>
+              {t("freeTemplates.howItWorksLink")}
+            </Link>
+          </p>
+          <div className="templates-search-wrap">
+            <svg className="templates-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
+              <path d="M21 21l-4.3-4.3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            </svg>
+            <input
+              type="search"
+              className="templates-search-input"
+              placeholder={t("freeTemplates.searchPlaceholder")}
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              aria-label={t("freeTemplates.searchPlaceholder")}
+            />
+          </div>
         </div>
       </div>
 
