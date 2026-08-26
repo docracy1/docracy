@@ -8,10 +8,10 @@ compatibility_flags = ["nodejs_compat"]
 # nudges + SPA smoke (Sign in / Start free), offset to :07.
 # (Account cron-trigger limit — avoid a third schedule; SPA smoke rides the hourly cron.)
 # Deliberately NOT on the hour/half-hour: "0 * * * *" is the single most common cron schedule in
-# existence, and the SPA smoke check kept firing a genuine (retry-confirmed) 522 within ~1 second
-# of the exact hour mark on two separate hours, in production, even after two internal-contention
-# fixes — consistent with platform-wide thundering-herd congestion at round cron marks rather than
-# anything Docracy's own code controls. Offsetting past that mark is the standard mitigation.
+# existence, and the SPA smoke check used to fire a genuine (retry-confirmed) 522 within ~1 second
+# of the exact hour mark when it self-fetched api.docracy.io — platform thundering-herd plus
+# in-invocation contention. Auth shape is now in-process; cron still offset past :00 as belt-and-
+# suspenders for the remaining public Pages probes.
 [triggers]
 crons = ["22 8 * * *", "7 * * * *"]
 

@@ -120,17 +120,24 @@ export default {
     }
 
     if (event.cron === HOURLY_CRON) {
-      // SPA Sign in / Start free hydrate probe — dispatched FIRST, before the heavier sweeps below.
-      // All three run as concurrent waitUntil tasks inside the same invocation (no separate cron
-      // slot available — see wrangler.toml), sharing that invocation's subrequest/CPU budget. The
-      // onboarding/completion sweeps do enough KV work to matter (see their own "doubles KV list
-      // usage" comment) — started after this one, so the smoke check's handful of self-fetches
-      // aren't competing with that for the shared budget. Observed in production: the alert fired
-      // with a genuine (retry-confirmed) 522 exactly at an hourly tick, yet manual checks moments
-      // later passed cleanly — consistent with transient in-invocation contention, not a real outage.
-      ctx.waitUntil(runSpaSmokeAndAlert(env).catch((err) => console.error("SPA smoke sweep failed:", err)));
-      ctx.waitUntil(runOnboardingEmailSweep(env).catch((err) => console.error("Onboarding email sweep failed:", err)));
-      ctx.waitUntil(runCompletionEmailSweep(env).catch((err) => console.error("Completion-email sweep failed:", err)));
+      // SPA smoke must finish before onboarding/completion sweeps. They share one cron invocation
+      // (account trigger limit — see wrangler.toml); concurrent waitUntil used to starve the smoke
+      // check's public Pages fetches of subrequest/CPU budget and produced false 522 alerts on the
+      // old api.docracy.io self-fetch. Auth shape is now in-process; Pages probes still need a quiet
+      // window first.
+      ctx.waitUntil(
+        (async () => {
+          try {
+            await runSpaSmokeAndAlert(env);
+          } catch (err) {
+            console.error("SPA smoke sweep failed:", err);
+          }
+          await Promise.all([
+            runOnboardingEmailSweep(env).catch((err) => console.error("Onboarding email sweep failed:", err)),
+            runCompletionEmailSweep(env).catch((err) => console.error("Completion-email sweep failed:", err)),
+          ]);
+        })()
+      );
       return;
     }
 

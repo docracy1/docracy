@@ -1,5 +1,12 @@
 import type { Env } from "@docracy/shared";
+import auth from "../routes/auth";
 import { sendSpaSmokeAlert } from "./email";
+
+/** Minimal ExecutionContext for in-process Hono `auth.request` during cron (no real waitUntil work). */
+const SMOKE_CTX = {
+  waitUntil: () => {},
+  passThroughOnException: () => {},
+} as unknown as ExecutionContext;
 
 /** Browser-like UA so Pages/WAF don't treat the probe as a raw bot. */
 const PROBE_UA =
@@ -45,10 +52,6 @@ const CRITICAL_PATHS = ["/", "/login", "/prepare"] as const;
 
 function origin(env: Env): string {
   return (env.PUBLIC_APP_URL || "https://docracy.io").replace(/\/$/, "");
-}
-
-function workerOrigin(env: Env): string {
-  return (env.PUBLIC_WORKER_URL || "https://api.docracy.io").replace(/\/$/, "");
 }
 
 /** Pull the Vite main module from HTML (`<script type="module" src="/assets/....js">`). */
@@ -153,19 +156,27 @@ export async function checkSpaPage(pageUrl: string): Promise<SpaSmokeFailure | n
 }
 
 async function checkAuthApiShape(env: Env): Promise<SpaSmokeFailure | null> {
-  const url = `${workerOrigin(env)}/api/auth/request-link`;
+  // In-process against the auth Hono app — NOT a public self-fetch to PUBLIC_WORKER_URL.
+  // Cron-time fetch("https://api.docracy.io/...") repeatedly produced Cloudflare 522
+  // (text/plain) even when the route was healthy for real clients: shared invocation budget +
+  // edge loopback. This still proves request-link returns JSON 4xx on bad input without
+  // sending email; Pages hydrate checks above still hit the public app origin.
   try {
-    // Invalid body → 400 JSON without sending a magic link (no email spam).
-    const res = await fetch(url, {
-      method: "POST",
-      headers: {
-        "User-Agent": PROBE_UA,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Origin: origin(env),
+    const res = await auth.request(
+      "/request-link",
+      {
+        method: "POST",
+        headers: {
+          "User-Agent": PROBE_UA,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Origin: origin(env),
+        },
+        body: JSON.stringify({}),
       },
-      body: JSON.stringify({}),
-    });
+      env,
+      SMOKE_CTX
+    );
     const ct = res.headers.get("content-type") ?? "";
     if (!ct.toLowerCase().includes("application/json")) {
       return { name: "API auth/request-link", detail: `expected JSON, got ${ct || "(none)"} (HTTP ${res.status})` };
@@ -178,7 +189,7 @@ async function checkAuthApiShape(env: Env): Promise<SpaSmokeFailure | null> {
   } catch (err) {
     return {
       name: "API auth/request-link",
-      detail: `fetch failed: ${err instanceof Error ? err.message : String(err)}`,
+      detail: `handler failed: ${err instanceof Error ? err.message : String(err)}`,
     };
   }
 }

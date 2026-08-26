@@ -46,15 +46,9 @@ describe("content-type / HTML fallback helpers", () => {
 });
 
 describe("runSpaSmokeChecks", () => {
-  it("passes when pages hydrate and API returns JSON 400", async () => {
-    vi.spyOn(global, "fetch").mockImplementation(async (input, init) => {
+  it("passes when pages hydrate and in-process auth returns JSON 400", async () => {
+    vi.spyOn(global, "fetch").mockImplementation(async (input) => {
       const url = String(input);
-      if (url.includes("/api/auth/request-link")) {
-        return new Response(JSON.stringify({ error: "bad" }), {
-          status: 400,
-          headers: { "Content-Type": "application/json" },
-        });
-      }
       if (url.endsWith(".js")) {
         return new Response(JS_OK, {
           status: 200,
@@ -70,12 +64,6 @@ describe("runSpaSmokeChecks", () => {
   it("fails when asset Content-Type is text/html", async () => {
     vi.spyOn(global, "fetch").mockImplementation(async (input) => {
       const url = String(input);
-      if (url.includes("/api/auth/request-link")) {
-        return new Response(JSON.stringify({ error: "bad" }), {
-          status: 400,
-          headers: { "Content-Type": "application/json" },
-        });
-      }
       if (url.endsWith(".js")) {
         return new Response(HTML_OK, { status: 200, headers: { "Content-Type": "text/html; charset=utf-8" } });
       }
@@ -86,18 +74,28 @@ describe("runSpaSmokeChecks", () => {
     expect(failures.length).toBeGreaterThan(0);
     expect(failures.some((f) => f.detail.includes("SPA HTML fallback") || f.detail.includes("text/html"))).toBe(true);
   });
+
+  it("does not call the public API origin for the auth shape check", async () => {
+    const fetchSpy = vi.spyOn(global, "fetch").mockImplementation(async (input) => {
+      const url = String(input);
+      if (url.includes("/api/auth/request-link")) {
+        throw new Error("public self-fetch must not be used for auth smoke");
+      }
+      if (url.endsWith(".js")) {
+        return new Response(JS_OK, { status: 200, headers: { "Content-Type": "application/javascript" } });
+      }
+      return new Response(HTML_OK, { status: 200, headers: { "Content-Type": "text/html" } });
+    });
+    const { env } = makeMockEnv({ PUBLIC_APP_URL: "https://docracy.io", PUBLIC_WORKER_URL: "https://api.docracy.io" });
+    expect(await runSpaSmokeChecks(env)).toEqual([]);
+    expect(fetchSpy.mock.calls.every(([input]) => !String(input).includes("/api/auth/request-link"))).toBe(true);
+  });
 });
 
 describe("runSpaSmokeAndAlert", () => {
   function mockHealthyFetch() {
     vi.spyOn(global, "fetch").mockImplementation(async (input) => {
       const url = String(input);
-      if (url.includes("/api/auth/request-link")) {
-        return new Response(JSON.stringify({ error: "bad" }), {
-          status: 400,
-          headers: { "Content-Type": "application/json" },
-        });
-      }
       if (url.endsWith(".js")) {
         return new Response(JS_OK, { status: 200, headers: { "Content-Type": "application/javascript" } });
       }
@@ -108,12 +106,6 @@ describe("runSpaSmokeAndAlert", () => {
   function mockBrokenFetch() {
     vi.spyOn(global, "fetch").mockImplementation(async (input) => {
       const url = String(input);
-      if (url.includes("/api/auth/request-link")) {
-        return new Response(JSON.stringify({ error: "bad" }), {
-          status: 400,
-          headers: { "Content-Type": "application/json" },
-        });
-      }
       if (url.endsWith(".js")) {
         return new Response(HTML_OK, { status: 200, headers: { "Content-Type": "text/html" } });
       }
@@ -215,22 +207,16 @@ describe("runSpaSmokeAndAlert", () => {
     vi.useRealTimers();
   });
 
-  // The actual bug this session's alert flood traced back to: a lone transient 522 (Cloudflare
-  // origin timeout) on the very first attempt used to alert immediately, with nothing to
-  // distinguish it from a real outage — this is what the retry-before-alert logic now prevents.
+  // Pages-only blip: first pass fails hydrate, a retry moments later passes — must not alert.
+  // (API auth is in-process now, so the old public 522 self-fetch path is gone.)
   it("does not email when the first pass fails but a retry a few seconds later passes", async () => {
     vi.useFakeTimers();
     let call = 0;
     vi.spyOn(global, "fetch").mockImplementation(async (input) => {
       call++;
       const url = String(input);
-      const failingFirstPass = call <= 4; // 3 pages + 1 API check make up "one pass" worth of calls
-      if (url.includes("/api/auth/request-link")) {
-        return new Response(JSON.stringify({ error: "bad" }), {
-          status: failingFirstPass ? 522 : 400,
-          headers: { "Content-Type": failingFirstPass ? "text/plain" : "application/json" },
-        });
-      }
+      // 3 page HTML fetches + 3 asset fetches = 6 per pass
+      const failingFirstPass = call <= 6;
       if (url.endsWith(".js")) {
         return failingFirstPass
           ? new Response(HTML_OK, { status: 200, headers: { "Content-Type": "text/html" } })

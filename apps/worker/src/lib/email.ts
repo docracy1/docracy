@@ -874,18 +874,26 @@ export async function sendHealthAlert(
   await send(env, env.FEEDBACK_EMAIL, "Docracy healthcheck failure", `<p>${lines}</p>`, { emailType: "health_alert" });
 }
 
-/** SPA hydrate failure (Sign in / Start free) — recipient is usually FEEDBACK_EMAIL / founder@. */
+/** SPA hydrate / auth-shape failure — recipient is usually FEEDBACK_EMAIL / founder@. */
 export async function sendSpaSmokeAlert(
   env: Env,
   to: string,
   failures: { name: string; detail?: string }[]
 ): Promise<void> {
+  const spaFail = failures.some((f) => !f.name.startsWith("API "));
+  const intro = spaFail
+    ? `Sign in (/login) or Start free (/prepare) may be stuck on prerendered HTML because the main
+      JS bundle is not serving as JavaScript (often <code>text/html</code> SPA fallback).`
+    : `The hourly SPA smoke auth probe failed (API shape check). Public pages may still be fine —
+      see the detail below.`;
+  const subject = spaFail
+    ? "Docracy: Sign in / Start free broken (SPA JS)"
+    : "Docracy: SPA smoke API check failed";
   const lines = failures.map((f) => `<li><strong>${escapeHtml(f.name)}</strong>: ${escapeHtml(f.detail ?? "failed")}</li>`).join("");
   const body = `
     ${emailHeadline("Docracy SPA smoke check failed")}
     <p style="margin:0 0 16px 0;font-size:15px;color:${INK};line-height:1.5;">
-      Sign in (/login) or Start free (/prepare) may be stuck on prerendered HTML because the main
-      JS bundle is not serving as JavaScript (often <code>text/html</code> SPA fallback).
+      ${intro}
     </p>
     <ul style="margin:0;padding-left:20px;font-size:14px;color:${INK};line-height:1.6;">${lines}</ul>
     <p style="margin:20px 0 0 0;font-size:13px;color:${MUTED};line-height:1.5;">
@@ -893,7 +901,7 @@ export async function sendSpaSmokeAlert(
       (detail changes alone do not re-page).
     </p>
   `;
-  await send(env, to, "Docracy: Sign in / Start free broken (SPA JS)", emailShell(env.PUBLIC_APP_URL, body), {
+  await send(env, to, subject, emailShell(env.PUBLIC_APP_URL, body), {
     emailType: "spa_smoke_alert",
   });
 }
