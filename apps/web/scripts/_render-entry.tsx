@@ -40,6 +40,7 @@ import PartnerPage from "../src/pages/PartnerPage";
 import SeoLandingTemplate from "../src/components/SeoLandingTemplate";
 import { SEO_LANDING_PAGES } from "../src/lib/seoPages";
 import { PARTNER_PAGES } from "../src/lib/partnerPages";
+import { ALTERNATIVE_PAGES, IMPORT_GUIDE_PAGES } from "../src/lib/marketingPages";
 
 /** Renders the real app components to static markup for a single path — same components a
  *  browser gets, minus effects (which never run during static rendering, so Header's login-check
@@ -127,25 +128,17 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/simple-signing" element={<FeaturePage slug="simple-signing" />} />
           <Route path="/document-verification" element={<FeaturePage slug="document-verification" />} />
           <Route path="/blockchain-timestamp" element={<FeaturePage slug="blockchain-timestamp" />} />
-          <Route path="/eversign-alternative" element={<AlternativePage slug="eversign-alternative" />} />
+          {ALTERNATIVE_PAGES.map((p) => (
+            <Route key={p.slug} path={`/${p.slug}`} element={<AlternativePage slug={p.slug} />} />
+          ))}
           <Route path="/es/alternativa-a-eversign" element={<AlternativePage slug="eversign-alternative" />} />
-          <Route path="/onlinesignature-alternative" element={<AlternativePage slug="onlinesignature-alternative" />} />
-          <Route path="/docusign-alternative" element={<AlternativePage slug="docusign-alternative" />} />
           <Route path="/es/alternativa-a-docusign" element={<AlternativePage slug="docusign-alternative" />} />
-          <Route path="/hellosign-alternative" element={<AlternativePage slug="hellosign-alternative" />} />
           <Route path="/es/alternativa-a-hellosign" element={<AlternativePage slug="hellosign-alternative" />} />
-          <Route path="/pandadoc-alternative" element={<AlternativePage slug="pandadoc-alternative" />} />
           <Route path="/es/alternativa-a-pandadoc" element={<AlternativePage slug="pandadoc-alternative" />} />
-          <Route path="/adobe-sign-alternative" element={<AlternativePage slug="adobe-sign-alternative" />} />
           <Route path="/es/alternativa-a-adobe-sign" element={<AlternativePage slug="adobe-sign-alternative" />} />
-          <Route path="/contractbook-alternative" element={<AlternativePage slug="contractbook-alternative" />} />
-          <Route path="/import-from-docusign" element={<ImportGuidePage slug="docusign" />} />
-          <Route path="/import-from-eversign" element={<ImportGuidePage slug="eversign" />} />
-          <Route path="/import-from-hellosign" element={<ImportGuidePage slug="hellosign" />} />
-          <Route path="/import-from-pandadoc" element={<ImportGuidePage slug="pandadoc" />} />
-          <Route path="/import-from-adobe-sign" element={<ImportGuidePage slug="adobe-sign" />} />
-          <Route path="/import-from-contractbook" element={<ImportGuidePage slug="contractbook" />} />
-          <Route path="/import-from-onlinesignature" element={<ImportGuidePage slug="onlinesignature" />} />
+          {IMPORT_GUIDE_PAGES.map((p) => (
+            <Route key={p.slug} path={`/import-from-${p.slug}`} element={<ImportGuidePage slug={p.slug} />} />
+          ))}
           <Route path="/industry/freelancers" element={<IndustryPage slug="freelancers" />} />
           <Route path="/industry/creative-agencies" element={<IndustryPage slug="creative-agencies" />} />
           <Route path="/industry/real-estate" element={<IndustryPage slug="real-estate" />} />

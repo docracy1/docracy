@@ -95,7 +95,7 @@ await build({
   format: "cjs",
   logLevel: "warning",
 });
-const { FEATURE_PAGES, ALTERNATIVE_PAGES, EXPLAINER_PAGES, INDUSTRY_PAGES, getFeaturePageContent } = require(marketingBundleFile);
+const { FEATURE_PAGES, ALTERNATIVE_PAGES, EXPLAINER_PAGES, INDUSTRY_PAGES, IMPORT_GUIDE_PAGES, getFeaturePageContent } = require(marketingBundleFile);
 fs.unlinkSync(marketingBundleFile);
 
 const partnerPagesBundleFile = path.join(__dirname, "_partnerPages.bundle.cjs");
@@ -366,55 +366,12 @@ const routes = [
       "A plain-English guide to electronic signatures: US ESIGN Act & UETA, EU eIDAS SES/AES/QES tiers, GDPR data " +
       "protection, security architecture, SOC 2, and how e-signature pricing actually works.",
   },
-  {
-    urlPath: "/import-from-docusign",
-    outFile: "import-from-docusign.html",
-    title: "Import DocuSign Documents to Docracy — Free Export Guide",
-    description:
-      "Step-by-step guide to export DocuSign envelopes and templates as PDFs and upload them to Docracy. No account linking, no password sharing — AI field detection places signatures for you.",
-  },
-  {
-    urlPath: "/import-from-eversign",
-    outFile: "import-from-eversign.html",
-    title: "Import eversign / Xodo Sign Documents to Docracy",
-    description:
-      "Export eversign (now Xodo Sign) documents as PDFs and bring them into Docracy. No account linking — free per-document download, then AI field detection on upload.",
-  },
-  {
-    urlPath: "/import-from-hellosign",
-    outFile: "import-from-hellosign.html",
-    title: "Import HelloSign / Dropbox Sign Documents to Docracy",
-    description:
-      "Export HelloSign (Dropbox Sign) signature requests as PDFs and upload them to Docracy. No account linking — free per-document download with clear steps.",
-  },
-  {
-    urlPath: "/import-from-pandadoc",
-    outFile: "import-from-pandadoc.html",
-    title: "Import PandaDoc Documents to Docracy — PDF & DocX Export",
-    description:
-      "Export PandaDoc documents and templates (PDF or DocX) and bring them into Docracy. Easiest of the major tools to migrate — no account linking required.",
-  },
-  {
-    urlPath: "/import-from-adobe-sign",
-    outFile: "import-from-adobe-sign.html",
-    title: "Import Adobe Acrobat Sign Documents to Docracy",
-    description:
-      "Export Adobe Acrobat Sign agreements as PDFs and upload them to Docracy. No account linking — manual per-document download with clear limits explained.",
-  },
-  {
-    urlPath: "/import-from-contractbook",
-    outFile: "import-from-contractbook.html",
-    title: "Import Contractbook Documents to Docracy",
-    description:
-      "Export contracts from Contractbook as PDFs and bring them into Docracy for simple signing. No account linking — for when you need a signature, not a full CLM workspace.",
-  },
-  {
-    urlPath: "/import-from-onlinesignature",
-    outFile: "import-from-onlinesignature.html",
-    title: "Import from OnlineSignature.com to Docracy",
-    description:
-      "OnlineSignature.com routes into Xodo Sign / eversign. Export your PDFs from that signing account and upload them to Docracy — free for up to 2 signers, no account required.",
-  },
+  ...IMPORT_GUIDE_PAGES.map((p) => ({
+    urlPath: `/import-from-${p.slug}`,
+    outFile: `import-from-${p.slug}.html`,
+    title: p.seoTitle,
+    description: p.seoDescription,
+  })),
   ...INDUSTRY_PAGES.map((p) => ({
     urlPath: `/industry/${p.slug}`,
     outFile: `industry/${p.slug}.html`,

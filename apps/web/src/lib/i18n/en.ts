@@ -180,6 +180,8 @@ const en: Messages = {
   "footer.vsDocusign": "vs DocuSign",
   "footer.vsPandadoc": "vs PandaDoc",
   "footer.vsAdobe": "vs Adobe Acrobat Sign",
+  "footer.vsContractbook": "vs Contractbook",
+  "footer.vsOnlinesignature": "vs OnlineSignature",
   "footer.importGuide": "Import from DocuSign/eversign",
   "footer.importDocusign": "Import from DocuSign",
   "footer.importEversign": "Import from eversign / Xodo",
