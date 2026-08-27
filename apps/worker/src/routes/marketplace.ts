@@ -80,7 +80,12 @@ marketplaceAccount.get("/submissions", requirePaidAccount, async (c) => {
 export const marketplacePublic = new Hono<{ Bindings: Env; Variables: Variables }>();
 
 marketplacePublic.get("/sitemap.xml", async (c) => {
-  const rows = await listWeeklyOfficialForSitemap(c.env);
+  let rows: Array<{ slug: string; lastmod: string }> = [];
+  try {
+    rows = await listWeeklyOfficialForSitemap(c.env);
+  } catch (err) {
+    console.error("marketplace sitemap failed:", err instanceof Error ? err.message : err);
+  }
   const urls = rows
     .map(
       (r) =>
@@ -94,15 +99,20 @@ marketplacePublic.get("/sitemap.xml", async (c) => {
 });
 
 marketplacePublic.get("/", async (c) => {
-  const category = c.req.query("category") || undefined;
-  const origin = c.req.query("origin");
-  if (origin === "weekly") {
-    const limit = Math.min(50, Math.max(1, Number(c.req.query("limit") || 10) || 10));
-    const templates = await listWeeklyOfficial(c.env, limit);
+  try {
+    const category = c.req.query("category") || undefined;
+    const origin = c.req.query("origin");
+    if (origin === "weekly") {
+      const limit = Math.min(50, Math.max(1, Number(c.req.query("limit") || 10) || 10));
+      const templates = await listWeeklyOfficial(c.env, limit);
+      return c.json({ templates });
+    }
+    const templates = await listApproved(c.env, category);
     return c.json({ templates });
+  } catch (err) {
+    console.error("GET /api/marketplace failed:", err instanceof Error ? err.message : err);
+    return c.json({ templates: [], error: "Marketplace temporarily unavailable" }, 503);
   }
-  const templates = await listApproved(c.env, category);
-  return c.json({ templates });
 });
 
 interface AnonymousSubmitMeta {
