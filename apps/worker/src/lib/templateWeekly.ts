@@ -1,5 +1,6 @@
 import { sanitizeJsonStringNewlines } from "./aiJson";
 import { slugify } from "./blogPosts";
+import { pingIndexNow } from "./indexNow";
 import { publishOfficialTemplate } from "./marketplaceTemplates";
 import { renderTemplatePdf, type TemplatePdfBlock } from "./templatePdf";
 import type { Env } from "@docracy/shared";
@@ -283,6 +284,7 @@ export async function runWeeklyTemplatePublish(env: Env): Promise<void> {
   }
 
   let published = 0;
+  const publishedPaths: string[] = [];
   for (const topic of topics) {
     const draft = await draftFromTopic(env, topic);
     if (!draft) {
@@ -333,8 +335,12 @@ export async function runWeeklyTemplatePublish(env: Env): Promise<void> {
 
     await markTopicPublished(env, topic.id, created.id);
     published += 1;
+    publishedPaths.push(`/free-templates/${created.slug}`);
     console.log(`Weekly templates: published ${created.slug} from topic ${topic.id}`);
   }
 
+  if (publishedPaths.length > 0) {
+    await pingIndexNow(publishedPaths);
+  }
   console.log(`Weekly templates: published ${published}/${topics.length} this run`);
 }

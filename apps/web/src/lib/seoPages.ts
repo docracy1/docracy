@@ -80,15 +80,25 @@ export const SEO_FAQS: { question: string; answer: string }[] = [
   },
 ];
 
+function slugifyCompetitor(name: string): string {
+  return name.toLowerCase();
+}
+
+/** Canonical A-vs-B pages only (one direction per pair). Reverse URLs 301 via public/_redirects. */
 export const SEO_LANDING_PAGES: SeoLandingPageContent[] = [];
+
+/** Reverse slug → canonical slug for redirects / docs. */
+export const SEO_VS_REDIRECTS: Array<{ from: string; to: string }> = [];
 
 for (let i = 0; i < COMPETITORS.length; i++) {
   for (let j = i + 1; j < COMPETITORS.length; j++) {
     const comp1 = COMPETITORS[i];
     const comp2 = COMPETITORS[j];
+    const canonicalSlug = `${slugifyCompetitor(comp1)}-vs-${slugifyCompetitor(comp2)}`;
+    const reverseSlug = `${slugifyCompetitor(comp2)}-vs-${slugifyCompetitor(comp1)}`;
 
     SEO_LANDING_PAGES.push({
-      slug: `${comp1.toLowerCase()}-vs-${comp2.toLowerCase()}`,
+      slug: canonicalSlug,
       pageType: "vs-competitor",
       primaryCompetitor: comp1,
       secondaryCompetitor: comp2,
@@ -99,17 +109,7 @@ for (let i = 0; i < COMPETITORS.length; i++) {
       comparisonRows: COMPARISON_ROWS,
     });
 
-    SEO_LANDING_PAGES.push({
-      slug: `${comp2.toLowerCase()}-vs-${comp1.toLowerCase()}`,
-      pageType: "vs-competitor",
-      primaryCompetitor: comp2,
-      secondaryCompetitor: comp1,
-      seoTitle: `${comp2} vs ${comp1}: which is right for you? | Docracy`,
-      seoDescription: `Comparing ${comp2} and ${comp1}? See how they stack up, and how Docracy's flat pricing and no-signup signing compares to both.`,
-      heroHeadline: `${comp2} vs ${comp1}`,
-      heroSubheadline: `Both are solid e-signature tools built around per-seat pricing. Here's how they compare, and a simpler flat-rate option to consider.`,
-      comparisonRows: COMPARISON_ROWS,
-    });
+    SEO_VS_REDIRECTS.push({ from: `/${reverseSlug}`, to: `/${canonicalSlug}` });
   }
 }
 

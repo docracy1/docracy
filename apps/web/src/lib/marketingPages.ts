@@ -86,6 +86,23 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       { label: "Free one-way NDA template", to: "/free-templates/unilateral-nda" },
       { label: "What is an NDA?", to: "/what-is-an-nda" },
     ],
+    faqs: [
+      {
+        question: "Do recipients need an account to sign an NDA?",
+        answer:
+          "No. They open the link from email (or WhatsApp on a paid plan) and sign — nothing to install or register.",
+      },
+      {
+        question: "Is there a free NDA template?",
+        answer:
+          "Yes. Start from Docracy's mutual or one-way NDA templates with fields already placed, then send for signature.",
+      },
+      {
+        question: "Are Docracy NDAs legally valid e-signatures?",
+        answer:
+          "Docracy produces simple electronic signatures (SES) with a timestamped audit trail, designed to support ESIGN/UETA. It does not verify signer identity — see /trust for the honest disclosure.",
+      },
+    ],
   },
   {
     slug: "client-contracts",
@@ -292,6 +309,23 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     ],
     youtubeId: "LvnzCbPBRqY",
     youtubeTitle: "Sign documents via WhatsApp — Docracy demo",
+    faqs: [
+      {
+        question: "How does WhatsApp signing work?",
+        answer:
+          "You set a PIN and the signer's phone number. Docracy delivers the signing link to their WhatsApp. They enter the PIN, then sign — phone-bound delivery with an audit trail.",
+      },
+      {
+        question: "Is WhatsApp signing free?",
+        answer:
+          "Signed-up free accounts get 1 WhatsApp-signed invite per month. Paid plans include 10/month, then $0.50 each. Enterprise gets 50/month fair-use.",
+      },
+      {
+        question: "Is this an Advanced Electronic Signature (AES)?",
+        answer:
+          "WhatsApp-verified, PIN-protected signing is designed toward the EU eIDAS AES criteria (unique linkage, identification, sole control, tamper-evidence). Default email signing remains SES. See /advanced-electronic-signature and /trust.",
+      },
+    ],
   },
   {
     slug: "advanced-electronic-signature",
@@ -1133,6 +1167,23 @@ export function getNdaSigningPageEs(): FeaturePageContent {
       { label: "Plantilla gratis de NDA unilateral", to: "/free-templates/unilateral-nda" },
       { label: "¿Qué es un NDA?", to: "/what-is-an-nda" },
     ],
+    faqs: [
+      {
+        question: "¿Los destinatarios necesitan una cuenta para firmar un NDA?",
+        answer:
+          "No. Abren el enlace del correo (o WhatsApp en un plan de pago) y firman — nada que instalar ni registrar.",
+      },
+      {
+        question: "¿Hay una plantilla de NDA gratis?",
+        answer:
+          "Sí. Empieza con las plantillas de NDA mutuo o unilateral de Docracy, con campos ya colocados, y envíala a firmar.",
+      },
+      {
+        question: "¿Las firmas de NDA en Docracy son válidas?",
+        answer:
+          "Docracy produce firmas electrónicas simples (SES) con registro de auditoría. No verifica la identidad del firmante — ver /trust.",
+      },
+    ],
   };
 }
 
@@ -1194,6 +1245,27 @@ export interface AlternativePageContent {
   ctaTo: string;
   compareBlogSlug: string;
   compareLabel: string;
+  /** Optional FAQ — emits FAQPage JSON-LD + visible details when present. */
+  faqs?: Array<{ question: string; answer: string }>;
+}
+
+/** Default FAQs for competitor alternative pages (GEO / rich results). */
+export function defaultAlternativeFaqs(competitorName: string): Array<{ question: string; answer: string }> {
+  return [
+    {
+      question: `Why switch from ${competitorName} to Docracy?`,
+      answer:
+        "Docracy is free for up to 2 signers with no account required for recipients, and a flat $10/mo paid plan instead of per-seat pricing. Upload any PDF as-is — no proprietary template rebuild.",
+    },
+    {
+      question: "Do signers need an account?",
+      answer: "No. They open the link and sign — no login, no app download.",
+    },
+    {
+      question: `Can I import PDFs I already use in ${competitorName}?`,
+      answer: `Yes. Export the PDF from ${competitorName}, upload it to Docracy, and place (or auto-detect) signature fields. See the /import-from-* guides for step-by-step export tips.`,
+    },
+  ];
 }
 
 export const ALTERNATIVE_PAGES: AlternativePageContent[] = [

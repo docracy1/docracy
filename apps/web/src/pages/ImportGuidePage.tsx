@@ -24,8 +24,22 @@ export default function ImportGuidePage({ slug }: { slug: string }) {
 
   const otherGuides = IMPORT_GUIDE_PAGES.filter((p) => p.slug !== page.slug);
 
+  const howToJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: `Export documents from ${page.competitorName} into Docracy`,
+    description: page.seoDescription,
+    step: page.exportSteps.map((text, i) => ({
+      "@type": "HowToStep",
+      position: i + 1,
+      name: `Step ${i + 1}`,
+      text,
+    })),
+  };
+
   return (
     <div className="import-guide-page">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }} />
       <div className="hero-band">
         <div className="hero-inner import-guide-hero">
           <h1>{page.heroHeadline}</h1>

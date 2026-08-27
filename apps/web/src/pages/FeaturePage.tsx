@@ -15,13 +15,10 @@ export default function FeaturePage({ slug }: { slug: string }) {
   const page = getFeaturePageContent(slug, locale);
   const bilingual = BILINGUAL_FEATURE_BY_SLUG[slug];
 
-  usePageMeta(
-    page?.seoTitle ?? "Docracy",
-    page?.seoDescription ?? "",
-    bilingual
-      ? { canonicalPath: cleanPath(location.pathname), alternates: seoAlternates(bilingual) }
-      : undefined
-  );
+  usePageMeta(page?.seoTitle ?? "Docracy", page?.seoDescription ?? "", {
+    canonicalPath: bilingual ? cleanPath(location.pathname) : `/${slug}`,
+    ...(bilingual ? { alternates: seoAlternates(bilingual) } : {}),
+  });
 
   if (!page) return null;
 

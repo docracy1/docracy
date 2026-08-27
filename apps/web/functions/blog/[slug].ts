@@ -78,6 +78,24 @@ export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => 
     // use minimal shell
   }
 
+  const blogPostingLd = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description,
+    datePublished: date,
+    dateModified: date,
+    mainEntityOfPage: canonical,
+    author: { "@type": "Organization", name: "Docracy", url: SITE },
+    publisher: {
+      "@type": "Organization",
+      name: "Docracy",
+      url: SITE,
+      logo: { "@type": "ImageObject", url: `${SITE}/docracy-seal-icon.png` },
+    },
+    image: [`${SITE}/og-image.png`],
+  }).replace(/</g, "\\u003c");
+
   const metaBlock = `
     <title>${escapeHtml(title)}</title>
     <meta name="description" content="${escapeHtml(description)}" />
@@ -89,6 +107,7 @@ export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => 
     <meta name="twitter:title" content="${escapeHtml(title)}" />
     <meta name="twitter:description" content="${escapeHtml(description)}" />
     <script type="application/json" id="__PRELOADED_BLOG_POST__">${preload}</script>
+    <script type="application/ld+json">${blogPostingLd}</script>
   `;
 
   const articleHtml = `

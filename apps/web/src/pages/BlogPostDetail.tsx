@@ -260,9 +260,27 @@ function DynamicPostView({ post }: { post: DynamicBlogPostDetail }) {
     canonicalPath: `/blog/${post.slug}`,
   });
   const date = (post.publishedAt ?? post.createdAt).slice(0, 10);
+  const blogPostingLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.description || post.title,
+    datePublished: date,
+    dateModified: date,
+    mainEntityOfPage: `https://docracy.io/blog/${post.slug}`,
+    author: { "@type": "Organization", name: "Docracy", url: "https://docracy.io" },
+    publisher: {
+      "@type": "Organization",
+      name: "Docracy",
+      url: "https://docracy.io",
+      logo: { "@type": "ImageObject", url: "https://docracy.io/docracy-seal-icon.png" },
+    },
+    image: ["https://docracy.io/og-image.png"],
+  };
 
   return (
     <div className="container" style={{ maxWidth: 720 }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingLd) }} />
       <p style={{ fontSize: 13 }}>
         <Link to="/blog">{t("blog.allPosts")}</Link>
       </p>
