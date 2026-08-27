@@ -74,6 +74,7 @@ export default function Pricing() {
   return (
     <div className="pricing-page">
       <div className="container pricing-compare">
+        <p className="pricing-intro">{t("pricing.intro")}</p>
         {/* Desktop: multi-column comparison table */}
         <div className="plan-table-scroll pricing-desktop-table">
           <table className="plan-table plan-table-pricing">

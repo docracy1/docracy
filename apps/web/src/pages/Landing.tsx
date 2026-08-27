@@ -508,6 +508,20 @@ export default function Landing() {
               ))}
           </h1>
           <p className="hero-sub">{t("hero.sub")}</p>
+          <ul className="hero-trust-badges" aria-label={t("hero.trustAria")}>
+            <li>
+              <FeatureIcon name="scale" />
+              {t("hero.badge.legal")}
+            </li>
+            <li>
+              <FeatureIcon name="pen" />
+              {t("hero.badge.noSignup")}
+            </li>
+            <li>
+              <FeatureIcon name="badge" />
+              {t("hero.badge.price")}
+            </li>
+          </ul>
 
           {/* Trusted-by logos live in the Google Doc band (under the circle, above the email
               form) so they read immediately mid-hero — not a separate strip below the fold. */}
@@ -658,6 +672,8 @@ export default function Landing() {
           </div>
         </div>
       </div>
+
+      <FirstDocumentPrompt source="how" />
 
       <div className="core-features-band">
         <div className="core-features-inner">
