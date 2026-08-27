@@ -1677,6 +1677,11 @@ select {
   max-width: 34em;
 }
 
+.hero-stack .hero-trust-badges {
+  justify-content: center;
+  margin: 4px 0 2px;
+}
+
 .hero-stack .hero-upload-circle-wrap,
 .hero-stack .pdf-upload-circle-wrap {
   margin: 12px 0 2px;
@@ -4799,6 +4804,15 @@ select {
   /* Shared column math so the sticky price bar lines up under Free / Paid / Enterprise. */
   --pricing-feature-col: 34%;
   --pricing-plan-col: calc((100% - var(--pricing-feature-col)) / 3);
+}
+
+.pricing-intro {
+  max-width: 40em;
+  margin: 0 auto 22px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--mute);
+  text-align: center;
 }
 
 .plan-table-pricing {

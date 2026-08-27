@@ -8,11 +8,17 @@ import { TRUST_LOGOS } from "../pages/Landing";
  *  hold its own SOC 2/ISO 27001 attestation, so this deliberately doesn't say "SOC 2 in progress"
  *  — only that the infrastructure (Cloudflare) does. */
 const REASONS: Array<{ title: string; body: string; to?: string }> = [
-  { title: "Legally binding", body: "Built to support the U.S. ESIGN Act, UETA, and EU eIDAS." },
-  { title: "No account required", body: "Signers open a link and sign — nothing to install or register." },
-  { title: "Fast", body: "Upload, add fields, and send in under a minute." },
+  {
+    title: "Designed for ESIGN, UETA & eIDAS",
+    body: "SES e-signatures built to support U.S. and EU frameworks. We don't verify identity — see /trust for the honest disclosure.",
+  },
+  { title: "No account required", body: "Signers open a link and sign — nothing to install or register. Free for up to 2 signers." },
+  { title: "Sign in under a minute", body: "Upload, add fields, and send — then unlimited on a flat $10/month, not per seat." },
   { title: "Works on any device", body: "No app to install — sign from a phone, tablet, or desktop browser." },
-  { title: "Secure by default", body: "Timestamped audit trail on every document; infrastructure runs on Cloudflare (SOC 2 Type II, ISO 27001)." },
+  {
+    title: "Secure by default",
+    body: "Timestamped audit trail on every document; infrastructure runs on Cloudflare (SOC 2 Type II, ISO 27001). Docracy itself does not claim SOC 2 yet.",
+  },
   { title: "Independently verifiable", body: "Anyone with the finished document can confirm it was really signed here.", to: "/verify" },
   { title: "API & integrations", body: "Zapier and an MCP connector for Claude, ChatGPT, and other AI assistants." },
 ];
@@ -20,7 +26,7 @@ const REASONS: Array<{ title: string; body: string; to?: string }> = [
 export default function TrustSection() {
   return (
     <div className="card" style={{ marginTop: 32, padding: "24px 20px" }}>
-      <h2 style={{ fontSize: 18, marginTop: 0, marginBottom: 16 }}>Why teams trust Docracy</h2>
+      <h2 style={{ fontSize: 18, marginTop: 0, marginBottom: 16 }}>Why teams start with Docracy</h2>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16 }}>
         {REASONS.map((r) => (
           <div key={r.title}>

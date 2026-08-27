@@ -9,6 +9,8 @@ function shouldHideDock(pathname: string): boolean {
   if (pathname.startsWith("/sign/") || pathname.startsWith("/status/") || pathname.startsWith("/embed/")) {
     return true;
   }
+  // Keep free-templates / SEO template pages on the dock — Template → Sign → Upgrade is the
+  // conversion bridge for search traffic. Hide only product, auth, and the dedicated pricing page.
   const prefixes = [
     "/prepare",
     "/es/preparar",
@@ -20,8 +22,6 @@ function shouldHideDock(pathname: string): boolean {
     "/team",
     "/pricing",
     "/es/precios",
-    "/free-templates",
-    "/es/plantillas-gratis",
   ];
   return prefixes.some((p) => pathname === p || pathname.startsWith(`${p}/`));
 }

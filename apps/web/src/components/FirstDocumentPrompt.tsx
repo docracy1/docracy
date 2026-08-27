@@ -4,12 +4,9 @@ import { localizePath, useI18n, useT } from "../lib/i18n";
 import { track } from "../lib/track";
 import PdfUploadCircle from "./PdfUploadCircle";
 
-/** Homepage conversion prompt — appears in 3 spots on Landing.tsx (directly under the hero,
- *  under the features section, and a mobile-only instance near the footer). Uploading a PDF here
- *  hands the file straight into Prepare.tsx via router state instead of dropping the visitor on
- *  another empty upload screen — see Prepare.tsx's mount effect that reads `location.state`.
- *  `source` distinguishes the 3 placements in the resulting landingpage_cta_clicked events, since
- *  they'd otherwise all look identical in the data. */
+/** Homepage conversion prompt — after how-it-works, after features, and a mobile-only footer
+ *  instance. Uploading a PDF hands the file into Prepare.tsx via router state (see Prepare mount
+ *  effect). `source` distinguishes placements in landingpage_cta_clicked events. */
 export default function FirstDocumentPrompt({ mobileOnly = false, source = "hero" }: { mobileOnly?: boolean; source?: string }) {
   const t = useT();
   const { locale } = useI18n();
