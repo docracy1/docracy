@@ -10,6 +10,7 @@ import {
   listPending,
   listApproved,
   listWeeklyOfficial,
+  listWeeklyOfficialForSitemap,
   getApprovedBySlug,
   getSubmissionForReview,
   reviewSubmission,
@@ -77,6 +78,20 @@ marketplaceAccount.get("/submissions", requirePaidAccount, async (c) => {
 
 // Mounted at /api/marketplace — public, no auth.
 export const marketplacePublic = new Hono<{ Bindings: Env; Variables: Variables }>();
+
+marketplacePublic.get("/sitemap.xml", async (c) => {
+  const rows = await listWeeklyOfficialForSitemap(c.env);
+  const urls = rows
+    .map(
+      (r) =>
+        `  <url>\n    <loc>https://docracy.io/free-templates/${r.slug}</loc>\n    <lastmod>${r.lastmod}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.6</priority>\n  </url>`
+    )
+    .join("\n");
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
+  return new Response(xml, {
+    headers: { "Content-Type": "application/xml; charset=utf-8", "Cache-Control": "public, max-age=3600" },
+  });
+});
 
 marketplacePublic.get("/", async (c) => {
   const category = c.req.query("category") || undefined;

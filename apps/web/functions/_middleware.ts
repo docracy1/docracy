@@ -167,8 +167,10 @@ export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => 
     url.pathname !== "/" &&
     // API proxy + blog SSR have their own Functions — never rewrite those to a marketing 404.
     !url.pathname.startsWith("/api/") &&
-    // Let the more-specific blog Function handle /blog/* (including missing slugs).
-    !url.pathname.startsWith("/blog/")
+    // Let the more-specific blog / free-templates Functions handle dynamic D1 slugs
+    // (including missing → real 404 inside those Functions).
+    !url.pathname.startsWith("/blog/") &&
+    !url.pathname.startsWith("/free-templates/")
   ) {
     const hasPage = await staticHtmlExists(context.env, url.origin, url.pathname);
     if (!hasPage) {

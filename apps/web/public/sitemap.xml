@@ -20,6 +20,330 @@
     </video:video>
   </url>
   <url>
+    <loc>https://docracy.io/free-templates</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-templates" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/plantillas-gratis" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-templates" />
+  </url>
+  <url>
+    <loc>https://docracy.io/mcp</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/mcp" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/mcp" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/mcp" />
+  </url>
+  <url>
+    <loc>https://docracy.io/ai</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/ai" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/ia" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/ai" />
+  </url>
+  <url>
+    <loc>https://docracy.io/developers</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/developers" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/desarrolladores" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/developers" />
+  </url>
+  <url>
+    <loc>https://docracy.io/solutions/ai-contract-drafting</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/solutions/ai-contract-drafting" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/soluciones/redaccion-contratos-ia" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/solutions/ai-contract-drafting" />
+  </url>
+  <url>
+    <loc>https://docracy.io/enterprise</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/enterprise" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/empresas" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/enterprise" />
+  </url>
+  <url>
+    <loc>https://docracy.io/integrations/ai-assistants</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/integrations/ai-assistants" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/integraciones/asistentes-ia" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/integrations/ai-assistants" />
+  </url>
+  <url>
+    <loc>https://docracy.io/esign-ueta</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/esign-ueta" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/esign-ueta" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/esign-ueta" />
+  </url>
+  <url>
+    <loc>https://docracy.io/create-a-digital-signature</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/create-a-digital-signature" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/crear-firma-digital" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/create-a-digital-signature" />
+  </url>
+  <url>
+    <loc>https://docracy.io/ai-contract-analysis</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/ai-contract-analysis" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/analisis-de-contratos-ia" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/ai-contract-analysis" />
+  </url>
+  <url>
+    <loc>https://docracy.io/esignature-software</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/esignature-software" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/software-de-firma-electronica" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/esignature-software" />
+  </url>
+  <url>
+    <loc>https://docracy.io/sign-pdf-online</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/sign-pdf-online" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/firmar-pdf-en-linea" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/sign-pdf-online" />
+  </url>
+  <url>
+    <loc>https://docracy.io/secure-electronic-signature</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/secure-electronic-signature" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/firma-electronica-segura" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/secure-electronic-signature" />
+  </url>
+  <url>
+    <loc>https://docracy.io/free-electronic-signature</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-electronic-signature" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/firma-electronica-gratis" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-electronic-signature" />
+  </url>
+  <url>
+    <loc>https://docracy.io/docracy-alternative</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/docracy-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-docracy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/docracy-alternative" />
+  </url>
+  <url>
+    <loc>https://docracy.io/template-marketplace</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/template-marketplace" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/marketplace-de-plantillas" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/template-marketplace" />
+  </url>
+  <url>
+    <loc>https://docracy.io/submit-template</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/submit-template" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/enviar-plantilla" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/submit-template" />
+  </url>
+  <url>
+    <loc>https://docracy.io/electronic-signature-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/import-from-docusign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/import-from-eversign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/import-from-hellosign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/import-from-pandadoc</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/import-from-adobe-sign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/import-from-contractbook</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/import-from-onlinesignature</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/import-from-signnow</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/import-from-zoho-sign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/import-from-onespan</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/import-from-docuseal</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/import-from-boldsign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/import-from-signrequest</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/import-from-yousign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/import-from-nitro-sign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/import-from-dochub</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/import-from-signeasy</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/import-from-blueink</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/import-from-box-sign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/import-from-getaccept</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/industry/freelancers</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/industry/creative-agencies</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/industry/real-estate</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/industry/construction</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/industry/small-business</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/industry/hr</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/industry/legal</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/industry/sales</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/industry/recruiting</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/industry/consulting</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/industry/developers</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/industry/startups</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/industry/photographers</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/industry/personal</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/about</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/pricing</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/pricing" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/precios" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/pricing" />
+  </url>
+  <url>
     <loc>https://docracy.io/es</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -37,236 +361,188 @@
     </video:video>
   </url>
   <url>
-    <loc>https://docracy.io/free-templates</loc>
+    <loc>https://docracy.io/es/precios</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-templates" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/plantillas-gratis" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-templates" />
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/pricing" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/precios" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/pricing" />
   </url>
   <url>
     <loc>https://docracy.io/es/plantillas-gratis</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-templates" />
     <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/plantillas-gratis" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-templates" />
   </url>
   <url>
-    <loc>https://docracy.io/mcp</loc>
+    <loc>https://docracy.io/es/alternativa-a-docusign</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/mcp" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/mcp" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/mcp" />
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/docusign-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-docusign" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/docusign-alternative" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/alternativa-a-hellosign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/hellosign-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-hellosign" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/hellosign-alternative" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/alternativa-a-adobe-sign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/adobe-sign-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-adobe-sign" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/adobe-sign-alternative" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/alternativa-a-eversign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/eversign-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-eversign" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/eversign-alternative" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/alternativa-a-pandadoc</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/pandadoc-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-pandadoc" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/pandadoc-alternative" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/firma-de-nda</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/nda-signing" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/firma-de-nda" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/nda-signing" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/contratos-con-clientes</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/client-contracts" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/contratos-con-clientes" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/client-contracts" />
+  </url>
+  <url>
+    <loc>https://docracy.io/docs</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/docs" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/documentacion" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/docs" />
   </url>
   <url>
     <loc>https://docracy.io/es/mcp</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/mcp" />
     <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/mcp" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/mcp" />
   </url>
   <url>
-    <loc>https://docracy.io/ai</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/ai" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/ia" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/ai" />
-  </url>
-  <url>
     <loc>https://docracy.io/es/ia</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/ai" />
     <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/ia" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/ai" />
-  </url>
-  <url>
-    <loc>https://docracy.io/developers</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/developers" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/desarrolladores" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/developers" />
   </url>
   <url>
     <loc>https://docracy.io/es/desarrolladores</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/developers" />
     <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/desarrolladores" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/developers" />
   </url>
   <url>
-    <loc>https://docracy.io/solutions/ai-contract-drafting</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/solutions/ai-contract-drafting" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/soluciones/redaccion-contratos-ia" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/solutions/ai-contract-drafting" />
-  </url>
-  <url>
     <loc>https://docracy.io/es/soluciones/redaccion-contratos-ia</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/solutions/ai-contract-drafting" />
     <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/soluciones/redaccion-contratos-ia" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/solutions/ai-contract-drafting" />
-  </url>
-  <url>
-    <loc>https://docracy.io/enterprise</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/enterprise" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/empresas" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/enterprise" />
   </url>
   <url>
     <loc>https://docracy.io/es/empresas</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/enterprise" />
     <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/empresas" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/enterprise" />
   </url>
   <url>
-    <loc>https://docracy.io/integrations/ai-assistants</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/integrations/ai-assistants" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/integraciones/asistentes-ia" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/integrations/ai-assistants" />
-  </url>
-  <url>
     <loc>https://docracy.io/es/integraciones/asistentes-ia</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/integrations/ai-assistants" />
     <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/integraciones/asistentes-ia" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/integrations/ai-assistants" />
-  </url>
-  <url>
-    <loc>https://docracy.io/esign-ueta</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/esign-ueta" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/esign-ueta" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/esign-ueta" />
   </url>
   <url>
     <loc>https://docracy.io/es/esign-ueta</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/esign-ueta" />
     <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/esign-ueta" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/esign-ueta" />
   </url>
   <url>
-    <loc>https://docracy.io/create-a-digital-signature</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/create-a-digital-signature" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/crear-firma-digital" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/create-a-digital-signature" />
-  </url>
-  <url>
     <loc>https://docracy.io/es/crear-firma-digital</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/create-a-digital-signature" />
     <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/crear-firma-digital" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/create-a-digital-signature" />
-  </url>
-  <url>
-    <loc>https://docracy.io/ai-contract-analysis</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/ai-contract-analysis" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/analisis-de-contratos-ia" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/ai-contract-analysis" />
   </url>
   <url>
     <loc>https://docracy.io/es/analisis-de-contratos-ia</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/ai-contract-analysis" />
     <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/analisis-de-contratos-ia" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/ai-contract-analysis" />
   </url>
   <url>
-    <loc>https://docracy.io/esignature-software</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/esignature-software" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/software-de-firma-electronica" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/esignature-software" />
-  </url>
-  <url>
     <loc>https://docracy.io/es/software-de-firma-electronica</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/esignature-software" />
     <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/software-de-firma-electronica" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/esignature-software" />
-  </url>
-  <url>
-    <loc>https://docracy.io/sign-pdf-online</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/sign-pdf-online" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/firmar-pdf-en-linea" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/sign-pdf-online" />
   </url>
   <url>
     <loc>https://docracy.io/es/firmar-pdf-en-linea</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/sign-pdf-online" />
     <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/firmar-pdf-en-linea" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/sign-pdf-online" />
   </url>
   <url>
-    <loc>https://docracy.io/secure-electronic-signature</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/secure-electronic-signature" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/firma-electronica-segura" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/secure-electronic-signature" />
-  </url>
-  <url>
     <loc>https://docracy.io/es/firma-electronica-segura</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/secure-electronic-signature" />
     <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/firma-electronica-segura" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/secure-electronic-signature" />
-  </url>
-  <url>
-    <loc>https://docracy.io/free-electronic-signature</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-electronic-signature" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/firma-electronica-gratis" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-electronic-signature" />
   </url>
   <url>
     <loc>https://docracy.io/es/firma-electronica-gratis</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-electronic-signature" />
     <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/firma-electronica-gratis" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-electronic-signature" />
-  </url>
-  <url>
-    <loc>https://docracy.io/docracy-alternative</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/docracy-alternative" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-docracy" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/docracy-alternative" />
   </url>
   <url>
     <loc>https://docracy.io/es/alternativa-a-docracy</loc>
@@ -277,163 +553,153 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/docracy-alternative" />
   </url>
   <url>
-    <loc>https://docracy.io/template-marketplace</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/template-marketplace" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/marketplace-de-plantillas" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/template-marketplace" />
-  </url>
-  <url>
     <loc>https://docracy.io/es/marketplace-de-plantillas</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/template-marketplace" />
     <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/marketplace-de-plantillas" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/template-marketplace" />
-  </url>
-  <url>
-    <loc>https://docracy.io/submit-template</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/submit-template" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/enviar-plantilla" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/submit-template" />
   </url>
   <url>
     <loc>https://docracy.io/es/enviar-plantilla</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/submit-template" />
     <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/enviar-plantilla" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/submit-template" />
-  </url>
-  <url>
-    <loc>https://docracy.io/pricing</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/pricing" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/precios" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/pricing" />
-  </url>
-  <url>
-    <loc>https://docracy.io/es/precios</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/pricing" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/precios" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/pricing" />
-  </url>
-  <url>
-    <loc>https://docracy.io/docs</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/docs" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/documentacion" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/docs" />
   </url>
   <url>
     <loc>https://docracy.io/es/documentacion</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/docs" />
     <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/documentacion" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/docs" />
   </url>
   <url>
-    <loc>https://docracy.io/about</loc>
+    <loc>https://docracy.io/imprint</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/trust</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/verify</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/dpa</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/privacy</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/terms</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/uptime</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/docracy-vs-eversign</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/docracy-vs-docusign</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/docracy-vs-pandadoc</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/docracy-vs-adobe-acrobat-sign</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/what-is-an-nda</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/one-way-vs-mutual-nda</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/how-to-sign-an-nda-online</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/nda-for-freelancers</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/nda-mistakes-to-avoid</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/what-is-a-simple-contract</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/how-to-sign-a-contract-online</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/client-contract-basics</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/service-agreement-explained</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/contract-templates-you-can-use-today</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/how-online-signatures-work</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/are-online-signatures-legally-binding</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/how-to-send-a-document-for-signature</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/how-to-sign-a-w-9-form-online</loc>
@@ -443,88 +709,115 @@
   <url>
     <loc>https://docracy.io/blog/best-tools-for-quick-signatures</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/why-simple-signing-tools-matter</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/essential-agreements-for-freelancers</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/how-freelancers-can-protect-their-work</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/simple-contracts-for-small-projects</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/how-to-onboard-new-clients-quickly</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/agreements-every-small-business-needs</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/how-to-streamline-client-onboarding</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/vendor-agreements-explained</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/how-to-manage-recurring-documents</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/ai-contract-management-small-business</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/best-alternatives-to-docusign</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/whatsapp-signing-now-available</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/introducing-the-docracy-marketplace</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/blog/10-new-free-templates</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/blog/how-to-form-an-llc</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/blog/why-nobody-reads-your-terms-of-service</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/blog/how-freelancers-get-paid-on-time</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/blog/trademark-basics-for-small-business</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/blog/what-is-a-patent</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/blog/software-licensing-types-explained</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/blog/can-i-use-that-image</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/free-templates/mutual-nda</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-templates/mutual-nda" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/plantillas-gratis/mutual-nda" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-templates/mutual-nda" />
-  </url>
-  <url>
-    <loc>https://docracy.io/es/plantillas-gratis/mutual-nda</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-templates/mutual-nda" />
@@ -540,23 +833,7 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-templates/independent-contractor-agreement" />
   </url>
   <url>
-    <loc>https://docracy.io/es/plantillas-gratis/independent-contractor-agreement</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-templates/independent-contractor-agreement" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/plantillas-gratis/independent-contractor-agreement" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-templates/independent-contractor-agreement" />
-  </url>
-  <url>
     <loc>https://docracy.io/free-templates/offer-letter</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-templates/offer-letter" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/plantillas-gratis/offer-letter" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-templates/offer-letter" />
-  </url>
-  <url>
-    <loc>https://docracy.io/es/plantillas-gratis/offer-letter</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-templates/offer-letter" />
@@ -572,23 +849,7 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-templates/remote-work-policy" />
   </url>
   <url>
-    <loc>https://docracy.io/es/plantillas-gratis/remote-work-policy</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-templates/remote-work-policy" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/plantillas-gratis/remote-work-policy" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-templates/remote-work-policy" />
-  </url>
-  <url>
     <loc>https://docracy.io/free-templates/freelance-service-agreement</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-templates/freelance-service-agreement" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/plantillas-gratis/freelance-service-agreement" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-templates/freelance-service-agreement" />
-  </url>
-  <url>
-    <loc>https://docracy.io/es/plantillas-gratis/freelance-service-agreement</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-templates/freelance-service-agreement" />
@@ -786,596 +1047,14 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://docracy.io/privacy</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/trust</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/verify</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/document-verification</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/blockchain-timestamp</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/electronic-signature-guide</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/dpa</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.4</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/terms</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/imprint</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/uptime</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.3</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/simple-agreements</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/nda-signing</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/nda-signing" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/firma-de-nda" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/nda-signing" />
-  </url>
-  <url>
-    <loc>https://docracy.io/es/firma-de-nda</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/nda-signing" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/firma-de-nda" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/nda-signing" />
-  </url>
-  <url>
-    <loc>https://docracy.io/client-contracts</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/client-contracts" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/contratos-con-clientes" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/client-contracts" />
-  </url>
-  <url>
-    <loc>https://docracy.io/es/contratos-con-clientes</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/client-contracts" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/contratos-con-clientes" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/client-contracts" />
-  </url>
-  <url>
-    <loc>https://docracy.io/onboarding-documents</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/vendor-agreements</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/compliance-documentation</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/whatsapp-signing</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/advanced-electronic-signature</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/artist-contracts</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/creative-licensing</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/music-collaboration-contracts</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/freelancer-contracts</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/web-design-contract</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/developer-contracts</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/llc-legal-templates</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/startup-legal-templates</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/founder-agreement</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/seo-agency-contract</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/marketing-service-agreement</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/education-forms</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/student-agreements</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/import-google-doc</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/anonymous-signing</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/quick-sign</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/upload-and-sign</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/simple-signing</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/eversign-alternative</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/eversign-alternative" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-eversign" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/eversign-alternative" />
-  </url>
-  <url>
-    <loc>https://docracy.io/es/alternativa-a-eversign</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/eversign-alternative" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-eversign" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/eversign-alternative" />
-  </url>
-  <url>
-    <loc>https://docracy.io/onlinesignature-alternative</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/docusign-alternative</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/docusign-alternative" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-docusign" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/docusign-alternative" />
-  </url>
-  <url>
-    <loc>https://docracy.io/es/alternativa-a-docusign</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/docusign-alternative" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-docusign" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/docusign-alternative" />
-  </url>
-  <url>
-    <loc>https://docracy.io/import-from-docusign</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/import-from-eversign</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/import-from-hellosign</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/import-from-pandadoc</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/import-from-adobe-sign</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/import-from-contractbook</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/import-from-onlinesignature</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/hellosign-alternative</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/hellosign-alternative" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-hellosign" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/hellosign-alternative" />
-  </url>
-  <url>
-    <loc>https://docracy.io/es/alternativa-a-hellosign</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/hellosign-alternative" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-hellosign" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/hellosign-alternative" />
-  </url>
-  <url>
-    <loc>https://docracy.io/pandadoc-alternative</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/pandadoc-alternative" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-pandadoc" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/pandadoc-alternative" />
-  </url>
-  <url>
-    <loc>https://docracy.io/es/alternativa-a-pandadoc</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/pandadoc-alternative" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-pandadoc" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/pandadoc-alternative" />
-  </url>
-  <url>
-    <loc>https://docracy.io/adobe-sign-alternative</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/adobe-sign-alternative" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-adobe-sign" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/adobe-sign-alternative" />
-  </url>
-  <url>
-    <loc>https://docracy.io/es/alternativa-a-adobe-sign</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/adobe-sign-alternative" />
-    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-adobe-sign" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/adobe-sign-alternative" />
-  </url>
-  <url>
-    <loc>https://docracy.io/what-is-an-nda</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/are-electronic-signatures-legal</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/ueta-electronic-signature</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/docracy-ueta-compliance</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/industry/freelancers</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/industry/creative-agencies</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/industry/real-estate</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/industry/construction</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/industry/small-business</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/industry/hr</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/industry/legal</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/industry/sales</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/industry/recruiting</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/industry/consulting</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/industry/developers</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/industry/startups</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/industry/photographers</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/industry/personal</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/contractbook-alternative</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/builderprime</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/salesforce</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/crm-tools</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/helpdesk-support</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/staffing-recruiting</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/sop-training</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/productivity-tools</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/moving-companies</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/healthcare</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/facility-management</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/delivery-logistics</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/enterprise-it</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/local-services</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/germany-eu</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/aircall</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/amocrm</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/crosstrax</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/pipefy</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/freshdesk</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/bullhorn</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/akken</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/trainual</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/moodle</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/online-courses</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/evernote</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/canva</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/smartmoving</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/nhsp</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/dentco</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/hungrypanda</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/barracuda</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/germany</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/for/digital-unterschreiben</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://docracy.io/free-templates/w-9-form</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/free-templates/i-9-form</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://docracy.io/free-templates/last-will-and-testament</loc>
@@ -1638,66 +1317,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://docracy.io/pandadoc-vs-docusign</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/docusign-vs-pandadoc</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/pandadoc-vs-hellosign</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/hellosign-vs-pandadoc</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/pandadoc-vs-eversign</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/eversign-vs-pandadoc</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/docusign-vs-hellosign</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/hellosign-vs-docusign</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/docusign-vs-eversign</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/eversign-vs-docusign</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/hellosign-vs-eversign</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://docracy.io/eversign-vs-hellosign</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://docracy.io/free-templates/request-for-proposal</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -1728,37 +1347,518 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://docracy.io/blog/how-to-form-an-llc</loc>
+    <loc>https://docracy.io/es/plantillas-gratis/mutual-nda</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-templates/mutual-nda" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/plantillas-gratis/mutual-nda" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-templates/mutual-nda" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/plantillas-gratis/independent-contractor-agreement</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-templates/independent-contractor-agreement" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/plantillas-gratis/independent-contractor-agreement" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-templates/independent-contractor-agreement" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/plantillas-gratis/offer-letter</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-templates/offer-letter" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/plantillas-gratis/offer-letter" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-templates/offer-letter" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/plantillas-gratis/freelance-service-agreement</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-templates/freelance-service-agreement" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/plantillas-gratis/freelance-service-agreement" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-templates/freelance-service-agreement" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/plantillas-gratis/remote-work-policy</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/free-templates/remote-work-policy" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/plantillas-gratis/remote-work-policy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/free-templates/remote-work-policy" />
+  </url>
+  <url>
+    <loc>https://docracy.io/simple-agreements</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://docracy.io/blog/why-nobody-reads-your-terms-of-service</loc>
+    <loc>https://docracy.io/nda-signing</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/nda-signing" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/firma-de-nda" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/nda-signing" />
+  </url>
+  <url>
+    <loc>https://docracy.io/client-contracts</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/client-contracts" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/contratos-con-clientes" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/client-contracts" />
+  </url>
+  <url>
+    <loc>https://docracy.io/onboarding-documents</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://docracy.io/blog/how-freelancers-get-paid-on-time</loc>
+    <loc>https://docracy.io/vendor-agreements</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://docracy.io/blog/trademark-basics-for-small-business</loc>
+    <loc>https://docracy.io/compliance-documentation</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://docracy.io/blog/what-is-a-patent</loc>
+    <loc>https://docracy.io/whatsapp-signing</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://docracy.io/blog/software-licensing-types-explained</loc>
+    <loc>https://docracy.io/advanced-electronic-signature</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://docracy.io/blog/can-i-use-that-image</loc>
+    <loc>https://docracy.io/artist-contracts</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/creative-licensing</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/music-collaboration-contracts</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/freelancer-contracts</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/web-design-contract</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/developer-contracts</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/llc-legal-templates</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/startup-legal-templates</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/founder-agreement</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/seo-agency-contract</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/marketing-service-agreement</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/education-forms</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/student-agreements</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/import-google-doc</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/anonymous-signing</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/quick-sign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/upload-and-sign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/simple-signing</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/document-verification</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/blockchain-timestamp</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/eversign-alternative</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/eversign-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-eversign" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/eversign-alternative" />
+  </url>
+  <url>
+    <loc>https://docracy.io/onlinesignature-alternative</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/docusign-alternative</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/docusign-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-docusign" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/docusign-alternative" />
+  </url>
+  <url>
+    <loc>https://docracy.io/hellosign-alternative</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/hellosign-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-hellosign" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/hellosign-alternative" />
+  </url>
+  <url>
+    <loc>https://docracy.io/pandadoc-alternative</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/pandadoc-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-pandadoc" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/pandadoc-alternative" />
+  </url>
+  <url>
+    <loc>https://docracy.io/adobe-sign-alternative</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/adobe-sign-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-adobe-sign" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/adobe-sign-alternative" />
+  </url>
+  <url>
+    <loc>https://docracy.io/contractbook-alternative</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/signnow-alternative</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/zoho-sign-alternative</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/onespan-alternative</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/docuseal-alternative</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/boldsign-alternative</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/signrequest-alternative</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/yousign-alternative</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/nitro-sign-alternative</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/dochub-alternative</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/signeasy-alternative</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/blueink-alternative</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/box-sign-alternative</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/getaccept-alternative</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/what-is-an-nda</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/are-electronic-signatures-legal</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/ueta-electronic-signature</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/docracy-ueta-compliance</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/pandadoc-vs-docusign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/pandadoc-vs-hellosign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/pandadoc-vs-eversign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/docusign-vs-hellosign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/docusign-vs-eversign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/hellosign-vs-eversign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/builderprime</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/salesforce</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/crm-tools</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/helpdesk-support</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/staffing-recruiting</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/sop-training</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/productivity-tools</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/moving-companies</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/healthcare</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/facility-management</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/delivery-logistics</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/enterprise-it</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/local-services</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/germany-eu</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/aircall</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/amocrm</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/crosstrax</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/pipefy</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/freshdesk</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/bullhorn</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/akken</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/trainual</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/moodle</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/online-courses</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/evernote</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/canva</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/smartmoving</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/nhsp</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/dentco</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/hungrypanda</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/barracuda</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/germany</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/for/digital-unterschreiben</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

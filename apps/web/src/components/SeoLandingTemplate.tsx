@@ -9,7 +9,9 @@ export default function SeoLandingTemplate({ slug }: { slug: string }) {
   const page = getSeoLandingPage(slug);
   const { locale } = useI18n();
 
-  usePageMeta(page?.seoTitle || "Docracy", page?.seoDescription || "");
+  usePageMeta(page?.seoTitle || "Docracy", page?.seoDescription || "", {
+    canonicalPath: page ? `/${page.slug}` : undefined,
+  });
 
   if (!page) return <NotFound />;
 

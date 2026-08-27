@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { createRequire } from "node:module";
 import { htmlToMarkdown } from "./htmlToMarkdown.mjs";
 import { INDEXNOW_KEY } from "./indexNowKey.mjs";
+import { writeSeoDiscovery } from "./writeSeoDiscovery.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
@@ -902,5 +903,6 @@ for (const route of routes) {
 fs.mkdirSync(path.join(distDir, "blog"), { recursive: true });
 writeBlogFeed();
 writeIndexNowKey();
+writeSeoDiscovery(routes, { distDir, publicDir: path.join(root, "public") });
 
 console.log(`Done — ${routes.length} routes prerendered.`);

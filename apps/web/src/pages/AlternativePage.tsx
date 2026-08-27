@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { usePageMeta } from "../lib/usePageMeta";
-import { ALTERNATIVE_PAGES } from "../lib/marketingPages";
+import { ALTERNATIVE_PAGES, defaultAlternativeFaqs } from "../lib/marketingPages";
 import { localizePath, useI18n, useT } from "../lib/i18n";
 import { BILINGUAL_ALT_BY_SLUG, cleanPath, seoAlternates } from "../lib/i18n/paths";
 import { track } from "../lib/track";
@@ -17,9 +17,10 @@ export default function AlternativePage({ slug }: { slug: string }) {
   usePageMeta(
     bilingual && catalogKey ? t(`seo.${catalogKey}.title`) : page?.seoTitle ?? "Docracy",
     bilingual && catalogKey ? t(`seo.${catalogKey}.description`) : page?.seoDescription ?? "",
-    bilingual
-      ? { canonicalPath: cleanPath(location.pathname), alternates: seoAlternates(bilingual.seoPage) }
-      : undefined
+    {
+      canonicalPath: bilingual ? cleanPath(location.pathname) : `/${slug}`,
+      ...(bilingual ? { alternates: seoAlternates(bilingual.seoPage) } : {}),
+    }
   );
 
   if (!page) return null;
@@ -45,6 +46,7 @@ export default function AlternativePage({ slug }: { slug: string }) {
   const compareLabel = useEsBody ? t(`alt.${catalogKey}.compareLabel`) : page.compareLabel;
   const ctaTo = localizePath(page.ctaTo, locale);
   const pricingTo = localizePath("/pricing?ref=seo-price", locale);
+  const faqs = page.faqs ?? defaultAlternativeFaqs(page.competitorName);
 
   const relatedAlts = [
     { slug: "docusign-alternative", labelKey: "alt.related.docusign" },
@@ -54,8 +56,19 @@ export default function AlternativePage({ slug }: { slug: string }) {
     .filter((r) => r.slug !== slug)
     .map((r) => ({ ...r, label: t(r.labelKey) }));
 
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  };
+
   return (
     <div>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       <div className="hero-band">
         <div className="hero-inner" style={{ maxWidth: 720 }}>
           <h1>{heroHeadline}</h1>
@@ -96,6 +109,14 @@ export default function AlternativePage({ slug }: { slug: string }) {
             </li>
           ))}
         </ul>
+
+        <h2 style={{ fontSize: 19, marginTop: 36 }}>{t("tpl.detail.faqTitle")}</h2>
+        {faqs.map((faq, i) => (
+          <details key={i} className="faq-item" style={{ marginTop: 12 }}>
+            <summary style={{ fontWeight: 700, cursor: "pointer" }}>{faq.question}</summary>
+            <p style={{ margin: "8px 0 0", color: "var(--body)" }}>{faq.answer}</p>
+          </details>
+        ))}
 
         <p style={{ marginTop: 24 }}>
           <Link to={`/blog/${page.compareBlogSlug}`}>{compareLabel} →</Link>
