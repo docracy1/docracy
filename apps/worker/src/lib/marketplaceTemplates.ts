@@ -194,23 +194,40 @@ export async function listPending(env: Env): Promise<MarketplaceTemplateSummary[
 export async function listApproved(env: Env, category?: string): Promise<MarketplaceTemplateSummary[]> {
   const db = requireDb(env);
   // Human community submissions only — Monday-cron official rows use listWeeklyOfficial / ?origin=weekly.
-  const { results } = category
-    ? await db
-        .prepare(
-          `SELECT * FROM marketplace_templates
-           WHERE status = 'approved' AND origin = 'community' AND category = ?
-           ORDER BY reviewed_at DESC`
-        )
-        .bind(category)
-        .all<MarketplaceTemplateRow>()
-    : await db
-        .prepare(
-          `SELECT * FROM marketplace_templates
-           WHERE status = 'approved' AND origin = 'community'
-           ORDER BY reviewed_at DESC`
-        )
-        .all<MarketplaceTemplateRow>();
-  return results.map(rowToSummary);
+  try {
+    const { results } = category
+      ? await db
+          .prepare(
+            `SELECT * FROM marketplace_templates
+             WHERE status = 'approved' AND origin = 'community' AND category = ?
+             ORDER BY reviewed_at DESC`
+          )
+          .bind(category)
+          .all<MarketplaceTemplateRow>()
+      : await db
+          .prepare(
+            `SELECT * FROM marketplace_templates
+             WHERE status = 'approved' AND origin = 'community'
+             ORDER BY reviewed_at DESC`
+          )
+          .all<MarketplaceTemplateRow>();
+    return results.map(rowToSummary);
+  } catch (err) {
+    // Remote D1 may lag migrations (origin column from 0026). Fall back so the public
+    // marketplace list doesn't 500 until `wrangler d1 migrations apply` is run.
+    console.error("listApproved with origin filter failed; falling back:", err instanceof Error ? err.message : err);
+    const { results } = category
+      ? await db
+          .prepare(
+            `SELECT * FROM marketplace_templates WHERE status = 'approved' AND category = ? ORDER BY reviewed_at DESC`
+          )
+          .bind(category)
+          .all<MarketplaceTemplateRow>()
+      : await db
+          .prepare(`SELECT * FROM marketplace_templates WHERE status = 'approved' ORDER BY reviewed_at DESC`)
+          .all<MarketplaceTemplateRow>();
+    return results.map(rowToSummary);
+  }
 }
 
 export async function getApprovedBySlug(
@@ -327,15 +344,20 @@ export async function publishOfficialTemplate(
 /** Newest Monday-cron (origin=weekly) templates — powers /free-templates#newest. */
 export async function listWeeklyOfficial(env: Env, limit = 10): Promise<MarketplaceTemplateSummary[]> {
   const db = requireDb(env);
-  const { results } = await db
-    .prepare(
-      `SELECT * FROM marketplace_templates
-       WHERE status = 'approved' AND origin = 'weekly'
-       ORDER BY reviewed_at DESC LIMIT ?`
-    )
-    .bind(limit)
-    .all<MarketplaceTemplateRow>();
-  return results.map(rowToSummary);
+  try {
+    const { results } = await db
+      .prepare(
+        `SELECT * FROM marketplace_templates
+         WHERE status = 'approved' AND origin = 'weekly'
+         ORDER BY reviewed_at DESC LIMIT ?`
+      )
+      .bind(limit)
+      .all<MarketplaceTemplateRow>();
+    return results.map(rowToSummary);
+  } catch (err) {
+    console.error("listWeeklyOfficial failed (is migration 0026 applied?):", err instanceof Error ? err.message : err);
+    return [];
+  }
 }
 
 /** All weekly official templates for the public sitemap (capped). */
@@ -344,17 +366,25 @@ export async function listWeeklyOfficialForSitemap(
   limit = 500
 ): Promise<Array<{ slug: string; lastmod: string }>> {
   if (!env.DOCRACY_DB) return [];
-  const db = env.DOCRACY_DB;
-  const { results } = await db
-    .prepare(
-      `SELECT slug, reviewed_at, submitted_at FROM marketplace_templates
-       WHERE status = 'approved' AND origin = 'weekly'
-       ORDER BY reviewed_at DESC LIMIT ?`
-    )
-    .bind(limit)
-    .all<{ slug: string; reviewed_at: string | null; submitted_at: string }>();
-  return results.map((r) => ({
-    slug: r.slug,
-    lastmod: (r.reviewed_at ?? r.submitted_at).slice(0, 10),
-  }));
+  try {
+    const db = env.DOCRACY_DB;
+    const { results } = await db
+      .prepare(
+        `SELECT slug, reviewed_at, submitted_at FROM marketplace_templates
+         WHERE status = 'approved' AND origin = 'weekly'
+         ORDER BY reviewed_at DESC LIMIT ?`
+      )
+      .bind(limit)
+      .all<{ slug: string; reviewed_at: string | null; submitted_at: string }>();
+    return results.map((r) => ({
+      slug: r.slug,
+      lastmod: (r.reviewed_at ?? r.submitted_at).slice(0, 10),
+    }));
+  } catch (err) {
+    console.error(
+      "listWeeklyOfficialForSitemap failed (is migration 0026 applied?):",
+      err instanceof Error ? err.message : err
+    );
+    return [];
+  }
 }
