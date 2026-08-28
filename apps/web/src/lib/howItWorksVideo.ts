@@ -8,5 +8,5 @@ export const HOW_IT_WORKS_VIDEO = {
   uploadDate: "2026-08-04",
   contentUrl: "https://docracy.io/videos/how-it-works.webm",
   posterUrl: "https://docracy.io/videos/how-it-works-poster.jpg",
-  embedUrl: "https://docracy.io/#watch-how-it-works",
+  embedUrl: "https://docracy.io/how-it-works",
 } as const;

@@ -4,6 +4,7 @@ import Header from "../src/components/Header";
 import Footer from "../src/components/Footer";
 import { LocaleProvider, type Locale } from "../src/lib/i18n";
 import Landing from "../src/pages/Landing";
+import HowItWorksWatch from "../src/pages/HowItWorksWatch";
 import FreeTemplates from "../src/pages/FreeTemplates";
 import FreeTemplateDetail from "../src/pages/FreeTemplateDetail";
 import Mcp from "../src/pages/Mcp";
@@ -55,6 +56,8 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/es" element={<Landing />} />
+          <Route path="/how-it-works" element={<HowItWorksWatch />} />
+          <Route path="/es/como-funciona" element={<HowItWorksWatch />} />
           <Route path="/free-templates" element={<FreeTemplates />} />
           <Route path="/es/plantillas-gratis" element={<FreeTemplates />} />
           <Route path="/free-templates/:slug" element={<FreeTemplateDetail />} />

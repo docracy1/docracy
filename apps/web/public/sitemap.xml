@@ -9,6 +9,14 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/" />
     <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/" />
+  </url>
+  <url>
+    <loc>https://docracy.io/how-it-works</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/how-it-works" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/como-funciona" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/how-it-works" />
     <video:video>
       <video:thumbnail_loc>https://docracy.io/videos/how-it-works-poster.jpg</video:thumbnail_loc>
       <video:title>How Docracy works — sign documents in under a minute</video:title>
@@ -350,6 +358,14 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/" />
     <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/como-funciona</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/how-it-works" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/como-funciona" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/how-it-works" />
     <video:video>
       <video:thumbnail_loc>https://docracy.io/videos/how-it-works-poster.jpg</video:thumbnail_loc>
       <video:title>Cómo funciona Docracy — firma documentos en menos de un minuto</video:title>

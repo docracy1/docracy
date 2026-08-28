@@ -11,6 +11,21 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
 const distDir = path.join(root, "dist");
 const SITE = "https://docracy.io";
+
+function watchPageVideoMeta(locale) {
+  const playerUrl = locale === "es" ? `${SITE}/es/como-funciona` : `${SITE}/how-it-works`;
+  return `
+    <meta property="og:video" content="https://docracy.io/videos/how-it-works.webm" />
+    <meta property="og:video:type" content="video/webm" />
+    <meta property="og:video:width" content="1280" />
+    <meta property="og:video:height" content="720" />
+    <meta name="twitter:card" content="player" />
+    <meta name="twitter:player" content="${playerUrl}" />
+    <meta name="twitter:player:width" content="1280" />
+    <meta name="twitter:player:height" content="720" />
+    <meta name="twitter:player:stream" content="https://docracy.io/videos/how-it-works.webm" />
+    <meta name="twitter:player:stream:content_type" content="video/webm" />`;
+}
 const require = createRequire(import.meta.url);
 
 // react-router-dom's <Link> uses useLayoutEffect internally, which React logs a (harmless, for
@@ -179,6 +194,16 @@ const routes = [
       "Create, send, and sign documents in minutes — free for up to two signers, no account required. Watch how Docracy works, then start from a template or your own PDF.",
     locale: "en",
     alternates: { en: "/", es: "/es" },
+  },
+  {
+    urlPath: "/how-it-works",
+    outFile: "how-it-works.html",
+    title: "How Docracy works — sign documents in under a minute",
+    description:
+      "A short walkthrough of Docracy: upload a PDF, place signature fields, email signing links, and download the signed document — free for up to two signers, no account needed.",
+    locale: "en",
+    alternates: { en: "/how-it-works", es: "/es/como-funciona" },
+    watchPage: true,
   },
   {
     urlPath: "/free-templates",
@@ -403,6 +428,16 @@ const routes = [
       "Crea, envía y firma documentos en minutos — gratis hasta dos firmantes, sin necesidad de cuenta. Mira cómo funciona Docracy y empieza con una plantilla o tu propio PDF.",
     locale: "es",
     alternates: { en: "/", es: "/es" },
+  },
+  {
+    urlPath: "/es/como-funciona",
+    outFile: "es/como-funciona.html",
+    title: "Cómo funciona Docracy — firma documentos en menos de un minuto",
+    description:
+      "Un recorrido breve de Docracy: sube un PDF, coloca campos de firma, envía enlaces por correo y descarga el documento firmado — gratis hasta dos firmantes, sin cuenta.",
+    locale: "es",
+    alternates: { en: "/how-it-works", es: "/es/como-funciona" },
+    watchPage: true,
   },
   {
     urlPath: "/es/precios",
@@ -832,7 +867,7 @@ function writeIndexNowKey() {
   fs.writeFileSync(path.join(distDir, `${INDEXNOW_KEY}.txt`), INDEXNOW_KEY);
 }
 
-function withMeta(html, { title, description, urlPath, locale = "en", alternates, image }) {
+function withMeta(html, { title, description, urlPath, locale = "en", alternates, image, watchPage = false }) {
   const canonical = `${SITE}${urlPath === "/" ? "/" : urlPath}`;
   // Escape before interpolating into raw HTML — a title/description containing a literal `"`
   // (e.g. a quoted term like "digital signature") would otherwise terminate the content="..."
@@ -871,13 +906,11 @@ function withMeta(html, { title, description, urlPath, locale = "en", alternates
     out = out.replace("</head>", `    ${hreflang}\n  </head>`);
   }
 
-  // The base index.html hardcodes og:video/twitter:player tags for the homepage's demo video —
-  // withMeta() never cleared them for every other route, so all ~280 other pages inherited them
-  // unchanged. Google discovered video markup on every one of those pages via Open Graph/Twitter
-  // Card tags (not just the XML sitemap) and correctly flagged most as "video isn't on a watch
-  // page" in Search Console, since the video isn't actually that page's content. Only the routes
-  // that also carry a <video:video> sitemap entry (home page, "/" and "/es") should keep them.
-  if (urlPath !== "/" && urlPath !== "/es") {
+  // Video Open Graph / Twitter player tags belong only on dedicated watch pages. The SPA shell
+  // (index.html) no longer ships them by default; inject here for watch routes only.
+  if (watchPage) {
+    out = out.replace("</head>", `${watchPageVideoMeta(locale)}\n  </head>`);
+  } else {
     out = out.replace(/\s*<meta\s+(?:property="og:video[^"]*"|name="twitter:player[^"]*")\s+content="[^"]*"\s*\/?>/g, "");
   }
 

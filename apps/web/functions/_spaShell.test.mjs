@@ -20,6 +20,7 @@ buildSync({
 const {
   emptyRoot,
   sanitizeForNoIndex,
+  stripVideoMetaTags,
   isSpaAppPath,
   hasFileExtension,
   hasViteModuleScript,
@@ -48,6 +49,13 @@ assert.equal(cleaned.includes("The fastest way"), false);
 assert.equal(cleaned.includes('<div id="root"></div>'), true);
 assert.equal(hasViteModuleScript(cleaned), true, "sanitize must keep the Vite module script");
 assert.equal(hasViteModuleScript(`<!doctype html><html><body><div id="root"></div></body></html>`), false);
+
+const withVideoMeta = `${nested.slice(0, nested.indexOf("</head>"))}
+<meta property="og:video" content="https://docracy.io/videos/how-it-works.webm" />
+<meta name="twitter:player" content="https://docracy.io/how-it-works" />
+</head>${nested.slice(nested.indexOf("</head>") + 7)}`;
+assert.equal(stripVideoMetaTags(withVideoMeta).includes("og:video"), false);
+assert.equal(stripVideoMetaTags(withVideoMeta).includes("twitter:player"), false);
 
 assert.equal(isSpaAppPath("/login"), true);
 assert.equal(isSpaAppPath("/prepare"), true);

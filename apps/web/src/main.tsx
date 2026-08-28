@@ -15,6 +15,7 @@ import { clearStaleChunkReloadGuard, reloadOnceOnStaleChunk } from "./lib/reload
 // to visitors who never touch it. Prerendering (scripts/_render-entry.tsx) is a separate,
 // eagerly-imported esbuild bundle unaffected by any of this.
 import Landing from "./pages/Landing";
+import HowItWorksWatch from "./pages/HowItWorksWatch";
 
 // After a deploy, open tabs may still point at retired hashed chunks. Vite emits this event
 // for failed dynamic imports; one reload picks up the new HTML shell.
@@ -111,6 +112,8 @@ function AppRoutes() {
     <Routes>
       <Route path="/" element={<Landing />} />
       <Route path="/es" element={<Landing />} />
+      <Route path="/how-it-works" element={<HowItWorksWatch />} />
+      <Route path="/es/como-funciona" element={<HowItWorksWatch />} />
       <Route path="/try" element={<ShortTryRedirect />} />
       <Route path="/nda" element={<ShortNdaRedirect />} />
       <Route path="/price" element={<ShortPriceRedirect />} />

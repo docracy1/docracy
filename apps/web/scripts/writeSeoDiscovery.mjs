@@ -124,7 +124,7 @@ function urlEntry(route) {
     lines.push(`    <xhtml:link rel="alternate" hreflang="es" href="${escapeXml(esHref)}" />`);
     lines.push(`    <xhtml:link rel="alternate" hreflang="x-default" href="${escapeXml(enHref)}" />`);
   }
-  if (route.urlPath === "/" || route.urlPath === "/es") {
+  if (route.urlPath === "/how-it-works" || route.urlPath === "/es/como-funciona") {
     lines.push(videoBlock(route.locale === "es" ? "es" : "en"));
   }
   lines.push("  </url>");

@@ -2298,6 +2298,56 @@ select {
   background: #000;
 }
 
+.watch-page-inner {
+  max-width: 960px;
+  padding: 40px 24px 64px;
+}
+
+.watch-page-inner h1 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  margin: 0 0 20px;
+  text-align: center;
+}
+
+.watch-page-player {
+  margin: 0 auto 20px;
+  max-width: 960px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 12px 40px rgba(6, 16, 32, 0.12);
+}
+
+.watch-page-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
+
+.watch-page-description {
+  font-size: 16px;
+  line-height: 1.55;
+  margin: 0 0 24px;
+  color: var(--body-strong);
+}
+
+.watch-page-steps {
+  margin: 0 0 32px;
+  padding-left: 1.25rem;
+  line-height: 1.55;
+}
+
+.watch-page-steps li + li {
+  margin-top: 10px;
+}
+
+.watch-page-cta {
+  margin: 0;
+  text-align: center;
+}
+
 /* Stacks below .hero-split's own 760px breakpoint: a side-by-side button and link get cramped
    before the columns collapse. */
 @media (max-width: 700px) {
