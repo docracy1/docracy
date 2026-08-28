@@ -1,5 +1,6 @@
 import type { Env } from "@docracy/shared";
 import { EXCLUDED_AGENTS_SQL_FILTER } from "./analytics";
+import { analyticsCountFromSql } from "./analyticsBaseline";
 
 export type AnalyticsQueryFailure =
   | { kind: "not_configured" }
@@ -43,6 +44,7 @@ async function runAnalyticsSql<T>(env: Env, sql: string): Promise<AnalyticsQuery
  *  something this code can provision for itself. Returns a structured failure (not a thrown error)
  *  when the token/account id aren't configured yet or the SQL API rejects the query. */
 export async function queryFunnelSummary(env: Env, days: number): Promise<AnalyticsQueryResult<unknown[]>> {
+  const baseline = analyticsCountFromSql(env);
   const sql = `
     SELECT
       blob1 AS event,
@@ -54,7 +56,7 @@ export async function queryFunnelSummary(env: Env, days: number): Promise<Analyt
       SUM(double1) AS count
     FROM docracy_funnel
     WHERE timestamp > now() - INTERVAL '${days}' DAY
-      AND ${EXCLUDED_AGENTS_SQL_FILTER}
+      AND ${EXCLUDED_AGENTS_SQL_FILTER}${baseline}
     GROUP BY event, route, traffic_type, bot_name, country, day
     ORDER BY day DESC, event, count DESC
   `.trim();
@@ -90,7 +92,8 @@ export async function queryFunnelStepCounts(
   humansOnly = false
 ): Promise<AnalyticsQueryResult<FunnelStepRow[]>> {
   const humanFilter = humansOnly ? ` AND blob3 = 'human'` : "";
-  const window = `timestamp > now() - INTERVAL '${days}' DAY AND ${EXCLUDED_AGENTS_SQL_FILTER}${humanFilter}`;
+  const baseline = analyticsCountFromSql(env);
+  const window = `timestamp > now() - INTERVAL '${days}' DAY AND ${EXCLUDED_AGENTS_SQL_FILTER}${humanFilter}${baseline}`;
 
   const totalsSql = `
     SELECT blob1 AS event, SUM(double1) AS totalCount
@@ -174,6 +177,7 @@ export async function queryTrafficSources(
   humansOnly = false
 ): Promise<AnalyticsQueryResult<TrafficSourceRow[]>> {
   const humanFilter = humansOnly ? ` AND blob3 = 'human'` : "";
+  const baseline = analyticsCountFromSql(env);
   const sql = `
     SELECT
       blob1 AS event,
@@ -183,7 +187,7 @@ export async function queryTrafficSources(
       SUM(double1) AS count
     FROM docracy_funnel
     WHERE timestamp > now() - INTERVAL '${days}' DAY
-      AND ${EXCLUDED_AGENTS_SQL_FILTER}${humanFilter}
+      AND ${EXCLUDED_AGENTS_SQL_FILTER}${humanFilter}${baseline}
       AND blob1 IN ('referral_source_detected', 'page_view')
       AND (blob9 != '' OR blob15 != '')
     GROUP BY event, source, attribution, day
@@ -201,6 +205,7 @@ export async function queryAttributionBreakdown(
   humansOnly = false
 ): Promise<AnalyticsQueryResult<AttributionRow[]>> {
   const humanFilter = humansOnly ? ` AND blob3 = 'human'` : "";
+  const baseline = analyticsCountFromSql(env);
   const sql = `
     SELECT
       blob1 AS event,
@@ -208,7 +213,7 @@ export async function queryAttributionBreakdown(
       SUM(double1) AS count
     FROM docracy_funnel
     WHERE timestamp > now() - INTERVAL '${days}' DAY
-      AND ${EXCLUDED_AGENTS_SQL_FILTER}${humanFilter}
+      AND ${EXCLUDED_AGENTS_SQL_FILTER}${humanFilter}${baseline}
       AND blob1 IN (
         'signup_started',
         'signup_completed',

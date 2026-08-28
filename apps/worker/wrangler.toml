@@ -60,6 +60,10 @@ FEEDBACK_EMAIL = "founder@docracy.io"
 ADMIN_EMAILS = "rl@relacon.at"
 # Not secret (just an identifier) — needed only for the Analytics Engine SQL read API.
 CF_ACCOUNT_ID = "d7764515fd9887154193dc04810d81d8"
+# Admin analytics baseline — events before this UTC time are excluded from /admin/analytics
+# counters (Analytics Engine + D1 document drill-down). Does not delete data or affect SEO.
+# Set to docstoc.io launch time when ready to start counting; 2030-01-01 keeps all KPIs at 0.
+ANALYTICS_COUNT_FROM = "2030-01-01T00:00:00Z"
 # Paid (standard) plan — not secret (just an identifier). Used by POST /api/billing/checkout
 # when no {plan: "enterprise"} is requested.
 STRIPE_PRICE_ID = "price_1TxwaFQvixTOu6qpCjZQupJJ"

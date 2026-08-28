@@ -272,6 +272,8 @@ export interface Env {
   /** Bot-aware funnel tracking (apps/worker/src/lib/analytics.ts) — write-only from the binding;
    *  reading aggregates back requires the separate Analytics Engine SQL HTTP API. */
   ANALYTICS?: AnalyticsEngineDataset;
+  /** ISO UTC datetime — admin analytics ignores funnel events before this (see analyticsBaseline.ts). */
+  ANALYTICS_COUNT_FROM?: string;
   /** Comma-separated allow-list of account emails permitted to call GET /api/admin/analytics. */
   ADMIN_EMAILS?: string;
   /** Shared password letting any ADMIN_EMAILS address sign in via POST /api/auth/admin-login

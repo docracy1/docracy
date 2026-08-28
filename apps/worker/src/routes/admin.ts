@@ -7,6 +7,7 @@ import {
   queryTrafficSources,
   formatAnalyticsFailure,
 } from "../lib/analyticsQuery";
+import { analyticsCountFromIso } from "../lib/analyticsBaseline";
 import { NOTRACK_COOKIE_NAME, noTrackCookieOptions } from "../lib/analytics";
 import { requireAdminAccount, type AccountContext } from "../lib/auth";
 import { findAccountIdByEmail, markAccountEnterprise, markAccountPaid } from "../lib/billing";
@@ -52,7 +53,12 @@ admin.get("/documents", requireAdminAccount, async (c) => {
   if (!c.env.DOCRACY_DB) return c.json({ documents: [], kind: "sent", days: 30 });
   const days = Math.min(90, Math.max(1, Number(c.req.query("days")) || 30));
   const kind = c.req.query("kind") === "signed" ? "signed" : "sent";
-  const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
+  const windowStart = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
+  const baseline = analyticsCountFromIso(c.env);
+  const since =
+    baseline && baseline > windowStart
+      ? baseline
+      : windowStart;
 
   const { results: docs } = await c.env.DOCRACY_DB.prepare(
     kind === "signed"
@@ -150,6 +156,7 @@ admin.get("/analytics", requireAdminAccount, async (c) => {
   return c.json({
     days,
     humansOnly,
+    countFrom: analyticsCountFromIso(c.env),
     rows: summary.data,
     funnelSteps: steps.data,
     attribution: attribution.data,

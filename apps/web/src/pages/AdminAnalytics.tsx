@@ -1647,6 +1647,7 @@ export default function AdminAnalytics() {
   const [funnelSteps, setFunnelSteps] = useState<FunnelStepRow[] | null>(null);
   const [attribution, setAttribution] = useState<AttributionRow[]>([]);
   const [trafficSources, setTrafficSources] = useState<TrafficSourceRow[]>([]);
+  const [countFrom, setCountFrom] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [section, setSection] = useState<AdminSection>("analytics");
@@ -1669,6 +1670,7 @@ export default function AdminAnalytics() {
           setFunnelSteps(res.funnelSteps);
           setAttribution(res.attribution ?? []);
           setTrafficSources(res.trafficSources ?? []);
+          setCountFrom(res.countFrom ?? null);
         }
       })
       .catch((err) => {
@@ -1758,6 +1760,23 @@ export default function AdminAnalytics() {
               ? "Page views and funnel steps exclude classified crawlers (search, social previews, SEO tools, …). The daily chart still shows the bot split so you can see what was filtered out."
               : "Counts include crawler traffic, which inflates server-side page loads relative to click events that need a real browser."}
           </p>
+          {countFrom && (
+            <div
+              className="card"
+              style={{
+                marginBottom: 16,
+                padding: "12px 16px",
+                fontSize: 13,
+                borderColor: "var(--primary)",
+                background: "var(--primary-soft)",
+              }}
+            >
+              <strong>Measurement baseline active.</strong> Funnel and traffic counters only include events from{" "}
+              <time dateTime={countFrom}>{countFrom}</time> UTC onward — everything before that reads as 0 here.
+              Historical data and SEO are unchanged. Set <code>ANALYTICS_COUNT_FROM</code> in worker{" "}
+              <code>wrangler.toml</code> to the docstoc.io launch time when you are ready to start counting.
+            </div>
+          )}
           {/* Blog posts and Signups are backed by their own independent D1-only fetches (each
               card manages its own loading/error state) — they have no dependency on the
               Analytics Engine call below, so they must render regardless of whether that call

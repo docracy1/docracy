@@ -854,6 +854,8 @@ export async function fetchAdminAnalytics(
 ): Promise<{
   days: number;
   humansOnly: boolean;
+  /** When set, funnel/traffic KPIs exclude events before this UTC time. */
+  countFrom: string | null;
   rows: FunnelRow[];
   funnelSteps: FunnelStepRow[];
   attribution: AttributionRow[];
