@@ -59,7 +59,7 @@ Respond with ONLY a JSON object (no markdown fences):
 {
   "title": "DOCUMENT TITLE IN TITLE CASE",
   "seoTitle": "Free <Name> Template",
-  "description": "one SEO sentence, under 160 chars",
+  "description": "one SEO sentence, 140-160 chars (minimum 120 for search snippets)",
   "useCase": "2 sentences: when to use this",
   "definition": "1-2 sentence formal definition of what this document is",
   "keyClauses": ["clause paraphrase 1", "... 5 to 8 items"],

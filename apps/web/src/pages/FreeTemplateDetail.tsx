@@ -3,7 +3,6 @@ import { Link, useParams } from "react-router-dom";
 import { getFreeTemplate } from "../lib/freeTemplates";
 import { isSeoTemplateSlug, localizePath, templateAlternates, useI18n, useT } from "../lib/i18n";
 import { cleanPath } from "../lib/i18n/paths";
-import { ensureMetaDescription } from "../lib/seoMeta";
 import { usePageMeta } from "../lib/usePageMeta";
 import { track } from "../lib/track";
 import { useLocation } from "react-router-dom";
@@ -123,7 +122,7 @@ function CommunityTemplateDetail({ slug }: { slug: string }) {
       : `${template.title} | Docracy Marketplace`
     : t("tpl.detail.notFoundTitle");
 
-  usePageMeta(pageTitle, ensureMetaDescription(template?.description ?? t("tpl.detail.notFoundDesc")), {
+  usePageMeta(pageTitle, template?.description ?? t("tpl.detail.notFoundDesc"), {
     canonicalPath: `/free-templates/${slug}`,
   });
 
@@ -315,7 +314,7 @@ export default function FreeTemplateDetail() {
 
   usePageMeta(
     template ? `${seoTitle} | Docracy` : t("tpl.detail.notFoundTitle"),
-    ensureMetaDescription(description ?? t("tpl.detail.notFoundDesc")),
+    description ?? t("tpl.detail.notFoundDesc"),
     slug && isSeoTemplateSlug(slug)
       ? { canonicalPath: cleanPath(location.pathname), alternates: templateAlternates(slug) }
       : undefined

@@ -780,7 +780,7 @@ const routes = [
       urlPath: `/free-templates/${t.slug}`,
       outFile: `free-templates/${t.slug}.html`,
       title: `${t.seoTitle} | Docracy`,
-      description: ensureMetaDescription(t.description),
+      description: t.description,
       ...(bilingual
         ? {
             locale: "en",
@@ -881,12 +881,8 @@ function writeIndexNowKey() {
 
 function withMeta(html, { title, description, urlPath, locale = "en", alternates, image, watchPage = false }) {
   const canonical = `${SITE}${urlPath === "/" ? "/" : urlPath}`;
-  // Escape before interpolating into raw HTML — a title/description containing a literal `"`
-  // (e.g. a quoted term like "digital signature") would otherwise terminate the content="..."
-  // attribute early, silently truncating or blanking the tag for every downstream tool/crawler
-  // that parses the static HTML rather than executing usePageMeta's DOM-API version.
   const safeTitle = escapeXml(title);
-  const safeDescription = escapeXml(description);
+  const safeDescription = escapeXml(ensureMetaDescription(description));
   // Use function replacers — string replacements treat `$10` in copy as a capture-group token.
   let out = html
     .replace(/<html lang="[^"]*"/, `<html lang="${locale}"`)
