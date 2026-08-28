@@ -1392,6 +1392,9 @@ function AttributionTable({ rows }: { rows: AttributionRow[] }) {
  *  their spoofed Referer, not real navigation. */
 const SELF_HOST_RE = /docracy/i;
 
+/** Hide legacy junk tags from the campaign table (new hits are dropped server-side too). */
+const BLOCKED_CAMPAIGN_RE = /^(docstoc)(\/|$)/i;
+
 /** Known referrer hostnames → a human label. Falls back to the bare hostname (www. stripped) for
  *  anything not in this list — deliberately small and manually curated rather than a giant lookup
  *  table, since the whole point of this view is naming the handful of channels that actually
@@ -1442,6 +1445,7 @@ function TrafficSourcesTable({ rows }: { rows: TrafficSourceRow[] }) {
         const label = hostLabel(r.source);
         referrerMap.set(label, (referrerMap.get(label) ?? 0) + r.count);
       } else if (r.event === "page_view" && r.attribution) {
+        if (BLOCKED_CAMPAIGN_RE.test(r.attribution)) continue;
         campaignMap.set(r.attribution, (campaignMap.get(r.attribution) ?? 0) + r.count);
       }
     }
@@ -1521,6 +1525,11 @@ function TrafficSourcesTable({ rows }: { rows: TrafficSourceRow[] }) {
             }}
           >
             <h4 style={{ fontSize: 13, marginTop: 0, marginBottom: 8 }}>Tagged campaign clicks (utm/ref links)</h4>
+            <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 0, marginBottom: 8 }}>
+              Respects <strong>Humans only</strong> — classified crawlers are excluded. <code>seo-*</code> tags come from
+              on-site CTAs; real browser clicks only. Legacy <code>?ref=docstoc</code> is ignored — share{" "}
+              <code>/docstoc</code> instead.
+            </p>
             {campaigns.length === 0 ? (
               <p style={{ fontSize: 13, color: "var(--mute)", margin: 0 }}>None yet.</p>
             ) : (

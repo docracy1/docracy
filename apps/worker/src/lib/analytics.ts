@@ -180,14 +180,25 @@ export interface TrackEventParams {
   attribution?: string | null;
 }
 
+/** Legacy or mistagged refs — drop before writing blob15 so they never appear in campaign tables. */
+const BLOCKED_ATTRIBUTION_SOURCES = new Set(["docstoc"]);
+
+export function isBlockedAttributionSource(source: string): boolean {
+  const clean = source.trim().toLowerCase();
+  return clean !== "" && BLOCKED_ATTRIBUTION_SOURCES.has(clean);
+}
+
 /** Clamps a client-supplied attribution label — /track accepts this straight from the browser. */
 export function sanitizeAttribution(value: string | null | undefined): string {
   if (!value) return "";
-  return value
+  const sanitized = value
     .trim()
     .toLowerCase()
     .replace(/[^a-z0-9._/-]/g, "-")
     .slice(0, 72);
+  const source = sanitized.split("/")[0] ?? "";
+  if (isBlockedAttributionSource(source)) return "";
+  return sanitized;
 }
 
 /**

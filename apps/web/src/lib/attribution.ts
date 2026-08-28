@@ -17,6 +17,15 @@ const STORAGE_KEY = "docracy_attribution";
 const MAX_PART_LENGTH = 32;
 const ALLOWED_CHARS = /[^a-z0-9._-]/g;
 
+/** Legacy or mistagged refs that should not pollute first-touch or campaign analytics.
+ *  Use `/docstoc` (short link with utm tags) for intentional DocStoc referral traffic. */
+const BLOCKED_REF_SOURCES = new Set(["docstoc"]);
+
+export function isBlockedRefSource(source: string): boolean {
+  const clean = source.trim().toLowerCase();
+  return clean !== "" && BLOCKED_REF_SOURCES.has(clean);
+}
+
 interface StoredAttribution {
   source: string;
   medium: string;
@@ -79,7 +88,12 @@ export function captureAttribution(): void {
   if (read()) return;
 
   const params = new URLSearchParams(window.location.search);
-  const source = sanitize(params.get("utm_source")) || sanitize(params.get("ref")) || referrerHost();
+  const utmSource = sanitize(params.get("utm_source"));
+  const refSource = sanitize(params.get("ref"));
+  const source =
+    (utmSource && !isBlockedRefSource(utmSource) ? utmSource : "") ||
+    (refSource && !isBlockedRefSource(refSource) ? refSource : "") ||
+    referrerHost();
   if (!source) return;
 
   write({
@@ -104,6 +118,31 @@ export function seedAttribution(source: string, campaign = "", medium = "shortli
     campaign: sanitize(campaign),
     firstSeenAt: new Date().toISOString(),
   });
+}
+
+/** Removes blocked ref/utm params from the address bar so junk tags don't linger in shared URLs. */
+export function stripBlockedAttributionParams(): void {
+  try {
+    const url = new URL(window.location.href);
+    const params = url.searchParams;
+    let changed = false;
+    if (params.has("ref") && isBlockedRefSource(params.get("ref") ?? "")) {
+      params.delete("ref");
+      changed = true;
+    }
+    if (params.has("utm_source") && isBlockedRefSource(params.get("utm_source") ?? "")) {
+      params.delete("utm_source");
+      params.delete("utm_medium");
+      params.delete("utm_campaign");
+      params.delete("utm_content");
+      changed = true;
+    }
+    if (!changed) return;
+    const next = `${url.pathname}${params.toString() ? `?${params}` : ""}${url.hash}`;
+    window.history.replaceState(window.history.state, "", next);
+  } catch {
+    // Non-fatal — analytics still ignores the blocked tag server-side.
+  }
 }
 
 /** Compact `source/campaign` label for analytics, e.g. `linkedin/post-01-auto` or `direct`. */

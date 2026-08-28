@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { getCookie } from "hono/cookie";
-import { trackEvent, NOTRACK_COOKIE_NAME, isExcludedAgent, sanitizeAttribution } from "../lib/analytics";
+import { trackEvent, NOTRACK_COOKIE_NAME, isExcludedAgent, sanitizeAttribution, isBlockedAttributionSource } from "../lib/analytics";
 import { checkTrackEventRateLimit } from "../lib/ratelimit";
 import { isAdminEmail, resolveAccount, SESSION_COOKIE_NAME } from "../lib/auth";
 import type { FunnelEvent } from "../lib/analytics";
@@ -123,7 +123,7 @@ function attributionFromQuery(query: string | undefined): string {
   if (!query) return "";
   const params = new URLSearchParams(query.startsWith("?") ? query.slice(1) : query);
   const source = params.get("utm_source") || params.get("ref") || "";
-  if (!source) return "";
+  if (!source || isBlockedAttributionSource(source)) return "";
   const campaign = params.get("utm_campaign") || params.get("utm_content") || "";
   return sanitizeAttribution(campaign ? `${source}/${campaign}` : source);
 }

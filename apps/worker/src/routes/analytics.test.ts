@@ -62,6 +62,42 @@ describe("POST /api/analytics/pageview", () => {
     expect(point.blobs[14]).toBe("linkedin/post-01-auto"); // blob15 = attribution
   });
 
+  it("ignores legacy ref=docstoc query tags (use /docstoc short link instead)", async () => {
+    const calls: unknown[][] = [];
+    const { env } = makeMockEnv({
+      ANALYTICS: { writeDataPoint: (...args: unknown[]) => calls.push(args) } as any,
+    });
+
+    const res = await analytics.request(
+      "/pageview",
+      post({ route: "/free-templates", query: "?ref=docstoc" }),
+      env,
+      MOCK_CTX
+    );
+
+    expect(res.status).toBe(200);
+    const [point] = calls[0] as [{ blobs: string[] }];
+    expect(point.blobs[14]).toBe("");
+  });
+
+  it("credits the proper /docstoc short link", async () => {
+    const calls: unknown[][] = [];
+    const { env } = makeMockEnv({
+      ANALYTICS: { writeDataPoint: (...args: unknown[]) => calls.push(args) } as any,
+    });
+
+    const res = await analytics.request(
+      "/pageview",
+      post({ route: "/free-templates", query: "?ref=docstoc-migration" }),
+      env,
+      MOCK_CTX
+    );
+
+    expect(res.status).toBe(200);
+    const [point] = calls[0] as [{ blobs: string[] }];
+    expect(point.blobs[14]).toBe("docstoc-migration");
+  });
+
   it("also logs landingpage_loaded for the homepage", async () => {
     const calls: unknown[][] = [];
     const { env } = makeMockEnv({

@@ -58,6 +58,7 @@ Disallow: /nda$
 Disallow: /price$
 Disallow: /submit$
 Disallow: /marketplace$
+Disallow: /docstoc$
 Disallow: /prepare/sent
 
 # Catch-all for crawlers that don't get Cloudflare's managed Allow: /
