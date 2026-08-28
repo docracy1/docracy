@@ -1774,7 +1774,7 @@ export default function AdminAnalytics() {
               <strong>Measurement baseline active.</strong> Funnel and traffic counters only include events from{" "}
               <time dateTime={countFrom}>{countFrom}</time> UTC onward — everything before that reads as 0 here.
               Historical data and SEO are unchanged. Set <code>ANALYTICS_COUNT_FROM</code> in worker{" "}
-              <code>wrangler.toml</code> to the docstoc.io launch time when you are ready to start counting.
+              <code>wrangler.toml</code> to the UTC time when you want counters to start (leave at 2030-01-01 to keep reading 0).
             </div>
           )}
           {/* Blog posts and Signups are backed by their own independent D1-only fetches (each
