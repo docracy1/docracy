@@ -78,6 +78,18 @@ await build({
 const { FREE_TEMPLATES } = require(dataBundleFile);
 fs.unlinkSync(dataBundleFile);
 
+const seoMetaBundleFile = path.join(__dirname, "_seoMeta.bundle.cjs");
+await build({
+  entryPoints: [path.join(root, "src/lib/seoMeta.ts")],
+  outfile: seoMetaBundleFile,
+  bundle: true,
+  platform: "node",
+  format: "cjs",
+  logLevel: "warning",
+});
+const { ensureMetaDescription } = require(seoMetaBundleFile);
+fs.unlinkSync(seoMetaBundleFile);
+
 const blogBundleFile = path.join(__dirname, "_blog.bundle.cjs");
 await build({
   entryPoints: [path.join(root, "src/lib/blog.ts")],
@@ -768,7 +780,7 @@ const routes = [
       urlPath: `/free-templates/${t.slug}`,
       outFile: `free-templates/${t.slug}.html`,
       title: `${t.seoTitle} | Docracy`,
-      description: t.description,
+      description: ensureMetaDescription(t.description),
       ...(bilingual
         ? {
             locale: "en",
