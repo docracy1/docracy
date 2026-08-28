@@ -27,10 +27,6 @@ const SHORT_LINKS: Record<string, { to: string; source: string; campaign?: strin
   gl: { to: "/mcp", source: "glama", campaign: "listing" },
   sh: { to: "/prepare?freeTemplate=mutual-nda", source: "saashub", campaign: "listing" },
   at: { to: "/prepare?freeTemplate=mutual-nda", source: "alternativeto", campaign: "listing" },
-  docstoc: {
-    to: "/free-templates?ref=docstoc-migration",
-    source: "docstoc-migration",
-  },
   // Persona-matched outreach: each cold-email persona lands on a dedicated /outreach page
   // ("why I reached out" + "what this solves for you" + instant try) matched to a template
   // closer to what they'd actually send, instead of everyone hitting the homepage or the
@@ -59,10 +55,6 @@ export function ShortSubmitRedirect() {
 
 export function ShortMarketplaceRedirect() {
   return <ShortRedirect entry={SHORT_LINKS.marketplace} />;
-}
-
-export function ShortDocstocRedirect() {
-  return <ShortRedirect entry={SHORT_LINKS.docstoc} />;
 }
 
 export function ShortGoRedirect() {

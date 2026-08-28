@@ -1359,7 +1359,8 @@ const REVENUE_STEPS: FunnelStepDef[] = [
 ];
 
 function AttributionTable({ rows }: { rows: AttributionRow[] }) {
-  if (rows.length === 0) {
+  const visible = rows.filter((r) => !BLOCKED_CAMPAIGN_RE.test(r.attribution));
+  if (visible.length === 0) {
     return <p style={{ color: "var(--mute)", fontSize: 13 }}>No attributed growth events in this window yet.</p>;
   }
   return (
@@ -1372,7 +1373,7 @@ function AttributionTable({ rows }: { rows: AttributionRow[] }) {
         </tr>
       </thead>
       <tbody>
-        {rows.map((r) => (
+        {visible.map((r) => (
           <tr key={`${r.event}:${r.attribution}`}>
             <td>{r.event}</td>
             <td style={{ fontFamily: "ui-monospace, monospace", fontSize: 12 }}>{r.attribution}</td>
@@ -1527,8 +1528,7 @@ function TrafficSourcesTable({ rows }: { rows: TrafficSourceRow[] }) {
             <h4 style={{ fontSize: 13, marginTop: 0, marginBottom: 8 }}>Tagged campaign clicks (utm/ref links)</h4>
             <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 0, marginBottom: 8 }}>
               Respects <strong>Humans only</strong> — classified crawlers are excluded. <code>seo-*</code> tags come from
-              on-site CTAs; real browser clicks only. Legacy <code>?ref=docstoc</code> is ignored — share{" "}
-              <code>/docstoc</code> instead.
+              on-site CTAs. Legacy <code>docstoc</code> refs are dropped entirely.
             </p>
             {campaigns.length === 0 ? (
               <p style={{ fontSize: 13, color: "var(--mute)", margin: 0 }}>None yet.</p>

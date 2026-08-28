@@ -94,18 +94,18 @@ import { PARTNER_PAGES } from "./lib/partnerPages";
 import { ALTERNATIVE_PAGES, IMPORT_GUIDE_PAGES } from "./lib/marketingPages";
 import {
   ShortGoRedirect,
-  ShortDocstocRedirect,
   ShortMarketplaceRedirect,
   ShortNdaRedirect,
   ShortPriceRedirect,
   ShortSubmitRedirect,
   ShortTryRedirect,
 } from "./pages/ShortLinkRedirect";
-import { captureAttribution, stripBlockedAttributionParams } from "./lib/attribution";
+import { captureAttribution, purgeStoredBlockedAttribution, stripBlockedAttributionParams } from "./lib/attribution";
 import { LocaleProvider } from "./lib/i18n";
 import LocalePathSync from "./components/LocalePathSync";
 
 // Before first render so the first funnel event already carries the channel that brought them.
+purgeStoredBlockedAttribution();
 captureAttribution();
 stripBlockedAttributionParams();
 
@@ -121,7 +121,6 @@ function AppRoutes() {
       <Route path="/price" element={<ShortPriceRedirect />} />
       <Route path="/submit" element={<ShortSubmitRedirect />} />
       <Route path="/marketplace" element={<ShortMarketplaceRedirect />} />
-      <Route path="/docstoc" element={<ShortDocstocRedirect />} />
       <Route path="/go/:campaign" element={<ShortGoRedirect />} />
       <Route path="/prepare" element={<Prepare />} />
       <Route path="/es/preparar" element={<Prepare />} />

@@ -155,6 +155,9 @@ export function isExcludedAgent(userAgent: string | null | undefined): boolean {
 /** SQL fragment that drops excluded agent rows from admin reads (blob4 = botName). */
 export const EXCLUDED_AGENTS_SQL_FILTER = `blob4 NOT IN ('ClaudeBot', 'Claude-User', 'anthropic-ai', 'Cursor')`;
 
+/** SQL fragment — drop legacy docstoc tags from admin reads (blob15 = attribution). */
+export const BLOCKED_ATTRIBUTION_SQL_FILTER = `(blob15 = '' OR (blob15 != 'docstoc' AND blob15 NOT LIKE 'docstoc/%'))`;
+
 export interface TrackEventParams {
   event: FunnelEvent;
   route?: string | null;

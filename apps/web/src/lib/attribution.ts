@@ -17,8 +17,7 @@ const STORAGE_KEY = "docracy_attribution";
 const MAX_PART_LENGTH = 32;
 const ALLOWED_CHARS = /[^a-z0-9._-]/g;
 
-/** Legacy or mistagged refs that should not pollute first-touch or campaign analytics.
- *  Use `/docstoc` (short link with utm tags) for intentional DocStoc referral traffic. */
+/** Legacy or mistagged refs that should not pollute first-touch or campaign analytics. */
 const BLOCKED_REF_SOURCES = new Set(["docstoc"]);
 
 export function isBlockedRefSource(source: string): boolean {
@@ -118,6 +117,17 @@ export function seedAttribution(source: string, campaign = "", medium = "shortli
     campaign: sanitize(campaign),
     firstSeenAt: new Date().toISOString(),
   });
+}
+
+/** Clears a stored first-touch if it was a blocked legacy tag (e.g. docstoc). */
+export function purgeStoredBlockedAttribution(): void {
+  const stored = read();
+  if (!stored || !isBlockedRefSource(stored.source)) return;
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    // ignore
+  }
 }
 
 /** Removes blocked ref/utm params from the address bar so junk tags don't linger in shared URLs. */

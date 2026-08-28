@@ -1,5 +1,5 @@
 import type { Env } from "@docracy/shared";
-import { EXCLUDED_AGENTS_SQL_FILTER } from "./analytics";
+import { EXCLUDED_AGENTS_SQL_FILTER, BLOCKED_ATTRIBUTION_SQL_FILTER } from "./analytics";
 
 export type AnalyticsQueryFailure =
   | { kind: "not_configured" }
@@ -184,6 +184,7 @@ export async function queryTrafficSources(
     FROM docracy_funnel
     WHERE timestamp > now() - INTERVAL '${days}' DAY
       AND ${EXCLUDED_AGENTS_SQL_FILTER}${humanFilter}
+      AND ${BLOCKED_ATTRIBUTION_SQL_FILTER}
       AND blob1 IN ('referral_source_detected', 'page_view')
       AND (blob9 != '' OR blob15 != '')
     GROUP BY event, source, attribution, day
@@ -209,6 +210,7 @@ export async function queryAttributionBreakdown(
     FROM docracy_funnel
     WHERE timestamp > now() - INTERVAL '${days}' DAY
       AND ${EXCLUDED_AGENTS_SQL_FILTER}${humanFilter}
+      AND ${BLOCKED_ATTRIBUTION_SQL_FILTER}
       AND blob1 IN (
         'signup_started',
         'signup_completed',
