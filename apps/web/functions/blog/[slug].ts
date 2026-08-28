@@ -1,4 +1,5 @@
 import { fetchIndexShell, sanitizeForNoIndex } from "../_spaShell";
+import { ensureMetaDescription } from "../../src/lib/seoMeta";
 
 const WORKER_URL = "https://api.docracy.io";
 const SITE = "https://docracy.io";
@@ -65,7 +66,7 @@ export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => 
   }
 
   const title = `${post.title} | Docracy`;
-  const description = (post.description || post.title).slice(0, 300);
+  const description = ensureMetaDescription((post.description || post.title).slice(0, 300));
   const canonical = `${SITE}/blog/${encodeURIComponent(slug)}`;
   const date = (post.publishedAt ?? post.createdAt).slice(0, 10);
   const preload = JSON.stringify({ post }).replace(/</g, "\\u003c");

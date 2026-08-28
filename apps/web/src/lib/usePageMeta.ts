@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { ensureMetaDescription } from "./seoMeta";
 import { track } from "./track";
 
 const SITE = "https://docracy.io";
@@ -32,6 +33,7 @@ function setMetaBySelector(selector: string, content: string) {
  *  into static HTML because useEffect never runs during static rendering. */
 export function usePageMeta(title: string, description: string, options: PageMetaOptions = {}) {
   const { canonicalPath, alternates } = options;
+  const metaDescription = ensureMetaDescription(description);
 
   useEffect(() => {
     // Confirms this hit actually ran a browser's JS engine — paired with the server-side
@@ -46,11 +48,11 @@ export function usePageMeta(title: string, description: string, options: PageMet
     const prevDescription = meta?.getAttribute("content") ?? null;
 
     document.title = title;
-    if (meta) meta.setAttribute("content", description);
+    if (meta) meta.setAttribute("content", metaDescription);
     setMetaBySelector('meta[property="og:title"]', title);
-    setMetaBySelector('meta[property="og:description"]', description);
+    setMetaBySelector('meta[property="og:description"]', metaDescription);
     setMetaBySelector('meta[name="twitter:title"]', title);
-    setMetaBySelector('meta[name="twitter:description"]', description);
+    setMetaBySelector('meta[name="twitter:description"]', metaDescription);
 
     const managed: HTMLLinkElement[] = [];
 
@@ -78,5 +80,5 @@ export function usePageMeta(title: string, description: string, options: PageMet
       // Leave canonical/hreflang in place — the next page's effect will overwrite them.
       void managed;
     };
-  }, [title, description, canonicalPath, alternates?.en, alternates?.es]);
+  }, [title, metaDescription, canonicalPath, alternates?.en, alternates?.es]);
 }
