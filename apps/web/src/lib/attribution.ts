@@ -17,12 +17,10 @@ const STORAGE_KEY = "docracy_attribution";
 const MAX_PART_LENGTH = 32;
 const ALLOWED_CHARS = /[^a-z0-9._-]/g;
 
-/** Legacy or mistagged refs that should not pollute first-touch or campaign analytics. */
-const BLOCKED_REF_SOURCES = new Set(["docstoc"]);
-
+/** Legacy docstoc tags — drop from first-touch and the address bar. */
 export function isBlockedRefSource(source: string): boolean {
   const clean = source.trim().toLowerCase();
-  return clean !== "" && BLOCKED_REF_SOURCES.has(clean);
+  return clean !== "" && clean.startsWith("docstoc");
 }
 
 interface StoredAttribution {

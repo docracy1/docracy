@@ -155,8 +155,11 @@ export function isExcludedAgent(userAgent: string | null | undefined): boolean {
 /** SQL fragment that drops excluded agent rows from admin reads (blob4 = botName). */
 export const EXCLUDED_AGENTS_SQL_FILTER = `blob4 NOT IN ('ClaudeBot', 'Claude-User', 'anthropic-ai', 'Cursor')`;
 
-/** SQL fragment — drop legacy docstoc tags from admin reads (blob15 = attribution). */
-export const BLOCKED_ATTRIBUTION_SQL_FILTER = `(blob15 = '' OR (blob15 != 'docstoc' AND blob15 NOT LIKE 'docstoc/%'))`;
+/** SQL fragment — drop legacy docstoc campaign tags (blob15) and referrers (blob9). */
+export const BLOCKED_DOCSTOC_SQL_FILTER = `(blob15 = '' OR blob15 NOT LIKE 'docstoc%') AND (blob9 = '' OR blob9 NOT LIKE '%docstoc%')`;
+
+/** @deprecated Use BLOCKED_DOCSTOC_SQL_FILTER */
+export const BLOCKED_ATTRIBUTION_SQL_FILTER = BLOCKED_DOCSTOC_SQL_FILTER;
 
 export interface TrackEventParams {
   event: FunnelEvent;
@@ -183,12 +186,15 @@ export interface TrackEventParams {
   attribution?: string | null;
 }
 
-/** Legacy or mistagged refs — drop before writing blob15 so they never appear in campaign tables. */
-const BLOCKED_ATTRIBUTION_SOURCES = new Set(["docstoc"]);
-
+/** Legacy docstoc tags/referrers — drop before writing analytics blobs. */
 export function isBlockedAttributionSource(source: string): boolean {
   const clean = source.trim().toLowerCase();
-  return clean !== "" && BLOCKED_ATTRIBUTION_SOURCES.has(clean);
+  return clean !== "" && clean.startsWith("docstoc");
+}
+
+export function isBlockedReferrerHost(host: string): boolean {
+  const clean = host.trim().toLowerCase().replace(/^www\./, "");
+  return clean.includes("docstoc");
 }
 
 /** Clamps a client-supplied attribution label — /track accepts this straight from the browser. */

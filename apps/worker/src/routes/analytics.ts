@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { getCookie } from "hono/cookie";
-import { trackEvent, NOTRACK_COOKIE_NAME, isExcludedAgent, sanitizeAttribution, isBlockedAttributionSource } from "../lib/analytics";
+import { trackEvent, NOTRACK_COOKIE_NAME, isExcludedAgent, sanitizeAttribution, isBlockedAttributionSource, isBlockedReferrerHost } from "../lib/analytics";
 import { checkTrackEventRateLimit } from "../lib/ratelimit";
 import { isAdminEmail, resolveAccount, SESSION_COOKIE_NAME } from "../lib/auth";
 import type { FunnelEvent } from "../lib/analytics";
@@ -160,7 +160,7 @@ analytics.post("/pageview", async (c) => {
     try {
       const referrerHost = new URL(referrer).hostname;
       const requestHost = new URL(c.req.url).hostname;
-      if (referrerHost && referrerHost !== requestHost) {
+      if (referrerHost && referrerHost !== requestHost && !isBlockedReferrerHost(referrerHost)) {
         trackEvent(c.env, {
           event: "referral_source_detected",
           route,
