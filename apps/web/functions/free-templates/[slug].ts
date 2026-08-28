@@ -1,4 +1,5 @@
-import { fetchIndexShell, sanitizeForNoIndex } from "../_spaShell";
+import { fetchIndexShell, sanitizeForNoIndex, staticHtmlExists } from "../_spaShell";
+import { ensureMetaDescription } from "../../src/lib/seoMeta";
 
 const WORKER_URL = "https://api.docracy.io";
 const SITE = "https://docracy.io";
@@ -42,6 +43,9 @@ export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => 
   }
 
   if (!tpl) {
+    const hasStatic = await staticHtmlExists(context.env, url.origin, url.pathname);
+    if (hasStatic) return context.next();
+
     const shell = await fetchIndexShell(context.env, context.request, url);
     const html = sanitizeForNoIndex(shell, "Template not found — Docracy");
     return new Response(html, {
@@ -54,7 +58,9 @@ export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => 
   }
 
   const title = `${tpl.seoTitle || tpl.title} | Docracy`;
-  const description = (tpl.description || tpl.useCase || tpl.definition || tpl.title).slice(0, 300);
+  const description = ensureMetaDescription(
+    (tpl.description || tpl.useCase || tpl.definition || tpl.title).slice(0, 300)
+  );
   const canonical = `${SITE}/free-templates/${encodeURIComponent(slug)}`;
   const preload = JSON.stringify({ template: tpl }).replace(/</g, "\\u003c");
 
