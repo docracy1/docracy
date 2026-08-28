@@ -100,12 +100,14 @@ import {
   ShortSubmitRedirect,
   ShortTryRedirect,
 } from "./pages/ShortLinkRedirect";
-import { captureAttribution } from "./lib/attribution";
+import { captureAttribution, purgeStoredBlockedAttribution, stripBlockedAttributionParams } from "./lib/attribution";
 import { LocaleProvider } from "./lib/i18n";
 import LocalePathSync from "./components/LocalePathSync";
 
 // Before first render so the first funnel event already carries the channel that brought them.
+purgeStoredBlockedAttribution();
 captureAttribution();
+stripBlockedAttributionParams();
 
 function AppRoutes() {
   return (

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { classifyBot, trackEvent, isExcludedAgent } from "./analytics";
+import { classifyBot, trackEvent, isExcludedAgent, sanitizeAttribution, isBlockedAttributionSource } from "./analytics";
 import { makeMockEnv } from "../test/mockEnv";
 
 describe("classifyBot", () => {
@@ -55,6 +55,15 @@ describe("isExcludedAgent", () => {
   it("does not exclude other bots or humans", () => {
     expect(isExcludedAgent("GPTBot/1.1")).toBe(false);
     expect(isExcludedAgent("Mozilla/5.0")).toBe(false);
+  });
+});
+
+describe("sanitizeAttribution", () => {
+  it("drops legacy docstoc junk tags", () => {
+    expect(isBlockedAttributionSource("docstoc")).toBe(true);
+    expect(sanitizeAttribution("docstoc")).toBe("");
+    expect(sanitizeAttribution("docstoc/migration")).toBe("");
+    expect(sanitizeAttribution("linkedin/post-01")).toBe("linkedin/post-01");
   });
 });
 
