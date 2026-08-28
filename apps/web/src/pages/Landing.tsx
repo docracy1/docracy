@@ -2,7 +2,6 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PricingCalculator from "../components/PricingCalculator";
 import FirstDocumentPrompt from "../components/FirstDocumentPrompt";
-import HowItWorksModal from "../components/HowItWorksModal";
 import IntegrationsBand from "../components/IntegrationsBand";
 import TurnstileWidget, { turnstileRequired } from "../components/TurnstileWidget";
 import DetectMockup from "../components/DetectMockup";
@@ -10,7 +9,6 @@ import PdfUploadCircle from "../components/PdfUploadCircle";
 import { fetchMarketplaceTemplates, fetchWeeklyTemplates, requestMagicLink } from "../lib/api";
 import { track } from "../lib/track";
 import { FREE_TEMPLATES } from "../lib/freeTemplates";
-import { HOW_IT_WORKS_VIDEO } from "../lib/howItWorksVideo";
 import { localizePath, useI18n, useT } from "../lib/i18n";
 import { useSeoMeta } from "../lib/useSeoMeta";
 import { setPendingUploadFile } from "../lib/pendingUpload";
@@ -357,7 +355,6 @@ export default function Landing() {
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [turnstileResetKey, setTurnstileResetKey] = useState(0);
   const [pendingSubmit, setPendingSubmit] = useState(false);
-  const [watchOpen, setWatchOpen] = useState(false);
   const [templateCount, setTemplateCount] = useState(FREE_TEMPLATES.length);
   const heroEmailRef = useRef<HTMLInputElement>(null);
   useSeoMeta("home");
@@ -374,6 +371,7 @@ export default function Landing() {
   // that promise should be visible on the one screen where it matters most.
   const prepareTo = localizePath("/prepare", locale);
   const templatesTo = localizePath("/free-templates", locale);
+  const watchTo = localizePath("/how-it-works", locale);
   const emailTrimmed = heroEmail.trim();
   // Match Login: mount Turnstile whenever the site key is set so a token is ready before submit.
   // Keep the button clickable with an empty field so we can show "Email is missing" instead of
@@ -385,9 +383,9 @@ export default function Landing() {
       document.getElementById("faq")?.scrollIntoView();
     }
     if (window.location.hash === "#watch-how-it-works") {
-      setWatchOpen(true);
+      navigate(watchTo, { replace: true });
     }
-  }, []);
+  }, [navigate, watchTo]);
 
   // Live library size = static free templates + Marketplace community + weekly cron batch.
   useEffect(() => {
@@ -406,21 +404,6 @@ export default function Landing() {
       cancelled = true;
     };
   }, []);
-
-  useEffect(() => {
-    const onHash = () => {
-      if (window.location.hash === "#watch-how-it-works") setWatchOpen(true);
-    };
-    window.addEventListener("hashchange", onHash);
-    return () => window.removeEventListener("hashchange", onHash);
-  }, []);
-
-  const closeWatch = () => {
-    setWatchOpen(false);
-    if (window.location.hash === "#watch-how-it-works") {
-      history.replaceState(null, "", window.location.pathname + window.location.search);
-    }
-  };
 
   const focusHeroEmail = () => {
     heroEmailRef.current?.focus();
@@ -625,17 +608,10 @@ export default function Landing() {
           {!heroSent && <p className="hero-cta-hint">{t("hero.hint")}</p>}
 
           <div className="hero-cta-row hero-cta-row-center">
-            <button
-              type="button"
+            <Link
+              to={watchTo}
               className="hero-watch-btn"
-              id="watch-how-it-works"
-              onClick={() => {
-                track("landingpage_cta_clicked", { source: "hero_watch_how" });
-                setWatchOpen(true);
-                if (window.location.hash !== "#watch-how-it-works") {
-                  history.replaceState(null, "", "#watch-how-it-works");
-                }
-              }}
+              onClick={() => track("landingpage_cta_clicked", { source: "hero_watch_how" })}
             >
               <span className="hero-watch-icon" aria-hidden="true">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
@@ -644,7 +620,7 @@ export default function Landing() {
                 </svg>
               </span>
               {t("hero.watchHow")}
-            </button>
+            </Link>
             <span className="hero-cta-row-sep">·</span>
             <Link
               to={templatesTo}
@@ -854,38 +830,15 @@ export default function Landing() {
       </div>
       <script
         type="application/ld+json"
-        // Rendered inline so VideoObject / HowTo / FAQPage appear in prerendered homepage markup
-        // alongside the visible how-it-works video and FAQ copy (rich-result eligibility).
+        // HowTo + FAQPage on the homepage; VideoObject lives on /how-it-works (dedicated watch page).
         dangerouslySetInnerHTML={{
           __html: JSON.stringify([
-            {
-              "@context": "https://schema.org",
-              "@type": "VideoObject",
-              name: t("seo.video.name"),
-              description: t("seo.video.description"),
-              thumbnailUrl: [HOW_IT_WORKS_VIDEO.posterUrl],
-              uploadDate: HOW_IT_WORKS_VIDEO.uploadDate,
-              duration: HOW_IT_WORKS_VIDEO.durationIso,
-              contentUrl: HOW_IT_WORKS_VIDEO.contentUrl,
-              embedUrl: HOW_IT_WORKS_VIDEO.embedUrl,
-              encodingFormat: "video/webm",
-              inLanguage: locale === "es" ? "es" : "en",
-              publisher: {
-                "@type": "Organization",
-                name: "Docracy",
-                url: "https://docracy.io",
-                logo: {
-                  "@type": "ImageObject",
-                  url: "https://docracy.io/docracy-seal-icon.png",
-                },
-              },
-            },
             {
               "@context": "https://schema.org",
               "@type": "HowTo",
               name: t("how.title"),
               description: t("seo.video.description"),
-              totalTime: HOW_IT_WORKS_VIDEO.durationIso,
+              totalTime: "PT1M3S",
               step: HOW_IT_WORKS_KEYS.map((step, i) => ({
                 "@type": "HowToStep",
                 position: i + 1,
@@ -920,7 +873,6 @@ export default function Landing() {
       </div>
 
       <FirstDocumentPrompt mobileOnly source="mobile_footer" />
-      {watchOpen && <HowItWorksModal onClose={closeWatch} />}
     </div>
   );
 }

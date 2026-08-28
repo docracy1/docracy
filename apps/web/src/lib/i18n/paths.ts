@@ -30,6 +30,7 @@ export const ES_PATH_BY_EN: Record<string, string> = {
   "/solutions/ai-contract-drafting": "/es/soluciones/redaccion-contratos-ia",
   "/enterprise": "/es/empresas",
   "/integrations/ai-assistants": "/es/integraciones/asistentes-ia",
+  "/how-it-works": "/es/como-funciona",
 };
 
 export const EN_PATH_BY_ES: Record<string, string> = Object.fromEntries(

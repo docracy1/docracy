@@ -74,6 +74,7 @@ Allow: /freelancer-contracts$
 Allow: /getaccept-alternative$
 Allow: /hellosign-alternative$
 Allow: /hellosign-vs-eversign$
+Allow: /how-it-works$
 Allow: /import-google-doc$
 Allow: /imprint$
 Allow: /integrations/ai-assistants$

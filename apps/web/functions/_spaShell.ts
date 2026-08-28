@@ -107,9 +107,18 @@ export function emptyRoot(html: string): string {
   return html;
 }
 
+/** Strip og:video / twitter:player tags leaked from the homepage shell. */
+export function stripVideoMetaTags(html: string): string {
+  return html.replace(
+    /\s*<meta\s+(?:property="og:video[^"]*"|name="twitter:player[^"]*")\s+content="[^"]*"\s*\/?>/g,
+    ""
+  );
+}
+
 /** Strip homepage SEO signals and mark the document noindex. */
 export function sanitizeForNoIndex(html: string, title: string): string {
   let out = emptyRoot(html);
+  out = stripVideoMetaTags(out);
   out = out.replace(/<title>[^<]*<\/title>/i, `<title>${title}</title>`);
   out = out.replace(
     /<meta\s+name="description"\s+content="[^"]*"\s*\/?>/i,

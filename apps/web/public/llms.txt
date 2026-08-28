@@ -9,7 +9,7 @@
 ## Primary services
 
 - [Prepare a document](https://docracy.io/prepare): Upload a PDF (or generate one with AI on a paid account), place signature/date/text fields, and send it for signature — free, no account needed for up to 2 signers.
-- [How it works (video)](https://docracy.io/#watch-how-it-works): ~1-minute product walkthrough on a sample Freelance Service Agreement. File: https://docracy.io/videos/how-it-works.webm
+- [How it works (video)](https://docracy.io/how-it-works): ~1-minute product walkthrough on a sample Freelance Service Agreement. File: https://docracy.io/videos/how-it-works.webm
 - [Free legal templates](https://docracy.io/free-templates): 103 ready-to-use templates (NDA, offer letter, freelance agreement, lease, etc.) with fields already placed. Monday cron adds more via the Marketplace.
 - [Pricing](https://docracy.io/pricing): Free vs Paid vs Enterprise feature comparison (Paid includes Dropbox, OneDrive, and Box auto-upload connectors).
 - [Documentation](https://docracy.io/docs): Free vs Paid vs Enterprise overview (including bulk send, embed, contacts, Dropbox/OneDrive/Box), plus MCP/Zapier/API details.
