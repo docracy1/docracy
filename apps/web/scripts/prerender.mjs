@@ -6,11 +6,12 @@ import { createRequire } from "node:module";
 import { htmlToMarkdown } from "./htmlToMarkdown.mjs";
 import { INDEXNOW_KEY } from "./indexNowKey.mjs";
 import { writeSeoDiscovery } from "./writeSeoDiscovery.mjs";
+import { PUBLIC_APP_URL } from "../site.config.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
 const distDir = path.join(root, "dist");
-const SITE = "https://docracy.io";
+const SITE = PUBLIC_APP_URL;
 const require = createRequire(import.meta.url);
 
 // react-router-dom's <Link> uses useLayoutEffect internally, which React logs a (harmless, for

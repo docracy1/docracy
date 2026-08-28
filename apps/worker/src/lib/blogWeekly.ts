@@ -1,6 +1,7 @@
 import { sanitizeJsonStringNewlines } from "./aiJson";
 import { createBlogPost, listPublishedBlogPosts, slugify, updateBlogPost } from "./blogPosts";
 import { pingIndexNow } from "./indexNow";
+import { publicAppUrl } from "./publicUrls";
 import type { Env } from "@docracy/shared";
 
 const DEFAULT_MODEL = "@cf/meta/llama-3.1-8b-instruct-fp8";
@@ -176,7 +177,7 @@ export async function runWeeklyBlogPublish(env: Env): Promise<void> {
 
   const fromDraft = await publishOldestDraft(env);
   if (fromDraft) {
-    await pingIndexNow([`/blog/${fromDraft}`]);
+    await pingIndexNow(env, [`/blog/${fromDraft}`]);
     return;
   }
 
@@ -207,16 +208,17 @@ export async function runWeeklyBlogPublish(env: Env): Promise<void> {
 
   await markTopicPublished(env, topic.id, created.id);
   console.log(`Weekly blog: published ${slug} from topic ${topic.id}`);
-  await pingIndexNow([`/blog/${slug}`]);
+  await pingIndexNow(env, [`/blog/${slug}`]);
 }
 
 /** XML sitemap fragment listing published D1 posts (for robots.txt second sitemap). */
 export async function blogPostsSitemapXml(env: Env): Promise<string> {
   const posts = await listPublishedBlogPosts(env);
+  const site = publicAppUrl(env);
   const urls = posts
     .map((p) => {
       const lastmod = (p.publishedAt ?? p.createdAt).slice(0, 10);
-      return `  <url>\n    <loc>https://docracy.io/blog/${p.slug}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.6</priority>\n  </url>`;
+      return `  <url>\n    <loc>${site}/blog/${p.slug}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.6</priority>\n  </url>`;
     })
     .join("\n");
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;

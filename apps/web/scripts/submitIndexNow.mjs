@@ -10,11 +10,12 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { INDEXNOW_KEY } from "./indexNowKey.mjs";
+import { PUBLIC_APP_HOST, PUBLIC_APP_URL } from "../site.config.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
-const HOST = "docracy.io";
-const SITE = `https://${HOST}`;
+const HOST = PUBLIC_APP_HOST;
+const SITE = PUBLIC_APP_URL;
 
 function readSitemapUrls() {
   const sitemapPath = path.join(root, "public", "sitemap.xml");

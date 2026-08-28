@@ -4,8 +4,15 @@
  */
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
+import {
+  PUBLIC_APP_URL,
+  PUBLIC_CONNECTOR_URL,
+  PUBLIC_WORKER_URL,
+  rewriteLegacyPublicUrls,
+} from "../site.config.mjs";
 
-const SITE = "https://docracy.io";
+const SITE = PUBLIC_APP_URL;
 
 const HOW_IT_WORKS_VIDEO = {
   thumbnail: `${SITE}/videos/how-it-works-poster.jpg`,
@@ -63,9 +70,9 @@ Disallow: /prepare/sent
 # Catch-all for crawlers that don't get Cloudflare's managed Allow: /
 Disallow: /
 
-Sitemap: https://docracy.io/sitemap.xml
-Sitemap: https://api.docracy.io/api/blog-posts/sitemap.xml
-Sitemap: https://api.docracy.io/api/marketplace/sitemap.xml
+Sitemap: ${PUBLIC_APP_URL}/sitemap.xml
+Sitemap: ${PUBLIC_WORKER_URL}/api/blog-posts/sitemap.xml
+Sitemap: ${PUBLIC_WORKER_URL}/api/marketplace/sitemap.xml
 `.trim();
 
 function escapeXml(s) {
@@ -191,7 +198,7 @@ ${unique.map(urlEntry).join("\n")}
 </urlset>
 `;
 
-  const robots = `# robots.txt for https://docracy.io
+  const robots = `# robots.txt for ${PUBLIC_APP_URL}
 #
 # NOTE: Cloudflare’s dashboard “AI Crawl Control” / Content-Signal managed block is
 # prepended live (User-agent: * + Content-Signal + Allow: /). Google merges both
@@ -216,5 +223,58 @@ ${ROBOTS_DISALLOW}
     fs.writeFileSync(path.join(dir, "sitemap.xml"), sitemap);
     fs.writeFileSync(path.join(dir, "robots.txt"), robots);
   }
+
+  writePublicUrlAssets({ distDir, publicDir });
+
   console.log(`seo-discovery: wrote sitemap.xml (${unique.length} urls) + robots.txt → dist/ and public/`);
+}
+
+/** Copy llms / MCP discovery files with current PUBLIC_* URLs (source files keep doocracy.io literals). */
+function writePublicUrlAssets({ distDir, publicDir }) {
+  const publicSrc = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "public");
+  const textFiles = ["llms.txt", "llms-full.txt", "auth.md"];
+  for (const name of textFiles) {
+    const src = path.join(publicSrc, name);
+    if (!fs.existsSync(src)) continue;
+    const body = rewriteLegacyPublicUrls(fs.readFileSync(src, "utf-8"));
+    for (const dir of [distDir, publicDir]) {
+      fs.writeFileSync(path.join(dir, name), body);
+    }
+  }
+
+  const serverCard = {
+    serverInfo: {
+      name: "docracy",
+      version: "0.1.0",
+      websiteUrl: PUBLIC_APP_URL,
+    },
+    transport: {
+      type: "streamable-http",
+      url: `${PUBLIC_CONNECTOR_URL}/mcp`,
+    },
+    capabilities: {
+      tools: true,
+      resources: false,
+      prompts: false,
+    },
+    authentication: {
+      required: false,
+      note: "No authentication needed for free template tools and check_status. A Bearer API key (or ?token= query param), issued from the Docracy Dashboard, unlocks find_documents.",
+      schemes: ["none", "bearer"],
+    },
+    tools: [
+      { name: "list_templates", tier: "free", description: "Browse free-library and Marketplace templates by keyword." },
+      { name: "get_template", tier: "free", description: "Metadata, drafting hints, and prepare URL for one template slug." },
+      { name: "draft_from_template", tier: "free", description: "Return a drafting brief and prepare link; never auto-sends." },
+      { name: "check_status", tier: "free", description: "Look up the status of a Docracy signing chain from a sign or status link." },
+      { name: "find_documents", tier: "paid", description: "Search your own Docracy documents by title or a signer's name/email/company." },
+    ],
+    documentationUrl: `${PUBLIC_APP_URL}/mcp`,
+  };
+
+  for (const dir of [distDir, publicDir]) {
+    const wellKnownDir = path.join(dir, ".well-known", "mcp");
+    fs.mkdirSync(wellKnownDir, { recursive: true });
+    fs.writeFileSync(path.join(wellKnownDir, "server-card.json"), `${JSON.stringify(serverCard, null, 2)}\n`);
+  }
 }

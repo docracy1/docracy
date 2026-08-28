@@ -3,6 +3,7 @@ import DetectMockup from "../components/DetectMockup";
 import { localizePath, useI18n, useT } from "../lib/i18n";
 import { useSeoMeta } from "../lib/useSeoMeta";
 import { track } from "../lib/track";
+import { PUBLIC_APP_URL } from "../lib/site";
 
 const FEATURE_IDS = ["detect", "explain", "risk", "generate", "templates", "mcp"] as const;
 
@@ -47,7 +48,7 @@ export default function Ai() {
       description: t("ai.schemaOffer"),
     },
     description: t("seo.ai.description"),
-    url: "https://docracy.io/ai",
+    url: `${PUBLIC_APP_URL}/ai`,
   };
 
   return (

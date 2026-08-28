@@ -5,7 +5,9 @@
 // About/Pricing/Docs/Imprint/Mcp/FreeTemplates*: a, br, code, div, h1-h3, input, li, p, pre, span,
 // strong, table/thead/tbody/tr/th/td, ul), so a small hand-written converter is more reliable here
 // than pulling in a DOM-dependent library that doesn't run in Cloudflare's edge runtime anyway.
-const SITE = "https://docracy.io";
+import { PUBLIC_APP_URL } from "../site.config.mjs";
+
+const SITE = PUBLIC_APP_URL;
 
 function decodeEntities(str) {
   return str

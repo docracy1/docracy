@@ -15,7 +15,13 @@ function makeEnv(doc: unknown) {
       return type === "json" ? JSON.parse(raw) : raw;
     },
   };
-  return { DOCRACY_KV: kv as unknown as ConnectorEnv["DOCRACY_KV"], TOKEN_SECRET } as ConnectorEnv;
+  return {
+    DOCRACY_KV: kv as unknown as ConnectorEnv["DOCRACY_KV"],
+    TOKEN_SECRET,
+    PUBLIC_APP_URL: "https://docracy.io",
+    PUBLIC_WORKER_URL: "https://api.docracy.io",
+    PUBLIC_CONNECTOR_URL: "https://mcp.docracy.io",
+  } as ConnectorEnv;
 }
 
 const sampleDoc = {

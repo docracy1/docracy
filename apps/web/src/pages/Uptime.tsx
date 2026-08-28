@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { usePageMeta } from "../lib/usePageMeta";
 import { apiUrl } from "../lib/api";
+import { PUBLIC_WORKER_URL } from "../lib/site";
 
 interface HealthCheckResult {
   name: string;
@@ -76,7 +77,7 @@ export default function Uptime() {
       // apps/web. If that proxy is missing (e.g. a deploy uploaded only dist/), the SPA
       // fallback returns HTML and Safari's JSON parser surfaces "The string did not match
       // the expected pattern." Fall back to the public worker host for this unauthenticated page.
-      const candidates = [apiUrl("/api/status"), "https://api.docracy.io/api/status"];
+      const candidates = [apiUrl("/api/status"), `${PUBLIC_WORKER_URL}/api/status`];
       let lastError: Error | null = null;
       for (const url of candidates) {
         try {

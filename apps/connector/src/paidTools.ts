@@ -2,7 +2,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { registerCheckStatus } from "./checkStatusTool";
 import { registerTemplateTools } from "./templateTools";
-import { SERVER_INFO } from "./serverInfo";
+import { buildServerInfo } from "./serverInfo";
 import type { ConnectorEnv as Env } from "./types";
 
 export interface DocumentSearchResult {
@@ -47,17 +47,17 @@ export async function findDocuments(env: Env, accountId: string, query: string):
 /** Free-tier server for anonymous callers — template tools + check_status (no accountId).
  *  find_documents stays paid-only via buildPaidServer below. */
 export function buildFreeServer(env: Env) {
-  const server = new McpServer(SERVER_INFO);
+  const server = new McpServer(buildServerInfo(env));
   registerCheckStatus(server, env);
-  registerTemplateTools(server);
+  registerTemplateTools(server, env);
   return server;
 }
 
 /** Paid tool set, scoped to a single already-resolved account (see index.ts). */
 export function buildPaidServer(env: Env, accountId: string) {
-  const server = new McpServer(SERVER_INFO);
+  const server = new McpServer(buildServerInfo(env));
   registerCheckStatus(server, env);
-  registerTemplateTools(server);
+  registerTemplateTools(server, env);
 
   server.registerTool(
     "find_documents",

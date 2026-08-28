@@ -4,6 +4,7 @@ import { getFeaturePageContent } from "../lib/marketingPages";
 import { localizePath, useI18n, useT } from "../lib/i18n";
 import { BILINGUAL_FEATURE_BY_SLUG, cleanPath, seoAlternates } from "../lib/i18n/paths";
 import { track } from "../lib/track";
+import { PUBLIC_APP_URL } from "../lib/site";
 import { NavIcon } from "../components/NavIcons";
 
 /** Renders one of the FEATURE_PAGES entries — mounted at a distinct literal route per slug (see
@@ -54,10 +55,10 @@ export default function FeaturePage({ slug }: { slug: string }) {
         publisher: {
           "@type": "Organization",
           name: "Docracy",
-          url: "https://docracy.io",
+          url: PUBLIC_APP_URL,
           logo: {
             "@type": "ImageObject",
-            url: "https://docracy.io/docracy-seal-icon.png",
+            url: `${PUBLIC_APP_URL}/docracy-seal-icon.png`,
           },
         },
       }

@@ -340,7 +340,7 @@ export async function runWeeklyTemplatePublish(env: Env): Promise<void> {
   }
 
   if (publishedPaths.length > 0) {
-    await pingIndexNow(publishedPaths);
+    await pingIndexNow(env, publishedPaths);
   }
   console.log(`Weekly templates: published ${published}/${topics.length} this run`);
 }

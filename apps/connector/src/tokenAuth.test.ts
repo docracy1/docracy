@@ -40,6 +40,9 @@ describe("resolvePaidAccountId", () => {
         },
       } as unknown as ConnectorEnv["DOCRACY_KV"],
       TOKEN_SECRET,
+      PUBLIC_APP_URL: "https://docracy.io",
+      PUBLIC_WORKER_URL: "https://api.docracy.io",
+      PUBLIC_CONNECTOR_URL: "https://mcp.docracy.io",
       ...(isPaidByAccountId
         ? {
             DOCRACY_DB: {

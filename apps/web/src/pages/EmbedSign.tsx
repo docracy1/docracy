@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { resolveEmbedSession } from "../lib/api";
 import { useNoIndex } from "../lib/useNoIndex";
 import Sign from "./Sign";
+import { PUBLIC_APP_URL } from "../lib/site";
 
 function parentOrigin(): string | null {
   const ancestors = (window.location as Location & { ancestorOrigins?: DOMStringList }).ancestorOrigins;
@@ -66,7 +67,7 @@ export default function EmbedSign() {
         returnUrl={returnUrl}
       />
       <a
-        href="https://docracy.io?utm_source=embed&utm_medium=widget&utm_campaign=powered_by"
+        href={`${PUBLIC_APP_URL}?utm_source=embed&utm_medium=widget&utm_campaign=powered_by`}
         target="_blank"
         rel="noopener noreferrer"
         style={{

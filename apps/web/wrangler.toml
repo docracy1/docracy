@@ -1,0 +1,10 @@
+name = "docracy"
+compatibility_date = "2024-12-01"
+pages_build_output_dir = "dist"
+
+# Pages Functions read these via context.env (see functions/_site.ts).
+# Keep in sync with apps/web/site.config.mjs and apps/worker/wrangler.toml [vars].
+[vars]
+PUBLIC_APP_URL = "https://docracy.io"
+PUBLIC_WORKER_URL = "https://api.docracy.io"
+PUBLIC_CONNECTOR_URL = "https://mcp.docracy.io"

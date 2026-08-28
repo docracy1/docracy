@@ -16,6 +16,7 @@ import {
   reviewSubmission,
 } from "../lib/marketplaceTemplates";
 import { bytesToBase64 } from "../lib/base64";
+import { publicAppUrl } from "../lib/publicUrls";
 import type { DocField, Env } from "@docracy/shared";
 
 type Variables = { account: AccountContext | null };
@@ -86,10 +87,11 @@ marketplacePublic.get("/sitemap.xml", async (c) => {
   } catch (err) {
     console.error("marketplace sitemap failed:", err instanceof Error ? err.message : err);
   }
+  const site = publicAppUrl(c.env);
   const urls = rows
     .map(
       (r) =>
-        `  <url>\n    <loc>https://docracy.io/free-templates/${r.slug}</loc>\n    <lastmod>${r.lastmod}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.6</priority>\n  </url>`
+        `  <url>\n    <loc>${site}/free-templates/${r.slug}</loc>\n    <lastmod>${r.lastmod}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.6</priority>\n  </url>`
     )
     .join("\n");
   const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;

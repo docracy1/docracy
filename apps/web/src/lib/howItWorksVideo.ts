@@ -1,4 +1,6 @@
 /** Shared landing “how it works” demo video assets (absolute URLs for schema / OG). */
+import { PUBLIC_APP_URL } from "./site";
+
 export const HOW_IT_WORKS_VIDEO = {
   path: "/videos/how-it-works.webm",
   posterPath: "/videos/how-it-works-poster.jpg",
@@ -6,7 +8,7 @@ export const HOW_IT_WORKS_VIDEO = {
   durationIso: "PT1M3S",
   /** When the current cut was published (schema.org uploadDate). */
   uploadDate: "2026-08-04",
-  contentUrl: "https://docracy.io/videos/how-it-works.webm",
-  posterUrl: "https://docracy.io/videos/how-it-works-poster.jpg",
-  embedUrl: "https://docracy.io/#watch-how-it-works",
+  contentUrl: `${PUBLIC_APP_URL}/videos/how-it-works.webm`,
+  posterUrl: `${PUBLIC_APP_URL}/videos/how-it-works-poster.jpg`,
+  embedUrl: `${PUBLIC_APP_URL}/#watch-how-it-works`,
 } as const;

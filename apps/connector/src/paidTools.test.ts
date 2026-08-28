@@ -48,6 +48,9 @@ function makeEnv(rows: Row[], withDb = true): ConnectorEnv {
   return {
     DOCRACY_KV: {} as ConnectorEnv["DOCRACY_KV"],
     TOKEN_SECRET: "test-secret",
+    PUBLIC_APP_URL: "https://docracy.io",
+    PUBLIC_WORKER_URL: "https://api.docracy.io",
+    PUBLIC_CONNECTOR_URL: "https://mcp.docracy.io",
     DOCRACY_DB: withDb ? (makeMockD1(rows) as unknown as ConnectorEnv["DOCRACY_DB"]) : undefined,
   };
 }

@@ -1,7 +1,5 @@
 import { fetchIndexShell, sanitizeForNoIndex } from "../_spaShell";
-
-const WORKER_URL = "https://api.docracy.io";
-const SITE = "https://docracy.io";
+import { resolveSiteEnv, type SiteBindings } from "../_site";
 
 function escapeHtml(s: string): string {
   return s
@@ -26,7 +24,8 @@ function paragraphs(body: string): string {
  * (Pages serves static files before Functions). Missing static posts fall through here instead
  * of the SPA homepage shell, so crawlers get real title/canonical/body.
  */
-export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => {
+export const onRequest: PagesFunction<SiteBindings> = async (context) => {
+  const { appUrl, workerUrl } = resolveSiteEnv(context.env);
   const url = new URL(context.request.url);
   const slug = url.pathname.replace(/^\/blog\//, "").replace(/\/+$/, "");
   if (!slug || slug.includes("/") || slug.includes(".")) {
@@ -41,7 +40,7 @@ export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => 
     createdAt: string;
   } | null = null;
   try {
-    const res = await fetch(`${WORKER_URL}/api/blog-posts/${encodeURIComponent(slug)}`);
+    const res = await fetch(`${workerUrl}/api/blog-posts/${encodeURIComponent(slug)}`);
     if (res.ok) {
       const data = (await res.json()) as { post: NonNullable<typeof post> };
       post = data.post;
@@ -66,7 +65,7 @@ export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => 
 
   const title = `${post.title} | Docracy`;
   const description = (post.description || post.title).slice(0, 300);
-  const canonical = `${SITE}/blog/${encodeURIComponent(slug)}`;
+  const canonical = `${appUrl}/blog/${encodeURIComponent(slug)}`;
   const date = (post.publishedAt ?? post.createdAt).slice(0, 10);
   const preload = JSON.stringify({ post }).replace(/</g, "\\u003c");
 
@@ -86,14 +85,14 @@ export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => 
     datePublished: date,
     dateModified: date,
     mainEntityOfPage: canonical,
-    author: { "@type": "Organization", name: "Docracy", url: SITE },
+    author: { "@type": "Organization", name: "Docracy", url: appUrl },
     publisher: {
       "@type": "Organization",
       name: "Docracy",
-      url: SITE,
-      logo: { "@type": "ImageObject", url: `${SITE}/docracy-seal-icon.png` },
+      url: appUrl,
+      logo: { "@type": "ImageObject", url: `${appUrl}/docracy-seal-icon.png` },
     },
-    image: [`${SITE}/og-image.png`],
+    image: [`${appUrl}/og-image.png`],
   }).replace(/</g, "\\u003c");
 
   const metaBlock = `

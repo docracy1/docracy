@@ -12,8 +12,7 @@ import {
   sanitizeForNoIndex,
   staticHtmlExists,
 } from "./_spaShell";
-
-const WORKER_URL = "https://api.docracy.io";
+import { resolveSiteEnv, type SiteBindings } from "./_site";
 
 // Fixed top-level routes with no shared prefix to pattern-match on, plus the handful of bilingual
 // (/es/...) aliases for pages that have a translated slug — those can't be derived from
@@ -90,7 +89,8 @@ function isTrackedRoute(pathname: string): boolean {
   );
 }
 
-export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => {
+export const onRequest: PagesFunction<SiteBindings> = async (context) => {
+  const { workerUrl } = resolveSiteEnv(context.env);
   const url = new URL(context.request.url);
 
   // Never serve HTML for hashed bundles — SPA fallback / Bot Fight interstitials as text/html
@@ -107,7 +107,7 @@ export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => 
 
   if (isTrackedRoute(url.pathname)) {
     context.waitUntil(
-      fetch(`${WORKER_URL}/api/analytics/pageview`, {
+      fetch(`${workerUrl}/api/analytics/pageview`, {
         method: "POST",
         headers: {
           "content-type": "application/json",

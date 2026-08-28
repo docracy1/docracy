@@ -47,6 +47,9 @@ dataset = "docracy_funnel"
 # --- Non-secret config ---
 # This is the deployed (production) value. Local `wrangler dev` overrides it back to localhost
 # via apps/worker/.dev.vars, which takes precedence over [vars] when running locally.
+# Cutover to docstoc.io: update these three URLs (+ Cloudflare custom domains, Google OAuth,
+# Turnstile, Resend, Stripe webhook, connector OAuth redirects). Keep in sync with
+# apps/web/site.config.mjs and apps/web/wrangler.toml [vars].
 [vars]
 PUBLIC_APP_URL = "https://docracy.io"
 PUBLIC_CONNECTOR_URL = "https://mcp.docracy.io"

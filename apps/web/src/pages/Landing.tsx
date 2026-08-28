@@ -11,6 +11,7 @@ import { fetchMarketplaceTemplates, fetchWeeklyTemplates, requestMagicLink } fro
 import { track } from "../lib/track";
 import { FREE_TEMPLATES } from "../lib/freeTemplates";
 import { HOW_IT_WORKS_VIDEO } from "../lib/howItWorksVideo";
+import { PUBLIC_APP_URL } from "../lib/site";
 import { localizePath, useI18n, useT } from "../lib/i18n";
 import { useSeoMeta } from "../lib/useSeoMeta";
 import { setPendingUploadFile } from "../lib/pendingUpload";
@@ -873,10 +874,10 @@ export default function Landing() {
               publisher: {
                 "@type": "Organization",
                 name: "Docracy",
-                url: "https://docracy.io",
+                url: PUBLIC_APP_URL,
                 logo: {
                   "@type": "ImageObject",
-                  url: "https://docracy.io/docracy-seal-icon.png",
+                  url: `${PUBLIC_APP_URL}/docracy-seal-icon.png`,
                 },
               },
             },

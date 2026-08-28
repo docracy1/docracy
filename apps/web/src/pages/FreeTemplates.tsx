@@ -4,6 +4,7 @@ import { FREE_TEMPLATES, RECURRING_CATEGORIES } from "../lib/freeTemplates";
 import { isSeoTemplateSlug, localizePath, useI18n, useT } from "../lib/i18n";
 import { useSeoMeta } from "../lib/useSeoMeta";
 import { track } from "../lib/track";
+import { PUBLIC_APP_URL } from "../lib/site";
 import { apiUrl, fetchMarketplaceTemplates, fetchWeeklyTemplates, type MarketplaceSubmission } from "../lib/api";
 import TemplateThumbnail from "../components/TemplateThumbnail";
 
@@ -177,7 +178,7 @@ export default function FreeTemplates() {
               ).map((tpl) => ({
                 name: tpl.name,
                 description: tpl.description,
-                url: `https://docracy.io${localizePath(`/free-templates/${tpl.slug}`, locale)}`,
+                url: `${PUBLIC_APP_URL}${localizePath(`/free-templates/${tpl.slug}`, locale)}`,
               }));
               return { matches };
             },

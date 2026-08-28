@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+APP_URL="${PUBLIC_APP_URL:-https://docracy.io}"
+API_URL="${PUBLIC_WORKER_URL:-https://api.docracy.io}"
+MCP_URL="${PUBLIC_CONNECTOR_URL:-https://mcp.docracy.io}"
+INDEXNOW_KEY="${INDEXNOW_KEY:-docracy-indexnow-20260728}"
+
 fail=0
 
 check() {
@@ -16,23 +21,31 @@ check() {
 }
 
 echo "=== Docracy go-live verification ==="
-check "Homepage" "https://docracy.io/"
-check "Pricing" "https://docracy.io/pricing"
-check "MCP page" "https://docracy.io/mcp"
-check "Docs" "https://docracy.io/docs"
-check "Sitemap" "https://docracy.io/sitemap.xml"
-check "RSS" "https://docracy.io/blog/feed.xml"
-check "IndexNow key" "https://docracy.io/docracy-indexnow-20260728.txt"
-check "Worker root" "https://api.docracy.io/" "404"
-check "Status API (worker)" "https://api.docracy.io/api/status" "200"
-check "Status API (same-origin proxy)" "https://docracy.io/api/status" "200"
-check "Connector auth gate" "https://mcp.docracy.io/mcp" "401"
+echo "APP_URL=$APP_URL API_URL=$API_URL MCP_URL=$MCP_URL"
+check "Homepage" "$APP_URL/"
+check "Pricing" "$APP_URL/pricing"
+check "MCP page" "$APP_URL/mcp"
+check "Docs" "$APP_URL/docs"
+check "Sitemap" "$APP_URL/sitemap.xml"
+check "RSS" "$APP_URL/blog/feed.xml"
+check "IndexNow key" "$APP_URL/$INDEXNOW_KEY.txt"
+check "Worker root" "$API_URL/" "404"
+check "Status API (worker)" "$API_URL/api/status" "200"
+check "Status API (same-origin proxy)" "$APP_URL/api/status" "200"
 
-status_ct=$(curl -sS -o /dev/null -w "%{content_type}" --max-time 15 "https://docracy.io/api/status" || echo "")
+mcp_code=$(curl -sS -o /dev/null -w "%{http_code}" --max-time 15 "$MCP_URL/mcp" || echo "000")
+if [[ "$mcp_code" == "401" || "$mcp_code" == "405" || "$mcp_code" == "406" ]]; then
+  echo "OK  Connector auth gate ($mcp_code) $MCP_URL/mcp"
+else
+  echo "FAIL Connector auth gate (got $mcp_code, want 401/405/406) $MCP_URL/mcp"
+  fail=1
+fi
+
+status_ct=$(curl -sS -o /dev/null -w "%{content_type}" --max-time 15 "$APP_URL/api/status" || echo "")
 if [[ "$status_ct" == *"application/json"* ]]; then
   echo "OK  Status API content-type ($status_ct)"
 else
-  echo "FAIL Status API content-type (got $status_ct, want application/json) https://docracy.io/api/status"
+  echo "FAIL Status API content-type (got $status_ct, want application/json) $APP_URL/api/status"
   fail=1
 fi
 

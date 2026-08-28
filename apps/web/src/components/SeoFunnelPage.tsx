@@ -4,6 +4,7 @@ import { useSeoMeta } from "../lib/useSeoMeta";
 import type { SeoPage } from "../lib/i18n/paths";
 import { SEO_EN_PATH } from "../lib/i18n/paths";
 import { track } from "../lib/track";
+import { PUBLIC_APP_URL } from "../lib/site";
 
 type Props = {
   seoPage: SeoPage;
@@ -62,7 +63,7 @@ export default function SeoFunnelPage({
     "@type": "WebPage",
     name: t(`seo.${seoCatalogKey}.title`),
     description: t(`seo.${seoCatalogKey}.description`),
-    url: `https://docracy.io${SEO_EN_PATH[seoPage]}`,
+    url: `${PUBLIC_APP_URL}${SEO_EN_PATH[seoPage]}`,
   };
 
   return (

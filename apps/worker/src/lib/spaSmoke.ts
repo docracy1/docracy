@@ -9,8 +9,10 @@ const SMOKE_CTX = {
 } as unknown as ExecutionContext;
 
 /** Browser-like UA so Pages/WAF don't treat the probe as a raw bot. */
-const PROBE_UA =
-  "Mozilla/5.0 (compatible; DocracySpaSmoke/1.0; +https://docracy.io) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36";
+function probeUa(env: Env): string {
+  const app = origin(env);
+  return `Mozilla/5.0 (compatible; DocracySpaSmoke/1.0; +${app}) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36`;
+}
 
 const ALERT_STATE_KEY = "spa-smoke:alert";
 /** Reminder while still down — don't email every hourly tick. */
@@ -87,12 +89,13 @@ function absUrl(base: string, src: string): string {
 
 async function fetchText(
   url: string,
+  userAgent: string,
   init?: RequestInit
 ): Promise<{ ok: boolean; status: number; contentType: string | null; body: string }> {
   const res = await fetch(url, {
     ...init,
     headers: {
-      "User-Agent": PROBE_UA,
+      "User-Agent": userAgent,
       Accept: init?.method === "POST" ? "application/json" : "*/*",
       ...(init?.headers ?? {}),
     },
@@ -108,10 +111,10 @@ async function fetchText(
 }
 
 /** Verify one SPA URL hydrates: HTML references a JS module that is actually JavaScript. */
-export async function checkSpaPage(pageUrl: string): Promise<SpaSmokeFailure | null> {
+export async function checkSpaPage(pageUrl: string, userAgent: string): Promise<SpaSmokeFailure | null> {
   let page;
   try {
-    page = await fetchText(pageUrl);
+    page = await fetchText(pageUrl, userAgent);
   } catch (err) {
     return { name: pageUrl, detail: `fetch failed: ${err instanceof Error ? err.message : String(err)}` };
   }
@@ -130,7 +133,7 @@ export async function checkSpaPage(pageUrl: string): Promise<SpaSmokeFailure | n
   const assetUrl = absUrl(pageUrl, src);
   let asset;
   try {
-    asset = await fetchText(assetUrl);
+    asset = await fetchText(assetUrl, userAgent);
   } catch (err) {
     return {
       name: `${pageUrl} → ${src}`,
@@ -167,7 +170,7 @@ async function checkAuthApiShape(env: Env): Promise<SpaSmokeFailure | null> {
       {
         method: "POST",
         headers: {
-          "User-Agent": PROBE_UA,
+          "User-Agent": probeUa(env),
           "Content-Type": "application/json",
           Accept: "application/json",
           Origin: origin(env),
@@ -196,7 +199,8 @@ async function checkAuthApiShape(env: Env): Promise<SpaSmokeFailure | null> {
 
 export async function runSpaSmokeChecks(env: Env): Promise<SpaSmokeFailure[]> {
   const base = origin(env);
-  const pageResults = await Promise.all(CRITICAL_PATHS.map((p) => checkSpaPage(`${base}${p}`)));
+  const ua = probeUa(env);
+  const pageResults = await Promise.all(CRITICAL_PATHS.map((p) => checkSpaPage(`${base}${p}`, ua)));
   const failures = pageResults.filter((f): f is SpaSmokeFailure => f !== null);
   const apiFail = await checkAuthApiShape(env);
   if (apiFail) failures.push(apiFail);

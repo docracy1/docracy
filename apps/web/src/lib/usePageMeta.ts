@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { track } from "./track";
+import { PUBLIC_APP_URL } from "./site";
 
-const SITE = "https://docracy.io";
+const SITE = PUBLIC_APP_URL;
 
 export type PageMetaOptions = {
   /** Pathname used for canonical + og:url (e.g. "/es/precios"). */

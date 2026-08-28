@@ -1,7 +1,5 @@
 import { fetchIndexShell, sanitizeForNoIndex } from "../_spaShell";
-
-const WORKER_URL = "https://api.docracy.io";
-const SITE = "https://docracy.io";
+import { resolveSiteEnv, type SiteBindings } from "../_site";
 
 function escapeHtml(s: string): string {
   return s
@@ -17,7 +15,8 @@ function escapeHtml(s: string): string {
  * Static prerendered FREE_TEMPLATES/*.html still win when present; D1-only weekly
  * slugs fall through here so crawlers get real HTML instead of a soft-404 SPA shell.
  */
-export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => {
+export const onRequest: PagesFunction<SiteBindings> = async (context) => {
+  const { appUrl, workerUrl } = resolveSiteEnv(context.env);
   const url = new URL(context.request.url);
   const slug = url.pathname.replace(/^\/free-templates\//, "").replace(/\/+$/, "");
   if (!slug || slug.includes("/") || slug.includes(".")) {
@@ -33,7 +32,7 @@ export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => 
     origin?: string;
   } | null = null;
   try {
-    const res = await fetch(`${WORKER_URL}/api/marketplace/${encodeURIComponent(slug)}`);
+    const res = await fetch(`${workerUrl}/api/marketplace/${encodeURIComponent(slug)}`);
     if (res.ok) {
       tpl = (await res.json()) as NonNullable<typeof tpl>;
     }
@@ -55,12 +54,12 @@ export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => 
 
   const title = `${tpl.seoTitle || tpl.title} | Docracy`;
   const description = (tpl.description || tpl.useCase || tpl.definition || tpl.title).slice(0, 300);
-  const canonical = `${SITE}/free-templates/${encodeURIComponent(slug)}`;
+  const canonical = `${appUrl}/free-templates/${encodeURIComponent(slug)}`;
   const preload = JSON.stringify({ template: tpl }).replace(/</g, "\\u003c");
 
   let shell = '<!doctype html><html><head></head><body><div id="root"></div></body></html>';
   try {
-    const indexRes = await context.env.ASSETS.fetch(new Request(new URL("/index.html", url), context.request));
+    const indexRes = await context.env.ASSETS!.fetch(new Request(new URL("/index.html", url), context.request));
     if (indexRes.ok) shell = await indexRes.text();
   } catch {
     // use minimal shell

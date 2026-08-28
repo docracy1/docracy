@@ -9,6 +9,7 @@ import { track } from "../lib/track";
 import { useT } from "../lib/i18n";
 import { BlogHeroArt, CompetitorHeroArt, gradientForSlug, topicForCluster, type BlogTopic } from "../components/BlogHeroArt";
 import TrustSection from "../components/TrustSection";
+import { PUBLIC_APP_URL } from "../lib/site";
 
 function BlogHero({ slug, topic, competitorKey }: { slug: string; topic: BlogTopic; competitorKey?: string }) {
   return (
@@ -267,15 +268,15 @@ function DynamicPostView({ post }: { post: DynamicBlogPostDetail }) {
     description: post.description || post.title,
     datePublished: date,
     dateModified: date,
-    mainEntityOfPage: `https://docracy.io/blog/${post.slug}`,
-    author: { "@type": "Organization", name: "Docracy", url: "https://docracy.io" },
+    mainEntityOfPage: `${PUBLIC_APP_URL}/blog/${post.slug}`,
+    author: { "@type": "Organization", name: "Docracy", url: PUBLIC_APP_URL },
     publisher: {
       "@type": "Organization",
       name: "Docracy",
-      url: "https://docracy.io",
-      logo: { "@type": "ImageObject", url: "https://docracy.io/docracy-seal-icon.png" },
+      url: PUBLIC_APP_URL,
+      logo: { "@type": "ImageObject", url: `${PUBLIC_APP_URL}/docracy-seal-icon.png` },
     },
-    image: ["https://docracy.io/og-image.png"],
+    image: [`${PUBLIC_APP_URL}/og-image.png`],
   };
 
   return (
