@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { classifyBot, trackEvent, isExcludedAgent, sanitizeAttribution, isBlockedAttributionSource } from "./analytics";
+import { classifyBot, trackEvent, isExcludedAgent, sanitizeAttribution, isBlockedAttributionSource, isBlockedReferrerHost } from "./analytics";
 import { makeMockEnv } from "../test/mockEnv";
 
 describe("classifyBot", () => {
@@ -59,10 +59,13 @@ describe("isExcludedAgent", () => {
 });
 
 describe("sanitizeAttribution", () => {
-  it("drops legacy docstoc junk tags", () => {
+  it("drops legacy docstoc junk tags and variants", () => {
     expect(isBlockedAttributionSource("docstoc")).toBe(true);
+    expect(isBlockedAttributionSource("docstoc-migration")).toBe(true);
+    expect(isBlockedReferrerHost("www.docstoc.com")).toBe(true);
     expect(sanitizeAttribution("docstoc")).toBe("");
     expect(sanitizeAttribution("docstoc/migration")).toBe("");
+    expect(sanitizeAttribution("docstoc-migration")).toBe("");
     expect(sanitizeAttribution("linkedin/post-01")).toBe("linkedin/post-01");
   });
 });

@@ -80,6 +80,23 @@ describe("POST /api/analytics/pageview", () => {
     expect(point.blobs[14]).toBe("");
   });
 
+  it("ignores docstoc.com as an external referrer", async () => {
+    const calls: unknown[][] = [];
+    const { env } = makeMockEnv({
+      ANALYTICS: { writeDataPoint: (...args: unknown[]) => calls.push(args) } as any,
+    });
+
+    const res = await analytics.request(
+      "/pageview",
+      post({ route: "/free-templates" }, { "x-referrer": "https://www.docstoc.com/docs/example" }),
+      env,
+      MOCK_CTX
+    );
+
+    expect(res.status).toBe(200);
+    expect(eventsOf(calls)).toEqual(["page_view"]);
+  });
+
   it("also logs landingpage_loaded for the homepage", async () => {
     const calls: unknown[][] = [];
     const { env } = makeMockEnv({

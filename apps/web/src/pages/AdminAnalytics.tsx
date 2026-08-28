@@ -1359,7 +1359,7 @@ const REVENUE_STEPS: FunnelStepDef[] = [
 ];
 
 function AttributionTable({ rows }: { rows: AttributionRow[] }) {
-  const visible = rows.filter((r) => !BLOCKED_CAMPAIGN_RE.test(r.attribution));
+  const visible = rows.filter((r) => !BLOCKED_DOCSTOC_RE.test(r.attribution));
   if (visible.length === 0) {
     return <p style={{ color: "var(--mute)", fontSize: 13 }}>No attributed growth events in this window yet.</p>;
   }
@@ -1393,8 +1393,8 @@ function AttributionTable({ rows }: { rows: AttributionRow[] }) {
  *  their spoofed Referer, not real navigation. */
 const SELF_HOST_RE = /docracy/i;
 
-/** Hide legacy junk tags from the campaign table (new hits are dropped server-side too). */
-const BLOCKED_CAMPAIGN_RE = /^(docstoc)(\/|$)/i;
+/** Hide legacy docstoc tags/referrers from the traffic overview. */
+const BLOCKED_DOCSTOC_RE = /docstoc/i;
 
 /** Known referrer hostnames → a human label. Falls back to the bare hostname (www. stripped) for
  *  anything not in this list — deliberately small and manually curated rather than a giant lookup
@@ -1439,14 +1439,14 @@ function TrafficSourcesTable({ rows }: { rows: TrafficSourceRow[] }) {
     for (const r of rows) {
       if (selectedDay !== "all" && r.day !== selectedDay) continue;
       if (r.event === "referral_source_detected" && r.source) {
-        if (SELF_HOST_RE.test(r.source)) {
+        if (SELF_HOST_RE.test(r.source) || BLOCKED_DOCSTOC_RE.test(r.source)) {
           selfCount += r.count;
           continue;
         }
         const label = hostLabel(r.source);
         referrerMap.set(label, (referrerMap.get(label) ?? 0) + r.count);
       } else if (r.event === "page_view" && r.attribution) {
-        if (BLOCKED_CAMPAIGN_RE.test(r.attribution)) continue;
+        if (BLOCKED_DOCSTOC_RE.test(r.attribution)) continue;
         campaignMap.set(r.attribution, (campaignMap.get(r.attribution) ?? 0) + r.count);
       }
     }
@@ -1463,8 +1463,8 @@ function TrafficSourcesTable({ rows }: { rows: TrafficSourceRow[] }) {
     <>
       <DayFilterSelect days={days} selectedDay={selectedDay} onChange={setSelectedDay} />
       <p style={{ fontSize: 12, color: "var(--mute)", marginTop: -4 }}>
-        Excludes {selfReferralCount} self-referral hit{selfReferralCount === 1 ? "" : "s"} (the site linking to
-        itself, or bot traffic spoofing our own hostname) — this is only genuine external discovery.
+        Excludes {selfReferralCount} self-referral and legacy docstoc hit{selfReferralCount === 1 ? "" : "s"} — only
+        genuine external discovery is shown here.
       </p>
       {nothingYet ? (
         <p style={{ fontSize: 13, color: "var(--mute)" }}>No external referrers or tagged campaign clicks for this range.</p>
