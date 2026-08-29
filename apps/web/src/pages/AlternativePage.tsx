@@ -3,6 +3,7 @@ import { usePageMeta } from "../lib/usePageMeta";
 import { ALTERNATIVE_PAGES, defaultAlternativeFaqs } from "../lib/marketingPages";
 import { localizePath, useI18n, useT } from "../lib/i18n";
 import { BILINGUAL_ALT_BY_SLUG, cleanPath, seoAlternates } from "../lib/i18n/paths";
+import PricingComparisonStrip from "../components/PricingComparisonStrip";
 import { track } from "../lib/track";
 
 export default function AlternativePage({ slug }: { slug: string }) {
@@ -92,6 +93,7 @@ export default function AlternativePage({ slug }: { slug: string }) {
             </Link>
           </div>
         </div>
+        <PricingComparisonStrip alternativeSlug={slug} refTag={`seo-${slug}-price`} />
       </div>
 
       <div className="container" style={{ maxWidth: 720 }}>

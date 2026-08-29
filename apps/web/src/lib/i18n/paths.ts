@@ -44,6 +44,16 @@ export const SEO_TEMPLATE_SLUGS = [
   "offer-letter",
   "freelance-service-agreement",
   "remote-work-policy",
+  "employment-agreement",
+  "consulting-agreement",
+  "unilateral-nda",
+  "vendor-agreement",
+  "w-9-form",
+  "promissory-note",
+  "letter-of-intent",
+  "simple-commercial-lease-agreement",
+  "separation-agreement",
+  "sales-agreement",
 ] as const;
 
 export type SeoTemplateSlug = (typeof SEO_TEMPLATE_SLUGS)[number];

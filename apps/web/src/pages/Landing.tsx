@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, useMemo, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PricingCalculator from "../components/PricingCalculator";
 import FirstDocumentPrompt from "../components/FirstDocumentPrompt";
@@ -13,6 +13,7 @@ import { localizePath, useI18n, useT } from "../lib/i18n";
 import { useSeoMeta } from "../lib/useSeoMeta";
 import { setPendingUploadFile } from "../lib/pendingUpload";
 import { TemplateCard } from "./FreeTemplates";
+import { TESTIMONIALS, testimonialsJsonLd } from "../lib/testimonials";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -224,97 +225,6 @@ export const TRUST_LOGOS: Array<{ name: string; logo: string | null; href: strin
   { name: "Grohmann Hienert Zierhut", logo: "/testimonials/grohmann-hienert-zierhut.jpg", href: "https://www.xing.com/profile/Stephan_Orasch", w: 436, h: 96 },
 ];
 
-const TESTIMONIALS: Array<{
-  quoteKey: string;
-  name: string;
-  titleKey: string;
-  company: string | null;
-  logo: string | null;
-  /** Personal headshot for testimonials from an individual professional rather than a company
-   *  representative — rendered as a round avatar next to the name instead of the wide company
-   *  logo strip, since a photo at that 36px-tall/auto-width treatment would render as an
-   *  unrecognizable sliver. */
-  avatar?: string;
-}> = [
-  {
-    quoteKey: "testimonial.1.quote",
-    name: "DACH Advisory",
-    titleKey: "testimonial.1.title",
-    company: null,
-    logo: "/testimonials/dach-advisory.png",
-  },
-  {
-    quoteKey: "testimonial.2.quote",
-    name: "Abaseh Mirvali",
-    titleKey: "testimonial.2.title",
-    company: null,
-    logo: null,
-  },
-  {
-    quoteKey: "testimonial.3.quote",
-    name: "Marc Brandsma",
-    titleKey: "testimonial.3.title",
-    company: null,
-    logo: "/culttech-logo.png",
-  },
-  {
-    quoteKey: "testimonial.4.quote",
-    name: "Laurenz Gröbner",
-    titleKey: "testimonial.4.title",
-    company: null,
-    logo: "/testimonials/hellocash.png",
-  },
-  {
-    quoteKey: "testimonial.5.quote",
-    name: "Dietmar Grünstäudl",
-    titleKey: "testimonial.5.title",
-    company: null,
-    logo: "/testimonials/ae-entsorgungssysteme.png",
-  },
-  {
-    quoteKey: "testimonial.6.quote",
-    name: "Otto Schweinzer",
-    titleKey: "testimonial.6.title",
-    company: null,
-    logo: "/testimonials/volpini.png",
-  },
-  {
-    quoteKey: "testimonial.7.quote",
-    name: "Johannes Sornig",
-    titleKey: "testimonial.7.title",
-    company: null,
-    logo: "/testimonials/kapsch.png",
-  },
-  {
-    quoteKey: "testimonial.8.quote",
-    name: "Joachim Zimmel",
-    titleKey: "testimonial.8.title",
-    company: null,
-    logo: "/testimonials/akg.png",
-  },
-  {
-    quoteKey: "testimonial.9.quote",
-    name: "Herbert Utz",
-    titleKey: "testimonial.9.title",
-    company: null,
-    logo: "/testimonials/faun-austria.png",
-  },
-  {
-    quoteKey: "testimonial.11.quote",
-    name: "Stephan Orasch",
-    titleKey: "testimonial.11.title",
-    company: null,
-    logo: "/testimonials/grohmann-hienert-zierhut.jpg",
-  },
-  {
-    quoteKey: "testimonial.12.quote",
-    name: "Bettina Authried",
-    titleKey: "testimonial.12.title",
-    company: null,
-    logo: null,
-  },
-];
-
 const USE_CASE_KEYS: Array<{ titleKey: string; bodyKey: string; to: string }> = [
   { titleKey: "landing.uc1.title", bodyKey: "landing.uc1.body", to: "/client-contracts" },
   { titleKey: "landing.uc2.title", bodyKey: "landing.uc2.body", to: "/onboarding-documents" },
@@ -362,6 +272,7 @@ export default function Landing() {
     question: t(item.qKey),
     answer: t(item.aKey),
   }));
+  const reviewsJsonLd = useMemo(() => testimonialsJsonLd((k) => t(k), (k) => t(k)), [t]);
   // Freelance service agreement, not the mutual NDA — most freelancers/SMEs landing on the
   // homepage need to get a client agreement signed, not protect confidential info. NDA stays the
   // default only for outreach personas/short-links that are specifically about that use case.
@@ -468,6 +379,7 @@ export default function Landing() {
 
   return (
     <div>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewsJsonLd) }} />
       <div className="hero-band hero-band-decorated hero-band-first-page">
         <HeroDecorPhoto className="hero-decor-card-1" rotate={-8} src="/decor/lady-justice.jpg" alt="" />
         <HeroDecorPhoto className="hero-decor-card-2" rotate={10} src="/decor/docracy-seal.png" alt="" />
