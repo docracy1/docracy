@@ -95,6 +95,12 @@ function isTrackedRoute(pathname: string): boolean {
 export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => {
   const url = new URL(context.request.url);
 
+  // Canonical host — both www and apex serve the same site; 301 to apex for crawl budget.
+  if (url.hostname === "www.docracy.io") {
+    const target = new URL(url.pathname + url.search + url.hash, "https://docracy.io");
+    return Response.redirect(target.toString(), 301);
+  }
+
   // Never serve HTML for hashed bundles — SPA fallback / Bot Fight interstitials as text/html
   // 200 break `type=module` loads ("Failed to fetch dynamically imported module") and leave
   // /login + /prepare stuck on the prerendered landing shell.

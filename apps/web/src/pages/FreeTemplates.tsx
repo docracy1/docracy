@@ -243,6 +243,10 @@ export default function FreeTemplates() {
             <Link to={localizePath("/template-marketplace", locale)}>
               {t("freeTemplates.howItWorksLink")}
             </Link>
+            {" · "}
+            <Link to={localizePath("/docusign-alternative", locale)}>{t("freeTemplates.comparePricing")}</Link>
+            {" · "}
+            <Link to={localizePath("/try", locale)}>{t("freeTemplates.trySample")}</Link>
           </p>
           <div className="templates-search-wrap">
             <svg className="templates-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">

@@ -157,6 +157,16 @@ const SEO_TEMPLATE_SLUGS = new Set([
   "offer-letter",
   "freelance-service-agreement",
   "remote-work-policy",
+  "employment-agreement",
+  "consulting-agreement",
+  "unilateral-nda",
+  "vendor-agreement",
+  "w-9-form",
+  "promissory-note",
+  "letter-of-intent",
+  "simple-commercial-lease-agreement",
+  "separation-agreement",
+  "sales-agreement",
 ]);
 const ES_TEMPLATE_META = {
   "mutual-nda": {
@@ -183,6 +193,56 @@ const ES_TEMPLATE_META = {
     title: "Plantilla gratis de política de trabajo remoto",
     description:
       "Una política breve de trabajo desde casa que cubre horarios, seguridad y expectativas del espacio de trabajo para que firmen los empleados remotos.",
+  },
+  "employment-agreement": {
+    title: "Plantilla gratis de contrato de empleo",
+    description:
+      "Contrato de empleo estándar que cubre puesto, compensación, beneficios y términos de empleo a voluntad.",
+  },
+  "consulting-agreement": {
+    title: "Plantilla gratis de contrato de consultoría",
+    description:
+      "Acuerdo de consultoría que define alcance, honorarios, confidencialidad y propiedad intelectual entre un consultor y un cliente.",
+  },
+  "unilateral-nda": {
+    title: "Plantilla gratis de NDA unilateral",
+    description:
+      "Acuerdo de confidencialidad unilateral cuando solo una parte divulga información sensible.",
+  },
+  "vendor-agreement": {
+    title: "Plantilla gratis de contrato con proveedor",
+    description:
+      "Contrato con proveedor que cubre entregables, plazos, pago y términos de servicio.",
+  },
+  "w-9-form": {
+    title: "Plantilla gratis de formulario W-9",
+    description:
+      "Formulario W-9 listo para firmar para recopilar el TIN de un contratista antes del pago.",
+  },
+  "promissory-note": {
+    title: "Plantilla gratis de pagaré",
+    description:
+      "Pagare simple que documenta monto prestado, interés y calendario de reembolso.",
+  },
+  "letter-of-intent": {
+    title: "Plantilla gratis de carta de intención",
+    description:
+      "Carta de intención preliminar que describe los términos propuestos antes de un acuerdo vinculante.",
+  },
+  "simple-commercial-lease-agreement": {
+    title: "Plantilla gratis de arrendamiento comercial",
+    description:
+      "Contrato de arrendamiento comercial básico para espacio de oficina o retail a corto plazo.",
+  },
+  "separation-agreement": {
+    title: "Plantilla gratis de acuerdo de separación",
+    description:
+      "Acuerdo de separación laboral que cubre indemnización final, beneficios y liberación mutua.",
+  },
+  "sales-agreement": {
+    title: "Plantilla gratis de contrato de venta",
+    description:
+      "Contrato de venta de bienes o servicios con precio, entrega y términos de pago.",
   },
 };
 

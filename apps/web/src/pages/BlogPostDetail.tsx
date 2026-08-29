@@ -6,7 +6,8 @@ import { getCompetitor, formatUsd, DOCRACY_PRICE } from "../lib/competitors";
 import { fetchBlogPost, type DynamicBlogPostDetail } from "../lib/api";
 import { usePageMeta } from "../lib/usePageMeta";
 import { track } from "../lib/track";
-import { useT } from "../lib/i18n";
+import { blogAlternativePath, blogTemplatePath } from "../lib/blogSeo";
+import { localizePath, useI18n, useT } from "../lib/i18n";
 import { BlogHeroArt, CompetitorHeroArt, gradientForSlug, topicForCluster, type BlogTopic } from "../components/BlogHeroArt";
 import TrustSection from "../components/TrustSection";
 
@@ -36,9 +37,15 @@ function BlogByline({ date }: { date: string }) {
  *  drove it. */
 function BlogCta({ slug }: { slug: string }) {
   const t = useT();
+  const { locale } = useI18n();
   const isW9 = slug.includes("w-9");
-  const prepareTo = isW9 ? `/prepare?ref=blog-${slug}` : `/prepare?freeTemplate=mutual-nda&ref=blog-${slug}`;
+  const prepareTo = isW9
+    ? localizePath(`/prepare?ref=blog-${slug}`, locale)
+    : localizePath(`/prepare?freeTemplate=mutual-nda&ref=blog-${slug}`, locale);
   const prepareLabel = isW9 ? t("blog.uploadW9") : t("blog.tryFreeSampleNda");
+  const altPath = localizePath(blogAlternativePath(slug), locale);
+  const templatePath = localizePath(blogTemplatePath(slug), locale);
+  const tryPath = localizePath("/try", locale);
 
   return (
     <div style={{ marginTop: 24 }}>
@@ -47,19 +54,37 @@ function BlogCta({ slug }: { slug: string }) {
           to={prepareTo}
           className="btn-primary"
           style={{ textDecoration: "none" }}
-          onClick={() => track("blog_cta_clicked", { source: slug })}
+          onClick={() => track("blog_cta_clicked", { source: `${slug}:prepare` })}
         >
           {prepareLabel}
+        </Link>
+        <Link
+          to={tryPath}
+          className="btn-secondary"
+          style={{ textDecoration: "none" }}
+          onClick={() => track("blog_cta_clicked", { source: `${slug}:try` })}
+        >
+          {t("blog.tryShortLink")}
         </Link>
         <Link
           to={`/pricing?ref=blog-${slug}`}
           className="btn-secondary"
           style={{ textDecoration: "none" }}
-          onClick={() => track("blog_cta_clicked", { source: slug })}
+          onClick={() => track("blog_cta_clicked", { source: `${slug}:pricing` })}
         >
           {t("blog.seePricing")}
         </Link>
       </div>
+      <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 12, marginBottom: 0 }}>
+        {t("blog.ctaAlso")}{" "}
+        <Link to={altPath} onClick={() => track("blog_cta_clicked", { source: `${slug}:alternative` })}>
+          {t("blog.ctaCompare")}
+        </Link>
+        {" · "}
+        <Link to={templatePath} onClick={() => track("blog_cta_clicked", { source: `${slug}:template` })}>
+          {t("blog.ctaTemplate")}
+        </Link>
+      </p>
       <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 8 }}>{t("blog.ctaNoAccount")}</p>
     </div>
   );

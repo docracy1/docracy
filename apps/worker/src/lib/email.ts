@@ -654,12 +654,12 @@ export async function sendCompletionEmails(
     <p style="margin:24px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">
       Enviado con Docracy — firmas electrónicas gratis para acuerdos simples.
     </p>
-    ${ctaButton(`${env.PUBLIC_APP_URL}/try`, "Envía el tuyo gratis")}`
+    ${ctaButton(`${env.PUBLIC_APP_URL}/try?utm_source=email&utm_medium=completion&utm_campaign=signer-reverse`, "Envía el tuyo gratis")}`
         : `
     <p style="margin:24px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">
       Sent with Docracy — free e-signatures for simple agreements.
     </p>
-    ${ctaButton(`${env.PUBLIC_APP_URL}/try`, "Send your own free")}`;
+    ${ctaButton(`${env.PUBLIC_APP_URL}/try?utm_source=email&utm_medium=completion&utm_campaign=signer-reverse`, "Send your own free")}`;
   const verifyUrl = `${env.PUBLIC_APP_URL}/verify?hash=${finalPdfSha256}`;
   const verifyLine =
     locale === "es"
@@ -747,7 +747,7 @@ export async function sendCompletionEmails(
     <p style="margin:24px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">
       ¿Quieres tener todos tus PDF firmados en un solo lugar, plantillas reutilizables y más de 2 firmantes?
     </p>
-    ${ctaButton(`${env.PUBLIC_APP_URL}/price`, "Ver planes de pago")}
+    ${ctaButton(`${env.PUBLIC_APP_URL}/price?utm_source=email&utm_medium=completion&utm_campaign=preparer-upgrade`, "Ver planes de pago")}
     <p style="margin:12px 0 0 0;font-size:13px;color:${MUTED};">
       O <a href="${env.PUBLIC_APP_URL}/login?ref=preparer-done" style="color:${PRIMARY};">crea una cuenta gratis</a> para conservar tu historial sin pagar.
     </p>`
@@ -755,7 +755,7 @@ export async function sendCompletionEmails(
     <p style="margin:24px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">
       Want every signed PDF in one place, reusable templates, and more than 2 signers?
     </p>
-    ${ctaButton(`${env.PUBLIC_APP_URL}/price`, "See paid plans")}
+    ${ctaButton(`${env.PUBLIC_APP_URL}/price?utm_source=email&utm_medium=completion&utm_campaign=preparer-upgrade`, "See paid plans")}
     <p style="margin:12px 0 0 0;font-size:13px;color:${MUTED};">
       Or <a href="${env.PUBLIC_APP_URL}/login?ref=preparer-done" style="color:${PRIMARY};">create a free account</a> to keep history without paying.
     </p>`;
