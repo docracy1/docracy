@@ -12,6 +12,7 @@ import {
   sanitizeForNoIndex,
   staticHtmlExists,
 } from "./_spaShell";
+import { legacyTemplateRedirectTarget } from "../src/lib/templateLegacyRedirects";
 
 const WORKER_URL = "https://api.docracy.io";
 
@@ -98,6 +99,13 @@ export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => 
   // Canonical host — both www and apex serve the same site; 301 to apex for crawl budget.
   if (url.hostname === "www.docracy.io") {
     const target = new URL(url.pathname + url.search + url.hash, "https://docracy.io");
+    return Response.redirect(target.toString(), 301);
+  }
+
+  // Legacy docracy.com document slugs → canonical free template (no duplicate landing pages).
+  const legacyTarget = legacyTemplateRedirectTarget(url.pathname);
+  if (legacyTarget) {
+    const target = new URL(legacyTarget + url.search + url.hash, url.origin);
     return Response.redirect(target.toString(), 301);
   }
 
