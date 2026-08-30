@@ -1,17 +1,12 @@
 {
   "processedUrls": 9486,
   "legalClusters": 2659,
-  "redirectCount": 607,
+  "redirectCount": 810,
   "topRedirects": [
     {
       "legacy": "intellectual-property-agreement",
       "canonical": "ip-licensing-agreement",
       "hits": 70
-    },
-    {
-      "legacy": "landlord-reference-letter",
-      "canonical": "reference-letter",
-      "hits": 51
     },
     {
       "legacy": "portrait-photography-agreement",
@@ -149,6 +144,11 @@
       "hits": 8
     },
     {
+      "legacy": "agreement-for-design-services-interactive-web-works-full-assignment",
+      "canonical": "agreement-for-design-services-interactive-web-works-ful",
+      "hits": 8
+    },
+    {
       "legacy": "employee-proprietary-information-and-inventions-agreement",
       "canonical": "proprietary-information-and-inventions-agreement",
       "hits": 8
@@ -189,20 +189,20 @@
       "hits": 5
     },
     {
+      "legacy": "animation-production-contract",
+      "canonical": "short-form-animation-production-contract",
+      "hits": 5
+    },
+    {
       "legacy": "non-disclosure-agreement-in-french",
       "canonical": "mutual-nda",
       "hits": 5
     },
     {
-      "legacy": "basic-non-disclosure-agreement-contractor",
-      "canonical": "mutual-nda",
-      "hits": 5
-    },
-    {
-      "legacy": "form-of-independent-contractor-agreement",
-      "canonical": "independent-contractor-agreement",
+      "legacy": "freelance-contract",
+      "canonical": "freelance-contract-motion-graphics",
       "hits": 5
     }
   ],
-  "canonicalTemplateCount": 203
+  "canonicalTemplateCount": 703
 }

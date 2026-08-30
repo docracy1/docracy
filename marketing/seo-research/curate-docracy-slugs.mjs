@@ -26,9 +26,11 @@ const existingSlugs = new Set([...freeTemplatesSrc.matchAll(/slug: "([^"]+)"/g)]
 
 // Legacy batch slugs (generated separately) — treat as canonical targets once deployed.
 let legacyBatchSlugs = new Set();
-const batchPath = path.join(ROOT, "apps/web/scripts/legacyBatch/catalog.json");
-if (fs.existsSync(batchPath)) {
-  legacyBatchSlugs = new Set(JSON.parse(fs.readFileSync(batchPath, "utf8")).map((t) => t.slug));
+for (const batchFile of ["catalog.json", "catalog-batch2.json"]) {
+  const batchPath = path.join(ROOT, "apps/web/scripts/legacyBatch", batchFile);
+  if (fs.existsSync(batchPath)) {
+    for (const t of JSON.parse(fs.readFileSync(batchPath, "utf8"))) legacyBatchSlugs.add(t.slug);
+  }
 }
 const allCanonical = new Set([...existingSlugs, ...legacyBatchSlugs]);
 

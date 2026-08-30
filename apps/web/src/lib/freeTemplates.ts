@@ -1,5 +1,6 @@
 import type { DocField } from "./types";
 import { LEGACY_BATCH_TEMPLATES } from "./freeTemplatesLegacyBatch";
+import { LEGACY_BATCH_2_TEMPLATES } from "./freeTemplatesLegacyBatch2";
 
 export interface FreeTemplate {
   slug: string;
@@ -5302,6 +5303,7 @@ FREE_TEMPLATES.push(
     ],
   },
   ...LEGACY_BATCH_TEMPLATES,
+  ...LEGACY_BATCH_2_TEMPLATES,
 );
 
 export function getFreeTemplate(slug: string): FreeTemplate | undefined {
