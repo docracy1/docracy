@@ -1,0 +1,208 @@
+{
+  "processedUrls": 9486,
+  "legalClusters": 2659,
+  "redirectCount": 810,
+  "topRedirects": [
+    {
+      "legacy": "intellectual-property-agreement",
+      "canonical": "ip-licensing-agreement",
+      "hits": 70
+    },
+    {
+      "legacy": "portrait-photography-agreement",
+      "canonical": "photography-services-agreement",
+      "hits": 51
+    },
+    {
+      "legacy": "master-agreement-for-design-services",
+      "canonical": "web-design-services-agreement",
+      "hits": 43
+    },
+    {
+      "legacy": "logo-design-contract-agreement",
+      "canonical": "web-design-services-agreement",
+      "hits": 39
+    },
+    {
+      "legacy": "non-disclosure-agreement-and-confidentiality-agreement-australia",
+      "canonical": "mutual-nda",
+      "hits": 37
+    },
+    {
+      "legacy": "creative-services-agreement",
+      "canonical": "consulting-agreement",
+      "hits": 36
+    },
+    {
+      "legacy": "commercial-kitchen-rental-agreement",
+      "canonical": "rental-agreement",
+      "hits": 34
+    },
+    {
+      "legacy": "founders-agreement-template-with-vesting",
+      "canonical": "founder-vesting-agreement",
+      "hits": 32
+    },
+    {
+      "legacy": "contract-of-works-for-web-design",
+      "canonical": "web-design-services-agreement",
+      "hits": 28
+    },
+    {
+      "legacy": "statement-of-work-web-design",
+      "canonical": "scope-of-work",
+      "hits": 27
+    },
+    {
+      "legacy": "non-disclosure-agreement",
+      "canonical": "mutual-nda",
+      "hits": 26
+    },
+    {
+      "legacy": "contract-for-wedding-photography-services",
+      "canonical": "wedding-photography-contract",
+      "hits": 23
+    },
+    {
+      "legacy": "shortform-nda",
+      "canonical": "short-form-mutual-nda",
+      "hits": 20
+    },
+    {
+      "legacy": "mutual-confidentiality-agreement",
+      "canonical": "mutual-nda",
+      "hits": 20
+    },
+    {
+      "legacy": "model-release",
+      "canonical": "model-release-form",
+      "hits": 18
+    },
+    {
+      "legacy": "contract-killer",
+      "canonical": "web-development-agreement",
+      "hits": 16
+    },
+    {
+      "legacy": "short-non-disclosure-agreement-for-an-internet-startup",
+      "canonical": "mutual-nda",
+      "hits": 14
+    },
+    {
+      "legacy": "development-service-contract",
+      "canonical": "web-development-agreement",
+      "hits": 13
+    },
+    {
+      "legacy": "mutual-nondisclosure-agreement",
+      "canonical": "mutual-nda",
+      "hits": 12
+    },
+    {
+      "legacy": "employee-agreement",
+      "canonical": "employment-agreement",
+      "hits": 10
+    },
+    {
+      "legacy": "residential-sublease-agreement",
+      "canonical": "sublease-agreement",
+      "hits": 10
+    },
+    {
+      "legacy": "contract-killer-3",
+      "canonical": "web-development-agreement",
+      "hits": 10
+    },
+    {
+      "legacy": "founder-collaboration-agreement",
+      "canonical": "partnership-agreement",
+      "hits": 9
+    },
+    {
+      "legacy": "rental-agreement-plain-language-lease",
+      "canonical": "rental-agreement",
+      "hits": 9
+    },
+    {
+      "legacy": "work-for-hire-agreement",
+      "canonical": "work-made-for-hire-agreement",
+      "hits": 9
+    },
+    {
+      "legacy": "independent-developer-or-contractor-agreement",
+      "canonical": "independent-contractor-agreement",
+      "hits": 8
+    },
+    {
+      "legacy": "employment-offer-letter",
+      "canonical": "offer-letter",
+      "hits": 8
+    },
+    {
+      "legacy": "consulting-agreement-for-hourly-work",
+      "canonical": "consulting-agreement",
+      "hits": 8
+    },
+    {
+      "legacy": "agreement-for-design-services-interactive-web-works-full-assignment",
+      "canonical": "agreement-for-design-services-interactive-web-works-ful",
+      "hits": 8
+    },
+    {
+      "legacy": "employee-proprietary-information-and-inventions-agreement",
+      "canonical": "proprietary-information-and-inventions-agreement",
+      "hits": 8
+    },
+    {
+      "legacy": "founders-agreement",
+      "canonical": "founder-vesting-agreement",
+      "hits": 7
+    },
+    {
+      "legacy": "design-contract",
+      "canonical": "web-design-services-agreement",
+      "hits": 7
+    },
+    {
+      "legacy": "addendum-to-an-existing-contract",
+      "canonical": "scope-of-work",
+      "hits": 6
+    },
+    {
+      "legacy": "liability-release",
+      "canonical": "liability-waiver",
+      "hits": 6
+    },
+    {
+      "legacy": "independent-contractor-agreement-developers",
+      "canonical": "independent-contractor-agreement",
+      "hits": 6
+    },
+    {
+      "legacy": "consulting-agreement-for-a-fixed-price-contract",
+      "canonical": "consulting-agreement",
+      "hits": 5
+    },
+    {
+      "legacy": "short-form-design-contract",
+      "canonical": "web-design-services-agreement",
+      "hits": 5
+    },
+    {
+      "legacy": "animation-production-contract",
+      "canonical": "short-form-animation-production-contract",
+      "hits": 5
+    },
+    {
+      "legacy": "non-disclosure-agreement-in-french",
+      "canonical": "mutual-nda",
+      "hits": 5
+    },
+    {
+      "legacy": "freelance-contract",
+      "canonical": "freelance-contract-motion-graphics",
+      "hits": 5
+    }
+  ],
+  "canonicalTemplateCount": 703
+}

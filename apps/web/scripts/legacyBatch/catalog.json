@@ -1,0 +1,3702 @@
+[
+  {
+    "slug": "30-day-move-out-notice",
+    "name": "30-Day Move-Out Notice",
+    "seoTitle": "Free 30-Day Move-Out Notice Template",
+    "description": "A tenant-to-landlord notice confirming intent to vacate a rental unit at least 30 days before the move-out date.",
+    "useCase": "Use this when a month-to-month or periodic tenant is ending their tenancy and must give written notice under the lease or local law. It creates a clear paper trail of the intended move-out date and forwarding address for deposit return.",
+    "definition": "A 30-day move-out notice is a written statement from a tenant to a landlord declaring the date the tenant will surrender possession of a rental unit, typically satisfying statutory or lease-required advance notice.",
+    "keyClauses": [
+      "Tenant and landlord identification and rental property address",
+      "Intended move-out and key-return date",
+      "Statement that tenancy ends on that date",
+      "Forwarding address for security deposit correspondence",
+      "Acknowledgment of cleaning and key-return obligations",
+      "Reference to lease notice period and governing law"
+    ],
+    "fillInFields": [
+      "[Tenant Name(s)]",
+      "[Landlord Name]",
+      "[Rental Property Address]",
+      "[Move-Out Date]",
+      "[Notice Date]",
+      "[Forwarding Address]",
+      "[Tenant Phone/Email]"
+    ],
+    "legalSummary": "Delivering this notice starts the clock on ending a periodic tenancy and may trigger the landlord's duty to return a security deposit within local time limits. It does not release the tenant from rent owed through the move-out date or from damage beyond ordinary wear and tear.",
+    "chatgptPrompts": [
+      "Fill this 30-Day Move-Out Notice for a month-to-month tenant in California vacating on the last day of next month.",
+      "Explain whether email delivery satisfies notice requirements before I send this 30-Day Move-Out Notice.",
+      "Adapt this notice for two roommates on one lease who are both moving out on the same date."
+    ],
+    "signerLabels": [
+      "Tenant",
+      "Landlord Acknowledgment"
+    ],
+    "recurringCategory": "Real Estate",
+    "archetype": "noticeLetter"
+  },
+  {
+    "slug": "mobile-app-development-agreement",
+    "name": "Mobile App Development Agreement",
+    "seoTitle": "Free Mobile App Development Agreement Template",
+    "description": "Defines scope, milestones, app-store submission, and IP ownership for custom iOS/Android application builds.",
+    "useCase": "Use this when a startup or business hires a developer or agency to design, build, and deliver a native or cross-platform mobile app. It separates mobile deliverables from unrelated web work and covers TestFlight/beta handoff and store submission responsibilities.",
+    "definition": "A mobile app development agreement is a contract in which a client engages a developer to produce a functional mobile application, specifying platforms, features, acceptance testing, and ownership of source code and store assets.",
+    "keyClauses": [
+      "Target platforms (iOS, Android, or cross-platform framework)",
+      "Feature scope, milestones, and delivery schedule",
+      "Client responsibilities for accounts, content, and approvals",
+      "Payment tied to milestone acceptance",
+      "Source code, repository, and App Store asset ownership",
+      "Warranty, bug-fix window, and post-launch support limits"
+    ],
+    "fillInFields": [
+      "[Client Name]",
+      "[Developer/Agency Name]",
+      "[App Name and Description]",
+      "[Target Platforms]",
+      "[Milestone Schedule]",
+      "[Total Fee]",
+      "[App Store Account Owner]",
+      "[Effective Date]"
+    ],
+    "legalSummary": "Signing commits the developer to deliver the described app functionality by agreed milestones and the client to pay on acceptance. Ownership of custom code typically transfers after final payment, while third-party libraries remain under their original licenses.",
+    "chatgptPrompts": [
+      "Generate a filled Mobile App Development Agreement for a React Native fitness tracking app with three milestones.",
+      "Clarify who owns the Apple Developer account and listing metadata under this Mobile App Development Agreement.",
+      "Add a clause for ongoing monthly maintenance after the 30-day warranty in this agreement."
+    ],
+    "signerLabels": [
+      "Client",
+      "Developer"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "life-coaching-agreement",
+    "name": "Life Coaching Agreement",
+    "seoTitle": "Free Life Coaching Agreement Template",
+    "description": "Sets session format, coaching boundaries, fees, cancellation rules, and confidentiality for personal coaching engagements.",
+    "useCase": "Use this when an independent life coach begins work with a new client and needs clear boundaries between coaching and therapy or medical advice. It documents session length, communication channels, and what happens if either party ends the engagement early.",
+    "definition": "A life coaching agreement is a service contract between a coach and a client that defines the coaching relationship, session structure, fees, and limits of the coach's role.",
+    "keyClauses": [
+      "Coaching scope and explicit non-medical, non-therapeutic disclaimer",
+      "Session length, frequency, and format (in-person, phone, video)",
+      "Fees, payment timing, and package expiration",
+      "Cancellation and rescheduling policy",
+      "Confidentiality and exceptions (harm, legal process)",
+      "Client responsibility for decisions and outcomes"
+    ],
+    "fillInFields": [
+      "[Coach Name]",
+      "[Client Name]",
+      "[Session Package Description]",
+      "[Fee and Payment Terms]",
+      "[Session Length and Frequency]",
+      "[Start Date]",
+      "[Cancellation Notice Period]"
+    ],
+    "legalSummary": "This agreement establishes a professional coaching relationship, not a healthcare or fiduciary one. The client pays for scheduled sessions under the cancellation policy, and both parties agree that the coach does not guarantee specific life or career results.",
+    "chatgptPrompts": [
+      "Fill this Life Coaching Agreement for a 12-session package billed monthly with 24-hour cancellation.",
+      "Explain how to word the therapy disclaimer for a coach who also holds unrelated wellness certifications.",
+      "Adapt session terms for async coaching via voice notes instead of live video calls."
+    ],
+    "signerLabels": [
+      "Coach",
+      "Client"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "personalServices"
+  },
+  {
+    "slug": "project-completion-certificate",
+    "name": "Project Completion Certificate",
+    "seoTitle": "Free Project Completion Certificate Template",
+    "description": "Documents that contracted work met agreed specifications and triggers final payment or warranty start date.",
+    "useCase": "Use this when a contractor, consultant, or vendor finishes a defined project and the client must formally acknowledge acceptance. It is often paired with a punch list or inspection before releasing retainage or closing the job file.",
+    "definition": "A project completion certificate is a signed acknowledgment that specified deliverables have been completed to the client's satisfaction according to an underlying contract or statement of work.",
+    "keyClauses": [
+      "Reference to underlying contract or work order",
+      "Description of completed deliverables",
+      "Statement of substantial completion and acceptance",
+      "Final payment or retainage release trigger",
+      "Start of warranty or support period",
+      "Reservation of rights for latent defects if any"
+    ],
+    "fillInFields": [
+      "[Project Name]",
+      "[Contractor/Vendor Name]",
+      "[Client Name]",
+      "[Completion Date]",
+      "[Contract/Reference Number]",
+      "[Final Payment Amount]",
+      "[Warranty Period]"
+    ],
+    "legalSummary": "Signing confirms the client accepts the work as complete under the referenced agreement, which typically authorizes final payment. It may start warranty clocks but does not usually waive claims for fraud or hidden defects discovered later.",
+    "chatgptPrompts": [
+      "Generate a Project Completion Certificate for a kitchen remodel accepted with a 10% retainage release.",
+      "Explain whether signing blocks the client from later claiming incomplete punch-list items.",
+      "Adapt this certificate for phased software delivery where only Sprint 3 is being accepted."
+    ],
+    "signerLabels": [
+      "Client",
+      "Contractor"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "reseller-agreement",
+    "name": "Reseller Agreement",
+    "seoTitle": "Free Reseller Agreement Template",
+    "description": "Authorizes a partner to resell a supplier's products or services under brand, pricing, and territory rules.",
+    "useCase": "Use this when a software vendor, manufacturer, or distributor appoints a reseller to sell to end customers without a full franchise relationship. It sets MAP pricing, marketing rules, and whether the reseller may white-label or must stay non-exclusive.",
+    "definition": "A reseller agreement is a commercial contract granting a party the right to market and sell another party's products or services to third-party customers subject to defined terms.",
+    "keyClauses": [
+      "Appointment as authorized (or non-exclusive) reseller",
+      "Product/service catalog and pricing or discount tiers",
+      "Territory or customer segment restrictions",
+      "Branding, trademark, and marketing guidelines",
+      "Order process, payment, and return policies",
+      "Term, termination, and post-termination sell-off"
+    ],
+    "fillInFields": [
+      "[Supplier/Vendor Name]",
+      "[Reseller Name]",
+      "[Products or Services Covered]",
+      "[Territory or Market]",
+      "[Discount or Margin Structure]",
+      "[Minimum Sales Target]",
+      "[Effective Date]"
+    ],
+    "legalSummary": "The supplier grants limited resale rights while retaining product ownership and brand control until sale to end users. The reseller must comply with pricing and marketing rules, and either party may exit on notice subject to outstanding order fulfillment.",
+    "chatgptPrompts": [
+      "Fill this Reseller Agreement for a SaaS vendor appointing a non-exclusive US reseller at 20% margin.",
+      "Compare exclusive vs non-exclusive territory language before I sign as the reseller.",
+      "Add MAP pricing enforcement language to this Reseller Agreement."
+    ],
+    "signerLabels": [
+      "Supplier",
+      "Reseller"
+    ],
+    "recurringCategory": "Sale and Purchase",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "real-estate-photography-licensing-agreement",
+    "name": "Real Estate Photography Licensing Agreement",
+    "seoTitle": "Free Real Estate Photography License Template",
+    "description": "Grants a broker or seller limited use of listing photos while the photographer retains copyright.",
+    "useCase": "Use this when a real estate photographer delivers images for an MLS listing and must spell out where photos may appear, how long, and whether the agent may sublicense to portals. It prevents agents from reusing photos for unrelated listings after the sale closes.",
+    "definition": "A real estate photography licensing agreement is a copyright license in which a photographer permits a broker, agent, or seller to use listing photographs for defined marketing purposes and duration.",
+    "keyClauses": [
+      "Grant of limited license for MLS, print, and online marketing",
+      "Listing-specific or time-limited usage scope",
+      "Photographer retention of copyright and credit requirements",
+      "Prohibition on sublicensing beyond approved portals",
+      "Fees, delivery format, and revision limits",
+      "License termination when listing ends or expires"
+    ],
+    "fillInFields": [
+      "[Photographer Name]",
+      "[Broker/Agent Name]",
+      "[Property Address]",
+      "[License Duration]",
+      "[Permitted Uses]",
+      "[Fee]",
+      "[Delivery Date]"
+    ],
+    "legalSummary": "The photographer keeps ownership of images but grants a narrow license tied to marketing a specific property. Using photos for a different listing or beyond the license term without renewal can constitute copyright infringement.",
+    "chatgptPrompts": [
+      "Fill this Real Estate Photography Licensing Agreement for a 6-month MLS and social media license.",
+      "Explain whether the agent may upload these photos to Zillow under this license grant.",
+      "Adapt usage terms for drone aerials included in the same shoot."
+    ],
+    "signerLabels": [
+      "Photographer",
+      "Licensee"
+    ],
+    "recurringCategory": "Intellectual Property",
+    "archetype": "ipLicense"
+  },
+  {
+    "slug": "music-license-agreement",
+    "name": "Music License Agreement",
+    "seoTitle": "Free Music License Agreement Template",
+    "description": "Permits use of a recorded composition in specified media with clear scope, territory, and royalty terms.",
+    "useCase": "Use this when an indie artist, label, or rights holder licenses a track for a film, ad, podcast, or event without transferring full ownership. It distinguishes sync rights from master use and sets whether the license is exclusive or non-exclusive.",
+    "definition": "A music license agreement is a contract in which a rights holder grants permission to use a musical work or sound recording within defined media, territory, and time limits.",
+    "keyClauses": [
+      "Identification of composition and recording",
+      "Licensed uses (sync, streaming, live, commercial)",
+      "Exclusivity, territory, and term",
+      "Upfront fee and royalty or backend participation",
+      "Credit and attribution requirements",
+      "Revocation, breach, and takedown remedies"
+    ],
+    "fillInFields": [
+      "[Licensor/Artist Name]",
+      "[Licensee Name]",
+      "[Song Title]",
+      "[Licensed Project or Media]",
+      "[Territory]",
+      "[License Term]",
+      "[Fee and Royalty Rate]"
+    ],
+    "legalSummary": "The licensee may exploit the track only within the licensed uses and duration; all other rights remain with the licensor. Overuse, sublicensing without permission, or failure to pay royalties can terminate the license and expose the licensee to damages.",
+    "chatgptPrompts": [
+      "Generate a Music License Agreement for a 60-second non-exclusive sync license in a local TV ad.",
+      "Explain the difference between master and publishing rights in this Music License Agreement.",
+      "Adapt this for a podcast intro theme licensed worldwide for two years."
+    ],
+    "signerLabels": [
+      "Licensor",
+      "Licensee"
+    ],
+    "recurringCategory": "Intellectual Property",
+    "archetype": "ipLicense"
+  },
+  {
+    "slug": "event-photography-contract",
+    "name": "Event Photography Contract",
+    "seoTitle": "Free Event Photography Contract Template",
+    "description": "Covers event shoot hours, deliverables, image licensing, and cancellation for corporate or private events.",
+    "useCase": "Use this when a photographer is hired for a one-day conference, gala, or brand activation rather than a wedding package. It clarifies shot list expectations, on-site contact, and turnaround for edited galleries.",
+    "definition": "An event photography contract is a services agreement in which a photographer documents a scheduled event and delivers edited images under specified usage rights.",
+    "keyClauses": [
+      "Event date, venue, and coverage hours",
+      "Deliverables, editing level, and delivery timeline",
+      "Usage license for marketing, press, and social media",
+      "Deposit, balance due, and overtime rates",
+      "Cancellation, rescheduling, and force majeure",
+      "Limitation of liability for missed moments or equipment failure"
+    ],
+    "fillInFields": [
+      "[Photographer Name]",
+      "[Client/Organizer Name]",
+      "[Event Name and Date]",
+      "[Venue Address]",
+      "[Coverage Hours]",
+      "[Package Fee]",
+      "[Image Delivery Timeline]"
+    ],
+    "legalSummary": "The photographer agrees to provide professional coverage for the scheduled window; the client pays per the fee schedule and receives a defined license to use images. Neither party is guaranteed perfection of every moment, but the contract sets measurable delivery obligations.",
+    "chatgptPrompts": [
+      "Fill this Event Photography Contract for a 4-hour corporate conference with next-day preview gallery.",
+      "Add a clause requiring photographer credit on all social posts using these images.",
+      "Adapt cancellation terms for an outdoor festival with weather backup date."
+    ],
+    "signerLabels": [
+      "Photographer",
+      "Client"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "artwork-commission-agreement",
+    "name": "Artwork Commission Agreement",
+    "seoTitle": "Free Artwork Commission Agreement Template",
+    "description": "Defines custom art specifications, approval stages, payment schedule, and copyright for commissioned pieces.",
+    "useCase": "Use this when a collector, publisher, or brand hires an artist to create an original illustration, painting, or digital piece to spec. It covers reference materials, revision rounds, and whether the buyer receives reproduction rights.",
+    "definition": "An artwork commission agreement is a contract in which a client orders a custom creative work from an artist, detailing specifications, milestones, payment, and ownership of the final piece and reproduction rights.",
+    "keyClauses": [
+      "Description of artwork, medium, dimensions, and references",
+      "Concept/sketch approval and revision limits",
+      "Deposit, progress payments, and final balance",
+      "Delivery timeline and shipping or digital transfer",
+      "Copyright and reproduction rights allocation",
+      "Cancellation refunds and kill fees"
+    ],
+    "fillInFields": [
+      "[Artist Name]",
+      "[Commissioner Name]",
+      "[Artwork Description]",
+      "[Dimensions/Medium]",
+      "[Total Commission Fee]",
+      "[Delivery Date]",
+      "[Revision Rounds Included]"
+    ],
+    "legalSummary": "The artist commits to creating the described work; the commissioner pays on the agreed schedule and receives ownership or license as specified. Until final payment, the artist typically retains the work and may withhold delivery.",
+    "chatgptPrompts": [
+      "Generate an Artwork Commission Agreement for a book cover illustration with two revision rounds.",
+      "Explain who owns commercial reproduction rights if the commissioner plans to sell prints.",
+      "Adapt payment terms for 50% deposit and 50% on final PNG delivery."
+    ],
+    "signerLabels": [
+      "Artist",
+      "Commissioner"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "website-maintenance-agreement",
+    "name": "Website Maintenance Agreement",
+    "seoTitle": "Free Website Maintenance Agreement Template",
+    "description": "Ongoing updates, security patches, backups, and support hours for an existing client website.",
+    "useCase": "Use this after a site launch when a client needs monthly CMS updates, plugin patches, uptime monitoring, or small content changes. It keeps maintenance separate from new feature development billed under a different SOW.",
+    "definition": "A website maintenance agreement is a recurring services contract in which a provider performs defined upkeep tasks on a client's live website for a fixed period or retainer fee.",
+    "keyClauses": [
+      "Sites covered and environments (production, staging)",
+      "Included tasks: updates, backups, monitoring, minor edits",
+      "Response times and monthly hour caps",
+      "Exclusions for redesigns and new features",
+      "Monthly or annual fee and auto-renewal",
+      "Access credentials and security responsibilities"
+    ],
+    "fillInFields": [
+      "[Provider Name]",
+      "[Client Name]",
+      "[Website URL(s)]",
+      "[Monthly Retainer Fee]",
+      "[Included Hours per Month]",
+      "[Response Time SLA]",
+      "[Term and Renewal]"
+    ],
+    "legalSummary": "The provider performs routine upkeep within the retainer scope; work outside scope requires separate approval and billing. The client must maintain hosting accounts and provide timely access for the provider to meet SLA commitments.",
+    "chatgptPrompts": [
+      "Fill this Website Maintenance Agreement for a WordPress site with 5 hours/month and 24-hour response.",
+      "List typical exclusions I should add before offering unlimited content edits.",
+      "Adapt this for quarterly maintenance on a static marketing site instead of monthly."
+    ],
+    "signerLabels": [
+      "Client",
+      "Provider"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "saas-subscription-agreement",
+    "name": "SaaS Subscription Agreement",
+    "seoTitle": "Free SaaS Subscription Agreement Template",
+    "description": "Terms for cloud software access: plan tier, billing cycle, data handling, uptime, and cancellation.",
+    "useCase": "Use this when a B2B SaaS vendor sells recurring online access rather than a perpetual license. It sets auto-renewal, user seat limits, and what happens to customer data on termination.",
+    "definition": "A SaaS subscription agreement is a contract granting a customer time-limited access to hosted software in exchange for recurring fees, subject to acceptable use and service levels.",
+    "keyClauses": [
+      "Subscription plan, seats, and feature tier",
+      "Billing frequency, taxes, and price changes",
+      "Acceptable use and account security",
+      "Service availability and support channels",
+      "Customer data ownership and deletion on exit",
+      "Renewal, cancellation notice, and refunds"
+    ],
+    "fillInFields": [
+      "[Provider Name]",
+      "[Customer Name]",
+      "[Plan Name and Seats]",
+      "[Monthly/Annual Fee]",
+      "[Start Date]",
+      "[Billing Contact]",
+      "[Data Retention Period After Termination]"
+    ],
+    "legalSummary": "The customer receives a limited right to use the service while fees are current; the provider retains the platform and may suspend for non-payment or abuse. Upon termination, access ends and data export/deletion follows the stated policy.",
+    "chatgptPrompts": [
+      "Fill this SaaS Subscription Agreement for a 10-seat annual CRM plan with 30-day data export.",
+      "Explain auto-renewal notice requirements before I use this with California customers.",
+      "Add an SLA credit table for 99.9% monthly uptime."
+    ],
+    "signerLabels": [
+      "Provider",
+      "Customer"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "settlement-agreement",
+    "name": "Settlement Agreement",
+    "seoTitle": "Free Settlement Agreement Template",
+    "description": "Resolves a dispute with mutual releases, payment terms, and confidentiality between parties.",
+    "useCase": "Use this when two parties want to settle a pending or threatened claim without admitting liability. It typically exchanges payment or performance for a full mutual release and nondisparagement.",
+    "definition": "A settlement agreement is a contract in which disputing parties define consideration and mutual releases to resolve specified claims without further litigation.",
+    "keyClauses": [
+      "Recitals describing the underlying dispute",
+      "Settlement payment or performance obligations",
+      "Mutual release of claims through a defined date",
+      "Confidentiality and nondisparagement",
+      "No admission of fault",
+      "Governing law and dispute resolution for breach"
+    ],
+    "fillInFields": [
+      "[Party A Name]",
+      "[Party B Name]",
+      "[Dispute Description]",
+      "[Settlement Amount]",
+      "[Payment Deadline]",
+      "[Release Effective Date]",
+      "[Governing State/Jurisdiction]"
+    ],
+    "legalSummary": "Each party gives up listed claims in exchange for the agreed consideration; breaching payment or confidentiality may revive certain remedies. Signing is binding only if both parties sign and consideration is delivered.",
+    "chatgptPrompts": [
+      "Generate a Settlement Agreement for an unpaid invoice dispute with a lump-sum payment in 30 days.",
+      "Explain whether a general release covers future unknown claims in this template.",
+      "Adapt for installment payments tied to continued confidentiality."
+    ],
+    "signerLabels": [
+      "Party A",
+      "Party B"
+    ],
+    "archetype": "corporateGovernance"
+  },
+  {
+    "slug": "internship-agreement",
+    "name": "Internship Agreement",
+    "seoTitle": "Free Internship Agreement Template",
+    "description": "Defines intern role, learning objectives, schedule, supervision, and paid or academic-credit terms.",
+    "useCase": "Use this when a company brings on a student or career-switcher intern for a fixed program with defined learning goals. It documents that the role is educational and sets IP and confidentiality expectations.",
+    "definition": "An internship agreement is a written arrangement between an organization and an intern describing the training role, duration, compensation or credit, and workplace policies.",
+    "keyClauses": [
+      "Intern title, department, and supervisor",
+      "Learning objectives and training activities",
+      "Schedule, duration, and at-will status",
+      "Compensation, stipend, or academic credit coordination",
+      "Confidentiality and work-product ownership",
+      "Conduct standards and termination"
+    ],
+    "fillInFields": [
+      "[Company Name]",
+      "[Intern Name]",
+      "[Internship Title]",
+      "[Start and End Dates]",
+      "[Supervisor Name]",
+      "[Stipend or Hourly Rate]",
+      "[School/Program if for Credit]"
+    ],
+    "legalSummary": "The intern receives training and supervision in exchange for agreed compensation or credit; the company owns work product created in the role unless otherwise stated. Either party may end the internship according to its at-will or notice terms.",
+    "chatgptPrompts": [
+      "Fill this Internship Agreement for a 12-week paid marketing intern at $20/hour.",
+      "Add language coordinating with a university for academic credit verification.",
+      "Explain intern vs employee classification risks before we publish this program."
+    ],
+    "signerLabels": [
+      "Company",
+      "Intern"
+    ],
+    "recurringCategory": "Employment",
+    "archetype": "employmentDoc"
+  },
+  {
+    "slug": "convertible-note-term-sheet",
+    "name": "Convertible Note Term Sheet",
+    "seoTitle": "Free Convertible Note Term Sheet Template",
+    "description": "Non-binding summary of key convertible debt terms before drafting the full note and purchase agreement.",
+    "useCase": "Use this when a startup and angel investors agree on headline terms for a convertible note round before counsel drafts definitive documents. It covers cap, discount, interest, maturity, and qualified financing triggers.",
+    "definition": "A convertible note term sheet is a preliminary document outlining principal economic and conversion terms for a convertible loan investment, typically non-binding except for exclusivity or confidentiality.",
+    "keyClauses": [
+      "Principal amount and investor allocation",
+      "Interest rate and maturity date",
+      "Valuation cap and/or discount on conversion",
+      "Qualified financing threshold triggering conversion",
+      "Change-of-control and repayment treatment",
+      "Most-favored-nation and pro rata rights if any"
+    ],
+    "fillInFields": [
+      "[Company Name]",
+      "[Lead Investor Name]",
+      "[Total Round Size]",
+      "[Valuation Cap]",
+      "[Discount Rate]",
+      "[Interest Rate]",
+      "[Maturity Date]"
+    ],
+    "legalSummary": "Signing a term sheet signals intent to invest on stated terms but usually does not obligate funding until definitive documents close. Investors should treat cap and discount mechanics as binding only in the final note.",
+    "chatgptPrompts": [
+      "Fill this Convertible Note Term Sheet for a $500K round with a $6M cap and 20% discount.",
+      "Compare maturity extension vs automatic conversion on qualified financing.",
+      "Add an exclusivity clause expiring in 45 days."
+    ],
+    "signerLabels": [
+      "Company",
+      "Investor"
+    ],
+    "recurringCategory": "Funding",
+    "archetype": "corporateGovernance"
+  },
+  {
+    "slug": "partnership-dissolution-agreement",
+    "name": "Partnership Dissolution Agreement",
+    "seoTitle": "Free Partnership Dissolution Agreement Template",
+    "description": "Winds up a business partnership: asset division, liabilities, client transition, and releases.",
+    "useCase": "Use this when co-owners of a partnership or small firm agree to shut down or split without litigation. It assigns accounts, pays creditors, and releases each partner from future partnership obligations.",
+    "definition": "A partnership dissolution agreement is a contract that sets the process and terms for ending a partnership, dividing assets and liabilities, and releasing partners from ongoing joint duties.",
+    "keyClauses": [
+      "Effective dissolution date and public notice plan",
+      "Asset and client list allocation",
+      "Assumption and payment of outstanding liabilities",
+      "Partner buyout or capital account settlement",
+      "Tax filing and regulatory wind-down responsibilities",
+      "Mutual release of partnership claims"
+    ],
+    "fillInFields": [
+      "[Partnership Name]",
+      "[Partner A Name]",
+      "[Partner B Name]",
+      "[Dissolution Date]",
+      "[Asset Division Summary]",
+      "[Debt Responsibility Split]",
+      "[Client Transition Contact]"
+    ],
+    "legalSummary": "Partners agree how to liquidate or divide the business and who pays remaining debts; third-party creditors may still pursue liable partners if not paid. Releases bind only the signing partners, not outside claimants.",
+    "chatgptPrompts": [
+      "Generate a Partnership Dissolution Agreement for a two-partner consulting firm splitting client lists 50/50.",
+      "Explain how to handle a shared lease that runs six months past dissolution.",
+      "Add a non-compete carve-out allowing each partner to keep their own book of business."
+    ],
+    "signerLabels": [
+      "Partner A",
+      "Partner B"
+    ],
+    "recurringCategory": "Incorporation",
+    "archetype": "corporateGovernance"
+  },
+  {
+    "slug": "master-services-agreement",
+    "name": "Master Services Agreement",
+    "seoTitle": "Free Master Services Agreement (MSA) Template",
+    "description": "Framework contract for ongoing vendor work with separate statements of work for each project.",
+    "useCase": "Use this when a company expects multiple projects from the same agency or consultant over time. The MSA sets global legal terms while each SOW defines scope and fees for individual engagements.",
+    "definition": "A master services agreement is an umbrella contract establishing standard legal and commercial terms between a client and service provider, with project specifics added in statements of work.",
+    "keyClauses": [
+      "Relationship of parties and order of precedence (MSA vs SOW)",
+      "Intellectual property and work-product ownership",
+      "Confidentiality and data security baseline",
+      "Warranties, indemnities, and limitation of liability",
+      "Payment, invoicing, and dispute process",
+      "Term, termination, and survival of key clauses"
+    ],
+    "fillInFields": [
+      "[Client Name]",
+      "[Service Provider Name]",
+      "[Effective Date]",
+      "[Governing Law State]",
+      "[Standard Payment Terms]",
+      "[Insurance Requirements]",
+      "[Primary SOW Reference if Any]"
+    ],
+    "legalSummary": "The MSA governs all future SOWs unless a SOW explicitly overrides a specific term. Signing does not obligate either party to any project until a SOW is executed.",
+    "chatgptPrompts": [
+      "Fill this Master Services Agreement for a digital agency serving a SaaS client under Delaware law.",
+      "Explain how IP ownership works when multiple SOWs deliver related codebases.",
+      "Add a liability cap at 12 months of fees paid under the MSA."
+    ],
+    "signerLabels": [
+      "Client",
+      "Service Provider"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "video-production-agreement",
+    "name": "Video Production Agreement",
+    "seoTitle": "Free Video Production Agreement Template",
+    "description": "Covers pre-production through delivery: concept, shoot days, edits, revisions, and usage rights.",
+    "useCase": "Use this when a production company or freelancer creates a commercial, training, or brand video for a client. It separates production fees from music licensing and specifies who clears talent releases.",
+    "definition": "A video production agreement is a services contract in which a producer plans, shoots, and edits audiovisual content for a client under defined creative and delivery specifications.",
+    "keyClauses": [
+      "Project concept, runtime, and deliverable formats",
+      "Production schedule, shoot days, and locations",
+      "Client approval points and included revision rounds",
+      "Fees, expenses, and change-order process",
+      "Talent, location, and music clearance responsibilities",
+      "Usage license and raw footage ownership"
+    ],
+    "fillInFields": [
+      "[Producer/Company Name]",
+      "[Client Name]",
+      "[Video Title/Purpose]",
+      "[Deliverable Length and Format]",
+      "[Production Fee]",
+      "[Shoot Date(s)]",
+      "[Revision Rounds Included]"
+    ],
+    "legalSummary": "The producer delivers the agreed video on schedule; the client pays fees and provides timely approvals. Usage rights for the final master are granted as specified; uncleared third-party content remains the clearing party's responsibility.",
+    "chatgptPrompts": [
+      "Generate a Video Production Agreement for a 90-second product launch video with two edit rounds.",
+      "Clarify who obtains signed talent releases for extras on a corporate shoot.",
+      "Adapt deliverables for vertical social cuts in addition to the master 16:9 file."
+    ],
+    "signerLabels": [
+      "Producer",
+      "Client"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "royalty-split-agreement",
+    "name": "Royalty Split Agreement",
+    "seoTitle": "Free Royalty Split Agreement Template",
+    "description": "Allocates revenue shares among collaborators on a song, product, or creative project.",
+    "useCase": "Use this when band members, co-writers, or product co-creators agree on percentage splits before release. It defines what revenue counts, how often accounting runs, and audit rights.",
+    "definition": "A royalty split agreement is a contract that assigns each contributor's percentage share of defined revenues from a specified creative work or product.",
+    "keyClauses": [
+      "Identification of work or product covered",
+      "Participant names and ownership percentages totaling 100%",
+      "Revenue streams included (streaming, sync, merch, etc.)",
+      "Collection agent or distributor and payment schedule",
+      "Expense recoupment order if applicable",
+      "Audit rights and dispute resolution"
+    ],
+    "fillInFields": [
+      "[Project/Work Title]",
+      "[Participant A Name and %]",
+      "[Participant B Name and %]",
+      "[Additional Participants if Any]",
+      "[Revenue Sources Covered]",
+      "[Payment Frequency]",
+      "[Effective Date]"
+    ],
+    "legalSummary": "Each participant is entitled to their share of defined net or gross revenue as reported by the collecting party. Misreporting or failure to pay can trigger audit rights and breach remedies.",
+    "chatgptPrompts": [
+      "Fill this Royalty Split Agreement for two songwriters at 50/50 on streaming and sync income.",
+      "Explain recoupment language if one participant fronted production costs.",
+      "Add a third collaborator at 15% without rewriting the whole split table."
+    ],
+    "signerLabels": [
+      "Participant A",
+      "Participant B"
+    ],
+    "recurringCategory": "Intellectual Property",
+    "archetype": "ipLicense"
+  },
+  {
+    "slug": "commission-sales-agreement",
+    "name": "Commission Sales Agreement",
+    "seoTitle": "Free Commission Sales Agreement Template",
+    "description": "Pays an independent sales agent on closed deals with defined commission rates and chargeback rules.",
+    "useCase": "Use this when a company hires a 1099 sales rep or broker paid only on results, not salary. It defines what counts as a qualified lead, when commission vests, and clawbacks on cancellations.",
+    "definition": "A commission sales agreement is a contract in which a principal agrees to pay an agent a percentage or fixed fee for sales or introductions that meet defined qualification criteria.",
+    "keyClauses": [
+      "Products or services eligible for commission",
+      "Commission rate, tiers, and payment timing",
+      "Lead registration and conflict rules",
+      "Clawbacks on refunds or churn within a window",
+      "Independent contractor status",
+      "Term and exclusivity or territory if any"
+    ],
+    "fillInFields": [
+      "[Company Name]",
+      "[Sales Agent Name]",
+      "[Commission Rate]",
+      "[Qualified Sale Definition]",
+      "[Payment Schedule]",
+      "[Territory or Account List]",
+      "[Agreement Term]"
+    ],
+    "legalSummary": "The agent earns commission only on sales that meet the contract's qualification and documentation rules. The company may recoup commissions on reversed transactions during the stated clawback period.",
+    "chatgptPrompts": [
+      "Fill this Commission Sales Agreement for 10% on net new SaaS contracts closed by the agent.",
+      "Add lead registration rules to prevent disputes with an inside sales team.",
+      "Explain clawback period tradeoffs for annual subscriptions paid upfront."
+    ],
+    "signerLabels": [
+      "Company",
+      "Sales Agent"
+    ],
+    "recurringCategory": "Sale and Purchase",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "seo-services-agreement",
+    "name": "SEO Services Agreement",
+    "seoTitle": "Free SEO Services Agreement Template",
+    "description": "Monthly search optimization scope: audits, keywords, content, reporting, and no-guarantee disclaimer.",
+    "useCase": "Use this when an agency retains a client for ongoing SEO rather than a one-time audit. It sets deliverables like technical fixes and content briefs while disclaiming guaranteed rankings.",
+    "definition": "An SEO services agreement is a marketing services contract in which a provider performs search engine optimization tasks for a client website over a defined period.",
+    "keyClauses": [
+      "Target site(s) and baseline audit deliverable",
+      "Monthly activities: technical, on-page, and content support",
+      "Reporting metrics and meeting cadence",
+      "Client access and approval responsibilities",
+      "No guarantee of specific rankings or traffic",
+      "Term, fee, and termination with notice"
+    ],
+    "fillInFields": [
+      "[Agency Name]",
+      "[Client Name]",
+      "[Website URL]",
+      "[Monthly Retainer Fee]",
+      "[Monthly Deliverables Summary]",
+      "[Contract Term]",
+      "[Analytics Access Requirements]"
+    ],
+    "legalSummary": "The agency performs agreed optimization work professionally; search algorithms are outside its control so results are not guaranteed. The client must provide CMS and analytics access needed to execute the plan.",
+    "chatgptPrompts": [
+      "Generate an SEO Services Agreement for a local law firm site at $2,500/month for six months.",
+      "Add language clarifying the client owns all content created under the contract.",
+      "List reasonable KPIs to include in monthly reports without guaranteeing rankings."
+    ],
+    "signerLabels": [
+      "Agency",
+      "Client"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "branding-agreement",
+    "name": "Branding Agreement",
+    "seoTitle": "Free Branding Agreement Template",
+    "description": "Logo, identity system, and brand guidelines project with milestones and trademark handoff notes.",
+    "useCase": "Use this when a brand strategist or studio delivers naming, visual identity, and style guides for a new company rebrand. It is broader than a single logo contract and covers discovery workshops and guideline delivery.",
+    "definition": "A branding agreement is a creative services contract for developing a cohesive brand identity—including visual assets and usage rules—for a client's business.",
+    "keyClauses": [
+      "Discovery phase and brand strategy deliverables",
+      "Logo, color, typography, and collateral scope",
+      "Revision rounds and approval milestones",
+      "Final brand guidelines document",
+      "Ownership transfer upon payment and trademark search disclaimer",
+      "Exclusions such as website build or ad production"
+    ],
+    "fillInFields": [
+      "[Brand Studio Name]",
+      "[Client Name]",
+      "[Project Name]",
+      "[Deliverables List]",
+      "[Total Project Fee]",
+      "[Timeline/Milestones]",
+      "[Revision Rounds]"
+    ],
+    "legalSummary": "The studio creates and delivers the brand system; the client pays per milestone and receives ownership of final approved assets after full payment. Trademark registrability is not guaranteed and may require separate legal review.",
+    "chatgptPrompts": [
+      "Fill this Branding Agreement for a startup rebrand with strategy, logo, and 20-page guidelines.",
+      "Explain ownership if the client rejects concepts after two rounds but uses ideas internally.",
+      "Add optional trademark filing support as an out-of-scope add-on."
+    ],
+    "signerLabels": [
+      "Studio",
+      "Client"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "voting-agreement",
+    "name": "Voting Agreement",
+    "seoTitle": "Free Voting Agreement Template",
+    "description": "Shareholders agree to vote shares together on board seats, sales, or major corporate actions.",
+    "useCase": "Use this when co-founders or investors want aligned votes on director elections or acquisition approval. It often pairs with a shareholders' agreement in early-stage companies.",
+    "definition": "A voting agreement is a contract among shareholders obligating them to vote their shares in specified ways on defined corporate matters for a set period.",
+    "keyClauses": [
+      "Parties and shares subject to the agreement",
+      "Matters covered (board election, sale, financing)",
+      "Required vote alignment and proxy mechanics",
+      "Drag-along or tag-along cross-references if any",
+      "Term and termination on IPO or mutual consent",
+      "Remedies for breach including injunction"
+    ],
+    "fillInFields": [
+      "[Company Name]",
+      "[Shareholder A Name]",
+      "[Shareholder B Name]",
+      "[Shares Covered]",
+      "[Voting Matters Covered]",
+      "[Term End Date]",
+      "[Governing State]"
+    ],
+    "legalSummary": "Signers commit to vote as agreed while the agreement is in effect; breaking the vote pact may expose a party to contractual damages or court-ordered compliance. It does not by itself transfer economic ownership of shares.",
+    "chatgptPrompts": [
+      "Generate a Voting Agreement for three founders voting as a block on board seats.",
+      "Explain interaction with a separate drag-along provision in a stockholders agreement.",
+      "Adapt for investors who agree to vote with the lead investor on a sale."
+    ],
+    "signerLabels": [
+      "Shareholder A",
+      "Shareholder B"
+    ],
+    "recurringCategory": "Equity",
+    "archetype": "corporateGovernance"
+  },
+  {
+    "slug": "monitoring-agreement",
+    "name": "Monitoring Agreement",
+    "seoTitle": "Free Monitoring Agreement Template",
+    "description": "Remote health, security, or compliance monitoring service terms with alerts and data retention.",
+    "useCase": "Use this when a clinic, property manager, or IT vendor provides ongoing sensor or log monitoring with escalation protocols. It defines what triggers alerts, who responds, and how long data is stored.",
+    "definition": "A monitoring agreement is a services contract in which a provider continuously observes specified systems or metrics and notifies the client when thresholds are breached.",
+    "keyClauses": [
+      "Systems, devices, or metrics monitored",
+      "Monitoring hours and alert channels",
+      "Response tiers and escalation contacts",
+      "Data collection, privacy, and retention",
+      "Fees, SLAs, and excluded on-site work",
+      "Term, termination, and equipment return"
+    ],
+    "fillInFields": [
+      "[Monitoring Provider Name]",
+      "[Client Name]",
+      "[Monitored Assets Description]",
+      "[Alert Thresholds Summary]",
+      "[Monthly Fee]",
+      "[Data Retention Period]",
+      "[Primary On-Call Contact]"
+    ],
+    "legalSummary": "The provider watches agreed signals and notifies the client per SLA; on-site remediation is typically excluded unless added. The client grants access needed for monitoring and remains responsible for acting on alerts.",
+    "chatgptPrompts": [
+      "Fill this Monitoring Agreement for 24/7 server uptime monitoring with email and SMS alerts.",
+      "Add HIPAA-oriented data handling language for a remote patient device feed.",
+      "Clarify liability limits if an alert is delayed due to third-party carrier outage."
+    ],
+    "signerLabels": [
+      "Provider",
+      "Client"
+    ],
+    "recurringCategory": "Compliance Documents",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "dropshipping-agreement",
+    "name": "Dropshipping Agreement",
+    "seoTitle": "Free Dropshipping Agreement Template",
+    "description": "Supplier fulfills orders shipped directly to the retailer's customers with branding and return rules.",
+    "useCase": "Use this when an e-commerce seller sources products from a supplier who ships blind to end buyers. It covers SKU lists, MAP pricing, defective returns, and who handles customer service.",
+    "definition": "A dropshipping agreement is a supply arrangement in which a supplier ships products directly to a retailer's customers while the retailer markets and sells the goods.",
+    "keyClauses": [
+      "Product catalog, SKUs, and wholesale pricing",
+      "Order transmission and fulfillment SLAs",
+      "Blind shipping and packaging/branding rules",
+      "Inventory updates and out-of-stock procedure",
+      "Returns, defects, and chargeback allocation",
+      "Term, exclusivity, and termination notice"
+    ],
+    "fillInFields": [
+      "[Supplier Name]",
+      "[Retailer Name]",
+      "[Product Categories Covered]",
+      "[Wholesale Price List Reference]",
+      "[Fulfillment SLA]",
+      "[Return Window]",
+      "[Effective Date]"
+    ],
+    "legalSummary": "The retailer sells; the supplier ships directly to buyers under agreed packaging and timing. Each party handles the customer-facing obligations assigned to them, including refunds for defective goods per the return policy.",
+    "chatgptPrompts": [
+      "Generate a Dropshipping Agreement for a Shopify store sourcing home goods from a US warehouse.",
+      "Add MAP pricing enforcement for branded products sold online.",
+      "Explain who owns customer data collected at checkout."
+    ],
+    "signerLabels": [
+      "Supplier",
+      "Retailer"
+    ],
+    "recurringCategory": "Sale and Purchase",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "affiliate-marketing-agreement",
+    "name": "Affiliate Marketing Agreement",
+    "seoTitle": "Free Affiliate Marketing Agreement Template",
+    "description": "Affiliates promote products for commission with tracking links, disclosure, and brand use rules.",
+    "useCase": "Use this when a merchant launches an affiliate program through bloggers, creators, or coupon sites. It requires FTC disclosure, prohibits trademark bidding, and sets cookie window and payout thresholds.",
+    "definition": "An affiliate marketing agreement is a contract in which a merchant authorizes affiliates to promote its products in exchange for commission on tracked sales or leads.",
+    "keyClauses": [
+      "Commission structure and qualifying actions",
+      "Tracking method, cookie duration, and reporting",
+      "FTC disclosure and promotional content standards",
+      "Trademark and paid-search bidding restrictions",
+      "Prohibited traffic sources (spam, incentivized)",
+      "Term, termination, and final payment settlement"
+    ],
+    "fillInFields": [
+      "[Merchant Name]",
+      "[Affiliate Name]",
+      "[Commission Rate]",
+      "[Cookie/Attribution Window]",
+      "[Payout Threshold and Schedule]",
+      "[Promotional Methods Allowed]",
+      "[Agreement Term]"
+    ],
+    "legalSummary": "Affiliates may earn commissions on properly tracked conversions while following brand and disclosure rules. Violations such as cookie stuffing or misleading ads can terminate the relationship and forfeit unpaid commissions.",
+    "chatgptPrompts": [
+      "Fill this Affiliate Marketing Agreement for 15% commission on referred SaaS subscriptions with 60-day cookie.",
+      "Add clear FTC disclosure examples affiliates must use in blog posts.",
+      "Prohibit trademark keyword bidding on Google Ads in this agreement."
+    ],
+    "signerLabels": [
+      "Merchant",
+      "Affiliate"
+    ],
+    "recurringCategory": "Sale and Purchase",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "sponsorship-agreement",
+    "name": "Sponsorship Agreement",
+    "seoTitle": "Free Sponsorship Agreement Template",
+    "description": "Event or content sponsor benefits, logo placement, deliverables, and exclusivity category.",
+    "useCase": "Use this when a conference, podcast, or sports team sells named sponsorship tiers with specific benefits. It lists impressions, booth space, speaking slots, and approval rights over co-branding.",
+    "definition": "A sponsorship agreement is a contract in which a sponsor pays for promotional association with an event, property, or content in exchange for defined marketing benefits.",
+    "keyClauses": [
+      "Sponsored property or event description",
+      "Sponsor tier, fee, and payment schedule",
+      "Logo placement, mentions, and deliverable list",
+      "Category exclusivity and competitor restrictions",
+      "Content approval and brand guidelines",
+      "Cancellation, force majeure, and make-good media"
+    ],
+    "fillInFields": [
+      "[Organizer Name]",
+      "[Sponsor Name]",
+      "[Event/Property Name]",
+      "[Sponsorship Level]",
+      "[Sponsorship Fee]",
+      "[Benefits Checklist]",
+      "[Event Date(s)]"
+    ],
+    "legalSummary": "The organizer delivers promised exposure and benefits; the sponsor pays on schedule and complies with brand usage rules. If the event is canceled, make-good or refund terms control the outcome.",
+    "chatgptPrompts": [
+      "Generate a Sponsorship Agreement for a podcast season gold tier at $25,000 with four ad reads.",
+      "Add category exclusivity for fintech sponsors only.",
+      "Adapt benefits for a virtual conference without physical booth space."
+    ],
+    "signerLabels": [
+      "Organizer",
+      "Sponsor"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "endorsement-agreement",
+    "name": "Endorsement Agreement",
+    "seoTitle": "Free Endorsement Agreement Template",
+    "description": "Talent or expert promotes a brand with approved scripts, usage term, and morals clause.",
+    "useCase": "Use this when a company pays a public figure or niche expert to endorse a product in ads or social posts. It controls approval of copy, image rights, and what happens if the talent faces reputational issues.",
+    "definition": "An endorsement agreement is a contract in which a personality grants a brand the right to use their name, likeness, and statements to promote products or services for a fee.",
+    "keyClauses": [
+      "Endorser identity and brand/product covered",
+      "Deliverables: ads, posts, appearances, or scripts",
+      "Compensation and usage period/media",
+      "Content approval and FTC disclosure duties",
+      "Exclusivity in product category",
+      "Morals, termination, and takedown on breach"
+    ],
+    "fillInFields": [
+      "[Brand Name]",
+      "[Endorser Name]",
+      "[Product/Service Endorsed]",
+      "[Deliverables and Timeline]",
+      "[Fee]",
+      "[Usage Term and Media]",
+      "[Exclusivity Category]"
+    ],
+    "legalSummary": "The endorser creates or approves promotional content; the brand receives a limited license to use it during the term. Either party may terminate for material breach or morals events as defined, with takedown obligations.",
+    "chatgptPrompts": [
+      "Fill this Endorsement Agreement for a fitness influencer promoting a protein brand for six months.",
+      "Add FTC-compliant disclosure language the endorser must include in each post.",
+      "Explain morals clause triggers before signing a celebrity talent."
+    ],
+    "signerLabels": [
+      "Brand",
+      "Endorser"
+    ],
+    "recurringCategory": "Intellectual Property",
+    "archetype": "ipLicense"
+  },
+  {
+    "slug": "ghostwriting-agreement",
+    "name": "Ghostwriting Agreement",
+    "seoTitle": "Free Ghostwriting Agreement Template",
+    "description": "Writer creates content credited to the client with confidentiality and work-for-hire ownership.",
+    "useCase": "Use this when an executive, founder, or creator hires a writer for a book, blog, or speech published under the client's name. It assigns copyright to the client and requires the writer to stay anonymous.",
+    "definition": "A ghostwriting agreement is a contract in which a writer produces literary or spoken content for a client who will be credited as the author, typically with full ownership transferring to the client.",
+    "keyClauses": [
+      "Project description, length, and format",
+      "Research interviews and client input obligations",
+      "Draft schedule and revision rounds",
+      "Ghostwriter anonymity and confidentiality",
+      "Work-made-for-hire or copyright assignment",
+      "Kill fee and termination payment"
+    ],
+    "fillInFields": [
+      "[Client Name]",
+      "[Ghostwriter Name]",
+      "[Work Title/Subject]",
+      "[Approximate Word Count or Length]",
+      "[Delivery Milestones]",
+      "[Total Fee]",
+      "[Credit Arrangement (None/Pseudonym)]"
+    ],
+    "legalSummary": "The client owns the finished work and receives sole credit; the writer is paid per milestone and may not publicly claim authorship without permission. Confidential information learned during research must stay private.",
+    "chatgptPrompts": [
+      "Generate a Ghostwriting Agreement for a 60,000-word business memoir with three draft milestones.",
+      "Clarify ownership of unused interview transcripts and research notes.",
+      "Add a kill fee if the client cancels after the outline is approved."
+    ],
+    "signerLabels": [
+      "Client",
+      "Ghostwriter"
+    ],
+    "recurringCategory": "Intellectual Property",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "translation-services-agreement",
+    "name": "Translation Services Agreement",
+    "seoTitle": "Free Translation Services Agreement Template",
+    "description": "Professional translation of documents with deadlines, review rounds, confidentiality, and ownership of the translated text.",
+    "useCase": "Use this when a company hires a linguist or agency to translate contracts, manuals, or marketing copy into another language. It sets word-count pricing, glossary use, and who certifies accuracy for regulated content.",
+    "definition": "A translation services agreement is a contract in which a translator converts written materials from a source language to a target language according to agreed quality standards and delivery dates.",
+    "keyClauses": [
+      "Languages, document list, and word-count basis",
+      "Delivery schedule and rush-fee triggers",
+      "Accuracy standard and client review window",
+      "Confidentiality of source files",
+      "Ownership of translated output",
+      "Payment terms and cancellation"
+    ],
+    "fillInFields": [
+      "[Translator/Agency]",
+      "[Client]",
+      "[Source Language]",
+      "[Target Language]",
+      "[Documents Description]",
+      "[Word Count/Fee]",
+      "[Delivery Date]",
+      "[Governing Law]"
+    ],
+    "legalSummary": "The translator delivers faithful translations by the deadline; the client pays per agreed rates and typically owns the translated text for its business use. Specialized terminology may require client-provided glossaries for accuracy.",
+    "chatgptPrompts": [
+      "Fill this Translation Services Agreement for 8,000 words EN→ES product documentation.",
+      "Add a second review pass for FDA-regulated labeling language.",
+      "Explain rush fees for 48-hour turnaround on a legal contract."
+    ],
+    "signerLabels": [
+      "Translator",
+      "Client"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "social-media-management-agreement",
+    "name": "Social Media Management Agreement",
+    "seoTitle": "Free Social Media Management Agreement Template",
+    "description": "Agency manages client social accounts: content calendar, posting, community replies, and monthly analytics.",
+    "useCase": "Use this when a marketing agency runs a client's LinkedIn, Instagram, or X presence on retainer. It defines approval workflow, ad-boost authorization, and credential ownership on exit.",
+    "definition": "A social media management agreement is a services contract in which a provider plans, publishes, and monitors branded content on specified social platforms for a client.",
+    "keyClauses": [
+      "Platforms and account access method",
+      "Content calendar and approval SLA",
+      "Community management and escalation",
+      "Paid boost/ad spend authorization",
+      "Monthly reporting metrics",
+      "Term, fee, and credential handback"
+    ],
+    "fillInFields": [
+      "[Agency]",
+      "[Client]",
+      "[Platforms Managed]",
+      "[Monthly Retainer]",
+      "[Posts per Month]",
+      "[Approval Turnaround]",
+      "[Contract Term]"
+    ],
+    "legalSummary": "The agency operates accounts per the approved calendar; the client retains brand ownership and final say on published content. On termination, login credentials and source assets return to the client.",
+    "chatgptPrompts": [
+      "Generate this agreement for LinkedIn+Instagram at $3,000/month.",
+      "Add rules for handling negative comments and PR escalation.",
+      "Clarify ownership of photo/video assets created for posts."
+    ],
+    "signerLabels": [
+      "Agency",
+      "Client"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "content-licensing-agreement",
+    "name": "Content Licensing Agreement",
+    "seoTitle": "Free Content Licensing Agreement Template",
+    "description": "Grants limited rights to reuse articles, photos, or video clips without transferring full copyright.",
+    "useCase": "Use this when a publisher or creator licenses blog posts, stock imagery, or footage to a third party for marketing or syndication. It scopes media, territory, exclusivity, and duration.",
+    "definition": "A content licensing agreement is a copyright license permitting defined uses of creative content in exchange for a fee while the licensor retains ownership.",
+    "keyClauses": [
+      "Content identification and format",
+      "Permitted uses, media, and audience",
+      "Exclusivity, territory, and term",
+      "Fees and attribution requirements",
+      "Quality and editing restrictions",
+      "Breach and takedown remedies"
+    ],
+    "fillInFields": [
+      "[Licensor]",
+      "[Licensee]",
+      "[Content Description]",
+      "[Licensed Uses]",
+      "[Territory]",
+      "[License Term]",
+      "[Fee]"
+    ],
+    "legalSummary": "The licensee may use content only within the licensed scope; all other rights stay with the licensor. Overuse or failure to pay can terminate the license and create infringement exposure.",
+    "chatgptPrompts": [
+      "License a blog article bundle for 12-month worldwide digital marketing use.",
+      "Explain exclusivity impact on the licensor's own channels.",
+      "Adapt for video clip snippets in paid social ads only."
+    ],
+    "signerLabels": [
+      "Licensor",
+      "Licensee"
+    ],
+    "recurringCategory": "Intellectual Property",
+    "archetype": "ipLicense"
+  },
+  {
+    "slug": "podcast-production-agreement",
+    "name": "Podcast Production Agreement",
+    "seoTitle": "Free Podcast Production Agreement Template",
+    "description": "Covers recording, editing, show notes, and delivery cadence for a client-hosted podcast.",
+    "useCase": "Use this when a production shop handles audio editing and publishing workflow for a founder or brand podcast. It separates production from host talent contracts and ad sales.",
+    "definition": "A podcast production agreement is a services contract in which a producer records, edits, and prepares podcast episodes according to an agreed format and release schedule.",
+    "keyClauses": [
+      "Show format, length, and episode count",
+      "Recording logistics and file delivery",
+      "Editing, mixing, and intro/outro assets",
+      "Show notes and transcript scope",
+      "Revision rounds and approval",
+      "Fees, schedule, and IP in finished episodes"
+    ],
+    "fillInFields": [
+      "[Producer]",
+      "[Client/Host]",
+      "[Podcast Title]",
+      "[Episodes per Month]",
+      "[Fee per Episode or Retainer]",
+      "[Distribution Platforms]",
+      "[Start Date]"
+    ],
+    "legalSummary": "The producer delivers broadcast-ready episodes on schedule; the client pays per the fee structure and typically owns the finished recordings. Raw session files may remain with the producer unless specified.",
+    "chatgptPrompts": [
+      "Fill for a weekly 30-minute interview show with editing and show notes.",
+      "Add loudness standards for Spotify/Apple submission.",
+      "Clarify who clears music stingers used in the intro."
+    ],
+    "signerLabels": [
+      "Producer",
+      "Client"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "voice-over-agreement",
+    "name": "Voice-Over Agreement",
+    "seoTitle": "Free Voice-Over Agreement Template",
+    "description": "Talent records narration with usage scope, session fees, revisions, and broadcast vs web rights.",
+    "useCase": "Use this when a studio hires a VO artist for explainer videos, IVR prompts, or ad spots. It limits usage to specified media and duration so talent fees stay proportional.",
+    "definition": "A voice-over agreement is a contract in which a performer records spoken narration for a client project under defined usage and compensation terms.",
+    "keyClauses": [
+      "Script length and recording format",
+      "Session schedule and pickup rounds",
+      "Usage media (web, broadcast, internal)",
+      "Exclusivity and conflict categories",
+      "Fee, buyout, or reuse surcharges",
+      "Credit and confidentiality"
+    ],
+    "fillInFields": [
+      "[Talent Name]",
+      "[Client/Producer]",
+      "[Project Title]",
+      "[Script Word Count]",
+      "[Usage Media and Term]",
+      "[Session Fee]",
+      "[Delivery Format]"
+    ],
+    "legalSummary": "The talent delivers recorded reads meeting agreed quality; the client receives only the licensed usage rights purchased. Reuse outside scope requires a new license or fee.",
+    "chatgptPrompts": [
+      "Generate for a 90-second explainer with 1-year worldwide web use.",
+      "Compare buyout vs limited-term license for a regional TV ad.",
+      "Add pickup session rules if the script changes after recording."
+    ],
+    "signerLabels": [
+      "Talent",
+      "Client"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "ui-ux-design-agreement",
+    "name": "UI/UX Design Agreement",
+    "seoTitle": "Free UI/UX Design Agreement Template",
+    "description": "User research, wireframes, and high-fidelity UI deliverables with handoff to development.",
+    "useCase": "Use this when a product team hires a designer for app or web UX flows separate from front-end coding. It covers Figma files, design systems, and developer handoff specs.",
+    "definition": "A UI/UX design agreement is a creative services contract defining user experience research, interface design deliverables, and transfer of design files to a client or dev team.",
+    "keyClauses": [
+      "Research and persona scope",
+      "Wireframe and prototype milestones",
+      "Visual design and component library",
+      "Revision rounds and stakeholder reviews",
+      "Developer handoff and asset formats",
+      "Ownership upon payment and tool licenses"
+    ],
+    "fillInFields": [
+      "[Designer/Studio]",
+      "[Client]",
+      "[Product Name]",
+      "[Deliverables List]",
+      "[Timeline]",
+      "[Total Fee]",
+      "[Revision Rounds]"
+    ],
+    "legalSummary": "The designer delivers agreed UX/UI artifacts; the client pays on milestone acceptance and receives ownership of final files after full payment. Third-party fonts or icon sets may require separate client licenses.",
+    "chatgptPrompts": [
+      "Fill for a mobile banking app UX through hi-fi screens in Figma.",
+      "Explain IP if the designer reuses their own UI kit components.",
+      "Add accessibility (WCAG) acceptance criteria to deliverables."
+    ],
+    "signerLabels": [
+      "Designer",
+      "Client"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "software-maintenance-agreement",
+    "name": "Software Maintenance Agreement",
+    "seoTitle": "Free Software Maintenance Agreement Template",
+    "description": "Bug fixes, dependency updates, and patch releases for deployed custom software.",
+    "useCase": "Use this after bespoke software goes live when the client needs ongoing patches without a full support desk. It caps hours and excludes new feature development.",
+    "definition": "A software maintenance agreement is a recurring contract for corrective updates and minor improvements to existing software under defined response times.",
+    "keyClauses": [
+      "Systems and versions covered",
+      "Included bug-fix and patch activities",
+      "Response and resolution targets",
+      "Excluded enhancements and refactors",
+      "Monthly retainer or ticket pricing",
+      "Access, backups, and change windows"
+    ],
+    "fillInFields": [
+      "[Maintainer]",
+      "[Client]",
+      "[Software/System Name]",
+      "[Environments Covered]",
+      "[Monthly Hours/Fee]",
+      "[Response SLA]",
+      "[Term]"
+    ],
+    "legalSummary": "The maintainer addresses defects within scope and SLA; feature requests require change orders. The client provides staging access and timely reproduction steps.",
+    "chatgptPrompts": [
+      "Fill for a Python API with 20 hours/month and P1 4-hour response.",
+      "List exclusions before offering unlimited bug fixes.",
+      "Add security patch escalation for critical CVEs."
+    ],
+    "signerLabels": [
+      "Maintainer",
+      "Client"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "hosting-services-agreement",
+    "name": "Hosting Services Agreement",
+    "seoTitle": "Free Hosting Services Agreement Template",
+    "description": "Managed server or cloud hosting with uptime targets, backups, and acceptable use rules.",
+    "useCase": "Use this when a host provides VPS, dedicated, or managed WordPress hosting to business clients. It sets resource limits, backup frequency, and suspension policy for abuse.",
+    "definition": "A hosting services agreement is a contract in which a provider supplies infrastructure and connectivity for a client's websites or applications subject to AUP and SLAs.",
+    "keyClauses": [
+      "Service tier, storage, and bandwidth",
+      "Uptime commitment and maintenance windows",
+      "Backup and restore responsibilities",
+      "Security patching scope",
+      "Acceptable use and suspension",
+      "Fees, renewal, and migration assistance"
+    ],
+    "fillInFields": [
+      "[Host Name]",
+      "[Customer]",
+      "[Plan/Tier]",
+      "[Monthly Fee]",
+      "[Primary Domain/App]",
+      "[Backup Schedule]",
+      "[Term]"
+    ],
+    "legalSummary": "The host keeps services available per SLA while the customer complies with AUP and pays on time. Data loss risk is allocated via backup duties defined in the agreement.",
+    "chatgptPrompts": [
+      "Fill for managed WordPress with nightly backups and 99.9% uptime.",
+      "Explain customer duty to maintain off-site backups too.",
+      "Add migration help clause on 30-day notice termination."
+    ],
+    "signerLabels": [
+      "Host",
+      "Customer"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "api-licensing-agreement",
+    "name": "API Licensing Agreement",
+    "seoTitle": "Free API Licensing Agreement Template",
+    "description": "Terms for third-party access to your API: keys, rate limits, data use, and revocation.",
+    "useCase": "Use this when a SaaS company opens APIs to partners or developers. It restricts scraping, sets call quotas, and clarifies ownership of submitted data.",
+    "definition": "An API licensing agreement grants a licensee permission to access and integrate with a provider's application programming interface under technical and legal constraints.",
+    "keyClauses": [
+      "API scope, versions, and documentation",
+      "Authentication, keys, and rate limits",
+      "Permitted and prohibited data uses",
+      "Service levels and deprecation notice",
+      "Fees or revenue share if any",
+      "Termination and key revocation"
+    ],
+    "fillInFields": [
+      "[API Provider]",
+      "[Licensee]",
+      "[API Product Name]",
+      "[Rate Limits]",
+      "[Permitted Use Case]",
+      "[Fee Structure]",
+      "[Term]"
+    ],
+    "legalSummary": "The licensee may call the API only within quotas and use restrictions; abuse or overuse can trigger suspension. Provider may modify endpoints with notice per the agreement.",
+    "chatgptPrompts": [
+      "Fill for a partner integration with 10K calls/day and OAuth keys.",
+      "Prohibit training ML models on API response data.",
+      "Add 90-day deprecation notice for breaking changes."
+    ],
+    "signerLabels": [
+      "Provider",
+      "Licensee"
+    ],
+    "recurringCategory": "Intellectual Property",
+    "archetype": "ipLicense"
+  },
+  {
+    "slug": "white-label-agreement",
+    "name": "White Label Agreement",
+    "seoTitle": "Free White Label Agreement Template",
+    "description": "Allows a partner to rebrand and resell your product or service under their own name.",
+    "useCase": "Use this when a SaaS or agency product can be sold by resellers with custom logos and domains. It controls support responsibilities and minimum quality standards.",
+    "definition": "A white label agreement permits a licensee to market a provider's product or service under the licensee's brand while the provider remains the underlying supplier.",
+    "keyClauses": [
+      "White-labeled product or service scope",
+      "Branding, domain, and customer-facing support split",
+      "Pricing, revenue share, or wholesale fees",
+      "SLA and quality standards",
+      "Prohibited misrepresentation and regulatory compliance",
+      "Term and transition on termination"
+    ],
+    "fillInFields": [
+      "[Provider]",
+      "[White Label Partner]",
+      "[Product/Service]",
+      "[Brand/Domain Rules]",
+      "[Pricing Model]",
+      "[Support Responsibilities]",
+      "[Term]"
+    ],
+    "legalSummary": "The partner sells under its brand but relies on the provider's core service; customers may not know the underlying vendor unless disclosure is required. Either party may exit with customer migration rules.",
+    "chatgptPrompts": [
+      "Fill for a white-label email API sold to regional agencies.",
+      "Assign tier-1 support to partner and tier-2 to provider.",
+      "Add minimum uptime pass-through in partner SLAs."
+    ],
+    "signerLabels": [
+      "Provider",
+      "Partner"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "joint-venture-agreement",
+    "name": "Joint Venture Agreement",
+    "seoTitle": "Free Joint Venture Agreement Template",
+    "description": "Two parties form a project-based venture: contributions, governance, profit split, and exit.",
+    "useCase": "Use this when two companies collaborate on one product or market entry without merging entirely. It defines capital, decision votes, and dissolution if the project ends.",
+    "definition": "A joint venture agreement is a contract in which parties combine resources and share control for a defined business undertaking without necessarily forming a permanent combined entity.",
+    "keyClauses": [
+      "Venture purpose and duration",
+      "Capital and non-cash contributions",
+      "Governance and deadlock resolution",
+      "Profit/loss allocation",
+      "IP ownership in venture outputs",
+      "Exit, buyout, and wind-down"
+    ],
+    "fillInFields": [
+      "[Party A]",
+      "[Party B]",
+      "[Venture Name/Purpose]",
+      "[Contributions]",
+      "[Ownership Split]",
+      "[Decision Thresholds]",
+      "[Term/End Events]"
+    ],
+    "legalSummary": "Parties share upside and control per the agreement; liabilities may flow to the venture entity or jointly depending on structure. Exit triggers buyout or asset division formulas.",
+    "chatgptPrompts": [
+      "Fill for a 50/50 JV to launch a co-branded hardware accessory.",
+      "Explain deadlock breakers for 50/50 boards.",
+      "Add IP assignment to the JV for jointly developed tech."
+    ],
+    "signerLabels": [
+      "Party A",
+      "Party B"
+    ],
+    "recurringCategory": "Incorporation",
+    "archetype": "corporateGovernance"
+  },
+  {
+    "slug": "memorandum-of-understanding",
+    "name": "Memorandum of Understanding",
+    "seoTitle": "Free Memorandum of Understanding Template",
+    "description": "Non-binding or partially binding outline of intent before definitive contracts are drafted.",
+    "useCase": "Use this early in a partnership or grant discussion to align on goals, timelines, and next steps before lawyers draft the full agreement. It can bind confidentiality or exclusivity only if stated.",
+    "definition": "A memorandum of understanding (MOU) is a document describing mutual intentions and framework terms between parties, which may be non-binding except for specified clauses.",
+    "keyClauses": [
+      "Purpose and background of collaboration",
+      "Roles and high-level responsibilities",
+      "Timeline and milestones toward definitive agreements",
+      "Confidentiality or exclusivity if binding",
+      "Non-binding disclaimer for commercial terms",
+      "Signatories and effective date"
+    ],
+    "fillInFields": [
+      "[Party A]",
+      "[Party B]",
+      "[Subject of MOU]",
+      "[Key Objectives]",
+      "[Target Definitive Agreement Date]",
+      "[Binding Clauses if Any]",
+      "[Effective Date]"
+    ],
+    "legalSummary": "Most MOU language is aspirational unless explicitly binding; parties should not assume enforceable payment or performance duties without definitive contracts. Selected clauses like confidentiality may still bind.",
+    "chatgptPrompts": [
+      "Draft an MOU for two nonprofits exploring a joint grant application.",
+      "Mark which sections are binding vs non-binding.",
+      "Convert MOU goals into a checklist for the full contract."
+    ],
+    "signerLabels": [
+      "Party A",
+      "Party B"
+    ],
+    "recurringCategory": "Incorporation",
+    "archetype": "corporateGovernance"
+  },
+  {
+    "slug": "eviction-notice-to-tenant",
+    "name": "Eviction Notice to Tenant",
+    "seoTitle": "Free Eviction Notice to Tenant Template",
+    "description": "Landlord notice citing lease breach or nonpayment and demanding cure or vacate by a legal deadline.",
+    "useCase": "Use this when a landlord must start formal eviction for unpaid rent or material lease violations after any required cure period. It documents the breach, cure window, and consequences of failure to comply.",
+    "definition": "An eviction notice to tenant is a written landlord communication that identifies a lease violation or termination ground and demands corrective action or surrender of the premises within a statutory or contractual period.",
+    "keyClauses": [
+      "Tenant, landlord, and premises identification",
+      "Specific breach or termination ground cited",
+      "Lease section references and amounts owed if any",
+      "Cure deadline or move-out date required by law",
+      "Method of delivery and proof of service note",
+      "Statement that failure may lead to court filing"
+    ],
+    "fillInFields": [
+      "[Landlord Name]",
+      "[Tenant Name(s)]",
+      "[Property Address]",
+      "[Breach Description]",
+      "[Amount Owed if Any]",
+      "[Cure/ Move-Out Deadline]",
+      "[Notice Date]"
+    ],
+    "legalSummary": "Proper notice is often a prerequisite to filing eviction; defective notice can delay or dismiss a case. This notice does not itself remove the tenant—court process may follow if the tenant does not cure or vacate.",
+    "chatgptPrompts": [
+      "Fill for nonpayment with 3-day pay-or-quit where local law allows.",
+      "Explain cure vs unconditional quit notice differences.",
+      "Adapt when two tenants are on one lease but only one breached."
+    ],
+    "signerLabels": [
+      "Landlord",
+      "Process Server Acknowledgment"
+    ],
+    "recurringCategory": "Real Estate",
+    "archetype": "noticeLetter"
+  },
+  {
+    "slug": "rent-increase-notice",
+    "name": "Rent Increase Notice",
+    "seoTitle": "Free Rent Increase Notice Template",
+    "description": "Landlord notice of new monthly rent effective on a future date per lease or rent-control rules.",
+    "useCase": "Use this when a periodic tenancy allows a rent adjustment after proper advance notice. It states the current rent, new rent, effective date, and how tenants may respond if they do not accept.",
+    "definition": "A rent increase notice is a landlord's written announcement raising periodic rent to a specified amount effective on a future date in compliance with lease and local law.",
+    "keyClauses": [
+      "Property and tenant identification",
+      "Current and new rent amounts",
+      "Effective date and notice period compliance",
+      "Reference to lease renewal or month-to-month terms",
+      "Payment instructions after increase",
+      "Local rent-control or cap disclosures if applicable"
+    ],
+    "fillInFields": [
+      "[Landlord Name]",
+      "[Tenant Name(s)]",
+      "[Property Address]",
+      "[Current Rent]",
+      "[New Rent]",
+      "[Effective Date]",
+      "[Notice Date]"
+    ],
+    "legalSummary": "Tenants remain bound by tenancy terms after lawful notice; rejection may trigger negotiation or termination rights depending on jurisdiction. Increases above legal caps may be void or challengeable.",
+    "chatgptPrompts": [
+      "Fill for 60-day notice raising rent 5% on a month-to-month unit.",
+      "Check rent-control maximum before sending this notice.",
+      "Explain tenant options if they cannot afford the new rent."
+    ],
+    "signerLabels": [
+      "Landlord",
+      "Tenant Acknowledgment"
+    ],
+    "recurringCategory": "Real Estate",
+    "archetype": "noticeLetter"
+  },
+  {
+    "slug": "security-deposit-return-letter",
+    "name": "Security Deposit Return Letter",
+    "seoTitle": "Free Security Deposit Return Letter Template",
+    "description": "Landlord itemizes deposit deductions and returns the balance with an explanation of charges.",
+    "useCase": "Use this at move-out when returning all or part of a tenant's security deposit within the statutory deadline. It lists damages, cleaning, or unpaid rent with amounts and supporting references.",
+    "definition": "A security deposit return letter is a landlord's written accounting that returns the remaining deposit or explains lawful deductions after tenancy ends.",
+    "keyClauses": [
+      "Tenant forwarding address and lease reference",
+      "Original deposit and move-out inspection date",
+      "Itemized deductions with descriptions and costs",
+      "Balance returned or amount still owed",
+      "Deadline compliance statement",
+      "Dispute contact and documentation offered"
+    ],
+    "fillInFields": [
+      "[Landlord Name]",
+      "[Tenant Name]",
+      "[Property Address]",
+      "[Original Deposit]",
+      "[Total Deductions]",
+      "[Amount Returned]",
+      "[Forwarding Address]"
+    ],
+    "legalSummary": "Landlords must follow local rules on timing and itemization; wrongful withholding can expose them to penalties. Tenants may dispute improper deductions through small claims or housing agencies.",
+    "chatgptPrompts": [
+      "Fill returning $800 of a $1,500 deposit with $700 for carpet cleaning and wall repair.",
+      "Attach move-out photos reference in the itemization.",
+      "Explain deadline if tenant never provided a forwarding address."
+    ],
+    "signerLabels": [
+      "Landlord",
+      "Tenant"
+    ],
+    "recurringCategory": "Real Estate",
+    "archetype": "noticeLetter"
+  },
+  {
+    "slug": "home-staging-agreement",
+    "name": "Home Staging Agreement",
+    "seoTitle": "Free Home Staging Agreement Template",
+    "description": "Stager furnishes and styles a listing with fees, rental period, and damage responsibilities.",
+    "useCase": "Use this when a stager brings furniture and decor to sell a vacant or occupied home faster. It covers rental duration, monthly fees, insurance, and who pays if items are damaged.",
+    "definition": "A home staging agreement is a contract in which a stager provides furniture, art, and styling services to enhance a property for sale for a defined listing period.",
+    "keyClauses": [
+      "Property address and listing timeframe",
+      "Staging scope and rooms covered",
+      "Rental fees, delivery, and de-staging costs",
+      "Care, insurance, and damage liability",
+      "Broker/seller access for showings",
+      "Extension and early removal terms"
+    ],
+    "fillInFields": [
+      "[Stager Name]",
+      "[Client/Seller or Agent]",
+      "[Property Address]",
+      "[Staging Start Date]",
+      "[Monthly Staging Fee]",
+      "[Insurance Requirement]",
+      "[De-Staging Trigger]"
+    ],
+    "legalSummary": "The stager loans or rents visual assets while the home is marketed; the client pays fees and is responsible for property access and agreed damage standards. Failure to pay may trigger removal of staging items.",
+    "chatgptPrompts": [
+      "Fill for a 90-day vacant listing staging at $2,200/month.",
+      "Assign liability if a buyer damages rented staging furniture at an open house.",
+      "Add extension pricing if the home does not sell in 60 days."
+    ],
+    "signerLabels": [
+      "Stager",
+      "Client"
+    ],
+    "recurringCategory": "Real Estate",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "buyer-agency-agreement",
+    "name": "Buyer Agency Agreement",
+    "seoTitle": "Free Buyer Agency Agreement Template",
+    "description": "Buyer hires a real estate agent exclusively or non-exclusively with commission terms.",
+    "useCase": "Use this when a residential buyer formally retains a broker to represent their interests in a purchase. It defines search area, term, and how the agent gets paid at closing.",
+    "definition": "A buyer agency agreement is a contract in which a prospective purchaser engages a licensed agent to locate and negotiate property acquisitions on the buyer's behalf.",
+    "keyClauses": [
+      "Buyer and brokerage identification",
+      "Exclusive or non-exclusive representation",
+      "Geographic area and property type",
+      "Agreement term and termination",
+      "Compensation source (seller commission or buyer fee)",
+      "Dual agency and confidentiality duties"
+    ],
+    "fillInFields": [
+      "[Buyer Name(s)]",
+      "[Broker/Agent Name]",
+      "[Brokerage Firm]",
+      "[Search Area/Property Type]",
+      "[Agreement Term]",
+      "[Commission Terms]",
+      "[Effective Date]"
+    ],
+    "legalSummary": "The agent owes fiduciary or statutory duties to the buyer while the agreement is active; buyers may owe fees if they purchase without agent involvement during the term, depending on language.",
+    "chatgptPrompts": [
+      "Fill for exclusive buyer representation for 6 months in one county.",
+      "Explain compensation if the seller offers less than expected commission.",
+      "Add clause allowing buyer to terminate with 14-day notice."
+    ],
+    "signerLabels": [
+      "Buyer",
+      "Agent"
+    ],
+    "recurringCategory": "Real Estate",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "property-listing-agreement",
+    "name": "Property Listing Agreement",
+    "seoTitle": "Free Property Listing Agreement Template",
+    "description": "Seller authorizes a broker to market a property with commission, duration, and marketing duties.",
+    "useCase": "Use this when a homeowner lists residential or commercial property with an agent. It sets list price guidance, marketing plan, commission split, and whether the listing is exclusive.",
+    "definition": "A property listing agreement is a contract granting a broker the right to offer a property for sale or lease in exchange for a commission if a transaction closes within the term.",
+    "keyClauses": [
+      "Property description and authorized price range",
+      "Exclusive or open listing status",
+      "Listing term and commission rate",
+      "Marketing and showing obligations",
+      "Seller disclosures and cooperation duties",
+      "Protection period for buyers introduced during term"
+    ],
+    "fillInFields": [
+      "[Seller Name]",
+      "[Broker/Agent Name]",
+      "[Property Address]",
+      "[List Price]",
+      "[Commission %]",
+      "[Listing Term End Date]",
+      "[MLS Authorization Y/N]"
+    ],
+    "legalSummary": "The broker earns commission if a qualifying sale occurs during the term under the agreement's protection clauses. Sellers must disclose material defects and cooperate with showings per contract.",
+    "chatgptPrompts": [
+      "Fill for exclusive 6-month residential listing at 5% commission.",
+      "Add seller obligation to notify agent of direct buyer inquiries.",
+      "Explain protection period if listing expires before closing."
+    ],
+    "signerLabels": [
+      "Seller",
+      "Listing Agent"
+    ],
+    "recurringCategory": "Real Estate",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "change-order-agreement",
+    "name": "Change Order Agreement",
+    "seoTitle": "Free Change Order Agreement Template",
+    "description": "Documents scope, price, and schedule adjustments to an existing construction or services contract.",
+    "useCase": "Use this when a client requests extra work beyond the original SOW on a build or install job. It prevents disputes by writing new deliverables, cost, and revised completion date before work starts.",
+    "definition": "A change order agreement is a written amendment that modifies scope, price, or timeline of an underlying contract after the original work has begun or been agreed.",
+    "keyClauses": [
+      "Reference to original contract or work order",
+      "Description of added or deleted work",
+      "Price adjustment and payment timing",
+      "Revised completion or milestone dates",
+      "Impact on warranties and permits if any",
+      "Authorization signatures before proceeding"
+    ],
+    "fillInFields": [
+      "[Contractor Name]",
+      "[Client Name]",
+      "[Original Contract Date/Number]",
+      "[Change Description]",
+      "[Price Change (+/-)]",
+      "[New Completion Date]",
+      "[Change Order Number]"
+    ],
+    "legalSummary": "Work performed without a signed change order may be unpaid or disputed; this document binds both parties to the new terms. Original contract terms survive except as modified here.",
+    "chatgptPrompts": [
+      "Fill for adding recessed lighting to a kitchen remodel for +$1,800.",
+      "Show schedule slip of one week due to extra electrical inspection.",
+      "Explain when verbal change approvals are risky for contractors."
+    ],
+    "signerLabels": [
+      "Contractor",
+      "Client"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "constructionDoc"
+  },
+  {
+    "slug": "subcontractor-agreement",
+    "name": "Subcontractor Agreement",
+    "seoTitle": "Free Subcontractor Agreement Template",
+    "description": "General contractor hires a trade subcontractor with scope, insurance, lien waiver, and payment terms.",
+    "useCase": "Use this when a GC brings in plumbing, electrical, or drywall subs on a commercial or residential job. It flows down prime contract requirements and sets retainage and lien release on pay apps.",
+    "definition": "A subcontractor agreement is a contract between a general contractor and a specialty trade contractor defining work scope, schedule, and payment on a larger project.",
+    "keyClauses": [
+      "Project identification and prime contract flow-down",
+      "Scope of subcontract work and drawings referenced",
+      "Schedule, coordination, and site rules",
+      "Payment, retainage, and lien waiver requirements",
+      "Insurance, indemnity, and safety compliance",
+      "Termination for cause and defective work remedy"
+    ],
+    "fillInFields": [
+      "[General Contractor]",
+      "[Subcontractor Name]",
+      "[Project Name/Address]",
+      "[Trade/Scope Description]",
+      "[Contract Amount]",
+      "[Retainage %]",
+      "[Substantial Completion Date]"
+    ],
+    "legalSummary": "The sub performs defined trade work and gets paid when milestones are approved and waivers are submitted; the GC may back-charge for defects or delays per the agreement.",
+    "chatgptPrompts": [
+      "Fill for electrical rough-in on a tenant improvement at $45,000.",
+      "Require COI naming GC as additional insured.",
+      "Add conditional lien waiver upon each progress payment."
+    ],
+    "signerLabels": [
+      "General Contractor",
+      "Subcontractor"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "constructionDoc"
+  },
+  {
+    "slug": "architect-services-agreement",
+    "name": "Architect Services Agreement",
+    "seoTitle": "Free Architect Services Agreement Template",
+    "description": "Architect provides design, drawings, and construction administration phases with fee structure.",
+    "useCase": "Use this when an owner retains a licensed architect for schematic design through permit sets and CA visits. It follows AIA-style phase billing without copying proprietary forms.",
+    "definition": "An architect services agreement is a professional services contract in which an architect plans and documents a building project and may observe construction for conformance.",
+    "keyClauses": [
+      "Project description and site",
+      "Basic vs additional services by phase",
+      "Fee basis (fixed, % of cost, hourly)",
+      "Owner decision and approval timelines",
+      "Standard of care and code compliance disclaimer",
+      "Ownership of drawings and reuse restrictions"
+    ],
+    "fillInFields": [
+      "[Architect/Firm]",
+      "[Owner/Client]",
+      "[Project Name and Address]",
+      "[Services Phases Included]",
+      "[Fee Structure]",
+      "[Estimated Construction Budget]",
+      "[Governing State]"
+    ],
+    "legalSummary": "The architect delivers professional design services to industry standards but does not guarantee contractor pricing or build quality unless separately contracted. Instruments of service are licensed to the owner for the project.",
+    "chatgptPrompts": [
+      "Fill for SD through CD on a small office build at 6% of construction cost.",
+      "Exclude bidding and full CA from basic services scope.",
+      "Clarify architect stamp requirements for permit submission."
+    ],
+    "signerLabels": [
+      "Architect",
+      "Owner"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "constructionDoc"
+  },
+  {
+    "slug": "interior-design-agreement",
+    "name": "Interior Design Agreement",
+    "seoTitle": "Free Interior Design Agreement Template",
+    "description": "Designer plans layouts, finishes, and procurement with fees, vendor markups, and installation oversight.",
+    "useCase": "Use this for residential or commercial interior projects where the designer selects furniture and materials. It separates design fees from pass-through product costs and revision limits.",
+    "definition": "An interior design agreement is a contract in which a designer creates functional and aesthetic plans for interior spaces and may procure goods on the client's behalf.",
+    "keyClauses": [
+      "Space scope and design phases",
+      "Deliverables: mood boards, plans, specs",
+      "Designer fee and procurement markup disclosure",
+      "Client approval gates and revision limits",
+      "Vendor ordering and delivery coordination",
+      "Liability for product defects vs design errors"
+    ],
+    "fillInFields": [
+      "[Designer Name]",
+      "[Client Name]",
+      "[Project Address/Rooms]",
+      "[Design Fee]",
+      "[Procurement Budget Estimate]",
+      "[Target Completion]",
+      "[Revision Rounds]"
+    ],
+    "legalSummary": "The designer provides plans and coordination; product warranties come from manufacturers unless the designer negligently specifies unsuitable items. Client pays design fees plus disclosed product costs.",
+    "chatgptPrompts": [
+      "Fill for whole-home refresh with FF&E procurement up to $80K.",
+      "Disclose 15% procurement markup in the agreement.",
+      "Limit liability for client-direct purchases off the spec list."
+    ],
+    "signerLabels": [
+      "Designer",
+      "Client"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "hvac-maintenance-agreement",
+    "name": "HVAC Maintenance Agreement",
+    "seoTitle": "Free HVAC Maintenance Agreement Template",
+    "description": "Seasonal tune-ups, filter changes, and priority repair discounts for building HVAC systems.",
+    "useCase": "Use this when an HVAC company sells annual maintenance plans to homeowners or small businesses. It schedules visits, lists covered equipment, and sets response priority for breakdowns.",
+    "definition": "An HVAC maintenance agreement is a service plan in which a contractor performs preventive maintenance on heating and cooling equipment for a recurring fee.",
+    "keyClauses": [
+      "Equipment covered (units, locations, age)",
+      "Visit frequency and included tasks",
+      "Parts and labor discounts on repairs",
+      "Emergency response priority if offered",
+      "Exclusions for refrigerant, ductwork, or replacements",
+      "Auto-renewal and cancellation notice"
+    ],
+    "fillInFields": [
+      "[HVAC Company]",
+      "[Customer Name]",
+      "[Service Address]",
+      "[Equipment List]",
+      "[Annual Plan Fee]",
+      "[Visit Schedule]",
+      "[Plan Term]"
+    ],
+    "legalSummary": "The contractor performs listed preventive services; major repairs and replacements are typically billed separately unless explicitly included. Neglecting maintenance may void equipment warranties from manufacturers.",
+    "chatgptPrompts": [
+      "Fill for two rooftop units with spring/fall tune-ups at $900/year.",
+      "Add 10% discount on labor for plan members during breakdowns.",
+      "Exclude refrigerant top-offs from the flat annual fee."
+    ],
+    "signerLabels": [
+      "Contractor",
+      "Customer"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "catering-services-agreement",
+    "name": "Catering Services Agreement",
+    "seoTitle": "Free Catering Services Agreement Template",
+    "description": "Menu, headcount, service staff, rentals, and cancellation for an catered event.",
+    "useCase": "Use this when a caterer provides food and service for a wedding, corporate lunch, or gala. It locks guest count deadlines, deposit, dietary accommodations, and overtime for staff.",
+    "definition": "A catering services agreement is a contract in which a caterer prepares and serves food and beverages at a client's event per an agreed menu and service level.",
+    "keyClauses": [
+      "Event date, venue, and service window",
+      "Menu, beverages, and guaranteed guest count",
+      "Staffing, rentals, and setup/breakdown",
+      "Pricing, deposit, and final count deadline",
+      "Health, allergy, and licensing representations",
+      "Cancellation tiers and force majeure"
+    ],
+    "fillInFields": [
+      "[Caterer Name]",
+      "[Client Name]",
+      "[Event Date and Venue]",
+      "[Guest Count Guarantee]",
+      "[Menu Package]",
+      "[Total Price and Deposit]",
+      "[Final Count Deadline]"
+    ],
+    "legalSummary": "The caterer delivers food safely and on schedule; the client pays per guaranteed count even if attendance is lower once the deadline passes. Last-minute headcount changes may incur fees.",
+    "chatgptPrompts": [
+      "Fill for 150-guest corporate dinner with buffet and two servers.",
+      "Add severe allergy prep protocol for a nut-free table.",
+      "Set 50% cancellation fee inside 7 days of the event."
+    ],
+    "signerLabels": [
+      "Caterer",
+      "Client"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "food-truck-vendor-agreement",
+    "name": "Food Truck Vendor Agreement",
+    "seoTitle": "Free Food Truck Vendor Agreement Template",
+    "description": "Event host permits a mobile food vendor with fees, power/water, and health compliance duties.",
+    "useCase": "Use this when a festival, brewery, or office park books a food truck for a set day. It covers site location, revenue share or flat fee, and insurance certificates.",
+    "definition": "A food truck vendor agreement is a contract allowing a mobile food operator to sell at a host's venue subject to safety, insurance, and fee terms.",
+    "keyClauses": [
+      "Event date, location, and setup window",
+      "Fee structure: flat, revenue share, or minimum guarantee",
+      "Utilities, permits, and health department compliance",
+      "Insurance and indemnity requirements",
+      "Branding, exclusivity, and menu restrictions",
+      "Cancellation and weather contingency"
+    ],
+    "fillInFields": [
+      "[Host/Organizer]",
+      "[Food Truck Operator]",
+      "[Event Name/Date]",
+      "[Location Spot Assignment]",
+      "[Fee or Revenue Share %]",
+      "[Insurance COI Deadline]",
+      "[Setup/Teardown Times]"
+    ],
+    "legalSummary": "The operator may sell food during the event window if licensed and insured; the host provides access and may charge fees or share revenue. Violations of health or safety rules can mean immediate removal.",
+    "chatgptPrompts": [
+      "Fill for a brewery weekend with 15% gross sales share.",
+      "Require $1M general liability COI naming the host.",
+      "Add rain date reschedule terms for outdoor festivals."
+    ],
+    "signerLabels": [
+      "Host",
+      "Vendor"
+    ],
+    "recurringCategory": "Sale and Purchase",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "dj-services-agreement",
+    "name": "DJ Services Agreement",
+    "seoTitle": "Free DJ Services Agreement Template",
+    "description": "DJ performance hours, equipment, playlist process, and cancellation for weddings or parties.",
+    "useCase": "Use this when a DJ is hired for a reception or corporate party. It specifies sound system ownership, MC duties, overtime rate, and what happens if the venue limits volume.",
+    "definition": "A DJ services agreement is a contract in which a disc jockey provides music and MC services for an event for a defined time and fee.",
+    "keyClauses": [
+      "Event date, venue, and performance hours",
+      "Equipment provided and power requirements",
+      "Playlist planning and do-not-play list",
+      "MC announcements scope",
+      "Deposit, balance, and overtime rate",
+      "Cancellation and substitution policy"
+    ],
+    "fillInFields": [
+      "[DJ Name/Company]",
+      "[Client Name]",
+      "[Event Type and Date]",
+      "[Venue Address]",
+      "[Performance Hours]",
+      "[Package Fee]",
+      "[Overtime Rate/Hour]"
+    ],
+    "legalSummary": "The DJ performs for the contracted hours with professional equipment; the client provides venue access and timely payment. Cancellation terms control refund of deposits.",
+    "chatgptPrompts": [
+      "Fill for a 5-hour wedding reception with ceremony sound included.",
+      "Add must-play list deadline two weeks before event.",
+      "Clarify volume limits imposed by the venue."
+    ],
+    "signerLabels": [
+      "DJ",
+      "Client"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "band-performance-agreement",
+    "name": "Band Performance Agreement",
+    "seoTitle": "Free Band Performance Agreement Template",
+    "description": "Live band set length, technical rider, deposit, and cancellation for venues or private events.",
+    "useCase": "Use this when a venue or event planner books a musical act. It covers load-in, set times, hospitality rider, and recording restrictions.",
+    "definition": "A band performance agreement is a contract in which musicians perform live at an event or venue in exchange for a guaranteed fee and specified logistics.",
+    "keyClauses": [
+      "Performance date, venue, and set length",
+      "Soundcheck and load-in schedule",
+      "Fee, deposit, and payment method",
+      "Technical rider and backline responsibilities",
+      "Recording, streaming, and merch rights",
+      "Cancellation, force majeure, and substitution"
+    ],
+    "fillInFields": [
+      "[Band/Artist Name]",
+      "[Promoter/Client]",
+      "[Venue and Date]",
+      "[Set Length and Call Time]",
+      "[Performance Fee]",
+      "[Deposit Amount]",
+      "[Technical Rider Attached Y/N]"
+    ],
+    "legalSummary": "The band appears and performs professionally; the promoter provides agreed stage conditions and pays per schedule. Recording or rebroadcast requires explicit permission.",
+    "chatgptPrompts": [
+      "Fill for a 90-minute headline set at a private corporate gala.",
+      "Attach simplified input list for a house PA system.",
+      "Set 50% deposit non-refundable inside 14 days of show."
+    ],
+    "signerLabels": [
+      "Artist",
+      "Promoter"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "event-planning-agreement",
+    "name": "Event Planning Agreement",
+    "seoTitle": "Free Event Planning Agreement Template",
+    "description": "Planner coordinates vendors, timeline, and budget with fee structure and client decision duties.",
+    "useCase": "Use this when a professional planner runs a wedding or conference end-to-end. It defines planning phases, vendor booking authority, and what happens if the client changes the date.",
+    "definition": "An event planning agreement is a services contract in which a planner designs and coordinates logistics for a scheduled event on behalf of a client.",
+    "keyClauses": [
+      "Event type, date, and guest scale",
+      "Planner services by phase (concept through day-of)",
+      "Fee: flat, hourly, or percentage of budget",
+      "Vendor booking authority and payment flow",
+      "Client approval deadlines",
+      "Cancellation and postponement fees"
+    ],
+    "fillInFields": [
+      "[Planner Name]",
+      "[Client Name]",
+      "[Event Type and Date]",
+      "[Estimated Guest Count]",
+      "[Planning Fee Structure]",
+      "[Planning Start Date]",
+      "[Budget Range]"
+    ],
+    "legalSummary": "The planner coordinates vendors professionally but typically does not guarantee third-party performance; client remains financially responsible to vendors unless planner explicitly contracts and is reimbursed.",
+    "chatgptPrompts": [
+      "Fill for full wedding planning with 15% fee on vendor contracts.",
+      "Limit planner liability for vendor no-shows.",
+      "Add postponement clause with replanning fee."
+    ],
+    "signerLabels": [
+      "Planner",
+      "Client"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "wedding-videography-contract",
+    "name": "Wedding Videography Contract",
+    "seoTitle": "Free Wedding Videography Contract Template",
+    "description": "Highlight and full-length wedding film deliverables, hours, and licensing for personal vs commercial use.",
+    "useCase": "Use this when a videographer films a wedding separately from photography packages. It sets ceremony coverage hours, drone use if any, and delivery timeline for highlight reels.",
+    "definition": "A wedding videography contract is an agreement in which a videographer records and edits wedding footage for the couple under specified deliverables and usage rights.",
+    "keyClauses": [
+      "Coverage date, hours, and key moments list",
+      "Deliverables: highlight, full film, raw footage option",
+      "Second shooter or drone if included",
+      "Editing style and revision rounds",
+      "Deposit, balance, and travel fees",
+      "Personal use license and social sharing rights"
+    ],
+    "fillInFields": [
+      "[Videographer Name]",
+      "[Couple Names]",
+      "[Wedding Date and Venues]",
+      "[Coverage Hours]",
+      "[Package Deliverables]",
+      "[Total Fee]",
+      "[Delivery Timeline]"
+    ],
+    "legalSummary": "The videographer delivers agreed films on schedule; the couple receives a personal-use license unless commercial rights are purchased separately. Lost footage clauses should match backup practices disclosed.",
+    "chatgptPrompts": [
+      "Fill for 10-hour coverage with 5-min highlight and full ceremony film.",
+      "Add drone footage clause subject to venue and FAA rules.",
+      "Set revision limit to two rounds on highlight edit."
+    ],
+    "signerLabels": [
+      "Videographer",
+      "Couple"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "newborn-photography-contract",
+    "name": "Newborn Photography Contract",
+    "seoTitle": "Free Newborn Photography Contract Template",
+    "description": "In-studio or in-home newborn session safety, scheduling, proofs, and print licensing.",
+    "useCase": "Use this when a photographer schedules posed or lifestyle newborn sessions within the first weeks after birth. It covers rescheduling around medical issues, studio hygiene, and parent release for gallery use.",
+    "definition": "A newborn photography contract is a services agreement for a portrait session focused on infants, including timing, safety practices, and delivery of edited images.",
+    "keyClauses": [
+      "Session window after birth and rescheduling",
+      "Studio or location and safety protocols",
+      "Session fee, products, and digital package",
+      "Proofing timeline and print ordering",
+      "Gallery use model release option",
+      "Illness postponement policy"
+    ],
+    "fillInFields": [
+      "[Photographer Name]",
+      "[Parent/Guardian Names]",
+      "[Expected Due Date]",
+      "[Session Location]",
+      "[Session Fee]",
+      "[Digital Package Description]",
+      "[Tentative Session Date]"
+    ],
+    "legalSummary": "Parents hire the photographer for a time-sensitive session subject to infant health postponements; payment terms apply per cancellation policy. Model release governs marketing use of images.",
+    "chatgptPrompts": [
+      "Fill for in-home lifestyle session with 40 edited digital files.",
+      "Add COVID/flu postponement without losing deposit.",
+      "Explain heating and posing safety limits for newborns."
+    ],
+    "signerLabels": [
+      "Photographer",
+      "Parent/Guardian"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "commercial-photography-license",
+    "name": "Commercial Photography License",
+    "seoTitle": "Free Commercial Photography License Template",
+    "description": "License to use commissioned or stock-style images in ads, packaging, or websites with scope limits.",
+    "useCase": "Use this after a product shoot when the brand needs defined ad usage without buying full copyright. It sets media, territory, term, and exclusivity against competitor categories.",
+    "definition": "A commercial photography license grants a business permission to reproduce photographs for marketing purposes while the photographer retains copyright unless assigned.",
+    "keyClauses": [
+      "Photographs covered (IDs or shoot reference)",
+      "Permitted uses and media channels",
+      "Territory, term, and exclusivity",
+      "Fee structure: day rate vs license fee",
+      "Credit and alteration restrictions",
+      "Renewal and buyout options"
+    ],
+    "fillInFields": [
+      "[Photographer Name]",
+      "[Licensee/Brand]",
+      "[Shoot/Collection Reference]",
+      "[Licensed Uses]",
+      "[Territory and Term]",
+      "[License Fee]",
+      "[Exclusivity Category if Any]"
+    ],
+    "legalSummary": "The brand may use images only as licensed; broader campaigns or sublicensing require expansion. Photographer retains moral rights to attribution where required.",
+    "chatgptPrompts": [
+      "License product hero shots for 2-year US digital and print ads.",
+      "Add category exclusivity for competing skincare brands.",
+      "Quote renewal fee for extended worldwide use."
+    ],
+    "signerLabels": [
+      "Photographer",
+      "Licensee"
+    ],
+    "recurringCategory": "Intellectual Property",
+    "archetype": "ipLicense"
+  },
+  {
+    "slug": "stock-photo-license-agreement",
+    "name": "Stock Photo License Agreement",
+    "seoTitle": "Free Stock Photo License Agreement Template",
+    "description": "Standard royalty-free or rights-managed terms for still image downloads from a photographer or agency.",
+    "useCase": "Use this when selling single-image downloads from a personal stock library or small agency. It limits print run, seats, and sensitive uses like endorsement implied by models.",
+    "definition": "A stock photo license agreement permits a buyer to use a specific image under preset tier limits while the licensor retains copyright and can license to others unless exclusive.",
+    "keyClauses": [
+      "Image ID and resolution delivered",
+      "License tier: web, print, extended",
+      "Permitted and prohibited uses (defamation, implied endorsement)",
+      "Seat/user count and transfer restrictions",
+      "Attribution requirements if any",
+      "No refund after download acknowledgment"
+    ],
+    "fillInFields": [
+      "[Licensor/Agency]",
+      "[Licensee Name]",
+      "[Image ID/Description]",
+      "[License Tier]",
+      "[Permitted Use Summary]",
+      "[License Fee]",
+      "[Download Date]"
+    ],
+    "legalSummary": "Download activates the granted tier; uses beyond tier require upgrade. Model/property releases may limit sensitive subject matter regardless of technical license.",
+    "chatgptPrompts": [
+      "Sell a standard web license for blog use to a SaaS marketing team.",
+      "Compare royalty-free vs rights-managed for a national print ad.",
+      "Prohibit use implying medical endorsement without extended license."
+    ],
+    "signerLabels": [
+      "Licensor",
+      "Licensee"
+    ],
+    "recurringCategory": "Intellectual Property",
+    "archetype": "ipLicense"
+  },
+  {
+    "slug": "location-scouting-agreement",
+    "name": "Location Scouting Agreement",
+    "seoTitle": "Free Location Scouting Agreement Template",
+    "description": "Scout finds and clears film or photo locations with fees, exclusivity windows, and permit coordination.",
+    "useCase": "Use this when a production hires a location scout for commercials or music videos. It defines deliverables (lookbook, permits), travel expenses, and hold fees on shortlisted sites.",
+    "definition": "A location scouting agreement is a contract in which a scout identifies and secures permissions for physical places used in audiovisual production.",
+    "keyClauses": [
+      "Project type and geographic search area",
+      "Deliverables: reports, photos, shortlist",
+      "Permit and property owner liaison duties",
+      "Scout fee and expense reimbursement",
+      "Location hold and cancellation fees",
+      "Confidentiality of unreleased creative"
+    ],
+    "fillInFields": [
+      "[Scout Name]",
+      "[Production Company]",
+      "[Project Title]",
+      "[Search Region]",
+      "[Scout Fee]",
+      "[Expense Cap]",
+      "[Scouting Period]"
+    ],
+    "legalSummary": "The scout provides professional location options and coordination assistance; final location contracts and permits may still require production signatures and payment.",
+    "chatgptPrompts": [
+      "Fill for a 2-week LA commercial scout with $3K fee plus expenses.",
+      "Add hold fees passed through if a location requires deposit.",
+      "Require owner permission before entering private property."
+    ],
+    "signerLabels": [
+      "Scout",
+      "Production"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "post-production-agreement",
+    "name": "Post-Production Agreement",
+    "seoTitle": "Free Post-Production Agreement Template",
+    "description": "Editing, color, sound mix, and deliverables for footage shot elsewhere with revision limits.",
+    "useCase": "Use this when an editor or post house finishes a project after principal photography. It references raw media handoff, proxy workflow, and delivery specs for broadcast or web.",
+    "definition": "A post-production agreement is a services contract for editing and finishing audiovisual material into final masters according to technical specifications.",
+    "keyClauses": [
+      "Source footage description and ingest method",
+      "Edit, color, VFX, and audio scope",
+      "Delivery formats and codecs",
+      "Review rounds and approval windows",
+      "Schedule and milestone payments",
+      "Archive and project file retention period"
+    ],
+    "fillInFields": [
+      "[Post Vendor Name]",
+      "[Client/Producer]",
+      "[Project Title]",
+      "[Deliverables List]",
+      "[Timeline]",
+      "[Total Fee]",
+      "[Revision Rounds]"
+    ],
+    "legalSummary": "The post team delivers masters meeting specs; client must provide organized footage and timely feedback. Additional rounds or scope creep are change-order billed.",
+    "chatgptPrompts": [
+      "Fill for documentary cut down to 52 minutes with broadcast loudness spec.",
+      "Add archival of project files for 90 days after delivery.",
+      "Clarify music clearance remains client's duty."
+    ],
+    "signerLabels": [
+      "Post Vendor",
+      "Client"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "animation-services-agreement",
+    "name": "Animation Services Agreement",
+    "seoTitle": "Free Animation Services Agreement Template",
+    "description": "2D/3D animation scope, storyboard approvals, render deliverables, and ownership of character assets.",
+    "useCase": "Use this when a studio produces explainer animation or character spots for a brand. It sets style frames, voice sync, and whether source project files transfer on payment.",
+    "definition": "An animation services agreement is a contract for creating motion graphics or character animation from script or storyboard through final rendered output.",
+    "keyClauses": [
+      "Script/storyboard approval milestones",
+      "Animation style and resolution specs",
+      "Voiceover and music integration duties",
+      "Revision rounds per milestone",
+      "Render deliverables and project file transfer",
+      "Schedule and kill fee on client delay"
+    ],
+    "fillInFields": [
+      "[Animation Studio]",
+      "[Client Name]",
+      "[Project Title and Length]",
+      "[Style (2D/3D)]",
+      "[Total Fee]",
+      "[Delivery Date]",
+      "[Revision Rounds per Milestone]"
+    ],
+    "legalSummary": "The studio produces animation per approved boards; client owns final renders after payment unless source files are separately priced. Third-party asset licenses must be cleared for client use.",
+    "chatgptPrompts": [
+      "Fill for 90-second 2D explainer with two revision rounds per milestone.",
+      "Transfer Blender project files on final payment.",
+      "Add delay fee if client voiceover arrives late."
+    ],
+    "signerLabels": [
+      "Studio",
+      "Client"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "game-development-agreement",
+    "name": "Game Development Agreement",
+    "seoTitle": "Free Game Development Agreement Template",
+    "description": "Indie or contract game build: milestones, engine, IP ownership, publishing rights, and QA acceptance.",
+    "useCase": "Use this when a publisher or brand hires a studio to build a mobile or PC game prototype through gold master. It covers milestone acceptance, bug severity, and revenue share if any.",
+    "definition": "A game development agreement is a contract in which a developer creates interactive software entertainment for a client or publisher under milestone-based delivery.",
+    "keyClauses": [
+      "Platforms, genre, and feature outline",
+      "Milestone schedule and acceptance tests",
+      "Budget, payment, and change orders",
+      "Ownership of code, art, and trademarks",
+      "Publishing and sequel option rights if any",
+      "Warranty period for critical bug fixes"
+    ],
+    "fillInFields": [
+      "[Developer/Studio]",
+      "[Client/Publisher]",
+      "[Game Title/Concept]",
+      "[Target Platforms]",
+      "[Milestone Summary]",
+      "[Total Development Fee]",
+      "[Acceptance Criteria Reference]"
+    ],
+    "legalSummary": "Developer delivers playable builds meeting acceptance criteria; IP allocation determines who can exploit sequels and assets. Delayed client feedback may shift milestones.",
+    "chatgptPrompts": [
+      "Fill for mobile puzzle MVP with three paid milestones.",
+      "Assign character IP to publisher on final payment.",
+      "Define P0 bug fix window of 60 days post-launch."
+    ],
+    "signerLabels": [
+      "Developer",
+      "Publisher"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "beta-tester-agreement",
+    "name": "Beta Tester Agreement",
+    "seoTitle": "Free Beta Tester Agreement Template",
+    "description": "Early access tester agrees to confidentiality, feedback duties, and known-bug disclaimers.",
+    "useCase": "Use this when inviting users to a closed beta of software or hardware. It prevents public disclosure of features, limits liability for crashes, and clarifies that data may be wiped.",
+    "definition": "A beta tester agreement is a contract granting pre-release product access in exchange for confidentiality, feedback, and acceptance of unstable software risks.",
+    "keyClauses": [
+      "Beta product description and access method",
+      "Confidentiality of unreleased features",
+      "Feedback submission expectations",
+      "Data backup and wipe disclaimer",
+      "No warranty and limitation of liability",
+      "Term and revocation for leaks"
+    ],
+    "fillInFields": [
+      "[Company Name]",
+      "[Tester Name]",
+      "[Product Name]",
+      "[Beta Period]",
+      "[Tester Email/Account]",
+      "[NDA Term After Beta]",
+      "[Feedback Channel]"
+    ],
+    "legalSummary": "Testers may use the product under secrecy and assume risk of bugs or data loss; the company may revoke access anytime. Feedback may be assigned to the company for product improvement.",
+    "chatgptPrompts": [
+      "Fill for a 60-day SaaS beta under mutual NDA-style terms.",
+      "Allow screenshot sharing only in private Slack channel.",
+      "Explain data wipe on beta exit in plain language."
+    ],
+    "signerLabels": [
+      "Company",
+      "Tester"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "releaseForm"
+  },
+  {
+    "slug": "mediation-agreement",
+    "name": "Mediation Agreement",
+    "seoTitle": "Free Mediation Agreement Template",
+    "description": "Parties commit to confidential mediation before litigation with mediator fees and process rules.",
+    "useCase": "Use this when disputing parties agree to try mediation first in a contract dispute or workplace issue. It binds confidentiality of statements made in sessions and splits mediator costs.",
+    "definition": "A mediation agreement is a contract to participate in a structured negotiation assisted by a neutral mediator, often with confidentiality protections for settlement discussions.",
+    "keyClauses": [
+      "Dispute description and parties",
+      "Mediator selection or appointment process",
+      "Confidentiality of mediation communications",
+      "Fee sharing and scheduling",
+      "Good-faith participation expectations",
+      "Non-binding outcome unless written settlement signed"
+    ],
+    "fillInFields": [
+      "[Party A]",
+      "[Party B]",
+      "[Dispute Summary]",
+      "[Mediator Name if Known]",
+      "[Fee Split]",
+      "[Mediation Deadline]",
+      "[Governing Law]"
+    ],
+    "legalSummary": "Mediation does not decide the case unless parties sign a settlement; statements in mediation are typically inadmissible in court if confidentiality applies. Either party may stop but may face contractual consequences if mediation was mandatory.",
+    "chatgptPrompts": [
+      "Fill before suing on a vendor breach with 30-day mediation window.",
+      "Split mediator fees 50/50 with cap at $5K each.",
+      "Preserve right to litigate if mediation fails."
+    ],
+    "signerLabels": [
+      "Party A",
+      "Party B"
+    ],
+    "recurringCategory": "Compliance Documents",
+    "archetype": "noticeLetter"
+  },
+  {
+    "slug": "arbitration-agreement",
+    "name": "Arbitration Agreement",
+    "seoTitle": "Free Arbitration Agreement Template",
+    "description": "Parties agree to binding arbitration instead of court for defined disputes under AAA/JAMS-style rules.",
+    "useCase": "Use this in B2B contracts to route commercial disputes to private arbitration. It specifies seat, rules, arbitrator count, and whether injunctive relief stays available in court.",
+    "definition": "An arbitration agreement is a contract clause or standalone pact requiring parties to resolve specified disputes through binding arbitration rather than litigation.",
+    "keyClauses": [
+      "Scope of disputes covered",
+      "Arbitration rules and administering body",
+      "Seat/venue and number of arbitrators",
+      "Language and discovery limits",
+      "Fee allocation between parties",
+      "Confidentiality of proceedings if desired"
+    ],
+    "fillInFields": [
+      "[Party A]",
+      "[Party B]",
+      "[Effective Date]",
+      "[Arbitration Rules (e.g., AAA Commercial)]",
+      "[Seat City/State]",
+      "[Number of Arbitrators]",
+      "[Governing Law]"
+    ],
+    "legalSummary": "Binding arbitration waives jury trial for covered claims; award is enforceable like a judgment subject to limited review. Some consumer or employment contexts restrict mandatory arbitration.",
+    "chatgptPrompts": [
+      "Add to a B2B SaaS contract for US commercial disputes under AAA rules.",
+      "Carve out IP injunction requests to courts.",
+      "Explain fee split for three-arbitrator panel vs single."
+    ],
+    "signerLabels": [
+      "Party A",
+      "Party B"
+    ],
+    "recurringCategory": "Compliance Documents",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "prenuptial-agreement",
+    "name": "Prenuptial Agreement",
+    "seoTitle": "Free Prenuptial Agreement Template",
+    "description": "Before marriage: separate property, spousal support limits, and division rules if the marriage ends.",
+    "useCase": "Use this when engaged partners disclose assets and agree on financial boundaries before marrying. It should be signed with adequate time and independent counsel where advisable.",
+    "definition": "A prenuptial agreement is a contract entered before marriage that defines property rights and support obligations upon divorce or death, subject to state enforceability rules.",
+    "keyClauses": [
+      "Full financial disclosure schedules",
+      "Separate vs marital property definitions",
+      "Spousal support waivers or caps",
+      "Treatment of business interests and equity",
+      "Estate rights and beneficiary acknowledgments",
+      "Sunset clauses or review triggers if any"
+    ],
+    "fillInFields": [
+      "[Party A Name]",
+      "[Party B Name]",
+      "[Wedding Date]",
+      "[Party A Separate Property Summary]",
+      "[Party B Separate Property Summary]",
+      "[Governing State Law]",
+      "[Effective Upon Marriage Date]"
+    ],
+    "legalSummary": "Enforceability varies by state; duress, unconscionability, or incomplete disclosure can void terms. Both parties should understand waivers of default marital property rules.",
+    "chatgptPrompts": [
+      "Draft for two professionals keeping pre-marital retirement accounts separate.",
+      "Add review clause after 10 years of marriage.",
+      "List disclosure attachments needed for enforceability."
+    ],
+    "signerLabels": [
+      "Party A",
+      "Party B"
+    ],
+    "archetype": "personalServices"
+  },
+  {
+    "slug": "cohabitation-agreement",
+    "name": "Cohabitation Agreement",
+    "seoTitle": "Free Cohabitation Agreement Template",
+    "description": "Unmarried partners document rent, bills, property ownership, and exit terms while living together.",
+    "useCase": "Use this when romantic or platonic partners share a lease or buy furniture together without marriage. It clarifies who pays what and how to split assets if someone moves out.",
+    "definition": "A cohabitation agreement is a contract between unmarried housemates or partners setting financial and property arrangements during shared residency.",
+    "keyClauses": [
+      "Residence address and tenancy names on lease",
+      "Expense split: rent, utilities, groceries",
+      "Ownership of shared purchases and pets",
+      "House rules and guest policies",
+      "Move-out notice and buyout mechanics",
+      "Dispute resolution and amendment process"
+    ],
+    "fillInFields": [
+      "[Partner A Name]",
+      "[Partner B Name]",
+      "[Shared Address]",
+      "[Rent and Deposit Split]",
+      "[Move-Out Notice Period]",
+      "[Joint Property List Reference]",
+      "[Effective Date]"
+    ],
+    "legalSummary": "Partners clarify expectations outside default landlord-tenant law; it does not create marital property rights. Lease liability still follows the names on the landlord's lease.",
+    "chatgptPrompts": [
+      "Fill for 50/50 rent split on a two-bedroom apartment lease in both names.",
+      "Add pet custody and vet cost split for a shared dog.",
+      "Explain buyout formula for jointly purchased sofa and TV."
+    ],
+    "signerLabels": [
+      "Partner A",
+      "Partner B"
+    ],
+    "recurringCategory": "Real Estate",
+    "archetype": "realEstateLease"
+  },
+  {
+    "slug": "nanny-agreement",
+    "name": "Nanny Agreement",
+    "seoTitle": "Free Nanny Agreement Template",
+    "description": "In-home childcare schedule, duties, pay, overtime, and transportation authorization.",
+    "useCase": "Use this when a family hires a part-time or full-time nanny directly. It documents hours, rate, PTO, sick child policies, and whether the nanny may drive children.",
+    "definition": "A nanny agreement is a household employment contract defining childcare duties, schedule, compensation, and house rules for an in-home caregiver.",
+    "keyClauses": [
+      "Children covered and daily schedule",
+      "Duties: childcare, light child-related housekeeping",
+      "Hourly/salary pay, overtime, and payroll taxes note",
+      "PTO, holidays, and sick leave",
+      "Driving authorization and car seat rules",
+      "Termination notice and confidentiality"
+    ],
+    "fillInFields": [
+      "[Family/Employer Name]",
+      "[Nanny Name]",
+      "[Children Names/Ages]",
+      "[Work Schedule]",
+      "[Hourly Rate/Overtime Rules]",
+      "[Start Date]",
+      "[Driving Authorization Y/N]"
+    ],
+    "legalSummary": "Families may be employers for tax and labor law purposes; written terms reduce disputes over hours and duties. Either party may terminate per notice clause subject to applicable law.",
+    "chatgptPrompts": [
+      "Fill for full-time nanny Mon–Fri 8–5 at $22/hour with two weeks PTO.",
+      "Add authorization to take kids to pediatric appointments.",
+      "Explain household employer payroll tax obligations briefly."
+    ],
+    "signerLabels": [
+      "Family",
+      "Nanny"
+    ],
+    "recurringCategory": "Employment",
+    "archetype": "employmentDoc"
+  },
+  {
+    "slug": "tutoring-agreement",
+    "name": "Tutoring Agreement",
+    "seoTitle": "Free Tutoring Agreement Template",
+    "description": "Academic tutor sets subjects, session length, rates, cancellation, and online safety for minors.",
+    "useCase": "Use this when an independent tutor works with a K-12 or college student outside a school program. It sets homework expectations, no-guarantee of grades, and virtual session rules.",
+    "definition": "A tutoring agreement is a services contract in which a tutor provides individualized academic instruction on a scheduled basis for a fee.",
+    "keyClauses": [
+      "Subjects, level, and learning goals",
+      "Session length, frequency, and location/online platform",
+      "Fees, payment timing, and cancellation notice",
+      "Materials and homework expectations",
+      "No grade guarantee disclaimer",
+      "Safeguarding and communication with parents if minor"
+    ],
+    "fillInFields": [
+      "[Tutor Name]",
+      "[Student/Parent Name]",
+      "[Subject(s) and Level]",
+      "[Session Schedule]",
+      "[Rate per Session/Hour]",
+      "[Cancellation Policy]",
+      "[Start Date]"
+    ],
+    "legalSummary": "The tutor provides supplemental instruction professionally; outcomes depend on student effort and are not guaranteed. Parents authorize online contact protocols for minors.",
+    "chatgptPrompts": [
+      "Fill for weekly SAT math tutoring online at $75/hour.",
+      "Require 24-hour cancellation or one session fee.",
+      "Add parent CC on all emails for a minor student."
+    ],
+    "signerLabels": [
+      "Tutor",
+      "Parent/Student"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "personalServices"
+  },
+  {
+    "slug": "personal-training-agreement",
+    "name": "Personal Training Agreement",
+    "seoTitle": "Free Personal Training Agreement Template",
+    "description": "Trainer liability waiver elements, health disclosure, session pack expiry, and cancellation.",
+    "useCase": "Use this when a gym or independent trainer sells session packages. It requires PAR-Q health acknowledgment and states training is not medical advice.",
+    "definition": "A personal training agreement is a contract for one-on-one fitness coaching sessions with health disclaimers and session scheduling terms.",
+    "keyClauses": [
+      "Trainer credentials and session location",
+      "Health questionnaire and doctor clearance triggers",
+      "Session pack size and expiration",
+      "Cancellation/no-show fees",
+      "Assumption of exercise risk",
+      "Photo/social media release if optional"
+    ],
+    "fillInFields": [
+      "[Trainer/Gym Name]",
+      "[Client Name]",
+      "[Session Package Count]",
+      "[Package Price]",
+      "[Expiration Months]",
+      "[Session Length]",
+      "[Emergency Contact]"
+    ],
+    "legalSummary": "Clients acknowledge physical activity risks and accurate health disclosures; trainers coach but do not diagnose injuries. Unused sessions may expire per disclosed policy.",
+    "chatgptPrompts": [
+      "Fill for 20-session pack expiring in 6 months at a gym.",
+      "Require doctor note before post-surgery return to training.",
+      "Add 12-hour cancellation fee for no-shows."
+    ],
+    "signerLabels": [
+      "Trainer",
+      "Client"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "personalServices"
+  },
+  {
+    "slug": "executive-coaching-agreement",
+    "name": "Executive Coaching Agreement",
+    "seoTitle": "Free Executive Coaching Agreement Template",
+    "description": "Leadership coaching for executives: confidentiality, goals, session cadence, and employer sponsorship.",
+    "useCase": "Use this when a company sponsors coaching for a VP or the executive hires a coach directly. It addresses confidentiality vis-à-vis the employer and success metrics.",
+    "definition": "An executive coaching agreement is a professional development contract between a coach and an executive client, sometimes with employer involvement, focused on leadership performance.",
+    "keyClauses": [
+      "Coaching objectives and stakeholder alignment",
+      "Session cadence and duration of engagement",
+      "Confidentiality between coach and executive",
+      "Employer reporting boundaries if sponsored",
+      "Fees invoiced to company or individual",
+      "Termination and chemistry-fit clause"
+    ],
+    "fillInFields": [
+      "[Coach Name]",
+      "[Executive Client Name]",
+      "[Sponsor Company if Any]",
+      "[Engagement Length]",
+      "[Session Frequency]",
+      "[Fee and Invoicing Party]",
+      "[Start Date]"
+    ],
+    "legalSummary": "Coaching is developmental, not therapy or legal advice; confidentiality protects candid leadership topics unless danger or policy exceptions apply. Sponsor pays but may not receive session content without client consent.",
+    "chatgptPrompts": [
+      "Fill for 6-month biweekly coaching sponsored by the CEO's company.",
+      "Keep session notes confidential from HR.",
+      "Add 360-feedback coordination without sharing raw comments."
+    ],
+    "signerLabels": [
+      "Coach",
+      "Client"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "personalServices"
+  },
+  {
+    "slug": "bookkeeping-services-agreement",
+    "name": "Bookkeeping Services Agreement",
+    "seoTitle": "Free Bookkeeping Services Agreement Template",
+    "description": "Monthly books, categorization, reconciliations, and deliverables up to but not including tax filing.",
+    "useCase": "Use this when a bookkeeper serves SMB clients on QuickBooks or Xero. It defines cutoff dates, missing receipt policies, and that CPA tax prep is separate.",
+    "definition": "A bookkeeping services agreement is a contract for recurring recording and reconciliation of a client's financial transactions in agreed accounting software.",
+    "keyClauses": [
+      "Services: categorization, bank rec, AR/AP support scope",
+      "Software access and client document duties",
+      "Monthly close deadline and reporting package",
+      "Excluded tax preparation and audit support",
+      "Fee, billing date, and late payment",
+      "Confidentiality of financial data"
+    ],
+    "fillInFields": [
+      "[Bookkeeper/Firm]",
+      "[Client Business Name]",
+      "[Software Platform]",
+      "[Monthly Fee]",
+      "[Monthly Close Deadline]",
+      "[Services Included List]",
+      "[Effective Date]"
+    ],
+    "legalSummary": "Bookkeeper maintains records accurately based on client-provided docs; tax positions remain client's responsibility with their CPA. Access credentials must be secured.",
+    "chatgptPrompts": [
+      "Fill for monthly QBO cleanup and bank rec by the 15th at $600/month.",
+      "Exclude payroll processing from scope.",
+      "Require client upload of receipts by the 5th."
+    ],
+    "signerLabels": [
+      "Bookkeeper",
+      "Client"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "fractional-cfo-agreement",
+    "name": "Fractional CFO Agreement",
+    "seoTitle": "Free Fractional CFO Agreement Template",
+    "description": "Part-time CFO services: forecasting, board prep, fundraising support, and hour caps.",
+    "useCase": "Use this when a startup retains a fractional CFO for 10–20 hours monthly. It scopes investor reporting, model updates, and excludes legal securities advice.",
+    "definition": "A fractional CFO agreement is a part-time executive services contract in which a finance leader provides strategic financial oversight without full-time employment.",
+    "keyClauses": [
+      "Services: FP&A, fundraising materials, board decks",
+      "Monthly hour cap and overage rate",
+      "On-site vs remote availability",
+      "Confidentiality and insider information duties",
+      "Term and non-solicitation of finance staff if any",
+      "Independent contractor status"
+    ],
+    "fillInFields": [
+      "[CFO/Consultant Name]",
+      "[Company Name]",
+      "[Monthly Hour Commitment]",
+      "[Monthly Retainer Fee]",
+      "[Overage Hourly Rate]",
+      "[Term Length]",
+      "[Primary Contact/CEO]"
+    ],
+    "legalSummary": "The fractional CFO advises management but does not replace board fiduciary duties or licensed legal/tax counsel. Company provides timely data for accurate forecasts.",
+    "chatgptPrompts": [
+      "Fill for 15 hours/month at $5K retainer for a Series A startup.",
+      "Include monthly board deck review in scope.",
+      "Carve out securities law advice to company counsel."
+    ],
+    "signerLabels": [
+      "CFO Consultant",
+      "Company"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "penetration-testing-agreement",
+    "name": "Penetration Testing Agreement",
+    "seoTitle": "Free Penetration Testing Agreement Template",
+    "description": "Authorized security testing scope, rules of engagement, data handling, and liability limits.",
+    "useCase": "Use this before a pentest vendor probes production or staging environments. It defines IP ranges, forbidden attacks, emergency stop contacts, and report confidentiality.",
+    "definition": "A penetration testing agreement is a contract authorizing simulated cyberattacks on a client's systems within strict scope to identify vulnerabilities.",
+    "keyClauses": [
+      "Systems and IP scope in/out of bounds",
+      "Testing window and notification requirements",
+      "Rules of engagement and stop conditions",
+      "Handling of discovered data and critical findings",
+      "Report delivery and remediation retest option",
+      "Liability cap and insurance"
+    ],
+    "fillInFields": [
+      "[Testing Vendor]",
+      "[Client Company]",
+      "[Scope Assets/List]",
+      "[Test Window Dates]",
+      "[Emergency Contact 24/7]",
+      "[Fee]",
+      "[Report Delivery Date]"
+    ],
+    "legalSummary": "Client explicitly authorizes otherwise illegal probing within scope; vendor must avoid destructive tests unless approved. Critical findings trigger agreed escalation paths.",
+    "chatgptPrompts": [
+      "Fill for external web app pentest on staging URL over one weekend.",
+      "Forbid social engineering and DoS attacks.",
+      "Require encrypted report delivery within 5 business days."
+    ],
+    "signerLabels": [
+      "Vendor",
+      "Client"
+    ],
+    "recurringCategory": "Compliance Documents",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "safe-agreement",
+    "name": "SAFE Agreement",
+    "seoTitle": "Free SAFE Agreement Template",
+    "description": "Simple Agreement for Future Equity: investment amount, valuation cap, discount, and conversion triggers.",
+    "useCase": "Use this when a startup raises on a YC-style SAFE instead of a priced round. It documents purchase amount, cap/discount, and pro rata rights if included.",
+    "definition": "A SAFE (Simple Agreement for Future Equity) is an investment contract that converts into equity upon specified future events without setting a current share price.",
+    "keyClauses": [
+      "Purchase amount and payment date",
+      "Valuation cap and/or discount rate",
+      "Conversion triggers (equity financing, liquidity)",
+      "Pro rata and MFN provisions if any",
+      "Company representations and investor accreditation",
+      "Dissolution or change-of-control treatment"
+    ],
+    "fillInFields": [
+      "[Company Name]",
+      "[Investor Name]",
+      "[Purchase Amount]",
+      "[Valuation Cap]",
+      "[Discount Rate if Any]",
+      "[Date of SAFE]",
+      "[Governing State]"
+    ],
+    "legalSummary": "Investor funds the company now for future shares on trigger events; no debt repayment unless dissolution provisions apply. Terms vary by SAFE variant (cap only, discount only, or both).",
+    "chatgptPrompts": [
+      "Fill a post-money SAFE with $250K and $8M cap for an angel.",
+      "Explain difference from convertible note for the investor.",
+      "Add pro rata side letter reference."
+    ],
+    "signerLabels": [
+      "Company",
+      "Investor"
+    ],
+    "recurringCategory": "Funding",
+    "archetype": "corporateGovernance"
+  },
+  {
+    "slug": "angel-investor-term-sheet",
+    "name": "Angel Investor Term Sheet",
+    "seoTitle": "Free Angel Investor Term Sheet Template",
+    "description": "Headline terms for a priced seed round: valuation, board seat, protective provisions, and option pool.",
+    "useCase": "Use this before drafting stock purchase agreements for an angel-led seed round. It aligns on pre-money, investor rights, and founder vesting refresh if any.",
+    "definition": "An angel investor term sheet summarizes key economic and control terms for a preferred stock financing, typically non-binding except for exclusivity and fees.",
+    "keyClauses": [
+      "Pre-money valuation and round size",
+      "Security type and liquidation preference",
+      "Board composition and observer rights",
+      "Protective provisions and drag-along",
+      "Option pool increase before closing",
+      "Exclusivity/no-shop period"
+    ],
+    "fillInFields": [
+      "[Company Name]",
+      "[Lead Angel Name]",
+      "[Pre-Money Valuation]",
+      "[Investment Amount]",
+      "[Option Pool Target %]",
+      "[Board Seat Y/N]",
+      "[Exclusivity Days]"
+    ],
+    "legalSummary": "Term sheet guides definitive docs; investors should not wire funds until legal closing. Founders should understand dilution and control changes from protective provisions.",
+    "chatgptPrompts": [
+      "Fill for $1.5M seed on $6M pre with 1x non-participating pref.",
+      "Add standard NVCA-lite protective provisions list.",
+      "Explain option pool shuffle impact on founder dilution."
+    ],
+    "signerLabels": [
+      "Company",
+      "Lead Investor"
+    ],
+    "recurringCategory": "Funding",
+    "archetype": "corporateGovernance"
+  },
+  {
+    "slug": "shareholder-agreement",
+    "name": "Shareholder Agreement",
+    "seoTitle": "Free Shareholder Agreement Template",
+    "description": "Rights among shareholders: transfers, ROFR, tag/drag, dividends, and deadlock resolution.",
+    "useCase": "Use this alongside bylaws for a closely held corporation to restrict share transfers and define buyout formulas. It often covers founder departures and non-compete bounds.",
+    "definition": "A shareholder agreement is a contract among a corporation's shareholders governing ownership transfers, governance, and economic rights beyond the certificate of incorporation.",
+    "keyClauses": [
+      "Share ownership and capital contributions",
+      "Transfer restrictions and ROFR/co-sale",
+      "Tag-along and drag-along rights",
+      "Board appointment and deadlock breakers",
+      "Dividend policy and distributions",
+      "Non-compete and confidentiality among holders"
+    ],
+    "fillInFields": [
+      "[Company Name]",
+      "[Shareholder A]",
+      "[Shareholder B]",
+      "[Share Counts/Percentages]",
+      "[ROFR Period Days]",
+      "[Drag-Along Threshold %]",
+      "[Governing Law State]"
+    ],
+    "legalSummary": "Shareholders contract around default corporate law; buyout triggers activate formulas on death, termination, or voluntary sale. Unapproved transfers may be void against the company.",
+    "chatgptPrompts": [
+      "Fill for 3-founder C-corp with 30-day ROFR on any transfer.",
+      "Add shotgun clause for 50/50 deadlock.",
+      "Align drag-along at 66% holder approval."
+    ],
+    "signerLabels": [
+      "Shareholder A",
+      "Shareholder B"
+    ],
+    "recurringCategory": "Equity",
+    "archetype": "corporateGovernance"
+  },
+  {
+    "slug": "distribution-agreement",
+    "name": "Distribution Agreement",
+    "seoTitle": "Free Distribution Agreement Template",
+    "description": "Manufacturer appoints distributor to stock, market, and sell products in a territory.",
+    "useCase": "Use this when a hardware or CPG maker sells through regional distributors. It sets MOQs, pricing tiers, MAP, and termination stock buyback.",
+    "definition": "A distribution agreement is a contract granting a distributor the right to purchase and resell a supplier's products in a defined territory under commercial terms.",
+    "keyClauses": [
+      "Products and territory exclusivity",
+      "Pricing, discounts, and payment terms",
+      "Minimum purchase commitments if any",
+      "Marketing support and trademark usage",
+      "Product recalls and warranty handling",
+      "Term, termination, and slow-moving stock buyback"
+    ],
+    "fillInFields": [
+      "[Supplier/Manufacturer]",
+      "[Distributor Name]",
+      "[Product Lines]",
+      "[Territory]",
+      "[Discount/Margin Schedule]",
+      "[Minimum Order Value if Any]",
+      "[Agreement Term]"
+    ],
+    "legalSummary": "Distributor buys inventory for resale; title and risk pass per delivery terms. Supplier may terminate for underperformance or brand damage per contract.",
+    "chatgptPrompts": [
+      "Fill for exclusive US Southwest distribution of kitchen gadgets.",
+      "Add MAP policy with termination for violations.",
+      "Require quarterly sell-through reporting."
+    ],
+    "signerLabels": [
+      "Supplier",
+      "Distributor"
+    ],
+    "recurringCategory": "Sale and Purchase",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "manufacturing-agreement",
+    "name": "Manufacturing Agreement",
+    "seoTitle": "Free Manufacturing Agreement Template",
+    "description": "Contract manufacturer builds to spec with QA, IP, tooling, and forecast-based orders.",
+    "useCase": "Use this when a brand outsources production to a factory, often overseas. It covers BOM, quality inspections, defect rates, and who owns molds.",
+    "definition": "A manufacturing agreement is a contract in which a manufacturer produces goods according to a buyer's specifications and quality standards.",
+    "keyClauses": [
+      "Product specs, BOM, and approved suppliers",
+      "Forecast, MOQ, and lead times",
+      "Quality control and inspection rights",
+      "Tooling/mold ownership and maintenance",
+      "Pricing adjustments and raw material pass-through",
+      "IP protection and counterfeit prevention"
+    ],
+    "fillInFields": [
+      "[Manufacturer]",
+      "[Buyer/Brand]",
+      "[Product Name/SKU]",
+      "[Annual Volume Estimate]",
+      "[Unit Price]",
+      "[Lead Time Weeks]",
+      "[Tooling Owner]"
+    ],
+    "legalSummary": "Manufacturer must meet spec and quality metrics; buyer pays per accepted orders. Tooling and IP misappropriation are key breach concerns with audit rights.",
+    "chatgptPrompts": [
+      "Fill for 10K unit/year electronics assembly with buyer-owned tooling.",
+      "Add on-site inspection rights with 48-hour notice.",
+      "Cap scrap rate at 2% before chargebacks."
+    ],
+    "signerLabels": [
+      "Manufacturer",
+      "Buyer"
+    ],
+    "recurringCategory": "Sale and Purchase",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "consignment-agreement",
+    "name": "Consignment Agreement",
+    "seoTitle": "Free Consignment Agreement Template",
+    "description": "Consignor places goods with a retailer who pays only after sale with commission and return terms.",
+    "useCase": "Use this when an artist, boutique supplier, or used goods seller places inventory in a shop. It sets consignment period, commission %, and unsold return logistics.",
+    "definition": "A consignment agreement is a arrangement where an owner places goods with a seller who remits payment minus commission only when items sell.",
+    "keyClauses": [
+      "Consigned inventory list and pricing authority",
+      "Commission rate and payout schedule",
+      "Risk of loss and insurance while on display",
+      "Markdown and discount approval",
+      "Unsold goods return timeline",
+      "Recordkeeping and inventory audit"
+    ],
+    "fillInFields": [
+      "[Consignor Name]",
+      "[Consignee/Shop Name]",
+      "[Inventory Description]",
+      "[Commission %]",
+      "[Consignment Period End Date]",
+      "[Minimum Price Policy]",
+      "[Payout Frequency]"
+    ],
+    "legalSummary": "Title typically stays with consignor until sale; shop must segregate funds and return unsold goods timely. Shop liability for loss depends on agreed care standard.",
+    "chatgptPrompts": [
+      "Fill for boutique clothing consignment at 40% commission to shop.",
+      "Require monthly sales report and payout.",
+      "Return unsold items 30 days after season ends."
+    ],
+    "signerLabels": [
+      "Consignor",
+      "Consignee"
+    ],
+    "recurringCategory": "Sale and Purchase",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "warehouse-services-agreement",
+    "name": "Warehouse Services Agreement",
+    "seoTitle": "Free Warehouse Services Agreement Template",
+    "description": "3PL storage, pick-pack-ship, inventory reporting, and SLA for ecommerce fulfillment.",
+    "useCase": "Use this when a brand uses a third-party warehouse for SKU storage and order fulfillment. It defines inbound ASN, pick accuracy targets, and chargeback for mis-ships.",
+    "definition": "A warehouse services agreement is a logistics contract in which a provider stores and fulfills a client's goods according to operational SLAs and fee schedules.",
+    "keyClauses": [
+      "Facility location and product types allowed",
+      "Storage fees and fulfillment per-order fees",
+      "Inbound/receiving and inventory accuracy SLAs",
+      "Pick/pack/shipping carriers and cutoffs",
+      "Liability caps for loss/damage",
+      "Term, volume tiers, and peak season surcharges"
+    ],
+    "fillInFields": [
+      "[3PL/Warehouse Provider]",
+      "[Client Brand]",
+      "[Primary SKUs Count Estimate]",
+      "[Storage Fee Structure]",
+      "[Pick/Pack Fee per Order]",
+      "[SLA Accuracy Target %]",
+      "[Contract Term]"
+    ],
+    "legalSummary": "Provider handles goods with reasonable care per SLA; client must provide accurate SKU data and timely inbound shipments. Liability for lost inventory is often capped monthly.",
+    "chatgptPrompts": [
+      "Fill for ecommerce 3PL at $15/pallet/month plus $3/order pick fee.",
+      "Require 99.5% pick accuracy with credit for errors.",
+      "Add peak November surcharge schedule."
+    ],
+    "signerLabels": [
+      "Provider",
+      "Client"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "freight-broker-agreement",
+    "name": "Freight Broker Agreement",
+    "seoTitle": "Free Freight Broker Agreement Template",
+    "description": "Broker arranges carrier transportation for shipper loads with payment, liability, and claims process.",
+    "useCase": "Use this when a licensed broker moves full truckload or LTL freight for a manufacturer. It clarifies broker is not the carrier and sets payment terms and cargo claim filing.",
+    "definition": "A freight broker agreement is a contract in which a broker arranges motor carrier transportation of a shipper's goods for a fee without taking possession of freight.",
+    "keyClauses": [
+      "Broker MC authority representation",
+      "Load tender and rate confirmation process",
+      "Payment terms and factoring notice if any",
+      "Carrier selection and insurance minimums",
+      "Claims filing and documentation duties",
+      "Non-carrier disclaimer and liability limits"
+    ],
+    "fillInFields": [
+      "[Broker Name]",
+      "[Shipper/Customer]",
+      "[Primary Lanes or Regions]",
+      "[Payment Terms Days]",
+      "[Insurance Minimum per Load]",
+      "[Effective Date]",
+      "[Primary Contact]"
+    ],
+    "legalSummary": "Broker procures carriers; carrier remains liable for cargo loss subject to Carmack and contracts. Shipper must accurately declare freight characteristics and value.",
+    "chatgptPrompts": [
+      "Fill for FTL produce lanes with net-30 and $100K cargo min insurance.",
+      "Explain broker vs carrier liability on a damaged pallet.",
+      "Add quick pay option with 2% discount."
+    ],
+    "signerLabels": [
+      "Broker",
+      "Shipper"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "vacation-rental-agreement",
+    "name": "Vacation Rental Agreement",
+    "seoTitle": "Free Vacation Rental Agreement Template",
+    "description": "Short-term guest stay rules, deposit, cleaning fees, and house rules for Airbnb-style rentals.",
+    "useCase": "Use this when an owner rents a furnished home for nights or weeks to travelers. It sets check-in/out, occupancy limits, noise rules, and damage deposit hold.",
+    "definition": "A vacation rental agreement is a short-term lodging contract between a property owner or manager and a guest for transient occupancy not intended as a long-term lease.",
+    "keyClauses": [
+      "Property, dates, and guest count limits",
+      "Nightly rate, cleaning fee, taxes, and deposit",
+      "Check-in/out procedures and key access",
+      "House rules: pets, parties, smoking bans",
+      "Cancellation and refund tiers",
+      "Damage reporting and deposit release timing"
+    ],
+    "fillInFields": [
+      "[Host/Owner Name]",
+      "[Guest Name]",
+      "[Property Address]",
+      "[Check-In and Check-Out Dates]",
+      "[Total Price and Deposit]",
+      "[Maximum Occupancy]",
+      "[House Rules Summary]"
+    ],
+    "legalSummary": "Guest receives temporary occupancy rights, not tenant protections of long-term leases in many jurisdictions. Host may cancel per policy; local short-term rental laws may apply separately.",
+    "chatgptPrompts": [
+      "Fill for 7-night beach house rental with $500 damage hold.",
+      "Prohibit events over 8 guests and quiet hours after 10pm.",
+      "Set moderate cancellation: full refund 14+ days out."
+    ],
+    "signerLabels": [
+      "Host",
+      "Guest"
+    ],
+    "recurringCategory": "Real Estate",
+    "archetype": "realEstateLease"
+  },
+  {
+    "slug": "easement-agreement",
+    "name": "Easement Agreement",
+    "seoTitle": "Free Easement Agreement Template",
+    "description": "Grants right to cross or use a portion of land for access, utilities, or drainage.",
+    "useCase": "Use this when a neighbor needs a driveway easement or a utility line crosses private property. It describes the path, maintenance duties, and whether it runs with the land.",
+    "definition": "An easement agreement is a property contract granting a non-owner limited use of another's land for a specified purpose.",
+    "keyClauses": [
+      "Legal description of servient and dominant parcels",
+      "Easement area and permitted use",
+      "Exclusive vs non-exclusive rights",
+      "Maintenance and repair responsibilities",
+      "Term or perpetual appurtenance",
+      "Indemnity and insurance if any"
+    ],
+    "fillInFields": [
+      "[Grantor Property Owner]",
+      "[Grantee/Benefited Owner]",
+      "[Property Legal Descriptions]",
+      "[Easement Purpose]",
+      "[Easement Area Description]",
+      "[Maintenance Party]",
+      "[Recording County]"
+    ],
+    "legalSummary": "Easement holder may use land only as granted; grantor retains ownership subject to that use. Recording makes rights enforceable against future owners if properly drafted appurtenant.",
+    "chatgptPrompts": [
+      "Fill for shared gravel driveway easement 12 feet wide.",
+      "Assign snow removal to benefited owner.",
+      "State easement runs with the land and binds successors."
+    ],
+    "signerLabels": [
+      "Grantor",
+      "Grantee"
+    ],
+    "recurringCategory": "Real Estate",
+    "archetype": "realEstateLease"
+  },
+  {
+    "slug": "neighbor-fence-agreement",
+    "name": "Neighbor Fence Agreement",
+    "seoTitle": "Free Neighbor Fence Agreement Template",
+    "description": "Adjacent owners agree on boundary fence cost share, design, and maintenance.",
+    "useCase": "Use this when replacing a shared fence between residential lots. It documents cost split, height/material choices, contractor selection, and future repair duty.",
+    "definition": "A neighbor fence agreement is a contract between adjoining property owners specifying construction, cost allocation, and upkeep of a boundary fence.",
+    "keyClauses": [
+      "Property addresses and shared boundary line",
+      "Fence specifications and permits responsibility",
+      "Cost share percentage and payment schedule",
+      "Contractor selection and access to yards",
+      "Maintenance and replacement triggers",
+      "Dispute resolution for future damage"
+    ],
+    "fillInFields": [
+      "[Neighbor A Name]",
+      "[Neighbor B Name]",
+      "[Shared Boundary Description]",
+      "[Fence Material and Height]",
+      "[Total Estimated Cost]",
+      "[Cost Share Split]",
+      "[Construction Start Date]"
+    ],
+    "legalSummary": "Both owners benefit from a defined boundary structure; failure to pay agreed share may leave one owner pursuing contribution in small claims. Local fence laws still apply.",
+    "chatgptPrompts": [
+      "Split 50/50 on 6-foot cedar privacy fence replacement.",
+      "Assign west owner to pull city permit.",
+      "Add tree root damage repair responsibility."
+    ],
+    "signerLabels": [
+      "Neighbor A",
+      "Neighbor B"
+    ],
+    "recurringCategory": "Real Estate",
+    "archetype": "constructionDoc"
+  },
+  {
+    "slug": "solar-panel-installation-agreement",
+    "name": "Solar Panel Installation Agreement",
+    "seoTitle": "Free Solar Panel Installation Agreement Template",
+    "description": "PV system design, install, interconnection, incentives, warranties, and performance expectations.",
+    "useCase": "Use this when a homeowner buys a rooftop solar system from an installer. It covers system size, production estimate disclaimer, utility interconnection, and workmanship warranty.",
+    "definition": "A solar panel installation agreement is a contract for design, installation, and commissioning of a photovoltaic energy system on a customer's property.",
+    "keyClauses": [
+      "System size, equipment brands, and layout",
+      "Price, incentives assignment, and payment schedule",
+      "Permits, interconnection, and inspection duties",
+      "Production estimate disclaimer",
+      "Workmanship and equipment warranties",
+      "Roof penetration and leak repair responsibility"
+    ],
+    "fillInFields": [
+      "[Installer Company]",
+      "[Customer Name]",
+      "[Installation Address]",
+      "[System kW Size]",
+      "[Total Contract Price]",
+      "[Estimated Completion Date]",
+      "[Utility Company]"
+    ],
+    "legalSummary": "Installer delivers a permitted, interconnected system; customer owns hardware after payment unless lease/PPA alternate doc. Production varies with weather; estimates are not guarantees.",
+    "chatgptPrompts": [
+      "Fill for 8kW rooftop purchase with 25-year panel warranty pass-through.",
+      "Assign ITC documentation signature to customer.",
+      "Add roof leak repair warranty 10 years from install."
+    ],
+    "signerLabels": [
+      "Installer",
+      "Customer"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "constructionDoc"
+  },
+  {
+    "slug": "lawn-care-agreement",
+    "name": "Lawn Care Agreement",
+    "seoTitle": "Free Lawn Care Agreement Template",
+    "description": "Recurring mowing, edging, fertilization schedule, and seasonal service exclusions.",
+    "useCase": "Use this when a landscaping company maintains residential or commercial turf monthly. It defines visit frequency, rain delays, and whether fertilization is included.",
+    "definition": "A lawn care agreement is a seasonal or annual contract for routine grounds maintenance services on a client's property.",
+    "keyClauses": [
+      "Property address and lawn area scope",
+      "Services per visit: mow, edge, blow",
+      "Visit frequency and weather rescheduling",
+      "Fertilization/weed control if included",
+      "Monthly or per-visit pricing",
+      "Term, auto-renewal, and cancellation notice"
+    ],
+    "fillInFields": [
+      "[Landscaper Name]",
+      "[Customer Name]",
+      "[Service Address]",
+      "[Visit Frequency]",
+      "[Monthly Fee]",
+      "[Season Start/End Months]",
+      "[Gate/Access Instructions]"
+    ],
+    "legalSummary": "Contractor performs routine maintenance professionally; damage to hidden irrigation or objects should be reported promptly. Customer keeps areas accessible on service days.",
+    "chatgptPrompts": [
+      "Fill for weekly mowing April–October at $180/month.",
+      "Exclude leaf removal from base fee.",
+      "Add 24-hour rain delay reschedule policy."
+    ],
+    "signerLabels": [
+      "Landscaper",
+      "Customer"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "moving-services-agreement",
+    "name": "Moving Services Agreement",
+    "seoTitle": "Free Moving Services Agreement Template",
+    "description": "Household or office move: inventory, binding estimate, liability valuation, and delivery window.",
+    "useCase": "Use this when a licensed mover transports goods locally or interstate. It documents inventory, valuation option (released vs full value), and charges for stairs/long carry.",
+    "definition": "A moving services agreement is a contract in which a carrier transports a customer's household or office goods to a new location for an agreed price and delivery schedule.",
+    "keyClauses": [
+      "Origin and destination addresses",
+      "Inventory or weight estimate basis",
+      "Binding vs non-binding estimate type",
+      "Valuation coverage and claims process",
+      "Accessorial charges: stairs, packing, storage",
+      "Pickup and delivery date windows"
+    ],
+    "fillInFields": [
+      "[Mover Company Name]",
+      "[Customer Name]",
+      "[Origin Address]",
+      "[Destination Address]",
+      "[Estimated Weight/Cubic Feet]",
+      "[Total Estimate Price]",
+      "[Move Date Window]"
+    ],
+    "legalSummary": "Mover must deliver per estimate terms; customer declares high-value items separately. Liability for loss depends on valuation option chosen and federal/state rules for interstate moves.",
+    "chatgptPrompts": [
+      "Fill for local 2-bedroom apartment move with released value coverage.",
+      "List piano as high-value item with extra handling fee.",
+      "Add storage-in-transit clause up to 30 days."
+    ],
+    "signerLabels": [
+      "Mover",
+      "Customer"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "session-musician-agreement",
+    "name": "Session Musician Agreement",
+    "seoTitle": "Free Session Musician Agreement Template",
+    "description": "Studio session work for hire with fees, overdub scope, and credit/work-for-hire terms.",
+    "useCase": "Use this when a producer hires musicians to record parts on an album or jingle. It specifies session fee, whether union rules apply, and work-for-hire ownership of recordings.",
+    "definition": "A session musician agreement is a contract in which a performer records musical parts in a studio setting for a producer or label under defined compensation and rights terms.",
+    "keyClauses": [
+      "Session date, studio, and instruments",
+      "Tracks/songs and part description",
+      "Session fee and overtime/reuse fees",
+      "Work-for-hire sound recording ownership",
+      "Credit on album optional",
+      "Cancellation and reschedule"
+    ],
+    "fillInFields": [
+      "[Producer/Label Name]",
+      "[Musician Name]",
+      "[Session Date and Studio]",
+      "[Songs/Parts Covered]",
+      "[Session Fee]",
+      "[Work-for-Hire Y/N]",
+      "[Reuse/Backend Fee if Any]"
+    ],
+    "legalSummary": "Musician performs and typically assigns recording rights for the session fee unless union reuse fees apply. Songwriting splits are separate if musician contributes composition.",
+    "chatgptPrompts": [
+      "Fill for 4-hour bass session on three tracks work-for-hire.",
+      "Add 50% fee for national ad reuse of the recording.",
+      "Clarify no songwriting credit unless composition contributed."
+    ],
+    "signerLabels": [
+      "Producer",
+      "Musician"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "beat-licensing-agreement",
+    "name": "Beat Licensing Agreement",
+    "seoTitle": "Free Beat Licensing Agreement Template",
+    "description": "Producer licenses an instrumental beat with MP3/WAV/stems tier and distribution limits.",
+    "useCase": "Use this when a beat maker sells non-exclusive or exclusive licenses to independent artists. It caps streaming counts or monetization for basic tiers.",
+    "definition": "A beat licensing agreement grants an artist permission to record vocals over a producer's instrumental track within defined distribution and monetization limits.",
+    "keyClauses": [
+      "Beat title and file formats delivered",
+      "Exclusive vs non-exclusive license",
+      "Distribution/streaming caps by tier",
+      "Credit requirements",
+      "Prohibited resale of instrumental alone",
+      "Term and territory"
+    ],
+    "fillInFields": [
+      "[Producer Name]",
+      "[Artist Name]",
+      "[Beat Title]",
+      "[License Tier Exclusive/Non]",
+      "[Streaming Cap if Any]",
+      "[License Fee]",
+      "[Credit Line Text]"
+    ],
+    "legalSummary": "Artist may release songs using the beat within tier limits; producer retains underlying composition/master unless exclusive buyout. Exceeding caps requires upgrade.",
+    "chatgptPrompts": [
+      "Sell non-exclusive lease with 50K audio streams cap.",
+      "Exclusive buyout removes producer from future licenses.",
+      "Require credit 'Prod. by [Name]' in track metadata."
+    ],
+    "signerLabels": [
+      "Producer",
+      "Artist"
+    ],
+    "recurringCategory": "Intellectual Property",
+    "archetype": "ipLicense"
+  },
+  {
+    "slug": "sync-licensing-agreement",
+    "name": "Sync Licensing Agreement",
+    "seoTitle": "Free Sync Licensing Agreement Template",
+    "description": "License to synchronize music with video in film, TV, ads, or games with media and term scope.",
+    "useCase": "Use this when a rights holder permits a track in a trailer, commercial, or YouTube video. It combines master and publishing sync permissions with fee and territory.",
+    "definition": "A sync licensing agreement authorizes use of a musical composition and sound recording timed to visual media in specified productions.",
+    "keyClauses": [
+      "Production title and scene/context description",
+      "Media types: TV, web, theatrical, in-game",
+      "Term, territory, and exclusivity in media category",
+      "Sync fee and performance royalties note",
+      "Credit requirements",
+      "Takedown on breach or nonpayment"
+    ],
+    "fillInFields": [
+      "[Rights Holder/Licensor]",
+      "[Producer/Licensee]",
+      "[Song Title]",
+      "[Production/Project Name]",
+      "[Media and Territory]",
+      "[Term Length]",
+      "[Sync Fee]"
+    ],
+    "legalSummary": "Licensee may use the track only in the licensed production and media; renewals needed for new seasons or edits beyond scope. PRO royalties may still apply publicly.",
+    "chatgptPrompts": [
+      "License indie track for 1-year worldwide web ad campaign non-exclusive.",
+      "Combine master and publishing sync in one fee.",
+      "Require final video approval before broadcast."
+    ],
+    "signerLabels": [
+      "Licensor",
+      "Licensee"
+    ],
+    "recurringCategory": "Intellectual Property",
+    "archetype": "ipLicense"
+  },
+  {
+    "slug": "influencer-marketing-agreement",
+    "name": "Influencer Marketing Agreement",
+    "seoTitle": "Free Influencer Marketing Agreement Template",
+    "description": "Creator delivers sponsored posts with approvals, metrics, exclusivity, and usage rights.",
+    "useCase": "Use this when a brand pays an influencer for Instagram/TikTok/YouTube deliverables. It sets posting window, whitelisting ads, and kill fee if brand cancels after approval.",
+    "definition": "An influencer marketing agreement is a contract in which a content creator publishes branded material to their audience in exchange for compensation and defined usage rights.",
+    "keyClauses": [
+      "Deliverables: posts, stories, videos, counts",
+      "Creative brief and approval timeline",
+      "Compensation and payment trigger on live posts",
+      "Exclusivity category and window",
+      "Whitelisting/Spark ads usage rights",
+      "FTC disclosure and authenticity requirements"
+    ],
+    "fillInFields": [
+      "[Brand Name]",
+      "[Influencer Name]",
+      "[Platform(s) and Handles]",
+      "[Deliverables List]",
+      "[Fee]",
+      "[Posting Deadline]",
+      "[Exclusivity Category/Days]"
+    ],
+    "legalSummary": "Influencer must disclose sponsorship clearly; brand receives limited usage rights for whitelisting as stated. Either party may face termination for brand safety or missed posting dates.",
+    "chatgptPrompts": [
+      "Fill for 1 Reel + 3 Stories for skincare launch at $4K fee.",
+      "Allow brand whitelisting on Meta ads for 90 days.",
+      "Require #ad disclosure in first line of caption."
+    ],
+    "signerLabels": [
+      "Brand",
+      "Influencer"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "brand-ambassador-agreement",
+    "name": "Brand Ambassador Agreement",
+    "seoTitle": "Free Brand Ambassador Agreement Template",
+    "description": "Longer-term ambassador promotes brand at events and online with monthly deliverables and discounts.",
+    "useCase": "Use this when a college ambassador or micro-influencer represents a brand for a semester or year. It includes promo codes, event appearances, and conduct standards.",
+    "definition": "A brand ambassador agreement is an ongoing promotional contract in which an ambassador represents a brand through events, content, and word-of-mouth within guidelines.",
+    "keyClauses": [
+      "Ambassador term and renewal",
+      "Monthly content and event appearance quotas",
+      "Compensation: stipend, commissions, or product",
+      "Promo code tracking and FTC disclosure",
+      "Conduct and brand safety standards",
+      "Termination for misrepresentation"
+    ],
+    "fillInFields": [
+      "[Brand Name]",
+      "[Ambassador Name]",
+      "[Term Length]",
+      "[Monthly Deliverables]",
+      "[Compensation Structure]",
+      "[Promo Code Assigned]",
+      "[Territory/Campus if Any]"
+    ],
+    "legalSummary": "Ambassador earns benefits by meeting ongoing promotional duties; misconduct can terminate without further pay. Sales through codes may determine commission payouts.",
+    "chatgptPrompts": [
+      "Fill for 6-month campus ambassador with $300/month plus 10% code sales.",
+      "Require 2 events tabling per semester.",
+      "Remove ambassador for underage drinking posts at sponsored events."
+    ],
+    "signerLabels": [
+      "Brand",
+      "Ambassador"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "book-publishing-agreement",
+    "name": "Book Publishing Agreement",
+    "seoTitle": "Free Book Publishing Agreement Template",
+    "description": "Author grants publisher print/ebook rights with royalties, advances, reversion, and approval gates.",
+    "useCase": "Use this for a small press signing an author for a single title. It covers delivery date, editorial process, royalty rates, and when rights revert if out of print.",
+    "definition": "A book publishing agreement is a contract in which an author grants a publisher the right to produce and distribute a literary work in exchange for royalties and possibly an advance.",
+    "keyClauses": [
+      "Work title, format, and delivery deadline",
+      "Grant of rights scope and territory",
+      "Advance and royalty rates by format",
+      "Editorial approval and title/cover consultation",
+      "Subrights split (audio, foreign, film)",
+      "Reversion/out-of-print thresholds"
+    ],
+    "fillInFields": [
+      "[Publisher Name]",
+      "[Author Name]",
+      "[Book Title]",
+      "[Delivery Manuscript Date]",
+      "[Advance Amount]",
+      "[Print Royalty %]",
+      "[Territory Granted]"
+    ],
+    "legalSummary": "Author delivers publishable manuscript; publisher exploits rights diligently and pays royalties per statements. Rights revert on agreed out-of-print or low-sales triggers if stated.",
+    "chatgptPrompts": [
+      "Fill for world English print+ebook with $5K advance and 10% print royalty.",
+      "Add reversion if fewer than 100 sales in 12 months.",
+      "Give author consultation on cover and title."
+    ],
+    "signerLabels": [
+      "Publisher",
+      "Author"
+    ],
+    "recurringCategory": "Intellectual Property",
+    "archetype": "ipLicense"
+  },
+  {
+    "slug": "editing-services-agreement",
+    "name": "Editing Services Agreement",
+    "seoTitle": "Free Editing Services Agreement Template",
+    "description": "Developmental, copy, or line editing scope with word count, rounds, and manuscript confidentiality.",
+    "useCase": "Use this when an editor works on a novel or business book manuscript. It defines edit type, single vs two-pass, and whether editor may use client name in portfolio.",
+    "definition": "An editing services agreement is a contract in which an editor improves a written manuscript for clarity, structure, or correctness according to an agreed edit level.",
+    "keyClauses": [
+      "Manuscript description and word count",
+      "Edit level: dev, line, copy, proof",
+      "Number of passes and author review windows",
+      "Delivery dates and rush fees",
+      "Confidentiality and no sharing of manuscript",
+      "Fee and payment milestones"
+    ],
+    "fillInFields": [
+      "[Editor Name]",
+      "[Author/Client Name]",
+      "[Manuscript Title]",
+      "[Word Count]",
+      "[Edit Type]",
+      "[Fee and Payment Schedule]",
+      "[Delivery Date]"
+    ],
+    "legalSummary": "Editor delivers professional editorial feedback or corrections; author retains full ownership and decides which edits to accept. Editor does not claim co-authorship.",
+    "chatgptPrompts": [
+      "Fill for 80K-word novel copyedit with one follow-up pass.",
+      "Keep manuscript confidential and off cloud tools without encryption.",
+      "Add 2-week author review window before final files."
+    ],
+    "signerLabels": [
+      "Editor",
+      "Author"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  },
+  {
+    "slug": "nonprofit-volunteer-agreement",
+    "name": "Nonprofit Volunteer Agreement",
+    "seoTitle": "Free Nonprofit Volunteer Agreement Template",
+    "description": "Volunteer role description, conduct, confidentiality, photo release, and at-will status.",
+    "useCase": "Use this when a charity onboards event or office volunteers. It clarifies volunteers are unpaid, sets background check consent if needed, and limits liability assumptions appropriately.",
+    "definition": "A nonprofit volunteer agreement documents the voluntary relationship, role expectations, and policies governing unpaid helpers at an organization.",
+    "keyClauses": [
+      "Volunteer role and supervisor",
+      "Schedule and training requirements",
+      "At-will volunteer status (not employee)",
+      "Conduct, safety, and confidentiality rules",
+      "Photo/media release optional",
+      "Assumption of risk for physical activities if any"
+    ],
+    "fillInFields": [
+      "[Nonprofit Organization]",
+      "[Volunteer Name]",
+      "[Role/Program]",
+      "[Supervisor Name]",
+      "[Typical Schedule]",
+      "[Start Date]",
+      "[Background Check Consent Y/N]"
+    ],
+    "legalSummary": "Volunteers serve without wages and may be released at organization discretion; they must follow policies protecting beneficiaries and confidential donor info.",
+    "chatgptPrompts": [
+      "Fill for food bank shift volunteer 4 hours weekly.",
+      "Add photo release for fundraising website only.",
+      "Include lift-25-lbs requirement and safety waiver."
+    ],
+    "signerLabels": [
+      "Organization",
+      "Volunteer"
+    ],
+    "recurringCategory": "Compliance Documents",
+    "archetype": "releaseForm"
+  },
+  {
+    "slug": "board-member-agreement",
+    "name": "Board Member Agreement",
+    "seoTitle": "Free Board Member Agreement Template",
+    "description": "Director duties, confidentiality, conflicts disclosure, time commitment, and D&O insurance note.",
+    "useCase": "Use this when a private company adds an independent board member. It restates fiduciary duties, meeting frequency, equity compensation if any, and NDA for board materials.",
+    "definition": "A board member agreement is a contract or letter outlining expectations, duties, and policies for an individual serving on a company's board of directors.",
+    "keyClauses": [
+      "Board role: independent vs insider",
+      "Meeting cadence and committee assignments",
+      "Confidentiality of board materials",
+      "Conflict of interest disclosure duties",
+      "Compensation/equity if any",
+      "D&O insurance and indemnification reference"
+    ],
+    "fillInFields": [
+      "[Company Name]",
+      "[Director Name]",
+      "[Board Seat Type]",
+      "[Term Length if Staggered]",
+      "[Equity Grant if Any]",
+      "[Expected Meeting Hours/Year]",
+      "[Effective Date]"
+    ],
+    "legalSummary": "Directors owe fiduciary duties of care and loyalty; this agreement supplements bylaws and charter on confidentiality and conflicts. Indemnification depends on corporate charter and D&O policy.",
+    "chatgptPrompts": [
+      "Fill for independent director with 4 meetings/year and 0.25% equity grant.",
+      "Require annual conflict disclosure form.",
+      "Reference company D&O policy in indemnification section."
+    ],
+    "signerLabels": [
+      "Company",
+      "Director"
+    ],
+    "recurringCategory": "Incorporation",
+    "archetype": "corporateGovernance"
+  },
+  {
+    "slug": "technology-consulting-agreement",
+    "name": "Technology Consulting Agreement",
+    "seoTitle": "Free Technology Consulting Agreement Template",
+    "description": "IT strategy, architecture review, or implementation advisory with hourly or fixed fees and IP rules.",
+    "useCase": "Use this when a consultant advises on cloud migration, ERP selection, or security roadmap without being the implementer. It caps hours, requires client data access controls, and assigns deliverable ownership.",
+    "definition": "A technology consulting agreement is a professional services contract in which a consultant analyzes, recommends, or guides technology decisions for a client organization.",
+    "keyClauses": [
+      "Engagement objectives and deliverables",
+      "Time and materials or fixed fee",
+      "Client access, stakeholders, and decision timelines",
+      "Work product ownership and license",
+      "Confidentiality and data security duties",
+      "Non-solicitation of client IT staff if any"
+    ],
+    "fillInFields": [
+      "[Consultant/Firm Name]",
+      "[Client Company]",
+      "[Engagement Summary]",
+      "[Fee Rate or Fixed Fee]",
+      "[Estimated Hours/Cap]",
+      "[Start and End Dates]",
+      "[Primary Executive Sponsor]"
+    ],
+    "legalSummary": "Consultant provides advice and written deliverables professionally; client decides whether to implement recommendations. Client data must be used only for the engagement and returned or destroyed after.",
+    "chatgptPrompts": [
+      "Fill for 80-hour AWS migration assessment at $200/hour cap.",
+      "Assign ownership of architecture report to client upon payment.",
+      "Prohibit subcontracting without client approval."
+    ],
+    "signerLabels": [
+      "Consultant",
+      "Client"
+    ],
+    "recurringCategory": "Consulting",
+    "archetype": "serviceAgreement"
+  }
+]
