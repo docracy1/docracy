@@ -1,8 +1,10 @@
 import { Hono } from "hono";
 import { PDFDocument } from "pdf-lib";
 import { requireAutomationToken } from "../lib/auth";
+import { runWeeklyBlogPublish } from "../lib/blogWeekly";
 import { createBlogPost, slugify } from "../lib/blogPosts";
 import { submitTemplate } from "../lib/marketplaceTemplates";
+import { runWeeklyTemplatePublish } from "../lib/templateWeekly";
 import type { DocField, Env } from "@docracy/shared";
 
 const MAX_TITLE_LENGTH = 100;
@@ -10,10 +12,22 @@ const MAX_DESCRIPTION_LENGTH = 400;
 const MAX_PDF_BYTES = 15 * 1024 * 1024;
 
 /** Headless-caller-only routes for the scheduled weekly content routine — see
- *  requireAutomationToken's doc comment for why these are token-gated rather than session-based,
- *  and why each one can only ever create something in a review queue, never publish/approve
- *  anything itself. Mounted at /api/automation. */
+ *  requireAutomationToken's doc comment for why these are token-gated rather than session-based.
+ *  Draft-submit routes land in review queues; run-weekly-content mirrors the Monday cron.
+ *  Mounted at /api/automation. */
 export const automation = new Hono<{ Bindings: Env }>();
+
+/** Same as the Monday 08:22 UTC cron — publish one blog post + up to 10 FreeTemplate templates.
+ *  Returns immediately; AI drafting runs in waitUntil (can take several minutes). */
+automation.post("/run-weekly-content", requireAutomationToken, async (c) => {
+  c.executionCtx.waitUntil(
+    Promise.all([
+      runWeeklyBlogPublish(c.env).catch((err) => console.error("Weekly blog publish failed:", err)),
+      runWeeklyTemplatePublish(c.env).catch((err) => console.error("Weekly template publish failed:", err)),
+    ])
+  );
+  return c.json({ ok: true, started: true });
+});
 
 interface DraftBlogPostBody {
   slug?: string;
