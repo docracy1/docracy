@@ -1,4 +1,4 @@
-import { fetchIndexShell, sanitizeForNoIndex } from "../_spaShell";
+import { fetchIndexShell, sanitizeForNoIndex, staticHtmlExists } from "../_spaShell";
 import { ensureMetaDescription } from "../../src/lib/seoMeta";
 
 const WORKER_URL = "https://api.docracy.io";
@@ -52,6 +52,9 @@ export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => 
   }
 
   if (!post) {
+    const hasStatic = await staticHtmlExists(context.env, url.origin, url.pathname);
+    if (hasStatic) return context.next();
+
     // Do NOT fall through to `/* /index.html 200` — that serves the prerendered homepage
     // (soft-404 / duplicate canonical `/` in GSC). Return a real 404 shell instead.
     const shell = await fetchIndexShell(context.env, context.request, url);
