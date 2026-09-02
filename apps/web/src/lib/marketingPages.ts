@@ -1273,8 +1273,9 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
     slug: "eversign-alternative",
     competitorName: "eversign",
     navDesc: "Faster, simpler signing flow.",
-    seoTitle: "Eversign Alternative — Simple & Fast | Docracy",
-    seoDescription: "A lightweight alternative to Eversign for quick agreements. No subscriptions, no complexity.",
+    seoTitle: "Eversign Alternative — Free, No Account | Docracy",
+    seoDescription:
+      "Free Eversign / Xodo Sign alternative for NDAs and client contracts. No account for signers, free for up to 2 signers — flat $10/mo paid, not per-seat.",
     heroHeadline: "A lightweight alternative to Eversign.",
     heroSubheadline: "Built for quick, low-stakes agreements — not enterprise workflows.",
     problem:
@@ -1335,8 +1336,9 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
     slug: "docusign-alternative",
     competitorName: "DocuSign",
     navDesc: "Lighter, no per-seat pricing.",
-    seoTitle: "DocuSign Alternative — Simple Signing | Docracy",
-    seoDescription: "A simple alternative to DocuSign for quick agreements. Fast, clean, no account required.",
+    seoTitle: "Free DocuSign Alternative (2026) — No Account, $10/mo Flat | Docracy",
+    seoDescription:
+      "DocuSign alternative without per-seat pricing or a 5-seat minimum. Free for up to 2 signers, no account required — flat $10/mo when you need more.",
     heroHeadline: "DocuSign is too heavy for simple agreements.",
     heroSubheadline: "Docracy.io is built for fast, lightweight signing.",
     problem:
@@ -1364,9 +1366,9 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
     slug: "hellosign-alternative",
     competitorName: "HelloSign / Dropbox Sign",
     navDesc: "Free for light NDA volume.",
-    seoTitle: "HelloSign / Dropbox Sign Alternative | Docracy",
+    seoTitle: "HelloSign Alternative — Free for 2 Signers, No Account | Docracy",
     seoDescription:
-      "Looking for a HelloSign or Dropbox Sign alternative for NDAs and client contracts? Free for up to 2 signers, no account required. Paid $10/mo flat.",
+      "HelloSign / Dropbox Sign alternative for NDAs and client contracts. Free for up to 2 signers, no account required — flat $10/mo paid, not per-seat.",
     heroHeadline: "A simpler alternative to HelloSign / Dropbox Sign.",
     heroSubheadline: "For freelancers and small teams who just need agreements signed — not another seat tax.",
     problem:
@@ -1390,9 +1392,9 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
     slug: "pandadoc-alternative",
     competitorName: "PandaDoc",
     navDesc: "No proposal suite you don't need.",
-    seoTitle: "PandaDoc Alternative for Simple Agreements | Docracy",
+    seoTitle: "PandaDoc Alternative — Sign NDAs Without the Proposal Suite | Docracy",
     seoDescription:
-      "Need signatures without PandaDoc’s proposal suite? Docracy is free for up to 2 signers — built for NDAs and client contracts, not sales proposals.",
+      "PandaDoc alternative for NDAs and client contracts only — no CPQ or proposal builder. Free for up to 2 signers, no account required — flat $10/mo paid.",
     heroHeadline: "PandaDoc is overkill if you only need a signature.",
     heroSubheadline: "Docracy skips proposals and CPQ — just send the PDF and get it signed.",
     problem:
@@ -1421,9 +1423,9 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
     slug: "adobe-sign-alternative",
     competitorName: "Adobe Acrobat Sign",
     navDesc: "Sign without an Adobe seat.",
-    seoTitle: "Adobe Sign Alternative — Lightweight E-Sign | Docracy",
+    seoTitle: "Adobe Sign Alternative — Free, No Creative Cloud | Docracy",
     seoDescription:
-      "Adobe Acrobat Sign alternative for freelancers and small teams. Free for up to 2 signers, no account required. Paid $10/mo flat.",
+      "Adobe Sign alternative without a Creative Cloud seat or annual lock-in. Free for up to 2 signers, no account required — flat $10/mo paid.",
     heroHeadline: "Adobe Sign without the Acrobat baggage.",
     heroSubheadline: "When you need a signature — not another Adobe seat in the stack.",
     problem:
@@ -1482,8 +1484,9 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
     slug: "signnow-alternative",
     competitorName: "SignNow",
     navDesc: "Skip airSlate seat tiers for simple docs.",
-    seoTitle: "SignNow Alternative — Free Lightweight E-Sign | Docracy",
-    seoDescription: "Looking for a SignNow alternative without airSlate plan complexity? Docracy is free for up to 2 signers, no account required.",
+    seoTitle: "SignNow Alternative (2026) — Free, No airSlate Seat Tax | Docracy",
+    seoDescription:
+      "SignNow alternative without airSlate plan tiers. Free for up to 2 signers, no account required — flat $10/mo paid for templates and teams.",
     heroHeadline: "SignNow is solid. It still wants an account and a plan.",
     heroSubheadline: "Docracy is built for quick agreements — free for two signers, no signup required.",
     problem:

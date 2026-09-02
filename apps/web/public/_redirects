@@ -11,6 +11,10 @@
 /hellosign-vs-docusign  /docusign-vs-hellosign  301
 /eversign-vs-docusign  /docusign-vs-eversign  301
 /eversign-vs-hellosign  /hellosign-vs-eversign  301
+/signnow-vs-pandadoc  /pandadoc-vs-signnow  301
+/signnow-vs-docusign  /docusign-vs-signnow  301
+/signnow-vs-hellosign  /hellosign-vs-signnow  301
+/signnow-vs-eversign  /eversign-vs-signnow  301
 
 # Superseded by 5 dedicated per-competitor import guides (more specific, better SEO than one
 # combined page) — redirect so the URL doesn't 404 if already shared or indexed.

@@ -60,6 +60,7 @@ Allow: /docuseal-alternative$
 Allow: /docusign-alternative$
 Allow: /docusign-vs-eversign$
 Allow: /docusign-vs-hellosign$
+Allow: /docusign-vs-signnow$
 Allow: /dpa$
 Allow: /education-forms$
 Allow: /electronic-signature-guide$
@@ -68,12 +69,14 @@ Allow: /es$
 Allow: /esign-ueta$
 Allow: /esignature-software$
 Allow: /eversign-alternative$
+Allow: /eversign-vs-signnow$
 Allow: /founder-agreement$
 Allow: /free-electronic-signature$
 Allow: /freelancer-contracts$
 Allow: /getaccept-alternative$
 Allow: /hellosign-alternative$
 Allow: /hellosign-vs-eversign$
+Allow: /hellosign-vs-signnow$
 Allow: /how-it-works$
 Allow: /import-google-doc$
 Allow: /imprint$
@@ -91,6 +94,7 @@ Allow: /pandadoc-alternative$
 Allow: /pandadoc-vs-docusign$
 Allow: /pandadoc-vs-eversign$
 Allow: /pandadoc-vs-hellosign$
+Allow: /pandadoc-vs-signnow$
 Allow: /pricing$
 Allow: /privacy$
 Allow: /quick-sign$

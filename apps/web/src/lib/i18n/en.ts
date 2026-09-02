@@ -1071,21 +1071,21 @@ const en: Messages = {
   "seo.prepare.title": "Prepare a document — Docracy",
   "seo.prepare.description":
     "Upload a PDF or start from a free template, add signers, and send for signature in minutes — no account required.",
-  "seo.docusign.title": "DocuSign Alternative — Simple Signing | Docracy",
+  "seo.docusign.title": "Free DocuSign Alternative (2026) — No Account, $10/mo Flat | Docracy",
   "seo.docusign.description":
-    "A simple alternative to DocuSign for quick agreements. Fast, clean, no account required. Free for up to 2 signers.",
-  "seo.hellosign.title": "HelloSign / Dropbox Sign Alternative — Free & Simple | Docracy",
+    "DocuSign alternative without per-seat pricing or a 5-seat minimum. Free for up to 2 signers, no account required — flat $10/mo when you need more.",
+  "seo.hellosign.title": "HelloSign Alternative — Free for 2 Signers, No Account | Docracy",
   "seo.hellosign.description":
-    "Looking for a HelloSign or Dropbox Sign alternative for NDAs and client contracts? Free for up to 2 signers, no account required. Paid $10/mo flat.",
-  "seo.adobeSign.title": "Adobe Sign Alternative — Lightweight E-Sign | Docracy",
+    "HelloSign / Dropbox Sign alternative for NDAs and client contracts. Free for up to 2 signers, no account required — flat $10/mo paid, not per-seat.",
+  "seo.adobeSign.title": "Adobe Sign Alternative — Free, No Creative Cloud | Docracy",
   "seo.adobeSign.description":
-    "Adobe Acrobat Sign alternative for freelancers and small teams. Free for up to 2 signers, no account required. Paid $10/mo flat.",
-  "seo.eversign.title": "Eversign Alternative — Simple & Fast | Docracy",
+    "Adobe Sign alternative without a Creative Cloud seat or annual lock-in. Free for up to 2 signers, no account required — flat $10/mo paid.",
+  "seo.eversign.title": "Eversign Alternative — Free, No Account | Docracy",
   "seo.eversign.description":
-    "A lightweight alternative to Eversign for quick agreements. No subscriptions, no complexity.",
-  "seo.pandadoc.title": "PandaDoc Alternative for Simple Agreements | Docracy",
+    "Free Eversign / Xodo Sign alternative for NDAs and client contracts. No account for signers, free for up to 2 signers — flat $10/mo paid, not per-seat.",
+  "seo.pandadoc.title": "PandaDoc Alternative — Sign NDAs Without the Proposal Suite | Docracy",
   "seo.pandadoc.description":
-    "Need signatures without PandaDoc's proposal suite? Docracy is free for up to 2 signers — built for NDAs and client contracts, not sales proposals.",
+    "PandaDoc alternative for NDAs and client contracts only — no CPQ or proposal builder. Free for up to 2 signers, no account required — flat $10/mo paid.",
   "seo.ndaSigning.title": "NDA Signing Online — Fast & Simple | Docracy",
   "seo.ndaSigning.description":
     "Sign NDAs online in minutes. Free NDA template, no subscriptions, no account required.",

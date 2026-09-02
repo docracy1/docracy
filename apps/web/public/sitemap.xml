@@ -4809,6 +4809,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://docracy.io/pandadoc-vs-signnow</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://docracy.io/docusign-vs-hellosign</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -4819,7 +4824,22 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://docracy.io/docusign-vs-signnow</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://docracy.io/hellosign-vs-eversign</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/hellosign-vs-signnow</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/eversign-vs-signnow</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

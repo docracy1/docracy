@@ -146,6 +146,8 @@ export const ARTICLES: ArticlePost[] = [
           "PDF so you can prove later that the file hasn't been altered."
       ),
       link("See the full step-by-step flow", "/blog/how-to-sign-an-nda-online"),
+      link("Free mutual NDA template — sign online", "/free-templates/mutual-nda"),
+      link("NDA signing page — send in minutes", "/nda-signing"),
 
       h2("NDAs compared to other documents"),
       p(
@@ -296,6 +298,7 @@ export const ARTICLES: ArticlePost[] = [
       p("Both NDAs can be signed online in minutes, with no account required for the person signing."),
       link("Free mutual NDA template", "/free-templates/mutual-nda"),
       link("Free one-way NDA template", "/free-templates/unilateral-nda"),
+      link("How to sign an NDA online — step-by-step", "/blog/how-to-sign-an-nda-online"),
     ],
   },
   {
@@ -403,6 +406,8 @@ export const ARTICLES: ArticlePost[] = [
       ),
 
       link("Send an NDA now — free mutual NDA template", "/nda-signing"),
+      link("Free mutual NDA template (PDF)", "/free-templates/mutual-nda"),
+      link("Compare e-sign tools — DocuSign alternative", "/docusign-alternative"),
     ],
   },
   {
@@ -511,6 +516,8 @@ export const ARTICLES: ArticlePost[] = [
 
       link("Docracy for freelancers", "/industry/freelancers"),
       link("Free mutual NDA template", "/free-templates/mutual-nda"),
+      link("How to sign an NDA online", "/blog/how-to-sign-an-nda-online"),
+      link("DocuSign alternative for freelancers", "/docusign-alternative"),
     ],
   },
   {
@@ -609,6 +616,8 @@ export const ARTICLES: ArticlePost[] = [
 
       p("A clear, specific NDA prevents misunderstandings and legal issues far more reliably than a vague one."),
       link("Send an NDA now — free mutual NDA template", "/nda-signing"),
+      link("Free mutual NDA template", "/free-templates/mutual-nda"),
+      link("How to sign an NDA online", "/blog/how-to-sign-an-nda-online"),
     ],
   },
 

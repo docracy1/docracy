@@ -17,7 +17,32 @@ export interface SeoLandingPageContent {
   comparisonRows: SeoComparisonRow[];
 }
 
-const COMPETITORS = ["PandaDoc", "DocuSign", "HelloSign", "Eversign"];
+const COMPETITORS = ["PandaDoc", "DocuSign", "HelloSign", "Eversign", "SignNow"];
+
+type VsPageMeta = Pick<
+  SeoLandingPageContent,
+  "seoTitle" | "seoDescription" | "heroHeadline" | "heroSubheadline"
+>;
+
+/** High-intent pairs get tighter SERP copy; everything else uses the default template. */
+const VS_PAGE_OVERRIDES: Record<string, VsPageMeta> = {
+  "hellosign-vs-signnow": {
+    seoTitle: "HelloSign vs SignNow (2026): Pricing & Features | Docracy",
+    seoDescription:
+      "HelloSign (Dropbox Sign) vs SignNow compared — per-seat pricing, free tiers, and signing flow. Plus a free flat-rate alternative for NDAs and client contracts.",
+    heroHeadline: "HelloSign vs SignNow",
+    heroSubheadline:
+      "Both charge per seat and push account signup before your first send. Here's how they compare — and a simpler flat-rate option for NDAs and client contracts.",
+  },
+  "docusign-vs-signnow": {
+    seoTitle: "DocuSign vs SignNow (2026): Which E-Sign Tool Fits? | Docracy",
+    seoDescription:
+      "DocuSign vs SignNow for small teams — pricing models, onboarding friction, and when a lighter free tool is enough for NDAs and one-off agreements.",
+    heroHeadline: "DocuSign vs SignNow",
+    heroSubheadline:
+      "Enterprise-grade DocuSign vs airSlate's SignNow — both scale on per-seat pricing. Here's how they differ, and when a free flat-rate signer is enough.",
+  },
+};
 
 // Deliberately no invented per-competitor pricing figures — those go stale and we'd be
 // guessing. Rows describe the well-known per-seat/enterprise-onboarding pattern both
@@ -97,15 +122,20 @@ for (let i = 0; i < COMPETITORS.length; i++) {
     const canonicalSlug = `${slugifyCompetitor(comp1)}-vs-${slugifyCompetitor(comp2)}`;
     const reverseSlug = `${slugifyCompetitor(comp2)}-vs-${slugifyCompetitor(comp1)}`;
 
+    const override = VS_PAGE_OVERRIDES[canonicalSlug];
     SEO_LANDING_PAGES.push({
       slug: canonicalSlug,
       pageType: "vs-competitor",
       primaryCompetitor: comp1,
       secondaryCompetitor: comp2,
-      seoTitle: `${comp1} vs ${comp2}: which is right for you? | Docracy`,
-      seoDescription: `Comparing ${comp1} and ${comp2}? See how they stack up, and how Docracy's flat pricing and no-signup signing compares to both.`,
-      heroHeadline: `${comp1} vs ${comp2}`,
-      heroSubheadline: `Both are solid e-signature tools built around per-seat pricing. Here's how they compare, and a simpler flat-rate option to consider.`,
+      seoTitle: override?.seoTitle ?? `${comp1} vs ${comp2}: which is right for you? | Docracy`,
+      seoDescription:
+        override?.seoDescription ??
+        `Comparing ${comp1} and ${comp2}? See how they stack up, and how Docracy's flat pricing and no-signup signing compares to both.`,
+      heroHeadline: override?.heroHeadline ?? `${comp1} vs ${comp2}`,
+      heroSubheadline:
+        override?.heroSubheadline ??
+        `Both are solid e-signature tools built around per-seat pricing. Here's how they compare, and a simpler flat-rate option to consider.`,
       comparisonRows: COMPARISON_ROWS,
     });
 
