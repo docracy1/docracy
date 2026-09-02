@@ -1154,21 +1154,21 @@ const es: Messages = {
   "seo.prepare.title": "Preparar un documento — Docracy",
   "seo.prepare.description":
     "Sube un PDF o empieza desde una plantilla gratis, agrega firmantes y envía a firma en minutos — sin cuenta.",
-  "seo.docusign.title": "Alternativa a DocuSign — Firma simple | Docracy",
+  "seo.docusign.title": "Alternativa gratis a DocuSign (2026) — Sin cuenta, $10/mes fijo | Docracy",
   "seo.docusign.description":
-    "Una alternativa simple a DocuSign para acuerdos rápidos. Rápida, limpia, sin cuenta. Gratis para hasta 2 firmantes.",
-  "seo.hellosign.title": "Alternativa a HelloSign / Dropbox Sign — Gratis y simple | Docracy",
+    "Alternativa a DocuSign sin precio por asiento ni mínimo de 5 licencias. Gratis hasta 2 firmantes, sin cuenta — $10/mes fijo cuando necesites más.",
+  "seo.hellosign.title": "Alternativa a HelloSign — Gratis para 2 firmantes, sin cuenta | Docracy",
   "seo.hellosign.description":
-    "¿Buscas una alternativa a HelloSign o Dropbox Sign para NDAs y contratos? Gratis hasta 2 firmantes, sin cuenta. Plan de pago $10/mes fijo.",
-  "seo.adobeSign.title": "Alternativa a Adobe Sign — Firma electrónica ligera | Docracy",
+    "Alternativa a HelloSign / Dropbox Sign para NDAs y contratos con clientes. Gratis hasta 2 firmantes, sin cuenta — $10/mes fijo, no por asiento.",
+  "seo.adobeSign.title": "Alternativa a Adobe Sign — Gratis, sin Creative Cloud | Docracy",
   "seo.adobeSign.description":
-    "Alternativa a Adobe Acrobat Sign para freelancers y equipos pequeños. Gratis hasta 2 firmantes, sin cuenta. Plan de pago $10/mes fijo.",
-  "seo.eversign.title": "Alternativa a Eversign — Simple y rápida | Docracy",
+    "Alternativa a Adobe Sign sin licencia de Creative Cloud ni compromiso anual. Gratis hasta 2 firmantes, sin cuenta — $10/mes fijo.",
+  "seo.eversign.title": "Alternativa a Eversign — Gratis, sin cuenta | Docracy",
   "seo.eversign.description":
-    "Una alternativa ligera a Eversign para acuerdos rápidos. Sin suscripciones, sin complejidad.",
-  "seo.pandadoc.title": "Alternativa a PandaDoc para acuerdos simples | Docracy",
+    "Alternativa gratis a Eversign / Xodo Sign para NDAs y contratos. Sin cuenta para firmantes, gratis hasta 2 firmantes — $10/mes fijo, no por asiento.",
+  "seo.pandadoc.title": "Alternativa a PandaDoc — Firma NDAs sin suite de propuestas | Docracy",
   "seo.pandadoc.description":
-    "¿Necesitas firmas sin la suite de propuestas de PandaDoc? Docracy es gratis hasta 2 firmantes — hecho para NDAs y contratos con clientes, no para propuestas de venta.",
+    "Alternativa a PandaDoc solo para NDAs y contratos — sin CPQ ni generador de propuestas. Gratis hasta 2 firmantes, sin cuenta — $10/mes fijo.",
   "seo.ndaSigning.title": "Firma de NDA en línea — Rápida y simple | Docracy",
   "seo.ndaSigning.description":
     "Firma NDAs en línea en minutos. Plantilla de NDA gratis, sin suscripciones ni cuenta requerida.",
