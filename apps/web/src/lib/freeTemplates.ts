@@ -95,10 +95,9 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
   {
     slug: "mutual-nda",
     name: "Mutual NDA",
-    seoTitle: "Free Mutual NDA Template",
+    seoTitle: "Sign NDA Online Free — Mutual NDA Template",
     description:
-      "A standard mutual non-disclosure agreement (NDA) — also called a confidentiality agreement — for two " +
-      "parties exploring a business relationship.",
+      "Sign an NDA online free with this mutual non-disclosure agreement template — fill in, send, and collect signatures with no account required for up to 2 signers.",
     useCase:
       "Use this when you and another company are about to share confidential information — pricing, product plans, " +
       "customer data — while evaluating a potential deal, partnership, or vendor relationship, and both sides need " +

@@ -1169,9 +1169,9 @@ const es: Messages = {
   "seo.pandadoc.title": "Alternativa a PandaDoc — Firma NDAs sin suite de propuestas | Docracy",
   "seo.pandadoc.description":
     "Alternativa a PandaDoc solo para NDAs y contratos — sin CPQ ni generador de propuestas. Gratis hasta 2 firmantes, sin cuenta — $10/mes fijo.",
-  "seo.ndaSigning.title": "Firma de NDA en línea — Rápida y simple | Docracy",
+  "seo.ndaSigning.title": "Firma un NDA en línea gratis — Sin cuenta | Docracy",
   "seo.ndaSigning.description":
-    "Firma NDAs en línea en minutos. Plantilla de NDA gratis, sin suscripciones ni cuenta requerida.",
+    "Firma un NDA en línea gratis hasta 2 firmantes — sin cuenta. Plantilla de NDA mutuo lista en minutos; $10/mes fijo cuando necesites más.",
   "seo.clientContracts.title": "Firma de contratos con clientes — Rápida y simple | Docracy",
   "seo.clientContracts.description":
     "Envía contratos con clientes sin fricción. Flujo de firma limpio, sin cuentas requeridas.",
@@ -1810,7 +1810,7 @@ const es: Messages = {
   "tpl.detail.faq4.q": "¿Necesito una cuenta para enviar este {{name}}?",
   "tpl.detail.faq4.a": "No — es gratis hasta 2 firmantes, sin cuenta. Crea una cuenta gratuita solo si quieres guardarlo en un panel o reutilizarlo después.",
   "tpl.mutual-nda.name": "NDA mutuo",
-  "tpl.mutual-nda.seoTitle": "Plantilla gratis de NDA mutuo",
+  "tpl.mutual-nda.seoTitle": "Firma un NDA en línea gratis — Plantilla NDA mutuo",
   "tpl.mutual-nda.description": "Un acuerdo de confidencialidad mutuo (NDA) estándar — también llamado acuerdo de no divulgación — para dos partes que exploran una relación comercial.",
   "tpl.mutual-nda.useCase": "Úsalo cuando tú y otra empresa estén a punto de compartir información confidencial — precios, planes de producto, datos de clientes — al evaluar un posible trato, alianza o relación con un proveedor, y ambos lados necesitan protección, no solo uno.",
   "tpl.independent-contractor-agreement.name": "Acuerdo de contratista independiente",
@@ -2057,6 +2057,8 @@ const es: Messages = {
   "prepare.viewerCc": "Espectador (CC)",
   "prepare.addViewerCc": "+ Espectador (CC)",
   "footer.vsHellosign": "vs HelloSign / Dropbox Sign",
+  "footer.vsSignnow": "vs SignNow",
+  "footer.hellosignVsSignnow": "HelloSign vs SignNow",
   "flow.dropPdf": "Suelta el PDF aquí",
   "flow.step1": "1 · Subir",
   "flow.step2": "2 · Colocar campos",
