@@ -303,8 +303,9 @@ export const ARTICLES: ArticlePost[] = [
   },
   {
     slug: "how-to-sign-an-nda-online",
-    title: "How to sign an NDA online in minutes",
-    description: "The five-step flow for signing an NDA online, and why online signatures are legally binding.",
+    title: "How to sign an NDA online free in minutes",
+    description:
+      "Sign an NDA online free — the five-step flow, why e-signatures are legally binding, and how to send a mutual NDA without an account.",
     publishedDate: PUBLISHED,
     cluster: "NDA",
     blocks: [

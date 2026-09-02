@@ -72,6 +72,8 @@ export default function Footer() {
           { label: t("footer.vsDocusign"), to: "/docusign-alternative" },
           { label: t("footer.vsEversign"), to: "/eversign-alternative" },
           { label: t("footer.vsHellosign"), to: "/hellosign-alternative" },
+          { label: t("footer.vsSignnow"), to: "/signnow-alternative" },
+          { label: t("footer.hellosignVsSignnow"), to: "/hellosign-vs-signnow" },
           { label: t("footer.vsPandadoc"), to: "/pandadoc-alternative" },
           { label: t("footer.vsAdobe"), to: "/adobe-sign-alternative" },
           { label: t("footer.vsContractbook"), to: "/contractbook-alternative" },

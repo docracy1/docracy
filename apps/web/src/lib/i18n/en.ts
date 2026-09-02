@@ -1086,9 +1086,9 @@ const en: Messages = {
   "seo.pandadoc.title": "PandaDoc Alternative — Sign NDAs Without the Proposal Suite | Docracy",
   "seo.pandadoc.description":
     "PandaDoc alternative for NDAs and client contracts only — no CPQ or proposal builder. Free for up to 2 signers, no account required — flat $10/mo paid.",
-  "seo.ndaSigning.title": "NDA Signing Online — Fast & Simple | Docracy",
+  "seo.ndaSigning.title": "Sign NDA Online Free — No Account Required | Docracy",
   "seo.ndaSigning.description":
-    "Sign NDAs online in minutes. Free NDA template, no subscriptions, no account required.",
+    "Sign an NDA online free for up to 2 signers — no account required. Mutual NDA template ready in minutes; flat $10/mo when you need more.",
   "seo.clientContracts.title": "Client Contract Signing — Fast & Simple | Docracy",
   "seo.clientContracts.description": "Send client contracts without friction. Clean signing flow, no accounts required.",
   "seo.docs.title": "Docracy Documentation — Setup, API & Features",
@@ -1752,8 +1752,9 @@ const en: Messages = {
   "tpl.detail.faq4.q": "Do I need an account to send this {{name}}?",
   "tpl.detail.faq4.a": "No — it's free for up to 2 signers with no account required. Create a free account only if you want to save it to a dashboard or reuse it later.",
   "tpl.mutual-nda.name": "Mutual NDA",
-  "tpl.mutual-nda.seoTitle": "Free Mutual NDA Template — Fill, Sign, and Send Online",
-  "tpl.mutual-nda.description": "A standard mutual non-disclosure agreement (NDA) — also called a confidentiality agreement — for two parties exploring a business relationship.",
+  "tpl.mutual-nda.seoTitle": "Sign NDA Online Free — Mutual NDA Template",
+  "tpl.mutual-nda.description":
+    "Sign an NDA online free with this mutual non-disclosure agreement — fill in, send, and collect signatures with no account required for up to 2 signers.",
   "tpl.mutual-nda.useCase": "Use this when you and another company are about to share confidential information — pricing, product plans, customer data — while evaluating a potential deal, partnership, or vendor relationship, and both sides need protection, not just one.",
   "tpl.independent-contractor-agreement.name": "Independent Contractor Agreement",
   "tpl.independent-contractor-agreement.seoTitle": "Free Independent Contractor Agreement Template (1099 Agreement)",
@@ -1997,6 +1998,8 @@ const en: Messages = {
   "prepare.viewerCc": "Viewer (CC)",
   "prepare.addViewerCc": "+ Viewer (CC)",
   "footer.vsHellosign": "vs HelloSign / Dropbox Sign",
+  "footer.vsSignnow": "vs SignNow",
+  "footer.hellosignVsSignnow": "HelloSign vs SignNow",
   "flow.dropPdf": "Drop PDF here",
   "flow.step1": "1 · Upload",
   "flow.step2": "2 · Place fields",

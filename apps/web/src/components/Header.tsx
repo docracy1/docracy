@@ -85,6 +85,7 @@ export default function Header() {
   }));
   const compareNavChildren = [
     ...COMPARE_PAGES.map((c) => ({ to: `/${c.slug}`, label: `vs ${c.competitorName}` })),
+    { to: "/hellosign-vs-signnow", label: "HelloSign vs SignNow" },
     ...IMPORT_GUIDES.map((g) => ({
       to: `/import-from-${g.slug}`,
       label: `Import from ${g.competitorName}`,

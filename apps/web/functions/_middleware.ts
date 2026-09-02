@@ -102,6 +102,12 @@ export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => 
     return Response.redirect(target.toString(), 301);
   }
 
+  // Strip trailing slashes on extensionless paths — `/blog/foo/` 404'd while `/blog/foo` is canonical.
+  if (url.pathname.length > 1 && url.pathname.endsWith("/") && !hasFileExtension(url.pathname)) {
+    const target = new URL(url.pathname.replace(/\/+$/, "") + url.search + url.hash, url.origin);
+    return Response.redirect(target.toString(), 301);
+  }
+
   // Legacy docracy.com document slugs → canonical free template (no duplicate landing pages).
   const legacyTarget = legacyTemplateRedirectTarget(url.pathname);
   if (legacyTarget) {

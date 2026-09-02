@@ -57,8 +57,9 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
   },
   {
     slug: "nda-signing",
-    seoTitle: "NDA Signing Online — Fast & Simple | Docracy",
-    seoDescription: "Sign NDAs online in minutes. Free NDA template, no subscriptions, no account required.",
+    seoTitle: "Sign NDA Online Free — No Account Required | Docracy",
+    seoDescription:
+      "Sign an NDA online free for up to 2 signers — no account required for sender or signer. Mutual NDA template ready in minutes; flat $10/mo when you need more.",
     heroHeadline: "Sign NDAs fast — without subscriptions or complexity.",
     heroSubheadline: "Perfect for freelancers, consultants, agencies, and small teams.",
     problem: "Traditional e-signature tools make NDA signing slow: accounts, onboarding, templates hidden behind paywalls.",
@@ -1133,9 +1134,9 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
 export function getNdaSigningPageEs(): FeaturePageContent {
   return {
     slug: "nda-signing",
-    seoTitle: "Firma de NDA en línea — Rápida y simple | Docracy",
+    seoTitle: "Firma un NDA en línea gratis — Sin cuenta | Docracy",
     seoDescription:
-      "Firma NDAs en línea en minutos. Plantilla de NDA gratis, sin suscripciones ni cuenta requerida.",
+      "Firma un NDA en línea gratis hasta 2 firmantes — sin cuenta. Plantilla de NDA mutuo lista en minutos; $10/mes fijo cuando necesites más.",
     heroHeadline: "Firma NDAs rápido — sin suscripciones ni complejidad.",
     heroSubheadline: "Ideal para freelancers, consultores, agencias y equipos pequeños.",
     problem:
