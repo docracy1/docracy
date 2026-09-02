@@ -4,6 +4,7 @@ import {
   cookieConsentPending,
   hasAnalyticsConsent,
   loadClarity,
+  loadGa,
   setCookieConsent,
 } from "../lib/cookieConsent";
 import { useT } from "../lib/i18n";
@@ -28,7 +29,10 @@ export default function CookieConsentBanner() {
   const [hidden, setHidden] = useState(() => !cookieConsentPending() || hasAnalyticsConsent());
 
   useEffect(() => {
-    if (hasAnalyticsConsent()) loadClarity();
+    if (hasAnalyticsConsent()) {
+      loadClarity();
+      loadGa();
+    }
   }, []);
 
   if (hidden || shouldHideBanner(pathname)) return null;
@@ -59,6 +63,7 @@ export default function CookieConsentBanner() {
             onClick={() => {
               setCookieConsent("accepted");
               loadClarity();
+              loadGa();
               setHidden(true);
             }}
           >
