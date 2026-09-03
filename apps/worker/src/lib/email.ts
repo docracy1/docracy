@@ -922,11 +922,9 @@ function templateList(items: string[]): string {
 
 
 /** The onboarding drip, scheduled by lib/onboardingEmails.ts at account creation and sent by its
- *  cron sweep at 3 minutes / 24 hours / 3 days — each step skipped once the account has actually
- *  sent a document (checked live, not tracked on this email itself). The former 4-hour "step 2"
- *  was retired: that slot's content ("you haven't sent anything yet") is superseded by the
- *  per-document preparer-notification family below, which covers the case where a document *was*
- *  sent but the recipient hasn't acted — a more specific, more useful nudge than a generic timer. */
+ *  cron sweep at 3 minutes / 24 hours / 2 days / 3 days — each step skipped once the account has
+ *  actually sent a document (checked live, not tracked on this email itself). Day-2 (step 2) is a
+ *  Docstoc-style soft check-in: free templates + gentle CTA, not a hard sales push. */
 export async function sendOnboardingStep1(env: Env, email: string, locale: Locale = "en"): Promise<void> {
   const subject = locale === "es" ? "Tu primer documento toma 30 segundos" : "Your first document takes 30 seconds";
   const body =
@@ -977,6 +975,56 @@ export async function sendOnboardingStep1(env: Env, email: string, locale: Local
   `;
   await send(env, email, subject, emailShell(env.PUBLIC_APP_URL, body), {
     emailType: "onboarding_step1",
+    replyTo: env.FEEDBACK_EMAIL,
+  });
+}
+
+/** Day-2 signup check-in — soft Docstoc-style reactivation: templates library + free send CTA. */
+export async function sendOnboardingStep2(env: Env, email: string, locale: Locale = "en"): Promise<void> {
+  const subject =
+    locale === "es" ? "¿Todavía necesitas firmar un documento?" : "Still need a document signed?";
+  const body =
+    locale === "es"
+      ? `
+    ${emailHeadline(`¿Todavía necesitas firmar un documento?`)}
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      Solo un aviso amable — tu cuenta de Docracy sigue lista cuando lo necesites. Miles de
+      plantillas gratis (NDAs, contratos, cartas de oferta) y firma electrónica sin pedirle una
+      cuenta al firmante.
+    </p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      Empieza desde una plantilla o sube tu propio PDF — gratis hasta 2 firmantes.
+    </p>
+    ${templateList(["NDA mutuo", "Acuerdo de servicio freelance", "Carta de oferta", "Acuerdo con contratista independiente"])}
+    ${ctaButton(`${env.PUBLIC_APP_URL}/free-templates?utm_source=email&utm_medium=onboarding&utm_campaign=step2`, "Explorar plantillas gratis")}
+    <p style="margin:16px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">
+      ¿Tienes el PDF listo?
+      <a href="${env.PUBLIC_APP_URL}/try?utm_source=email&utm_medium=onboarding&utm_campaign=step2" style="color:${PRIMARY};">Envía un NDA de ejemplo en 30 segundos</a>.
+    </p>
+    <p style="margin:0;font-size:14px;color:${MUTED};">Si no es el momento, no hay problema — tu cuenta seguirá aquí.</p>
+    ${signOff(locale)}
+  `
+      : `
+    ${emailHeadline(`Still need a document signed?`)}
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      Just a friendly check-in — your Docracy account is still ready whenever you need it. Free
+      templates (NDAs, contracts, offer letters) and e-signatures without asking the signer to create
+      an account.
+    </p>
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      Start from a template or upload your own PDF — free for up to 2 signers.
+    </p>
+    ${templateList(["Mutual NDA", "Freelance service agreement", "Offer letter", "Independent contractor agreement"])}
+    ${ctaButton(`${env.PUBLIC_APP_URL}/free-templates?utm_source=email&utm_medium=onboarding&utm_campaign=step2`, "Browse free templates")}
+    <p style="margin:16px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">
+      Already have the PDF?
+      <a href="${env.PUBLIC_APP_URL}/try?utm_source=email&utm_medium=onboarding&utm_campaign=step2" style="color:${PRIMARY};">Send a sample NDA in 30 seconds</a>.
+    </p>
+    <p style="margin:0;font-size:14px;color:${MUTED};">If now isn't the right time, no worries — your account will still be here.</p>
+    ${signOff(locale)}
+  `;
+  await send(env, email, subject, emailShell(env.PUBLIC_APP_URL, body), {
+    emailType: "onboarding_step2",
     replyTo: env.FEEDBACK_EMAIL,
   });
 }

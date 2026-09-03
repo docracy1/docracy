@@ -84,6 +84,25 @@ describe("runOnboardingEmailSweep", () => {
     expect(row?.step1_sent_at).toBe(firstSentAt);
   });
 
+  it("sends step 2 (day-2 Docstoc-style check-in) once 2 days have passed", async () => {
+    const { env, d1 } = makeMockEnv();
+    await insertAccount(d1, "acct-1", "new@example.com");
+    await insertOnboardingRow(d1, "acct-1", "new@example.com", 2 * DAY + HOUR);
+
+    await runOnboardingEmailSweep(env);
+
+    const row = (await d1
+      .prepare(`SELECT step1_sent_at, step2_sent_at, step3_sent_at, step4_sent_at FROM onboarding_emails WHERE account_id = ?`)
+      .bind("acct-1")
+      .first()) as Record<string, string | null> | null;
+
+    // Latest-first: day-2 is due and day-3 is not yet — only step2 lands.
+    expect(row?.step2_sent_at).not.toBeNull();
+    expect(row?.step4_sent_at).toBeNull();
+    expect(row?.step1_sent_at).toBeNull();
+    expect(row?.step3_sent_at).toBeNull();
+  });
+
   it("sends step 3 (24h) only once the account has NOT sent a document", async () => {
     const { env, d1 } = makeMockEnv();
     await insertAccount(d1, "acct-sent", "sent@example.com");
