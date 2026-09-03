@@ -5,6 +5,7 @@ import {
   sendOnboardingStep3,
   sendOnboardingStep4,
   sendPreparerLeadStep1,
+  sendPreparerLeadStep2,
   sendPreparerLeadStep3,
   sendPreparerLeadStep4,
 } from "./email";
@@ -36,6 +37,7 @@ const STEPS: Step[] = [
 /** Same cadence as account onboarding, but content assumes the recipient already sent a document. */
 const LEAD_STEPS: Step[] = [
   { column: "step4_sent_at", delayMs: 3 * DAY, send: sendPreparerLeadStep4 },
+  { column: "step2_sent_at", delayMs: 2 * DAY, send: sendPreparerLeadStep2 },
   { column: "step3_sent_at", delayMs: 24 * HOUR, send: sendPreparerLeadStep3 },
   { column: "step1_sent_at", delayMs: 3 * MINUTE, send: sendPreparerLeadStep1 },
 ];
@@ -111,7 +113,8 @@ async function hasSentAnyDocument(env: Env, accountId: string): Promise<boolean>
  * nominal 3-minute delay may land up to ~1 hour after signup on free-tier cron spacing.
  * Day-2 uses the existing step2_sent_at column (Docstoc-style soft check-in).
  *
- * Also sweeps preparer-opt-in leads (same cadence except no day-2 step — those people already sent).
+ * Also sweeps preparer-opt-in leads (same cadence including day-2 — different content because
+ * those people already sent a document).
  */
 export async function runOnboardingEmailSweep(env: Env): Promise<void> {
   if (!env.DOCRACY_DB) return;
