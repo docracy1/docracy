@@ -11,7 +11,7 @@ const HOW_IT_WORKS_VIDEO = {
   thumbnail: `${SITE}/videos/how-it-works-poster.jpg`,
   content: `${SITE}/videos/how-it-works.webm`,
   duration: 63,
-  publicationDate: "2026-08-04",
+  publicationDate: "2026-08-04T00:00:00+00:00",
 };
 
 const ROBOTS_PREFIX_ALLOWS = [

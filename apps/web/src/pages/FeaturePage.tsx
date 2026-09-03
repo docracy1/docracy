@@ -5,6 +5,7 @@ import { localizePath, useI18n, useT } from "../lib/i18n";
 import { BILINGUAL_FEATURE_BY_SLUG, cleanPath, seoAlternates } from "../lib/i18n/paths";
 import { track } from "../lib/track";
 import { NavIcon } from "../components/NavIcons";
+import { isoUploadDate } from "../lib/howItWorksVideo";
 
 /** Renders one of the FEATURE_PAGES entries — mounted at a distinct literal route per slug (see
  *  main.tsx), not a `:slug` param, so each gets its own static path for SEO/backlinks. */
@@ -48,7 +49,8 @@ export default function FeaturePage({ slug }: { slug: string }) {
         "@type": "VideoObject",
         name: youtubeTitle,
         description: page.seoDescription,
-        thumbnailUrl: [`https://img.youtube.com/vi/${page.youtubeId}/hqdefault.jpg`],
+        thumbnailUrl: [`https://img.youtube.com/vi/${page.youtubeId}/maxresdefault.jpg`],
+        uploadDate: isoUploadDate(page.youtubeUploadDate ?? "2026-08-08"),
         embedUrl: `https://www.youtube-nocookie.com/embed/${page.youtubeId}`,
         contentUrl: `https://www.youtube.com/watch?v=${page.youtubeId}`,
         publisher: {
