@@ -317,6 +317,16 @@ export async function fetchMe(): Promise<{ account: Account | null; isAdmin: boo
   return asJson(res);
 }
 
+/** After Stripe Checkout, ask the worker to apply a completed session if the webhook was missed. */
+export async function reconcileCheckout(sessionId?: string | null): Promise<{ ok: true; paid: boolean; reconciled: boolean }> {
+  const res = await apiFetch("/api/billing/reconcile", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(sessionId ? { sessionId } : {}),
+  });
+  return asJson(res);
+}
+
 /** Updates the caller's own occasional-product-news email preference. */
 export async function setMarketingOptIn(optIn: boolean): Promise<{ ok: true; marketingOptIn: boolean }> {
   const res = await apiFetch("/api/account/marketing-opt-in", {
@@ -330,12 +340,17 @@ export async function setMarketingOptIn(optIn: boolean): Promise<{ ok: true; mar
 /** Returns the Stripe-hosted checkout URL to redirect the browser to. Omit `plan` (or pass
  *  "paid") for the standard $10/month subscription; pass "enterprise" for the Enterprise plan's
  *  recurring annual subscription — same self-serve flow either way. */
-export async function startCheckout(plan?: "paid" | "enterprise"): Promise<{ url: string }> {
+export async function startCheckout(plan?: "paid" | "enterprise"): Promise<{ url: string; alreadyPaid?: boolean }> {
   const res = await apiFetch("/api/billing/checkout", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ plan, attribution: attributionLabel() }),
   });
+  if (res.status === 409) {
+    const body = (await res.json().catch(() => ({}))) as { alreadyPaid?: boolean; error?: string };
+    if (body.alreadyPaid) return { url: "", alreadyPaid: true };
+    throw new Error(body.error ?? "Request failed (409)");
+  }
   return asJson(res);
 }
 

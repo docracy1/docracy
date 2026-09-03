@@ -158,6 +158,8 @@ const es: Messages = {
   "dash.upgradeBody":
     "Firmantes ilimitados, un conector para que Claude, ChatGPT, Grok o Perplexity consulten tus documentos, cuentas de equipo, marca blanca y herramientas de IA — detección automática de campos, resumen claro con riesgos y un generador de contratos a partir de una línea.",
   "dash.upgradeTitle": "Mejorar a plan de pago — $10/mes",
+  "dash.checkoutConfirming": "Confirmando tu suscripción…",
+  "dash.checkoutPending": "Pago recibido. Si las funciones de pago no se activan en un minuto, escribe a founder@docracy.io y lo resolvemos.",
   "dash.void": "Anular",
   "dash.voidPrompt": "Motivo opcional para anular (déjalo en blanco para omitir):",
   "dash.voiding": "Anulando…",

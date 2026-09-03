@@ -34,6 +34,7 @@ import {
   reassignSigner,
   regenerateApiToken,
   removeTeamMember,
+  reconcileCheckout,
   setMarketingOptIn,
   setWorkspaceSlug,
   startCheckout,
@@ -358,6 +359,7 @@ export default function Dashboard() {
   const [disconnectingProvider, setDisconnectingProvider] = useState<CloudProvider | null>(null);
   const [connectorBanner, setConnectorBanner] = useState<"connected" | "error" | null>(null);
   const [claimBanner, setClaimBanner] = useState<string | null>(null);
+  const [checkoutPending, setCheckoutPending] = useState(false);
   const [whatsappBannerDismissed, setWhatsappBannerDismissed] = useState(
     () => localStorage.getItem("docracy_whatsapp_announcement_dismissed") === "1"
   );
@@ -769,7 +771,11 @@ export default function Dashboard() {
     setUpgrading(true);
     setUpgradeError(null);
     try {
-      const { url } = await startCheckout();
+      const { url, alreadyPaid } = await startCheckout();
+      if (alreadyPaid) {
+        window.location.assign("/dashboard?checkout=success");
+        return;
+      }
       window.location.href = url;
     } catch (err) {
       setUpgradeError(err instanceof Error ? err.message : t("common.error"));
@@ -782,7 +788,11 @@ export default function Dashboard() {
     setUpgradingEnterprise(true);
     setUpgradeEnterpriseError(null);
     try {
-      const { url } = await startCheckout("enterprise");
+      const { url, alreadyPaid } = await startCheckout("enterprise");
+      if (alreadyPaid) {
+        window.location.assign("/dashboard?checkout=success");
+        return;
+      }
       window.location.href = url;
     } catch (err) {
       setUpgradeEnterpriseError(err instanceof Error ? err.message : t("common.error"));
@@ -914,11 +924,34 @@ export default function Dashboard() {
   }, [navigate]);
 
   useEffect(() => {
+    let cancelled = false;
     fetchMe()
       .then(async (res) => {
-        setAccount(res.account);
-        setIsAdmin(res.isAdmin);
-        if (res.account) {
+        const params = new URLSearchParams(window.location.search);
+        const checkoutSuccess = params.get("checkout") === "success";
+        const sessionId = params.get("session_id");
+        let me = res;
+
+        if (checkoutSuccess && me.account && !cancelled) {
+          try {
+            await reconcileCheckout(sessionId);
+          } catch {
+            // Webhook may still be in flight — poll /me regardless.
+          }
+          const deadline = Date.now() + 60_000;
+          while (!cancelled && Date.now() < deadline) {
+            me = await fetchMe();
+            if (me.account?.isPaid) break;
+            await new Promise((r) => setTimeout(r, 2000));
+          }
+          if (!cancelled && !me.account?.isPaid) setCheckoutPending(true);
+          if (!cancelled) navigate("/dashboard", { replace: true });
+        }
+        if (cancelled) return;
+
+        setAccount(me.account);
+        setIsAdmin(me.isAdmin);
+        if (me.account) {
           track("dashboard_loaded");
           const pending = readPendingClaim();
           if (pending?.claimToken) {
@@ -934,7 +967,7 @@ export default function Dashboard() {
           const { documents } = await fetchMyDocuments();
           setDocuments(documents);
         }
-        if (res.account?.isPaid) {
+        if (me.account?.isPaid) {
           const { hasToken } = await fetchTokenStatus();
           setHasToken(hasToken);
           const { templates } = await fetchTemplates();
@@ -953,19 +986,25 @@ export default function Dashboard() {
           const { slug } = await fetchWorkspaceSlug();
           setWorkspaceSlugState(slug);
         }
-        if (res.account?.isPaid) {
+        if (me.account?.isPaid) {
           const { connections } = await fetchConnectors();
           setConnections(connections);
         }
       })
       .catch((err) => setError(err instanceof Error ? err.message : t("common.error")))
-      .finally(() => setLoading(false));
-  }, []);
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [navigate, t]);
 
   if (loading) {
+    const confirming = new URLSearchParams(window.location.search).get("checkout") === "success";
     return (
       <div className="container">
-        <p>{t("common.loading")}</p>
+        <p>{confirming ? t("dash.checkoutConfirming") : t("common.loading")}</p>
       </div>
     );
   }
@@ -1178,6 +1217,11 @@ export default function Dashboard() {
       </aside>
 
       <div className="dashboard-content">
+        {checkoutPending && !account.isPaid && (
+          <div className="card" style={{ marginBottom: 16, borderColor: "var(--primary)" }}>
+            <span>{t("dash.checkoutPending")}</span>
+          </div>
+        )}
         {account.paymentFailedAt && (
           <div
             className="card"

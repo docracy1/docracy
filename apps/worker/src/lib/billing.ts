@@ -114,3 +114,95 @@ export async function getStripeCustomerId(env: Env, accountId: string): Promise<
     .first<{ stripe_customer_id: string | null }>();
   return row?.stripe_customer_id ?? null;
 }
+
+function isDuplicateColumnError(err: unknown): boolean {
+  const msg = err instanceof Error ? err.message : String(err);
+  return /duplicate column/i.test(msg);
+}
+
+/** CI often cannot apply D1 migrations (token lacks D1:Edit). Checkout persist/reconcile add the
+ *  columns themselves so a missed webhook can still be healed without waiting on wrangler. */
+export async function ensureCheckoutSessionColumns(env: Env): Promise<void> {
+  if (!env.DOCRACY_DB) return;
+  for (const sql of [
+    "ALTER TABLE accounts ADD COLUMN stripe_checkout_session_id TEXT",
+    "ALTER TABLE accounts ADD COLUMN stripe_checkout_created_at TEXT",
+  ]) {
+    try {
+      await env.DOCRACY_DB.prepare(sql).run();
+    } catch (err) {
+      if (isDuplicateColumnError(err)) continue;
+      console.log(`Billing: alter skipped (${err instanceof Error ? err.message : err})`);
+    }
+  }
+}
+
+export async function persistCheckoutSession(env: Env, accountId: string, sessionId: string): Promise<void> {
+  if (!env.DOCRACY_DB || !sessionId) return;
+  await ensureCheckoutSessionColumns(env);
+  await env.DOCRACY_DB.prepare(
+    `UPDATE accounts SET stripe_checkout_session_id = ?, stripe_checkout_created_at = ? WHERE id = ?`
+  )
+    .bind(sessionId, new Date().toISOString(), accountId)
+    .run();
+}
+
+export async function getCheckoutSessionId(env: Env, accountId: string): Promise<string | null> {
+  if (!env.DOCRACY_DB) return null;
+  try {
+    const row = await env.DOCRACY_DB.prepare(`SELECT stripe_checkout_session_id FROM accounts WHERE id = ?`)
+      .bind(accountId)
+      .first<{ stripe_checkout_session_id: string | null }>();
+    return row?.stripe_checkout_session_id ?? null;
+  } catch (err) {
+    console.log(`Billing: getCheckoutSessionId skipped (${err instanceof Error ? err.message : err})`);
+    return null;
+  }
+}
+
+export async function isAccountPaid(env: Env, accountId: string): Promise<boolean> {
+  if (!env.DOCRACY_DB) return false;
+  const row = await env.DOCRACY_DB.prepare(`SELECT is_paid FROM accounts WHERE id = ?`)
+    .bind(accountId)
+    .first<{ is_paid: number }>();
+  return !!row?.is_paid;
+}
+
+/** Shared by the Stripe webhook and the reconcile path — one place that flips paid + customer id. */
+export async function applyPaidCheckout(
+  env: Env,
+  input: { accountId: string; customerId?: string | null; isEnterprise?: boolean }
+): Promise<boolean> {
+  await markAccountPaid(env, input.accountId, true);
+  if (input.customerId) await setStripeCustomerId(env, input.accountId, input.customerId);
+  if (input.isEnterprise) await markAccountEnterprise(env, input.accountId);
+  return isAccountPaid(env, input.accountId);
+}
+
+export interface PendingCheckoutRow {
+  id: string;
+  email: string;
+  stripe_checkout_session_id: string;
+  stripe_customer_id: string | null;
+}
+
+/** Unpaid accounts that started Checkout at least `minAgeMs` ago — hourly heal for missed webhooks. */
+export async function listStaleUnpaidCheckouts(env: Env, minAgeMs = 60_000, limit = 25): Promise<PendingCheckoutRow[]> {
+  if (!env.DOCRACY_DB) return [];
+  await ensureCheckoutSessionColumns(env);
+  const cutoff = new Date(Date.now() - minAgeMs).toISOString();
+  try {
+    const { results } = await env.DOCRACY_DB.prepare(
+      `SELECT id, email, stripe_checkout_session_id, stripe_customer_id FROM accounts
+       WHERE is_paid = 0 AND stripe_checkout_session_id IS NOT NULL AND stripe_checkout_created_at IS NOT NULL
+         AND stripe_checkout_created_at <= ?
+       ORDER BY stripe_checkout_created_at ASC LIMIT ?`
+    )
+      .bind(cutoff, limit)
+      .all<PendingCheckoutRow>();
+    return results;
+  } catch (err) {
+    console.log(`Billing: listStaleUnpaidCheckouts skipped (${err instanceof Error ? err.message : err})`);
+    return [];
+  }
+}

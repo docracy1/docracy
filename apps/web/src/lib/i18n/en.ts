@@ -555,6 +555,8 @@ const en: Messages = {
   "dash.sentTimes": "— sent {{count}} time",
   "dash.sentTimesPlural": "— sent {{count}} times",
   "dash.upgradeTitle": "Upgrade to paid — $10/month",
+  "dash.checkoutConfirming": "Confirming your subscription…",
+  "dash.checkoutPending": "Payment received. If paid features aren't unlocked in a minute, email founder@docracy.io and we'll fix it.",
   "dash.upgradeBody": "Unlimited signers, a connector so Claude, ChatGPT, Grok, or Perplexity can look up your documents, team accounts, white-label branding, and a set of AI tools — auto-detect signature/date fields, a plain-English explainer with risk highlighting, and a contract generator that turns a one-line description into a signable PDF.",
   "dash.freeTemplates": "Marketplace",
   "dash.freeTemplatesSub": "Ready-to-use documents from Docracy and the community — pick one to prefill its signature fields automatically.",

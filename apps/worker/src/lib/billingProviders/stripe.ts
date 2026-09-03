@@ -9,6 +9,7 @@ export type StripeWebhookResult =
       isEnterprise: boolean;
       /** First-touch channel round-tripped via session metadata — "" when unknown. */
       attribution: string;
+      sessionId: string | null;
     }
   | { type: "subscription_deleted"; customerId: string }
   | { type: "invoice_payment_failed"; customerId: string }
@@ -92,12 +93,14 @@ export async function verifyAndExtract(
     const metadataRecord = typeof metadata === "object" && metadata !== null ? (metadata as Record<string, unknown>) : {};
     const isEnterprise = metadataRecord.plan === "enterprise";
     const attribution = metadataRecord.attribution;
+    const sessionId = event.data?.object?.id;
     return {
       type: "checkout_completed",
       accountId,
       customerId: typeof customer === "string" ? customer : null,
       isEnterprise,
       attribution: typeof attribution === "string" ? attribution : "",
+      sessionId: typeof sessionId === "string" ? sessionId : null,
     };
   }
 
