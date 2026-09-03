@@ -1,8 +1,9 @@
 import { sanitizeJsonStringNewlines } from "./aiJson";
 import { slugify } from "./blogPosts";
 import { pingIndexNow } from "./indexNow";
-import { publishOfficialTemplate } from "./marketplaceTemplates";
+import { listWeeklyOfficial, publishOfficialTemplate } from "./marketplaceTemplates";
 import { renderTemplatePdf, type TemplatePdfBlock } from "./templatePdf";
+import { ensureWeeklyTemplateInfra, shouldCatchUpWeeklyTemplates } from "./templateTopicQueue";
 import type { Env } from "@docracy/shared";
 
 const DEFAULT_MODEL = "@cf/meta/llama-3.1-8b-instruct-fp8";
@@ -277,6 +278,8 @@ export async function runWeeklyTemplatePublish(env: Env): Promise<void> {
     return;
   }
 
+  await ensureWeeklyTemplateInfra(env);
+
   const topics = await nextQueuedTopics(env, WEEKLY_TEMPLATE_BATCH);
   if (topics.length === 0) {
     console.log("Weekly templates: no queued topics left");
@@ -343,4 +346,21 @@ export async function runWeeklyTemplatePublish(env: Env): Promise<void> {
     await pingIndexNow(publishedPaths);
   }
   console.log(`Weekly templates: published ${published}/${topics.length} this run`);
+}
+
+/**
+ * Hourly backfill: if no origin=weekly Marketplace rows exist yet (migrations never applied,
+ * Monday cron missed, or AI skipped the first batch), create the queue and publish one batch.
+ * No-op once at least one weekly template is live.
+ */
+export async function runWeeklyTemplateCatchUpIfEmpty(env: Env): Promise<void> {
+  if (!env.DOCRACY_DB) return;
+  await ensureWeeklyTemplateInfra(env);
+  const existing = await listWeeklyOfficial(env, 1);
+  if (!shouldCatchUpWeeklyTemplates(existing.length)) {
+    console.log("Weekly templates: catch-up skipped (weekly list already populated)");
+    return;
+  }
+  console.log("Weekly templates: weekly list empty — running publish catch-up");
+  await runWeeklyTemplatePublish(env);
 }

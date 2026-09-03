@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { parseAndValidateDraft } from "./templateWeekly";
+import { parseAndValidateDraft, runWeeklyTemplateCatchUpIfEmpty } from "./templateWeekly";
 import { renderTemplatePdf, TEXT_BLANK } from "./templatePdf";
+import { ensureWeeklyTemplateInfra, shouldCatchUpWeeklyTemplates } from "./templateTopicQueue";
+import { makeMockEnv } from "../test/mockEnv";
 
 const baseTopic = {
   id: "ttq_test",
@@ -140,3 +142,75 @@ describe("template PDF layout (FreeTemplate scheme)", () => {
     expect(fields.filter((f) => f.type === "date")).toHaveLength(2);
   });
 });
+
+async function queuedTopicCount(d1: ReturnType<typeof makeMockEnv>["d1"]): Promise<number> {
+  const row = (await d1.prepare(`SELECT COUNT(*) as n FROM template_topic_queue WHERE status = 'queued'`).first()) as {
+    n: number;
+  } | null;
+  return Number(row?.n ?? 0);
+}
+
+describe("weekly template runtime infra", () => {
+  it("seeds the queue when the table is missing (CI D1 migrations never applied)", async () => {
+    const { env, d1 } = makeMockEnv();
+    await d1.exec("DROP TABLE template_topic_queue");
+
+    await ensureWeeklyTemplateInfra(env);
+
+    expect(await queuedTopicCount(d1)).toBe(108);
+    const first = (await d1
+      .prepare(`SELECT slug FROM template_topic_queue WHERE status = 'queued' ORDER BY sort_order ASC LIMIT 1`)
+      .first()) as { slug: string } | null;
+    expect(first?.slug).toBe("residential-lease-addendum");
+  });
+
+  it("is idempotent when migration 0026 already applied", async () => {
+    const { env, d1 } = makeMockEnv();
+    const before = await queuedTopicCount(d1);
+    expect(before).toBe(108);
+
+    await ensureWeeklyTemplateInfra(env);
+    await ensureWeeklyTemplateInfra(env);
+
+    expect(await queuedTopicCount(d1)).toBe(108);
+  });
+
+  it("catch-up is a no-op once a weekly marketplace row exists", async () => {
+    const { env, d1 } = makeMockEnv();
+    const now = new Date().toISOString();
+    await d1
+      .prepare(
+        `INSERT INTO marketplace_templates
+          (id, account_id, slug, title, category, description, signer_count, page_count, fields,
+           status, submitted_at, reviewed_at, origin)
+         VALUES (?, NULL, ?, ?, ?, ?, 2, 1, '[]', 'approved', ?, ?, 'weekly')`
+      )
+      .bind("mt-weekly-1", "weekly-catchup-test", "Weekly Catchup Test", "Consulting", "A weekly row.", now, now)
+      .run();
+
+    await runWeeklyTemplateCatchUpIfEmpty(env);
+
+    expect(await queuedTopicCount(d1)).toBe(108);
+  });
+
+  it("catch-up runs a publish batch while the weekly list is empty", async () => {
+    const { env, d1 } = makeMockEnv();
+    await runWeeklyTemplateCatchUpIfEmpty(env);
+
+    const skipped = (await d1
+      .prepare(`SELECT COUNT(*) as n FROM template_topic_queue WHERE status = 'skipped'`)
+      .first()) as { n: number } | null;
+    // Mock AI throws, so drafts are invalid and the batch is skipped rather than published.
+    expect(Number(skipped?.n ?? 0)).toBe(10);
+    expect(await queuedTopicCount(d1)).toBe(98);
+  });
+});
+
+describe("shouldCatchUpWeeklyTemplates", () => {
+  it("runs only while the weekly list is empty", () => {
+    expect(shouldCatchUpWeeklyTemplates(0)).toBe(true);
+    expect(shouldCatchUpWeeklyTemplates(1)).toBe(false);
+    expect(shouldCatchUpWeeklyTemplates(10)).toBe(false);
+  });
+});
+
