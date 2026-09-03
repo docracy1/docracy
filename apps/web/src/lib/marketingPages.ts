@@ -26,6 +26,8 @@ export interface FeaturePageContent {
   youtubeId?: string;
   /** Accessible iframe / VideoObject title; defaults to heroHeadline when omitted. */
   youtubeTitle?: string;
+  /** Required with youtubeId — VideoObject uploadDate (YYYY-MM-DD or ISO DateTime). */
+  youtubeUploadDate?: string;
 }
 
 export const FEATURE_PAGES: FeaturePageContent[] = [
@@ -310,6 +312,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     ],
     youtubeId: "LvnzCbPBRqY",
     youtubeTitle: "Sign documents via WhatsApp — Docracy demo",
+    youtubeUploadDate: "2026-08-08",
     faqs: [
       {
         question: "How does WhatsApp signing work?",
