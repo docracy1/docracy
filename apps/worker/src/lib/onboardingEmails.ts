@@ -1,6 +1,7 @@
 import type { Env, Locale } from "@docracy/shared";
 import {
   sendOnboardingStep1,
+  sendOnboardingStep2,
   sendOnboardingStep3,
   sendOnboardingStep4,
   sendPreparerLeadStep1,
@@ -13,7 +14,7 @@ const HOUR = 60 * MINUTE;
 const DAY = 24 * HOUR;
 
 interface Step {
-  column: "step1_sent_at" | "step3_sent_at" | "step4_sent_at";
+  column: "step1_sent_at" | "step2_sent_at" | "step3_sent_at" | "step4_sent_at";
   delayMs: number;
   send: (env: Env, email: string, locale?: Locale) => Promise<void>;
 }
@@ -23,12 +24,11 @@ interface Step {
 // pending when a later one is *also* due is if the cron didn't run for a while, in which case the
 // later, more urgent email is the more useful one to actually land.
 //
-// step2_sent_at still exists as a dormant column in the onboarding_emails table (see migration
-// 0013) but is deliberately unused now — the 4-hour "you haven't sent anything yet" nudge it used
-// to drive was retired in favor of the per-document preparer-notification family in email.ts,
-// which reacts to what actually happened (recipient hasn't opened/signed) instead of a blind timer.
+// Cadence: ~3 min → 24h → 2 days (Docstoc-style check-in) → 3 days. step2_sent_at was the old
+// 4-hour nudge; that timer was retired, and the column now holds the day-2 reactivation email.
 const STEPS: Step[] = [
   { column: "step4_sent_at", delayMs: 3 * DAY, send: sendOnboardingStep4 },
+  { column: "step2_sent_at", delayMs: 2 * DAY, send: sendOnboardingStep2 },
   { column: "step3_sent_at", delayMs: 24 * HOUR, send: sendOnboardingStep3 },
   { column: "step1_sent_at", delayMs: 3 * MINUTE, send: sendOnboardingStep1 },
 ];
@@ -109,8 +109,9 @@ async function hasSentAnyDocument(env: Env, accountId: string): Promise<boolean>
  * the first one it sends for a given account in this pass, so a long cron gap sends at most one
  * (the most relevant) email per account rather than bursting all of them at once. Step 1's
  * nominal 3-minute delay may land up to ~1 hour after signup on free-tier cron spacing.
+ * Day-2 uses the existing step2_sent_at column (Docstoc-style soft check-in).
  *
- * Also sweeps preparer-opt-in leads (same cadence, different content — those people already sent).
+ * Also sweeps preparer-opt-in leads (same cadence except no day-2 step — those people already sent).
  */
 export async function runOnboardingEmailSweep(env: Env): Promise<void> {
   if (!env.DOCRACY_DB) return;
