@@ -1149,6 +1149,50 @@ export async function sendPreparerLeadStep1(env: Env, email: string, locale: Loc
   });
 }
 
+/** Day-2 check-in for preparer opt-ins — they already sent; nudge templates + free account. */
+export async function sendPreparerLeadStep2(env: Env, email: string, locale: Locale = "en"): Promise<void> {
+  const subject =
+    locale === "es" ? "¿Listo para el próximo documento?" : "Ready for the next document?";
+  const body =
+    locale === "es"
+      ? `
+    ${emailHeadline(`¿Listo para el próximo documento?`)}
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      Solo un aviso amable — Docracy sigue aquí cuando necesites enviar otro acuerdo. Plantillas
+      gratis para NDAs, contratos y cartas de oferta, y el firmante no necesita crear una cuenta.
+    </p>
+    ${templateList(["NDA mutuo", "Acuerdo de servicio freelance", "Carta de oferta", "Acuerdo con contratista independiente"])}
+    ${ctaButton(`${env.PUBLIC_APP_URL}/free-templates?utm_source=email&utm_medium=preparer-lead&utm_campaign=step2`, "Explorar plantillas gratis")}
+    <p style="margin:16px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">
+      ¿Quieres todos tus envíos en un solo lugar?
+      <a href="${env.PUBLIC_APP_URL}/login?utm_source=email&utm_medium=preparer-lead&utm_campaign=step2" style="color:${PRIMARY};">Crea una cuenta gratis</a>
+      — sin contraseña, solo un enlace mágico.
+    </p>
+    <p style="margin:0;font-size:14px;color:${MUTED};">Pediste algunos consejos — responde este correo en cualquier momento para dejar de recibirlos.</p>
+    ${signOff(locale)}
+  `
+      : `
+    ${emailHeadline(`Ready for the next document?`)}
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      Just a friendly check-in — Docracy is still here when you need to send another agreement. Free
+      templates for NDAs, contracts, and offer letters, and the signer never needs an account.
+    </p>
+    ${templateList(["Mutual NDA", "Freelance service agreement", "Offer letter", "Independent contractor agreement"])}
+    ${ctaButton(`${env.PUBLIC_APP_URL}/free-templates?utm_source=email&utm_medium=preparer-lead&utm_campaign=step2`, "Browse free templates")}
+    <p style="margin:16px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">
+      Want every send in one place?
+      <a href="${env.PUBLIC_APP_URL}/login?utm_source=email&utm_medium=preparer-lead&utm_campaign=step2" style="color:${PRIMARY};">Create a free account</a>
+      — no password, just a magic link.
+    </p>
+    <p style="margin:0;font-size:14px;color:${MUTED};">You asked for a few tips — reply anytime to stop them.</p>
+    ${signOff(locale)}
+  `;
+  await send(env, email, subject, emailShell(env.PUBLIC_APP_URL, body), {
+    emailType: "preparer_lead_step2",
+    replyTo: env.FEEDBACK_EMAIL,
+  });
+}
+
 export async function sendPreparerLeadStep3(env: Env, email: string, locale: Locale = "en"): Promise<void> {
   const subject = locale === "es" ? "La próxima vez, empieza desde una plantilla" : "Next time, start from a template";
   const body =

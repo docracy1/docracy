@@ -214,4 +214,25 @@ describe("runOnboardingEmailSweep leads", () => {
     };
     expect(row.step1_sent_at).not.toBeNull();
   });
+
+  it("sends preparer lead step 2 (day-2) once 2 days have passed", async () => {
+    const { env, d1 } = makeMockEnv();
+    const optedInAt = new Date(Date.now() - (2 * DAY + HOUR)).toISOString();
+    await d1
+      .prepare(`INSERT INTO onboarding_leads (email, source, opted_in_at) VALUES (?, ?, ?)`)
+      .bind("preparer@example.com", "preparer_optin", optedInAt)
+      .run();
+
+    await runOnboardingEmailSweep(env);
+
+    const row = (await d1
+      .prepare(`SELECT step1_sent_at, step2_sent_at, step3_sent_at, step4_sent_at FROM onboarding_leads WHERE email = ?`)
+      .bind("preparer@example.com")
+      .first()) as Record<string, string | null>;
+
+    expect(row.step2_sent_at).not.toBeNull();
+    expect(row.step4_sent_at).toBeNull();
+    expect(row.step1_sent_at).toBeNull();
+    expect(row.step3_sent_at).toBeNull();
+  });
 });
