@@ -251,7 +251,8 @@ export interface Env {
   PUBLIC_CONNECTOR_URL: string;
   FREE_TIER_MAX_SIGNERS: string;
   DOC_TTL_DAYS: string;
-  /** Max custom retention a paid account may set at create time (days). Defaults to 90 when unset. */
+  /** Max custom retention a paid account may set at create time (days). Defaults to 500
+   *  (tax-year vault ceiling) when unset. */
   DOC_TTL_MAX_DAYS?: string;
   FEEDBACK_EMAIL: string;
   /** Absent until a real Stripe account exists — billing routes must degrade gracefully (501),
@@ -362,4 +363,8 @@ export interface Env {
    *  from the signing-invite template — see lib/whatsapp.ts's sendWhatsAppPin). Defaults to
    *  "signing_pin" when unset. */
   WHATSAPP_PIN_TEMPLATE_NAME?: string;
+  /** Name of the pre-approved WhatsApp template sent after the chain completes (signed copy +
+   *  pay page URL as named variable `receipt_link`). Defaults to "signing_completed" when unset.
+   *  Submit in Meta Business Manager as UTILITY — this codebase cannot create the template. */
+  WHATSAPP_COMPLETED_TEMPLATE_NAME?: string;
 }

@@ -49,7 +49,8 @@ export interface CreateDocumentOptions {
   customMessage?: string;
   signingMode?: "sequential" | "parallel";
   ccRecipients?: CcRecipientInput[];
-  /** Paid only — retention days (1–90). Omitted / free always uses the default (9). */
+  /** Paid only — retention days (1–tax-year vault, max 500). Omitted paid uses the vault default;
+   *  free always uses 9. */
   ttlDays?: number;
   /** Paid only — sender's own payment link. Docracy never collects this money. */
   paymentRequest?: { amount: string; currency: string; url: string };

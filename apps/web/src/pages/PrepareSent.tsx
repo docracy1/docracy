@@ -8,6 +8,7 @@ import {
   packetPreparePath,
   US_CONTRACTOR_PACKET_SLUG,
 } from "../lib/contractorPacket";
+import { signedPagePath } from "../lib/paidVault";
 import { track } from "../lib/track";
 
 /**
@@ -29,7 +30,7 @@ export default function PrepareSent() {
     } | null;
   };
   const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
-  const [copied, setCopied] = useState<"status" | "share" | null>(null);
+  const [copied, setCopied] = useState<"status" | "share" | "signed" | null>(null);
 
   useEffect(() => {
     if (state?.docId && state.claimToken) {
@@ -56,15 +57,19 @@ export default function PrepareSent() {
   }
 
   const statusUrl = `${window.location.origin}/status/${state.statusToken}`;
+  const signedUrl = `${window.location.origin}${signedPagePath(state.statusToken, locale)}`;
   const shareBlurb = t("sent.shareBlurb");
   // After signup, land on dashboard so the pending claim can redeem into history.
   const loginNext = encodeURIComponent("/dashboard");
 
-  const copyText = async (kind: "status" | "share", text: string) => {
+  const copyText = async (kind: "status" | "share" | "signed", text: string) => {
     try {
       await navigator.clipboard.writeText(text);
       setCopied(kind);
-      track("viral_cta_clicked", { source: kind === "status" ? "prepare_sent_copy_status" : "prepare_sent_share" });
+      track("viral_cta_clicked", {
+        source:
+          kind === "status" ? "prepare_sent_copy_status" : kind === "signed" ? "prepare_sent_copy_signed" : "prepare_sent_share",
+      });
       window.setTimeout(() => setCopied(null), 2000);
     } catch {
       // Clipboard blocked — fall back to selecting nothing; status URL is still visible as a link.
@@ -84,6 +89,15 @@ export default function PrepareSent() {
           </button>
           <button type="button" className="btn-secondary" onClick={() => copyText("share", shareBlurb)}>
             {copied === "share" ? t("common.copied") : t("sent.shareColleague")}
+          </button>
+        </div>
+      </div>
+      <div className="card" style={{ marginTop: 16 }}>
+        <p style={{ marginBottom: 8 }}>{t("sent.signedPage")}</p>
+        <Link to={signedPagePath(state.statusToken, locale)}>{signedUrl}</Link>
+        <div style={{ marginTop: 12 }}>
+          <button type="button" className="btn-secondary" onClick={() => copyText("signed", signedUrl)}>
+            {copied === "signed" ? t("common.copied") : t("sent.copySigned")}
           </button>
         </div>
       </div>

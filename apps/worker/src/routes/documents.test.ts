@@ -256,6 +256,26 @@ describe("POST /api/documents", () => {
     });
   });
 
+  it("uses the tax-year vault as paid default retention when ttlDays is omitted", async () => {
+    const { env, kv } = makeMockEnv();
+    const ctx = makeCtx();
+    const sessionToken = await createSession(env, ctx, "acct-vault", "vault@example.com", true, false, null, null);
+    await ctx.flush();
+    const pdf = await makeValidPdfBytes();
+    const res = await documents.request(
+      "/",
+      { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${sessionToken}` }, body: buildForm(pdf, validMeta) },
+      env,
+      MOCK_CTX
+    );
+    expect(res.status).toBe(200);
+    const [, docValue] = [...kv._store.entries()].find(([k]) => k.startsWith("doc:"))!;
+    const stored = JSON.parse(docValue) as { createdAt: string; expiresAt: string };
+    const days = (new Date(stored.expiresAt).getTime() - new Date(stored.createdAt).getTime()) / 86_400_000;
+    expect(days).toBeGreaterThanOrEqual(390);
+    expect(days).toBeLessThanOrEqual(500);
+  });
+
   it("rejects a payment link from a free or anonymous send", async () => {
     const { env } = makeMockEnv();
     const pdf = await makeValidPdfBytes();

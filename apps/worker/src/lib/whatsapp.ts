@@ -1,4 +1,4 @@
-import type { DocState, Env } from "@docracy/shared";
+import { signToken, type DocState, type Env, type Locale } from "@docracy/shared";
 
 // A stalled connection to Meta's Graph API must still give up in bounded time — same reasoning as
 // email.ts's RESEND_TIMEOUT_MS.
@@ -118,4 +118,48 @@ export async function sendWhatsAppPin(env: Env, doc: DocState, signerOrder: numb
 
   const templateName = env.WHATSAPP_PIN_TEMPLATE_NAME || "signing_pin";
   await sendWhatsAppTemplate(env, to, templateName, whatsappTemplateLang(env, doc), "pin_code", pin, `${doc.docId}:${signerOrder}:pin`);
+}
+
+/** Canonical forwardable URL for the signed PDF (+ pay CTA when the sender attached a checkout). */
+export function signedPageUrl(appUrl: string, token: string, locale: Locale = "en"): string {
+  const path = locale === "es" ? `/es/firmado/${token}` : `/signed/${token}`;
+  return `${appUrl.replace(/\/$/, "")}${path}`;
+}
+
+/**
+ * After the chain completes, text each WhatsApp signer the shareable signed-copy (and pay) page.
+ * Same channel they already used for the invite — LATAM collection happens in WhatsApp, not Gmail.
+ * Does not consume extra monthly quota: this is a follow-up on an already-counted invite, not a
+ * new outbound campaign. Never throws.
+ *
+ * Template (submit in Meta Business Manager as UTILITY, named variable `receipt_link`):
+ *   EN: "Everyone has signed. Open the signed copy — and pay if the sender asked: {{receipt_link}}"
+ *   ES: "Todos firmaron. Abre la copia firmada — y paga si te lo pidieron: {{receipt_link}}"
+ *
+ * biz_opaque_callback_data uses a ":done" suffix so the inbound webhook ignores these receipts
+ * the same way it ignores PIN messages (parts.length !== 2).
+ */
+export async function sendWhatsAppCompletedReceipts(env: Env, doc: DocState): Promise<void> {
+  if (!doc.whatsappInvites) return;
+
+  const locale: Locale = doc.locale ?? "en";
+  const statusToken = await signToken(doc.docId, 0, env.TOKEN_SECRET);
+  const receiptUrl = signedPageUrl(env.PUBLIC_APP_URL, statusToken, locale);
+  const templateName = env.WHATSAPP_COMPLETED_TEMPLATE_NAME || "signing_completed";
+  const lang = whatsappTemplateLang(env, doc);
+
+  for (const signer of doc.signers) {
+    if (!signer.whatsappPhone) continue;
+    const to = normalizeE164(signer.whatsappPhone);
+    if (!to) continue;
+    await sendWhatsAppTemplate(
+      env,
+      to,
+      templateName,
+      lang,
+      "receipt_link",
+      receiptUrl,
+      `${doc.docId}:${signer.order}:done`
+    );
+  }
 }

@@ -160,6 +160,7 @@ const es: Messages = {
   "dash.upgradeTitle": "Conserva tus archivos firmados — $10/mes",
   "dash.deletesOn": "Se elimina el {{date}}",
   "dash.keepFile": "Conservar este archivo",
+  "dash.copySignedLink": "Copiar enlace firmado + pago",
   "dash.archiveNag": "Un PDF firmado de esta lista se elimina en menos de 2 días.",
   "dash.void": "Anular",
   "dash.voidPrompt": "Motivo opcional para anular (déjalo en blanco para omitir):",
@@ -350,7 +351,7 @@ const es: Messages = {
     "Sí — empieza gratis con más de 100 plantillas listas, o guarda las tuyas en una cuenta de pago.",
   "landing.faq4.q": "¿Puedo usar plantillas?",
   "landing.faq5.a":
-    "Sí en el plan de pago ($10/mes fijos, no por asiento): conserva los PDF más de 9 días, pega tu enlace de PayPal/Stripe/Mercado Pago después de firmar, más equipo, plantillas, conectores e IA en un solo workspace.",
+    "Sí en el plan de pago ($10/mes fijos, no por asiento): conserva los PDF hasta el próximo 15 de abril o 13 meses, pega tu enlace de PayPal/Stripe/Mercado Pago después de firmar, más equipo, plantillas, conectores e IA en un solo workspace.",
   "landing.faq5.q": "¿Docracy.io admite equipos?",
   "landing.faqTitle": "Preguntas frecuentes",
   "landing.feat1.body":
@@ -567,6 +568,7 @@ const es: Messages = {
   "plan.templates": "Plantillas reutilizables",
   "plan.val.days9": "9 días, luego se elimina",
   "plan.val.days90": "Hasta 90 días",
+  "plan.val.taxVault": "Hasta el próximo 15 abr. o 13 meses",
   "plan.val.premium": "Premium",
   "plan.included": "Incluido",
   "plan.notIncluded": "No incluido",
@@ -622,6 +624,8 @@ const es: Messages = {
   "prepare.generateWithAi": "O genera uno con IA",
   "prepare.identityNote":
     "La identidad del firmante no se verifica — úsalo solo para documentos donde eso sea aceptable.",
+  "prepare.taxVaultHint":
+    "Por defecto en pago: se conserva hasta el próximo 15 de abril o 13 meses, lo que ocurra más tarde — suficiente para W-9 en temporada 1099 y un arrendamiento de un año.",
   "prepare.inDays": "en",
   "prepare.initialHere": "Iniciales aquí",
   "prepare.inviteEmail": "Correo de invitación",
@@ -687,12 +691,12 @@ const es: Messages = {
   "pricing.free.tagline": "Para acuerdos rápidos y puntuales",
   "pricing.goDashboard": "Ir al panel",
   "pricing.intro":
-    "Firmar es gratis — hasta 2 firmantes, sin cuenta. El plan de pago es $10/mes para conservar los PDF más de 9 días y pegar tu checkout después de que firmen. No es una tarifa por firma ni un recorte de lo que te paguen.",
+    "Firmar es gratis — hasta 2 firmantes, sin cuenta. El plan de pago es $10/mes para conservar los PDF hasta el próximo 15 de abril o 13 meses, y pegar tu checkout después de que firmen. No es una tarifa por firma ni un recorte de lo que te paguen.",
   "pricing.dockAria": "Precios de planes",
   "pricing.paid.ctaGet": "Ilimitado — $10/mes",
   "pricing.paid.ctaLogin": "Inicia sesión para mejorar el plan",
   "pricing.paid.ctaUpgrade": "Mejorar plan — $10/mes",
-  "pricing.paid.f1": "Conserva los PDF firmados hasta 90 días",
+  "pricing.paid.f1": "Conserva los PDF firmados hasta el próximo 15 de abril o 13 meses",
   "pricing.paid.f10": "Webhooks para tus propios sistemas",
   "pricing.paid.f11": "Conector MCP (Claude, ChatGPT, Grok, Perplexity)",
   "pricing.paid.f12": "IA: detección automática de campos de firma y fecha",
@@ -725,6 +729,9 @@ const es: Messages = {
   "privacy.title": "Privacidad",
   "sent.bookmark": "Guarda este enlace para consultar el progreso en cualquier momento:",
   "sent.copyStatus": "Copiar enlace de estado",
+  "sent.signedPage":
+    "Cuando todos hayan firmado, reenvía esta página — PDF firmado y botón de pago, mientras el archivo esté en el archivo:",
+  "sent.copySigned": "Copiar enlace firmado + pago",
   "sent.fallbackBody": "Tu documento fue creado. Revisa tu correo para actualizaciones de estado.",
   "sent.parallel": "Cada firmante recibió su enlace por correo — pueden firmar en cualquier orden.",
   "sent.saveAccount": "Guardar este envío en una cuenta",
@@ -833,6 +840,8 @@ const es: Messages = {
   "status.dontLoseLinkSub":
     "Crea una cuenta gratis y adjuntaremos este documento a tu historial — sin contraseña. Conserva este enlace de estado como respaldo.",
   "status.download": "Descargar PDF firmado",
+  "status.openSignedPage": "Abrir página firmada + pago",
+  "status.copySignedLink": "Copiar enlace firmado + pago",
   "status.fullySigned": "Completamente firmado",
   "status.inProgress": "Firma en curso",
   "status.keepPdfs": "Guarda este documento en tu panel",
@@ -965,14 +974,17 @@ const es: Messages = {
   "docs.enterprise.body2": "o mejora el plan desde la pestaña de suscripción del Panel.",
   "docs.enterprise.title": "Enterprise",
   "docs.expiry.body":
-    "Los documentos gratis siempre vencen después de 9 días (o antes, cuando todos hayan firmado y se haya enviado la copia final por correo). Con una cuenta de pago puedes elegir retención de 1–90 días al preparar un documento o enviar masivamente desde una plantilla.",
-  "docs.expiry.title": "Vencimiento personalizado del documento (pago)",
+    "Los documentos gratis siempre vencen después de 9 días (o antes, cuando todos hayan firmado y se haya enviado la copia final por correo). En una cuenta de pago el archivo por defecto es lo que ocurra más tarde: 13 meses o el 15 de abril del año calendario siguiente — suficiente para un W-9 hasta la declaración 1099, o un arrendamiento de un año. Sigue pudiendo elegir una ventana más corta (desde 1 día hasta ese tope) al preparar o enviar masivamente.",
+  "docs.expiry.title": "Archivo hasta temporada fiscal (pago)",
   "docs.packet.title": "Kit de contratista en EE. UU. (gratis)",
   "docs.packet.body":
     "Tres plantillas gratis existentes, un PDF a la vez: NDA mutuo, W-9 del IRS y luego acuerdo de contratista independiente. Abre /packets/us-contractor (español: /es/kit-contratista). Pegar un enlace de cobro en esos envíos sigue requiriendo el plan de pago.",
   "docs.pay.title": "Cobra después de que firmen (pago)",
   "docs.pay.body":
-    "En una cuenta de pago, al preparar puedes pegar tu propio checkout https — PayPal.me, Stripe Payment Link, Mercado Pago o similar — más un monto y una moneda. Cuando todos han firmado, el firmante ve un botón de pagar. Docracy nunca cobra ese dinero; el plan de $10/mes es cómo nos pagan a nosotros, no un porcentaje del tuyo.",
+    "En una cuenta de pago, al preparar puedes pegar tu propio checkout https — PayPal.me, Stripe Payment Link, Mercado Pago o similar — más un monto y una moneda. Cuando todos han firmado, el firmante ve un botón de pagar, el correo de finalización lo incluye, y si enviaste la invitación por WhatsApp también reciben la página firmada+pago por WhatsApp. Docracy nunca cobra ese dinero; el plan de $10/mes es cómo nos pagan a nosotros, no un porcentaje del tuyo.",
+  "docs.signedPage.title": "Página para reenviar: firmado + pago",
+  "docs.signedPage.body":
+    "Cada documento tiene una URL /signed/… (español: /es/firmado/…) que sobrevive a la pestaña de firma. Quien tenga el enlace puede descargar el PDF y abrir el checkout del remitente. Dura lo mismo que el archivo (9 días en gratis, bóveda fiscal en pago). Cópiala desde el estado, el panel o la confirmación de envío. Los WhatsApp al completar (plantilla signing_completed, variable receipt_link) apuntan aquí — hay que enviar esa plantilla UTILITY a Meta Business Manager para que los textos de producción se entreguen.",
   "docs.fields.checkbox": "Casilla — obligatoria u opcional.",
   "docs.fields.dropdown":
     "Desplegable — defines las opciones al colocar el campo; el valor elegido queda grabado en el PDF.",
@@ -985,7 +997,7 @@ const es: Messages = {
     "para que Claude, ChatGPT, Grok, Perplexity o un agente IDE como Cursor consulten el estado de firma y busquen tus documentos desde el chat. Requiere cuenta de pago — copia tu URL de conector personal desde Panel → Conector y clave API. Instrucciones completas:",
   "docs.mcp.title": "Conectar un asistente de IA (MCP)",
   "docs.paid.body1":
-    "Firmar sigue siendo gratis. Una cuenta gratis lista los envíos en el panel hasta que el TTL de 9 días borra el PDF — no conserva el archivo. El plan de pago ($10/mes) conserva los PDF firmados hasta 90 días, te deja pegar tu enlace de PayPal/Stripe/Mercado Pago después de firmar (Docracy no se lleva un porcentaje), más firmantes ilimitados, plantillas reutilizables, enlaces con PIN, cuentas de equipo, marca blanca, webhooks, MCP/Zapier, IA, carga automática a Dropbox/OneDrive/Box/Google Drive y las funciones de flujo abajo. El kit de contratista es gratis. Comparación completa en",
+    "Firmar sigue siendo gratis. Una cuenta gratis lista los envíos en el panel hasta que el TTL de 9 días borra el PDF — no conserva el archivo. El plan de pago ($10/mes) conserva los PDF firmados hasta el próximo 15 de abril o 13 meses, te deja pegar tu enlace de PayPal/Stripe/Mercado Pago después de firmar (Docracy no se lleva un porcentaje), más firmantes ilimitados, plantillas reutilizables, enlaces con PIN, cuentas de equipo, marca blanca, webhooks, MCP/Zapier, IA, carga automática a Dropbox/OneDrive/Box/Google Drive y las funciones de flujo abajo. El kit de contratista es gratis. Comparación completa en",
   "docs.paid.title": "Cuenta de pago ($10/mes)",
   "docs.privacy.and": "y",
   "docs.privacy.body1":
@@ -1495,7 +1507,7 @@ const es: Messages = {
   "secureSig.faq.a3":
     "No por defecto. El registro de auditoría prueba qué se firmó y cuándo, no una identidad verificada. Un PIN opcional y la entrega vinculada a WhatsApp (próximamente, planes de pago) agregan una verificación más fuerte del firmante.",
   "secureSig.faq.q4": "¿Cuánto tiempo se guardan mis documentos?",
-  "secureSig.faq.a4": "Las cadenas de firma anónimas usan una ventana de retención por defecto de 9 días. El plan de pago conserva los PDF firmados hasta 90 días.",
+  "secureSig.faq.a4": "Las cadenas de firma anónimas usan una ventana de retención por defecto de 9 días. El plan de pago conserva los PDF firmados hasta el próximo 15 de abril o 13 meses.",
   "secureSig.footerCta": "Mira exactamente cómo se protege tu documento.",
   "secureSig.trustLink": "Página completa de Confianza y seguridad",
   "secureSig.dpaLink": "Acuerdo de procesamiento de datos",
@@ -1512,7 +1524,7 @@ const es: Messages = {
   "freeSig.included.4": "Un certificado de finalización que resume quién firmó, cuándo y cómo",
   "freeSig.upgradeTitle": "Cuándo realmente necesitarías actualizar",
   "freeSig.upgradeBody": "El plan gratis cubre la mayoría de los acuerdos puntuales. Necesitarías el plan de pago de $10/mes fijo si necesitas:",
-  "freeSig.upgrade.1": "Archivos firmados conservados más de 9 días (hasta 90 días)",
+  "freeSig.upgrade.1": "Archivos firmados conservados más de 9 días (hasta el próximo 15 abr. o 13 meses)",
   "freeSig.upgrade.2": "Plantillas reutilizables, un panel de equipo o envío masivo",
   "freeSig.upgrade.3": "Más de 2 firmantes en un solo documento",
   "freeSig.pricingLink": "Ver la comparación completa de planes",
@@ -2303,6 +2315,16 @@ const es: Messages = {
   "prepare.payUrlAria": "Tu enlace de pago",
   "sign.payCta": "Pagar {{amount}} {{currency}}",
   "sign.payHint": "Este cobro es del remitente. Docracy no procesa el pago.",
+  "signed.title": "Todos han firmado",
+  "signed.untitled": "Documento firmado",
+  "signed.notDone": "Aún no está completamente firmado",
+  "signed.notDoneBody": "Esta página abre el PDF firmado (y el botón de pago) cuando todos hayan terminado. Mientras tanto, consulta el estado.",
+  "signed.viewStatus": "Ver estado de firma",
+  "signed.availableUntil": "Disponible hasta el {{date}}",
+  "signed.download": "Descargar PDF firmado",
+  "signed.copyLink": "Copiar esta página",
+  "signed.forwardHint": "Reenvía esta URL por WhatsApp o correo. El archivo permanece aquí hasta la fecha de archivo.",
+  "signed.sendYours": "Envía el tuyo gratis →",
   "packet.seoTitle": "Kit gratis de contratista en EE. UU. — NDA, W-9 y acuerdo de contratista",
   "packet.seoDescription":
     "Incorpora un contratista de EE. UU. con NDA, W-9 del IRS y acuerdo. Firma gratis, sin cuenta. El plan de pago agrega tu PayPal o Mercado Pago.",

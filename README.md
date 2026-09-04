@@ -38,7 +38,10 @@ The free anonymous flow stores document state in Cloudflare KV, PDFs in R2, send
 - dashboard with document history
 - reusable templates
 - bulk send from a template
-- custom document expiry (1-90 days)
+- custom document expiry (tax-year vault: next April 15 or 13 months)
+- get paid after they sign (sender's own PayPal / Stripe / Mercado Pago link)
+- shareable signed + pay page (outlives the signing tab)
+- WhatsApp completion: signed copy + pay link after the chain finishes
 - embedded signing via iframe
 - saved contacts and signer reassignment
 - white-label branding

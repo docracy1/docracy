@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate, useSearchParams } from "react-router-do
 import { useI18n } from "../lib/i18n";
 import { useNoIndex } from "../lib/useNoIndex";
 import { useSeoMeta } from "../lib/useSeoMeta";
+import { paidVaultDays, PAID_TTL_MAX_DAYS } from "../lib/paidVault";
 import PdfViewer from "../components/PdfViewer";
 import PdfUploadCircle from "../components/PdfUploadCircle";
 import {
@@ -217,8 +218,10 @@ export default function Prepare() {
   const [submittingToMarketplace, setSubmittingToMarketplace] = useState(false);
   const [marketplaceSubmitError, setMarketplaceSubmitError] = useState<string | null>(null);
   const [marketplaceSubmittedSlug, setMarketplaceSubmittedSlug] = useState<string | null>(null);
-  /** Paid custom retention — default matches free/hard-coded DOC_EXPIRY_DAYS. */
+  /** Paid custom retention — tax-year vault once the account is known paid. */
   const [ttlDays, setTtlDays] = useState(DOC_EXPIRY_DAYS);
+  const paidVault = paidVaultDays();
+  const paidTtlMax = Math.min(PAID_TTL_MAX_DAYS, paidVault);
 
   useEffect(() => {
     const nextDefault = t("prepare.defaultDropdownOptions");
@@ -268,6 +271,10 @@ export default function Prepare() {
       .then((res) => setAccount(res.account))
       .catch(() => setAccount(null));
   }, []);
+
+  useEffect(() => {
+    if (account?.isPaid) setTtlDays(paidTtlMax);
+  }, [account?.isPaid, paidTtlMax]);
 
   useEffect(() => {
     if (!account?.isPaid) {
@@ -2468,13 +2475,13 @@ export default function Prepare() {
                       className="form-input"
                       type="number"
                       min={1}
-                      max={90}
+                      max={paidTtlMax}
                       aria-label={t("prepare.retentionAria")}
                       value={ttlDays}
                       onChange={(e) => {
                         const n = Number(e.target.value);
                         if (!Number.isFinite(n)) return;
-                        setTtlDays(Math.min(90, Math.max(1, Math.floor(n))));
+                        setTtlDays(Math.min(paidTtlMax, Math.max(1, Math.floor(n))));
                       }}
                       style={{ width: 56, padding: "2px 6px", fontSize: 13, fontWeight: 600 }}
                     />
@@ -2487,7 +2494,7 @@ export default function Prepare() {
                 )}
               </div>
               <p style={{ fontSize: 11, color: "var(--mute)", margin: "4px 0 0" }}>
-                {t("prepare.identityNote")}
+                {account?.isPaid ? t("prepare.taxVaultHint") : t("prepare.identityNote")}
               </p>
             </div>
 

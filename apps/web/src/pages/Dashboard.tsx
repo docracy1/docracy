@@ -1,6 +1,7 @@
 import { Component, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useT } from "../lib/i18n";
+import { useI18n } from "../lib/i18n";
+import { signedPagePath } from "../lib/paidVault";
 import {
   apiUrl,
   cancelTeamInvite,
@@ -281,7 +282,7 @@ function MenuIcon({ name }: { name: "team" | "subscription" | "support" | "logou
 }
 
 export default function Dashboard() {
-  const t = useT();
+  const { t, locale } = useI18n();
   const [account, setAccount] = useState<Account | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [documents, setDocuments] = useState<DocumentSummary[]>([]);
@@ -310,6 +311,7 @@ export default function Dashboard() {
   const [marketplaceError, setMarketplaceError] = useState<string | null>(null);
   const [marketplaceSubmittedSlug, setMarketplaceSubmittedSlug] = useState<string | null>(null);
   const [communityTemplates, setCommunityTemplates] = useState<MarketplaceSubmission[]>([]);
+  const [copiedSignedDocId, setCopiedSignedDocId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchMarketplaceTemplates()
@@ -1540,6 +1542,24 @@ export default function Dashboard() {
                     >
                       {doc.status === "completed" ? t("dash.statusSigned") : doc.status === "voided" ? t("dash.statusVoided") : t("dash.statusPending")}
                     </span>
+                    {doc.status === "completed" && (
+                      <button
+                        className="btn-secondary"
+                        style={{ fontSize: 12, padding: "4px 8px" }}
+                        onClick={async () => {
+                          const url = `${window.location.origin}${signedPagePath(doc.statusToken, locale)}`;
+                          try {
+                            await navigator.clipboard.writeText(url);
+                            setCopiedSignedDocId(doc.docId);
+                            window.setTimeout(() => setCopiedSignedDocId(null), 2000);
+                          } catch {
+                            /* clipboard blocked */
+                          }
+                        }}
+                      >
+                        {copiedSignedDocId === doc.docId ? t("common.copied") : t("dash.copySignedLink")}
+                      </button>
+                    )}
                     {!account.isPaid && doc.status === "completed" && (
                       <button
                         className="btn-secondary"

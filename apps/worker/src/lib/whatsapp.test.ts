@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { normalizeE164, sendWhatsAppPin } from "./whatsapp";
+import { normalizeE164, sendWhatsAppPin, sendWhatsAppCompletedReceipts, signedPageUrl } from "./whatsapp";
 import { makeMockEnv } from "../test/mockEnv";
 import type { DocState } from "@docracy/shared";
 
@@ -83,3 +83,44 @@ describe("sendWhatsAppPin", () => {
     expect(body.biz_opaque_callback_data).toBe("doc-1:1:pin");
   });
 });
+
+describe("sendWhatsAppCompletedReceipts", () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  it("sends the completed template with the signed-page URL to each WhatsApp signer", async () => {
+    const { env } = makeMockEnv();
+    const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+    await sendWhatsAppCompletedReceipts(env, makeDoc({ locale: "es" }));
+    const logged = logSpy.mock.calls.map((c) => c.join(" ")).join("\n");
+    expect(logged).toContain("signing_completed");
+    expect(logged).toContain("receipt_link=");
+    expect(logged).toContain("/es/firmado/");
+  });
+
+  it("no-ops when WhatsApp invites are off", async () => {
+    const { env } = makeMockEnv();
+    const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+    await sendWhatsAppCompletedReceipts(env, makeDoc({ whatsappInvites: false }));
+    expect(logSpy).not.toHaveBeenCalled();
+  });
+
+  it("posts to Meta with a :done callback suffix", async () => {
+    const { env } = makeMockEnv({ WHATSAPP_ACCESS_TOKEN: "tok", WHATSAPP_PHONE_NUMBER_ID: "12345" });
+    const fetchSpy = vi.spyOn(global, "fetch").mockResolvedValue(new Response("{}", { status: 200 }));
+    await sendWhatsAppCompletedReceipts(env, makeDoc());
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+    const body = JSON.parse(String(fetchSpy.mock.calls[0][1]?.body));
+    expect(body.template.name).toBe("signing_completed");
+    expect(body.template.components[0].parameters[0].parameter_name).toBe("receipt_link");
+    expect(body.template.components[0].parameters[0].text).toContain("/signed/");
+    expect(body.biz_opaque_callback_data).toBe("doc-1:1:done");
+  });
+});
+
+describe("signedPageUrl", () => {
+  it("uses the Spanish path for es locale", () => {
+    expect(signedPageUrl("https://docracy.io", "tok", "es")).toBe("https://docracy.io/es/firmado/tok");
+    expect(signedPageUrl("https://docracy.io/", "tok", "en")).toBe("https://docracy.io/signed/tok");
+  });
+});
+

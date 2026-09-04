@@ -1,8 +1,9 @@
+import { signToken } from "@docracy/shared";
 import { resolveEmailLogoUrl } from "./branding";
 import { mergePdfs } from "./pdf";
 import { trackEvent } from "./analytics";
 import { sendSigningSmsLink } from "./sms";
-import { sendWhatsAppSigningLink } from "./whatsapp";
+import { sendWhatsAppSigningLink, signedPageUrl } from "./whatsapp";
 import type { DocState, Env, Locale } from "@docracy/shared";
 
 // docracy.io is verified in Resend (DKIM on the root domain, SPF/bounce handling via the
@@ -131,6 +132,26 @@ function paymentCtaHtml(doc: DocState, locale: Locale): string {
       : `The sender asked to be paid after signing. Docracy does not take this money — the link is theirs.`;
   return `<p style="margin:20px 0 0 0;font-size:14px;color:${INK};line-height:1.5;">${blurb}</p>
     ${ctaButton(req.url, label)}`;
+}
+
+async function signedPageCtaHtml(env: Env, doc: DocState, locale: Locale): Promise<string> {
+  const token = await signToken(doc.docId, 0, env.TOKEN_SECRET);
+  const url = signedPageUrl(env.PUBLIC_APP_URL, token, locale);
+  const hasPay = Boolean(doc.paymentRequest);
+  const label =
+    locale === "es"
+      ? hasPay
+        ? "Copia firmada y pago"
+        : "Abrir copia firmada"
+      : hasPay
+        ? "Signed copy and pay"
+        : "Open signed copy";
+  const blurb =
+    locale === "es"
+      ? `Reenvía este enlace (WhatsApp, correo): el PDF firmado sigue aquí mientras el archivo exista.`
+      : `Forward this link (WhatsApp, email): the signed PDF stays here for as long as the file is in the archive.`;
+  return `<p style="margin:20px 0 0 0;font-size:14px;color:${INK};line-height:1.5;">${blurb}</p>
+    ${ctaButton(url, label)}`;
 }
 
 const PRIMARY = "#2f7ed8";
@@ -660,6 +681,7 @@ export async function sendCompletionEmails(
   certificatePdf?: Uint8Array
 ): Promise<void> {
   const locale: Locale = doc.locale ?? "en";
+  const signedCta = await signedPageCtaHtml(env, doc, locale);
   // One combined attachment (final pages + certificate page appended) rather than two separate
   // files — purely a delivery-format convenience. The certificate is still generated, hashed, and
   // stored in R2 as its own object beforehand (see generateCertificate's doc comment on why), so
@@ -704,6 +726,7 @@ export async function sendCompletionEmails(
     <p style="margin:0;font-size:13px;color:${MUTED};line-height:1.5;">${statusLines(doc, locale)}</p>
     ${verifyLine}
     ${paymentCtaHtml(doc, locale)}
+    ${signedCta}
     ${viralCta}
     ${signOff(locale)}
   `
@@ -715,6 +738,7 @@ export async function sendCompletionEmails(
     <p style="margin:0;font-size:13px;color:${MUTED};line-height:1.5;">${statusLines(doc, locale)}</p>
     ${verifyLine}
     ${paymentCtaHtml(doc, locale)}
+    ${signedCta}
     ${viralCta}
     ${signOff(locale)}
   `;
@@ -771,8 +795,9 @@ export async function sendCompletionEmails(
         : locale === "es"
           ? `
     ${paymentCtaHtml(doc, locale)}
+    ${signedCta}
     <p style="margin:24px 0 0 0;font-size:14px;color:${INK};line-height:1.5;">
-      El PDF firmado se elimina el ${deleteDate}. El plan de pago lo conserva en tu archivo — no es un extra de firmas, es no perder el documento.
+      El PDF firmado se elimina el ${deleteDate}. El plan de pago lo conserva en tu archivo hasta el próximo 15 de abril o 13 meses — no es un extra de firmas, es no perder el documento.
     </p>
     ${ctaButton(`${env.PUBLIC_APP_URL}/pricing?utm_source=email&utm_medium=completion&utm_campaign=keep-files&ref=preparer-done`, "Conservar los archivos firmados")}
     <p style="margin:12px 0 0 0;font-size:13px;color:${MUTED};">
@@ -780,8 +805,9 @@ export async function sendCompletionEmails(
     </p>`
           : `
     ${paymentCtaHtml(doc, locale)}
+    ${signedCta}
     <p style="margin:24px 0 0 0;font-size:14px;color:${INK};line-height:1.5;">
-      This signed PDF is deleted on ${deleteDate}. Paid keeps it in your archive — not extra signatures, just not losing the file.
+      This signed PDF is deleted on ${deleteDate}. Paid keeps it in your archive until the next April 15 or 13 months — not extra signatures, just not losing the file.
     </p>
     ${ctaButton(`${env.PUBLIC_APP_URL}/pricing?utm_source=email&utm_medium=completion&utm_campaign=keep-files&ref=preparer-done`, "Keep signed files")}
     <p style="margin:12px 0 0 0;font-size:13px;color:${MUTED};">

@@ -48,7 +48,7 @@ export default function ChatWidget() {
     return () => window.removeEventListener("docracy:open-chat", onOpenRequest);
   }, [t]);
 
-  if (location.pathname.startsWith("/sign/") || location.pathname.startsWith("/status/")) return null;
+  if (location.pathname.startsWith("/sign/") || location.pathname.startsWith("/status/") || location.pathname.startsWith("/signed/") || location.pathname.startsWith("/es/firmado/")) return null;
 
   const say = (from: Message["from"], text: string, extra?: Partial<Message>) =>
     setMessages((m) => [...m, { from, text, ...extra }]);
