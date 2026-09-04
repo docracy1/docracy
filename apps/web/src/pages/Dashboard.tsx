@@ -1,6 +1,6 @@
 import { Component, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useI18n } from "../lib/i18n";
+import { localizePath, useI18n } from "../lib/i18n";
 import { signedPagePath } from "../lib/paidVault";
 import {
   apiUrl,
@@ -1022,6 +1022,18 @@ export default function Dashboard() {
           <NavIcon name="new" />
           <span>{t("dash.new")}</span>
         </Link>
+        {account.isPaid && (
+          <>
+            <Link to={localizePath("/cobro", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
+              <NavIcon name="new" />
+              <span>{t("dash.cobro")}</span>
+            </Link>
+            <Link to={localizePath("/1099-season", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
+              <NavIcon name="completed" />
+              <span>{t("dash.taxYear")}</span>
+            </Link>
+          </>
+        )}
         <button
           className={`dashboard-nav-item${activeTab === "dashboard" ? " active" : ""}`}
           onClick={() => setActiveTab("dashboard")}

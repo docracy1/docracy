@@ -49,6 +49,9 @@ const Terms = lazy(() => import("./pages/Terms"));
 const Trust = lazy(() => import("./pages/Trust"));
 const Verify = lazy(() => import("./pages/Verify"));
 const ContractorPacket = lazy(() => import("./pages/ContractorPacket"));
+const LatamContractorPacket = lazy(() => import("./pages/LatamContractorPacket"));
+const TaxYear = lazy(() => import("./pages/TaxYear"));
+const Cobro = lazy(() => import("./pages/Cobro"));
 const Dpa = lazy(() => import("./pages/Dpa"));
 const Login = lazy(() => import("./pages/Login"));
 const AuthVerify = lazy(() => import("./pages/AuthVerify"));
@@ -138,6 +141,12 @@ function AppRoutes() {
       <Route path="/es/verificar" element={<Verify />} />
       <Route path="/packets/us-contractor" element={<ContractorPacket />} />
       <Route path="/es/kit-contratista" element={<ContractorPacket />} />
+      <Route path="/packets/latam-contractor" element={<LatamContractorPacket />} />
+      <Route path="/es/kit-contratista-latam" element={<LatamContractorPacket />} />
+      <Route path="/1099-season" element={<TaxYear />} />
+      <Route path="/es/temporada-1099" element={<TaxYear />} />
+      <Route path="/cobro" element={<Cobro />} />
+      <Route path="/es/cobro" element={<Cobro />} />
       <Route path="/dpa" element={<Dpa />} />
       <Route path="/login" element={<Login />} />
       <Route path="/auth/verify" element={<AuthVerify />} />
@@ -222,6 +231,12 @@ function AppRoutes() {
       <Route path="/simple-signing" element={<FeaturePage slug="simple-signing" />} />
       <Route path="/document-verification" element={<FeaturePage slug="document-verification" />} />
       <Route path="/blockchain-timestamp" element={<FeaturePage slug="blockchain-timestamp" />} />
+      <Route path="/whatsapp-invoice" element={<FeaturePage slug="whatsapp-invoice" />} />
+      <Route path="/es/factura-whatsapp" element={<FeaturePage slug="whatsapp-invoice" />} />
+      <Route path="/1099-contractor-records" element={<FeaturePage slug="1099-contractor-records" />} />
+      <Route path="/es/registros-1099" element={<FeaturePage slug="1099-contractor-records" />} />
+      <Route path="/hire-contractor-abroad" element={<FeaturePage slug="hire-contractor-abroad" />} />
+      <Route path="/es/contratar-en-el-extranjero" element={<FeaturePage slug="hire-contractor-abroad" />} />
       {ALTERNATIVE_PAGES.map((p) => (
         <Route key={p.slug} path={`/${p.slug}`} element={<AlternativePage slug={p.slug} />} />
       ))}

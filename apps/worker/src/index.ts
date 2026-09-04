@@ -31,6 +31,7 @@ import { marketplaceAccount, marketplacePublic, marketplaceAdmin } from "./route
 import { roadmapAdmin, roadmapPublic } from "./routes/roadmap";
 import { runReminderSweep } from "./lib/reminders";
 import { runArchiveNagSweep } from "./lib/archiveNag";
+import { runCobroRemindSweep } from "./lib/cobro";
 import { reconcileD1Index } from "./lib/index-d1";
 import { runExpiredDocCleanup } from "./lib/cleanup";
 import { runHealthCheckAndAlert } from "./lib/healthcheck";
@@ -150,6 +151,7 @@ export default {
 
     ctx.waitUntil(runReminderSweep(env));
     ctx.waitUntil(runArchiveNagSweep(env).catch((err) => console.error("Archive nag sweep failed:", err)));
+    ctx.waitUntil(runCobroRemindSweep(env).catch((err) => console.error("Cobro remind sweep failed:", err)));
     ctx.waitUntil(reconcileD1Index(env).catch((err) => console.error("D1 reconciliation sweep failed:", err)));
     ctx.waitUntil(runExpiredDocCleanup(env).catch((err) => console.error("Expired doc cleanup sweep failed:", err)));
     ctx.waitUntil(runHealthCheckAndAlert(env).catch((err) => console.error("Healthcheck sweep failed:", err)));

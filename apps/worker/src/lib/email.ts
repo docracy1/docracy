@@ -1374,3 +1374,52 @@ function bytesToBase64(bytes: Uint8Array): string {
   for (const b of bytes) binary += String.fromCharCode(b);
   return btoa(binary);
 }
+
+/** Pay+file cobro — no signature. Docracy never takes the money. */
+export async function sendCobroNotice(
+  env: Env,
+  to: string,
+  doc: DocState,
+  pageUrl: string,
+  isReminder: boolean
+): Promise<void> {
+  const locale: Locale = doc.locale ?? "en";
+  const title = escapeHtml(doc.title?.trim() || (locale === "es" ? "Documento" : "Document"));
+  const req = doc.paymentRequest;
+  const amountLabel = req ? `${escapeHtml(req.amount)} ${escapeHtml(req.currency)}` : "";
+  const payUrl = req?.url ?? pageUrl;
+  const recipient = escapeHtml(doc.cobroRecipient?.name ?? "");
+  const subject =
+    locale === "es"
+      ? isReminder
+        ? `Recordatorio: pago de ${amountLabel || title}`
+        : `Pago: ${amountLabel || title}`
+      : isReminder
+        ? `Reminder: pay ${amountLabel || title}`
+        : `Pay: ${amountLabel || title}`;
+  const headline =
+    locale === "es" ? (isReminder ? "Recordatorio de pago" : "Paga este archivo") : isReminder ? "Payment reminder" : "Pay for this file";
+  const bodyCopy =
+    locale === "es"
+      ? `<p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      ${recipient ? `${recipient}: ` : ""}abre el PDF y paga ${amountLabel || "el monto pedido"} con el checkout del remitente.
+      Docracy no cobra este dinero — el enlace es suyo. No hace falta firmar.
+    </p>`
+      : `<p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      ${recipient ? `${recipient}: ` : ""}open the PDF and pay ${amountLabel || "the requested amount"} at the sender's checkout.
+      Docracy does not take this money — the link is theirs. No signature needed.
+    </p>`;
+  const payLabel = locale === "es" ? (amountLabel ? `Pagar ${amountLabel}` : "Pagar") : amountLabel ? `Pay ${amountLabel}` : "Pay";
+  const pageLabel = locale === "es" ? "Abrir archivo y pagar" : "Open file and pay";
+  const body = `
+    ${emailHeadline(headline)}
+    <p style="margin:0;font-size:14px;color:${MUTED};line-height:1.5;">${title}</p>
+    ${bodyCopy}
+    ${ctaButton(pageUrl, pageLabel)}
+    ${req ? ctaButton(payUrl, payLabel) : ""}
+    ${signOff(locale)}
+  `;
+  await send(env, to, subject, emailShell(env.PUBLIC_APP_URL, body), {
+    emailType: isReminder ? "cobro_remind" : "cobro_notice",
+  });
+}

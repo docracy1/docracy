@@ -4,6 +4,24 @@
 # without the duplication.
 /templates  /free-templates  301
 
+# Keyword aliases for the 1099 locker and WhatsApp cobro landings (one canonical each).
+/1099          /1099-season  301
+/tax-year      /1099-season  301
+/w-9-archive   /1099-season  301
+/1099-nec      /1099-season  301
+/whatsapp-pay  /cobro        301
+/get-paid-whatsapp  /cobro   301
+/send-invoice-whatsapp  /whatsapp-invoice  301
+/paypal-whatsapp        /whatsapp-invoice  301
+/mercado-pago-invoice   /whatsapp-invoice  301
+/hire-in-mexico         /hire-contractor-abroad  301
+/hire-in-colombia       /hire-contractor-abroad  301
+/w-8ben                 /packets/latam-contractor  301
+/es/factura-por-whatsapp  /es/factura-whatsapp  301
+/es/cobrar-por-whatsapp   /es/cobro  301
+/es/contratista-mexico    /es/contratar-en-el-extranjero  301
+/es/w-8ben                /es/kit-contratista-latam  301
+
 # Canonicalize A-vs-B twins (seoPages.ts only ships one direction; reverse URLs 301 here).
 /docusign-vs-pandadoc  /pandadoc-vs-docusign  301
 /hellosign-vs-pandadoc  /pandadoc-vs-hellosign  301

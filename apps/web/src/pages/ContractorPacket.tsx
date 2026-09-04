@@ -86,6 +86,9 @@ export default function ContractorPacket() {
         <p>
           <Link to={localizePath("/pricing", locale)}>{t("packet.keepLink")}</Link>
         </p>
+        <p style={{ fontSize: 14 }}>
+          <Link to={localizePath("/packets/latam-contractor", locale)}>{t("footer.latamPacket")}</Link>
+        </p>
       </div>
     </div>
   );

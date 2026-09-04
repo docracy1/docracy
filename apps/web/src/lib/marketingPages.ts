@@ -306,9 +306,10 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     ctaLabel: "Try WhatsApp signing",
     ctaTo: "/prepare",
     relatedLinks: [
+      { label: "Send an invoice on WhatsApp (no signature)", to: "/whatsapp-invoice" },
+      { label: "Get paid on WhatsApp (cobro)", to: "/cobro" },
       { label: "Advanced Electronic Signature (AES)", to: "/advanced-electronic-signature" },
       { label: "See pricing", to: "/pricing" },
-      { label: "Trust & security", to: "/trust" },
     ],
     youtubeId: "LvnzCbPBRqY",
     youtubeTitle: "Sign documents via WhatsApp — Docracy demo",
@@ -1132,6 +1133,169 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       { label: "Trust & security", to: "/trust" },
     ],
   },
+  {
+    slug: "whatsapp-invoice",
+    seoTitle: "Send an Invoice on WhatsApp — PayPal & Mercado Pago | Docracy",
+    seoDescription:
+      "WhatsApp invoice with your own PayPal, Stripe, or Mercado Pago link. No signature required. Docracy never takes the money. Paid $10/mo.",
+    heroHeadline: "Send the invoice on WhatsApp. Get paid on your checkout.",
+    heroSubheadline:
+      "Attach the PDF, paste PayPal.me or Mercado Pago, and text the pay page. No extra signature. Not a payment processor.",
+    problem:
+      "Email invoices sit unopened. For LATAM clients and many US contractors, WhatsApp is the inbox that actually gets read — but most e-sign tools still refuse to send anything but a signature request.",
+    solution:
+      "Docracy cobro is pay + file: the recipient opens a page with your PDF and your https checkout. Optional 30-day ping. Signing stays a separate, free product.",
+    features: [
+      { title: "No signature required", body: "The file is available immediately. If you need a signature, send a normal document instead." },
+      { title: "Your checkout", body: "PayPal.me, Stripe Payment Link, Mercado Pago — Docracy never collects the funds." },
+      { title: "WhatsApp + email", body: "Uses the live signing_invite template. Counts against monthly WhatsApp quota." },
+      { title: "30-day reminder", body: "Automatic ping until the archive date, plus send-again from your account." },
+    ],
+    useCases: [
+      "Freelancers collecting on closed work in Mexico, Colombia, or Argentina",
+      "US studios paying LATAM contractors over Mercado Pago",
+      "Follow-up invoices after the contract is already signed",
+    ],
+    faqs: [
+      {
+        question: "Is this Stripe Connect or a Docracy fee on the payment?",
+        answer: "No. You paste a checkout URL you already own. Paid is $10/month for the product, not a cut of the invoice.",
+      },
+      {
+        question: "Do they have to sign the invoice?",
+        answer: "No. Open /cobro (Spanish: /es/cobro). For a signature + pay button, use Prepare on a paid account instead.",
+      },
+      {
+        question: "Can I send a WhatsApp invoice to Mexico or Colombia?",
+        answer:
+          "Yes. Paste a Mercado Pago, PayPal.me, or Stripe Payment Link. Amount labels include MXN, COP, ARS, CLP, PEN, BRL, and USD.",
+      },
+      {
+        question: "Is this the same as WhatsApp signing?",
+        answer:
+          "No. WhatsApp signing (/whatsapp-signing) is a PIN-protected signature invite. Cobro is pay + file with no signer chain.",
+      },
+      {
+        question: "Will Docracy remind them if they don't pay?",
+        answer: "Yes — about every 30 days until the archive date, plus a manual send-again. Each WhatsApp ping uses quota.",
+      },
+    ],
+    ctaLabel: "Send a WhatsApp cobro",
+    ctaTo: "/cobro",
+    relatedLinks: [
+      { label: "WhatsApp signing (with PIN)", to: "/whatsapp-signing" },
+      { label: "1099 season locker", to: "/1099-season" },
+      { label: "LATAM contractor kit", to: "/packets/latam-contractor" },
+    ],
+  },
+  {
+    slug: "1099-contractor-records",
+    seoTitle: "1099 Contractor Records — W-9 Archive & CPA Spreadsheet | Docracy",
+    seoDescription:
+      "Keep signed W-9s and contractor agreements until 1099 season. Download a CPA CSV of completed files. Not IRS e-file. Paid $10/month.",
+    heroHeadline: "Contractor records that still exist in January.",
+    heroSubheadline:
+      "Every completed Docracy file from the calendar year, plus a spreadsheet for your CPA. We do not file 1099-NEC or read TINs off the PDF.",
+    problem:
+      "Free e-sign tools delete the W-9 after a week. Come 1099 time you have a name in the bank feed and no file.",
+    solution:
+      "Paid keeps PDFs until the next April 15 or 13 months. The 1099 season locker lists that year and exports CSV: titles, counterparties, amounts you typed, signed-page URLs.",
+    features: [
+      { title: "Calendar-year list", body: "All completed docs, not only ones titled W-9." },
+      { title: "CPA CSV", body: "Honest columns — no fake TIN extraction." },
+      { title: "Tax-year vault", body: "Same Paid archive that already keeps the PDFs." },
+      { title: "Includes cobro", body: "Pay-only WhatsApp sends count in the same year." },
+    ],
+    useCases: [
+      "US companies collecting W-9s from 1099 contractors",
+      "Studios that pay both US and LATAM contractors",
+      "Anyone whose CPA asked for a list, not a ZIP of Gmail PDFs",
+    ],
+    faqs: [
+      {
+        question: "Will Docracy e-file my 1099s?",
+        answer: "No. This is an archive and a CSV. You or your CPA still file with the IRS.",
+      },
+      {
+        question: "Where is the locker?",
+        answer: "https://docracy.io/1099-season — Spanish: /es/temporada-1099. Paid accounts see the download; everyone else sees this explainer.",
+      },
+      {
+        question: "Do you extract Social Security numbers from the W-9?",
+        answer: "No. We never OCR taxpayer IDs. Keep the signed W-9 PDF in the vault and hand that file to your CPA.",
+      },
+      {
+        question: "Does this include invoices I sent on WhatsApp without a signature?",
+        answer: "Yes. Completed cobro (pay + file) counts in the same calendar year as signed contracts.",
+      },
+      {
+        question: "Is the 1099 locker free?",
+        answer: "No. Free signing deletes PDFs after 9 days. Paid ($10/month) keeps files through tax season and unlocks the CSV.",
+      },
+    ],
+    ctaLabel: "Open the 1099 season locker",
+    ctaTo: "/1099-season",
+    relatedLinks: [
+      { label: "US contractor kit (W-9)", to: "/packets/us-contractor" },
+      { label: "Free W-9 template", to: "/free-templates/w-9-form" },
+      { label: "Pricing", to: "/pricing" },
+    ],
+  },
+  {
+    slug: "hire-contractor-abroad",
+    seoTitle: "Hire a Contractor Abroad — NDA, Agreement & WhatsApp Pay | Docracy",
+    seoDescription:
+      "Paper a LATAM or overseas contractor: free NDA and independent contractor agreement, then get paid on WhatsApp. Not a W-8BEN. EN + Spanish.",
+    heroHeadline: "Hire abroad without inventing a W-8BEN.",
+    heroSubheadline:
+      "Mutual NDA and contractor agreement are free templates. Then Paid cobro sends your Mercado Pago or PayPal link on WhatsApp. US persons still need the IRS W-9 kit.",
+    problem:
+      "US kits assume a W-9. Overseas contractors are not US persons. Fake W-8BEN PDFs are how companies get in trouble.",
+    solution:
+      "Docracy's LATAM corridor is honest: NDA, contractor agreement, then cobro. No invented IRS form. Spanish URLs included.",
+    features: [
+      { title: "Free NDA + agreement", body: "Existing marketplace templates, one PDF at a time." },
+      { title: "WhatsApp cobro", body: "Paid: file + your checkout, no extra signature." },
+      { title: "Spanish surface", body: "/es/kit-contratista-latam and /es/cobro." },
+      { title: "US kit still exists", body: "W-9 path stays at /packets/us-contractor." },
+    ],
+    useCases: [
+      "US startups hiring engineers in Mexico or Colombia",
+      "Agencies paying LATAM designers over Mercado Pago",
+      "Anyone who was about to Google a free W-8BEN and sign it blindly",
+    ],
+    faqs: [
+      {
+        question: "Is this tax or immigration advice?",
+        answer: "No. It is a document wizard. Ask a CPA about withholding and a W-8BEN.",
+      },
+      {
+        question: "Where do I start?",
+        answer: "https://docracy.io/packets/latam-contractor — Spanish: /es/kit-contratista-latam.",
+      },
+      {
+        question: "Do you have a W-8BEN template?",
+        answer:
+          "No. We do not invent IRS forms. This kit is NDA + contractor agreement + your checkout. US persons use the W-9 kit instead.",
+      },
+      {
+        question: "Can I hire a contractor in Mexico or Colombia?",
+        answer:
+          "Yes — send the NDA and agreement in English or Spanish, then cobro with Mercado Pago or PayPal. Not employment or visa advice.",
+      },
+      {
+        question: "Is the whole kit free?",
+        answer: "NDA and agreement signing are free. WhatsApp cobro / payment links are Paid ($10/month).",
+      },
+    ],
+    ctaLabel: "Open the LATAM contractor kit",
+    ctaTo: "/packets/latam-contractor",
+    relatedLinks: [
+      { label: "US contractor kit (W-9)", to: "/packets/us-contractor" },
+      { label: "WhatsApp cobro", to: "/cobro" },
+      { label: "1099 season locker", to: "/1099-season" },
+    ],
+  },
 ];
 
 export function getNdaSigningPageEs(): FeaturePageContent {
@@ -1221,9 +1385,183 @@ export function getClientContractsPageEs(): FeaturePageContent {
   };
 }
 
+export function getWhatsappInvoicePageEs(): FeaturePageContent {
+  return {
+    slug: "whatsapp-invoice",
+    seoTitle: "Enviar factura por WhatsApp — PayPal y Mercado Pago | Docracy",
+    seoDescription:
+      "Factura por WhatsApp con tu enlace de PayPal, Stripe o Mercado Pago. Sin firma. Docracy nunca cobra el dinero. Plan de $10/mes.",
+    heroHeadline: "Envía la factura por WhatsApp. Cobra en tu checkout.",
+    heroSubheadline:
+      "Adjunta el PDF, pega PayPal.me o Mercado Pago y manda la página de cobro. Sin firma extra. No somos un procesador de pagos.",
+    problem:
+      "Las facturas por correo se quedan sin abrir. En LATAM y con muchos contratistas de EE. UU., WhatsApp es la bandeja que sí se lee — pero la mayoría de las herramientas de firma solo envían una solicitud de firma.",
+    solution:
+      "El cobro de Docracy es archivo + pago: el destinatario abre una página con tu PDF y tu checkout https. Aviso opcional cada 30 días. Firmar sigue siendo un producto aparte y gratis.",
+    features: [
+      { title: "Sin firma", body: "El archivo está disponible de inmediato. Si necesitas firma, envía un documento normal." },
+      { title: "Tu checkout", body: "PayPal.me, Stripe Payment Link, Mercado Pago — Docracy nunca cobra los fondos." },
+      { title: "WhatsApp + correo", body: "Usa la plantilla viva signing_invite. Cuenta contra la cuota mensual de WhatsApp." },
+      { title: "Recordatorio a 30 días", body: "Aviso automático hasta la fecha de archivo, más reenvío desde tu cuenta." },
+    ],
+    useCases: [
+      "Freelancers cobrando trabajo cerrado en México, Colombia o Argentina",
+      "Estudios de EE. UU. que pagan contratistas LATAM por Mercado Pago",
+      "Facturas de seguimiento cuando el contrato ya está firmado",
+    ],
+    faqs: [
+      {
+        question: "¿Esto es Stripe Connect o una comisión de Docracy?",
+        answer: "No. Pegas una URL de checkout que ya tienes. El plan de pago son $10/mes por el producto, no un recorte de la factura.",
+      },
+      {
+        question: "¿Tienen que firmar la factura?",
+        answer: "No. Abre /es/cobro. Si necesitas firma + botón de pago, usa Preparar en una cuenta de pago.",
+      },
+      {
+        question: "¿Puedo enviar una factura por WhatsApp a México o Colombia?",
+        answer: "Sí. Pega Mercado Pago, PayPal.me o un Stripe Payment Link. Las etiquetas incluyen MXN, COP, ARS, CLP, PEN, BRL y USD.",
+      },
+      {
+        question: "¿Es lo mismo que firmar por WhatsApp?",
+        answer:
+          "No. Firmar por WhatsApp (/whatsapp-signing) es una invitación con PIN. El cobro es archivo + pago, sin cadena de firmantes.",
+      },
+      {
+        question: "¿Docracy les recuerda si no pagan?",
+        answer: "Sí — cada ~30 días hasta la fecha de archivo, más un reenvío manual. Cada ping de WhatsApp usa cuota.",
+      },
+    ],
+    ctaLabel: "Enviar un cobro por WhatsApp",
+    ctaTo: "/cobro",
+    relatedLinks: [
+      { label: "Firmar por WhatsApp (con PIN)", to: "/whatsapp-signing" },
+      { label: "Casillero temporada 1099", to: "/1099-season" },
+      { label: "Kit contratista LATAM", to: "/packets/latam-contractor" },
+    ],
+  };
+}
+
+export function getContractorRecordsPageEs(): FeaturePageContent {
+  return {
+    slug: "1099-contractor-records",
+    seoTitle: "Registros 1099 de contratistas — archivo W-9 y CSV | Docracy",
+    seoDescription:
+      "Conserva W-9s firmados y acuerdos de contratista hasta la temporada 1099. Descarga un CSV para tu contador. No es presentación ante el IRS. $10/mes.",
+    heroHeadline: "Registros de contratista que siguen existiendo en enero.",
+    heroSubheadline:
+      "Cada archivo de Docracy completado en el año calendario, más una hoja para tu contador. No presentamos el 1099-NEC ni leemos TIN del PDF.",
+    problem:
+      "Las herramientas de firma gratis borran el W-9 a la semana. En temporada 1099 tienes un nombre en el banco y ningún archivo.",
+    solution:
+      "El plan de pago conserva los PDF hasta el próximo 15 de abril o 13 meses. El casillero 1099 lista ese año y exporta CSV: títulos, contrapartes, montos que escribiste, URLs de la página firmada.",
+    features: [
+      { title: "Lista del año calendario", body: "Todos los documentos completados, no solo los titulados W-9." },
+      { title: "CSV para el contador", body: "Columnas honestas — sin extracción falsa de TIN." },
+      { title: "Bóveda fiscal", body: "El mismo archivo de pago que ya conserva los PDF." },
+      { title: "Incluye cobro", body: "Los envíos de pago por WhatsApp cuentan en el mismo año." },
+    ],
+    useCases: [
+      "Empresas de EE. UU. que recogen W-9s de contratistas 1099",
+      "Estudios que pagan contratistas en EE. UU. y LATAM",
+      "Quien tiene un contador que pide una lista, no un ZIP de Gmail",
+    ],
+    faqs: [
+      {
+        question: "¿Docracy presenta mis 1099 ante el IRS?",
+        answer: "No. Esto es un archivo y un CSV. Tú o tu contador siguen presentando.",
+      },
+      {
+        question: "¿Dónde está el casillero?",
+        answer: "https://docracy.io/es/temporada-1099 — inglés: /1099-season. Las cuentas de pago ven la descarga; el resto ve esta explicación.",
+      },
+      {
+        question: "¿Extraen el número de Seguro Social del W-9?",
+        answer: "No. Nunca leemos TIN con OCR. Conserva el W-9 firmado en la bóveda y entrega ese PDF a tu contador.",
+      },
+      {
+        question: "¿Incluye facturas que envié por WhatsApp sin firma?",
+        answer: "Sí. El cobro completado (archivo + pago) cuenta en el mismo año calendario que los contratos firmados.",
+      },
+      {
+        question: "¿El casillero 1099 es gratis?",
+        answer: "No. La firma gratis borra los PDF a los 9 días. El plan de $10/mes conserva los archivos hasta la temporada fiscal y desbloquea el CSV.",
+      },
+    ],
+    ctaLabel: "Abrir el casillero temporada 1099",
+    ctaTo: "/1099-season",
+    relatedLinks: [
+      { label: "Kit de contratista en EE. UU. (W-9)", to: "/packets/us-contractor" },
+      { label: "Plantilla gratis de W-9", to: "/free-templates/w-9-form" },
+      { label: "Precios", to: "/pricing" },
+    ],
+  };
+}
+
+export function getHireAbroadPageEs(): FeaturePageContent {
+  return {
+    slug: "hire-contractor-abroad",
+    seoTitle: "Contratar en el extranjero — NDA, acuerdo y cobro por WhatsApp | Docracy",
+    seoDescription:
+      "Documenta un contratista en LATAM o el extranjero: NDA y acuerdo gratis, luego cobra por WhatsApp. No es un W-8BEN. EN + español.",
+    heroHeadline: "Contrata en el extranjero sin inventar un W-8BEN.",
+    heroSubheadline:
+      "El NDA mutuo y el acuerdo de contratista son plantillas gratis. Luego el cobro de pago envía tu Mercado Pago o PayPal por WhatsApp. Las personas de EE. UU. siguen el kit W-9 del IRS.",
+    problem:
+      "Los kits de EE. UU. asumen un W-9. Los contratistas en el extranjero no son personas de EE. UU. Un PDF falso de W-8BEN es cómo las empresas se meten en problemas.",
+    solution:
+      "El corredor LATAM de Docracy es honesto: NDA, acuerdo de contratista y luego cobro. Sin formulario inventado del IRS. URLs en español incluidas.",
+    features: [
+      { title: "NDA + acuerdo gratis", body: "Plantillas existentes del marketplace, un PDF a la vez." },
+      { title: "Cobro por WhatsApp", body: "Pago: archivo + tu checkout, sin firma extra." },
+      { title: "Superficie en español", body: "/es/kit-contratista-latam y /es/cobro." },
+      { title: "El kit de EE. UU. sigue existiendo", body: "La ruta W-9 está en /es/kit-contratista." },
+    ],
+    useCases: [
+      "Startups de EE. UU. que contratan ingenieros en México o Colombia",
+      "Agencias que pagan diseñadores LATAM por Mercado Pago",
+      "Quien iba a googlear un W-8BEN gratis y firmarlo a ciegas",
+    ],
+    faqs: [
+      {
+        question: "¿Esto es asesoría fiscal o migratoria?",
+        answer: "No. Es un asistente de documentos. Pregunta a un contador sobre retención y el W-8BEN.",
+      },
+      {
+        question: "¿Por dónde empiezo?",
+        answer: "https://docracy.io/es/kit-contratista-latam — inglés: /packets/latam-contractor.",
+      },
+      {
+        question: "¿Tienen plantilla de W-8BEN?",
+        answer:
+          "No. No inventamos formularios del IRS. Este kit es NDA + acuerdo + tu checkout. Personas de EE. UU. usan el kit W-9.",
+      },
+      {
+        question: "¿Puedo contratar un freelancer en México o Colombia?",
+        answer:
+          "Sí — envía el NDA y el acuerdo en inglés o español, luego cobro con Mercado Pago o PayPal. No es asesoría laboral ni de visas.",
+      },
+      {
+        question: "¿El kit entero es gratis?",
+        answer: "Firmar el NDA y el acuerdo es gratis. El cobro por WhatsApp / enlaces de pago es el plan de $10/mes.",
+      },
+    ],
+    ctaLabel: "Abrir el kit contratista LATAM",
+    ctaTo: "/packets/latam-contractor",
+    relatedLinks: [
+      { label: "Kit de contratista en EE. UU. (W-9)", to: "/packets/us-contractor" },
+      { label: "Cobro por WhatsApp", to: "/cobro" },
+      { label: "Casillero temporada 1099", to: "/1099-season" },
+    ],
+  };
+}
+
 const ES_FEATURE_GETTERS: Record<string, () => FeaturePageContent> = {
   "nda-signing": getNdaSigningPageEs,
   "client-contracts": getClientContractsPageEs,
+  "whatsapp-invoice": getWhatsappInvoicePageEs,
+  "1099-contractor-records": getContractorRecordsPageEs,
+  "hire-contractor-abroad": getHireAbroadPageEs,
 };
 
 /** Locale-aware feature page content — ES routes use Spanish copy. */
@@ -2939,7 +3277,7 @@ export const INDUSTRY_PAGES: IndustryPageContent[] = [
       "Most e-sign tools price per seat or per envelope — brutal math for a solo operator sending a dozen documents a month, not a thousand.",
     ],
     whyDocracy:
-      "Docracy is free for signing chains of up to two people — you and your client — with no account required on either side. Start from a free freelance service agreement, NDA, or payment-terms template, fill in your details, and send. It's built for exactly this: one person sending a handful of agreements a month, not a sales team on a seat license.",
+      "Docracy is free for signing chains of up to two people — you and your client — with no account required on either side. Start from a free freelance service agreement, NDA, or payment-terms template, fill in your details, and send. It's built for exactly this: one person sending a handful of agreements a month, not a sales team on a seat license. After the work is done, Paid cobro sends the invoice on WhatsApp with your PayPal or Mercado Pago link — no extra signature, and Docracy never takes the money.",
     relevantTemplates: [
       "freelance-service-agreement",
       "independent-contractor-agreement",

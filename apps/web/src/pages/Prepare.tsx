@@ -35,6 +35,7 @@ import {
 import type { TextSpan } from "../lib/pdfEdit";
 import { getFreeTemplate } from "../lib/freeTemplates";
 import { markPacketTemplateSent, US_CONTRACTOR_PACKET_SLUG } from "../lib/contractorPacket";
+import { markLatamPacketStepSent, LATAM_CONTRACTOR_PACKET_SLUG } from "../lib/latamContractorPacket";
 import { assignFieldsToSigners, detectAnchorFields, detectFieldCandidates } from "../lib/fieldDetection";
 import type { CcRecipientInput, DocField, DocFieldType, SignerInput } from "../lib/types";
 import { track } from "../lib/track";
@@ -1034,13 +1035,19 @@ export default function Prepare() {
       if (packetSlug === US_CONTRACTOR_PACKET_SLUG && freeTemplateSlug) {
         markPacketTemplateSent(freeTemplateSlug);
       }
+      if (packetSlug === LATAM_CONTRACTOR_PACKET_SLUG && freeTemplateSlug) {
+        markLatamPacketStepSent(freeTemplateSlug);
+      }
       navigate("/prepare/sent", {
         state: {
           docId,
           statusToken,
           claimToken,
           signingMode: effectiveSigningMode,
-          packetSlug: packetSlug === US_CONTRACTOR_PACKET_SLUG ? packetSlug : undefined,
+          packetSlug:
+            packetSlug === US_CONTRACTOR_PACKET_SLUG || packetSlug === LATAM_CONTRACTOR_PACKET_SLUG
+              ? packetSlug
+              : undefined,
           sentTemplateSlug: freeTemplateSlug ?? undefined,
         },
       });

@@ -79,4 +79,6 @@ export interface StatusPayload {
   title?: string | null;
   expiresAt?: string;
   completedAt?: string | null;
+  /** Pay+file cobro — no signature required. */
+  kind?: "cobro";
 }

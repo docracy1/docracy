@@ -366,6 +366,52 @@ export async function fetchMyDocuments(): Promise<{ documents: DocumentSummary[]
   return asJson(res);
 }
 
+export interface TaxYearDocument {
+  docId: string;
+  title: string;
+  completedAt: string;
+  expiresAt: string;
+  statusToken: string;
+  signedPageUrl: string;
+  counterparties: Array<{ name: string; email: string }>;
+  amount: string;
+  currency: string;
+  paymentUrl: string;
+  kind: "cobro" | "sign";
+}
+
+export async function fetchTaxYear(
+  year: number,
+  locale: Locale
+): Promise<{ year: number; documents: TaxYearDocument[] }> {
+  const res = await apiFetch(`/api/account/tax-year?year=${year}&locale=${locale}`);
+  return asJson(res);
+}
+
+export async function createCobro(
+  pdf: File,
+  meta: {
+    title: string;
+    recipientName: string;
+    recipientEmail?: string;
+    recipientWhatsapp?: string;
+    remindEveryDays?: number;
+    locale?: Locale;
+    paymentRequest: { amount: string; currency: string; url: string };
+  }
+): Promise<{ docId: string; statusToken: string }> {
+  const form = new FormData();
+  form.set("pdf", pdf);
+  form.set("meta", JSON.stringify(meta));
+  const res = await apiFetch("/api/account/cobro", { method: "POST", body: form });
+  return asJson(res);
+}
+
+export async function remindCobro(docId: string): Promise<{ ok: true; skipWhatsApp: boolean; nextRemindAt?: string }> {
+  const res = await apiFetch(`/api/account/cobro/${docId}/remind`, { method: "POST" });
+  return asJson(res);
+}
+
 /** Redeem an anonymous create's claimToken onto the signed-in account's dashboard history. */
 export async function claimDocument(
   claimToken: string

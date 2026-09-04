@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { normalizeE164, sendWhatsAppPin, sendWhatsAppCompletedReceipts, signedPageUrl } from "./whatsapp";
+import { normalizeE164, sendWhatsAppPin, sendWhatsAppCompletedReceipts, sendWhatsAppCobro, signedPageUrl } from "./whatsapp";
 import { makeMockEnv } from "../test/mockEnv";
 import type { DocState } from "@docracy/shared";
 
@@ -133,6 +133,30 @@ describe("signedPageUrl", () => {
   it("uses the Spanish path for es locale", () => {
     expect(signedPageUrl("https://docracy.io", "tok", "es")).toBe("https://docracy.io/es/firmado/tok");
     expect(signedPageUrl("https://docracy.io/", "tok", "en")).toBe("https://docracy.io/signed/tok");
+  });
+});
+
+describe("sendWhatsAppCobro", () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  it("reuses signing_invite with the pay page in signing_link and a :cobro callback", async () => {
+    const { env } = makeMockEnv({
+      WHATSAPP_ACCESS_TOKEN: "tok",
+      WHATSAPP_PHONE_NUMBER_ID: "12345",
+    });
+    const fetchSpy = vi.spyOn(global, "fetch").mockResolvedValue(new Response("{}", { status: 200 }));
+    const doc = makeDoc({
+      kind: "cobro",
+      cobroRecipient: { name: "Ana", whatsappPhone: "+525551112233" },
+      signers: [],
+    });
+    await sendWhatsAppCobro(env, doc, "https://docracy.io/es/firmado/tok");
+    expect(fetchSpy).toHaveBeenCalledOnce();
+    const body = JSON.parse(String(fetchSpy.mock.calls[0][1]?.body));
+    expect(body.template.name).toBe("signing_invite");
+    expect(body.template.components[0].parameters[0].parameter_name).toBe("signing_link");
+    expect(body.template.components[0].parameters[0].text).toBe("https://docracy.io/es/firmado/tok");
+    expect(body.biz_opaque_callback_data).toBe("doc-1:0:cobro");
   });
 });
 

@@ -79,6 +79,18 @@ function abs(urlPath) {
 function priorityFor(urlPath) {
   if (urlPath === "/" || urlPath === "/es") return "1.0";
   if (urlPath === "/free-templates" || urlPath === "/pricing" || urlPath === "/blog") return "0.8";
+  if (
+    urlPath === "/1099-season" ||
+    urlPath === "/es/temporada-1099" ||
+    urlPath === "/cobro" ||
+    urlPath === "/es/cobro" ||
+    urlPath === "/packets/latam-contractor" ||
+    urlPath === "/es/kit-contratista-latam" ||
+    urlPath === "/packets/us-contractor" ||
+    urlPath === "/es/kit-contratista"
+  ) {
+    return "0.8";
+  }
   if (urlPath.startsWith("/free-templates/") || urlPath.startsWith("/blog/")) return "0.7";
   if (urlPath.includes("-alternative") || urlPath.includes("-vs-")) return "0.7";
   return "0.6";
@@ -163,6 +175,15 @@ function robotsAllowForRoutes(routes) {
     "/es/verificar",
     "/packets/us-contractor",
     "/es/kit-contratista",
+    "/packets/latam-contractor",
+    "/es/kit-contratista-latam",
+    "/1099-season",
+    "/es/temporada-1099",
+    "/cobro",
+    "/es/cobro",
+    "/whatsapp-invoice",
+    "/1099-contractor-records",
+    "/hire-contractor-abroad",
     "/templates",
   ]) {
     exact.add(p);
