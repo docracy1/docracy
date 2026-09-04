@@ -33,6 +33,8 @@ const en: Messages = {
   "nav.mega.feature.ai.desc": "Automatically finds and places signature, date, and initial fields.",
   "nav.mega.feature.templates.title": "Marketplace",
   "nav.mega.feature.templates.desc": "Free templates from Docracy and the community, ready to sign.",
+  "nav.mega.feature.packet.title": "US contractor kit",
+  "nav.mega.feature.packet.desc": "NDA, W-9, and contractor agreement — three free templates, in order.",
   "nav.mega.feature.team.title": "Team access",
   "nav.mega.feature.team.desc": "Share documents and templates under one workspace.",
   "nav.mega.feature.storage.title": "Secure storage",
@@ -315,7 +317,7 @@ const en: Messages = {
     "Yes — start free from 100+ ready templates, or save your own reusable templates on a paid account.",
   "landing.faq5.q": "Does Docracy.io support teams?",
   "landing.faq5.a":
-    "Yes on Paid ($10/mo flat, not per seat): invite teammates, share templates, connectors, and AI tools under one workspace.",
+    "Yes on Paid ($10/mo flat, not per seat): keep signed PDFs past 9 days, attach your own PayPal/Stripe/Mercado Pago link after they sign, plus teammates, templates, connectors, and AI under one workspace.",
   "landing.compareTitle": "How Docracy compares on price",
   "landing.compareSub": "Docracy's paid plan is one flat fee per workspace, not a per-seat license — add as many teammates as you want at no extra cost.",
   "landing.disclaimer":
@@ -875,6 +877,12 @@ const en: Messages = {
   "docs.expiry.body":
     "Free documents always expire after 9 days (or sooner once everyone has signed and the final copy is emailed). On a paid account you can choose retention of 1–90 days when preparing a document or bulk-sending from a template.",
   "docs.expiry.title": "Custom document expiry (paid)",
+  "docs.pay.title": "Get paid after they sign (paid)",
+  "docs.pay.body":
+    "On a paid account, prepare can attach your own https checkout — PayPal.me, Stripe Payment Link, Mercado Pago, or similar — plus an amount and currency. After everyone has signed, the signer sees a pay button. Docracy never takes that money; the $10/month plan is how we get paid, not a percentage of yours.",
+  "docs.packet.title": "US contractor kit (free)",
+  "docs.packet.body":
+    "Three existing free templates sent one PDF at a time: mutual NDA, IRS W-9, then independent contractor agreement. Open /packets/us-contractor (Spanish: /es/kit-contratista). Attaching a payment link on those sends still requires Paid.",
   "docs.fields.checkbox": "Checkbox — required or optional.",
   "docs.fields.dropdown":
     "Dropdown — you define the options when placing the field; the chosen value is burned into the PDF.",
@@ -1418,7 +1426,7 @@ const en: Messages = {
   "secureSig.faq.a3":
     "Not by default. The audit trail proves what was signed and when, not a verified identity. An optional PIN and WhatsApp-bound delivery (paid plans) add stronger signer verification.",
   "secureSig.faq.q4": "How long are my documents kept?",
-  "secureSig.faq.a4": "Anonymous signing chains use a 9-day default retention window. Paid workspaces keep history according to their plan until deleted.",
+  "secureSig.faq.a4": "Anonymous signing chains use a 9-day default retention window. Paid keeps signed PDFs up to 90 days.",
   "secureSig.footerCta": "See exactly how your document is protected.",
   "secureSig.trustLink": "Full Trust & security page",
   "secureSig.dpaLink": "Data Processing Agreement",
@@ -1912,7 +1920,7 @@ const en: Messages = {
   "prepare.freeCcLimit": "Free plan supports up to {{max}} CC viewers. Upgrade for unlimited viewers.",
   "prepare.freePlanSigners": "Free plan: up to {{max}} signers",
   "prepare.freePlanViewers": "Free plan: up to {{max}} viewers",
-  "prepare.freeSignerLimit": "Free plan supports up to {{max}} signers. Upgrade for unlimited signers, templates, and history.",
+  "prepare.freeSignerLimit": "Free plan supports up to {{max}} signers. Upgrade for unlimited signers, templates, and keeping signed files past 9 days.",
   "prepare.freeTemplateMissing": "That free template couldn't be found.",
   "prepare.generateError": "Couldn't generate a contract",
   "prepare.loadTemplateError": "Couldn't load that template",

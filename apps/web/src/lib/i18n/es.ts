@@ -350,7 +350,7 @@ const es: Messages = {
     "Sí — empieza gratis con más de 100 plantillas listas, o guarda las tuyas en una cuenta de pago.",
   "landing.faq4.q": "¿Puedo usar plantillas?",
   "landing.faq5.a":
-    "Sí en Paid ($10/mes fijos, no por asiento): invita al equipo, comparte plantillas, conectores e IA en un solo workspace.",
+    "Sí en el plan de pago ($10/mes fijos, no por asiento): conserva los PDF más de 9 días, pega tu enlace de PayPal/Stripe/Mercado Pago después de firmar, más equipo, plantillas, conectores e IA en un solo workspace.",
   "landing.faq5.q": "¿Docracy.io admite equipos?",
   "landing.faqTitle": "Preguntas frecuentes",
   "landing.feat1.body":
@@ -481,6 +481,8 @@ const es: Messages = {
   "nav.mega.feature.ai.desc": "Encuentra y coloca automáticamente campos de firma, fecha e iniciales.",
   "nav.mega.feature.templates.title": "Plantillas reutilizables",
   "nav.mega.feature.templates.desc": "Guarda el diseño de campos una vez y reutilízalo siempre.",
+  "nav.mega.feature.packet.title": "Kit de contratista en EE. UU.",
+  "nav.mega.feature.packet.desc": "NDA, W-9 y acuerdo de contratista — tres plantillas gratis, en orden.",
   "nav.mega.feature.team.title": "Acceso de equipo",
   "nav.mega.feature.team.desc": "Comparte documentos y plantillas en un mismo espacio de trabajo.",
   "nav.mega.feature.storage.title": "Almacenamiento seguro",
@@ -965,6 +967,12 @@ const es: Messages = {
   "docs.expiry.body":
     "Los documentos gratis siempre vencen después de 9 días (o antes, cuando todos hayan firmado y se haya enviado la copia final por correo). Con una cuenta de pago puedes elegir retención de 1–90 días al preparar un documento o enviar masivamente desde una plantilla.",
   "docs.expiry.title": "Vencimiento personalizado del documento (pago)",
+  "docs.packet.title": "Kit de contratista en EE. UU. (gratis)",
+  "docs.packet.body":
+    "Tres plantillas gratis existentes, un PDF a la vez: NDA mutuo, W-9 del IRS y luego acuerdo de contratista independiente. Abre /packets/us-contractor (español: /es/kit-contratista). Pegar un enlace de cobro en esos envíos sigue requiriendo el plan de pago.",
+  "docs.pay.title": "Cobra después de que firmen (pago)",
+  "docs.pay.body":
+    "En una cuenta de pago, al preparar puedes pegar tu propio checkout https — PayPal.me, Stripe Payment Link, Mercado Pago o similar — más un monto y una moneda. Cuando todos han firmado, el firmante ve un botón de pagar. Docracy nunca cobra ese dinero; el plan de $10/mes es cómo nos pagan a nosotros, no un porcentaje del tuyo.",
   "docs.fields.checkbox": "Casilla — obligatoria u opcional.",
   "docs.fields.dropdown":
     "Desplegable — defines las opciones al colocar el campo; el valor elegido queda grabado en el PDF.",
@@ -1487,7 +1495,7 @@ const es: Messages = {
   "secureSig.faq.a3":
     "No por defecto. El registro de auditoría prueba qué se firmó y cuándo, no una identidad verificada. Un PIN opcional y la entrega vinculada a WhatsApp (próximamente, planes de pago) agregan una verificación más fuerte del firmante.",
   "secureSig.faq.q4": "¿Cuánto tiempo se guardan mis documentos?",
-  "secureSig.faq.a4": "Las cadenas de firma anónimas usan una ventana de retención por defecto de 9 días. Los espacios de trabajo de pago conservan el historial según su plan hasta que se elimine.",
+  "secureSig.faq.a4": "Las cadenas de firma anónimas usan una ventana de retención por defecto de 9 días. El plan de pago conserva los PDF firmados hasta 90 días.",
   "secureSig.footerCta": "Mira exactamente cómo se protege tu documento.",
   "secureSig.trustLink": "Página completa de Confianza y seguridad",
   "secureSig.dpaLink": "Acuerdo de procesamiento de datos",
@@ -1955,7 +1963,7 @@ const es: Messages = {
   "prepare.freeCcLimit": "El plan gratis admite hasta {{max}} espectadores CC. Mejora el plan para espectadores ilimitados.",
   "prepare.freePlanSigners": "Plan gratis: hasta {{max}} firmantes",
   "prepare.freePlanViewers": "Plan gratis: hasta {{max}} espectadores",
-  "prepare.freeSignerLimit": "El plan gratis admite hasta {{max}} firmantes. Mejora el plan para firmantes ilimitados, plantillas e historial.",
+  "prepare.freeSignerLimit": "El plan gratis admite hasta {{max}} firmantes. Mejora el plan para firmantes ilimitados, plantillas y conservar los archivos firmados más de 9 días.",
   "prepare.freeTemplateMissing": "No se encontró esa plantilla gratis.",
   "prepare.generateError": "No se pudo generar un contrato",
   "prepare.loadTemplateError": "No se pudo cargar esa plantilla",

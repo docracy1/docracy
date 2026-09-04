@@ -9,7 +9,7 @@ import { track } from "../lib/track";
 import { useNoIndex } from "../lib/useNoIndex";
 import type { SignPayload } from "../lib/api";
 import type { DocField, StatusPayload } from "../lib/types";
-import { useT } from "../lib/i18n";
+import { localizePath, useI18n, useT } from "../lib/i18n";
 
 function fieldIsFilled(f: DocField, values: Record<string, string>): boolean {
   const type = f.type ?? "signature";
@@ -87,6 +87,7 @@ export default function Sign({
   returnUrl,
 }: SignProps = {}) {
   const t = useT();
+  const { locale } = useI18n();
   const { token: paramToken } = useParams<{ token: string }>();
   const token = overrideToken ?? paramToken;
   const [payload, setPayload] = useState<SignPayload | null>(null);
@@ -508,7 +509,7 @@ export default function Sign({
           <div className="card" style={{ marginTop: 24, maxWidth: 420, borderColor: "var(--primary)" }}>
             <p style={{ marginBottom: 12, fontWeight: 600 }}>{t("sign.viral")}</p>
             <Link
-              to="/prepare?ref=signer-completion"
+              to={`${localizePath("/prepare", locale)}?ref=signer-completion`}
               className="btn-primary"
               style={{ display: "inline-block", textDecoration: "none" }}
               onClick={() => track("viral_cta_clicked", { source: "signer_done" })}
