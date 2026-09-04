@@ -261,9 +261,9 @@ const routes = [
     // to change copy), so withMeta() below is a no-op on those two fields for this route alone.
     urlPath: "/",
     outFile: "index.html",
-    title: "Docracy — Sign Free. Then the Packet They Asked For.",
+    title: "Docracy — Stop Chasing the Invoice. Get Paid on WhatsApp.",
     description:
-      "Sign contracts free — 2 signers, no account. Paid is the packet: constancia, WhatsApp cobro, 1099 for your CPA, trades and W-9 kits. $10/month. Not a W-2 or bank letter.",
+      "Paste Mercado Pago or PayPal, send the PDF on WhatsApp, share a constancia. Signing stays free. $10/month is cobro — Docracy never takes a cut.",
     locale: "en",
     alternates: { en: "/", es: "/es" },
   },
@@ -495,9 +495,9 @@ const routes = [
   {
     urlPath: "/es",
     outFile: "es.html",
-    title: "Docracy — Firma gratis. Luego el paquete que te piden.",
+    title: "Docracy — Basta de perseguir el pago. Cobra por WhatsApp.",
     description:
-      "Firma contratos gratis — 2 firmantes, sin cuenta. El plan de pago es el paquete: constancia, cobro por WhatsApp, 1099, oficios y W-9. $10/mes. No es un W-2 ni carta bancaria.",
+      "Pega tu Mercado Pago o PayPal, manda el PDF por WhatsApp y arma tu constancia. Firmar sigue gratis. $10 al mes es el cobro — Docracy no se queda un peso.",
     locale: "es",
     alternates: { en: "/", es: "/es" },
   },
