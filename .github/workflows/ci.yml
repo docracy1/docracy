@@ -37,8 +37,8 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Apply D1 migrations
-        # Weekly template/blog queues (0026/0027) must exist for the Monday cron. Safe to re-run.
-        # Needs D1:Edit on CLOUDFLARE_API_TOKEN — if missing (7403), deploy continues; apply manually.
+        # Weekly template/blog queues (0026/0027). Worker also CREATE/seed at runtime if this
+        # step fails (token often lacks D1:Edit → Cloudflare 7403). Safe to re-run.
         continue-on-error: true
         run: |
           if npx wrangler d1 migrations apply docracy-index --remote; then
@@ -66,8 +66,10 @@ jobs:
         # Best-effort — a transient IndexNow outage shouldn't fail an otherwise-successful deploy.
         run: npm run submit:indexnow || true
         working-directory: apps/web
-      - name: Run Monday weekly content (catch-up)
-        # Same jobs as the 08:22 UTC cron — use after migrations land or when Monday cron missed.
+      - name: Run weekly content catch-up
+        # Same jobs as the 08:22 UTC cron. Fires on Monday, workflow_dispatch, or when
+        # origin=weekly is still empty. The Worker hourly cron is the path that does not
+        # need this secret (runtime CREATE/seed + catch-up).
         # Requires AUTOMATION_API_TOKEN repo secret (same value as wrangler secret on the worker).
         env:
           AUTOMATION_API_TOKEN: ${{ secrets.AUTOMATION_API_TOKEN }}
@@ -77,8 +79,11 @@ jobs:
             exit 0
           fi
           DOW=$(date -u +%u)
-          if [ "$DOW" != "1" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
-            echo "Not Monday UTC — skipping weekly content catch-up"
+          WEEKLY_JSON=$(curl -sf "https://api.docracy.io/api/marketplace?origin=weekly" || true)
+          WEEKLY_EMPTY=0
+          echo "$WEEKLY_JSON" | grep -q '"templates":\[\]' && WEEKLY_EMPTY=1
+          if [ "$DOW" != "1" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ] && [ "$WEEKLY_EMPTY" != "1" ]; then
+            echo "Not Monday UTC and weekly marketplace is populated — skipping weekly content catch-up"
             exit 0
           fi
           curl -sf -X POST "https://api.docracy.io/api/automation/run-weekly-content" \
