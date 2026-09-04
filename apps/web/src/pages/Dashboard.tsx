@@ -100,7 +100,10 @@ function NavIcon({
     | "connector"
     | "webhooks"
     | "connectors"
-    | "branding";
+    | "branding"
+    | "send"
+    | "badge"
+    | "duplicate";
   size?: number;
 }) {
   const common = {
@@ -207,6 +210,26 @@ function NavIcon({
         <svg {...common}>
           <circle cx="12" cy="12" r="3.25" />
           <path d="M12 3.5v2.2M12 18.3v2.2M3.5 12h2.2M18.3 12h2.2M6.1 6.1l1.6 1.6M16.3 16.3l1.6 1.6M17.9 6.1l-1.6 1.6M7.7 16.3l-1.6 1.6" />
+        </svg>
+      );
+    case "send":
+      return (
+        <svg {...common}>
+          <path d="M3 11l18-8-8 18-2-8-8-2z" />
+        </svg>
+      );
+    case "badge":
+      return (
+        <svg {...common}>
+          <path d="M12 2.5l2.1 2.1 2.9-.4.9 2.8 2.8.9-.4 2.9 2.1 2.1-2.1 2.1.4 2.9-2.8.9-.9 2.8-2.9-.4L12 21.5l-2.1-2.1-2.9.4-.9-2.8-2.8-.9.4-2.9L2.5 12l2.1-2.1-.4-2.9 2.8-.9.9-2.8 2.9.4L12 2.5z" />
+          <path d="M8.5 12.2l2.2 2.2 4.3-4.6" />
+        </svg>
+      );
+    case "duplicate":
+      return (
+        <svg {...common}>
+          <rect x="8" y="8" width="12" height="13" rx="1.5" />
+          <path d="M4 15V4.5A1.5 1.5 0 0 1 5.5 3H15" />
         </svg>
       );
   }
@@ -1022,22 +1045,6 @@ export default function Dashboard() {
           <NavIcon name="new" />
           <span>{t("dash.new")}</span>
         </Link>
-        {account.isPaid && (
-          <>
-            <Link to={localizePath("/cobro", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
-              <NavIcon name="new" />
-              <span>{t("dash.cobro")}</span>
-            </Link>
-            <Link to={localizePath("/1099-season", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
-              <NavIcon name="completed" />
-              <span>{t("dash.taxYear")}</span>
-            </Link>
-            <Link to={localizePath("/income-proof", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
-              <NavIcon name="completed" />
-              <span>{t("dash.constancia")}</span>
-            </Link>
-          </>
-        )}
         <button
           className={`dashboard-nav-item${activeTab === "dashboard" ? " active" : ""}`}
           onClick={() => setActiveTab("dashboard")}
@@ -1052,6 +1059,23 @@ export default function Dashboard() {
           <NavIcon name="templates" />
           <span>{t("dash.templates")}</span>
         </button>
+        {account.isPaid && (
+          <div className="dashboard-nav-section">
+            <p className="dashboard-nav-section-label">{t("dash.navPacket")}</p>
+            <Link to={`${localizePath("/cobro", locale)}#send`} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
+              <NavIcon name="send" />
+              <span>{t("dash.cobro")}</span>
+            </Link>
+            <Link to={localizePath("/1099-season", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
+              <NavIcon name="badge" />
+              <span>{t("dash.taxYear")}</span>
+            </Link>
+            <Link to={localizePath("/income-proof", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
+              <NavIcon name="duplicate" />
+              <span>{t("dash.constancia")}</span>
+            </Link>
+          </div>
+        )}
         {account.isPaid && (
           <button
             className={`dashboard-nav-item${activeTab === "contacts" ? " active" : ""}`}
@@ -1381,7 +1405,7 @@ export default function Dashboard() {
               <div className="dashboard-corridor-grid">
                 {[
                   { to: localizePath("/income-proof", locale), title: t("dash.constancia"), body: t("dash.corridorConstancia") },
-                  { to: localizePath("/cobro", locale), title: t("dash.cobro"), body: t("dash.corridorCobro") },
+                  { to: `${localizePath("/cobro", locale)}#send`, title: t("dash.cobro"), body: t("dash.corridorCobro") },
                   { to: `${localizePath("/income-proof", locale)}#receipts`, title: t("dash.corridorReceiptsTitle"), body: t("dash.corridorReceipts") },
                 ].map((card) => (
                   <Link key={card.to} to={card.to} className="dashboard-corridor-card">

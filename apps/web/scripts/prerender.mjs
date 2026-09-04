@@ -261,9 +261,9 @@ const routes = [
     // to change copy), so withMeta() below is a no-op on those two fields for this route alone.
     urlPath: "/",
     outFile: "index.html",
-    title: "Docracy — Free E-Sign + Shareable Income Proof",
+    title: "Docracy — Sign Free. Then the Packet They Asked For.",
     description:
-      "Sign contracts free — 2 signers, no account. Paid packs the year into a constancia a landlord or CPA can open. Not a W-2 or bank letter. $10/month.",
+      "Sign contracts free — 2 signers, no account. Paid is the packet: constancia, WhatsApp cobro, 1099 for your CPA, trades and W-9 kits. $10/month. Not a W-2 or bank letter.",
     locale: "en",
     alternates: { en: "/", es: "/es" },
   },
@@ -495,9 +495,9 @@ const routes = [
   {
     urlPath: "/es",
     outFile: "es.html",
-    title: "Docracy — Firma gratis y constancia de ingresos",
+    title: "Docracy — Firma gratis. Luego el paquete que te piden.",
     description:
-      "Firma contratos gratis — 2 firmantes, sin cuenta. El plan de pago arma el año en una constancia. No es un W-2 ni carta bancaria. $10/mes.",
+      "Firma contratos gratis — 2 firmantes, sin cuenta. El plan de pago es el paquete: constancia, cobro por WhatsApp, 1099, oficios y W-9. $10/mes. No es un W-2 ni carta bancaria.",
     locale: "es",
     alternates: { en: "/", es: "/es" },
   },
@@ -993,6 +993,26 @@ const routes = [
       "Envía un PDF y tu enlace de PayPal, Stripe o Mercado Pago por WhatsApp. Sin firma. Docracy nunca cobra el dinero. Plan de $10/mes.",
     locale: "es",
     alternates: { en: "/cobro", es: "/es/cobro" },
+  },
+  {
+    urlPath: "/latam",
+    outFile: "latam.html",
+    title: "LATAM: cobro, constancia, and contractor kits | Docracy",
+    description:
+      "WhatsApp cobro, a shareable constancia, hire in LATAM, and RFC / W-9 collect. Not a W-2, W-8BEN, or customs filing. Signing stays free.",
+    locale: "en",
+    alternates: { en: "/latam", es: "/es/latam" },
+    xDefault: "es",
+  },
+  {
+    urlPath: "/es/latam",
+    outFile: "es/latam.html",
+    title: "LATAM: cobro, constancia y kits | Docracy",
+    description:
+      "Cobro por WhatsApp, constancia para compartir, contratar en LATAM y pedir RFC. No es un W-2, ni W-8BEN, ni aduana. Firmar sigue gratis.",
+    locale: "es",
+    alternates: { en: "/latam", es: "/es/latam" },
+    xDefault: "es",
   },
   {
     urlPath: "/income-proof",

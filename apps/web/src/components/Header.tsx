@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { fetchMe, logout } from "../lib/api";
 import { localizePath, useI18n, useT } from "../lib/i18n";
+import { track } from "../lib/track";
 import LanguageSwitcher from "./LanguageSwitcher";
 import NavMegaMenu from "./NavMegaMenu";
 import NavListMenu, { type NavListEntry } from "./NavListMenu";
@@ -218,12 +219,13 @@ export default function Header() {
         </div>
         <div className="header-center">
           <Link
-            to={localizePath("/whatsapp-signing", locale)}
+            to="/es/latam"
             className="header-whatsapp-badge"
-            title={t("hero.whatsappBadge")}
+            title={t("hero.latamBadge")}
+            onClick={() => track("landingpage_cta_clicked", { source: "header_latam_badge" })}
           >
             <img src="/integrations/whatsapp.svg" alt="" width={15} height={15} />
-            <span className="header-whatsapp-badge-text">{t("hero.whatsappBadge")}</span>
+            <span className="header-whatsapp-badge-text">{t("hero.latamBadge")}</span>
           </Link>
         </div>
         <nav className="header-nav-right" aria-label="Account">
@@ -292,11 +294,14 @@ export default function Header() {
             {t("nav.templates")}
           </Link>
           <Link
-            to={localizePath("/whatsapp-signing", locale)}
+            to="/es/latam"
             className="header-mobile-nav-link"
-            onClick={() => setMenuOpen(false)}
+            onClick={() => {
+              setMenuOpen(false);
+              track("landingpage_cta_clicked", { source: "header_latam_badge_mobile" });
+            }}
           >
-            {t("hero.whatsappBadge")}
+            {t("hero.latamBadge")}
           </Link>
           <details className="header-mobile-accordion">
             <summary>{t("nav.more")}</summary>

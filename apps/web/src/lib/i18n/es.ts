@@ -288,14 +288,18 @@ const es: Messages = {
   "hero.orConstancia": "o arma una constancia",
   "hero.watchHow": "Mira cómo funciona (30 seg)",
   "hero.sub":
-    "PayPal no imprime recibos de nómina. Firma el contrato gratis, cobra, y comparte el año como constancia. El plan de pago es el paquete — $10/mes, no una tarifa por firma.",
+    "Constancia, cobro por WhatsApp, 1099 para tu contador, órdenes de trabajo, W-9. Firmar sigue gratis. El plan de pago es el año que pueden abrir — $10/mes, no un recorte del trabajo.",
   "hero.badge.legal": "Alineado con ESIGN y UETA",
   "hero.badge.ssl": "Cifrado · retención corta",
   "hero.badge.noSignup": "Sin registro para firmar",
   "hero.badge.price": "El plan de pago es el paquete · $10/mes",
+  "hero.badge.constancia": "Constancia que pueden abrir",
+  "hero.badge.cobro": "Cobro con tu checkout",
+  "hero.badge.kits": "1099 · W-9 · oficios",
   "hero.trustAria": "Por qué empezar con Docracy",
   "hero.whatsappBadge": "Nuevo: firma por WhatsApp",
-  "hero.title": "Firma gratis.\nLa constancia es lo que te piden.",
+  "hero.latamBadge": "LATAM: cobro y constancia",
+  "hero.title": "Firma gratis.\nLuego el paquete que te piden.",
   "how.s1.body": "Agrega el PDF que quieres firmar (o pega un enlace de Google Docs), o empieza desde una plantilla gratis.",
   "how.s1.title": "Subir",
   "how.s2.body":
@@ -341,7 +345,7 @@ const es: Messages = {
     "Las firmas SES de Docracy están diseñadas para respaldar la ESIGN Act y UETA de EE. UU. No verificamos identidad — cualquiera con el enlace puede firmar con el nombre indicado. El registro de auditoría prueba qué se firmó y cuándo, no quién lo firmó realmente. Para firmas con identidad verificada, usa un servicio de grado de cumplimiento. Detalles:",
   "landing.disclaimerTrust": "Confianza y seguridad",
   "landing.faq1.a":
-    "Una entrada de firma electrónica gratis más un registro de pago después de firmar. Firma contratos sin cuenta (hasta 2 personas). El plan de $10/mes conserva los archivos y arma el año en una constancia para compartir — no es un W-2, ni carta bancaria, ni carta certificada — más cobro por WhatsApp y un CSV 1099. No es una tarifa por firma.",
+    "Una entrada de firma electrónica gratis más paquetes de pago después de firmar. Firma contratos sin cuenta (hasta 2 personas). El plan de $10/mes es constancia, cobro por WhatsApp, 1099 para tu contador, kits de oficios y pedir W-9 / RFC — no es un W-2, ni carta bancaria, ni tarifa por firma.",
   "landing.faq1.q": "¿Qué es Docracy.io?",
   "landing.faq2.a":
     "Sube un documento (o empieza desde una plantilla gratis), coloca campos y envía un enlace. Los firmantes abren y firman en segundos — sin app ni registro.",
@@ -1206,9 +1210,9 @@ const es: Messages = {
   "mcp.zapierLinkLabel": "Conectar Docracy en Zapier",
   "mcp.zapierTitle": "Automatiza con Zapier",
   "uptime.title": "Estado del sistema",
-  "seo.home.title": "Docracy — Firma gratis y constancia de ingresos",
+  "seo.home.title": "Docracy — Firma gratis. Luego el paquete que te piden.",
   "seo.home.description":
-    "Firma contratos gratis — 2 firmantes, sin cuenta. El plan de pago arma el año en una constancia. No es un W-2 ni carta bancaria. $10/mes.",
+    "Firma contratos gratis — 2 firmantes, sin cuenta. El plan de pago es el paquete: constancia, cobro por WhatsApp, 1099, oficios y W-9. $10/mes. No es un W-2 ni carta bancaria.",
   "seo.video.name": "Cómo funciona Docracy — firma documentos en menos de un minuto",
   "seo.video.description":
     "Un recorrido breve de Docracy: sube un PDF, coloca campos de firma, envía enlaces por correo y descarga el documento firmado — gratis hasta dos firmantes, sin cuenta.",
@@ -2501,6 +2505,15 @@ const es: Messages = {
   "dash.taxYear": "Casillero 1099",
   "dash.cobro": "Enviar cobro",
   "dash.constancia": "Constancia",
+  "dash.navPacket": "Después de firmar",
+  "latamDesk.seoTitle": "LATAM: cobro, constancia y kits | Docracy",
+  "latamDesk.seoDescription":
+    "Cobro por WhatsApp, constancia para compartir, contratar en LATAM y pedir RFC. No es un W-2, ni W-8BEN, ni aduana. Firmar sigue gratis.",
+  "latamDesk.kicker": "LATAM",
+  "latamDesk.heroTitle": "Cobra. Arma tu constancia. Contrata.",
+  "latamDesk.heroSub":
+    "Lo que piden en US ↔ LATAM: cobro con tu Mercado Pago, una constancia que pueden abrir, y los kits. Docracy no se lleva el dinero.",
+  "latamDesk.openKit": "Abrir el kit",
   "taxYear.seoTitle": "Casillero temporada 1099 — W-9s, contratos y CSV para tu contador | Docracy",
   "taxYear.seoDescription":
     "Conserva cada archivo de contratista del año fiscal y descarga un CSV para tu contador. No es presentación ante el IRS. Plan de $10/mes — firmar sigue gratis.",

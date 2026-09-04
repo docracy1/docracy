@@ -52,5 +52,5 @@ export function latamPacketPreparePath(slug: LatamPacketTemplateSlug, locale: "e
 
 export function latamCobroPath(locale: "en" | "es"): string {
   const cobro = locale === "es" ? "/es/cobro" : "/cobro";
-  return `${cobro}?packet=${LATAM_CONTRACTOR_PACKET_SLUG}`;
+  return `${cobro}?packet=${LATAM_CONTRACTOR_PACKET_SLUG}#send`;
 }

@@ -112,7 +112,7 @@ export function jobPacketBlankPreparePath(id: JobPacketId, locale: "en" | "es"):
 
 export function jobPacketCobroPath(id: JobPacketId, locale: "en" | "es"): string {
   const cobro = locale === "es" ? "/es/cobro" : "/cobro";
-  return `${cobro}?packet=${id}`;
+  return `${cobro}?packet=${id}#send`;
 }
 
 export function jobPacketPath(id: JobPacketId, locale: "en" | "es"): string {

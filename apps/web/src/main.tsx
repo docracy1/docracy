@@ -56,6 +56,7 @@ const ConstanciaShare = lazy(() => import("./pages/ConstanciaShare"));
 const TaxYearShare = lazy(() => import("./pages/TaxYearShare"));
 const JobPacket = lazy(() => import("./pages/JobPacket"));
 const Cobro = lazy(() => import("./pages/Cobro"));
+const LatamDesk = lazy(() => import("./pages/LatamDesk"));
 const Dpa = lazy(() => import("./pages/Dpa"));
 const Login = lazy(() => import("./pages/Login"));
 const AuthVerify = lazy(() => import("./pages/AuthVerify"));
@@ -163,6 +164,8 @@ function AppRoutes() {
       <Route path="/es/constancia/:token" element={<ConstanciaShare />} />
       <Route path="/cobro" element={<Cobro />} />
       <Route path="/es/cobro" element={<Cobro />} />
+      <Route path="/latam" element={<LatamDesk />} />
+      <Route path="/es/latam" element={<LatamDesk />} />
       <Route path="/dpa" element={<Dpa />} />
       <Route path="/login" element={<Login />} />
       <Route path="/auth/verify" element={<AuthVerify />} />

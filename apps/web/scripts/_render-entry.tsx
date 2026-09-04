@@ -34,6 +34,7 @@ import JobPacket from "../src/pages/JobPacket";
 import TaxYear from "../src/pages/TaxYear";
 import Constancia from "../src/pages/Constancia";
 import Cobro from "../src/pages/Cobro";
+import LatamDesk from "../src/pages/LatamDesk";
 import Dpa from "../src/pages/Dpa";
 import Privacy from "../src/pages/Privacy";
 import Terms from "../src/pages/Terms";
@@ -118,6 +119,8 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/es/constancia" element={<Constancia />} />
           <Route path="/cobro" element={<Cobro />} />
           <Route path="/es/cobro" element={<Cobro />} />
+          <Route path="/latam" element={<LatamDesk />} />
+          <Route path="/es/latam" element={<LatamDesk />} />
           <Route path="/dpa" element={<Dpa />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />

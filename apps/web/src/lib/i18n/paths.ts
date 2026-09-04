@@ -39,6 +39,7 @@ export const ES_PATH_BY_EN: Record<string, string> = {
   "/packets/collect": "/es/pide-documentos",
   "/1099-season": "/es/temporada-1099",
   "/cobro": "/es/cobro",
+  "/latam": "/es/latam",
   "/whatsapp-invoice": "/es/factura-whatsapp",
   "/1099-contractor-records": "/es/registros-1099",
   "/hire-contractor-abroad": "/es/contratar-en-el-extranjero",

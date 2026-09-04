@@ -73,7 +73,7 @@ export async function staticHtmlExists(env: { ASSETS: Fetcher }, origin: string,
       // Missing files that fall through `/* /index.html 200` look identical to the homepage.
       if (!body || body === (await getIndexBody())) continue;
       // Extra guard: homepage hero h1 must not appear on a real prerendered leaf page.
-      if (body.includes("Keep a record they will accept")) continue;
+      if (body.includes("Then the packet they asked for")) continue;
       return true;
     } catch {
       // try next candidate
