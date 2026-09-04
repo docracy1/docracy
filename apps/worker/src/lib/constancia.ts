@@ -126,3 +126,55 @@ export async function mintConstanciaShare(
   const shareToken = await signConstanciaToken(workspaceId, year, env.TOKEN_SECRET);
   return { shareToken, shareUrl: constanciaPageUrl(env.PUBLIC_APP_URL, shareToken, locale) };
 }
+
+export const CONSTANCIA_RECEIPTS_PREFIX = "constancia-receipts:";
+export const MAX_CONSTANCIA_RECEIPTS = 8;
+export const MAX_RECEIPT_BYTES = 15 * 1024 * 1024;
+export const MAX_RECEIPT_NAME = 80;
+
+export interface ConstanciaReceiptMeta {
+  id: string;
+  filename: string;
+  uploadedAt: string;
+  size: number;
+}
+
+export function receiptsKvKey(workspaceId: string, year: number): string {
+  return `${CONSTANCIA_RECEIPTS_PREFIX}${workspaceId}:${year}`;
+}
+
+export function receiptObjectKey(workspaceId: string, year: number, id: string): string {
+  return `constancia/${workspaceId}/${year}/${id}.pdf`;
+}
+
+export function sanitizeReceiptFilename(raw: unknown): string | { error: string } {
+  if (typeof raw !== "string") return { error: "A PDF filename is required" };
+  const base = raw.replace(/\\/g, "/").split("/").pop()?.trim() ?? "";
+  const name = base.replace(/[^\w.\- ()áéíóúüñÁÉÍÓÚÜÑ]+/g, "_").slice(0, MAX_RECEIPT_NAME);
+  if (!name.toLowerCase().endsWith(".pdf") || name.length < 5) {
+    return { error: "Upload a PDF (PayPal, Mercado Pago, or bank export)" };
+  }
+  return name;
+}
+
+export async function listConstanciaReceipts(
+  env: Env,
+  workspaceId: string,
+  year: number
+): Promise<ConstanciaReceiptMeta[]> {
+  const stored = await env.DOCRACY_KV.get<{ files: ConstanciaReceiptMeta[] }>(receiptsKvKey(workspaceId, year), "json");
+  return stored?.files ?? [];
+}
+
+export async function putConstanciaReceipts(
+  env: Env,
+  workspaceId: string,
+  year: number,
+  files: ConstanciaReceiptMeta[]
+): Promise<void> {
+  await env.DOCRACY_KV.put(receiptsKvKey(workspaceId, year), JSON.stringify({ files }));
+}
+
+export function isPdfBytes(bytes: Uint8Array): boolean {
+  return bytes.length >= 5 && bytes[0] === 0x25 && bytes[1] === 0x50 && bytes[2] === 0x44 && bytes[3] === 0x46;
+}

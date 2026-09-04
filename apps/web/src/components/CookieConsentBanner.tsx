@@ -19,6 +19,8 @@ function shouldHideBanner(pathname: string): boolean {
     pathname.startsWith("/es/firmado/") ||
     pathname.startsWith("/income-proof/") ||
     pathname.startsWith("/es/constancia/") ||
+    pathname.startsWith("/1099-season/") ||
+    pathname.startsWith("/es/temporada-1099/") ||
     pathname.startsWith("/auth/")
   );
 }

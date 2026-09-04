@@ -52,6 +52,8 @@ Disallow: /sign/
 Disallow: /status/
 Disallow: /income-proof/
 Disallow: /es/constancia/
+Disallow: /1099-season/
+Disallow: /es/temporada-1099/
 Disallow: /team/
 Disallow: /go/
 Disallow: /outreach/
@@ -90,10 +92,24 @@ function priorityFor(urlPath) {
     urlPath === "/es/kit-contratista-latam" ||
     urlPath === "/packets/us-contractor" ||
     urlPath === "/es/kit-contratista" ||
+    urlPath === "/packets/trades" ||
+    urlPath === "/es/kit-oficios" ||
+    urlPath === "/packets/latam-trade" ||
+    urlPath === "/es/kit-comercio" ||
+    urlPath === "/packets/collect" ||
+    urlPath === "/es/pide-documentos" ||
     urlPath === "/income-proof" ||
     urlPath === "/es/constancia" ||
     urlPath === "/proof-of-income" ||
-    urlPath === "/es/prueba-de-ingresos"
+    urlPath === "/es/prueba-de-ingresos" ||
+    urlPath === "/signed-work-order" ||
+    urlPath === "/es/orden-de-trabajo-firmada" ||
+    urlPath === "/contractor-payment-proof" ||
+    urlPath === "/es/comprobante-pago-contratistas" ||
+    urlPath === "/latam-export-documents" ||
+    urlPath === "/es/documentos-exportacion" ||
+    urlPath === "/request-w9" ||
+    urlPath === "/es/pedir-w9"
   ) {
     return "0.8";
   }
@@ -184,6 +200,12 @@ function robotsAllowForRoutes(routes) {
     "/es/kit-contratista",
     "/packets/latam-contractor",
     "/es/kit-contratista-latam",
+    "/packets/trades",
+    "/es/kit-oficios",
+    "/packets/latam-trade",
+    "/es/kit-comercio",
+    "/packets/collect",
+    "/es/pide-documentos",
     "/1099-season",
     "/es/temporada-1099",
     "/cobro",
@@ -193,6 +215,10 @@ function robotsAllowForRoutes(routes) {
     "/hire-contractor-abroad",
     "/income-proof",
     "/proof-of-income",
+    "/signed-work-order",
+    "/contractor-payment-proof",
+    "/latam-export-documents",
+    "/request-w9",
     "/templates",
   ]) {
     exact.add(p);

@@ -6745,6 +6745,35 @@ select {
   display: grid;
   gap: 16px;
 }
+
+.dashboard-corridor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+.dashboard-corridor-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  padding: 14px 16px;
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  background: var(--bg, #fff);
+}
+.dashboard-corridor-card h3 {
+  font-size: 15px;
+  margin: 0 0 6px;
+}
+.dashboard-corridor-card p {
+  font-size: 13px;
+  color: var(--mute);
+  margin: 0;
+  line-height: 1.4;
+}
+.dashboard-corridor-card:hover {
+  border-color: var(--primary);
+}
 .packet-step {
   padding: 20px 22px;
   border-color: var(--hairline);

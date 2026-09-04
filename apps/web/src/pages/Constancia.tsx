@@ -5,6 +5,8 @@ import {
   fetchConstancia,
   saveConstanciaProfile,
   startCheckout,
+  uploadConstanciaReceipt,
+  deleteConstanciaReceipt,
   type Account,
   type ConstanciaPacket,
 } from "../lib/api";
@@ -30,6 +32,7 @@ export default function Constancia() {
   const [upgrading, setUpgrading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   const canonicalPath = locale === "es" ? "/es/constancia" : "/income-proof";
 
@@ -124,6 +127,30 @@ export default function Constancia() {
       window.setTimeout(() => setCopied(false), 2000);
     } catch {
       /* clipboard blocked — the URL is still in the input */
+    }
+  };
+
+  const onReceiptFile = async (file: File | undefined) => {
+    if (!file || !account?.isPaid) return;
+    setUploading(true);
+    setError(null);
+    try {
+      const res = await uploadConstanciaReceipt(year, file);
+      setPacket((prev) => (prev ? { ...prev, receipts: res.receipts } : prev));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t("common.error"));
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const onDeleteReceipt = async (id: string) => {
+    setError(null);
+    try {
+      const res = await deleteConstanciaReceipt(year, id);
+      setPacket((prev) => (prev ? { ...prev, receipts: res.receipts } : prev));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t("common.error"));
     }
   };
 
@@ -240,6 +267,42 @@ export default function Constancia() {
                       </div>
                     ))
                   )}
+                </div>
+                <div id="receipts" style={{ marginTop: 24 }}>
+                  <h3 style={{ fontSize: 16, marginBottom: 6 }}>{t("constancia.receiptsTitle")}</h3>
+                  <p style={{ fontSize: 13, color: "var(--mute)" }}>{t("constancia.receiptsSub")}</p>
+                  {(packet.receipts ?? []).map((r) => (
+                    <div
+                      key={r.id}
+                      style={{
+                        padding: "8px 0",
+                        borderBottom: "1px solid var(--hairline)",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        gap: 8,
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      <span style={{ fontSize: 14 }}>{r.filename}</span>
+                      <button type="button" className="btn-secondary" style={{ fontSize: 12, padding: "4px 8px" }} onClick={() => onDeleteReceipt(r.id)}>
+                        {t("common.delete")}
+                      </button>
+                    </div>
+                  ))}
+                  <label style={{ display: "inline-block", marginTop: 12, fontSize: 13 }}>
+                    {uploading ? t("common.uploading") : t("constancia.receiptsAdd")}
+                    <input
+                      type="file"
+                      accept="application/pdf,.pdf"
+                      style={{ display: "block", marginTop: 6 }}
+                      disabled={uploading}
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        e.target.value = "";
+                        void onReceiptFile(file);
+                      }}
+                    />
+                  </label>
                 </div>
               </>
             )}

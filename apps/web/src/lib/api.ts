@@ -383,7 +383,7 @@ export interface TaxYearDocument {
 export async function fetchTaxYear(
   year: number,
   locale: Locale
-): Promise<{ year: number; documents: TaxYearDocument[] }> {
+): Promise<{ year: number; documents: TaxYearDocument[]; shareToken?: string; shareUrl?: string }> {
   const res = await apiFetch(`/api/account/tax-year?year=${year}&locale=${locale}`);
   return asJson(res);
 }
@@ -394,6 +394,13 @@ export interface ConstanciaTotal {
   count: number;
 }
 
+export interface ConstanciaReceipt {
+  id: string;
+  filename: string;
+  uploadedAt: string;
+  size: number;
+}
+
 export interface ConstanciaPacket {
   year: number;
   subjectName: string;
@@ -401,6 +408,7 @@ export interface ConstanciaPacket {
   shareUrl: string;
   documents: TaxYearDocument[];
   totals: ConstanciaTotal[];
+  receipts: ConstanciaReceipt[];
 }
 
 export interface ConstanciaPublicRow {
@@ -418,6 +426,7 @@ export interface ConstanciaPublicPacket {
   subjectName: string;
   documents: ConstanciaPublicRow[];
   totals: ConstanciaTotal[];
+  receipts: ConstanciaReceipt[];
 }
 
 export async function fetchConstancia(year: number, locale: Locale): Promise<ConstanciaPacket> {
@@ -434,8 +443,38 @@ export async function saveConstanciaProfile(subjectName: string): Promise<{ subj
   return asJson(res);
 }
 
+export async function uploadConstanciaReceipt(
+  year: number,
+  pdf: File
+): Promise<{ receipts: ConstanciaReceipt[] }> {
+  const form = new FormData();
+  form.set("pdf", pdf);
+  form.set("year", String(year));
+  const res = await apiFetch("/api/account/constancia/receipts", { method: "POST", body: form });
+  return asJson(res);
+}
+
+export async function deleteConstanciaReceipt(year: number, id: string): Promise<{ receipts: ConstanciaReceipt[] }> {
+  const res = await apiFetch(`/api/account/constancia/receipts/${encodeURIComponent(id)}?year=${year}`, {
+    method: "DELETE",
+  });
+  return asJson(res);
+}
+
+export function constanciaReceiptPublicUrl(token: string, id: string): string {
+  return `/api/constancia/${encodeURIComponent(token)}/receipts/${encodeURIComponent(id)}`;
+}
+
 export async function fetchConstanciaPublic(token: string, locale: Locale): Promise<ConstanciaPublicPacket> {
   const res = await apiFetch(`/api/constancia/${encodeURIComponent(token)}?locale=${locale}`);
+  return asJson(res);
+}
+
+export async function fetchPayerPublic(
+  token: string,
+  locale: Locale
+): Promise<{ year: number; documents: ConstanciaPublicRow[]; totals: ConstanciaTotal[] }> {
+  const res = await apiFetch(`/api/payer/${encodeURIComponent(token)}?locale=${locale}`);
   return asJson(res);
 }
 

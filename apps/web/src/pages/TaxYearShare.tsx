@@ -1,18 +1,21 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { fetchConstanciaPublic, constanciaReceiptPublicUrl, type ConstanciaPublicPacket } from "../lib/api";
+import { fetchPayerPublic, type ConstanciaPublicRow, type ConstanciaTotal } from "../lib/api";
 import { localizePath, useI18n } from "../lib/i18n";
 import { track } from "../lib/track";
 import { useNoIndex } from "../lib/useNoIndex";
 
 /**
- * Public income-proof packet. Anyone with the HMAC token can open it — same trust model as
- * /signed/:token. noindex. Does not show the owner's email.
+ * Public "prove I paid them" year packet for a CPA. HMAC token. noindex. No emails.
  */
-export default function ConstanciaShare() {
+export default function TaxYearShare() {
   const { t, locale } = useI18n();
   const { token } = useParams<{ token: string }>();
-  const [packet, setPacket] = useState<ConstanciaPublicPacket | null>(null);
+  const [packet, setPacket] = useState<{
+    year: number;
+    documents: ConstanciaPublicRow[];
+    totals: ConstanciaTotal[];
+  } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
@@ -20,7 +23,7 @@ export default function ConstanciaShare() {
 
   useEffect(() => {
     if (!token) return;
-    fetchConstanciaPublic(token, locale)
+    fetchPayerPublic(token, locale)
       .then(setPacket)
       .catch((err) => setError(err.message));
   }, [token, locale]);
@@ -29,7 +32,7 @@ export default function ConstanciaShare() {
     try {
       await navigator.clipboard.writeText(window.location.href);
       setCopied(true);
-      track("viral_cta_clicked", { source: "constancia_share_copy" });
+      track("viral_cta_clicked", { source: "payer_share_copy" });
       window.setTimeout(() => setCopied(false), 2000);
     } catch {
       /* clipboard blocked */
@@ -53,23 +56,19 @@ export default function ConstanciaShare() {
     );
   }
 
-  const heading = packet.subjectName.trim()
-    ? t("constanciaShare.namedTitle", { name: packet.subjectName, year: packet.year })
-    : t("constanciaShare.title", { year: packet.year });
-
   return (
     <div className="container" style={{ maxWidth: 640 }}>
       <p
         className="hero-kicker"
         style={{ marginBottom: 8, color: "var(--mute)", fontSize: 13, letterSpacing: "0.04em", textTransform: "uppercase" }}
       >
-        {t("constanciaShare.kicker")}
+        {t("payerShare.kicker")}
       </p>
-      <h1>{heading}</h1>
-      <p style={{ color: "var(--mute)" }}>{t("constanciaShare.disclaimer")}</p>
+      <h1>{t("payerShare.title", { year: packet.year })}</h1>
+      <p style={{ color: "var(--mute)" }}>{t("payerShare.disclaimer")}</p>
       {packet.totals.length > 0 && (
         <div className="card" style={{ marginBottom: 20 }}>
-          <h2 style={{ fontSize: 16, marginTop: 0 }}>{t("constanciaShare.totalsTitle")}</h2>
+          <h2 style={{ fontSize: 16, marginTop: 0 }}>{t("payerShare.totalsTitle")}</h2>
           {packet.totals.map((tot) => (
             <div key={tot.currency} style={{ padding: "6px 0", borderBottom: "1px solid var(--hairline)" }}>
               <strong>
@@ -84,7 +83,7 @@ export default function ConstanciaShare() {
       )}
       <div className="card">
         {packet.documents.length === 0 ? (
-          <p style={{ color: "var(--mute)", marginBottom: 0 }}>{t("constanciaShare.empty")}</p>
+          <p style={{ color: "var(--mute)", marginBottom: 0 }}>{t("payerShare.empty")}</p>
         ) : (
           packet.documents.map((d, i) => (
             <div key={`${d.signedPageUrl}-${i}`} style={{ padding: "10px 0", borderBottom: "1px solid var(--hairline)" }}>
@@ -98,25 +97,15 @@ export default function ConstanciaShare() {
             </div>
           ))
         )}
-        {(packet.receipts ?? []).length > 0 && (
-          <div style={{ marginTop: 16, paddingTop: 8, borderTop: "1px solid var(--hairline)" }}>
-            <h2 style={{ fontSize: 15, margin: "0 0 8px" }}>{t("constanciaShare.receiptsTitle")}</h2>
-            {(packet.receipts ?? []).map((r) => (
-              <div key={r.id} style={{ padding: "6px 0" }}>
-                <a href={token ? constanciaReceiptPublicUrl(token, r.id) : "#"}>{r.filename}</a>
-              </div>
-            ))}
-          </div>
-        )}
         <div style={{ marginTop: 16 }}>
           <button type="button" className="btn-secondary" onClick={copyLink}>
-            {copied ? t("common.copied") : t("constanciaShare.copyLink")}
+            {copied ? t("common.copied") : t("payerShare.copyLink")}
           </button>
         </div>
       </div>
       <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 24 }}>
-        {t("constanciaShare.forwardHint")}{" "}
-        <Link to={localizePath("/income-proof", locale)}>{t("constanciaShare.sendYours")}</Link>
+        {t("payerShare.forwardHint")}{" "}
+        <Link to={localizePath("/1099-season", locale)}>{t("payerShare.sendYours")}</Link>
       </p>
     </div>
   );

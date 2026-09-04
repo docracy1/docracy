@@ -1375,6 +1375,39 @@ export default function Dashboard() {
               </Link>
             </div>
 
+            <div className="card" style={{ marginTop: 24 }} id="after-they-sign">
+              <h3 style={{ fontSize: 15, marginBottom: 4 }}>{t("dash.corridorEarnTitle")}</h3>
+              <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 0 }}>{t("dash.corridorEarnSub")}</p>
+              <div className="dashboard-corridor-grid">
+                {[
+                  { to: localizePath("/income-proof", locale), title: t("dash.constancia"), body: t("dash.corridorConstancia") },
+                  { to: localizePath("/cobro", locale), title: t("dash.cobro"), body: t("dash.corridorCobro") },
+                  { to: `${localizePath("/income-proof", locale)}#receipts`, title: t("dash.corridorReceiptsTitle"), body: t("dash.corridorReceipts") },
+                ].map((card) => (
+                  <Link key={card.to} to={card.to} className="dashboard-corridor-card">
+                    <h3>{card.title}</h3>
+                    <p>{card.body}</p>
+                  </Link>
+                ))}
+              </div>
+              <h3 style={{ fontSize: 15, margin: "28px 0 4px" }}>{t("dash.corridorPayTitle")}</h3>
+              <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 0 }}>{t("dash.corridorPaySub")}</p>
+              <div className="dashboard-corridor-grid">
+                {[
+                  { to: localizePath("/1099-season", locale), title: t("dash.taxYear"), body: t("dash.corridorPayer") },
+                  { to: localizePath("/packets/collect", locale), title: t("dash.corridorCollectTitle"), body: t("dash.corridorCollect") },
+                  { to: localizePath("/packets/trades", locale), title: t("dash.corridorTradesTitle"), body: t("dash.corridorTrades") },
+                  { to: localizePath("/packets/latam-contractor", locale), title: t("footer.latamPacket"), body: t("dash.corridorLatamHire") },
+                  { to: localizePath("/packets/latam-trade", locale), title: t("dash.corridorTradeTitle"), body: t("dash.corridorTrade") },
+                ].map((card) => (
+                  <Link key={card.to} to={card.to} className="dashboard-corridor-card">
+                    <h3>{card.title}</h3>
+                    <p>{card.body}</p>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
             {recurringQuickActions.length > 0 && (
               <div className="card" style={{ marginTop: 24 }}>
                 <h3 style={{ fontSize: 15 }}>{t("dash.quickActions")}</h3>

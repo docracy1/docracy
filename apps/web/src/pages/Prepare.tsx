@@ -36,6 +36,7 @@ import type { TextSpan } from "../lib/pdfEdit";
 import { getFreeTemplate } from "../lib/freeTemplates";
 import { markPacketTemplateSent, US_CONTRACTOR_PACKET_SLUG } from "../lib/contractorPacket";
 import { markLatamPacketStepSent, LATAM_CONTRACTOR_PACKET_SLUG } from "../lib/latamContractorPacket";
+import { isJobPacketId, markJobPacketStepSent } from "../lib/jobPackets";
 import { assignFieldsToSigners, detectAnchorFields, detectFieldCandidates } from "../lib/fieldDetection";
 import type { CcRecipientInput, DocField, DocFieldType, SignerInput } from "../lib/types";
 import { track } from "../lib/track";
@@ -1038,6 +1039,9 @@ export default function Prepare() {
       if (packetSlug === LATAM_CONTRACTOR_PACKET_SLUG && freeTemplateSlug) {
         markLatamPacketStepSent(freeTemplateSlug);
       }
+      if (isJobPacketId(packetSlug)) {
+        markJobPacketStepSent(packetSlug, freeTemplateSlug ?? "rfc-upload");
+      }
       navigate("/prepare/sent", {
         state: {
           docId,
@@ -1045,10 +1049,12 @@ export default function Prepare() {
           claimToken,
           signingMode: effectiveSigningMode,
           packetSlug:
-            packetSlug === US_CONTRACTOR_PACKET_SLUG || packetSlug === LATAM_CONTRACTOR_PACKET_SLUG
+            packetSlug === US_CONTRACTOR_PACKET_SLUG ||
+            packetSlug === LATAM_CONTRACTOR_PACKET_SLUG ||
+            isJobPacketId(packetSlug)
               ? packetSlug
               : undefined,
-          sentTemplateSlug: freeTemplateSlug ?? undefined,
+          sentTemplateSlug: freeTemplateSlug ?? (isJobPacketId(packetSlug) ? "rfc-upload" : undefined),
         },
       });
     } catch (err) {

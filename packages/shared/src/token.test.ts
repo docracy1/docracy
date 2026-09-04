@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { parseToken, signToken, verifyToken, signConstanciaToken, verifyConstanciaToken } from "./token";
+import { parseToken, signToken, verifyToken, signConstanciaToken, verifyConstanciaToken, signPayerToken, verifyPayerToken } from "./token";
 
 const SECRET = "test-secret";
 
@@ -83,5 +83,14 @@ describe("token", () => {
   it("does not treat a document status token as a constancia packet", async () => {
     const docToken = await signToken("doc-1", 0, SECRET);
     expect(await verifyConstanciaToken(docToken, SECRET)).toBeNull();
+  });
+
+  it("round-trips a payer-share token and does not confuse it with constancia", async () => {
+    const workspaceId = "acct-pay";
+    const token = await signPayerToken(workspaceId, 2026, SECRET);
+    expect(await verifyPayerToken(token, SECRET)).toEqual({ workspaceId, year: 2026 });
+    expect(await verifyConstanciaToken(token, SECRET)).toBeNull();
+    const cToken = await signConstanciaToken(workspaceId, 2026, SECRET);
+    expect(await verifyPayerToken(cToken, SECRET)).toBeNull();
   });
 });

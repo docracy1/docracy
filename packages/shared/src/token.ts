@@ -112,3 +112,26 @@ export async function verifyConstanciaToken(
   if (!Number.isInteger(year) || year < 2000 || year > 2100) return null;
   return { workspaceId, year };
 }
+
+/** Prefix so payer-share tokens never collide with documents or constancia (`c-`). */
+const PAYER_DOC_PREFIX = "p-";
+
+export async function signPayerToken(workspaceId: string, year: number, secret: string): Promise<string> {
+  return signToken(`${PAYER_DOC_PREFIX}${workspaceId}`, year, secret);
+}
+
+export interface VerifiedPayerToken {
+  workspaceId: string;
+  year: number;
+}
+
+export async function verifyPayerToken(token: string, secret: string): Promise<VerifiedPayerToken | null> {
+  const verified = await verifyToken(token, secret);
+  if (!verified) return null;
+  if (!verified.docId.startsWith(PAYER_DOC_PREFIX)) return null;
+  const workspaceId = verified.docId.slice(PAYER_DOC_PREFIX.length);
+  if (!workspaceId) return null;
+  const year = verified.order;
+  if (!Number.isInteger(year) || year < 2000 || year > 2100) return null;
+  return { workspaceId, year };
+}

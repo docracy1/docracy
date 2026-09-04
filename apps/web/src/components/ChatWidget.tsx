@@ -48,7 +48,7 @@ export default function ChatWidget() {
     return () => window.removeEventListener("docracy:open-chat", onOpenRequest);
   }, [t]);
 
-  if (location.pathname.startsWith("/sign/") || location.pathname.startsWith("/status/") || location.pathname.startsWith("/signed/") || location.pathname.startsWith("/es/firmado/") || location.pathname.startsWith("/income-proof/") || location.pathname.startsWith("/es/constancia/")) return null;
+  if (location.pathname.startsWith("/sign/") || location.pathname.startsWith("/status/") || location.pathname.startsWith("/signed/") || location.pathname.startsWith("/es/firmado/") || location.pathname.startsWith("/income-proof/") || location.pathname.startsWith("/es/constancia/") || location.pathname.startsWith("/1099-season/") || location.pathname.startsWith("/es/temporada-1099/")) return null;
 
   const say = (from: Message["from"], text: string, extra?: Partial<Message>) =>
     setMessages((m) => [...m, { from, text, ...extra }]);

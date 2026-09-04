@@ -33,7 +33,9 @@ export function isSpaAppPath(pathname: string): boolean {
     pathname.startsWith("/go/") ||
     pathname.startsWith("/outreach/") ||
     pathname.startsWith("/income-proof/") ||
-    pathname.startsWith("/es/constancia/")
+    pathname.startsWith("/es/constancia/") ||
+    pathname.startsWith("/1099-season/") ||
+    pathname.startsWith("/es/temporada-1099/")
   );
 }
 

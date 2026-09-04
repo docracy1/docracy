@@ -34,6 +34,9 @@ export const ES_PATH_BY_EN: Record<string, string> = {
   "/verify": "/es/verificar",
   "/packets/us-contractor": "/es/kit-contratista",
   "/packets/latam-contractor": "/es/kit-contratista-latam",
+  "/packets/trades": "/es/kit-oficios",
+  "/packets/latam-trade": "/es/kit-comercio",
+  "/packets/collect": "/es/pide-documentos",
   "/1099-season": "/es/temporada-1099",
   "/cobro": "/es/cobro",
   "/whatsapp-invoice": "/es/factura-whatsapp",
@@ -41,6 +44,10 @@ export const ES_PATH_BY_EN: Record<string, string> = {
   "/hire-contractor-abroad": "/es/contratar-en-el-extranjero",
   "/income-proof": "/es/constancia",
   "/proof-of-income": "/es/prueba-de-ingresos",
+  "/signed-work-order": "/es/orden-de-trabajo-firmada",
+  "/contractor-payment-proof": "/es/comprobante-pago-contratistas",
+  "/latam-export-documents": "/es/documentos-exportacion",
+  "/request-w9": "/es/pedir-w9",
 };
 
 export const EN_PATH_BY_ES: Record<string, string> = Object.fromEntries(
@@ -207,6 +214,22 @@ export function constanciaSharePath(token: string, locale: Locale): string {
   return locale === "es" ? `/es/constancia/${token}` : `/income-proof/${token}`;
 }
 
+function payerShareFromPath(path: string): { locale: Locale; token: string } | null {
+  if (path.startsWith("/1099-season/")) {
+    const token = path.slice("/1099-season/".length);
+    return token ? { locale: "en", token } : null;
+  }
+  if (path.startsWith("/es/temporada-1099/")) {
+    const token = path.slice("/es/temporada-1099/".length);
+    return token ? { locale: "es", token } : null;
+  }
+  return null;
+}
+
+export function payerSharePath(token: string, locale: Locale): string {
+  return locale === "es" ? `/es/temporada-1099/${token}` : `/1099-season/${token}`;
+}
+
 /** Locale forced by a bilingual SEO URL, or null when the path is not in the map. */
 export function pathLocale(pathname: string): Locale | null {
   const path = cleanPath(pathname);
@@ -214,6 +237,8 @@ export function pathLocale(pathname: string): Locale | null {
   if (signed) return signed.locale;
   const constancia = constanciaShareFromPath(path);
   if (constancia) return constancia.locale;
+  const payer = payerShareFromPath(path);
+  if (payer) return payer.locale;
   const tmpl = templateSlugFromPath(path);
   if (tmpl) {
     // Only SEO template pairs force locale from the URL; non-SEO /es/… URLs shouldn't exist.
@@ -241,6 +266,9 @@ export function localizePath(href: string, locale: Locale): string {
   const constancia = constanciaShareFromPath(path);
   if (constancia) return `${constanciaSharePath(constancia.token, locale)}${query}${hash}`;
 
+  const payer = payerShareFromPath(path);
+  if (payer) return `${payerSharePath(payer.token, locale)}${query}${hash}`;
+
   const tmpl = templateSlugFromPath(path);
   if (tmpl) {
     // Non-SEO templates stay on English detail URLs to avoid thin EN-under-/es pages.
@@ -265,6 +293,8 @@ export function alternatePath(pathname: string, target: Locale): string | null {
   if (signed) return signedReceiptPath(signed.token, target);
   const constancia = constanciaShareFromPath(path);
   if (constancia) return constanciaSharePath(constancia.token, target);
+  const payer = payerShareFromPath(path);
+  if (payer) return payerSharePath(payer.token, target);
   const tmpl = templateSlugFromPath(path);
   if (tmpl) {
     if (!isSeoTemplateSlug(tmpl)) return null;

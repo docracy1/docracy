@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import account from "./account";
 import constancia from "./constancia";
 import { createSession, SESSION_COOKIE_NAME } from "../lib/auth";
-import { makeMockEnv } from "../test/mockEnv";
+import { makeMockEnv, makeValidPdfBytes } from "../test/mockEnv";
 import { putDoc } from "../lib/kv";
 import { signConstanciaToken, signToken } from "@docracy/shared";
 import { putConstanciaProfile } from "../lib/constancia";
@@ -84,6 +84,7 @@ describe("GET /api/account/constancia", () => {
       shareUrl: string;
       documents: Array<{ docId: string; amount: string }>;
       totals: Array<{ currency: string; amount: string }>;
+      receipts: unknown[];
     } = await res.json();
     expect(body.year).toBe(2026);
     expect(body.subjectName).toBe("Ana Ruiz");
@@ -91,6 +92,46 @@ describe("GET /api/account/constancia", () => {
     expect(body.shareUrl).toContain("/es/constancia/");
     expect(body.documents.map((d) => d.docId)).toEqual(["doc-in"]);
     expect(body.totals).toEqual([{ currency: "MXN", amount: "150.00", count: 1 }]);
+    expect(body.receipts).toEqual([]);
+  });
+});
+
+describe("POST /api/account/constancia/receipts", () => {
+  it("stores a PayPal-style PDF on the year packet", async () => {
+    const { env } = makeMockEnv();
+    const ctx = makeCtx();
+    const token = await createSession(env, ctx, "acct-1", "paid@example.com", true, false, null, null);
+    const pdf = await makeValidPdfBytes();
+    const form = new FormData();
+    form.set("pdf", new File([pdf], "paypal-export.pdf", { type: "application/pdf" }));
+    form.set("year", "2026");
+    const res = await account.request(
+      "/constancia/receipts",
+      { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` }, body: form },
+      env,
+      ctx
+    );
+    expect(res.status).toBe(200);
+    const body: { receipts: Array<{ filename: string; id: string }> } = await res.json();
+    expect(body.receipts).toHaveLength(1);
+    expect(body.receipts[0].filename).toBe("paypal-export.pdf");
+    expect(body.receipts[0].id).toBeTruthy();
+  });
+
+  it("rejects a non-PDF upload", async () => {
+    const { env } = makeMockEnv();
+    const ctx = makeCtx();
+    const token = await createSession(env, ctx, "acct-1", "paid@example.com", true, false, null, null);
+    const form = new FormData();
+    form.set("pdf", new File([new Uint8Array([0x00, 0x01])], "note.txt", { type: "text/plain" }));
+    form.set("year", "2026");
+    const res = await account.request(
+      "/constancia/receipts",
+      { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` }, body: form },
+      env,
+      ctx
+    );
+    expect(res.status).toBe(400);
   });
 });
 
@@ -162,6 +203,7 @@ describe("GET /api/constancia/:token", () => {
       subjectName: string;
       documents: Array<{ title: string; counterparties: Array<{ name: string; email?: string }> }>;
       totals: Array<{ currency: string }>;
+      receipts: unknown[];
     } = JSON.parse(raw);
     expect(body.year).toBe(2026);
     expect(body.subjectName).toBe("Ana Ruiz");
@@ -170,5 +212,6 @@ describe("GET /api/constancia/:token", () => {
     expect(body.documents[0].counterparties[0].name).toBe("Ana Ruiz");
     expect(body.documents[0].counterparties[0].email).toBeUndefined();
     expect(body.totals[0].currency).toBe("MXN");
+    expect(body.receipts).toEqual([]);
   });
 });

@@ -53,6 +53,8 @@ const LatamContractorPacket = lazy(() => import("./pages/LatamContractorPacket")
 const TaxYear = lazy(() => import("./pages/TaxYear"));
 const Constancia = lazy(() => import("./pages/Constancia"));
 const ConstanciaShare = lazy(() => import("./pages/ConstanciaShare"));
+const TaxYearShare = lazy(() => import("./pages/TaxYearShare"));
+const JobPacket = lazy(() => import("./pages/JobPacket"));
 const Cobro = lazy(() => import("./pages/Cobro"));
 const Dpa = lazy(() => import("./pages/Dpa"));
 const Login = lazy(() => import("./pages/Login"));
@@ -145,8 +147,16 @@ function AppRoutes() {
       <Route path="/es/kit-contratista" element={<ContractorPacket />} />
       <Route path="/packets/latam-contractor" element={<LatamContractorPacket />} />
       <Route path="/es/kit-contratista-latam" element={<LatamContractorPacket />} />
+      <Route path="/packets/trades" element={<JobPacket packetId="trades" />} />
+      <Route path="/es/kit-oficios" element={<JobPacket packetId="trades" />} />
+      <Route path="/packets/latam-trade" element={<JobPacket packetId="latam-trade" />} />
+      <Route path="/es/kit-comercio" element={<JobPacket packetId="latam-trade" />} />
+      <Route path="/packets/collect" element={<JobPacket packetId="collect" />} />
+      <Route path="/es/pide-documentos" element={<JobPacket packetId="collect" />} />
       <Route path="/1099-season" element={<TaxYear />} />
       <Route path="/es/temporada-1099" element={<TaxYear />} />
+      <Route path="/1099-season/:token" element={<TaxYearShare />} />
+      <Route path="/es/temporada-1099/:token" element={<TaxYearShare />} />
       <Route path="/income-proof" element={<Constancia />} />
       <Route path="/es/constancia" element={<Constancia />} />
       <Route path="/income-proof/:token" element={<ConstanciaShare />} />
@@ -245,6 +255,14 @@ function AppRoutes() {
       <Route path="/es/contratar-en-el-extranjero" element={<FeaturePage slug="hire-contractor-abroad" />} />
       <Route path="/proof-of-income" element={<FeaturePage slug="proof-of-income" />} />
       <Route path="/es/prueba-de-ingresos" element={<FeaturePage slug="proof-of-income" />} />
+      <Route path="/signed-work-order" element={<FeaturePage slug="signed-work-order" />} />
+      <Route path="/es/orden-de-trabajo-firmada" element={<FeaturePage slug="signed-work-order" />} />
+      <Route path="/contractor-payment-proof" element={<FeaturePage slug="contractor-payment-proof" />} />
+      <Route path="/es/comprobante-pago-contratistas" element={<FeaturePage slug="contractor-payment-proof" />} />
+      <Route path="/latam-export-documents" element={<FeaturePage slug="latam-export-documents" />} />
+      <Route path="/es/documentos-exportacion" element={<FeaturePage slug="latam-export-documents" />} />
+      <Route path="/request-w9" element={<FeaturePage slug="request-w9" />} />
+      <Route path="/es/pedir-w9" element={<FeaturePage slug="request-w9" />} />
       {ALTERNATIVE_PAGES.map((p) => (
         <Route key={p.slug} path={`/${p.slug}`} element={<AlternativePage slug={p.slug} />} />
       ))}

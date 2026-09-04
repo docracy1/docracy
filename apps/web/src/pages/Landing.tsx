@@ -210,6 +210,8 @@ const AFTER_SIGN_OUTCOMES: Array<{
   { icon: "send", titleKey: "landing.out1.title", bodyKey: "landing.out1.body", to: "/cobro", linkKey: "landing.out1.link" },
   { icon: "badge", titleKey: "landing.out2.title", bodyKey: "landing.out2.body", to: "/1099-season", linkKey: "landing.out2.link" },
   { icon: "users", titleKey: "landing.out3.title", bodyKey: "landing.out3.body", to: "/packets/latam-contractor", linkKey: "landing.out3.link" },
+  { icon: "users", titleKey: "landing.out5.title", bodyKey: "landing.out5.body", to: "/packets/trades", linkKey: "landing.out5.link" },
+  { icon: "duplicate", titleKey: "landing.out6.title", bodyKey: "landing.out6.body", to: "/packets/collect", linkKey: "landing.out6.link" },
 ];
 
 const FAQ_KEYS: Array<{ qKey: string; aKey: string }> = [
