@@ -207,11 +207,20 @@ const AFTER_SIGN_OUTCOMES: Array<{
   linkKey: string;
 }> = [
   { icon: "duplicate", titleKey: "landing.out4.title", bodyKey: "landing.out4.body", to: "/income-proof", linkKey: "landing.out4.link" },
-  { icon: "send", titleKey: "landing.out1.title", bodyKey: "landing.out1.body", to: "/cobro", linkKey: "landing.out1.link" },
+  { icon: "send", titleKey: "landing.out1.title", bodyKey: "landing.out1.body", to: "/cobro#send", linkKey: "landing.out1.link" },
   { icon: "badge", titleKey: "landing.out2.title", bodyKey: "landing.out2.body", to: "/1099-season", linkKey: "landing.out2.link" },
   { icon: "users", titleKey: "landing.out3.title", bodyKey: "landing.out3.body", to: "/packets/latam-contractor", linkKey: "landing.out3.link" },
   { icon: "users", titleKey: "landing.out5.title", bodyKey: "landing.out5.body", to: "/packets/trades", linkKey: "landing.out5.link" },
   { icon: "duplicate", titleKey: "landing.out6.title", bodyKey: "landing.out6.body", to: "/packets/collect", linkKey: "landing.out6.link" },
+];
+
+/** `/es` front door — cobro first, no 1099/trades tour. */
+const LATAM_OUTCOMES: typeof AFTER_SIGN_OUTCOMES = [
+  { icon: "send", titleKey: "landing.out1.title", bodyKey: "landing.out1.body", to: "/cobro#send", linkKey: "landing.out1.link" },
+  { icon: "duplicate", titleKey: "landing.out4.title", bodyKey: "landing.out4.body", to: "/income-proof", linkKey: "landing.out4.link" },
+  { icon: "users", titleKey: "landing.out3.title", bodyKey: "landing.out3.body", to: "/packets/latam-contractor", linkKey: "landing.out3.link" },
+  { icon: "duplicate", titleKey: "landing.out6.title", bodyKey: "landing.out6.body", to: "/packets/collect", linkKey: "landing.out6.link" },
+  { icon: "users", titleKey: "dash.corridorTradeTitle", bodyKey: "dash.corridorTrade", to: "/packets/latam-trade", linkKey: "latamDesk.openKit" },
 ];
 
 const FAQ_KEYS: Array<{ qKey: string; aKey: string }> = [
@@ -303,6 +312,10 @@ export default function Landing() {
   const templatesTo = localizePath("/free-templates", locale);
   const constanciaTo = localizePath("/income-proof", locale);
   const watchTo = localizePath("/how-it-works", locale);
+  const latamDoor = locale === "es";
+  const cobroSendTo = `${localizePath("/cobro", locale)}#send`;
+  const cobroLoginNext = `${localizePath("/cobro", locale)}?send=1`;
+  const magicNext = latamDoor ? cobroLoginNext : prepareSampleTo;
   const emailTrimmed = heroEmail.trim();
   // Match Login: mount Turnstile whenever the site key is set so a token is ready before submit.
   // Keep the button clickable with an empty field so we can show "Email is missing" instead of
@@ -344,7 +357,7 @@ export default function Landing() {
     setHeroSubmitting(true);
     setHeroError(null);
     try {
-      await requestMagicLink(email, token ?? undefined, prepareSampleTo, locale);
+      await requestMagicLink(email, token ?? undefined, magicNext, locale);
       setHeroSent(true);
     } catch (err) {
       setHeroError(err instanceof Error ? err.message : t("common.error"));
@@ -431,7 +444,7 @@ export default function Landing() {
               </Link>
             </li>
             <li>
-              <Link to={localizePath("/cobro", locale)} onClick={() => track("landingpage_cta_clicked", { source: "hero_badge_cobro" })}>
+              <Link to={cobroSendTo} onClick={() => track("landingpage_cta_clicked", { source: "hero_badge_cobro" })}>
                 <FeatureIcon name="send" />
                 {t("hero.badge.cobro")}
               </Link>
@@ -448,7 +461,20 @@ export default function Landing() {
           </ul>
 
           {/* Trusted-by logos live in the Google Doc band (under the circle, above the email
-              form) so they read immediately mid-hero — not a separate strip below the fold. */}
+              form) so they read immediately mid-hero — not a separate strip below the fold.
+              `/es` is the LATAM door: cobro first, no Austrian logo strip, no sign-upload tour. */}
+          {latamDoor ? (
+            <div className="hero-latam-cta">
+              <Link
+                to={cobroSendTo}
+                className="hero-signup-btn hero-latam-cta-btn"
+                onClick={() => track("landingpage_cta_clicked", { source: "hero_latam_cobro" })}
+              >
+                {t("landing.out1.link")} →
+              </Link>
+              <p className="hero-cta-hint">{t("hero.hintLatam")}</p>
+            </div>
+          ) : (
           <div className="hero-upload-trust-zone">
             <PdfUploadCircle
               variant="hero"
@@ -494,17 +520,18 @@ export default function Landing() {
               }
             />
           </div>
+          )}
 
           {heroSent ? (
             <div className="hero-signup-sent" role="status">
               <p className="hero-signup-sent-title">{t("hero.sentTitle")}</p>
               <p className="hero-signup-sent-body">{t("hero.sentBody", { email: emailTrimmed })}</p>
               <Link
-                to={prepareSampleTo}
+                to={latamDoor ? cobroSendTo : prepareSampleTo}
                 className="hero-signup-sent-continue"
-                onClick={() => track("landingpage_cta_clicked", { source: "hero_continue_prepare" })}
+                onClick={() => track("landingpage_cta_clicked", { source: latamDoor ? "hero_continue_cobro" : "hero_continue_prepare" })}
               >
-                {t("hero.continuePrepare")} →
+                {latamDoor ? t("landing.out1.link") : t("hero.continuePrepare")} →
               </Link>
             </div>
           ) : (
@@ -533,7 +560,7 @@ export default function Landing() {
                     ? t("common.sending")
                     : pendingSubmit
                       ? t("common.verifying")
-                      : `${t("hero.startFree")} →`}
+                      : `${t(latamDoor ? "hero.startCobro" : "hero.startFree")} →`}
                 </button>
               </div>
               {needsTurnstile && heroEmailStarted && (
@@ -546,9 +573,29 @@ export default function Landing() {
               )}
             </form>
           )}
-          {!heroSent && <p className="hero-cta-hint">{t("hero.hint")}</p>}
+          {!heroSent && <p className="hero-cta-hint">{t(latamDoor ? "hero.hintLatamEmail" : "hero.hint")}</p>}
 
           <div className="hero-cta-row hero-cta-row-center">
+            {latamDoor ? (
+              <>
+                <Link
+                  to={prepareTo}
+                  className="hero-secondary-link"
+                  onClick={() => track("landingpage_cta_clicked", { source: "hero_sign_free" })}
+                >
+                  {t("hero.orSignFree")}
+                </Link>
+                <span className="hero-cta-row-sep">·</span>
+                <Link
+                  to={constanciaTo}
+                  className="hero-secondary-link"
+                  onClick={() => track("landingpage_cta_clicked", { source: "hero_open_constancia" })}
+                >
+                  {t("hero.orConstancia")}
+                </Link>
+              </>
+            ) : (
+              <>
             <Link
               to={watchTo}
               className="hero-watch-btn"
@@ -578,10 +625,14 @@ export default function Landing() {
             >
               {t("hero.orConstancia")}
             </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
 
+      {!latamDoor && (
+        <>
       <div className="audience-band" id="how-it-works">
         <div className="audience-inner">
           <h2 style={{ fontSize: 22, marginBottom: 0, textAlign: "center" }}>{t("how.title")}</h2>
@@ -599,14 +650,16 @@ export default function Landing() {
       </div>
 
       <FirstDocumentPrompt source="how" />
+        </>
+      )}
 
       <div className="core-features-band" id="after-they-sign">
         <div className="core-features-inner">
-          <h2 style={{ fontSize: 26, marginBottom: 8, textAlign: "center" }}>{t("landing.outcomesTitle")}</h2>
-          <p style={{ textAlign: "center", maxWidth: 560, margin: "0 auto" }}>{t("landing.outcomesSub")}</p>
+          <h2 style={{ fontSize: 26, marginBottom: 8, textAlign: "center" }}>{t(latamDoor ? "latamDesk.heroTitle" : "landing.outcomesTitle")}</h2>
+          <p style={{ textAlign: "center", maxWidth: 560, margin: "0 auto" }}>{t(latamDoor ? "latamDesk.heroSub" : "landing.outcomesSub")}</p>
           <div className="core-features-grid">
-            {AFTER_SIGN_OUTCOMES.map((f) => (
-              <div key={f.titleKey} className="core-feature-card">
+            {(latamDoor ? LATAM_OUTCOMES : AFTER_SIGN_OUTCOMES).map((f) => (
+              <div key={f.titleKey + f.to} className="core-feature-card">
                 <div className="core-feature-icon">
                   <FeatureIcon name={f.icon} />
                 </div>
@@ -650,7 +703,7 @@ export default function Landing() {
           feature cards would break the 2-column CSS grid (a full-span item here forces every
           later card down a row, out of alignment), so this sits right after the features section
           that Feature #1 leads instead — same visual position, without wrecking the grid. */}
-      <FirstDocumentPrompt source="features" />
+      {!latamDoor && <FirstDocumentPrompt source="features" />}
 
       <IntegrationsBand learnMoreTo="/mcp" />
 
