@@ -282,6 +282,10 @@ const es: Messages = {
   "hero.emailInvalid": "Introduce tu correo",
   "hero.turnstileRequired": "Completa la verificación e inténtalo de nuevo.",
   "hero.startFree": "Empezar a firmar gratis",
+  "hero.startCobro": "Entrar y cobrar",
+  "hero.orSignFree": "o firma un PDF gratis",
+  "hero.hintLatam": "PDF + tu Mercado Pago o PayPal. Sin firma. El siguiente paso es el formulario.",
+  "hero.hintLatamEmail": "Enlace mágico. El siguiente paso es el cobro — no un tour de firma.",
   "hero.sentTitle": "Revisa tu correo",
   "hero.sentBody":
     "Enviamos un enlace de acceso a {{email}}. Haz clic para crear tu cuenta gratis — caduca en 15 minutos.",

@@ -219,7 +219,7 @@ export default function Header() {
         </div>
         <div className="header-center">
           <Link
-            to="/es/latam"
+            to="/es"
             className="header-whatsapp-badge"
             title={t("hero.latamBadge")}
             onClick={() => track("landingpage_cta_clicked", { source: "header_latam_badge" })}
@@ -294,7 +294,7 @@ export default function Header() {
             {t("nav.templates")}
           </Link>
           <Link
-            to="/es/latam"
+            to="/es"
             className="header-mobile-nav-link"
             onClick={() => {
               setMenuOpen(false);

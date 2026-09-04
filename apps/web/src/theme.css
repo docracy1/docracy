@@ -2276,6 +2276,23 @@ select {
   background: var(--accent-hover);
 }
 
+.hero-latam-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0 18px;
+}
+
+a.hero-latam-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border-radius: 999px;
+  min-width: 220px;
+}
+
 .hero-watch-btn {
   display: inline-flex;
   align-items: center;
