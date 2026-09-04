@@ -1,15 +1,21 @@
 import { Hono } from "hono";
 import { requireAccount, requirePaidAccount, type AccountContext } from "../lib/auth";
 import {
+  applyPaidCheckout,
   clearPaymentFailed,
   findAccountIdByStripeCustomerId,
   getStripeCustomerId,
-  markAccountEnterprise,
+  isAccountPaid,
   markAccountPaid,
   markPaymentFailed,
-  setStripeCustomerId,
+  persistCheckoutSession,
 } from "../lib/billing";
 import { verifyAndExtract } from "../lib/billingProviders/stripe";
+import {
+  alertIfCheckoutDidNotUpgrade,
+  reconcileCheckoutForAccount,
+  stripeCustomerHasLiveSubscription,
+} from "../lib/billingReconcile";
 import { sanitizeAttribution, trackEvent } from "../lib/analytics";
 import type { Env } from "@docracy/shared";
 
@@ -43,16 +49,32 @@ billing.post("/checkout", requireAccount, async (c) => {
     return c.json({ error: "Ask your workspace owner to manage the subscription." }, 403);
   }
 
+  if (account.isPaid || (await isAccountPaid(c.env, account.id))) {
+    return c.json({ error: "This workspace already has an active subscription.", alreadyPaid: true }, 409);
+  }
+
+  const existingCustomerId = await getStripeCustomerId(c.env, account.id);
+  if (existingCustomerId && (await stripeCustomerHasLiveSubscription(c.env, existingCustomerId))) {
+    await applyPaidCheckout(c.env, { accountId: account.id, customerId: existingCustomerId });
+    return c.json({ error: "This workspace already has an active subscription.", alreadyPaid: true }, 409);
+  }
+
   const attribution = sanitizeAttribution(body.attribution);
   const params = new URLSearchParams({
     mode: "subscription",
     "line_items[0][price]": priceId,
     "line_items[0][quantity]": "1",
-    success_url: `${c.env.PUBLIC_APP_URL}/dashboard?checkout=success`,
+    success_url: `${c.env.PUBLIC_APP_URL}/dashboard?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${c.env.PUBLIC_APP_URL}/dashboard?checkout=cancelled`,
     client_reference_id: account.id,
-    customer_email: account.email,
   });
+  // Reuse the Stripe customer when we already have one so a second Checkout cannot mint a
+  // parallel subscription under a new customer for the same email.
+  if (existingCustomerId) {
+    params.set("customer", existingCustomerId);
+  } else {
+    params.set("customer_email", account.email);
+  }
   // The webhook (lib/billingProviders/stripe.ts) reads this off the completed session to decide
   // whether to also call markAccountEnterprise — same metadata shape as the old manually-created
   // Payment Link used, so no webhook-side changes were needed for this to work.
@@ -85,9 +107,12 @@ billing.post("/checkout", requireAccount, async (c) => {
     return c.json({ error: "Could not start checkout. Please try again." }, 502);
   }
 
-  const session = (await res.json()) as { url: string | null };
+  const session = (await res.json()) as { url: string | null; id?: string };
   if (!session.url) {
     return c.json({ error: "Could not start checkout. Please try again." }, 502);
+  }
+  if (session.id) {
+    await persistCheckoutSession(c.env, account.id, session.id);
   }
   // Gap vs checkout_completed = Stripe drop-off; gap vs upgrade_clicked = price bounce.
   trackEvent(c.env, {
@@ -107,9 +132,20 @@ billing.post("/webhook", async (c) => {
   const signature = c.req.header("Stripe-Signature") ?? null;
   const result = await verifyAndExtract(rawBody, signature, c.env);
   if (result?.type === "checkout_completed") {
-    await markAccountPaid(c.env, result.accountId, true);
-    if (result.customerId) await setStripeCustomerId(c.env, result.accountId, result.customerId);
-    if (result.isEnterprise) await markAccountEnterprise(c.env, result.accountId);
+    const upgraded = await applyPaidCheckout(c.env, {
+      accountId: result.accountId,
+      customerId: result.customerId,
+      isEnterprise: result.isEnterprise,
+    });
+    if (result.sessionId) await persistCheckoutSession(c.env, result.accountId, result.sessionId);
+    if (!upgraded) {
+      c.executionCtx.waitUntil(
+        alertIfCheckoutDidNotUpgrade(c.env, result.accountId, {
+          customerId: result.customerId,
+          sessionId: result.sessionId,
+        }).catch((err) => console.error("Billing mismatch alert failed:", err))
+      );
+    }
     trackEvent(c.env, {
       event: "checkout_completed",
       route: "billing",
@@ -130,6 +166,23 @@ billing.post("/webhook", async (c) => {
   // Always 200: Stripe retries (and eventually disables the endpoint) on non-2xx responses, and
   // "signature didn't verify" / "not an event type we act on" aren't retry-worthy conditions.
   return c.json({ ok: true });
+});
+
+/** Heal a missed checkout.session.completed webhook after Stripe redirects back to the dashboard. */
+billing.post("/reconcile", requireAccount, async (c) => {
+  const account = c.get("account")!;
+  if (account.id !== account.workspaceId) {
+    return c.json({ error: "Ask your workspace owner to manage the subscription." }, 403);
+  }
+  let sessionId: string | undefined;
+  try {
+    const body = await c.req.json<{ sessionId?: string }>();
+    sessionId = typeof body.sessionId === "string" ? body.sessionId.trim() : undefined;
+  } catch {
+    sessionId = undefined;
+  }
+  const result = await reconcileCheckoutForAccount(c.env, account.id, sessionId);
+  return c.json({ ok: true, paid: result.paid, reconciled: result.reconciled });
 });
 
 // Redirects a paid account to Stripe's hosted Customer Portal, where they can cancel or manage

@@ -618,6 +618,8 @@ const en: Messages = {
   "dash.sentTimes": "— sent {{count}} time",
   "dash.sentTimesPlural": "— sent {{count}} times",
   "dash.upgradeTitle": "Keep your signed files — $10/month",
+  "dash.checkoutConfirming": "Confirming your subscription…",
+  "dash.checkoutPending": "Payment received. If paid features aren't unlocked in a minute, email founder@docracy.io and we'll fix it.",
   "dash.upgradeBody":
     "Free signing deletes the PDF after 9 days. Paid keeps every signed contract until tax season, plus a 1099 CSV for your CPA, WhatsApp cobro without a signature, reusable templates, bulk send, and team tools. You are not paying for the signature.",
   "dash.deletesOn": "Deletes {{date}}",

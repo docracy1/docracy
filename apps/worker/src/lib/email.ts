@@ -973,6 +973,32 @@ export async function sendHealthAlert(
   await send(env, env.FEEDBACK_EMAIL, "Docracy healthcheck failure", `<p>${lines}</p>`, { emailType: "health_alert" });
 }
 
+/** Stripe Checkout succeeded (or was healed) without a matching paid account — founder-only. */
+export async function sendBillingMismatchAlert(
+  env: Env,
+  info: { kind: "healed" | "webhook_miss"; email: string; accountId: string; sessionId: string }
+): Promise<void> {
+  const healed = info.kind === "healed";
+  const subject = healed
+    ? "Docracy: missed Stripe webhook healed"
+    : "Docracy: Stripe checkout completed but account is still free";
+  const intro = healed
+    ? "Hourly reconcile found a completed Stripe Checkout Session whose Docracy account was still free, and upgraded it."
+    : "checkout.session.completed ran but the account is still free (missing row, or the paid UPDATE did not stick).";
+  const body = `
+    ${emailHeadline(healed ? "Missed billing webhook healed" : "Billing webhook did not upgrade")}
+    <p style="margin:0 0 16px 0;font-size:15px;color:${INK};line-height:1.5;">${intro}</p>
+    <p style="margin:0;font-size:14px;color:${INK};line-height:1.6;">
+      Email: ${escapeHtml(info.email)}<br>
+      Account: ${escapeHtml(info.accountId)}<br>
+      Stripe session: ${escapeHtml(info.sessionId || "(none)")}
+    </p>
+  `;
+  await send(env, env.FEEDBACK_EMAIL, subject, emailShell(env.PUBLIC_APP_URL, body), {
+    emailType: "billing_alert",
+  });
+}
+
 /** SPA hydrate / auth-shape failure — recipient is usually FEEDBACK_EMAIL / founder@. */
 export async function sendSpaSmokeAlert(
   env: Env,

@@ -66,6 +66,18 @@ describe("GET /api/auth/me", () => {
     const body = (await res.json()) as { isAdmin: boolean };
     expect(body.isAdmin).toBe(true);
   });
+
+  it("returns isPaid from D1 even when the session cache still says free", async () => {
+    const { env, d1 } = makeMockEnv();
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 1)`)
+      .bind("acct-1", "anna@example.com", new Date().toISOString())
+      .run();
+    const token = await createSession(env, MOCK_CTX, "acct-1", "anna@example.com", false, false, null, null);
+    const res = await auth.request("/me", { headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } }, env, MOCK_CTX);
+    const body = (await res.json()) as { account: { isPaid: boolean } | null };
+    expect(body.account?.isPaid).toBe(true);
+  });
 });
 
 describe("GET /api/auth/google", () => {

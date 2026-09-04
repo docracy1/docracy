@@ -158,6 +158,8 @@ const es: Messages = {
   "dash.upgradeBody":
     "Firmar borra el PDF a los 9 días. El plan de pago conserva cada contrato hasta temporada fiscal, más un CSV 1099 para tu contador, cobro por WhatsApp sin firma, plantillas reutilizables, envío masivo y herramientas de equipo. No estás pagando por la firma.",
   "dash.upgradeTitle": "Conserva tus archivos firmados — $10/mes",
+  "dash.checkoutConfirming": "Confirmando tu suscripción…",
+  "dash.checkoutPending": "Pago recibido. Si las funciones de pago no se activan en un minuto, escribe a founder@docracy.io y lo resolvemos.",
   "dash.deletesOn": "Se elimina el {{date}}",
   "dash.keepFile": "Conservar este archivo",
   "dash.copySignedLink": "Copiar enlace firmado + pago",

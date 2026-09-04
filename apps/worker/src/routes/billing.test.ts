@@ -40,13 +40,19 @@ describe("POST /api/billing/checkout", () => {
   });
 
   it("creates a Stripe checkout session and returns its URL", async () => {
-    const { env } = makeMockEnv({ STRIPE_SECRET_KEY: "sk_test_x", STRIPE_PRICE_ID: "price_x" });
+    const { env, d1 } = makeMockEnv({ STRIPE_SECRET_KEY: "sk_test_x", STRIPE_PRICE_ID: "price_x" });
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 0)`)
+      .bind("acct-1", "anna@example.com", new Date().toISOString())
+      .run();
     const ctx = makeCtx();
     const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, false, null, null);
 
     const fetchSpy = vi
       .spyOn(global, "fetch")
-      .mockResolvedValue(new Response(JSON.stringify({ url: "https://checkout.stripe.com/session/xyz" }), { status: 200 }));
+      .mockResolvedValue(
+        new Response(JSON.stringify({ id: "cs_test_xyz", url: "https://checkout.stripe.com/session/xyz" }), { status: 200 })
+      );
 
     const res = await billing.request(
       "/checkout",
@@ -64,6 +70,58 @@ describe("POST /api/billing/checkout", () => {
     );
     const callInit = fetchSpy.mock.calls[0][1] as RequestInit;
     expect(callInit.body as string).toContain("client_reference_id=acct-1");
+    expect(decodeURIComponent(callInit.body as string)).toContain("session_id={CHECKOUT_SESSION_ID}");
+
+    const row = (await d1
+      .prepare("SELECT stripe_checkout_session_id FROM accounts WHERE id = ?")
+      .bind("acct-1")
+      .first()) as { stripe_checkout_session_id: string | null } | null;
+    expect(row?.stripe_checkout_session_id).toBe("cs_test_xyz");
+  });
+
+  it("409s when the account is already paid", async () => {
+    const { env, d1 } = makeMockEnv({ STRIPE_SECRET_KEY: "sk_test_x", STRIPE_PRICE_ID: "price_x" });
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 1)`)
+      .bind("acct-1", "anna@example.com", new Date().toISOString())
+      .run();
+    const ctx = makeCtx();
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", true, false, null, null);
+    const fetchSpy = vi.spyOn(global, "fetch");
+
+    const res = await billing.request(
+      "/checkout",
+      { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } },
+      env,
+      ctx
+    );
+    expect(res.status).toBe(409);
+    const body: { alreadyPaid: boolean } = await res.json();
+    expect(body.alreadyPaid).toBe(true);
+    expect(fetchSpy).not.toHaveBeenCalled();
+  });
+
+  it("409s and upgrades when Stripe already has a live subscription for the customer", async () => {
+    const { env, d1 } = makeMockEnv({ STRIPE_SECRET_KEY: "sk_test_x", STRIPE_PRICE_ID: "price_x" });
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid, stripe_customer_id) VALUES (?, ?, ?, 0, ?)`)
+      .bind("acct-1", "anna@example.com", new Date().toISOString(), "cus_1")
+      .run();
+    const ctx = makeCtx();
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, false, null, null);
+    vi.spyOn(global, "fetch").mockResolvedValue(
+      new Response(JSON.stringify({ data: [{ status: "active" }] }), { status: 200 })
+    );
+
+    const res = await billing.request(
+      "/checkout",
+      { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } },
+      env,
+      ctx
+    );
+    expect(res.status).toBe(409);
+    const row = (await d1.prepare("SELECT is_paid FROM accounts WHERE id = ?").bind("acct-1").first()) as { is_paid: number };
+    expect(row.is_paid).toBe(1);
   });
 
   it("uses the enterprise price and sets metadata.plan when {plan: \"enterprise\"} is requested", async () => {
@@ -391,6 +449,56 @@ describe("POST /api/billing/webhook", () => {
       payment_failed_at: string | null;
     } | null;
     expect(row?.payment_failed_at).toBeNull();
+  });
+});
+
+describe("POST /api/billing/reconcile", () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  it("401s without a session", async () => {
+    const { env } = makeMockEnv();
+    const res = await billing.request("/reconcile", { method: "POST", body: "{}" }, env, MOCK_CTX);
+    expect(res.status).toBe(401);
+  });
+
+  it("upgrades from a completed Stripe Checkout Session when the webhook was missed", async () => {
+    const { env, d1 } = makeMockEnv({ STRIPE_SECRET_KEY: "sk_test_x" });
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 0)`)
+      .bind("acct-1", "anna@example.com", new Date().toISOString())
+      .run();
+    const ctx = makeCtx();
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, false, null, null);
+
+    vi.spyOn(global, "fetch").mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          id: "cs_test_1",
+          status: "complete",
+          payment_status: "paid",
+          client_reference_id: "acct-1",
+          customer: "cus_1",
+        }),
+        { status: 200 }
+      )
+    );
+
+    const res = await billing.request(
+      "/reconcile",
+      {
+        method: "POST",
+        headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId: "cs_test_1" }),
+      },
+      env,
+      ctx
+    );
+    expect(res.status).toBe(200);
+    const body: { paid: boolean; reconciled: boolean } = await res.json();
+    expect(body.paid).toBe(true);
+    expect(body.reconciled).toBe(true);
+    const row = (await d1.prepare("SELECT is_paid FROM accounts WHERE id = ?").bind("acct-1").first()) as { is_paid: number };
+    expect(row.is_paid).toBe(1);
   });
 });
 

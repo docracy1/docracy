@@ -43,6 +43,7 @@ import { runCompletionEmailSweep } from "./lib/completionEmails";
 import { runSpaSmokeAndAlert } from "./lib/spaSmoke";
 import { BLOG_WEEKLY_CRON, runWeeklyBlogPublish, isWeeklyBlogMondayUtc } from "./lib/blogWeekly";
 import { runWeeklyTemplateCatchUpIfEmpty, runWeeklyTemplatePublish } from "./lib/templateWeekly";
+import { reconcileStaleCheckouts } from "./lib/billingReconcile";
 import type { Env } from "@docracy/shared";
 
 const app = new Hono<{ Bindings: Env }>();
@@ -109,12 +110,13 @@ app.route("/api/unsubscribe", unsubscribeRoute);
 app.route("/api/webhooks/resend", resendWebhook);
 app.route("/api/webhooks/whatsapp", whatsappWebhook);
 
-// Hourly cron runs onboarding drip + completion nudges, plus a weekly-template catch-up when
-// /api/marketplace?origin=weekly is still empty (D1 migrations often never apply in CI). Daily
-// cron runs reminders/cleanup/health, and on Mondays (UTC) also publishes one queued SEO blog
-// post plus up to 10 FreeTemplate-quality Marketplace templates (docracy.com taxonomy). Branch
-// on event.cron so the hourly schedule does not re-fire daily sweeps. (No separate Monday cron
-// — account trigger limit.)
+// Hourly cron runs onboarding drip + completion nudges, a Stripe checkout reconcile for unpaid
+// accounts whose Checkout Session already completed (missed webhook), and a weekly-template
+// catch-up when /api/marketplace?origin=weekly is still empty (D1 migrations often never apply
+// in CI). Daily cron runs reminders/cleanup/health, and on Mondays (UTC) also publishes one
+// queued SEO blog post plus up to 10 FreeTemplate-quality Marketplace templates (docracy.com
+// taxonomy). Branch on event.cron so the hourly schedule does not re-fire daily sweeps. (No
+// separate Monday cron — account trigger limit.)
 // Offset to :07, not :00 — see wrangler.toml's [triggers] comment for why (thundering-herd 522s
 // observed right at the hour mark). Must exactly match the hourly entry in wrangler.toml's crons.
 const HOURLY_CRON = "7 * * * *";
@@ -143,6 +145,7 @@ export default {
           await Promise.all([
             runOnboardingEmailSweep(env).catch((err) => console.error("Onboarding email sweep failed:", err)),
             runCompletionEmailSweep(env).catch((err) => console.error("Completion-email sweep failed:", err)),
+            reconcileStaleCheckouts(env).catch((err) => console.error("Billing checkout reconcile failed:", err)),
           ]);
           // After smoke + email so this AI/PDF batch cannot starve the public Pages probes.
           await runWeeklyTemplateCatchUpIfEmpty(env).catch((err) =>

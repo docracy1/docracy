@@ -48,6 +48,7 @@ describe("verifyAndExtract (Stripe)", () => {
       customerId: "cus_1",
       isEnterprise: false,
       attribution: "",
+      sessionId: null,
     });
   });
 
@@ -63,6 +64,7 @@ describe("verifyAndExtract (Stripe)", () => {
       customerId: null,
       isEnterprise: false,
       attribution: "",
+      sessionId: null,
     });
   });
 
@@ -81,6 +83,7 @@ describe("verifyAndExtract (Stripe)", () => {
       customerId: null,
       isEnterprise: true,
       attribution: "",
+      sessionId: null,
     });
   });
 
@@ -105,6 +108,7 @@ describe("verifyAndExtract (Stripe)", () => {
       customerId: "cus_1",
       isEnterprise: false,
       attribution: "linkedin/post-09-price",
+      sessionId: null,
     });
   });
 

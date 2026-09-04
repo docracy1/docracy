@@ -165,7 +165,10 @@ auth.get("/google/callback", async (c) => {
 });
 
 auth.get("/me", optionalAccount, async (c) => {
-  const account = c.get("account");
+  const sessionToken = getCookie(c, SESSION_COOKIE_NAME);
+  const account = sessionToken
+    ? await resolveAccount(c.env, sessionToken, { forcePaidRefresh: true })
+    : c.get("account");
   const isAdmin = !!account && isAdminEmail(c.env, account.email);
   // Keep the founder notrack cookie fresh on every /me so Pages middleware pageviews (which only
   // see the cookie, not the session alone when forwarded) stay opted out.

@@ -288,6 +288,30 @@ describe("resolveAccount", () => {
     expect(account?.isPaid).toBe(true);
   });
 
+  it("forcePaidRefresh reads D1 even when the cache is still fresh", async () => {
+    const { env, d1, kv } = makeMockEnv();
+    const ctx = makeCtx();
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 1)`)
+      .bind("acct-1", "anna@example.com", new Date().toISOString())
+      .run();
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", false, false, null, null);
+    await ctx.flush();
+
+    const hash = [...kv._store.keys()].find((k) => k.startsWith("session:"))!;
+    const record = JSON.parse(kv._store.get(hash)!);
+    record.workspaceId = "acct-1";
+    record.isPaid = false;
+    record.isPaidCachedAt = new Date().toISOString();
+    kv._store.set(hash, JSON.stringify(record));
+
+    const cached = await resolveAccount(env, token);
+    expect(cached?.isPaid).toBe(false);
+
+    const fresh = await resolveAccount(env, token, { forcePaidRefresh: true });
+    expect(fresh?.isPaid).toBe(true);
+  });
+
   it("resolves a team member's workspaceId to the owner's account, and inherits the owner's isPaid", async () => {
     const { env, d1 } = makeMockEnv();
     const ctx = makeCtx();

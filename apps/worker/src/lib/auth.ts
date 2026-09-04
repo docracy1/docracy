@@ -356,7 +356,11 @@ async function resolveWorkspace(
  * every call and is the only thing that can 401 a request — D1 is never read on this hot path
  * except for this bounded refresh.
  */
-export async function resolveAccount(env: Env, sessionToken: string | undefined): Promise<AccountContext | null> {
+export async function resolveAccount(
+  env: Env,
+  sessionToken: string | undefined,
+  opts?: { forcePaidRefresh?: boolean }
+): Promise<AccountContext | null> {
   if (!sessionToken) return null;
   const hash = await hashOpaqueToken(sessionToken, env.TOKEN_SECRET);
   const record = await env.DOCRACY_KV.get<SessionRecord>(`session:${hash}`, "json");
@@ -367,7 +371,7 @@ export async function resolveAccount(env: Env, sessionToken: string | undefined)
   let workspaceId = record.workspaceId ?? record.accountId;
   let paymentFailedAt = record.paymentFailedAt ?? null;
   const cacheAgeMs = Date.now() - new Date(record.isPaidCachedAt).getTime();
-  if (env.DOCRACY_DB && (!record.workspaceId || cacheAgeMs > PAID_STATUS_REFRESH_SECONDS * 1000)) {
+  if (env.DOCRACY_DB && (opts?.forcePaidRefresh || !record.workspaceId || cacheAgeMs > PAID_STATUS_REFRESH_SECONDS * 1000)) {
     const resolved = await resolveWorkspace(env, record.accountId);
     if (resolved) {
       isPaid = resolved.isPaid;
