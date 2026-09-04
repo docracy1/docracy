@@ -25,7 +25,7 @@ export const PLAN_ROWS: Array<{
   { labelKey: "plan.dashboard", free: true, paid: true },
   { labelKey: "plan.templates", free: false, paid: true },
   { labelKey: "plan.bulkSend", free: false, paid: true },
-  { labelKey: "plan.customExpiry", free: "plan.val.days9", paid: "plan.val.days90" },
+  { labelKey: "plan.customExpiry", free: "plan.val.days9", paid: "plan.val.taxVault" },
   { labelKey: "plan.archiveReminder", free: true, paid: true },
   { labelKey: "plan.embedded", free: false, paid: true },
   { labelKey: "plan.contactsReassign", free: false, paid: true },

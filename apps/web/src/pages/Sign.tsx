@@ -10,6 +10,7 @@ import { useNoIndex } from "../lib/useNoIndex";
 import type { SignPayload } from "../lib/api";
 import type { DocField, StatusPayload } from "../lib/types";
 import { localizePath, useI18n, useT } from "../lib/i18n";
+import { signedPagePath } from "../lib/paidVault";
 
 function fieldIsFilled(f: DocField, values: Record<string, string>): boolean {
   const type = f.type ?? "signature";
@@ -115,6 +116,7 @@ export default function Sign({
   const [attachmentError, setAttachmentError] = useState<string | null>(null);
   const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
   const [conversionDismissed, setConversionDismissed] = useState(false);
+  const [copiedSigned, setCopiedSigned] = useState(false);
   const postTargetOrigin = allowedOrigins?.[0] || "*";
   const pendingAdvanceRef = useRef(false);
 
@@ -495,6 +497,25 @@ export default function Sign({
             >
               {t("sign.payCta", { amount: payment.amount, currency: payment.currency })}
             </a>
+          )}
+          {isFullySigned && token && (
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={async () => {
+                const url = `${window.location.origin}${signedPagePath(token, locale)}`;
+                try {
+                  await navigator.clipboard.writeText(url);
+                  setCopiedSigned(true);
+                  track("viral_cta_clicked", { source: "signer_copy_signed" });
+                  window.setTimeout(() => setCopiedSigned(false), 2000);
+                } catch {
+                  /* clipboard blocked */
+                }
+              }}
+            >
+              {copiedSigned ? t("common.copied") : t("signed.copyLink")}
+            </button>
           )}
         </div>
         {isFullySigned && payment && (

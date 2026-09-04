@@ -29,7 +29,7 @@ const FAQS = [
   },
   {
     q: "How long does Docracy keep my documents?",
-    a: "Anonymous signing chains (the free, no-signup flow) use a short retention window — 9 days after creation by default — after which the document and its signing state are deleted, or sooner once the chain completes and final copies are emailed out. Paid keeps signed PDFs up to 90 days.",
+    a: "Anonymous signing chains (the free, no-signup flow) use a short retention window — 9 days after creation by default — after which the document and its signing state are deleted, or sooner once the chain completes and final copies are emailed out. Paid keeps signed PDFs until the next April 15 or 13 months.",
   },
   {
     q: "How much does electronic signing with Docracy cost?",
@@ -329,7 +329,7 @@ export default function ElectronicSignatureGuide() {
           </li>
           <li style={{ marginBottom: 8 }}>
             <strong>Paid — $10/month flat</strong>, not per seat. Unlimited signers and team members, a
-            dashboard, reusable templates, bulk send, a 90-day signing window, embedded signing, webhooks,
+            dashboard, reusable templates, bulk send, a tax-year archive window, embedded signing, webhooks,
             an MCP connector, AI drafting/review tools, white-labeling, PIN-protected links, and cloud
             storage connectors.
           </li>

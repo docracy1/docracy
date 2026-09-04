@@ -83,6 +83,10 @@ export default function Docs() {
         <p>{t("docs.pay.body")}</p>
       </Section>
 
+      <Section id="signed-page" title={t("docs.signedPage.title")}>
+        <p>{t("docs.signedPage.body")}</p>
+      </Section>
+
       <Section id="contractor-kit" title={t("docs.packet.title")}>
         <p>
           {t("docs.packet.body")}{" "}

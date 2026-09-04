@@ -76,4 +76,7 @@ export interface StatusPayload {
   brandWorkspaceSlug?: string | null;
   /** Sender-owned payment link shown after everyone has signed. */
   paymentRequest?: { amount: string; currency: string; url: string };
+  title?: string | null;
+  expiresAt?: string;
+  completedAt?: string | null;
 }

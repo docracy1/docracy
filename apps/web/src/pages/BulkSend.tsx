@@ -10,6 +10,7 @@ import {
 } from "../lib/api";
 import { useT } from "../lib/i18n";
 import { useNoIndex } from "../lib/useNoIndex";
+import { paidVaultDays, PAID_TTL_MAX_DAYS } from "../lib/paidVault";
 
 const DEFAULT_TTL = 9;
 
@@ -32,6 +33,7 @@ export default function BulkSend() {
   const [rows, setRows] = useState<RecipientRow[]>([emptyRow(1)]);
   const [pasteText, setPasteText] = useState("");
   const [ttlDays, setTtlDays] = useState(DEFAULT_TTL);
+  const paidTtlMax = Math.min(PAID_TTL_MAX_DAYS, paidVaultDays());
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [results, setResults] = useState<BulkSendResultDoc[] | null>(null);
@@ -41,6 +43,7 @@ export default function BulkSend() {
       .then(async (res) => {
         setAccount(res.account);
         if (res.account?.isPaid) {
+          setTtlDays(Math.min(PAID_TTL_MAX_DAYS, paidVaultDays()));
           const { templates: list } = await fetchTemplates();
           setTemplates(list);
           if (list.length > 0) {
@@ -185,16 +188,17 @@ export default function BulkSend() {
               className="form-input"
               type="number"
               min={1}
-              max={90}
+              max={paidTtlMax}
               value={ttlDays}
               onChange={(e) => {
                 const n = Number(e.target.value);
                 if (!Number.isFinite(n)) return;
-                setTtlDays(Math.min(90, Math.max(1, Math.floor(n))));
+                setTtlDays(Math.min(paidTtlMax, Math.max(1, Math.floor(n))));
               }}
               style={{ width: 80 }}
               aria-label={t("bulkSend.retention")}
             />
+            <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 6 }}>{t("prepare.taxVaultHint")}</p>
           </div>
 
           {signerCount === 1 && (

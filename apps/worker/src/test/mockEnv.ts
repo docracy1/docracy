@@ -282,7 +282,7 @@ export function makeMockEnv(overrides: Partial<Env> = {}) {
     PUBLIC_WORKER_URL: "http://localhost:8787",
     FREE_TIER_MAX_SIGNERS: "2",
     DOC_TTL_DAYS: "9",
-    DOC_TTL_MAX_DAYS: "90",
+    DOC_TTL_MAX_DAYS: "500",
     FEEDBACK_EMAIL: "feedback-test@example.com",
     ...overrides,
   } as Env;

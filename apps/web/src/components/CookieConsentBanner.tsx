@@ -15,6 +15,8 @@ function shouldHideBanner(pathname: string): boolean {
     pathname.startsWith("/sign/") ||
     pathname.startsWith("/embed/") ||
     pathname.startsWith("/status/") ||
+    pathname.startsWith("/signed/") ||
+    pathname.startsWith("/es/firmado/") ||
     pathname.startsWith("/auth/")
   );
 }

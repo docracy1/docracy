@@ -43,6 +43,7 @@ const Sign = lazy(() => import("./pages/Sign"));
 const EmbedSign = lazy(() => import("./pages/EmbedSign"));
 const BulkSend = lazy(() => import("./pages/BulkSend"));
 const Status = lazy(() => import("./pages/Status"));
+const Signed = lazy(() => import("./pages/Signed"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
 const Trust = lazy(() => import("./pages/Trust"));
@@ -128,6 +129,8 @@ function AppRoutes() {
       <Route path="/prepare/sent" element={<PrepareSent />} />
       <Route path="/sign/:token" element={<Sign />} />
       <Route path="/status/:token" element={<Status />} />
+      <Route path="/signed/:token" element={<Signed />} />
+      <Route path="/es/firmado/:token" element={<Signed />} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />
       <Route path="/trust" element={<Trust />} />

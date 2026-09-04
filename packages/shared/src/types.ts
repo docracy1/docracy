@@ -251,7 +251,8 @@ export interface Env {
   PUBLIC_CONNECTOR_URL: string;
   FREE_TIER_MAX_SIGNERS: string;
   DOC_TTL_DAYS: string;
-  /** Max custom retention a paid account may set at create time (days). Defaults to 90 when unset. */
+  /** Max custom retention a paid account may set at create time (days). Defaults to 500
+   *  (tax-year vault ceiling) when unset. */
   DOC_TTL_MAX_DAYS?: string;
   FEEDBACK_EMAIL: string;
   /** Absent until a real Stripe account exists — billing routes must degrade gracefully (501),

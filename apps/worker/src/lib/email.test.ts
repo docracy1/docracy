@@ -249,6 +249,8 @@ describe("sendCompletionEmails", () => {
     expect(bodies[0]).toContain("Pay 150 MXN");
     expect(bodies[0]).toContain("https://paypal.me/acme");
     expect(bodies[0]).toContain("Docracy does not take this money");
+    expect(bodies[0]).toContain("/signed/");
+    expect(bodies[0]).toContain("Signed copy and pay");
   });
 
   it("does not double-email a preparer who was also a signer", async () => {

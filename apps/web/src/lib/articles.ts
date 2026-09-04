@@ -2762,7 +2762,7 @@ export const ARTICLES: ArticlePost[] = [
     slug: "keep-signed-contracts-get-paid",
     title: "Keep signed contracts — and get paid after they sign",
     description:
-      "Signing stays free. Paid keeps the PDF past 9 days. Add your PayPal or Mercado Pago link, then onboard US contractors with NDA, W-9, and agreement.",
+      "Signing stays free. Paid keeps the PDF until next April 15 or 13 months. Add your PayPal or Mercado Pago link, then onboard US contractors with NDA, W-9, and agreement.",
     publishedDate: "2026-09-04",
     cluster: "Product",
     blocks: [
@@ -2778,14 +2778,14 @@ export const ARTICLES: ArticlePost[] = [
         "A completed Docracy document is still a real signed PDF: audit trail, completion certificate, Bitcoin timestamp via OpenTimestamps. What Free does not do is store that file for you. Nine days after you send it, the PDF is deleted. A free account lists the send on the dashboard until that date. It does not stop the deletion."
       ),
       p(
-        "Paid is $10/month, flat, not per signature and not per seat. The job of that plan is to keep signed PDFs up to 90 days, plus the workflow around them — reusable templates, bulk send, team workspace, connectors. If you only needed two people to sign an NDA this afternoon, you do not need Paid. If you need the contract next quarter, you do."
+        "Paid is $10/month, flat, not per signature and not per seat. The job of that plan is to keep signed PDFs until the next April 15 or 13 months — long enough for a W-9 at 1099 time and a one-year lease — plus the workflow around them: reusable templates, bulk send, team workspace, connectors. If you only needed two people to sign an NDA this afternoon, you do not need Paid. If you need the contract next tax season, you do."
       ),
       p(
         "Before a file disappears, the preparer gets a named reminder: document title, counterparties, the delete date, and a one-click keep-file upgrade. The same countdown shows on the dashboard. That nag is not a dark pattern for charging signatures. It is the honest TTL, written on the document instead of buried in a pricing footnote."
       ),
       h2("Get paid after they sign — your checkout, not ours"),
       p(
-        "This is a Paid feature ($10/month), not a processing fee. When you prepare a document you add an amount, a currency (USD, MXN, COP, ARS, CLP, PEN, or BRL), and an https payment URL you already own. After the signing chain finishes, the last signer — and the completion email — see a pay button for that amount."
+        "This is a Paid feature ($10/month), not a processing fee. When you prepare a document you add an amount, a currency (USD, MXN, COP, ARS, CLP, PEN, or BRL), and an https payment URL you already own. After the signing chain finishes, the last signer, the completion email, and — if you invited over WhatsApp — a WhatsApp follow-up all point at a shareable page with the signed PDF and that pay button. The page outlives the signing tab for as long as the file is in the archive."
       ),
       p(
         "Docracy never takes the money, never stores card numbers, and never runs Stripe Connect. The link is yours: PayPal.me, a Stripe Payment Link, Mercado Pago, or any other https checkout you send people today. We earn the same $10 as the archive plan — not 2.9% of the invoice. That is the whole model: signing stays free; outcomes after the signature (keep the file, get paid) are Paid."
@@ -2796,7 +2796,7 @@ export const ARTICLES: ArticlePost[] = [
         "White-label workspaces hide Docracy's own upgrade CTAs; your payment link still belongs to you",
       ]),
       p(
-        "This is the LATAM- and US-shaped version of \"sign then pay\": the sender already has a way to collect money. Docracy just puts that link next to the finished contract instead of making you paste it into a separate WhatsApp thread — and charges a flat subscription instead of taking a cut."
+        "This is the LATAM- and US-shaped version of \"sign then pay\": the sender already has a way to collect money. Docracy puts that link on a page you can forward in WhatsApp all week, instead of hoping they still have the signing tab open — and charges a flat subscription instead of taking a cut."
       ),
       h2("One US contractor kit: NDA, W-9, contractor agreement"),
       p(
@@ -2825,7 +2825,7 @@ export const ARTICLES: ArticlePost[] = [
       h2("A few common questions"),
       h3("Does a free Docracy account keep my signed PDF?"),
       p(
-        "No. A free account puts the send on your dashboard until the 9-day TTL. The PDF is still deleted on that date. Paid keeps the file in the archive, up to 90 days."
+        "No. A free account puts the send on your dashboard until the 9-day TTL. The PDF is still deleted on that date. Paid keeps the file in the archive until the next April 15 or 13 months."
       ),
       h3("Does Docracy take a cut when I get paid after they sign?"),
       p(

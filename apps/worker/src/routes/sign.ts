@@ -28,6 +28,7 @@ import { uploadCompletedDocument } from "../lib/cloudConnectors";
 import { trackEvent, NOTRACK_COOKIE_NAME } from "../lib/analytics";
 import { getWorkspaceSlug, getLogoObject, hasCustomLogo, logoPath } from "../lib/branding";
 import { authenticateDocToken } from "../lib/docTokenAuth";
+import { sendWhatsAppCompletedReceipts } from "../lib/whatsapp";
 import { signToken } from "@docracy/shared";
 import {
   attachmentLimits,
@@ -133,6 +134,9 @@ function statusPayload(doc: Awaited<ReturnType<typeof getDoc>>) {
     voidedBy: doc.voidedBy ?? null,
     signerAttachmentGroups: signerAttachmentGroups.length > 0 ? signerAttachmentGroups : undefined,
     paymentRequest: doc.paymentRequest,
+    title: doc.title,
+    expiresAt: doc.expiresAt,
+    completedAt: doc.completedAt,
   };
 }
 
@@ -821,6 +825,11 @@ sign.post("/sign/:token", async (c) => {
 
     await putDoc(c.env, freshDoc);
     await sendCompletionEmails(c.env, freshDoc, finalBytes, finalHash, certificateBytes);
+    c.executionCtx.waitUntil(
+      sendWhatsAppCompletedReceipts(c.env, freshDoc).catch((err) =>
+        console.error(`WhatsApp completion receipts failed for doc ${freshDoc.docId} (non-fatal):`, err)
+      )
+    );
 
     if (freshDoc.accountId) {
       indexNonFatal(c.executionCtx, freshDoc.docId, "completed", indexCompleted(c.env, freshDoc));

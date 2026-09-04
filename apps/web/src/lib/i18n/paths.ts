@@ -167,9 +167,27 @@ function enPathFromAny(path: string): string | null {
   return EN_PATH_BY_ES[path] ?? (Object.prototype.hasOwnProperty.call(ES_PATH_BY_EN, path) ? path : null);
 }
 
+function signedReceiptFromPath(path: string): { locale: Locale; token: string } | null {
+  if (path.startsWith("/signed/")) {
+    const token = path.slice("/signed/".length);
+    return token ? { locale: "en", token } : null;
+  }
+  if (path.startsWith("/es/firmado/")) {
+    const token = path.slice("/es/firmado/".length);
+    return token ? { locale: "es", token } : null;
+  }
+  return null;
+}
+
+function signedReceiptPath(token: string, locale: Locale): string {
+  return locale === "es" ? `/es/firmado/${token}` : `/signed/${token}`;
+}
+
 /** Locale forced by a bilingual SEO URL, or null when the path is not in the map. */
 export function pathLocale(pathname: string): Locale | null {
   const path = cleanPath(pathname);
+  const signed = signedReceiptFromPath(path);
+  if (signed) return signed.locale;
   const tmpl = templateSlugFromPath(path);
   if (tmpl) {
     // Only SEO template pairs force locale from the URL; non-SEO /es/… URLs shouldn't exist.
@@ -191,6 +209,9 @@ export function localizePath(href: string, locale: Locale): string {
   const rawPath = qIdx >= 0 ? withoutHash.slice(0, qIdx) : withoutHash;
   const path = cleanPath(rawPath);
 
+  const signed = signedReceiptFromPath(path);
+  if (signed) return `${signedReceiptPath(signed.token, locale)}${query}${hash}`;
+
   const tmpl = templateSlugFromPath(path);
   if (tmpl) {
     // Non-SEO templates stay on English detail URLs to avoid thin EN-under-/es pages.
@@ -211,6 +232,8 @@ export function localizePath(href: string, locale: Locale): string {
 /** Alternate language URL for a bilingual path, or null if the path isn't bilingual. */
 export function alternatePath(pathname: string, target: Locale): string | null {
   const path = cleanPath(pathname);
+  const signed = signedReceiptFromPath(path);
+  if (signed) return signedReceiptPath(signed.token, target);
   const tmpl = templateSlugFromPath(path);
   if (tmpl) {
     if (!isSeoTemplateSlug(tmpl)) return null;
