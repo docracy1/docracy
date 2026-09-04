@@ -28,6 +28,8 @@ export interface FeaturePageContent {
   youtubeTitle?: string;
   /** Required with youtubeId — VideoObject uploadDate (YYYY-MM-DD or ISO DateTime). */
   youtubeUploadDate?: string;
+  /** When set, hreflang x-default points at this locale (constancia keyword pages are ES-lead). */
+  xDefault?: "en" | "es";
 }
 
 export const FEATURE_PAGES: FeaturePageContent[] = [
@@ -1186,6 +1188,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       { label: "WhatsApp signing (with PIN)", to: "/whatsapp-signing" },
       { label: "1099 season locker", to: "/1099-season" },
       { label: "LATAM contractor kit", to: "/packets/latam-contractor" },
+      { label: "Income proof packet", to: "/income-proof" },
     ],
   },
   {
@@ -1238,7 +1241,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     relatedLinks: [
       { label: "US contractor kit (W-9)", to: "/packets/us-contractor" },
       { label: "Free W-9 template", to: "/free-templates/w-9-form" },
-      { label: "Pricing", to: "/pricing" },
+      { label: "Income proof packet", to: "/income-proof" },
     ],
   },
   {
@@ -1294,6 +1297,275 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       { label: "US contractor kit (W-9)", to: "/packets/us-contractor" },
       { label: "WhatsApp cobro", to: "/cobro" },
       { label: "1099 season locker", to: "/1099-season" },
+      { label: "Income proof packet", to: "/income-proof" },
+    ],
+  },
+  {
+    slug: "proof-of-income",
+    xDefault: "es",
+    seoTitle: "Proof of Income Without Pay Stubs — Freelancer Packet | Docracy",
+    seoDescription:
+      "Need proof of income without pay stubs? Share a dated packet of signed contracts and cobros. Not a W-2, bank letter, or certified income letter. Paid $10/month.",
+    heroHeadline: "Proof of income when you don't have pay stubs.",
+    heroSubheadline:
+      "Landlords, banks, and CPAs ask for a letter. PayPal and Mercado Pago don't print one. Docracy packs the year you already signed and collected into a shareable URL.",
+    problem:
+      "If you earn through PayPal, Mercado Pago, or cobro, you don't get a W-2 or a stub. Screenshots of the app don't survive a rental application. A Word 'carta de ingresos' you wrote yourself looks like you wrote it yourself.",
+    solution:
+      "The constancia packet is not a new document type. It is the completed files already in your Paid vault — titles, dates, names you typed, amounts you typed — on one noindex URL. Spanish is the lead language: /es/constancia. English: /income-proof.",
+    features: [
+      {
+        title: "A URL a stranger can open",
+        body: "Year, your display name, each completed file, amounts you entered. Not a ZIP of PDFs in a chat.",
+      },
+      {
+        title: "Names, not emails",
+        body: "The public page shows counterparties by name only. Your login email never appears.",
+      },
+      {
+        title: "Honest about what it is not",
+        body: "Not a W-2, not a bank letter, not an employer certificate, not SAT or IRS e-file.",
+      },
+      {
+        title: "Built from cobro + signed contracts",
+        body: "WhatsApp cobros and signed agreements from the same calendar year sit in one list.",
+      },
+    ],
+    useCases: [
+      "Freelancers in Mexico or Colombia renting an apartment",
+      "Contractors who need a CPA packet without a W-2",
+      "Anyone paid on PayPal or Mercado Pago who is asked for 'prueba de ingresos'",
+    ],
+    faqs: [
+      {
+        question: "Is this a certified proof-of-income letter?",
+        answer:
+          "No. It is a dated index of documents you already completed on Docracy. A landlord or bank may still ask for a bank statement. We do not stamp, notarize, or verify identity.",
+      },
+      {
+        question: "Do you read my PayPal or Mercado Pago account?",
+        answer:
+          "No. Totals are the amounts you typed when you sent cobro or attached a payment link. We do not connect to a bank.",
+      },
+      {
+        question: "Where do I open the packet?",
+        answer:
+          "https://docracy.io/es/constancia — English: /income-proof. Keyword page you are on: /proof-of-income (Spanish: /es/prueba-de-ingresos).",
+      },
+      {
+        question: "Will Google index the shared link?",
+        answer: "No. Packet URLs are noindex. The marketing pages are indexable so people can find the product.",
+      },
+      {
+        question: "Is this free?",
+        answer:
+          "Signing stays free. The packet needs the Paid vault so files still exist when someone asks. $10/month.",
+      },
+    ],
+    ctaLabel: "Open the income proof packet",
+    ctaTo: "/income-proof",
+    relatedLinks: [
+      { label: "Constancia / income proof tool", to: "/income-proof" },
+      { label: "WhatsApp cobro", to: "/cobro" },
+      { label: "1099 season locker", to: "/1099-season" },
+      { label: "LATAM contractor kit", to: "/packets/latam-contractor" },
+    ],
+  },
+  {
+    slug: "signed-work-order",
+    seoTitle: "Signed Work Order & Change Order Online | Docracy",
+    seoDescription:
+      "Get a work order and change order signed free, then collect a deposit on your PayPal or Square link. For electricians, HVAC, and trades. Not Jobber. Not a lien waiver.",
+    heroHeadline: "Get the work order signed before you buy the materials.",
+    heroSubheadline:
+      "Free sequential e-sign for the estimate and the change order. Paid cobro sends your own checkout on WhatsApp. We do not run your calendar and we do not invent a mechanic's lien form.",
+    problem:
+      "The customer said yes on the phone. Jobber wants a subscription to send the estimate. Excel does not get a signature. You buy materials, then they ghost.",
+    solution:
+      "Docracy's trades packet is three real sends: work order, change order, then cobro with the Square/PayPal/Venmo URL you already have. Signing is free for two people. Cobro is the $10/month plan — not a cut of the job.",
+    features: [
+      { title: "Work order first", body: "Scope, estimated cost, dates — signed before you start." },
+      { title: "Change order when it moves", body: "A second PDF so extras are not a handshake." },
+      { title: "Your checkout", body: "Cobro pastes PayPal, Square, or Venmo. Docracy never takes the deposit." },
+      { title: "Honest about liens", body: "No fake state-specific waiver. Ask a construction lawyer for that." },
+    ],
+    useCases: [
+      "Electricians collecting a deposit after the estimate is accepted",
+      "HVAC change orders mid-job",
+      "Landscapers who invoice on WhatsApp",
+    ],
+    faqs: [
+      {
+        question: "Is this a replacement for Jobber?",
+        answer: "No. Keep Jobber for scheduling. Docracy signs the PDF and sends your payment link.",
+      },
+      {
+        question: "Where is the kit?",
+        answer: "https://docracy.io/packets/trades — Spanish: /es/kit-oficios. Keyword page you are on: /signed-work-order.",
+      },
+      {
+        question: "Do you file a mechanic's lien?",
+        answer: "No. We do not ship a valid state waiver or file liens.",
+      },
+      {
+        question: "Can I send the invoice on WhatsApp without another signature?",
+        answer: "Yes on Paid. That is cobro — the last step of this packet.",
+      },
+    ],
+    ctaLabel: "Open the trades job packet",
+    ctaTo: "/packets/trades",
+    relatedLinks: [
+      { label: "Trades kit", to: "/packets/trades" },
+      { label: "WhatsApp cobro", to: "/cobro" },
+      { label: "Request a W-9", to: "/packets/collect" },
+    ],
+  },
+  {
+    slug: "contractor-payment-proof",
+    seoTitle: "Prove You Paid Contractors — CPA Packet | Docracy",
+    seoDescription:
+      "Share a year of signed W-9s, contracts, and cobros with your CPA. HMAC URL, names not emails. Not IRS e-file. No TIN OCR. Paid $10/month.",
+    heroHeadline: "Prove you paid them — without emailing a ZIP of PDFs.",
+    heroSubheadline:
+      "The 1099 locker already lists the year. Copy a link your CPA can open. Titles, names, amounts you typed. We do not file 1099-NEC and we never read Social Security numbers off the page.",
+    problem:
+      "January arrives. The CPA wants a list. Gmail search for W-9 returns nothing because free e-sign deleted the file in nine days.",
+    solution:
+      "Paid keeps the PDFs. The locker exports CSV and now mints a shareable HMAC page — the inverse of a freelancer constancia. Public page is noindex. Your login email never appears.",
+    features: [
+      { title: "CPA URL", body: "Same year list as the locker, stripped of emails and payment URLs." },
+      { title: "CSV still there", body: "Download for the spreadsheet people." },
+      { title: "Includes cobro", body: "WhatsApp pay-only sends count in the same calendar year." },
+      { title: "No TIN OCR", body: "Hand the signed W-9 PDF to the CPA. We do not extract SSNs." },
+    ],
+    useCases: [
+      "US studios paying 1099 contractors",
+      "Agencies that also cobro LATAM designers",
+      "Anyone whose CPA asked for proof of payment, not a filed 1099",
+    ],
+    faqs: [
+      {
+        question: "Will Docracy e-file my 1099s?",
+        answer: "No. Archive + CSV + a shareable index. You or your CPA still file.",
+      },
+      {
+        question: "Where do I copy the link?",
+        answer: "https://docracy.io/1099-season — Spanish: /es/temporada-1099. Paid accounts see Copy CPA link.",
+      },
+      {
+        question: "Is this the same as the freelancer constancia?",
+        answer: "Opposite direction. Constancia is 'I earned this.' This page is 'I paid them.'",
+      },
+      {
+        question: "Do you extract taxpayer IDs?",
+        answer: "No.",
+      },
+    ],
+    ctaLabel: "Open the 1099 locker",
+    ctaTo: "/1099-season",
+    relatedLinks: [
+      { label: "1099 season locker", to: "/1099-season" },
+      { label: "Request a W-9", to: "/packets/collect" },
+      { label: "Income proof (they earned)", to: "/income-proof" },
+    ],
+  },
+  {
+    slug: "latam-export-documents",
+    xDefault: "es",
+    seoTitle: "LatAm Export Documents to Sign — Not Customs Software | Docracy",
+    seoDescription:
+      "Sign a sales agreement and purchase order for intra-LatAm trade, then cobro. Not a packing list filer, not a certificate of origin, not aduana. Spanish lead.",
+    heroHeadline: "The commercial packet. Not the pedimento.",
+    heroSubheadline:
+      "Nearshoring still needs a signed sale and a purchase order. Docracy signs those PDFs. We do not auto-fill customs forms, quote freight, or invent a certificado de origen.",
+    problem:
+      "Intra-LatAm trade is a stack of PDFs plus a broker. SaaS that promises to 'digitize aduana' is a different company — and a liability if the form is wrong.",
+    solution:
+      "The kit is honest: sales agreement, purchase order, then Paid cobro with Mercado Pago. Spanish URL /es/kit-comercio is x-default. Hire a customs broker for the filing.",
+    features: [
+      { title: "Two templates you actually sign", body: "Existing sales agreement and purchase order." },
+      { title: "Then cobro", body: "Your checkout. Not a payment processor." },
+      { title: "Spanish lead", body: "/es/kit-comercio and /es/documentos-exportacion." },
+      { title: "What we will not ship", body: "No packing-list generator, no origin certificate, no freight API." },
+    ],
+    useCases: [
+      "A Mexican seller shipping to Colombia with a broker on the side",
+      "US buyers who need the commercial docs signed before the container moves",
+      "Anyone who Googled certificado de origen and almost downloaded a fake PDF",
+    ],
+    faqs: [
+      {
+        question: "Is this customs middleware?",
+        answer: "No. We do not file with aduana or compare freight rates.",
+      },
+      {
+        question: "Where is the kit?",
+        answer: "https://docracy.io/es/kit-comercio — English: /packets/latam-trade. This keyword page: /es/documentos-exportacion.",
+      },
+      {
+        question: "Do you have a certificate of origin?",
+        answer: "No. Preferential origin documents are official. We do not invent one.",
+      },
+      {
+        question: "Can I get paid after they sign?",
+        answer: "Yes on Paid cobro with Mercado Pago or PayPal.",
+      },
+    ],
+    ctaLabel: "Open the commercial kit",
+    ctaTo: "/packets/latam-trade",
+    relatedLinks: [
+      { label: "LATAM commercial kit", to: "/packets/latam-trade" },
+      { label: "LATAM contractor kit", to: "/packets/latam-contractor" },
+      { label: "WhatsApp cobro", to: "/cobro" },
+    ],
+  },
+  {
+    slug: "request-w9",
+    seoTitle: "Send Me Your W-9 or NDA | Docracy",
+    seoDescription:
+      "Collect a W-9 or mutual NDA by sending the template. For RFC / Constancia de Situación Fiscal they upload their PDF. No SAT form. No TIN OCR. Free to sign.",
+    heroHeadline: "Send me your W-9. Or your NDA. Or the RFC PDF you already have.",
+    heroSubheadline:
+      "You stay the sender so the completed file lands in your vault. IRS W-9 and mutual NDA are free templates. We do not publish an RFC or W-8BEN.",
+    problem:
+      "Agencies DM 'send me your W-9' and get a photo in WhatsApp. Free e-sign deletes it before tax season. Fake RFC generators are how people get in trouble with SAT.",
+    solution:
+      "The collect kit is three sends: W-9, NDA, then their existing RFC/CSF PDF. Paid keeps the files and unlocks the 1099 locker share for your CPA.",
+    features: [
+      { title: "You send, they sign", body: "Not an anonymous drop-box. The file is yours to archive." },
+      { title: "Real IRS W-9", body: "Existing template. We never OCR the TIN." },
+      { title: "RFC is their PDF", body: "Upload what SAT already issued. We do not invent the form." },
+      { title: "Then the locker", body: "Share the year with a CPA from /1099-season." },
+    ],
+    useCases: [
+      "US companies onboarding 1099 contractors",
+      "Agencies collecting NDAs before a pitch",
+      "Paying someone in Mexico who has a Constancia de Situación Fiscal, not a W-9",
+    ],
+    faqs: [
+      {
+        question: "Is this a magic link they fill without me creating a send?",
+        answer: "No. You send each document. That is how it appears in your Paid vault.",
+      },
+      {
+        question: "Where do I start?",
+        answer: "https://docracy.io/packets/collect — Spanish: /es/pide-documentos.",
+      },
+      {
+        question: "Do you have a W-8BEN or RFC form?",
+        answer: "No. We do not invent IRS or SAT forms.",
+      },
+      {
+        question: "Will you read Social Security numbers?",
+        answer: "No TIN OCR.",
+      },
+    ],
+    ctaLabel: "Open the request kit",
+    ctaTo: "/packets/collect",
+    relatedLinks: [
+      { label: "Collect kit", to: "/packets/collect" },
+      { label: "US contractor kit", to: "/packets/us-contractor" },
+      { label: "CPA payment proof", to: "/contractor-payment-proof" },
     ],
   },
 ];
@@ -1438,6 +1710,7 @@ export function getWhatsappInvoicePageEs(): FeaturePageContent {
       { label: "Firmar por WhatsApp (con PIN)", to: "/whatsapp-signing" },
       { label: "Casillero temporada 1099", to: "/1099-season" },
       { label: "Kit contratista LATAM", to: "/packets/latam-contractor" },
+      { label: "Constancia de ingresos", to: "/income-proof" },
     ],
   };
 }
@@ -1493,7 +1766,7 @@ export function getContractorRecordsPageEs(): FeaturePageContent {
     relatedLinks: [
       { label: "Kit de contratista en EE. UU. (W-9)", to: "/packets/us-contractor" },
       { label: "Plantilla gratis de W-9", to: "/free-templates/w-9-form" },
-      { label: "Precios", to: "/pricing" },
+      { label: "Constancia de ingresos", to: "/income-proof" },
     ],
   };
 }
@@ -1552,6 +1825,290 @@ export function getHireAbroadPageEs(): FeaturePageContent {
       { label: "Kit de contratista en EE. UU. (W-9)", to: "/packets/us-contractor" },
       { label: "Cobro por WhatsApp", to: "/cobro" },
       { label: "Casillero temporada 1099", to: "/1099-season" },
+      { label: "Constancia de ingresos", to: "/income-proof" },
+    ],
+  };
+}
+
+export function getProofOfIncomePageEs(): FeaturePageContent {
+  return {
+    slug: "proof-of-income",
+    xDefault: "es",
+    seoTitle: "Prueba de ingresos sin recibos de nómina | Docracy",
+    seoDescription:
+      "¿Te piden prueba de ingresos y no tienes recibos de nómina? Comparte un paquete con contratos y cobros. No es una carta certificada ni un W-2. Plan de $10/mes.",
+    heroHeadline: "Prueba de ingresos cuando no hay recibos de nómina.",
+    heroSubheadline:
+      "El arrendador, el banco o el contador piden una carta. PayPal y Mercado Pago no la imprimen. Docracy junta el año que ya firmaste y cobraste en una URL que puedes compartir.",
+    problem:
+      "Si cobras por PayPal, Mercado Pago o cobro, no te dan W-2 ni stub. Una captura de la app no pasa una solicitud de renta. Una 'carta de ingresos' que escribiste tú se ve exactamente así.",
+    solution:
+      "La constancia no es un tipo de documento nuevo. Son los archivos completados que ya están en tu bóveda de pago — títulos, fechas, nombres y montos que tú escribiste — en un enlace noindex. El español es el idioma principal: /es/constancia. Inglés: /income-proof.",
+    features: [
+      {
+        title: "Una URL que puede abrir un desconocido",
+        body: "Año, tu nombre como quieres que aparezca, cada archivo completado, montos que anotaste. No un ZIP en el chat.",
+      },
+      {
+        title: "Nombres, no correos",
+        body: "La página pública muestra contrapartes solo por nombre. Tu correo de cuenta no aparece.",
+      },
+      {
+        title: "Honesta sobre lo que no es",
+        body: "No es un W-2, no es una carta del banco, no es un certificado de empleador, no es declaración ante el SAT ni el IRS.",
+      },
+      {
+        title: "Sale de cobros y contratos firmados",
+        body: "Los cobros por WhatsApp y los acuerdos firmados del mismo año calendario van en una sola lista.",
+      },
+    ],
+    useCases: [
+      "Freelancers en México o Colombia que rentan un departamento",
+      "Contratistas que necesitan un paquete para el contador sin W-2",
+      "Quien cobra por PayPal o Mercado Pago y le piden prueba de ingresos",
+    ],
+    faqs: [
+      {
+        question: "¿Esto es una carta certificada de ingresos?",
+        answer:
+          "No. Es un índice con fecha de documentos que ya completaste en Docracy. Un arrendador o un banco aún puede pedir un estado de cuenta. No sellamos, no notariamos ni verificamos identidad.",
+      },
+      {
+        question: "¿Leen mi cuenta de PayPal o Mercado Pago?",
+        answer:
+          "No. Los totales son los montos que tú escribiste al enviar un cobro o pegar un enlace de pago. No nos conectamos a ningún banco.",
+      },
+      {
+        question: "¿Dónde abro el paquete?",
+        answer:
+          "https://docracy.io/es/constancia — inglés: /income-proof. Esta página de búsqueda es /es/prueba-de-ingresos.",
+      },
+      {
+        question: "¿Google indexa el enlace compartido?",
+        answer: "No. Las URLs del paquete son noindex. Las páginas de marketing sí se indexan para que te encuentren.",
+      },
+      {
+        question: "¿Es gratis?",
+        answer:
+          "Firmar sigue gratis. El paquete necesita la bóveda de pago para que los archivos existan cuando te los pidan. $10/mes.",
+      },
+    ],
+    ctaLabel: "Abrir la constancia de ingresos",
+    ctaTo: "/income-proof",
+    relatedLinks: [
+      { label: "Herramienta de constancia", to: "/income-proof" },
+      { label: "Cobro por WhatsApp", to: "/cobro" },
+      { label: "Casillero temporada 1099", to: "/1099-season" },
+      { label: "Kit contratista LATAM", to: "/packets/latam-contractor" },
+    ],
+  };
+}
+
+export function getSignedWorkOrderPageEs(): FeaturePageContent {
+  return {
+    slug: "signed-work-order",
+    seoTitle: "Orden de trabajo y change order firmados | Docracy",
+    seoDescription:
+      "Firma la orden de trabajo y el change order gratis, luego cobra con tu PayPal o Square. Para electricistas, HVAC y oficios. No es Jobber. No es un waiver de gravamen.",
+    heroHeadline: "Firma la orden de trabajo antes de comprar los materiales.",
+    heroSubheadline:
+      "Firma secuencial gratis para el presupuesto y el change order. El cobro de pago envía tu propio checkout por WhatsApp. No llevamos tu calendario ni inventamos un formulario de gravamen.",
+    problem:
+      "El cliente dijo que sí por teléfono. Jobber pide una suscripción para enviar el presupuesto. Excel no obtiene una firma. Compras materiales y luego desaparecen.",
+    solution:
+      "El kit de oficios de Docracy son tres envíos reales: orden de trabajo, change order y luego cobro con la URL de Square/PayPal/Venmo que ya tienes. Firmar es gratis para dos personas. El cobro es el plan de $10/mes — no un recorte del trabajo.",
+    features: [
+      { title: "Orden de trabajo primero", body: "Alcance, costo estimado, fechas — firmado antes de empezar." },
+      { title: "Change order cuando se mueve", body: "Un segundo PDF para que los extras no sean un apretón de manos." },
+      { title: "Tu checkout", body: "El cobro pega PayPal, Square o Venmo. Docracy nunca cobra el depósito." },
+      { title: "Honesto sobre gravámenes", body: "No hay un waiver falso por estado. Pregunta a un abogado de construcción." },
+    ],
+    useCases: [
+      "Electricistas que cobran un anticipo después de aceptar el presupuesto",
+      "Change orders de HVAC a mitad de obra",
+      "Jardineros que facturan por WhatsApp",
+    ],
+    faqs: [
+      {
+        question: "¿Esto reemplaza a Jobber?",
+        answer: "No. Quédate con Jobber para el calendario. Docracy firma el PDF y envía tu enlace de pago.",
+      },
+      {
+        question: "¿Dónde está el kit?",
+        answer: "https://docracy.io/es/kit-oficios — inglés: /packets/trades. Esta página de búsqueda: /es/orden-de-trabajo-firmada.",
+      },
+      {
+        question: "¿Presentan un mechanic’s lien?",
+        answer: "No. No enviamos un waiver estatal válido ni presentamos gravámenes.",
+      },
+      {
+        question: "¿Puedo mandar la factura por WhatsApp sin otra firma?",
+        answer: "Sí en el plan de pago. Eso es cobro — el último paso de este kit.",
+      },
+    ],
+    ctaLabel: "Abrir el kit de oficios",
+    ctaTo: "/packets/trades",
+    relatedLinks: [
+      { label: "Kit oficios", to: "/packets/trades" },
+      { label: "Cobro por WhatsApp", to: "/cobro" },
+      { label: "Pedir un W-9", to: "/packets/collect" },
+    ],
+  };
+}
+
+export function getContractorPaymentProofPageEs(): FeaturePageContent {
+  return {
+    slug: "contractor-payment-proof",
+    seoTitle: "Comprobante de pago a contratistas — paquete CPA | Docracy",
+    seoDescription:
+      "Comparte un año de W-9s, contratos y cobros firmados con tu contador. URL HMAC, nombres no correos. No es e-file del IRS. Sin OCR de TIN. Plan de $10/mes.",
+    heroHeadline: "Prueba que les pagaste — sin mandar un ZIP de PDFs.",
+    heroSubheadline:
+      "El casillero 1099 ya lista el año. Copia un enlace que tu CPA puede abrir. Títulos, nombres, montos que escribiste. No presentamos 1099-NEC y nunca leemos números de seguro social de la página.",
+    problem:
+      "Llega enero. El contador quiere una lista. Buscar W-9 en Gmail no da nada porque la firma gratis borró el archivo a los nueve días.",
+    solution:
+      "El plan de pago conserva los PDFs. El casillero exporta CSV y ahora genera una página HMAC para compartir — lo inverso de una constancia de freelancer. La página pública es noindex. Tu correo de login nunca aparece.",
+    features: [
+      { title: "URL para el CPA", body: "La misma lista del año que el casillero, sin correos ni URLs de pago." },
+      { title: "CSV sigue ahí", body: "Descarga para quien vive en la hoja de cálculo." },
+      { title: "Incluye cobro", body: "Los envíos de cobro por WhatsApp cuentan en el mismo año calendario." },
+      { title: "Sin OCR de TIN", body: "Entrega el PDF del W-9 firmado al CPA. No extraemos SSN." },
+    ],
+    useCases: [
+      "Estudios en EE. UU. que pagan contratistas 1099",
+      "Agencias que también cobran a diseñadores en LATAM",
+      "Quien el CPA pidió prueba de pago, no un 1099 presentado",
+    ],
+    faqs: [
+      {
+        question: "¿Docracy presenta mis 1099 ante el IRS?",
+        answer: "No. Archivo + CSV + un índice para compartir. Tú o tu CPA siguen presentando.",
+      },
+      {
+        question: "¿Dónde copio el enlace?",
+        answer: "https://docracy.io/es/temporada-1099 — inglés: /1099-season. Las cuentas de pago ven Copiar enlace CPA.",
+      },
+      {
+        question: "¿Es lo mismo que la constancia del freelancer?",
+        answer: "Dirección opuesta. La constancia es «yo cobré esto». Esta página es «yo les pagué».",
+      },
+      {
+        question: "¿Extraen identificaciones fiscales?",
+        answer: "No.",
+      },
+    ],
+    ctaLabel: "Abrir el casillero 1099",
+    ctaTo: "/1099-season",
+    relatedLinks: [
+      { label: "Casillero temporada 1099", to: "/1099-season" },
+      { label: "Pedir un W-9", to: "/packets/collect" },
+      { label: "Constancia (ellos cobraron)", to: "/income-proof" },
+    ],
+  };
+}
+
+export function getLatamExportDocumentsPageEs(): FeaturePageContent {
+  return {
+    slug: "latam-export-documents",
+    xDefault: "es",
+    seoTitle: "Documentos comerciales LATAM — no software de aduana | Docracy",
+    seoDescription:
+      "Firma un contrato de compraventa y una orden de compra para comercio intra-LATAM, luego cobro. No es packing list, no es certificado de origen, no es aduana. Español primero.",
+    heroHeadline: "El paquete comercial. No el pedimento.",
+    heroSubheadline:
+      "El nearshoring sigue necesitando una venta firmada y una orden de compra. Docracy firma esos PDFs. No llenamos formularios de aduana, no cotizamos flete ni inventamos un certificado de origen.",
+    problem:
+      "El comercio intra-LATAM es una pila de PDFs más un agente. El SaaS que promete «digitalizar aduana» es otra empresa — y un riesgo si el formulario está mal.",
+    solution:
+      "El kit es honesto: contrato de compraventa, orden de compra y luego cobro de pago con Mercado Pago. La URL en español /es/kit-comercio es x-default. Contrata un agente aduanal para la presentación.",
+    features: [
+      { title: "Dos plantillas que sí firmas", body: "Contrato de compraventa y orden de compra que ya existen." },
+      { title: "Luego cobro", body: "Tu checkout. No un procesador de pagos." },
+      { title: "Español primero", body: "/es/kit-comercio y /es/documentos-exportacion." },
+      { title: "Lo que no vamos a enviar", body: "No hay generador de packing list, ni certificado de origen, ni API de flete." },
+    ],
+    useCases: [
+      "Un vendedor en México que envía a Colombia con un agente al lado",
+      "Compradores en EE. UU. que necesitan los papeles comerciales firmados antes del contenedor",
+      "Quien buscó certificado de origen y casi descargó un PDF falso",
+    ],
+    faqs: [
+      {
+        question: "¿Esto es middleware de aduanas?",
+        answer: "No. No presentamos ante aduana ni comparamos fletes.",
+      },
+      {
+        question: "¿Dónde está el kit?",
+        answer: "https://docracy.io/es/kit-comercio — inglés: /packets/latam-trade. Esta página: /es/documentos-exportacion.",
+      },
+      {
+        question: "¿Tienen certificado de origen?",
+        answer: "No. Los documentos de origen preferencial son oficiales. No inventamos uno.",
+      },
+      {
+        question: "¿Puedo cobrar después de que firmen?",
+        answer: "Sí, cobro de pago con Mercado Pago o PayPal.",
+      },
+    ],
+    ctaLabel: "Abrir el kit comercial",
+    ctaTo: "/packets/latam-trade",
+    relatedLinks: [
+      { label: "Kit comercial LATAM", to: "/packets/latam-trade" },
+      { label: "Kit contratista LATAM", to: "/packets/latam-contractor" },
+      { label: "Cobro por WhatsApp", to: "/cobro" },
+    ],
+  };
+}
+
+export function getRequestW9PageEs(): FeaturePageContent {
+  return {
+    slug: "request-w9",
+    seoTitle: "Pídeme tu W-9 o NDA | Docracy",
+    seoDescription:
+      "Reúne un W-9 o NDA mutuo enviando la plantilla. Para RFC / Constancia de Situación Fiscal suben su PDF. No hay formulario del SAT. Sin OCR de TIN. Firmar es gratis.",
+    heroHeadline: "Pídeme tu W-9. O tu NDA. O el PDF de RFC que ya tienes.",
+    heroSubheadline:
+      "Tú sigues siendo quien envía para que el archivo completado caiga en tu bóveda. El W-9 del IRS y el NDA mutuo son plantillas gratis. No publicamos un RFC ni un W-8BEN.",
+    problem:
+      "Las agencias mandan «pásame tu W-9» y reciben una foto por WhatsApp. La firma gratis borra el archivo antes de la temporada fiscal. Los generadores falsos de RFC son cómo la gente se mete en problemas con el SAT.",
+    solution:
+      "El kit de solicitud son tres envíos: W-9, NDA y luego su PDF de RFC/CSF. El plan de pago conserva los archivos y desbloquea el casillero 1099 para tu CPA.",
+    features: [
+      { title: "Tú envías, ellos firman", body: "No es un buzón anónimo. El archivo es tuyo para archivar." },
+      { title: "W-9 real del IRS", body: "Plantilla existente. Nunca leemos el TIN con OCR." },
+      { title: "El RFC es su PDF", body: "Suben lo que el SAT ya emitió. No inventamos el formulario." },
+      { title: "Luego el casillero", body: "Comparte el año con un CPA desde /es/temporada-1099." },
+    ],
+    useCases: [
+      "Empresas en EE. UU. que incorporan contratistas 1099",
+      "Agencias que piden NDA antes de un pitch",
+      "Pagar a alguien en México que tiene Constancia de Situación Fiscal, no un W-9",
+    ],
+    faqs: [
+      {
+        question: "¿Es un enlace mágico que llenan sin que yo cree un envío?",
+        answer: "No. Tú envías cada documento. Así aparece en tu bóveda de pago.",
+      },
+      {
+        question: "¿Por dónde empiezo?",
+        answer: "https://docracy.io/es/pide-documentos — inglés: /packets/collect.",
+      },
+      {
+        question: "¿Tienen un W-8BEN o un formulario RFC?",
+        answer: "No. No inventamos formularios del IRS ni del SAT.",
+      },
+      {
+        question: "¿Van a leer números de seguro social?",
+        answer: "Sin OCR de TIN.",
+      },
+    ],
+    ctaLabel: "Abrir el kit de solicitud",
+    ctaTo: "/packets/collect",
+    relatedLinks: [
+      { label: "Kit de solicitud", to: "/packets/collect" },
+      { label: "Kit contratista EE. UU.", to: "/packets/us-contractor" },
+      { label: "Comprobante de pago CPA", to: "/contractor-payment-proof" },
     ],
   };
 }
@@ -1562,6 +2119,11 @@ const ES_FEATURE_GETTERS: Record<string, () => FeaturePageContent> = {
   "whatsapp-invoice": getWhatsappInvoicePageEs,
   "1099-contractor-records": getContractorRecordsPageEs,
   "hire-contractor-abroad": getHireAbroadPageEs,
+  "proof-of-income": getProofOfIncomePageEs,
+  "signed-work-order": getSignedWorkOrderPageEs,
+  "contractor-payment-proof": getContractorPaymentProofPageEs,
+  "latam-export-documents": getLatamExportDocumentsPageEs,
+  "request-w9": getRequestW9PageEs,
 };
 
 /** Locale-aware feature page content — ES routes use Spanish copy. */

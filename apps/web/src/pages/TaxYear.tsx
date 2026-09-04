@@ -19,8 +19,10 @@ export default function TaxYear() {
   const [year, setYear] = useState(yearNow);
   const [account, setAccount] = useState<Account | null | undefined>(undefined);
   const [docs, setDocs] = useState<TaxYearDocument[] | null>(null);
+  const [shareUrl, setShareUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [upgrading, setUpgrading] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   usePageMeta(t("taxYear.seoTitle"), t("taxYear.seoDescription"), {
     canonicalPath: locale === "es" ? "/es/temporada-1099" : "/1099-season",
@@ -36,11 +38,15 @@ export default function TaxYear() {
   useEffect(() => {
     if (!account?.isPaid) {
       setDocs(null);
+      setShareUrl(null);
       return;
     }
     setError(null);
     fetchTaxYear(year, locale)
-      .then((res) => setDocs(res.documents))
+      .then((res) => {
+        setDocs(res.documents);
+        setShareUrl(res.shareUrl ?? null);
+      })
       .catch((err) => setError(err instanceof Error ? err.message : t("common.error")));
   }, [account?.isPaid, year, locale, t]);
 
@@ -87,6 +93,18 @@ export default function TaxYear() {
     a.click();
     URL.revokeObjectURL(url);
     track("viral_cta_clicked", { source: "tax_year_csv" });
+  };
+
+  const onCopyShare = async () => {
+    if (!shareUrl) return;
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      track("viral_cta_clicked", { source: "payer_copy" });
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      /* clipboard blocked */
+    }
   };
 
   const onUpgrade = async () => {
@@ -169,6 +187,16 @@ export default function TaxYear() {
                 <button type="button" className="btn-primary" onClick={downloadCsv} disabled={docs.length === 0}>
                   {t("taxYear.downloadCsv")}
                 </button>
+                <button
+                  type="button"
+                  className="btn-secondary"
+                  style={{ marginLeft: 8 }}
+                  onClick={onCopyShare}
+                  disabled={!shareUrl}
+                >
+                  {copied ? t("common.copied") : t("taxYear.copyShare")}
+                </button>
+                <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 8 }}>{t("taxYear.shareHint")}</p>
                 <div style={{ marginTop: 16 }}>
                   {docs.length === 0 ? (
                     <p style={{ color: "var(--mute)" }}>{t("taxYear.empty")}</p>
@@ -200,6 +228,8 @@ export default function TaxYear() {
 
         <p style={{ marginTop: 24, fontSize: 14 }}>
           <Link to={localizePath("/cobro", locale)}>{t("footer.cobro")}</Link>
+          {" · "}
+          <Link to={localizePath("/income-proof", locale)}>{t("footer.constancia")}</Link>
           {" · "}
           <Link to={localizePath("/packets/latam-contractor", locale)}>{t("footer.latamPacket")}</Link>
           {" · "}

@@ -31,7 +31,11 @@ export function isSpaAppPath(pathname: string): boolean {
     pathname.startsWith("/embed/") ||
     pathname.startsWith("/team/") ||
     pathname.startsWith("/go/") ||
-    pathname.startsWith("/outreach/")
+    pathname.startsWith("/outreach/") ||
+    pathname.startsWith("/income-proof/") ||
+    pathname.startsWith("/es/constancia/") ||
+    pathname.startsWith("/1099-season/") ||
+    pathname.startsWith("/es/temporada-1099/")
   );
 }
 
@@ -69,7 +73,7 @@ export async function staticHtmlExists(env: { ASSETS: Fetcher }, origin: string,
       // Missing files that fall through `/* /index.html 200` look identical to the homepage.
       if (!body || body === (await getIndexBody())) continue;
       // Extra guard: homepage hero h1 must not appear on a real prerendered leaf page.
-      if (body.includes("The fastest way to create and sign agreements")) continue;
+      if (body.includes("Keep a record they will accept")) continue;
       return true;
     } catch {
       // try next candidate

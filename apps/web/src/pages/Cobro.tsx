@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { createCobro, fetchMe, startCheckout, type Account } from "../lib/api";
 import { markLatamPacketStepSent, LATAM_CONTRACTOR_PACKET_SLUG } from "../lib/latamContractorPacket";
+import { isJobPacketId, jobPacketPath, markJobPacketStepSent } from "../lib/jobPackets";
 import { localizePath, useI18n } from "../lib/i18n";
 import { signedPagePath } from "../lib/paidVault";
 import { usePageMeta } from "../lib/usePageMeta";
@@ -102,6 +103,8 @@ export default function Cobro() {
       });
       if (packetSlug === LATAM_CONTRACTOR_PACKET_SLUG) {
         markLatamPacketStepSent("cobro");
+      } else if (isJobPacketId(packetSlug)) {
+        markJobPacketStepSent(packetSlug, "cobro");
       }
       setSent(result);
       track("landingpage_cta_clicked", { source: "cobro" });
@@ -176,6 +179,11 @@ export default function Cobro() {
                     <Link to={localizePath("/packets/latam-contractor", locale)}>{t("latamPacket.backToKit")}</Link>
                   </p>
                 )}
+                {isJobPacketId(packetSlug) && (
+                  <p>
+                    <Link to={jobPacketPath(packetSlug, locale)}>{t("packet.backToKit")}</Link>
+                  </p>
+                )}
               </>
             ) : (
               <>
@@ -223,6 +231,8 @@ export default function Cobro() {
 
         <p style={{ marginTop: 24, fontSize: 14 }}>
           <Link to={localizePath("/1099-season", locale)}>{t("footer.taxYear")}</Link>
+          {" · "}
+          <Link to={localizePath("/income-proof", locale)}>{t("footer.constancia")}</Link>
           {" · "}
           <Link to={localizePath("/packets/latam-contractor", locale)}>{t("footer.latamPacket")}</Link>
           {" · "}

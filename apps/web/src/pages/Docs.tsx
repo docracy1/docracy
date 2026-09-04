@@ -115,6 +115,41 @@ export default function Docs() {
         </p>
       </Section>
 
+      <Section id="constancia" title={t("docs.constancia.title")}>
+        <p>
+          {t("docs.constancia.body")}{" "}
+          <Link to={localizePath("/income-proof", locale)}>{t("footer.constancia")}</Link>.
+        </p>
+      </Section>
+
+      <Section id="trades-kit" title={t("docs.tradesPacket.title")}>
+        <p>
+          {t("docs.tradesPacket.body")}{" "}
+          <Link to={localizePath("/packets/trades", locale)}>{t("footer.tradesPacket")}</Link>.
+        </p>
+      </Section>
+
+      <Section id="latam-trade-kit" title={t("docs.latamTradePacket.title")}>
+        <p>
+          {t("docs.latamTradePacket.body")}{" "}
+          <Link to={localizePath("/packets/latam-trade", locale)}>{t("footer.latamTradePacket")}</Link>.
+        </p>
+      </Section>
+
+      <Section id="collect-kit" title={t("docs.collectPacket.title")}>
+        <p>
+          {t("docs.collectPacket.body")}{" "}
+          <Link to={localizePath("/packets/collect", locale)}>{t("footer.collectPacket")}</Link>.
+        </p>
+      </Section>
+
+      <Section id="payer-share" title={t("docs.payerShare.title")}>
+        <p>
+          {t("docs.payerShare.body")}{" "}
+          <Link to={localizePath("/1099-season", locale)}>{t("footer.taxYear")}</Link>.
+        </p>
+      </Section>
+
       <Section id="cloud-connectors" title={t("docs.cloudConnectors.title")}>
         <p>
           {t("docs.cloudConnectors.body1")}{" "}

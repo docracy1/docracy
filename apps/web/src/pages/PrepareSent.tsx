@@ -14,6 +14,16 @@ import {
   latamPacketPreparePath,
   nextLatamPacketStep,
 } from "../lib/latamContractorPacket";
+import {
+  isJobPacketId,
+  JOB_PACKETS,
+  jobPacketBlankPreparePath,
+  jobPacketCobroPath,
+  jobPacketPath,
+  jobPacketPreparePath,
+  nextJobPacketStep,
+  type JobPacketId,
+} from "../lib/jobPackets";
 import { signedPagePath } from "../lib/paidVault";
 import { track } from "../lib/track";
 
@@ -167,6 +177,46 @@ export default function PrepareSent() {
           return (
             <div className="card" style={{ marginTop: 20, borderColor: "var(--primary)" }}>
               <p style={{ marginBottom: 8, fontWeight: 600 }}>{t("latamPacket.nextTitle")}</p>
+              <p style={{ fontSize: 14, color: "var(--mute)", marginBottom: 12 }}>{label}</p>
+              <Link to={to} className="btn-primary" style={{ textDecoration: "none" }}>
+                {t("packet.nextCta")}
+              </Link>
+            </div>
+          );
+        })()}
+
+      {isJobPacketId(state.packetSlug) &&
+        (() => {
+          const id = state.packetSlug as JobPacketId;
+          const def = JOB_PACKETS[id];
+          const p = def.i18nPrefix;
+          const next = nextJobPacketStep(id, state.sentTemplateSlug);
+          if (!next) {
+            return (
+              <div className="card" style={{ marginTop: 20 }}>
+                <p style={{ marginBottom: 8, fontWeight: 600 }}>{t(`${p}.kitDone`)}</p>
+                <p style={{ fontSize: 14, color: "var(--mute)", marginBottom: 12 }}>{t(`${p}.kitDoneSub`)}</p>
+                <Link to={jobPacketPath(id, locale)} className="btn-secondary" style={{ textDecoration: "none" }}>
+                  {t("packet.backToKit")}
+                </Link>
+              </div>
+            );
+          }
+          const to =
+            next.kind === "cobro"
+              ? jobPacketCobroPath(id, locale)
+              : next.kind === "prepare"
+                ? jobPacketBlankPreparePath(id, locale)
+                : jobPacketPreparePath(id, next.slug, locale);
+          const label =
+            next.kind === "cobro"
+              ? t(`${p}.cobroStepTitle`)
+              : next.kind === "prepare"
+                ? t(`${p}.prepareStepTitle`)
+                : t(`${p}.tpl.${next.slug}.name`);
+          return (
+            <div className="card" style={{ marginTop: 20, borderColor: "var(--primary)" }}>
+              <p style={{ marginBottom: 8, fontWeight: 600 }}>{t(`${p}.nextTitle`)}</p>
               <p style={{ fontSize: 14, color: "var(--mute)", marginBottom: 12 }}>{label}</p>
               <Link to={to} className="btn-primary" style={{ textDecoration: "none" }}>
                 {t("packet.nextCta")}

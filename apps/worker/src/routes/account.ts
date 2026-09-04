@@ -24,6 +24,22 @@ import {
   MAX_COBRO_REMIND_DAYS,
 } from "../lib/cobro";
 import { parseTaxYear, taxYearBounds, hydrateTaxYearRow } from "../lib/taxYear";
+import {
+  getConstanciaProfile,
+  isPdfBytes,
+  listCompletedInYear,
+  listConstanciaReceipts,
+  MAX_CONSTANCIA_RECEIPTS,
+  MAX_RECEIPT_BYTES,
+  mintConstanciaShare,
+  normalizeSubjectName,
+  putConstanciaProfile,
+  putConstanciaReceipts,
+  receiptObjectKey,
+  sanitizeReceiptFilename,
+  totalsByCurrency,
+} from "../lib/constancia";
+import { mintPayerShare } from "../lib/payer";
 
 type Variables = { account: AccountContext | null };
 const account = new Hono<{ Bindings: Env; Variables: Variables }>();
@@ -434,7 +450,8 @@ account.get("/tax-year", requirePaidAccount, async (c) => {
   const year = parsed;
   const locale: Locale = c.req.query("locale") === "es" ? "es" : "en";
   if (!c.env.DOCRACY_DB) {
-    return c.json({ year, documents: [] });
+    const share = await mintPayerShare(c.env, acct.workspaceId, year, locale);
+    return c.json({ year, documents: [], shareToken: share.shareToken, shareUrl: share.shareUrl });
   }
 
   const { start, end } = taxYearBounds(year);
@@ -452,7 +469,92 @@ account.get("/tax-year", requirePaidAccount, async (c) => {
     .all<{ doc_id: string; title: string; completed_at: string; expires_at: string }>();
 
   const documents = await Promise.all(results.map((r) => hydrateTaxYearRow(c.env, r, locale)));
-  return c.json({ year, documents });
+  const share = await mintPayerShare(c.env, acct.workspaceId, year, locale);
+  return c.json({ year, documents, shareToken: share.shareToken, shareUrl: share.shareUrl });
+});
+
+account.get("/constancia", requirePaidAccount, async (c) => {
+  const acct = c.get("account")!;
+  const parsed = parseTaxYear(c.req.query("year"));
+  if (typeof parsed === "object") return c.json(parsed, 400);
+  const year = parsed;
+  const locale: Locale = c.req.query("locale") === "es" ? "es" : "en";
+  const [profile, documents, share, receipts] = await Promise.all([
+    getConstanciaProfile(c.env, acct.workspaceId),
+    listCompletedInYear(c.env, acct.workspaceId, year, locale),
+    mintConstanciaShare(c.env, acct.workspaceId, year, locale),
+    listConstanciaReceipts(c.env, acct.workspaceId, year),
+  ]);
+  return c.json({
+    year,
+    subjectName: profile?.subjectName ?? "",
+    shareToken: share.shareToken,
+    shareUrl: share.shareUrl,
+    documents,
+    totals: totalsByCurrency(documents),
+    receipts,
+  });
+});
+
+account.post("/constancia/profile", requirePaidAccount, async (c) => {
+  const acct = c.get("account")!;
+  let body: { subjectName?: unknown };
+  try {
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: "Invalid JSON" }, 400);
+  }
+  const name = normalizeSubjectName(body.subjectName);
+  if (typeof name === "object") return c.json(name, 400);
+  const profile = await putConstanciaProfile(c.env, acct.workspaceId, name);
+  return c.json({ subjectName: profile.subjectName });
+});
+
+account.post("/constancia/receipts", requirePaidAccount, async (c) => {
+  const acct = c.get("account")!;
+  const form = await c.req.parseBody();
+  const pdfFile = form["pdf"];
+  const yearRaw = form["year"];
+  if (!(pdfFile instanceof File) || typeof yearRaw !== "string") {
+    return c.json({ error: "Expected multipart form with 'pdf' file and 'year'" }, 400);
+  }
+  const parsed = parseTaxYear(yearRaw);
+  if (typeof parsed === "object") return c.json(parsed, 400);
+  const year = parsed;
+  if (pdfFile.size > MAX_RECEIPT_BYTES) {
+    return c.json({ error: `PDF must be under ${MAX_RECEIPT_BYTES / (1024 * 1024)}MB` }, 400);
+  }
+  const filename = sanitizeReceiptFilename(pdfFile.name);
+  if (typeof filename === "object") return c.json(filename, 400);
+  const bytes = new Uint8Array(await pdfFile.arrayBuffer());
+  if (!isPdfBytes(bytes)) return c.json({ error: "Upload a PDF (PayPal, Mercado Pago, or bank export)" }, 400);
+
+  const existing = await listConstanciaReceipts(c.env, acct.workspaceId, year);
+  if (existing.length >= MAX_CONSTANCIA_RECEIPTS) {
+    return c.json({ error: `At most ${MAX_CONSTANCIA_RECEIPTS} extra PDFs per year` }, 400);
+  }
+  const id = crypto.randomUUID();
+  const meta = { id, filename, uploadedAt: new Date().toISOString(), size: bytes.byteLength };
+  await c.env.DOCRACY_DOCS.put(receiptObjectKey(acct.workspaceId, year, id), bytes, {
+    httpMetadata: { contentType: "application/pdf" },
+  });
+  const files = [...existing, meta];
+  await putConstanciaReceipts(c.env, acct.workspaceId, year, files);
+  return c.json({ receipts: files });
+});
+
+account.delete("/constancia/receipts/:id", requirePaidAccount, async (c) => {
+  const acct = c.get("account")!;
+  const id = c.req.param("id");
+  const parsed = parseTaxYear(c.req.query("year"));
+  if (typeof parsed === "object") return c.json(parsed, 400);
+  const year = parsed;
+  const existing = await listConstanciaReceipts(c.env, acct.workspaceId, year);
+  const next = existing.filter((f) => f.id !== id);
+  if (next.length === existing.length) return c.json({ error: "Not found" }, 404);
+  await c.env.DOCRACY_DOCS.delete(receiptObjectKey(acct.workspaceId, year, id));
+  await putConstanciaReceipts(c.env, acct.workspaceId, year, next);
+  return c.json({ receipts: next });
 });
 
 account.post("/cobro", requirePaidAccount, async (c) => {

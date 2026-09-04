@@ -261,9 +261,9 @@ const routes = [
     // to change copy), so withMeta() below is a no-op on those two fields for this route alone.
     urlPath: "/",
     outFile: "index.html",
-    title: "Docracy.io – Simple and secure e-signatures for businesses",
+    title: "Docracy — Free E-Sign + Shareable Income Proof",
     description:
-      "Create, send, and sign documents in minutes — free for up to two signers, no account required. Watch how Docracy works, then start from a template or your own PDF.",
+      "Sign contracts free — 2 signers, no account. Paid packs the year into a constancia a landlord or CPA can open. Not a W-2 or bank letter. $10/month.",
     locale: "en",
     alternates: { en: "/", es: "/es" },
   },
@@ -495,9 +495,9 @@ const routes = [
   {
     urlPath: "/es",
     outFile: "es.html",
-    title: "Docracy.io – Firmas electrónicas simples y seguras",
+    title: "Docracy — Firma gratis y constancia de ingresos",
     description:
-      "Crea, envía y firma documentos en minutos — gratis hasta dos firmantes, sin necesidad de cuenta. Mira cómo funciona Docracy y empieza con una plantilla o tu propio PDF.",
+      "Firma contratos gratis — 2 firmantes, sin cuenta. El plan de pago arma el año en una constancia. No es un W-2 ni carta bancaria. $10/mes.",
     locale: "es",
     alternates: { en: "/", es: "/es" },
   },
@@ -612,6 +612,48 @@ const routes = [
     description: getFeaturePageContent("hire-contractor-abroad", "es").seoDescription,
     locale: "es",
     alternates: { en: "/hire-contractor-abroad", es: "/es/contratar-en-el-extranjero" },
+  },
+  {
+    urlPath: "/es/prueba-de-ingresos",
+    outFile: "es/prueba-de-ingresos.html",
+    title: getFeaturePageContent("proof-of-income", "es").seoTitle,
+    description: getFeaturePageContent("proof-of-income", "es").seoDescription,
+    locale: "es",
+    alternates: { en: "/proof-of-income", es: "/es/prueba-de-ingresos" },
+    xDefault: "es",
+  },
+  {
+    urlPath: "/es/orden-de-trabajo-firmada",
+    outFile: "es/orden-de-trabajo-firmada.html",
+    title: getFeaturePageContent("signed-work-order", "es").seoTitle,
+    description: getFeaturePageContent("signed-work-order", "es").seoDescription,
+    locale: "es",
+    alternates: { en: "/signed-work-order", es: "/es/orden-de-trabajo-firmada" },
+  },
+  {
+    urlPath: "/es/comprobante-pago-contratistas",
+    outFile: "es/comprobante-pago-contratistas.html",
+    title: getFeaturePageContent("contractor-payment-proof", "es").seoTitle,
+    description: getFeaturePageContent("contractor-payment-proof", "es").seoDescription,
+    locale: "es",
+    alternates: { en: "/contractor-payment-proof", es: "/es/comprobante-pago-contratistas" },
+  },
+  {
+    urlPath: "/es/documentos-exportacion",
+    outFile: "es/documentos-exportacion.html",
+    title: getFeaturePageContent("latam-export-documents", "es").seoTitle,
+    description: getFeaturePageContent("latam-export-documents", "es").seoDescription,
+    locale: "es",
+    alternates: { en: "/latam-export-documents", es: "/es/documentos-exportacion" },
+    xDefault: "es",
+  },
+  {
+    urlPath: "/es/pedir-w9",
+    outFile: "es/pedir-w9.html",
+    title: getFeaturePageContent("request-w9", "es").seoTitle,
+    description: getFeaturePageContent("request-w9", "es").seoDescription,
+    locale: "es",
+    alternates: { en: "/request-w9", es: "/es/pedir-w9" },
   },
   {
     urlPath: "/docs",
@@ -861,6 +903,62 @@ const routes = [
     alternates: { en: "/packets/latam-contractor", es: "/es/kit-contratista-latam" },
   },
   {
+    urlPath: "/packets/trades",
+    outFile: "packets/trades.html",
+    title: "Signed Work Order & Change Order, Then Get Paid | Docracy",
+    description:
+      "Sign the estimate and change order free, then send cobro with your PayPal or Square link. Not Jobber. Not a state lien waiver. $10/mo for cobro.",
+    locale: "en",
+    alternates: { en: "/packets/trades", es: "/es/kit-oficios" },
+  },
+  {
+    urlPath: "/es/kit-oficios",
+    outFile: "es/kit-oficios.html",
+    title: "Orden de trabajo y change order firmados, luego cobra | Docracy",
+    description:
+      "Firma el presupuesto y el change order gratis, luego cobro con tu PayPal o Square. No es Jobber. No es un waiver estatal. $10/mes para cobro.",
+    locale: "es",
+    alternates: { en: "/packets/trades", es: "/es/kit-oficios" },
+  },
+  {
+    urlPath: "/packets/latam-trade",
+    outFile: "packets/latam-trade.html",
+    title: "LatAm Commercial Documents — Not Customs Filing | Docracy",
+    description:
+      "Sign a sales agreement and purchase order, then cobro. Not a packing list for aduana, not a certificate of origin. EN + Spanish.",
+    locale: "en",
+    alternates: { en: "/packets/latam-trade", es: "/es/kit-comercio" },
+    xDefault: "es",
+  },
+  {
+    urlPath: "/es/kit-comercio",
+    outFile: "es/kit-comercio.html",
+    title: "Documentos comerciales LATAM — no presentación aduanera | Docracy",
+    description:
+      "Firma un contrato de compraventa y una orden de compra, luego cobro. No es packing list ni certificado de origen. Español primero.",
+    locale: "es",
+    alternates: { en: "/packets/latam-trade", es: "/es/kit-comercio" },
+    xDefault: "es",
+  },
+  {
+    urlPath: "/packets/collect",
+    outFile: "packets/collect.html",
+    title: "Send Me Your W-9 or NDA — Request Link | Docracy",
+    description:
+      "Collect a W-9 or NDA by sending the template. For RFC / CSF they upload their PDF. We do not invent an SAT form. Free to sign.",
+    locale: "en",
+    alternates: { en: "/packets/collect", es: "/es/pide-documentos" },
+  },
+  {
+    urlPath: "/es/pide-documentos",
+    outFile: "es/pide-documentos.html",
+    title: "Pídeme tu W-9 o NDA — Docracy",
+    description:
+      "Reúne un W-9 o NDA enviando la plantilla. Para RFC / CSF suben su PDF. No inventamos un formulario del SAT. Firmar es gratis.",
+    locale: "es",
+    alternates: { en: "/packets/collect", es: "/es/pide-documentos" },
+  },
+  {
     urlPath: "/1099-season",
     outFile: "1099-season.html",
     title: "1099 Season Locker — Signed W-9s, Contracts & CPA CSV | Docracy",
@@ -895,6 +993,26 @@ const routes = [
       "Envía un PDF y tu enlace de PayPal, Stripe o Mercado Pago por WhatsApp. Sin firma. Docracy nunca cobra el dinero. Plan de $10/mes.",
     locale: "es",
     alternates: { en: "/cobro", es: "/es/cobro" },
+  },
+  {
+    urlPath: "/income-proof",
+    outFile: "income-proof.html",
+    title: "Income Proof Packet for Freelancers — Docracy",
+    description:
+      "Share a year of signed files and cobros as income proof. Not a W-2, bank letter, or employer certificate. Paid $10/mo — signing stays free.",
+    locale: "en",
+    alternates: { en: "/income-proof", es: "/es/constancia" },
+    xDefault: "es",
+  },
+  {
+    urlPath: "/es/constancia",
+    outFile: "es/constancia.html",
+    title: "Constancia de ingresos para freelancers — Docracy",
+    description:
+      "Arma una constancia de ingresos con cobros y contratos firmados. Compártela con el arrendador o el banco. No es un W-2 ni carta bancaria. Plan de $10/mes.",
+    locale: "es",
+    alternates: { en: "/income-proof", es: "/es/constancia" },
+    xDefault: "es",
   },
   {
     urlPath: "/dpa",
@@ -974,6 +1092,11 @@ const routes = [
       "whatsapp-invoice": { en: "/whatsapp-invoice", es: "/es/factura-whatsapp" },
       "1099-contractor-records": { en: "/1099-contractor-records", es: "/es/registros-1099" },
       "hire-contractor-abroad": { en: "/hire-contractor-abroad", es: "/es/contratar-en-el-extranjero" },
+      "proof-of-income": { en: "/proof-of-income", es: "/es/prueba-de-ingresos" },
+      "signed-work-order": { en: "/signed-work-order", es: "/es/orden-de-trabajo-firmada" },
+      "contractor-payment-proof": { en: "/contractor-payment-proof", es: "/es/comprobante-pago-contratistas" },
+      "latam-export-documents": { en: "/latam-export-documents", es: "/es/documentos-exportacion" },
+      "request-w9": { en: "/request-w9", es: "/es/pedir-w9" },
       "docusign-alternative": { en: "/docusign-alternative", es: "/es/alternativa-a-docusign" },
       "hellosign-alternative": { en: "/hellosign-alternative", es: "/es/alternativa-a-hellosign" },
       "adobe-sign-alternative": { en: "/adobe-sign-alternative", es: "/es/alternativa-a-adobe-sign" },
@@ -985,7 +1108,9 @@ const routes = [
       outFile: `${p.slug}.html`,
       title: p.seoTitle,
       description: p.seoDescription,
-      ...(bilingual ? { locale: "en", alternates: bilingual } : {}),
+      ...(bilingual
+        ? { locale: "en", alternates: bilingual, ...(p.xDefault === "es" ? { xDefault: "es" } : {}) }
+        : {}),
     };
   }),
   ...SEO_LANDING_PAGES.map((p) => ({
@@ -1049,7 +1174,7 @@ function writeIndexNowKey() {
   fs.writeFileSync(path.join(distDir, `${INDEXNOW_KEY}.txt`), INDEXNOW_KEY);
 }
 
-function withMeta(html, { title, description, urlPath, locale = "en", alternates, image, watchPage = false }) {
+function withMeta(html, { title, description, urlPath, locale = "en", alternates, image, watchPage = false, xDefault }) {
   const canonical = `${SITE}${urlPath === "/" ? "/" : urlPath}`;
   const safeTitle = escapeXml(title);
   const safeDescription = escapeXml(ensureMetaDescription(description));
@@ -1074,10 +1199,11 @@ function withMeta(html, { title, description, urlPath, locale = "en", alternates
   if (alternates) {
     const enHref = `${SITE}${alternates.en === "/" ? "/" : alternates.en}`;
     const esHref = `${SITE}${alternates.es}`;
+    const defaultHref = xDefault === "es" ? esHref : enHref;
     const hreflang = [
       `<link rel="alternate" hreflang="en" href="${enHref}" />`,
       `<link rel="alternate" hreflang="es" href="${esHref}" />`,
-      `<link rel="alternate" hreflang="x-default" href="${enHref}" />`,
+      `<link rel="alternate" hreflang="x-default" href="${defaultHref}" />`,
     ].join("\n    ");
     // Drop any previous hreflang tags then inject before </head>.
     out = out.replace(/\s*<link rel="alternate" hreflang="[^"]*" href="[^"]*"\s*\/?>/g, "");

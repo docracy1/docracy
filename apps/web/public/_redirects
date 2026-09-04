@@ -22,6 +22,40 @@
 /es/contratista-mexico    /es/contratar-en-el-extranjero  301
 /es/w-8ben                /es/kit-contratista-latam  301
 
+# Trades job packet — work order / change order / cobro. Not Jobber, not a lien waiver.
+/work-order-packet          /packets/trades  301
+/change-order               /packets/trades  301
+/signed-change-order        /signed-work-order  301
+/es/orden-de-trabajo        /es/kit-oficios  301
+/es/change-order            /es/kit-oficios  301
+
+# Intra-LatAm commercial docs — not packing list / origin certificate / aduana software.
+/packing-list               /es/documentos-exportacion  301
+/certificate-of-origin      /es/documentos-exportacion  301
+/certificado-de-origen      /es/documentos-exportacion  301
+/es/packing-list            /es/documentos-exportacion  301
+/es/certificado-de-origen   /es/documentos-exportacion  301
+/commercial-invoice-packet  /packets/latam-trade  301
+
+# Collect W-9 / NDA / RFC PDF they already have. Not a SAT form.
+/send-me-your-w9            /request-w9  301
+/pedir-rfc                  /es/pedir-w9  301
+/es/pedir-rfc               /es/pedir-w9  301
+/w9-request                 /packets/collect  301
+
+# Prove-you-paid-them CPA share (marketing). Token pages stay noindex.
+/prove-i-paid               /contractor-payment-proof  301
+/es/comprobante-de-pago     /es/comprobante-pago-contratistas  301
+
+# Constancia / proof-of-income — Spanish is the lead language (x-default = ES).
+/constancia                 /es/constancia  301
+/constancia-de-ingresos     /es/constancia  301
+/carta-de-ingresos          /es/prueba-de-ingresos  301
+/es/carta-de-ingresos       /es/prueba-de-ingresos  301
+/proof-of-income-letter     /proof-of-income  301
+/freelancer-income-proof    /proof-of-income  301
+/pay-stubs-alternative      /income-proof  301
+
 # Canonicalize A-vs-B twins (seoPages.ts only ships one direction; reverse URLs 301 here).
 /docusign-vs-pandadoc  /pandadoc-vs-docusign  301
 /hellosign-vs-pandadoc  /pandadoc-vs-hellosign  301

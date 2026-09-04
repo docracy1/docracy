@@ -9,6 +9,8 @@ export type PageMetaOptions = {
   canonicalPath?: string;
   /** EN/ES pathnames for hreflang alternates on bilingual pages. */
   alternates?: { en: string; es: string };
+  /** Default hreflang. Constancia landings are Spanish-lead; everywhere else stays English. */
+  xDefault?: "en" | "es";
 };
 
 function upsertLink(rel: string, attrs: Record<string, string>, identityKey: string, identityValue: string) {
@@ -32,7 +34,7 @@ function setMetaBySelector(selector: string, content: string) {
  *  Restores title + description on unmount. Client-only — prerender.mjs injects the same fields
  *  into static HTML because useEffect never runs during static rendering. */
 export function usePageMeta(title: string, description: string, options: PageMetaOptions = {}) {
-  const { canonicalPath, alternates } = options;
+  const { canonicalPath, alternates, xDefault = "en" } = options;
   const metaDescription = ensureMetaDescription(description);
 
   useEffect(() => {
@@ -64,10 +66,13 @@ export function usePageMeta(title: string, description: string, options: PageMet
     }
 
     if (alternates) {
+      const enHref = `${SITE}${alternates.en === "/" ? "/" : alternates.en}`;
+      const esHref = `${SITE}${alternates.es}`;
+      const defaultHref = xDefault === "es" ? esHref : enHref;
       const tags = [
-        { hreflang: "en", href: `${SITE}${alternates.en === "/" ? "/" : alternates.en}` },
-        { hreflang: "es", href: `${SITE}${alternates.es}` },
-        { hreflang: "x-default", href: `${SITE}${alternates.en === "/" ? "/" : alternates.en}` },
+        { hreflang: "en", href: enHref },
+        { hreflang: "es", href: esHref },
+        { hreflang: "x-default", href: defaultHref },
       ];
       for (const tag of tags) {
         managed.push(upsertLink("alternate", { href: tag.href, hreflang: tag.hreflang }, "hreflang", tag.hreflang));
@@ -80,5 +85,5 @@ export function usePageMeta(title: string, description: string, options: PageMet
       // Leave canonical/hreflang in place — the next page's effect will overwrite them.
       void managed;
     };
-  }, [title, metaDescription, canonicalPath, alternates?.en, alternates?.es]);
+  }, [title, metaDescription, canonicalPath, alternates?.en, alternates?.es, xDefault]);
 }

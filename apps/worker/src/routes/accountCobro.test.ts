@@ -97,10 +97,16 @@ describe("GET /api/account/tax-year", () => {
       ctx
     );
     expect(res.status).toBe(200);
-    const body: { year: number; documents: Array<{ docId: string; amount: string; counterparties: Array<{ name: string }> }> } =
-      await res.json();
+    const body: {
+      year: number;
+      documents: Array<{ docId: string; amount: string; counterparties: Array<{ name: string }> }>;
+      shareUrl?: string;
+      shareToken?: string;
+    } = await res.json();
     expect(body.year).toBe(2026);
     expect(body.documents.map((d) => d.docId)).toEqual(["doc-in"]);
+    expect(body.shareUrl).toContain("/1099-season/");
+    expect(body.shareToken).toBeTruthy();
     expect(body.documents[0].amount).toBe("2000");
     expect(body.documents[0].counterparties[0].name).toBe("Ana Ruiz");
   });
