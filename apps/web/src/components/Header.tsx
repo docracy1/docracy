@@ -22,6 +22,7 @@ const FEATURE_ITEMS = [
   { to: "/whatsapp-signing", icon: "whatsapp", titleKey: "nav.mega.feature.whatsapp.title", descKey: "nav.mega.feature.whatsapp.desc" },
   { to: "/ai", icon: "sparkles", titleKey: "nav.mega.feature.ai.title", descKey: "nav.mega.feature.ai.desc" },
   { to: "/free-templates", icon: "duplicate", titleKey: "nav.mega.feature.templates.title", descKey: "nav.mega.feature.templates.desc" },
+  { to: "/packets/us-contractor", icon: "briefcase", titleKey: "nav.mega.feature.packet.title", descKey: "nav.mega.feature.packet.desc" },
   { to: "/esign-ueta", icon: "scale", titleKey: "nav.mega.feature.esign.title", descKey: "nav.mega.feature.esign.desc" },
   { to: "/pricing", icon: "users", titleKey: "nav.mega.feature.team.title", descKey: "nav.mega.feature.team.desc" },
   { to: "/privacy", icon: "shield", titleKey: "nav.mega.feature.storage.title", descKey: "nav.mega.feature.storage.desc" },

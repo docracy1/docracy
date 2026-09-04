@@ -85,6 +85,7 @@ export default function Footer() {
     { label: t("footer.startFree"), to: localizePath("/prepare", locale) },
     { label: t("footer.pricing"), to: localizePath("/pricing", locale) },
     { label: t("footer.templates"), to: localizePath("/free-templates", locale) },
+    { label: t("footer.packet"), to: localizePath("/packets/us-contractor", locale) },
     { label: t("footer.enterprise"), to: localizePath("/enterprise", locale) },
     { label: t("nav.blog"), to: "/blog" },
     { label: t("footer.docs"), to: localizePath("/docs", locale) },
@@ -104,7 +105,7 @@ export default function Footer() {
     { label: t("footer.whatsappSigning"), to: "/whatsapp-signing" },
     { label: t("footer.signPdf"), to: localizePath("/sign-pdf-online", locale) },
     { label: t("footer.freeSig"), to: localizePath("/free-electronic-signature", locale) },
-    { label: t("footer.verify"), to: "/verify" },
+    { label: t("footer.verify"), to: localizePath("/verify", locale) },
   ];
 
   const industryLinks: FooterLink[] = [

@@ -6734,3 +6734,28 @@ select {
   line-height: 1.6;
 }
 
+.packet-steps {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 0;
+  display: grid;
+  gap: 16px;
+}
+.packet-step {
+  padding: 20px 22px;
+  border-color: var(--hairline);
+}
+.packet-step.is-done {
+  background: var(--primary-soft);
+}
+.packet-step-num {
+  margin: 0 0 6px;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+.packet-step h3 {
+  color: var(--ink);
+}
+

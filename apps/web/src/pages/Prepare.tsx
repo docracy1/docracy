@@ -33,6 +33,7 @@ import {
 } from "../lib/pdfEdit";
 import type { TextSpan } from "../lib/pdfEdit";
 import { getFreeTemplate } from "../lib/freeTemplates";
+import { markPacketTemplateSent, US_CONTRACTOR_PACKET_SLUG } from "../lib/contractorPacket";
 import { assignFieldsToSigners, detectAnchorFields, detectFieldCandidates } from "../lib/fieldDetection";
 import type { CcRecipientInput, DocField, DocFieldType, SignerInput } from "../lib/types";
 import { track } from "../lib/track";
@@ -101,6 +102,7 @@ export default function Prepare() {
   const templateId = searchParams.get("template");
   const freeTemplateSlug = searchParams.get("freeTemplate");
   const marketplaceTemplateSlug = searchParams.get("marketplaceTemplate");
+  const packetSlug = searchParams.get("packet");
   // Refs (not state) since these only need to be read once, in an unmount cleanup — a ref keeps
   // that cleanup's closure looking at the live value without adding either to a dependency array.
   const documentSentRef = useRef(false);
@@ -135,6 +137,9 @@ export default function Prepare() {
   const [showCustomMessage, setShowCustomMessage] = useState(false);
   const [customSubject, setCustomSubject] = useState("");
   const [customMessage, setCustomMessage] = useState("");
+  const [paymentAmount, setPaymentAmount] = useState("");
+  const [paymentCurrency, setPaymentCurrency] = useState("USD");
+  const [paymentUrl, setPaymentUrl] = useState("");
   const [signingMode, setSigningMode] = useState<"sequential" | "parallel">("sequential");
   const [signers, setSigners] = useState<SignerInput[]>([
     { order: 1, name: "", email: "" },
@@ -1002,6 +1007,15 @@ export default function Prepare() {
         smsInvites: smsInvites || undefined,
         whatsappInvites: whatsappInvites || undefined,
         locale,
+        ...(account?.isPaid && paymentAmount.trim() && paymentUrl.trim()
+          ? {
+              paymentRequest: {
+                amount: paymentAmount.trim(),
+                currency: paymentCurrency,
+                url: paymentUrl.trim(),
+              },
+            }
+          : {}),
         ...(account?.isPaid
           ? {
               ttlDays,
@@ -1010,8 +1024,18 @@ export default function Prepare() {
           : {}),
       });
       documentSentRef.current = true;
+      if (packetSlug === US_CONTRACTOR_PACKET_SLUG && freeTemplateSlug) {
+        markPacketTemplateSent(freeTemplateSlug);
+      }
       navigate("/prepare/sent", {
-        state: { docId, statusToken, claimToken, signingMode: effectiveSigningMode },
+        state: {
+          docId,
+          statusToken,
+          claimToken,
+          signingMode: effectiveSigningMode,
+          packetSlug: packetSlug === US_CONTRACTOR_PACKET_SLUG ? packetSlug : undefined,
+          sentTemplateSlug: freeTemplateSlug ?? undefined,
+        },
       });
     } catch (err) {
       const message = err instanceof Error ? err.message : t("common.error");
@@ -1668,6 +1692,67 @@ export default function Prepare() {
                   )}
                 </div>
               )}
+              <div
+                style={{
+                  marginBottom: 12,
+                  padding: 10,
+                  background: "var(--primary-soft)",
+                  border: "1px solid var(--hairline)",
+                  borderRadius: "var(--r-sm)",
+                }}
+              >
+                <p style={{ fontSize: 13, fontWeight: 600, margin: "0 0 6px" }}>{t("prepare.payTitle")}</p>
+                {account?.isPaid ? (
+                  <>
+                    <p style={{ fontSize: 12, color: "var(--mute)", margin: "0 0 8px" }}>{t("prepare.payHint")}</p>
+                    <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>
+                      <input
+                        className="form-input"
+                        style={{ flex: "1 1 90px", minWidth: 90 }}
+                        inputMode="decimal"
+                        placeholder={t("prepare.payAmountPh")}
+                        aria-label={t("prepare.payAmountAria")}
+                        value={paymentAmount}
+                        onChange={(e) => setPaymentAmount(e.target.value)}
+                      />
+                      <select
+                        className="form-input"
+                        style={{ flex: "0 0 88px" }}
+                        aria-label={t("prepare.payCurrencyAria")}
+                        value={paymentCurrency}
+                        onChange={(e) => setPaymentCurrency(e.target.value)}
+                      >
+                        {["USD", "MXN", "COP", "ARS", "CLP", "PEN", "BRL"].map((c) => (
+                          <option key={c} value={c}>
+                            {c}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <input
+                      className="form-input"
+                      style={{ width: "100%" }}
+                      type="url"
+                      placeholder={t("prepare.payUrlPh")}
+                      aria-label={t("prepare.payUrlAria")}
+                      value={paymentUrl}
+                      onChange={(e) => setPaymentUrl(e.target.value)}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <p style={{ fontSize: 12, color: "var(--mute)", margin: "0 0 8px" }}>{t("prepare.payLocked")}</p>
+                    <Link
+                      to={account ? "/pricing" : "/login?ref=prepare-pay"}
+                      className="btn-primary"
+                      style={{ textDecoration: "none", fontSize: 13, display: "inline-block" }}
+                      onClick={() => track("upgrade_clicked", { source: "prepare_payment_link" })}
+                    >
+                      {account ? t("prepare.upgradeMonthly") : t("prepare.signInUpgrade")}
+                    </Link>
+                  </>
+                )}
+              </div>
               {preferTapPlace && (
                 <p className="prepare-mobile-place-instruction" style={{ marginBottom: 12 }}>
                   {t("prepare.mobilePlaceInstruction")}

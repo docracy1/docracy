@@ -132,6 +132,7 @@ function statusPayload(doc: Awaited<ReturnType<typeof getDoc>>) {
     voidReason: doc.voidReason,
     voidedBy: doc.voidedBy ?? null,
     signerAttachmentGroups: signerAttachmentGroups.length > 0 ? signerAttachmentGroups : undefined,
+    paymentRequest: doc.paymentRequest,
   };
 }
 

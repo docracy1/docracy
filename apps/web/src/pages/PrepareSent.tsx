@@ -3,6 +3,11 @@ import { Link, useLocation } from "react-router-dom";
 import { fetchMe } from "../lib/api";
 import { localizePath, useI18n, useT } from "../lib/i18n";
 import { savePendingClaim } from "../lib/pendingClaim";
+import {
+  nextPacketTemplate,
+  packetPreparePath,
+  US_CONTRACTOR_PACKET_SLUG,
+} from "../lib/contractorPacket";
 import { track } from "../lib/track";
 
 /**
@@ -19,6 +24,8 @@ export default function PrepareSent() {
       statusToken: string;
       claimToken?: string;
       signingMode?: "sequential" | "parallel";
+      packetSlug?: string;
+      sentTemplateSlug?: string;
     } | null;
   };
   const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
@@ -80,6 +87,39 @@ export default function PrepareSent() {
           </button>
         </div>
       </div>
+
+      {state.packetSlug === US_CONTRACTOR_PACKET_SLUG &&
+        (() => {
+          const next = nextPacketTemplate(state.sentTemplateSlug);
+          if (!next) {
+            return (
+              <div className="card" style={{ marginTop: 20 }}>
+                <p style={{ marginBottom: 8, fontWeight: 600 }}>{t("packet.kitDone")}</p>
+                <p style={{ fontSize: 14, color: "var(--mute)", marginBottom: 12 }}>{t("packet.kitDoneSub")}</p>
+                <Link
+                  to={localizePath("/packets/us-contractor", locale)}
+                  className="btn-secondary"
+                  style={{ textDecoration: "none" }}
+                >
+                  {t("packet.backToKit")}
+                </Link>
+              </div>
+            );
+          }
+          return (
+            <div className="card" style={{ marginTop: 20, borderColor: "var(--primary)" }}>
+              <p style={{ marginBottom: 8, fontWeight: 600 }}>{t("packet.nextTitle")}</p>
+              <p style={{ fontSize: 14, color: "var(--mute)", marginBottom: 12 }}>{t(`tpl.${next}.name`)}</p>
+              <Link
+                to={packetPreparePath(next, locale)}
+                className="btn-primary"
+                style={{ textDecoration: "none" }}
+              >
+                {t("packet.nextCta")}
+              </Link>
+            </div>
+          );
+        })()}
 
       {loggedIn === false && state.claimToken && (
         <div className="card" style={{ marginTop: 20 }}>

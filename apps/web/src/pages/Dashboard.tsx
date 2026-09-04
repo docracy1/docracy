@@ -1405,12 +1405,7 @@ export default function Dashboard() {
             {!account.isPaid && (
               <div className="card" style={{ marginTop: 24 }}>
                 <h3 style={{ fontSize: 15 }}>{t("dash.upgradeTitle")}</h3>
-                <p>
-                  Unlimited signers, a connector so Claude, ChatGPT, Grok, or Perplexity can look up your documents,
-                  team accounts, white-label branding, and a set of AI tools — auto-detect signature/date fields,
-                  a plain-English explainer with risk highlighting, and a contract generator that turns a one-line
-                  description into a signable PDF.
-                </p>
+                <p>{t("dash.upgradeBody")}</p>
                 {upgradeError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{upgradeError}</p>}
                 <button className="btn-primary" onClick={onUpgrade} disabled={upgrading}>
                   {upgrading ? t("common.redirecting") : t("common.upgrade")}
@@ -1476,6 +1471,25 @@ export default function Dashboard() {
                 : t("dash.allDocs")}
             </h3>
             {docActionError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{docActionError}</p>}
+            {!account.isPaid &&
+              visibleDocs.some((d) => {
+                if (d.status !== "completed" || !d.expiresAt) return false;
+                const days = Math.floor((new Date(d.expiresAt).getTime() - Date.now()) / 86400000);
+                return days >= 0 && days <= 2;
+              }) && (
+                <p style={{ fontSize: 13, marginBottom: 12 }}>
+                  {t("dash.archiveNag")}{" "}
+                  <button
+                    type="button"
+                    className="btn-primary"
+                    style={{ fontSize: 12, padding: "4px 10px", marginLeft: 8 }}
+                    onClick={onUpgrade}
+                    disabled={upgrading}
+                  >
+                    {t("dash.keepFile")}
+                  </button>
+                </p>
+              )}
             {visibleDocs.length === 0 ? (
               <div>
                 <p style={{ marginBottom: 12 }}>{t("dash.emptyDocs")}</p>
@@ -1497,9 +1511,22 @@ export default function Dashboard() {
                     alignItems: "center",
                   }}
                 >
-                  <Link to={`/status/${doc.statusToken}`} style={{ overflowWrap: "anywhere" }}>
-                    {doc.title}
-                  </Link>
+                  <div>
+                    <Link to={`/status/${doc.statusToken}`} style={{ overflowWrap: "anywhere" }}>
+                      {doc.title}
+                    </Link>
+                    {doc.expiresAt && (
+                      <div style={{ fontSize: 12, color: "var(--mute)", marginTop: 2 }}>
+                        {t("dash.deletesOn", {
+                          date: new Date(doc.expiresAt).toLocaleDateString(undefined, {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          }),
+                        })}
+                      </div>
+                    )}
+                  </div>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
                     <span
                       style={{
@@ -1513,6 +1540,16 @@ export default function Dashboard() {
                     >
                       {doc.status === "completed" ? t("dash.statusSigned") : doc.status === "voided" ? t("dash.statusVoided") : t("dash.statusPending")}
                     </span>
+                    {!account.isPaid && doc.status === "completed" && (
+                      <button
+                        className="btn-secondary"
+                        style={{ fontSize: 12, padding: "4px 8px" }}
+                        onClick={onUpgrade}
+                        disabled={upgrading}
+                      >
+                        {t("dash.keepFile")}
+                      </button>
+                    )}
                     {account.isPaid && doc.status !== "voided" && (
                       <button
                         className="btn-secondary"

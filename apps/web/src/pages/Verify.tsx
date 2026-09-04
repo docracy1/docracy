@@ -4,6 +4,7 @@ import { usePageMeta } from "../lib/usePageMeta";
 import { verifyDocumentHash, checkOtsStatus, apiUrl, type VerificationResult, type OtsStatusResult } from "../lib/api";
 import { track } from "../lib/track";
 import { NavIcon } from "../components/NavIcons";
+import { useI18n, useT } from "../lib/i18n";
 
 const HASH_RE = /^[0-9a-f]{64}$/i;
 
@@ -26,10 +27,12 @@ type OtsCheck =
   | { state: "error" };
 
 export default function Verify() {
-  usePageMeta(
-    "Verify a Signed Document — Independently, via Blockchain | Docracy",
-    "Confirm a PDF was really completed through Docracy's signing flow — and check it independently on the Bitcoin blockchain via OpenTimestamps, without needing to trust Docracy at all. Upload the file or paste its SHA-256 hash; it never leaves your browser."
-  );
+  const t = useT();
+  const { locale } = useI18n();
+  usePageMeta(t("verify.seoTitle"), t("verify.seoDescription"), {
+    canonicalPath: locale === "es" ? "/es/verificar" : "/verify",
+    alternates: { en: "/verify", es: "/es/verificar" },
+  });
 
   const [searchParams] = useSearchParams();
   const [status, setStatus] = useState<Status>({ state: "idle" });
@@ -54,7 +57,7 @@ export default function Verify() {
         }
       }
     } catch (err) {
-      setStatus({ state: "error", message: err instanceof Error ? err.message : "Something went wrong." });
+      setStatus({ state: "error", message: err instanceof Error ? err.message : t("verify.genericError") });
     }
   };
 
@@ -69,7 +72,7 @@ export default function Verify() {
 
   const onFile = async (file: File) => {
     if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
-      setStatus({ state: "error", message: "That doesn't look like a PDF file." });
+      setStatus({ state: "error", message: t("verify.notPdf") });
       return;
     }
     setStatus({ state: "checking" });
@@ -77,7 +80,7 @@ export default function Verify() {
       const hash = await sha256HexOfFile(file);
       await runCheck(hash);
     } catch {
-      setStatus({ state: "error", message: "Couldn't read that file — please try again." });
+      setStatus({ state: "error", message: t("verify.readFail") });
     }
   };
 
@@ -85,7 +88,7 @@ export default function Verify() {
     e.preventDefault();
     const trimmed = hashInput.trim();
     if (!HASH_RE.test(trimmed)) {
-      setStatus({ state: "error", message: "That's not a valid SHA-256 hash (expected 64 hex characters)." });
+      setStatus({ state: "error", message: t("verify.badHash") });
       return;
     }
     runCheck(trimmed);
@@ -95,19 +98,16 @@ export default function Verify() {
     <div>
       <div className="verify-dark-hero">
         <div className="verify-dark-hero-inner">
-          <h1>Verify a signed document</h1>
-          <p>
-            Confirm a PDF was really completed through Docracy's signing flow, and when — then check it a second
-            way, independently of Docracy, on the Bitcoin blockchain.
-          </p>
+          <h1>{t("verify.h1")}</h1>
+          <p>{t("verify.sub")}</p>
           <ul className="verify-dark-trust-row">
             <li>
               <NavIcon name="badge" />
-              Checked against Docracy's records
+              {t("verify.trustRecords")}
             </li>
             <li>
               <NavIcon name="chainLink" />
-              Independently checkable on Bitcoin
+              {t("verify.trustBitcoin")}
             </li>
           </ul>
 
@@ -141,29 +141,29 @@ export default function Verify() {
               <span className="verify-circle-icon">
                 <NavIcon name="badge" />
               </span>
-              <p className="verify-circle-title">Click or drag your PDF here</p>
-              <p className="verify-circle-sub">Free, tamper-evident verification</p>
+              <p className="verify-circle-title">{t("verify.dropTitle")}</p>
+              <p className="verify-circle-sub">{t("verify.dropSub")}</p>
             </label>
           </div>
-          <p className="verify-circle-caption">SHA-256 · computed in your browser · nothing ever uploaded</p>
+          <p className="verify-circle-caption">{t("verify.caption")}</p>
 
           <form className="verify-hash-form" onSubmit={onHashSubmit}>
             <input
               type="text"
               value={hashInput}
               onChange={(e) => setHashInput(e.target.value)}
-              placeholder="Or paste a SHA-256 hash"
+              placeholder={t("verify.hashPh")}
             />
-            <button type="submit">Check</button>
+            <button type="submit">{t("verify.check")}</button>
           </form>
 
           {status.state === "checking" && (
-            <p style={{ marginTop: 20, color: "rgba(255,255,255,0.7)" }}>Checking…</p>
+            <p style={{ marginTop: 20, color: "rgba(255,255,255,0.7)" }}>{t("verify.checking")}</p>
           )}
 
           {status.state === "error" && (
             <div className="verify-reveal is-danger">
-              <p className="verify-reveal-label">Error</p>
+              <p className="verify-reveal-label">{t("verify.error")}</p>
               <p>{status.message}</p>
             </div>
           )}

@@ -110,6 +110,29 @@ function formatDate(iso: string, locale: Locale = "en"): string {
   return new Date(iso).toLocaleDateString(locale === "es" ? "es-ES" : "en-US", { month: "short", day: "numeric" });
 }
 
+function formatDeleteDate(iso: string, locale: Locale = "en"): string {
+  return new Date(iso).toLocaleDateString(locale === "es" ? "es-ES" : "en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+function paymentCtaHtml(doc: DocState, locale: Locale): string {
+  const req = doc.paymentRequest;
+  if (!req) return "";
+  const label =
+    locale === "es"
+      ? `Pagar ${escapeHtml(req.amount)} ${escapeHtml(req.currency)}`
+      : `Pay ${escapeHtml(req.amount)} ${escapeHtml(req.currency)}`;
+  const blurb =
+    locale === "es"
+      ? `El remitente pidió el pago después de firmar. Docracy no cobra este dinero — el enlace es suyo.`
+      : `The sender asked to be paid after signing. Docracy does not take this money — the link is theirs.`;
+  return `<p style="margin:20px 0 0 0;font-size:14px;color:${INK};line-height:1.5;">${blurb}</p>
+    ${ctaButton(req.url, label)}`;
+}
+
 const PRIMARY = "#2f7ed8";
 const INK = "#1a2b3c";
 const MUTED = "#6b7785";
@@ -680,6 +703,7 @@ export async function sendCompletionEmails(
     </p>
     <p style="margin:0;font-size:13px;color:${MUTED};line-height:1.5;">${statusLines(doc, locale)}</p>
     ${verifyLine}
+    ${paymentCtaHtml(doc, locale)}
     ${viralCta}
     ${signOff(locale)}
   `
@@ -690,6 +714,7 @@ export async function sendCompletionEmails(
     </p>
     <p style="margin:0;font-size:13px;color:${MUTED};line-height:1.5;">${statusLines(doc, locale)}</p>
     ${verifyLine}
+    ${paymentCtaHtml(doc, locale)}
     ${viralCta}
     ${signOff(locale)}
   `;
@@ -739,25 +764,28 @@ export async function sendCompletionEmails(
   // Skip if they were already emailed as a signer or CC.
   const preparer = doc.preparerEmail?.trim().toLowerCase();
   if (preparer && !signerEmails.has(preparer) && !(doc.ccRecipients ?? []).some((c) => c.email.trim().toLowerCase() === preparer)) {
+    const deleteDate = formatDeleteDate(doc.expiresAt, locale);
     const preparerUpgrade =
-      customLogoUrl || doc.accountId
+      customLogoUrl
         ? ""
         : locale === "es"
           ? `
-    <p style="margin:24px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">
-      ¿Quieres tener todos tus PDF firmados en un solo lugar, plantillas reutilizables y más de 2 firmantes?
+    ${paymentCtaHtml(doc, locale)}
+    <p style="margin:24px 0 0 0;font-size:14px;color:${INK};line-height:1.5;">
+      El PDF firmado se elimina el ${deleteDate}. El plan de pago lo conserva en tu archivo — no es un extra de firmas, es no perder el documento.
     </p>
-    ${ctaButton(`${env.PUBLIC_APP_URL}/price?utm_source=email&utm_medium=completion&utm_campaign=preparer-upgrade`, "Ver planes de pago")}
+    ${ctaButton(`${env.PUBLIC_APP_URL}/pricing?utm_source=email&utm_medium=completion&utm_campaign=keep-files&ref=preparer-done`, "Conservar los archivos firmados")}
     <p style="margin:12px 0 0 0;font-size:13px;color:${MUTED};">
-      O <a href="${env.PUBLIC_APP_URL}/login?ref=preparer-done" style="color:${PRIMARY};">crea una cuenta gratis</a> para conservar tu historial sin pagar.
+      Una <a href="${env.PUBLIC_APP_URL}/login?ref=preparer-done" style="color:${PRIMARY};">cuenta gratis</a> lista el envío en el panel hasta esa fecha; no evita que se borre.
     </p>`
           : `
-    <p style="margin:24px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">
-      Want every signed PDF in one place, reusable templates, and more than 2 signers?
+    ${paymentCtaHtml(doc, locale)}
+    <p style="margin:24px 0 0 0;font-size:14px;color:${INK};line-height:1.5;">
+      This signed PDF is deleted on ${deleteDate}. Paid keeps it in your archive — not extra signatures, just not losing the file.
     </p>
-    ${ctaButton(`${env.PUBLIC_APP_URL}/price?utm_source=email&utm_medium=completion&utm_campaign=preparer-upgrade`, "See paid plans")}
+    ${ctaButton(`${env.PUBLIC_APP_URL}/pricing?utm_source=email&utm_medium=completion&utm_campaign=keep-files&ref=preparer-done`, "Keep signed files")}
     <p style="margin:12px 0 0 0;font-size:13px;color:${MUTED};">
-      Or <a href="${env.PUBLIC_APP_URL}/login?ref=preparer-done" style="color:${PRIMARY};">create a free account</a> to keep history without paying.
+      A <a href="${env.PUBLIC_APP_URL}/login?ref=preparer-done" style="color:${PRIMARY};">free account</a> lists this send on your dashboard until that date; it does not stop the deletion.
     </p>`;
     const preparerSubject =
       locale === "es" ? "Todos han firmado — tu documento está listo" : "Everyone has signed — your document is ready";
@@ -798,6 +826,51 @@ export async function sendCompletionEmails(
       });
     }
   }
+}
+
+/** Preparer-only: named document, counterparties, delete date, one-click keep-files upgrade.
+ *  Skipped for white-label (custom logo) because those workspaces paid to hide Docracy. */
+export async function sendArchiveNag(env: Env, doc: DocState): Promise<void> {
+  const to = doc.preparerEmail?.trim();
+  if (!to) return;
+  const locale: Locale = doc.locale ?? "en";
+  const customLogoUrl = await resolveEmailLogoUrl(env, doc.accountId);
+  if (customLogoUrl) return;
+
+  const title = doc.title?.trim() || (locale === "es" ? "tu documento firmado" : "your signed document");
+  const parties = doc.signers.map((s) => s.name.trim()).filter(Boolean).join(", ") || (locale === "es" ? "las partes" : "the parties");
+  const deleteDate = formatDeleteDate(doc.expiresAt, locale);
+  const upgradeUrl = doc.accountId
+    ? `${env.PUBLIC_APP_URL}/pricing?utm_source=email&utm_medium=archive-nag&utm_campaign=keep-files&ref=archive-nag`
+    : `${env.PUBLIC_APP_URL}/login?ref=archive-nag&next=${encodeURIComponent("/pricing?ref=archive-nag")}`;
+
+  const subject =
+    locale === "es"
+      ? `${title} se elimina el ${deleteDate}`
+      : `${title} is deleted on ${deleteDate}`;
+  const body =
+    locale === "es"
+      ? `
+    ${emailHeadline(`Este PDF firmado desaparece el ${deleteDate}`)}
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      <strong>${escapeHtml(title)}</strong> — firmado con ${escapeHtml(parties)} — se borra de Docracy el ${deleteDate}.
+    </p>
+    <p style="margin:12px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      El plan de pago guarda el archivo en tu archivo. Firmar sigue siendo gratis; lo que se paga es no perder el contrato.
+    </p>
+    ${ctaButton(upgradeUrl, "Conservar este archivo — $10/mes")}
+  `
+      : `
+    ${emailHeadline(`This signed PDF is deleted on ${deleteDate}`)}
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      <strong>${escapeHtml(title)}</strong> — signed with ${escapeHtml(parties)} — is removed from Docracy on ${deleteDate}.
+    </p>
+    <p style="margin:12px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      Paid keeps the file in your archive. Signing stays free; what you pay for is not losing the contract.
+    </p>
+    ${ctaButton(upgradeUrl, "Keep this file — $10/mo")}
+  `;
+  await send(env, to, subject, emailShell(env.PUBLIC_APP_URL, body), { emailType: "archive_nag" });
 }
 
 export async function sendMagicLink(env: Env, email: string, link: string, locale: Locale = "en"): Promise<void> {

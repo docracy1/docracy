@@ -160,6 +160,9 @@ function robotsAllowForRoutes(routes) {
     "/dpa",
     "/uptime",
     "/verify",
+    "/es/verificar",
+    "/packets/us-contractor",
+    "/es/kit-contratista",
     "/templates",
   ]) {
     exact.add(p);

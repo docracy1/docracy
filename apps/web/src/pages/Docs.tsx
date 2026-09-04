@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { FREE_TEMPLATES } from "../lib/freeTemplates";
-import { useT } from "../lib/i18n";
+import { localizePath, useI18n, useT } from "../lib/i18n";
 import { useSeoMeta } from "../lib/useSeoMeta";
 
 function Section({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
@@ -14,6 +14,7 @@ function Section({ id, title, children }: { id: string; title: string; children:
 
 export default function Docs() {
   const t = useT();
+  const { locale } = useI18n();
   useSeoMeta("docs");
 
   return (
@@ -75,6 +76,17 @@ export default function Docs() {
         <p>
           {t("docs.paid.body1")}{" "}
           <Link to="/pricing">{t("pricing.title")}</Link>.
+        </p>
+      </Section>
+
+      <Section id="pay" title={t("docs.pay.title")}>
+        <p>{t("docs.pay.body")}</p>
+      </Section>
+
+      <Section id="contractor-kit" title={t("docs.packet.title")}>
+        <p>
+          {t("docs.packet.body")}{" "}
+          <Link to={localizePath("/packets/us-contractor", locale)}>{t("footer.packet")}</Link>.
         </p>
       </Section>
 

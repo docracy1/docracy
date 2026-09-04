@@ -156,8 +156,11 @@ const es: Messages = {
   "dash.tools": "Herramientas",
   "dash.updatePayment": "Actualizar método de pago",
   "dash.upgradeBody":
-    "Firmantes ilimitados, un conector para que Claude, ChatGPT, Grok o Perplexity consulten tus documentos, cuentas de equipo, marca blanca y herramientas de IA — detección automática de campos, resumen claro con riesgos y un generador de contratos a partir de una línea.",
-  "dash.upgradeTitle": "Mejorar a plan de pago — $10/mes",
+    "Firmar borra el PDF a los 9 días. El plan de pago conserva cada contrato firmado en tu archivo, más plantillas reutilizables, envío masivo y herramientas de equipo. No estás pagando por la firma.",
+  "dash.upgradeTitle": "Conserva tus archivos firmados — $10/mes",
+  "dash.deletesOn": "Se elimina el {{date}}",
+  "dash.keepFile": "Conservar este archivo",
+  "dash.archiveNag": "Un PDF firmado de esta lista se elimina en menos de 2 días.",
   "dash.void": "Anular",
   "dash.voidPrompt": "Motivo opcional para anular (déjalo en blanco para omitir):",
   "dash.voiding": "Anulando…",
@@ -230,7 +233,7 @@ const es: Messages = {
   "footer.industryLegal": "Legal",
   "footer.industryConstruction": "Construcción",
   "footer.industrySmallBusiness": "Pequeños negocios",
-  "footer.startFree": "Probar gratis",
+  "footer.packet": "Kit de contratista en EE. UU.",
   "footer.status": "Estado",
   "footer.roadmap": "Hoja de ruta",
   "footer.tagline":
@@ -335,7 +338,7 @@ const es: Messages = {
     "Las firmas SES de Docracy están diseñadas para respaldar la ESIGN Act y UETA de EE. UU. No verificamos identidad — cualquiera con el enlace puede firmar con el nombre indicado. El registro de auditoría prueba qué se firmó y cuándo, no quién lo firmó realmente. Para firmas con identidad verificada, usa un servicio de grado de cumplimiento. Detalles:",
   "landing.disclaimerTrust": "Confianza y seguridad",
   "landing.faq1.a":
-    "La herramienta de firma electrónica más rápida y simple para founders y equipos pequeños: sube un PDF, agrega firmantes, listo. Gratis hasta 2 firmantes sin cuenta; $10/mes fijos para ilimitado.",
+    "La herramienta de firma electrónica más rápida y simple para founders y equipos pequeños: sube un PDF, agrega firmantes, listo. Gratis hasta 2 firmantes sin cuenta. El plan de pago es $10/mes para conservar los PDF firmados más de 9 días — no es una tarifa por firma.",
   "landing.faq1.q": "¿Qué es Docracy.io?",
   "landing.faq2.a":
     "Sube un documento (o empieza desde una plantilla gratis), coloca campos y envía un enlace. Los firmantes abren y firman en segundos — sin app ni registro.",
@@ -347,7 +350,7 @@ const es: Messages = {
     "Sí — empieza gratis con más de 100 plantillas listas, o guarda las tuyas en una cuenta de pago.",
   "landing.faq4.q": "¿Puedo usar plantillas?",
   "landing.faq5.a":
-    "Sí en Paid ($10/mes fijos, no por asiento): invita al equipo, comparte plantillas, conectores e IA en un solo workspace.",
+    "Sí en el plan de pago ($10/mes fijos, no por asiento): conserva los PDF más de 9 días, pega tu enlace de PayPal/Stripe/Mercado Pago después de firmar, más equipo, plantillas, conectores e IA en un solo workspace.",
   "landing.faq5.q": "¿Docracy.io admite equipos?",
   "landing.faqTitle": "Preguntas frecuentes",
   "landing.feat1.body":
@@ -437,7 +440,7 @@ const es: Messages = {
   "login.subSave":
     "Crea una cuenta gratis para que cada envío futuro viva en tu panel — sin contraseña, solo un enlace mágico a este correo.",
   "login.subUpgrade":
-    "Inicia sesión (o crea una cuenta) y luego mejora el plan para firmantes ilimitados, plantillas e historial.",
+    "Inicia sesión y luego mejora el plan para conservar los PDF firmados más de 9 días — firmar sigue siendo gratis.",
   "login.title": "Iniciar sesión",
   "login.heading": "Iniciar sesión / Registrarse",
   "login.titleSave": "Guarda el documento que acabas de enviar",
@@ -478,6 +481,8 @@ const es: Messages = {
   "nav.mega.feature.ai.desc": "Encuentra y coloca automáticamente campos de firma, fecha e iniciales.",
   "nav.mega.feature.templates.title": "Plantillas reutilizables",
   "nav.mega.feature.templates.desc": "Guarda el diseño de campos una vez y reutilízalo siempre.",
+  "nav.mega.feature.packet.title": "Kit de contratista en EE. UU.",
+  "nav.mega.feature.packet.desc": "NDA, W-9 y acuerdo de contratista — tres plantillas gratis, en orden.",
   "nav.mega.feature.team.title": "Acceso de equipo",
   "nav.mega.feature.team.desc": "Comparte documentos y plantillas en un mismo espacio de trabajo.",
   "nav.mega.feature.storage.title": "Almacenamiento seguro",
@@ -537,8 +542,11 @@ const es: Messages = {
   "plan.bulkSend": "Envío masivo",
   "plan.ccRecipients": "Destinatarios CC / espectadores",
   "plan.contactsReassign": "Contactos guardados + reasignación de firmantes",
-  "plan.customExpiry": "Ventana de firma (luego se elimina)",
-  "plan.dashboard": "Panel con historial de documentos (cuenta gratis)",
+  "plan.archiveReminder": "Aviso por correo y en el panel antes de que se borren los PDF firmados",
+  "plan.contractorPacket": "Kit de contratista en EE. UU. (NDA, W-9, acuerdo de contratista)",
+  "plan.customExpiry": "Conservar los PDF firmados después de completar",
+  "plan.dashboard": "Panel de tus envíos (cuenta gratis)",
+  "plan.paymentLink": "Cobra después de que firmen (tu enlace de PayPal, Stripe o Mercado Pago)",
   "plan.declineCancel": "Rechazar o cancelar un documento",
   "plan.docVerification": "Verificación de documentos gratis (cualquiera, sin cuenta)",
   "plan.dropbox": "Conector Dropbox (carga automática de PDFs firmados)",
@@ -557,7 +565,7 @@ const es: Messages = {
   "plan.support": "Soporte al cliente",
   "plan.teamAccounts": "Cuentas de equipo (espacio compartido)",
   "plan.templates": "Plantillas reutilizables",
-  "plan.val.days9": "9 días",
+  "plan.val.days9": "9 días, luego se elimina",
   "plan.val.days90": "Hasta 90 días",
   "plan.val.premium": "Premium",
   "plan.included": "Incluido",
@@ -673,18 +681,18 @@ const es: Messages = {
   "pricing.free.cta": "Empezar a firmar gratis",
   "pricing.free.f1": "Hasta 2 firmantes por documento",
   "pricing.free.f2": "Firma secuencial o todos a la vez",
-  "pricing.free.f3": "Registro de auditoría + certificado de finalización",
+  "pricing.free.f3": "Kit de contratista en EE. UU. (NDA, W-9, acuerdo)",
   "pricing.free.name": "Gratis",
   "pricing.free.note": "sin cuenta, sin tarjeta",
   "pricing.free.tagline": "Para acuerdos rápidos y puntuales",
   "pricing.goDashboard": "Ir al panel",
   "pricing.intro":
-    "Gratis hasta 2 firmantes — sin cuenta. Firmas ilimitadas por $10/mes fijos por espacio de trabajo, no por asiento. Enterprise para facturación y SSO.",
+    "Firmar es gratis — hasta 2 firmantes, sin cuenta. El plan de pago es $10/mes para conservar los PDF más de 9 días y pegar tu checkout después de que firmen. No es una tarifa por firma ni un recorte de lo que te paguen.",
   "pricing.dockAria": "Precios de planes",
   "pricing.paid.ctaGet": "Ilimitado — $10/mes",
   "pricing.paid.ctaLogin": "Inicia sesión para mejorar el plan",
   "pricing.paid.ctaUpgrade": "Mejorar plan — $10/mes",
-  "pricing.paid.f1": "Firmantes ilimitados",
+  "pricing.paid.f1": "Conserva los PDF firmados hasta 90 días",
   "pricing.paid.f10": "Webhooks para tus propios sistemas",
   "pricing.paid.f11": "Conector MCP (Claude, ChatGPT, Grok, Perplexity)",
   "pricing.paid.f12": "IA: detección automática de campos de firma y fecha",
@@ -694,19 +702,19 @@ const es: Messages = {
   "pricing.paid.f16": "Marca blanca",
   "pricing.paid.f17": "Enlaces de firma protegidos con PIN",
   "pricing.paid.f18": "Conectores Dropbox, OneDrive, Box y Google Drive",
-  "pricing.paid.f2": "Miembros de equipo ilimitados",
-  "pricing.paid.f3": "Panel con historial de documentos",
+  "pricing.paid.f2": "Cobra después de que firmen — tu enlace de PayPal, Stripe o Mercado Pago",
+  "pricing.paid.f3": "Archivo en el panel de cada archivo firmado",
   "pricing.paid.f4": "Soporte al cliente",
   "pricing.paid.f5": "Plantillas reutilizables",
   "pricing.paid.f6": "Envío masivo desde una plantilla",
-  "pricing.paid.f7": "Ventana de firma hasta 90 días (luego se elimina)",
+  "pricing.paid.f7": "Firmantes ilimitados por documento",
   "pricing.paid.f8": "Firma integrada (iframe)",
   "pricing.paid.f9": "Contactos guardados + reasignación de firmantes",
   "pricing.paid.monthly": "$10/mes",
   "pricing.paid.name": "Pago",
   "pricing.paid.note": "/mes, fijo — no por asiento",
   "pricing.paid.redirecting": "Redirigiendo…",
-  "pricing.paid.tagline": "Para equipos y empresas en crecimiento",
+  "pricing.paid.tagline": "Conserva archivos. Reutiliza kits. Cobra.",
   "pricing.title": "Precios",
   "privacy.analytics": "Analítica de tráfico",
   "privacy.audit": "Registro de auditoría",
@@ -721,9 +729,9 @@ const es: Messages = {
   "sent.parallel": "Cada firmante recibió su enlace por correo — pueden firmar en cualquier orden.",
   "sent.saveAccount": "Guardar este envío en una cuenta",
   "sent.saveAccountSub":
-    "Este documento y su historial de firma se eliminan después de 9 días a menos que lo guardes. Crea una cuenta gratis y lo moveremos a tu panel — sin contraseña, solo un enlace mágico.",
+    "Este PDF firmado se elimina a los 9 días. Una cuenta gratis lo lista en tu panel hasta entonces — el plan de pago es lo que conserva el archivo.",
   "sent.saveAccountSubFuture":
-    "Aviso: este documento y su historial de firma se eliminan después de 9 días — el enlace de estado de arriba también dejará de funcionar. Crea una cuenta gratis para que este envío (y cada futuro) se quede en tu panel para siempre — sin contraseña, solo un enlace mágico.",
+    "Este PDF firmado se elimina a los 9 días — el enlace de estado también deja de funcionar. Una cuenta gratis lista los envíos hasta esa fecha. El plan de pago conserva los archivos.",
   "sent.sendAnother": "Enviar otro",
   "sent.sequential":
     "El primer firmante recibió su enlace. Los demás en la cadena serán notificados en turno.",
@@ -792,12 +800,12 @@ const es: Messages = {
     "Sube al menos un archivo (PDF o imagen, hasta {{mb}}MB cada uno) antes de firmar.",
   "sign.uploading": "Subiendo…",
   "sign.useSig": "Usar esta firma",
-  "sign.viral": "Creado con Docracy — envía tus propios documentos gratis.",
+  "sign.viral": "¿Necesitas enviar el tuyo? Gratis — sin cuenta para quienes firman.",
   "sign.conv.brand": "Docracy",
   "sign.conv.headline": "¡Todo listo!",
   "sign.conv.sub": "Firmar siempre puede ser así de fácil.",
   "sign.conv.body":
-    "Crea una cuenta gratis para enviar tus propios documentos — hasta 2 firmantes, sin tarjeta. Guárdalos en tu panel. El plan de pago desbloquea plantillas, IA y herramientas de equipo.",
+    "Crea una cuenta gratis y envía los tuyos — hasta 2 firmantes, sin tarjeta. El plan de pago es solo si quieres conservar los archivos firmados más de 9 días.",
   "sign.conv.emailLabel": "Correo",
   "sign.conv.emailPlaceholder": "tu@empresa.com",
   "sign.conv.cta": "Crear cuenta gratis",
@@ -959,6 +967,12 @@ const es: Messages = {
   "docs.expiry.body":
     "Los documentos gratis siempre vencen después de 9 días (o antes, cuando todos hayan firmado y se haya enviado la copia final por correo). Con una cuenta de pago puedes elegir retención de 1–90 días al preparar un documento o enviar masivamente desde una plantilla.",
   "docs.expiry.title": "Vencimiento personalizado del documento (pago)",
+  "docs.packet.title": "Kit de contratista en EE. UU. (gratis)",
+  "docs.packet.body":
+    "Tres plantillas gratis existentes, un PDF a la vez: NDA mutuo, W-9 del IRS y luego acuerdo de contratista independiente. Abre /packets/us-contractor (español: /es/kit-contratista). Pegar un enlace de cobro en esos envíos sigue requiriendo el plan de pago.",
+  "docs.pay.title": "Cobra después de que firmen (pago)",
+  "docs.pay.body":
+    "En una cuenta de pago, al preparar puedes pegar tu propio checkout https — PayPal.me, Stripe Payment Link, Mercado Pago o similar — más un monto y una moneda. Cuando todos han firmado, el firmante ve un botón de pagar. Docracy nunca cobra ese dinero; el plan de $10/mes es cómo nos pagan a nosotros, no un porcentaje del tuyo.",
   "docs.fields.checkbox": "Casilla — obligatoria u opcional.",
   "docs.fields.dropdown":
     "Desplegable — defines las opciones al colocar el campo; el valor elegido queda grabado en el PDF.",
@@ -971,7 +985,7 @@ const es: Messages = {
     "para que Claude, ChatGPT, Grok, Perplexity o un agente IDE como Cursor consulten el estado de firma y busquen tus documentos desde el chat. Requiere cuenta de pago — copia tu URL de conector personal desde Panel → Conector y clave API. Instrucciones completas:",
   "docs.mcp.title": "Conectar un asistente de IA (MCP)",
   "docs.paid.body1":
-    "Una cuenta gratis ya guarda el historial de cada envío en el panel. El plan de pago añade firmantes ilimitados por documento, plantillas reutilizables, firma paralela (todos a la vez), enlaces protegidos con PIN, cuentas de equipo (espacio compartido), marca blanca (tu logo en correos/páginas de firma), webhooks, MCP/Zapier, herramientas de IA, carga automática a Dropbox/OneDrive/Box/Google Drive, más las funciones de flujo abajo. Comparación completa en",
+    "Firmar sigue siendo gratis. Una cuenta gratis lista los envíos en el panel hasta que el TTL de 9 días borra el PDF — no conserva el archivo. El plan de pago ($10/mes) conserva los PDF firmados hasta 90 días, te deja pegar tu enlace de PayPal/Stripe/Mercado Pago después de firmar (Docracy no se lleva un porcentaje), más firmantes ilimitados, plantillas reutilizables, enlaces con PIN, cuentas de equipo, marca blanca, webhooks, MCP/Zapier, IA, carga automática a Dropbox/OneDrive/Box/Google Drive y las funciones de flujo abajo. El kit de contratista es gratis. Comparación completa en",
   "docs.paid.title": "Cuenta de pago ($10/mes)",
   "docs.privacy.and": "y",
   "docs.privacy.body1":
@@ -1147,7 +1161,7 @@ const es: Messages = {
     "Un recorrido breve de Docracy: sube un PDF, coloca campos de firma, envía enlaces por correo y descarga el documento firmado — gratis hasta dos firmantes, sin cuenta.",
   "seo.pricing.title": "Precios de Docracy — Planes gratis y de pago",
   "seo.pricing.description":
-    "Gratis para cadenas de hasta 2 firmantes. El plan de pago es $10/mes fijo por espacio de trabajo — firmantes ilimitados, plantillas, herramientas de IA, conectores y cuentas de equipo.",
+    "Firmar es gratis hasta 2 personas. $10/mes conserva los PDF más de 9 días, cobra con tu enlace, plantillas y equipos. Sin recorte de tu cobro.",
   "seo.freeTemplates.title": "Plantillas gratis de documentos | Docracy",
   "seo.freeTemplates.description":
     "Plantillas gratis listas para firmar para los documentos de negocio más comunes — NDA mutuo, acuerdo de contratista independiente, carta de oferta, política de trabajo remoto y acuerdo de servicios freelance. Completa tus datos y envía a firma en minutos.",
@@ -1481,7 +1495,7 @@ const es: Messages = {
   "secureSig.faq.a3":
     "No por defecto. El registro de auditoría prueba qué se firmó y cuándo, no una identidad verificada. Un PIN opcional y la entrega vinculada a WhatsApp (próximamente, planes de pago) agregan una verificación más fuerte del firmante.",
   "secureSig.faq.q4": "¿Cuánto tiempo se guardan mis documentos?",
-  "secureSig.faq.a4": "Las cadenas de firma anónimas usan una ventana de retención por defecto de 9 días. Los espacios de trabajo de pago conservan el historial según su plan hasta que se elimine.",
+  "secureSig.faq.a4": "Las cadenas de firma anónimas usan una ventana de retención por defecto de 9 días. El plan de pago conserva los PDF firmados hasta 90 días.",
   "secureSig.footerCta": "Mira exactamente cómo se protege tu documento.",
   "secureSig.trustLink": "Página completa de Confianza y seguridad",
   "secureSig.dpaLink": "Acuerdo de procesamiento de datos",
@@ -1498,9 +1512,9 @@ const es: Messages = {
   "freeSig.included.4": "Un certificado de finalización que resume quién firmó, cuándo y cómo",
   "freeSig.upgradeTitle": "Cuándo realmente necesitarías actualizar",
   "freeSig.upgradeBody": "El plan gratis cubre la mayoría de los acuerdos puntuales. Necesitarías el plan de pago de $10/mes fijo si necesitas:",
-  "freeSig.upgrade.1": "Más de 2 firmantes en un solo documento",
+  "freeSig.upgrade.1": "Archivos firmados conservados más de 9 días (hasta 90 días)",
   "freeSig.upgrade.2": "Plantillas reutilizables, un panel de equipo o envío masivo",
-  "freeSig.upgrade.3": "Herramientas de IA (explicación de contratos, detector de riesgo, auto-detección) o el conector MCP",
+  "freeSig.upgrade.3": "Más de 2 firmantes en un solo documento",
   "freeSig.pricingLink": "Ver la comparación completa de planes",
   "freeSig.catchTitle": "¿Cuál es el truco?",
   "freeSig.catchBody":
@@ -1949,7 +1963,7 @@ const es: Messages = {
   "prepare.freeCcLimit": "El plan gratis admite hasta {{max}} espectadores CC. Mejora el plan para espectadores ilimitados.",
   "prepare.freePlanSigners": "Plan gratis: hasta {{max}} firmantes",
   "prepare.freePlanViewers": "Plan gratis: hasta {{max}} espectadores",
-  "prepare.freeSignerLimit": "El plan gratis admite hasta {{max}} firmantes. Mejora el plan para firmantes ilimitados, plantillas e historial.",
+  "prepare.freeSignerLimit": "El plan gratis admite hasta {{max}} firmantes. Mejora el plan para firmantes ilimitados, plantillas y conservar los archivos firmados más de 9 días.",
   "prepare.freeTemplateMissing": "No se encontró esa plantilla gratis.",
   "prepare.generateError": "No se pudo generar un contrato",
   "prepare.loadTemplateError": "No se pudo cargar esa plantilla",
@@ -2277,6 +2291,119 @@ const es: Messages = {
   "integrationsAi.linkEnterprise": "Enterprise →",
   "integrationsAi.linkDocs": "Docs →",
 
+  "prepare.payTitle": "Cobra después de que firmen (opcional)",
+  "prepare.payHint":
+    "Pega tu URL de PayPal, Stripe Payment Link o Mercado Pago. Docracy nunca cobra este dinero — el plan de $10 es cómo nos pagan a nosotros, no un porcentaje del tuyo.",
+  "prepare.payLocked":
+    "El plan de pago ($10/mes) pone tu checkout junto al contrato terminado. Nunca nos llevamos un porcentaje; te quedas el 100% de lo que te paguen.",
+  "prepare.payAmountPh": "Monto",
+  "prepare.payAmountAria": "Monto a cobrar",
+  "prepare.payCurrencyAria": "Moneda",
+  "prepare.payUrlPh": "https://paypal.me/tu o tu enlace de cobro",
+  "prepare.payUrlAria": "Tu enlace de pago",
+  "sign.payCta": "Pagar {{amount}} {{currency}}",
+  "sign.payHint": "Este cobro es del remitente. Docracy no procesa el pago.",
+  "packet.seoTitle": "Kit gratis de contratista en EE. UU. — NDA, W-9 y acuerdo de contratista",
+  "packet.seoDescription":
+    "Incorpora un contratista de EE. UU. con NDA, W-9 del IRS y acuerdo. Firma gratis, sin cuenta. El plan de pago agrega tu PayPal o Mercado Pago.",
+  "packet.kicker": "Contratistas en EE. UU.",
+  "packet.heroTitle": "NDA, W-9 y acuerdo de contratista — en orden",
+  "packet.heroSub":
+    "Tres plantillas gratis que ya existen, enviadas un PDF a la vez. Sin paquete combinado ni costo extra. Firmar es gratis; el plan de pago es solo si quieres conservar los archivos más de 9 días.",
+  "packet.ctaStart": "Empezar con el NDA",
+  "packet.stepsTitle": "Los tres documentos",
+  "packet.stepsSub": "Envíalos en este orden. Cada uno es un envío normal de Docracy — el siguiente paso espera en esta página cuando vuelvas.",
+  "packet.stepN": "Paso {{n}}",
+  "packet.sent": "Enviado en esta sesión",
+  "packet.sendThis": "Completar y enviar",
+  "packet.sendAgain": "Enviar de nuevo",
+  "packet.payTitle": "Cobra después de que firmen",
+  "packet.payBody":
+    "En el plan de pago puedes pegar tu URL de PayPal.me, Stripe Payment Link o Mercado Pago y un monto al preparar. Docracy nunca cobra ese dinero — los $10/mes son cómo nos pagan a nosotros, no un recorte del tuyo. Después de la última firma, el firmante ve ese botón de pagar.",
+  "packet.keepLink": "El plan de pago conserva los PDF firmados más de 9 días →",
+  "packet.nextTitle": "Siguiente en el kit de contratista",
+  "packet.nextCta": "Continuar al siguiente documento",
+  "packet.kitDone": "Kit de contratista completo en esta sesión",
+  "packet.kitDoneSub": "Aún puedes reenviar cualquiera de las tres plantillas, o conservar los archivos firmados en el plan de pago.",
+  "packet.backToKit": "Volver al kit",
+  "verify.seoTitle": "Verifica un documento firmado — de forma independiente, vía blockchain | Docracy",
+  "verify.seoDescription":
+    "Confirma que un PDF se completó en Docracy y compruébalo en Bitcoin con OpenTimestamps. Sube o pega el SHA-256 — el archivo no sale de tu navegador.",
+  "verify.h1": "Verifica un documento firmado",
+  "verify.sub":
+    "Confirma que un PDF se completó de verdad en el flujo de firma de Docracy, y cuándo — luego compruébalo de una segunda forma, independiente de Docracy, en la blockchain de Bitcoin.",
+  "verify.trustRecords": "Confrontado con los registros de Docracy",
+  "verify.trustBitcoin": "Comprobable de forma independiente en Bitcoin",
+  "verify.dropTitle": "Haz clic o arrastra tu PDF aquí",
+  "verify.dropSub": "Verificación gratis, a prueba de manipulación",
+  "verify.caption": "SHA-256 · se calcula en tu navegador · nunca se sube nada",
+  "verify.hashPh": "O pega un hash SHA-256",
+  "verify.check": "Comprobar",
+  "verify.checking": "Comprobando…",
+  "verify.error": "Error",
+  "verify.notPdf": "Eso no parece un archivo PDF.",
+  "verify.badHash": "Eso no es un hash SHA-256 válido (se esperan 64 caracteres hex).",
+  "verify.readFail": "No se pudo leer ese archivo — inténtalo de nuevo.",
+  "verify.genericError": "Algo salió mal.",
+  "tpl.employment-agreement.name": "Acuerdo de empleo",
+  "tpl.employment-agreement.seoTitle": "Plantilla gratis de acuerdo de empleo",
+  "tpl.employment-agreement.description":
+    "Cubre puesto, pago, horario, confidencialidad y términos de terminación para una nueva contratación.",
+  "tpl.employment-agreement.useCase":
+    "Úsalo cuando contratas formalmente a un empleado y necesitas un registro firmado de su rol, pago, horario y los términos básicos de confidencialidad y terminación que ambos lados aceptan.",
+  "tpl.consulting-agreement.name": "Acuerdo de consultoría",
+  "tpl.consulting-agreement.seoTitle": "Plantilla gratis de acuerdo de consultoría",
+  "tpl.consulting-agreement.description":
+    "Términos para una relación continua de asesoría o consultoría — honorarios, confidencialidad y propiedad de las recomendaciones.",
+  "tpl.consulting-agreement.useCase":
+    "Úsalo cuando incorporas (o actúas como) un asesor para guía estratégica continua, no un entregable puntual — distinto de un contratista por proyecto.",
+  "tpl.unilateral-nda.name": "NDA unidireccional",
+  "tpl.unilateral-nda.seoTitle": "Plantilla gratis de NDA unidireccional (unilateral)",
+  "tpl.unilateral-nda.description":
+    "Un acuerdo de confidencialidad para cuando solo una parte comparte información confidencial.",
+  "tpl.unilateral-nda.useCase":
+    "Úsalo cuando tú (o tu empresa) eres quien comparte información confidencial — con un candidato, proveedor o posible inversionista — y solo la otra parte debe quedar obligada a confidencialidad, no ambos.",
+  "tpl.vendor-agreement.name": "Acuerdo con proveedor",
+  "tpl.vendor-agreement.seoTitle": "Plantilla gratis de acuerdo con proveedor / vendedor",
+  "tpl.vendor-agreement.description":
+    "Define precio, entrega y calidad al comprar bienes o servicios de un proveedor.",
+  "tpl.vendor-agreement.useCase":
+    "Úsalo cuando formalizas una relación con un proveedor que da bienes o servicios a tu negocio de forma continua.",
+  "tpl.w-9-form.name": "Formulario W-9",
+  "tpl.w-9-form.seoTitle": "Formulario W-9 gratis — firma el formulario del IRS en línea",
+  "tpl.w-9-form.description":
+    "El Formulario W-9 oficial del IRS (Rev. marzo 2024) — recopila el ID fiscal de un contratista o proveedor antes de pagarle.",
+  "tpl.w-9-form.useCase":
+    "Úsalo antes de pagarle a un contratista, freelancer o proveedor para tener su número de identificación fiscal en archivo para el reporte 1099. Es el formulario real y vigente del IRS — no un sustituto redactado por Docracy.",
+  "tpl.promissory-note.name": "Pagaré",
+  "tpl.promissory-note.seoTitle": "Plantilla gratis de pagaré",
+  "tpl.promissory-note.description":
+    "La promesa escrita de un prestatario de devolver un préstamo, con principal, interés y calendario de pagos.",
+  "tpl.promissory-note.useCase":
+    "Úsalo cuando prestas o pides dinero entre personas o pequeños negocios y quieres un registro firmado y fechado del monto, interés y términos de pago — sin banco ni notario.",
+  "tpl.letter-of-intent.name": "Carta de intención",
+  "tpl.letter-of-intent.seoTitle": "Plantilla gratis de carta de intención (LOI)",
+  "tpl.letter-of-intent.description":
+    "Una carta no vinculante que resume los términos propuestos de un trato — precio, estructura y plazos — antes de firmar un acuerdo definitivo.",
+  "tpl.letter-of-intent.useCase":
+    "Úsala cuando tú y la contraparte ya tienen un entendimiento preliminar sobre una venta, alianza, inmueble o transacción similar y quieren dejar los términos propuestos por escrito antes de negociar el acuerdo definitivo.",
+  "tpl.simple-commercial-lease-agreement.name": "Contrato de arrendamiento comercial simple",
+  "tpl.simple-commercial-lease-agreement.seoTitle": "Plantilla gratis de arrendamiento comercial simple",
+  "tpl.simple-commercial-lease-agreement.description":
+    "Cubre renta, plazo, depósito y responsabilidades de mantenimiento para un arrendamiento de inmueble sencillo.",
+  "tpl.simple-commercial-lease-agreement.useCase":
+    "Úsalo cuando rentas (o tomas en renta) un local comercial pequeño — oficina, estudio o local — y quieres términos claros de renta, depósito y quién responde por qué.",
+  "tpl.separation-agreement.name": "Acuerdo de separación",
+  "tpl.separation-agreement.seoTitle": "Plantilla gratis de acuerdo de separación laboral",
+  "tpl.separation-agreement.description":
+    "Cubre pago final, liquidación, devolución de bienes y liberación cuando un empleado se va — a veces llamado acuerdo de indemnización.",
+  "tpl.separation-agreement.useCase":
+    "Úsalo cuando termina el tiempo de un empleado en tu empresa y quieres un registro firmado del pago final, cualquier liquidación y las obligaciones que quedan de cada lado.",
+  "tpl.sales-agreement.name": "Contrato de compraventa",
+  "tpl.sales-agreement.seoTitle": "Plantilla gratis de contrato de compraventa",
+  "tpl.sales-agreement.description": "Cubre precio, entrega y estado para una venta puntual de bienes.",
+  "tpl.sales-agreement.useCase":
+    "Úsalo cuando compras o vendes bienes — equipo, inventario, un activo puntual — y quieres documentar precio, entrega y estado en lugar de un trato de palabra."
 };
 
 export default es;

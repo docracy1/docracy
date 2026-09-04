@@ -206,6 +206,22 @@ export interface DocState {
     /** Default 5MB per file. */
     maxBytesPerFile?: number;
   };
+  /**
+   * Optional "get paid after they sign" request. The sender pastes their own payment URL
+   * (PayPal.me, Stripe Payment Link, Mercado Pago, etc.) — Docracy never collects the money
+   * and never adds a processing fee. Always read via `doc.paymentRequest`.
+   */
+  paymentRequest?: PaymentRequest;
+  /** Set once the "this signed file is about to be deleted" nag has been emailed to the preparer. */
+  archiveNagSentAt?: string | null;
+}
+
+/** Display-only payment ask attached to a document. Amount/currency are labels; `url` is the
+ *  sender's own checkout link. Docracy does not charge or receive these funds. */
+export interface PaymentRequest {
+  amount: string;
+  currency: string;
+  url: string;
 }
 
 export interface Env {

@@ -33,6 +33,8 @@ const en: Messages = {
   "nav.mega.feature.ai.desc": "Automatically finds and places signature, date, and initial fields.",
   "nav.mega.feature.templates.title": "Marketplace",
   "nav.mega.feature.templates.desc": "Free templates from Docracy and the community, ready to sign.",
+  "nav.mega.feature.packet.title": "US contractor kit",
+  "nav.mega.feature.packet.desc": "NDA, W-9, and contractor agreement — three free templates, in order.",
   "nav.mega.feature.team.title": "Team access",
   "nav.mega.feature.team.desc": "Share documents and templates under one workspace.",
   "nav.mega.feature.storage.title": "Secure storage",
@@ -120,7 +122,7 @@ const en: Messages = {
   "login.titleUpgrade": "Sign in to upgrade",
   "login.sub": "No password — we'll email you a link. First time here? This creates your account too.",
   "login.subSave": "Create a free account so every future send lives in your dashboard — no password, just a magic link to this email.",
-  "login.subUpgrade": "Sign in (or create an account), then upgrade for unlimited signers, templates, and history.",
+  "login.subUpgrade": "Sign in, then upgrade to keep signed PDFs past 9 days — signing itself stays free.",
   "login.cta": "Send sign-in link",
   "login.ctaSave": "Email me a magic link",
   "login.email": "Email",
@@ -130,7 +132,7 @@ const en: Messages = {
   "login.orEmail": "Or continue with email",
   "pricing.title": "Pricing",
   "pricing.intro":
-    "Free for up to 2 signers — no account needed. Unlimited signatures for a flat $10/month per workspace, not per seat. Enterprise for invoice billing and SSO.",
+    "Signing is free — up to 2 signers, no account. Paid is $10/month to keep signed PDFs past 9 days and to attach your own checkout after they sign. Not a per-signature fee, and not a cut of what they pay you.",
   "sign.ready": "Ready to sign",
   "sign.review": "Review & sign",
   "sign.submit": "Complete signing",
@@ -162,6 +164,7 @@ const en: Messages = {
   "footer.industryConstruction": "Construction",
   "footer.industrySmallBusiness": "Small business",
   "footer.startFree": "Try free",
+  "footer.packet": "US contractor kit",
   "footer.pricing": "Pricing",
   "footer.templates": "Marketplace",
   "footer.mcp": "MCP connector",
@@ -302,7 +305,7 @@ const en: Messages = {
   "landing.faqTitle": "Frequently asked questions",
   "landing.faq1.q": "What is Docracy.io?",
   "landing.faq1.a":
-    "The fastest, simplest e-signature tool for solo founders and small teams: upload a PDF, add signers, done. Free for up to 2 signers with no account required; flat $10/month for unlimited.",
+    "The fastest, simplest e-signature tool for solo founders and small teams: upload a PDF, add signers, done. Free for up to 2 signers with no account required. Paid is $10/month to keep signed PDFs past 9 days — not a per-signature fee.",
   "landing.faq2.q": "How do e-signatures work?",
   "landing.faq2.a":
     "Upload a document (or start from a free template), place fields, send a link. Signers open it and sign in seconds — no app, no signup.",
@@ -314,7 +317,7 @@ const en: Messages = {
     "Yes — start free from 100+ ready templates, or save your own reusable templates on a paid account.",
   "landing.faq5.q": "Does Docracy.io support teams?",
   "landing.faq5.a":
-    "Yes on Paid ($10/mo flat, not per seat): invite teammates, share templates, connectors, and AI tools under one workspace.",
+    "Yes on Paid ($10/mo flat, not per seat): keep signed PDFs past 9 days, attach your own PayPal/Stripe/Mercado Pago link after they sign, plus teammates, templates, connectors, and AI under one workspace.",
   "landing.compareTitle": "How Docracy compares on price",
   "landing.compareSub": "Docracy's paid plan is one flat fee per workspace, not a per-seat license — add as many teammates as you want at no extra cost.",
   "landing.disclaimer":
@@ -325,18 +328,18 @@ const en: Messages = {
   "pricing.free.note": "no account, no card",
   "pricing.free.f1": "Up to 2 signers per document",
   "pricing.free.f2": "Sequential or all-at-once signing",
-  "pricing.free.f3": "Audit trail + completion certificate",
+  "pricing.free.f3": "US contractor kit (NDA, W-9, agreement)",
   "pricing.free.cta": "Start signing free",
   "pricing.paid.name": "Paid",
-  "pricing.paid.tagline": "For teams and growing businesses",
+  "pricing.paid.tagline": "Keep signed files. Reuse kits. Get paid.",
   "pricing.paid.note": "/mo, flat — not per seat",
-  "pricing.paid.f1": "Unlimited signers",
-  "pricing.paid.f2": "Unlimited team members",
-  "pricing.paid.f3": "Dashboard with document history",
+  "pricing.paid.f1": "Keep signed PDFs up to 90 days",
+  "pricing.paid.f2": "Get paid after they sign — your PayPal, Stripe, or Mercado Pago link",
+  "pricing.paid.f3": "Dashboard archive of every signed file",
   "pricing.paid.f4": "Customer support",
   "pricing.paid.f5": "Reusable templates",
   "pricing.paid.f6": "Bulk send from a template",
-  "pricing.paid.f7": "Signing window up to 90 days (then auto-deleted)",
+  "pricing.paid.f7": "Unlimited signers per document",
   "pricing.paid.f8": "Embedded signing (iframe)",
   "pricing.paid.f9": "Saved contacts + signer reassignment",
   "pricing.paid.f10": "Webhooks for your own systems",
@@ -410,13 +413,15 @@ const en: Messages = {
   "sign.declinedBody": "You've declined to sign. The sender and other parties have been notified.",
   "sign.cancelledBody": "This document has been cancelled and is no longer available for signing.",
   "sign.declinedDocBody": "A signer declined this document, so it's no longer available for signing.",
-  "sign.viral": "Created with Docracy — send your own documents for free.",
+  "sign.viral": "Need to send your own? Free — no account for the people who sign.",
   "sign.sendDoc": "Send a document",
+  "sign.payCta": "Pay {{amount}} {{currency}}",
+  "sign.payHint": "This checkout belongs to the sender. Docracy does not take the payment.",
   "sign.conv.brand": "Docracy",
   "sign.conv.headline": "You're all set!",
-  "sign.conv.sub": "Signing can always be this easy.",
+  "sign.conv.sub": "Sending a document can be this easy too.",
   "sign.conv.body":
-    "Create a free account to send your own documents — up to 2 signers, no credit card. Keep them in your dashboard. Paid unlocks templates, AI, and team tools.",
+    "Create a free account and send your own — up to 2 signers, no credit card. Paid is only if you want signed files kept past 9 days.",
   "sign.conv.emailLabel": "Email",
   "sign.conv.emailPlaceholder": "you@company.com",
   "sign.conv.cta": "Create free account",
@@ -490,10 +495,13 @@ const en: Messages = {
   "plan.auditCert": "Audit trail + completion certificate",
   "plan.docVerification": "Free document verification (anyone, no account)",
   "plan.blockchainTimestamp": "Bitcoin blockchain timestamp on every document (via OpenTimestamps)",
-  "plan.dashboard": "Dashboard with document history (free account)",
+  "plan.dashboard": "Dashboard of your sends (free account)",
   "plan.templates": "Reusable templates",
   "plan.bulkSend": "Bulk send",
-  "plan.customExpiry": "Signing window (then auto-deleted)",
+  "plan.customExpiry": "Keep signed PDFs after completion",
+  "plan.archiveReminder": "Email + dashboard reminder before signed PDFs are deleted",
+  "plan.paymentLink": "Get paid after they sign (your PayPal, Stripe, or Mercado Pago link)",
+  "plan.contractorPacket": "US contractor kit (NDA, W-9, contractor agreement)",
   "plan.embedded": "Embedded signing",
   "plan.contactsReassign": "Saved contacts + signer reassignment",
   "plan.webhooks": "Webhooks for your own systems",
@@ -516,7 +524,7 @@ const en: Messages = {
   "plan.val.whatsappFree": "1/month",
   "plan.val.whatsappPaid": "10/month, then $0.50 each",
   "plan.val.whatsappEnterprise": "50/month (fair use)",
-  "plan.val.days9": "9 days",
+  "plan.val.days9": "9 days, then deleted",
   "plan.val.days90": "Up to 90 days",
   "plan.val.premium": "Premium",
   "plan.included": "Included",
@@ -554,8 +562,12 @@ const en: Messages = {
   "dash.sendAgain": "Send again",
   "dash.sentTimes": "— sent {{count}} time",
   "dash.sentTimesPlural": "— sent {{count}} times",
-  "dash.upgradeTitle": "Upgrade to paid — $10/month",
-  "dash.upgradeBody": "Unlimited signers, a connector so Claude, ChatGPT, Grok, or Perplexity can look up your documents, team accounts, white-label branding, and a set of AI tools — auto-detect signature/date fields, a plain-English explainer with risk highlighting, and a contract generator that turns a one-line description into a signable PDF.",
+  "dash.upgradeTitle": "Keep your signed files — $10/month",
+  "dash.upgradeBody":
+    "Free signing deletes the PDF after 9 days. Paid keeps every signed contract in your archive, plus reusable templates, bulk send, and team tools. You are not paying for the signature.",
+  "dash.deletesOn": "Deletes {{date}}",
+  "dash.keepFile": "Keep this file",
+  "dash.archiveNag": "A signed PDF in this list is deleted within 2 days.",
   "dash.freeTemplates": "Marketplace",
   "dash.freeTemplatesSub": "Ready-to-use documents from Docracy and the community — pick one to prefill its signature fields automatically.",
   "dash.browseFreeTemplates": "Browse the full Marketplace →",
@@ -632,6 +644,16 @@ const en: Messages = {
   "prepare.inviteEmail": "Invite email",
   "prepare.customized": "Customized",
   "prepare.defaultInvite": "Default subject & message",
+  "prepare.payTitle": "Get paid after they sign (optional)",
+  "prepare.payHint":
+    "Paste your own PayPal, Stripe Payment Link, or Mercado Pago URL. Docracy never takes this money — the $10 plan is how we get paid, not a cut of yours.",
+  "prepare.payLocked":
+    "Paid ($10/month) puts your checkout next to the finished contract. We never take a percentage; you keep 100% of what they pay you.",
+  "prepare.payAmountPh": "Amount",
+  "prepare.payAmountAria": "Payment amount",
+  "prepare.payCurrencyAria": "Currency",
+  "prepare.payUrlPh": "https://paypal.me/you or your checkout link",
+  "prepare.payUrlAria": "Your payment link",
   "prepare.files": "Files",
   "prepare.signers": "Signers",
   "prepare.fieldsPlaced": "Fields placed",
@@ -680,8 +702,8 @@ const en: Messages = {
   "sent.copyStatus": "Copy status link",
   "sent.shareColleague": "Share Docracy with a colleague",
   "sent.saveAccount": "Save this send to an account",
-  "sent.saveAccountSub": "This document and its signing history are deleted after 9 days unless you save it. Create a free account and we'll move it into your dashboard — no password, just a magic link.",
-  "sent.saveAccountSubFuture": "Heads up: this document and its signing history are deleted after 9 days — the status link above stops working then too. Create a free account so this send (and every future one) stays in your dashboard for good — no password, just a magic link.",
+  "sent.saveAccountSub": "This signed PDF is deleted after 9 days. A free account lists it on your dashboard until then — paid is what keeps the file.",
+  "sent.saveAccountSubFuture": "This signed PDF is deleted after 9 days — the status link stops working then too. A free account lists sends until that date. Paid keeps the files.",
   "sent.sendAnother": "Send another",
   "dash.claimSuccess": "Saved to your dashboard: {{title}}",
   "dash.whatsappAnnouncement": "New: send signing links via WhatsApp — phone-bound, PIN-protected, a step toward Advanced Electronic Signature.",
@@ -855,6 +877,12 @@ const en: Messages = {
   "docs.expiry.body":
     "Free documents always expire after 9 days (or sooner once everyone has signed and the final copy is emailed). On a paid account you can choose retention of 1–90 days when preparing a document or bulk-sending from a template.",
   "docs.expiry.title": "Custom document expiry (paid)",
+  "docs.pay.title": "Get paid after they sign (paid)",
+  "docs.pay.body":
+    "On a paid account, prepare can attach your own https checkout — PayPal.me, Stripe Payment Link, Mercado Pago, or similar — plus an amount and currency. After everyone has signed, the signer sees a pay button. Docracy never takes that money; the $10/month plan is how we get paid, not a percentage of yours.",
+  "docs.packet.title": "US contractor kit (free)",
+  "docs.packet.body":
+    "Three existing free templates sent one PDF at a time: mutual NDA, IRS W-9, then independent contractor agreement. Open /packets/us-contractor (Spanish: /es/kit-contratista). Attaching a payment link on those sends still requires Paid.",
   "docs.fields.checkbox": "Checkbox — required or optional.",
   "docs.fields.dropdown":
     "Dropdown — you define the options when placing the field; the chosen value is burned into the PDF.",
@@ -866,7 +894,7 @@ const en: Messages = {
     "server so Claude, ChatGPT, Grok, Perplexity, or an IDE agent like Cursor can check signing status and search your documents from a chat. Requires a paid account — copy your personal connector URL from Dashboard → Connector & API key. Full setup instructions:",
   "docs.mcp.title": "Connect an AI assistant (MCP)",
   "docs.paid.body1":
-    "A free account already keeps dashboard history for every send. Paid adds unlimited signers per document, reusable saved templates, parallel (all-at-once) signing, PIN-protected signing links, team accounts (shared workspace with teammates), white-label branding (your own logo on emails/signing pages), webhooks, MCP/Zapier, AI tools, Dropbox/OneDrive/Box/Google Drive auto-upload, plus the workflow features below. Full comparison on",
+    "Signing stays free. A free account lists sends on the dashboard until the 9-day TTL deletes the PDF — it does not keep the file. Paid ($10/month) keeps signed PDFs up to 90 days, lets you attach your own PayPal/Stripe/Mercado Pago link after they sign (no Docracy cut), plus unlimited signers, reusable templates, PIN-protected links, team accounts, white-label branding, webhooks, MCP/Zapier, AI tools, Dropbox/OneDrive/Box/Google Drive auto-upload, and the workflow features below. The US contractor kit is free. Full comparison on",
   "docs.paid.title": "Paid account ($10/month)",
   "docs.privacy.and": "and",
   "docs.privacy.body1":
@@ -1064,7 +1092,7 @@ const en: Messages = {
     "A short walkthrough of Docracy: upload a PDF, place signature fields, email signing links, and download the signed document — free for up to two signers, no account needed.",
   "seo.pricing.title": "Docracy Pricing — Free, Paid & Enterprise Plans",
   "seo.pricing.description":
-    "Free for signing chains of up to 2 signers. Paid is $10/month flat per workspace — unlimited signers, templates, AI tools, connectors, and team accounts.",
+    "Signing is free for up to 2 people. $10/month keeps signed PDFs past 9 days, plus get-paid links, templates, teams, and AI. No cut of your checkout.",
   "seo.freeTemplates.title": "Free Business Document Templates | Docracy",
   "seo.freeTemplates.description":
     "Free, ready-to-sign templates for the most common business documents — mutual NDA, independent contractor agreement, offer letter, remote work policy, and freelance service agreement. Fill in your details and send for signature in minutes.",
@@ -1398,7 +1426,7 @@ const en: Messages = {
   "secureSig.faq.a3":
     "Not by default. The audit trail proves what was signed and when, not a verified identity. An optional PIN and WhatsApp-bound delivery (paid plans) add stronger signer verification.",
   "secureSig.faq.q4": "How long are my documents kept?",
-  "secureSig.faq.a4": "Anonymous signing chains use a 9-day default retention window. Paid workspaces keep history according to their plan until deleted.",
+  "secureSig.faq.a4": "Anonymous signing chains use a 9-day default retention window. Paid keeps signed PDFs up to 90 days.",
   "secureSig.footerCta": "See exactly how your document is protected.",
   "secureSig.trustLink": "Full Trust & security page",
   "secureSig.dpaLink": "Data Processing Agreement",
@@ -1415,9 +1443,9 @@ const en: Messages = {
   "freeSig.included.4": "A certificate of completion summarizing who signed, when, and how",
   "freeSig.upgradeTitle": "When you'd actually need to upgrade",
   "freeSig.upgradeBody": "The free tier covers most one-off agreements. You'd need the $10/month flat Paid plan if you need:",
-  "freeSig.upgrade.1": "More than 2 signers on a single document",
+  "freeSig.upgrade.1": "Signed files kept past 9 days (up to 90 days)",
   "freeSig.upgrade.2": "Reusable templates, a team dashboard, or bulk sending",
-  "freeSig.upgrade.3": "AI tools (contract explainer, risk highlighter, auto-detect) or the MCP connector",
+  "freeSig.upgrade.3": "More than 2 signers on a single document",
   "freeSig.pricingLink": "See the full plan comparison",
   "freeSig.catchTitle": "What's the catch?",
   "freeSig.catchBody":
@@ -1892,7 +1920,7 @@ const en: Messages = {
   "prepare.freeCcLimit": "Free plan supports up to {{max}} CC viewers. Upgrade for unlimited viewers.",
   "prepare.freePlanSigners": "Free plan: up to {{max}} signers",
   "prepare.freePlanViewers": "Free plan: up to {{max}} viewers",
-  "prepare.freeSignerLimit": "Free plan supports up to {{max}} signers. Upgrade for unlimited signers, templates, and history.",
+  "prepare.freeSignerLimit": "Free plan supports up to {{max}} signers. Upgrade for unlimited signers, templates, and keeping signed files past 9 days.",
   "prepare.freeTemplateMissing": "That free template couldn't be found.",
   "prepare.generateError": "Couldn't generate a contract",
   "prepare.loadTemplateError": "Couldn't load that template",
@@ -2211,7 +2239,108 @@ const en: Messages = {
   "integrationsAi.linkAi": "AI tools overview →",
   "integrationsAi.linkDrafting": "AI contract drafting →",
   "integrationsAi.linkEnterprise": "Enterprise →",
-  "integrationsAi.linkDocs": "Docs →"
+  "integrationsAi.linkDocs": "Docs →",
+  "packet.seoTitle": "Free US Contractor Kit — NDA, W-9 & Independent Contractor Agreement",
+  "packet.seoDescription":
+    "Onboard a US contractor with free NDA, IRS W-9, and contractor agreement. Sign online, no account. Paid adds your PayPal or Mercado Pago link.",
+  "packet.kicker": "US contractors",
+  "packet.heroTitle": "NDA, W-9, and contractor agreement — in order",
+  "packet.heroSub":
+    "Three existing free templates, sent one PDF at a time. No merged packet, no extra fee. Signing is free; paid is only if you want the signed files kept past 9 days.",
+  "packet.ctaStart": "Start with the NDA",
+  "packet.stepsTitle": "The three documents",
+  "packet.stepsSub": "Send them in this order. Each one is a normal Docracy send — the next step waits on this page until you come back.",
+  "packet.stepN": "Step {{n}}",
+  "packet.sent": "Sent this session",
+  "packet.sendThis": "Fill and send",
+  "packet.sendAgain": "Send again",
+  "packet.payTitle": "Get paid after they sign",
+  "packet.payBody":
+    "On Paid you can paste your own PayPal.me, Stripe Payment Link, or Mercado Pago URL plus an amount when you prepare. Docracy never takes the money — the $10/month is how we get paid, not a cut of yours. After the last signature, the signer sees that pay button.",
+  "packet.keepLink": "Paid keeps the signed PDFs past 9 days →",
+  "packet.nextTitle": "Next in the US contractor kit",
+  "packet.nextCta": "Continue to the next document",
+  "packet.kitDone": "Contractor kit complete for this session",
+  "packet.kitDoneSub": "You can still resend any of the three templates, or keep the signed files on Paid.",
+  "packet.backToKit": "Back to the kit",
+  "verify.seoTitle": "Verify a Signed Document — Independently, via Blockchain | Docracy",
+  "verify.seoDescription":
+    "Confirm a PDF was completed through Docracy and check it on Bitcoin via OpenTimestamps. Upload or paste the SHA-256 — the file never leaves your browser.",
+  "verify.h1": "Verify a signed document",
+  "verify.sub":
+    "Confirm a PDF was really completed through Docracy's signing flow, and when — then check it a second way, independently of Docracy, on the Bitcoin blockchain.",
+  "verify.trustRecords": "Checked against Docracy's records",
+  "verify.trustBitcoin": "Independently checkable on Bitcoin",
+  "verify.dropTitle": "Click or drag your PDF here",
+  "verify.dropSub": "Free, tamper-evident verification",
+  "verify.caption": "SHA-256 · computed in your browser · nothing ever uploaded",
+  "verify.hashPh": "Or paste a SHA-256 hash",
+  "verify.check": "Check",
+  "verify.checking": "Checking…",
+  "verify.error": "Error",
+  "verify.notPdf": "That doesn't look like a PDF file.",
+  "verify.badHash": "That's not a valid SHA-256 hash (expected 64 hex characters).",
+  "verify.readFail": "Couldn't read that file — please try again.",
+  "verify.genericError": "Something went wrong.",
+  "tpl.employment-agreement.name": "Employment Agreement",
+  "tpl.employment-agreement.seoTitle": "Free Employment Agreement Template",
+  "tpl.employment-agreement.description":
+    "Covers position, pay, work schedule, confidentiality, and termination terms for a new hire.",
+  "tpl.employment-agreement.useCase":
+    "Use this when you're formally hiring an employee and need a signed record of their role, pay, schedule, and the basic confidentiality and termination terms both sides are agreeing to.",
+  "tpl.consulting-agreement.name": "Consulting Agreement",
+  "tpl.consulting-agreement.seoTitle": "Free Consulting Agreement Template",
+  "tpl.consulting-agreement.description":
+    "Terms for an ongoing advisory/consultant relationship — fees, confidentiality, and ownership of recommendations.",
+  "tpl.consulting-agreement.useCase":
+    "Use this when you're bringing on (or acting as) an advisor for ongoing strategic guidance, rather than a one-off deliverable — distinct from a project-based contractor engagement.",
+  "tpl.unilateral-nda.name": "One-Way NDA",
+  "tpl.unilateral-nda.seoTitle": "Free One-Way (Unilateral) NDA Template",
+  "tpl.unilateral-nda.description":
+    "A non-disclosure agreement for when only one party is sharing confidential information.",
+  "tpl.unilateral-nda.useCase":
+    "Use this when you (or your company) are the one sharing confidential information — with a candidate, vendor, or potential investor — and only the other side needs to be bound to confidentiality, not both of you.",
+  "tpl.vendor-agreement.name": "Vendor Agreement",
+  "tpl.vendor-agreement.seoTitle": "Free Vendor / Supplier Agreement Template",
+  "tpl.vendor-agreement.description":
+    "Sets pricing, delivery, and quality terms for buying goods or services from a supplier.",
+  "tpl.vendor-agreement.useCase":
+    "Use this when you're formalizing a relationship with a supplier or vendor providing goods or services to your business on an ongoing basis.",
+  "tpl.w-9-form.name": "W-9 Form",
+  "tpl.w-9-form.seoTitle": "Free W-9 Form — Sign the IRS Form Online",
+  "tpl.w-9-form.description":
+    "The official IRS Form W-9 (Rev. March 2024) — collect a contractor or vendor's taxpayer ID before you pay them.",
+  "tpl.w-9-form.useCase":
+    "Use this before you pay a contractor, freelancer, or vendor so you have their taxpayer identification number on file for 1099 reporting. This is the real, current IRS form — not a Docracy-drafted substitute.",
+  "tpl.promissory-note.name": "Promissory Note",
+  "tpl.promissory-note.seoTitle": "Free Promissory Note Template",
+  "tpl.promissory-note.description":
+    "A borrower's written promise to repay a loan, covering principal, interest, and repayment schedule.",
+  "tpl.promissory-note.useCase":
+    "Use this when you're lending or borrowing money between individuals or small businesses and want a signed, dated record of the amount, interest, and repayment terms — without a bank or notary.",
+  "tpl.letter-of-intent.name": "Letter of Intent",
+  "tpl.letter-of-intent.seoTitle": "Free Letter of Intent (LOI) Template",
+  "tpl.letter-of-intent.description":
+    "A non-binding letter outlining the proposed terms of a deal — price, structure, and timeline — before a definitive agreement is signed.",
+  "tpl.letter-of-intent.useCase":
+    "Use this when you and a counterparty have reached a preliminary understanding on a business sale, partnership, real estate deal, or similar transaction and want to record the proposed terms in writing before a definitive agreement is negotiated.",
+  "tpl.simple-commercial-lease-agreement.name": "Simple Commercial Lease Agreement",
+  "tpl.simple-commercial-lease-agreement.seoTitle": "Free Simple Commercial Lease Agreement Template",
+  "tpl.simple-commercial-lease-agreement.description":
+    "Covers rent, term, deposit, and maintenance responsibilities for a straightforward property lease.",
+  "tpl.simple-commercial-lease-agreement.useCase":
+    "Use this when you're leasing out (or leasing) a small commercial space — an office, studio, or storefront — and want clear terms on rent, deposit, and who's responsible for what.",
+  "tpl.separation-agreement.name": "Separation Agreement",
+  "tpl.separation-agreement.seoTitle": "Free Employee Separation Agreement Template",
+  "tpl.separation-agreement.description":
+    "Covers final pay, severance, return of property, and release terms when an employee leaves — sometimes called a severance agreement.",
+  "tpl.separation-agreement.useCase":
+    "Use this when an employee's time with your company is ending and you want a clear, signed record of final pay, any severance, and each side's remaining obligations.",
+  "tpl.sales-agreement.name": "Sales Agreement",
+  "tpl.sales-agreement.seoTitle": "Free Sales / Purchase Agreement Template",
+  "tpl.sales-agreement.description": "Covers price, delivery, and condition terms for a one-off sale of goods.",
+  "tpl.sales-agreement.useCase":
+    "Use this when you're buying or selling goods — equipment, inventory, a one-off asset — and want the price, delivery, and condition terms documented rather than a handshake deal."
 };
 
 export default en;

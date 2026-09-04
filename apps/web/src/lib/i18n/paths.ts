@@ -31,6 +31,8 @@ export const ES_PATH_BY_EN: Record<string, string> = {
   "/enterprise": "/es/empresas",
   "/integrations/ai-assistants": "/es/integraciones/asistentes-ia",
   "/how-it-works": "/es/como-funciona",
+  "/verify": "/es/verificar",
+  "/packets/us-contractor": "/es/kit-contratista",
 };
 
 export const EN_PATH_BY_ES: Record<string, string> = Object.fromEntries(

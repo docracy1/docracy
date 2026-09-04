@@ -29,11 +29,11 @@ const FAQS = [
   },
   {
     q: "How long does Docracy keep my documents?",
-    a: "Anonymous signing chains (the free, no-signup flow) use a short retention window — 9 days after creation by default — after which the document and its signing state are deleted, or sooner once the chain completes and final copies are emailed out. Paid workspaces keep dashboard history and templates according to their plan until deleted or the account is closed.",
+    a: "Anonymous signing chains (the free, no-signup flow) use a short retention window — 9 days after creation by default — after which the document and its signing state are deleted, or sooner once the chain completes and final copies are emailed out. Paid keeps signed PDFs up to 90 days.",
   },
   {
     q: "How much does electronic signing with Docracy cost?",
-    a: "Free: $0, no account or card required, up to 2 signers per document. Paid: $10/month flat — not per seat — for unlimited signers, a team dashboard, reusable templates, bulk send, a 90-day signing window, embedded signing, webhooks, an MCP connector, AI drafting/review tools, white-labeling, PIN-protected links, and cloud storage connectors. Enterprise: custom pricing for invoice billing, annual contracts, SLA support, and SSO/multi-workspace setups. Full breakdown on the pricing page.",
+    a: "Free: $0, no account or card required, up to 2 signers per document. Paid: $10/month flat — not per seat — to keep signed PDFs past 9 days and to attach your own PayPal, Stripe, or Mercado Pago link after they sign, plus unlimited signers, a team dashboard, reusable templates, bulk send, embedded signing, webhooks, an MCP connector, AI tools, white-labeling, PIN-protected links, and cloud storage connectors. Docracy never takes a cut of your checkout. Enterprise: custom pricing for invoice billing, annual contracts, SLA support, and SSO/multi-workspace setups. Full breakdown on the pricing page.",
   },
 ];
 

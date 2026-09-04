@@ -51,6 +51,8 @@ export interface CreateDocumentOptions {
   ccRecipients?: CcRecipientInput[];
   /** Paid only — retention days (1–90). Omitted / free always uses the default (9). */
   ttlDays?: number;
+  /** Paid only — sender's own payment link. Docracy never collects this money. */
+  paymentRequest?: { amount: string; currency: string; url: string };
   smsInvites?: boolean;
   /** Also send signing links via WhatsApp — requires a signed-up account (free: 1/month, paid: 10/month, enterprise: 50/month). */
   whatsappInvites?: boolean;
@@ -352,6 +354,7 @@ export interface DocumentSummary {
   status: "pending" | "completed" | "voided";
   createdAt: string;
   completedAt: string | null;
+  expiresAt?: string;
   statusToken: string;
   awaitingYou: boolean;
   signToken: string | null;
