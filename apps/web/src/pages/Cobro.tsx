@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { createCobro, fetchMe, startCheckout, type Account } from "../lib/api";
 import { markLatamPacketStepSent, LATAM_CONTRACTOR_PACKET_SLUG } from "../lib/latamContractorPacket";
 import { isJobPacketId, jobPacketPath, markJobPacketStepSent } from "../lib/jobPackets";
@@ -15,11 +15,14 @@ const CURRENCIES = ["USD", "MXN", "COP", "ARS", "CLP", "PEN", "BRL"] as const;
 /**
  * Public SEO landing for WhatsApp cobro (pay + file, no signature), with the Paid send form
  * for logged-in paid accounts. Indexed copy never claims Docracy takes the money.
+ * Dashboard "Send cobro" and #send skip the marketing hero so the form is the first thing.
  */
 export default function Cobro() {
   const { t, locale } = useI18n();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const packetSlug = searchParams.get("packet");
+  const wantSend = location.hash === "#send" || searchParams.get("send") === "1";
   const [account, setAccount] = useState<Account | null | undefined>(undefined);
   const [upgrading, setUpgrading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -44,6 +47,13 @@ export default function Cobro() {
       .then((res) => setAccount(res.account))
       .catch(() => setAccount(null));
   }, []);
+
+  useEffect(() => {
+    if (!wantSend) return;
+    window.scrollTo(0, 0);
+  }, [wantSend]);
+
+  const formFirst = wantSend || account?.isPaid === true;
 
   const faqJsonLd = useMemo(
     () => ({
@@ -115,110 +125,156 @@ export default function Cobro() {
     }
   };
 
-  const loginTo = `/login?next=${encodeURIComponent(locale === "es" ? "/es/cobro" : "/cobro")}&ref=cobro`;
+  const cobroPath = locale === "es" ? "/es/cobro" : "/cobro";
+  const loginTo = `/login?next=${encodeURIComponent(`${cobroPath}#send`)}&ref=cobro`;
   const signedUrl = sent ? `${typeof window !== "undefined" ? window.location.origin : ""}${signedPagePath(sent.statusToken, locale)}` : "";
+
+  const sendForm = (
+    <>
+      {sent ? (
+        <>
+          <p>{t("cobro.sentBody")}</p>
+          <p>
+            <Link to={signedPagePath(sent.statusToken, locale)}>{signedUrl}</Link>
+          </p>
+          {packetSlug === LATAM_CONTRACTOR_PACKET_SLUG && (
+            <p>
+              <Link to={localizePath("/packets/latam-contractor", locale)}>{t("latamPacket.backToKit")}</Link>
+            </p>
+          )}
+          {isJobPacketId(packetSlug) && (
+            <p>
+              <Link to={jobPacketPath(packetSlug, locale)}>{t("packet.backToKit")}</Link>
+            </p>
+          )}
+        </>
+      ) : (
+        <>
+          <label style={{ display: "block", marginBottom: 10 }}>
+            {t("cobro.fileLabel")}
+            <input
+              type="file"
+              accept="application/pdf"
+              style={{ display: "block", marginTop: 6 }}
+              onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+            />
+          </label>
+          <div className="cobro-form-row">
+            <input className="form-input" placeholder={t("cobro.titlePh")} value={title} onChange={(e) => setTitle(e.target.value)} aria-label={t("cobro.titlePh")} />
+            <input className="form-input" placeholder={t("cobro.namePh")} value={recipientName} onChange={(e) => setRecipientName(e.target.value)} aria-label={t("cobro.namePh")} />
+            <input className="form-input" type="email" placeholder={t("cobro.emailPh")} value={recipientEmail} onChange={(e) => setRecipientEmail(e.target.value)} aria-label={t("cobro.emailPh")} />
+          </div>
+          <input className="form-input" style={{ marginTop: 8 }} placeholder={t("cobro.whatsappPh")} value={recipientWhatsapp} onChange={(e) => setRecipientWhatsapp(e.target.value)} aria-label={t("cobro.whatsappPh")} />
+          <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+            <input className="form-input" style={{ flex: 1 }} inputMode="decimal" placeholder={t("prepare.payAmountPh")} value={amount} onChange={(e) => setAmount(e.target.value)} aria-label={t("prepare.payAmountAria")} />
+            <select className="form-input" style={{ width: 88 }} value={currency} onChange={(e) => setCurrency(e.target.value)} aria-label={t("prepare.payCurrencyAria")}>
+              {CURRENCIES.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+          </div>
+          <input className="form-input" style={{ marginTop: 8 }} type="url" placeholder={t("prepare.payUrlPh")} value={url} onChange={(e) => setUrl(e.target.value)} aria-label={t("prepare.payUrlAria")} />
+          <p style={{ fontSize: 12, color: "var(--mute)" }}>{t("cobro.formHint")}</p>
+          {error && <p style={{ color: "var(--danger)" }}>{error}</p>}
+          <button type="button" className="btn-primary" style={{ marginTop: 8 }} onClick={onSubmit} disabled={submitting || !file || !account?.isPaid}>
+            {submitting ? t("common.sending") : t("cobro.submit")}
+          </button>
+        </>
+      )}
+    </>
+  );
+
+  let sendCardBody: ReactNode;
+  if (account === undefined || account?.isPaid) {
+    sendCardBody = sendForm;
+  } else if (account) {
+    sendCardBody = (
+      <>
+        <p>{t("cobro.heroSub")}</p>
+        <button type="button" className="btn-primary" onClick={onUpgrade} disabled={upgrading}>
+          {upgrading ? t("common.redirecting") : t("cobro.ctaPaid")}
+        </button>
+      </>
+    );
+  } else {
+    sendCardBody = (
+      <>
+        <p>{t("cobro.heroSub")}</p>
+        <Link
+          to={loginTo}
+          className="btn-primary"
+          style={{ display: "inline-block", textDecoration: "none" }}
+          onClick={() => track("landingpage_cta_clicked", { source: "seo:cobro:send" })}
+        >
+          {t("cobro.ctaLogin")}
+        </Link>
+      </>
+    );
+  }
+
+  const sendCard = (
+    <div id="send" className="card" style={{ marginTop: formFirst ? 0 : 36 }}>
+      <h2 style={{ fontSize: 20, marginTop: 0 }}>{t("cobro.formTitle")}</h2>
+      {sendCardBody}
+    </div>
+  );
 
   return (
     <div>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(crumbs) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howTo) }} />
-      <div className="hero-band">
-        <div className="hero-inner" style={{ maxWidth: 720 }}>
-          <p className="hero-kicker" style={{ marginBottom: 8, color: "var(--mute)", fontSize: 13, letterSpacing: "0.04em", textTransform: "uppercase" }}>
-            {t("cobro.kicker")}
-          </p>
-          <h1>{t("cobro.heroTitle")}</h1>
-          <p>{t("cobro.heroSub")}</p>
-          <div style={{ marginTop: 20 }}>
-            {account?.isPaid ? (
-              <a href="#send" className="btn-primary btn-lg" style={{ display: "inline-block", textDecoration: "none" }}>
-                {t("cobro.ctaSend")}
-              </a>
-            ) : account ? (
-              <button type="button" className="btn-primary btn-lg" onClick={onUpgrade} disabled={upgrading}>
-                {upgrading ? t("common.redirecting") : t("cobro.ctaPaid")}
-              </button>
-            ) : (
-              <Link
-                to={loginTo}
-                className="btn-primary btn-lg"
-                style={{ display: "inline-block", textDecoration: "none" }}
-                onClick={() => track("landingpage_cta_clicked", { source: "seo:cobro:hero" })}
-              >
-                {t("cobro.ctaLogin")}
-              </Link>
-            )}
+      {!formFirst && (
+        <div className="hero-band">
+          <div className="hero-inner" style={{ maxWidth: 720 }}>
+            <p className="hero-kicker" style={{ marginBottom: 8, color: "var(--mute)", fontSize: 13, letterSpacing: "0.04em", textTransform: "uppercase" }}>
+              {t("cobro.kicker")}
+            </p>
+            <h1>{t("cobro.heroTitle")}</h1>
+            <p>{t("cobro.heroSub")}</p>
+            <div style={{ marginTop: 20 }}>
+              {account?.isPaid ? (
+                <a href="#send" className="btn-primary btn-lg" style={{ display: "inline-block", textDecoration: "none" }}>
+                  {t("cobro.ctaSend")}
+                </a>
+              ) : account ? (
+                <button type="button" className="btn-primary btn-lg" onClick={onUpgrade} disabled={upgrading}>
+                  {upgrading ? t("common.redirecting") : t("cobro.ctaPaid")}
+                </button>
+              ) : (
+                <Link
+                  to={loginTo}
+                  className="btn-primary btn-lg"
+                  style={{ display: "inline-block", textDecoration: "none" }}
+                  onClick={() => track("landingpage_cta_clicked", { source: "seo:cobro:hero" })}
+                >
+                  {t("cobro.ctaLogin")}
+                </Link>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
-      <div className="container" style={{ maxWidth: 720 }}>
-        <h2 style={{ fontSize: 22, marginTop: 40 }}>{t("cobro.problemTitle")}</h2>
-        <p>{t("cobro.problem")}</p>
-        <h2 style={{ fontSize: 22, marginTop: 32 }}>{t("cobro.solutionTitle")}</h2>
-        <p>{t("cobro.solution")}</p>
-        <ul>
-          <li>{t("cobro.feat1")}</li>
-          <li>{t("cobro.feat2")}</li>
-          <li>{t("cobro.feat3")}</li>
-          <li>{t("cobro.feat4")}</li>
-        </ul>
+      <div className="container" style={{ maxWidth: 720, paddingTop: formFirst ? 28 : undefined }}>
+        {formFirst && sendCard}
 
-        {account?.isPaid && (
-          <div id="send" className="card" style={{ marginTop: 36 }}>
-            <h2 style={{ fontSize: 20, marginTop: 0 }}>{t("cobro.formTitle")}</h2>
-            {sent ? (
-              <>
-                <p>{t("cobro.sentBody")}</p>
-                <p>
-                  <Link to={signedPagePath(sent.statusToken, locale)}>{signedUrl}</Link>
-                </p>
-                {packetSlug === LATAM_CONTRACTOR_PACKET_SLUG && (
-                  <p>
-                    <Link to={localizePath("/packets/latam-contractor", locale)}>{t("latamPacket.backToKit")}</Link>
-                  </p>
-                )}
-                {isJobPacketId(packetSlug) && (
-                  <p>
-                    <Link to={jobPacketPath(packetSlug, locale)}>{t("packet.backToKit")}</Link>
-                  </p>
-                )}
-              </>
-            ) : (
-              <>
-                <label style={{ display: "block", marginBottom: 10 }}>
-                  {t("cobro.fileLabel")}
-                  <input
-                    type="file"
-                    accept="application/pdf"
-                    style={{ display: "block", marginTop: 6 }}
-                    onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-                  />
-                </label>
-                <input className="form-input" placeholder={t("cobro.titlePh")} value={title} onChange={(e) => setTitle(e.target.value)} aria-label={t("cobro.titlePh")} />
-                <input className="form-input" style={{ marginTop: 8 }} placeholder={t("cobro.namePh")} value={recipientName} onChange={(e) => setRecipientName(e.target.value)} aria-label={t("cobro.namePh")} />
-                <input className="form-input" style={{ marginTop: 8 }} type="email" placeholder={t("cobro.emailPh")} value={recipientEmail} onChange={(e) => setRecipientEmail(e.target.value)} aria-label={t("cobro.emailPh")} />
-                <input className="form-input" style={{ marginTop: 8 }} placeholder={t("cobro.whatsappPh")} value={recipientWhatsapp} onChange={(e) => setRecipientWhatsapp(e.target.value)} aria-label={t("cobro.whatsappPh")} />
-                <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
-                  <input className="form-input" style={{ flex: 1 }} inputMode="decimal" placeholder={t("prepare.payAmountPh")} value={amount} onChange={(e) => setAmount(e.target.value)} aria-label={t("prepare.payAmountAria")} />
-                  <select className="form-input" style={{ width: 88 }} value={currency} onChange={(e) => setCurrency(e.target.value)} aria-label={t("prepare.payCurrencyAria")}>
-                    {CURRENCIES.map((c) => (
-                      <option key={c} value={c}>
-                        {c}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <input className="form-input" style={{ marginTop: 8 }} type="url" placeholder={t("prepare.payUrlPh")} value={url} onChange={(e) => setUrl(e.target.value)} aria-label={t("prepare.payUrlAria")} />
-                <p style={{ fontSize: 12, color: "var(--mute)" }}>{t("cobro.formHint")}</p>
-                {error && <p style={{ color: "var(--danger)" }}>{error}</p>}
-                <button type="button" className="btn-primary" style={{ marginTop: 8 }} onClick={onSubmit} disabled={submitting || !file}>
-                  {submitting ? t("common.sending") : t("cobro.submit")}
-                </button>
-              </>
-            )}
-          </div>
+        {!formFirst && (
+          <>
+            <h2 style={{ fontSize: 22, marginTop: 40 }}>{t("cobro.problemTitle")}</h2>
+            <p>{t("cobro.problem")}</p>
+            <h2 style={{ fontSize: 22, marginTop: 32 }}>{t("cobro.solutionTitle")}</h2>
+            <p>{t("cobro.solution")}</p>
+            <ul>
+              <li>{t("cobro.feat1")}</li>
+              <li>{t("cobro.feat2")}</li>
+              <li>{t("cobro.feat3")}</li>
+              <li>{t("cobro.feat4")}</li>
+            </ul>
+            {account?.isPaid && sendCard}
+          </>
         )}
 
         <h2 style={{ fontSize: 19, marginTop: 36 }}>{t("tpl.detail.faqTitle")}</h2>

@@ -80,13 +80,17 @@ const en: Messages = {
   "nav.mega.resource.contact.desc": "Questions before you sign up? Ask sales@docracy.io.",
   "hero.eyebrow": "Sequential e-signatures · AI-assisted",
   "hero.whatsappBadge": "New: Sign via WhatsApp",
-  "hero.title": "Sign free.\nKeep a record they will accept.",
+  "hero.latamBadge": "LATAM: cobro + constancia",
+  "hero.title": "Stop chasing the invoice.\nGet paid on WhatsApp.",
   "hero.sub":
-    "PayPal does not print a stub. Sign the contract free, get paid, then share a year of files as income proof. Paid is the packet — $10/month, not a signature fee.",
+    "Paste Mercado Pago or PayPal, send the PDF, share a constancia a landlord will open. Signing stays free. $10/month is cobro and the year they can open — Docracy never takes a cut.",
   "hero.badge.legal": "ESIGN & UETA aligned",
   "hero.badge.ssl": "Encrypted · short retention",
   "hero.badge.noSignup": "No signup to sign",
   "hero.badge.price": "Paid is the packet · $10/mo",
+  "hero.badge.constancia": "Constancia a landlord opens",
+  "hero.badge.cobro": "Cobro on Mercado Pago",
+  "hero.badge.kits": "Hire · RFC · W-9",
   "hero.trustAria": "Why start with Docracy",
   "hero.b1": "Fast and frictionless document signing",
   "hero.b2": "Simple workflow setup for teams",
@@ -306,7 +310,7 @@ const en: Messages = {
   "landing.faqTitle": "Frequently asked questions",
   "landing.faq1.q": "What is Docracy.io?",
   "landing.faq1.a":
-    "A free e-sign on-ramp plus a paid record after they sign. Sign contracts with no account (up to 2 people). Paid ($10/month) keeps the files and packs the year into a shareable constancia — not a W-2, bank letter, or certified income letter — plus WhatsApp cobro and a 1099 CSV. Not a per-signature fee.",
+    "A free e-sign on-ramp plus paid packets after they sign. Sign contracts with no account (up to 2 people). Paid ($10/month) is constancia, WhatsApp cobro, a 1099 for your CPA, trades job packets, and W-9 / RFC collect — not a W-2, bank letter, or per-signature fee.",
   "landing.faq2.q": "How do e-signatures work?",
   "landing.faq2.a":
     "Upload a document (or start from a free template), place fields, send a link. Signers open it and sign in seconds — no app, no signup.",
@@ -1144,9 +1148,9 @@ const en: Messages = {
     "Prefer a no-code automation instead of an AI assistant? The same paid account works with Zapier: trigger a Zap on Document Created, Signer Signed, or Document Completed, or send a saved template out for signature as an action. The integration isn't in Zapier's public directory yet, so use the direct connect link below rather than searching for \"Docracy\" in Zapier — same API key as above, used as the \"API Key\" field instead of the full connector URL.",
   "mcp.zapierLinkLabel": "Connect Docracy in Zapier",
   "mcp.zapierTitle": "Automate with Zapier",
-  "seo.home.title": "Docracy — Free E-Sign + Shareable Income Proof",
+  "seo.home.title": "Docracy — Stop Chasing the Invoice. Get Paid on WhatsApp.",
   "seo.home.description":
-    "Sign contracts free — 2 signers, no account. Paid packs the year into a constancia a landlord or CPA can open. Not a W-2 or bank letter. $10/month.",
+    "Paste Mercado Pago or PayPal, send the PDF on WhatsApp, share a constancia. Signing stays free. $10/month is cobro — Docracy never takes a cut.",
   "seo.video.name": "How Docracy works — sign documents in under a minute",
   "seo.video.description":
     "A short walkthrough of Docracy: upload a PDF, place signature fields, email signing links, and download the signed document — free for up to two signers, no account needed.",
@@ -2435,6 +2439,15 @@ const en: Messages = {
   "dash.taxYear": "1099 locker",
   "dash.cobro": "Send cobro",
   "dash.constancia": "Income proof",
+  "dash.navPacket": "Después de firmar",
+  "latamDesk.seoTitle": "LATAM: cobro, constancia, and contractor kits | Docracy",
+  "latamDesk.seoDescription":
+    "WhatsApp cobro, a shareable constancia, hire in LATAM, and RFC / W-9 collect. Not a W-2, W-8BEN, or customs filing. Signing stays free.",
+  "latamDesk.kicker": "LATAM",
+  "latamDesk.heroTitle": "Cobra. Prueba ingresos. Contrata.",
+  "latamDesk.heroSub":
+    "The packet for US ↔ LATAM work. Cobro on your Mercado Pago, a constancia they can open, then the kits. Docracy never takes the money.",
+  "latamDesk.openKit": "Open the kit",
   "taxYear.seoTitle": "1099 Season Locker — Signed W-9s, Contracts & CPA CSV | Docracy",
   "taxYear.seoDescription":
     "Keep every completed contractor file from the tax year and download a CSV for your CPA. Not IRS e-file. Paid $10/mo — signing stays free.",

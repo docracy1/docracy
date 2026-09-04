@@ -425,16 +425,25 @@ export default function Landing() {
           <p className="hero-sub">{t("hero.sub")}</p>
           <ul className="hero-trust-badges" aria-label={t("hero.trustAria")}>
             <li>
-              <FeatureIcon name="scale" />
-              {t("hero.badge.legal")}
+              <Link to={localizePath("/income-proof", locale)} onClick={() => track("landingpage_cta_clicked", { source: "hero_badge_constancia" })}>
+                <FeatureIcon name="duplicate" />
+                {t("hero.badge.constancia")}
+              </Link>
             </li>
             <li>
-              <FeatureIcon name="pen" />
-              {t("hero.badge.noSignup")}
+              <Link to={localizePath("/cobro", locale)} onClick={() => track("landingpage_cta_clicked", { source: "hero_badge_cobro" })}>
+                <FeatureIcon name="send" />
+                {t("hero.badge.cobro")}
+              </Link>
             </li>
             <li>
-              <FeatureIcon name="badge" />
-              {t("hero.badge.price")}
+              <Link
+                to={locale === "es" ? "/es#after-they-sign" : "/#after-they-sign"}
+                onClick={() => track("landingpage_cta_clicked", { source: "hero_badge_kits" })}
+              >
+                <FeatureIcon name="badge" />
+                {t("hero.badge.kits")}
+              </Link>
             </li>
           </ul>
 
