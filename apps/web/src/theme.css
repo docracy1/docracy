@@ -2357,6 +2357,10 @@ select {
     gap: 14px;
   }
 
+  .hero-cta-row-sep {
+    display: none;
+  }
+
   .hero-signup-form {
     flex: 0 0 auto;
     max-width: none;

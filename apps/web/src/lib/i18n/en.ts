@@ -80,13 +80,13 @@ const en: Messages = {
   "nav.mega.resource.contact.desc": "Questions before you sign up? Ask sales@docracy.io.",
   "hero.eyebrow": "Sequential e-signatures · AI-assisted",
   "hero.whatsappBadge": "New: Sign via WhatsApp",
-  "hero.title": "Docracy —\nthe fastest way to sign agreements",
+  "hero.title": "Sign free.\nKeep a record they will accept.",
   "hero.sub":
-    "Sign in under a minute — no account needed. Free for up to 2 signers. Unlimited on a flat $10/month.",
+    "PayPal does not print a stub. Sign the contract free, get paid, then share a year of files as income proof. Paid is the packet — $10/month, not a signature fee.",
   "hero.badge.legal": "ESIGN & UETA aligned",
   "hero.badge.ssl": "Encrypted · short retention",
   "hero.badge.noSignup": "No signup to sign",
-  "hero.badge.price": "Flat $10/mo — not per seat",
+  "hero.badge.price": "Paid is the packet · $10/mo",
   "hero.trustAria": "Why start with Docracy",
   "hero.b1": "Fast and frictionless document signing",
   "hero.b2": "Simple workflow setup for teams",
@@ -114,6 +114,7 @@ const en: Messages = {
   "hero.sentBody": "We sent a sign-in link to {{email}}. Click it to create your free account — it expires in 15 minutes.",
   "hero.continuePrepare": "Start without an account — upload a PDF now",
   "hero.orTemplates": "or start from a free template",
+  "hero.orConstancia": "or open an income packet",
   "hero.watchHow": "Watch how it works (30 sec)",
   "how.title": "How it works",
   "login.title": "Sign in",
@@ -234,11 +235,11 @@ const en: Messages = {
   "how.s2.body": "Enter who needs to sign, in what order, and drop signature and date fields onto the document.",
   "how.s3.title": "Send",
   "how.s3.body": "Everyone in the chain gets an email link — no account required to sign.",
-  "how.s4.title": "Signed & done",
-  "how.s4.body": "Once everyone's signed, download the final PDF and its certificate of completion.",
-  "landing.featuresTitle": "Everything you need for simple, secure document workflows",
+  "how.s4.title": "Share the record",
+  "how.s4.body": "Download the signed PDF. Paid keeps the files and turns the year into a constancia a stranger can open.",
+  "landing.featuresTitle": "The free signing workflow",
   "landing.featuresSub":
-    "The fastest, simplest e-signature for solo founders and small teams — without per-seat pricing or enterprise bloat.",
+    "Signing is the on-ramp — free for up to 2 people, no account. Paid is what happens after: the packet, cobro, and the tax-year locker.",
   "landing.feat1.title": "Simple document sending",
   "landing.feat1.body": "Upload a PDF or paste a Google Docs link, add recipients, and send it for signature in seconds — no complicated setup.",
   "landing.feat1.link": "Send a document",
@@ -305,7 +306,7 @@ const en: Messages = {
   "landing.faqTitle": "Frequently asked questions",
   "landing.faq1.q": "What is Docracy.io?",
   "landing.faq1.a":
-    "The fastest, simplest e-signature tool for solo founders and small teams: upload a PDF, add signers, done. Free for up to 2 signers with no account required. Paid is $10/month to keep signed PDFs past 9 days — not a per-signature fee.",
+    "A free e-sign on-ramp plus a paid record after they sign. Sign contracts with no account (up to 2 people). Paid ($10/month) keeps the files and packs the year into a shareable constancia — not a W-2, bank letter, or certified income letter — plus WhatsApp cobro and a 1099 CSV. Not a per-signature fee.",
   "landing.faq2.q": "How do e-signatures work?",
   "landing.faq2.a":
     "Upload a document (or start from a free template), place fields, send a link. Signers open it and sign in seconds — no app, no signup.",
@@ -330,9 +331,9 @@ const en: Messages = {
   "landing.faq9.q": "How do I prove income without pay stubs?",
   "landing.faq9.a":
     "Paid packs the year of signed files and cobros into a shareable constancia at /income-proof (Spanish lead: /es/constancia). Not a W-2, bank letter, or certified income letter. Amounts are what you typed.",
-  "landing.outcomesTitle": "After they sign — keep the file, get paid",
+  "landing.outcomesTitle": "After they sign — the packet they asked for",
   "landing.outcomesSub":
-    "Signing stays free. Paid is the outcome: your checkout on WhatsApp, a 1099-season CSV, a shareable income packet, and a kit for someone you pay abroad.",
+    "Signing stays free. Paid is the packet: a shareable constancia, WhatsApp cobro, a 1099 CSV, and a kit for someone you pay abroad.",
   "landing.out1.title": "Get paid on WhatsApp",
   "landing.out1.body":
     "Send the PDF and your PayPal or Mercado Pago link — no signature required. Docracy never collects the payment.",
@@ -1135,9 +1136,9 @@ const en: Messages = {
     "Prefer a no-code automation instead of an AI assistant? The same paid account works with Zapier: trigger a Zap on Document Created, Signer Signed, or Document Completed, or send a saved template out for signature as an action. The integration isn't in Zapier's public directory yet, so use the direct connect link below rather than searching for \"Docracy\" in Zapier — same API key as above, used as the \"API Key\" field instead of the full connector URL.",
   "mcp.zapierLinkLabel": "Connect Docracy in Zapier",
   "mcp.zapierTitle": "Automate with Zapier",
-  "seo.home.title": "Docracy.io – Simple and secure e-signatures for businesses",
+  "seo.home.title": "Docracy — Free E-Sign + Shareable Income Proof",
   "seo.home.description":
-    "Create, send, and sign documents in minutes — free for up to two signers, no account required. Watch how Docracy works, then start from a template or your own PDF.",
+    "Sign contracts free — 2 signers, no account. Paid packs the year into a constancia a landlord or CPA can open. Not a W-2 or bank letter. $10/month.",
   "seo.video.name": "How Docracy works — sign documents in under a minute",
   "seo.video.description":
     "A short walkthrough of Docracy: upload a PDF, place signature fields, email signing links, and download the signed document — free for up to two signers, no account needed.",

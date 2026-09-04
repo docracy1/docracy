@@ -284,16 +284,17 @@ const es: Messages = {
     "Enviamos un enlace de acceso a {{email}}. Haz clic para crear tu cuenta gratis — caduca en 15 minutos.",
   "hero.continuePrepare": "Empieza sin cuenta — sube un PDF ahora",
   "hero.orTemplates": "o empieza con una plantilla gratis",
+  "hero.orConstancia": "o arma una constancia",
   "hero.watchHow": "Mira cómo funciona (30 seg)",
   "hero.sub":
-    "Firma en menos de un minuto — sin cuenta. Gratis hasta 2 firmantes. Ilimitado por $10/mes fijos.",
+    "PayPal no imprime recibos de nómina. Firma el contrato gratis, cobra, y comparte el año como constancia. El plan de pago es el paquete — $10/mes, no una tarifa por firma.",
   "hero.badge.legal": "Alineado con ESIGN y UETA",
   "hero.badge.ssl": "Cifrado · retención corta",
   "hero.badge.noSignup": "Sin registro para firmar",
-  "hero.badge.price": "$10/mes fijos — no por asiento",
+  "hero.badge.price": "El plan de pago es el paquete · $10/mes",
   "hero.trustAria": "Por qué empezar con Docracy",
   "hero.whatsappBadge": "Nuevo: firma por WhatsApp",
-  "hero.title": "Docracy —\nla forma más rápida de firmar acuerdos",
+  "hero.title": "Firma gratis.\nLa constancia es lo que te piden.",
   "how.s1.body": "Agrega el PDF que quieres firmar (o pega un enlace de Google Docs), o empieza desde una plantilla gratis.",
   "how.s1.title": "Subir",
   "how.s2.body":
@@ -303,8 +304,8 @@ const es: Messages = {
     "Todos en la cadena reciben un enlace por correo — no necesitan cuenta para firmar.",
   "how.s3.title": "Enviar",
   "how.s4.body":
-    "Cuando todos hayan firmado, descarga el PDF final y su certificado de finalización.",
-  "how.s4.title": "Firmado y listo",
+    "Descarga el PDF firmado. El plan de pago conserva los archivos y arma el año en una constancia que puede abrir un desconocido.",
+  "how.s4.title": "Comparte el registro",
   "how.title": "Cómo funciona",
   "imprint.contact": "Contacto",
   "imprint.operator": "Operador",
@@ -339,7 +340,7 @@ const es: Messages = {
     "Las firmas SES de Docracy están diseñadas para respaldar la ESIGN Act y UETA de EE. UU. No verificamos identidad — cualquiera con el enlace puede firmar con el nombre indicado. El registro de auditoría prueba qué se firmó y cuándo, no quién lo firmó realmente. Para firmas con identidad verificada, usa un servicio de grado de cumplimiento. Detalles:",
   "landing.disclaimerTrust": "Confianza y seguridad",
   "landing.faq1.a":
-    "La herramienta de firma electrónica más rápida y simple para founders y equipos pequeños: sube un PDF, agrega firmantes, listo. Gratis hasta 2 firmantes sin cuenta. El plan de pago es $10/mes para conservar los PDF firmados más de 9 días — no es una tarifa por firma.",
+    "Una entrada de firma electrónica gratis más un registro de pago después de firmar. Firma contratos sin cuenta (hasta 2 personas). El plan de $10/mes conserva los archivos y arma el año en una constancia para compartir — no es un W-2, ni carta bancaria, ni carta certificada — más cobro por WhatsApp y un CSV 1099. No es una tarifa por firma.",
   "landing.faq1.q": "¿Qué es Docracy.io?",
   "landing.faq2.a":
     "Sube un documento (o empieza desde una plantilla gratis), coloca campos y envía un enlace. Los firmantes abren y firman en segundos — sin app ni registro.",
@@ -365,9 +366,9 @@ const es: Messages = {
   "landing.faq9.q": "¿Cómo pruebo ingresos si no tengo recibos de nómina?",
   "landing.faq9.a":
     "En el plan de pago armas una constancia del año — contratos y cobros — en /es/constancia (inglés: /income-proof). No es un W-2, ni una carta del banco, ni una carta certificada. Los montos son los que tú escribiste.",
-  "landing.outcomesTitle": "Después de firmar — conserva el archivo y cobra",
+  "landing.outcomesTitle": "Después de firmar — la constancia que te piden",
   "landing.outcomesSub":
-    "Firmar sigue gratis. El plan de pago es el resultado: tu checkout por WhatsApp, un CSV para temporada 1099, una constancia de ingresos y un kit para quien pagas en el extranjero.",
+    "Firmar sigue gratis. El plan de pago es el paquete: una constancia para compartir, cobro por WhatsApp, un CSV 1099 y un kit para quien pagas en el extranjero.",
   "landing.out1.title": "Cobra por WhatsApp",
   "landing.out1.body":
     "Envía el PDF y tu enlace de PayPal o Mercado Pago — sin firma. Docracy nunca cobra el pago.",
@@ -426,8 +427,8 @@ const es: Messages = {
   "landing.feat10.link": "Ver cómo funciona",
   "landing.feat10.title": "Sello de tiempo en blockchain",
   "landing.featuresSub":
-    "La firma electrónica más rápida y simple para founders y equipos pequeños — sin cobro por asiento ni complejidad enterprise.",
-  "landing.featuresTitle": "Todo lo que necesitas para flujos de documentos simples y seguros",
+    "Firmar es la entrada — gratis hasta 2 personas, sin cuenta. El plan de pago es lo que sigue: la constancia, el cobro y el casillero 1099.",
+  "landing.featuresTitle": "El flujo de firma gratis",
   "landing.templateUse": "Usar esta plantilla",
   "landing.templatesBrowse": "Ver las {{count}} plantillas gratis",
   "landing.templatesTitle": "Plantillas populares",
@@ -1196,9 +1197,9 @@ const es: Messages = {
   "mcp.zapierLinkLabel": "Conectar Docracy en Zapier",
   "mcp.zapierTitle": "Automatiza con Zapier",
   "uptime.title": "Estado del sistema",
-  "seo.home.title": "Docracy.io – Firmas electrónicas simples y seguras para negocios",
+  "seo.home.title": "Docracy — Firma gratis y constancia de ingresos",
   "seo.home.description":
-    "Crea, envía y firma documentos en minutos — gratis hasta dos firmantes, sin necesidad de cuenta. Mira cómo funciona Docracy y empieza con una plantilla o tu propio PDF.",
+    "Firma contratos gratis — 2 firmantes, sin cuenta. El plan de pago arma el año en una constancia. No es un W-2 ni carta bancaria. $10/mes.",
   "seo.video.name": "Cómo funciona Docracy — firma documentos en menos de un minuto",
   "seo.video.description":
     "Un recorrido breve de Docracy: sube un PDF, coloca campos de firma, envía enlaces por correo y descarga el documento firmado — gratis hasta dos firmantes, sin cuenta.",

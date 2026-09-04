@@ -261,9 +261,9 @@ const routes = [
     // to change copy), so withMeta() below is a no-op on those two fields for this route alone.
     urlPath: "/",
     outFile: "index.html",
-    title: "Docracy.io – Simple and secure e-signatures for businesses",
+    title: "Docracy — Free E-Sign + Shareable Income Proof",
     description:
-      "Create, send, and sign documents in minutes — free for up to two signers, no account required. Watch how Docracy works, then start from a template or your own PDF.",
+      "Sign contracts free — 2 signers, no account. Paid packs the year into a constancia a landlord or CPA can open. Not a W-2 or bank letter. $10/month.",
     locale: "en",
     alternates: { en: "/", es: "/es" },
   },
@@ -495,9 +495,9 @@ const routes = [
   {
     urlPath: "/es",
     outFile: "es.html",
-    title: "Docracy.io – Firmas electrónicas simples y seguras",
+    title: "Docracy — Firma gratis y constancia de ingresos",
     description:
-      "Crea, envía y firma documentos en minutos — gratis hasta dos firmantes, sin necesidad de cuenta. Mira cómo funciona Docracy y empieza con una plantilla o tu propio PDF.",
+      "Firma contratos gratis — 2 firmantes, sin cuenta. El plan de pago arma el año en una constancia. No es un W-2 ni carta bancaria. $10/mes.",
     locale: "es",
     alternates: { en: "/", es: "/es" },
   },

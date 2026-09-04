@@ -16,17 +16,17 @@ function openSalesChat() {
   window.dispatchEvent(new CustomEvent("docracy:open-chat", { detail: { intent: "sales" } }));
 }
 
-/** Real features only — mirrors Landing.tsx's CORE_FEATURES, not a wishlist. */
+/** Real features only — free on-ramp first, then the paid packet, then the rest of the product. */
 const FEATURE_ITEMS = [
   { to: "/prepare", icon: "send", titleKey: "nav.mega.feature.send.title", descKey: "nav.mega.feature.send.desc" },
+  { to: "/income-proof", icon: "badge", titleKey: "nav.mega.feature.constancia.title", descKey: "nav.mega.feature.constancia.desc" },
+  { to: "/cobro", icon: "whatsapp", titleKey: "nav.mega.feature.cobro.title", descKey: "nav.mega.feature.cobro.desc" },
+  { to: "/1099-season", icon: "badge", titleKey: "nav.mega.feature.taxYear.title", descKey: "nav.mega.feature.taxYear.desc" },
   { to: "/whatsapp-signing", icon: "whatsapp", titleKey: "nav.mega.feature.whatsapp.title", descKey: "nav.mega.feature.whatsapp.desc" },
   { to: "/ai", icon: "sparkles", titleKey: "nav.mega.feature.ai.title", descKey: "nav.mega.feature.ai.desc" },
   { to: "/free-templates", icon: "duplicate", titleKey: "nav.mega.feature.templates.title", descKey: "nav.mega.feature.templates.desc" },
   { to: "/packets/us-contractor", icon: "briefcase", titleKey: "nav.mega.feature.packet.title", descKey: "nav.mega.feature.packet.desc" },
   { to: "/packets/latam-contractor", icon: "briefcase", titleKey: "nav.mega.feature.latamPacket.title", descKey: "nav.mega.feature.latamPacket.desc" },
-  { to: "/cobro", icon: "whatsapp", titleKey: "nav.mega.feature.cobro.title", descKey: "nav.mega.feature.cobro.desc" },
-  { to: "/1099-season", icon: "badge", titleKey: "nav.mega.feature.taxYear.title", descKey: "nav.mega.feature.taxYear.desc" },
-  { to: "/income-proof", icon: "badge", titleKey: "nav.mega.feature.constancia.title", descKey: "nav.mega.feature.constancia.desc" },
   { to: "/esign-ueta", icon: "scale", titleKey: "nav.mega.feature.esign.title", descKey: "nav.mega.feature.esign.desc" },
   { to: "/pricing", icon: "users", titleKey: "nav.mega.feature.team.title", descKey: "nav.mega.feature.team.desc" },
   { to: "/privacy", icon: "shield", titleKey: "nav.mega.feature.storage.title", descKey: "nav.mega.feature.storage.desc" },

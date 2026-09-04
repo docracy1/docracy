@@ -1,10 +1,10 @@
 # Docracy
 
-> Docracy is a free, no-signup e-signature tool: upload a PDF, add signers in order, and each one
-> gets their turn automatically. Free for chains of up to 2 signers. A paid plan ($10/month) adds
-> unlimited signers, bulk send, embedded signing, custom expiry, contacts, Dropbox/OneDrive/Box
-> auto-upload, AI tools, and an MCP connector. Enterprise adds invoice billing, premium support, and
-> volume discounts.
+> Docracy is free sequential e-sign (no account, up to 2 signers) plus a paid record after they
+> sign. People do not pay to send or sign. Paid ($10/month) is the packet: a shareable constancia
+> (year of signed files and cobros — not a W-2, bank letter, or certified income letter), WhatsApp
+> cobro with the sender's own PayPal/Stripe/Mercado Pago URL, and a 1099-season locker. Unlimited
+> signers, bulk send, connectors, AI, and MCP are also on Paid. Enterprise adds invoice billing.
 
 ## Primary services
 
@@ -16,11 +16,11 @@
 
 ## After the signature (Paid — $10/month)
 
-Signing stays free. Paid is the outcome after they sign: keep the file, get paid, export a list for tax season. Docracy never takes a cut of the payment.
+Signing stays free. Paid is the packet after they sign: share a constancia, get paid, export a list for tax season. Docracy never takes a cut of the payment.
 
+- [Income proof / constancia](https://docracy.io/es/constancia) (English: https://docracy.io/income-proof): shareable year packet of signed files and cobros. Spanish is the lead language (hreflang x-default). Not a W-2, bank letter, or certified income letter. Keyword landing: https://docracy.io/proof-of-income (Spanish: https://docracy.io/es/prueba-de-ingresos).
 - [Get paid on WhatsApp](https://docracy.io/cobro) (Spanish: https://docracy.io/es/cobro): PDF + your PayPal / Stripe / Mercado Pago link, no signature required. Keyword landing: https://docracy.io/whatsapp-invoice (Spanish: https://docracy.io/es/factura-whatsapp).
 - [1099 season locker](https://docracy.io/1099-season) (Spanish: https://docracy.io/es/temporada-1099): calendar-year list + CPA CSV. Not IRS e-file; no TIN OCR. Keyword landing: https://docracy.io/1099-contractor-records (Spanish: https://docracy.io/es/registros-1099).
-- [Income proof / constancia](https://docracy.io/es/constancia) (English: https://docracy.io/income-proof): shareable year packet of signed files and cobros. Spanish is the lead language (hreflang x-default). Not a W-2, bank letter, or certified income letter. Keyword landing: https://docracy.io/proof-of-income (Spanish: https://docracy.io/es/prueba-de-ingresos).
 - [US contractor kit](https://docracy.io/packets/us-contractor) (Spanish: https://docracy.io/es/kit-contratista): free NDA, IRS W-9, independent contractor agreement.
 - [LATAM contractor kit](https://docracy.io/packets/latam-contractor) (Spanish: https://docracy.io/es/kit-contratista-latam): free NDA + contractor agreement, then Paid cobro. Not a W-8BEN. Keyword landing: https://docracy.io/hire-contractor-abroad (Spanish: https://docracy.io/es/contratar-en-el-extranjero).
 
