@@ -1,6 +1,7 @@
 import { Component, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useT } from "../lib/i18n";
+import { localizePath, useI18n } from "../lib/i18n";
+import { signedPagePath } from "../lib/paidVault";
 import {
   apiUrl,
   cancelTeamInvite,
@@ -100,7 +101,10 @@ function NavIcon({
     | "connector"
     | "webhooks"
     | "connectors"
-    | "branding";
+    | "branding"
+    | "send"
+    | "badge"
+    | "duplicate";
   size?: number;
 }) {
   const common = {
@@ -209,6 +213,26 @@ function NavIcon({
           <path d="M12 3.5v2.2M12 18.3v2.2M3.5 12h2.2M18.3 12h2.2M6.1 6.1l1.6 1.6M16.3 16.3l1.6 1.6M17.9 6.1l-1.6 1.6M7.7 16.3l-1.6 1.6" />
         </svg>
       );
+    case "send":
+      return (
+        <svg {...common}>
+          <path d="M3 11l18-8-8 18-2-8-8-2z" />
+        </svg>
+      );
+    case "badge":
+      return (
+        <svg {...common}>
+          <path d="M12 2.5l2.1 2.1 2.9-.4.9 2.8 2.8.9-.4 2.9 2.1 2.1-2.1 2.1.4 2.9-2.8.9-.9 2.8-2.9-.4L12 21.5l-2.1-2.1-2.9.4-.9-2.8-2.8-.9.4-2.9L2.5 12l2.1-2.1-.4-2.9 2.8-.9.9-2.8 2.9.4L12 2.5z" />
+          <path d="M8.5 12.2l2.2 2.2 4.3-4.6" />
+        </svg>
+      );
+    case "duplicate":
+      return (
+        <svg {...common}>
+          <rect x="8" y="8" width="12" height="13" rx="1.5" />
+          <path d="M4 15V4.5A1.5 1.5 0 0 1 5.5 3H15" />
+        </svg>
+      );
   }
 }
 
@@ -282,7 +306,7 @@ function MenuIcon({ name }: { name: "team" | "subscription" | "support" | "logou
 }
 
 export default function Dashboard() {
-  const t = useT();
+  const { t, locale } = useI18n();
   const [account, setAccount] = useState<Account | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [documents, setDocuments] = useState<DocumentSummary[]>([]);
@@ -311,6 +335,7 @@ export default function Dashboard() {
   const [marketplaceError, setMarketplaceError] = useState<string | null>(null);
   const [marketplaceSubmittedSlug, setMarketplaceSubmittedSlug] = useState<string | null>(null);
   const [communityTemplates, setCommunityTemplates] = useState<MarketplaceSubmission[]>([]);
+  const [copiedSignedDocId, setCopiedSignedDocId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchMarketplaceTemplates()
@@ -1074,6 +1099,23 @@ export default function Dashboard() {
           <span>{t("dash.templates")}</span>
         </button>
         {account.isPaid && (
+          <div className="dashboard-nav-section">
+            <p className="dashboard-nav-section-label">{t("dash.navPacket")}</p>
+            <Link to={`${localizePath("/cobro", locale)}#send`} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
+              <NavIcon name="send" />
+              <span>{t("dash.cobro")}</span>
+            </Link>
+            <Link to={localizePath("/1099-season", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
+              <NavIcon name="badge" />
+              <span>{t("dash.taxYear")}</span>
+            </Link>
+            <Link to={localizePath("/income-proof", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
+              <NavIcon name="duplicate" />
+              <span>{t("dash.constancia")}</span>
+            </Link>
+          </div>
+        )}
+        {account.isPaid && (
           <button
             className={`dashboard-nav-item${activeTab === "contacts" ? " active" : ""}`}
             onClick={() => setActiveTab("contacts")}
@@ -1401,6 +1443,39 @@ export default function Dashboard() {
               </Link>
             </div>
 
+            <div className="card" style={{ marginTop: 24 }} id="after-they-sign">
+              <h3 style={{ fontSize: 15, marginBottom: 4 }}>{t("dash.corridorEarnTitle")}</h3>
+              <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 0 }}>{t("dash.corridorEarnSub")}</p>
+              <div className="dashboard-corridor-grid">
+                {[
+                  { to: localizePath("/income-proof", locale), title: t("dash.constancia"), body: t("dash.corridorConstancia") },
+                  { to: `${localizePath("/cobro", locale)}#send`, title: t("dash.cobro"), body: t("dash.corridorCobro") },
+                  { to: `${localizePath("/income-proof", locale)}#receipts`, title: t("dash.corridorReceiptsTitle"), body: t("dash.corridorReceipts") },
+                ].map((card) => (
+                  <Link key={card.to} to={card.to} className="dashboard-corridor-card">
+                    <h3>{card.title}</h3>
+                    <p>{card.body}</p>
+                  </Link>
+                ))}
+              </div>
+              <h3 style={{ fontSize: 15, margin: "28px 0 4px" }}>{t("dash.corridorPayTitle")}</h3>
+              <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 0 }}>{t("dash.corridorPaySub")}</p>
+              <div className="dashboard-corridor-grid">
+                {[
+                  { to: localizePath("/1099-season", locale), title: t("dash.taxYear"), body: t("dash.corridorPayer") },
+                  { to: localizePath("/packets/collect", locale), title: t("dash.corridorCollectTitle"), body: t("dash.corridorCollect") },
+                  { to: localizePath("/packets/trades", locale), title: t("dash.corridorTradesTitle"), body: t("dash.corridorTrades") },
+                  { to: localizePath("/packets/latam-contractor", locale), title: t("footer.latamPacket"), body: t("dash.corridorLatamHire") },
+                  { to: localizePath("/packets/latam-trade", locale), title: t("dash.corridorTradeTitle"), body: t("dash.corridorTrade") },
+                ].map((card) => (
+                  <Link key={card.to} to={card.to} className="dashboard-corridor-card">
+                    <h3>{card.title}</h3>
+                    <p>{card.body}</p>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
             {recurringQuickActions.length > 0 && (
               <div className="card" style={{ marginTop: 24 }}>
                 <h3 style={{ fontSize: 15 }}>{t("dash.quickActions")}</h3>
@@ -1449,12 +1524,7 @@ export default function Dashboard() {
             {!account.isPaid && (
               <div className="card" style={{ marginTop: 24 }}>
                 <h3 style={{ fontSize: 15 }}>{t("dash.upgradeTitle")}</h3>
-                <p>
-                  Unlimited signers, a connector so Claude, ChatGPT, Grok, or Perplexity can look up your documents,
-                  team accounts, white-label branding, and a set of AI tools — auto-detect signature/date fields,
-                  a plain-English explainer with risk highlighting, and a contract generator that turns a one-line
-                  description into a signable PDF.
-                </p>
+                <p>{t("dash.upgradeBody")}</p>
                 {upgradeError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{upgradeError}</p>}
                 <button className="btn-primary" onClick={onUpgrade} disabled={upgrading}>
                   {upgrading ? t("common.redirecting") : t("common.upgrade")}
@@ -1520,6 +1590,25 @@ export default function Dashboard() {
                 : t("dash.allDocs")}
             </h3>
             {docActionError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{docActionError}</p>}
+            {!account.isPaid &&
+              visibleDocs.some((d) => {
+                if (d.status !== "completed" || !d.expiresAt) return false;
+                const days = Math.floor((new Date(d.expiresAt).getTime() - Date.now()) / 86400000);
+                return days >= 0 && days <= 2;
+              }) && (
+                <p style={{ fontSize: 13, marginBottom: 12 }}>
+                  {t("dash.archiveNag")}{" "}
+                  <button
+                    type="button"
+                    className="btn-primary"
+                    style={{ fontSize: 12, padding: "4px 10px", marginLeft: 8 }}
+                    onClick={onUpgrade}
+                    disabled={upgrading}
+                  >
+                    {t("dash.keepFile")}
+                  </button>
+                </p>
+              )}
             {visibleDocs.length === 0 ? (
               <div>
                 <p style={{ marginBottom: 12 }}>{t("dash.emptyDocs")}</p>
@@ -1541,9 +1630,22 @@ export default function Dashboard() {
                     alignItems: "center",
                   }}
                 >
-                  <Link to={`/status/${doc.statusToken}`} style={{ overflowWrap: "anywhere" }}>
-                    {doc.title}
-                  </Link>
+                  <div>
+                    <Link to={`/status/${doc.statusToken}`} style={{ overflowWrap: "anywhere" }}>
+                      {doc.title}
+                    </Link>
+                    {doc.expiresAt && (
+                      <div style={{ fontSize: 12, color: "var(--mute)", marginTop: 2 }}>
+                        {t("dash.deletesOn", {
+                          date: new Date(doc.expiresAt).toLocaleDateString(undefined, {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          }),
+                        })}
+                      </div>
+                    )}
+                  </div>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
                     <span
                       style={{
@@ -1557,6 +1659,34 @@ export default function Dashboard() {
                     >
                       {doc.status === "completed" ? t("dash.statusSigned") : doc.status === "voided" ? t("dash.statusVoided") : t("dash.statusPending")}
                     </span>
+                    {doc.status === "completed" && (
+                      <button
+                        className="btn-secondary"
+                        style={{ fontSize: 12, padding: "4px 8px" }}
+                        onClick={async () => {
+                          const url = `${window.location.origin}${signedPagePath(doc.statusToken, locale)}`;
+                          try {
+                            await navigator.clipboard.writeText(url);
+                            setCopiedSignedDocId(doc.docId);
+                            window.setTimeout(() => setCopiedSignedDocId(null), 2000);
+                          } catch {
+                            /* clipboard blocked */
+                          }
+                        }}
+                      >
+                        {copiedSignedDocId === doc.docId ? t("common.copied") : t("dash.copySignedLink")}
+                      </button>
+                    )}
+                    {!account.isPaid && doc.status === "completed" && (
+                      <button
+                        className="btn-secondary"
+                        style={{ fontSize: 12, padding: "4px 8px" }}
+                        onClick={onUpgrade}
+                        disabled={upgrading}
+                      >
+                        {t("dash.keepFile")}
+                      </button>
+                    )}
                     {account.isPaid && doc.status !== "voided" && (
                       <button
                         className="btn-secondary"

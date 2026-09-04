@@ -6,7 +6,7 @@ import { track } from "../lib/track";
 
 /** Product / auth flows where a pricing dock would get in the way. */
 function shouldHideDock(pathname: string): boolean {
-  if (pathname.startsWith("/sign/") || pathname.startsWith("/status/") || pathname.startsWith("/embed/")) {
+  if (pathname.startsWith("/sign/") || pathname.startsWith("/status/") || pathname.startsWith("/signed/") || pathname.startsWith("/es/firmado/") || pathname.startsWith("/income-proof/") || pathname.startsWith("/es/constancia/") || pathname.startsWith("/1099-season/") || pathname.startsWith("/es/temporada-1099/") || pathname.startsWith("/embed/")) {
     return true;
   }
   // Keep free-templates / SEO template pages on the dock — Template → Sign → Upgrade is the

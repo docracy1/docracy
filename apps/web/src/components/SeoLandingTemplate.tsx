@@ -143,7 +143,7 @@ export default function SeoLandingTemplate({ slug }: { slug: string }) {
       <div className="cta-band">
         <h2 style={{ marginTop: 0, marginBottom: 8 }}>Simple, flat pricing</h2>
         <p style={{ fontSize: 18, marginBottom: 24, opacity: 0.9 }}>
-          Free for up to 2 signers. Flat $10/mo for unlimited. No per-seat pricing.
+          Free for up to 2 signers. $10/mo keeps signed files and lets you get paid after they sign. No per-seat pricing.
         </p>
         <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
           <Link

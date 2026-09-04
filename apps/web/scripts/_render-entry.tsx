@@ -28,6 +28,13 @@ import Blog from "../src/pages/Blog";
 import BlogPostDetail from "../src/pages/BlogPostDetail";
 import Trust from "../src/pages/Trust";
 import Verify from "../src/pages/Verify";
+import ContractorPacket from "../src/pages/ContractorPacket";
+import LatamContractorPacket from "../src/pages/LatamContractorPacket";
+import JobPacket from "../src/pages/JobPacket";
+import TaxYear from "../src/pages/TaxYear";
+import Constancia from "../src/pages/Constancia";
+import Cobro from "../src/pages/Cobro";
+import LatamDesk from "../src/pages/LatamDesk";
 import Dpa from "../src/pages/Dpa";
 import Privacy from "../src/pages/Privacy";
 import Terms from "../src/pages/Terms";
@@ -95,6 +102,25 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/imprint" element={<Imprint />} />
           <Route path="/trust" element={<Trust />} />
           <Route path="/verify" element={<Verify />} />
+          <Route path="/es/verificar" element={<Verify />} />
+          <Route path="/packets/us-contractor" element={<ContractorPacket />} />
+          <Route path="/es/kit-contratista" element={<ContractorPacket />} />
+          <Route path="/packets/latam-contractor" element={<LatamContractorPacket />} />
+          <Route path="/es/kit-contratista-latam" element={<LatamContractorPacket />} />
+          <Route path="/packets/trades" element={<JobPacket packetId="trades" />} />
+          <Route path="/es/kit-oficios" element={<JobPacket packetId="trades" />} />
+          <Route path="/packets/latam-trade" element={<JobPacket packetId="latam-trade" />} />
+          <Route path="/es/kit-comercio" element={<JobPacket packetId="latam-trade" />} />
+          <Route path="/packets/collect" element={<JobPacket packetId="collect" />} />
+          <Route path="/es/pide-documentos" element={<JobPacket packetId="collect" />} />
+          <Route path="/1099-season" element={<TaxYear />} />
+          <Route path="/es/temporada-1099" element={<TaxYear />} />
+          <Route path="/income-proof" element={<Constancia />} />
+          <Route path="/es/constancia" element={<Constancia />} />
+          <Route path="/cobro" element={<Cobro />} />
+          <Route path="/es/cobro" element={<Cobro />} />
+          <Route path="/latam" element={<LatamDesk />} />
+          <Route path="/es/latam" element={<LatamDesk />} />
           <Route path="/dpa" element={<Dpa />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
@@ -131,6 +157,22 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/simple-signing" element={<FeaturePage slug="simple-signing" />} />
           <Route path="/document-verification" element={<FeaturePage slug="document-verification" />} />
           <Route path="/blockchain-timestamp" element={<FeaturePage slug="blockchain-timestamp" />} />
+          <Route path="/whatsapp-invoice" element={<FeaturePage slug="whatsapp-invoice" />} />
+          <Route path="/es/factura-whatsapp" element={<FeaturePage slug="whatsapp-invoice" />} />
+          <Route path="/1099-contractor-records" element={<FeaturePage slug="1099-contractor-records" />} />
+          <Route path="/es/registros-1099" element={<FeaturePage slug="1099-contractor-records" />} />
+          <Route path="/hire-contractor-abroad" element={<FeaturePage slug="hire-contractor-abroad" />} />
+          <Route path="/es/contratar-en-el-extranjero" element={<FeaturePage slug="hire-contractor-abroad" />} />
+          <Route path="/proof-of-income" element={<FeaturePage slug="proof-of-income" />} />
+          <Route path="/es/prueba-de-ingresos" element={<FeaturePage slug="proof-of-income" />} />
+          <Route path="/signed-work-order" element={<FeaturePage slug="signed-work-order" />} />
+          <Route path="/es/orden-de-trabajo-firmada" element={<FeaturePage slug="signed-work-order" />} />
+          <Route path="/contractor-payment-proof" element={<FeaturePage slug="contractor-payment-proof" />} />
+          <Route path="/es/comprobante-pago-contratistas" element={<FeaturePage slug="contractor-payment-proof" />} />
+          <Route path="/latam-export-documents" element={<FeaturePage slug="latam-export-documents" />} />
+          <Route path="/es/documentos-exportacion" element={<FeaturePage slug="latam-export-documents" />} />
+          <Route path="/request-w9" element={<FeaturePage slug="request-w9" />} />
+          <Route path="/es/pedir-w9" element={<FeaturePage slug="request-w9" />} />
           {ALTERNATIVE_PAGES.map((p) => (
             <Route key={p.slug} path={`/${p.slug}`} element={<AlternativePage slug={p.slug} />} />
           ))}

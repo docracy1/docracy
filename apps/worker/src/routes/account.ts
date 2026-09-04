@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { PDFDocument } from "pdf-lib";
 import { requireAccount, requirePaidAccount, type AccountContext } from "../lib/auth";
 import { issueApiToken, hasApiToken } from "../lib/apiTokens";
 import { getDoc, putDoc } from "../lib/kv";
@@ -8,7 +9,37 @@ import { deliverWebhookEvent } from "../lib/webhooks";
 import { upsertContact } from "../lib/contacts";
 import { documentClaimKvKey, type DocumentClaimRecord } from "../lib/documentCreation";
 import { signToken, hashOpaqueToken } from "@docracy/shared";
-import type { Env } from "@docracy/shared";
+import type { Env, Locale } from "@docracy/shared";
+import { checkRateLimit } from "../lib/ratelimit";
+import { parsePaymentRequest } from "../lib/paymentRequest";
+import { normalizeE164 } from "../lib/whatsapp";
+import { resolveTtlDays } from "../lib/docTtl";
+import {
+  createCobroDocument,
+  consumeCobroWhatsapp,
+  reportCobroWhatsappOverage,
+  sendCobroAgain,
+  DEFAULT_COBRO_REMIND_DAYS,
+  MIN_COBRO_REMIND_DAYS,
+  MAX_COBRO_REMIND_DAYS,
+} from "../lib/cobro";
+import { parseTaxYear, taxYearBounds, hydrateTaxYearRow } from "../lib/taxYear";
+import {
+  getConstanciaProfile,
+  isPdfBytes,
+  listCompletedInYear,
+  listConstanciaReceipts,
+  MAX_CONSTANCIA_RECEIPTS,
+  MAX_RECEIPT_BYTES,
+  mintConstanciaShare,
+  normalizeSubjectName,
+  putConstanciaProfile,
+  putConstanciaReceipts,
+  receiptObjectKey,
+  sanitizeReceiptFilename,
+  totalsByCurrency,
+} from "../lib/constancia";
+import { mintPayerShare } from "../lib/payer";
 
 type Variables = { account: AccountContext | null };
 const account = new Hono<{ Bindings: Env; Variables: Variables }>();
@@ -23,6 +54,7 @@ interface DocumentRow {
   status: string;
   created_at: string;
   completed_at: string | null;
+  expires_at: string;
   preparer_signs: number;
   order1_status: string | null;
 }
@@ -34,7 +66,7 @@ account.get("/documents", requireAccount, async (c) => {
   }
 
   const { results } = await c.env.DOCRACY_DB.prepare(
-    `SELECT d.doc_id, d.title, d.status, d.created_at, d.completed_at, d.preparer_signs, s1.status AS order1_status
+    `SELECT d.doc_id, d.title, d.status, d.created_at, d.completed_at, d.expires_at, d.preparer_signs, s1.status AS order1_status
      FROM documents d
      LEFT JOIN signers s1 ON s1.doc_id = d.doc_id AND s1."order" = 1
      WHERE d.account_id = ?
@@ -60,6 +92,7 @@ account.get("/documents", requireAccount, async (c) => {
         status: r.status,
         createdAt: r.created_at,
         completedAt: r.completed_at,
+        expiresAt: r.expires_at,
         statusToken: await signToken(r.doc_id, 0, c.env.TOKEN_SECRET),
         awaitingYou,
         signToken: signTok,
@@ -404,6 +437,265 @@ account.get("/documents/:docId/attachments/:signerOrder/:attachmentId", requireP
       "Content-Disposition": `attachment; filename="${attachment.name.replace(/[^\w.\-() ]+/g, "_")}"`,
     },
   });
+});
+
+const MAX_PDF_BYTES = 15 * 1024 * 1024;
+const MAX_COBRO_TITLE = 200;
+const MAX_COBRO_NAME = 200;
+
+account.get("/tax-year", requirePaidAccount, async (c) => {
+  const acct = c.get("account")!;
+  const parsed = parseTaxYear(c.req.query("year"));
+  if (typeof parsed === "object") return c.json(parsed, 400);
+  const year = parsed;
+  const locale: Locale = c.req.query("locale") === "es" ? "es" : "en";
+  if (!c.env.DOCRACY_DB) {
+    const share = await mintPayerShare(c.env, acct.workspaceId, year, locale);
+    return c.json({ year, documents: [], shareToken: share.shareToken, shareUrl: share.shareUrl });
+  }
+
+  const { start, end } = taxYearBounds(year);
+  const { results } = await c.env.DOCRACY_DB.prepare(
+    `SELECT doc_id, title, completed_at, expires_at
+     FROM documents
+     WHERE account_id = ?
+       AND status = 'completed'
+       AND completed_at IS NOT NULL
+       AND completed_at >= ?
+       AND completed_at < ?
+     ORDER BY completed_at ASC`
+  )
+    .bind(acct.workspaceId, start, end)
+    .all<{ doc_id: string; title: string; completed_at: string; expires_at: string }>();
+
+  const documents = await Promise.all(results.map((r) => hydrateTaxYearRow(c.env, r, locale)));
+  const share = await mintPayerShare(c.env, acct.workspaceId, year, locale);
+  return c.json({ year, documents, shareToken: share.shareToken, shareUrl: share.shareUrl });
+});
+
+account.get("/constancia", requirePaidAccount, async (c) => {
+  const acct = c.get("account")!;
+  const parsed = parseTaxYear(c.req.query("year"));
+  if (typeof parsed === "object") return c.json(parsed, 400);
+  const year = parsed;
+  const locale: Locale = c.req.query("locale") === "es" ? "es" : "en";
+  const [profile, documents, share, receipts] = await Promise.all([
+    getConstanciaProfile(c.env, acct.workspaceId),
+    listCompletedInYear(c.env, acct.workspaceId, year, locale),
+    mintConstanciaShare(c.env, acct.workspaceId, year, locale),
+    listConstanciaReceipts(c.env, acct.workspaceId, year),
+  ]);
+  return c.json({
+    year,
+    subjectName: profile?.subjectName ?? "",
+    shareToken: share.shareToken,
+    shareUrl: share.shareUrl,
+    documents,
+    totals: totalsByCurrency(documents),
+    receipts,
+  });
+});
+
+account.post("/constancia/profile", requirePaidAccount, async (c) => {
+  const acct = c.get("account")!;
+  let body: { subjectName?: unknown };
+  try {
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: "Invalid JSON" }, 400);
+  }
+  const name = normalizeSubjectName(body.subjectName);
+  if (typeof name === "object") return c.json(name, 400);
+  const profile = await putConstanciaProfile(c.env, acct.workspaceId, name);
+  return c.json({ subjectName: profile.subjectName });
+});
+
+account.post("/constancia/receipts", requirePaidAccount, async (c) => {
+  const acct = c.get("account")!;
+  const form = await c.req.parseBody();
+  const pdfFile = form["pdf"];
+  const yearRaw = form["year"];
+  if (!(pdfFile instanceof File) || typeof yearRaw !== "string") {
+    return c.json({ error: "Expected multipart form with 'pdf' file and 'year'" }, 400);
+  }
+  const parsed = parseTaxYear(yearRaw);
+  if (typeof parsed === "object") return c.json(parsed, 400);
+  const year = parsed;
+  if (pdfFile.size > MAX_RECEIPT_BYTES) {
+    return c.json({ error: `PDF must be under ${MAX_RECEIPT_BYTES / (1024 * 1024)}MB` }, 400);
+  }
+  const filename = sanitizeReceiptFilename(pdfFile.name);
+  if (typeof filename === "object") return c.json(filename, 400);
+  const bytes = new Uint8Array(await pdfFile.arrayBuffer());
+  if (!isPdfBytes(bytes)) return c.json({ error: "Upload a PDF (PayPal, Mercado Pago, or bank export)" }, 400);
+
+  const existing = await listConstanciaReceipts(c.env, acct.workspaceId, year);
+  if (existing.length >= MAX_CONSTANCIA_RECEIPTS) {
+    return c.json({ error: `At most ${MAX_CONSTANCIA_RECEIPTS} extra PDFs per year` }, 400);
+  }
+  const id = crypto.randomUUID();
+  const meta = { id, filename, uploadedAt: new Date().toISOString(), size: bytes.byteLength };
+  await c.env.DOCRACY_DOCS.put(receiptObjectKey(acct.workspaceId, year, id), bytes, {
+    httpMetadata: { contentType: "application/pdf" },
+  });
+  const files = [...existing, meta];
+  await putConstanciaReceipts(c.env, acct.workspaceId, year, files);
+  return c.json({ receipts: files });
+});
+
+account.delete("/constancia/receipts/:id", requirePaidAccount, async (c) => {
+  const acct = c.get("account")!;
+  const id = c.req.param("id");
+  const parsed = parseTaxYear(c.req.query("year"));
+  if (typeof parsed === "object") return c.json(parsed, 400);
+  const year = parsed;
+  const existing = await listConstanciaReceipts(c.env, acct.workspaceId, year);
+  const next = existing.filter((f) => f.id !== id);
+  if (next.length === existing.length) return c.json({ error: "Not found" }, 404);
+  await c.env.DOCRACY_DOCS.delete(receiptObjectKey(acct.workspaceId, year, id));
+  await putConstanciaReceipts(c.env, acct.workspaceId, year, next);
+  return c.json({ receipts: next });
+});
+
+account.post("/cobro", requirePaidAccount, async (c) => {
+  const acct = c.get("account")!;
+  const ip = c.req.header("CF-Connecting-IP") ?? "unknown";
+  const allowed = await checkRateLimit(c.env, ip);
+  if (!allowed) {
+    return c.json({ error: "Too many documents created recently. Please try again later." }, 429);
+  }
+
+  const form = await c.req.parseBody();
+  const pdfFile = form["pdf"];
+  const metaRaw = form["meta"];
+  if (!(pdfFile instanceof File) || typeof metaRaw !== "string") {
+    return c.json({ error: "Expected multipart form with 'pdf' file and 'meta' JSON field" }, 400);
+  }
+  if (pdfFile.size > MAX_PDF_BYTES) {
+    return c.json({ error: `PDF must be under ${MAX_PDF_BYTES / (1024 * 1024)}MB` }, 400);
+  }
+
+  const pdfBytes = new Uint8Array(await pdfFile.arrayBuffer());
+  const header = new TextDecoder().decode(pdfBytes.slice(0, 5));
+  if (header !== "%PDF-") {
+    return c.json({ error: "That file doesn't look like a valid PDF" }, 400);
+  }
+  try {
+    await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
+  } catch {
+    return c.json({ error: "That PDF couldn't be read — it may be corrupted" }, 400);
+  }
+
+  let meta: {
+    title?: string;
+    recipientName?: string;
+    recipientEmail?: string;
+    recipientWhatsapp?: string;
+    remindEveryDays?: number;
+    locale?: Locale;
+    paymentRequest?: { amount: string; currency: string; url: string };
+  };
+  try {
+    meta = JSON.parse(metaRaw);
+  } catch {
+    return c.json({ error: "Invalid 'meta' JSON" }, 400);
+  }
+
+  const title = meta.title?.trim() ?? "";
+  if (!title || title.length > MAX_COBRO_TITLE) {
+    return c.json({ error: `A title is required (max ${MAX_COBRO_TITLE} characters)` }, 400);
+  }
+  const recipientName = meta.recipientName?.trim() ?? "";
+  if (!recipientName || recipientName.length > MAX_COBRO_NAME) {
+    return c.json({ error: `Recipient name is required (max ${MAX_COBRO_NAME} characters)` }, 400);
+  }
+
+  const recipientEmail = meta.recipientEmail?.trim() || undefined;
+  if (recipientEmail && !EMAIL_RE.test(recipientEmail)) {
+    return c.json({ error: "That doesn't look like a valid email address" }, 400);
+  }
+  const whatsappRaw = meta.recipientWhatsapp?.trim() || "";
+  const whatsappPhone = whatsappRaw ? normalizeE164(whatsappRaw) : null;
+  if (whatsappRaw && !whatsappPhone) {
+    return c.json({ error: "WhatsApp number must be a valid international number" }, 400);
+  }
+  if (!recipientEmail && !whatsappPhone) {
+    return c.json({ error: "Add a recipient email or WhatsApp number" }, 400);
+  }
+
+  const parsedPayment = parsePaymentRequest(meta.paymentRequest);
+  if (parsedPayment.error) return c.json({ error: parsedPayment.error }, 400);
+  if (!parsedPayment.paymentRequest) {
+    return c.json({ error: "A payment amount, currency, and https checkout URL are required" }, 400);
+  }
+
+  let remindEveryDays = DEFAULT_COBRO_REMIND_DAYS;
+  if (meta.remindEveryDays !== undefined) {
+    if (
+      !Number.isInteger(meta.remindEveryDays) ||
+      meta.remindEveryDays < MIN_COBRO_REMIND_DAYS ||
+      meta.remindEveryDays > MAX_COBRO_REMIND_DAYS
+    ) {
+      return c.json(
+        { error: `Remind every must be ${MIN_COBRO_REMIND_DAYS}–${MAX_COBRO_REMIND_DAYS} days` },
+        400
+      );
+    }
+    remindEveryDays = meta.remindEveryDays;
+  }
+
+  const ttl = resolveTtlDays(c.env, { isPaid: true });
+  if ("error" in ttl) return c.json({ error: ttl.error }, 400);
+
+  if (whatsappPhone) {
+    const quota = await consumeCobroWhatsapp(c.env, acct, 1);
+    if (!quota.ok) return c.json({ error: quota.error }, 402);
+    reportCobroWhatsappOverage(c.env, c.executionCtx, acct, quota.overageUnits);
+  }
+
+  const { docId, statusToken } = await createCobroDocument({
+    env: c.env,
+    ctx: c.executionCtx,
+    pdfBytes,
+    filename: pdfFile.name || "document.pdf",
+    accountId: acct.workspaceId,
+    preparerEmail: acct.email,
+    title,
+    paymentRequest: parsedPayment.paymentRequest,
+    recipient: {
+      name: recipientName,
+      email: recipientEmail,
+      whatsappPhone: whatsappPhone ?? undefined,
+    },
+    remindEveryDays,
+    locale: meta.locale === "es" ? "es" : "en",
+    creatorIp: ip,
+    ttlDays: ttl.ttlDays,
+  });
+
+  return c.json({ docId, statusToken });
+});
+
+account.post("/cobro/:docId/remind", requirePaidAccount, async (c) => {
+  const acct = c.get("account")!;
+  const doc = await getDoc(c.env, c.req.param("docId"));
+  if (!doc || doc.accountId !== acct.workspaceId || doc.kind !== "cobro") {
+    return c.json({ error: "Document not found" }, 404);
+  }
+
+  let skipWhatsApp = false;
+  if (doc.cobroRecipient?.whatsappPhone) {
+    const quota = await consumeCobroWhatsapp(c.env, acct, 1);
+    if (!quota.ok) {
+      if (!doc.cobroRecipient.email) return c.json({ error: quota.error }, 402);
+      skipWhatsApp = true;
+    } else {
+      reportCobroWhatsappOverage(c.env, c.executionCtx, acct, quota.overageUnits);
+    }
+  }
+
+  await sendCobroAgain(c.env, doc, { skipWhatsApp });
+  return c.json({ ok: true, skipWhatsApp, nextRemindAt: doc.cobroNextRemindAt });
 });
 
 export default account;

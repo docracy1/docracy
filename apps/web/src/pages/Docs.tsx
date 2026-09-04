@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { FREE_TEMPLATES } from "../lib/freeTemplates";
-import { useT } from "../lib/i18n";
+import { localizePath, useI18n, useT } from "../lib/i18n";
 import { useSeoMeta } from "../lib/useSeoMeta";
 
 function Section({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
@@ -14,6 +14,7 @@ function Section({ id, title, children }: { id: string; title: string; children:
 
 export default function Docs() {
   const t = useT();
+  const { locale } = useI18n();
   useSeoMeta("docs");
 
   return (
@@ -75,6 +76,77 @@ export default function Docs() {
         <p>
           {t("docs.paid.body1")}{" "}
           <Link to="/pricing">{t("pricing.title")}</Link>.
+        </p>
+      </Section>
+
+      <Section id="pay" title={t("docs.pay.title")}>
+        <p>{t("docs.pay.body")}</p>
+      </Section>
+
+      <Section id="signed-page" title={t("docs.signedPage.title")}>
+        <p>{t("docs.signedPage.body")}</p>
+      </Section>
+
+      <Section id="contractor-kit" title={t("docs.packet.title")}>
+        <p>
+          {t("docs.packet.body")}{" "}
+          <Link to={localizePath("/packets/us-contractor", locale)}>{t("footer.packet")}</Link>.
+        </p>
+      </Section>
+
+      <Section id="latam-kit" title={t("docs.latamPacket.title")}>
+        <p>
+          {t("docs.latamPacket.body")}{" "}
+          <Link to={localizePath("/packets/latam-contractor", locale)}>{t("footer.latamPacket")}</Link>.
+        </p>
+      </Section>
+
+      <Section id="cobro" title={t("docs.cobro.title")}>
+        <p>
+          {t("docs.cobro.body")}{" "}
+          <Link to={localizePath("/cobro", locale)}>{t("footer.cobro")}</Link>.
+        </p>
+      </Section>
+
+      <Section id="tax-year" title={t("docs.taxYear.title")}>
+        <p>
+          {t("docs.taxYear.body")}{" "}
+          <Link to={localizePath("/1099-season", locale)}>{t("footer.taxYear")}</Link>.
+        </p>
+      </Section>
+
+      <Section id="constancia" title={t("docs.constancia.title")}>
+        <p>
+          {t("docs.constancia.body")}{" "}
+          <Link to={localizePath("/income-proof", locale)}>{t("footer.constancia")}</Link>.
+        </p>
+      </Section>
+
+      <Section id="trades-kit" title={t("docs.tradesPacket.title")}>
+        <p>
+          {t("docs.tradesPacket.body")}{" "}
+          <Link to={localizePath("/packets/trades", locale)}>{t("footer.tradesPacket")}</Link>.
+        </p>
+      </Section>
+
+      <Section id="latam-trade-kit" title={t("docs.latamTradePacket.title")}>
+        <p>
+          {t("docs.latamTradePacket.body")}{" "}
+          <Link to={localizePath("/packets/latam-trade", locale)}>{t("footer.latamTradePacket")}</Link>.
+        </p>
+      </Section>
+
+      <Section id="collect-kit" title={t("docs.collectPacket.title")}>
+        <p>
+          {t("docs.collectPacket.body")}{" "}
+          <Link to={localizePath("/packets/collect", locale)}>{t("footer.collectPacket")}</Link>.
+        </p>
+      </Section>
+
+      <Section id="payer-share" title={t("docs.payerShare.title")}>
+        <p>
+          {t("docs.payerShare.body")}{" "}
+          <Link to={localizePath("/1099-season", locale)}>{t("footer.taxYear")}</Link>.
         </p>
       </Section>
 

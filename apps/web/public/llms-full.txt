@@ -38,7 +38,16 @@ Operated by RELACON GmbH, Elisabethstraße 15/5b, 1010 Vienna, Austria. Contact:
 - White-label branding — your own logo on signing pages and emails.
 - An MCP connector and a Zapier integration (see below) using the same API key.
 - Four AI tools (see below).
-- **Dropbox / OneDrive / Box connectors** — completed signed PDFs upload automatically to connected storage.
+- **Dropbox / OneDrive / Box / Google Drive connectors** — completed signed PDFs upload automatically to connected storage.
+- **WhatsApp cobro** — pay + file, no signature (`/cobro`, Spanish `/es/cobro`). Sender's own PayPal/Stripe/Mercado Pago URL; Docracy never takes the money.
+- **1099 season locker** — calendar-year completed-doc list + CPA CSV (`/1099-season`). Not IRS e-file; no TIN OCR.
+- **Income proof / constancia** — shareable calendar-year packet of signed files and cobros. Spanish lead: `/es/constancia` (x-default). English: `/income-proof`. Not a W-2, bank letter, employer certificate, or SAT/IRS filing. Keyword landing: `/proof-of-income` (Spanish `/es/prueba-de-ingresos`).
+- **US contractor kit** (free templates) — NDA, IRS W-9, independent contractor agreement (`/packets/us-contractor`).
+- **LATAM contractor kit** — NDA + contractor agreement, then Paid cobro (`/packets/latam-contractor`). Not a W-8BEN.
+- **Trades job packet** — work order, change order, then cobro (`/packets/trades`). Not Jobber; not a mechanic's lien waiver.
+- **LATAM commercial kit** — sales agreement + purchase order + cobro (`/es/kit-comercio`, English `/packets/latam-trade`). Not packing list / origin certificate / aduana software.
+- **Request W-9 / NDA / RFC** — sender sends templates; RFC is their SAT PDF (`/packets/collect`). No TIN OCR.
+- **CPA payment proof** — HMAC share of the 1099 year (`/contractor-payment-proof`). Inverse of constancia. Not IRS e-file.
 
 ## Enterprise tier (custom pricing — sales@docracy.io)
 

@@ -9,7 +9,8 @@ import { track } from "../lib/track";
 import { useNoIndex } from "../lib/useNoIndex";
 import type { SignPayload } from "../lib/api";
 import type { DocField, StatusPayload } from "../lib/types";
-import { useT } from "../lib/i18n";
+import { localizePath, useI18n, useT } from "../lib/i18n";
+import { signedPagePath } from "../lib/paidVault";
 
 function fieldIsFilled(f: DocField, values: Record<string, string>): boolean {
   const type = f.type ?? "signature";
@@ -87,6 +88,7 @@ export default function Sign({
   returnUrl,
 }: SignProps = {}) {
   const t = useT();
+  const { locale } = useI18n();
   const { token: paramToken } = useParams<{ token: string }>();
   const token = overrideToken ?? paramToken;
   const [payload, setPayload] = useState<SignPayload | null>(null);
@@ -114,6 +116,7 @@ export default function Sign({
   const [attachmentError, setAttachmentError] = useState<string | null>(null);
   const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
   const [conversionDismissed, setConversionDismissed] = useState(false);
+  const [copiedSigned, setCopiedSigned] = useState(false);
   const postTargetOrigin = allowedOrigins?.[0] || "*";
   const pendingAdvanceRef = useRef(false);
 
@@ -166,7 +169,7 @@ export default function Sign({
 
   // Conversion popup only for anonymous signers on the public (non-embed, non-white-label) flow.
   useEffect(() => {
-    if (!done || embedMode || payload?.brandLogoPath) {
+    if ((!done && payload?.status.status !== "completed") || embedMode || payload?.brandLogoPath) {
       setLoggedIn(null);
       return;
     }
@@ -181,7 +184,7 @@ export default function Sign({
     return () => {
       cancelled = true;
     };
-  }, [done, embedMode, payload?.brandLogoPath]);
+  }, [done, embedMode, payload?.brandLogoPath, payload?.status.status]);
 
   const onUnlock = async () => {
     if (!token || !pinInput.trim()) return;
@@ -459,26 +462,64 @@ export default function Sign({
     );
   }
 
-  if (done) {
+  if (done || payload.status.status === "completed") {
     const showConversionPopup =
       !embedMode && !payload.brandLogoPath && loggedIn === false && !conversionDismissed;
     const showViralCard =
       !embedMode && !payload.brandLogoPath && (loggedIn === true || conversionDismissed);
+    const payment = (finalStatus ?? payload.status).paymentRequest;
+    const isFullySigned = (finalStatus ?? payload.status).status === "completed";
 
     return (
       <div className="container">
         <BrandLogo path={payload.brandLogoPath} slug={payload.brandWorkspaceSlug} />
         <h1>{t("sign.signed")}</h1>
         <p>{t("sign.thanks")}</p>
-        {finalStatus?.status === "completed" && token && (
-          <a
-            href={apiUrl(`/api/status/${token}/download`)}
-            download
-            className="btn-primary"
-            style={{ display: "inline-block", textDecoration: "none", marginTop: 4, marginBottom: 20 }}
-          >
-            {t("sign.download")}
-          </a>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 4, marginBottom: 20 }}>
+          {isFullySigned && token && (
+            <a
+              href={apiUrl(`/api/status/${token}/download`)}
+              download
+              className="btn-primary"
+              style={{ display: "inline-block", textDecoration: "none" }}
+            >
+              {t("sign.download")}
+            </a>
+          )}
+          {isFullySigned && payment && (
+            <a
+              href={payment.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary"
+              style={{ display: "inline-block", textDecoration: "none" }}
+              onClick={() => track("viral_cta_clicked", { source: "signer_pay" })}
+            >
+              {t("sign.payCta", { amount: payment.amount, currency: payment.currency })}
+            </a>
+          )}
+          {isFullySigned && token && (
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={async () => {
+                const url = `${window.location.origin}${signedPagePath(token, locale)}`;
+                try {
+                  await navigator.clipboard.writeText(url);
+                  setCopiedSigned(true);
+                  track("viral_cta_clicked", { source: "signer_copy_signed" });
+                  window.setTimeout(() => setCopiedSigned(false), 2000);
+                } catch {
+                  /* clipboard blocked */
+                }
+              }}
+            >
+              {copiedSigned ? t("common.copied") : t("signed.copyLink")}
+            </button>
+          )}
+        </div>
+        {isFullySigned && payment && (
+          <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 0 }}>{t("sign.payHint")}</p>
         )}
         {/* The recipient never needed an account to get here — this is the moment they're most
          *  likely to become a sender themselves. Skipped entirely for white-labeled workspaces,
@@ -486,10 +527,10 @@ export default function Sign({
          *  skipped in embedMode so the iframe stays chrome-less. Logged-in signers get the soft
          *  viral card instead of the account-creation popup. */}
         {showViralCard && (
-          <div className="card" style={{ marginTop: 24, maxWidth: 420 }}>
-            <p style={{ marginBottom: 12 }}>{t("sign.viral")}</p>
+          <div className="card" style={{ marginTop: 24, maxWidth: 420, borderColor: "var(--primary)" }}>
+            <p style={{ marginBottom: 12, fontWeight: 600 }}>{t("sign.viral")}</p>
             <Link
-              to="/prepare?ref=signer-completion"
+              to={`${localizePath("/prepare", locale)}?ref=signer-completion`}
               className="btn-primary"
               style={{ display: "inline-block", textDecoration: "none" }}
               onClick={() => track("viral_cta_clicked", { source: "signer_done" })}

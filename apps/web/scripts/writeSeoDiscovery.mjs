@@ -50,6 +50,10 @@ Disallow: /admin/
 Disallow: /embed/
 Disallow: /sign/
 Disallow: /status/
+Disallow: /income-proof/
+Disallow: /es/constancia/
+Disallow: /1099-season/
+Disallow: /es/temporada-1099/
 Disallow: /team/
 Disallow: /go/
 Disallow: /outreach/
@@ -79,6 +83,36 @@ function abs(urlPath) {
 function priorityFor(urlPath) {
   if (urlPath === "/" || urlPath === "/es") return "1.0";
   if (urlPath === "/free-templates" || urlPath === "/pricing" || urlPath === "/blog") return "0.8";
+  if (
+    urlPath === "/1099-season" ||
+    urlPath === "/es/temporada-1099" ||
+    urlPath === "/cobro" ||
+    urlPath === "/es/cobro" ||
+    urlPath === "/packets/latam-contractor" ||
+    urlPath === "/es/kit-contratista-latam" ||
+    urlPath === "/packets/us-contractor" ||
+    urlPath === "/es/kit-contratista" ||
+    urlPath === "/packets/trades" ||
+    urlPath === "/es/kit-oficios" ||
+    urlPath === "/packets/latam-trade" ||
+    urlPath === "/es/kit-comercio" ||
+    urlPath === "/packets/collect" ||
+    urlPath === "/es/pide-documentos" ||
+    urlPath === "/income-proof" ||
+    urlPath === "/es/constancia" ||
+    urlPath === "/proof-of-income" ||
+    urlPath === "/es/prueba-de-ingresos" ||
+    urlPath === "/signed-work-order" ||
+    urlPath === "/es/orden-de-trabajo-firmada" ||
+    urlPath === "/contractor-payment-proof" ||
+    urlPath === "/es/comprobante-pago-contratistas" ||
+    urlPath === "/latam-export-documents" ||
+    urlPath === "/es/documentos-exportacion" ||
+    urlPath === "/request-w9" ||
+    urlPath === "/es/pedir-w9"
+  ) {
+    return "0.8";
+  }
   if (urlPath.startsWith("/free-templates/") || urlPath.startsWith("/blog/")) return "0.7";
   if (urlPath.includes("-alternative") || urlPath.includes("-vs-")) return "0.7";
   return "0.6";
@@ -122,7 +156,8 @@ function urlEntry(route) {
     const esHref = abs(route.alternates.es);
     lines.push(`    <xhtml:link rel="alternate" hreflang="en" href="${escapeXml(enHref)}" />`);
     lines.push(`    <xhtml:link rel="alternate" hreflang="es" href="${escapeXml(esHref)}" />`);
-    lines.push(`    <xhtml:link rel="alternate" hreflang="x-default" href="${escapeXml(enHref)}" />`);
+    const defaultHref = route.xDefault === "es" ? esHref : enHref;
+    lines.push(`    <xhtml:link rel="alternate" hreflang="x-default" href="${escapeXml(defaultHref)}" />`);
   }
   if (route.urlPath === "/how-it-works" || route.urlPath === "/es/como-funciona") {
     lines.push(videoBlock(route.locale === "es" ? "es" : "en"));
@@ -160,6 +195,30 @@ function robotsAllowForRoutes(routes) {
     "/dpa",
     "/uptime",
     "/verify",
+    "/es/verificar",
+    "/packets/us-contractor",
+    "/es/kit-contratista",
+    "/packets/latam-contractor",
+    "/es/kit-contratista-latam",
+    "/packets/trades",
+    "/es/kit-oficios",
+    "/packets/latam-trade",
+    "/es/kit-comercio",
+    "/packets/collect",
+    "/es/pide-documentos",
+    "/1099-season",
+    "/es/temporada-1099",
+    "/cobro",
+    "/es/cobro",
+    "/whatsapp-invoice",
+    "/1099-contractor-records",
+    "/hire-contractor-abroad",
+    "/income-proof",
+    "/proof-of-income",
+    "/signed-work-order",
+    "/contractor-payment-proof",
+    "/latam-export-documents",
+    "/request-w9",
     "/templates",
   ]) {
     exact.add(p);

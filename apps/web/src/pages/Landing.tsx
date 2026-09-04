@@ -199,12 +199,31 @@ const CORE_FEATURES: Array<{
   { icon: "chainLink", titleKey: "landing.feat10.title", bodyKey: "landing.feat10.body", to: "/blockchain-timestamp", linkKey: "landing.feat10.link" },
 ];
 
+const AFTER_SIGN_OUTCOMES: Array<{
+  icon: "send" | "badge" | "users" | "duplicate";
+  titleKey: string;
+  bodyKey: string;
+  to: string;
+  linkKey: string;
+}> = [
+  { icon: "duplicate", titleKey: "landing.out4.title", bodyKey: "landing.out4.body", to: "/income-proof", linkKey: "landing.out4.link" },
+  { icon: "send", titleKey: "landing.out1.title", bodyKey: "landing.out1.body", to: "/cobro", linkKey: "landing.out1.link" },
+  { icon: "badge", titleKey: "landing.out2.title", bodyKey: "landing.out2.body", to: "/1099-season", linkKey: "landing.out2.link" },
+  { icon: "users", titleKey: "landing.out3.title", bodyKey: "landing.out3.body", to: "/packets/latam-contractor", linkKey: "landing.out3.link" },
+  { icon: "users", titleKey: "landing.out5.title", bodyKey: "landing.out5.body", to: "/packets/trades", linkKey: "landing.out5.link" },
+  { icon: "duplicate", titleKey: "landing.out6.title", bodyKey: "landing.out6.body", to: "/packets/collect", linkKey: "landing.out6.link" },
+];
+
 const FAQ_KEYS: Array<{ qKey: string; aKey: string }> = [
   { qKey: "landing.faq1.q", aKey: "landing.faq1.a" },
   { qKey: "landing.faq2.q", aKey: "landing.faq2.a" },
   { qKey: "landing.faq3.q", aKey: "landing.faq3.a" },
   { qKey: "landing.faq4.q", aKey: "landing.faq4.a" },
   { qKey: "landing.faq5.q", aKey: "landing.faq5.a" },
+  { qKey: "landing.faq6.q", aKey: "landing.faq6.a" },
+  { qKey: "landing.faq7.q", aKey: "landing.faq7.a" },
+  { qKey: "landing.faq8.q", aKey: "landing.faq8.a" },
+  { qKey: "landing.faq9.q", aKey: "landing.faq9.a" },
 ];
 
 // Subset of TESTIMONIALS with a real, recognizable company identity — shown as a compact logo
@@ -282,6 +301,7 @@ export default function Landing() {
   // that promise should be visible on the one screen where it matters most.
   const prepareTo = localizePath("/prepare", locale);
   const templatesTo = localizePath("/free-templates", locale);
+  const constanciaTo = localizePath("/income-proof", locale);
   const watchTo = localizePath("/how-it-works", locale);
   const emailTrimmed = heroEmail.trim();
   // Match Login: mount Turnstile whenever the site key is set so a token is ready before submit.
@@ -405,16 +425,25 @@ export default function Landing() {
           <p className="hero-sub">{t("hero.sub")}</p>
           <ul className="hero-trust-badges" aria-label={t("hero.trustAria")}>
             <li>
-              <FeatureIcon name="scale" />
-              {t("hero.badge.legal")}
+              <Link to={localizePath("/income-proof", locale)} onClick={() => track("landingpage_cta_clicked", { source: "hero_badge_constancia" })}>
+                <FeatureIcon name="duplicate" />
+                {t("hero.badge.constancia")}
+              </Link>
             </li>
             <li>
-              <FeatureIcon name="pen" />
-              {t("hero.badge.noSignup")}
+              <Link to={localizePath("/cobro", locale)} onClick={() => track("landingpage_cta_clicked", { source: "hero_badge_cobro" })}>
+                <FeatureIcon name="send" />
+                {t("hero.badge.cobro")}
+              </Link>
             </li>
             <li>
-              <FeatureIcon name="badge" />
-              {t("hero.badge.price")}
+              <Link
+                to={locale === "es" ? "/es#after-they-sign" : "/#after-they-sign"}
+                onClick={() => track("landingpage_cta_clicked", { source: "hero_badge_kits" })}
+              >
+                <FeatureIcon name="badge" />
+                {t("hero.badge.kits")}
+              </Link>
             </li>
           </ul>
 
@@ -541,6 +570,14 @@ export default function Landing() {
             >
               {t("hero.orTemplates")}
             </Link>
+            <span className="hero-cta-row-sep">·</span>
+            <Link
+              to={constanciaTo}
+              className="hero-secondary-link"
+              onClick={() => track("landingpage_cta_clicked", { source: "hero_open_constancia" })}
+            >
+              {t("hero.orConstancia")}
+            </Link>
           </div>
         </div>
       </div>
@@ -562,6 +599,27 @@ export default function Landing() {
       </div>
 
       <FirstDocumentPrompt source="how" />
+
+      <div className="core-features-band" id="after-they-sign">
+        <div className="core-features-inner">
+          <h2 style={{ fontSize: 26, marginBottom: 8, textAlign: "center" }}>{t("landing.outcomesTitle")}</h2>
+          <p style={{ textAlign: "center", maxWidth: 560, margin: "0 auto" }}>{t("landing.outcomesSub")}</p>
+          <div className="core-features-grid">
+            {AFTER_SIGN_OUTCOMES.map((f) => (
+              <div key={f.titleKey} className="core-feature-card">
+                <div className="core-feature-icon">
+                  <FeatureIcon name={f.icon} />
+                </div>
+                <h3>{t(f.titleKey)}</h3>
+                <p>{t(f.bodyKey)}</p>
+                <Link to={localizePath(f.to, locale)} style={{ fontSize: 13, fontWeight: 600 }}>
+                  {t(f.linkKey)} →
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
       <div className="core-features-band">
         <div className="core-features-inner">

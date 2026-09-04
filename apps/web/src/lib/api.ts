@@ -49,8 +49,11 @@ export interface CreateDocumentOptions {
   customMessage?: string;
   signingMode?: "sequential" | "parallel";
   ccRecipients?: CcRecipientInput[];
-  /** Paid only — retention days (1–90). Omitted / free always uses the default (9). */
+  /** Paid only — retention days (1–tax-year vault, max 500). Omitted paid uses the vault default;
+   *  free always uses 9. */
   ttlDays?: number;
+  /** Paid only — sender's own payment link. Docracy never collects this money. */
+  paymentRequest?: { amount: string; currency: string; url: string };
   smsInvites?: boolean;
   /** Also send signing links via WhatsApp — requires a signed-up account (free: 1/month, paid: 10/month, enterprise: 50/month). */
   whatsappInvites?: boolean;
@@ -367,6 +370,7 @@ export interface DocumentSummary {
   status: "pending" | "completed" | "voided";
   createdAt: string;
   completedAt: string | null;
+  expiresAt?: string;
   statusToken: string;
   awaitingYou: boolean;
   signToken: string | null;
@@ -374,6 +378,142 @@ export interface DocumentSummary {
 
 export async function fetchMyDocuments(): Promise<{ documents: DocumentSummary[] }> {
   const res = await apiFetch("/api/account/documents");
+  return asJson(res);
+}
+
+export interface TaxYearDocument {
+  docId: string;
+  title: string;
+  completedAt: string;
+  expiresAt: string;
+  statusToken: string;
+  signedPageUrl: string;
+  counterparties: Array<{ name: string; email: string }>;
+  amount: string;
+  currency: string;
+  paymentUrl: string;
+  kind: "cobro" | "sign";
+}
+
+export async function fetchTaxYear(
+  year: number,
+  locale: Locale
+): Promise<{ year: number; documents: TaxYearDocument[]; shareToken?: string; shareUrl?: string }> {
+  const res = await apiFetch(`/api/account/tax-year?year=${year}&locale=${locale}`);
+  return asJson(res);
+}
+
+export interface ConstanciaTotal {
+  currency: string;
+  amount: string;
+  count: number;
+}
+
+export interface ConstanciaReceipt {
+  id: string;
+  filename: string;
+  uploadedAt: string;
+  size: number;
+}
+
+export interface ConstanciaPacket {
+  year: number;
+  subjectName: string;
+  shareToken: string;
+  shareUrl: string;
+  documents: TaxYearDocument[];
+  totals: ConstanciaTotal[];
+  receipts: ConstanciaReceipt[];
+}
+
+export interface ConstanciaPublicRow {
+  title: string;
+  completedAt: string;
+  counterparties: Array<{ name: string }>;
+  amount: string;
+  currency: string;
+  signedPageUrl: string;
+  kind: "cobro" | "sign";
+}
+
+export interface ConstanciaPublicPacket {
+  year: number;
+  subjectName: string;
+  documents: ConstanciaPublicRow[];
+  totals: ConstanciaTotal[];
+  receipts: ConstanciaReceipt[];
+}
+
+export async function fetchConstancia(year: number, locale: Locale): Promise<ConstanciaPacket> {
+  const res = await apiFetch(`/api/account/constancia?year=${year}&locale=${locale}`);
+  return asJson(res);
+}
+
+export async function saveConstanciaProfile(subjectName: string): Promise<{ subjectName: string }> {
+  const res = await apiFetch("/api/account/constancia/profile", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ subjectName }),
+  });
+  return asJson(res);
+}
+
+export async function uploadConstanciaReceipt(
+  year: number,
+  pdf: File
+): Promise<{ receipts: ConstanciaReceipt[] }> {
+  const form = new FormData();
+  form.set("pdf", pdf);
+  form.set("year", String(year));
+  const res = await apiFetch("/api/account/constancia/receipts", { method: "POST", body: form });
+  return asJson(res);
+}
+
+export async function deleteConstanciaReceipt(year: number, id: string): Promise<{ receipts: ConstanciaReceipt[] }> {
+  const res = await apiFetch(`/api/account/constancia/receipts/${encodeURIComponent(id)}?year=${year}`, {
+    method: "DELETE",
+  });
+  return asJson(res);
+}
+
+export function constanciaReceiptPublicUrl(token: string, id: string): string {
+  return `/api/constancia/${encodeURIComponent(token)}/receipts/${encodeURIComponent(id)}`;
+}
+
+export async function fetchConstanciaPublic(token: string, locale: Locale): Promise<ConstanciaPublicPacket> {
+  const res = await apiFetch(`/api/constancia/${encodeURIComponent(token)}?locale=${locale}`);
+  return asJson(res);
+}
+
+export async function fetchPayerPublic(
+  token: string,
+  locale: Locale
+): Promise<{ year: number; documents: ConstanciaPublicRow[]; totals: ConstanciaTotal[] }> {
+  const res = await apiFetch(`/api/payer/${encodeURIComponent(token)}?locale=${locale}`);
+  return asJson(res);
+}
+
+export async function createCobro(
+  pdf: File,
+  meta: {
+    title: string;
+    recipientName: string;
+    recipientEmail?: string;
+    recipientWhatsapp?: string;
+    remindEveryDays?: number;
+    locale?: Locale;
+    paymentRequest: { amount: string; currency: string; url: string };
+  }
+): Promise<{ docId: string; statusToken: string }> {
+  const form = new FormData();
+  form.set("pdf", pdf);
+  form.set("meta", JSON.stringify(meta));
+  const res = await apiFetch("/api/account/cobro", { method: "POST", body: form });
+  return asJson(res);
+}
+
+export async function remindCobro(docId: string): Promise<{ ok: true; skipWhatsApp: boolean; nextRemindAt?: string }> {
+  const res = await apiFetch(`/api/account/cobro/${docId}/remind`, { method: "POST" });
   return asJson(res);
 }
 

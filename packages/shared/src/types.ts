@@ -206,6 +206,33 @@ export interface DocState {
     /** Default 5MB per file. */
     maxBytesPerFile?: number;
   };
+  /**
+   * Optional "get paid after they sign" request. The sender pastes their own payment URL
+   * (PayPal.me, Stripe Payment Link, Mercado Pago, etc.) — Docracy never collects the money
+   * and never adds a processing fee. Always read via `doc.paymentRequest`.
+   */
+  paymentRequest?: PaymentRequest;
+  /** Set once the "this signed file is about to be deleted" nag has been emailed to the preparer. */
+  archiveNagSentAt?: string | null;
+  /**
+   * Paid-only pay+file send with no signature required (WhatsApp cobro). Always read via
+   * `doc.kind` — absent on every signing document created before this field existed.
+   */
+  kind?: "cobro";
+  /** Recipient of a cobro send — not a signer. Always read via `doc.cobroRecipient`. */
+  cobroRecipient?: { name: string; email?: string; whatsappPhone?: string };
+  /** Days between cobro "pay again" pings. Default 30. Always read via `doc.cobroRemindEveryDays`. */
+  cobroRemindEveryDays?: number;
+  cobroNextRemindAt?: string;
+  cobroLastRemindAt?: string;
+}
+
+/** Display-only payment ask attached to a document. Amount/currency are labels; `url` is the
+ *  sender's own checkout link. Docracy does not charge or receive these funds. */
+export interface PaymentRequest {
+  amount: string;
+  currency: string;
+  url: string;
 }
 
 export interface Env {
@@ -235,7 +262,8 @@ export interface Env {
   PUBLIC_CONNECTOR_URL: string;
   FREE_TIER_MAX_SIGNERS: string;
   DOC_TTL_DAYS: string;
-  /** Max custom retention a paid account may set at create time (days). Defaults to 90 when unset. */
+  /** Max custom retention a paid account may set at create time (days). Defaults to 500
+   *  (tax-year vault ceiling) when unset. */
   DOC_TTL_MAX_DAYS?: string;
   FEEDBACK_EMAIL: string;
   /** Absent until a real Stripe account exists — billing routes must degrade gracefully (501),

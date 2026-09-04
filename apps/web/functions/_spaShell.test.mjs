@@ -60,6 +60,14 @@ assert.equal(stripVideoMetaTags(withVideoMeta).includes("twitter:player"), false
 assert.equal(isSpaAppPath("/login"), true);
 assert.equal(isSpaAppPath("/prepare"), true);
 assert.equal(isSpaAppPath("/sign/abc"), true);
+assert.equal(isSpaAppPath("/income-proof/tok"), true);
+assert.equal(isSpaAppPath("/es/constancia/tok"), true);
+assert.equal(isSpaAppPath("/income-proof"), false);
+assert.equal(isSpaAppPath("/es/constancia"), false);
+assert.equal(isSpaAppPath("/1099-season/tok"), true);
+assert.equal(isSpaAppPath("/es/temporada-1099/tok"), true);
+assert.equal(isSpaAppPath("/1099-season"), false);
+assert.equal(isSpaAppPath("/es/temporada-1099"), false);
 assert.equal(isSpaAppPath("/pricing"), false);
 assert.equal(hasFileExtension("/assets/x.js"), true);
 assert.equal(hasFileExtension("/pricing"), false);

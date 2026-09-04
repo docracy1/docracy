@@ -28,8 +28,12 @@ import { automation } from "./routes/automation";
 import { verifyPublic } from "./routes/verify";
 import { importGoogleDoc } from "./routes/importGoogleDoc";
 import { marketplaceAccount, marketplacePublic, marketplaceAdmin } from "./routes/marketplace";
+import constanciaRoute from "./routes/constancia";
+import payerRoute from "./routes/payer";
 import { roadmapAdmin, roadmapPublic } from "./routes/roadmap";
 import { runReminderSweep } from "./lib/reminders";
+import { runArchiveNagSweep } from "./lib/archiveNag";
+import { runCobroRemindSweep } from "./lib/cobro";
 import { reconcileD1Index } from "./lib/index-d1";
 import { runExpiredDocCleanup } from "./lib/cleanup";
 import { runHealthCheckAndAlert } from "./lib/healthcheck";
@@ -100,6 +104,8 @@ app.route("/api/import/google-doc", importGoogleDoc);
 app.route("/api/admin/roadmap", roadmapAdmin);
 app.route("/api/roadmap", roadmapPublic);
 app.route("/api/status", statusRoute);
+app.route("/api/constancia", constanciaRoute);
+app.route("/api/payer", payerRoute);
 app.route("/api/unsubscribe", unsubscribeRoute);
 app.route("/api/webhooks/resend", resendWebhook);
 app.route("/api/webhooks/whatsapp", whatsappWebhook);
@@ -152,6 +158,8 @@ export default {
     }
 
     ctx.waitUntil(runReminderSweep(env));
+    ctx.waitUntil(runArchiveNagSweep(env).catch((err) => console.error("Archive nag sweep failed:", err)));
+    ctx.waitUntil(runCobroRemindSweep(env).catch((err) => console.error("Cobro remind sweep failed:", err)));
     ctx.waitUntil(reconcileD1Index(env).catch((err) => console.error("D1 reconciliation sweep failed:", err)));
     ctx.waitUntil(runExpiredDocCleanup(env).catch((err) => console.error("Expired doc cleanup sweep failed:", err)));
     ctx.waitUntil(runHealthCheckAndAlert(env).catch((err) => console.error("Healthcheck sweep failed:", err)));

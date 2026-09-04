@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate, useSearchParams } from "react-router-do
 import { useI18n } from "../lib/i18n";
 import { useNoIndex } from "../lib/useNoIndex";
 import { useSeoMeta } from "../lib/useSeoMeta";
+import { paidVaultDays, PAID_TTL_MAX_DAYS } from "../lib/paidVault";
 import PdfViewer from "../components/PdfViewer";
 import PdfUploadCircle from "../components/PdfUploadCircle";
 import {
@@ -33,6 +34,9 @@ import {
 } from "../lib/pdfEdit";
 import type { TextSpan } from "../lib/pdfEdit";
 import { getFreeTemplate } from "../lib/freeTemplates";
+import { markPacketTemplateSent, US_CONTRACTOR_PACKET_SLUG } from "../lib/contractorPacket";
+import { markLatamPacketStepSent, LATAM_CONTRACTOR_PACKET_SLUG } from "../lib/latamContractorPacket";
+import { isJobPacketId, markJobPacketStepSent } from "../lib/jobPackets";
 import { assignFieldsToSigners, detectAnchorFields, detectFieldCandidates } from "../lib/fieldDetection";
 import type { CcRecipientInput, DocField, DocFieldType, SignerInput } from "../lib/types";
 import { track } from "../lib/track";
@@ -101,6 +105,7 @@ export default function Prepare() {
   const templateId = searchParams.get("template");
   const freeTemplateSlug = searchParams.get("freeTemplate");
   const marketplaceTemplateSlug = searchParams.get("marketplaceTemplate");
+  const packetSlug = searchParams.get("packet");
   // Refs (not state) since these only need to be read once, in an unmount cleanup — a ref keeps
   // that cleanup's closure looking at the live value without adding either to a dependency array.
   const documentSentRef = useRef(false);
@@ -135,6 +140,9 @@ export default function Prepare() {
   const [showCustomMessage, setShowCustomMessage] = useState(false);
   const [customSubject, setCustomSubject] = useState("");
   const [customMessage, setCustomMessage] = useState("");
+  const [paymentAmount, setPaymentAmount] = useState("");
+  const [paymentCurrency, setPaymentCurrency] = useState("USD");
+  const [paymentUrl, setPaymentUrl] = useState("");
   const [signingMode, setSigningMode] = useState<"sequential" | "parallel">("sequential");
   const [signers, setSigners] = useState<SignerInput[]>([
     { order: 1, name: "", email: "" },
@@ -212,8 +220,10 @@ export default function Prepare() {
   const [submittingToMarketplace, setSubmittingToMarketplace] = useState(false);
   const [marketplaceSubmitError, setMarketplaceSubmitError] = useState<string | null>(null);
   const [marketplaceSubmittedSlug, setMarketplaceSubmittedSlug] = useState<string | null>(null);
-  /** Paid custom retention — default matches free/hard-coded DOC_EXPIRY_DAYS. */
+  /** Paid custom retention — tax-year vault once the account is known paid. */
   const [ttlDays, setTtlDays] = useState(DOC_EXPIRY_DAYS);
+  const paidVault = paidVaultDays();
+  const paidTtlMax = Math.min(PAID_TTL_MAX_DAYS, paidVault);
 
   useEffect(() => {
     const nextDefault = t("prepare.defaultDropdownOptions");
@@ -263,6 +273,10 @@ export default function Prepare() {
       .then((res) => setAccount(res.account))
       .catch(() => setAccount(null));
   }, []);
+
+  useEffect(() => {
+    if (account?.isPaid) setTtlDays(paidTtlMax);
+  }, [account?.isPaid, paidTtlMax]);
 
   useEffect(() => {
     if (!account?.isPaid) {
@@ -1002,6 +1016,15 @@ export default function Prepare() {
         smsInvites: smsInvites || undefined,
         whatsappInvites: whatsappInvites || undefined,
         locale,
+        ...(account?.isPaid && paymentAmount.trim() && paymentUrl.trim()
+          ? {
+              paymentRequest: {
+                amount: paymentAmount.trim(),
+                currency: paymentCurrency,
+                url: paymentUrl.trim(),
+              },
+            }
+          : {}),
         ...(account?.isPaid
           ? {
               ttlDays,
@@ -1010,8 +1033,29 @@ export default function Prepare() {
           : {}),
       });
       documentSentRef.current = true;
+      if (packetSlug === US_CONTRACTOR_PACKET_SLUG && freeTemplateSlug) {
+        markPacketTemplateSent(freeTemplateSlug);
+      }
+      if (packetSlug === LATAM_CONTRACTOR_PACKET_SLUG && freeTemplateSlug) {
+        markLatamPacketStepSent(freeTemplateSlug);
+      }
+      if (isJobPacketId(packetSlug)) {
+        markJobPacketStepSent(packetSlug, freeTemplateSlug ?? "rfc-upload");
+      }
       navigate("/prepare/sent", {
-        state: { docId, statusToken, claimToken, signingMode: effectiveSigningMode },
+        state: {
+          docId,
+          statusToken,
+          claimToken,
+          signingMode: effectiveSigningMode,
+          packetSlug:
+            packetSlug === US_CONTRACTOR_PACKET_SLUG ||
+            packetSlug === LATAM_CONTRACTOR_PACKET_SLUG ||
+            isJobPacketId(packetSlug)
+              ? packetSlug
+              : undefined,
+          sentTemplateSlug: freeTemplateSlug ?? (isJobPacketId(packetSlug) ? "rfc-upload" : undefined),
+        },
       });
     } catch (err) {
       const message = err instanceof Error ? err.message : t("common.error");
@@ -1668,6 +1712,67 @@ export default function Prepare() {
                   )}
                 </div>
               )}
+              <div
+                style={{
+                  marginBottom: 12,
+                  padding: 10,
+                  background: "var(--primary-soft)",
+                  border: "1px solid var(--hairline)",
+                  borderRadius: "var(--r-sm)",
+                }}
+              >
+                <p style={{ fontSize: 13, fontWeight: 600, margin: "0 0 6px" }}>{t("prepare.payTitle")}</p>
+                {account?.isPaid ? (
+                  <>
+                    <p style={{ fontSize: 12, color: "var(--mute)", margin: "0 0 8px" }}>{t("prepare.payHint")}</p>
+                    <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>
+                      <input
+                        className="form-input"
+                        style={{ flex: "1 1 90px", minWidth: 90 }}
+                        inputMode="decimal"
+                        placeholder={t("prepare.payAmountPh")}
+                        aria-label={t("prepare.payAmountAria")}
+                        value={paymentAmount}
+                        onChange={(e) => setPaymentAmount(e.target.value)}
+                      />
+                      <select
+                        className="form-input"
+                        style={{ flex: "0 0 88px" }}
+                        aria-label={t("prepare.payCurrencyAria")}
+                        value={paymentCurrency}
+                        onChange={(e) => setPaymentCurrency(e.target.value)}
+                      >
+                        {["USD", "MXN", "COP", "ARS", "CLP", "PEN", "BRL"].map((c) => (
+                          <option key={c} value={c}>
+                            {c}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <input
+                      className="form-input"
+                      style={{ width: "100%" }}
+                      type="url"
+                      placeholder={t("prepare.payUrlPh")}
+                      aria-label={t("prepare.payUrlAria")}
+                      value={paymentUrl}
+                      onChange={(e) => setPaymentUrl(e.target.value)}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <p style={{ fontSize: 12, color: "var(--mute)", margin: "0 0 8px" }}>{t("prepare.payLocked")}</p>
+                    <Link
+                      to={account ? "/pricing" : "/login?ref=prepare-pay"}
+                      className="btn-primary"
+                      style={{ textDecoration: "none", fontSize: 13, display: "inline-block" }}
+                      onClick={() => track("upgrade_clicked", { source: "prepare_payment_link" })}
+                    >
+                      {account ? t("prepare.upgradeMonthly") : t("prepare.signInUpgrade")}
+                    </Link>
+                  </>
+                )}
+              </div>
               {preferTapPlace && (
                 <p className="prepare-mobile-place-instruction" style={{ marginBottom: 12 }}>
                   {t("prepare.mobilePlaceInstruction")}
@@ -2383,13 +2488,13 @@ export default function Prepare() {
                       className="form-input"
                       type="number"
                       min={1}
-                      max={90}
+                      max={paidTtlMax}
                       aria-label={t("prepare.retentionAria")}
                       value={ttlDays}
                       onChange={(e) => {
                         const n = Number(e.target.value);
                         if (!Number.isFinite(n)) return;
-                        setTtlDays(Math.min(90, Math.max(1, Math.floor(n))));
+                        setTtlDays(Math.min(paidTtlMax, Math.max(1, Math.floor(n))));
                       }}
                       style={{ width: 56, padding: "2px 6px", fontSize: 13, fontWeight: 600 }}
                     />
@@ -2402,7 +2507,7 @@ export default function Prepare() {
                 )}
               </div>
               <p style={{ fontSize: 11, color: "var(--mute)", margin: "4px 0 0" }}>
-                {t("prepare.identityNote")}
+                {account?.isPaid ? t("prepare.taxVaultHint") : t("prepare.identityNote")}
               </p>
             </div>
 

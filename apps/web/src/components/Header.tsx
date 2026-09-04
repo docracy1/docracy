@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { fetchMe, logout } from "../lib/api";
 import { localizePath, useI18n, useT } from "../lib/i18n";
+import { track } from "../lib/track";
 import LanguageSwitcher from "./LanguageSwitcher";
 import NavMegaMenu from "./NavMegaMenu";
 import NavListMenu, { type NavListEntry } from "./NavListMenu";
@@ -16,12 +17,20 @@ function openSalesChat() {
   window.dispatchEvent(new CustomEvent("docracy:open-chat", { detail: { intent: "sales" } }));
 }
 
-/** Real features only — mirrors Landing.tsx's CORE_FEATURES, not a wishlist. */
+/** Real features only — free on-ramp first, then the paid packet, then the rest of the product. */
 const FEATURE_ITEMS = [
   { to: "/prepare", icon: "send", titleKey: "nav.mega.feature.send.title", descKey: "nav.mega.feature.send.desc" },
+  { to: "/income-proof", icon: "badge", titleKey: "nav.mega.feature.constancia.title", descKey: "nav.mega.feature.constancia.desc" },
+  { to: "/cobro", icon: "whatsapp", titleKey: "nav.mega.feature.cobro.title", descKey: "nav.mega.feature.cobro.desc" },
+  { to: "/1099-season", icon: "badge", titleKey: "nav.mega.feature.taxYear.title", descKey: "nav.mega.feature.taxYear.desc" },
   { to: "/whatsapp-signing", icon: "whatsapp", titleKey: "nav.mega.feature.whatsapp.title", descKey: "nav.mega.feature.whatsapp.desc" },
   { to: "/ai", icon: "sparkles", titleKey: "nav.mega.feature.ai.title", descKey: "nav.mega.feature.ai.desc" },
   { to: "/free-templates", icon: "duplicate", titleKey: "nav.mega.feature.templates.title", descKey: "nav.mega.feature.templates.desc" },
+  { to: "/packets/us-contractor", icon: "briefcase", titleKey: "nav.mega.feature.packet.title", descKey: "nav.mega.feature.packet.desc" },
+  { to: "/packets/latam-contractor", icon: "briefcase", titleKey: "nav.mega.feature.latamPacket.title", descKey: "nav.mega.feature.latamPacket.desc" },
+  { to: "/packets/trades", icon: "briefcase", titleKey: "nav.mega.feature.trades.title", descKey: "nav.mega.feature.trades.desc" },
+  { to: "/packets/latam-trade", icon: "briefcase", titleKey: "nav.mega.feature.latamTrade.title", descKey: "nav.mega.feature.latamTrade.desc" },
+  { to: "/packets/collect", icon: "duplicate", titleKey: "nav.mega.feature.collect.title", descKey: "nav.mega.feature.collect.desc" },
   { to: "/esign-ueta", icon: "scale", titleKey: "nav.mega.feature.esign.title", descKey: "nav.mega.feature.esign.desc" },
   { to: "/pricing", icon: "users", titleKey: "nav.mega.feature.team.title", descKey: "nav.mega.feature.team.desc" },
   { to: "/privacy", icon: "shield", titleKey: "nav.mega.feature.storage.title", descKey: "nav.mega.feature.storage.desc" },
@@ -210,12 +219,13 @@ export default function Header() {
         </div>
         <div className="header-center">
           <Link
-            to={localizePath("/whatsapp-signing", locale)}
+            to="/es/latam"
             className="header-whatsapp-badge"
-            title={t("hero.whatsappBadge")}
+            title={t("hero.latamBadge")}
+            onClick={() => track("landingpage_cta_clicked", { source: "header_latam_badge" })}
           >
             <img src="/integrations/whatsapp.svg" alt="" width={15} height={15} />
-            <span className="header-whatsapp-badge-text">{t("hero.whatsappBadge")}</span>
+            <span className="header-whatsapp-badge-text">{t("hero.latamBadge")}</span>
           </Link>
         </div>
         <nav className="header-nav-right" aria-label="Account">
@@ -284,11 +294,14 @@ export default function Header() {
             {t("nav.templates")}
           </Link>
           <Link
-            to={localizePath("/whatsapp-signing", locale)}
+            to="/es/latam"
             className="header-mobile-nav-link"
-            onClick={() => setMenuOpen(false)}
+            onClick={() => {
+              setMenuOpen(false);
+              track("landingpage_cta_clicked", { source: "header_latam_badge_mobile" });
+            }}
           >
-            {t("hero.whatsappBadge")}
+            {t("hero.latamBadge")}
           </Link>
           <details className="header-mobile-accordion">
             <summary>{t("nav.more")}</summary>

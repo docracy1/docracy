@@ -74,4 +74,11 @@ export interface StatusPayload {
   /** Cosmetic workspace label shown alongside the logo — plain text, not a subdomain/route. Null/
    *  absent for anonymous documents or workspaces that haven't set one. */
   brandWorkspaceSlug?: string | null;
+  /** Sender-owned payment link shown after everyone has signed. */
+  paymentRequest?: { amount: string; currency: string; url: string };
+  title?: string | null;
+  expiresAt?: string;
+  completedAt?: string | null;
+  /** Pay+file cobro — no signature required. */
+  kind?: "cobro";
 }

@@ -3,19 +3,21 @@ import { Link, useParams } from "react-router-dom";
 import { SignerAttachmentsList } from "../components/SignerAttachmentsList";
 import { apiUrl, fetchMe, fetchStatus, statusAttachmentDownloadUrl, voidDocument } from "../lib/api";
 import { hasPendingClaimForDoc } from "../lib/pendingClaim";
+import { signedPagePath } from "../lib/paidVault";
 import { track } from "../lib/track";
-import { useT } from "../lib/i18n";
+import { useI18n } from "../lib/i18n";
 import { useNoIndex } from "../lib/useNoIndex";
 import type { StatusPayload } from "../lib/types";
 
 export default function Status() {
-  const t = useT();
+  const { t, locale } = useI18n();
   const { token } = useParams<{ token: string }>();
   const [status, setStatus] = useState<StatusPayload | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [voiding, setVoiding] = useState(false);
   const [voidError, setVoidError] = useState<string | null>(null);
   const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
+  const [copiedSigned, setCopiedSigned] = useState(false);
 
   useNoIndex();
 
@@ -137,14 +139,59 @@ export default function Status() {
           />
         )}
         {status.status === "completed" && (
-          <a
-            href={apiUrl(`/api/status/${token}/download`)}
-            download
-            className="btn-primary"
-            style={{ display: "inline-block", textDecoration: "none", marginTop: 16 }}
-          >
-            {t("status.download")}
-          </a>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 16 }}>
+            <a
+              href={apiUrl(`/api/status/${token}/download`)}
+              download
+              className="btn-primary"
+              style={{ display: "inline-block", textDecoration: "none" }}
+            >
+              {t("status.download")}
+            </a>
+            {status.paymentRequest && (
+              <a
+                href={status.paymentRequest.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary"
+                style={{ display: "inline-block", textDecoration: "none" }}
+                onClick={() => track("viral_cta_clicked", { source: "status_pay" })}
+              >
+                {t("sign.payCta", {
+                  amount: status.paymentRequest.amount,
+                  currency: status.paymentRequest.currency,
+                })}
+              </a>
+            )}
+            {token && (
+              <>
+                <Link
+                  to={signedPagePath(token, locale)}
+                  className="btn-secondary"
+                  style={{ textDecoration: "none" }}
+                >
+                  {t("status.openSignedPage")}
+                </Link>
+                <button
+                  type="button"
+                  className="btn-secondary"
+                  onClick={async () => {
+                    const url = `${window.location.origin}${signedPagePath(token, locale)}`;
+                    try {
+                      await navigator.clipboard.writeText(url);
+                      setCopiedSigned(true);
+                      track("viral_cta_clicked", { source: "status_copy_signed" });
+                      window.setTimeout(() => setCopiedSigned(false), 2000);
+                    } catch {
+                      /* clipboard blocked */
+                    }
+                  }}
+                >
+                  {copiedSigned ? t("common.copied") : t("status.copySignedLink")}
+                </button>
+              </>
+            )}
+          </div>
         )}
         {status.status === "pending" && token && canVoid && (
           <div style={{ marginTop: 16 }}>

@@ -85,6 +85,8 @@ export interface CreateDocumentCoreParams {
   whatsappInvites?: boolean;
   /** Paid-only attachment requirement for signers. */
   signerAttachments?: DocState["signerAttachments"];
+  /** Optional sender-owned payment link shown after the chain completes. */
+  paymentRequest?: DocState["paymentRequest"];
 }
 
 export async function createDocumentCore(
@@ -180,6 +182,7 @@ export async function createDocumentCore(
     smsInvites: params.smsInvites || undefined,
     whatsappInvites: params.whatsappInvites || undefined,
     signerAttachments: params.signerAttachments,
+    paymentRequest: params.paymentRequest,
   };
 
   for (const s of signersToInvite) s.linkSentAt = now.toISOString();

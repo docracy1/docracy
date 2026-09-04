@@ -3,6 +3,28 @@ import { Link, useLocation } from "react-router-dom";
 import { fetchMe } from "../lib/api";
 import { localizePath, useI18n, useT } from "../lib/i18n";
 import { savePendingClaim } from "../lib/pendingClaim";
+import {
+  nextPacketTemplate,
+  packetPreparePath,
+  US_CONTRACTOR_PACKET_SLUG,
+} from "../lib/contractorPacket";
+import {
+  LATAM_CONTRACTOR_PACKET_SLUG,
+  latamCobroPath,
+  latamPacketPreparePath,
+  nextLatamPacketStep,
+} from "../lib/latamContractorPacket";
+import {
+  isJobPacketId,
+  JOB_PACKETS,
+  jobPacketBlankPreparePath,
+  jobPacketCobroPath,
+  jobPacketPath,
+  jobPacketPreparePath,
+  nextJobPacketStep,
+  type JobPacketId,
+} from "../lib/jobPackets";
+import { signedPagePath } from "../lib/paidVault";
 import { track } from "../lib/track";
 
 /**
@@ -19,10 +41,12 @@ export default function PrepareSent() {
       statusToken: string;
       claimToken?: string;
       signingMode?: "sequential" | "parallel";
+      packetSlug?: string;
+      sentTemplateSlug?: string;
     } | null;
   };
   const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
-  const [copied, setCopied] = useState<"status" | "share" | null>(null);
+  const [copied, setCopied] = useState<"status" | "share" | "signed" | null>(null);
 
   useEffect(() => {
     if (state?.docId && state.claimToken) {
@@ -49,15 +73,19 @@ export default function PrepareSent() {
   }
 
   const statusUrl = `${window.location.origin}/status/${state.statusToken}`;
+  const signedUrl = `${window.location.origin}${signedPagePath(state.statusToken, locale)}`;
   const shareBlurb = t("sent.shareBlurb");
   // After signup, land on dashboard so the pending claim can redeem into history.
   const loginNext = encodeURIComponent("/dashboard");
 
-  const copyText = async (kind: "status" | "share", text: string) => {
+  const copyText = async (kind: "status" | "share" | "signed", text: string) => {
     try {
       await navigator.clipboard.writeText(text);
       setCopied(kind);
-      track("viral_cta_clicked", { source: kind === "status" ? "prepare_sent_copy_status" : "prepare_sent_share" });
+      track("viral_cta_clicked", {
+        source:
+          kind === "status" ? "prepare_sent_copy_status" : kind === "signed" ? "prepare_sent_copy_signed" : "prepare_sent_share",
+      });
       window.setTimeout(() => setCopied(null), 2000);
     } catch {
       // Clipboard blocked — fall back to selecting nothing; status URL is still visible as a link.
@@ -80,6 +108,122 @@ export default function PrepareSent() {
           </button>
         </div>
       </div>
+      <div className="card" style={{ marginTop: 16 }}>
+        <p style={{ marginBottom: 8 }}>{t("sent.signedPage")}</p>
+        <Link to={signedPagePath(state.statusToken, locale)}>{signedUrl}</Link>
+        <div style={{ marginTop: 12 }}>
+          <button type="button" className="btn-secondary" onClick={() => copyText("signed", signedUrl)}>
+            {copied === "signed" ? t("common.copied") : t("sent.copySigned")}
+          </button>
+        </div>
+      </div>
+
+      {state.packetSlug === US_CONTRACTOR_PACKET_SLUG &&
+        (() => {
+          const next = nextPacketTemplate(state.sentTemplateSlug);
+          if (!next) {
+            return (
+              <div className="card" style={{ marginTop: 20 }}>
+                <p style={{ marginBottom: 8, fontWeight: 600 }}>{t("packet.kitDone")}</p>
+                <p style={{ fontSize: 14, color: "var(--mute)", marginBottom: 12 }}>{t("packet.kitDoneSub")}</p>
+                <Link
+                  to={localizePath("/packets/us-contractor", locale)}
+                  className="btn-secondary"
+                  style={{ textDecoration: "none" }}
+                >
+                  {t("packet.backToKit")}
+                </Link>
+              </div>
+            );
+          }
+          return (
+            <div className="card" style={{ marginTop: 20, borderColor: "var(--primary)" }}>
+              <p style={{ marginBottom: 8, fontWeight: 600 }}>{t("packet.nextTitle")}</p>
+              <p style={{ fontSize: 14, color: "var(--mute)", marginBottom: 12 }}>{t(`tpl.${next}.name`)}</p>
+              <Link
+                to={packetPreparePath(next, locale)}
+                className="btn-primary"
+                style={{ textDecoration: "none" }}
+              >
+                {t("packet.nextCta")}
+              </Link>
+            </div>
+          );
+        })()}
+
+      {state.packetSlug === LATAM_CONTRACTOR_PACKET_SLUG &&
+        (() => {
+          const next = nextLatamPacketStep(state.sentTemplateSlug);
+          if (!next) {
+            return (
+              <div className="card" style={{ marginTop: 20 }}>
+                <p style={{ marginBottom: 8, fontWeight: 600 }}>{t("latamPacket.kitDone")}</p>
+                <p style={{ fontSize: 14, color: "var(--mute)", marginBottom: 12 }}>{t("latamPacket.kitDoneSub")}</p>
+                <Link
+                  to={localizePath("/packets/latam-contractor", locale)}
+                  className="btn-secondary"
+                  style={{ textDecoration: "none" }}
+                >
+                  {t("packet.backToKit")}
+                </Link>
+              </div>
+            );
+          }
+          const to =
+            next.kind === "cobro"
+              ? latamCobroPath(locale)
+              : latamPacketPreparePath(next.slug as "mutual-nda" | "independent-contractor-agreement", locale);
+          const label = next.kind === "cobro" ? t("latamPacket.cobroStepTitle") : t(`tpl.${next.slug}.name`);
+          return (
+            <div className="card" style={{ marginTop: 20, borderColor: "var(--primary)" }}>
+              <p style={{ marginBottom: 8, fontWeight: 600 }}>{t("latamPacket.nextTitle")}</p>
+              <p style={{ fontSize: 14, color: "var(--mute)", marginBottom: 12 }}>{label}</p>
+              <Link to={to} className="btn-primary" style={{ textDecoration: "none" }}>
+                {t("packet.nextCta")}
+              </Link>
+            </div>
+          );
+        })()}
+
+      {isJobPacketId(state.packetSlug) &&
+        (() => {
+          const id = state.packetSlug as JobPacketId;
+          const def = JOB_PACKETS[id];
+          const p = def.i18nPrefix;
+          const next = nextJobPacketStep(id, state.sentTemplateSlug);
+          if (!next) {
+            return (
+              <div className="card" style={{ marginTop: 20 }}>
+                <p style={{ marginBottom: 8, fontWeight: 600 }}>{t(`${p}.kitDone`)}</p>
+                <p style={{ fontSize: 14, color: "var(--mute)", marginBottom: 12 }}>{t(`${p}.kitDoneSub`)}</p>
+                <Link to={jobPacketPath(id, locale)} className="btn-secondary" style={{ textDecoration: "none" }}>
+                  {t("packet.backToKit")}
+                </Link>
+              </div>
+            );
+          }
+          const to =
+            next.kind === "cobro"
+              ? jobPacketCobroPath(id, locale)
+              : next.kind === "prepare"
+                ? jobPacketBlankPreparePath(id, locale)
+                : jobPacketPreparePath(id, next.slug, locale);
+          const label =
+            next.kind === "cobro"
+              ? t(`${p}.cobroStepTitle`)
+              : next.kind === "prepare"
+                ? t(`${p}.prepareStepTitle`)
+                : t(`${p}.tpl.${next.slug}.name`);
+          return (
+            <div className="card" style={{ marginTop: 20, borderColor: "var(--primary)" }}>
+              <p style={{ marginBottom: 8, fontWeight: 600 }}>{t(`${p}.nextTitle`)}</p>
+              <p style={{ fontSize: 14, color: "var(--mute)", marginBottom: 12 }}>{label}</p>
+              <Link to={to} className="btn-primary" style={{ textDecoration: "none" }}>
+                {t("packet.nextCta")}
+              </Link>
+            </div>
+          );
+        })()}
 
       {loggedIn === false && state.claimToken && (
         <div className="card" style={{ marginTop: 20 }}>
