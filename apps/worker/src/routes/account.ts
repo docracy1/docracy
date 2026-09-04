@@ -19,6 +19,9 @@ import {
   consumeCobroWhatsapp,
   reportCobroWhatsappOverage,
   sendCobroAgain,
+  markCobroPaid,
+  getCobroPrefs,
+  putCobroPrefs,
   DEFAULT_COBRO_REMIND_DAYS,
   MIN_COBRO_REMIND_DAYS,
   MAX_COBRO_REMIND_DAYS,
@@ -78,11 +81,9 @@ account.get("/documents", requireAccount, async (c) => {
   const documents = await Promise.all(
     results.map(async (r) => {
       const awaitingYou = r.status === "pending" && !!r.preparer_signs && r.order1_status === "pending";
+      const doc = await getDoc(c.env, r.doc_id);
       let signTok: string | null = null;
       if (awaitingYou) {
-        // Prefer KV so we can include linkNonce; if the doc isn't in KV (rare race / test fixture
-        // with D1-only rows), fall back to a legacy token without a nonce.
-        const doc = await getDoc(c.env, r.doc_id);
         const signer = doc?.signers.find((s) => s.order === 1);
         signTok = await signToken(r.doc_id, 1, c.env.TOKEN_SECRET, signer?.linkNonce);
       }
@@ -96,6 +97,8 @@ account.get("/documents", requireAccount, async (c) => {
         statusToken: await signToken(r.doc_id, 0, c.env.TOKEN_SECRET),
         awaitingYou,
         signToken: signTok,
+        kind: doc?.kind === "cobro" ? "cobro" : undefined,
+        cobroPaidAt: doc?.cobroPaidAt ?? null,
       };
     })
   );
@@ -673,7 +676,25 @@ account.post("/cobro", requirePaidAccount, async (c) => {
     ttlDays: ttl.ttlDays,
   });
 
+  await putCobroPrefs(c.env, acct.workspaceId, parsedPayment.paymentRequest.url, parsedPayment.paymentRequest.currency);
+
   return c.json({ docId, statusToken });
+});
+
+account.get("/cobro/prefs", requireAccount, async (c) => {
+  const acct = c.get("account")!;
+  const prefs = await getCobroPrefs(c.env, acct.workspaceId);
+  return c.json({ prefs: prefs ? { url: prefs.url, currency: prefs.currency } : null });
+});
+
+account.post("/cobro/:docId/paid", requirePaidAccount, async (c) => {
+  const acct = c.get("account")!;
+  const doc = await getDoc(c.env, c.req.param("docId"));
+  if (!doc || doc.accountId !== acct.workspaceId || doc.kind !== "cobro") {
+    return c.json({ error: "Document not found" }, 404);
+  }
+  const next = await markCobroPaid(c.env, doc);
+  return c.json({ ok: true, cobroPaidAt: next.cobroPaidAt });
 });
 
 account.post("/cobro/:docId/remind", requirePaidAccount, async (c) => {
@@ -681,6 +702,9 @@ account.post("/cobro/:docId/remind", requirePaidAccount, async (c) => {
   const doc = await getDoc(c.env, c.req.param("docId"));
   if (!doc || doc.accountId !== acct.workspaceId || doc.kind !== "cobro") {
     return c.json({ error: "Document not found" }, 404);
+  }
+  if (doc.cobroPaidAt) {
+    return c.json({ error: "This cobro is already marked paid" }, 409);
   }
 
   let skipWhatsApp = false;

@@ -150,6 +150,17 @@ describe("POST /api/account/cobro", () => {
     expect(stored.signers).toEqual([]);
     expect(stored.paymentRequest.amount).toBe("150.00");
     expect(r2._store.has(`docs/${body.docId}/final.pdf`)).toBe(true);
+
+    const prefsRes = await account.request(
+      "/cobro/prefs",
+      { headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } },
+      env,
+      ctx
+    );
+    expect(prefsRes.status).toBe(200);
+    const prefs: { prefs: { url: string; currency: string } | null } = await prefsRes.json();
+    expect(prefs.prefs?.url).toBe("https://paypal.me/studio/150");
+    expect(prefs.prefs?.currency).toBe("MXN");
   });
 
   it("rejects a cobro with neither email nor WhatsApp", async () => {
@@ -231,5 +242,74 @@ describe("POST /api/account/cobro/:docId/remind", () => {
     expect(stored.cobroLastRemindAt).toBeTruthy();
     expect(new Date(stored.cobroNextRemindAt).getTime()).toBeGreaterThan(now);
     expect(spy.mock.calls.map((c) => c.join(" ")).join("\n")).toContain("ana@estudio.mx");
+  });
+
+  it("409s when the cobro is already marked paid", async () => {
+    const { env } = makeMockEnv();
+    const ctx = makeCtx();
+    const token = await createSession(env, ctx, "acct-paid", "paid@example.com", true, false, null, null);
+    const now = Date.now();
+    await putDoc(env, {
+      docId: "cobro-paid",
+      accountId: "acct-paid",
+      title: "Invoice",
+      createdAt: new Date(now).toISOString(),
+      expiresAt: new Date(now + 400 * 86400000).toISOString(),
+      preparerSigns: false,
+      status: "completed",
+      completedAt: new Date(now).toISOString(),
+      signers: [],
+      fields: [],
+      kind: "cobro",
+      cobroRecipient: { name: "Ana", email: "ana@estudio.mx" },
+      cobroPaidAt: new Date(now).toISOString(),
+      paymentRequest: { amount: "10", currency: "USD", url: "https://paypal.me/x/10" },
+      locale: "en",
+    });
+    const res = await account.request(
+      "/cobro/cobro-paid/remind",
+      { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } },
+      env,
+      ctx
+    );
+    expect(res.status).toBe(409);
+  });
+});
+
+describe("POST /api/account/cobro/:docId/paid", () => {
+  it("marks a cobro paid and stops reminders", async () => {
+    const { env, kv } = makeMockEnv();
+    const ctx = makeCtx();
+    const token = await createSession(env, ctx, "acct-paid", "paid@example.com", true, false, null, null);
+    const now = Date.now();
+    await putDoc(env, {
+      docId: "cobro-2",
+      accountId: "acct-paid",
+      title: "Invoice",
+      createdAt: new Date(now).toISOString(),
+      expiresAt: new Date(now + 400 * 86400000).toISOString(),
+      preparerSigns: false,
+      status: "completed",
+      completedAt: new Date(now).toISOString(),
+      signers: [],
+      fields: [],
+      kind: "cobro",
+      cobroRecipient: { name: "Ana", email: "ana@estudio.mx" },
+      cobroNextRemindAt: new Date(now - 1000).toISOString(),
+      paymentRequest: { amount: "10", currency: "USD", url: "https://paypal.me/x/10" },
+      locale: "en",
+    });
+    const res = await account.request(
+      "/cobro/cobro-2/paid",
+      { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } },
+      env,
+      ctx
+    );
+    expect(res.status).toBe(200);
+    const body: { cobroPaidAt: string } = await res.json();
+    expect(body.cobroPaidAt).toBeTruthy();
+    const stored = JSON.parse(kv._store.get("doc:cobro-2") as string);
+    expect(stored.cobroPaidAt).toBeTruthy();
+    expect(stored.cobroNextRemindAt).toBeUndefined();
   });
 });

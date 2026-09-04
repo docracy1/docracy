@@ -148,7 +148,7 @@ export default function Status() {
             >
               {t("status.download")}
             </a>
-            {status.paymentRequest && (
+            {status.paymentRequest && !status.cobroPaidAt && (
               <a
                 href={status.paymentRequest.url}
                 target="_blank"
@@ -192,6 +192,12 @@ export default function Status() {
               </>
             )}
           </div>
+        )}
+        {status.status === "completed" && status.paymentRequest && status.cobroPaidAt && (
+          <>
+            <p style={{ fontSize: 14, fontWeight: 600, marginBottom: 4, marginTop: 12 }}>{t("signed.cobroPaid")}</p>
+            <p style={{ fontSize: 13, color: "var(--mute)", marginBottom: 0, marginTop: 0 }}>{t("signed.cobroPaidHint")}</p>
+          </>
         )}
         {status.status === "pending" && token && canVoid && (
           <div style={{ marginTop: 16 }}>

@@ -138,6 +138,7 @@ function statusPayload(doc: Awaited<ReturnType<typeof getDoc>>) {
     expiresAt: doc.expiresAt,
     completedAt: doc.completedAt,
     kind: doc.kind,
+    cobroPaidAt: doc.cobroPaidAt,
   };
 }
 

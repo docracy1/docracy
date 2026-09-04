@@ -225,6 +225,11 @@ export interface DocState {
   cobroRemindEveryDays?: number;
   cobroNextRemindAt?: string;
   cobroLastRemindAt?: string;
+  /**
+   * Sender marked this cobro as paid in their own checkout (PayPal / Mercado Pago).
+   * Docracy did not collect the money. Always read via `doc.cobroPaidAt`.
+   */
+  cobroPaidAt?: string;
 }
 
 /** Display-only payment ask attached to a document. Amount/currency are labels; `url` is the

@@ -60,6 +60,7 @@ export default function Signed() {
 
   const payment = status.paymentRequest;
   const isCobro = status.kind === "cobro" || status.signers.length === 0;
+  const cobroPaid = Boolean(status.cobroPaidAt);
   const title = status.title?.trim() || (isCobro ? t("signed.cobroUntitled") : t("signed.untitled"));
   const expiresLabel = status.expiresAt
     ? new Date(status.expiresAt).toLocaleDateString(locale === "es" ? "es-MX" : "en-US", {
@@ -142,7 +143,7 @@ export default function Signed() {
               {t("signed.download")}
             </a>
           )}
-          {payment && (
+          {payment && !cobroPaid && (
             <a
               href={payment.url}
               target="_blank"
@@ -158,7 +159,13 @@ export default function Signed() {
             {copied ? t("common.copied") : t("signed.copyLink")}
           </button>
         </div>
-        {payment && (
+        {payment && cobroPaid && (
+          <>
+            <p style={{ fontSize: 14, fontWeight: 600, marginBottom: 4, marginTop: 12 }}>{t("signed.cobroPaid")}</p>
+            <p style={{ fontSize: 13, color: "var(--mute)", marginBottom: 0, marginTop: 0 }}>{t("signed.cobroPaidHint")}</p>
+          </>
+        )}
+        {payment && !cobroPaid && (
           <p style={{ fontSize: 13, color: "var(--mute)", marginBottom: 0, marginTop: 12 }}>{t("sign.payHint")}</p>
         )}
       </div>

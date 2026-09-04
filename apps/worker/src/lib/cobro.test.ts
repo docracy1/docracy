@@ -37,6 +37,10 @@ describe("cobroRemindDue", () => {
     const later = new Date(Date.now() + 86400000).toISOString();
     expect(cobroRemindDue(makeCobro({ cobroNextRemindAt: later }), Date.now())).toBe(false);
   });
+
+  it("is not due after the sender marks it paid", () => {
+    expect(cobroRemindDue(makeCobro({ cobroPaidAt: new Date().toISOString() }), Date.now())).toBe(false);
+  });
 });
 
 describe("isCobroDoc", () => {
