@@ -81,4 +81,6 @@ export interface StatusPayload {
   completedAt?: string | null;
   /** Pay+file cobro — no signature required. */
   kind?: "cobro";
+  /** Sender marked the cobro paid in their own checkout. */
+  cobroPaidAt?: string;
 }

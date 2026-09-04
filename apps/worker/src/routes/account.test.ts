@@ -2,7 +2,9 @@ import { describe, it, expect } from "vitest";
 import account from "./account";
 import { createSession, SESSION_COOKIE_NAME } from "../lib/auth";
 import { verifyToken } from "@docracy/shared";
+import { putDoc } from "../lib/kv";
 import { makeMockEnv } from "../test/mockEnv";
+import type { DocState } from "@docracy/shared";
 
 const MOCK_CTX = { waitUntil: () => {}, passThroughOnException: () => {} } as unknown as ExecutionContext;
 
@@ -127,6 +129,42 @@ describe("GET /api/account/documents", () => {
 
     const verifiedSignToken = await verifyToken(byId["doc-you"].signToken!, env.TOKEN_SECRET);
     expect(verifiedSignToken).toEqual({ docId: "doc-you", order: 1 });
+  });
+
+  it("hydrates cobro kind and cobroPaidAt from KV", async () => {
+    const { env, d1 } = makeMockEnv();
+    const ctx = makeCtx();
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", true, false, null, null);
+    const now = "2026-03-01T00:00:00Z";
+    await d1
+      .prepare(
+        `INSERT INTO documents (doc_id, account_id, title, status, preparer_signs, created_at, completed_at, expires_at) VALUES (?, ?, ?, 'completed', 0, ?, ?, ?)`
+      )
+      .bind("cobro-1", "acct-1", "March invoice", now, now, "2027-04-15T00:00:00Z")
+      .run();
+    const cobro: DocState = {
+      docId: "cobro-1",
+      accountId: "acct-1",
+      title: "March invoice",
+      createdAt: now,
+      expiresAt: "2027-04-15T00:00:00Z",
+      preparerSigns: false,
+      status: "completed",
+      completedAt: now,
+      signers: [],
+      fields: [],
+      kind: "cobro",
+      cobroPaidAt: "2026-03-02T00:00:00Z",
+      paymentRequest: { amount: "150", currency: "MXN", url: "https://paypal.me/x/150" },
+    };
+    await putDoc(env, cobro);
+
+    const res = await account.request("/documents", { headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } }, env, ctx);
+    const body: {
+      documents: Array<{ docId: string; kind?: string; cobroPaidAt?: string | null }>;
+    } = await res.json();
+    expect(body.documents[0].kind).toBe("cobro");
+    expect(body.documents[0].cobroPaidAt).toBe("2026-03-02T00:00:00Z");
   });
 });
 

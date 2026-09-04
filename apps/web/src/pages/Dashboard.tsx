@@ -39,6 +39,7 @@ import {
   setMarketingOptIn,
   setWorkspaceSlug,
   startCheckout,
+  markCobroPaid,
   fetchMarketplaceTemplates,
   submitTemplateToMarketplace,
   type MarketplaceSubmission,
@@ -336,6 +337,7 @@ export default function Dashboard() {
   const [marketplaceSubmittedSlug, setMarketplaceSubmittedSlug] = useState<string | null>(null);
   const [communityTemplates, setCommunityTemplates] = useState<MarketplaceSubmission[]>([]);
   const [copiedSignedDocId, setCopiedSignedDocId] = useState<string | null>(null);
+  const [markingPaidDocId, setMarkingPaidDocId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchMarketplaceTemplates()
@@ -438,6 +440,19 @@ export default function Dashboard() {
   const refreshDocuments = () => fetchMyDocuments().then((res) => setDocuments(res.documents));
 
   const refreshContacts = () => fetchContacts().then((res) => setContacts(res.contacts));
+
+  const onMarkCobroPaid = async (doc: DocumentSummary) => {
+    setMarkingPaidDocId(doc.docId);
+    setDocActionError(null);
+    try {
+      await markCobroPaid(doc.docId);
+      await refreshDocuments();
+    } catch (err) {
+      setDocActionError(err instanceof Error ? err.message : t("common.error"));
+    } finally {
+      setMarkingPaidDocId(null);
+    }
+  };
 
   const onVoidDocument = async (doc: DocumentSummary) => {
     const reason = window.prompt(t("dash.voidPrompt"));
@@ -1650,15 +1665,38 @@ export default function Dashboard() {
                     <span
                       style={{
                         color:
-                          doc.status === "completed"
+                          doc.kind === "cobro" && doc.cobroPaidAt
                             ? "var(--success)"
-                            : doc.status === "voided"
-                              ? "var(--danger)"
-                              : "var(--body)",
+                            : doc.status === "completed" && doc.kind !== "cobro"
+                              ? "var(--success)"
+                              : doc.status === "voided"
+                                ? "var(--danger)"
+                                : "var(--body)",
                       }}
                     >
-                      {doc.status === "completed" ? t("dash.statusSigned") : doc.status === "voided" ? t("dash.statusVoided") : t("dash.statusPending")}
+                      {doc.kind === "cobro"
+                        ? doc.cobroPaidAt
+                          ? t("dash.statusCobroPaid")
+                          : t("dash.statusCobroSent")
+                        : doc.status === "completed"
+                          ? t("dash.statusSigned")
+                          : doc.status === "voided"
+                            ? t("dash.statusVoided")
+                            : t("dash.statusPending")}
                     </span>
+                    {doc.kind === "cobro" && account.isPaid && !doc.cobroPaidAt && (
+                      <button
+                        className="btn-secondary"
+                        style={{ fontSize: 12, padding: "4px 8px" }}
+                        disabled={markingPaidDocId === doc.docId}
+                        onClick={() => onMarkCobroPaid(doc)}
+                      >
+                        {markingPaidDocId === doc.docId ? t("common.saving") : t("dash.cobroMarkPaid")}
+                      </button>
+                    )}
+                    {doc.kind === "cobro" && doc.cobroPaidAt && (
+                      <span style={{ fontSize: 12, color: "var(--mute)" }}>{t("cobro.markedPaidHint")}</span>
+                    )}
                     {doc.status === "completed" && (
                       <button
                         className="btn-secondary"

@@ -374,6 +374,8 @@ export interface DocumentSummary {
   statusToken: string;
   awaitingYou: boolean;
   signToken: string | null;
+  kind?: "cobro";
+  cobroPaidAt?: string | null;
 }
 
 export async function fetchMyDocuments(): Promise<{ documents: DocumentSummary[] }> {
@@ -514,6 +516,16 @@ export async function createCobro(
 
 export async function remindCobro(docId: string): Promise<{ ok: true; skipWhatsApp: boolean; nextRemindAt?: string }> {
   const res = await apiFetch(`/api/account/cobro/${docId}/remind`, { method: "POST" });
+  return asJson(res);
+}
+
+export async function markCobroPaid(docId: string): Promise<{ ok: true; cobroPaidAt: string }> {
+  const res = await apiFetch(`/api/account/cobro/${docId}/paid`, { method: "POST" });
+  return asJson(res);
+}
+
+export async function fetchCobroPrefs(): Promise<{ prefs: { url: string; currency: string } | null }> {
+  const res = await apiFetch("/api/account/cobro/prefs");
   return asJson(res);
 }
 

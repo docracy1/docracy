@@ -21,6 +21,7 @@ export function isCobroDoc(doc: Pick<DocState, "kind" | "signers">): boolean {
 export function cobroRemindDue(doc: DocState, nowMs: number): boolean {
   if (doc.kind !== "cobro") return false;
   if (doc.status !== "completed") return false;
+  if (doc.cobroPaidAt) return false;
   if (!doc.cobroNextRemindAt) return false;
   if (new Date(doc.expiresAt).getTime() <= nowMs) return false;
   return new Date(doc.cobroNextRemindAt).getTime() <= nowMs;
@@ -28,6 +29,37 @@ export function cobroRemindDue(doc: DocState, nowMs: number): boolean {
 
 export function nextCobroRemindAt(fromMs: number, everyDays: number): string {
   return new Date(fromMs + everyDays * 24 * 60 * 60 * 1000).toISOString();
+}
+
+export const COBRO_PREFS_PREFIX = "cobro-prefs:";
+
+export interface CobroPrefs {
+  url: string;
+  currency: string;
+  updatedAt: string;
+}
+
+export function cobroPrefsKey(workspaceId: string): string {
+  return `${COBRO_PREFS_PREFIX}${workspaceId}`;
+}
+
+export async function getCobroPrefs(env: Env, workspaceId: string): Promise<CobroPrefs | null> {
+  return env.DOCRACY_KV.get<CobroPrefs>(cobroPrefsKey(workspaceId), "json");
+}
+
+export async function putCobroPrefs(env: Env, workspaceId: string, url: string, currency: string): Promise<CobroPrefs> {
+  const prefs: CobroPrefs = { url, currency, updatedAt: new Date().toISOString() };
+  await env.DOCRACY_KV.put(cobroPrefsKey(workspaceId), JSON.stringify(prefs));
+  return prefs;
+}
+
+export async function markCobroPaid(env: Env, doc: DocState): Promise<DocState> {
+  if (doc.kind !== "cobro") throw new Error("Not a cobro");
+  if (doc.cobroPaidAt) return doc;
+  doc.cobroPaidAt = new Date().toISOString();
+  doc.cobroNextRemindAt = undefined;
+  await putDoc(env, doc);
+  return doc;
 }
 
 export interface ConsumeWhatsappResult {
@@ -191,6 +223,7 @@ export async function sendCobroAgain(
   doc: DocState,
   opts: { skipWhatsApp?: boolean } = {}
 ): Promise<DocState> {
+  if (doc.cobroPaidAt) return doc;
   const statusToken = await signToken(doc.docId, 0, env.TOKEN_SECRET);
   const now = Date.now();
   const everyDays = doc.cobroRemindEveryDays ?? DEFAULT_COBRO_REMIND_DAYS;

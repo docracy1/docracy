@@ -1,8 +1,17 @@
-import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { Link, useLocation, useSearchParams } from "react-router-dom";
-import { createCobro, fetchMe, startCheckout, type Account } from "../lib/api";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  createCobro,
+  fetchCobroPrefs,
+  fetchContacts,
+  fetchMe,
+  startCheckout,
+  type Account,
+  type ContactSummary,
+} from "../lib/api";
 import { markLatamPacketStepSent, LATAM_CONTRACTOR_PACKET_SLUG } from "../lib/latamContractorPacket";
 import { isJobPacketId, jobPacketPath, markJobPacketStepSent } from "../lib/jobPackets";
+import { clearCobroDraft, readCobroDraft, writeCobroDraft } from "../lib/cobroDraft";
 import { localizePath, useI18n } from "../lib/i18n";
 import { signedPagePath } from "../lib/paidVault";
 import { usePageMeta } from "../lib/usePageMeta";
@@ -13,26 +22,29 @@ const FAQ_COUNT = 5;
 const CURRENCIES = ["USD", "MXN", "COP", "ARS", "CLP", "PEN", "BRL"] as const;
 
 /**
- * Public SEO landing for WhatsApp cobro (pay + file, no signature), with the Paid send form
- * for logged-in paid accounts. Indexed copy never claims Docracy takes the money.
- * Dashboard "Send cobro" and #send skip the marketing hero so the form is the first thing.
+ * Public SEO landing for WhatsApp cobro (pay + file, no signature). The send form is always
+ * fillable (logged out / Free / Paid); POST still requires Paid. Indexed copy never claims
+ * Docracy takes the money. Dashboard "Send cobro" and #send / ?send=1 skip the marketing hero.
  */
 export default function Cobro() {
   const { t, locale } = useI18n();
   const location = useLocation();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const packetSlug = searchParams.get("packet");
   const wantSend = location.hash === "#send" || searchParams.get("send") === "1";
+  const draft = useMemo(() => readCobroDraft(), []);
   const [account, setAccount] = useState<Account | null | undefined>(undefined);
+  const [contacts, setContacts] = useState<ContactSummary[]>([]);
   const [upgrading, setUpgrading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
-  const [title, setTitle] = useState("");
-  const [recipientName, setRecipientName] = useState("");
-  const [recipientEmail, setRecipientEmail] = useState("");
-  const [recipientWhatsapp, setRecipientWhatsapp] = useState("");
-  const [amount, setAmount] = useState("");
-  const [currency, setCurrency] = useState("USD");
-  const [url, setUrl] = useState("");
+  const [title, setTitle] = useState(draft.title);
+  const [recipientName, setRecipientName] = useState(draft.recipientName);
+  const [recipientEmail, setRecipientEmail] = useState(draft.recipientEmail);
+  const [recipientWhatsapp, setRecipientWhatsapp] = useState(draft.recipientWhatsapp);
+  const [amount, setAmount] = useState(draft.amount);
+  const [currency, setCurrency] = useState(draft.currency || "USD");
+  const [url, setUrl] = useState(draft.url);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sent, setSent] = useState<{ docId: string; statusToken: string } | null>(null);
@@ -44,9 +56,36 @@ export default function Cobro() {
 
   useEffect(() => {
     fetchMe()
-      .then((res) => setAccount(res.account))
+      .then((res) => {
+        setAccount(res.account);
+        if (!res.account) return;
+        fetchCobroPrefs()
+          .then(({ prefs }) => {
+            if (!prefs) return;
+            setUrl((prev) => prev || prefs.url);
+            setCurrency((prev) => (prev && prev !== "USD" ? prev : prefs.currency || prev));
+          })
+          .catch(() => {});
+        if (res.account.isPaid) {
+          fetchContacts()
+            .then((c) => setContacts(c.contacts))
+            .catch(() => setContacts([]));
+        }
+      })
       .catch(() => setAccount(null));
   }, []);
+
+  useEffect(() => {
+    writeCobroDraft({
+      title,
+      recipientName,
+      recipientEmail,
+      recipientWhatsapp,
+      amount,
+      currency,
+      url,
+    });
+  }, [title, recipientName, recipientEmail, recipientWhatsapp, amount, currency, url]);
 
   useEffect(() => {
     if (!wantSend) return;
@@ -88,18 +127,34 @@ export default function Cobro() {
     [t]
   );
 
-  const onUpgrade = async () => {
-    setUpgrading(true);
-    try {
-      const { url: checkout } = await startCheckout();
-      window.location.href = checkout;
-    } catch {
-      setUpgrading(false);
-    }
-  };
+  const cobroPath = locale === "es" ? "/es/cobro" : "/cobro";
+  const loginTo = `/login?next=${encodeURIComponent(`${cobroPath}?send=1`)}&ref=cobro`;
 
   const onSubmit = async () => {
-    if (!file || !account?.isPaid) return;
+    writeCobroDraft({
+      title,
+      recipientName,
+      recipientEmail,
+      recipientWhatsapp,
+      amount,
+      currency,
+      url,
+    });
+    if (!account) {
+      navigate(loginTo);
+      return;
+    }
+    if (!account.isPaid) {
+      setUpgrading(true);
+      try {
+        const { url: checkout } = await startCheckout();
+        window.location.href = checkout;
+      } catch {
+        setUpgrading(false);
+      }
+      return;
+    }
+    if (!file) return;
     setSubmitting(true);
     setError(null);
     try {
@@ -116,6 +171,7 @@ export default function Cobro() {
       } else if (isJobPacketId(packetSlug)) {
         markJobPacketStepSent(packetSlug, "cobro");
       }
+      clearCobroDraft();
       setSent(result);
       track("landingpage_cta_clicked", { source: "cobro" });
     } catch (err) {
@@ -124,9 +180,6 @@ export default function Cobro() {
       setSubmitting(false);
     }
   };
-
-  const cobroPath = locale === "es" ? "/es/cobro" : "/cobro";
-  const loginTo = `/login?next=${encodeURIComponent(`${cobroPath}#send`)}&ref=cobro`;
   const signedUrl = sent ? `${typeof window !== "undefined" ? window.location.origin : ""}${signedPagePath(sent.statusToken, locale)}` : "";
 
   const sendForm = (
@@ -159,6 +212,28 @@ export default function Cobro() {
               onChange={(e) => setFile(e.target.files?.[0] ?? null)}
             />
           </label>
+          {contacts.length > 0 && (
+            <select
+              className="form-input"
+              style={{ marginBottom: 10 }}
+              defaultValue=""
+              aria-label={t("cobro.pickContact")}
+              onChange={(e) => {
+                const picked = contacts.find((c) => c.id === e.target.value);
+                if (!picked) return;
+                setRecipientName(picked.name);
+                setRecipientEmail(picked.email);
+              }}
+            >
+              <option value="">{t("cobro.pickContact")}</option>
+              {contacts.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                  {c.email ? ` · ${c.email}` : ""}
+                </option>
+              ))}
+            </select>
+          )}
           <div className="cobro-form-row">
             <input className="form-input" placeholder={t("cobro.titlePh")} value={title} onChange={(e) => setTitle(e.target.value)} aria-label={t("cobro.titlePh")} />
             <input className="form-input" placeholder={t("cobro.namePh")} value={recipientName} onChange={(e) => setRecipientName(e.target.value)} aria-label={t("cobro.namePh")} />
@@ -176,48 +251,35 @@ export default function Cobro() {
             </select>
           </div>
           <input className="form-input" style={{ marginTop: 8 }} type="url" placeholder={t("prepare.payUrlPh")} value={url} onChange={(e) => setUrl(e.target.value)} aria-label={t("prepare.payUrlAria")} />
+          <p style={{ fontSize: 12, color: "var(--mute)", marginBottom: 0 }}>{t("cobro.prefsHint")}</p>
           <p style={{ fontSize: 12, color: "var(--mute)" }}>{t("cobro.formHint")}</p>
           {error && <p style={{ color: "var(--danger)" }}>{error}</p>}
-          <button type="button" className="btn-primary" style={{ marginTop: 8 }} onClick={onSubmit} disabled={submitting || !file || !account?.isPaid}>
-            {submitting ? t("common.sending") : t("cobro.submit")}
+          <button
+            type="button"
+            className="btn-primary"
+            style={{ marginTop: 8 }}
+            onClick={onSubmit}
+            disabled={submitting || upgrading || (Boolean(account?.isPaid) && !file)}
+          >
+            {submitting || upgrading
+              ? account?.isPaid
+                ? t("common.sending")
+                : t("common.redirecting")
+              : !account
+                ? t("cobro.submitLogin")
+                : account.isPaid
+                  ? t("cobro.submit")
+                  : t("cobro.submitUpgrade")}
           </button>
         </>
       )}
     </>
   );
 
-  let sendCardBody: ReactNode;
-  if (account === undefined || account?.isPaid) {
-    sendCardBody = sendForm;
-  } else if (account) {
-    sendCardBody = (
-      <>
-        <p>{t("cobro.heroSub")}</p>
-        <button type="button" className="btn-primary" onClick={onUpgrade} disabled={upgrading}>
-          {upgrading ? t("common.redirecting") : t("cobro.ctaPaid")}
-        </button>
-      </>
-    );
-  } else {
-    sendCardBody = (
-      <>
-        <p>{t("cobro.heroSub")}</p>
-        <Link
-          to={loginTo}
-          className="btn-primary"
-          style={{ display: "inline-block", textDecoration: "none" }}
-          onClick={() => track("landingpage_cta_clicked", { source: "seo:cobro:send" })}
-        >
-          {t("cobro.ctaLogin")}
-        </Link>
-      </>
-    );
-  }
-
   const sendCard = (
     <div id="send" className="card" style={{ marginTop: formFirst ? 0 : 36 }}>
       <h2 style={{ fontSize: 20, marginTop: 0 }}>{t("cobro.formTitle")}</h2>
-      {sendCardBody}
+      {sendForm}
     </div>
   );
 
@@ -235,24 +297,14 @@ export default function Cobro() {
             <h1>{t("cobro.heroTitle")}</h1>
             <p>{t("cobro.heroSub")}</p>
             <div style={{ marginTop: 20 }}>
-              {account?.isPaid ? (
-                <a href="#send" className="btn-primary btn-lg" style={{ display: "inline-block", textDecoration: "none" }}>
-                  {t("cobro.ctaSend")}
-                </a>
-              ) : account ? (
-                <button type="button" className="btn-primary btn-lg" onClick={onUpgrade} disabled={upgrading}>
-                  {upgrading ? t("common.redirecting") : t("cobro.ctaPaid")}
-                </button>
-              ) : (
-                <Link
-                  to={loginTo}
-                  className="btn-primary btn-lg"
-                  style={{ display: "inline-block", textDecoration: "none" }}
-                  onClick={() => track("landingpage_cta_clicked", { source: "seo:cobro:hero" })}
-                >
-                  {t("cobro.ctaLogin")}
-                </Link>
-              )}
+              <a
+                href="#send"
+                className="btn-primary btn-lg"
+                style={{ display: "inline-block", textDecoration: "none" }}
+                onClick={() => track("landingpage_cta_clicked", { source: "seo:cobro:hero" })}
+              >
+                {t("cobro.ctaSend")}
+              </a>
             </div>
           </div>
         </div>
@@ -273,7 +325,7 @@ export default function Cobro() {
               <li>{t("cobro.feat3")}</li>
               <li>{t("cobro.feat4")}</li>
             </ul>
-            {account?.isPaid && sendCard}
+            {sendCard}
           </>
         )}
 
