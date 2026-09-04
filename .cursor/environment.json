@@ -1,0 +1,26 @@
+{
+  "name": "Docracy",
+  "install": "bash .cursor/install.sh",
+  "terminals": [
+    {
+      "name": "worker",
+      "command": "npm run dev:worker",
+      "description": "Cloudflare Worker API (local wrangler) on http://127.0.0.1:8787. Without RESEND_API_KEY, outgoing emails (incl. signing links) print to this console."
+    },
+    {
+      "name": "web",
+      "command": "npm run dev:web",
+      "description": "React + Vite frontend on http://localhost:5173. Proxies /api to the worker on :8787."
+    },
+    {
+      "name": "connector",
+      "command": "npm run dev:connector",
+      "description": "MCP connector (local wrangler) on http://localhost:8788."
+    }
+  ],
+  "ports": [
+    { "name": "web", "port": 5173 },
+    { "name": "worker", "port": 8787 },
+    { "name": "connector", "port": 8788 }
+  ]
+}
