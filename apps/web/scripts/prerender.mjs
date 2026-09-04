@@ -487,8 +487,8 @@ const routes = [
     outFile: "pricing.html",
     title: "Docracy Pricing — Free, Paid & Enterprise Plans",
     description:
-      "Free for signing chains of up to 2 signers, no account required. Paid is $10/month and adds AI tools, an " +
-      "MCP connector, unlimited signers, templates, webhooks, and team accounts.",
+      "Signing is free for up to 2 people. $10/month keeps signed PDFs past 9 days, plus get-paid links, templates, teams, and AI. " +
+      "No cut of your checkout.",
     locale: "en",
     alternates: { en: "/pricing", es: "/es/precios" },
   },
@@ -516,7 +516,7 @@ const routes = [
     outFile: "es/precios.html",
     title: "Precios de Docracy — Planes gratis y de pago",
     description:
-      "Gratis para cadenas de hasta 2 firmantes. El plan de pago es $10/mes fijo por espacio de trabajo — firmantes ilimitados, plantillas, herramientas de IA, conectores y cuentas de equipo.",
+      "Firmar es gratis hasta 2 personas. $10/mes conserva los PDF más de 9 días, cobra con tu enlace, plantillas y equipos. Sin recorte de tu cobro.",
     locale: "es",
     alternates: { en: "/pricing", es: "/es/precios" },
   },
@@ -787,7 +787,36 @@ const routes = [
     outFile: "verify.html",
     title: "Verify a Signed Document — Independently, via Blockchain | Docracy",
     description:
-      "Confirm a PDF was really completed through Docracy's signing flow — and check it independently on the Bitcoin blockchain via OpenTimestamps, without needing to trust Docracy at all. Upload the file or paste its SHA-256 hash; it never leaves your browser.",
+      "Confirm a PDF was completed through Docracy and check it on Bitcoin via OpenTimestamps. Upload or paste the SHA-256 — the file never leaves your browser.",
+    locale: "en",
+    alternates: { en: "/verify", es: "/es/verificar" },
+  },
+  {
+    urlPath: "/es/verificar",
+    outFile: "es/verificar.html",
+    title: "Verifica un documento firmado — de forma independiente, vía blockchain | Docracy",
+    description:
+      "Confirma que un PDF se completó en Docracy y compruébalo en Bitcoin con OpenTimestamps. Sube o pega el SHA-256 — el archivo no sale de tu navegador.",
+    locale: "es",
+    alternates: { en: "/verify", es: "/es/verificar" },
+  },
+  {
+    urlPath: "/packets/us-contractor",
+    outFile: "packets/us-contractor.html",
+    title: "Free US Contractor Kit — NDA, W-9 & Independent Contractor Agreement",
+    description:
+      "Onboard a US contractor with free NDA, IRS W-9, and contractor agreement. Sign online, no account. Paid adds your PayPal or Mercado Pago link.",
+    locale: "en",
+    alternates: { en: "/packets/us-contractor", es: "/es/kit-contratista" },
+  },
+  {
+    urlPath: "/es/kit-contratista",
+    outFile: "es/kit-contratista.html",
+    title: "Kit gratis de contratista en EE. UU. — NDA, W-9 y acuerdo de contratista",
+    description:
+      "Incorpora un contratista de EE. UU. con NDA, W-9 del IRS y acuerdo. Firma gratis, sin cuenta. El plan de pago agrega tu PayPal o Mercado Pago.",
+    locale: "es",
+    alternates: { en: "/packets/us-contractor", es: "/es/kit-contratista" },
   },
   {
     urlPath: "/dpa",

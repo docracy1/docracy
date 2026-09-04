@@ -8,6 +8,7 @@ import {
   sendFeedback,
   sendMagicLink,
   sendPinEmail,
+  sendArchiveNag,
 } from "./email";
 import { makeMockEnv } from "../test/mockEnv";
 import type { DocState } from "@docracy/shared";
@@ -224,8 +225,30 @@ describe("sendCompletionEmails", () => {
     expect(recipients).toContain("preparer@example.com");
     expect(subjects).toContain("Everyone has signed — your document is ready");
     const preparerHtml = bodies[recipients.indexOf("preparer@example.com")];
-    expect(preparerHtml).toContain("/price");
-    expect(preparerHtml).toContain("See paid plans");
+    expect(preparerHtml).toContain("/pricing");
+    expect(preparerHtml).toContain("Keep signed files");
+    expect(preparerHtml).not.toContain("keep history without paying");
+    expect(preparerHtml).not.toContain("See paid plans");
+  });
+
+  it("includes the sender payment CTA on the signed completion email", async () => {
+    const { env } = makeMockEnv({ RESEND_API_KEY: "test-key" });
+    const bodies: string[] = [];
+    vi.spyOn(global, "fetch").mockImplementation(async (_url, init) => {
+      bodies.push(JSON.parse(init!.body as string).html);
+      return new Response("{}", { status: 200 });
+    });
+    const finalPdf = await makePdfWithPages(1);
+    const doc = {
+      ...makeDoc("Anna"),
+      paymentRequest: { amount: "150", currency: "MXN", url: "https://paypal.me/acme" },
+    };
+
+    await sendCompletionEmails(env, doc, finalPdf, "deadbeef");
+
+    expect(bodies[0]).toContain("Pay 150 MXN");
+    expect(bodies[0]).toContain("https://paypal.me/acme");
+    expect(bodies[0]).toContain("Docracy does not take this money");
   });
 
   it("does not double-email a preparer who was also a signer", async () => {
@@ -241,6 +264,41 @@ describe("sendCompletionEmails", () => {
     await sendCompletionEmails(env, doc, finalPdf, "deadbeef");
 
     expect(recipients.filter((r) => r === "victim@example.com")).toHaveLength(1);
+  });
+});
+
+describe("sendArchiveNag", () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  it("names the document, counterparties, delete date, and keep-file upgrade", async () => {
+    const { env } = makeMockEnv();
+    const capture = captureDevEmailLog();
+    const expiresAt = "2026-09-12T00:00:00.000Z";
+    const doc = {
+      ...makeDoc("Anna"),
+      title: "Acme contractor agreement",
+      preparerEmail: "preparer@example.com",
+      expiresAt,
+    };
+
+    await sendArchiveNag(env, doc);
+
+    const logged = capture.logged();
+    expect(logged).toContain("preparer@example.com");
+    expect(logged).toContain("Acme contractor agreement is deleted on");
+    expect(logged).toContain("Acme contractor agreement");
+    expect(logged).toContain("signed with Anna");
+    expect(logged).toContain("Keep this file — $10/mo");
+    expect(logged).not.toContain("keep history");
+  });
+
+  it("skips when there is no preparer email", async () => {
+    const { env } = makeMockEnv();
+    const capture = captureDevEmailLog();
+
+    await sendArchiveNag(env, makeDoc("Anna"));
+
+    expect(capture.logged()).toBe("");
   });
 });
 

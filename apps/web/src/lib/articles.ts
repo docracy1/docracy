@@ -2759,6 +2759,94 @@ export const ARTICLES: ArticlePost[] = [
 
   // --- Product cluster ---
   {
+    slug: "keep-signed-contracts-get-paid",
+    title: "Keep signed contracts — and get paid after they sign",
+    description:
+      "Signing stays free. Paid keeps the PDF past 9 days. Add your PayPal or Mercado Pago link, then onboard US contractors with NDA, W-9, and agreement.",
+    publishedDate: "2026-09-04",
+    cluster: "Product",
+    blocks: [
+      p(
+        "People will pay to keep a signed file. They will not pay extra to collect the signature. Docracy is built around that split: sending and signing stay free, and Paid exists so the PDF is still there after the 9-day window."
+      ),
+      p(
+        "Three product pieces now match that model. You can keep completed contracts in an archive instead of watching them disappear. On Paid you can attach your own checkout link so the other party pays you after the last signature — PayPal, Stripe Payment Link, or Mercado Pago, with no Docracy fee (the $10 plan is how we earn, not a cut of the invoice). And if you are hiring a US contractor, a three-step kit walks through a mutual NDA, an IRS W-9, and an independent contractor agreement using templates that already exist on the site."
+      ),
+      link("See which features sit on Free vs Paid", "/pricing"),
+      h2("Signing is free. Keeping the PDF is what Paid is for"),
+      p(
+        "A completed Docracy document is still a real signed PDF: audit trail, completion certificate, Bitcoin timestamp via OpenTimestamps. What Free does not do is store that file for you. Nine days after you send it, the PDF is deleted. A free account lists the send on the dashboard until that date. It does not stop the deletion."
+      ),
+      p(
+        "Paid is $10/month, flat, not per signature and not per seat. The job of that plan is to keep signed PDFs up to 90 days, plus the workflow around them — reusable templates, bulk send, team workspace, connectors. If you only needed two people to sign an NDA this afternoon, you do not need Paid. If you need the contract next quarter, you do."
+      ),
+      p(
+        "Before a file disappears, the preparer gets a named reminder: document title, counterparties, the delete date, and a one-click keep-file upgrade. The same countdown shows on the dashboard. That nag is not a dark pattern for charging signatures. It is the honest TTL, written on the document instead of buried in a pricing footnote."
+      ),
+      h2("Get paid after they sign — your checkout, not ours"),
+      p(
+        "This is a Paid feature ($10/month), not a processing fee. When you prepare a document you add an amount, a currency (USD, MXN, COP, ARS, CLP, PEN, or BRL), and an https payment URL you already own. After the signing chain finishes, the last signer — and the completion email — see a pay button for that amount."
+      ),
+      p(
+        "Docracy never takes the money, never stores card numbers, and never runs Stripe Connect. The link is yours: PayPal.me, a Stripe Payment Link, Mercado Pago, or any other https checkout you send people today. We earn the same $10 as the archive plan — not 2.9% of the invoice. That is the whole model: signing stays free; outcomes after the signature (keep the file, get paid) are Paid."
+      ),
+      list([
+        "Requires Paid — Free can still send and sign; it cannot attach a checkout link",
+        "Shown only after everyone has signed, not as a gate in front of the PDF",
+        "White-label workspaces hide Docracy's own upgrade CTAs; your payment link still belongs to you",
+      ]),
+      p(
+        "This is the LATAM- and US-shaped version of \"sign then pay\": the sender already has a way to collect money. Docracy just puts that link next to the finished contract instead of making you paste it into a separate WhatsApp thread — and charges a flat subscription instead of taking a cut."
+      ),
+      h2("One US contractor kit: NDA, W-9, contractor agreement"),
+      p(
+        "Onboarding a 1099 contractor in the United States is usually three PDFs, not one. The kit is a wizard over templates you can already send for free — not a merged packet builder and not a new document type."
+      ),
+      list([
+        "Mutual NDA — both sides share confidential information before the work starts",
+        "IRS Form W-9 — the real current IRS form, so you have a taxpayer ID on file before you pay",
+        "Independent contractor agreement — scope, pay, and IP, with the worker classified as a contractor, not an employee",
+      ]),
+      p(
+        "Each step is a normal Docracy send. Come back to the kit page after you send one, and the next template is waiting. On Paid, prepare can add your payment link so you can collect a deposit once the last signature is in."
+      ),
+      link("Open the free US contractor kit", "/packets/us-contractor"),
+      link("Start from the mutual NDA template", "/free-templates/mutual-nda"),
+      h2("How to tell Free and Paid apart"),
+      p(
+        "The pricing table is the source of truth. The contractor kit is free. Get-paid links are Paid — not because they cost extra to run, but because that is how Docracy is paid: $10/month, no percentage of your checkout. What Paid also keeps is the file after day nine, longer expiry, templates you reuse, bulk send, and team tools. If a comparison chart still says a free account \"keeps history,\" that line is wrong: history of the send is not the same as keeping the signed PDF."
+      ),
+      link("Full feature comparison", "/pricing"),
+      h2("How to confirm the signed file is still the real one"),
+      p(
+        "Anyone can hash a completed PDF in the browser and check it against Docracy's records, then against the Bitcoin blockchain via OpenTimestamps. That verification does not prove who physically signed — Docracy's default is a simple electronic signature (SES) under ESIGN and UETA — but it does prove the bytes have not changed since completion. Use it when a counterparty emails you a copy and you want to know it matches what left the signing flow."
+      ),
+      link("Verify a signed document", "/verify"),
+      h2("A few common questions"),
+      h3("Does a free Docracy account keep my signed PDF?"),
+      p(
+        "No. A free account puts the send on your dashboard until the 9-day TTL. The PDF is still deleted on that date. Paid keeps the file in the archive, up to 90 days."
+      ),
+      h3("Does Docracy take a cut when I get paid after they sign?"),
+      p(
+        "No. You paste your own https checkout. Docracy does not process the payment and does not charge a percentage. Attaching that link is a Paid feature — $10/month, the same plan that keeps the PDF. Your PayPal, Stripe, or Mercado Pago fees are between you and that provider."
+      ),
+      h3("Can I add a payment link on the free plan?"),
+      p(
+        "No. Free is for sending and signing. Get-paid-after-they-sign is how Docracy is paid: a flat subscription, not a slice of what your signer sends you."
+      ),
+      h3("Can I send the contractor kit without an account?"),
+      p(
+        "Yes. Each template is the ordinary free flow — up to two signers, no signup for the people who sign. Create an account only if you want the sends listed on a dashboard, and upgrade only if you want the signed files kept."
+      ),
+      h3("Is the W-9 in the kit a real IRS form?"),
+      p(
+        "Yes. It is the official Form W-9, not a lookalike. Collect it before you pay a US contractor so you have their taxpayer identification number for 1099 reporting."
+      ),
+      link("Keep signed files on Paid — $10/month", "/pricing"),
+    ],
+  },
+  {
     slug: "whatsapp-signing-now-available",
     title: "WhatsApp signing is here — sign without an inbox",
     description: "Docracy can now deliver signing links over WhatsApp, phone-bound and PIN-protected, as a step toward Advanced Electronic Signature. Free: 1/month. Paid: 10/month, then $0.50 each.",

@@ -23,6 +23,7 @@ interface DocumentRow {
   status: string;
   created_at: string;
   completed_at: string | null;
+  expires_at: string;
   preparer_signs: number;
   order1_status: string | null;
 }
@@ -34,7 +35,7 @@ account.get("/documents", requireAccount, async (c) => {
   }
 
   const { results } = await c.env.DOCRACY_DB.prepare(
-    `SELECT d.doc_id, d.title, d.status, d.created_at, d.completed_at, d.preparer_signs, s1.status AS order1_status
+    `SELECT d.doc_id, d.title, d.status, d.created_at, d.completed_at, d.expires_at, d.preparer_signs, s1.status AS order1_status
      FROM documents d
      LEFT JOIN signers s1 ON s1.doc_id = d.doc_id AND s1."order" = 1
      WHERE d.account_id = ?
@@ -60,6 +61,7 @@ account.get("/documents", requireAccount, async (c) => {
         status: r.status,
         createdAt: r.created_at,
         completedAt: r.completed_at,
+        expiresAt: r.expires_at,
         statusToken: await signToken(r.doc_id, 0, c.env.TOKEN_SECRET),
         awaitingYou,
         signToken: signTok,

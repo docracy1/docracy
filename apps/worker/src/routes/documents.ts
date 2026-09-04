@@ -13,6 +13,7 @@ import { isAdminEmail, optionalAccount, type AccountContext } from "../lib/auth"
 import { resolveTtlDays } from "../lib/docTtl";
 import { schedulePreparerLeadEmails } from "../lib/onboardingEmails";
 import { clampAttachmentLimits } from "../lib/signerAttachments";
+import { parsePaymentRequest } from "../lib/paymentRequest";
 import type { DocField, Env, Locale } from "@docracy/shared";
 
 interface CreateDocumentBody {
@@ -48,6 +49,8 @@ interface CreateDocumentBody {
   whatsappInvites?: boolean;
   /** Paid — require signers to upload attachments before signing. */
   signerAttachments?: { enabled: boolean; maxFiles?: number; maxBytesPerFile?: number };
+  /** Sender's own payment link (PayPal / Stripe / Mercado Pago). Docracy never charges this. */
+  paymentRequest?: { amount: string; currency: string; url: string };
   /** Set only when these fields were loaded from a saved (paid-tier) template — see
    *  routes/templates.ts's GET /:id, which fires the matching template_started event. Purely for
    *  the Template funnel's template_completed step; never persisted on the resulting document. */
@@ -352,6 +355,19 @@ documents.post("/", optionalAccount, async (c) => {
     return c.json({ error: ttl.error }, 400);
   }
 
+  const parsedPayment = parsePaymentRequest(meta.paymentRequest);
+  if (parsedPayment.error) {
+    return c.json({ error: parsedPayment.error }, 400);
+  }
+  if (parsedPayment.paymentRequest && !account?.isPaid) {
+    return failWith(
+      "send_failed",
+      { error: "Adding a payment link after they sign requires a paid account." },
+      402,
+      "payment_link_requires_paid"
+    );
+  }
+
   // WhatsApp is the AES-track channel — gated to signed-up accounts (anonymous senders are
   // rejected outright). Every tier has a real, hard-costed cap now: Meta charges Docracy per
   // message with no free tier of its own. Free hard-stops at FREE_MONTHLY_LIMIT/month, enterprise
@@ -443,6 +459,7 @@ documents.post("/", optionalAccount, async (c) => {
     signerAttachments: meta.signerAttachments?.enabled
       ? { enabled: true, ...clampAttachmentLimits(meta.signerAttachments) }
       : undefined,
+    paymentRequest: parsedPayment.paymentRequest,
   });
 
   // Opt-in only — the preparer email itself is collected for the status link. Marketing tips are
