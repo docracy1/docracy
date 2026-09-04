@@ -614,6 +614,15 @@ const routes = [
     alternates: { en: "/hire-contractor-abroad", es: "/es/contratar-en-el-extranjero" },
   },
   {
+    urlPath: "/es/prueba-de-ingresos",
+    outFile: "es/prueba-de-ingresos.html",
+    title: getFeaturePageContent("proof-of-income", "es").seoTitle,
+    description: getFeaturePageContent("proof-of-income", "es").seoDescription,
+    locale: "es",
+    alternates: { en: "/proof-of-income", es: "/es/prueba-de-ingresos" },
+    xDefault: "es",
+  },
+  {
     urlPath: "/docs",
     outFile: "docs.html",
     title: "Docracy Documentation — Setup, API & Features",
@@ -897,6 +906,26 @@ const routes = [
     alternates: { en: "/cobro", es: "/es/cobro" },
   },
   {
+    urlPath: "/income-proof",
+    outFile: "income-proof.html",
+    title: "Income Proof Packet for Freelancers — Docracy",
+    description:
+      "Share a year of signed files and cobros as income proof. Not a W-2, bank letter, or employer certificate. Paid $10/mo — signing stays free.",
+    locale: "en",
+    alternates: { en: "/income-proof", es: "/es/constancia" },
+    xDefault: "es",
+  },
+  {
+    urlPath: "/es/constancia",
+    outFile: "es/constancia.html",
+    title: "Constancia de ingresos para freelancers — Docracy",
+    description:
+      "Arma una constancia de ingresos con cobros y contratos firmados. Compártela con el arrendador o el banco. No es un W-2 ni carta bancaria. Plan de $10/mes.",
+    locale: "es",
+    alternates: { en: "/income-proof", es: "/es/constancia" },
+    xDefault: "es",
+  },
+  {
     urlPath: "/dpa",
     outFile: "dpa.html",
     title: "Data Processing Agreement (DPA) — Docracy",
@@ -974,6 +1003,7 @@ const routes = [
       "whatsapp-invoice": { en: "/whatsapp-invoice", es: "/es/factura-whatsapp" },
       "1099-contractor-records": { en: "/1099-contractor-records", es: "/es/registros-1099" },
       "hire-contractor-abroad": { en: "/hire-contractor-abroad", es: "/es/contratar-en-el-extranjero" },
+      "proof-of-income": { en: "/proof-of-income", es: "/es/prueba-de-ingresos" },
       "docusign-alternative": { en: "/docusign-alternative", es: "/es/alternativa-a-docusign" },
       "hellosign-alternative": { en: "/hellosign-alternative", es: "/es/alternativa-a-hellosign" },
       "adobe-sign-alternative": { en: "/adobe-sign-alternative", es: "/es/alternativa-a-adobe-sign" },
@@ -985,7 +1015,9 @@ const routes = [
       outFile: `${p.slug}.html`,
       title: p.seoTitle,
       description: p.seoDescription,
-      ...(bilingual ? { locale: "en", alternates: bilingual } : {}),
+      ...(bilingual
+        ? { locale: "en", alternates: bilingual, ...(p.xDefault === "es" ? { xDefault: "es" } : {}) }
+        : {}),
     };
   }),
   ...SEO_LANDING_PAGES.map((p) => ({
@@ -1049,7 +1081,7 @@ function writeIndexNowKey() {
   fs.writeFileSync(path.join(distDir, `${INDEXNOW_KEY}.txt`), INDEXNOW_KEY);
 }
 
-function withMeta(html, { title, description, urlPath, locale = "en", alternates, image, watchPage = false }) {
+function withMeta(html, { title, description, urlPath, locale = "en", alternates, image, watchPage = false, xDefault }) {
   const canonical = `${SITE}${urlPath === "/" ? "/" : urlPath}`;
   const safeTitle = escapeXml(title);
   const safeDescription = escapeXml(ensureMetaDescription(description));
@@ -1074,10 +1106,11 @@ function withMeta(html, { title, description, urlPath, locale = "en", alternates
   if (alternates) {
     const enHref = `${SITE}${alternates.en === "/" ? "/" : alternates.en}`;
     const esHref = `${SITE}${alternates.es}`;
+    const defaultHref = xDefault === "es" ? esHref : enHref;
     const hreflang = [
       `<link rel="alternate" hreflang="en" href="${enHref}" />`,
       `<link rel="alternate" hreflang="es" href="${esHref}" />`,
-      `<link rel="alternate" hreflang="x-default" href="${enHref}" />`,
+      `<link rel="alternate" hreflang="x-default" href="${defaultHref}" />`,
     ].join("\n    ");
     // Drop any previous hreflang tags then inject before </head>.
     out = out.replace(/\s*<link rel="alternate" hreflang="[^"]*" href="[^"]*"\s*\/?>/g, "");

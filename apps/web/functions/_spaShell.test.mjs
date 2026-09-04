@@ -60,6 +60,10 @@ assert.equal(stripVideoMetaTags(withVideoMeta).includes("twitter:player"), false
 assert.equal(isSpaAppPath("/login"), true);
 assert.equal(isSpaAppPath("/prepare"), true);
 assert.equal(isSpaAppPath("/sign/abc"), true);
+assert.equal(isSpaAppPath("/income-proof/tok"), true);
+assert.equal(isSpaAppPath("/es/constancia/tok"), true);
+assert.equal(isSpaAppPath("/income-proof"), false);
+assert.equal(isSpaAppPath("/es/constancia"), false);
 assert.equal(isSpaAppPath("/pricing"), false);
 assert.equal(hasFileExtension("/assets/x.js"), true);
 assert.equal(hasFileExtension("/pricing"), false);

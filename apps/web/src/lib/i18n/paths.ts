@@ -39,6 +39,8 @@ export const ES_PATH_BY_EN: Record<string, string> = {
   "/whatsapp-invoice": "/es/factura-whatsapp",
   "/1099-contractor-records": "/es/registros-1099",
   "/hire-contractor-abroad": "/es/contratar-en-el-extranjero",
+  "/income-proof": "/es/constancia",
+  "/proof-of-income": "/es/prueba-de-ingresos",
 };
 
 export const EN_PATH_BY_ES: Record<string, string> = Object.fromEntries(
@@ -189,11 +191,29 @@ function signedReceiptPath(token: string, locale: Locale): string {
   return locale === "es" ? `/es/firmado/${token}` : `/signed/${token}`;
 }
 
+function constanciaShareFromPath(path: string): { locale: Locale; token: string } | null {
+  if (path.startsWith("/income-proof/")) {
+    const token = path.slice("/income-proof/".length);
+    return token ? { locale: "en", token } : null;
+  }
+  if (path.startsWith("/es/constancia/")) {
+    const token = path.slice("/es/constancia/".length);
+    return token ? { locale: "es", token } : null;
+  }
+  return null;
+}
+
+export function constanciaSharePath(token: string, locale: Locale): string {
+  return locale === "es" ? `/es/constancia/${token}` : `/income-proof/${token}`;
+}
+
 /** Locale forced by a bilingual SEO URL, or null when the path is not in the map. */
 export function pathLocale(pathname: string): Locale | null {
   const path = cleanPath(pathname);
   const signed = signedReceiptFromPath(path);
   if (signed) return signed.locale;
+  const constancia = constanciaShareFromPath(path);
+  if (constancia) return constancia.locale;
   const tmpl = templateSlugFromPath(path);
   if (tmpl) {
     // Only SEO template pairs force locale from the URL; non-SEO /es/… URLs shouldn't exist.
@@ -218,6 +238,9 @@ export function localizePath(href: string, locale: Locale): string {
   const signed = signedReceiptFromPath(path);
   if (signed) return `${signedReceiptPath(signed.token, locale)}${query}${hash}`;
 
+  const constancia = constanciaShareFromPath(path);
+  if (constancia) return `${constanciaSharePath(constancia.token, locale)}${query}${hash}`;
+
   const tmpl = templateSlugFromPath(path);
   if (tmpl) {
     // Non-SEO templates stay on English detail URLs to avoid thin EN-under-/es pages.
@@ -240,6 +263,8 @@ export function alternatePath(pathname: string, target: Locale): string | null {
   const path = cleanPath(pathname);
   const signed = signedReceiptFromPath(path);
   if (signed) return signedReceiptPath(signed.token, target);
+  const constancia = constanciaShareFromPath(path);
+  if (constancia) return constanciaSharePath(constancia.token, target);
   const tmpl = templateSlugFromPath(path);
   if (tmpl) {
     if (!isSeoTemplateSlug(tmpl)) return null;

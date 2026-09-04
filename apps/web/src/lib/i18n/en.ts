@@ -327,9 +327,12 @@ const en: Messages = {
   "landing.faq8.q": "How do I hire a contractor in LATAM?",
   "landing.faq8.a":
     "Use the LATAM kit: free NDA and contractor agreement, then Paid cobro. We do not ship a W-8BEN. Start at /packets/latam-contractor (Spanish: /es/kit-contratista-latam). US persons use the W-9 kit instead.",
+  "landing.faq9.q": "How do I prove income without pay stubs?",
+  "landing.faq9.a":
+    "Paid packs the year of signed files and cobros into a shareable constancia at /income-proof (Spanish lead: /es/constancia). Not a W-2, bank letter, or certified income letter. Amounts are what you typed.",
   "landing.outcomesTitle": "After they sign — keep the file, get paid",
   "landing.outcomesSub":
-    "Signing stays free. Paid is the outcome: your checkout on WhatsApp, a 1099-season CSV, and a kit for someone you pay abroad.",
+    "Signing stays free. Paid is the outcome: your checkout on WhatsApp, a 1099-season CSV, a shareable income packet, and a kit for someone you pay abroad.",
   "landing.out1.title": "Get paid on WhatsApp",
   "landing.out1.body":
     "Send the PDF and your PayPal or Mercado Pago link — no signature required. Docracy never collects the payment.",
@@ -342,6 +345,10 @@ const en: Messages = {
   "landing.out3.body":
     "NDA and contractor agreement are free. Then cobro. We do not invent a W-8BEN.",
   "landing.out3.link": "Open the LATAM kit",
+  "landing.out4.title": "Income proof packet",
+  "landing.out4.body":
+    "Share a year of signed files and cobros when someone asks for proof of income. Not a W-2 or a bank letter.",
+  "landing.out4.link": "Open the constancia",
   "landing.compareTitle": "How Docracy compares on price",
   "landing.compareSub": "Docracy's paid plan is one flat fee per workspace, not a per-seat license — add as many teammates as you want at no extra cost.",
   "landing.disclaimer":
@@ -2388,13 +2395,18 @@ const en: Messages = {
   "footer.taxYear": "1099 season locker",
   "footer.cobro": "Get paid on WhatsApp",
   "footer.latamPacket": "LATAM contractor kit",
+  "footer.constancia": "Income proof / constancia",
+  "footer.proofOfIncome": "Proof of income (SEO)",
   "nav.mega.feature.taxYear.title": "1099 season locker",
   "nav.mega.feature.taxYear.desc": "Every completed file from the tax year, plus a CSV for your CPA. Paid.",
+  "nav.mega.feature.constancia.title": "Income proof packet",
+  "nav.mega.feature.constancia.desc": "Share a year of signed files and cobros. Not a W-2. Paid.",
   "nav.mega.feature.cobro.title": "Get paid on WhatsApp",
   "nav.mega.feature.cobro.desc": "Send a file and your PayPal or Mercado Pago link — no signature required.",
   "nav.mega.feature.latamPacket.title": "Hire in LATAM",
   "nav.mega.feature.latamPacket.desc": "NDA, contractor agreement, then cobro. For someone you pay abroad.",
   "plan.taxYearLocker": "1099 season locker (CSV for your CPA)",
+  "plan.constancia": "Income proof packet (shareable constancia)",
   "plan.cobro": "WhatsApp cobro — pay + file, no signature",
   "plan.latamPacket": "US ↔ LATAM contractor kit (NDA, agreement, cobro)",
   "docs.taxYear.title": "1099 season locker (paid)",
@@ -2406,10 +2418,14 @@ const en: Messages = {
   "docs.latamPacket.title": "US ↔ LATAM contractor kit",
   "docs.latamPacket.body":
     "Wizard over existing free templates: mutual NDA, independent contractor agreement, then Paid cobro so you can get paid abroad. There is no W-8BEN in the catalog — we do not invent IRS forms. US persons still use the US kit (NDA, W-9, agreement). Open /packets/latam-contractor (Spanish: /es/kit-contratista-latam).",
+  "docs.constancia.title": "Income proof packet / constancia (paid)",
+  "docs.constancia.body":
+    "Paid accounts open /es/constancia (English: /income-proof), type the name they want shown, and copy a HMAC URL for that calendar year. The public page lists titles, dates, counterparty names (no emails), amounts they typed, and signed-page links. Totals are by currency. It is not a W-2, bank letter, employer certificate, or SAT/IRS filing. Spanish is the lead language.",
   "signed.cobroTitle": "Pay for this file",
   "signed.cobroUntitled": "Payment request",
   "dash.taxYear": "1099 locker",
   "dash.cobro": "Send cobro",
+  "dash.constancia": "Income proof",
   "taxYear.seoTitle": "1099 Season Locker — Signed W-9s, Contracts & CPA CSV | Docracy",
   "taxYear.seoDescription":
     "Keep every completed contractor file from the tax year and download a CSV for your CPA. Not IRS e-file. Paid $10/mo — signing stays free.",
@@ -2527,6 +2543,67 @@ const en: Messages = {
   "latamPacket.howTo2": "Send the independent contractor agreement (free template).",
   "latamPacket.howTo3": "On Paid, send cobro with your Mercado Pago or PayPal link — no extra signature.",
   "latamPacket.howTo4": "Skip this kit if they are a US person — use the IRS W-9 kit instead. We do not ship a W-8BEN.",
+  "constancia.seoTitle": "Income Proof Packet for Freelancers — Docracy",
+  "constancia.seoDescription":
+    "Share a year of signed files and cobros as income proof. Not a W-2, bank letter, or employer certificate. Paid $10/mo — signing stays free.",
+  "constancia.kicker": "Paid · constancia",
+  "constancia.heroTitle": "The income packet you can actually forward",
+  "constancia.heroSub":
+    "If you earn on PayPal or Mercado Pago, nobody prints a stub. Pack the year of signed contracts and cobros into one URL. Spanish is the lead page: /es/constancia.",
+  "constancia.ctaOpen": "Open this year's packet",
+  "constancia.ctaPaid": "Unlock the packet — $10/month",
+  "constancia.ctaLogin": "Sign in to open the packet",
+  "constancia.problemTitle": "The problem",
+  "constancia.problem":
+    "A landlord, a bank, or a CPA asks for proof of income. You have PDFs in chat and screenshots of PayPal. None of that looks like a record a stranger will accept.",
+  "constancia.solutionTitle": "What this is",
+  "constancia.solution":
+    "A shareable index of documents you already completed on Docracy that year: titles, dates, names you typed, amounts you typed, links to each signed page. It is not a W-2, not a bank letter, not an employer certificate, and not a SAT or IRS filing.",
+  "constancia.feat1": "One HMAC URL per calendar year — anyone with the link can open it.",
+  "constancia.feat2": "Your display name (how you want to appear), not your login email.",
+  "constancia.feat3": "Counterparty names only on the public page. Totals by currency from amounts you entered.",
+  "constancia.feat4": "Signing stays free. Paid is how the files still exist when someone asks.",
+  "constancia.toolTitle": "{{year}} income packet",
+  "constancia.toolSub": "Type the name that should appear on the cover, then copy the link. Source of truth is still each PDF.",
+  "constancia.yearLabel": "Year",
+  "constancia.nameLabel": "Name on the packet",
+  "constancia.namePlaceholder": "Ana Ruiz",
+  "constancia.saveName": "Save name",
+  "constancia.copyLink": "Copy packet link",
+  "constancia.nameRequired": "Save a name before copying. That's how you appear — not your email.",
+  "constancia.totalsLabel": "Amounts you typed:",
+  "constancia.count": "{{n}} completed file(s)",
+  "constancia.empty": "Nothing completed in this calendar year yet. Send a cobro or a contract first.",
+  "constancia.faq.1.q": "Is this a certified proof-of-income letter?",
+  "constancia.faq.1.a":
+    "No. It is a dated list of files you already completed here. A landlord or bank may still want a bank statement. We do not notarize or verify identity.",
+  "constancia.faq.2.q": "Do you connect to PayPal or Mercado Pago?",
+  "constancia.faq.2.a": "No. Totals are the amounts you typed when you sent cobro or attached a payment link.",
+  "constancia.faq.3.q": "Will my email show on the public page?",
+  "constancia.faq.3.a": "No. The cover shows the name you type. Counterparties appear by name only.",
+  "constancia.faq.4.q": "Is the packet free?",
+  "constancia.faq.4.a": "No. Free signing deletes PDFs after 9 days. Paid ($10/month) keeps the files and unlocks this link.",
+  "constancia.faq.5.q": "Why is the Spanish URL the default?",
+  "constancia.faq.5.a":
+    "This product is for people who get asked for a constancia, mostly in US + LATAM Spanish. /es/constancia is x-default. English lives at /income-proof.",
+  "constancia.howToName": "How to share an income proof packet",
+  "constancia.howTo1": "Complete cobros and contracts on Docracy during the year (Paid keeps the PDFs).",
+  "constancia.howTo2": "Open /es/constancia or /income-proof and pick the year.",
+  "constancia.howTo3": "Type the name you want shown and copy the packet URL.",
+  "constancia.howTo4": "Send the link. Say honestly: it is your Docracy record, not a W-2 or a bank letter.",
+  "constanciaShare.kicker": "Income packet",
+  "constanciaShare.title": "Income packet · {{year}}",
+  "constanciaShare.namedTitle": "{{name}} · {{year}}",
+  "constanciaShare.disclaimer":
+    "This is a list of documents completed on Docracy. It is not a W-2, not a bank letter, not an employer certificate, and not a tax filing.",
+  "constanciaShare.totalsTitle": "Amounts entered",
+  "constanciaShare.totalCount": "{{n}} file(s)",
+  "constanciaShare.empty": "No completed files in this year.",
+  "constanciaShare.kindCobro": "cobro",
+  "constanciaShare.kindSign": "signed",
+  "constanciaShare.copyLink": "Copy this page",
+  "constanciaShare.forwardHint": "Need your own packet?",
+  "constanciaShare.sendYours": "Open constancia on Docracy",
 };
 
 export default en;

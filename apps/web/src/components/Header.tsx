@@ -26,6 +26,7 @@ const FEATURE_ITEMS = [
   { to: "/packets/latam-contractor", icon: "briefcase", titleKey: "nav.mega.feature.latamPacket.title", descKey: "nav.mega.feature.latamPacket.desc" },
   { to: "/cobro", icon: "whatsapp", titleKey: "nav.mega.feature.cobro.title", descKey: "nav.mega.feature.cobro.desc" },
   { to: "/1099-season", icon: "badge", titleKey: "nav.mega.feature.taxYear.title", descKey: "nav.mega.feature.taxYear.desc" },
+  { to: "/income-proof", icon: "badge", titleKey: "nav.mega.feature.constancia.title", descKey: "nav.mega.feature.constancia.desc" },
   { to: "/esign-ueta", icon: "scale", titleKey: "nav.mega.feature.esign.title", descKey: "nav.mega.feature.esign.desc" },
   { to: "/pricing", icon: "users", titleKey: "nav.mega.feature.team.title", descKey: "nav.mega.feature.team.desc" },
   { to: "/privacy", icon: "shield", titleKey: "nav.mega.feature.storage.title", descKey: "nav.mega.feature.storage.desc" },

@@ -24,6 +24,14 @@ import {
   MAX_COBRO_REMIND_DAYS,
 } from "../lib/cobro";
 import { parseTaxYear, taxYearBounds, hydrateTaxYearRow } from "../lib/taxYear";
+import {
+  getConstanciaProfile,
+  listCompletedInYear,
+  mintConstanciaShare,
+  normalizeSubjectName,
+  putConstanciaProfile,
+  totalsByCurrency,
+} from "../lib/constancia";
 
 type Variables = { account: AccountContext | null };
 const account = new Hono<{ Bindings: Env; Variables: Variables }>();
@@ -453,6 +461,41 @@ account.get("/tax-year", requirePaidAccount, async (c) => {
 
   const documents = await Promise.all(results.map((r) => hydrateTaxYearRow(c.env, r, locale)));
   return c.json({ year, documents });
+});
+
+account.get("/constancia", requirePaidAccount, async (c) => {
+  const acct = c.get("account")!;
+  const parsed = parseTaxYear(c.req.query("year"));
+  if (typeof parsed === "object") return c.json(parsed, 400);
+  const year = parsed;
+  const locale: Locale = c.req.query("locale") === "es" ? "es" : "en";
+  const [profile, documents, share] = await Promise.all([
+    getConstanciaProfile(c.env, acct.workspaceId),
+    listCompletedInYear(c.env, acct.workspaceId, year, locale),
+    mintConstanciaShare(c.env, acct.workspaceId, year, locale),
+  ]);
+  return c.json({
+    year,
+    subjectName: profile?.subjectName ?? "",
+    shareToken: share.shareToken,
+    shareUrl: share.shareUrl,
+    documents,
+    totals: totalsByCurrency(documents),
+  });
+});
+
+account.post("/constancia/profile", requirePaidAccount, async (c) => {
+  const acct = c.get("account")!;
+  let body: { subjectName?: unknown };
+  try {
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: "Invalid JSON" }, 400);
+  }
+  const name = normalizeSubjectName(body.subjectName);
+  if (typeof name === "object") return c.json(name, 400);
+  const profile = await putConstanciaProfile(c.env, acct.workspaceId, name);
+  return c.json({ subjectName: profile.subjectName });
 });
 
 account.post("/cobro", requirePaidAccount, async (c) => {

@@ -19,7 +19,7 @@ export default function FeaturePage({ slug }: { slug: string }) {
 
   usePageMeta(page?.seoTitle ?? "Docracy", page?.seoDescription ?? "", {
     canonicalPath: esPath ? cleanPath(location.pathname) : enPath,
-    ...(esPath ? { alternates: { en: enPath, es: esPath } } : {}),
+    ...(esPath ? { alternates: { en: enPath, es: esPath }, xDefault: page?.xDefault } : {}),
   });
 
   if (!page) return null;

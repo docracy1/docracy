@@ -31,6 +31,7 @@ import Verify from "../src/pages/Verify";
 import ContractorPacket from "../src/pages/ContractorPacket";
 import LatamContractorPacket from "../src/pages/LatamContractorPacket";
 import TaxYear from "../src/pages/TaxYear";
+import Constancia from "../src/pages/Constancia";
 import Cobro from "../src/pages/Cobro";
 import Dpa from "../src/pages/Dpa";
 import Privacy from "../src/pages/Privacy";
@@ -106,6 +107,8 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/es/kit-contratista-latam" element={<LatamContractorPacket />} />
           <Route path="/1099-season" element={<TaxYear />} />
           <Route path="/es/temporada-1099" element={<TaxYear />} />
+          <Route path="/income-proof" element={<Constancia />} />
+          <Route path="/es/constancia" element={<Constancia />} />
           <Route path="/cobro" element={<Cobro />} />
           <Route path="/es/cobro" element={<Cobro />} />
           <Route path="/dpa" element={<Dpa />} />
@@ -150,6 +153,8 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/es/registros-1099" element={<FeaturePage slug="1099-contractor-records" />} />
           <Route path="/hire-contractor-abroad" element={<FeaturePage slug="hire-contractor-abroad" />} />
           <Route path="/es/contratar-en-el-extranjero" element={<FeaturePage slug="hire-contractor-abroad" />} />
+          <Route path="/proof-of-income" element={<FeaturePage slug="proof-of-income" />} />
+          <Route path="/es/prueba-de-ingresos" element={<FeaturePage slug="proof-of-income" />} />
           {ALTERNATIVE_PAGES.map((p) => (
             <Route key={p.slug} path={`/${p.slug}`} element={<AlternativePage slug={p.slug} />} />
           ))}

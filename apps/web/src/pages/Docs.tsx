@@ -115,6 +115,13 @@ export default function Docs() {
         </p>
       </Section>
 
+      <Section id="constancia" title={t("docs.constancia.title")}>
+        <p>
+          {t("docs.constancia.body")}{" "}
+          <Link to={localizePath("/income-proof", locale)}>{t("footer.constancia")}</Link>.
+        </p>
+      </Section>
+
       <Section id="cloud-connectors" title={t("docs.cloudConnectors.title")}>
         <p>
           {t("docs.cloudConnectors.body1")}{" "}

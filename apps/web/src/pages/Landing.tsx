@@ -200,7 +200,7 @@ const CORE_FEATURES: Array<{
 ];
 
 const AFTER_SIGN_OUTCOMES: Array<{
-  icon: "send" | "badge" | "users";
+  icon: "send" | "badge" | "users" | "duplicate";
   titleKey: string;
   bodyKey: string;
   to: string;
@@ -209,6 +209,7 @@ const AFTER_SIGN_OUTCOMES: Array<{
   { icon: "send", titleKey: "landing.out1.title", bodyKey: "landing.out1.body", to: "/cobro", linkKey: "landing.out1.link" },
   { icon: "badge", titleKey: "landing.out2.title", bodyKey: "landing.out2.body", to: "/1099-season", linkKey: "landing.out2.link" },
   { icon: "users", titleKey: "landing.out3.title", bodyKey: "landing.out3.body", to: "/packets/latam-contractor", linkKey: "landing.out3.link" },
+  { icon: "duplicate", titleKey: "landing.out4.title", bodyKey: "landing.out4.body", to: "/income-proof", linkKey: "landing.out4.link" },
 ];
 
 const FAQ_KEYS: Array<{ qKey: string; aKey: string }> = [
@@ -220,6 +221,7 @@ const FAQ_KEYS: Array<{ qKey: string; aKey: string }> = [
   { qKey: "landing.faq6.q", aKey: "landing.faq6.a" },
   { qKey: "landing.faq7.q", aKey: "landing.faq7.a" },
   { qKey: "landing.faq8.q", aKey: "landing.faq8.a" },
+  { qKey: "landing.faq9.q", aKey: "landing.faq9.a" },
 ];
 
 // Subset of TESTIMONIALS with a real, recognizable company identity — shown as a compact logo

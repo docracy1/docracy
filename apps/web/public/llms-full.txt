@@ -41,6 +41,7 @@ Operated by RELACON GmbH, Elisabethstraße 15/5b, 1010 Vienna, Austria. Contact:
 - **Dropbox / OneDrive / Box / Google Drive connectors** — completed signed PDFs upload automatically to connected storage.
 - **WhatsApp cobro** — pay + file, no signature (`/cobro`, Spanish `/es/cobro`). Sender's own PayPal/Stripe/Mercado Pago URL; Docracy never takes the money.
 - **1099 season locker** — calendar-year completed-doc list + CPA CSV (`/1099-season`). Not IRS e-file; no TIN OCR.
+- **Income proof / constancia** — shareable calendar-year packet of signed files and cobros. Spanish lead: `/es/constancia` (x-default). English: `/income-proof`. Not a W-2, bank letter, employer certificate, or SAT/IRS filing. Keyword landing: `/proof-of-income` (Spanish `/es/prueba-de-ingresos`).
 - **US contractor kit** (free templates) — NDA, IRS W-9, independent contractor agreement (`/packets/us-contractor`).
 - **LATAM contractor kit** — NDA + contractor agreement, then Paid cobro (`/packets/latam-contractor`). Not a W-8BEN.
 

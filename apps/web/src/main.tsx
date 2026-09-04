@@ -51,6 +51,8 @@ const Verify = lazy(() => import("./pages/Verify"));
 const ContractorPacket = lazy(() => import("./pages/ContractorPacket"));
 const LatamContractorPacket = lazy(() => import("./pages/LatamContractorPacket"));
 const TaxYear = lazy(() => import("./pages/TaxYear"));
+const Constancia = lazy(() => import("./pages/Constancia"));
+const ConstanciaShare = lazy(() => import("./pages/ConstanciaShare"));
 const Cobro = lazy(() => import("./pages/Cobro"));
 const Dpa = lazy(() => import("./pages/Dpa"));
 const Login = lazy(() => import("./pages/Login"));
@@ -145,6 +147,10 @@ function AppRoutes() {
       <Route path="/es/kit-contratista-latam" element={<LatamContractorPacket />} />
       <Route path="/1099-season" element={<TaxYear />} />
       <Route path="/es/temporada-1099" element={<TaxYear />} />
+      <Route path="/income-proof" element={<Constancia />} />
+      <Route path="/es/constancia" element={<Constancia />} />
+      <Route path="/income-proof/:token" element={<ConstanciaShare />} />
+      <Route path="/es/constancia/:token" element={<ConstanciaShare />} />
       <Route path="/cobro" element={<Cobro />} />
       <Route path="/es/cobro" element={<Cobro />} />
       <Route path="/dpa" element={<Dpa />} />
@@ -237,6 +243,8 @@ function AppRoutes() {
       <Route path="/es/registros-1099" element={<FeaturePage slug="1099-contractor-records" />} />
       <Route path="/hire-contractor-abroad" element={<FeaturePage slug="hire-contractor-abroad" />} />
       <Route path="/es/contratar-en-el-extranjero" element={<FeaturePage slug="hire-contractor-abroad" />} />
+      <Route path="/proof-of-income" element={<FeaturePage slug="proof-of-income" />} />
+      <Route path="/es/prueba-de-ingresos" element={<FeaturePage slug="proof-of-income" />} />
       {ALTERNATIVE_PAGES.map((p) => (
         <Route key={p.slug} path={`/${p.slug}`} element={<AlternativePage slug={p.slug} />} />
       ))}

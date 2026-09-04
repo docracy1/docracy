@@ -50,6 +50,8 @@ Disallow: /admin/
 Disallow: /embed/
 Disallow: /sign/
 Disallow: /status/
+Disallow: /income-proof/
+Disallow: /es/constancia/
 Disallow: /team/
 Disallow: /go/
 Disallow: /outreach/
@@ -87,7 +89,11 @@ function priorityFor(urlPath) {
     urlPath === "/packets/latam-contractor" ||
     urlPath === "/es/kit-contratista-latam" ||
     urlPath === "/packets/us-contractor" ||
-    urlPath === "/es/kit-contratista"
+    urlPath === "/es/kit-contratista" ||
+    urlPath === "/income-proof" ||
+    urlPath === "/es/constancia" ||
+    urlPath === "/proof-of-income" ||
+    urlPath === "/es/prueba-de-ingresos"
   ) {
     return "0.8";
   }
@@ -134,7 +140,8 @@ function urlEntry(route) {
     const esHref = abs(route.alternates.es);
     lines.push(`    <xhtml:link rel="alternate" hreflang="en" href="${escapeXml(enHref)}" />`);
     lines.push(`    <xhtml:link rel="alternate" hreflang="es" href="${escapeXml(esHref)}" />`);
-    lines.push(`    <xhtml:link rel="alternate" hreflang="x-default" href="${escapeXml(enHref)}" />`);
+    const defaultHref = route.xDefault === "es" ? esHref : enHref;
+    lines.push(`    <xhtml:link rel="alternate" hreflang="x-default" href="${escapeXml(defaultHref)}" />`);
   }
   if (route.urlPath === "/how-it-works" || route.urlPath === "/es/como-funciona") {
     lines.push(videoBlock(route.locale === "es" ? "es" : "en"));
@@ -184,6 +191,8 @@ function robotsAllowForRoutes(routes) {
     "/whatsapp-invoice",
     "/1099-contractor-records",
     "/hire-contractor-abroad",
+    "/income-proof",
+    "/proof-of-income",
     "/templates",
   ]) {
     exact.add(p);

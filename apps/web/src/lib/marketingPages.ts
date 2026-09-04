@@ -28,6 +28,8 @@ export interface FeaturePageContent {
   youtubeTitle?: string;
   /** Required with youtubeId — VideoObject uploadDate (YYYY-MM-DD or ISO DateTime). */
   youtubeUploadDate?: string;
+  /** When set, hreflang x-default points at this locale (constancia keyword pages are ES-lead). */
+  xDefault?: "en" | "es";
 }
 
 export const FEATURE_PAGES: FeaturePageContent[] = [
@@ -1186,6 +1188,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       { label: "WhatsApp signing (with PIN)", to: "/whatsapp-signing" },
       { label: "1099 season locker", to: "/1099-season" },
       { label: "LATAM contractor kit", to: "/packets/latam-contractor" },
+      { label: "Income proof packet", to: "/income-proof" },
     ],
   },
   {
@@ -1238,7 +1241,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     relatedLinks: [
       { label: "US contractor kit (W-9)", to: "/packets/us-contractor" },
       { label: "Free W-9 template", to: "/free-templates/w-9-form" },
-      { label: "Pricing", to: "/pricing" },
+      { label: "Income proof packet", to: "/income-proof" },
     ],
   },
   {
@@ -1294,6 +1297,78 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       { label: "US contractor kit (W-9)", to: "/packets/us-contractor" },
       { label: "WhatsApp cobro", to: "/cobro" },
       { label: "1099 season locker", to: "/1099-season" },
+      { label: "Income proof packet", to: "/income-proof" },
+    ],
+  },
+  {
+    slug: "proof-of-income",
+    xDefault: "es",
+    seoTitle: "Proof of Income Without Pay Stubs — Freelancer Packet | Docracy",
+    seoDescription:
+      "Need proof of income without pay stubs? Share a dated packet of signed contracts and cobros. Not a W-2, bank letter, or certified income letter. Paid $10/month.",
+    heroHeadline: "Proof of income when you don't have pay stubs.",
+    heroSubheadline:
+      "Landlords, banks, and CPAs ask for a letter. PayPal and Mercado Pago don't print one. Docracy packs the year you already signed and collected into a shareable URL.",
+    problem:
+      "If you earn through PayPal, Mercado Pago, or cobro, you don't get a W-2 or a stub. Screenshots of the app don't survive a rental application. A Word 'carta de ingresos' you wrote yourself looks like you wrote it yourself.",
+    solution:
+      "The constancia packet is not a new document type. It is the completed files already in your Paid vault — titles, dates, names you typed, amounts you typed — on one noindex URL. Spanish is the lead language: /es/constancia. English: /income-proof.",
+    features: [
+      {
+        title: "A URL a stranger can open",
+        body: "Year, your display name, each completed file, amounts you entered. Not a ZIP of PDFs in a chat.",
+      },
+      {
+        title: "Names, not emails",
+        body: "The public page shows counterparties by name only. Your login email never appears.",
+      },
+      {
+        title: "Honest about what it is not",
+        body: "Not a W-2, not a bank letter, not an employer certificate, not SAT or IRS e-file.",
+      },
+      {
+        title: "Built from cobro + signed contracts",
+        body: "WhatsApp cobros and signed agreements from the same calendar year sit in one list.",
+      },
+    ],
+    useCases: [
+      "Freelancers in Mexico or Colombia renting an apartment",
+      "Contractors who need a CPA packet without a W-2",
+      "Anyone paid on PayPal or Mercado Pago who is asked for 'prueba de ingresos'",
+    ],
+    faqs: [
+      {
+        question: "Is this a certified proof-of-income letter?",
+        answer:
+          "No. It is a dated index of documents you already completed on Docracy. A landlord or bank may still ask for a bank statement. We do not stamp, notarize, or verify identity.",
+      },
+      {
+        question: "Do you read my PayPal or Mercado Pago account?",
+        answer:
+          "No. Totals are the amounts you typed when you sent cobro or attached a payment link. We do not connect to a bank.",
+      },
+      {
+        question: "Where do I open the packet?",
+        answer:
+          "https://docracy.io/es/constancia — English: /income-proof. Keyword page you are on: /proof-of-income (Spanish: /es/prueba-de-ingresos).",
+      },
+      {
+        question: "Will Google index the shared link?",
+        answer: "No. Packet URLs are noindex. The marketing pages are indexable so people can find the product.",
+      },
+      {
+        question: "Is this free?",
+        answer:
+          "Signing stays free. The packet needs the Paid vault so files still exist when someone asks. $10/month.",
+      },
+    ],
+    ctaLabel: "Open the income proof packet",
+    ctaTo: "/income-proof",
+    relatedLinks: [
+      { label: "Constancia / income proof tool", to: "/income-proof" },
+      { label: "WhatsApp cobro", to: "/cobro" },
+      { label: "1099 season locker", to: "/1099-season" },
+      { label: "LATAM contractor kit", to: "/packets/latam-contractor" },
     ],
   },
 ];
@@ -1438,6 +1513,7 @@ export function getWhatsappInvoicePageEs(): FeaturePageContent {
       { label: "Firmar por WhatsApp (con PIN)", to: "/whatsapp-signing" },
       { label: "Casillero temporada 1099", to: "/1099-season" },
       { label: "Kit contratista LATAM", to: "/packets/latam-contractor" },
+      { label: "Constancia de ingresos", to: "/income-proof" },
     ],
   };
 }
@@ -1493,7 +1569,7 @@ export function getContractorRecordsPageEs(): FeaturePageContent {
     relatedLinks: [
       { label: "Kit de contratista en EE. UU. (W-9)", to: "/packets/us-contractor" },
       { label: "Plantilla gratis de W-9", to: "/free-templates/w-9-form" },
-      { label: "Precios", to: "/pricing" },
+      { label: "Constancia de ingresos", to: "/income-proof" },
     ],
   };
 }
@@ -1552,6 +1628,81 @@ export function getHireAbroadPageEs(): FeaturePageContent {
       { label: "Kit de contratista en EE. UU. (W-9)", to: "/packets/us-contractor" },
       { label: "Cobro por WhatsApp", to: "/cobro" },
       { label: "Casillero temporada 1099", to: "/1099-season" },
+      { label: "Constancia de ingresos", to: "/income-proof" },
+    ],
+  };
+}
+
+export function getProofOfIncomePageEs(): FeaturePageContent {
+  return {
+    slug: "proof-of-income",
+    xDefault: "es",
+    seoTitle: "Prueba de ingresos sin recibos de nómina | Docracy",
+    seoDescription:
+      "¿Te piden prueba de ingresos y no tienes recibos de nómina? Comparte un paquete con contratos y cobros. No es una carta certificada ni un W-2. Plan de $10/mes.",
+    heroHeadline: "Prueba de ingresos cuando no hay recibos de nómina.",
+    heroSubheadline:
+      "El arrendador, el banco o el contador piden una carta. PayPal y Mercado Pago no la imprimen. Docracy junta el año que ya firmaste y cobraste en una URL que puedes compartir.",
+    problem:
+      "Si cobras por PayPal, Mercado Pago o cobro, no te dan W-2 ni stub. Una captura de la app no pasa una solicitud de renta. Una 'carta de ingresos' que escribiste tú se ve exactamente así.",
+    solution:
+      "La constancia no es un tipo de documento nuevo. Son los archivos completados que ya están en tu bóveda de pago — títulos, fechas, nombres y montos que tú escribiste — en un enlace noindex. El español es el idioma principal: /es/constancia. Inglés: /income-proof.",
+    features: [
+      {
+        title: "Una URL que puede abrir un desconocido",
+        body: "Año, tu nombre como quieres que aparezca, cada archivo completado, montos que anotaste. No un ZIP en el chat.",
+      },
+      {
+        title: "Nombres, no correos",
+        body: "La página pública muestra contrapartes solo por nombre. Tu correo de cuenta no aparece.",
+      },
+      {
+        title: "Honesta sobre lo que no es",
+        body: "No es un W-2, no es una carta del banco, no es un certificado de empleador, no es declaración ante el SAT ni el IRS.",
+      },
+      {
+        title: "Sale de cobros y contratos firmados",
+        body: "Los cobros por WhatsApp y los acuerdos firmados del mismo año calendario van en una sola lista.",
+      },
+    ],
+    useCases: [
+      "Freelancers en México o Colombia que rentan un departamento",
+      "Contratistas que necesitan un paquete para el contador sin W-2",
+      "Quien cobra por PayPal o Mercado Pago y le piden prueba de ingresos",
+    ],
+    faqs: [
+      {
+        question: "¿Esto es una carta certificada de ingresos?",
+        answer:
+          "No. Es un índice con fecha de documentos que ya completaste en Docracy. Un arrendador o un banco aún puede pedir un estado de cuenta. No sellamos, no notariamos ni verificamos identidad.",
+      },
+      {
+        question: "¿Leen mi cuenta de PayPal o Mercado Pago?",
+        answer:
+          "No. Los totales son los montos que tú escribiste al enviar un cobro o pegar un enlace de pago. No nos conectamos a ningún banco.",
+      },
+      {
+        question: "¿Dónde abro el paquete?",
+        answer:
+          "https://docracy.io/es/constancia — inglés: /income-proof. Esta página de búsqueda es /es/prueba-de-ingresos.",
+      },
+      {
+        question: "¿Google indexa el enlace compartido?",
+        answer: "No. Las URLs del paquete son noindex. Las páginas de marketing sí se indexan para que te encuentren.",
+      },
+      {
+        question: "¿Es gratis?",
+        answer:
+          "Firmar sigue gratis. El paquete necesita la bóveda de pago para que los archivos existan cuando te los pidan. $10/mes.",
+      },
+    ],
+    ctaLabel: "Abrir la constancia de ingresos",
+    ctaTo: "/income-proof",
+    relatedLinks: [
+      { label: "Herramienta de constancia", to: "/income-proof" },
+      { label: "Cobro por WhatsApp", to: "/cobro" },
+      { label: "Casillero temporada 1099", to: "/1099-season" },
+      { label: "Kit contratista LATAM", to: "/packets/latam-contractor" },
     ],
   };
 }
@@ -1562,6 +1713,7 @@ const ES_FEATURE_GETTERS: Record<string, () => FeaturePageContent> = {
   "whatsapp-invoice": getWhatsappInvoicePageEs,
   "1099-contractor-records": getContractorRecordsPageEs,
   "hire-contractor-abroad": getHireAbroadPageEs,
+  "proof-of-income": getProofOfIncomePageEs,
 };
 
 /** Locale-aware feature page content — ES routes use Spanish copy. */

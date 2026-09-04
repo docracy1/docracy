@@ -22,6 +22,15 @@
 /es/contratista-mexico    /es/contratar-en-el-extranjero  301
 /es/w-8ben                /es/kit-contratista-latam  301
 
+# Constancia / proof-of-income — Spanish is the lead language (x-default = ES).
+/constancia                 /es/constancia  301
+/constancia-de-ingresos     /es/constancia  301
+/carta-de-ingresos          /es/prueba-de-ingresos  301
+/es/carta-de-ingresos       /es/prueba-de-ingresos  301
+/proof-of-income-letter     /proof-of-income  301
+/freelancer-income-proof    /proof-of-income  301
+/pay-stubs-alternative      /income-proof  301
+
 # Canonicalize A-vs-B twins (seoPages.ts only ships one direction; reverse URLs 301 here).
 /docusign-vs-pandadoc  /pandadoc-vs-docusign  301
 /hellosign-vs-pandadoc  /pandadoc-vs-hellosign  301

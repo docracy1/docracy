@@ -201,6 +201,8 @@ export default function TaxYear() {
         <p style={{ marginTop: 24, fontSize: 14 }}>
           <Link to={localizePath("/cobro", locale)}>{t("footer.cobro")}</Link>
           {" · "}
+          <Link to={localizePath("/income-proof", locale)}>{t("footer.constancia")}</Link>
+          {" · "}
           <Link to={localizePath("/packets/latam-contractor", locale)}>{t("footer.latamPacket")}</Link>
           {" · "}
           <Link to={localizePath("/packets/us-contractor", locale)}>{t("footer.packet")}</Link>

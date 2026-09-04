@@ -89,6 +89,7 @@ export default function Footer() {
     { label: t("footer.latamPacket"), to: localizePath("/packets/latam-contractor", locale) },
     { label: t("footer.cobro"), to: localizePath("/cobro", locale) },
     { label: t("footer.taxYear"), to: localizePath("/1099-season", locale) },
+    { label: t("footer.constancia"), to: localizePath("/income-proof", locale) },
     { label: t("footer.enterprise"), to: localizePath("/enterprise", locale) },
     { label: t("nav.blog"), to: "/blog" },
     { label: t("footer.docs"), to: localizePath("/docs", locale) },

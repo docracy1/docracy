@@ -1032,6 +1032,10 @@ export default function Dashboard() {
               <NavIcon name="completed" />
               <span>{t("dash.taxYear")}</span>
             </Link>
+            <Link to={localizePath("/income-proof", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
+              <NavIcon name="completed" />
+              <span>{t("dash.constancia")}</span>
+            </Link>
           </>
         )}
         <button

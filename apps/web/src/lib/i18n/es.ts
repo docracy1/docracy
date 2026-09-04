@@ -362,9 +362,12 @@ const es: Messages = {
   "landing.faq8.q": "¿Cómo contrato a alguien en LATAM?",
   "landing.faq8.a":
     "Usa el kit LATAM: NDA y acuerdo gratis, luego cobro de pago. No hay W-8BEN. Empieza en /es/kit-contratista-latam. Personas de EE. UU. usan el kit W-9.",
+  "landing.faq9.q": "¿Cómo pruebo ingresos si no tengo recibos de nómina?",
+  "landing.faq9.a":
+    "En el plan de pago armas una constancia del año — contratos y cobros — en /es/constancia (inglés: /income-proof). No es un W-2, ni una carta del banco, ni una carta certificada. Los montos son los que tú escribiste.",
   "landing.outcomesTitle": "Después de firmar — conserva el archivo y cobra",
   "landing.outcomesSub":
-    "Firmar sigue gratis. El plan de pago es el resultado: tu checkout por WhatsApp, un CSV para temporada 1099 y un kit para quien pagas en el extranjero.",
+    "Firmar sigue gratis. El plan de pago es el resultado: tu checkout por WhatsApp, un CSV para temporada 1099, una constancia de ingresos y un kit para quien pagas en el extranjero.",
   "landing.out1.title": "Cobra por WhatsApp",
   "landing.out1.body":
     "Envía el PDF y tu enlace de PayPal o Mercado Pago — sin firma. Docracy nunca cobra el pago.",
@@ -377,6 +380,10 @@ const es: Messages = {
   "landing.out3.body":
     "El NDA y el acuerdo de contratista son gratis. Luego cobro. No inventamos un W-8BEN.",
   "landing.out3.link": "Abrir el kit LATAM",
+  "landing.out4.title": "Constancia de ingresos",
+  "landing.out4.body":
+    "Comparte un año de contratos y cobros cuando te pidan prueba de ingresos. No es un W-2 ni una carta del banco.",
+  "landing.out4.link": "Abrir la constancia",
   "landing.faqTitle": "Preguntas frecuentes",
   "landing.feat1.body":
     "Sube un PDF o pega un enlace de Google Docs, agrega destinatarios y envíalo a firmar en segundos — sin configuración complicada.",
@@ -2453,13 +2460,18 @@ const es: Messages = {
   "footer.taxYear": "Casillero temporada 1099",
   "footer.cobro": "Cobra por WhatsApp",
   "footer.latamPacket": "Kit contratista LATAM",
+  "footer.constancia": "Constancia de ingresos",
+  "footer.proofOfIncome": "Prueba de ingresos (SEO)",
   "nav.mega.feature.taxYear.title": "Casillero temporada 1099",
   "nav.mega.feature.taxYear.desc": "Todos los archivos completados del año fiscal, más un CSV para tu contador. Plan de pago.",
+  "nav.mega.feature.constancia.title": "Constancia de ingresos",
+  "nav.mega.feature.constancia.desc": "Comparte un año de contratos y cobros. No es un W-2. Plan de pago.",
   "nav.mega.feature.cobro.title": "Cobra por WhatsApp",
   "nav.mega.feature.cobro.desc": "Envía un archivo y tu enlace de PayPal o Mercado Pago — sin firma.",
   "nav.mega.feature.latamPacket.title": "Contrata en LATAM",
   "nav.mega.feature.latamPacket.desc": "NDA, acuerdo de contratista y luego cobro. Para alguien a quien pagas en el extranjero.",
   "plan.taxYearLocker": "Casillero temporada 1099 (CSV para tu contador)",
+  "plan.constancia": "Constancia de ingresos (paquete para compartir)",
   "plan.cobro": "Cobro por WhatsApp — archivo + pago, sin firma",
   "plan.latamPacket": "Kit EE. UU. ↔ LATAM (NDA, acuerdo, cobro)",
   "docs.taxYear.title": "Casillero temporada 1099 (pago)",
@@ -2471,10 +2483,14 @@ const es: Messages = {
   "docs.latamPacket.title": "Kit EE. UU. ↔ contratista LATAM",
   "docs.latamPacket.body":
     "Asistente sobre plantillas gratis existentes: NDA mutuo, acuerdo de contratista independiente y luego cobro de pago para cobrar en el extranjero. No hay W-8BEN en el catálogo — no inventamos formularios del IRS. Personas de EE. UU. siguen el kit de EE. UU. (NDA, W-9, acuerdo). Abre /es/kit-contratista-latam.",
+  "docs.constancia.title": "Constancia de ingresos (pago)",
+  "docs.constancia.body":
+    "Las cuentas de pago abren /es/constancia (inglés: /income-proof), escriben el nombre que quieren mostrar y copian una URL HMAC de ese año calendario. La página pública lista títulos, fechas, nombres de contraparte (sin correos), montos que tú escribiste y enlaces a cada copia firmada. Totales por moneda. No es un W-2, ni carta bancaria, ni certificado de empleador, ni declaración ante el SAT o el IRS. El español es el idioma principal.",
   "signed.cobroTitle": "Paga este archivo",
   "signed.cobroUntitled": "Solicitud de pago",
   "dash.taxYear": "Casillero 1099",
   "dash.cobro": "Enviar cobro",
+  "dash.constancia": "Constancia",
   "taxYear.seoTitle": "Casillero temporada 1099 — W-9s, contratos y CSV para tu contador | Docracy",
   "taxYear.seoDescription":
     "Conserva cada archivo de contratista del año fiscal y descarga un CSV para tu contador. No es presentación ante el IRS. Plan de $10/mes — firmar sigue gratis.",
@@ -2592,6 +2608,67 @@ const es: Messages = {
   "latamPacket.howTo2": "Envía el acuerdo de contratista independiente (plantilla gratis).",
   "latamPacket.howTo3": "En el plan de pago, envía cobro con tu Mercado Pago o PayPal — sin otra firma.",
   "latamPacket.howTo4": "Si es persona de EE. UU., usa el kit W-9 del IRS. No publicamos un W-8BEN.",
+  "constancia.seoTitle": "Constancia de ingresos para freelancers — Docracy",
+  "constancia.seoDescription":
+    "Arma una constancia de ingresos con cobros y contratos firmados. Compártela con el arrendador o el banco. No es un W-2 ni carta bancaria. Plan de $10/mes.",
+  "constancia.kicker": "Pago · constancia",
+  "constancia.heroTitle": "La constancia que sí puedes reenviar",
+  "constancia.heroSub":
+    "Si cobras por PayPal o Mercado Pago, nadie te imprime un recibo de nómina. Junta el año de contratos y cobros en una sola URL. Esta página en español es la principal.",
+  "constancia.ctaOpen": "Abrir el paquete de este año",
+  "constancia.ctaPaid": "Desbloquear la constancia — $10/mes",
+  "constancia.ctaLogin": "Inicia sesión para abrir la constancia",
+  "constancia.problemTitle": "El problema",
+  "constancia.problem":
+    "El arrendador, el banco o el contador te piden prueba de ingresos. Tienes PDFs en el chat y capturas de PayPal. Nada de eso se ve como un registro que un desconocido acepte.",
+  "constancia.solutionTitle": "Qué es esto",
+  "constancia.solution":
+    "Un índice para compartir de documentos que ya completaste en Docracy ese año: títulos, fechas, nombres que tú escribiste, montos que tú escribiste, enlaces a cada página firmada. No es un W-2, no es una carta del banco, no es un certificado de empleador y no es una declaración ante el SAT ni el IRS.",
+  "constancia.feat1": "Una URL HMAC por año calendario — quien tenga el enlace puede abrirla.",
+  "constancia.feat2": "Tu nombre como quieres que aparezca, no el correo de la cuenta.",
+  "constancia.feat3": "En la página pública, solo nombres de contraparte. Totales por moneda con los montos que anotaste.",
+  "constancia.feat4": "Firmar sigue gratis. El plan de pago es cómo los archivos existen cuando te los piden.",
+  "constancia.toolTitle": "Paquete {{year}}",
+  "constancia.toolSub": "Escribe el nombre de la portada y copia el enlace. La fuente de verdad sigue siendo cada PDF.",
+  "constancia.yearLabel": "Año",
+  "constancia.nameLabel": "Nombre en la constancia",
+  "constancia.namePlaceholder": "Ana Ruiz",
+  "constancia.saveName": "Guardar nombre",
+  "constancia.copyLink": "Copiar enlace del paquete",
+  "constancia.nameRequired": "Guarda un nombre antes de copiar. Así apareces tú — no tu correo.",
+  "constancia.totalsLabel": "Montos que escribiste:",
+  "constancia.count": "{{n}} archivo(s) completado(s)",
+  "constancia.empty": "Aún no hay nada completado en este año. Envía un cobro o un contrato primero.",
+  "constancia.faq.1.q": "¿Esto es una carta certificada de ingresos?",
+  "constancia.faq.1.a":
+    "No. Es una lista con fecha de archivos que ya completaste aquí. Un arrendador o un banco aún puede pedir un estado de cuenta. No notariamos ni verificamos identidad.",
+  "constancia.faq.2.q": "¿Se conectan a PayPal o Mercado Pago?",
+  "constancia.faq.2.a": "No. Los totales son los montos que tú escribiste al enviar un cobro o pegar un enlace de pago.",
+  "constancia.faq.3.q": "¿Sale mi correo en la página pública?",
+  "constancia.faq.3.a": "No. La portada muestra el nombre que escribes. Las contrapartes aparecen solo por nombre.",
+  "constancia.faq.4.q": "¿La constancia es gratis?",
+  "constancia.faq.4.a": "No. En el plan gratis los PDF se borran a los 9 días. El plan de $10/mes conserva los archivos y desbloquea este enlace.",
+  "constancia.faq.5.q": "¿Por qué el español es el idioma principal?",
+  "constancia.faq.5.a":
+    "Este producto es para quien pide una constancia, sobre todo en EE. UU. y LATAM. /es/constancia es x-default. El inglés está en /income-proof.",
+  "constancia.howToName": "Cómo compartir una constancia de ingresos",
+  "constancia.howTo1": "Completa cobros y contratos en Docracy durante el año (el plan de pago conserva los PDF).",
+  "constancia.howTo2": "Abre /es/constancia y elige el año.",
+  "constancia.howTo3": "Escribe el nombre que quieres mostrar y copia la URL del paquete.",
+  "constancia.howTo4": "Envía el enlace. Di la verdad: es tu registro en Docracy, no un W-2 ni una carta del banco.",
+  "constanciaShare.kicker": "Constancia",
+  "constanciaShare.title": "Constancia · {{year}}",
+  "constanciaShare.namedTitle": "{{name}} · {{year}}",
+  "constanciaShare.disclaimer":
+    "Esto es una lista de documentos completados en Docracy. No es un W-2, no es una carta del banco, no es un certificado de empleador y no es una declaración fiscal.",
+  "constanciaShare.totalsTitle": "Montos anotados",
+  "constanciaShare.totalCount": "{{n}} archivo(s)",
+  "constanciaShare.empty": "No hay archivos completados en este año.",
+  "constanciaShare.kindCobro": "cobro",
+  "constanciaShare.kindSign": "firmado",
+  "constanciaShare.copyLink": "Copiar esta página",
+  "constanciaShare.forwardHint": "¿Necesitas la tuya?",
+  "constanciaShare.sendYours": "Abrir constancia en Docracy",
 };
 
 export default es;

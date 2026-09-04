@@ -85,3 +85,30 @@ export async function verifyToken(
   const valid = await crypto.subtle.verify("HMAC", key, sigBytes, new TextEncoder().encode(message));
   return valid ? parsed : null;
 }
+
+/** Prefix so constancia tokens never collide with document IDs (UUIDs, no dots). HMAC message is
+ *  `c-{workspaceId}:{year}` via signToken — year rides in the order slot. */
+const CONSTANCIA_DOC_PREFIX = "c-";
+
+export async function signConstanciaToken(workspaceId: string, year: number, secret: string): Promise<string> {
+  return signToken(`${CONSTANCIA_DOC_PREFIX}${workspaceId}`, year, secret);
+}
+
+export interface VerifiedConstanciaToken {
+  workspaceId: string;
+  year: number;
+}
+
+export async function verifyConstanciaToken(
+  token: string,
+  secret: string
+): Promise<VerifiedConstanciaToken | null> {
+  const verified = await verifyToken(token, secret);
+  if (!verified) return null;
+  if (!verified.docId.startsWith(CONSTANCIA_DOC_PREFIX)) return null;
+  const workspaceId = verified.docId.slice(CONSTANCIA_DOC_PREFIX.length);
+  if (!workspaceId) return null;
+  const year = verified.order;
+  if (!Number.isInteger(year) || year < 2000 || year > 2100) return null;
+  return { workspaceId, year };
+}

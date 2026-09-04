@@ -57,6 +57,7 @@ const TRACKED_ROUTES = new Set([
   "/es/factura-whatsapp",
   "/es/registros-1099",
   "/es/contratar-en-el-extranjero",
+  "/es/prueba-de-ingresos",
   "/es/alternativa-a-eversign",
   "/es/alternativa-a-docusign",
   "/es/alternativa-a-hellosign",
@@ -72,6 +73,8 @@ const TRACKED_ROUTES = new Set([
   "/es/kit-contratista",
   "/packets/latam-contractor",
   "/es/kit-contratista-latam",
+  "/income-proof",
+  "/es/constancia",
   // Every FeaturePage/AlternativePage slug is a bare "/<slug>" route (see main.tsx) — derived
   // here so a new marketingPages.ts entry is tracked automatically, with no second file to edit.
   ...FEATURE_PAGES.map((p) => `/${p.slug}`),

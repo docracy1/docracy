@@ -224,6 +224,8 @@ export default function Cobro() {
         <p style={{ marginTop: 24, fontSize: 14 }}>
           <Link to={localizePath("/1099-season", locale)}>{t("footer.taxYear")}</Link>
           {" · "}
+          <Link to={localizePath("/income-proof", locale)}>{t("footer.constancia")}</Link>
+          {" · "}
           <Link to={localizePath("/packets/latam-contractor", locale)}>{t("footer.latamPacket")}</Link>
           {" · "}
           <Link to="/whatsapp-signing">{t("footer.whatsappSigning")}</Link>
