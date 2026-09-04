@@ -363,8 +363,4 @@ export interface Env {
    *  from the signing-invite template — see lib/whatsapp.ts's sendWhatsAppPin). Defaults to
    *  "signing_pin" when unset. */
   WHATSAPP_PIN_TEMPLATE_NAME?: string;
-  /** Name of the pre-approved WhatsApp template sent after the chain completes (signed copy +
-   *  pay page URL as named variable `receipt_link`). Defaults to "signing_completed" when unset.
-   *  Submit in Meta Business Manager as UTILITY — this codebase cannot create the template. */
-  WHATSAPP_COMPLETED_TEMPLATE_NAME?: string;
 }

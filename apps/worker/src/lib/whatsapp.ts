@@ -128,14 +128,12 @@ export function signedPageUrl(appUrl: string, token: string, locale: Locale = "e
 
 /**
  * After the chain completes, text each WhatsApp signer the shareable signed-copy (and pay) page.
- * Same channel they already used for the invite — LATAM collection happens in WhatsApp, not Gmail.
- * Does not consume extra monthly quota: this is a follow-up on an already-counted invite, not a
- * new outbound campaign. Never throws.
+ * Reuses the live invite template (`WHATSAPP_TEMPLATE_NAME` / `signing_invite`, named variable
+ * `signing_link`) — same approved Meta template as sendWhatsAppSigningLink, with the /signed URL
+ * in the link slot. No second template to submit. The invite copy still reads as a link to open;
+ * the page itself is the completed PDF + pay CTA.
  *
- * Template (submit in Meta Business Manager as UTILITY, named variable `receipt_link`):
- *   EN: "Everyone has signed. Open the signed copy — and pay if the sender asked: {{receipt_link}}"
- *   ES: "Todos firmaron. Abre la copia firmada — y paga si te lo pidieron: {{receipt_link}}"
- *
+ * Does not consume extra monthly quota: follow-up on an already-counted invite. Never throws.
  * biz_opaque_callback_data uses a ":done" suffix so the inbound webhook ignores these receipts
  * the same way it ignores PIN messages (parts.length !== 2).
  */
@@ -145,7 +143,7 @@ export async function sendWhatsAppCompletedReceipts(env: Env, doc: DocState): Pr
   const locale: Locale = doc.locale ?? "en";
   const statusToken = await signToken(doc.docId, 0, env.TOKEN_SECRET);
   const receiptUrl = signedPageUrl(env.PUBLIC_APP_URL, statusToken, locale);
-  const templateName = env.WHATSAPP_COMPLETED_TEMPLATE_NAME || "signing_completed";
+  const templateName = env.WHATSAPP_TEMPLATE_NAME || "signing_invite";
   const lang = whatsappTemplateLang(env, doc);
 
   for (const signer of doc.signers) {
@@ -157,7 +155,7 @@ export async function sendWhatsAppCompletedReceipts(env: Env, doc: DocState): Pr
       to,
       templateName,
       lang,
-      "receipt_link",
+      "signing_link",
       receiptUrl,
       `${doc.docId}:${signer.order}:done`
     );
