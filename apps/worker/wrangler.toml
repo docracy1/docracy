@@ -5,7 +5,7 @@ compatibility_flags = ["nodejs_compat"]
 
 # Daily reminder/cleanup/health (~08:22 UTC) plus Monday SEO blog publish and 10 FreeTemplate-quality
 # Marketplace templates (docracy.com taxonomy) inside that handler, and hourly onboarding/completion
-# nudges + SPA smoke (Sign in / Start free), offset to :07.
+# nudges + SPA smoke (Sign in / Start free) + empty weekly-template catch-up, offset to :07.
 # (Account cron-trigger limit — avoid a third schedule; SPA smoke rides the hourly cron.)
 # Deliberately NOT on the hour/half-hour: "0 * * * *" is the single most common cron schedule in
 # existence, and the SPA smoke check used to fire a genuine (retry-confirmed) 522 within ~1 second
