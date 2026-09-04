@@ -161,3 +161,27 @@ export async function sendWhatsAppCompletedReceipts(env: Env, doc: DocState): Pr
     );
   }
 }
+
+/**
+ * Paid cobro: send the shareable pay+file page over the live `signing_invite` template
+ * (`signing_link` slot). Consumes monthly quota — this is a new outbound, not a completer
+ * follow-up. Callback suffix `:cobro` so the webhook ignores receipts (parts.length !== 2).
+ * Never throws.
+ */
+export async function sendWhatsAppCobro(env: Env, doc: DocState, pageUrl: string): Promise<void> {
+  const phone = doc.cobroRecipient?.whatsappPhone;
+  if (!phone) return;
+  const to = normalizeE164(phone);
+  if (!to) return;
+
+  const templateName = env.WHATSAPP_TEMPLATE_NAME || "signing_invite";
+  await sendWhatsAppTemplate(
+    env,
+    to,
+    templateName,
+    whatsappTemplateLang(env, doc),
+    "signing_link",
+    pageUrl,
+    `${doc.docId}:0:cobro`
+  );
+}

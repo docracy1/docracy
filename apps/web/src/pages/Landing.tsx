@@ -199,12 +199,27 @@ const CORE_FEATURES: Array<{
   { icon: "chainLink", titleKey: "landing.feat10.title", bodyKey: "landing.feat10.body", to: "/blockchain-timestamp", linkKey: "landing.feat10.link" },
 ];
 
+const AFTER_SIGN_OUTCOMES: Array<{
+  icon: "send" | "badge" | "users";
+  titleKey: string;
+  bodyKey: string;
+  to: string;
+  linkKey: string;
+}> = [
+  { icon: "send", titleKey: "landing.out1.title", bodyKey: "landing.out1.body", to: "/cobro", linkKey: "landing.out1.link" },
+  { icon: "badge", titleKey: "landing.out2.title", bodyKey: "landing.out2.body", to: "/1099-season", linkKey: "landing.out2.link" },
+  { icon: "users", titleKey: "landing.out3.title", bodyKey: "landing.out3.body", to: "/packets/latam-contractor", linkKey: "landing.out3.link" },
+];
+
 const FAQ_KEYS: Array<{ qKey: string; aKey: string }> = [
   { qKey: "landing.faq1.q", aKey: "landing.faq1.a" },
   { qKey: "landing.faq2.q", aKey: "landing.faq2.a" },
   { qKey: "landing.faq3.q", aKey: "landing.faq3.a" },
   { qKey: "landing.faq4.q", aKey: "landing.faq4.a" },
   { qKey: "landing.faq5.q", aKey: "landing.faq5.a" },
+  { qKey: "landing.faq6.q", aKey: "landing.faq6.a" },
+  { qKey: "landing.faq7.q", aKey: "landing.faq7.a" },
+  { qKey: "landing.faq8.q", aKey: "landing.faq8.a" },
 ];
 
 // Subset of TESTIMONIALS with a real, recognizable company identity — shown as a compact logo
@@ -593,6 +608,27 @@ export default function Landing() {
           later card down a row, out of alignment), so this sits right after the features section
           that Feature #1 leads instead — same visual position, without wrecking the grid. */}
       <FirstDocumentPrompt source="features" />
+
+      <div className="core-features-band" id="after-they-sign">
+        <div className="core-features-inner">
+          <h2 style={{ fontSize: 26, marginBottom: 8, textAlign: "center" }}>{t("landing.outcomesTitle")}</h2>
+          <p style={{ textAlign: "center", maxWidth: 560, margin: "0 auto" }}>{t("landing.outcomesSub")}</p>
+          <div className="core-features-grid">
+            {AFTER_SIGN_OUTCOMES.map((f) => (
+              <div key={f.titleKey} className="core-feature-card">
+                <div className="core-feature-icon">
+                  <FeatureIcon name={f.icon} />
+                </div>
+                <h3>{t(f.titleKey)}</h3>
+                <p>{t(f.bodyKey)}</p>
+                <Link to={localizePath(f.to, locale)} style={{ fontSize: 13, fontWeight: 600 }}>
+                  {t(f.linkKey)} →
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
       <IntegrationsBand learnMoreTo="/mcp" />
 

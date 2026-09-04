@@ -214,6 +214,17 @@ export interface DocState {
   paymentRequest?: PaymentRequest;
   /** Set once the "this signed file is about to be deleted" nag has been emailed to the preparer. */
   archiveNagSentAt?: string | null;
+  /**
+   * Paid-only pay+file send with no signature required (WhatsApp cobro). Always read via
+   * `doc.kind` — absent on every signing document created before this field existed.
+   */
+  kind?: "cobro";
+  /** Recipient of a cobro send — not a signer. Always read via `doc.cobroRecipient`. */
+  cobroRecipient?: { name: string; email?: string; whatsappPhone?: string };
+  /** Days between cobro "pay again" pings. Default 30. Always read via `doc.cobroRemindEveryDays`. */
+  cobroRemindEveryDays?: number;
+  cobroNextRemindAt?: string;
+  cobroLastRemindAt?: string;
 }
 
 /** Display-only payment ask attached to a document. Amount/currency are labels; `url` is the

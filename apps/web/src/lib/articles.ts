@@ -2812,6 +2812,13 @@ export const ARTICLES: ArticlePost[] = [
       ),
       link("Open the free US contractor kit", "/packets/us-contractor"),
       link("Start from the mutual NDA template", "/free-templates/mutual-nda"),
+      h2("Hire abroad: NDA, agreement, WhatsApp cobro"),
+      p(
+        "If the person is not a US person, skip the W-9 kit. Docracy does not invent a W-8BEN. The LATAM corridor is mutual NDA, independent contractor agreement, then Paid cobro — your Mercado Pago or PayPal link on WhatsApp, no extra signature. January's 1099 locker lists those completed files plus a CSV for a CPA; it still does not e-file."
+      ),
+      link("Open the LATAM contractor kit", "/packets/latam-contractor"),
+      link("Get paid on WhatsApp (no signature)", "/cobro"),
+      link("1099 season locker", "/1099-season"),
       h2("How to tell Free and Paid apart"),
       p(
         "The pricing table is the source of truth. The contractor kit is free. Get-paid links are Paid — not because they cost extra to run, but because that is how Docracy is paid: $10/month, no percentage of your checkout. What Paid also keeps is the file after day nine, longer expiry, templates you reuse, bulk send, and team tools. If a comparison chart still says a free account \"keeps history,\" that line is wrong: history of the send is not the same as keeping the signed PDF."

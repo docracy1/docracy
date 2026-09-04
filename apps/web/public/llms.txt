@@ -14,6 +14,15 @@
 - [Pricing](https://docracy.io/pricing): Free vs Paid vs Enterprise feature comparison (Paid includes Dropbox, OneDrive, and Box auto-upload connectors).
 - [Documentation](https://docracy.io/docs): Free vs Paid vs Enterprise overview (including bulk send, embed, contacts, Dropbox/OneDrive/Box), plus MCP/Zapier/API details.
 
+## After the signature (Paid — $10/month)
+
+Signing stays free. Paid is the outcome after they sign: keep the file, get paid, export a list for tax season. Docracy never takes a cut of the payment.
+
+- [Get paid on WhatsApp](https://docracy.io/cobro) (Spanish: https://docracy.io/es/cobro): PDF + your PayPal / Stripe / Mercado Pago link, no signature required. Keyword landing: https://docracy.io/whatsapp-invoice (Spanish: https://docracy.io/es/factura-whatsapp).
+- [1099 season locker](https://docracy.io/1099-season) (Spanish: https://docracy.io/es/temporada-1099): calendar-year list + CPA CSV. Not IRS e-file; no TIN OCR. Keyword landing: https://docracy.io/1099-contractor-records (Spanish: https://docracy.io/es/registros-1099).
+- [US contractor kit](https://docracy.io/packets/us-contractor) (Spanish: https://docracy.io/es/kit-contratista): free NDA, IRS W-9, independent contractor agreement.
+- [LATAM contractor kit](https://docracy.io/packets/latam-contractor) (Spanish: https://docracy.io/es/kit-contratista-latam): free NDA + contractor agreement, then Paid cobro. Not a W-8BEN. Keyword landing: https://docracy.io/hire-contractor-abroad (Spanish: https://docracy.io/es/contratar-en-el-extranjero).
+
 ## AI & automation
 
 - [AI Auto-Detect](https://docracy.io/ai): Product landing for AI field placement, plain-English explainer, risk highlighter, contract generator, open templates, and MCP overview.

@@ -9,6 +9,7 @@ import {
   sendMagicLink,
   sendPinEmail,
   sendArchiveNag,
+  sendCobroNotice,
 } from "./email";
 import { makeMockEnv } from "../test/mockEnv";
 import type { DocState } from "@docracy/shared";
@@ -386,5 +387,31 @@ describe("sendFeedback", () => {
     const logged = capture.logged();
     expect(logged).not.toContain("<script>alert(1)</script>");
     expect(logged).toContain("line one<br>&lt;script&gt;alert(1)&lt;/script&gt;");
+  });
+});
+
+describe("sendCobroNotice", () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  it("escapes the recipient name and does not say everyone signed", async () => {
+    const { env } = makeMockEnv();
+    const capture = captureDevEmailLog();
+    const doc: DocState = {
+      ...makeDoc("<img src=x>"),
+      kind: "cobro",
+      title: "Invoice <b>12</b>",
+      cobroRecipient: { name: "<img src=x>", email: "ana@x.com" },
+      paymentRequest: { amount: "150", currency: "MXN", url: "https://paypal.me/acme" },
+      signers: [],
+      status: "completed",
+      completedAt: new Date().toISOString(),
+    };
+    await sendCobroNotice(env, "ana@x.com", doc, "https://docracy.io/signed/tok", false);
+    const logged = capture.logged();
+    expect(logged).not.toContain("<img src=x>");
+    expect(logged).toContain("&lt;img src=x&gt;");
+    expect(logged).not.toContain("Everyone has signed");
+    expect(logged).toContain("No signature needed");
+    expect(logged).toContain("Pay 150 MXN");
   });
 });

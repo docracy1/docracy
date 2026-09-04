@@ -590,6 +590,30 @@ const routes = [
     alternates: { en: "/client-contracts", es: "/es/contratos-con-clientes" },
   },
   {
+    urlPath: "/es/factura-whatsapp",
+    outFile: "es/factura-whatsapp.html",
+    title: getFeaturePageContent("whatsapp-invoice", "es").seoTitle,
+    description: getFeaturePageContent("whatsapp-invoice", "es").seoDescription,
+    locale: "es",
+    alternates: { en: "/whatsapp-invoice", es: "/es/factura-whatsapp" },
+  },
+  {
+    urlPath: "/es/registros-1099",
+    outFile: "es/registros-1099.html",
+    title: getFeaturePageContent("1099-contractor-records", "es").seoTitle,
+    description: getFeaturePageContent("1099-contractor-records", "es").seoDescription,
+    locale: "es",
+    alternates: { en: "/1099-contractor-records", es: "/es/registros-1099" },
+  },
+  {
+    urlPath: "/es/contratar-en-el-extranjero",
+    outFile: "es/contratar-en-el-extranjero.html",
+    title: getFeaturePageContent("hire-contractor-abroad", "es").seoTitle,
+    description: getFeaturePageContent("hire-contractor-abroad", "es").seoDescription,
+    locale: "es",
+    alternates: { en: "/hire-contractor-abroad", es: "/es/contratar-en-el-extranjero" },
+  },
+  {
     urlPath: "/docs",
     outFile: "docs.html",
     title: "Docracy Documentation — Setup, API & Features",
@@ -819,6 +843,60 @@ const routes = [
     alternates: { en: "/packets/us-contractor", es: "/es/kit-contratista" },
   },
   {
+    urlPath: "/packets/latam-contractor",
+    outFile: "packets/latam-contractor.html",
+    title: "Hire a LATAM Contractor — NDA, Agreement & WhatsApp Pay | Docracy",
+    description:
+      "Onboard a contractor you pay abroad: free mutual NDA and contractor agreement, then Paid cobro via PayPal or Mercado Pago. Not a W-8BEN.",
+    locale: "en",
+    alternates: { en: "/packets/latam-contractor", es: "/es/kit-contratista-latam" },
+  },
+  {
+    urlPath: "/es/kit-contratista-latam",
+    outFile: "es/kit-contratista-latam.html",
+    title: "Contrata en LATAM — NDA, acuerdo y cobro por WhatsApp | Docracy",
+    description:
+      "Incorpora a un contratista que pagas en el extranjero: NDA y acuerdo gratis, luego cobro con PayPal o Mercado Pago. No es un W-8BEN.",
+    locale: "es",
+    alternates: { en: "/packets/latam-contractor", es: "/es/kit-contratista-latam" },
+  },
+  {
+    urlPath: "/1099-season",
+    outFile: "1099-season.html",
+    title: "1099 Season Locker — Signed W-9s, Contracts & CPA CSV | Docracy",
+    description:
+      "Keep every completed contractor file from the tax year and download a CSV for your CPA. Not IRS e-file. Paid $10/mo — signing stays free.",
+    locale: "en",
+    alternates: { en: "/1099-season", es: "/es/temporada-1099" },
+  },
+  {
+    urlPath: "/es/temporada-1099",
+    outFile: "es/temporada-1099.html",
+    title: "Casillero temporada 1099 — W-9s, contratos y CSV para tu contador | Docracy",
+    description:
+      "Conserva cada archivo de contratista del año fiscal y descarga un CSV para tu contador. No es presentación ante el IRS. Plan de $10/mes.",
+    locale: "es",
+    alternates: { en: "/1099-season", es: "/es/temporada-1099" },
+  },
+  {
+    urlPath: "/cobro",
+    outFile: "cobro.html",
+    title: "Get Paid on WhatsApp — No Signature Required | Docracy",
+    description:
+      "Send a PDF and your PayPal, Stripe, or Mercado Pago link on WhatsApp. No signature. Docracy never takes the money. Paid $10/mo.",
+    locale: "en",
+    alternates: { en: "/cobro", es: "/es/cobro" },
+  },
+  {
+    urlPath: "/es/cobro",
+    outFile: "es/cobro.html",
+    title: "Cobra por WhatsApp — sin firma | Docracy",
+    description:
+      "Envía un PDF y tu enlace de PayPal, Stripe o Mercado Pago por WhatsApp. Sin firma. Docracy nunca cobra el dinero. Plan de $10/mes.",
+    locale: "es",
+    alternates: { en: "/cobro", es: "/es/cobro" },
+  },
+  {
     urlPath: "/dpa",
     outFile: "dpa.html",
     title: "Data Processing Agreement (DPA) — Docracy",
@@ -893,6 +971,9 @@ const routes = [
     const bilingual = {
       "nda-signing": { en: "/nda-signing", es: "/es/firma-de-nda" },
       "client-contracts": { en: "/client-contracts", es: "/es/contratos-con-clientes" },
+      "whatsapp-invoice": { en: "/whatsapp-invoice", es: "/es/factura-whatsapp" },
+      "1099-contractor-records": { en: "/1099-contractor-records", es: "/es/registros-1099" },
+      "hire-contractor-abroad": { en: "/hire-contractor-abroad", es: "/es/contratar-en-el-extranjero" },
       "docusign-alternative": { en: "/docusign-alternative", es: "/es/alternativa-a-docusign" },
       "hellosign-alternative": { en: "/hellosign-alternative", es: "/es/alternativa-a-hellosign" },
       "adobe-sign-alternative": { en: "/adobe-sign-alternative", es: "/es/alternativa-a-adobe-sign" },

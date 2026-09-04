@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { usePageMeta } from "../lib/usePageMeta";
 import { getFeaturePageContent } from "../lib/marketingPages";
 import { localizePath, useI18n, useT } from "../lib/i18n";
-import { BILINGUAL_FEATURE_BY_SLUG, cleanPath, seoAlternates } from "../lib/i18n/paths";
+import { cleanPath, ES_PATH_BY_EN } from "../lib/i18n/paths";
 import { track } from "../lib/track";
 import { NavIcon } from "../components/NavIcons";
 import { isoUploadDate } from "../lib/howItWorksVideo";
@@ -14,11 +14,12 @@ export default function FeaturePage({ slug }: { slug: string }) {
   const location = useLocation();
   const t = useT();
   const page = getFeaturePageContent(slug, locale);
-  const bilingual = BILINGUAL_FEATURE_BY_SLUG[slug];
+  const enPath = `/${slug}`;
+  const esPath = ES_PATH_BY_EN[enPath];
 
   usePageMeta(page?.seoTitle ?? "Docracy", page?.seoDescription ?? "", {
-    canonicalPath: bilingual ? cleanPath(location.pathname) : `/${slug}`,
-    ...(bilingual ? { alternates: seoAlternates(bilingual) } : {}),
+    canonicalPath: esPath ? cleanPath(location.pathname) : enPath,
+    ...(esPath ? { alternates: { en: enPath, es: esPath } } : {}),
   });
 
   if (!page) return null;

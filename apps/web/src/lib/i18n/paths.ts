@@ -33,6 +33,12 @@ export const ES_PATH_BY_EN: Record<string, string> = {
   "/how-it-works": "/es/como-funciona",
   "/verify": "/es/verificar",
   "/packets/us-contractor": "/es/kit-contratista",
+  "/packets/latam-contractor": "/es/kit-contratista-latam",
+  "/1099-season": "/es/temporada-1099",
+  "/cobro": "/es/cobro",
+  "/whatsapp-invoice": "/es/factura-whatsapp",
+  "/1099-contractor-records": "/es/registros-1099",
+  "/hire-contractor-abroad": "/es/contratar-en-el-extranjero",
 };
 
 export const EN_PATH_BY_ES: Record<string, string> = Object.fromEntries(

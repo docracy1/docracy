@@ -137,6 +137,7 @@ function statusPayload(doc: Awaited<ReturnType<typeof getDoc>>) {
     title: doc.title,
     expiresAt: doc.expiresAt,
     completedAt: doc.completedAt,
+    kind: doc.kind,
   };
 }
 

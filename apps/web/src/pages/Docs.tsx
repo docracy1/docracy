@@ -94,6 +94,27 @@ export default function Docs() {
         </p>
       </Section>
 
+      <Section id="latam-kit" title={t("docs.latamPacket.title")}>
+        <p>
+          {t("docs.latamPacket.body")}{" "}
+          <Link to={localizePath("/packets/latam-contractor", locale)}>{t("footer.latamPacket")}</Link>.
+        </p>
+      </Section>
+
+      <Section id="cobro" title={t("docs.cobro.title")}>
+        <p>
+          {t("docs.cobro.body")}{" "}
+          <Link to={localizePath("/cobro", locale)}>{t("footer.cobro")}</Link>.
+        </p>
+      </Section>
+
+      <Section id="tax-year" title={t("docs.taxYear.title")}>
+        <p>
+          {t("docs.taxYear.body")}{" "}
+          <Link to={localizePath("/1099-season", locale)}>{t("footer.taxYear")}</Link>.
+        </p>
+      </Section>
+
       <Section id="cloud-connectors" title={t("docs.cloudConnectors.title")}>
         <p>
           {t("docs.cloudConnectors.body1")}{" "}

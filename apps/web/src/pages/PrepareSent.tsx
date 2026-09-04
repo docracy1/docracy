@@ -8,6 +8,12 @@ import {
   packetPreparePath,
   US_CONTRACTOR_PACKET_SLUG,
 } from "../lib/contractorPacket";
+import {
+  LATAM_CONTRACTOR_PACKET_SLUG,
+  latamCobroPath,
+  latamPacketPreparePath,
+  nextLatamPacketStep,
+} from "../lib/latamContractorPacket";
 import { signedPagePath } from "../lib/paidVault";
 import { track } from "../lib/track";
 
@@ -129,6 +135,40 @@ export default function PrepareSent() {
                 className="btn-primary"
                 style={{ textDecoration: "none" }}
               >
+                {t("packet.nextCta")}
+              </Link>
+            </div>
+          );
+        })()}
+
+      {state.packetSlug === LATAM_CONTRACTOR_PACKET_SLUG &&
+        (() => {
+          const next = nextLatamPacketStep(state.sentTemplateSlug);
+          if (!next) {
+            return (
+              <div className="card" style={{ marginTop: 20 }}>
+                <p style={{ marginBottom: 8, fontWeight: 600 }}>{t("latamPacket.kitDone")}</p>
+                <p style={{ fontSize: 14, color: "var(--mute)", marginBottom: 12 }}>{t("latamPacket.kitDoneSub")}</p>
+                <Link
+                  to={localizePath("/packets/latam-contractor", locale)}
+                  className="btn-secondary"
+                  style={{ textDecoration: "none" }}
+                >
+                  {t("packet.backToKit")}
+                </Link>
+              </div>
+            );
+          }
+          const to =
+            next.kind === "cobro"
+              ? latamCobroPath(locale)
+              : latamPacketPreparePath(next.slug as "mutual-nda" | "independent-contractor-agreement", locale);
+          const label = next.kind === "cobro" ? t("latamPacket.cobroStepTitle") : t(`tpl.${next.slug}.name`);
+          return (
+            <div className="card" style={{ marginTop: 20, borderColor: "var(--primary)" }}>
+              <p style={{ marginBottom: 8, fontWeight: 600 }}>{t("latamPacket.nextTitle")}</p>
+              <p style={{ fontSize: 14, color: "var(--mute)", marginBottom: 12 }}>{label}</p>
+              <Link to={to} className="btn-primary" style={{ textDecoration: "none" }}>
                 {t("packet.nextCta")}
               </Link>
             </div>

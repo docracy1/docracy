@@ -59,7 +59,8 @@ export default function Signed() {
   }
 
   const payment = status.paymentRequest;
-  const title = status.title?.trim() || t("signed.untitled");
+  const isCobro = status.kind === "cobro" || status.signers.length === 0;
+  const title = status.title?.trim() || (isCobro ? t("signed.cobroUntitled") : t("signed.untitled"));
   const expiresLabel = status.expiresAt
     ? new Date(status.expiresAt).toLocaleDateString(locale === "es" ? "es-MX" : "en-US", {
         month: "short",
@@ -111,7 +112,7 @@ export default function Signed() {
           )}
         </div>
       )}
-      <h1>{t("signed.title")}</h1>
+      <h1>{isCobro ? t("signed.cobroTitle") : t("signed.title")}</h1>
       <p style={{ fontSize: 18, fontWeight: 600, marginTop: 0 }}>{title}</p>
       {expiresLabel && (
         <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 0 }}>
@@ -119,16 +120,17 @@ export default function Signed() {
         </p>
       )}
       <div className="card">
-        {[...status.signers]
-          .sort((a, b) => a.order - b.order)
-          .map((s) => (
-            <div key={s.order} style={{ padding: "8px 0", borderBottom: "1px solid var(--hairline)" }}>
-              <span style={{ color: "var(--success)" }}>
-                {t("sign.signedBy", { name: s.name })}
-                {s.signedAt ? ` (${new Date(s.signedAt).toLocaleDateString()})` : ""}
-              </span>
-            </div>
-          ))}
+        {!isCobro &&
+          [...status.signers]
+            .sort((a, b) => a.order - b.order)
+            .map((s) => (
+              <div key={s.order} style={{ padding: "8px 0", borderBottom: "1px solid var(--hairline)" }}>
+                <span style={{ color: "var(--success)" }}>
+                  {t("sign.signedBy", { name: s.name })}
+                  {s.signedAt ? ` (${new Date(s.signedAt).toLocaleDateString()})` : ""}
+                </span>
+              </div>
+            ))}
         <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 16 }}>
           {token && (
             <a

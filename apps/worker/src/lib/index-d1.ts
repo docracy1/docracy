@@ -19,11 +19,21 @@ export async function indexDocumentCreated(env: Env, doc: DocState, originalPdfB
   const accountId = doc.accountId;
   const title = doc.title ?? "Untitled document";
 
+  const firstSigner = doc.signers[0];
   await env.DOCRACY_DB.batch([
     env.DOCRACY_DB.prepare(
-      `INSERT INTO documents (doc_id, account_id, title, status, preparer_signs, created_at, expires_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`
-    ).bind(doc.docId, accountId, title, doc.status, doc.preparerSigns ? 1 : 0, doc.createdAt, doc.expiresAt),
+      `INSERT INTO documents (doc_id, account_id, title, status, preparer_signs, created_at, completed_at, expires_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+    ).bind(
+      doc.docId,
+      accountId,
+      title,
+      doc.status,
+      doc.preparerSigns ? 1 : 0,
+      doc.createdAt,
+      doc.completedAt,
+      doc.expiresAt
+    ),
     env.DOCRACY_DB.prepare(`INSERT INTO documents_fts (doc_id, title) VALUES (?, ?)`).bind(doc.docId, title),
     ...doc.signers.map((s) => insertSignerStmt(env, doc.docId, s)),
     env.DOCRACY_DB.prepare(
@@ -31,7 +41,9 @@ export async function indexDocumentCreated(env: Env, doc: DocState, originalPdfB
        VALUES (?, ?, 0, ?, ?, NULL, ?)`
     ).bind(crypto.randomUUID(), doc.docId, `docs/${doc.docId}/versions/v0.pdf`, doc.createdAt, originalPdfBytes.byteLength),
     insertAuditStmt(env, doc.docId, accountId, "created", null, null, null),
-    insertAuditStmt(env, doc.docId, accountId, "invite_sent", doc.signers[0]?.order ?? null, doc.signers[0]?.name ?? null, null),
+    ...(firstSigner
+      ? [insertAuditStmt(env, doc.docId, accountId, "invite_sent", firstSigner.order, firstSigner.name, null)]
+      : []),
   ]);
 
   await env.DOCRACY_DOCS.put(`docs/${doc.docId}/versions/v0.pdf`, originalPdfBytes);
