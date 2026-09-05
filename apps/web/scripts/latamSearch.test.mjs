@@ -38,6 +38,11 @@ assert.equal(cuba.officialHref, "https://www.minjus.gob.cu/es");
 const cfdi = searchLatamIndex("cfdi")[0];
 assert.equal(cfdi.kind, "honest-no");
 assert.equal(cfdi.docracyTo, "/cobro#send");
+assert.equal(cfdi.paid, true);
+
+const cobro = searchLatamIndex("cobro")[0];
+assert.equal(cobro.paid, true);
+assert.ok(!searchLatamIndex("i-9")[0].paid, "I-9 signing stays free");
 
 const w8 = searchLatamIndex("w-8ben")[0];
 assert.equal(w8.kind, "honest-no");

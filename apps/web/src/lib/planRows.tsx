@@ -58,6 +58,28 @@ export const PLAN_ROWS: Array<{
   { labelKey: "plan.volumeDiscounts", free: false, paid: false, enterprise: true },
 ];
 
+/** ES pricing leads with why they pay — not “unlimited signers.” */
+const LATAM_LEAD_KEYS = [
+  "plan.immigrantPacket",
+  "plan.cobro",
+  "plan.constancia",
+  "plan.taxYearLocker",
+  "plan.paymentLink",
+  "plan.customExpiry",
+  "plan.latamPacket",
+] as const;
+
+export function pricingPlanRows(locale: "en" | "es") {
+  const rows = PLAN_ROWS.filter((row) => !row.esOnly || locale === "es");
+  if (locale !== "es") return rows;
+  const leadAt = new Map<string, number>(LATAM_LEAD_KEYS.map((k, i) => [k, i]));
+  return [...rows].sort((a, b) => {
+    const ai = leadAt.get(a.labelKey) ?? 100 + rows.indexOf(a);
+    const bi = leadAt.get(b.labelKey) ?? 100 + rows.indexOf(b);
+    return ai - bi;
+  });
+}
+
 export function PlanCell({
   value,
   t,

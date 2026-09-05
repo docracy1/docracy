@@ -58,6 +58,7 @@ export default function MobilePricingBar() {
 
   return (
     <div className="mobile-pricing-dock" aria-label={t("pricing.dockAria")}>
+      {locale === "es" ? <p className="mobile-pricing-hint">{t("pricing.dockHintLatam")}</p> : null}
       <div className="pricing-sticky-bar mobile-pricing-dock-bar">
         <div className="pricing-sticky-col">
           <div className="pricing-sticky-name">{t("pricing.free.name")}</div>

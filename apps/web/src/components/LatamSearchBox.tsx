@@ -1,6 +1,7 @@
 import { useMemo, useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { localizePath, useI18n } from "../lib/i18n";
+import { loginWithCheckout } from "../lib/latamCheckout";
 import {
   LATAM_SEARCH_CHIPS,
   LATAM_SEARCH_EN,
@@ -109,6 +110,17 @@ export default function LatamSearchBox({
                     <a href={hit.officialHref} target="_blank" rel="noopener noreferrer">
                       {officialLabel(hit, t, locale) ?? t("latamSearch.official")}
                     </a>
+                  ) : null}
+                  {hit.paid ? (
+                    <>
+                      {" · "}
+                      <Link
+                        to={loginWithCheckout(localizePath(hit.docracyTo, locale), "latam-search")}
+                        onClick={() => track("landingpage_cta_clicked", { source: `${source}:paid:${hit.id}` })}
+                      >
+                        {t("latamSearch.paidCta")}
+                      </Link>
+                    </>
                   ) : null}
                 </p>
               </li>
