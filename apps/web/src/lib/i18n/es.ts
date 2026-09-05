@@ -3361,6 +3361,41 @@ const es: Messages = {
   "whoFiles.howTo2": "Abre el portal oficial de la fila — USCIS, CEAC, CBP, IRS, SSA o el .gob de tu país.",
   "whoFiles.howTo3": "Tú lo subes o el empleador lo guarda. Nosotros no presentamos.",
   "whoFiles.howTo4": "Marca la fila cuando lo hayas entregado. El plan de pago reabre el PDF después.",
+  "footer.latamSearch": "Buscar documentos LATAM",
+  "latamSearch.seoTitle": "Buscar documentos LATAM → EE. UU. — I-9, apostilla, I-94 | Docracy",
+  "latamSearch.seoDescription":
+    "Escribe I-9, apostilla México, I-94, cobro o ITIN. Te mandamos al portal oficial y al PDF que firmamos. No tramitamos USCIS, no apostillamos ni timbramos CFDI. $10/mes.",
+  "latamSearch.kicker": "Escribe lo que necesitas",
+  "latamSearch.heroTitle": "La puerta LATAM. No otra pestaña de Google.",
+  "latamSearch.heroSub":
+    "I-9, apostilla, I-94, constancia, cobro. Link oficial + lo que firmamos. Tú lo subes. Nosotros no tramitamos.",
+  "latamSearch.label": "¿Qué archivo o trámite?",
+  "latamSearch.placeholder": "I-9, apostilla México, I-94, cobro, constancia…",
+  "latamSearch.submit": "Buscar",
+  "latamSearch.chipsLabel": "Búsquedas frecuentes",
+  "latamSearch.chip.i9": "I-9",
+  "latamSearch.chip.apostilleMx": "Apostilla México",
+  "latamSearch.chip.i94": "I-94",
+  "latamSearch.chip.constancia": "Constancia",
+  "latamSearch.chip.cobro": "Cobro",
+  "latamSearch.chip.itin": "ITIN",
+  "latamSearch.chip.ceac": "DS-160",
+  "latamSearch.empty":
+    "Nada en este índice coincide. Prueba I-9, apostilla + tu país, I-94, cobro o constancia. No inventamos W-8BEN, CFDI ni una petición de visa.",
+  "latamSearch.official": "Sitio oficial",
+  "latamSearch.disclaimer":
+    "Esto es un buscador de destinos, no un abogado ni Google. Los resultados son páginas que ya verificamos. Abrir un resultado no presenta nada.",
+  "latamSearch.countryFallback": "Apostilla / legalización de origen",
+  "latamSearch.no.cfdi.title": "CFDI / PAC — no somos eso",
+  "latamSearch.no.cfdi.blurb":
+    "No timbramos facturas. Pega Mercado Pago o PayPal en cobro. Kita / Alegra / un PAC hacen el CFDI.",
+  "latamSearch.no.dian.title": "Factura DIAN — no somos eso",
+  "latamSearch.no.dian.blurb": "Siigo y DIAN facturan. Nosotros firmamos extras y mandamos cobro con tu checkout.",
+  "latamSearch.no.w8.title": "W-8BEN — no lo inventamos",
+  "latamSearch.no.w8.blurb": "No hay W-8BEN sustituto. Personas de EE. UU. firman el W-9 oficial. Los demás: un contador.",
+  "latamSearch.no.file.title": "No tramitamos la petición",
+  "latamSearch.no.file.blurb":
+    "Boundless, CitizenPath, una gestoría o myaccount.uscis.gov. Firmamos los PDF de apoyo.",
 };
 
 export default es;

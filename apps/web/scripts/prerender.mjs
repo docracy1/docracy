@@ -805,6 +805,26 @@ const routes = [
     xDefault: "es",
   },
   {
+    urlPath: "/latam-search",
+    outFile: "latam-search.html",
+    title: "Search LATAM → US documents — I-9, apostille, I-94 | Docracy",
+    description:
+      "Type I-9, apostille México, I-94, cobro, or ITIN. We route you to the official portal and the PDF we sign. We don't file USCIS, stamp an apostille, or issue CFDI. $10/month.",
+    locale: "en",
+    alternates: { en: "/latam-search", es: "/es/buscar" },
+    xDefault: "es",
+  },
+  {
+    urlPath: "/es/buscar",
+    outFile: "es/buscar.html",
+    title: "Buscar documentos LATAM → EE. UU. — I-9, apostilla, I-94 | Docracy",
+    description:
+      "Escribe I-9, apostilla México, I-94, cobro o ITIN. Te mandamos al portal oficial y al PDF que firmamos. No tramitamos USCIS, no apostillamos ni timbramos CFDI. $10/mes.",
+    locale: "es",
+    alternates: { en: "/latam-search", es: "/es/buscar" },
+    xDefault: "es",
+  },
+  {
     urlPath: "/es/formulario-i-9",
     outFile: "es/formulario-i-9.html",
     title: getFeaturePageContent("i-9", "es").seoTitle,

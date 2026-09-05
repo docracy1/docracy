@@ -83,6 +83,7 @@ for (const line of [
   "/es/w-7  /es/itin  301",
   "/es/quien-presenta  /es/quien-sube-donde  301",
   "/where-each-file-goes  /who-files-where  301",
+  "/es/busca  /es/buscar  301",
 ]) {
   assert.ok(redirects.includes(line), `missing one-hop redirect: ${line}`);
 }

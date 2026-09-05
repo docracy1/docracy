@@ -7069,3 +7069,92 @@ a.dashboard-nav-subitem {
   color: var(--body) !important;
 }
 
+.latam-search {
+  margin-top: 20px;
+  text-align: left;
+}
+.latam-search-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.latam-search-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.latam-search-row input[type="search"] {
+  flex: 1 1 220px;
+  min-width: 0;
+  padding: 10px 12px;
+  font-size: 16px;
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+}
+.latam-search-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 0;
+}
+.latam-search-chip {
+  border: 1px solid var(--hairline);
+  background: var(--bg, #fff);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.latam-search-chip:hover {
+  border-color: var(--primary);
+}
+.latam-search-hits {
+  list-style: none;
+  padding: 0;
+  margin: 14px 0 0;
+  display: grid;
+  gap: 10px;
+}
+.latam-search-hit {
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: var(--bg, #fff);
+}
+.latam-search-hit a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.latam-search-hit strong {
+  display: block;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+.latam-search-hit > a span {
+  display: block;
+  font-size: 13px;
+  color: var(--mute);
+  line-height: 1.4;
+}
+.latam-search-hit-meta {
+  margin: 8px 0 0;
+  font-size: 13px;
+}
+.latam-search-hit-meta em {
+  font-style: normal;
+  font-weight: 700;
+}
+.latam-search-empty {
+  font-size: 14px;
+  color: var(--mute);
+}
+.latam-search.kind-honest-no,
+.latam-search-hit.kind-honest-no {
+  background: var(--primary-soft);
+}
+.hero-latam-cta .latam-search {
+  margin: 0 0 18px;
+}
+

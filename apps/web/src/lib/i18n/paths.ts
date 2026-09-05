@@ -63,6 +63,7 @@ export const ES_PATH_BY_EN: Record<string, string> = {
   "/immigrant-housing": "/es/arrendamiento-inmigrante",
   "/after-arrival": "/es/despues-de-llegar",
   "/who-files-where": "/es/quien-sube-donde",
+  "/latam-search": "/es/buscar",
   "/itin": "/es/itin",
   "/income-proof": "/es/constancia",
   "/proof-of-income": "/es/prueba-de-ingresos",

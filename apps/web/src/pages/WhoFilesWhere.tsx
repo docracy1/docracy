@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import WhoFilesWhereChecklist from "../components/WhoFilesWhereChecklist";
+import LatamSearchBox from "../components/LatamSearchBox";
 import { fetchMe, startCheckout, type Account } from "../lib/api";
 import { localizePath, useI18n } from "../lib/i18n";
 import { loginWithCheckout } from "../lib/latamCheckout";
@@ -163,6 +164,7 @@ export default function WhoFilesWhere() {
 
       <div className="container" style={{ maxWidth: 720 }}>
         <p className="who-files-disclaimer">{t("whoFiles.disclaimer")}</p>
+        <LatamSearchBox source="who-files-where" compact />
         <WhoFilesWhereChecklist renderAction={packetCta} sourcePrefix="seo:who-files-where" />
 
         <p style={{ marginTop: 28, fontSize: 14 }}>

@@ -14,6 +14,7 @@ import { useSeoMeta } from "../lib/useSeoMeta";
 import { setPendingUploadFile } from "../lib/pendingUpload";
 import { TemplateCard } from "./FreeTemplates";
 import { TESTIMONIALS, testimonialsJsonLd } from "../lib/testimonials";
+import LatamSearchBox from "../components/LatamSearchBox";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -216,6 +217,7 @@ const AFTER_SIGN_OUTCOMES: Array<{
 
 /** `/es` front door — cobro first, no 1099/trades tour. */
 const LATAM_OUTCOMES: typeof AFTER_SIGN_OUTCOMES = [
+  { icon: "badge", titleKey: "footer.latamSearch", bodyKey: "latamSearch.heroSub", to: "/latam-search", linkKey: "latamSearch.submit" },
   { icon: "send", titleKey: "landing.out1.title", bodyKey: "landing.out1.body", to: "/cobro#send", linkKey: "landing.out1.link" },
   { icon: "duplicate", titleKey: "landing.out4.title", bodyKey: "landing.out4.body", to: "/income-proof", linkKey: "landing.out4.link" },
   { icon: "users", titleKey: "landing.out7.title", bodyKey: "landing.out7.body", to: "/packets/latam-to-us", linkKey: "landing.out7.link" },
@@ -474,6 +476,7 @@ export default function Landing() {
               `/es` is the LATAM door: cobro first, no Austrian logo strip, no sign-upload tour. */}
           {latamDoor ? (
             <div className="hero-latam-cta">
+              <LatamSearchBox source="hero-es" compact />
               <Link
                 to={cobroSendTo}
                 className="hero-signup-btn hero-latam-cta-btn"

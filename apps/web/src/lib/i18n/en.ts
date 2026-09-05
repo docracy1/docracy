@@ -3295,6 +3295,41 @@ const en: Messages = {
   "whoFiles.howTo2": "Open the official portal in the row — USCIS, CEAC, CBP, IRS, SSA, or your origin .gob.",
   "whoFiles.howTo3": "You upload or the employer keeps it. We do not submit.",
   "whoFiles.howTo4": "Mark the row when you have delivered it. Unlock Paid to reopen the PDF later.",
+  "footer.latamSearch": "Search LATAM docs",
+  "latamSearch.seoTitle": "Search LATAM → US documents — I-9, apostille, I-94 | Docracy",
+  "latamSearch.seoDescription":
+    "Type I-9, apostille México, I-94, cobro, or ITIN. We route you to the official portal and the PDF we sign. We don't file USCIS, stamp an apostille, or issue CFDI. $10/month.",
+  "latamSearch.kicker": "Type what you need",
+  "latamSearch.heroTitle": "The LATAM front door. Not another Google tab.",
+  "latamSearch.heroSub":
+    "I-9, apostille, I-94, constancia, cobro. Official link + what we sign. You still upload. We don't file.",
+  "latamSearch.label": "What file or errand?",
+  "latamSearch.placeholder": "I-9, apostille México, I-94, cobro, constancia…",
+  "latamSearch.submit": "Search",
+  "latamSearch.chipsLabel": "Common searches",
+  "latamSearch.chip.i9": "I-9",
+  "latamSearch.chip.apostilleMx": "Apostille México",
+  "latamSearch.chip.i94": "I-94",
+  "latamSearch.chip.constancia": "Constancia",
+  "latamSearch.chip.cobro": "Cobro",
+  "latamSearch.chip.itin": "ITIN",
+  "latamSearch.chip.ceac": "DS-160",
+  "latamSearch.empty":
+    "Nothing in this index matches. Try I-9, apostille + your country, I-94, cobro, or constancia. We don't invent W-8BEN, CFDI, or a visa petition.",
+  "latamSearch.official": "Official site",
+  "latamSearch.disclaimer":
+    "This is a routing box, not a lawyer and not Google. Results are destinations we already verified. Checking a result does not file anything.",
+  "latamSearch.countryFallback": "Origin apostille / legalization",
+  "latamSearch.no.cfdi.title": "CFDI / PAC — not us",
+  "latamSearch.no.cfdi.blurb":
+    "We don't stamp invoices. Paste your Mercado Pago or PayPal on cobro. Kita / Alegra / a PAC do CFDI.",
+  "latamSearch.no.dian.title": "DIAN invoice — not us",
+  "latamSearch.no.dian.blurb": "Siigo and DIAN bill. We sign extras and send cobro with your checkout.",
+  "latamSearch.no.w8.title": "W-8BEN — we don't invent it",
+  "latamSearch.no.w8.blurb": "No substitute W-8BEN. US persons sign the official W-9. Everyone else: a tax advisor.",
+  "latamSearch.no.file.title": "We don't file the petition",
+  "latamSearch.no.file.blurb":
+    "Boundless, CitizenPath, a gestoría, or myaccount.uscis.gov. We sign the supporting PDFs.",
 };
 
 export default en;

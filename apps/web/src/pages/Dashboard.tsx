@@ -1140,10 +1140,16 @@ export default function Dashboard() {
             <span>{t("footer.afterArrival")}</span>
           </Link>
           {locale === "es" ? (
-            <Link to={localizePath("/who-files-where", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
-              <NavIcon name="documents" />
-              <span>{t("footer.whoFiles")}</span>
-            </Link>
+            <>
+              <Link to={localizePath("/who-files-where", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
+                <NavIcon name="documents" />
+                <span>{t("footer.whoFiles")}</span>
+              </Link>
+              <Link to={localizePath("/latam-search", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
+                <NavIcon name="templates" />
+                <span>{t("footer.latamSearch")}</span>
+              </Link>
+            </>
           ) : null}
           <div className="dashboard-nav-group">
             <button

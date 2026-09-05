@@ -5,6 +5,7 @@ import { usePageMeta } from "../lib/usePageMeta";
 import { track } from "../lib/track";
 import { breadcrumbJsonLd } from "../lib/productSeo";
 import { LATAM_COUNTRY_CORRIDORS } from "../lib/latamCountryCorridors";
+import LatamSearchBox from "../components/LatamSearchBox";
 
 /** Spanish-lead index of the LATAM packet — cobro, constancia, hire, RFC, comercio. No long SEO essay. */
 const ITEMS: Array<{
@@ -14,6 +15,7 @@ const ITEMS: Array<{
   linkKey: string;
   primary?: boolean;
 }> = [
+  { titleKey: "footer.latamSearch", bodyKey: "latamSearch.heroSub", to: "/latam-search", linkKey: "latamSearch.submit", primary: true },
   { titleKey: "landing.out1.title", bodyKey: "landing.out1.body", to: "/cobro#send", linkKey: "landing.out1.link", primary: true },
   { titleKey: "landing.out4.title", bodyKey: "landing.out4.body", to: "/income-proof", linkKey: "landing.out4.link" },
   { titleKey: "landing.out3.title", bodyKey: "landing.out3.body", to: "/packets/latam-contractor", linkKey: "landing.out3.link" },
@@ -54,6 +56,7 @@ export default function LatamDesk() {
         <p className="latam-desk-kicker">{t("latamDesk.kicker")}</p>
         <h1 className="latam-desk-title">{t("latamDesk.heroTitle")}</h1>
         <p className="latam-desk-sub">{t("latamDesk.heroSub")}</p>
+        <LatamSearchBox source="latam-desk" compact />
         <div className="latam-desk-grid">
           {ITEMS.map((item) => (
             <Link

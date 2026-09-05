@@ -9,10 +9,11 @@ const LATAM_LOGIN_REFS = new Set([
   "after-arrival",
   "itin",
   "who-files-where",
+  "latam-search",
 ]);
 
 const LATAM_NEXT_RE =
-  /kit-llegar-eeuu|latam-to-us|\/cobro|constancia|income-proof|mexico-a-eeuu|colombia-a-eeuu|despues-de-llegar|quien-sube-donde|who-files-where|\/itin|arrendamiento-inmigrante|\/es\/precios/;
+  /kit-llegar-eeuu|latam-to-us|\/cobro|constancia|income-proof|mexico-a-eeuu|colombia-a-eeuu|despues-de-llegar|quien-sube-donde|who-files-where|\/buscar|latam-search|\/itin|arrendamiento-inmigrante|\/es\/precios/;
 
 /** Login chrome for Spanish LATAM funnels — immigrant copy only when locale is es. */
 export function isLatamLoginIntent(ref: string, next: string): boolean {
