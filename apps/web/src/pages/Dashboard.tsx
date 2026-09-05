@@ -1473,7 +1473,11 @@ export default function Dashboard() {
                   </ol>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
                     <Link
-                      to="/prepare?freeTemplate=mutual-nda&ref=dashboard-first-run"
+                      to={
+                        locale === "es"
+                          ? `${localizePath("/prepare", locale)}?freeTemplate=i-9-form&ref=dashboard-first-run`
+                          : "/prepare?freeTemplate=mutual-nda&ref=dashboard-first-run"
+                      }
                       className="btn-primary"
                       style={{ textDecoration: "none" }}
                     >

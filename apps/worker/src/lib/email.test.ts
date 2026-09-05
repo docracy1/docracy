@@ -296,6 +296,26 @@ describe("sendArchiveNag", () => {
     expect(logged).not.toContain("keep history");
   });
 
+  it("Spanish archive nag sells the immigrant packet and /es/precios", async () => {
+    const { env } = makeMockEnv();
+    const capture = captureDevEmailLog();
+    const doc = {
+      ...makeDoc("Anna"),
+      locale: "es" as const,
+      accountId: "acct-1",
+      title: "I-9",
+      preparerEmail: "preparer@example.com",
+      expiresAt: "2026-09-12T00:00:00.000Z",
+    };
+
+    await sendArchiveNag(env, doc);
+
+    const logged = capture.logged();
+    expect(logged).toContain("I-9, oferta, constancia y cobro");
+    expect(logged).toContain("/es/precios?checkout=1");
+    expect(logged).toContain("Guardar el expediente — $10/mes");
+  });
+
   it("skips when there is no preparer email", async () => {
     const { env } = makeMockEnv();
     const capture = captureDevEmailLog();

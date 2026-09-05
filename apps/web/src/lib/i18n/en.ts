@@ -129,6 +129,9 @@ const en: Messages = {
   "login.heading": "Sign in / Sign up",
   "login.titleSave": "Save the document you just sent",
   "login.titleUpgrade": "Sign in to upgrade",
+  "login.titleLatam": "Sign in to keep I-9 and income proof",
+  "login.subLatam":
+    "No password. After you sign in, Stripe bills USD $10/month: vault until next April 15 or 13 months. Signing stays free.",
   "login.sub": "No password — we'll email you a link. First time here? This creates your account too.",
   "login.subSave": "Create a free account so every future send lives in your dashboard — no password, just a magic link to this email.",
   "login.subUpgrade": "Sign in, then upgrade to keep signed PDFs past 9 days — signing itself stays free.",
@@ -791,6 +794,8 @@ const en: Messages = {
   "status.viewer": "Viewer: {{info}}",
   "status.keepPdfs": "Save this document to your dashboard",
   "status.keepPdfsSub": "Create a free account and we'll move this send into your dashboard history — no password, just a magic link. Paid unlocks templates, unlimited signers, and team seats — $10/month.",
+  "status.keepPdfsSubLatam":
+    "Create a free account to list this send. The $10/month USD plan keeps I-9, constancia, and cobro until next April 15 or 13 months.",
   "status.createAccount": "Create a free account",
   "status.seePaidPlans": "See paid plans",
   "status.dontLoseLink": "Save this send to your dashboard",
@@ -808,6 +813,9 @@ const en: Messages = {
   "sent.saveAccount": "Save this send to an account",
   "sent.saveAccountSub": "This signed PDF is deleted after 9 days. A free account lists it on your dashboard until then — paid is what keeps the file.",
   "sent.saveAccountSubFuture": "This signed PDF is deleted after 9 days — the status link stops working then too. A free account lists sends until that date. Paid keeps the files.",
+  "sent.saveAccountSubLatam":
+    "Deleted after 9 days. The $10/month USD plan keeps I-9, offer letter, constancia, and cobro until next April 15 or 13 months. Signing stays free.",
+  "sent.upgradeLatam": "Keep the I-9 — $10/month",
   "sent.sendAnother": "Send another",
   "dash.claimSuccess": "Saved to your dashboard: {{title}}",
   "dash.whatsappAnnouncement": "New: send signing links via WhatsApp — phone-bound, PIN-protected, a step toward Advanced Electronic Signature.",

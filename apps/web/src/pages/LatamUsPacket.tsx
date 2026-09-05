@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchMe, startCheckout, type Account } from "../lib/api";
 import { localizePath, useI18n } from "../lib/i18n";
+import { loginWithCheckout } from "../lib/latamCheckout";
+import { useAutoCheckout } from "../lib/useAutoCheckout";
 import { usePageMeta } from "../lib/usePageMeta";
 import { track } from "../lib/track";
 import { breadcrumbJsonLd, howToJsonLd } from "../lib/productSeo";
@@ -254,7 +256,8 @@ export default function LatamUsPacket() {
     [t]
   );
 
-  const loginTo = `/login?next=${encodeURIComponent(canonicalPath)}&ref=latam-to-us`;
+  const loginTo = loginWithCheckout(canonicalPath, "latam-to-us");
+  useAutoCheckout(account, "seo:latam-to-us:auto");
 
   const onUpgrade = async () => {
     track("upgrade_clicked", { source: "seo:latam-to-us" });

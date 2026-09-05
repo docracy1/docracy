@@ -5,7 +5,7 @@ import { apiUrl, fetchMe, fetchStatus, statusAttachmentDownloadUrl, voidDocument
 import { hasPendingClaimForDoc } from "../lib/pendingClaim";
 import { signedPagePath } from "../lib/paidVault";
 import { track } from "../lib/track";
-import { useI18n } from "../lib/i18n";
+import { localizePath, useI18n } from "../lib/i18n";
 import { useNoIndex } from "../lib/useNoIndex";
 import type { StatusPayload } from "../lib/types";
 
@@ -213,7 +213,7 @@ export default function Status() {
         <div className="card" style={{ marginTop: 20 }}>
           <p style={{ marginBottom: 8, fontWeight: 600 }}>{t("status.keepPdfs")}</p>
           <p style={{ marginBottom: 14, color: "var(--mute)", fontSize: 14 }}>
-            {t("status.keepPdfsSub")}
+            {locale === "es" ? t("status.keepPdfsSubLatam") : t("status.keepPdfsSub")}
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
             <Link
@@ -224,7 +224,7 @@ export default function Status() {
               {t("status.createAccount")}
             </Link>
             <Link
-              to="/pricing?ref=status-completed"
+              to={`${localizePath("/pricing", locale)}?ref=status-completed&checkout=1`}
               className="btn-secondary"
               style={{ textDecoration: "none" }}
               onClick={() => track("upgrade_clicked", { source: "status_completed" })}
