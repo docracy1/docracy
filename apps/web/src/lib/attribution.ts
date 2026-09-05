@@ -13,6 +13,8 @@
  * "direct" at read time (see attributionLabel).
  */
 
+import { FIRST_TOUCH_COOKIE, parseFirstTouchCookie } from "./firstTouchCookie";
+
 const STORAGE_KEY = "docracy_attribution";
 const MAX_PART_LENGTH = 32;
 const ALLOWED_CHARS = /[^a-z0-9._-]/g;
@@ -81,24 +83,49 @@ function referrerHost(): string {
  * Records this visit's source if none is stored yet. Call once on app boot.
  * Precedence: utm_source → ref → external referrer host.
  */
+function readFirstTouchCookie(): { source: string; medium: string; campaign: string } | null {
+  try {
+    const match = document.cookie.match(new RegExp(`(?:^|; )${FIRST_TOUCH_COOKIE}=([^;]*)`));
+    if (!match?.[1]) return null;
+    return parseFirstTouchCookie(match[1]);
+  } catch {
+    return null;
+  }
+}
+
+function clearFirstTouchCookie(): void {
+  try {
+    document.cookie = `${FIRST_TOUCH_COOKIE}=; Path=/; Max-Age=0; SameSite=Lax`;
+  } catch {
+    /* ignore */
+  }
+}
+
 export function captureAttribution(): void {
   if (read()) return;
 
   const params = new URLSearchParams(window.location.search);
+  const seeded = readFirstTouchCookie();
   const utmSource = sanitize(params.get("utm_source"));
   const refSource = sanitize(params.get("ref"));
+  const cookieSource = sanitize(seeded?.source);
   const source =
     (utmSource && !isBlockedRefSource(utmSource) ? utmSource : "") ||
     (refSource && !isBlockedRefSource(refSource) ? refSource : "") ||
+    (cookieSource && !isBlockedRefSource(cookieSource) ? cookieSource : "") ||
     referrerHost();
   if (!source) return;
 
   write({
     source,
-    medium: sanitize(params.get("utm_medium")),
-    campaign: sanitize(params.get("utm_campaign")) || sanitize(params.get("utm_content")),
+    medium: sanitize(params.get("utm_medium") || seeded?.medium),
+    campaign:
+      sanitize(params.get("utm_campaign")) ||
+      sanitize(params.get("utm_content")) ||
+      sanitize(seeded?.campaign),
     firstSeenAt: new Date().toISOString(),
   });
+  if (seeded) clearFirstTouchCookie();
 }
 
 /**

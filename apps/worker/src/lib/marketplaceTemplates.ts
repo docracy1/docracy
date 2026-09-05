@@ -360,29 +360,29 @@ export async function listWeeklyOfficial(env: Env, limit = 10): Promise<Marketpl
   }
 }
 
-/** All weekly official templates for the public sitemap (capped). */
+/** Approved Marketplace rows for the public sitemap (weekly + community, capped). */
 export async function listWeeklyOfficialForSitemap(
   env: Env,
   limit = 500
 ): Promise<Array<{ slug: string; lastmod: string }>> {
   if (!env.DOCRACY_DB) return [];
-  try {
-    const db = env.DOCRACY_DB;
-    const { results } = await db
-      .prepare(
-        `SELECT slug, reviewed_at, submitted_at FROM marketplace_templates
-         WHERE status = 'approved' AND origin = 'weekly'
-         ORDER BY reviewed_at DESC LIMIT ?`
-      )
-      .bind(limit)
-      .all<{ slug: string; reviewed_at: string | null; submitted_at: string }>();
-    return results.map((r) => ({
+  const mapRows = (results: Array<{ slug: string; reviewed_at: string | null; submitted_at: string }>) =>
+    results.map((r) => ({
       slug: r.slug,
       lastmod: (r.reviewed_at ?? r.submitted_at).slice(0, 10),
     }));
+  try {
+    const { results } = await env.DOCRACY_DB.prepare(
+      `SELECT slug, reviewed_at, submitted_at FROM marketplace_templates
+       WHERE status = 'approved'
+       ORDER BY reviewed_at DESC LIMIT ?`
+    )
+      .bind(limit)
+      .all<{ slug: string; reviewed_at: string | null; submitted_at: string }>();
+    return mapRows(results);
   } catch (err) {
     console.error(
-      "listWeeklyOfficialForSitemap failed (is migration 0026 applied?):",
+      "listWeeklyOfficialForSitemap failed (is marketplace_templates present?):",
       err instanceof Error ? err.message : err
     );
     return [];

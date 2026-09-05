@@ -13,6 +13,7 @@ import {
   staticHtmlExists,
 } from "./_spaShell";
 import { legacyTemplateRedirectTarget } from "../src/lib/templateLegacyRedirects";
+import { canonicalPublicLocation, firstTouchSetCookieHeader } from "./_trackingParams";
 
 const WORKER_URL = "https://api.docracy.io";
 
@@ -120,16 +121,17 @@ function isTrackedRoute(pathname: string): boolean {
 export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => {
   const url = new URL(context.request.url);
 
-  // Canonical host — both www and apex serve the same site; 301 to apex for crawl budget.
-  if (url.hostname === "www.docracy.io") {
-    const target = new URL(url.pathname + url.search + url.hash, "https://docracy.io");
-    return Response.redirect(target.toString(), 301);
-  }
-
-  // Strip trailing slashes on extensionless paths — `/blog/foo/` 404'd while `/blog/foo` is canonical.
-  if (url.pathname.length > 1 && url.pathname.endsWith("/") && !hasFileExtension(url.pathname)) {
-    const target = new URL(url.pathname.replace(/\/+$/, "") + url.search + url.hash, url.origin);
-    return Response.redirect(target.toString(), 301);
+  // One hop: www → apex, drop trailing slash, strip tracking params (ref / utm_* / gclid…).
+  // Keeps freeTemplate, next, send, packet. GSC "alternate + proper canonical" on this site
+  // is almost entirely `?ref=` / www variants of pages that already self-canonicalize.
+  if (context.request.method === "GET" || context.request.method === "HEAD") {
+    const canonical = canonicalPublicLocation(url);
+    if (canonical) {
+      const headers = new Headers({ Location: canonical.location });
+      const ft = firstTouchSetCookieHeader(canonical.stripped);
+      if (ft) headers.set("Set-Cookie", ft);
+      return new Response(null, { status: 301, headers });
+    }
   }
 
   // Legacy docracy.com document slugs → canonical free template (no duplicate landing pages).
@@ -237,6 +239,7 @@ export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => 
           headers: {
             "content-type": "text/html; charset=utf-8",
             "cache-control": "private, no-store",
+            "x-robots-tag": "noindex, nofollow",
           },
         });
       }
@@ -247,6 +250,7 @@ export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => 
         headers: {
           "content-type": "text/html; charset=utf-8",
           "cache-control": "public, max-age=60",
+          "x-robots-tag": "noindex, nofollow",
         },
       });
     }
