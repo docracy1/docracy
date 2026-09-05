@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
+import { fetchWhoFilesVault, saveWhoFilesVault, type Account } from "../lib/api";
 import { localizePath, useI18n } from "../lib/i18n";
 import { LATAM_COUNTRY_CORRIDORS } from "../lib/latamCountryCorridors";
 import {
@@ -7,11 +8,12 @@ import {
   WHO_FILES_GROUPS,
   WHO_FILES_ROWS,
   WHO_FILES_STORAGE_KEY,
-  type WhoFilesGroup,
   type WhoFilesRow,
 } from "../lib/whoFilesWhere";
 
 export type WhoFilesAction = (to: string, label: string, source: string) => ReactNode;
+
+type VaultHint = "pending" | "local" | "account" | "paid";
 
 function readDone(): string[] {
   try {
@@ -32,10 +34,23 @@ function readCountry(): string {
   }
 }
 
+function writeLocal(done: string[], countrySlug: string) {
+  try {
+    localStorage.setItem(WHO_FILES_STORAGE_KEY, JSON.stringify(done));
+    if (countrySlug) localStorage.setItem(WHO_FILES_COUNTRY_KEY, countrySlug);
+    else localStorage.removeItem(WHO_FILES_COUNTRY_KEY);
+  } catch {
+    /* ignore quota / private mode */
+  }
+}
+
 export default function WhoFilesWhereChecklist({
+  account,
   renderAction,
   sourcePrefix,
 }: {
+  /** undefined = still loading /me; null = signed out; object = signed in (KV vault). */
+  account?: Account | null;
   renderAction?: WhoFilesAction;
   sourcePrefix: string;
 }) {
@@ -43,34 +58,62 @@ export default function WhoFilesWhereChecklist({
   const [done, setDone] = useState<string[]>([]);
   const [countrySlug, setCountrySlug] = useState("");
   const [hydrated, setHydrated] = useState(false);
+  const [vaultHint, setVaultHint] = useState<VaultHint>("pending");
 
   useEffect(() => {
-    setDone(readDone());
-    setCountrySlug(readCountry());
+    let cancelled = false;
+    const localDone = readDone();
+    const localCountry = readCountry();
+    setDone(localDone);
+    setCountrySlug(localCountry);
     setHydrated(true);
-  }, []);
 
-  const persistDone = (next: string[]) => {
-    setDone(next);
-    try {
-      localStorage.setItem(WHO_FILES_STORAGE_KEY, JSON.stringify(next));
-    } catch {
-      /* ignore quota / private mode */
+    if (account === undefined) {
+      setVaultHint("pending");
+      return;
+    }
+    if (!account) {
+      setVaultHint("local");
+      return;
+    }
+
+    fetchWhoFilesVault()
+      .then((vault) => {
+        if (cancelled) return;
+        const vaultHas = Boolean(vault.updatedAt) && (vault.done.length > 0 || Boolean(vault.countrySlug));
+        if (vaultHas) {
+          setDone(vault.done);
+          setCountrySlug(vault.countrySlug);
+          writeLocal(vault.done, vault.countrySlug);
+        } else if (localDone.length || localCountry) {
+          void saveWhoFilesVault({ done: localDone, countrySlug: localCountry });
+        }
+        setVaultHint(account.isPaid ? "paid" : "account");
+      })
+      .catch(() => {
+        if (!cancelled) setVaultHint("local");
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [account]);
+
+  const persist = (nextDone: string[], nextCountry: string) => {
+    setDone(nextDone);
+    setCountrySlug(nextCountry);
+    writeLocal(nextDone, nextCountry);
+    if (account) {
+      void saveWhoFilesVault({ done: nextDone, countrySlug: nextCountry });
     }
   };
 
   const onToggle = (id: string) => {
-    persistDone(done.includes(id) ? done.filter((x) => x !== id) : [...done, id]);
+    persist(done.includes(id) ? done.filter((x) => x !== id) : [...done, id], countrySlug);
   };
 
   const onCountry = (slug: string) => {
-    setCountrySlug(slug);
-    try {
-      if (slug) localStorage.setItem(WHO_FILES_COUNTRY_KEY, slug);
-      else localStorage.removeItem(WHO_FILES_COUNTRY_KEY);
-    } catch {
-      /* ignore */
-    }
+    persist(done, slug);
   };
 
   const country = LATAM_COUNTRY_CORRIDORS.find((c) => c.slug === countrySlug);
@@ -85,11 +128,15 @@ export default function WhoFilesWhereChecklist({
     []
   );
 
+  const hintKey =
+    vaultHint === "paid" ? "whoFiles.vaultPaid" : vaultHint === "account" ? "whoFiles.vaultAccount" : "whoFiles.vaultLocal";
+
   return (
     <div className="who-files">
       <p className="who-files-progress" aria-live="polite">
         {t("whoFiles.progress", { done: String(doneCount), total: String(WHO_FILES_ROWS.length) })}
       </p>
+      {vaultHint !== "pending" ? <p className="who-files-vault-hint">{t(hintKey)}</p> : null}
       <nav className="who-files-jump" aria-label={t("whoFiles.jumpLabel")}>
         {WHO_FILES_GROUPS.map((group) => (
           <a key={group} href={`#who-files-${group}`}>

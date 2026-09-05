@@ -6998,6 +6998,11 @@ a.dashboard-nav-subitem {
   font-size: 14px;
   font-weight: 600;
 }
+.who-files-vault-hint {
+  margin: -4px 0 12px;
+  font-size: 13px;
+  color: var(--mute);
+}
 .who-files-jump {
   display: flex;
   flex-wrap: wrap;

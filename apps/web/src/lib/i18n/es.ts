@@ -3337,8 +3337,11 @@ const es: Messages = {
   "whoFiles.ctaLogin": "Entra para desbloquear el paquete",
   "whoFiles.ctaOpen": "Abrir el plan inmigrante",
   "whoFiles.disclaimer":
-    "Esto es un mapa de entrega, no un trámite. Las casillas se quedan en este aparato. Los links oficiales son sitios de gobierno. Firmar un I-9 aquí no autoriza a trabajar y no es E-Verify.",
+    "Esto es un mapa de entrega, no un trámite. Sin sesión, las casillas se quedan en este teléfono. Con el plan de $10/mes, “qué ya entregué” vive en la misma bóveda que los PDF. Los links oficiales son sitios de gobierno. Firmar un I-9 aquí no autoriza a trabajar y no es E-Verify.",
   "whoFiles.progress": "{{done}} de {{total}} marcados como entregados",
+  "whoFiles.vaultLocal": "Las marcas se quedan en este teléfono hasta que entres. $10/mes las pone en la bóveda.",
+  "whoFiles.vaultAccount": "Guardado en esta cuenta. $10/mes deja la lista en la bóveda, no solo en este teléfono.",
+  "whoFiles.vaultPaid": "Guardado en tu bóveda de $10/mes. Otro teléfono ve las mismas marcas.",
   "whoFiles.jumpLabel": "Saltar a una sección",
   "whoFiles.weDontLabel": "Docracy no:",
   "whoFiles.group.employer": "Lo guarda el empleador",
@@ -3390,15 +3393,15 @@ const es: Messages = {
     "No. El ITIN es IRS.gov. El I-94 es i94.cbp.dhs.gov. No inventamos el W-7 y no hospedamos el registro de CBP.",
   "whoFiles.faq.5.q": "¿Marcar la casilla presenta algo?",
   "whoFiles.faq.5.a":
-    "No. Las marcas se quedan en este navegador para que recuerdes qué ya entregaste. Nada se envía a un gobierno.",
+    "No. Nada se envía a un gobierno. Sin sesión, las marcas se quedan en este teléfono. Cuando entras, la lista vive en la cuenta — el plan de $10/mes la guarda en la bóveda junto a los PDF.",
   "whoFiles.faq.6.q": "¿Qué hace aquí el plan de $10/mes?",
   "whoFiles.faq.6.a":
-    "Firmar los extras, guardar cada PDF más de 9 días (bóveda hasta el 15 de abril o 13 meses), compartir constancia y enviar cobro. La lista y los links oficiales se leen sin pagar.",
+    "Firmar los extras, guardar cada PDF más de 9 días (bóveda hasta el 15 de abril o 13 meses), compartir constancia, enviar cobro y dejar “qué ya entregué” en la cuenta para que otro teléfono vea el mismo mapa. Los links oficiales se leen sin pagar.",
   "whoFiles.howToName": "Cómo entregar cada archivo firmado",
   "whoFiles.howTo1": "Firma el PDF de apoyo en Docracy (I-9, oferta, poder, arrendamiento).",
   "whoFiles.howTo2": "Abre el portal oficial de la fila — USCIS, CEAC, CBP, IRS, SSA o el .gob de tu país.",
   "whoFiles.howTo3": "Tú lo subes o el empleador lo guarda. Nosotros no presentamos.",
-  "whoFiles.howTo4": "Marca la fila cuando lo hayas entregado. El plan de pago reabre el PDF después.",
+  "whoFiles.howTo4": "Marca la fila cuando lo hayas entregado. El plan de $10/mes deja esa lista en la bóveda, no solo en este teléfono.",
   "footer.latamSearch": "Buscar documentos LATAM",
   "latamSearch.seoTitle": "Buscar documentos LATAM → EE. UU. — I-9, apostilla, I-94 | Docracy",
   "latamSearch.seoDescription":

@@ -53,7 +53,7 @@ export type WhoFilesRow = {
 };
 
 /**
- * Who receives each file / who files it. Checkboxes are local-only.
+ * Who receives each file / who files it. Anonymous = localStorage; signed-in = KV vault.
  * Official hrefs are government hosts we already verified. No W-7 / W-8BEN templates.
  */
 export const WHO_FILES_ROWS: readonly WhoFilesRow[] = [

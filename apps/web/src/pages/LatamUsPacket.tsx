@@ -257,7 +257,7 @@ export default function LatamUsPacket() {
         <p style={{ fontSize: 14 }}>
           <Link to={localizePath(WHO_FILES_WHERE_EN, locale)}>{t("footer.whoFiles")}</Link>
         </p>
-        <WhoFilesWhereChecklist renderAction={packetCta} sourcePrefix="seo:latam-to-us" />
+        <WhoFilesWhereChecklist account={account} renderAction={packetCta} sourcePrefix="seo:latam-to-us" />
 
         <h2 style={{ fontSize: 19, marginTop: 36 }}>{t("latamUsPacket.compareTitle")}</h2>
         <p style={{ color: "var(--mute)" }}>{t("latamUsPacket.compareSub")}</p>
