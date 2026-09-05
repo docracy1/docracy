@@ -352,10 +352,10 @@ const es: Messages = {
   "imprint.sub": "Información según §5 ECG (Ley de Comercio Electrónico de Austria).",
   "imprint.title": "Aviso legal",
   "integrations.detail":
-    "Dropbox, OneDrive, Box y Google Drive suben PDFs firmados automáticamente. Zapier y webhooks automatizan tu stack. MCP conecta Claude, ChatGPT, Grok, Perplexity y Cursor a tus documentos.",
+    "Dropbox, OneDrive, Box y Google Drive suben PDFs firmados automáticamente. En cobro pegas PayPal.me, Stripe Payment Link, Mercado Pago, Square o Venmo. Zapier y webhooks automatizan tu stack. MCP conecta Claude, ChatGPT, Grok, Perplexity y Cursor a tus documentos.",
   "integrations.learnMore": "Saber más →",
   "integrations.sub":
-    "Integra las plataformas que ya usas — almacenamiento en la nube, automatización y asistentes de IA. Las cuentas de pago desbloquean conectores nativos, y WhatsApp ya funciona para enviar enlaces de firma.",
+    "Integra las plataformas que ya usas — nube, automatización, IA y el checkout que ya tienes. Las cuentas de pago desbloquean conectores nativos. WhatsApp entrega firma y cobro. PayPal, Stripe, Mercado Pago, Square y Venmo son tu enlace pegado — no nos quedamos el dinero.",
   "integrations.title": "Conecta Docracy con las herramientas que ya usas",
   "landing.ai1.body": "Sube un PDF o Google Doc y coloca campos de firma, fecha e iniciales por ti.",
   "landing.ai1.title": "Detectar campos automáticamente",
@@ -2523,6 +2523,7 @@ const es: Messages = {
   "prepare.payAmountAria": "Monto a cobrar",
   "prepare.payCurrencyAria": "Moneda",
   "prepare.payUrlPh": "https://paypal.me/tu o tu enlace de cobro",
+  "prepare.payLogosHint": "PayPal, Stripe, Mercado Pago, Square o Venmo — pega tu checkout. No nos quedamos el dinero.",
   "prepare.payUrlAria": "Tu enlace de pago",
   "sign.payCta": "Pagar {{amount}} {{currency}}",
   "sign.payHint": "Este cobro es del remitente. Docracy no procesa el pago.",
@@ -2819,6 +2820,7 @@ const es: Messages = {
   "cobro.pickContact": "Rellenar desde un contacto",
   "cobro.payUrlPh": "https://mpago.la/… o PayPal.me/tu",
   "cobro.prefsHint": "Recordamos tu última URL de checkout después de enviar. El PDF no se guarda hasta que envías.",
+  "cobro.payLogosHint": "PayPal, Stripe, Mercado Pago, Square o Venmo — pega tu checkout. Docracy no se queda el dinero.",
   "cobro.markPaid": "Marcar pagado",
   "cobro.markedPaid": "Pagado",
   "cobro.markedPaidHint": "Lo marcaste pagado en tu propio checkout. Se detuvieron los recordatorios.",

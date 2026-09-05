@@ -6,6 +6,7 @@ import { useSeoMeta } from "../lib/useSeoMeta";
 import { paidVaultDays, PAID_TTL_MAX_DAYS } from "../lib/paidVault";
 import PdfViewer from "../components/PdfViewer";
 import PdfUploadCircle from "../components/PdfUploadCircle";
+import { PaymentCheckoutLogos } from "../components/IntegrationsBand";
 import {
   analyzeDocumentRisks,
   createDocument,
@@ -1758,6 +1759,8 @@ export default function Prepare() {
                       value={paymentUrl}
                       onChange={(e) => setPaymentUrl(e.target.value)}
                     />
+                    <PaymentCheckoutLogos />
+                    <p style={{ fontSize: 12, color: "var(--mute)", margin: "6px 0 0" }}>{t("prepare.payLogosHint")}</p>
                   </>
                 ) : (
                   <>

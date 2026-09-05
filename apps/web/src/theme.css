@@ -3239,6 +3239,21 @@ a.hero-latam-cta-btn {
   display: block;
 }
 
+.payment-checkout-logos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.payment-checkout-logo {
+  display: block;
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+
 .integrations-tile-name {
   font-size: 12.5px;
   font-weight: 600;
