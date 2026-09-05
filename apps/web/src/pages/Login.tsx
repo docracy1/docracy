@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import TurnstileWidget, { turnstileRequired } from "../components/TurnstileWidget";
 import { adminLogin, requestMagicLink } from "../lib/api";
 import { useI18n } from "../lib/i18n";
+import { isLatamLoginIntent } from "../lib/latamCheckout";
 import { useNoIndex } from "../lib/useNoIndex";
 
 export default function Login() {
@@ -29,12 +30,26 @@ export default function Login() {
         ? "save-doc"
         : ref === "prepare-signer-cap" || ref === "prepare-cap" || ref === "prepare-cc-cap"
           ? "upgrade"
-          : "default";
+          : locale === "es" && isLatamLoginIntent(ref, nextParam)
+            ? "latam"
+            : "default";
 
   const headline =
-    intent === "save-doc" ? t("login.titleSave") : intent === "upgrade" ? t("login.titleUpgrade") : t("login.heading");
+    intent === "save-doc"
+      ? t("login.titleSave")
+      : intent === "upgrade"
+        ? t("login.titleUpgrade")
+        : intent === "latam"
+          ? t("login.titleLatam")
+          : t("login.heading");
   const subcopy =
-    intent === "save-doc" ? t("login.subSave") : intent === "upgrade" ? t("login.subUpgrade") : t("login.sub");
+    intent === "save-doc"
+      ? t("login.subSave")
+      : intent === "upgrade"
+        ? t("login.subUpgrade")
+        : intent === "latam"
+          ? t("login.subLatam")
+          : t("login.sub");
   const ctaLabel = intent === "save-doc" ? t("login.ctaSave") : t("login.cta");
 
   const [email, setEmail] = useState(emailParam);

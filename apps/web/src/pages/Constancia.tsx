@@ -11,6 +11,8 @@ import {
   type ConstanciaPacket,
 } from "../lib/api";
 import { localizePath, useI18n } from "../lib/i18n";
+import { loginWithCheckout } from "../lib/latamCheckout";
+import { useAutoCheckout } from "../lib/useAutoCheckout";
 import { usePageMeta } from "../lib/usePageMeta";
 import { track } from "../lib/track";
 import { breadcrumbJsonLd, howToJsonLd } from "../lib/productSeo";
@@ -154,7 +156,8 @@ export default function Constancia() {
     }
   };
 
-  const loginTo = `/login?next=${encodeURIComponent(canonicalPath)}&ref=constancia`;
+  const loginTo = loginWithCheckout(canonicalPath, "constancia");
+  useAutoCheckout(account, "seo:constancia:auto");
   const savedName = packet?.subjectName?.trim() ?? "";
   const canCopy = Boolean(packet?.shareUrl && savedName);
 

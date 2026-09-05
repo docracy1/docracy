@@ -1,8 +1,10 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { fetchMe } from "../lib/api";
+import { fetchMe, startCheckout, type Account } from "../lib/api";
 import { PLAN_ROWS, PlanCell, type PlanValue } from "../lib/planRows";
 import { localizePath, useI18n, useT } from "../lib/i18n";
+import { loginWithCheckout } from "../lib/latamCheckout";
+import { useAutoCheckout } from "../lib/useAutoCheckout";
 import { useSeoMeta } from "../lib/useSeoMeta";
 
 type PlanId = "free" | "paid" | "enterprise";
@@ -19,16 +21,48 @@ export default function Pricing() {
   useSeoMeta("pricing");
   const planRows = PLAN_ROWS.filter((row) => !row.esOnly || locale === "es");
 
-  /** null = logged out (show sticky dock); undefined = loading; Account = signed in (hide dock). */
-  const [signedOut, setSignedOut] = useState<boolean | null>(null);
+  /** undefined = loading; null = logged out; Account = signed in. */
+  const [account, setAccount] = useState<Account | null | undefined>(undefined);
+  const [upgrading, setUpgrading] = useState(false);
   /** Mobile accordion: Paid open by default (best value). */
   const [openPlan, setOpenPlan] = useState<PlanId | null>("paid");
 
   useEffect(() => {
     fetchMe()
-      .then(({ account }) => setSignedOut(!account))
-      .catch(() => setSignedOut(true));
+      .then(({ account: me }) => setAccount(me))
+      .catch(() => setAccount(null));
   }, []);
+
+  useAutoCheckout(account ?? null, "pricing:auto");
+
+  const paidLogin = loginWithCheckout(localizePath("/pricing", locale), locale === "es" ? "latam-to-us" : "pricing");
+
+  const onPaidCheckout = async () => {
+    setUpgrading(true);
+    try {
+      const { url } = await startCheckout();
+      window.location.href = url;
+    } catch {
+      setUpgrading(false);
+    }
+  };
+
+  const paidCta =
+    account?.isPaid ? (
+      <Link to={localizePath("/dashboard", locale)} className="btn-primary pricing-mobile-cta">
+        {t("common.goDashboard")}
+      </Link>
+    ) : account ? (
+      <button type="button" className="btn-primary pricing-mobile-cta" onClick={onPaidCheckout} disabled={upgrading}>
+        {upgrading ? t("common.redirecting") : t("pricing.paid.ctaGet")}
+      </button>
+    ) : (
+      <Link to={paidLogin} className="btn-primary pricing-mobile-cta">
+        {t("pricing.paid.ctaGet")}
+      </Link>
+    );
+
+  const showPaidDock = account !== undefined && !account?.isPaid;
 
   const mobilePlans: Array<{
     id: PlanId;
@@ -53,11 +87,7 @@ export default function Pricing() {
       nameKey: "pricing.paid.name",
       price: "$10",
       note: t("pricing.paid.note"),
-      cta: (
-        <Link to="/login" className="btn-primary pricing-mobile-cta">
-          {t("pricing.paid.ctaGet")}
-        </Link>
-      ),
+      cta: paidCta,
     },
     {
       id: "enterprise",
@@ -191,7 +221,7 @@ export default function Pricing() {
 
         {/* Sticky prices — desktop only. Mobile uses accordion cards with inline CTAs;
             a fixed 3-row dock was crushing the feature list under cookie+chrome. */}
-        {signedOut === true && (
+        {showPaidDock && (
           <div className="pricing-sticky-bar pricing-sticky-bar-desktop" aria-label={t("pricing.dockAria")}>
             <div className="pricing-sticky-spacer" aria-hidden="true" />
             <div className="pricing-sticky-col">
@@ -208,9 +238,15 @@ export default function Pricing() {
               <div className="pricing-sticky-price">
                 $10<span className="pricing-sticky-note">{t("pricing.paid.note")}</span>
               </div>
-              <Link to="/login" className="btn-primary pricing-sticky-cta">
-                {t("pricing.paid.ctaGet")}
-              </Link>
+              {account ? (
+                <button type="button" className="btn-primary pricing-sticky-cta" onClick={onPaidCheckout} disabled={upgrading}>
+                  {upgrading ? t("common.redirecting") : t("pricing.paid.ctaGet")}
+                </button>
+              ) : (
+                <Link to={paidLogin} className="btn-primary pricing-sticky-cta">
+                  {t("pricing.paid.ctaGet")}
+                </Link>
+              )}
             </div>
             <div className="pricing-sticky-col">
               <div className="pricing-sticky-name">{t("pricing.ent.name")}</div>

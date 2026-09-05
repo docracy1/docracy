@@ -533,6 +533,9 @@ const es: Messages = {
   "login.heading": "Iniciar sesión / Registrarse",
   "login.titleSave": "Guarda el documento que acabas de enviar",
   "login.titleUpgrade": "Inicia sesión para mejorar tu plan",
+  "login.titleLatam": "El plan de $10 guarda tu I-9 y la constancia",
+  "login.subLatam":
+    "Sin contraseña. Después de entrar, Stripe cobra USD $10/mes: vault hasta el 15 de abril o 13 meses, cobro con tu link, constancia para el arrendador. Firmar sigue gratis. No apostillamos ni tramitamos USCIS.",
   "mcp.eyebrow": "Para desarrolladores y usuarios avanzados de IA",
   "mcp.freeToolTitle": "Plantillas + check_status — gratis, sin registro",
   "mcp.freeToolBody":
@@ -780,7 +783,7 @@ const es: Messages = {
   "pricing.intro":
     "Firmar es gratis — hasta 2 firmantes, sin cuenta. El plan de $10/mes conserva los PDF hasta el próximo 15 de abril o 13 meses (los reabres cuando te los pidan), incluye el plan inmigrante (qué hacer + links oficiales + I-9 / constancia / cobro) y pegas tu checkout después de firmar. No es una tarifa por firma ni un recorte.",
   "pricing.dockAria": "Precios de planes",
-  "pricing.paid.ctaGet": "Ilimitado — $10/mes",
+  "pricing.paid.ctaGet": "Plan LATAM — $10/mes",
   "pricing.paid.ctaLogin": "Inicia sesión para mejorar el plan",
   "pricing.paid.ctaUpgrade": "Mejorar plan — $10/mes",
   "pricing.paid.f1": "Conserva los PDF firmados hasta el próximo 15 de abril o 13 meses",
@@ -826,6 +829,9 @@ const es: Messages = {
     "Este PDF firmado se elimina a los 9 días. Una cuenta gratis lo lista en tu panel hasta entonces — el plan de pago es lo que conserva el archivo.",
   "sent.saveAccountSubFuture":
     "Este PDF firmado se elimina a los 9 días — el enlace de estado también deja de funcionar. Una cuenta gratis lista los envíos hasta esa fecha. El plan de pago conserva los archivos.",
+  "sent.saveAccountSubLatam":
+    "A los 9 días se borra. El plan de USD $10/mes guarda I-9, oferta, constancia y cobro (hasta el 15 de abril o 13 meses). Firmar sigue gratis.",
+  "sent.upgradeLatam": "Guardar el I-9 — $10/mes",
   "sent.sendAnother": "Enviar otro",
   "sent.sequential":
     "El primer firmante recibió su enlace. Los demás en la cadena serán notificados en turno.",
@@ -934,6 +940,8 @@ const es: Messages = {
   "status.keepPdfs": "Guarda este documento en tu panel",
   "status.keepPdfsSub":
     "Crea una cuenta gratis y moveremos este envío a tu historial — sin contraseña, solo un enlace mágico. El plan de pago desbloquea plantillas, firmantes ilimitados y asientos de equipo — 10 $/mes.",
+  "status.keepPdfsSubLatam":
+    "Crea una cuenta gratis para listarlo. El plan de USD $10/mes guarda I-9, constancia y cobro hasta el 15 de abril o 13 meses — no es un recorte ni factura SAT/DIAN.",
   "status.seePaidPlans": "Ver planes de pago",
   "status.viewer": "Espectador: {{info}}",
   "team.failed": "No se pudo aceptar la invitación",
@@ -2317,12 +2325,12 @@ const es: Messages = {
 
   "sent.checkEmail": "Tu documento se creó. Revisa tu correo para actualizaciones de estado.",
   "sent.shareBlurb": "Acabo de enviar un documento a firmar con Docracy (gratis, sin registro). Pruébalo: https://docracy.io/try",
-  "dash.firstRunTitle": "Envía tu primer documento",
-  "dash.firstRunSub": "Tres pasos rápidos — luego el progreso aparece aquí.",
-  "dash.firstRunStep1": "Sube un PDF o Google Doc, o empieza desde una plantilla gratis",
-  "dash.firstRunStep2": "Agrega firmantes y coloca campos de firma",
-  "dash.firstRunStep3": "Envía — cada uno recibe un enlace por correo; no necesitan cuenta para firmar",
-  "dash.firstRunCta": "Empezar con un NDA de ejemplo",
+  "dash.firstRunTitle": "Firma el I-9 el primer día",
+  "dash.firstRunSub": "Tres pasos — el PDF oficial de USCIS, luego el progreso aparece aquí.",
+  "dash.firstRunStep1": "Abre el I-9 oficial o sube tu propio PDF",
+  "dash.firstRunStep2": "Tú firmas la Sección 1; el empleador no usa esto como E-Verify",
+  "dash.firstRunStep3": "Envía — firmar es gratis; el plan de $10/mes guarda el PDF cuando te lo pidan",
+  "dash.firstRunCta": "Abrir el I-9 oficial",
   "dash.firstRunUpload": "O sube tu propio PDF o Google Doc",
   "dash.emptyDocs": "Aún no hay nada — envía un documento y aparecerá en esta lista.",
   "dash.emptyDocsCta": "Nuevo documento",

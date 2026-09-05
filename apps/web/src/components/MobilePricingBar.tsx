@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { fetchMe } from "../lib/api";
 import { localizePath, useI18n, useT } from "../lib/i18n";
+import { loginWithCheckout } from "../lib/latamCheckout";
 import { track } from "../lib/track";
 
 /** Product / auth flows where a pricing dock would get in the way. */
@@ -77,7 +78,7 @@ export default function MobilePricingBar() {
             $10<span className="pricing-sticky-note">{t("pricing.paid.note")}</span>
           </div>
           <Link
-            to="/login"
+            to={loginWithCheckout(localizePath("/pricing", locale), locale === "es" ? "latam-to-us" : "pricing")}
             className="btn-primary pricing-sticky-cta"
             onClick={() => track("landingpage_cta_clicked", { source: "mobile_pricing_paid" })}
           >

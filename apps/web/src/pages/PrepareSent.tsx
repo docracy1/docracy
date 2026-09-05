@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { fetchMe } from "../lib/api";
+import { fetchMe, startCheckout, type Account } from "../lib/api";
 import { localizePath, useI18n, useT } from "../lib/i18n";
 import { savePendingClaim } from "../lib/pendingClaim";
 import {
@@ -46,6 +46,8 @@ export default function PrepareSent() {
     } | null;
   };
   const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
+  const [account, setAccount] = useState<Account | null>(null);
+  const [upgrading, setUpgrading] = useState(false);
   const [copied, setCopied] = useState<"status" | "share" | "signed" | null>(null);
 
   useEffect(() => {
@@ -56,7 +58,10 @@ export default function PrepareSent() {
 
   useEffect(() => {
     fetchMe()
-      .then(({ account }) => setLoggedIn(!!account))
+      .then(({ account: me }) => {
+        setAccount(me);
+        setLoggedIn(!!me);
+      })
       .catch(() => setLoggedIn(false));
   }, []);
 
@@ -229,7 +234,7 @@ export default function PrepareSent() {
         <div className="card" style={{ marginTop: 20 }}>
           <p style={{ marginBottom: 8, fontWeight: 600 }}>{t("sent.saveAccount")}</p>
           <p style={{ marginBottom: 14, color: "var(--mute)", fontSize: 14 }}>
-            {t("sent.saveAccountSub")}
+            {locale === "es" ? t("sent.saveAccountSubLatam") : t("sent.saveAccountSub")}
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
             <Link
@@ -255,7 +260,7 @@ export default function PrepareSent() {
         <div className="card" style={{ marginTop: 20 }}>
           <p style={{ marginBottom: 8, fontWeight: 600 }}>{t("sent.saveAccount")}</p>
           <p style={{ marginBottom: 14, color: "var(--mute)", fontSize: 14 }}>
-            {t("sent.saveAccountSubFuture")}
+            {locale === "es" ? t("sent.saveAccountSubLatam") : t("sent.saveAccountSubFuture")}
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
             <Link
@@ -279,7 +284,26 @@ export default function PrepareSent() {
 
       {loggedIn === true && (
         <div style={{ marginTop: 20, display: "flex", flexWrap: "wrap", gap: 10 }}>
-          <Link to={localizePath("/prepare", locale)} className="btn-primary" style={{ textDecoration: "none" }}>
+          {locale === "es" && account && !account.isPaid && (
+            <button
+              type="button"
+              className="btn-primary"
+              disabled={upgrading}
+              onClick={async () => {
+                track("upgrade_clicked", { source: "prepare_sent_latam" });
+                setUpgrading(true);
+                try {
+                  const { url } = await startCheckout();
+                  window.location.href = url;
+                } catch {
+                  setUpgrading(false);
+                }
+              }}
+            >
+              {upgrading ? t("common.redirecting") : t("sent.upgradeLatam")}
+            </button>
+          )}
+          <Link to={localizePath("/prepare", locale)} className={locale === "es" && account && !account.isPaid ? "btn-secondary" : "btn-primary"} style={{ textDecoration: "none" }}>
             {t("sent.sendAnother")}
           </Link>
           <Link to="/dashboard" className="btn-secondary" style={{ textDecoration: "none" }}>

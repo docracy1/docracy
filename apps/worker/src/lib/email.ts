@@ -806,9 +806,9 @@ export async function sendCompletionEmails(
     ${paymentCtaHtml(doc, locale)}
     ${signedCta}
     <p style="margin:24px 0 0 0;font-size:14px;color:${INK};line-height:1.5;">
-      El PDF firmado se elimina el ${deleteDate}. El plan de pago lo conserva en tu archivo hasta el próximo 15 de abril o 13 meses — no es un extra de firmas, es no perder el documento.
+      El PDF firmado se elimina el ${deleteDate}. El plan de USD $10/mes guarda I-9, constancia y cobro hasta el próximo 15 de abril o 13 meses.
     </p>
-    ${ctaButton(`${env.PUBLIC_APP_URL}/pricing?utm_source=email&utm_medium=completion&utm_campaign=keep-files&ref=preparer-done`, "Conservar los archivos firmados")}
+    ${ctaButton(`${env.PUBLIC_APP_URL}/es/precios?checkout=1&utm_source=email&utm_medium=completion&utm_campaign=keep-files&ref=preparer-done`, "Guardar el expediente — $10/mes")}
     <p style="margin:12px 0 0 0;font-size:13px;color:${MUTED};">
       Una <a href="${env.PUBLIC_APP_URL}/login?ref=preparer-done" style="color:${PRIMARY};">cuenta gratis</a> lista el envío en el panel hasta esa fecha; no evita que se borre.
     </p>`
@@ -875,9 +875,10 @@ export async function sendArchiveNag(env: Env, doc: DocState): Promise<void> {
   const title = doc.title?.trim() || (locale === "es" ? "tu documento firmado" : "your signed document");
   const parties = doc.signers.map((s) => s.name.trim()).filter(Boolean).join(", ") || (locale === "es" ? "las partes" : "the parties");
   const deleteDate = formatDeleteDate(doc.expiresAt, locale);
+  const pricingPath = locale === "es" ? "/es/precios" : "/pricing";
   const upgradeUrl = doc.accountId
-    ? `${env.PUBLIC_APP_URL}/pricing?utm_source=email&utm_medium=archive-nag&utm_campaign=keep-files&ref=archive-nag`
-    : `${env.PUBLIC_APP_URL}/login?ref=archive-nag&next=${encodeURIComponent("/pricing?ref=archive-nag")}`;
+    ? `${env.PUBLIC_APP_URL}${pricingPath}?checkout=1&utm_source=email&utm_medium=archive-nag&utm_campaign=keep-files&ref=archive-nag`
+    : `${env.PUBLIC_APP_URL}/login?ref=archive-nag&next=${encodeURIComponent(`${pricingPath}?checkout=1&ref=archive-nag`)}`;
 
   const subject =
     locale === "es"
@@ -891,9 +892,10 @@ export async function sendArchiveNag(env: Env, doc: DocState): Promise<void> {
       <strong>${escapeHtml(title)}</strong> — firmado con ${escapeHtml(parties)} — se borra de Docracy el ${deleteDate}.
     </p>
     <p style="margin:12px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
-      El plan de pago guarda el archivo en tu archivo. Firmar sigue siendo gratis; lo que se paga es no perder el contrato.
+      El plan de USD $10/mes guarda I-9, oferta, constancia y cobro (hasta el 15 de abril o 13 meses).
+      Firmar sigue gratis. No apostillamos ni tramitamos USCIS.
     </p>
-    ${ctaButton(upgradeUrl, "Conservar este archivo — $10/mes")}
+    ${ctaButton(upgradeUrl, "Guardar el expediente — $10/mes")}
   `
       : `
     ${emailHeadline(`This signed PDF is deleted on ${deleteDate}`)}

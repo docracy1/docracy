@@ -35,6 +35,7 @@ import {
 } from "../lib/pdfEdit";
 import type { TextSpan } from "../lib/pdfEdit";
 import { getFreeTemplate } from "../lib/freeTemplates";
+import { pricingUpgradeHref } from "../lib/latamCheckout";
 import { markPacketTemplateSent, US_CONTRACTOR_PACKET_SLUG } from "../lib/contractorPacket";
 import { markLatamPacketStepSent, LATAM_CONTRACTOR_PACKET_SLUG } from "../lib/latamContractorPacket";
 import { isJobPacketId, markJobPacketStepSent } from "../lib/jobPackets";
@@ -1609,7 +1610,7 @@ export default function Prepare() {
                   error.toLowerCase().includes("paid")) && (
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                     <Link
-                      to={account ? "/pricing" : "/login?ref=prepare-cap"}
+                      to={pricingUpgradeHref(account, locale, "prepare-cap")}
                       className="btn-primary"
                       style={{ textDecoration: "none", fontSize: 13 }}
                       onClick={() => track("upgrade_clicked", { source: "prepare_cap_error" })}
@@ -1766,7 +1767,7 @@ export default function Prepare() {
                   <>
                     <p style={{ fontSize: 12, color: "var(--mute)", margin: "0 0 8px" }}>{t("prepare.payLocked")}</p>
                     <Link
-                      to={account ? "/pricing" : "/login?ref=prepare-pay"}
+                      to={pricingUpgradeHref(account, locale, "prepare-pay")}
                       className="btn-primary"
                       style={{ textDecoration: "none", fontSize: 13, display: "inline-block" }}
                       onClick={() => track("upgrade_clicked", { source: "prepare_payment_link" })}
@@ -1998,7 +1999,7 @@ export default function Prepare() {
                     {t("prepare.signerUpsellBody")}
                   </p>
                   <Link
-                    to={account ? "/pricing" : "/login?ref=prepare-signer-cap"}
+                    to={pricingUpgradeHref(account, locale, "prepare-signer-cap")}
                     className="btn-primary"
                     style={{ textDecoration: "none", fontSize: 13 }}
                     onClick={() => track("upgrade_clicked", { source: "prepare_signer_cap_card" })}
@@ -2011,7 +2012,7 @@ export default function Prepare() {
                 <p style={{ fontSize: 13, marginTop: 8 }}>
                   {t("prepare.ccCapHint", { max: FREE_TIER_MAX_CCS })}{" "}
                   <Link
-                    to={account ? "/pricing" : "/login?ref=prepare-cc-cap"}
+                    to={pricingUpgradeHref(account, locale, "prepare-cc-cap")}
                     onClick={() => track("upgrade_clicked", { source: "prepare_cc_cap_card" })}
                   >
                     {t("prepare.upgradeUnlimited")}
