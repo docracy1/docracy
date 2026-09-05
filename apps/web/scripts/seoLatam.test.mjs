@@ -222,6 +222,10 @@ for (const c of GENERATED_COUNTRY_CORRIDORS) {
 }
 
 const sitemap = fs.readFileSync(path.join(__dirname, "../public/sitemap.xml"), "utf8");
+const robots = fs.readFileSync(path.join(__dirname, "../public/robots.txt"), "utf8");
+const { writeSeoDiscovery, LATAM_SITEMAP_PAIRS, LATAM_EN_ALLOW_PATHS } = await import(
+  "./writeSeoDiscovery.mjs"
+);
 for (const loc of [
   "/es/acta",
   "/es/cita-consular",
@@ -230,10 +234,40 @@ for (const loc of [
   "/es/buscar",
   "/es/quien-sube-donde",
   "/es/kit-llegar-eeuu",
+  "/itin",
+  "/es/itin",
+  "/after-arrival",
+  "/es/despues-de-llegar",
+  "/i-9",
+  "/mexico-to-us",
+  "/latam-search",
+  "/who-files-where",
+  "/acta",
 ]) {
   assert.ok(sitemap.includes(`<loc>https://docracy.io${loc}</loc>`), `sitemap missing ${loc}`);
 }
+for (const p of ["/acta", "/itin", "/latam-search", "/who-files-where", "/after-arrival", "/i-9", "/packets/latam-to-us", "/mexico-to-us"]) {
+  assert.ok(robots.includes(`Allow: ${p}$`), `committed robots missing Allow: ${p}$`);
+}
+
+const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "seo-discovery-"));
+writeSeoDiscovery([], { distDir: tmp, publicDir: tmp });
+const generatedRobots = fs.readFileSync(path.join(tmp, "robots.txt"), "utf8");
+for (const p of LATAM_EN_ALLOW_PATHS) {
+  assert.ok(generatedRobots.includes(`Allow: ${p}$`), `writeSeoDiscovery fallback missing Allow: ${p}$`);
+}
+assert.equal(LATAM_SITEMAP_PAIRS.length, 36);
+assert.ok(LATAM_EN_ALLOW_PATHS.includes("/cuba-to-us"));
+
+const indexNowSrc = fs.readFileSync(path.join(__dirname, "submitIndexNow.mjs"), "utf8");
+assert.ok(indexNowSrc.includes('path.join(root, "dist", "sitemap.xml")'), "IndexNow must prefer dist/sitemap.xml");
+
+const llmsFull = fs.readFileSync(path.join(__dirname, "../public/llms-full.txt"), "utf8");
+assert.ok(llmsFull.includes("/es/kit-llegar-eeuu"), "llms-full must document the immigrant plan");
+assert.ok(llmsFull.includes("/es/buscar"), "llms-full must document LATAM search");
+assert.ok(/not an Apostille party/i.test(llmsFull), "llms-full must not invent a Cuba Apostille");
 
 fs.unlinkSync(out);
 fs.unlinkSync(marketingOut);
+fs.rmSync(tmp, { recursive: true, force: true });
 console.log("seoLatam.test.mjs: ok");

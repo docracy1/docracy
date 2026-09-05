@@ -706,9 +706,13 @@ export async function sendCompletionEmails(
       : locale === "es"
         ? `
     <p style="margin:24px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">
-      Enviado con Docracy — firmas electrónicas gratis para acuerdos simples.
+      Enviado con Docracy — firmar sigue gratis. USD $10/mes guarda I-9, constancia y cobro.
+      No tramitamos USCIS, apostilla ni E-Verify.
     </p>
-    ${ctaButton(`${env.PUBLIC_APP_URL}/try?utm_source=email&utm_medium=completion&utm_campaign=signer-reverse`, "Envía el tuyo gratis")}`
+    ${ctaButton(`${env.PUBLIC_APP_URL}/es/kit-llegar-eeuu?utm_source=email&utm_medium=completion&utm_campaign=signer-reverse`, "Abrir el plan inmigrante")}
+    <p style="margin:12px 0 0 0;font-size:13px;color:${MUTED};">
+      <a href="${env.PUBLIC_APP_URL}/es/quien-sube-donde?utm_source=email&utm_medium=completion&utm_campaign=signer-reverse" style="color:${PRIMARY};">Quién sube dónde</a> — tú sigues subiendo el PDF.
+    </p>`
         : `
     <p style="margin:24px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">
       Sent with Docracy — free e-signatures for simple agreements.

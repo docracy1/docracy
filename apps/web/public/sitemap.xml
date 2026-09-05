@@ -5120,5 +5120,470 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/kit-llegar-eeuu" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/kit-llegar-eeuu" />
   </url>
+  <url>
+    <loc>https://docracy.io/itin</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/itin" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/itin" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/itin" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/itin</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/itin" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/itin" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/itin" />
+  </url>
+  <url>
+    <loc>https://docracy.io/after-arrival</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/after-arrival" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/despues-de-llegar" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/despues-de-llegar" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/despues-de-llegar</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/after-arrival" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/despues-de-llegar" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/despues-de-llegar" />
+  </url>
+  <url>
+    <loc>https://docracy.io/i-9</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/i-9" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/formulario-i-9" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/formulario-i-9" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/formulario-i-9</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/i-9" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/formulario-i-9" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/formulario-i-9" />
+  </url>
+  <url>
+    <loc>https://docracy.io/visa-supporting-documents</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/visa-supporting-documents" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/documentos-para-visa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/documentos-para-visa" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/documentos-para-visa</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/visa-supporting-documents" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/documentos-para-visa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/documentos-para-visa" />
+  </url>
+  <url>
+    <loc>https://docracy.io/immigrant-housing</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/immigrant-housing" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/arrendamiento-inmigrante" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/arrendamiento-inmigrante" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/arrendamiento-inmigrante</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/immigrant-housing" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/arrendamiento-inmigrante" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/arrendamiento-inmigrante" />
+  </url>
+  <url>
+    <loc>https://docracy.io/immigrant-documents</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/immigrant-documents" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/documentos-para-inmigrantes" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/documentos-para-inmigrantes" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/documentos-para-inmigrantes</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/immigrant-documents" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/documentos-para-inmigrantes" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/documentos-para-inmigrantes" />
+  </url>
+  <url>
+    <loc>https://docracy.io/move-to-us</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/move-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/llegar-a-estados-unidos" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/llegar-a-estados-unidos" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/llegar-a-estados-unidos</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/move-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/llegar-a-estados-unidos" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/llegar-a-estados-unidos" />
+  </url>
+  <url>
+    <loc>https://docracy.io/mexico-to-us</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/mexico-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/mexico-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/mexico-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/mexico-a-eeuu</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/mexico-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/mexico-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/mexico-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/colombia-to-us</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/colombia-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/colombia-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/colombia-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/colombia-a-eeuu</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/colombia-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/colombia-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/colombia-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/peru-to-us</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/peru-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/peru-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/peru-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/peru-a-eeuu</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/peru-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/peru-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/peru-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/argentina-to-us</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/argentina-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/argentina-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/argentina-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/argentina-a-eeuu</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/argentina-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/argentina-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/argentina-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/chile-to-us</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/chile-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/chile-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/chile-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/chile-a-eeuu</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/chile-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/chile-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/chile-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/panama-to-us</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/panama-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/panama-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/panama-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/panama-a-eeuu</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/panama-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/panama-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/panama-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/venezuela-to-us</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/venezuela-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/venezuela-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/venezuela-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/venezuela-a-eeuu</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/venezuela-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/venezuela-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/venezuela-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/ecuador-to-us</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/ecuador-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/ecuador-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/ecuador-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/ecuador-a-eeuu</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/ecuador-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/ecuador-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/ecuador-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/guatemala-to-us</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/guatemala-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/guatemala-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/guatemala-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/guatemala-a-eeuu</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/guatemala-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/guatemala-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/guatemala-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/honduras-to-us</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/honduras-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/honduras-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/honduras-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/honduras-a-eeuu</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/honduras-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/honduras-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/honduras-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/el-salvador-to-us</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/el-salvador-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/el-salvador-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/el-salvador-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/el-salvador-a-eeuu</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/el-salvador-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/el-salvador-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/el-salvador-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/dominican-republic-to-us</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/dominican-republic-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/republica-dominicana-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/republica-dominicana-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/republica-dominicana-a-eeuu</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/dominican-republic-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/republica-dominicana-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/republica-dominicana-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/bolivia-to-us</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/bolivia-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/bolivia-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/bolivia-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/bolivia-a-eeuu</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/bolivia-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/bolivia-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/bolivia-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/costa-rica-to-us</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/costa-rica-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/costa-rica-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/costa-rica-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/costa-rica-a-eeuu</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/costa-rica-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/costa-rica-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/costa-rica-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/nicaragua-to-us</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/nicaragua-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/nicaragua-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/nicaragua-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/nicaragua-a-eeuu</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/nicaragua-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/nicaragua-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/nicaragua-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/uruguay-to-us</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/uruguay-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/uruguay-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/uruguay-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/uruguay-a-eeuu</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/uruguay-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/uruguay-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/uruguay-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/paraguay-to-us</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/paraguay-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/paraguay-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/paraguay-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/paraguay-a-eeuu</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/paraguay-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/paraguay-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/paraguay-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/cuba-to-us</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/cuba-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/cuba-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/cuba-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/cuba-a-eeuu</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/cuba-to-us" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/cuba-a-eeuu" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/cuba-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/boundless-alternative</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/boundless-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-boundless" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/alternativa-a-boundless" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/alternativa-a-boundless</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/boundless-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-boundless" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/alternativa-a-boundless" />
+  </url>
+  <url>
+    <loc>https://docracy.io/citizenpath-alternative</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/citizenpath-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-citizenpath" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/alternativa-a-citizenpath" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/alternativa-a-citizenpath</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/citizenpath-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-citizenpath" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/alternativa-a-citizenpath" />
+  </url>
+  <url>
+    <loc>https://docracy.io/visa-service-alternative</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/visa-service-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-gestoria-de-visa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/alternativa-a-gestoria-de-visa" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/alternativa-a-gestoria-de-visa</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/visa-service-alternative" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/alternativa-a-gestoria-de-visa" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/alternativa-a-gestoria-de-visa" />
+  </url>
+  <url>
+    <loc>https://docracy.io/boundless-vs-citizenpath</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/boundless-vs-citizenpath" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/boundless-vs-citizenpath" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/boundless-vs-citizenpath" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/boundless-vs-citizenpath</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/boundless-vs-citizenpath" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/boundless-vs-citizenpath" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/boundless-vs-citizenpath" />
+  </url>
 </urlset>
+
 

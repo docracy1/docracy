@@ -71,6 +71,103 @@ Sitemap: https://api.docracy.io/api/blog-posts/sitemap.xml
 Sitemap: https://api.docracy.io/api/marketplace/sitemap.xml
 `.trim();
 
+/** EN/ES pairs Bing/Yandex must see. `Allow: /es/` already covers Spanish; EN needs an exact Allow
+ *  because of the catch-all `Disallow: /`. Used by writeSeoDiscovery fallback + ensureLatamSitemap. */
+export const LATAM_SITEMAP_PAIRS = [
+  { en: "/acta", es: "/es/acta" },
+  { en: "/consular-appointment", es: "/es/cita-consular" },
+  { en: "/ead-tps", es: "/es/ead-tps" },
+  { en: "/phone-and-bank", es: "/es/chip-y-banco" },
+  { en: "/latam-search", es: "/es/buscar" },
+  { en: "/who-files-where", es: "/es/quien-sube-donde" },
+  { en: "/packets/latam-to-us", es: "/es/kit-llegar-eeuu" },
+  { en: "/itin", es: "/es/itin" },
+  { en: "/after-arrival", es: "/es/despues-de-llegar" },
+  { en: "/i-9", es: "/es/formulario-i-9" },
+  { en: "/visa-supporting-documents", es: "/es/documentos-para-visa" },
+  { en: "/immigrant-housing", es: "/es/arrendamiento-inmigrante" },
+  { en: "/immigrant-documents", es: "/es/documentos-para-inmigrantes" },
+  { en: "/move-to-us", es: "/es/llegar-a-estados-unidos" },
+  { en: "/mexico-to-us", es: "/es/mexico-a-eeuu" },
+  { en: "/colombia-to-us", es: "/es/colombia-a-eeuu" },
+  { en: "/peru-to-us", es: "/es/peru-a-eeuu" },
+  { en: "/argentina-to-us", es: "/es/argentina-a-eeuu" },
+  { en: "/chile-to-us", es: "/es/chile-a-eeuu" },
+  { en: "/panama-to-us", es: "/es/panama-a-eeuu" },
+  { en: "/venezuela-to-us", es: "/es/venezuela-a-eeuu" },
+  { en: "/ecuador-to-us", es: "/es/ecuador-a-eeuu" },
+  { en: "/guatemala-to-us", es: "/es/guatemala-a-eeuu" },
+  { en: "/honduras-to-us", es: "/es/honduras-a-eeuu" },
+  { en: "/el-salvador-to-us", es: "/es/el-salvador-a-eeuu" },
+  { en: "/dominican-republic-to-us", es: "/es/republica-dominicana-a-eeuu" },
+  { en: "/bolivia-to-us", es: "/es/bolivia-a-eeuu" },
+  { en: "/costa-rica-to-us", es: "/es/costa-rica-a-eeuu" },
+  { en: "/nicaragua-to-us", es: "/es/nicaragua-a-eeuu" },
+  { en: "/uruguay-to-us", es: "/es/uruguay-a-eeuu" },
+  { en: "/paraguay-to-us", es: "/es/paraguay-a-eeuu" },
+  { en: "/cuba-to-us", es: "/es/cuba-a-eeuu" },
+  { en: "/boundless-alternative", es: "/es/alternativa-a-boundless" },
+  { en: "/citizenpath-alternative", es: "/es/alternativa-a-citizenpath" },
+  { en: "/visa-service-alternative", es: "/es/alternativa-a-gestoria-de-visa" },
+  { en: "/boundless-vs-citizenpath", es: "/es/boundless-vs-citizenpath" },
+];
+
+export const LATAM_EN_ALLOW_PATHS = [...new Set(LATAM_SITEMAP_PAIRS.map((p) => p.en))];
+
+function latamSitemapEntry(urlPath, pair) {
+  const loc = `${SITE}${urlPath}`;
+  const en = `${SITE}${pair.en}`;
+  const es = `${SITE}${pair.es}`;
+  const lines = [
+    "  <url>",
+    `    <loc>${loc}</loc>`,
+    "    <changefreq>monthly</changefreq>",
+    "    <priority>0.8</priority>",
+  ];
+  if (pair.en !== pair.es) {
+    lines.push(`    <xhtml:link rel="alternate" hreflang="en" href="${en}" />`);
+    lines.push(`    <xhtml:link rel="alternate" hreflang="es" href="${es}" />`);
+    lines.push(`    <xhtml:link rel="alternate" hreflang="x-default" href="${es}" />`);
+  }
+  lines.push("  </url>");
+  return lines.join("\n");
+}
+
+/** Patch committed public/sitemap.xml + robots.txt when a full prerender has not run yet. */
+export function ensureLatamDiscovery(publicDir) {
+  const sitemapPath = path.join(publicDir, "sitemap.xml");
+  const robotsPath = path.join(publicDir, "robots.txt");
+  let xml = fs.readFileSync(sitemapPath, "utf8");
+  const missing = [];
+  for (const pair of LATAM_SITEMAP_PAIRS) {
+    for (const p of new Set([pair.en, pair.es])) {
+      if (!xml.includes(`<loc>${SITE}${p}</loc>`)) {
+        missing.push(latamSitemapEntry(p, pair));
+      }
+    }
+  }
+  if (missing.length) {
+    if (!xml.includes("</urlset>")) throw new Error("sitemap.xml missing </urlset>");
+    xml = xml.replace("</urlset>", `${missing.join("\n")}\n</urlset>\n`);
+    fs.writeFileSync(sitemapPath, xml);
+  }
+
+  let robots = fs.readFileSync(robotsPath, "utf8");
+  const missingAllow = LATAM_EN_ALLOW_PATHS.filter((p) => !robots.includes(`Allow: ${p}$`));
+  if (missingAllow.length) {
+    const marker = "# --- Token / API / short-links";
+    if (!robots.includes(marker)) throw new Error("robots.txt missing Token/API marker");
+    const block = `${missingAllow
+      .sort()
+      .map((p) => `Allow: ${p}$`)
+      .join("\n")}\n\n`;
+    robots = robots.replace(marker, `${block}${marker}`);
+    fs.writeFileSync(robotsPath, robots);
+  }
+
+  return { sitemapAdded: missing.length, robotsAdded: missingAllow.length };
+}
+
 function escapeXml(s) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
@@ -122,7 +219,17 @@ function priorityFor(urlPath) {
     urlPath === "/who-files-where" ||
     urlPath === "/es/quien-sube-donde" ||
     urlPath === "/packets/latam-to-us" ||
-    urlPath === "/es/kit-llegar-eeuu"
+    urlPath === "/es/kit-llegar-eeuu" ||
+    urlPath === "/itin" ||
+    urlPath === "/es/itin" ||
+    urlPath === "/after-arrival" ||
+    urlPath === "/es/despues-de-llegar" ||
+    urlPath === "/i-9" ||
+    urlPath === "/es/formulario-i-9" ||
+    urlPath === "/mexico-to-us" ||
+    urlPath === "/es/mexico-a-eeuu" ||
+    urlPath === "/colombia-to-us" ||
+    urlPath === "/es/colombia-a-eeuu"
   ) {
     return "0.8";
   }
@@ -232,6 +339,7 @@ function robotsAllowForRoutes(routes) {
     "/latam-export-documents",
     "/request-w9",
     "/templates",
+    ...LATAM_EN_ALLOW_PATHS,
   ]) {
     exact.add(p);
   }
