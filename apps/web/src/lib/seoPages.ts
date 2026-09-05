@@ -442,7 +442,7 @@ const IMMIGRANT_FAQS_EN = [
   {
     question: "Does Docracy replace Boundless or CitizenPath?",
     answer:
-      "No. They file or prepare USCIS/State petitions. We sign the supporting packet (official I-9, offer, POA, reference, lease), keep it on Paid, and tell you where each file goes. Use them to file. Use us for the $10 extras around the filing.",
+      "No. They file or prepare USCIS/State petitions. We sign the supporting packet (official I-9, offer, POA, reference, lease), save it so you can reopen it, and tell you where each file goes. Use them to file. Use us for the $10 extras around the filing.",
   },
   {
     question: "Do you file DS-160 or I-129?",
@@ -452,7 +452,17 @@ const IMMIGRANT_FAQS_EN = [
   {
     question: "Why is Docracy $10/month instead of hundreds?",
     answer:
-      "Different job. They charge for preparing or filing a case. Paid is the vault + signed extras + constancia + cobro. Check their sites for case fees — we will not invent a number.",
+      "Different job. They charge for preparing or filing a case. Paid is one plan: playbook, official links, vault, signed extras, constancia, cobro. Check their sites for case fees — we will not invent a number.",
+  },
+  {
+    question: "Do you save my files so I can open them later?",
+    answer:
+      "Yes on Paid. The whole packet stays in the dashboard until the next April 15 or 13 months, whichever is later. Free signing deletes PDFs after 9 days. That is why the immigrant package is the Paid plan.",
+  },
+  {
+    question: "What currency do Boundless and CitizenPath charge?",
+    answer:
+      "USD. Boundless checkout lists priceCurrency USD. CitizenPath is the same. USCIS/State fees are USD. A MX/CO card still settles in dollars (FX + possible foreign-transaction fee). Gestoría honorarios are usually MXN or COP; the $185 State MRV is still USD. Docracy Paid is USD $10 on Stripe. Cobro amounts you label MXN/COP/USD go to your checkout, not us.",
   },
 ];
 
@@ -460,7 +470,7 @@ const IMMIGRANT_FAQS_ES = [
   {
     question: "¿Docracy sustituye a Boundless o CitizenPath?",
     answer:
-      "No. Ellos presentan o preparan peticiones ante USCIS/State. Nosotros firmamos el paquete de apoyo (I-9 oficial, oferta, poder, referencia, arrendamiento), lo guardamos en el plan y te decimos a dónde va cada archivo. Úsalos para presentar. Usa esto para los extras de $10 alrededor del trámite.",
+      "No. Ellos presentan o preparan peticiones ante USCIS/State. Nosotros firmamos el paquete de apoyo (I-9 oficial, oferta, poder, referencia, arrendamiento), lo guardamos para que lo reabras y te decimos a dónde va cada archivo. Úsalos para presentar. Usa esto para los extras de $10 alrededor del trámite.",
   },
   {
     question: "¿Presentan el DS-160 o el I-129?",
@@ -470,7 +480,17 @@ const IMMIGRANT_FAQS_ES = [
   {
     question: "¿Por qué Docracy son $10/mes y no cientos?",
     answer:
-      "Otro trabajo. Ellos cobran por preparar o presentar un caso. El plan es el vault + extras firmados + constancia + cobro. Mira sus sitios para las cuotas — no inventamos un número.",
+      "Otro trabajo. Ellos cobran por preparar o presentar un caso. El plan es uno solo: mapa, links oficiales, vault, extras firmados, constancia, cobro. Mira sus sitios para las cuotas — no inventamos un número.",
+  },
+  {
+    question: "¿Guardan mis archivos para abrirlos después?",
+    answer:
+      "Sí, en el plan. El paquete entero queda en el panel hasta el próximo 15 de abril o 13 meses, lo que ocurra más tarde. En gratis los PDF se borran a los 9 días. Por eso el paquete inmigrante es el plan de pago.",
+  },
+  {
+    question: "¿En qué moneda cobran Boundless y CitizenPath?",
+    answer:
+      "USD. El checkout de Boundless marca priceCurrency USD. CitizenPath igual. USCIS/State cobran en USD. Una tarjeta MX/CO igual liquida en dólares (tipo de cambio + posible comisión internacional). Los honorarios de gestoría suelen ser MXN o COP; los $185 de State siguen en USD. El plan de Docracy es USD $10 en Stripe. Los montos de cobro que etiquetas en MXN/COP/USD van a tu checkout, no a nosotros.",
   },
 ];
 
@@ -515,11 +535,11 @@ pushImmigrantVs(
       "Boundless vs CitizenPath for US immigration paperwork. They file or prepare petitions. Docracy is the $10/mo supporting packet — I-9, offer, constancia. We don't file.",
     heroHeadline: "Boundless vs CitizenPath",
     heroSubheadline:
-      "Boundless is full-service filing. CitizenPath is DIY USCIS forms. Docracy is neither — we sign the $10 packet around the filing and tell you where each file goes.",
+      "Boundless is full-service filing. CitizenPath is DIY USCIS forms. Docracy is neither — one $10 plan: what to do, official links, signed extras, and every file saved so you can reopen it.",
     rows: [
       {
         feature: "What they actually do",
-        docracyValue: "Sign official I-9 + visa supporting docs. Vault, constancia, cobro. Where-to-send map.",
+        docracyValue: "One plan: what to do, official links, sign I-9 + extras. We save every PDF so you can reopen it.",
         competitorValue: "Full-service: prepare and file USCIS petitions (attorneys in the loop)",
         secondCompetitorValue: "DIY USCIS form software — you file the petition they prepared",
       },
@@ -531,9 +551,15 @@ pushImmigrantVs(
       },
       {
         feature: "Price we can state",
-        docracyValue: "Paid $10/month for the supporting packet. Signing a template once is still free.",
+        docracyValue: "Paid $10/month for the all-in-one plan. Signing a template once is still free.",
         competitorValue: "FAQ 11 Jun 2026: marriage GC $699 / $1,349; K-1 $1,379 / $2,549; B-1/B-2 $195+$185. USCIS extra.",
         secondCompetitorValue: "They publish from $79–$99; I-130 $149; I-485 packet $279; N-400 $199. USCIS extra.",
+      },
+      {
+        feature: "Currency they bill",
+        docracyValue: "Paid is USD $10 on Stripe. Cobro amounts you label MXN, COP, USD — that money never hits us.",
+        competitorValue: "USD only (their checkout schema: priceCurrency USD). MX/CO card = FX + possible foreign-transaction fee.",
+        secondCompetitorValue: "USD. Same as Boundless. USCIS fees are also USD; G-1450 needs a U.S.-issued card.",
       },
       {
         feature: "I-9 and supporting letters",
@@ -546,6 +572,12 @@ pushImmigrantVs(
         docracyValue: "Constancia for a US landlord + WhatsApp cobro if you still invoice MX/CO",
         competitorValue: "Immigration case status — not income proof or cobro",
         secondCompetitorValue: "Same — forms, not a vault for landlords or invoices",
+      },
+      {
+        feature: "Keep the files / reopen later",
+        docracyValue: "Yes on Paid. Whole packet in the dashboard until next April 15 or 13 months.",
+        competitorValue: "Case files in their app — the petition, not your I-9 / constancia vault",
+        secondCompetitorValue: "Form drafts you prepared — not a vault for signed extras",
       },
       {
         feature: "Best fit",
@@ -561,11 +593,11 @@ pushImmigrantVs(
       "Boundless vs CitizenPath para papeles de inmigración. Ellos presentan o preparan. Docracy es el paquete de apoyo de $10/mes — I-9, oferta, constancia. No tramitamos.",
     heroHeadline: "Boundless vs CitizenPath",
     heroSubheadline:
-      "Boundless es trámite completo. CitizenPath es formularios USCIS DIY. Docracy no es ninguno — firmamos el paquete de $10 alrededor del trámite y te decimos a dónde va cada archivo.",
+      "Boundless es trámite completo. CitizenPath es formularios USCIS DIY. Docracy no es ninguno — un plan de $10: qué hacer, links oficiales, extras firmados, y cada archivo guardado para que lo reabras.",
     rows: [
       {
         feature: "Qué hacen de verdad",
-        docracyValue: "Firmar I-9 oficial + documentos de apoyo. Vault, constancia, cobro. Mapa de envío.",
+        docracyValue: "Un plan: qué hacer, links oficiales, firmar I-9 + extras. Guardamos cada PDF para que lo reabras.",
         competitorValue: "Servicio completo: preparan y presentan peticiones USCIS (abogados en el circuito)",
         secondCompetitorValue: "Software DIY de formularios USCIS — tú presentas el PDF que te armaron",
       },
@@ -577,9 +609,15 @@ pushImmigrantVs(
       },
       {
         feature: "Precio que sí podemos afirmar",
-        docracyValue: "Plan $10/mes por el paquete de apoyo. Firmar una plantilla una vez sigue gratis.",
+        docracyValue: "Plan $10/mes todo-en-uno. Firmar una plantilla una vez sigue gratis.",
         competitorValue: "FAQ 11 jun 2026: green card matrimonio $699 / $1,349; K-1 $1,379 / $2,549; B-1/B-2 $195+$185. USCIS aparte.",
         secondCompetitorValue: "Publican desde $79–$99; I-130 $149; paquete I-485 $279; N-400 $199. USCIS aparte.",
+      },
+      {
+        feature: "Moneda en la que cobran",
+        docracyValue: "El plan es USD $10 en Stripe. Los montos de cobro los etiquetas tú (MXN, COP, USD) — ese dinero no nos llega.",
+        competitorValue: "Solo USD (su checkout: priceCurrency USD). Tarjeta MX/CO = tipo de cambio + posible comisión internacional.",
+        secondCompetitorValue: "USD. Igual que Boundless. USCIS también cobra en USD; el G-1450 pide tarjeta emitida en EE. UU.",
       },
       {
         feature: "I-9 y cartas de apoyo",
@@ -592,6 +630,12 @@ pushImmigrantVs(
         docracyValue: "Constancia para el arrendador en EE. UU. + cobro por WhatsApp si sigues facturando MX/CO",
         competitorValue: "Estatus del caso de inmigración — no prueba de ingresos ni cobro",
         secondCompetitorValue: "Igual — formularios, no un vault para arrendadores o facturas",
+      },
+      {
+        feature: "Guardar los archivos / reabrirlos",
+        docracyValue: "Sí en el plan. El paquete entero en el panel hasta el próximo 15 de abril o 13 meses.",
+        competitorValue: "Archivos del caso en su app — la petición, no tu vault de I-9 / constancia",
+        secondCompetitorValue: "Borradores de formularios — no un vault de extras firmados",
       },
       {
         feature: "Para quién",

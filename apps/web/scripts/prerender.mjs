@@ -634,7 +634,7 @@ const routes = [
     outFile: "es/alternativa-a-gestoria-de-visa.html",
     title: "Alternativa a gestoría de visa — paquete de $10, no un trámite | Docracy",
     description:
-      "Alternativa a gestoría de visa: firma I-9, oferta y cartas de apoyo por $10/mes. No tramitamos la petición. Kit: /es/kit-llegar-eeuu.",
+      "Alternativa a gestoría de visa: un plan de $10/mes — I-9, oferta, links oficiales y cada PDF guardado. No tramitamos la petición. /es/kit-llegar-eeuu.",
     locale: "es",
     alternates: { en: "/visa-service-alternative", es: "/es/alternativa-a-gestoria-de-visa" },
     xDefault: "es",
@@ -743,9 +743,9 @@ const routes = [
   {
     urlPath: "/packets/latam-to-us",
     outFile: "packets/latam-to-us.html",
-    title: "Immigrant packet — I-9, visa docs, constancia | Docracy",
+    title: "Immigrant plan — I-9, official links, saved packet | Docracy",
     description:
-      "All-in-one LATAM immigrant packet: official I-9, visa supporting docs, where to send each file, constancia for a landlord, cobro. Paid $10/mo. Not Boundless — we don't file petitions.",
+      "One Paid plan: what to do, official USCIS/CEAC links, sign I-9 and visa extras, and every PDF saved so you can reopen it. $10/mo. Not Boundless — we don't file petitions.",
     locale: "en",
     alternates: { en: "/packets/latam-to-us", es: "/es/kit-llegar-eeuu" },
     xDefault: "es",
@@ -753,9 +753,9 @@ const routes = [
   {
     urlPath: "/es/kit-llegar-eeuu",
     outFile: "es/kit-llegar-eeuu.html",
-    title: "Kit inmigrante — I-9, visa y constancia | Docracy",
+    title: "Plan inmigrante — I-9, links oficiales, todo guardado | Docracy",
     description:
-      "Una página para inmigrantes de LATAM en EE. UU.: I-9 oficial, documentos de visa, constancia para el arrendador, cobro si facturas. Firmar una vez es gratis. Usar el paquete es el plan de $10/mes.",
+      "Un solo plan: qué hacer, links oficiales de USCIS/CEAC, firma I-9 y extras de visa, y todos los PDF guardados para cuando los pidas. $10/mes. No es Boundless — no tramitamos la petición.",
     locale: "es",
     alternates: { en: "/packets/latam-to-us", es: "/es/kit-llegar-eeuu" },
     xDefault: "es",

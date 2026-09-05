@@ -6,7 +6,13 @@ import { usePageMeta } from "../lib/usePageMeta";
 import { track } from "../lib/track";
 import { breadcrumbJsonLd, howToJsonLd } from "../lib/productSeo";
 
-const FAQ_COUNT = 7;
+const FAQ_COUNT = 8;
+
+const PLAN_INCLUDES = [
+  { titleKey: "latamUsPacket.include1.title", bodyKey: "latamUsPacket.include1.body" },
+  { titleKey: "latamUsPacket.include2.title", bodyKey: "latamUsPacket.include2.body" },
+  { titleKey: "latamUsPacket.include3.title", bodyKey: "latamUsPacket.include3.body" },
+] as const;
 
 const STEPS: Array<{ titleKey: string; bodyKey: string; to: string; ctaKey: string }> = [
   {
@@ -269,6 +275,17 @@ export default function LatamUsPacket() {
       </div>
 
       <div className="container" style={{ maxWidth: 720 }}>
+        <h2 style={{ fontSize: 22, marginTop: 40 }}>{t("latamUsPacket.includesTitle")}</h2>
+        <p style={{ color: "var(--mute)" }}>{t("latamUsPacket.includesSub")}</p>
+        <div className="dashboard-corridor-grid packet-includes">
+          {PLAN_INCLUDES.map((item) => (
+            <div key={item.titleKey} className="dashboard-corridor-card">
+              <h3>{t(item.titleKey)}</h3>
+              <p>{t(item.bodyKey)}</p>
+            </div>
+          ))}
+        </div>
+
         <h2 style={{ fontSize: 22, marginTop: 40 }}>{t("latamUsPacket.paidTitle")}</h2>
         <p style={{ color: "var(--mute)" }}>{t("latamUsPacket.paidSub")}</p>
         <ul>

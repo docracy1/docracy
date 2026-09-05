@@ -6,6 +6,8 @@ export const PLAN_ROWS: Array<{
   free: PlanValue;
   paid: PlanValue;
   enterprise?: PlanValue;
+  /** Immigrant all-in-one packet — only on the Spanish pricing table. */
+  esOnly?: boolean;
 }> = [
   { labelKey: "plan.signersPerDoc", free: "plan.val.upTo2", paid: "plan.val.unlimited" },
   { labelKey: "plan.sequentialOrParallel", free: true, paid: true },
@@ -26,6 +28,12 @@ export const PLAN_ROWS: Array<{
   { labelKey: "plan.constancia", free: false, paid: true },
   { labelKey: "plan.contractorPacket", free: true, paid: true },
   { labelKey: "plan.latamPacket", free: true, paid: true },
+  {
+    labelKey: "plan.immigrantPacket",
+    free: "plan.val.immigrantFree",
+    paid: "plan.val.immigrantPaid",
+    esOnly: true,
+  },
   { labelKey: "plan.dashboard", free: true, paid: true },
   { labelKey: "plan.templates", free: false, paid: true },
   { labelKey: "plan.bulkSend", free: false, paid: true },
