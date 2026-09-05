@@ -10,6 +10,7 @@ import {
   sendPinEmail,
   sendArchiveNag,
   sendCobroNotice,
+  sendOnboardingStep1,
 } from "./email";
 import { makeMockEnv } from "../test/mockEnv";
 import type { DocState } from "@docracy/shared";
@@ -360,6 +361,21 @@ describe("locale — Spanish translations", () => {
     const logged = capture.logged();
     expect(logged).toContain('subject="Tu enlace de acceso a Docracy"');
     expect(logged).toContain("Inicia sesión en Docracy");
+    expect(logged).toContain("Firmas electrónicas gratis, sin registro");
+    expect(logged).not.toContain("Free, no-signup e-signatures");
+  });
+
+  it("sends Spanish onboarding with the immigrant kit CTA and ES chrome", async () => {
+    const { env } = makeMockEnv();
+    const capture = captureDevEmailLog();
+
+    await sendOnboardingStep1(env, "anna@example.com", "es");
+
+    const logged = capture.logged();
+    expect(logged).toContain('subject="Tu primer documento toma 30 segundos"');
+    expect(logged).toContain("Plan inmigrante");
+    expect(logged).toContain("/es/kit-llegar-eeuu");
+    expect(logged).toContain("Firmas electrónicas gratis, sin registro");
   });
 });
 

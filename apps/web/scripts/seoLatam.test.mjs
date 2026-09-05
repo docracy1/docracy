@@ -121,6 +121,10 @@ assert.ok(
 assert.equal(LATAM_COUNTRY_CORRIDORS.length, 18, "Spanish LATAM catalog (MX+CO handmade + 16 generated)");
 assert.equal(GENERATED_COUNTRY_CORRIDORS.length, 16);
 assert.ok(!LATAM_COUNTRY_CORRIDORS.some((c) => /brazil|puerto-rico|portugal/i.test(c.slug)));
+assert.ok(
+  !LATAM_COUNTRY_CORRIDORS.some((c) => /hcch\.net/i.test(c.officialHref)),
+  "country doors must use verified government apostille/legalization URLs, not HCCH fallbacks"
+);
 assert.equal(new Set(LATAM_COUNTRY_CORRIDORS.map((c) => c.slug)).size, LATAM_COUNTRY_CORRIDORS.length);
 
 const officialBySlug = {
@@ -130,8 +134,24 @@ const officialBySlug = {
   "panama-to-us": "https://panamaconecta.gob.pa/servicios",
   "venezuela-to-us": "https://tramites.saren.gob.ve",
   "ecuador-to-us": "https://serviciosdigitales.cancilleria.gob.ec",
-  "guatemala-to-us": "https://www.hcch.net/en/instruments/conventions/authorities1/?cid=41",
+  "guatemala-to-us": "https://www.tramites.gob.gt/servicio/1733/",
+  "honduras-to-us": "https://tramitedigital.sreci.gob.hn/SOL/web/ciudadano/#/inicio",
+  "el-salvador-to-us": "https://apostilla.rree.gob.sv/",
+  "dominican-republic-to-us": "https://servicios360.mirex.gob.do/apostillas-legalizaciones/",
+  "bolivia-to-us": "https://apostilla.rree.gob.bo/",
+  "costa-rica-to-us": "https://www.rree.go.cr/?cat=autenticaciones&sec=servicios",
+  "nicaragua-to-us": "https://citas.cancilleria.gob.ni/",
+  "uruguay-to-us":
+    "https://www.gub.uy/tramites/apostilla-yo-legalizacion-documentos-publicos-uruguayos-extranjeros-produzcan-efectos-exterior-republica",
+  "paraguay-to-us": "https://www.mre.gov.py/legalizaciones-apostilla/",
+  "cuba-to-us": "https://www.minjus.gob.cu/es",
 };
+
+const cuba = LATAM_COUNTRY_CORRIDORS.find((c) => c.slug === "cuba-to-us");
+assert.ok(cuba);
+assert.match(cuba.officialNoteEn, /not a party to the Apostille/i, "Cuba is not an Apostille state");
+assert.match(cuba.officialNoteEs, /no es parte del Convenio de Apostilla/i);
+assert.ok(!/in force 2023/i.test(cuba.officialNoteEn), "do not claim Cuba joined Apostille in 2023");
 
 for (const c of GENERATED_COUNTRY_CORRIDORS) {
   const en = FEATURE_PAGES.find((p) => p.slug === c.slug);

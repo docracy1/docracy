@@ -164,7 +164,16 @@ const MUTED = "#6b7785";
  *  Header: logo only, centered — `customLogoUrl` swaps in a workspace's own branding here (only
  *  ever passed by signer-facing emails). Footer: always Docracy's own wordmark + short tagline,
  *  plus a plain-text sign-off with no personal name (never "Odo"/founder/"team" — see SIGN_OFF). */
-function emailShell(appUrl: string, bodyHtml: string, customLogoUrl?: string | null): string {
+function emailShell(
+  appUrl: string,
+  bodyHtml: string,
+  customLogoUrl?: string | null,
+  locale: Locale = "en"
+): string {
+  const tagline =
+    locale === "es"
+      ? `Firmas electrónicas gratis, sin registro · <a href="${appUrl}" style="color:${MUTED};text-decoration:underline;">docracy.io</a>`
+      : `Free, no-signup e-signatures · <a href="${appUrl}" style="color:${MUTED};text-decoration:underline;">docracy.io</a>`;
   return `
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#eef1f5;padding:32px 16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,Helvetica,sans-serif;">
   <tr>
@@ -184,7 +193,7 @@ function emailShell(appUrl: string, bodyHtml: string, customLogoUrl?: string | n
       <table role="presentation" width="520" cellpadding="0" cellspacing="0" style="max-width:520px;width:100%;">
         <tr>
           <td style="padding:24px 32px 0 32px;text-align:center;font-size:12px;color:${MUTED};line-height:1.6;">
-            Free, no-signup e-signatures · <a href="${appUrl}" style="color:${MUTED};text-decoration:underline;">docracy.io</a>
+            ${tagline}
           </td>
         </tr>
       </table>
@@ -267,7 +276,7 @@ export async function sendSigningInvite(env: Env, doc: DocState, order: number, 
     ${viralFooter}
     ${signOff(locale)}
   `;
-  await send(env, signer.email, subject, emailShell(env.PUBLIC_APP_URL, body, customLogoUrl), { emailType: "signing_invite" });
+  await send(env, signer.email, subject, emailShell(env.PUBLIC_APP_URL, body, customLogoUrl, locale), { emailType: "signing_invite" });
   try {
     await sendSigningSmsLink(env, doc, order, link);
   } catch (err) {
@@ -318,7 +327,7 @@ export async function sendPinEmail(env: Env, doc: DocState, signerOrder: number,
     </p>
     ${signOff(locale)}
   `;
-  await send(env, signer.email, subject, emailShell(env.PUBLIC_APP_URL, body, customLogoUrl), { emailType: "signing_pin" });
+  await send(env, signer.email, subject, emailShell(env.PUBLIC_APP_URL, body, customLogoUrl, locale), { emailType: "signing_pin" });
 }
 
 export async function sendPreparerStatusLink(
@@ -359,7 +368,7 @@ export async function sendPreparerStatusLink(
     </p>
     ${signOff(locale)}
   `;
-  await send(env, preparerEmail, subject, emailShell(env.PUBLIC_APP_URL, body), {
+  await send(env, preparerEmail, subject, emailShell(env.PUBLIC_APP_URL, body, undefined, locale), {
     emailType: "preparer_status_link",
   });
 }
@@ -396,7 +405,7 @@ export async function sendCcInvite(
     ${signOff(locale)}
   `;
   const customLogoUrl = await resolveEmailLogoUrl(env, doc.accountId);
-  await send(env, cc.email, subject, emailShell(env.PUBLIC_APP_URL, body, customLogoUrl), {
+  await send(env, cc.email, subject, emailShell(env.PUBLIC_APP_URL, body, customLogoUrl, locale), {
     emailType: "cc_invite",
   });
 }
@@ -436,7 +445,7 @@ export async function sendDocumentVoidedNotice(
     <p style="margin:0;font-size:13px;color:${MUTED};line-height:1.5;">${statusLines(doc, locale)}</p>
     ${signOff(locale)}
   `;
-  await send(env, to, locale === "es" ? "Documento cancelado" : "Document cancelled", emailShell(env.PUBLIC_APP_URL, body), {
+  await send(env, to, locale === "es" ? "Documento cancelado" : "Document cancelled", emailShell(env.PUBLIC_APP_URL, body, undefined, locale), {
     emailType: "document_voided",
   });
 }
@@ -477,7 +486,7 @@ export async function sendSignerDeclinedNotice(
     <p style="margin:0;font-size:13px;color:${MUTED};line-height:1.5;">${statusLines(doc, locale)}</p>
     ${signOff(locale)}
   `;
-  await send(env, to, subject, emailShell(env.PUBLIC_APP_URL, body), {
+  await send(env, to, subject, emailShell(env.PUBLIC_APP_URL, body, undefined, locale), {
     emailType: "signer_declined",
   });
 }
@@ -539,7 +548,7 @@ export async function sendReminder(env: Env, doc: DocState, order: number, token
     ${signOff(locale)}
   `;
   const customLogoUrl = await resolveEmailLogoUrl(env, doc.accountId);
-  await send(env, signer.email, subject, emailShell(env.PUBLIC_APP_URL, body, customLogoUrl), { emailType: "reminder" });
+  await send(env, signer.email, subject, emailShell(env.PUBLIC_APP_URL, body, customLogoUrl, locale), { emailType: "reminder" });
 }
 
 /** Quoted title for preparer-facing copy, or a neutral fallback when the doc has no title. */
@@ -585,7 +594,7 @@ export async function sendCompletionEmailNotOpened(
     </p>
     ${signOff(locale)}
   `;
-  await send(env, preparerEmail, subject, emailShell(env.PUBLIC_APP_URL, body), {
+  await send(env, preparerEmail, subject, emailShell(env.PUBLIC_APP_URL, body, undefined, locale), {
     emailType: "completion_not_opened",
   });
 }
@@ -629,7 +638,7 @@ export async function sendCompletionEmailViewedNotSigned(
     </p>
     ${signOff(locale)}
   `;
-  await send(env, preparerEmail, subject, emailShell(env.PUBLIC_APP_URL, body), {
+  await send(env, preparerEmail, subject, emailShell(env.PUBLIC_APP_URL, body, undefined, locale), {
     emailType: "completion_viewed_not_signed",
   });
 }
@@ -668,7 +677,7 @@ export async function sendCompletionEmailSigned(
     </p>
     ${signOff(locale)}
   `;
-  await send(env, preparerEmail, subject, emailShell(env.PUBLIC_APP_URL, body), {
+  await send(env, preparerEmail, subject, emailShell(env.PUBLIC_APP_URL, body, undefined, locale), {
     emailType: "completion_signed",
   });
 }
@@ -742,7 +751,7 @@ export async function sendCompletionEmails(
     ${viralCta}
     ${signOff(locale)}
   `;
-  const html = emailShell(env.PUBLIC_APP_URL, body, customLogoUrl);
+  const html = emailShell(env.PUBLIC_APP_URL, body, customLogoUrl, locale);
 
   for (const signer of doc.signers) {
     trackEvent(env, { event: "email_sent", emailType: "completion_all_signed" });
@@ -835,7 +844,7 @@ export async function sendCompletionEmails(
     ${preparerUpgrade}
     ${signOff(locale)}
   `;
-    const preparerHtml = emailShell(env.PUBLIC_APP_URL, preparerBody, customLogoUrl);
+    const preparerHtml = emailShell(env.PUBLIC_APP_URL, preparerBody, customLogoUrl, locale);
     trackEvent(env, { event: "email_sent", emailType: "completion_preparer_done" });
     if (!env.RESEND_API_KEY) {
       console.log(
@@ -896,7 +905,7 @@ export async function sendArchiveNag(env: Env, doc: DocState): Promise<void> {
     </p>
     ${ctaButton(upgradeUrl, "Keep this file — $10/mo")}
   `;
-  await send(env, to, subject, emailShell(env.PUBLIC_APP_URL, body), { emailType: "archive_nag" });
+  await send(env, to, subject, emailShell(env.PUBLIC_APP_URL, body, undefined, locale), { emailType: "archive_nag" });
 }
 
 export async function sendMagicLink(env: Env, email: string, link: string, locale: Locale = "en"): Promise<void> {
@@ -923,7 +932,7 @@ export async function sendMagicLink(env: Env, email: string, link: string, local
       If you didn't request this, you can safely ignore this email — no account changes were made.
     </p>
   `;
-  await send(env, email, subject, emailShell(env.PUBLIC_APP_URL, body), { emailType: "magic_link" });
+  await send(env, email, subject, emailShell(env.PUBLIC_APP_URL, body, undefined, locale), { emailType: "magic_link" });
 }
 
 export async function sendTeamInvite(
@@ -960,7 +969,7 @@ export async function sendTeamInvite(
       If you weren't expecting this, you can safely ignore this email — no account changes were made.
     </p>
   `;
-  await send(env, email, subject, emailShell(env.PUBLIC_APP_URL, body), {
+  await send(env, email, subject, emailShell(env.PUBLIC_APP_URL, body, undefined, locale), {
     emailType: "team_invite",
   });
 }
@@ -1098,7 +1107,7 @@ export async function sendOnboardingStep1(env: Env, email: string, locale: Local
     <p style="margin:0;font-size:14px;color:${MUTED};">Or upload your own PDF from the homepage. If you need help, just reply.</p>
     ${signOff(locale)}
   `;
-  await send(env, email, subject, emailShell(env.PUBLIC_APP_URL, body), {
+  await send(env, email, subject, emailShell(env.PUBLIC_APP_URL, body, undefined, locale), {
     emailType: "onboarding_step1",
     replyTo: env.FEEDBACK_EMAIL,
   });
@@ -1152,7 +1161,7 @@ export async function sendOnboardingStep2(env: Env, email: string, locale: Local
     <p style="margin:0;font-size:14px;color:${MUTED};">If now isn't the right time, no worries — your account will still be here.</p>
     ${signOff(locale)}
   `;
-  await send(env, email, subject, emailShell(env.PUBLIC_APP_URL, body), {
+  await send(env, email, subject, emailShell(env.PUBLIC_APP_URL, body, undefined, locale), {
     emailType: "onboarding_step2",
     replyTo: env.FEEDBACK_EMAIL,
   });
@@ -1188,7 +1197,7 @@ export async function sendOnboardingStep3(env: Env, email: string, locale: Local
     <p style="margin:0;font-size:14px;color:${MUTED};">Or start from any free template — still no account required.</p>
     ${signOff(locale)}
   `;
-  await send(env, email, subject, emailShell(env.PUBLIC_APP_URL, body), {
+  await send(env, email, subject, emailShell(env.PUBLIC_APP_URL, body, undefined, locale), {
     emailType: "onboarding_step3",
     replyTo: env.FEEDBACK_EMAIL,
   });
@@ -1222,7 +1231,7 @@ export async function sendOnboardingStep4(env: Env, email: string, locale: Local
     <p style="margin:0;font-size:14px;color:${MUTED};">Happy to help if you need anything.</p>
     ${signOff(locale)}
   `;
-  await send(env, email, subject, emailShell(env.PUBLIC_APP_URL, body), {
+  await send(env, email, subject, emailShell(env.PUBLIC_APP_URL, body, undefined, locale), {
     emailType: "onboarding_step4",
     replyTo: env.FEEDBACK_EMAIL,
   });
@@ -1272,7 +1281,7 @@ export async function sendPreparerLeadStep1(env: Env, email: string, locale: Loc
     <p style="margin:0;font-size:14px;color:${MUTED};">You asked for a few tips — reply anytime to stop them.</p>
     ${signOff(locale)}
   `;
-  await send(env, email, subject, emailShell(env.PUBLIC_APP_URL, body), {
+  await send(env, email, subject, emailShell(env.PUBLIC_APP_URL, body, undefined, locale), {
     emailType: "preparer_lead_step1",
     replyTo: env.FEEDBACK_EMAIL,
   });
@@ -1316,7 +1325,7 @@ export async function sendPreparerLeadStep2(env: Env, email: string, locale: Loc
     <p style="margin:0;font-size:14px;color:${MUTED};">You asked for a few tips — reply anytime to stop them.</p>
     ${signOff(locale)}
   `;
-  await send(env, email, subject, emailShell(env.PUBLIC_APP_URL, body), {
+  await send(env, email, subject, emailShell(env.PUBLIC_APP_URL, body, undefined, locale), {
     emailType: "preparer_lead_step2",
     replyTo: env.FEEDBACK_EMAIL,
   });
@@ -1332,10 +1341,10 @@ export async function sendPreparerLeadStep3(env: Env, email: string, locale: Loc
       Plantillas gratis para los acuerdos que más se envían — NDAs, acuerdos con contratistas, cartas
       de oferta — listas para llenar y enviar sin reconstruir los campos desde cero.
     </p>
-    ${templateList(["NDA mutuo", "Acuerdo con contratista independiente", "Carta de oferta", "Acuerdo de servicio freelance"])}
-    ${ctaButton(`${env.PUBLIC_APP_URL}/try?utm_source=email&utm_medium=preparer-lead&utm_campaign=step3`, "Enviar otro — NDA de ejemplo")}
+    ${templateList(["Plan inmigrante — I-9 y extras", "I-9 oficial de USCIS", "Constancia para el arrendador", "Cobro por WhatsApp"])}
+    ${ctaButton(`${env.PUBLIC_APP_URL}/es/kit-llegar-eeuu?utm_source=email&utm_medium=preparer-lead&utm_campaign=step3`, "Abrir el plan inmigrante")}
     <p style="margin:16px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">
-      O <a href="${env.PUBLIC_APP_URL}/free-templates?utm_source=email&utm_medium=preparer-lead&utm_campaign=step3" style="color:${PRIMARY};">explora todas las plantillas gratis</a>
+      O <a href="${env.PUBLIC_APP_URL}/es/plantillas-gratis?utm_source=email&utm_medium=preparer-lead&utm_campaign=step3" style="color:${PRIMARY};">explora las plantillas gratis</a>
       — sigue siendo gratis, sin necesidad de cuenta.
     </p>
     ${signOff(locale)}
@@ -1354,7 +1363,7 @@ export async function sendPreparerLeadStep3(env: Env, email: string, locale: Loc
     </p>
     ${signOff(locale)}
   `;
-  await send(env, email, subject, emailShell(env.PUBLIC_APP_URL, body), {
+  await send(env, email, subject, emailShell(env.PUBLIC_APP_URL, body, undefined, locale), {
     emailType: "preparer_lead_step3",
     replyTo: env.FEEDBACK_EMAIL,
   });
@@ -1367,11 +1376,10 @@ export async function sendPreparerLeadStep4(env: Env, email: string, locale: Loc
       ? `
     ${emailHeadline(`Cuando gratis no es suficiente`)}
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
-      Gratis cubre acuerdos rápidos y de bajo riesgo. El plan de pago desbloquea plantillas recurrentes,
-      más firmantes, cupos de equipo y retención más larga — para cuando firmar se vuelve parte de tu
-      trabajo semanal.
+      Gratis cubre un envío corto. El plan de USD $10/mes guarda I-9, oferta, constancia y cobro
+      (hasta el 15 de abril o 13 meses) y deja el paquete LATAM en la misma suscripción.
     </p>
-    ${ctaButton(`${env.PUBLIC_APP_URL}/pricing?utm_source=email&utm_medium=preparer-lead&utm_campaign=step4`, "Ver planes")}
+    ${ctaButton(`${env.PUBLIC_APP_URL}/es/precios?utm_source=email&utm_medium=preparer-lead&utm_campaign=step4`, "Ver el plan de $10/mes")}
     <p style="margin:0;font-size:14px;color:${MUTED};">Sin presión — lo gratis sigue siendo gratis.</p>
     ${signOff(locale)}
   `
@@ -1385,7 +1393,7 @@ export async function sendPreparerLeadStep4(env: Env, email: string, locale: Loc
     <p style="margin:0;font-size:14px;color:${MUTED};">No pressure — free stays free.</p>
     ${signOff(locale)}
   `;
-  await send(env, email, subject, emailShell(env.PUBLIC_APP_URL, body), {
+  await send(env, email, subject, emailShell(env.PUBLIC_APP_URL, body, undefined, locale), {
     emailType: "preparer_lead_step4",
     replyTo: env.FEEDBACK_EMAIL,
   });
@@ -1449,7 +1457,7 @@ export async function sendCobroNotice(
     ${req ? ctaButton(payUrl, payLabel) : ""}
     ${signOff(locale)}
   `;
-  await send(env, to, subject, emailShell(env.PUBLIC_APP_URL, body), {
+  await send(env, to, subject, emailShell(env.PUBLIC_APP_URL, body, undefined, locale), {
     emailType: isReminder ? "cobro_remind" : "cobro_notice",
   });
 }

@@ -55,8 +55,9 @@ const FOOTER_MUTED = "#6b7785"; // matches email.ts's own MUTED constant (not ex
 
 function unsubscribeFooterHtml(unsubscribeUrl: string): string {
   return `<p style="margin:32px 0 0 0;padding-top:16px;border-top:1px solid #e2e6ea;font-size:12px;color:${FOOTER_MUTED};line-height:1.6;">
+    Recibes esto porque pediste novedades de Docracy. /
     You're receiving this because you opted in to Docracy product updates.
-    <a href="${unsubscribeUrl}" style="color:${FOOTER_MUTED};text-decoration:underline;">Unsubscribe</a>
+    <a href="${unsubscribeUrl}" style="color:${FOOTER_MUTED};text-decoration:underline;">Cancelar suscripción / Unsubscribe</a>
     &middot; Docracy, RELACON GmbH, Elisabethstra&szlig;e 15/5b, 1010 Vienna, Austria
   </p>`;
 }
