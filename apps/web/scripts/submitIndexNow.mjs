@@ -16,11 +16,19 @@ const root = path.resolve(__dirname, "..");
 const HOST = "docracy.io";
 const SITE = `https://${HOST}`;
 
+function sitemapPath() {
+  // Prefer the sitemap we just prerendered into dist/ (deploy:pages / CI). public/
+  // can lag if only a band-aid script patched it.
+  const distPath = path.join(root, "dist", "sitemap.xml");
+  if (fs.existsSync(distPath)) return distPath;
+  return path.join(root, "public", "sitemap.xml");
+}
+
 function readSitemapUrls() {
-  const sitemapPath = path.join(root, "public", "sitemap.xml");
-  const xml = fs.readFileSync(sitemapPath, "utf-8");
+  const file = sitemapPath();
+  const xml = fs.readFileSync(file, "utf-8");
   const urls = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
-  if (urls.length === 0) throw new Error(`No <loc> entries found in ${sitemapPath}`);
+  if (urls.length === 0) throw new Error(`No <loc> entries found in ${file}`);
   return urls;
 }
 

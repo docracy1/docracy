@@ -412,6 +412,25 @@ describe("locale — Spanish translations", () => {
     expect(logged).not.toContain("tramitamos el I-765");
   });
 
+  it("Spanish completion viral CTA sells the immigrant kit, not /try", async () => {
+    const { env } = makeMockEnv({ RESEND_API_KEY: "test-key" });
+    const bodies: string[] = [];
+    vi.spyOn(global, "fetch").mockImplementation(async (_url, init) => {
+      bodies.push(JSON.parse(init!.body as string).html);
+      return new Response("{}", { status: 200 });
+    });
+    const finalPdf = await makePdfWithPages(1);
+
+    await sendCompletionEmails(env, { ...makeDoc("Anna"), locale: "es" }, finalPdf, "deadbeef");
+
+    expect(bodies[0]).toContain("/es/kit-llegar-eeuu");
+    expect(bodies[0]).toContain("/es/quien-sube-donde");
+    expect(bodies[0]).toContain("No tramitamos USCIS, apostilla ni E-Verify");
+    expect(bodies[0]).toContain("Abrir el plan inmigrante");
+    expect(bodies[0]).not.toContain("/try?");
+    expect(bodies[0]).not.toContain("Envía el tuyo gratis");
+  });
+
   it("sends Spanish day-3 vault checkout, not another NDA", async () => {
     const { env } = makeMockEnv();
     const capture = captureDevEmailLog();

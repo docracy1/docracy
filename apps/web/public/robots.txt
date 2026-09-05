@@ -125,6 +125,43 @@ Allow: /whatsapp-signing$
 Allow: /yousign-alternative$
 Allow: /zoho-sign-alternative$
 
+Allow: /acta$
+Allow: /after-arrival$
+Allow: /argentina-to-us$
+Allow: /bolivia-to-us$
+Allow: /boundless-alternative$
+Allow: /boundless-vs-citizenpath$
+Allow: /chile-to-us$
+Allow: /citizenpath-alternative$
+Allow: /colombia-to-us$
+Allow: /consular-appointment$
+Allow: /costa-rica-to-us$
+Allow: /cuba-to-us$
+Allow: /dominican-republic-to-us$
+Allow: /ead-tps$
+Allow: /ecuador-to-us$
+Allow: /el-salvador-to-us$
+Allow: /guatemala-to-us$
+Allow: /honduras-to-us$
+Allow: /i-9$
+Allow: /immigrant-documents$
+Allow: /immigrant-housing$
+Allow: /itin$
+Allow: /latam-search$
+Allow: /mexico-to-us$
+Allow: /move-to-us$
+Allow: /nicaragua-to-us$
+Allow: /packets/latam-to-us$
+Allow: /panama-to-us$
+Allow: /paraguay-to-us$
+Allow: /peru-to-us$
+Allow: /phone-and-bank$
+Allow: /uruguay-to-us$
+Allow: /venezuela-to-us$
+Allow: /visa-service-alternative$
+Allow: /visa-supporting-documents$
+Allow: /who-files-where$
+
 # --- Token / API / short-links (explicit; longer than CF Allow: /) ---
 # /prepare /login /dashboard /roadmap /es/preparar stay crawlable so www + ?ref=
 # 301s do not land on a robots-blocked URL (GSC Redirect error). Those shells
