@@ -380,6 +380,7 @@ export default function Dashboard() {
   const [documentsExpanded, setDocumentsExpanded] = useState(false);
   const [toolsExpanded, setToolsExpanded] = useState(false);
   const [countriesExpanded, setCountriesExpanded] = useState(false);
+  const [usMigrationExpanded, setUsMigrationExpanded] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [moreSheetOpen, setMoreSheetOpen] = useState(false);
   const [connections, setConnections] = useState<CloudConnectionSummary[]>([]);
@@ -1119,154 +1120,142 @@ export default function Dashboard() {
           <NavIcon name="templates" />
           <span>{t("dash.templates")}</span>
         </button>
-        <div className="dashboard-nav-section">
-          <p className="dashboard-nav-section-label">{t("dash.navPacket")}</p>
-          <Link to={localizePath("/packets/latam-to-us", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
-            <NavIcon name="contacts" />
-            <span>
-              {t("dash.latamSub")}
-              {!account.isPaid ? <span className="dashboard-paid-chip">{t("dash.paidHint")}</span> : null}
-            </span>
-          </Link>
-          <Link to={localizePath("/i-9", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
-            <NavIcon name="badge" />
-            <span>
-              {t("footer.i9")}
-              <span className="dashboard-free-chip">{t("dash.freeHint")}</span>
-            </span>
-          </Link>
-          <Link to={localizePath("/after-arrival", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
-            <NavIcon name="documents" />
-            <span>{t("footer.afterArrival")}</span>
-          </Link>
-          {locale === "es" ? (
-            <>
-              <Link to={localizePath("/who-files-where", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
-                <NavIcon name="documents" />
-                <span>{t("footer.whoFiles")}</span>
-              </Link>
-              <Link to={localizePath("/latam-search", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
-                <NavIcon name="templates" />
-                <span>{t("footer.latamSearch")}</span>
-              </Link>
-            </>
-          ) : null}
-          <div className="dashboard-nav-group">
-            <button
-              type="button"
-              className="dashboard-nav-item dashboard-nav-group-header"
-              onClick={() => setCountriesExpanded((o) => !o)}
-              aria-expanded={countriesExpanded}
-            >
-              <span className="dashboard-nav-item-main">
-                <NavIcon name="templates" />
-                <span>{t("dash.navCountries")}</span>
-              </span>
-              <span className={`dashboard-nav-chevron${countriesExpanded ? " open" : ""}`}>⌄</span>
-            </button>
-            {countriesExpanded && (
-              <div className="dashboard-nav-subitems">
-                {LATAM_COUNTRY_CORRIDORS.map((c) => (
-                  <Link
-                    key={c.slug}
-                    to={localizePath(c.enPath, locale)}
-                    className="dashboard-nav-subitem"
-                    style={{ textDecoration: "none" }}
-                  >
-                    <span>{locale === "es" ? c.countryEs : c.countryEn}</span>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-          <Link
-            to={account.isPaid ? `${localizePath("/cobro", locale)}#send` : localizePath("/cobro", locale)}
-            className="dashboard-nav-item"
-            style={{ textDecoration: "none" }}
-          >
-            <NavIcon name="send" />
-            <span>
-              {t("dash.cobro")}
-              {!account.isPaid ? <span className="dashboard-paid-chip">{t("dash.paidHint")}</span> : null}
-            </span>
-          </Link>
-          <Link to={localizePath("/1099-season", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
-            <NavIcon name="badge" />
-            <span>
-              {t("dash.taxYear")}
-              {!account.isPaid ? <span className="dashboard-paid-chip">{t("dash.paidHint")}</span> : null}
-            </span>
-          </Link>
-          <Link to={localizePath("/income-proof", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
-            <NavIcon name="duplicate" />
-            <span>
-              {t("dash.constancia")}
-              {!account.isPaid ? <span className="dashboard-paid-chip">{t("dash.paidHint")}</span> : null}
-            </span>
-          </Link>
-        </div>
-        {account.isPaid && (
-          <button
-            className={`dashboard-nav-item${activeTab === "contacts" ? " active" : ""}`}
-            onClick={() => setActiveTab("contacts")}
-          >
-            <NavIcon name="contacts" />
-            <span>{t("dash.contacts")}</span>
-          </button>
-        )}
-
         <div className="dashboard-nav-group">
           <button
-            className={`dashboard-nav-item dashboard-nav-group-header${activeTab === "documents" ? " active" : ""}`}
-            onClick={() => {
-              setActiveTab("documents");
-              setDocumentsExpanded((o) => !o);
-            }}
+            type="button"
+            className="dashboard-nav-item dashboard-nav-group-header"
+            onClick={() => setUsMigrationExpanded((o) => !o)}
+            aria-expanded={usMigrationExpanded}
           >
             <span className="dashboard-nav-item-main">
-              <NavIcon name="documents" />
-              <span>{t("dash.documents")}</span>
+              <NavIcon name="badge" />
+              <span>{t("dash.usMigration")}</span>
             </span>
-            <span className={`dashboard-nav-chevron${documentsExpanded ? " open" : ""}`}>⌄</span>
+            <span className={`dashboard-nav-chevron${usMigrationExpanded ? " open" : ""}`}>⌄</span>
           </button>
-          {documentsExpanded && (
+          {usMigrationExpanded && (
             <div className="dashboard-nav-subitems">
-              {DOCS_SUBNAV.map((item) => (
+              <div className="dashboard-nav-group">
                 <button
-                  key={item.key}
-                  className={`dashboard-nav-subitem${activeTab === "documents" && docsSubTab === item.key ? " active" : ""}`}
-                  onClick={() => openDocuments(item.key)}
+                  type="button"
+                  className="dashboard-nav-item dashboard-nav-group-header"
+                  onClick={() => setCountriesExpanded((o) => !o)}
+                  aria-expanded={countriesExpanded}
                 >
-                  <NavIcon name={item.icon} size={16} />
-                  <span>{item.label}</span>
+                  <span className="dashboard-nav-item-main">
+                    <NavIcon name="templates" />
+                    <span>{t("dash.navCountries")}</span>
+                  </span>
+                  <span className={`dashboard-nav-chevron${countriesExpanded ? " open" : ""}`}>⌄</span>
                 </button>
-              ))}
+                {countriesExpanded && (
+                  <div className="dashboard-nav-subitems">
+                    {LATAM_COUNTRY_CORRIDORS.map((c) => (
+                      <Link
+                        key={c.slug}
+                        to={localizePath(c.enPath, locale)}
+                        className="dashboard-nav-subitem"
+                        style={{ textDecoration: "none" }}
+                      >
+                        <span>{locale === "es" ? c.countryEs : c.countryEn}</span>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <Link to={localizePath("/i-9", locale)} className="dashboard-nav-subitem" style={{ textDecoration: "none" }}>
+                <NavIcon name="badge" size={16} />
+                <span>
+                  {t("footer.i9")}
+                  <span className="dashboard-free-chip">{t("dash.freeHint")}</span>
+                </span>
+              </Link>
+              <Link to={localizePath("/after-arrival", locale)} className="dashboard-nav-subitem" style={{ textDecoration: "none" }}>
+                <NavIcon name="documents" size={16} />
+                <span>{t("footer.afterArrival")}</span>
+              </Link>
+              {locale === "es" ? (
+                <>
+                  <Link to={localizePath("/who-files-where", locale)} className="dashboard-nav-subitem" style={{ textDecoration: "none" }}>
+                    <NavIcon name="documents" size={16} />
+                    <span>{t("footer.whoFiles")}</span>
+                  </Link>
+                  <Link to={localizePath("/latam-search", locale)} className="dashboard-nav-subitem" style={{ textDecoration: "none" }}>
+                    <NavIcon name="templates" size={16} />
+                    <span>{t("footer.latamSearch")}</span>
+                  </Link>
+                </>
+              ) : null}
+              <Link to={localizePath("/income-proof", locale)} className="dashboard-nav-subitem" style={{ textDecoration: "none" }}>
+                <NavIcon name="duplicate" size={16} />
+                <span>
+                  {t("dash.constancia")}
+                  {!account.isPaid ? <span className="dashboard-paid-chip">{t("dash.paidHint")}</span> : null}
+                </span>
+              </Link>
+              <Link to={localizePath("/1099-season", locale)} className="dashboard-nav-subitem" style={{ textDecoration: "none" }}>
+                <NavIcon name="badge" size={16} />
+                <span>
+                  {t("dash.taxYear")}
+                  {!account.isPaid ? <span className="dashboard-paid-chip">{t("dash.paidHint")}</span> : null}
+                </span>
+              </Link>
+              <Link
+                to={account.isPaid ? `${localizePath("/cobro", locale)}#send` : localizePath("/cobro", locale)}
+                className="dashboard-nav-subitem"
+                style={{ textDecoration: "none" }}
+              >
+                <NavIcon name="send" size={16} />
+                <span>
+                  {t("dash.cobro")}
+                  {!account.isPaid ? <span className="dashboard-paid-chip">{t("dash.paidHint")}</span> : null}
+                </span>
+              </Link>
             </div>
           )}
         </div>
 
-        {account.isPaid && (
+        <Link to={localizePath("/packets/latam-to-us", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
+          <NavIcon name="contacts" />
+          <span>
+            {t("dash.latamSub")}
+            {!account.isPaid ? <span className="dashboard-paid-chip">{t("dash.paidHint")}</span> : null}
+          </span>
+        </Link>
+
+        <div className="dashboard-nav-section">
+          <p className="dashboard-nav-section-label">{t("dash.navLegacy")}</p>
+          {account.isPaid && (
+            <button
+              className={`dashboard-nav-item${activeTab === "contacts" ? " active" : ""}`}
+              onClick={() => setActiveTab("contacts")}
+            >
+              <NavIcon name="contacts" />
+              <span>{t("dash.contacts")}</span>
+            </button>
+          )}
+
           <div className="dashboard-nav-group">
             <button
-              className={`dashboard-nav-item dashboard-nav-group-header${activeTab === "tools" ? " active" : ""}`}
+              className={`dashboard-nav-item dashboard-nav-group-header${activeTab === "documents" ? " active" : ""}`}
               onClick={() => {
-                setActiveTab("tools");
-                setToolsExpanded((o) => !o);
+                setActiveTab("documents");
+                setDocumentsExpanded((o) => !o);
               }}
             >
               <span className="dashboard-nav-item-main">
-                <NavIcon name="tools" />
-                <span>{t("dash.tools")}</span>
+                <NavIcon name="documents" />
+                <span>{t("dash.documents")}</span>
               </span>
-              <span className={`dashboard-nav-chevron${toolsExpanded ? " open" : ""}`}>⌄</span>
+              <span className={`dashboard-nav-chevron${documentsExpanded ? " open" : ""}`}>⌄</span>
             </button>
-            {toolsExpanded && (
+            {documentsExpanded && (
               <div className="dashboard-nav-subitems">
-                {TOOLS_SUBNAV.map((item) => (
+                {DOCS_SUBNAV.map((item) => (
                   <button
                     key={item.key}
-                    className={`dashboard-nav-subitem${activeTab === "tools" && toolsSubTab === item.key ? " active" : ""}`}
-                    onClick={() => openTools(item.key)}
+                    className={`dashboard-nav-subitem${activeTab === "documents" && docsSubTab === item.key ? " active" : ""}`}
+                    onClick={() => openDocuments(item.key)}
                   >
                     <NavIcon name={item.icon} size={16} />
                     <span>{item.label}</span>
@@ -1275,7 +1264,39 @@ export default function Dashboard() {
               </div>
             )}
           </div>
-        )}
+
+          {account.isPaid && (
+            <div className="dashboard-nav-group">
+              <button
+                className={`dashboard-nav-item dashboard-nav-group-header${activeTab === "tools" ? " active" : ""}`}
+                onClick={() => {
+                  setActiveTab("tools");
+                  setToolsExpanded((o) => !o);
+                }}
+              >
+                <span className="dashboard-nav-item-main">
+                  <NavIcon name="tools" />
+                  <span>{t("dash.tools")}</span>
+                </span>
+                <span className={`dashboard-nav-chevron${toolsExpanded ? " open" : ""}`}>⌄</span>
+              </button>
+              {toolsExpanded && (
+                <div className="dashboard-nav-subitems">
+                  {TOOLS_SUBNAV.map((item) => (
+                    <button
+                      key={item.key}
+                      className={`dashboard-nav-subitem${activeTab === "tools" && toolsSubTab === item.key ? " active" : ""}`}
+                      onClick={() => openTools(item.key)}
+                    >
+                      <NavIcon name={item.icon} size={16} />
+                      <span>{item.label}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
 
         <div className="dashboard-profile" ref={profileRef}>
           {profileMenuOpen && (
