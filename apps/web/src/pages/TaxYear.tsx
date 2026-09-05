@@ -89,7 +89,7 @@ export default function TaxYear() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `docracy-1099-${year}.csv`;
+    a.download = locale === "es" ? `docracy-archivo-${year}.csv` : `docracy-1099-${year}.csv`;
     a.click();
     URL.revokeObjectURL(url);
     track("viral_cta_clicked", { source: "tax_year_csv" });
@@ -207,6 +207,7 @@ export default function TaxYear() {
                         <div style={{ fontSize: 12, color: "var(--mute)" }}>
                           {d.completedAt.slice(0, 10)}
                           {d.amount ? ` · ${d.amount} ${d.currency}` : ""}
+                          {d.kind === "cobro" ? ` · ${d.cobroPaidAt ? t("taxYear.paid") : t("taxYear.unpaid")}` : ""}
                           {d.counterparties.length > 0 ? ` · ${d.counterparties.map((c) => c.name).join(", ")}` : ""}
                         </div>
                       </div>

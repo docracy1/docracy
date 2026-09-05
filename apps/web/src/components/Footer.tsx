@@ -60,6 +60,10 @@ export default function Footer() {
   const compareLinks: FooterLink[] =
     locale === "es"
       ? [
+          { label: t("footer.vsKita"), to: "/es/alternativa-a-kita" },
+          { label: t("footer.vsAlegra"), to: "/es/alternativa-a-alegra" },
+          { label: t("footer.vsSiigo"), to: "/es/alternativa-a-siigo" },
+          { label: t("footer.kitaVsAlegra"), to: "/es/kita-vs-alegra" },
           { label: t("footer.vsEversign"), to: "/es/alternativa-a-eversign" },
           { label: t("footer.vsDocusign"), to: "/es/alternativa-a-docusign" },
           { label: t("footer.vsHellosign"), to: "/es/alternativa-a-hellosign" },
@@ -69,6 +73,10 @@ export default function Footer() {
         ]
       : [
           // Footer stays lean — full list (20 compares + imports) lives in header Compare.
+          { label: t("footer.vsKita"), to: "/kita-alternative" },
+          { label: t("footer.vsAlegra"), to: "/alegra-alternative" },
+          { label: t("footer.vsSiigo"), to: "/siigo-alternative" },
+          { label: t("footer.kitaVsAlegra"), to: "/kita-vs-alegra" },
           { label: t("footer.vsDocusign"), to: "/docusign-alternative" },
           { label: t("footer.vsEversign"), to: "/eversign-alternative" },
           { label: t("footer.vsHellosign"), to: "/hellosign-alternative" },
@@ -87,6 +95,9 @@ export default function Footer() {
     { label: t("footer.templates"), to: localizePath("/free-templates", locale) },
     { label: t("footer.packet"), to: localizePath("/packets/us-contractor", locale) },
     { label: t("footer.latamPacket"), to: localizePath("/packets/latam-contractor", locale) },
+    { label: t("footer.latamUsPacket"), to: localizePath("/packets/latam-to-us", locale) },
+    { label: t("footer.i9"), to: localizePath("/i-9", locale) },
+    { label: t("footer.visaDocs"), to: localizePath("/visa-supporting-documents", locale) },
     { label: t("footer.tradesPacket"), to: localizePath("/packets/trades", locale) },
     { label: t("footer.latamTradePacket"), to: localizePath("/packets/latam-trade", locale) },
     { label: t("footer.collectPacket"), to: localizePath("/packets/collect", locale) },

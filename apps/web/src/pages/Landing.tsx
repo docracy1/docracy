@@ -218,6 +218,7 @@ const AFTER_SIGN_OUTCOMES: Array<{
 const LATAM_OUTCOMES: typeof AFTER_SIGN_OUTCOMES = [
   { icon: "send", titleKey: "landing.out1.title", bodyKey: "landing.out1.body", to: "/cobro#send", linkKey: "landing.out1.link" },
   { icon: "duplicate", titleKey: "landing.out4.title", bodyKey: "landing.out4.body", to: "/income-proof", linkKey: "landing.out4.link" },
+  { icon: "users", titleKey: "landing.out7.title", bodyKey: "landing.out7.body", to: "/packets/latam-to-us", linkKey: "landing.out7.link" },
   { icon: "users", titleKey: "landing.out3.title", bodyKey: "landing.out3.body", to: "/packets/latam-contractor", linkKey: "landing.out3.link" },
   { icon: "duplicate", titleKey: "landing.out6.title", bodyKey: "landing.out6.body", to: "/packets/collect", linkKey: "landing.out6.link" },
   { icon: "users", titleKey: "dash.corridorTradeTitle", bodyKey: "dash.corridorTrade", to: "/packets/latam-trade", linkKey: "latamDesk.openKit" },
@@ -233,6 +234,7 @@ const FAQ_KEYS: Array<{ qKey: string; aKey: string }> = [
   { qKey: "landing.faq7.q", aKey: "landing.faq7.a" },
   { qKey: "landing.faq8.q", aKey: "landing.faq8.a" },
   { qKey: "landing.faq9.q", aKey: "landing.faq9.a" },
+  { qKey: "landing.faq10.q", aKey: "landing.faq10.a" },
 ];
 
 // Subset of TESTIMONIALS with a real, recognizable company identity — shown as a compact logo

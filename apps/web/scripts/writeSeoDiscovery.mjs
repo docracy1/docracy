@@ -209,7 +209,6 @@ function robotsAllowForRoutes(routes) {
     "/es/temporada-1099",
     "/cobro",
     "/es/cobro",
-    "/whatsapp-invoice",
     "/1099-contractor-records",
     "/hire-contractor-abroad",
     "/income-proof",

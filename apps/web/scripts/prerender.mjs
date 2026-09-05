@@ -162,6 +162,7 @@ const SEO_TEMPLATE_SLUGS = new Set([
   "unilateral-nda",
   "vendor-agreement",
   "w-9-form",
+  "i-9-form",
   "promissory-note",
   "letter-of-intent",
   "simple-commercial-lease-agreement",
@@ -218,6 +219,11 @@ const ES_TEMPLATE_META = {
     title: "Plantilla gratis de formulario W-9",
     description:
       "Formulario W-9 listo para firmar para recopilar el TIN de un contratista antes del pago.",
+  },
+  "i-9-form": {
+    title: "Formulario I-9 gratis — firma el formulario de USCIS",
+    description:
+      "El Formulario I-9 oficial de USCIS (edición 01/20/25). Firma de empleado y empleador. No es E-Verify ni inspección de documentos.",
   },
   "promissory-note": {
     title: "Plantilla gratis de pagaré",
@@ -574,6 +580,36 @@ const routes = [
     alternates: { en: "/pandadoc-alternative", es: "/es/alternativa-a-pandadoc" },
   },
   {
+    urlPath: "/es/alternativa-a-kita",
+    outFile: "es/alternativa-a-kita.html",
+    title: "Alternativa a Kita — cobro por WhatsApp, sin CFDI | Docracy",
+    description:
+      "Alternativa a Kita si necesitas el PDF y tu Mercado Pago por WhatsApp — no un CFDI timbrado. $10/mes, 0% del cobro. Firmar sigue gratis.",
+    locale: "es",
+    alternates: { en: "/kita-alternative", es: "/es/alternativa-a-kita" },
+    xDefault: "es",
+  },
+  {
+    urlPath: "/es/alternativa-a-alegra",
+    outFile: "es/alternativa-a-alegra.html",
+    title: "Alternativa a Alegra — firma y cobro, no contabilidad | Docracy",
+    description:
+      "Alternativa a Alegra cuando necesitas firma y tu link de Mercado Pago — no factura PAC ni libros. Firmar gratis ≤2. $10/mes, 0% de recorte.",
+    locale: "es",
+    alternates: { en: "/alegra-alternative", es: "/es/alternativa-a-alegra" },
+    xDefault: "es",
+  },
+  {
+    urlPath: "/es/alternativa-a-siigo",
+    outFile: "es/alternativa-a-siigo.html",
+    title: "Alternativa a Siigo — cobro por WhatsApp, no factura DIAN | Docracy",
+    description:
+      "Alternativa a Siigo cuando necesitas un PDF firmado y tu link de cobro por WhatsApp — no una factura electrónica DIAN. $10/mes, 0% del cobro.",
+    locale: "es",
+    alternates: { en: "/siigo-alternative", es: "/es/alternativa-a-siigo" },
+    xDefault: "es",
+  },
+  {
     urlPath: "/es/firma-de-nda",
     outFile: "es/firma-de-nda.html",
     title: getFeaturePageContent("nda-signing", "es").seoTitle,
@@ -588,14 +624,6 @@ const routes = [
     description: getFeaturePageContent("client-contracts", "es").seoDescription,
     locale: "es",
     alternates: { en: "/client-contracts", es: "/es/contratos-con-clientes" },
-  },
-  {
-    urlPath: "/es/factura-whatsapp",
-    outFile: "es/factura-whatsapp.html",
-    title: getFeaturePageContent("whatsapp-invoice", "es").seoTitle,
-    description: getFeaturePageContent("whatsapp-invoice", "es").seoDescription,
-    locale: "es",
-    alternates: { en: "/whatsapp-invoice", es: "/es/factura-whatsapp" },
   },
   {
     urlPath: "/es/registros-1099",
@@ -654,6 +682,71 @@ const routes = [
     description: getFeaturePageContent("request-w9", "es").seoDescription,
     locale: "es",
     alternates: { en: "/request-w9", es: "/es/pedir-w9" },
+  },
+  {
+    urlPath: "/es/documentos-para-inmigrantes",
+    outFile: "es/documentos-para-inmigrantes.html",
+    title: getFeaturePageContent("immigrant-documents", "es").seoTitle,
+    description: getFeaturePageContent("immigrant-documents", "es").seoDescription,
+    locale: "es",
+    alternates: { en: "/immigrant-documents", es: "/es/documentos-para-inmigrantes" },
+    xDefault: "es",
+  },
+  {
+    urlPath: "/es/llegar-a-estados-unidos",
+    outFile: "es/llegar-a-estados-unidos.html",
+    title: getFeaturePageContent("move-to-us", "es").seoTitle,
+    description: getFeaturePageContent("move-to-us", "es").seoDescription,
+    locale: "es",
+    alternates: { en: "/move-to-us", es: "/es/llegar-a-estados-unidos" },
+    xDefault: "es",
+  },
+  {
+    urlPath: "/es/constancia-para-rentar",
+    outFile: "es/constancia-para-rentar.html",
+    title: getFeaturePageContent("proof-of-income-us-rental", "es").seoTitle,
+    description: getFeaturePageContent("proof-of-income-us-rental", "es").seoDescription,
+    locale: "es",
+    alternates: { en: "/proof-of-income-us-rental", es: "/es/constancia-para-rentar" },
+    xDefault: "es",
+  },
+  {
+    urlPath: "/packets/latam-to-us",
+    outFile: "packets/latam-to-us.html",
+    title: "Sign I-9 & visa supporting docs — immigrant kit | Docracy",
+    description:
+      "Sign the official USCIS I-9, offer letter, and visa supporting docs (POA, reference, child travel). Constancia for a US lease. We don't file petitions or run E-Verify.",
+    locale: "en",
+    alternates: { en: "/packets/latam-to-us", es: "/es/kit-llegar-eeuu" },
+    xDefault: "es",
+  },
+  {
+    urlPath: "/es/kit-llegar-eeuu",
+    outFile: "es/kit-llegar-eeuu.html",
+    title: "Firma el I-9 y papeles de visa — kit inmigrante | Docracy",
+    description:
+      "Firma el I-9 oficial de USCIS, la oferta y documentos de apoyo para visa (poder, referencia, viaje de menor). Constancia para rentar. No tramitamos la petición ni E-Verify.",
+    locale: "es",
+    alternates: { en: "/packets/latam-to-us", es: "/es/kit-llegar-eeuu" },
+    xDefault: "es",
+  },
+  {
+    urlPath: "/es/formulario-i-9",
+    outFile: "es/formulario-i-9.html",
+    title: getFeaturePageContent("i-9", "es").seoTitle,
+    description: getFeaturePageContent("i-9", "es").seoDescription,
+    locale: "es",
+    alternates: { en: "/i-9", es: "/es/formulario-i-9" },
+    xDefault: "es",
+  },
+  {
+    urlPath: "/es/documentos-para-visa",
+    outFile: "es/documentos-para-visa.html",
+    title: getFeaturePageContent("visa-supporting-documents", "es").seoTitle,
+    description: getFeaturePageContent("visa-supporting-documents", "es").seoDescription,
+    locale: "es",
+    alternates: { en: "/visa-supporting-documents", es: "/es/documentos-para-visa" },
+    xDefault: "es",
   },
   {
     urlPath: "/docs",
@@ -1105,11 +1198,12 @@ const routes = [
       alternates: { en: `/free-templates/${slug}`, es: `/es/plantillas-gratis/${slug}` },
     };
   }),
-  ...[...FEATURE_PAGES, ...ALTERNATIVE_PAGES, ...EXPLAINER_PAGES].map((p) => {
+  ...[...FEATURE_PAGES, ...ALTERNATIVE_PAGES, ...EXPLAINER_PAGES]
+    .filter((p) => p.slug !== "whatsapp-invoice")
+    .map((p) => {
     const bilingual = {
       "nda-signing": { en: "/nda-signing", es: "/es/firma-de-nda" },
       "client-contracts": { en: "/client-contracts", es: "/es/contratos-con-clientes" },
-      "whatsapp-invoice": { en: "/whatsapp-invoice", es: "/es/factura-whatsapp" },
       "1099-contractor-records": { en: "/1099-contractor-records", es: "/es/registros-1099" },
       "hire-contractor-abroad": { en: "/hire-contractor-abroad", es: "/es/contratar-en-el-extranjero" },
       "proof-of-income": { en: "/proof-of-income", es: "/es/prueba-de-ingresos" },
@@ -1117,11 +1211,19 @@ const routes = [
       "contractor-payment-proof": { en: "/contractor-payment-proof", es: "/es/comprobante-pago-contratistas" },
       "latam-export-documents": { en: "/latam-export-documents", es: "/es/documentos-exportacion" },
       "request-w9": { en: "/request-w9", es: "/es/pedir-w9" },
+      "immigrant-documents": { en: "/immigrant-documents", es: "/es/documentos-para-inmigrantes" },
+      "move-to-us": { en: "/move-to-us", es: "/es/llegar-a-estados-unidos" },
+      "proof-of-income-us-rental": { en: "/proof-of-income-us-rental", es: "/es/constancia-para-rentar" },
+      "i-9": { en: "/i-9", es: "/es/formulario-i-9" },
+      "visa-supporting-documents": { en: "/visa-supporting-documents", es: "/es/documentos-para-visa" },
       "docusign-alternative": { en: "/docusign-alternative", es: "/es/alternativa-a-docusign" },
       "hellosign-alternative": { en: "/hellosign-alternative", es: "/es/alternativa-a-hellosign" },
       "adobe-sign-alternative": { en: "/adobe-sign-alternative", es: "/es/alternativa-a-adobe-sign" },
       "eversign-alternative": { en: "/eversign-alternative", es: "/es/alternativa-a-eversign" },
       "pandadoc-alternative": { en: "/pandadoc-alternative", es: "/es/alternativa-a-pandadoc" },
+      "kita-alternative": { en: "/kita-alternative", es: "/es/alternativa-a-kita" },
+      "alegra-alternative": { en: "/alegra-alternative", es: "/es/alternativa-a-alegra" },
+      "siigo-alternative": { en: "/siigo-alternative", es: "/es/alternativa-a-siigo" },
     }[p.slug];
     return {
       urlPath: `/${p.slug}`,
@@ -1133,12 +1235,30 @@ const routes = [
         : {}),
     };
   }),
-  ...SEO_LANDING_PAGES.map((p) => ({
-    urlPath: `/${p.slug}`,
-    outFile: `${p.slug}.html`,
-    title: p.seoTitle,
-    description: p.seoDescription,
-  })),
+  ...SEO_LANDING_PAGES.flatMap((p) => {
+    const en = {
+      urlPath: `/${p.slug}`,
+      outFile: `${p.slug}.html`,
+      title: p.seoTitle,
+      description: p.seoDescription,
+      ...(p.lane === "latam" && p.es
+        ? { locale: "en", alternates: { en: `/${p.slug}`, es: `/es/${p.slug}` }, xDefault: "es" }
+        : {}),
+    };
+    if (p.lane !== "latam" || !p.es) return [en];
+    return [
+      en,
+      {
+        urlPath: `/es/${p.slug}`,
+        outFile: `es/${p.slug}.html`,
+        title: p.es.seoTitle,
+        description: p.es.seoDescription,
+        locale: "es",
+        alternates: { en: `/${p.slug}`, es: `/es/${p.slug}` },
+        xDefault: "es",
+      },
+    ];
+  }),
   ...PARTNER_PAGES.map((p) => ({
     urlPath: `/for/${p.slug}`,
     outFile: `for/${p.slug}.html`,

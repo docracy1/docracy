@@ -20,7 +20,12 @@ export default function AlternativePage({ slug }: { slug: string }) {
     bilingual && catalogKey ? t(`seo.${catalogKey}.description`) : page?.seoDescription ?? "",
     {
       canonicalPath: bilingual ? cleanPath(location.pathname) : `/${slug}`,
-      ...(bilingual ? { alternates: seoAlternates(bilingual.seoPage) } : {}),
+      ...(bilingual
+        ? {
+            alternates: seoAlternates(bilingual.seoPage),
+            ...(page?.xDefault ? { xDefault: page.xDefault } : {}),
+          }
+        : {}),
     }
   );
 
@@ -47,9 +52,13 @@ export default function AlternativePage({ slug }: { slug: string }) {
   const compareLabel = useEsBody ? t(`alt.${catalogKey}.compareLabel`) : page.compareLabel;
   const ctaTo = localizePath(page.ctaTo, locale);
   const pricingTo = localizePath("/pricing?ref=seo-price", locale);
-  const faqs = page.faqs ?? defaultAlternativeFaqs(page.competitorName);
+  const faqs = useEsBody && page.faqsEs ? page.faqsEs : (page.faqs ?? defaultAlternativeFaqs(page.competitorName));
+  const compareHref = page.compareTo ?? (page.compareBlogSlug ? `/blog/${page.compareBlogSlug}` : null);
 
   const relatedAlts = [
+    { slug: "kita-alternative", labelKey: "alt.related.kita" },
+    { slug: "alegra-alternative", labelKey: "alt.related.alegra" },
+    { slug: "siigo-alternative", labelKey: "alt.related.siigo" },
     { slug: "docusign-alternative", labelKey: "alt.related.docusign" },
     { slug: "hellosign-alternative", labelKey: "alt.related.hellosign" },
     { slug: "adobe-sign-alternative", labelKey: "alt.related.adobeSign" },
@@ -120,9 +129,11 @@ export default function AlternativePage({ slug }: { slug: string }) {
           </details>
         ))}
 
-        <p style={{ marginTop: 24 }}>
-          <Link to={`/blog/${page.compareBlogSlug}`}>{compareLabel} →</Link>
-        </p>
+        {compareHref && (
+          <p style={{ marginTop: 24 }}>
+            <Link to={localizePath(compareHref, locale)}>{compareLabel} →</Link>
+          </p>
+        )}
 
         <h2 style={{ fontSize: 18, marginTop: 36, marginBottom: 8 }}>{t("alt.alsoSee")}</h2>
         <ul style={{ paddingLeft: 20, marginTop: 0 }}>

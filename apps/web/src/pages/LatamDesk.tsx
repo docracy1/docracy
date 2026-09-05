@@ -17,6 +17,7 @@ const ITEMS: Array<{
   { titleKey: "landing.out4.title", bodyKey: "landing.out4.body", to: "/income-proof", linkKey: "landing.out4.link" },
   { titleKey: "landing.out3.title", bodyKey: "landing.out3.body", to: "/packets/latam-contractor", linkKey: "landing.out3.link" },
   { titleKey: "landing.out6.title", bodyKey: "landing.out6.body", to: "/packets/collect", linkKey: "landing.out6.link" },
+  { titleKey: "landing.out7.title", bodyKey: "landing.out7.body", to: "/packets/latam-to-us", linkKey: "landing.out7.link" },
   { titleKey: "dash.corridorTradeTitle", bodyKey: "dash.corridorTrade", to: "/packets/latam-trade", linkKey: "latamDesk.openKit" },
 ];
 

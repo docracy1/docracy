@@ -28,6 +28,7 @@ const FEATURE_ITEMS = [
   { to: "/free-templates", icon: "duplicate", titleKey: "nav.mega.feature.templates.title", descKey: "nav.mega.feature.templates.desc" },
   { to: "/packets/us-contractor", icon: "briefcase", titleKey: "nav.mega.feature.packet.title", descKey: "nav.mega.feature.packet.desc" },
   { to: "/packets/latam-contractor", icon: "briefcase", titleKey: "nav.mega.feature.latamPacket.title", descKey: "nav.mega.feature.latamPacket.desc" },
+  { to: "/packets/latam-to-us", icon: "briefcase", titleKey: "nav.mega.feature.latamUsPacket.title", descKey: "nav.mega.feature.latamUsPacket.desc" },
   { to: "/packets/trades", icon: "briefcase", titleKey: "nav.mega.feature.trades.title", descKey: "nav.mega.feature.trades.desc" },
   { to: "/packets/latam-trade", icon: "briefcase", titleKey: "nav.mega.feature.latamTrade.title", descKey: "nav.mega.feature.latamTrade.desc" },
   { to: "/packets/collect", icon: "duplicate", titleKey: "nav.mega.feature.collect.title", descKey: "nav.mega.feature.collect.desc" },
@@ -87,13 +88,16 @@ export default function Header() {
   // EN-only competitor pages use English labels even when the UI locale is ES (no ES alt routes
   // for the expanded set). localizePath is a no-op for unknown EN paths.
   const compareItems = COMPARE_PAGES.map((c) => ({
-    to: `/${c.slug}`,
+    to: localizePath(`/${c.slug}`, locale),
     icon: <NavIcon name="scale" />,
     title: `vs ${c.competitorName}`,
     description: c.navDesc,
   }));
   const compareNavChildren = [
-    ...COMPARE_PAGES.map((c) => ({ to: `/${c.slug}`, label: `vs ${c.competitorName}` })),
+    ...COMPARE_PAGES.map((c) => ({ to: localizePath(`/${c.slug}`, locale), label: `vs ${c.competitorName}` })),
+    { to: localizePath("/kita-vs-alegra", locale), label: "Kita vs Alegra" },
+    { to: localizePath("/kita-vs-siigo", locale), label: "Kita vs Siigo" },
+    { to: localizePath("/alegra-vs-siigo", locale), label: "Alegra vs Siigo" },
     { to: "/hellosign-vs-signnow", label: "HelloSign vs SignNow" },
     ...IMPORT_GUIDES.map((g) => ({
       to: `/import-from-${g.slug}`,
@@ -132,7 +136,10 @@ export default function Header() {
   const industryMobile = INDUSTRY_ITEMS.map((i) => ({ to: localizePath(i.to, locale), title: t(i.titleKey) }));
   const useCaseMobile = USE_CASE_ITEMS.map((u) => ({ to: localizePath(u.to, locale), title: t(u.titleKey) }));
   const compareMobile = [
-    ...COMPARE_PAGES.map((c) => ({ to: `/${c.slug}`, title: `vs ${c.competitorName}` })),
+    ...COMPARE_PAGES.map((c) => ({ to: localizePath(`/${c.slug}`, locale), title: `vs ${c.competitorName}` })),
+    { to: localizePath("/kita-vs-alegra", locale), title: "Kita vs Alegra" },
+    { to: localizePath("/kita-vs-siigo", locale), title: "Kita vs Siigo" },
+    { to: localizePath("/alegra-vs-siigo", locale), title: "Alegra vs Siigo" },
     ...IMPORT_GUIDES.map((g) => ({
       to: `/import-from-${g.slug}`,
       title: `Import from ${g.competitorName}`,

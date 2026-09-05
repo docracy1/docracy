@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, useEffect } from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import "./theme.css";
 import RootErrorBoundary from "./components/RootErrorBoundary";
 import Header from "./components/Header";
@@ -57,6 +57,7 @@ const TaxYearShare = lazy(() => import("./pages/TaxYearShare"));
 const JobPacket = lazy(() => import("./pages/JobPacket"));
 const Cobro = lazy(() => import("./pages/Cobro"));
 const LatamDesk = lazy(() => import("./pages/LatamDesk"));
+const LatamUsPacket = lazy(() => import("./pages/LatamUsPacket"));
 const Dpa = lazy(() => import("./pages/Dpa"));
 const Login = lazy(() => import("./pages/Login"));
 const AuthVerify = lazy(() => import("./pages/AuthVerify"));
@@ -148,6 +149,8 @@ function AppRoutes() {
       <Route path="/es/kit-contratista" element={<ContractorPacket />} />
       <Route path="/packets/latam-contractor" element={<LatamContractorPacket />} />
       <Route path="/es/kit-contratista-latam" element={<LatamContractorPacket />} />
+      <Route path="/packets/latam-to-us" element={<LatamUsPacket />} />
+      <Route path="/es/kit-llegar-eeuu" element={<LatamUsPacket />} />
       <Route path="/packets/trades" element={<JobPacket packetId="trades" />} />
       <Route path="/es/kit-oficios" element={<JobPacket packetId="trades" />} />
       <Route path="/packets/latam-trade" element={<JobPacket packetId="latam-trade" />} />
@@ -250,12 +253,22 @@ function AppRoutes() {
       <Route path="/simple-signing" element={<FeaturePage slug="simple-signing" />} />
       <Route path="/document-verification" element={<FeaturePage slug="document-verification" />} />
       <Route path="/blockchain-timestamp" element={<FeaturePage slug="blockchain-timestamp" />} />
-      <Route path="/whatsapp-invoice" element={<FeaturePage slug="whatsapp-invoice" />} />
-      <Route path="/es/factura-whatsapp" element={<FeaturePage slug="whatsapp-invoice" />} />
+      <Route path="/whatsapp-invoice" element={<Navigate to="/cobro" replace />} />
+      <Route path="/es/factura-whatsapp" element={<Navigate to="/es/cobro" replace />} />
       <Route path="/1099-contractor-records" element={<FeaturePage slug="1099-contractor-records" />} />
       <Route path="/es/registros-1099" element={<FeaturePage slug="1099-contractor-records" />} />
       <Route path="/hire-contractor-abroad" element={<FeaturePage slug="hire-contractor-abroad" />} />
       <Route path="/es/contratar-en-el-extranjero" element={<FeaturePage slug="hire-contractor-abroad" />} />
+      <Route path="/immigrant-documents" element={<FeaturePage slug="immigrant-documents" />} />
+      <Route path="/es/documentos-para-inmigrantes" element={<FeaturePage slug="immigrant-documents" />} />
+      <Route path="/move-to-us" element={<FeaturePage slug="move-to-us" />} />
+      <Route path="/es/llegar-a-estados-unidos" element={<FeaturePage slug="move-to-us" />} />
+      <Route path="/proof-of-income-us-rental" element={<FeaturePage slug="proof-of-income-us-rental" />} />
+      <Route path="/es/constancia-para-rentar" element={<FeaturePage slug="proof-of-income-us-rental" />} />
+      <Route path="/i-9" element={<FeaturePage slug="i-9" />} />
+      <Route path="/es/formulario-i-9" element={<FeaturePage slug="i-9" />} />
+      <Route path="/visa-supporting-documents" element={<FeaturePage slug="visa-supporting-documents" />} />
+      <Route path="/es/documentos-para-visa" element={<FeaturePage slug="visa-supporting-documents" />} />
       <Route path="/proof-of-income" element={<FeaturePage slug="proof-of-income" />} />
       <Route path="/es/prueba-de-ingresos" element={<FeaturePage slug="proof-of-income" />} />
       <Route path="/signed-work-order" element={<FeaturePage slug="signed-work-order" />} />
@@ -274,6 +287,9 @@ function AppRoutes() {
       <Route path="/es/alternativa-a-hellosign" element={<AlternativePage slug="hellosign-alternative" />} />
       <Route path="/es/alternativa-a-pandadoc" element={<AlternativePage slug="pandadoc-alternative" />} />
       <Route path="/es/alternativa-a-adobe-sign" element={<AlternativePage slug="adobe-sign-alternative" />} />
+      <Route path="/es/alternativa-a-kita" element={<AlternativePage slug="kita-alternative" />} />
+      <Route path="/es/alternativa-a-alegra" element={<AlternativePage slug="alegra-alternative" />} />
+      <Route path="/es/alternativa-a-siigo" element={<AlternativePage slug="siigo-alternative" />} />
       {IMPORT_GUIDE_PAGES.map((p) => (
         <Route key={p.slug} path={`/import-from-${p.slug}`} element={<ImportGuidePage slug={p.slug} />} />
       ))}
@@ -299,6 +315,9 @@ function AppRoutes() {
       <Route path="/docracy-ueta-compliance" element={<ExplainerPage slug="docracy-ueta-compliance" />} />
       {SEO_LANDING_PAGES.map((page) => (
         <Route key={page.slug} path={`/${page.slug}`} element={<SeoLandingTemplate slug={page.slug} />} />
+      ))}
+      {SEO_LANDING_PAGES.filter((page) => page.lane === "latam").map((page) => (
+        <Route key={`es-${page.slug}`} path={`/es/${page.slug}`} element={<SeoLandingTemplate slug={page.slug} />} />
       ))}
       {PARTNER_PAGES.map((page) => (
         <Route key={page.slug} path={`/for/${page.slug}`} element={<PartnerPage slug={page.slug} />} />

@@ -15,7 +15,7 @@ import { usePageMeta } from "../lib/usePageMeta";
 import { track } from "../lib/track";
 import { breadcrumbJsonLd, howToJsonLd } from "../lib/productSeo";
 
-const FAQ_COUNT = 5;
+const FAQ_COUNT = 6;
 
 /**
  * ES-lead SEO landing for the income-proof packet, with the Paid share tool below the fold.
@@ -172,6 +172,7 @@ export default function Constancia() {
             {t("constancia.kicker")}
           </p>
           <h1>{t("constancia.heroTitle")}</h1>
+          <p style={{ fontSize: 14, fontWeight: 600, color: "var(--body)", marginTop: 8 }}>{t("constancia.satDisclaimer")}</p>
           <p>{t("constancia.heroSub")}</p>
           <div style={{ marginTop: 20 }}>
             {account?.isPaid ? (

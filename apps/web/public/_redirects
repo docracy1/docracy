@@ -11,15 +11,42 @@
 /1099-nec      /1099-season  301
 /whatsapp-pay  /cobro        301
 /get-paid-whatsapp  /cobro   301
-/send-invoice-whatsapp  /whatsapp-invoice  301
-/paypal-whatsapp        /whatsapp-invoice  301
-/mercado-pago-invoice   /whatsapp-invoice  301
+/send-invoice-whatsapp  /cobro  301
+/paypal-whatsapp        /cobro  301
+/mercado-pago-invoice   /cobro  301
 /hire-in-mexico         /hire-contractor-abroad  301
 /hire-in-colombia       /hire-contractor-abroad  301
 /w-8ben                 /packets/latam-contractor  301
-/es/factura-por-whatsapp  /es/factura-whatsapp  301
+/es/factura-por-whatsapp  /es/cobro  301
 /es/cobrar-por-whatsapp   /es/cobro  301
 /es/contratista-mexico    /es/contratar-en-el-extranjero  301
+/es/inmigrantes  /es/documentos-para-inmigrantes  301
+/es/kit-inmigrante  /es/kit-llegar-eeuu  301
+/es/migrar-a-eeuu  /es/llegar-a-estados-unidos  301
+/es/migrar-a-estados-unidos  /es/llegar-a-estados-unidos  301
+/es/llegar-a-eeuu  /es/llegar-a-estados-unidos  301
+/es/documentos-inmigrante  /es/documentos-para-inmigrantes  301
+/es/prueba-de-ingresos-eeuu  /es/constancia-para-rentar  301
+/es/prueba-de-ingresos-estados-unidos  /es/constancia-para-rentar  301
+/es/constancia-para-apartamento  /es/constancia-para-rentar  301
+/es/carta-de-ingresos-usa  /es/constancia-para-rentar  301
+/es/constancia-ingresos-usa  /es/constancia-para-rentar  301
+/move-to-usa  /move-to-us  301
+/arrive-in-us  /packets/latam-to-us  301
+/immigrant-kit  /packets/latam-to-us  301
+/i9  /i-9  301
+/form-i-9  /i-9  301
+/sign-i-9  /i-9  301
+/es/i-9  /es/formulario-i-9  301
+/es/firmar-i-9  /es/formulario-i-9  301
+/es/formulario-i9  /es/formulario-i-9  301
+/visa-documents  /visa-supporting-documents  301
+/visa-packet  /visa-supporting-documents  301
+/visa-supporting  /visa-supporting-documents  301
+/es/visa  /es/documentos-para-visa  301
+/es/documentos-visa  /es/documentos-para-visa  301
+/es/papeles-para-visa  /es/documentos-para-visa  301
+/es/documentos-de-apoyo-visa  /es/documentos-para-visa  301
 /es/w-8ben                /es/kit-contratista-latam  301
 
 # Trades job packet — work order / change order / cobro. Not Jobber, not a lien waiver.
@@ -67,6 +94,20 @@
 /signnow-vs-docusign  /docusign-vs-signnow  301
 /signnow-vs-hellosign  /hellosign-vs-signnow  301
 /signnow-vs-eversign  /eversign-vs-signnow  301
+/alegra-vs-kita  /kita-vs-alegra  301
+/siigo-vs-kita  /kita-vs-siigo  301
+/siigo-vs-alegra  /alegra-vs-siigo  301
+/es/alegra-vs-kita  /es/kita-vs-alegra  301
+/es/siigo-vs-kita  /es/kita-vs-siigo  301
+/es/siigo-vs-alegra  /es/alegra-vs-siigo  301
+/docracy-vs-kita  /kita-alternative  301
+/docracy-vs-alegra  /alegra-alternative  301
+/docracy-vs-siigo  /siigo-alternative  301
+/es/docracy-vs-kita  /es/alternativa-a-kita  301
+/es/docracy-vs-alegra  /es/alternativa-a-alegra  301
+/es/docracy-vs-siigo  /es/alternativa-a-siigo  301
+/whatsapp-invoice  /cobro  301
+/es/factura-whatsapp  /es/cobro  301
 
 # Superseded by 5 dedicated per-competitor import guides (more specific, better SEO than one
 # combined page) — redirect so the URL doesn't 404 if already shared or indexed.

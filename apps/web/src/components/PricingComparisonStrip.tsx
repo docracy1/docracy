@@ -31,7 +31,8 @@ export default function PricingComparisonStrip({
   const t = useT();
   const { locale } = useI18n();
   const key = ALTERNATIVE_COMPETITOR_KEY[alternativeSlug];
-  const competitor = key ? COMPETITORS.find((c) => c.key === key) : COMPETITORS.find((c) => c.key === "docusign");
+  if (!key) return null;
+  const competitor = COMPETITORS.find((c) => c.key === key);
   if (!competitor) return null;
 
   const seats = Math.max(DEFAULT_TEAM, competitor.minSeats);

@@ -11,6 +11,12 @@ export const ES_PATH_BY_EN: Record<string, string> = {
   "/adobe-sign-alternative": "/es/alternativa-a-adobe-sign",
   "/eversign-alternative": "/es/alternativa-a-eversign",
   "/pandadoc-alternative": "/es/alternativa-a-pandadoc",
+  "/kita-alternative": "/es/alternativa-a-kita",
+  "/alegra-alternative": "/es/alternativa-a-alegra",
+  "/siigo-alternative": "/es/alternativa-a-siigo",
+  "/kita-vs-alegra": "/es/kita-vs-alegra",
+  "/kita-vs-siigo": "/es/kita-vs-siigo",
+  "/alegra-vs-siigo": "/es/alegra-vs-siigo",
   "/nda-signing": "/es/firma-de-nda",
   "/client-contracts": "/es/contratos-con-clientes",
   "/docs": "/es/documentacion",
@@ -40,9 +46,14 @@ export const ES_PATH_BY_EN: Record<string, string> = {
   "/1099-season": "/es/temporada-1099",
   "/cobro": "/es/cobro",
   "/latam": "/es/latam",
-  "/whatsapp-invoice": "/es/factura-whatsapp",
   "/1099-contractor-records": "/es/registros-1099",
   "/hire-contractor-abroad": "/es/contratar-en-el-extranjero",
+  "/packets/latam-to-us": "/es/kit-llegar-eeuu",
+  "/immigrant-documents": "/es/documentos-para-inmigrantes",
+  "/move-to-us": "/es/llegar-a-estados-unidos",
+  "/proof-of-income-us-rental": "/es/constancia-para-rentar",
+  "/i-9": "/es/formulario-i-9",
+  "/visa-supporting-documents": "/es/documentos-para-visa",
   "/income-proof": "/es/constancia",
   "/proof-of-income": "/es/prueba-de-ingresos",
   "/signed-work-order": "/es/orden-de-trabajo-firmada",
@@ -67,6 +78,7 @@ export const SEO_TEMPLATE_SLUGS = [
   "unilateral-nda",
   "vendor-agreement",
   "w-9-form",
+  "i-9-form",
   "promissory-note",
   "letter-of-intent",
   "simple-commercial-lease-agreement",
@@ -93,6 +105,9 @@ export type SeoPage =
   | "adobeSignAlternative"
   | "eversignAlternative"
   | "pandadocAlternative"
+  | "kitaAlternative"
+  | "alegraAlternative"
+  | "siigoAlternative"
   | "ndaSigning"
   | "clientContracts"
   | "docs"
@@ -123,6 +138,9 @@ export const SEO_EN_PATH: Record<SeoPage, string> = {
   adobeSignAlternative: "/adobe-sign-alternative",
   eversignAlternative: "/eversign-alternative",
   pandadocAlternative: "/pandadoc-alternative",
+  kitaAlternative: "/kita-alternative",
+  alegraAlternative: "/alegra-alternative",
+  siigoAlternative: "/siigo-alternative",
   ndaSigning: "/nda-signing",
   clientContracts: "/client-contracts",
   docs: "/docs",
@@ -151,6 +169,9 @@ export const BILINGUAL_ALT_BY_SLUG: Record<string, { seoPage: SeoPage; catalogKe
   "adobe-sign-alternative": { seoPage: "adobeSignAlternative", catalogKey: "adobeSign" },
   "eversign-alternative": { seoPage: "eversignAlternative", catalogKey: "eversign" },
   "pandadoc-alternative": { seoPage: "pandadocAlternative", catalogKey: "pandadoc" },
+  "kita-alternative": { seoPage: "kitaAlternative", catalogKey: "kita" },
+  "alegra-alternative": { seoPage: "alegraAlternative", catalogKey: "alegra" },
+  "siigo-alternative": { seoPage: "siigoAlternative", catalogKey: "siigo" },
 };
 
 /** Feature landings with EN/ES URL pairs (content in marketingPages.ts). */

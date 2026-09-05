@@ -395,6 +395,7 @@ export interface TaxYearDocument {
   currency: string;
   paymentUrl: string;
   kind: "cobro" | "sign";
+  cobroPaidAt?: string;
 }
 
 export async function fetchTaxYear(

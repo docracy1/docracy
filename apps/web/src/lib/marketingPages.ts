@@ -308,7 +308,6 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     ctaLabel: "Try WhatsApp signing",
     ctaTo: "/prepare",
     relatedLinks: [
-      { label: "Send an invoice on WhatsApp (no signature)", to: "/whatsapp-invoice" },
       { label: "Get paid on WhatsApp (cobro)", to: "/cobro" },
       { label: "Advanced Electronic Signature (AES)", to: "/advanced-electronic-signature" },
       { label: "See pricing", to: "/pricing" },
@@ -1333,6 +1332,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     ],
     useCases: [
       "Freelancers in Mexico or Colombia renting an apartment",
+      "LATAM immigrants applying for a US lease without a W-2",
       "Contractors who need a CPA packet without a W-2",
       "Anyone paid on PayPal or Mercado Pago who is asked for 'prueba de ingresos'",
     ],
@@ -1369,6 +1369,8 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       { label: "WhatsApp cobro", to: "/cobro" },
       { label: "1099 season locker", to: "/1099-season" },
       { label: "LATAM contractor kit", to: "/packets/latam-contractor" },
+      { label: "Constancia for a US rental", to: "/proof-of-income-us-rental" },
+      { label: "Immigrant kit", to: "/packets/latam-to-us" },
     ],
   },
   {
@@ -1566,6 +1568,245 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       { label: "Collect kit", to: "/packets/collect" },
       { label: "US contractor kit", to: "/packets/us-contractor" },
       { label: "CPA payment proof", to: "/contractor-payment-proof" },
+    ],
+  },
+  {
+    slug: "immigrant-documents",
+    xDefault: "es",
+    seoTitle: "Immigrant Documents — I-9, Visa Packet & Constancia | Docracy",
+    seoDescription:
+      "LATAM immigrant paperwork: official USCIS I-9, visa supporting docs, offer letter, constancia for a landlord. We don't file petitions or run E-Verify. Spanish first.",
+    heroHeadline: "Immigrant paperwork. Sign the I-9. Sign the visa packet.",
+    heroSubheadline:
+      "The official I-9 is in the catalog. Visa supporting docs we already ship. Constancia a US landlord can open. We don't file with USCIS — we sign the files they asked you for.",
+    problem:
+      "You landed. The employer sends an offer and an I-9. A visa lawyer wants supporting PDFs. The landlord wants proof of income. Visa consultants don't sign those contracts.",
+    solution:
+      "Docracy is the immigrant docs product: free SES signing of the official I-9 and the supporting templates we already have, Paid cobro + constancia. Honest limit: no E-Verify, no document inspection, no I-129 / DS-160 we invent.",
+    features: [
+      { title: "Official I-9", body: "USCIS Form I-9. Employee + employer signature. Not E-Verify." },
+      { title: "Visa supporting packet", body: "Offer, employment, POA, reference, child travel. Not the petition." },
+      { title: "Constancia a stranger can open", body: "Dated index of contracts and cobros. Not a W-2." },
+      { title: "W-9 kit if you are a US person", body: "We do not ship a fake W-8BEN." },
+    ],
+    useCases: [
+      "Someone who just moved from Mexico or Colombia to Houston or Miami",
+      "New hires who need I-9 signed the first week",
+      "People gathering supporting docs a visa or consulate asked for",
+      "Freelancers applying for a US apartment without pay stubs",
+    ],
+    faqs: [
+      {
+        question: "Can you do I-9?",
+        answer:
+          "Yes. We sign the official USCIS Form I-9. We do not inspect List A/B/C documents and we do not run E-Verify. Anyone with the link can sign as the name on it. See /trust.",
+      },
+      {
+        question: "Do you file visas?",
+        answer:
+          "No. We sign the supporting packet. Start at /visa-supporting-documents (Spanish: /es/documentos-para-visa).",
+      },
+      {
+        question: "Where do I start in Spanish?",
+        answer: "https://docracy.io/es/documentos-para-inmigrantes — kit: /es/kit-llegar-eeuu.",
+      },
+    ],
+    ctaLabel: "Open the immigrant kit",
+    ctaTo: "/packets/latam-to-us",
+    relatedLinks: [
+      { label: "Immigrant kit", to: "/packets/latam-to-us" },
+      { label: "Sign I-9", to: "/i-9" },
+      { label: "Visa supporting docs", to: "/visa-supporting-documents" },
+      { label: "Constancia for a US rental", to: "/proof-of-income-us-rental" },
+      { label: "I-9 template", to: "/free-templates/i-9-form" },
+    ],
+  },
+  {
+    slug: "move-to-us",
+    xDefault: "es",
+    seoTitle: "I Moved to the US — Sign I-9 & Prove Income | Docracy",
+    seoDescription:
+      "Just arrived from LATAM? Sign the official I-9, the offer, visa supporting docs, and a constancia for a US landlord. We don't file the petition. Spanish first.",
+    heroHeadline: "You just got here. They want an I-9, a signature, and proof of income.",
+    heroSubheadline:
+      "The first week is PDFs: I-9, offer letter, visa supporting docs, lease application. One product. Spanish first.",
+    problem:
+      "Search results are visa agencies and SAT constancia generators. Neither signs a US I-9 or builds a packet a Miami landlord will open.",
+    solution:
+      "Start the immigrant kit: official I-9, offer, visa supporting templates we already ship, cobro if you still invoice, constancia for the rental, W-9 only if you are a US person.",
+    features: [
+      { title: "Official I-9", body: "Free. Employee + employer. Not E-Verify." },
+      { title: "Offer letter template", body: "They can also just send you a link to sign." },
+      { title: "Visa supporting docs", body: "POA, reference, child travel — not I-129 or DS-160." },
+      { title: "Constancia for the lease", body: "Not a SAT constancia de situación fiscal." },
+    ],
+    useCases: [
+      "First 90 days after landing",
+      "New job that sent an I-9 the first week",
+      "Roommate or lease application without a W-2",
+    ],
+    faqs: [
+      {
+        question: "Do you process a visa?",
+        answer:
+          "No. We sign the supporting packet. Open /visa-supporting-documents. Hire a lawyer if you need the petition filed.",
+      },
+      {
+        question: "Spanish URL?",
+        answer: "https://docracy.io/es/llegar-a-estados-unidos — kit: /es/kit-llegar-eeuu.",
+      },
+    ],
+    ctaLabel: "Open the arrive-in-the-US kit",
+    ctaTo: "/packets/latam-to-us",
+    relatedLinks: [
+      { label: "Immigrant documents", to: "/immigrant-documents" },
+      { label: "Sign I-9", to: "/i-9" },
+      { label: "Visa supporting docs", to: "/visa-supporting-documents" },
+      { label: "Constancia to rent", to: "/proof-of-income-us-rental" },
+    ],
+  },
+  {
+    slug: "proof-of-income-us-rental",
+    xDefault: "es",
+    seoTitle: "Proof of Income for a US Apartment — No Pay Stub | Docracy",
+    seoDescription:
+      "Constancia for a US rental application: signed contracts and cobros on one URL. For LATAM immigrants without a W-2. Not a bank letter. Spanish first.",
+    heroHeadline: "Proof of income for a US apartment when you don't have a stub.",
+    heroSubheadline:
+      "Landlords in Houston, Miami, NYC ask for a letter. Immigrants paid on Mercado Pago or PayPal don't get one. Pack the year into a URL.",
+    problem:
+      "The application portal wants a W-2 or pay stubs. You have WhatsApp invoices and a signed contractor agreement. A Word 'carta de ingresos' looks homemade because it is.",
+    solution:
+      "The constancia is the files already in your Paid vault — titles, dates, names, amounts you typed. Spanish tool: /es/constancia. This page is the rental keyword. Not a SAT CSF.",
+    features: [
+      { title: "One link for the landlord", body: "They don't need a Docracy account." },
+      { title: "Currencies labeled", body: "MXN, USD, COP — whatever you typed on cobro." },
+      { title: "Honest cover", body: "Not a W-2. Say that in the application notes." },
+      { title: "Same product as /es/constancia", body: "This page exists so search can find the rental use." },
+    ],
+    useCases: [
+      "LATAM immigrants applying for a US lease",
+      "Freelancers without pay stubs in any US city",
+      "Someone who still invoices clients back home",
+    ],
+    faqs: [
+      {
+        question: "Will every landlord accept this?",
+        answer: "No. Some want a bank statement. Send both. We do not notarize.",
+      },
+      {
+        question: "Is this the SAT constancia?",
+        answer: "No. That collision is why we write it on the page. Ours is an index of Docracy files.",
+      },
+      {
+        question: "Spanish URL?",
+        answer: "https://docracy.io/es/constancia-para-rentar — tool: /es/constancia.",
+      },
+    ],
+    ctaLabel: "Open the constancia",
+    ctaTo: "/income-proof",
+    relatedLinks: [
+      { label: "Constancia tool", to: "/income-proof" },
+      { label: "Immigrant kit", to: "/packets/latam-to-us" },
+      { label: "Immigrant documents", to: "/immigrant-documents" },
+      { label: "Proof of income (generic)", to: "/proof-of-income" },
+    ],
+  },
+  {
+    slug: "i-9",
+    xDefault: "es",
+    seoTitle: "Sign Form I-9 Online — Official USCIS PDF | Docracy",
+    seoDescription:
+      "Sign the official USCIS Form I-9 (Edition 01/20/25). Employee + employer fields. Free for 2 signers. Not E-Verify. We don't inspect List A/B/C documents.",
+    heroHeadline: "Sign the I-9. We don't inspect the documents.",
+    heroSubheadline:
+      "The official USCIS Form I-9 is already in the catalog. Employee signs Section 1. Employer signs Section 2. Free for two parties. Spanish: /es/formulario-i-9.",
+    problem:
+      "A new hire's first day needs an I-9. Most e-sign tools hide the form or pretend signing equals work authorization. It doesn't.",
+    solution:
+      "Start from the official USCIS PDF. Place the two signatures we already mapped. Honest limit: we do not examine List A/B/C documents, we do not run E-Verify, and SES means anyone with the link can sign as the name on it. See /trust.",
+    features: [
+      { title: "Official USCIS form", body: "Edition 01/20/25. Not a Docracy-drafted substitute." },
+      { title: "Two signers, free", body: "Employee and employer or authorized representative." },
+      { title: "No account for the hire", body: "They open the link and sign." },
+      { title: "Honest I-9 limit", body: "Document inspection and E-Verify stay with the employer." },
+    ],
+    useCases: [
+      "US employers onboarding someone who just arrived from LATAM",
+      "Staffing / recruiting sending I-9 the same day as the offer",
+      "Immigrants who were emailed an I-9 to sign",
+    ],
+    faqs: [
+      {
+        question: "Does signing I-9 on Docracy authorize someone to work?",
+        answer:
+          "No. The form records attestations. The employer still reviews identity and work-authorization documents. We do not run E-Verify.",
+      },
+      {
+        question: "Is this the real USCIS form?",
+        answer: "Yes. Open /free-templates/i-9-form (Spanish: /es/plantillas-gratis/i-9-form).",
+      },
+      {
+        question: "Do you verify identity?",
+        answer: "No. SES: anyone with the signing link can sign as the name on it. Details on /trust.",
+      },
+    ],
+    ctaLabel: "Open the I-9 template",
+    ctaTo: "/free-templates/i-9-form",
+    relatedLinks: [
+      { label: "I-9 template", to: "/free-templates/i-9-form" },
+      { label: "Immigrant kit", to: "/packets/latam-to-us" },
+      { label: "Visa supporting docs", to: "/visa-supporting-documents" },
+      { label: "Offer letter", to: "/free-templates/offer-letter" },
+    ],
+  },
+  {
+    slug: "visa-supporting-documents",
+    xDefault: "es",
+    seoTitle: "Visa Supporting Documents to Sign | Docracy",
+    seoDescription:
+      "Sign the packet a visa or consulate asks for: offer letter, employment agreement, I-9, power of attorney, reference letter, child travel consent. We don't file I-129 or DS-160.",
+    heroHeadline: "We don't file the visa. We sign the supporting packet.",
+    heroSubheadline:
+      "Offer letter, employment agreement, official I-9, power of attorney, reference letter, child travel consent, lease. Templates we already have. Spanish: /es/documentos-para-visa.",
+    problem:
+      "A visa filing needs supporting PDFs signed this week. Lawyers file the petition. E-sign tools pretend they are USCIS. We are neither.",
+    solution:
+      "Send the templates we already ship. We do not invent I-129, DS-160, or I-864 and we do not talk to USCIS. If you need the petition filed, hire that service and come here for the signatures around it.",
+    features: [
+      { title: "Offer + employment", body: "The letter and agreement a consulate often asks to see." },
+      { title: "Official I-9", body: "When the job is in the US. Not E-Verify." },
+      { title: "POA, reference, child travel", body: "Family and authorization docs already in the catalog." },
+      { title: "Lease / roommate", body: "Housing paperwork that shows up in the same packet." },
+    ],
+    useCases: [
+      "Gathering supporting docs a lawyer or consulate listed",
+      "Employer sending an offer letter for a visa file",
+      "Parents signing child travel consent next to other immigration paperwork",
+    ],
+    faqs: [
+      {
+        question: "Will you file my visa?",
+        answer: "No. We sign supporting documents. We do not file I-129, DS-160, I-864, or any USCIS petition.",
+      },
+      {
+        question: "Which templates?",
+        answer:
+          "Offer letter, employment agreement, I-9, W-9 (US persons), power of attorney, reference letter, child travel consent, commercial lease / roommate. Thin legacy invitation-letter slugs are not this product.",
+      },
+      {
+        question: "Spanish URL?",
+        answer: "https://docracy.io/es/documentos-para-visa — kit: /es/kit-llegar-eeuu.",
+      },
+    ],
+    ctaLabel: "Open the immigrant kit",
+    ctaTo: "/packets/latam-to-us",
+    relatedLinks: [
+      { label: "Immigrant kit", to: "/packets/latam-to-us" },
+      { label: "Sign I-9", to: "/i-9" },
+      { label: "Offer letter", to: "/free-templates/offer-letter" },
+      { label: "Power of attorney", to: "/free-templates/power-of-attorney" },
+      { label: "Child travel consent", to: "/free-templates/child-travel-consent" },
     ],
   },
 ];
@@ -1864,6 +2105,7 @@ export function getProofOfIncomePageEs(): FeaturePageContent {
     ],
     useCases: [
       "Freelancers en México o Colombia que rentan un departamento",
+      "Inmigrantes de LATAM que piden un depa en EE. UU. sin W-2",
       "Contratistas que necesitan un paquete para el contador sin W-2",
       "Quien cobra por PayPal o Mercado Pago y le piden prueba de ingresos",
     ],
@@ -1900,6 +2142,8 @@ export function getProofOfIncomePageEs(): FeaturePageContent {
       { label: "Cobro por WhatsApp", to: "/cobro" },
       { label: "Casillero temporada 1099", to: "/1099-season" },
       { label: "Kit contratista LATAM", to: "/packets/latam-contractor" },
+      { label: "Constancia para rentar en EE. UU.", to: "/proof-of-income-us-rental" },
+      { label: "Kit inmigrante", to: "/packets/latam-to-us" },
     ],
   };
 }
@@ -2113,6 +2357,260 @@ export function getRequestW9PageEs(): FeaturePageContent {
   };
 }
 
+export function getImmigrantDocumentsPageEs(): FeaturePageContent {
+  return {
+    slug: "immigrant-documents",
+    xDefault: "es",
+    seoTitle: "Documentos para inmigrantes — I-9, visa y constancia | Docracy",
+    seoDescription:
+      "Papelería para inmigrantes de LATAM: I-9 oficial de USCIS, documentos de apoyo para visa, oferta, constancia para el arrendador. No tramitamos la petición ni E-Verify.",
+    heroHeadline: "Documentos para inmigrantes. Firma el I-9. Firma el paquete de visa.",
+    heroSubheadline:
+      "El I-9 oficial está en el catálogo. Documentos de apoyo para visa que ya tenemos. Constancia que un arrendador puede abrir. No presentamos ante USCIS — firmamos lo que te pidieron.",
+    problem:
+      "Llegaste. El empleador manda oferta e I-9. El abogado de visa pide PDFs de apoyo. El arrendador pide prueba de ingresos. Las gestorías no firman esos contratos.",
+    solution:
+      "Docracy es el producto de documentos: firma SES gratis del I-9 oficial y de las plantillas de apoyo, cobro y constancia de pago. Límite honesto: no E-Verify, no inspección de documentos, no I-129 / DS-160 inventados.",
+    features: [
+      { title: "I-9 oficial", body: "Formulario I-9 de USCIS. Firma de empleado y empleador. No es E-Verify." },
+      { title: "Paquete de apoyo para visa", body: "Oferta, empleo, poder, referencia, viaje de menor. No la petición." },
+      { title: "Constancia que puede abrir un desconocido", body: "Índice con fecha de contratos y cobros. No es un W-2." },
+      { title: "Kit W-9 si eres persona de EE. UU.", body: "No publicamos un W-8BEN falso." },
+    ],
+    useCases: [
+      "Quien acaba de mudarse de México o Colombia a Houston o Miami",
+      "Nuevos empleados que tienen que firmar el I-9 la primera semana",
+      "Quien junta documentos de apoyo que pidió una visa o un consulado",
+      "Freelancers que piden un depa en EE. UU. sin recibos de nómina",
+    ],
+    faqs: [
+      {
+        question: "¿Pueden hacer el I-9?",
+        answer:
+          "Sí. Firmamos el Formulario I-9 oficial de USCIS. No inspeccionamos documentos de las Listas A/B/C y no corremos E-Verify. Quien tiene el enlace puede firmar con el nombre indicado. Ver /trust.",
+      },
+      {
+        question: "¿Tramitan la visa?",
+        answer:
+          "No. Firmamos el paquete de apoyo. Empieza en /es/documentos-para-visa (inglés: /visa-supporting-documents).",
+      },
+      {
+        question: "¿Dónde empiezo?",
+        answer: "https://docracy.io/es/documentos-para-inmigrantes — kit: /es/kit-llegar-eeuu.",
+      },
+    ],
+    ctaLabel: "Abrir el kit de inmigrante",
+    ctaTo: "/packets/latam-to-us",
+    relatedLinks: [
+      { label: "Kit inmigrante", to: "/packets/latam-to-us" },
+      { label: "Firmar I-9", to: "/i-9" },
+      { label: "Documentos para visa", to: "/visa-supporting-documents" },
+      { label: "Constancia para rentar en EE. UU.", to: "/proof-of-income-us-rental" },
+      { label: "Plantilla I-9", to: "/free-templates/i-9-form" },
+    ],
+  };
+}
+
+export function getMoveToUsPageEs(): FeaturePageContent {
+  return {
+    slug: "move-to-us",
+    xDefault: "es",
+    seoTitle: "Llegar a Estados Unidos — firma el I-9 y prueba ingresos | Docracy",
+    seoDescription:
+      "¿Acabas de llegar de LATAM? Firma el I-9 oficial, la oferta, documentos de apoyo para visa y una constancia para el arrendador. No tramitamos la petición.",
+    heroHeadline: "Acabas de llegar. Te piden I-9, firma y prueba de ingresos.",
+    heroSubheadline:
+      "La primera semana son PDFs: I-9, oferta, documentos de visa, solicitud de depa. Un solo producto. Español primero.",
+    problem:
+      "Google te tira gestorías de visa y generadores de constancia SAT. Ninguno firma un I-9 ni arma un paquete que un arrendador en Miami abra.",
+    solution:
+      "Empieza el kit: I-9 oficial, oferta, plantillas de apoyo para visa que ya tenemos, cobro si sigues facturando, constancia para rentar, W-9 solo si eres persona de EE. UU.",
+    features: [
+      { title: "I-9 oficial", body: "Gratis. Empleado + empleador. No es E-Verify." },
+      { title: "Plantilla de oferta", body: "También pueden mandarte solo el enlace para firmar." },
+      { title: "Documentos de apoyo para visa", body: "Poder, referencia, viaje de menor — no I-129 ni DS-160." },
+      { title: "Constancia para el depa", body: "No es la constancia de situación fiscal del SAT." },
+    ],
+    useCases: [
+      "Los primeros 90 días después de aterrizar",
+      "Un trabajo nuevo que mandó el I-9 la primera semana",
+      "Solicitud de depa o roomie sin W-2",
+    ],
+    faqs: [
+      {
+        question: "¿Tramitan la visa?",
+        answer:
+          "No. Firmamos el paquete de apoyo. Abre /es/documentos-para-visa. Si hay que presentar la petición, contrata ese servicio.",
+      },
+      {
+        question: "¿URL en español?",
+        answer: "https://docracy.io/es/llegar-a-estados-unidos — kit: /es/kit-llegar-eeuu.",
+      },
+    ],
+    ctaLabel: "Abrir el kit de llegada",
+    ctaTo: "/packets/latam-to-us",
+    relatedLinks: [
+      { label: "Documentos para inmigrantes", to: "/immigrant-documents" },
+      { label: "Firmar I-9", to: "/i-9" },
+      { label: "Documentos para visa", to: "/visa-supporting-documents" },
+      { label: "Constancia para rentar", to: "/proof-of-income-us-rental" },
+    ],
+  };
+}
+
+export function getUsRentalIncomeProofPageEs(): FeaturePageContent {
+  return {
+    slug: "proof-of-income-us-rental",
+    xDefault: "es",
+    seoTitle: "Constancia de ingresos para rentar en EE. UU. | Docracy",
+    seoDescription:
+      "Constancia para una solicitud de depa en Estados Unidos: contratos y cobros en una URL. Para inmigrantes de LATAM sin W-2. No es carta bancaria. Español primero.",
+    heroHeadline: "Constancia de ingresos para rentar en EE. UU. cuando no hay stub.",
+    heroSubheadline:
+      "El arrendador en Houston, Miami o NYC pide una carta. Quien cobra por Mercado Pago o PayPal no la tiene. Junta el año en una URL.",
+    problem:
+      "El portal pide W-2 o recibos de nómina. Tú tienes facturas por WhatsApp y un acuerdo firmado. Una 'carta de ingresos' en Word se ve casera porque lo es.",
+    solution:
+      "La constancia son los archivos que ya están en tu bóveda de pago — títulos, fechas, nombres, montos que escribiste. Herramienta: /es/constancia. Esta página es la búsqueda de renta. No es la CSF del SAT.",
+    features: [
+      { title: "Un enlace para el arrendador", body: "No necesita cuenta en Docracy." },
+      { title: "Monedas etiquetadas", body: "MXN, USD, COP — lo que anotaste en el cobro." },
+      { title: "Portada honesta", body: "No es un W-2. Dilo en las notas de la solicitud." },
+      { title: "El mismo producto que /es/constancia", body: "Esta página existe para que te encuentren al buscar renta." },
+    ],
+    useCases: [
+      "Inmigrantes de LATAM que piden un depa en EE. UU.",
+      "Freelancers sin recibos de nómina en cualquier ciudad de EE. UU.",
+      "Quien sigue facturando a clientes en su país",
+    ],
+    faqs: [
+      {
+        question: "¿Todo arrendador la acepta?",
+        answer: "No. Algunos piden estado de cuenta. Manda las dos. No notariamos.",
+      },
+      {
+        question: "¿Es la constancia del SAT?",
+        answer: "No. Por eso lo escribimos en la página. La nuestra es un índice de archivos de Docracy.",
+      },
+      {
+        question: "¿URL en español?",
+        answer: "https://docracy.io/es/constancia-para-rentar — herramienta: /es/constancia.",
+      },
+    ],
+    ctaLabel: "Abrir la constancia",
+    ctaTo: "/income-proof",
+    relatedLinks: [
+      { label: "Herramienta de constancia", to: "/income-proof" },
+      { label: "Kit inmigrante", to: "/packets/latam-to-us" },
+      { label: "Documentos para inmigrantes", to: "/immigrant-documents" },
+      { label: "Prueba de ingresos (genérica)", to: "/proof-of-income" },
+    ],
+  };
+}
+
+export function getI9PageEs(): FeaturePageContent {
+  return {
+    slug: "i-9",
+    xDefault: "es",
+    seoTitle: "Firmar el formulario I-9 en línea — PDF oficial de USCIS | Docracy",
+    seoDescription:
+      "Firma el Formulario I-9 oficial de USCIS (edición 01/20/25). Campos de empleado y empleador. Gratis para 2 firmantes. No es E-Verify. No inspeccionamos documentos.",
+    heroHeadline: "Firma el I-9. No inspeccionamos los documentos.",
+    heroSubheadline:
+      "El Formulario I-9 oficial de USCIS ya está en el catálogo. El empleado firma la Sección 1. El empleador la Sección 2. Gratis para dos partes. /es/formulario-i-9.",
+    problem:
+      "El primer día de un empleado nuevo pide un I-9. La mayoría de las firmas esconden el formulario o pretenden que firmar = autorización para trabajar. No es así.",
+    solution:
+      "Empieza con el PDF oficial de USCIS. Las dos firmas ya están mapeadas. Límite honesto: no examinamos documentos de las Listas A/B/C, no corremos E-Verify, y SES significa que quien tiene el enlace puede firmar con el nombre indicado. Ver /trust.",
+    features: [
+      { title: "Formulario oficial de USCIS", body: "Edición 01/20/25. No es un sustituto de Docracy." },
+      { title: "Dos firmantes, gratis", body: "Empleado y empleador o representante autorizado." },
+      { title: "Sin cuenta para el empleado", body: "Abre el enlace y firma." },
+      { title: "Límite honesto del I-9", body: "La inspección de documentos y E-Verify quedan con el empleador." },
+    ],
+    useCases: [
+      "Empleadores en EE. UU. que incorporan a alguien que acaba de llegar de LATAM",
+      "Reclutamiento que manda el I-9 el mismo día que la oferta",
+      "Inmigrantes a quienes les enviaron un I-9 para firmar",
+    ],
+    faqs: [
+      {
+        question: "¿Firmar el I-9 en Docracy autoriza a trabajar?",
+        answer:
+          "No. El formulario registra las declaraciones. El empleador sigue revisando documentos de identidad y autorización. No corremos E-Verify.",
+      },
+      {
+        question: "¿Es el formulario real de USCIS?",
+        answer: "Sí. Abre /es/plantillas-gratis/i-9-form (inglés: /free-templates/i-9-form).",
+      },
+      {
+        question: "¿Verifican identidad?",
+        answer: "No. SES: quien tiene el enlace puede firmar con el nombre indicado. Detalles en /trust.",
+      },
+    ],
+    ctaLabel: "Abrir la plantilla I-9",
+    ctaTo: "/free-templates/i-9-form",
+    relatedLinks: [
+      { label: "Plantilla I-9", to: "/free-templates/i-9-form" },
+      { label: "Kit inmigrante", to: "/packets/latam-to-us" },
+      { label: "Documentos para visa", to: "/visa-supporting-documents" },
+      { label: "Carta de oferta", to: "/free-templates/offer-letter" },
+    ],
+  };
+}
+
+export function getVisaSupportingDocumentsPageEs(): FeaturePageContent {
+  return {
+    slug: "visa-supporting-documents",
+    xDefault: "es",
+    seoTitle: "Documentos de apoyo para visa — para firmar | Docracy",
+    seoDescription:
+      "Firma el paquete que pide una visa o un consulado: oferta, contrato de empleo, I-9, poder notarial, carta de referencia, viaje de menor. No presentamos I-129 ni DS-160.",
+    heroHeadline: "No tramitamos la visa. Firmamos el paquete de apoyo.",
+    heroSubheadline:
+      "Oferta, contrato de empleo, I-9 oficial, poder notarial, carta de referencia, consentimiento de viaje de menor, arrendamiento. Plantillas que ya tenemos. /es/documentos-para-visa.",
+    problem:
+      "Un expediente de visa pide PDFs firmados esta semana. El abogado presenta la petición. Las firmas pretenden ser USCIS. Nosotros no somos ni lo uno ni lo otro.",
+    solution:
+      "Envía las plantillas que ya publicamos. No inventamos I-129, DS-160 ni I-864 y no hablamos con USCIS. Si hay que presentar la petición, contrata ese servicio y ven aquí por las firmas de alrededor.",
+    features: [
+      { title: "Oferta + empleo", body: "La carta y el contrato que un consulado suele pedir." },
+      { title: "I-9 oficial", body: "Cuando el trabajo es en EE. UU. No es E-Verify." },
+      { title: "Poder, referencia, viaje de menor", body: "Documentos de familia y autorización que ya están en el catálogo." },
+      { title: "Arrendamiento / roomie", body: "Papeles de vivienda que aparecen en el mismo paquete." },
+    ],
+    useCases: [
+      "Juntar documentos de apoyo que listó un abogado o un consulado",
+      "Empleador que envía una oferta para un expediente de visa",
+      "Padres que firman consentimiento de viaje junto a otros papeles",
+    ],
+    faqs: [
+      {
+        question: "¿Van a tramitar mi visa?",
+        answer: "No. Firmamos documentos de apoyo. No presentamos I-129, DS-160, I-864 ni ninguna petición ante USCIS.",
+      },
+      {
+        question: "¿Cuáles plantillas?",
+        answer:
+          "Oferta, contrato de empleo, I-9, W-9 (personas de EE. UU.), poder notarial, carta de referencia, consentimiento de viaje de menor, arrendamiento / roomie. Las slugs viejas de 'invitation letter' no son este producto.",
+      },
+      {
+        question: "¿URL en español?",
+        answer: "https://docracy.io/es/documentos-para-visa — kit: /es/kit-llegar-eeuu.",
+      },
+    ],
+    ctaLabel: "Abrir el kit de inmigrante",
+    ctaTo: "/packets/latam-to-us",
+    relatedLinks: [
+      { label: "Kit inmigrante", to: "/packets/latam-to-us" },
+      { label: "Firmar I-9", to: "/i-9" },
+      { label: "Carta de oferta", to: "/free-templates/offer-letter" },
+      { label: "Poder notarial", to: "/free-templates/power-of-attorney" },
+      { label: "Viaje de menor", to: "/free-templates/child-travel-consent" },
+    ],
+  };
+}
+
 const ES_FEATURE_GETTERS: Record<string, () => FeaturePageContent> = {
   "nda-signing": getNdaSigningPageEs,
   "client-contracts": getClientContractsPageEs,
@@ -2124,6 +2622,11 @@ const ES_FEATURE_GETTERS: Record<string, () => FeaturePageContent> = {
   "contractor-payment-proof": getContractorPaymentProofPageEs,
   "latam-export-documents": getLatamExportDocumentsPageEs,
   "request-w9": getRequestW9PageEs,
+  "immigrant-documents": getImmigrantDocumentsPageEs,
+  "move-to-us": getMoveToUsPageEs,
+  "proof-of-income-us-rental": getUsRentalIncomeProofPageEs,
+  "i-9": getI9PageEs,
+  "visa-supporting-documents": getVisaSupportingDocumentsPageEs,
 };
 
 /** Locale-aware feature page content — ES routes use Spanish copy. */
@@ -2147,10 +2650,15 @@ export interface AlternativePageContent {
   comparison: string[];
   ctaLabel: string;
   ctaTo: string;
-  compareBlogSlug: string;
+  compareBlogSlug?: string;
+  /** Internal path instead of a blog post (LATAM compares). */
+  compareTo?: string;
   compareLabel: string;
   /** Optional FAQ — emits FAQPage JSON-LD + visible details when present. */
   faqs?: Array<{ question: string; answer: string }>;
+  faqsEs?: Array<{ question: string; answer: string }>;
+  /** LATAM compares lead in Spanish (x-default = es). */
+  xDefault?: "es";
 }
 
 /** Default FAQs for competitor alternative pages (GEO / rich results). */
@@ -2712,7 +3220,154 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
     ctaTo: "/prepare?freeTemplate=mutual-nda&ref=seo-getaccept-alternative",
     compareBlogSlug: "docracy-vs-pandadoc",
     compareLabel: "See how Docracy compares to sales-room e-sign tools",
-  }
+  },
+  {
+    slug: "kita-alternative",
+    competitorName: "Kita",
+    xDefault: "es",
+    navDesc: "WhatsApp cobro without becoming a PAC.",
+    seoTitle: "Kita Alternative — WhatsApp Pay + File, No CFDI | Docracy",
+    seoDescription:
+      "Kita alternative if you need the PDF and your Mercado Pago link on WhatsApp — not a stamped CFDI. $10/mo, 0% of the payment. Signing stays free.",
+    heroHeadline: "Kita stamps the invoice. Docracy sends the file and your checkout.",
+    heroSubheadline:
+      "Paste Mercado Pago or PayPal, attach the PDF, text the pay page. We never take the money and we do not timbrar CFDI.",
+    problem:
+      "Kita is a strong Mexico product: WhatsApp in, Mercado Pago charge, CFDI 4.0 out. That is the wrong stack if you already have a checkout and you need a signed contract plus a page the client can pay — not a PAC, CSD, or timbre balance.",
+    solution:
+      "Docracy cobro is file + your https checkout. Signing stays a separate free product. Paid ($10/month) keeps the PDF through tax season and unlocks WhatsApp cobro, constancia, and the accountant CSV. We are not Kita and we do not claim SAT invoicing.",
+    comparison: [
+      "0% of the payment — you paste Mercado Pago, PayPal.me, or Stripe",
+      "No CFDI, no PAC, no CSD — honest limit, written on the page",
+      "Optional signature first (free ≤2), then cobro without a second sign",
+      "Tax-year vault + CSV for your accountant; constancia you can forward",
+      "Currencies labeled USD, MXN, COP, ARS, CLP, PEN, BRL",
+      "WhatsApp uses the live invite — not a new Meta template",
+      "Kita is better if you need autofactura CFDI after every charge",
+    ],
+    ctaLabel: "Send a cobro — file + Mercado Pago",
+    ctaTo: "/cobro#send",
+    compareTo: "/kita-vs-alegra",
+    compareLabel: "Kita vs Alegra vs Docracy",
+    faqs: [
+      {
+        question: "Is Docracy a Kita alternative for CFDI?",
+        answer:
+          "No. Kita stamps CFDI 4.0 through a PAC. Docracy never does that. Use Kita (or Alegra) when the client needs a SAT invoice. Use Docracy when they need a signed PDF and a pay link you already own.",
+      },
+      {
+        question: "Do you take a cut like a payment app?",
+        answer: "No. Paid is $10/month. Mercado Pago or PayPal still charge their own processor fees — that is not us.",
+      },
+      {
+        question: "Can I sign and then collect?",
+        answer: "Yes. Send the contract from Prepare (free up to two signers). After it is signed, send cobro with the same checkout you already use.",
+      },
+    ],
+    faqsEs: [
+      {
+        question: "¿Docracy es alternativa a Kita para CFDI?",
+        answer:
+          "No. Kita timbra CFDI 4.0 con un PAC. Docracy nunca hace eso. Usa Kita (o Alegra) cuando el cliente necesita factura SAT. Usa Docracy cuando necesita un PDF firmado y un link de cobro que ya tienes.",
+      },
+      {
+        question: "¿Se llevan un porcentaje como una app de pagos?",
+        answer: "No. El plan son $10/mes. Mercado Pago o PayPal cobran su comisión — eso no somos nosotros.",
+      },
+      {
+        question: "¿Puedo firmar y luego cobrar?",
+        answer:
+          "Sí. Envía el contrato desde Preparar (gratis hasta dos firmantes). Cuando esté firmado, manda el cobro con el mismo checkout.",
+      },
+    ],
+  },
+  {
+    slug: "alegra-alternative",
+    competitorName: "Alegra",
+    xDefault: "es",
+    navDesc: "Sign and get paid — not a full ledger.",
+    seoTitle: "Alegra Alternative — Sign & WhatsApp Cobro, Not Books | Docracy",
+    seoDescription:
+      "Alegra alternative when you need a signature and your Mercado Pago link — not PAC invoicing or a full ledger. Free signing ≤2. Paid $10/mo, 0% cut.",
+    heroHeadline: "Alegra keeps the books. Docracy gets the contract signed and the file paid.",
+    heroSubheadline:
+      "WhatsApp cobro with your checkout. No CFDI timbre. Not a replacement for your accountant.",
+    problem:
+      "Alegra is accounting plus authorized e-invoicing, with a WhatsApp bot that issues CFDI. Freelancers who only need “sign this, then pay this link” should not buy a ledger and a timbre pack.",
+    solution:
+      "Docracy is the signing step and the pay+file page. Paste Mercado Pago. Keep PDFs until tax season on Paid. Constancia is a shareable index — not a SAT constancia de situación fiscal.",
+    comparison: [
+      "Free sequential e-sign for up to two people, no account for signers",
+      "Cobro: PDF + your Mercado Pago / PayPal page, no extra signature",
+      "Not a PAC — we do not stamp CFDI or replace Alegra books",
+      "$10/mo, 0% of collections",
+      "Income-proof packet and accountant CSV from files you already sent",
+      "Alegra is better when you need official invoices and a chart of accounts",
+    ],
+    ctaLabel: "Send cobro or start a free signature",
+    ctaTo: "/cobro#send",
+    compareTo: "/alegra-vs-siigo",
+    compareLabel: "Alegra vs Siigo vs Docracy",
+    faqs: [
+      {
+        question: "Will Docracy replace Alegra for SAT invoices?",
+        answer: "No. Alegra (as a PAC) stamps CFDI. We attach the PDF you already have and send your checkout.",
+      },
+      {
+        question: "Is this Stripe Connect?",
+        answer: "No. You paste a checkout URL you already own.",
+      },
+    ],
+    faqsEs: [
+      {
+        question: "¿Docracy reemplaza a Alegra para facturas SAT?",
+        answer: "No. Alegra (como PAC) timbra CFDI. Nosotros adjuntamos el PDF que ya tienes y mandamos tu checkout.",
+      },
+      {
+        question: "¿Esto es Stripe Connect?",
+        answer: "No. Pegas una URL de checkout que ya tienes.",
+      },
+    ],
+  },
+  {
+    slug: "siigo-alternative",
+    competitorName: "Siigo",
+    xDefault: "es",
+    navDesc: "WhatsApp pay page — not DIAN billing.",
+    seoTitle: "Siigo Alternative — WhatsApp Cobro, Not DIAN Billing | Docracy",
+    seoDescription:
+      "Siigo alternative when you need a signed PDF and your pay link on WhatsApp — not a DIAN electronic invoice. $10/mo, 0% of the payment.",
+    heroHeadline: "Siigo files the invoice with DIAN. Docracy sends the file and your checkout.",
+    heroSubheadline:
+      "For US↔Colombia contractors who already have Nequi, Mercado Pago, or PayPal — not a replacement for Siigo’s books.",
+    problem:
+      "Siigo is built for Colombian electronic invoicing at scale, including WhatsApp issuance. That is compliance software. A designer in Bogotá collecting from a US studio usually needs a contract, a PDF, and a pay link — not a DIAN document.",
+    solution:
+      "Docracy: free NDA + contractor agreement, then Paid cobro on WhatsApp with your checkout. We do not submit to DIAN.",
+    comparison: [
+      "No DIAN stamp — we will not pretend otherwise",
+      "File + your checkout on WhatsApp, 30-day reminder, mark paid",
+      "Signing free for two people; Paid keeps the archive",
+      "Spanish /es front door into cobro and constancia",
+      "Siigo is better if you must issue DIAN-authorized invoices",
+    ],
+    ctaLabel: "Send a cobro on WhatsApp",
+    ctaTo: "/cobro#send",
+    compareTo: "/kita-vs-siigo",
+    compareLabel: "Kita vs Siigo vs Docracy",
+    faqs: [
+      {
+        question: "Does Docracy issue a factura electrónica DIAN?",
+        answer: "No. Siigo does. We host the PDF you attach and the pay page.",
+      },
+    ],
+    faqsEs: [
+      {
+        question: "¿Docracy emite factura electrónica DIAN?",
+        answer: "No. Eso lo hace Siigo. Nosotros hospedamos el PDF que adjuntas y la página de cobro.",
+      },
+    ],
+  },
 ];
 
 /** One page per competitor: no "connect your account" button anywhere — confirmed via direct
@@ -3396,6 +4051,9 @@ export const IMPORT_GUIDE_PAGES: ImportGuideContent[] = [
 /** Preferred Compare-nav order — majors first; Contractbook + OnlineSignature included whenever
  *  they have pages (required whenever import guides exist). Unknown slugs append alphabetically. */
 const COMPARE_NAV_ORDER = [
+  "kita-alternative",
+  "alegra-alternative",
+  "siigo-alternative",
   "docusign-alternative",
   "eversign-alternative",
   "hellosign-alternative",
