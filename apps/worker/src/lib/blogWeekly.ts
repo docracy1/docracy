@@ -1,5 +1,6 @@
 import { sanitizeJsonStringNewlines } from "./aiJson";
 import { createBlogPost, listPublishedBlogPosts, slugify, updateBlogPost } from "./blogPosts";
+import { ensureWeeklyBlogInfra } from "./blogTopicQueue";
 import { pingIndexNow } from "./indexNow";
 import type { Env } from "@docracy/shared";
 
@@ -173,6 +174,8 @@ export async function runWeeklyBlogPublish(env: Env): Promise<void> {
     console.log("Weekly blog: skipped (no D1)");
     return;
   }
+
+  await ensureWeeklyBlogInfra(env);
 
   const fromDraft = await publishOldestDraft(env);
   if (fromDraft) {

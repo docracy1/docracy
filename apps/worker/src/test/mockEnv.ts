@@ -183,6 +183,18 @@ const STRIPE_CHECKOUT_SESSION_MIGRATION_SQL = readFileSync(
   fileURLToPath(new URL("../../migrations/0029_stripe_checkout_session.sql", import.meta.url).toString()),
   "utf-8"
 );
+const BLOG_TOPIC_QUEUE_MIGRATION_SQL = readFileSync(
+  fileURLToPath(new URL("../../migrations/0018_blog_topic_queue.sql", import.meta.url).toString()),
+  "utf-8"
+);
+const BLOG_TOPIC_QUEUE_REFILL_MIGRATION_SQL = readFileSync(
+  fileURLToPath(new URL("../../migrations/0027_blog_topic_queue_refill.sql", import.meta.url).toString()),
+  "utf-8"
+);
+const LATAM_BLOG_TEMPLATE_QUEUE_MIGRATION_SQL = readFileSync(
+  fileURLToPath(new URL("../../migrations/0030_latam_blog_template_queue.sql", import.meta.url).toString()),
+  "utf-8"
+);
 
 // sql.js's default WASM build doesn't compile in the FTS5 extension. It's swapped for a plain
 // table here — full-text MATCH queries aren't exercised by anything built in this pass anyway
@@ -216,7 +228,10 @@ const TEST_MIGRATION_SQL =
   MARKETPLACE_SEO_FIELDS_MIGRATION_SQL +
   TEMPLATE_TOPIC_QUEUE_MIGRATION_SQL +
   ONBOARDING_LEADS_STEP2_MIGRATION_SQL +
-  STRIPE_CHECKOUT_SESSION_MIGRATION_SQL;
+  STRIPE_CHECKOUT_SESSION_MIGRATION_SQL +
+  BLOG_TOPIC_QUEUE_MIGRATION_SQL +
+  BLOG_TOPIC_QUEUE_REFILL_MIGRATION_SQL +
+  LATAM_BLOG_TEMPLATE_QUEUE_MIGRATION_SQL;
 
 // sql.js's WASM module only needs loading once per test run; each test still gets its own
 // fresh in-memory `SQL.Database()` instance below.
