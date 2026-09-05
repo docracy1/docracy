@@ -130,7 +130,7 @@ const en: Messages = {
   "login.titleSave": "Save the document you just sent",
   "login.titleUpgrade": "Sign in to upgrade",
   "login.titleLatam": "Sign in to keep I-9 and income proof",
-  "login.ctaLatam": "Sign in and start the $10/month plan",
+  "login.ctaLatam": "Start cobro + constancia — $10/month",
   "login.subLatam":
     "Signing a PDF stays free — nobody pays for that. $10/month is the packet: cobro with your Mercado Pago, constancia for a landlord, and reopen the I-9 when they ask. Stripe bills USD. We don't apostille or file USCIS.",
   "login.sub": "No password — we'll email you a link. First time here? This creates your account too.",
