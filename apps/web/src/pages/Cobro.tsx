@@ -17,6 +17,7 @@ import { signedPagePath } from "../lib/paidVault";
 import { usePageMeta } from "../lib/usePageMeta";
 import { track } from "../lib/track";
 import { breadcrumbJsonLd, howToJsonLd } from "../lib/productSeo";
+import { PaymentCheckoutLogos } from "../components/IntegrationsBand";
 
 const FAQ_COUNT = 6;
 const CURRENCIES = ["USD", "MXN", "COP", "ARS", "CLP", "PEN", "BRL"] as const;
@@ -251,6 +252,8 @@ export default function Cobro() {
             </select>
           </div>
           <input className="form-input" style={{ marginTop: 8 }} type="url" placeholder={t("cobro.payUrlPh")} value={url} onChange={(e) => setUrl(e.target.value)} aria-label={t("prepare.payUrlAria")} />
+          <PaymentCheckoutLogos />
+          <p style={{ fontSize: 12, color: "var(--mute)", margin: "6px 0 0" }}>{t("cobro.payLogosHint")}</p>
           <p style={{ fontSize: 12, color: "var(--mute)", marginBottom: 0 }}>{t("cobro.prefsHint")}</p>
           <p style={{ fontSize: 12, color: "var(--mute)" }}>{t("cobro.formHint")}</p>
           {error && <p style={{ color: "var(--danger)" }}>{error}</p>}

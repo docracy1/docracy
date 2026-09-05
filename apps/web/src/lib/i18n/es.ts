@@ -164,8 +164,21 @@ const es: Messages = {
   "dash.tools": "Herramientas",
   "dash.updatePayment": "Actualizar método de pago",
   "dash.upgradeBody":
-    "Firmar borra el PDF a los 9 días. El plan de pago conserva cada contrato hasta temporada fiscal, más un CSV 1099 para tu contador, cobro por WhatsApp sin firma, plantillas reutilizables, envío masivo y herramientas de equipo. No estás pagando por la firma.",
-  "dash.upgradeTitle": "Conserva tus archivos firmados — $10/mes",
+    "Lee los playbooks ahora. Enviar cobro, abrir el casillero 1099, compartir la constancia y guardar PDFs más de 9 días son la suscripción de USD $10/mes — el paquete LATAM va incluido. Firmar I-9, NDA, oferta y roomie sigue gratis.",
+  "dash.upgradeTitle": "Desbloquea cobro, casillero y constancia — $10/mes",
+  "dash.paidHint": "Pago",
+  "dash.freeHint": "Gratis",
+  "dash.freeLaneTitle": "Firma gratis hoy",
+  "dash.freeLaneSub":
+    "Enviar un I-9, oferta, NDA o acuerdo de roomie es gratis y no pide el plan de pago. Vuelve cuando necesites el vault, cobro, casillero o una constancia para el arrendador — eso es la suscripción.",
+  "dash.freeLaneI9": "Firmar I-9",
+  "dash.freeLaneI9Body": "Formulario oficial de USCIS. El empleador lo conserva. Envío gratis.",
+  "dash.freeLaneOffer": "Enviar carta de oferta",
+  "dash.freeLaneOfferBody": "Plantilla gratis. No tramitamos la petición de visa.",
+  "dash.freeLaneNda": "Enviar un NDA",
+  "dash.freeLaneNdaBody": "NDA mutuo, hasta 2 firmantes, ellos sin cuenta.",
+  "dash.freeLaneRoommate": "Acuerdo de roomie",
+  "dash.freeLaneRoommateBody": "Parte la renta por escrito. La URL de constancia es de pago.",
   "dash.checkoutConfirming": "Confirmando tu suscripción…",
   "dash.checkoutPending": "Pago recibido. Si las funciones de pago no se activan en un minuto, escribe a founder@docracy.io y lo resolvemos.",
   "dash.deletesOn": "Se elimina el {{date}}",
@@ -339,10 +352,10 @@ const es: Messages = {
   "imprint.sub": "Información según §5 ECG (Ley de Comercio Electrónico de Austria).",
   "imprint.title": "Aviso legal",
   "integrations.detail":
-    "Dropbox, OneDrive, Box y Google Drive suben PDFs firmados automáticamente. Zapier y webhooks automatizan tu stack. MCP conecta Claude, ChatGPT, Grok, Perplexity y Cursor a tus documentos.",
+    "Dropbox, OneDrive, Box y Google Drive suben PDFs firmados automáticamente. En cobro pegas PayPal.me, Stripe Payment Link, Mercado Pago, Square o Venmo. Zapier y webhooks automatizan tu stack. MCP conecta Claude, ChatGPT, Grok, Perplexity y Cursor a tus documentos.",
   "integrations.learnMore": "Saber más →",
   "integrations.sub":
-    "Integra las plataformas que ya usas — almacenamiento en la nube, automatización y asistentes de IA. Las cuentas de pago desbloquean conectores nativos, y WhatsApp ya funciona para enviar enlaces de firma.",
+    "Integra las plataformas que ya usas — nube, automatización, IA y el checkout que ya tienes. Las cuentas de pago desbloquean conectores nativos. WhatsApp entrega firma y cobro. PayPal, Stripe, Mercado Pago, Square y Venmo son tu enlace pegado — no nos quedamos el dinero.",
   "integrations.title": "Conecta Docracy con las herramientas que ya usas",
   "landing.ai1.body": "Sube un PDF o Google Doc y coloca campos de firma, fecha e iniciales por ti.",
   "landing.ai1.title": "Detectar campos automáticamente",
@@ -2510,6 +2523,7 @@ const es: Messages = {
   "prepare.payAmountAria": "Monto a cobrar",
   "prepare.payCurrencyAria": "Moneda",
   "prepare.payUrlPh": "https://paypal.me/tu o tu enlace de cobro",
+  "prepare.payLogosHint": "PayPal, Stripe, Mercado Pago, Square o Venmo — pega tu checkout. No nos quedamos el dinero.",
   "prepare.payUrlAria": "Tu enlace de pago",
   "sign.payCta": "Pagar {{amount}} {{currency}}",
   "sign.payHint": "Este cobro es del remitente. Docracy no procesa el pago.",
@@ -2619,6 +2633,12 @@ const es: Messages = {
     "Consentimiento para que un menor viaje con un adulto nombrado — fechas, destinos y contactos de emergencia.",
   "tpl.child-travel-consent.useCase":
     "Úsalo cuando un padre se queda y el otro viaja con el menor. No reservamos vuelos ni hablamos con CBP. Aerolíneas y consulados ponen sus propias reglas.",
+  "tpl.roommate-agreement.name": "Acuerdo de roomie",
+  "tpl.roommate-agreement.seoTitle": "Plantilla gratis de acuerdo de roomie",
+  "tpl.roommate-agreement.description":
+    "Parte la renta y los servicios y fija reglas de casa entre coinquilinos.",
+  "tpl.roommate-agreement.useCase":
+    "Úsalo cuando te mudas con un roomie y quieres un reparto firmado de renta y cuentas — aparte del contrato con el arrendador. Adjunta la URL de la constancia si pidieron ingresos.",
   "tpl.promissory-note.name": "Pagaré",
   "tpl.promissory-note.seoTitle": "Plantilla gratis de pagaré",
   "tpl.promissory-note.description":
@@ -2654,7 +2674,10 @@ const es: Messages = {
   "footer.latamUsPacket": "Plan inmigrante",
   "footer.mexicoToUs": "México → EE. UU.",
   "footer.colombiaToUs": "Colombia → EE. UU.",
+  "footer.moreCountries": "Más países LATAM",
   "footer.immigrantHousing": "Arrendamiento / constancia",
+  "footer.afterArrival": "Después de llegar",
+  "footer.itin": "ITIN (W-7 del IRS)",
   "footer.i9": "Firmar I-9",
   "footer.visaDocs": "Documentos para visa",
   "footer.constancia": "Constancia de ingresos",
@@ -2696,14 +2719,21 @@ const es: Messages = {
   "dash.cobro": "Enviar cobro",
   "dash.constancia": "Constancia",
   "dash.navPacket": "Después de firmar",
-  "dash.migrantChecklist": "Plan inmigrante",
-  "dash.migrantOverviewTitle": "Plan inmigrante — todo en uno",
-  "dash.migrantOverviewSub": "Qué hacer, links oficiales, firma — y cada PDF guardado para reabrirlo. Vault hasta el 15 de abril o 13 meses. No tramitamos la petición.",
+  "dash.migrantChecklist": "Paquete LATAM",
+  "dash.latamSub": "Suscripción LATAM",
+  "dash.latamSubCta": "Abrir la suscripción LATAM — $10/mes",
+  "dash.navCountries": "Países",
+  "dash.migrantOverviewTitle": "Paquete LATAM — en la suscripción de $10/mes",
+  "dash.migrantOverviewSub": "I-9, extras de visa, vault, constancia, cobro. Link oficial de apostilla por país. Stripe cobra USD $10/mes. No apostillamos ni tramitamos la petición.",
   "dash.corridorI9": "I-9 oficial de USCIS. El empleador lo conserva. No inspeccionamos documentos ni corremos E-Verify.",
   "dash.corridorVisa": "Oferta, poder, referencia, viaje de menor — documentos de apoyo, no la petición.",
   "dash.corridorMexico": "El mismo plan. Link oficial de apostilla SRE. No apostillamos ni tramitamos.",
   "dash.corridorColombia": "El mismo plan. Link oficial de apostilla de Cancillería. No apostillamos ni tramitamos.",
+  "dash.corridorMoreCountries":
+    "La misma suscripción de USD $10/mes. Link oficial de apostilla para Panamá, Venezuela y el resto de LATAM en español.",
   "dash.corridorHousing": "Plantilla de arrendamiento o roomie + URL de constancia para el arrendador.",
+  "dash.corridorAfterArrival": "I-94, cuenta USCIS, domicilio, ITIN — links oficiales. No los presentamos.",
+  "dash.corridorItin": "W-7 del IRS si no puedes sacar SSN. No inventamos ni enviamos ese formulario.",
   "latamDesk.seoTitle": "LATAM: cobro, constancia y kits | Docracy",
   "latamDesk.seoDescription":
     "Cobro, constancia, kits y documentos para inmigrantes: I-9 oficial y plantillas de apoyo para visa. No tramitamos la petición ni E-Verify. Firmar sigue gratis.",
@@ -2712,6 +2742,10 @@ const es: Messages = {
   "latamDesk.heroSub":
     "También para quien acaba de llegar a EE. UU.: un plan con qué hacer, links oficiales, cobro con tu Mercado Pago, constancia, y todos los PDF guardados. Docracy no se lleva el dinero.",
   "latamDesk.openKit": "Abrir el kit",
+  "latamDesk.countriesTitle": "Todos los países de LATAM en español",
+  "latamDesk.countriesSub":
+    "La misma suscripción de USD $10/mes — el paquete LATAM ya va incluido. Link oficial de apostilla por origen. No apostillamos ni tramitamos.",
+  "latamDesk.openCountry": "Abrir la puerta del país",
   "taxYear.seoTitle": "Archivo fiscal para tu contador — contratos, cobros y CSV | Docracy",
   "taxYear.seoDescription":
     "Conserva cada archivo del año y descarga un CSV para tu contador. No presentamos ante el SAT, la DIAN ni el IRS. Plan de $10/mes — firmar sigue gratis.",
@@ -2786,6 +2820,7 @@ const es: Messages = {
   "cobro.pickContact": "Rellenar desde un contacto",
   "cobro.payUrlPh": "https://mpago.la/… o PayPal.me/tu",
   "cobro.prefsHint": "Recordamos tu última URL de checkout después de enviar. El PDF no se guarda hasta que envías.",
+  "cobro.payLogosHint": "PayPal, Stripe, Mercado Pago, Square o Venmo — pega tu checkout. Docracy no se queda el dinero.",
   "cobro.markPaid": "Marcar pagado",
   "cobro.markedPaid": "Pagado",
   "cobro.markedPaidHint": "Lo marcaste pagado en tu propio checkout. Se detuvieron los recordatorios.",
@@ -2967,6 +3002,25 @@ const es: Messages = {
   "latamUsPacket.send.ssn.body":
     "El trabajo suele pedir un número de Seguro Social al llegar. Tramítalo en SSA.gov. No presentamos el SS-5 y no emitimos números.",
   "latamUsPacket.send.ssn.official": "ssa.gov — solicitar SSN",
+  "latamUsPacket.send.i94.title": "I-94 → CBP (tú, no nosotros)",
+  "latamUsPacket.send.i94.body":
+    "El empleador o la escuela pide el registro de admisión. Lo sacas en el sitio de CBP. No hospedamos el I-94 y no corregimos el historial de viajes.",
+  "latamUsPacket.send.i94.official": "i94.cbp.dhs.gov — I-94 más reciente",
+  "latamUsPacket.send.i94.cta": "Puerta después de llegar",
+  "latamUsPacket.send.uscisAccount.title": "Cuenta USCIS → USCIS (tú, no nosotros)",
+  "latamUsPacket.send.uscisAccount.body":
+    "El E-COA y casi todo el correo del caso viven en myaccount.uscis.gov. No podemos abrir ni recuperar esa cuenta.",
+  "latamUsPacket.send.uscisAccount.official": "myaccount.uscis.gov",
+  "latamUsPacket.send.address.title": "Domicilio nuevo → USCIS (casi siempre en 10 días)",
+  "latamUsPacket.send.address.body":
+    "USCIS.gov/addresschange — casi siempre desde la cuenta en línea. El AR-11 en papel es el respaldo. Cambiar el correo de USPS no basta. No presentamos AR-11.",
+  "latamUsPacket.send.address.official": "uscis.gov/addresschange",
+  "latamUsPacket.send.address.cta": "Puerta después de llegar",
+  "latamUsPacket.send.itin.title": "ITIN → IRS (solo si no puedes sacar SSN)",
+  "latamUsPacket.send.itin.body":
+    "El W-7 está en IRS.gov. Por correo o en un TAC / CAA. Un ITIN no autoriza a trabajar. No inventamos el W-7 y no enviamos W-8BEN.",
+  "latamUsPacket.send.itin.official": "IRS — cómo pedir un ITIN",
+  "latamUsPacket.send.itin.cta": "Puerta ITIN",
   "latamUsPacket.send.apostille.title": "Apostilla / legalización → tu país de origen",
   "latamUsPacket.send.apostille.body":
     "Actas, títulos y poderes a menudo necesitan apostilla antes de que una escuela, empleador o consulado en EE. UU. los acepte. Eso es SRE (México), Cancillería (Colombia) o tu cancillería — no nosotros. El poder lo puedes firmar aquí primero.",
@@ -2994,9 +3048,9 @@ const es: Messages = {
     "Un padre se queda; el otro vuela con el menor. Firma el consentimiento aquí. No compramos boletos ni hablamos con CBP.",
   "latamUsPacket.send.child.cta": "Abrir consentimiento de viaje de menor",
   "latamUsPacket.tpl.lease": "Arrendamiento / paquete de vivienda",
-  "latamUsPacket.countryTitle": "¿México o Colombia?",
+  "latamUsPacket.countryTitle": "¿México, Colombia, Panamá, Venezuela — u otro origen?",
   "latamUsPacket.countrySub":
-    "El mismo plan de pago. Las páginas de país agregan el link oficial de apostilla de ese origen — nosotros no apostillamos ni tramitamos.",
+    "La misma suscripción de USD $10/mes. El paquete LATAM ya va incluido. Las páginas de país agregan el link oficial de apostilla de ese origen — nosotros no apostillamos ni tramitamos.",
   "latamUsPacket.compareTitle": "Vs Boundless, CitizenPath y una gestoría",
   "latamUsPacket.compareSub":
     "Ellos presentan o preparan. Boundless y CitizenPath cobran en USD ($699–$2,549 / $79–$279 + USCIS). Gestorías MX: honorarios en MXN (~$900–$3,800) + $185 USD de State. Nuestro plan es USD $10; el cobro lo etiquetas en MXN/COP/USD.",

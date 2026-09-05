@@ -1,4 +1,5 @@
 import type { Locale } from "./types";
+import { LATAM_COUNTRY_CORRIDORS } from "../latamCountryCorridors";
 
 /** Phase 1–2 Spanish SEO surface — English path → Spanish path. */
 export const ES_PATH_BY_EN: Record<string, string> = {
@@ -58,9 +59,10 @@ export const ES_PATH_BY_EN: Record<string, string> = {
   "/proof-of-income-us-rental": "/es/constancia-para-rentar",
   "/i-9": "/es/formulario-i-9",
   "/visa-supporting-documents": "/es/documentos-para-visa",
-  "/mexico-to-us": "/es/mexico-a-eeuu",
-  "/colombia-to-us": "/es/colombia-a-eeuu",
+  ...Object.fromEntries(LATAM_COUNTRY_CORRIDORS.map((c) => [c.enPath, c.esPath])),
   "/immigrant-housing": "/es/arrendamiento-inmigrante",
+  "/after-arrival": "/es/despues-de-llegar",
+  "/itin": "/es/itin",
   "/income-proof": "/es/constancia",
   "/proof-of-income": "/es/prueba-de-ingresos",
   "/signed-work-order": "/es/orden-de-trabajo-firmada",
@@ -89,6 +91,7 @@ export const SEO_TEMPLATE_SLUGS = [
   "power-of-attorney",
   "reference-letter",
   "child-travel-consent",
+  "roommate-agreement",
   "promissory-note",
   "letter-of-intent",
   "simple-commercial-lease-agreement",

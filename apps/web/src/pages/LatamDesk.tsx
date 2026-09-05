@@ -4,6 +4,7 @@ import { localizePath, useI18n } from "../lib/i18n";
 import { usePageMeta } from "../lib/usePageMeta";
 import { track } from "../lib/track";
 import { breadcrumbJsonLd } from "../lib/productSeo";
+import { LATAM_COUNTRY_CORRIDORS } from "../lib/latamCountryCorridors";
 
 /** Spanish-lead index of the LATAM packet — cobro, constancia, hire, RFC, comercio. No long SEO essay. */
 const ITEMS: Array<{
@@ -21,6 +22,8 @@ const ITEMS: Array<{
   { titleKey: "footer.mexicoToUs", bodyKey: "dash.corridorMexico", to: "/mexico-to-us", linkKey: "latamDesk.openKit" },
   { titleKey: "footer.colombiaToUs", bodyKey: "dash.corridorColombia", to: "/colombia-to-us", linkKey: "latamDesk.openKit" },
   { titleKey: "footer.immigrantHousing", bodyKey: "dash.corridorHousing", to: "/immigrant-housing", linkKey: "latamDesk.openKit" },
+  { titleKey: "footer.afterArrival", bodyKey: "dash.corridorAfterArrival", to: "/after-arrival", linkKey: "latamDesk.openKit" },
+  { titleKey: "footer.itin", bodyKey: "dash.corridorItin", to: "/itin", linkKey: "latamDesk.openKit" },
   { titleKey: "dash.corridorTradeTitle", bodyKey: "dash.corridorTrade", to: "/packets/latam-trade", linkKey: "latamDesk.openKit" },
 ];
 
@@ -61,6 +64,22 @@ export default function LatamDesk() {
               <h2>{t(item.titleKey)}</h2>
               <p>{t(item.bodyKey)}</p>
               <span>{t(item.linkKey)} →</span>
+            </Link>
+          ))}
+        </div>
+        <h2 className="latam-desk-title" style={{ fontSize: 22, marginTop: 40 }}>{t("latamDesk.countriesTitle")}</h2>
+        <p className="latam-desk-sub">{t("latamDesk.countriesSub")}</p>
+        <div className="latam-desk-grid">
+          {LATAM_COUNTRY_CORRIDORS.map((c) => (
+            <Link
+              key={c.slug}
+              to={localizePath(c.enPath, locale)}
+              className="latam-desk-card"
+              onClick={() => track("landingpage_cta_clicked", { source: `latam_desk:${c.slug}` })}
+            >
+              <h2>{locale === "es" ? `${c.countryEs} → EE. UU.` : `${c.countryEn} → US`}</h2>
+              <p>{locale === "es" ? c.apostilleLabelEs : c.apostilleLabelEn}</p>
+              <span>{t("latamDesk.openCountry")} →</span>
             </Link>
           ))}
         </div>

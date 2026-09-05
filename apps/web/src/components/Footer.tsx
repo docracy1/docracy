@@ -104,7 +104,10 @@ export default function Footer() {
           { label: t("footer.latamUsPacket"), to: localizePath("/packets/latam-to-us", locale) },
           { label: t("footer.mexicoToUs"), to: localizePath("/mexico-to-us", locale) },
           { label: t("footer.colombiaToUs"), to: localizePath("/colombia-to-us", locale) },
+          { label: t("footer.moreCountries"), to: localizePath("/latam", locale) },
           { label: t("footer.immigrantHousing"), to: localizePath("/immigrant-housing", locale) },
+          { label: t("footer.afterArrival"), to: localizePath("/after-arrival", locale) },
+          { label: t("footer.itin"), to: localizePath("/itin", locale) },
           { label: t("footer.i9"), to: localizePath("/i-9", locale) },
           { label: t("footer.visaDocs"), to: localizePath("/visa-supporting-documents", locale) },
         ]
