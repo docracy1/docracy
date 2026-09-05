@@ -1624,6 +1624,18 @@ export default function Dashboard() {
                       </>
                     ) : null}
                     <Link to={localizePath("/itin", locale)}>{t("footer.itin")}</Link>
+                    {locale === "es" ? (
+                      <>
+                        {" · "}
+                        <Link to={localizePath("/acta", locale)}>{t("footer.acta")}</Link>
+                        {" · "}
+                        <Link to={localizePath("/consular-appointment", locale)}>{t("footer.cita")}</Link>
+                        {" · "}
+                        <Link to={localizePath("/ead-tps", locale)}>{t("footer.eadTps")}</Link>
+                        {" · "}
+                        <Link to={localizePath("/phone-and-bank", locale)}>{t("footer.phoneBank")}</Link>
+                      </>
+                    ) : null}
                     {" · "}
                     <Link to={localizePath("/immigrant-housing", locale)}>{t("footer.immigrantHousing")}</Link>
                     {" · "}

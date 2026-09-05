@@ -27,6 +27,10 @@ assert.equal(isLatamLoginIntent("who-files-where", ""), true);
 assert.equal(isLatamLoginIntent("", "/es/quien-sube-donde"), true);
 assert.equal(isLatamLoginIntent("latam-search", ""), true);
 assert.equal(isLatamLoginIntent("", "/es/buscar?q=i-9"), true);
+assert.equal(isLatamLoginIntent("acta", ""), true);
+assert.equal(isLatamLoginIntent("", "/es/cita-consular"), true);
+assert.equal(isLatamLoginIntent("ead-tps", ""), true);
+assert.equal(isLatamLoginIntent("", "/es/chip-y-banco"), true);
 assert.equal(isLatamLoginIntent("prepare-sent", "/dashboard"), false);
 
 assert.equal(

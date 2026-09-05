@@ -47,6 +47,31 @@ assert.ok(!searchLatamIndex("i-9")[0].paid, "I-9 signing stays free");
 const w8 = searchLatamIndex("w-8ben")[0];
 assert.equal(w8.kind, "honest-no");
 
+const acta = searchLatamIndex("acta de nacimiento")[0];
+assert.ok(acta);
+assert.equal(acta.officialHref, "https://www.miregistrocivil.gob.mx/");
+assert.equal(acta.docracyTo, "/acta");
+
+const cita = searchLatamIndex("cita consular")[0];
+assert.ok(cita);
+assert.equal(cita.officialHref, "https://ais.usvisa-info.com/");
+
+const ead = searchLatamIndex("ead")[0];
+assert.equal(ead.docracyTo, "/ead-tps");
+assert.equal(ead.officialHref, "https://www.uscis.gov/i-765");
+
+const tps = searchLatamIndex("tps")[0];
+assert.equal(tps.docracyTo, "/ead-tps");
+
+const esim = searchLatamIndex("esim")[0];
+assert.equal(esim.docracyTo, "/phone-and-bank");
+assert.match(esim.officialHref, /consumerfinance\.gov/);
+
+const empty = searchLatamIndex("");
+assert.ok(empty.some((e) => e.id === "playbook-i9"));
+assert.ok(empty.some((e) => e.id === "playbook-acta"));
+assert.ok(!empty.some((e) => e.id === "playbook-cobro"), "empty migrant box must not lead with cobro");
+
 const brazil = searchLatamIndex("apostilla brasil");
 assert.ok(!brazil.some((e) => /brazil|brasil/i.test(e.id + e.docracyTo)));
 
