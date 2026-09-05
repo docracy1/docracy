@@ -130,8 +130,9 @@ const en: Messages = {
   "login.titleSave": "Save the document you just sent",
   "login.titleUpgrade": "Sign in to upgrade",
   "login.titleLatam": "Sign in to keep I-9 and income proof",
+  "login.ctaLatam": "Sign in and start the $10/month plan",
   "login.subLatam":
-    "No password. After you sign in, Stripe bills USD $10/month: vault until next April 15 or 13 months. Signing stays free.",
+    "Signing a PDF stays free — nobody pays for that. $10/month is the packet: cobro with your Mercado Pago, constancia for a landlord, and reopen the I-9 when they ask. Stripe bills USD. We don't apostille or file USCIS.",
   "login.sub": "No password — we'll email you a link. First time here? This creates your account too.",
   "login.subSave": "Create a free account so every future send lives in your dashboard — no password, just a magic link to this email.",
   "login.subUpgrade": "Sign in, then upgrade to keep signed PDFs past 9 days — signing itself stays free.",
@@ -145,6 +146,11 @@ const en: Messages = {
   "pricing.title": "Pricing",
   "pricing.intro":
     "Signing is free — up to 2 signers, no account. Paid is $10/month to keep signed PDFs until the next April 15 or 13 months, and to attach your own checkout after they sign. Not a per-signature fee, and not a cut of what they pay you.",
+  "pricing.whyLatamTitle": "Why $10 — not for the signature",
+  "pricing.whyLatam1": "WhatsApp cobro with your Mercado Pago or PayPal. Docracy never takes the money.",
+  "pricing.whyLatam2": "Constancia for a landlord + I-9 / offer you can reopen. Free deletes the PDF in 9 days.",
+  "pricing.whyLatam3": "Who-files-where map and official links. You file. We don't.",
+  "pricing.dockHintLatam": "Signing is free. $10 is cobro, constancia, and the I-9 when they ask.",
   "sign.ready": "Ready to sign",
   "sign.review": "Review & sign",
   "sign.submit": "Complete signing",
@@ -3317,6 +3323,7 @@ const en: Messages = {
   "latamSearch.empty":
     "Nothing in this index matches. Try I-9, apostille + your country, I-94, cobro, or constancia. We don't invent W-8BEN, CFDI, or a visa petition.",
   "latamSearch.official": "Official site",
+  "latamSearch.paidCta": "Unlock — $10/month",
   "latamSearch.disclaimer":
     "This is a routing box, not a lawyer and not Google. Results are destinations we already verified. Checking a result does not file anything.",
   "latamSearch.countryFallback": "Origin apostille / legalization",

@@ -50,7 +50,8 @@ export default function Login() {
         : intent === "latam"
           ? t("login.subLatam")
           : t("login.sub");
-  const ctaLabel = intent === "save-doc" ? t("login.ctaSave") : t("login.cta");
+  const ctaLabel =
+    intent === "save-doc" ? t("login.ctaSave") : intent === "latam" ? t("login.ctaLatam") : t("login.cta");
 
   const [email, setEmail] = useState(emailParam);
   const [submitting, setSubmitting] = useState(false);

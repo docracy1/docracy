@@ -17,6 +17,8 @@ export type LatamSearchEntry = {
   officialHref?: string;
   officialKey?: string;
   docracyTo: string;
+  /** Cobro / constancia / vault — e-sign is free; this is why they pay. */
+  paid?: boolean;
 };
 
 export const LATAM_SEARCH_CHIPS = [
@@ -58,6 +60,7 @@ const DOORS: LatamSearchEntry[] = [
     titleKey: "footer.latamUsPacket",
     blurbKey: "landing.out7.body",
     docracyTo: "/packets/latam-to-us",
+    paid: true,
   },
   {
     id: "door-who",
@@ -82,6 +85,7 @@ const DOORS: LatamSearchEntry[] = [
     titleKey: "footer.immigrantHousing",
     blurbKey: "dash.corridorHousing",
     docracyTo: "/immigrant-housing",
+    paid: true,
   },
 ];
 
@@ -94,6 +98,7 @@ const HONEST_NOS: LatamSearchEntry[] = [
     blurbKey: "latamSearch.no.cfdi.blurb",
     weDontKey: "whoFiles.weDont.cobro",
     docracyTo: "/cobro#send",
+    paid: true,
   },
   {
     id: "no-dian",
@@ -139,6 +144,7 @@ function playbookEntries(): LatamSearchEntry[] {
     officialHref: row.officialHref,
     officialKey: row.officialKey,
     docracyTo: row.docracyTo ?? `${WHO_FILES_WHERE_EN}#who-files-${row.group}`,
+    paid: row.id === "cobro" || row.id === "constancia",
   }));
 }
 

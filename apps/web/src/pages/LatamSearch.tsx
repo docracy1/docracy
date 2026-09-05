@@ -65,11 +65,11 @@ export default function LatamSearch() {
           <LatamSearchBox source="seo:latam-search" initialQuery={initialQuery} />
           <p style={{ marginTop: 16 }}>
             <Link
-              to={loginWithCheckout(localizePath("/packets/latam-to-us", locale), "latam-search")}
-              className="btn-secondary"
+              to={loginWithCheckout(localizePath("/pricing", locale), "latam-search")}
+              className="btn-primary"
               style={{ textDecoration: "none", display: "inline-block" }}
             >
-              {t("whoFiles.ctaLogin")}
+              {t("pricing.paid.ctaGet")}
             </Link>
           </p>
         </div>

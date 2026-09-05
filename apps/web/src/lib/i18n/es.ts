@@ -313,7 +313,7 @@ const es: Messages = {
   "hero.startFree": "Empezar a firmar gratis",
   "hero.startCobro": "Entrar y cobrar",
   "hero.orSignFree": "o firma un PDF gratis",
-  "hero.hintLatam": "PDF + tu Mercado Pago o PayPal. Sin firma. El siguiente paso es el formulario.",
+  "hero.hintLatam": "Firmar un PDF es gratis. $10/mes es cobro, constancia y no perder el I-9 a los 9 días.",
   "hero.hintLatamEmail": "Enlace mágico. El siguiente paso es el cobro — no un tour de firma.",
   "hero.sentTitle": "Revisa tu correo",
   "hero.sentBody":
@@ -534,8 +534,9 @@ const es: Messages = {
   "login.titleSave": "Guarda el documento que acabas de enviar",
   "login.titleUpgrade": "Inicia sesión para mejorar tu plan",
   "login.titleLatam": "El plan de $10 guarda tu I-9 y la constancia",
+  "login.ctaLatam": "Entra y activa el plan de $10/mes",
   "login.subLatam":
-    "Sin contraseña. Después de entrar, Stripe cobra USD $10/mes: vault hasta el 15 de abril o 13 meses, cobro con tu link, constancia para el arrendador. Firmar sigue gratis. No apostillamos ni tramitamos USCIS.",
+    "Firmar un PDF sigue gratis — nadie paga por eso. $10/mes es el paquete: cobro con tu Mercado Pago, constancia para el arrendador, y reabrir el I-9 cuando te lo pidan. Stripe cobra en USD. No apostillamos ni tramitamos USCIS.",
   "mcp.eyebrow": "Para desarrolladores y usuarios avanzados de IA",
   "mcp.freeToolTitle": "Plantillas + check_status — gratis, sin registro",
   "mcp.freeToolBody":
@@ -781,7 +782,12 @@ const es: Messages = {
   "pricing.free.tagline": "Para acuerdos rápidos y puntuales",
   "pricing.goDashboard": "Ir al panel",
   "pricing.intro":
-    "Firmar es gratis — hasta 2 firmantes, sin cuenta. El plan de $10/mes conserva los PDF hasta el próximo 15 de abril o 13 meses (los reabres cuando te los pidan), incluye el plan inmigrante (qué hacer + links oficiales + I-9 / constancia / cobro) y pegas tu checkout después de firmar. No es una tarifa por firma ni un recorte.",
+    "Nadie paga por firmar. Gratis: hasta 2 firmantes, sin cuenta. $10/mes es el paquete LATAM: cobro, constancia, I-9 y extras guardados hasta el 15 de abril o 13 meses. No es una tarifa por firma ni un recorte.",
+  "pricing.whyLatamTitle": "Por eso cobran $10 — no por la firma",
+  "pricing.whyLatam1": "Cobro por WhatsApp con tu Mercado Pago o PayPal. Docracy no se queda un peso.",
+  "pricing.whyLatam2": "Constancia para el arrendador + I-9 / oferta que puedes reabrir. Gratis se borra a los 9 días.",
+  "pricing.whyLatam3": "Mapa de quién sube dónde y links oficiales. Tú tramitas. Nosotros no.",
+  "pricing.dockHintLatam": "Firmar es gratis. $10 es cobro, constancia y el I-9 cuando te lo pidan.",
   "pricing.dockAria": "Precios de planes",
   "pricing.paid.ctaGet": "Plan LATAM — $10/mes",
   "pricing.paid.ctaLogin": "Inicia sesión para mejorar el plan",
@@ -808,7 +814,7 @@ const es: Messages = {
   "pricing.paid.name": "Pago",
   "pricing.paid.note": "/mes, fijo — no por asiento",
   "pricing.paid.redirecting": "Redirigiendo…",
-  "pricing.paid.tagline": "Conserva archivos. Reutiliza kits. Cobra.",
+  "pricing.paid.tagline": "Cobra. Constancia. Reabre el I-9. Firmar sigue gratis.",
   "pricing.title": "Precios",
   "privacy.analytics": "Analítica de tráfico",
   "privacy.audit": "Registro de auditoría",
@@ -3383,6 +3389,7 @@ const es: Messages = {
   "latamSearch.empty":
     "Nada en este índice coincide. Prueba I-9, apostilla + tu país, I-94, cobro o constancia. No inventamos W-8BEN, CFDI ni una petición de visa.",
   "latamSearch.official": "Sitio oficial",
+  "latamSearch.paidCta": "Activar — $10/mes",
   "latamSearch.disclaimer":
     "Esto es un buscador de destinos, no un abogado ni Google. Los resultados son páginas que ya verificamos. Abrir un resultado no presenta nada.",
   "latamSearch.countryFallback": "Apostilla / legalización de origen",

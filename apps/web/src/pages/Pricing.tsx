@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { fetchMe, startCheckout, type Account } from "../lib/api";
-import { PLAN_ROWS, PlanCell, type PlanValue } from "../lib/planRows";
+import { PLAN_ROWS, PlanCell, pricingPlanRows, type PlanValue } from "../lib/planRows";
 import { localizePath, useI18n, useT } from "../lib/i18n";
 import { loginWithCheckout } from "../lib/latamCheckout";
 import { useAutoCheckout } from "../lib/useAutoCheckout";
@@ -19,7 +19,7 @@ export default function Pricing() {
   const t = useT();
   const { locale } = useI18n();
   useSeoMeta("pricing");
-  const planRows = PLAN_ROWS.filter((row) => !row.esOnly || locale === "es");
+  const planRows = pricingPlanRows(locale);
 
   /** undefined = loading; null = logged out; Account = signed in. */
   const [account, setAccount] = useState<Account | null | undefined>(undefined);
@@ -106,6 +106,16 @@ export default function Pricing() {
     <div className="pricing-page">
       <div className="container pricing-compare">
         <p className="pricing-intro">{t("pricing.intro")}</p>
+        {locale === "es" ? (
+          <div className="pricing-why-latam">
+            <h2>{t("pricing.whyLatamTitle")}</h2>
+            <ul>
+              <li>{t("pricing.whyLatam1")}</li>
+              <li>{t("pricing.whyLatam2")}</li>
+              <li>{t("pricing.whyLatam3")}</li>
+            </ul>
+          </div>
+        ) : null}
         {/* Desktop: multi-column comparison table */}
         <div className="plan-table-scroll pricing-desktop-table">
           <table className="plan-table plan-table-pricing">
