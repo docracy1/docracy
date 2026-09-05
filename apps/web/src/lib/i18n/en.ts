@@ -2535,6 +2535,24 @@ const en: Messages = {
     "The official USCIS Form I-9 (Edition 01/20/25) — employee and employer signatures. Not E-Verify.",
   "tpl.i-9-form.useCase":
     "Use this on or before a new employee's first day so Section 1 (employee) and Section 2 (employer) can be signed. This is the real USCIS form. Docracy does not inspect List A/B/C documents and does not run E-Verify.",
+  "tpl.power-of-attorney.name": "Power of Attorney",
+  "tpl.power-of-attorney.seoTitle": "Free Power of Attorney Template",
+  "tpl.power-of-attorney.description":
+    "Grants a named agent authority to act on your behalf, with a fillable scope and a durability option.",
+  "tpl.power-of-attorney.useCase":
+    "Use this when family or a lawyer still in LATAM needs a signed POA. If a US school, employer, or consulate also wants an apostille, that is SRE, Cancillería, or your foreign ministry — not us.",
+  "tpl.reference-letter.name": "Reference Letter",
+  "tpl.reference-letter.seoTitle": "Free Reference Letter Template",
+  "tpl.reference-letter.description":
+    "A signed reference letter with fields for the relationship, how long you've known them, and the recommendation.",
+  "tpl.reference-letter.useCase":
+    "Use this to give a former employee, tenant, colleague, or contractor a signed, dated reference they can attach to a visa packet or job application. We do not file the petition.",
+  "tpl.child-travel-consent.name": "Child Travel Consent Letter",
+  "tpl.child-travel-consent.seoTitle": "Free Child Travel Consent Letter Template",
+  "tpl.child-travel-consent.description":
+    "Consent for a minor to travel with a named adult — dates, destinations, and emergency contacts.",
+  "tpl.child-travel-consent.useCase":
+    "Use this when one parent stays behind and the other flies with the child. We do not book tickets or talk to CBP. Airlines and consulates set their own rules.",
   "tpl.promissory-note.name": "Promissory Note",
   "tpl.promissory-note.seoTitle": "Free Promissory Note Template",
   "tpl.promissory-note.description":
@@ -2568,6 +2586,9 @@ const en: Messages = {
   "footer.cobro": "Get paid on WhatsApp",
   "footer.latamPacket": "LATAM contractor kit",
   "footer.latamUsPacket": "Immigrant plan",
+  "footer.mexicoToUs": "Mexico → US",
+  "footer.colombiaToUs": "Colombia → US",
+  "footer.immigrantHousing": "Lease / constancia",
   "footer.i9": "Sign I-9",
   "footer.visaDocs": "Visa supporting docs",
   "footer.constancia": "Income proof / constancia",
@@ -2614,6 +2635,9 @@ const en: Messages = {
   "dash.migrantOverviewSub": "What to do, official links, signing — and every PDF saved so you can reopen it. Vault until next April 15 or 13 months. We don't file the petition.",
   "dash.corridorI9": "Official USCIS I-9. Employer keeps it. We don't inspect documents or run E-Verify.",
   "dash.corridorVisa": "Offer, POA, reference, child travel — supporting docs, not the petition.",
+  "dash.corridorMexico": "Same plan. Official SRE apostille link. We don't apostille or file.",
+  "dash.corridorColombia": "Same plan. Official Cancillería apostille link. We don't apostille or file.",
+  "dash.corridorHousing": "Lease or roommate template + constancia URL for the landlord.",
   "latamDesk.seoTitle": "LATAM: cobro, constancia, and contractor kits | Docracy",
   "latamDesk.seoDescription":
     "WhatsApp cobro, constancia, hire in LATAM, and immigrant docs: official I-9 plus visa supporting templates. We don't file petitions or run E-Verify. Signing stays free.",
@@ -2873,6 +2897,40 @@ const en: Messages = {
     "The payer keeps the W-9 for 1099s. Official IRS form. We do not ship a W-8BEN. Ask a tax advisor which one you are.",
   "latamUsPacket.send.w9.cta": "Open the W-9",
   "latamUsPacket.send.w9.official": "IRS Form W-9 (official)",
+  "latamUsPacket.send.ssn.title": "SSN → Social Security Administration (you, not us)",
+  "latamUsPacket.send.ssn.body":
+    "A job often asks for a Social Security number after you arrive. Apply on SSA.gov. We do not file SS-5 and we do not issue numbers.",
+  "latamUsPacket.send.ssn.official": "ssa.gov — apply for an SSN",
+  "latamUsPacket.send.apostille.title": "Apostille / legalization → your origin country",
+  "latamUsPacket.send.apostille.body":
+    "Birth certificates, degrees, and powers of attorney often need an apostille before a US school, employer, or consulate accepts them. That is SRE (Mexico), Cancillería (Colombia), or your foreign ministry — not us. We can sign the POA here first.",
+  "latamUsPacket.send.apostille.official": "HCCH — apostille authorities by country",
+  "latamUsPacket.send.apostilleMx.title": "Mexico apostille → SRE (you, not us)",
+  "latamUsPacket.send.apostilleMx.body":
+    "Mexican birth certificates, degrees, and powers of attorney are apostilled by SRE. We can sign the POA here first. We do not stamp, courier, or legalize.",
+  "latamUsPacket.send.apostilleMx.official": "gob.mx/SRE — apostilla y legalización",
+  "latamUsPacket.send.apostilleMx.cta": "Mexico → US door",
+  "latamUsPacket.send.apostilleCo.title": "Colombia apostille → Cancillería (you, not us)",
+  "latamUsPacket.send.apostilleCo.body":
+    "Colombian civil records and powers of attorney are apostilled by Cancillería. We can sign the supporting PDF here first. We do not file with Cancillería or DIAN.",
+  "latamUsPacket.send.apostilleCo.official": "cancilleria.gov.co — apostilla y legalización",
+  "latamUsPacket.send.apostilleCo.cta": "Colombia → US door",
+  "latamUsPacket.send.lease.title": "Lease / roommate → landlord",
+  "latamUsPacket.send.lease.body":
+    "Sign the lease or roommate agreement here, then attach the constancia URL if they asked for proof of income. Not a SAT CSF and not a W-2.",
+  "latamUsPacket.send.lease.cta": "Open the lease template",
+  "latamUsPacket.send.poa.title": "Power of attorney → the person who acts for you",
+  "latamUsPacket.send.poa.body":
+    "Family or a lawyer still in LATAM may need a signed POA. Sign it here. If they need it apostilled, that is your origin country — see the row above.",
+  "latamUsPacket.send.poa.cta": "Open the power of attorney",
+  "latamUsPacket.send.child.title": "Child travel consent → airline / consulate / the adult traveling",
+  "latamUsPacket.send.child.body":
+    "One parent stays behind; the other flies with the child. Sign the consent here. We do not book tickets or talk to CBP.",
+  "latamUsPacket.send.child.cta": "Open child travel consent",
+  "latamUsPacket.tpl.lease": "Commercial lease / housing packet",
+  "latamUsPacket.countryTitle": "Mexico or Colombia?",
+  "latamUsPacket.countrySub":
+    "Same Paid plan. Country pages add the official apostille link for that origin — we still do not apostille or file.",
   "latamUsPacket.compareTitle": "Vs Boundless, CitizenPath, and a gestoría",
   "latamUsPacket.compareSub":
     "They file or prepare. Boundless and CitizenPath bill in USD ($699–$2,549 / $79–$279 + USCIS). MX gestorías: honorarios in MXN (~$900–$3,800) + $185 USD State. Our Paid plan is USD $10; cobro you label MXN/COP/USD.",

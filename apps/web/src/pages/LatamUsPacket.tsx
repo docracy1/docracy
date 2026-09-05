@@ -109,6 +109,52 @@ const SEND_TO: Array<{
     docracyTo: "/free-templates/w-9-form",
     docracyCtaKey: "latamUsPacket.send.w9.cta",
   },
+  {
+    titleKey: "latamUsPacket.send.ssn.title",
+    bodyKey: "latamUsPacket.send.ssn.body",
+    officialHref: "https://www.ssa.gov/ssnumber/",
+    officialKey: "latamUsPacket.send.ssn.official",
+  },
+  {
+    titleKey: "latamUsPacket.send.apostille.title",
+    bodyKey: "latamUsPacket.send.apostille.body",
+    officialHref: "https://www.hcch.net/en/instruments/conventions/authorities1/?cid=41",
+    officialKey: "latamUsPacket.send.apostille.official",
+  },
+  {
+    titleKey: "latamUsPacket.send.apostilleMx.title",
+    bodyKey: "latamUsPacket.send.apostilleMx.body",
+    officialHref: "https://www.gob.mx/sre/acciones-y-programas/apostilla-y-legalizacion-de-documentos",
+    officialKey: "latamUsPacket.send.apostilleMx.official",
+    docracyTo: "/mexico-to-us",
+    docracyCtaKey: "latamUsPacket.send.apostilleMx.cta",
+  },
+  {
+    titleKey: "latamUsPacket.send.apostilleCo.title",
+    bodyKey: "latamUsPacket.send.apostilleCo.body",
+    officialHref: "https://www.cancilleria.gov.co/tramites_servicios/apostilla_legalizacion",
+    officialKey: "latamUsPacket.send.apostilleCo.official",
+    docracyTo: "/colombia-to-us",
+    docracyCtaKey: "latamUsPacket.send.apostilleCo.cta",
+  },
+  {
+    titleKey: "latamUsPacket.send.lease.title",
+    bodyKey: "latamUsPacket.send.lease.body",
+    docracyTo: "/free-templates/simple-commercial-lease-agreement",
+    docracyCtaKey: "latamUsPacket.send.lease.cta",
+  },
+  {
+    titleKey: "latamUsPacket.send.poa.title",
+    bodyKey: "latamUsPacket.send.poa.body",
+    docracyTo: "/free-templates/power-of-attorney",
+    docracyCtaKey: "latamUsPacket.send.poa.cta",
+  },
+  {
+    titleKey: "latamUsPacket.send.child.title",
+    bodyKey: "latamUsPacket.send.child.body",
+    docracyTo: "/free-templates/child-travel-consent",
+    docracyCtaKey: "latamUsPacket.send.child.cta",
+  },
 ];
 
 const TEMPLATES: Array<{ slug: string; nameKey: string }> = [
@@ -118,6 +164,7 @@ const TEMPLATES: Array<{ slug: string; nameKey: string }> = [
   { slug: "power-of-attorney", nameKey: "latamUsPacket.tpl.poa" },
   { slug: "reference-letter", nameKey: "latamUsPacket.tpl.reference" },
   { slug: "child-travel-consent", nameKey: "latamUsPacket.tpl.childTravel" },
+  { slug: "simple-commercial-lease-agreement", nameKey: "latamUsPacket.tpl.lease" },
   { slug: "w-9-form", nameKey: "tpl.w-9-form.name" },
 ];
 
@@ -341,6 +388,16 @@ export default function LatamUsPacket() {
           <Link to={localizePath("/visa-service-alternative", locale)}>{t("footer.vsVisaService")}</Link>
           {" · "}
           <Link to={localizePath("/boundless-vs-citizenpath", locale)}>{t("footer.boundlessVsCitizenpath")}</Link>
+        </p>
+
+        <h2 style={{ fontSize: 19, marginTop: 36 }}>{t("latamUsPacket.countryTitle")}</h2>
+        <p style={{ color: "var(--mute)" }}>{t("latamUsPacket.countrySub")}</p>
+        <p>
+          <Link to={localizePath("/mexico-to-us", locale)}>{t("footer.mexicoToUs")}</Link>
+          {" · "}
+          <Link to={localizePath("/colombia-to-us", locale)}>{t("footer.colombiaToUs")}</Link>
+          {" · "}
+          <Link to={localizePath("/immigrant-housing", locale)}>{t("footer.immigrantHousing")}</Link>
         </p>
 
         <h2 style={{ fontSize: 19, marginTop: 36 }}>{t("latamUsPacket.templatesTitle")}</h2>

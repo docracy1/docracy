@@ -1066,14 +1066,14 @@ export async function sendOnboardingStep1(env: Env, email: string, locale: Local
       Sube tu primer documento → Agrega campos de firma → Envíalo a tu cliente o equipo → Listo
     </p>
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};">
-      Si no tienes un documento listo, también puedes empezar con una plantilla:
+      Si no tienes un documento listo, empieza por el plan inmigrante o una plantilla:
     </p>
-    ${templateList(["NDA (unilateral o mutuo)", "Contrato con cliente", "Acuerdo de incorporación", "Acuerdo con proveedor", "Acuerdo personal simple"])}
+    ${templateList(["Plan inmigrante (I-9, links oficiales, constancia)", "I-9 oficial de USCIS", "Carta de oferta", "Cobro por WhatsApp", "Constancia para el arrendador"])}
     <p style="margin:0;font-size:15px;color:${INK};line-height:1.5;">
       Envía tu primer documento ahora y comprueba lo rápido que es el proceso.
     </p>
-    ${ctaButton(`${env.PUBLIC_APP_URL}/try?utm_source=email&utm_medium=onboarding&utm_campaign=step1`, "Probar un NDA de ejemplo — 30 segundos")}
-    <p style="margin:0;font-size:14px;color:${MUTED};">O sube tu propio PDF desde la página principal. Si necesitas ayuda, solo responde este correo.</p>
+    ${ctaButton(`${env.PUBLIC_APP_URL}/es/kit-llegar-eeuu?utm_source=email&utm_medium=onboarding&utm_campaign=step1`, "Abrir el plan inmigrante")}
+    <p style="margin:0;font-size:14px;color:${MUTED};">O sube tu propio PDF. Si necesitas ayuda, solo responde este correo.</p>
     ${signOff(locale)}
   `
       : `
@@ -1113,18 +1113,22 @@ export async function sendOnboardingStep2(env: Env, email: string, locale: Local
       ? `
     ${emailHeadline(`¿Todavía necesitas firmar un documento?`)}
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
-      Solo un aviso amable — tu cuenta de Docracy sigue lista cuando lo necesites. Miles de
-      plantillas gratis (NDAs, contratos, cartas de oferta) y firma electrónica sin pedirle una
-      cuenta al firmante.
+      Tu cuenta sigue lista. Si acabas de llegar a EE. UU. o cobras desde LATAM, el plan de $10
+      junta qué hacer, los links oficiales (USCIS, CEAC, SRE/Cancillería) y guarda cada PDF para
+      cuando te los pidan.
     </p>
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
-      Empieza desde una plantilla o sube tu propio PDF — gratis hasta 2 firmantes.
+      Empieza por el plan inmigrante, un cobro o una constancia — firmar una vez sigue gratis.
     </p>
-    ${templateList(["NDA mutuo", "Acuerdo de servicio freelance", "Carta de oferta", "Acuerdo con contratista independiente"])}
-    ${ctaButton(`${env.PUBLIC_APP_URL}/free-templates?utm_source=email&utm_medium=onboarding&utm_campaign=step2`, "Explorar plantillas gratis")}
+    ${templateList(["Plan inmigrante — I-9, visa, a dónde mandar cada archivo", "Cobro por WhatsApp con tu Mercado Pago", "Constancia para el arrendador", "I-9 oficial"])}
+    ${ctaButton(`${env.PUBLIC_APP_URL}/es/kit-llegar-eeuu?utm_source=email&utm_medium=onboarding&utm_campaign=step2`, "Abrir el plan inmigrante")}
     <p style="margin:16px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">
-      ¿Tienes el PDF listo?
-      <a href="${env.PUBLIC_APP_URL}/try?utm_source=email&utm_medium=onboarding&utm_campaign=step2" style="color:${PRIMARY};">Envía un NDA de ejemplo en 30 segundos</a>.
+      ¿Solo necesitas cobrar?
+      <a href="${env.PUBLIC_APP_URL}/es/cobro?utm_source=email&utm_medium=onboarding&utm_campaign=step2" style="color:${PRIMARY};">Enviar un cobro</a>.
+    </p>
+    <p style="margin:8px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">
+      ¿Te pidieron ingresos para el depa?
+      <a href="${env.PUBLIC_APP_URL}/es/constancia?utm_source=email&utm_medium=onboarding&utm_campaign=step2" style="color:${PRIMARY};">Abrir la constancia</a>.
     </p>
     <p style="margin:0;font-size:14px;color:${MUTED};">Si no es el momento, no hay problema — tu cuenta seguirá aquí.</p>
     ${signOff(locale)}
@@ -1165,10 +1169,10 @@ export async function sendOnboardingStep3(env: Env, email: string, locale: Local
       sin cuentas, sin complicaciones.
     </p>
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
-      La mayoría de los usuarios empiezan con un NDA pequeño o un contrato con cliente y terminan en menos de un minuto.
+      La mayoría en español empiezan con un I-9, una oferta o un cobro — menos de un minuto.
     </p>
-    ${ctaButton(`${env.PUBLIC_APP_URL}/try?utm_source=email&utm_medium=onboarding&utm_campaign=step3`, "Enviar un NDA de ejemplo gratis")}
-    <p style="margin:0;font-size:14px;color:${MUTED};">O empieza con cualquier plantilla gratis — sigue sin necesitar cuenta.</p>
+    ${ctaButton(`${env.PUBLIC_APP_URL}/es/formulario-i-9?utm_source=email&utm_medium=onboarding&utm_campaign=step3`, "Abrir el I-9 oficial")}
+    <p style="margin:0;font-size:14px;color:${MUTED};">O abre el <a href="${env.PUBLIC_APP_URL}/es/kit-llegar-eeuu?utm_source=email&utm_medium=onboarding&utm_campaign=step3" style="color:${PRIMARY};">plan inmigrante</a> — sigue sin necesitar cuenta para leerlo.</p>
     ${signOff(locale)}
   `
       : `
@@ -1197,12 +1201,12 @@ export async function sendOnboardingStep4(env: Env, email: string, locale: Local
       ? `
     ${emailHeadline(`¿Quieres probar Docracy.io rápidamente?`)}
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
-      Si todavía quieres probar Docracy.io, puedes enviar un documento rápido ahora. Es simple: sube →
-      agrega campos → envía.
+      Si todavía quieres probarlo: el plan de $10 guarda I-9, oferta, constancia y cobro para cuando
+      te los pidan (hasta el 15 de abril o 13 meses). Firmar una vez sigue gratis.
     </p>
-    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};">O elige una plantilla:</p>
-    ${templateList(["NDA", "Contrato con cliente", "Acuerdo de servicio", "Documentos de incorporación", "Contrato de alquiler", "Orden de trabajo"])}
-    ${ctaButton(`${env.PUBLIC_APP_URL}/try?utm_source=email&utm_medium=onboarding&utm_campaign=step4`, "Probar un NDA de ejemplo gratis")}
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};">Empieza aquí:</p>
+    ${templateList(["Plan inmigrante", "I-9 oficial", "Constancia para rentar", "Cobro por WhatsApp", "México → EE. UU.", "Colombia → EE. UU."])}
+    ${ctaButton(`${env.PUBLIC_APP_URL}/es/kit-llegar-eeuu?utm_source=email&utm_medium=onboarding&utm_campaign=step4`, "Abrir el plan inmigrante")}
     <p style="margin:0;font-size:14px;color:${MUTED};">Con gusto te ayudamos si necesitas algo.</p>
     ${signOff(locale)}
   `
@@ -1283,11 +1287,11 @@ export async function sendPreparerLeadStep2(env: Env, email: string, locale: Loc
       ? `
     ${emailHeadline(`¿Listo para el próximo documento?`)}
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
-      Solo un aviso amable — Docracy sigue aquí cuando necesites enviar otro acuerdo. Plantillas
-      gratis para NDAs, contratos y cartas de oferta, y el firmante no necesita crear una cuenta.
+      Docracy sigue aquí. Si el siguiente PDF es un I-9, una oferta o una constancia para el
+      arrendador, el plan inmigrante junta qué hacer, los links oficiales y guarda los archivos.
     </p>
-    ${templateList(["NDA mutuo", "Acuerdo de servicio freelance", "Carta de oferta", "Acuerdo con contratista independiente"])}
-    ${ctaButton(`${env.PUBLIC_APP_URL}/free-templates?utm_source=email&utm_medium=preparer-lead&utm_campaign=step2`, "Explorar plantillas gratis")}
+    ${templateList(["Plan inmigrante", "I-9 oficial", "Constancia", "Cobro por WhatsApp"])}
+    ${ctaButton(`${env.PUBLIC_APP_URL}/es/kit-llegar-eeuu?utm_source=email&utm_medium=preparer-lead&utm_campaign=step2`, "Abrir el plan inmigrante")}
     <p style="margin:16px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">
       ¿Quieres todos tus envíos en un solo lugar?
       <a href="${env.PUBLIC_APP_URL}/login?utm_source=email&utm_medium=preparer-lead&utm_campaign=step2" style="color:${PRIMARY};">Crea una cuenta gratis</a>

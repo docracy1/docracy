@@ -72,10 +72,45 @@ for (const line of [
   "/es/boundless  /es/alternativa-a-boundless  301",
   "/citizenpath-vs-boundless  /boundless-vs-citizenpath  301",
   "/es/gestoria-de-visa  /es/alternativa-a-gestoria-de-visa  301",
+  "/es/de-mexico-a-eeuu  /es/mexico-a-eeuu  301",
+  "/es/de-colombia-a-eeuu  /es/colombia-a-eeuu  301",
+  "/es/renta-inmigrante  /es/arrendamiento-inmigrante  301",
 ]) {
   assert.ok(redirects.includes(line), `missing one-hop redirect: ${line}`);
 }
 assert.ok(!redirects.includes("/send-invoice-whatsapp  /whatsapp-invoice"), "alias must not chain through /whatsapp-invoice");
 
+const marketingOut = path.join(os.tmpdir(), `seoLatam-marketing-${process.pid}.cjs`);
+buildSync({
+  entryPoints: [path.join(__dirname, "../src/lib/marketingPages.ts")],
+  outfile: marketingOut,
+  bundle: true,
+  platform: "node",
+  format: "cjs",
+  logLevel: "silent",
+});
+const { FEATURE_PAGES, getFeaturePageContent } = createRequire(import.meta.url)(marketingOut);
+for (const slug of ["mexico-to-us", "colombia-to-us", "immigrant-housing"]) {
+  const en = FEATURE_PAGES.find((p) => p.slug === slug);
+  assert.ok(en, `missing FEATURE_PAGES ${slug}`);
+  assert.equal(en.xDefault, "es", `${slug} x-default must be Spanish`);
+  const es = getFeaturePageContent(slug, "es");
+  assert.ok(es?.seoTitle, `${slug} needs Spanish copy`);
+  assert.equal(es.ctaTo, "/packets/latam-to-us");
+}
+assert.ok(
+  getFeaturePageContent("mexico-to-us", "es").relatedLinks.some((l) =>
+    l.to.startsWith("https://www.gob.mx/sre/")
+  ),
+  "Mexico door must link official SRE apostille"
+);
+assert.ok(
+  getFeaturePageContent("colombia-to-us", "es").relatedLinks.some((l) =>
+    l.to.startsWith("https://www.cancilleria.gov.co/")
+  ),
+  "Colombia door must link official Cancillería apostille"
+);
+
 fs.unlinkSync(out);
+fs.unlinkSync(marketingOut);
 console.log("seoLatam.test.mjs: ok");

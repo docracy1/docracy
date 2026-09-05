@@ -163,6 +163,9 @@ const SEO_TEMPLATE_SLUGS = new Set([
   "vendor-agreement",
   "w-9-form",
   "i-9-form",
+  "power-of-attorney",
+  "reference-letter",
+  "child-travel-consent",
   "promissory-note",
   "letter-of-intent",
   "simple-commercial-lease-agreement",
@@ -224,6 +227,21 @@ const ES_TEMPLATE_META = {
     title: "Formulario I-9 gratis — firma el formulario de USCIS",
     description:
       "El Formulario I-9 oficial de USCIS (edición 01/20/25). Firma de empleado y empleador. No es E-Verify ni inspección de documentos.",
+  },
+  "power-of-attorney": {
+    title: "Plantilla gratis de poder notarial",
+    description:
+      "Autoriza a un agente a actuar por ti. Fírmalo aquí; si necesitan apostilla, eso es SRE / Cancillería — no nosotros.",
+  },
+  "reference-letter": {
+    title: "Plantilla gratis de carta de referencia",
+    description:
+      "Carta de referencia firmada con la relación, el tiempo que se conocen y la recomendación. No es una petición ante USCIS.",
+  },
+  "child-travel-consent": {
+    title: "Plantilla gratis de consentimiento de viaje de menor",
+    description:
+      "Consentimiento para que un menor viaje con un adulto nombrado. No reservamos vuelos ni hablamos con CBP.",
   },
   "promissory-note": {
     title: "Plantilla gratis de pagaré",
@@ -779,6 +797,33 @@ const routes = [
     xDefault: "es",
   },
   {
+    urlPath: "/es/mexico-a-eeuu",
+    outFile: "es/mexico-a-eeuu.html",
+    title: getFeaturePageContent("mexico-to-us", "es").seoTitle,
+    description: getFeaturePageContent("mexico-to-us", "es").seoDescription,
+    locale: "es",
+    alternates: { en: "/mexico-to-us", es: "/es/mexico-a-eeuu" },
+    xDefault: "es",
+  },
+  {
+    urlPath: "/es/colombia-a-eeuu",
+    outFile: "es/colombia-a-eeuu.html",
+    title: getFeaturePageContent("colombia-to-us", "es").seoTitle,
+    description: getFeaturePageContent("colombia-to-us", "es").seoDescription,
+    locale: "es",
+    alternates: { en: "/colombia-to-us", es: "/es/colombia-a-eeuu" },
+    xDefault: "es",
+  },
+  {
+    urlPath: "/es/arrendamiento-inmigrante",
+    outFile: "es/arrendamiento-inmigrante.html",
+    title: getFeaturePageContent("immigrant-housing", "es").seoTitle,
+    description: getFeaturePageContent("immigrant-housing", "es").seoDescription,
+    locale: "es",
+    alternates: { en: "/immigrant-housing", es: "/es/arrendamiento-inmigrante" },
+    xDefault: "es",
+  },
+  {
     urlPath: "/docs",
     outFile: "docs.html",
     title: "Docracy Documentation — Setup, API & Features",
@@ -1246,6 +1291,9 @@ const routes = [
       "proof-of-income-us-rental": { en: "/proof-of-income-us-rental", es: "/es/constancia-para-rentar" },
       "i-9": { en: "/i-9", es: "/es/formulario-i-9" },
       "visa-supporting-documents": { en: "/visa-supporting-documents", es: "/es/documentos-para-visa" },
+      "mexico-to-us": { en: "/mexico-to-us", es: "/es/mexico-a-eeuu" },
+      "colombia-to-us": { en: "/colombia-to-us", es: "/es/colombia-a-eeuu" },
+      "immigrant-housing": { en: "/immigrant-housing", es: "/es/arrendamiento-inmigrante" },
       "docusign-alternative": { en: "/docusign-alternative", es: "/es/alternativa-a-docusign" },
       "hellosign-alternative": { en: "/hellosign-alternative", es: "/es/alternativa-a-hellosign" },
       "adobe-sign-alternative": { en: "/adobe-sign-alternative", es: "/es/alternativa-a-adobe-sign" },

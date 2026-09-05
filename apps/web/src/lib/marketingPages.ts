@@ -1809,6 +1809,151 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       { label: "Child travel consent", to: "/free-templates/child-travel-consent" },
     ],
   },
+  {
+    slug: "mexico-to-us",
+    xDefault: "es",
+    seoTitle: "Mexico to the US — I-9, Apostille Links, Constancia | Docracy",
+    seoDescription:
+      "From Mexico to the US: sign official I-9, offer, POA; official SRE apostille link; constancia for a US lease. $10/mo plan. We don't apostille or file USCIS.",
+    heroHeadline: "Mexico → United States. We sign the packet. SRE apostilles it.",
+    heroSubheadline:
+      "Same Paid plan as the immigrant kit: I-9, offer, visa extras, constancia, cobro. Plus the official SRE apostille link. We do not apostille documents and we do not file I-129 or DS-160.",
+    problem:
+      "Search is gestorías, Boundless, and SAT constancia generators. None of them sign a US I-9 and then tell you the SRE page for apostille.",
+    solution:
+      "Unlock the $10 plan. Sign I-9 and supporting PDFs here. We save them so you can reopen them. Apostille is gob.mx/SRE — not us. Cobro still takes your Mercado Pago.",
+    features: [
+      { title: "Official I-9 + offer", body: "USCIS form. Employer keeps the I-9. We don't run E-Verify." },
+      { title: "SRE apostille (official)", body: "Link only. We do not stamp or courier apostilles." },
+      { title: "Constancia for Houston / Miami", body: "Not a SAT CSF. Paid vault URL." },
+      { title: "Cobro in MXN", body: "You label the amount. Stripe still bills Docracy Paid in USD $10." },
+    ],
+    useCases: [
+      "First job week after landing from Mexico",
+      "POA for family still in Mexico — sign here, apostille at SRE",
+      "Lease application without a W-2",
+    ],
+    faqs: [
+      {
+        question: "Do you apostille Mexican documents?",
+        answer:
+          "No. Apostille and legalization are SRE: https://www.gob.mx/sre/acciones-y-programas/apostilla-y-legalizacion-de-documentos. We can sign the POA first.",
+      },
+      {
+        question: "Is this Boundless?",
+        answer: "No. They file USCIS cases. We sign extras and keep the vault. Compare /boundless-alternative.",
+      },
+      {
+        question: "Spanish URL?",
+        answer: "https://docracy.io/es/mexico-a-eeuu — plan: /es/kit-llegar-eeuu.",
+      },
+    ],
+    ctaLabel: "Unlock the immigrant plan — $10/month",
+    ctaTo: "/packets/latam-to-us",
+    relatedLinks: [
+      { label: "Immigrant plan", to: "/packets/latam-to-us" },
+      { label: "SRE apostille (official)", to: "https://www.gob.mx/sre/acciones-y-programas/apostilla-y-legalizacion-de-documentos" },
+      { label: "Colombia → US", to: "/colombia-to-us" },
+      { label: "Lease / constancia", to: "/immigrant-housing" },
+      { label: "Sign I-9", to: "/i-9" },
+    ],
+  },
+  {
+    slug: "colombia-to-us",
+    xDefault: "es",
+    seoTitle: "Colombia to the US — I-9, Cancillería Apostille, Constancia | Docracy",
+    seoDescription:
+      "From Colombia to the US: sign official I-9 and visa extras; official Cancillería apostille link; constancia for a US lease. $10/mo. We don't apostille or file.",
+    heroHeadline: "Colombia → United States. We sign the packet. Cancillería apostilles it.",
+    heroSubheadline:
+      "Same $10 plan: I-9, offer, POA, constancia, cobro. Official Cancillería apostille link. We do not submit to DIAN, USCIS, or CEAC.",
+    problem:
+      "Siigo and gestorías own the search. You need a signed I-9 and a place that says who apostilles a Colombian birth certificate — not a DIAN invoice.",
+    solution:
+      "Sign supporting PDFs on Docracy. Paid keeps them. Apostille is Cancillería. Cobro can be COP on your Nequi or Mercado Pago — that money never hits us.",
+    features: [
+      { title: "Official I-9", body: "Employer retains it. Not E-Verify." },
+      { title: "Cancillería apostille (official)", body: "https://www.cancilleria.gov.co/tramites_servicios/apostilla_legalizacion — we don't file it." },
+      { title: "Constancia for a US landlord", body: "Not a DIAN invoice and not a W-2." },
+      { title: "Cobro in COP", body: "Your checkout. Paid is still USD $10 on Stripe." },
+    ],
+    useCases: [
+      "First US job after arriving from Colombia",
+      "POA for someone in Bogotá — sign here, apostille at Cancillería",
+      "Still invoicing Colombian clients on WhatsApp",
+    ],
+    faqs: [
+      {
+        question: "Do you apostille Colombian documents?",
+        answer:
+          "No. That is Cancillería: https://www.cancilleria.gov.co/tramites_servicios/apostilla_legalizacion. We sign the supporting PDF first.",
+      },
+      {
+        question: "Is this Siigo?",
+        answer: "No. Siigo is DIAN billing. Compare /siigo-alternative. This page is the immigrant packet.",
+      },
+      {
+        question: "Spanish URL?",
+        answer: "https://docracy.io/es/colombia-a-eeuu — plan: /es/kit-llegar-eeuu.",
+      },
+    ],
+    ctaLabel: "Unlock the immigrant plan — $10/month",
+    ctaTo: "/packets/latam-to-us",
+    relatedLinks: [
+      { label: "Immigrant plan", to: "/packets/latam-to-us" },
+      { label: "Cancillería apostille (official)", to: "https://www.cancilleria.gov.co/tramites_servicios/apostilla_legalizacion" },
+      { label: "Mexico → US", to: "/mexico-to-us" },
+      { label: "Lease / constancia", to: "/immigrant-housing" },
+      { label: "Siigo alternative", to: "/siigo-alternative" },
+    ],
+  },
+  {
+    slug: "immigrant-housing",
+    xDefault: "es",
+    seoTitle: "US Lease for LATAM Immigrants — Sign + Constancia | Docracy",
+    seoDescription:
+      "Sign a lease or roommate agreement and share a constancia URL when a US landlord asks for income proof. Not a W-2. $10/mo vault. Spanish first.",
+    heroHeadline: "The lease wants a signature and proof of income. You have neither on paper.",
+    heroSubheadline:
+      "Sign the lease or roommate template. Share a Paid constancia URL. Houston / Miami / NYC landlords. Not a SAT CSF. Not a bank letter.",
+    problem:
+      "The portal wants a W-2 and a wet-ink lease. You have Mercado Pago, a signed offer, and a roommate who also just arrived.",
+    solution:
+      "Sign the housing PDF here. Attach the constancia from the same $10 plan. Some landlords still want a bank statement — say that honestly.",
+    features: [
+      { title: "Lease / roommate templates", body: "Already in the catalog. Two signers free." },
+      { title: "Constancia URL", body: "Index of contracts and cobros you already completed. Paid." },
+      { title: "Same immigrant plan", body: "I-9 and visa extras stay in the same vault." },
+      { title: "Honest limit", body: "We do not notarize and we do not guarantee the landlord accepts it." },
+    ],
+    useCases: [
+      "Roommate agreement the first month",
+      "Commercial or simple lease the landlord emailed",
+      "Income proof without pay stubs",
+    ],
+    faqs: [
+      {
+        question: "Is this a SAT constancia?",
+        answer: "No. Ours is a Docracy index. The SAT CSF is a different document.",
+      },
+      {
+        question: "Will every landlord accept it?",
+        answer: "No. Send a bank statement too if you have one. We do not notarize.",
+      },
+      {
+        question: "Spanish URL?",
+        answer: "https://docracy.io/es/arrendamiento-inmigrante — tool: /es/constancia. Plan: /es/kit-llegar-eeuu.",
+      },
+    ],
+    ctaLabel: "Open the immigrant plan",
+    ctaTo: "/packets/latam-to-us",
+    relatedLinks: [
+      { label: "Constancia", to: "/income-proof" },
+      { label: "Constancia for a US rental", to: "/proof-of-income-us-rental" },
+      { label: "Lease template", to: "/free-templates/simple-commercial-lease-agreement" },
+      { label: "Roommate agreement", to: "/free-templates/roommate-agreement" },
+    ],
+  },
 ];
 
 export function getNdaSigningPageEs(): FeaturePageContent {
@@ -2611,6 +2756,160 @@ export function getVisaSupportingDocumentsPageEs(): FeaturePageContent {
   };
 }
 
+export function getMexicoToUsPageEs(): FeaturePageContent {
+  return {
+    slug: "mexico-to-us",
+    xDefault: "es",
+    seoTitle: "De México a EE. UU. — I-9, apostilla SRE, constancia | Docracy",
+    seoDescription:
+      "De México a EE. UU.: firma I-9 oficial, oferta y poder; link oficial de apostilla SRE; constancia para rentar. Plan $10/mes. No apostillamos ni tramitamos USCIS.",
+    heroHeadline: "México → Estados Unidos. Nosotros firmamos el paquete. SRE apostilla.",
+    heroSubheadline:
+      "El mismo plan: I-9, oferta, extras de visa, constancia, cobro. Más el link oficial de apostilla SRE. No apostillamos y no presentamos I-129 ni DS-160.",
+    problem:
+      "Google tira gestorías, Boundless y generadores de constancia SAT. Ninguno firma un I-9 y te manda a la página de SRE para la apostilla.",
+    solution:
+      "Desbloquea el plan de $10. Firma I-9 y los PDF de apoyo aquí. Los guardamos para que los reabras. La apostilla es gob.mx/SRE — no nosotros. El cobro sigue con tu Mercado Pago.",
+    features: [
+      { title: "I-9 oficial + oferta", body: "Formulario USCIS. El empleador conserva el I-9. No corremos E-Verify." },
+      { title: "Apostilla SRE (oficial)", body: "Solo el link. No timbramos ni enviamos apostillas." },
+      { title: "Constancia para Houston / Miami", body: "No es la CSF del SAT. URL del vault de pago." },
+      { title: "Cobro en MXN", body: "Tú etiquetas el monto. Stripe cobra el plan en USD $10." },
+    ],
+    useCases: [
+      "Primera semana de trabajo al llegar de México",
+      "Poder para familia que sigue en México — fírmalo aquí, apostilla en SRE",
+      "Solicitud de depa sin W-2",
+    ],
+    faqs: [
+      {
+        question: "¿Apostillan documentos mexicanos?",
+        answer:
+          "No. Apostilla y legalización son SRE: https://www.gob.mx/sre/acciones-y-programas/apostilla-y-legalizacion-de-documentos. El poder lo puedes firmar aquí primero.",
+      },
+      {
+        question: "¿Esto es Boundless?",
+        answer: "No. Ellos presentan casos ante USCIS. Nosotros firmamos extras y guardamos el vault. Compara /es/alternativa-a-boundless.",
+      },
+      {
+        question: "¿URL en español?",
+        answer: "https://docracy.io/es/mexico-a-eeuu — plan: /es/kit-llegar-eeuu.",
+      },
+    ],
+    ctaLabel: "Desbloquear el plan inmigrante — $10/mes",
+    ctaTo: "/packets/latam-to-us",
+    relatedLinks: [
+      { label: "Plan inmigrante", to: "/packets/latam-to-us" },
+      { label: "Apostilla SRE (oficial)", to: "https://www.gob.mx/sre/acciones-y-programas/apostilla-y-legalizacion-de-documentos" },
+      { label: "Colombia → EE. UU.", to: "/colombia-to-us" },
+      { label: "Arrendamiento / constancia", to: "/immigrant-housing" },
+      { label: "Firmar I-9", to: "/i-9" },
+    ],
+  };
+}
+
+export function getColombiaToUsPageEs(): FeaturePageContent {
+  return {
+    slug: "colombia-to-us",
+    xDefault: "es",
+    seoTitle: "De Colombia a EE. UU. — I-9, apostilla Cancillería, constancia | Docracy",
+    seoDescription:
+      "De Colombia a EE. UU.: firma I-9 y extras de visa; link oficial de apostilla de Cancillería; constancia para rentar. $10/mes. No apostillamos ni tramitamos.",
+    heroHeadline: "Colombia → Estados Unidos. Nosotros firmamos el paquete. Cancillería apostilla.",
+    heroSubheadline:
+      "El mismo plan de $10: I-9, oferta, poder, constancia, cobro. Link oficial de apostilla de Cancillería. No enviamos nada a DIAN, USCIS ni CEAC.",
+    problem:
+      "Siigo y las gestorías se quedan con la búsqueda. Tú necesitas un I-9 firmado y quién apostilla un acta colombiana — no una factura DIAN.",
+    solution:
+      "Firma los PDF de apoyo en Docracy. El plan los guarda. La apostilla es Cancillería. El cobro puede ir en COP por Nequi o Mercado Pago — ese dinero no nos llega.",
+    features: [
+      { title: "I-9 oficial", body: "El empleador lo retiene. No es E-Verify." },
+      { title: "Apostilla Cancillería (oficial)", body: "https://www.cancilleria.gov.co/tramites_servicios/apostilla_legalizacion — no la presentamos." },
+      { title: "Constancia para el arrendador", body: "No es factura DIAN ni W-2." },
+      { title: "Cobro en COP", body: "Tu checkout. El plan sigue en USD $10 en Stripe." },
+    ],
+    useCases: [
+      "Primer trabajo en EE. UU. al llegar de Colombia",
+      "Poder para alguien en Bogotá — fírmalo aquí, apostilla en Cancillería",
+      "Sigues facturando clientes en Colombia por WhatsApp",
+    ],
+    faqs: [
+      {
+        question: "¿Apostillan documentos colombianos?",
+        answer:
+          "No. Eso es Cancillería: https://www.cancilleria.gov.co/tramites_servicios/apostilla_legalizacion. Firmamos el PDF de apoyo primero.",
+      },
+      {
+        question: "¿Esto es Siigo?",
+        answer: "No. Siigo es facturación DIAN. Compara /es/alternativa-a-siigo. Esta página es el paquete inmigrante.",
+      },
+      {
+        question: "¿URL en español?",
+        answer: "https://docracy.io/es/colombia-a-eeuu — plan: /es/kit-llegar-eeuu.",
+      },
+    ],
+    ctaLabel: "Desbloquear el plan inmigrante — $10/mes",
+    ctaTo: "/packets/latam-to-us",
+    relatedLinks: [
+      { label: "Plan inmigrante", to: "/packets/latam-to-us" },
+      { label: "Apostilla Cancillería (oficial)", to: "https://www.cancilleria.gov.co/tramites_servicios/apostilla_legalizacion" },
+      { label: "México → EE. UU.", to: "/mexico-to-us" },
+      { label: "Arrendamiento / constancia", to: "/immigrant-housing" },
+      { label: "Alternativa a Siigo", to: "/siigo-alternative" },
+    ],
+  };
+}
+
+export function getImmigrantHousingPageEs(): FeaturePageContent {
+  return {
+    slug: "immigrant-housing",
+    xDefault: "es",
+    seoTitle: "Arrendamiento en EE. UU. para inmigrantes LATAM — firma + constancia | Docracy",
+    seoDescription:
+      "Firma un arrendamiento o acuerdo de roomie y comparte una constancia cuando el arrendador pide ingresos. No es W-2. Vault de $10/mes. Español primero.",
+    heroHeadline: "El depa pide firma y prueba de ingresos. En papel no tienes ninguna.",
+    heroSubheadline:
+      "Firma el arrendamiento o el acuerdo de roomie. Comparte la URL de la constancia del plan. Houston / Miami / NYC. No es la CSF del SAT. No es carta bancaria.",
+    problem:
+      "El portal pide W-2 y firma manuscrita. Tú tienes Mercado Pago, una oferta firmada y un roomie que también acaba de llegar.",
+    solution:
+      "Firma el PDF de vivienda aquí. Adjunta la constancia del mismo plan de $10. Algunos arrendadores igual piden estado de cuenta — dilo con honestidad.",
+    features: [
+      { title: "Plantillas de arrendamiento / roomie", body: "Ya están en el catálogo. Dos firmantes gratis." },
+      { title: "URL de constancia", body: "Índice de contratos y cobros que ya completaste. Plan de pago." },
+      { title: "El mismo plan inmigrante", body: "I-9 y extras de visa quedan en el mismo vault." },
+      { title: "Límite honesto", body: "No notariamos y no garantizamos que el arrendador lo acepte." },
+    ],
+    useCases: [
+      "Acuerdo de roomie el primer mes",
+      "Arrendamiento que te mandó el landlord",
+      "Prueba de ingresos sin stubs",
+    ],
+    faqs: [
+      {
+        question: "¿Esto es la constancia del SAT?",
+        answer: "No. La nuestra es un índice de Docracy. La CSF del SAT es otro documento.",
+      },
+      {
+        question: "¿Todo arrendador la acepta?",
+        answer: "No. Manda también un estado de cuenta si lo tienes. No notariamos.",
+      },
+      {
+        question: "¿URL en español?",
+        answer: "https://docracy.io/es/arrendamiento-inmigrante — herramienta: /es/constancia. Plan: /es/kit-llegar-eeuu.",
+      },
+    ],
+    ctaLabel: "Abrir el plan inmigrante",
+    ctaTo: "/packets/latam-to-us",
+    relatedLinks: [
+      { label: "Constancia", to: "/income-proof" },
+      { label: "Constancia para rentar", to: "/proof-of-income-us-rental" },
+      { label: "Plantilla de arrendamiento", to: "/free-templates/simple-commercial-lease-agreement" },
+      { label: "Acuerdo de roomie", to: "/free-templates/roommate-agreement" },
+    ],
+  };
+}
+
 const ES_FEATURE_GETTERS: Record<string, () => FeaturePageContent> = {
   "nda-signing": getNdaSigningPageEs,
   "client-contracts": getClientContractsPageEs,
@@ -2627,6 +2926,9 @@ const ES_FEATURE_GETTERS: Record<string, () => FeaturePageContent> = {
   "proof-of-income-us-rental": getUsRentalIncomeProofPageEs,
   "i-9": getI9PageEs,
   "visa-supporting-documents": getVisaSupportingDocumentsPageEs,
+  "mexico-to-us": getMexicoToUsPageEs,
+  "colombia-to-us": getColombiaToUsPageEs,
+  "immigrant-housing": getImmigrantHousingPageEs,
 };
 
 /** Locale-aware feature page content — ES routes use Spanish copy. */
