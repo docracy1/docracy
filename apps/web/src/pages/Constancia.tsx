@@ -172,6 +172,7 @@ export default function Constancia() {
             {t("constancia.kicker")}
           </p>
           <h1>{t("constancia.heroTitle")}</h1>
+          <p style={{ fontSize: 14, fontWeight: 600, color: "var(--body)", marginTop: 8 }}>{t("constancia.satDisclaimer")}</p>
           <p>{t("constancia.heroSub")}</p>
           <div style={{ marginTop: 20 }}>
             {account?.isPaid ? (

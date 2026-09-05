@@ -50,7 +50,6 @@ const TRACKED_ROUTES = new Set([
   "/docracy-ueta-compliance",
   "/es/firma-de-nda",
   "/es/contratos-con-clientes",
-  "/es/factura-whatsapp",
   "/es/registros-1099",
   "/es/contratar-en-el-extranjero",
   "/es/prueba-de-ingresos",
@@ -63,6 +62,15 @@ const TRACKED_ROUTES = new Set([
   "/es/alternativa-a-hellosign",
   "/es/alternativa-a-pandadoc",
   "/es/alternativa-a-adobe-sign",
+  "/es/alternativa-a-kita",
+  "/es/alternativa-a-alegra",
+  "/es/alternativa-a-siigo",
+  "/kita-vs-alegra",
+  "/kita-vs-siigo",
+  "/alegra-vs-siigo",
+  "/es/kita-vs-alegra",
+  "/es/kita-vs-siigo",
+  "/es/alegra-vs-siigo",
   // FeaturePage slugs
   "/simple-agreements",
   "/nda-signing",
@@ -92,7 +100,6 @@ const TRACKED_ROUTES = new Set([
   "/simple-signing",
   "/document-verification",
   "/blockchain-timestamp",
-  "/whatsapp-invoice",
   "/1099-contractor-records",
   "/hire-contractor-abroad",
   "/proof-of-income",
@@ -124,6 +131,9 @@ const TRACKED_ROUTES = new Set([
   "/pandadoc-alternative",
   "/adobe-sign-alternative",
   "/contractbook-alternative",
+  "/kita-alternative",
+  "/alegra-alternative",
+  "/siigo-alternative",
 ]);
 
 function isTrackedRoute(route: string): boolean {

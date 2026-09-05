@@ -308,7 +308,6 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     ctaLabel: "Try WhatsApp signing",
     ctaTo: "/prepare",
     relatedLinks: [
-      { label: "Send an invoice on WhatsApp (no signature)", to: "/whatsapp-invoice" },
       { label: "Get paid on WhatsApp (cobro)", to: "/cobro" },
       { label: "Advanced Electronic Signature (AES)", to: "/advanced-electronic-signature" },
       { label: "See pricing", to: "/pricing" },
@@ -2147,10 +2146,15 @@ export interface AlternativePageContent {
   comparison: string[];
   ctaLabel: string;
   ctaTo: string;
-  compareBlogSlug: string;
+  compareBlogSlug?: string;
+  /** Internal path instead of a blog post (LATAM compares). */
+  compareTo?: string;
   compareLabel: string;
   /** Optional FAQ — emits FAQPage JSON-LD + visible details when present. */
   faqs?: Array<{ question: string; answer: string }>;
+  faqsEs?: Array<{ question: string; answer: string }>;
+  /** LATAM compares lead in Spanish (x-default = es). */
+  xDefault?: "es";
 }
 
 /** Default FAQs for competitor alternative pages (GEO / rich results). */
@@ -2712,7 +2716,154 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
     ctaTo: "/prepare?freeTemplate=mutual-nda&ref=seo-getaccept-alternative",
     compareBlogSlug: "docracy-vs-pandadoc",
     compareLabel: "See how Docracy compares to sales-room e-sign tools",
-  }
+  },
+  {
+    slug: "kita-alternative",
+    competitorName: "Kita",
+    xDefault: "es",
+    navDesc: "WhatsApp cobro without becoming a PAC.",
+    seoTitle: "Kita Alternative — WhatsApp Pay + File, No CFDI | Docracy",
+    seoDescription:
+      "Kita alternative if you need the PDF and your Mercado Pago link on WhatsApp — not a stamped CFDI. $10/mo, 0% of the payment. Signing stays free.",
+    heroHeadline: "Kita stamps the invoice. Docracy sends the file and your checkout.",
+    heroSubheadline:
+      "Paste Mercado Pago or PayPal, attach the PDF, text the pay page. We never take the money and we do not timbrar CFDI.",
+    problem:
+      "Kita is a strong Mexico product: WhatsApp in, Mercado Pago charge, CFDI 4.0 out. That is the wrong stack if you already have a checkout and you need a signed contract plus a page the client can pay — not a PAC, CSD, or timbre balance.",
+    solution:
+      "Docracy cobro is file + your https checkout. Signing stays a separate free product. Paid ($10/month) keeps the PDF through tax season and unlocks WhatsApp cobro, constancia, and the accountant CSV. We are not Kita and we do not claim SAT invoicing.",
+    comparison: [
+      "0% of the payment — you paste Mercado Pago, PayPal.me, or Stripe",
+      "No CFDI, no PAC, no CSD — honest limit, written on the page",
+      "Optional signature first (free ≤2), then cobro without a second sign",
+      "Tax-year vault + CSV for your accountant; constancia you can forward",
+      "Currencies labeled USD, MXN, COP, ARS, CLP, PEN, BRL",
+      "WhatsApp uses the live invite — not a new Meta template",
+      "Kita is better if you need autofactura CFDI after every charge",
+    ],
+    ctaLabel: "Send a cobro — file + Mercado Pago",
+    ctaTo: "/cobro#send",
+    compareTo: "/kita-vs-alegra",
+    compareLabel: "Kita vs Alegra vs Docracy",
+    faqs: [
+      {
+        question: "Is Docracy a Kita alternative for CFDI?",
+        answer:
+          "No. Kita stamps CFDI 4.0 through a PAC. Docracy never does that. Use Kita (or Alegra) when the client needs a SAT invoice. Use Docracy when they need a signed PDF and a pay link you already own.",
+      },
+      {
+        question: "Do you take a cut like a payment app?",
+        answer: "No. Paid is $10/month. Mercado Pago or PayPal still charge their own processor fees — that is not us.",
+      },
+      {
+        question: "Can I sign and then collect?",
+        answer: "Yes. Send the contract from Prepare (free up to two signers). After it is signed, send cobro with the same checkout you already use.",
+      },
+    ],
+    faqsEs: [
+      {
+        question: "¿Docracy es alternativa a Kita para CFDI?",
+        answer:
+          "No. Kita timbra CFDI 4.0 con un PAC. Docracy nunca hace eso. Usa Kita (o Alegra) cuando el cliente necesita factura SAT. Usa Docracy cuando necesita un PDF firmado y un link de cobro que ya tienes.",
+      },
+      {
+        question: "¿Se llevan un porcentaje como una app de pagos?",
+        answer: "No. El plan son $10/mes. Mercado Pago o PayPal cobran su comisión — eso no somos nosotros.",
+      },
+      {
+        question: "¿Puedo firmar y luego cobrar?",
+        answer:
+          "Sí. Envía el contrato desde Preparar (gratis hasta dos firmantes). Cuando esté firmado, manda el cobro con el mismo checkout.",
+      },
+    ],
+  },
+  {
+    slug: "alegra-alternative",
+    competitorName: "Alegra",
+    xDefault: "es",
+    navDesc: "Sign and get paid — not a full ledger.",
+    seoTitle: "Alegra Alternative — Sign & WhatsApp Cobro, Not Books | Docracy",
+    seoDescription:
+      "Alegra alternative when you need a signature and your Mercado Pago link — not PAC invoicing or a full ledger. Free signing ≤2. Paid $10/mo, 0% cut.",
+    heroHeadline: "Alegra keeps the books. Docracy gets the contract signed and the file paid.",
+    heroSubheadline:
+      "WhatsApp cobro with your checkout. No CFDI timbre. Not a replacement for your accountant.",
+    problem:
+      "Alegra is accounting plus authorized e-invoicing, with a WhatsApp bot that issues CFDI. Freelancers who only need “sign this, then pay this link” should not buy a ledger and a timbre pack.",
+    solution:
+      "Docracy is the signing step and the pay+file page. Paste Mercado Pago. Keep PDFs until tax season on Paid. Constancia is a shareable index — not a SAT constancia de situación fiscal.",
+    comparison: [
+      "Free sequential e-sign for up to two people, no account for signers",
+      "Cobro: PDF + your Mercado Pago / PayPal page, no extra signature",
+      "Not a PAC — we do not stamp CFDI or replace Alegra books",
+      "$10/mo, 0% of collections",
+      "Income-proof packet and accountant CSV from files you already sent",
+      "Alegra is better when you need official invoices and a chart of accounts",
+    ],
+    ctaLabel: "Send cobro or start a free signature",
+    ctaTo: "/cobro#send",
+    compareTo: "/alegra-vs-siigo",
+    compareLabel: "Alegra vs Siigo vs Docracy",
+    faqs: [
+      {
+        question: "Will Docracy replace Alegra for SAT invoices?",
+        answer: "No. Alegra (as a PAC) stamps CFDI. We attach the PDF you already have and send your checkout.",
+      },
+      {
+        question: "Is this Stripe Connect?",
+        answer: "No. You paste a checkout URL you already own.",
+      },
+    ],
+    faqsEs: [
+      {
+        question: "¿Docracy reemplaza a Alegra para facturas SAT?",
+        answer: "No. Alegra (como PAC) timbra CFDI. Nosotros adjuntamos el PDF que ya tienes y mandamos tu checkout.",
+      },
+      {
+        question: "¿Esto es Stripe Connect?",
+        answer: "No. Pegas una URL de checkout que ya tienes.",
+      },
+    ],
+  },
+  {
+    slug: "siigo-alternative",
+    competitorName: "Siigo",
+    xDefault: "es",
+    navDesc: "WhatsApp pay page — not DIAN billing.",
+    seoTitle: "Siigo Alternative — WhatsApp Cobro, Not DIAN Billing | Docracy",
+    seoDescription:
+      "Siigo alternative when you need a signed PDF and your pay link on WhatsApp — not a DIAN electronic invoice. $10/mo, 0% of the payment.",
+    heroHeadline: "Siigo files the invoice with DIAN. Docracy sends the file and your checkout.",
+    heroSubheadline:
+      "For US↔Colombia contractors who already have Nequi, Mercado Pago, or PayPal — not a replacement for Siigo’s books.",
+    problem:
+      "Siigo is built for Colombian electronic invoicing at scale, including WhatsApp issuance. That is compliance software. A designer in Bogotá collecting from a US studio usually needs a contract, a PDF, and a pay link — not a DIAN document.",
+    solution:
+      "Docracy: free NDA + contractor agreement, then Paid cobro on WhatsApp with your checkout. We do not submit to DIAN.",
+    comparison: [
+      "No DIAN stamp — we will not pretend otherwise",
+      "File + your checkout on WhatsApp, 30-day reminder, mark paid",
+      "Signing free for two people; Paid keeps the archive",
+      "Spanish /es front door into cobro and constancia",
+      "Siigo is better if you must issue DIAN-authorized invoices",
+    ],
+    ctaLabel: "Send a cobro on WhatsApp",
+    ctaTo: "/cobro#send",
+    compareTo: "/kita-vs-siigo",
+    compareLabel: "Kita vs Siigo vs Docracy",
+    faqs: [
+      {
+        question: "Does Docracy issue a factura electrónica DIAN?",
+        answer: "No. Siigo does. We host the PDF you attach and the pay page.",
+      },
+    ],
+    faqsEs: [
+      {
+        question: "¿Docracy emite factura electrónica DIAN?",
+        answer: "No. Eso lo hace Siigo. Nosotros hospedamos el PDF que adjuntas y la página de cobro.",
+      },
+    ],
+  },
 ];
 
 /** One page per competitor: no "connect your account" button anywhere — confirmed via direct
@@ -3396,6 +3547,9 @@ export const IMPORT_GUIDE_PAGES: ImportGuideContent[] = [
 /** Preferred Compare-nav order — majors first; Contractbook + OnlineSignature included whenever
  *  they have pages (required whenever import guides exist). Unknown slugs append alphabetically. */
 const COMPARE_NAV_ORDER = [
+  "kita-alternative",
+  "alegra-alternative",
+  "siigo-alternative",
   "docusign-alternative",
   "eversign-alternative",
   "hellosign-alternative",

@@ -924,6 +924,10 @@ export default function Dashboard() {
   }, [templateUsage, templates]);
   const topRecurringUsage = recurringQuickActions[0]?.usage;
   const completedDocs = useMemo(() => documents.filter((d) => d.status === "completed"), [documents]);
+  const unpaidCobros = useMemo(
+    () => documents.filter((d) => d.kind === "cobro" && !d.cobroPaidAt),
+    [documents]
+  );
   const visibleDocs = useMemo(() => {
     if (docsSubTab === "awaiting") return awaitingYouDocs;
     if (docsSubTab === "waiting") return waitingOnOthersDocs;
@@ -1457,6 +1461,44 @@ export default function Dashboard() {
                 {t("dash.newDocBtn")}
               </Link>
             </div>
+
+            {account.isPaid && (
+              <div className="card" style={{ marginTop: 24 }} id="por-cobrar">
+                <h3 style={{ fontSize: 15, marginBottom: 4 }}>{t("dash.porCobrar")}</h3>
+                <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 0 }}>{t("dash.porCobrarHint")}</p>
+                {unpaidCobros.length === 0 ? (
+                  <p style={{ fontSize: 13, color: "var(--mute)" }}>{t("dash.porCobrarEmpty")}</p>
+                ) : (
+                  unpaidCobros.map((doc) => (
+                    <div
+                      key={doc.docId}
+                      style={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        gap: 8,
+                        padding: "8px 0",
+                        borderBottom: "1px solid var(--hairline)",
+                      }}
+                    >
+                      <Link to={`/status/${doc.statusToken}`} style={{ overflowWrap: "anywhere" }}>
+                        {doc.title}
+                      </Link>
+                      <button
+                        type="button"
+                        className="btn-secondary"
+                        style={{ padding: "4px 10px", fontSize: 13 }}
+                        disabled={markingPaidDocId === doc.docId}
+                        onClick={() => onMarkCobroPaid(doc)}
+                      >
+                        {markingPaidDocId === doc.docId ? t("common.saving") : t("dash.cobroMarkPaid")}
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
 
             <div className="card" style={{ marginTop: 24 }} id="after-they-sign">
               <h3 style={{ fontSize: 15, marginBottom: 4 }}>{t("dash.corridorEarnTitle")}</h3>

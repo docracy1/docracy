@@ -574,6 +574,36 @@ const routes = [
     alternates: { en: "/pandadoc-alternative", es: "/es/alternativa-a-pandadoc" },
   },
   {
+    urlPath: "/es/alternativa-a-kita",
+    outFile: "es/alternativa-a-kita.html",
+    title: "Alternativa a Kita — cobro por WhatsApp, sin CFDI | Docracy",
+    description:
+      "Alternativa a Kita si necesitas el PDF y tu Mercado Pago por WhatsApp — no un CFDI timbrado. $10/mes, 0% del cobro. Firmar sigue gratis.",
+    locale: "es",
+    alternates: { en: "/kita-alternative", es: "/es/alternativa-a-kita" },
+    xDefault: "es",
+  },
+  {
+    urlPath: "/es/alternativa-a-alegra",
+    outFile: "es/alternativa-a-alegra.html",
+    title: "Alternativa a Alegra — firma y cobro, no contabilidad | Docracy",
+    description:
+      "Alternativa a Alegra cuando necesitas firma y tu link de Mercado Pago — no factura PAC ni libros. Firmar gratis ≤2. $10/mes, 0% de recorte.",
+    locale: "es",
+    alternates: { en: "/alegra-alternative", es: "/es/alternativa-a-alegra" },
+    xDefault: "es",
+  },
+  {
+    urlPath: "/es/alternativa-a-siigo",
+    outFile: "es/alternativa-a-siigo.html",
+    title: "Alternativa a Siigo — cobro por WhatsApp, no factura DIAN | Docracy",
+    description:
+      "Alternativa a Siigo cuando necesitas un PDF firmado y tu link de cobro por WhatsApp — no una factura electrónica DIAN. $10/mes, 0% del cobro.",
+    locale: "es",
+    alternates: { en: "/siigo-alternative", es: "/es/alternativa-a-siigo" },
+    xDefault: "es",
+  },
+  {
     urlPath: "/es/firma-de-nda",
     outFile: "es/firma-de-nda.html",
     title: getFeaturePageContent("nda-signing", "es").seoTitle,
@@ -588,14 +618,6 @@ const routes = [
     description: getFeaturePageContent("client-contracts", "es").seoDescription,
     locale: "es",
     alternates: { en: "/client-contracts", es: "/es/contratos-con-clientes" },
-  },
-  {
-    urlPath: "/es/factura-whatsapp",
-    outFile: "es/factura-whatsapp.html",
-    title: getFeaturePageContent("whatsapp-invoice", "es").seoTitle,
-    description: getFeaturePageContent("whatsapp-invoice", "es").seoDescription,
-    locale: "es",
-    alternates: { en: "/whatsapp-invoice", es: "/es/factura-whatsapp" },
   },
   {
     urlPath: "/es/registros-1099",
@@ -1105,11 +1127,12 @@ const routes = [
       alternates: { en: `/free-templates/${slug}`, es: `/es/plantillas-gratis/${slug}` },
     };
   }),
-  ...[...FEATURE_PAGES, ...ALTERNATIVE_PAGES, ...EXPLAINER_PAGES].map((p) => {
+  ...[...FEATURE_PAGES, ...ALTERNATIVE_PAGES, ...EXPLAINER_PAGES]
+    .filter((p) => p.slug !== "whatsapp-invoice")
+    .map((p) => {
     const bilingual = {
       "nda-signing": { en: "/nda-signing", es: "/es/firma-de-nda" },
       "client-contracts": { en: "/client-contracts", es: "/es/contratos-con-clientes" },
-      "whatsapp-invoice": { en: "/whatsapp-invoice", es: "/es/factura-whatsapp" },
       "1099-contractor-records": { en: "/1099-contractor-records", es: "/es/registros-1099" },
       "hire-contractor-abroad": { en: "/hire-contractor-abroad", es: "/es/contratar-en-el-extranjero" },
       "proof-of-income": { en: "/proof-of-income", es: "/es/prueba-de-ingresos" },
@@ -1122,6 +1145,9 @@ const routes = [
       "adobe-sign-alternative": { en: "/adobe-sign-alternative", es: "/es/alternativa-a-adobe-sign" },
       "eversign-alternative": { en: "/eversign-alternative", es: "/es/alternativa-a-eversign" },
       "pandadoc-alternative": { en: "/pandadoc-alternative", es: "/es/alternativa-a-pandadoc" },
+      "kita-alternative": { en: "/kita-alternative", es: "/es/alternativa-a-kita" },
+      "alegra-alternative": { en: "/alegra-alternative", es: "/es/alternativa-a-alegra" },
+      "siigo-alternative": { en: "/siigo-alternative", es: "/es/alternativa-a-siigo" },
     }[p.slug];
     return {
       urlPath: `/${p.slug}`,
@@ -1133,12 +1159,30 @@ const routes = [
         : {}),
     };
   }),
-  ...SEO_LANDING_PAGES.map((p) => ({
-    urlPath: `/${p.slug}`,
-    outFile: `${p.slug}.html`,
-    title: p.seoTitle,
-    description: p.seoDescription,
-  })),
+  ...SEO_LANDING_PAGES.flatMap((p) => {
+    const en = {
+      urlPath: `/${p.slug}`,
+      outFile: `${p.slug}.html`,
+      title: p.seoTitle,
+      description: p.seoDescription,
+      ...(p.lane === "latam" && p.es
+        ? { locale: "en", alternates: { en: `/${p.slug}`, es: `/es/${p.slug}` }, xDefault: "es" }
+        : {}),
+    };
+    if (p.lane !== "latam" || !p.es) return [en];
+    return [
+      en,
+      {
+        urlPath: `/es/${p.slug}`,
+        outFile: `es/${p.slug}.html`,
+        title: p.es.seoTitle,
+        description: p.es.seoDescription,
+        locale: "es",
+        alternates: { en: `/${p.slug}`, es: `/es/${p.slug}` },
+        xDefault: "es",
+      },
+    ];
+  }),
   ...PARTNER_PAGES.map((p) => ({
     urlPath: `/for/${p.slug}`,
     outFile: `for/${p.slug}.html`,

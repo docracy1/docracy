@@ -9,6 +9,8 @@ export function taxYearToCsv(
     paymentUrl: string;
     expiresAt: string;
     signedPageUrl: string;
+    kind?: "cobro" | "sign";
+    cobroPaidAt?: string;
   }>
 ): string {
   const header = [
@@ -20,6 +22,8 @@ export function taxYearToCsv(
     "amount",
     "currency",
     "paymentUrl",
+    "cobroPaid",
+    "cobroPaidAt",
     "expiresAt",
     "signedPageUrl",
   ];
@@ -35,6 +39,8 @@ export function taxYearToCsv(
         csvCell(d.amount),
         csvCell(d.currency),
         csvCell(d.paymentUrl),
+        csvCell(d.kind === "cobro" ? (d.cobroPaidAt ? "paid" : "unpaid") : ""),
+        csvCell(d.cobroPaidAt ?? ""),
         csvCell(d.expiresAt),
         csvCell(d.signedPageUrl),
       ].join(",")

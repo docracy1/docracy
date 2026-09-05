@@ -1,5 +1,5 @@
 import { renderToStaticMarkup } from "react-dom/server";
-import { MemoryRouter, Routes, Route } from "react-router-dom";
+import { MemoryRouter, Navigate, Routes, Route } from "react-router-dom";
 import Header from "../src/components/Header";
 import Footer from "../src/components/Footer";
 import { LocaleProvider, type Locale } from "../src/lib/i18n";
@@ -157,8 +157,8 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/simple-signing" element={<FeaturePage slug="simple-signing" />} />
           <Route path="/document-verification" element={<FeaturePage slug="document-verification" />} />
           <Route path="/blockchain-timestamp" element={<FeaturePage slug="blockchain-timestamp" />} />
-          <Route path="/whatsapp-invoice" element={<FeaturePage slug="whatsapp-invoice" />} />
-          <Route path="/es/factura-whatsapp" element={<FeaturePage slug="whatsapp-invoice" />} />
+          <Route path="/whatsapp-invoice" element={<Navigate to="/cobro" replace />} />
+          <Route path="/es/factura-whatsapp" element={<Navigate to="/es/cobro" replace />} />
           <Route path="/1099-contractor-records" element={<FeaturePage slug="1099-contractor-records" />} />
           <Route path="/es/registros-1099" element={<FeaturePage slug="1099-contractor-records" />} />
           <Route path="/hire-contractor-abroad" element={<FeaturePage slug="hire-contractor-abroad" />} />
@@ -181,6 +181,9 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/es/alternativa-a-hellosign" element={<AlternativePage slug="hellosign-alternative" />} />
           <Route path="/es/alternativa-a-pandadoc" element={<AlternativePage slug="pandadoc-alternative" />} />
           <Route path="/es/alternativa-a-adobe-sign" element={<AlternativePage slug="adobe-sign-alternative" />} />
+          <Route path="/es/alternativa-a-kita" element={<AlternativePage slug="kita-alternative" />} />
+          <Route path="/es/alternativa-a-alegra" element={<AlternativePage slug="alegra-alternative" />} />
+          <Route path="/es/alternativa-a-siigo" element={<AlternativePage slug="siigo-alternative" />} />
           {IMPORT_GUIDE_PAGES.map((p) => (
             <Route key={p.slug} path={`/import-from-${p.slug}`} element={<ImportGuidePage slug={p.slug} />} />
           ))}
@@ -204,6 +207,9 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/docracy-ueta-compliance" element={<ExplainerPage slug="docracy-ueta-compliance" />} />
           {SEO_LANDING_PAGES.map((page) => (
             <Route key={page.slug} path={`/${page.slug}`} element={<SeoLandingTemplate slug={page.slug} />} />
+          ))}
+          {SEO_LANDING_PAGES.filter((page) => page.lane === "latam").map((page) => (
+            <Route key={`es-${page.slug}`} path={`/es/${page.slug}`} element={<SeoLandingTemplate slug={page.slug} />} />
           ))}
           {PARTNER_PAGES.map((page) => (
             <Route key={page.slug} path={`/for/${page.slug}`} element={<PartnerPage slug={page.slug} />} />

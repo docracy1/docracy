@@ -37,6 +37,7 @@ describe("toPublicConstanciaRow", () => {
       currency: "MXN",
       paymentUrl: "https://paypal.me/studio/150",
       kind: "cobro",
+      cobroPaidAt: "",
     };
     const pub = toPublicConstanciaRow(row);
     expect(pub).toEqual({

@@ -62,12 +62,40 @@ describe("taxYearCsv", () => {
       currency: "USD",
       paymentUrl: "https://paypal.me/x",
       kind: "sign",
+      cobroPaidAt: "",
     };
     const csv = taxYearCsv(2026, [row]);
     expect(csv).toContain('"W-9, ""studio"""');
     expect(csv).toContain('"Ana, LLC"');
     expect(csv.split("\n")[0]).toBe(
-      "year,completedAt,title,counterpartyNames,counterpartyEmails,amount,currency,paymentUrl,expiresAt,signedPageUrl"
+      "year,completedAt,title,counterpartyNames,counterpartyEmails,amount,currency,paymentUrl,cobroPaid,cobroPaidAt,expiresAt,signedPageUrl"
     );
+  });
+
+  it("marks cobro rows paid or unpaid", () => {
+    const base = {
+      docId: "d1",
+      title: "March invoice",
+      completedAt: "2026-03-01T00:00:00.000Z",
+      expiresAt: "2027-04-15T00:00:00.000Z",
+      statusToken: "tok",
+      signedPageUrl: "https://docracy.io/signed/tok",
+      counterparties: [{ name: "Luis", email: "luis@x.com" }],
+      amount: "150.00",
+      currency: "MXN",
+      paymentUrl: "https://mpago.la/x",
+    };
+    const unpaid: TaxYearRow = { ...base, kind: "cobro", cobroPaidAt: "" };
+    const paid: TaxYearRow = {
+      ...base,
+      docId: "d2",
+      kind: "cobro",
+      cobroPaidAt: "2026-03-02T00:00:00.000Z",
+    };
+    const csv = taxYearCsv(2026, [unpaid, paid]);
+    const [header, unpaidLine, paidLine] = csv.trim().split("\n");
+    expect(header).toContain("cobroPaid,cobroPaidAt");
+    expect(unpaidLine).toContain(",unpaid,");
+    expect(paidLine).toContain(",paid,2026-03-02T00:00:00.000Z,");
   });
 });

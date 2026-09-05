@@ -4,6 +4,7 @@
 // JavaScript and would otherwise never be counted at all. Fire-and-forget via ctx.waitUntil so a
 // slow/failing analytics call never delays the actual page response.
 import { FEATURE_PAGES, ALTERNATIVE_PAGES } from "../src/lib/marketingPages";
+import { SEO_LANDING_PAGES } from "../src/lib/seoPages";
 import {
   fetchIndexShell,
   hasFileExtension,
@@ -55,7 +56,9 @@ const TRACKED_ROUTES = new Set([
   "/docracy-ueta-compliance",
   "/es/firma-de-nda",
   "/es/contratos-con-clientes",
-  "/es/factura-whatsapp",
+  "/es/alternativa-a-kita",
+  "/es/alternativa-a-alegra",
+  "/es/alternativa-a-siigo",
   "/es/registros-1099",
   "/es/contratar-en-el-extranjero",
   "/es/prueba-de-ingresos",
@@ -88,8 +91,10 @@ const TRACKED_ROUTES = new Set([
   "/es/constancia",
   // Every FeaturePage/AlternativePage slug is a bare "/<slug>" route (see main.tsx) — derived
   // here so a new marketingPages.ts entry is tracked automatically, with no second file to edit.
-  ...FEATURE_PAGES.map((p) => `/${p.slug}`),
+  ...FEATURE_PAGES.filter((p) => p.slug !== "whatsapp-invoice").map((p) => `/${p.slug}`),
   ...ALTERNATIVE_PAGES.map((p) => `/${p.slug}`),
+  ...SEO_LANDING_PAGES.map((p) => `/${p.slug}`),
+  ...SEO_LANDING_PAGES.filter((p) => p.lane === "latam").map((p) => `/es/${p.slug}`),
 ]);
 
 // Blog posts are published via the self-serve CMS (no deploy needed), so their slugs can't be

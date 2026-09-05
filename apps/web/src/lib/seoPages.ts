@@ -5,16 +5,25 @@ export interface SeoComparisonRow {
   secondCompetitorValue?: string;
 }
 
-export interface SeoLandingPageContent {
-  slug: string;
-  pageType: "vs-competitor";
-  primaryCompetitor: string;
-  secondaryCompetitor: string;
+export type SeoLane = "esign" | "latam";
+
+export interface SeoLandingCopy {
   seoTitle: string;
   seoDescription: string;
   heroHeadline: string;
   heroSubheadline: string;
   comparisonRows: SeoComparisonRow[];
+  faqs?: { question: string; answer: string }[];
+}
+
+export interface SeoLandingPageContent extends SeoLandingCopy {
+  slug: string;
+  pageType: "vs-competitor";
+  primaryCompetitor: string;
+  secondaryCompetitor: string;
+  lane: SeoLane;
+  /** Spanish twin for LATAM cobro/factura compares. ES is x-default on those URLs. */
+  es?: SeoLandingCopy;
 }
 
 const COMPETITORS = ["PandaDoc", "DocuSign", "HelloSign", "Eversign", "SignNow"];
@@ -126,6 +135,7 @@ for (let i = 0; i < COMPETITORS.length; i++) {
     SEO_LANDING_PAGES.push({
       slug: canonicalSlug,
       pageType: "vs-competitor",
+      lane: "esign",
       primaryCompetitor: comp1,
       secondaryCompetitor: comp2,
       seoTitle: override?.seoTitle ?? `${comp1} vs ${comp2}: which is right for you? | Docracy`,
@@ -143,6 +153,299 @@ for (let i = 0; i < COMPETITORS.length; i++) {
   }
 }
 
+const LATAM_FAQS_EN = [
+  {
+    question: "Does Docracy stamp CFDI or a DIAN invoice?",
+    answer:
+      "No. We are not a PAC and we do not file with SAT or DIAN. You paste your own Mercado Pago, PayPal, or Stripe checkout. The PDF and the pay page stay on Docracy.",
+  },
+  {
+    question: "Do you take a cut of the payment?",
+    answer: "No. Paid is $10/month for the product. The money goes to the checkout URL you already own.",
+  },
+  {
+    question: "When should I use Kita or Alegra instead?",
+    answer:
+      "Use them when you need a stamped CFDI or full books. Use Docracy when the job is sign a contract, send the file + your pay link on WhatsApp, and keep the PDF for your accountant.",
+  },
+];
+
+const LATAM_FAQS_ES = [
+  {
+    question: "¿Docracy timbra CFDI o factura DIAN?",
+    answer:
+      "No. No somos PAC ni presentamos ante el SAT o la DIAN. Pegas tu propio checkout de Mercado Pago, PayPal o Stripe. El PDF y la página de cobro quedan en Docracy.",
+  },
+  {
+    question: "¿Se llevan un porcentaje del cobro?",
+    answer: "No. El plan son $10/mes por el producto. El dinero va a la URL de checkout que ya tienes.",
+  },
+  {
+    question: "¿Cuándo usar Kita o Alegra?",
+    answer:
+      "Úsalos cuando necesitas CFDI timbrado o contabilidad. Docracy es firmar el contrato, mandar el archivo + tu link de cobro por WhatsApp, y guardar el PDF para tu contador.",
+  },
+];
+
+function pushLatamVs(
+  a: string,
+  b: string,
+  en: Omit<SeoLandingCopy, "faqs" | "comparisonRows"> & { rows: SeoComparisonRow[] },
+  es: Omit<SeoLandingCopy, "faqs" | "comparisonRows"> & { rows: SeoComparisonRow[] }
+) {
+  const slug = `${slugifyCompetitor(a)}-vs-${slugifyCompetitor(b)}`;
+  SEO_LANDING_PAGES.push({
+    slug,
+    pageType: "vs-competitor",
+    lane: "latam",
+    primaryCompetitor: a,
+    secondaryCompetitor: b,
+    seoTitle: en.seoTitle,
+    seoDescription: en.seoDescription,
+    heroHeadline: en.heroHeadline,
+    heroSubheadline: en.heroSubheadline,
+    comparisonRows: en.rows,
+    faqs: LATAM_FAQS_EN,
+    es: {
+      seoTitle: es.seoTitle,
+      seoDescription: es.seoDescription,
+      heroHeadline: es.heroHeadline,
+      heroSubheadline: es.heroSubheadline,
+      comparisonRows: es.rows,
+      faqs: LATAM_FAQS_ES,
+    },
+  });
+  SEO_VS_REDIRECTS.push({ from: `/${slugifyCompetitor(b)}-vs-${slugifyCompetitor(a)}`, to: `/${slug}` });
+  SEO_VS_REDIRECTS.push({ from: `/es/${slugifyCompetitor(b)}-vs-${slugifyCompetitor(a)}`, to: `/es/${slug}` });
+}
+
+pushLatamVs(
+  "Kita",
+  "Alegra",
+  {
+    seoTitle: "Kita vs Alegra (2026): WhatsApp cobro & CFDI | Docracy",
+    seoDescription:
+      "Kita vs Alegra for Mexican WhatsApp invoicing. Both stamp CFDI. Docracy is file + your Mercado Pago link — no PAC, 0% of the payment.",
+    heroHeadline: "Kita vs Alegra",
+    heroSubheadline:
+      "Both are Mexican billing stacks: WhatsApp in, CFDI out. Docracy is the other job — sign the contract, send the PDF and your checkout, keep the file.",
+    rows: [
+      {
+        feature: "What they actually do",
+        docracyValue: "E-sign + file/pay page on WhatsApp. You paste Mercado Pago or PayPal.",
+        competitorValue: "WhatsApp bot that charges on Mercado Pago and stamps CFDI 4.0",
+        secondCompetitorValue: "Accounting + PAC e-invoicing, with a WhatsApp CFDI bot",
+      },
+      {
+        feature: "CFDI / SAT",
+        docracyValue: "No — not a PAC. Honest limit.",
+        competitorValue: "Yes — CFDI 4.0 via an authorized PAC",
+        secondCompetitorValue: "Yes — Alegra is a PAC; full books + timbres",
+      },
+      {
+        feature: "Who holds the money",
+        docracyValue: "Never Docracy. Your checkout URL.",
+        competitorValue: "Mercado Pago — Kita does not hold funds",
+        secondCompetitorValue: "Alegra billing / connected processors",
+      },
+      {
+        feature: "Price we can state",
+        docracyValue: "Sign free ≤2 people. Paid $10/mo, 0% of the invoice.",
+        competitorValue: "Published ~$500 MXN/mo + Mercado Pago fees (their site)",
+        secondCompetitorValue: "Subscription + timbres — see Alegra pricing",
+      },
+      {
+        feature: "Best fit",
+        docracyValue: "US↔LATAM contractors: NDA, agreement, cobro, constancia, tax-year vault",
+        competitorValue: "MX shop that needs autofactura after a Point or link charge",
+        secondCompetitorValue: "MX/CO business that wants books + stamped invoices",
+      },
+    ],
+  },
+  {
+    seoTitle: "Kita vs Alegra (2026): cobro por WhatsApp y CFDI | Docracy",
+    seoDescription:
+      "Kita vs Alegra para facturar por WhatsApp en México. Ambos timbran CFDI. Docracy es archivo + tu Mercado Pago — sin PAC, 0% del cobro.",
+    heroHeadline: "Kita vs Alegra",
+    heroSubheadline:
+      "Los dos son stacks de facturación: WhatsApp entra, CFDI sale. Docracy es el otro trabajo — firmar el contrato, mandar el PDF y tu checkout, guardar el archivo.",
+    rows: [
+      {
+        feature: "Qué hacen de verdad",
+        docracyValue: "Firma + página de archivo/pago por WhatsApp. Pegas Mercado Pago o PayPal.",
+        competitorValue: "Bot de WhatsApp que cobra en Mercado Pago y timbra CFDI 4.0",
+        secondCompetitorValue: "Contabilidad + factura electrónica PAC, con bot CFDI por WhatsApp",
+      },
+      {
+        feature: "CFDI / SAT",
+        docracyValue: "No — no somos PAC. Límite honesto.",
+        competitorValue: "Sí — CFDI 4.0 con PAC autorizado",
+        secondCompetitorValue: "Sí — Alegra es PAC; libros + timbres",
+      },
+      {
+        feature: "Quién tiene el dinero",
+        docracyValue: "Nunca Docracy. Tu URL de checkout.",
+        competitorValue: "Mercado Pago — Kita no retiene fondos",
+        secondCompetitorValue: "Facturación Alegra / procesadores conectados",
+      },
+      {
+        feature: "Precio que sí podemos afirmar",
+        docracyValue: "Firmar gratis ≤2. Plan $10/mes, 0% de la factura.",
+        competitorValue: "Publican ~$500 MXN/mes + comisión de Mercado Pago",
+        secondCompetitorValue: "Suscripción + timbres — ver precios de Alegra",
+      },
+      {
+        feature: "Para quién",
+        docracyValue: "Contratistas US↔LATAM: NDA, acuerdo, cobro, constancia, archivo fiscal",
+        competitorValue: "Negocio MX que necesita autofactura después de un cobro Point o link",
+        secondCompetitorValue: "Empresa MX/CO que quiere libros + facturas timbradas",
+      },
+    ],
+  }
+);
+
+pushLatamVs(
+  "Kita",
+  "Siigo",
+  {
+    seoTitle: "Kita vs Siigo (2026): WhatsApp invoice MX vs CO | Docracy",
+    seoDescription:
+      "Kita (Mexico CFDI + Mercado Pago) vs Siigo (Colombia DIAN + WhatsApp invoice). Docracy is sign + your pay link — not a tax-authority stamp.",
+    heroHeadline: "Kita vs Siigo",
+    heroSubheadline:
+      "Kita is Mexico CFDI on WhatsApp. Siigo is Colombia e-invoicing at DIAN scale. Docracy does not file with either authority.",
+    rows: [
+      {
+        feature: "Country rail",
+        docracyValue: "Any checkout URL (Mercado Pago, PayPal, Stripe). Currencies labeled.",
+        competitorValue: "Mexico — SAT / CFDI 4.0 + Mercado Pago",
+        secondCompetitorValue: "Colombia first — DIAN electronic invoice + WhatsApp chatbot",
+      },
+      {
+        feature: "Tax stamp",
+        docracyValue: "None. We keep the PDF you attach.",
+        competitorValue: "CFDI timbre",
+        secondCompetitorValue: "DIAN authorization",
+      },
+      {
+        feature: "E-sign + archive",
+        docracyValue: "SES e-sign, cobro without a second signature, tax-year vault + CPA CSV",
+        competitorValue: "Billing assistant, not a signing chain",
+        secondCompetitorValue: "Accounting suite; signing is not the product",
+      },
+      {
+        feature: "Cut of your invoice",
+        docracyValue: "$10/mo, 0% of what they pay you",
+        competitorValue: "Kita subscription; Mercado Pago still takes processor fees",
+        secondCompetitorValue: "Siigo subscription — see their plans",
+      },
+    ],
+  },
+  {
+    seoTitle: "Kita vs Siigo (2026): factura WhatsApp MX vs CO | Docracy",
+    seoDescription:
+      "Kita (CFDI México + Mercado Pago) vs Siigo (DIAN Colombia + factura por WhatsApp). Docracy es firma + tu link de cobro — no un timbre fiscal.",
+    heroHeadline: "Kita vs Siigo",
+    heroSubheadline:
+      "Kita es CFDI de México por WhatsApp. Siigo es facturación DIAN a escala. Docracy no presenta ante ninguna autoridad.",
+    rows: [
+      {
+        feature: "Riel del país",
+        docracyValue: "Cualquier checkout (Mercado Pago, PayPal, Stripe). Monedas etiquetadas.",
+        competitorValue: "México — SAT / CFDI 4.0 + Mercado Pago",
+        secondCompetitorValue: "Colombia primero — factura electrónica DIAN + chatbot WhatsApp",
+      },
+      {
+        feature: "Timbre fiscal",
+        docracyValue: "Ninguno. Conservamos el PDF que adjuntas.",
+        competitorValue: "Timbre CFDI",
+        secondCompetitorValue: "Autorización DIAN",
+      },
+      {
+        feature: "Firma + archivo",
+        docracyValue: "Firma SES, cobro sin segunda firma, archivo fiscal + CSV para el contador",
+        competitorValue: "Asistente de cobro, no una cadena de firmas",
+        secondCompetitorValue: "Suite contable; firmar no es el producto",
+      },
+      {
+        feature: "Recorte de tu factura",
+        docracyValue: "$10/mes, 0% de lo que te pagan",
+        competitorValue: "Suscripción Kita; Mercado Pago cobra su comisión",
+        secondCompetitorValue: "Suscripción Siigo — ver sus planes",
+      },
+    ],
+  }
+);
+
+pushLatamVs(
+  "Alegra",
+  "Siigo",
+  {
+    seoTitle: "Alegra vs Siigo (2026): LATAM accounting & e-invoice | Docracy",
+    seoDescription:
+      "Alegra vs Siigo for books and electronic invoices in LATAM. Docracy is not that suite — it is e-sign, WhatsApp cobro with your checkout, and a shareable archive.",
+    heroHeadline: "Alegra vs Siigo",
+    heroSubheadline:
+      "Two accounting platforms with WhatsApp e-invoice add-ons. Pick them for SAT/DIAN compliance. Pick Docracy to get the contract signed and the file paid.",
+    rows: [
+      {
+        feature: "Core product",
+        docracyValue: "Sequential e-sign + cobro (file + your pay link) + constancia / tax-year locker",
+        competitorValue: "Cloud accounting + CFDI (PAC) across LATAM",
+        secondCompetitorValue: "Cloud accounting + DIAN e-invoicing, large Colombia base",
+      },
+      {
+        feature: "WhatsApp",
+        docracyValue: "Send the pay/sign page on the live invite template. Your checkout.",
+        competitorValue: "Bot to issue CFDI from chat",
+        secondCompetitorValue: "Chatbot to issue a DIAN invoice from chat",
+      },
+      {
+        feature: "What we will not claim",
+        docracyValue: "Not a replacement for your accountant or a PAC",
+        competitorValue: "Not a lightweight signer — it is the books",
+        secondCompetitorValue: "Not a lightweight signer — it is the books",
+      },
+    ],
+  },
+  {
+    seoTitle: "Alegra vs Siigo (2026): contabilidad y factura LATAM | Docracy",
+    seoDescription:
+      "Alegra vs Siigo para libros y factura electrónica en LATAM. Docracy no es esa suite — es firma, cobro por WhatsApp con tu checkout y un archivo para compartir.",
+    heroHeadline: "Alegra vs Siigo",
+    heroSubheadline:
+      "Dos plataformas contables con factura por WhatsApp. Elígelas para SAT/DIAN. Elige Docracy para firmar el contrato y cobrar el archivo.",
+    rows: [
+      {
+        feature: "Producto de fondo",
+        docracyValue: "Firma secuencial + cobro (archivo + tu link) + constancia / casillero fiscal",
+        competitorValue: "Contabilidad en la nube + CFDI (PAC) en LATAM",
+        secondCompetitorValue: "Contabilidad + factura DIAN, base grande en Colombia",
+      },
+      {
+        feature: "WhatsApp",
+        docracyValue: "Manda la página de firma/cobro. Tu checkout.",
+        competitorValue: "Bot para emitir CFDI desde el chat",
+        secondCompetitorValue: "Chatbot para emitir factura DIAN desde el chat",
+      },
+      {
+        feature: "Lo que no afirmamos",
+        docracyValue: "No sustituimos al contador ni a un PAC",
+        competitorValue: "No es un firmante ligero — son los libros",
+        secondCompetitorValue: "No es un firmante ligero — son los libros",
+      },
+    ],
+  }
+);
+
 export function getSeoLandingPage(slug: string): SeoLandingPageContent | undefined {
   return SEO_LANDING_PAGES.find((p) => p.slug === slug);
+}
+
+export function resolveSeoLandingCopy(
+  page: SeoLandingPageContent,
+  locale: "en" | "es"
+): SeoLandingCopy {
+  if (locale === "es" && page.es) return page.es;
+  return page;
 }

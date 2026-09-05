@@ -15,6 +15,7 @@ export interface TaxYearRow {
   currency: string;
   paymentUrl: string;
   kind: "cobro" | "sign";
+  cobroPaidAt: string;
 }
 
 export function parseTaxYear(raw: string | undefined, now = new Date()): number | { error: string } {
@@ -63,6 +64,7 @@ export async function hydrateTaxYearRow(
     currency: payment?.currency ?? "",
     paymentUrl: payment?.url ?? "",
     kind: doc?.kind === "cobro" ? "cobro" : "sign",
+    cobroPaidAt: doc?.kind === "cobro" ? (doc.cobroPaidAt ?? "") : "",
   };
 }
 
@@ -76,6 +78,8 @@ export function taxYearCsv(year: number, documents: TaxYearRow[]): string {
     "amount",
     "currency",
     "paymentUrl",
+    "cobroPaid",
+    "cobroPaidAt",
     "expiresAt",
     "signedPageUrl",
   ];
@@ -91,6 +95,8 @@ export function taxYearCsv(year: number, documents: TaxYearRow[]): string {
         csvCell(d.amount),
         csvCell(d.currency),
         csvCell(d.paymentUrl),
+        csvCell(d.kind === "cobro" ? (d.cobroPaidAt ? "paid" : "unpaid") : ""),
+        csvCell(d.cobroPaidAt),
         csvCell(d.expiresAt),
         csvCell(d.signedPageUrl),
       ].join(",")
