@@ -23,12 +23,15 @@ export type LatamSearchEntry = {
 
 export const LATAM_SEARCH_CHIPS = [
   { q: "I-9", labelKey: "latamSearch.chip.i9" },
+  { q: "acta", labelKey: "latamSearch.chip.acta" },
+  { q: "cita consular", labelKey: "latamSearch.chip.cita" },
   { q: "apostilla México", labelKey: "latamSearch.chip.apostilleMx" },
   { q: "I-94", labelKey: "latamSearch.chip.i94" },
+  { q: "EAD", labelKey: "latamSearch.chip.ead" },
+  { q: "chip", labelKey: "latamSearch.chip.chip" },
   { q: "constancia", labelKey: "latamSearch.chip.constancia" },
   { q: "cobro", labelKey: "latamSearch.chip.cobro" },
   { q: "ITIN", labelKey: "latamSearch.chip.itin" },
-  { q: "DS-160", labelKey: "latamSearch.chip.ceac" },
 ] as const;
 
 const PLAYBOOK_ALIASES: Record<string, string[]> = {
@@ -37,6 +40,29 @@ const PLAYBOOK_ALIASES: Record<string, string[]> = {
   everify: ["e-verify", "everify", "e verify", "verificar empleo"],
   visa: ["visa", "i-129", "i-130", "i-485", "i-864", "peticion", "supporting documents", "documentos para visa"],
   ceac: ["ds-160", "ds160", "ceac", "formulario ds-160", "visa no inmigrante"],
+  cita: [
+    "cita",
+    "cita consular",
+    "consulado",
+    "cas",
+    "ais",
+    "usvisa-info",
+    "ustraveldocs",
+    "entrevista visa",
+    "appointment",
+  ],
+  ead: [
+    "ead",
+    "i-765",
+    "i765",
+    "permiso de trabajo",
+    "work permit",
+    "autorizacion de empleo",
+    "tps",
+    "i-821",
+    "i821",
+    "parole",
+  ],
   uscis: ["uscis", "peticion uscis", "boundless", "citizenpath", "gestoria"],
   uscisAccount: ["cuenta uscis", "myaccount", "e-coa", "eco a"],
   i94: ["i-94", "i94", "admision", "cbp", "ya llegue", "despues de llegar"],
@@ -45,6 +71,31 @@ const PLAYBOOK_ALIASES: Record<string, string[]> = {
   itin: ["itin", "w-7", "w7", "numero de impuesto", "tin sin ssn"],
   w9: ["w-9", "w9", "persona de ee uu", "us person"],
   apostille: ["apostilla", "apostille", "legalizacion", "hcch", "haya"],
+  acta: [
+    "acta",
+    "acta de nacimiento",
+    "acta nacimiento",
+    "birth certificate",
+    "acta de matrimonio",
+    "antecedentes",
+    "renapo",
+    "registro civil",
+    "miregistrocivil",
+  ],
+  phone: [
+    "chip",
+    "esim",
+    "e-sim",
+    "sim",
+    "simcard",
+    "airalo",
+    "holafly",
+    "numero usa",
+    "banco",
+    "abrir cuenta",
+    "bank account",
+    "itin banco",
+  ],
   poa: ["poder", "poder notarial", "power of attorney", "poa"],
   child: ["viaje menor", "child travel", "consentimiento menor", "custodia viaje"],
   lease: ["renta", "arrendamiento", "lease", "roomie", "roommate", "depa"],
@@ -194,7 +245,18 @@ export function foldLatamQuery(q: string): string {
 export function searchLatamIndex(raw: string, limit = 8): LatamSearchEntry[] {
   const q = foldLatamQuery(raw);
   const index = latamSearchIndex();
-  if (!q) return index.filter((e) => e.kind === "door" || e.id === "playbook-i9" || e.id === "playbook-cobro").slice(0, limit);
+  if (!q) {
+    return index
+      .filter(
+        (e) =>
+          e.id === "door-kit" ||
+          e.id === "door-who" ||
+          e.id === "playbook-i9" ||
+          e.id === "playbook-i94" ||
+          e.id === "playbook-acta"
+      )
+      .slice(0, limit);
+  }
 
   const tokens = q.split(" ").filter(Boolean);
   const scored = index

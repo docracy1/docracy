@@ -38,6 +38,16 @@ assert.equal(OFFICIAL_DESTINATIONS.ssn, "https://www.ssa.gov/ssnumber/");
 assert.equal(OFFICIAL_DESTINATIONS.itin, "https://www.irs.gov/tin/itin/how-to-apply-for-an-itin");
 assert.equal(OFFICIAL_DESTINATIONS.w7, "https://www.irs.gov/forms-pubs/about-form-w-7");
 assert.equal(OFFICIAL_DESTINATIONS.w9, "https://www.irs.gov/forms-pubs/about-form-w-9");
+assert.equal(OFFICIAL_DESTINATIONS.actaMx, "https://www.miregistrocivil.gob.mx/");
+assert.equal(OFFICIAL_DESTINATIONS.ais, "https://ais.usvisa-info.com/");
+assert.equal(OFFICIAL_DESTINATIONS.i765, "https://www.uscis.gov/i-765");
+assert.equal(OFFICIAL_DESTINATIONS.tps, "https://www.uscis.gov/humanitarian/temporary-protected-status");
+assert.equal(OFFICIAL_DESTINATIONS.i821, "https://www.uscis.gov/i-821");
+assert.match(OFFICIAL_DESTINATIONS.cfpbBank, /consumerfinance\.gov/);
+assert.ok(WHO_FILES_ROWS.some((r) => r.id === "acta" && r.docracyTo === "/acta"));
+assert.ok(WHO_FILES_ROWS.some((r) => r.id === "cita" && r.officialHref === OFFICIAL_DESTINATIONS.ais));
+assert.ok(WHO_FILES_ROWS.some((r) => r.id === "ead" && r.docracyTo === "/ead-tps"));
+assert.ok(WHO_FILES_ROWS.some((r) => r.id === "phone" && r.docracyTo === "/phone-and-bank"));
 
 assert.ok(WHO_FILES_ROWS.some((r) => r.id === "everify"));
 assert.ok(WHO_FILES_ROWS.every((r) => r.weDontKey.startsWith("whoFiles.weDont.")));

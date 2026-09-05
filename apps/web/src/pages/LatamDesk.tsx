@@ -27,6 +27,10 @@ const ITEMS: Array<{
   { titleKey: "footer.afterArrival", bodyKey: "dash.corridorAfterArrival", to: "/after-arrival", linkKey: "latamDesk.openKit" },
   { titleKey: "footer.whoFiles", bodyKey: "dash.corridorWhoFiles", to: "/who-files-where", linkKey: "latamDesk.openKit" },
   { titleKey: "footer.itin", bodyKey: "dash.corridorItin", to: "/itin", linkKey: "latamDesk.openKit" },
+  { titleKey: "footer.acta", bodyKey: "dash.corridorActa", to: "/acta", linkKey: "latamDesk.openKit" },
+  { titleKey: "footer.cita", bodyKey: "dash.corridorCita", to: "/consular-appointment", linkKey: "latamDesk.openKit" },
+  { titleKey: "footer.eadTps", bodyKey: "dash.corridorEad", to: "/ead-tps", linkKey: "latamDesk.openKit" },
+  { titleKey: "footer.phoneBank", bodyKey: "dash.corridorPhoneBank", to: "/phone-and-bank", linkKey: "latamDesk.openKit" },
   { titleKey: "dash.corridorTradeTitle", bodyKey: "dash.corridorTrade", to: "/packets/latam-trade", linkKey: "latamDesk.openKit" },
 ];
 

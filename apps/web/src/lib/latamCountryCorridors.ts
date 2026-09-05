@@ -461,6 +461,8 @@ export function countryFeaturePage(c: LatamCountryCorridor, locale: "en" | "es")
       { label: es ? "Constancia / renta" : "Lease / constancia", to: "/immigrant-housing" },
       { label: es ? "Cobro" : "Cobro", to: "/cobro" },
       { label: es ? "Firmar I-9" : "Sign I-9", to: "/i-9" },
+      { label: es ? "Acta" : "Acta", to: "/acta" },
+      { label: es ? "Cita consular" : "Consular appointment", to: "/consular-appointment" },
     ],
   };
 }

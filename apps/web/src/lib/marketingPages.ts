@@ -2007,6 +2007,9 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       { label: "Change of address", to: "https://www.uscis.gov/addresschange" },
       { label: "Apply for an ITIN (IRS)", to: "https://www.irs.gov/tin/itin/how-to-apply-for-an-itin" },
       { label: "Who files where", to: "/who-files-where" },
+      { label: "Acta / apostille", to: "/acta" },
+      { label: "EAD / TPS", to: "/ead-tps" },
+      { label: "Phone + bank", to: "/phone-and-bank" },
       { label: "Immigrant plan", to: "/packets/latam-to-us" },
     ],
   },
@@ -2057,6 +2060,205 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       { label: "W-9 template", to: "/free-templates/w-9-form" },
       { label: "After arrival", to: "/after-arrival" },
       { label: "Who files where", to: "/who-files-where" },
+      { label: "Phone + bank", to: "/phone-and-bank" },
+    ],
+  },
+  {
+    slug: "acta",
+    xDefault: "es",
+    seoTitle: "Acta de Nacimiento then Apostille — Official .gob | Docracy",
+    seoDescription:
+      "Get the birth or marriage certificate at origin, then apostille. Mexico: miregistrocivil.gob.mx then SRE. We don't issue or stamp actas. $10/month USD subscription keeps the I-9 and constancia.",
+    heroHeadline: "The acta is your registro civil. The stamp is your foreign ministry.",
+    heroSubheadline:
+      "Mexico issues new actas on miregistrocivil.gob.mx, then SRE apostilles. Other countries: your civil registry, then that corridor’s .gob. We sign I-9 and constancia when you land. We do not stamp.",
+    problem:
+      "Search is gestorías selling ‘acta + apostilla + visa’ as one fee. The state already issues the acta. The stamp is a government portal. Neither is an e-signature product.",
+    solution:
+      "Open the official civil-registry page. Apostille on the country door. Unlock Paid so the I-9, offer, and constancia still exist when HR or the landlord asks. We do not issue actas and we do not apostille.",
+    features: [
+      { title: "Mexico acta (current)", body: "https://www.miregistrocivil.gob.mx/ — gob.mx moved new trámites here 1 Aug 2025." },
+      { title: "Mexico folio follow-up", body: "Older payments: https://www.gob.mx/ActaNacimiento/folioSeguimiento/" },
+      { title: "Then SRE apostille", body: "https://www.gob.mx/sre/acciones-y-programas/apostilla-y-legalizacion-de-documentos — we don't stamp." },
+      { title: "Other origins", body: "Pick the country on /who-files-where. Cuba is MINJUS legalization, not an Apostille." },
+      { title: "When you land", body: "Sign I-9 and share a constancia. Free deletes those PDFs in 9 days — that is the $10 plan." },
+    ],
+    useCases: [
+      "US school or employer asked for an apostilled birth certificate",
+      "POA for family still in LATAM — sign here, apostille at origin",
+      "Just landed and the landlord wants proof you exist + income",
+    ],
+    faqs: [
+      {
+        question: "Do you issue or apostille the acta?",
+        answer: "No. Mexico: miregistrocivil.gob.mx then SRE. Other countries: your registro civil + that corridor’s .gob.",
+      },
+      {
+        question: "Is Cuba an Apostille?",
+        answer: "No. MINJUS legalization. See /cuba-to-us.",
+      },
+      {
+        question: "Spanish URL?",
+        answer: "https://docracy.io/es/acta — plan: /es/kit-llegar-eeuu.",
+      },
+    ],
+    ctaLabel: "Unlock the immigrant plan — $10/month",
+    ctaTo: "/packets/latam-to-us",
+    relatedLinks: [
+      { label: "Mexico Registro Civil (official)", to: "https://www.miregistrocivil.gob.mx/" },
+      { label: "SRE apostille (official)", to: "https://www.gob.mx/sre/acciones-y-programas/apostilla-y-legalizacion-de-documentos" },
+      { label: "Mexico → US door", to: "/mexico-to-us" },
+      { label: "Who files where", to: "/who-files-where" },
+      { label: "Power of attorney", to: "/free-templates/power-of-attorney" },
+      { label: "Immigrant plan", to: "/packets/latam-to-us" },
+    ],
+  },
+  {
+    slug: "consular-appointment",
+    xDefault: "es",
+    seoTitle: "US Consular Appointment — CEAC then AIS | Docracy",
+    seoDescription:
+      "DS-160 on ceac.state.gov, then book on ais.usvisa-info.com (State contractor). We don't buy the slot. We sign the offer and supporting PDFs. $10/month USD subscription.",
+    heroHeadline: "The cita is CEAC, then AIS. Not a gestoría inbox.",
+    heroSubheadline:
+      "Finish DS-160 on CEAC. Book on ais.usvisa-info.com — State’s contractor. Some countries list another host on travel.state.gov. We sign the offer. We do not sell appointments.",
+    problem:
+      "Mexico and Colombia shops sell ‘we get you the cita’ for honorarios in MXN or COP. The calendar is AIS or the contractor State named. Paying a middleman does not create a slot we control.",
+    solution:
+      "You file DS-160 and book. We sign the offer letter and the supporting templates we already ship. Unlock Paid so those PDFs are still here when the consulate or HR asks. We do not invent DS-160 and we do not buy the interview.",
+    features: [
+      { title: "DS-160 (CEAC)", body: "https://ceac.state.gov/genniv/ — the only official DS-160 host." },
+      { title: "Appointments (AIS)", body: "https://ais.usvisa-info.com/ — pick your country on that site." },
+      { title: "Visa types (State)", body: "https://travel.state.gov/content/travel/en/us-visas.html" },
+      { title: "What we sign", body: "Offer, employment agreement, POA, reference, child travel. Not the petition." },
+    ],
+    useCases: [
+      "DS-160 done — need the official appointment host, not a reseller",
+      "Consulate asked for a signed offer or POA",
+      "Gestoría quoted MXN honorarios on top of the $185 USD MRV",
+    ],
+    faqs: [
+      {
+        question: "Do you book the cita?",
+        answer: "No. ais.usvisa-info.com or the contractor travel.state.gov lists for your country.",
+      },
+      {
+        question: "Do you file DS-160?",
+        answer: "No. https://ceac.state.gov/genniv/",
+      },
+      {
+        question: "Spanish URL?",
+        answer: "https://docracy.io/es/cita-consular — plan: /es/kit-llegar-eeuu.",
+      },
+    ],
+    ctaLabel: "Unlock the immigrant plan — $10/month",
+    ctaTo: "/packets/latam-to-us",
+    relatedLinks: [
+      { label: "CEAC DS-160 (official)", to: "https://ceac.state.gov/genniv/" },
+      { label: "AIS appointments (official)", to: "https://ais.usvisa-info.com/" },
+      { label: "US visas (State)", to: "https://travel.state.gov/content/travel/en/us-visas.html" },
+      { label: "Visa supporting docs", to: "/visa-supporting-documents" },
+      { label: "Who files where", to: "/who-files-where" },
+      { label: "Immigrant plan", to: "/packets/latam-to-us" },
+    ],
+  },
+  {
+    slug: "ead-tps",
+    xDefault: "es",
+    seoTitle: "EAD and TPS — Official USCIS I-765 / I-821 | Docracy",
+    seoDescription:
+      "Work permit is Form I-765. TPS is I-821 on uscis.gov — designations change. We don't file. Signing I-9 is not work authorization. $10/month keeps the I-9 when HR asks.",
+    heroHeadline: "EAD and TPS are USCIS. Signing an I-9 is not a permit.",
+    heroSubheadline:
+      "I-765 is the work-permit form. TPS is I-821 — check the live designation list. We link the official pages. We do not file. The employer still wants Section 1; free deletes that PDF in 9 days.",
+    problem:
+      "TPS and parole headlines bury the I-9. People download a random I-765 and think e-sign equals an EAD. It doesn't. Designations and editions change (USCIS rejected old I-765 editions after 15 Sep 2026).",
+    solution:
+      "File I-765 / I-821 on myaccount.uscis.gov from the current USCIS edition. Sign the official I-9 here for the employer. Unlock Paid so that I-9 is still here when they ask. We do not grant work authorization and we do not run E-Verify.",
+    features: [
+      { title: "Form I-765", body: "https://www.uscis.gov/i-765 — use the edition USCIS is accepting today." },
+      { title: "TPS (live list)", body: "https://www.uscis.gov/humanitarian/temporary-protected-status — countries change." },
+      { title: "Form I-821", body: "https://www.uscis.gov/i-821 — often filed with I-765." },
+      { title: "USCIS account", body: "https://myaccount.uscis.gov/ — we cannot open or recover it." },
+      { title: "I-9 is separate", body: "Official USCIS I-9 in our catalog. Not E-Verify. Not a substitute EAD." },
+    ],
+    useCases: [
+      "Employer asked for an I-9 the same week TPS news hit WhatsApp",
+      "Need the official I-765 URL, not a blog PDF",
+      "Keep the signed I-9 past 9 days when HR asks again",
+    ],
+    faqs: [
+      {
+        question: "Do you file I-765 or I-821?",
+        answer: "No. https://www.uscis.gov/i-765 and https://www.uscis.gov/i-821",
+      },
+      {
+        question: "Does signing I-9 authorize work?",
+        answer: "No. See /trust. We don't inspect List A/B/C and we don't run E-Verify.",
+      },
+      {
+        question: "Spanish URL?",
+        answer: "https://docracy.io/es/ead-tps — plan: /es/kit-llegar-eeuu.",
+      },
+    ],
+    ctaLabel: "Unlock the immigrant plan — $10/month",
+    ctaTo: "/packets/latam-to-us",
+    relatedLinks: [
+      { label: "Form I-765 (USCIS)", to: "https://www.uscis.gov/i-765" },
+      { label: "Temporary Protected Status (USCIS)", to: "https://www.uscis.gov/humanitarian/temporary-protected-status" },
+      { label: "Form I-821 (USCIS)", to: "https://www.uscis.gov/i-821" },
+      { label: "Sign I-9", to: "/i-9" },
+      { label: "Who files where", to: "/who-files-where" },
+      { label: "Immigrant plan", to: "/packets/latam-to-us" },
+    ],
+  },
+  {
+    slug: "phone-and-bank",
+    xDefault: "es",
+    seoTitle: "US Phone then Bank — We Don't Sell eSIMs | Docracy",
+    seoDescription:
+      "Get a US number, then a bank. We don't sell chips or open accounts. CFPB explains ID + SSN or ITIN. The $10/month plan is the constancia the landlord wants — not Airalo.",
+    heroHeadline: "Chip first. Bank second. Constancia is what we sell.",
+    heroSubheadline:
+      "Most banks want a US number. We do not sell eSIMs and we do not open accounts. CFPB lists what banks often ask. The landlord still wants a constancia URL from the same $10 plan.",
+    problem:
+      "Day-zero search is Airalo and ‘chip USA’. That is a carrier. Then a bank. Then a Houston landlord who wants a W-2. We are none of the first two. We are the third file.",
+    solution:
+      "Buy a number from a carrier — not us. Open the account at a bank that accepts your ID + SSN or ITIN (CFPB). Share a Paid constancia when they ask for income. We do not affiliate SIMs and we do not notarize bank letters.",
+    features: [
+      { title: "We don't sell chips", body: "No Airalo, Holafly, or carrier checkout. Get a number wherever you already trust." },
+      { title: "CFPB — opening an account", body: "https://www.consumerfinance.gov/consumer-tools/educator-tools/adult-financial-education/ — photo ID + SSN or ITIN is common." },
+      { title: "ITIN if no SSN", body: "IRS W-7 on IRS.gov. We don't file it. Door: /itin." },
+      { title: "Landlord packet", body: "Constancia is Paid. Not a bank letter. Some landlords still want a statement — send both." },
+    ],
+    useCases: [
+      "Landed yesterday, WhatsApp still on a MX number, bank wants a US one",
+      "Bank asked for ITIN — official W-7 is IRS, not us",
+      "Landlord rejected chat screenshots — constancia URL + optional bank PDF",
+    ],
+    faqs: [
+      {
+        question: "Do you sell an eSIM?",
+        answer: "No. We don't take a cut of a carrier and we don't recommend one.",
+      },
+      {
+        question: "Do you open the bank account?",
+        answer: "No. CFPB: https://www.consumerfinance.gov/consumer-tools/educator-tools/adult-financial-education/",
+      },
+      {
+        question: "Spanish URL?",
+        answer: "https://docracy.io/es/chip-y-banco — constancia: /es/constancia. Plan: /es/kit-llegar-eeuu.",
+      },
+    ],
+    ctaLabel: "Unlock the immigrant plan — $10/month",
+    ctaTo: "/packets/latam-to-us",
+    relatedLinks: [
+      { label: "CFPB financial education (official)", to: "https://www.consumerfinance.gov/consumer-tools/educator-tools/adult-financial-education/" },
+      { label: "ITIN (IRS W-7)", to: "/itin" },
+      { label: "Constancia", to: "/income-proof" },
+      { label: "After arrival", to: "/after-arrival" },
+      { label: "Who files where", to: "/who-files-where" },
+      { label: "Immigrant plan", to: "/packets/latam-to-us" },
     ],
   },
   ...generatedCountryPages("en") as FeaturePageContent[],
@@ -3066,6 +3268,9 @@ export function getAfterArrivalPageEs(): FeaturePageContent {
       { label: "Cambio de domicilio", to: "https://www.uscis.gov/addresschange" },
       { label: "Pedir un ITIN (IRS)", to: "https://www.irs.gov/tin/itin/how-to-apply-for-an-itin" },
       { label: "Quién sube dónde", to: "/who-files-where" },
+      { label: "Acta / apostilla", to: "/acta" },
+      { label: "EAD / TPS", to: "/ead-tps" },
+      { label: "Chip y banco", to: "/phone-and-bank" },
       { label: "Plan inmigrante", to: "/packets/latam-to-us" },
     ],
   };
@@ -3119,6 +3324,217 @@ export function getItinPageEs(): FeaturePageContent {
       { label: "Plantilla W-9", to: "/free-templates/w-9-form" },
       { label: "Después de llegar", to: "/after-arrival" },
       { label: "Quién sube dónde", to: "/who-files-where" },
+      { label: "Chip y banco", to: "/phone-and-bank" },
+    ],
+  };
+}
+
+export function getActaPageEs(): FeaturePageContent {
+  return {
+    slug: "acta",
+    xDefault: "es",
+    seoTitle: "Acta de nacimiento y luego apostilla — .gob oficial | Docracy",
+    seoDescription:
+      "Saca el acta en origen y luego apostíllala. México: miregistrocivil.gob.mx y SRE. No emitimos ni timbramos actas. La suscripción de USD $10/mes guarda el I-9 y la constancia.",
+    heroHeadline: "El acta es tu registro civil. El sello es tu cancillería.",
+    heroSubheadline:
+      "México emite actas nuevas en miregistrocivil.gob.mx; SRE apostilla. Otros países: tu registro civil y el .gob del corredor. Firmamos I-9 y constancia al llegar. No timbramos.",
+    problem:
+      "Google es gestorías que venden ‘acta + apostilla + visa’ en un solo cobro. El Estado ya emite el acta. El sello es un portal de gobierno. Ninguno es un producto de firma.",
+    solution:
+      "Abre la página oficial del registro civil. Apostilla en la puerta del país. Activa el plan para que el I-9, la oferta y la constancia existan cuando HR o el arrendador pregunten. No emitimos actas ni apostillamos.",
+    features: [
+      { title: "Acta México (vigente)", body: "https://www.miregistrocivil.gob.mx/ — gob.mx movió trámites nuevos el 1 ago 2025." },
+      { title: "Folio de seguimiento", body: "Pagos viejos: https://www.gob.mx/ActaNacimiento/folioSeguimiento/" },
+      { title: "Luego apostilla SRE", body: "https://www.gob.mx/sre/acciones-y-programas/apostilla-y-legalizacion-de-documentos — no timbramos." },
+      { title: "Otros orígenes", body: "Elige el país en /es/quien-sube-donde. Cuba es legalización MINJUS, no Apostilla." },
+      { title: "Cuando llegas", body: "Firma el I-9 y comparte constancia. Gratis borra esos PDF a los 9 días — por eso el plan de $10." },
+    ],
+    useCases: [
+      "La escuela o el empleador en EE. UU. pidió acta apostillada",
+      "Poder para la familia en LATAM — fírmalo aquí, apostilla en origen",
+      "Ya llegaste y el arrendador quiere prueba de que existes + ingresos",
+    ],
+    faqs: [
+      {
+        question: "¿Emiten o apostillan el acta?",
+        answer: "No. México: miregistrocivil.gob.mx y luego SRE. Otros países: tu registro civil + el .gob del corredor.",
+      },
+      {
+        question: "¿Cuba es Apostilla?",
+        answer: "No. Legalización MINJUS. Ver /es/cuba-a-eeuu.",
+      },
+      {
+        question: "¿URL en español?",
+        answer: "https://docracy.io/es/acta — plan: /es/kit-llegar-eeuu.",
+      },
+    ],
+    ctaLabel: "Desbloquear el plan inmigrante — $10/mes",
+    ctaTo: "/packets/latam-to-us",
+    relatedLinks: [
+      { label: "Registro Civil México (oficial)", to: "https://www.miregistrocivil.gob.mx/" },
+      { label: "Apostilla SRE (oficial)", to: "https://www.gob.mx/sre/acciones-y-programas/apostilla-y-legalizacion-de-documentos" },
+      { label: "México → EE. UU.", to: "/mexico-to-us" },
+      { label: "Quién sube dónde", to: "/who-files-where" },
+      { label: "Poder notarial", to: "/free-templates/power-of-attorney" },
+      { label: "Plan inmigrante", to: "/packets/latam-to-us" },
+    ],
+  };
+}
+
+export function getConsularAppointmentPageEs(): FeaturePageContent {
+  return {
+    slug: "consular-appointment",
+    xDefault: "es",
+    seoTitle: "Cita consular EE. UU. — CEAC y luego AIS | Docracy",
+    seoDescription:
+      "DS-160 en ceac.state.gov; agenda en ais.usvisa-info.com (contratista de State). No compramos el cupo. Firmamos la oferta y los PDFs de apoyo. Suscripción de USD $10/mes.",
+    heroHeadline: "La cita es CEAC y luego AIS. No el inbox de una gestoría.",
+    heroSubheadline:
+      "Termina el DS-160 en CEAC. Agenda en ais.usvisa-info.com — contratista de State. Algunos países listan otro host en travel.state.gov. Firmamos la oferta. No vendemos citas.",
+    problem:
+      "En México y Colombia venden ‘te conseguimos la cita’ por honorarios en MXN o COP. El calendario es AIS o el contratista que State nombró. Pagar al intermediario no crea un cupo que controlemos.",
+    solution:
+      "Tú subes el DS-160 y agendas. Firmamos la carta de oferta y las plantillas de apoyo que ya tenemos. Activa el plan para que esos PDF sigan aquí cuando el consulado o HR pregunten. No inventamos el DS-160 ni compramos la entrevista.",
+    features: [
+      { title: "DS-160 (CEAC)", body: "https://ceac.state.gov/genniv/ — el único host oficial del DS-160." },
+      { title: "Citas (AIS)", body: "https://ais.usvisa-info.com/ — elige tu país en ese sitio." },
+      { title: "Tipos de visa (State)", body: "https://travel.state.gov/content/travel/en/us-visas.html" },
+      { title: "Lo que firmamos", body: "Oferta, acuerdo, poder, referencia, viaje de menor. No la petición." },
+    ],
+    useCases: [
+      "Ya hiciste el DS-160 — necesitas el host oficial, no un revendedor",
+      "El consulado pidió oferta o poder firmado",
+      "La gestoría cotizó honorarios en MXN encima de los $185 USD del MRV",
+    ],
+    faqs: [
+      {
+        question: "¿Agendan la cita?",
+        answer: "No. ais.usvisa-info.com o el contratista que travel.state.gov liste para tu país.",
+      },
+      {
+        question: "¿Presentan el DS-160?",
+        answer: "No. https://ceac.state.gov/genniv/",
+      },
+      {
+        question: "¿URL en español?",
+        answer: "https://docracy.io/es/cita-consular — plan: /es/kit-llegar-eeuu.",
+      },
+    ],
+    ctaLabel: "Desbloquear el plan inmigrante — $10/mes",
+    ctaTo: "/packets/latam-to-us",
+    relatedLinks: [
+      { label: "DS-160 CEAC (oficial)", to: "https://ceac.state.gov/genniv/" },
+      { label: "Citas AIS (oficial)", to: "https://ais.usvisa-info.com/" },
+      { label: "Visas EE. UU. (State)", to: "https://travel.state.gov/content/travel/en/us-visas.html" },
+      { label: "Documentos para visa", to: "/visa-supporting-documents" },
+      { label: "Quién sube dónde", to: "/who-files-where" },
+      { label: "Plan inmigrante", to: "/packets/latam-to-us" },
+    ],
+  };
+}
+
+export function getEadTpsPageEs(): FeaturePageContent {
+  return {
+    slug: "ead-tps",
+    xDefault: "es",
+    seoTitle: "EAD y TPS — I-765 / I-821 oficiales de USCIS | Docracy",
+    seoDescription:
+      "El permiso de trabajo es el I-765. El TPS es el I-821 en uscis.gov — las designaciones cambian. No presentamos. Firmar I-9 no autoriza a trabajar. $10/mes guarda el I-9 cuando HR lo pida.",
+    heroHeadline: "EAD y TPS son USCIS. Firmar un I-9 no es un permiso.",
+    heroSubheadline:
+      "El I-765 es el permiso de trabajo. El TPS es el I-821 — revisa la lista vigente. Enlazamos las páginas oficiales. No presentamos. El empleador igual quiere la Sección 1; gratis borra ese PDF a los 9 días.",
+    problem:
+      "Los titulares de TPS y parole tapan el I-9. La gente baja un I-765 cualquiera y cree que firmarlo es un EAD. No lo es. Las designaciones y ediciones cambian (USCIS rechazó ediciones viejas del I-765 después del 15 sep 2026).",
+    solution:
+      "Presenta I-765 / I-821 en myaccount.uscis.gov con la edición que USCIS acepte hoy. Firma el I-9 oficial aquí para el empleador. Activa el plan para que ese I-9 siga aquí cuando lo pidan. No concedemos autorización de trabajo ni corremos E-Verify.",
+    features: [
+      { title: "Formulario I-765", body: "https://www.uscis.gov/i-765 — usa la edición que USCIS acepte hoy." },
+      { title: "TPS (lista viva)", body: "https://www.uscis.gov/humanitarian/temporary-protected-status — los países cambian." },
+      { title: "Formulario I-821", body: "https://www.uscis.gov/i-821 — a menudo se presenta con el I-765." },
+      { title: "Cuenta USCIS", body: "https://myaccount.uscis.gov/ — no la abrimos ni la recuperamos." },
+      { title: "El I-9 es aparte", body: "I-9 oficial de USCIS en el catálogo. No es E-Verify. No sustituye el EAD." },
+    ],
+    useCases: [
+      "El empleador pidió I-9 la misma semana que el WhatsApp se llenó de TPS",
+      "Necesitas la URL oficial del I-765, no el PDF de un blog",
+      "Conservar el I-9 firmado más de 9 días cuando HR vuelve a pedirlo",
+    ],
+    faqs: [
+      {
+        question: "¿Presentan el I-765 o el I-821?",
+        answer: "No. https://www.uscis.gov/i-765 y https://www.uscis.gov/i-821",
+      },
+      {
+        question: "¿Firmar el I-9 autoriza a trabajar?",
+        answer: "No. Ver /trust. No inspeccionamos Listas A/B/C ni corremos E-Verify.",
+      },
+      {
+        question: "¿URL en español?",
+        answer: "https://docracy.io/es/ead-tps — plan: /es/kit-llegar-eeuu.",
+      },
+    ],
+    ctaLabel: "Desbloquear el plan inmigrante — $10/mes",
+    ctaTo: "/packets/latam-to-us",
+    relatedLinks: [
+      { label: "Formulario I-765 (USCIS)", to: "https://www.uscis.gov/i-765" },
+      { label: "Temporary Protected Status (USCIS)", to: "https://www.uscis.gov/humanitarian/temporary-protected-status" },
+      { label: "Formulario I-821 (USCIS)", to: "https://www.uscis.gov/i-821" },
+      { label: "Firmar I-9", to: "/i-9" },
+      { label: "Quién sube dónde", to: "/who-files-where" },
+      { label: "Plan inmigrante", to: "/packets/latam-to-us" },
+    ],
+  };
+}
+
+export function getPhoneAndBankPageEs(): FeaturePageContent {
+  return {
+    slug: "phone-and-bank",
+    xDefault: "es",
+    seoTitle: "Chip y luego banco — no vendemos eSIM | Docracy",
+    seoDescription:
+      "Consigue un número de EE. UU. y luego un banco. No vendemos chips ni abrimos cuentas. El CFPB explica ID + SSN o ITIN. El plan de $10/mes es la constancia que quiere el arrendador — no Airalo.",
+    heroHeadline: "Primero el chip. Luego el banco. La constancia es lo que cobramos.",
+    heroSubheadline:
+      "Casi todo banco pide un número de EE. UU. No vendemos eSIM ni abrimos cuentas. El CFPB lista lo que suelen pedir. El arrendador igual quiere la URL de constancia del mismo plan de $10.",
+    problem:
+      "El día cero en Google es Airalo y ‘chip USA’. Eso es un carrier. Luego un banco. Luego un landlord en Houston que pide W-2. Nosotros no somos los dos primeros. Somos el tercer archivo.",
+    solution:
+      "Compra el número donde ya confíes — no aquí. Abre la cuenta en un banco que acepte tu ID + SSN o ITIN (CFPB). Comparte una constancia de pago cuando pidan ingresos. No somos afiliados de SIM y no notariamos cartas de banco.",
+    features: [
+      { title: "No vendemos chips", body: "Ni Airalo, ni Holafly, ni checkout de carrier. El número lo sacas donde ya confíes." },
+      { title: "CFPB — abrir una cuenta", body: "https://www.consumerfinance.gov/consumer-tools/educator-tools/adult-financial-education/ — ID con foto + SSN o ITIN es lo común." },
+      { title: "ITIN si no hay SSN", body: "W-7 del IRS en IRS.gov. No lo presentamos. Puerta: /es/itin." },
+      { title: "Paquete del arrendador", body: "La constancia es de pago. No es carta de banco. Algunos igual piden estado de cuenta — manda ambos." },
+    ],
+    useCases: [
+      "Llegaste ayer, WhatsApp sigue en número MX, el banco pide uno de EE. UU.",
+      "El banco pidió ITIN — el W-7 oficial es el IRS, no nosotros",
+      "El arrendador rechazó capturas del chat — URL de constancia + estado de cuenta si lo tienes",
+    ],
+    faqs: [
+      {
+        question: "¿Venden eSIM?",
+        answer: "No. No nos quedamos un porcentaje del carrier y no recomendamos uno.",
+      },
+      {
+        question: "¿Abren la cuenta de banco?",
+        answer: "No. CFPB: https://www.consumerfinance.gov/consumer-tools/educator-tools/adult-financial-education/",
+      },
+      {
+        question: "¿URL en español?",
+        answer: "https://docracy.io/es/chip-y-banco — constancia: /es/constancia. Plan: /es/kit-llegar-eeuu.",
+      },
+    ],
+    ctaLabel: "Desbloquear el plan inmigrante — $10/mes",
+    ctaTo: "/packets/latam-to-us",
+    relatedLinks: [
+      { label: "Educación financiera CFPB (oficial)", to: "https://www.consumerfinance.gov/consumer-tools/educator-tools/adult-financial-education/" },
+      { label: "ITIN (W-7 del IRS)", to: "/itin" },
+      { label: "Constancia", to: "/income-proof" },
+      { label: "Después de llegar", to: "/after-arrival" },
+      { label: "Quién sube dónde", to: "/who-files-where" },
+      { label: "Plan inmigrante", to: "/packets/latam-to-us" },
     ],
   };
 }
@@ -3144,6 +3560,10 @@ const ES_FEATURE_GETTERS: Record<string, () => FeaturePageContent> = {
   "immigrant-housing": getImmigrantHousingPageEs,
   "after-arrival": getAfterArrivalPageEs,
   "itin": getItinPageEs,
+  "acta": getActaPageEs,
+  "consular-appointment": getConsularAppointmentPageEs,
+  "ead-tps": getEadTpsPageEs,
+  "phone-and-bank": getPhoneAndBankPageEs,
   ...Object.fromEntries(
     GENERATED_COUNTRY_CORRIDORS.map((c) => [c.slug, () => countryFeaturePage(c, "es") as FeaturePageContent])
   ),

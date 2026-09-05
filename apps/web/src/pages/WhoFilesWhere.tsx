@@ -174,6 +174,14 @@ export default function WhoFilesWhere() {
           {" · "}
           <Link to={localizePath("/itin", locale)}>{t("footer.itin")}</Link>
           {" · "}
+          <Link to={localizePath("/acta", locale)}>{t("footer.acta")}</Link>
+          {" · "}
+          <Link to={localizePath("/consular-appointment", locale)}>{t("footer.cita")}</Link>
+          {" · "}
+          <Link to={localizePath("/ead-tps", locale)}>{t("footer.eadTps")}</Link>
+          {" · "}
+          <Link to={localizePath("/phone-and-bank", locale)}>{t("footer.phoneBank")}</Link>
+          {" · "}
           <Link to={localizePath("/i-9", locale)}>{t("footer.i9")}</Link>
         </p>
 

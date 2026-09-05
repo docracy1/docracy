@@ -84,6 +84,10 @@ for (const line of [
   "/es/quien-presenta  /es/quien-sube-donde  301",
   "/where-each-file-goes  /who-files-where  301",
   "/es/busca  /es/buscar  301",
+  "/es/acta-nacimiento  /es/acta  301",
+  "/es/cita  /es/cita-consular  301",
+  "/es/permiso-de-trabajo  /es/ead-tps  301",
+  "/es/esim  /es/chip-y-banco  301",
 ]) {
   assert.ok(redirects.includes(line), `missing one-hop redirect: ${line}`);
 }
@@ -100,7 +104,17 @@ buildSync({
 });
 const { FEATURE_PAGES, getFeaturePageContent, LATAM_COUNTRY_CORRIDORS, GENERATED_COUNTRY_CORRIDORS } =
   createRequire(import.meta.url)(marketingOut);
-for (const slug of ["mexico-to-us", "colombia-to-us", "immigrant-housing", "after-arrival", "itin"]) {
+for (const slug of [
+  "mexico-to-us",
+  "colombia-to-us",
+  "immigrant-housing",
+  "after-arrival",
+  "itin",
+  "acta",
+  "consular-appointment",
+  "ead-tps",
+  "phone-and-bank",
+]) {
   const en = FEATURE_PAGES.find((p) => p.slug === slug);
   assert.ok(en, `missing FEATURE_PAGES ${slug}`);
   assert.equal(en.xDefault, "es", `${slug} x-default must be Spanish`);
@@ -127,6 +141,28 @@ assert.ok(
 assert.ok(
   getFeaturePageContent("itin", "es").relatedLinks.some((l) => l.to === "/who-files-where"),
   "itin must point at the who-files-where checklist"
+);
+assert.ok(
+  getFeaturePageContent("acta", "es").relatedLinks.some((l) => l.to === "https://www.miregistrocivil.gob.mx/"),
+  "acta must link Mexico Registro Civil"
+);
+assert.ok(
+  getFeaturePageContent("consular-appointment", "es").relatedLinks.some((l) => l.to === "https://ais.usvisa-info.com/"),
+  "cita must link AIS"
+);
+assert.ok(
+  getFeaturePageContent("ead-tps", "es").relatedLinks.some((l) => l.to === "https://www.uscis.gov/i-765"),
+  "ead-tps must link I-765"
+);
+assert.ok(
+  getFeaturePageContent("phone-and-bank", "es").relatedLinks.some((l) =>
+    l.to.startsWith("https://www.consumerfinance.gov/")
+  ),
+  "phone-and-bank must link CFPB, not a carrier"
+);
+assert.ok(
+  !getFeaturePageContent("phone-and-bank", "es").relatedLinks.some((l) => /airalo|holafly|visible/i.test(l.to)),
+  "no eSIM affiliate"
 );
 
 assert.equal(LATAM_COUNTRY_CORRIDORS.length, 18, "Spanish LATAM catalog (MX+CO handmade + 16 generated)");
