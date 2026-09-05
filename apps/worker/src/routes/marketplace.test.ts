@@ -294,3 +294,44 @@ describe("marketplace admin review flow", () => {
     expect(second.status).toBe(404);
   });
 });
+
+describe("GET /api/marketplace/sitemap.xml", () => {
+  it("lists approved weekly and community slugs", async () => {
+    const { env, d1 } = makeMockEnv();
+    const now = new Date().toISOString();
+    await d1
+      .prepare(
+        `INSERT INTO marketplace_templates
+          (id, account_id, slug, title, category, description, signer_count, page_count, fields,
+           status, submitted_at, reviewed_at, origin)
+         VALUES (?, NULL, ?, ?, ?, ?, 2, 1, '[]', 'approved', ?, ?, 'weekly')`
+      )
+      .bind("mt-weekly-sm", "weekly-sitemap-row", "Weekly Sitemap", "Consulting", "Weekly.", now, now)
+      .run();
+    await d1
+      .prepare(
+        `INSERT INTO marketplace_templates
+          (id, account_id, slug, title, category, description, signer_count, page_count, fields,
+           status, submitted_at, reviewed_at, origin)
+         VALUES (?, NULL, ?, ?, ?, ?, 2, 1, '[]', 'approved', ?, ?, 'community')`
+      )
+      .bind("mt-comm-sm", "community-sitemap-row", "Community Sitemap", "Consulting", "Community.", now, now)
+      .run();
+    await d1
+      .prepare(
+        `INSERT INTO marketplace_templates
+          (id, account_id, slug, title, category, description, signer_count, page_count, fields,
+           status, submitted_at, reviewed_at, origin)
+         VALUES (?, NULL, ?, ?, ?, ?, 2, 1, '[]', 'pending', ?, ?, 'community')`
+      )
+      .bind("mt-pend-sm", "pending-sitemap-row", "Pending Sitemap", "Consulting", "Pending.", now, now)
+      .run();
+
+    const res = await marketplacePublic.request("/sitemap.xml", {}, env, MOCK_CTX);
+    expect(res.status).toBe(200);
+    const xml = await res.text();
+    expect(xml).toContain("https://docracy.io/free-templates/weekly-sitemap-row");
+    expect(xml).toContain("https://docracy.io/free-templates/community-sitemap-row");
+    expect(xml).not.toContain("pending-sitemap-row");
+  });
+});
