@@ -28,6 +28,14 @@ for (const slug of ["kita-vs-alegra", "kita-vs-siigo", "alegra-vs-siigo"]) {
   assert.equal(es.seoTitle, page.es.seoTitle);
 }
 
+{
+  const page = getSeoLandingPage("boundless-vs-citizenpath");
+  assert.ok(page, "missing boundless-vs-citizenpath");
+  assert.equal(page.lane, "immigrant");
+  assert.ok(page.es?.seoTitle, "boundless-vs-citizenpath needs Spanish copy");
+  assert.equal(resolveSeoLandingCopy(page, "es").seoTitle, page.es.seoTitle);
+}
+
 assert.deepEqual(
   SEO_VS_REDIRECTS.filter((r) => r.to.includes("kita-vs-alegra") || r.to.includes("kita-vs-siigo") || r.to.includes("alegra-vs-siigo")),
   [
@@ -40,7 +48,13 @@ assert.deepEqual(
   ]
 );
 
-assert.ok(SEO_LANDING_PAGES.every((p) => p.lane === "esign" || p.lane === "latam"));
+assert.ok(SEO_LANDING_PAGES.every((p) => p.lane === "esign" || p.lane === "latam" || p.lane === "immigrant"));
+assert.ok(
+  SEO_VS_REDIRECTS.some((r) => r.from === "/citizenpath-vs-boundless" && r.to === "/boundless-vs-citizenpath")
+);
+assert.ok(
+  SEO_VS_REDIRECTS.some((r) => r.from === "/es/citizenpath-vs-boundless" && r.to === "/es/boundless-vs-citizenpath")
+);
 
 const redirects = fs.readFileSync(path.join(__dirname, "../public/_redirects"), "utf8");
 for (const line of [
@@ -54,6 +68,10 @@ for (const line of [
   "/es/i-9  /es/formulario-i-9  301",
   "/visa-documents  /visa-supporting-documents  301",
   "/es/documentos-visa  /es/documentos-para-visa  301",
+  "/boundless  /boundless-alternative  301",
+  "/es/boundless  /es/alternativa-a-boundless  301",
+  "/citizenpath-vs-boundless  /boundless-vs-citizenpath  301",
+  "/es/gestoria-de-visa  /es/alternativa-a-gestoria-de-visa  301",
 ]) {
   assert.ok(redirects.includes(line), `missing one-hop redirect: ${line}`);
 }

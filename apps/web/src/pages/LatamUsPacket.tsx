@@ -1,11 +1,18 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { fetchMe, startCheckout, type Account } from "../lib/api";
 import { localizePath, useI18n } from "../lib/i18n";
 import { usePageMeta } from "../lib/usePageMeta";
 import { track } from "../lib/track";
 import { breadcrumbJsonLd, howToJsonLd } from "../lib/productSeo";
 
-const FAQ_COUNT = 5;
+const FAQ_COUNT = 8;
+
+const PLAN_INCLUDES = [
+  { titleKey: "latamUsPacket.include1.title", bodyKey: "latamUsPacket.include1.body" },
+  { titleKey: "latamUsPacket.include2.title", bodyKey: "latamUsPacket.include2.body" },
+  { titleKey: "latamUsPacket.include3.title", bodyKey: "latamUsPacket.include3.body" },
+] as const;
 
 const STEPS: Array<{ titleKey: string; bodyKey: string; to: string; ctaKey: string }> = [
   {
@@ -40,6 +47,70 @@ const STEPS: Array<{ titleKey: string; bodyKey: string; to: string; ctaKey: stri
   },
 ];
 
+const SEND_TO: Array<{
+  titleKey: string;
+  bodyKey: string;
+  officialHref?: string;
+  officialKey?: string;
+  docracyTo?: string;
+  docracyCtaKey?: string;
+}> = [
+  {
+    titleKey: "latamUsPacket.send.offer.title",
+    bodyKey: "latamUsPacket.send.offer.body",
+    docracyTo: "/free-templates/offer-letter",
+    docracyCtaKey: "latamUsPacket.send.offer.cta",
+  },
+  {
+    titleKey: "latamUsPacket.send.i9.title",
+    bodyKey: "latamUsPacket.send.i9.body",
+    officialHref: "https://www.uscis.gov/i-9",
+    officialKey: "latamUsPacket.send.i9.official",
+    docracyTo: "/free-templates/i-9-form",
+    docracyCtaKey: "latamUsPacket.send.i9.cta",
+  },
+  {
+    titleKey: "latamUsPacket.send.visa.title",
+    bodyKey: "latamUsPacket.send.visa.body",
+    officialHref: "https://travel.state.gov/content/travel/en/us-visas.html",
+    officialKey: "latamUsPacket.send.visa.official",
+    docracyTo: "/visa-supporting-documents",
+    docracyCtaKey: "latamUsPacket.send.visa.cta",
+  },
+  {
+    titleKey: "latamUsPacket.send.ceac.title",
+    bodyKey: "latamUsPacket.send.ceac.body",
+    officialHref: "https://ceac.state.gov/genniv/",
+    officialKey: "latamUsPacket.send.ceac.official",
+  },
+  {
+    titleKey: "latamUsPacket.send.uscis.title",
+    bodyKey: "latamUsPacket.send.uscis.body",
+    officialHref: "https://www.uscis.gov/",
+    officialKey: "latamUsPacket.send.uscis.official",
+  },
+  {
+    titleKey: "latamUsPacket.send.constancia.title",
+    bodyKey: "latamUsPacket.send.constancia.body",
+    docracyTo: "/income-proof",
+    docracyCtaKey: "latamUsPacket.send.constancia.cta",
+  },
+  {
+    titleKey: "latamUsPacket.send.cobro.title",
+    bodyKey: "latamUsPacket.send.cobro.body",
+    docracyTo: "/cobro#send",
+    docracyCtaKey: "latamUsPacket.send.cobro.cta",
+  },
+  {
+    titleKey: "latamUsPacket.send.w9.title",
+    bodyKey: "latamUsPacket.send.w9.body",
+    officialHref: "https://www.irs.gov/forms-pubs/about-form-w-9",
+    officialKey: "latamUsPacket.send.w9.official",
+    docracyTo: "/free-templates/w-9-form",
+    docracyCtaKey: "latamUsPacket.send.w9.cta",
+  },
+];
+
 const TEMPLATES: Array<{ slug: string; nameKey: string }> = [
   { slug: "offer-letter", nameKey: "tpl.offer-letter.name" },
   { slug: "employment-agreement", nameKey: "tpl.employment-agreement.name" },
@@ -51,18 +122,27 @@ const TEMPLATES: Array<{ slug: string; nameKey: string }> = [
 ];
 
 /**
- * LATAM → US landing: sign offer + official I-9, visa supporting templates we already ship,
- * constancia / cobro, then W-9 if they are a US person. We do not file petitions or run E-Verify.
+ * All-in-one LATAM → US immigrant packet. Playbook + official “where to send” links
+ * are public. Using the package (send, keep, constancia, cobro) is Paid.
+ * Chrome only surfaces this on Spanish.
  */
 export default function LatamUsPacket() {
   const { t, locale } = useI18n();
   const canonicalPath = locale === "es" ? "/es/kit-llegar-eeuu" : "/packets/latam-to-us";
+  const [account, setAccount] = useState<Account | null | undefined>(undefined);
+  const [upgrading, setUpgrading] = useState(false);
 
   usePageMeta(t("latamUsPacket.seoTitle"), t("latamUsPacket.seoDescription"), {
     canonicalPath,
     alternates: { en: "/packets/latam-to-us", es: "/es/kit-llegar-eeuu" },
     xDefault: "es",
   });
+
+  useEffect(() => {
+    fetchMe()
+      .then((res) => setAccount(res.account))
+      .catch(() => setAccount(null));
+  }, []);
 
   const faqJsonLd = useMemo(
     () => ({
@@ -96,6 +176,51 @@ export default function LatamUsPacket() {
     [t]
   );
 
+  const loginTo = `/login?next=${encodeURIComponent(canonicalPath)}&ref=latam-to-us`;
+
+  const onUpgrade = async () => {
+    track("upgrade_clicked", { source: "seo:latam-to-us" });
+    setUpgrading(true);
+    try {
+      const { url } = await startCheckout();
+      window.location.href = url;
+    } catch {
+      setUpgrading(false);
+    }
+  };
+
+  const packetCta = (to: string, label: string, source: string) => {
+    if (account?.isPaid) {
+      return (
+        <Link
+          to={localizePath(to, locale)}
+          className="btn-secondary"
+          style={{ textDecoration: "none", display: "inline-block" }}
+          onClick={() => track("landingpage_cta_clicked", { source })}
+        >
+          {label}
+        </Link>
+      );
+    }
+    if (account) {
+      return (
+        <button type="button" className="btn-secondary" onClick={onUpgrade} disabled={upgrading}>
+          {upgrading ? t("common.redirecting") : t("latamUsPacket.ctaPaid")}
+        </button>
+      );
+    }
+    return (
+      <Link
+        to={loginTo}
+        className="btn-secondary"
+        style={{ textDecoration: "none", display: "inline-block" }}
+        onClick={() => track("landingpage_cta_clicked", { source })}
+      >
+        {t("latamUsPacket.ctaLogin")}
+      </Link>
+    );
+  };
+
   return (
     <div>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
@@ -112,27 +237,65 @@ export default function LatamUsPacket() {
           <h1>{t("latamUsPacket.heroTitle")}</h1>
           <p>{t("latamUsPacket.heroSub")}</p>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 20 }}>
-            <Link
-              to={localizePath("/free-templates/i-9-form", locale)}
-              className="btn-primary btn-lg"
-              style={{ display: "inline-block", textDecoration: "none" }}
-              onClick={() => track("landingpage_cta_clicked", { source: "seo:latam-to-us:hero" })}
-            >
-              {t("latamUsPacket.ctaPrimary")}
-            </Link>
-            <Link
-              to={localizePath("/visa-supporting-documents", locale)}
-              className="btn-secondary btn-lg"
-              style={{ display: "inline-block", textDecoration: "none" }}
-              onClick={() => track("landingpage_cta_clicked", { source: "seo:latam-to-us:visa" })}
-            >
-              {t("latamUsPacket.ctaSecondary")}
-            </Link>
+            {account?.isPaid ? (
+              <>
+                <Link
+                  to={localizePath("/income-proof", locale)}
+                  className="btn-primary btn-lg"
+                  style={{ display: "inline-block", textDecoration: "none" }}
+                  onClick={() => track("landingpage_cta_clicked", { source: "seo:latam-to-us:hero" })}
+                >
+                  {t("latamUsPacket.ctaOpen")}
+                </Link>
+                <Link
+                  to={`${localizePath("/cobro", locale)}#send`}
+                  className="btn-secondary btn-lg"
+                  style={{ display: "inline-block", textDecoration: "none" }}
+                  onClick={() => track("landingpage_cta_clicked", { source: "seo:latam-to-us:cobro" })}
+                >
+                  {t("latamUsPacket.ctaCobro")}
+                </Link>
+              </>
+            ) : account ? (
+              <button type="button" className="btn-primary btn-lg" onClick={onUpgrade} disabled={upgrading}>
+                {upgrading ? t("common.redirecting") : t("latamUsPacket.ctaPaid")}
+              </button>
+            ) : (
+              <Link
+                to={loginTo}
+                className="btn-primary btn-lg"
+                style={{ display: "inline-block", textDecoration: "none" }}
+                onClick={() => track("landingpage_cta_clicked", { source: "seo:latam-to-us:hero" })}
+              >
+                {t("latamUsPacket.ctaLogin")}
+              </Link>
+            )}
           </div>
         </div>
       </div>
 
       <div className="container" style={{ maxWidth: 720 }}>
+        <h2 style={{ fontSize: 22, marginTop: 40 }}>{t("latamUsPacket.includesTitle")}</h2>
+        <p style={{ color: "var(--mute)" }}>{t("latamUsPacket.includesSub")}</p>
+        <div className="dashboard-corridor-grid packet-includes">
+          {PLAN_INCLUDES.map((item) => (
+            <div key={item.titleKey} className="dashboard-corridor-card">
+              <h3>{t(item.titleKey)}</h3>
+              <p>{t(item.bodyKey)}</p>
+            </div>
+          ))}
+        </div>
+
+        <h2 style={{ fontSize: 22, marginTop: 40 }}>{t("latamUsPacket.paidTitle")}</h2>
+        <p style={{ color: "var(--mute)" }}>{t("latamUsPacket.paidSub")}</p>
+        <ul>
+          <li>{t("latamUsPacket.paidItem1")}</li>
+          <li>{t("latamUsPacket.paidItem2")}</li>
+          <li>{t("latamUsPacket.paidItem3")}</li>
+          <li>{t("latamUsPacket.paidItem4")}</li>
+        </ul>
+        <p style={{ fontSize: 14, color: "var(--mute)" }}>{t("latamUsPacket.freeHint")}</p>
+
         <h2 style={{ fontSize: 22, marginTop: 40 }}>{t("latamUsPacket.stepsTitle")}</h2>
         <p style={{ color: "var(--mute)" }}>{t("latamUsPacket.stepsSub")}</p>
         <ol className="packet-steps">
@@ -141,17 +304,44 @@ export default function LatamUsPacket() {
               <p className="packet-step-num">{t("packet.stepN", { n: i + 1 })}</p>
               <h3 style={{ marginTop: 0 }}>{t(step.titleKey)}</h3>
               <p style={{ fontSize: 14, color: "var(--mute)" }}>{t(step.bodyKey)}</p>
-              <Link
-                to={localizePath(step.to, locale)}
-                className="btn-secondary"
-                style={{ textDecoration: "none", display: "inline-block" }}
-                onClick={() => track("landingpage_cta_clicked", { source: `seo:latam-to-us:step${i + 1}` })}
-              >
-                {t(step.ctaKey)}
-              </Link>
+              {packetCta(step.to, t(step.ctaKey), `seo:latam-to-us:step${i + 1}`)}
             </li>
           ))}
         </ol>
+
+        <h2 style={{ fontSize: 22, marginTop: 40 }}>{t("latamUsPacket.sendTitle")}</h2>
+        <p style={{ color: "var(--mute)" }}>{t("latamUsPacket.sendSub")}</p>
+        <ol className="packet-steps">
+          {SEND_TO.map((row, i) => (
+            <li key={row.titleKey} className="card packet-step">
+              <p className="packet-step-num">{t("packet.stepN", { n: i + 1 })}</p>
+              <h3 style={{ marginTop: 0 }}>{t(row.titleKey)}</h3>
+              <p style={{ fontSize: 14, color: "var(--mute)" }}>{t(row.bodyKey)}</p>
+              <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
+                {row.docracyTo && row.docracyCtaKey
+                  ? packetCta(row.docracyTo, t(row.docracyCtaKey), `seo:latam-to-us:send${i + 1}`)
+                  : null}
+                {row.officialHref && row.officialKey ? (
+                  <a href={row.officialHref} target="_blank" rel="noopener noreferrer">
+                    {t(row.officialKey)}
+                  </a>
+                ) : null}
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        <h2 style={{ fontSize: 19, marginTop: 36 }}>{t("latamUsPacket.compareTitle")}</h2>
+        <p style={{ color: "var(--mute)" }}>{t("latamUsPacket.compareSub")}</p>
+        <p>
+          <Link to={localizePath("/boundless-alternative", locale)}>{t("footer.vsBoundless")}</Link>
+          {" · "}
+          <Link to={localizePath("/citizenpath-alternative", locale)}>{t("footer.vsCitizenpath")}</Link>
+          {" · "}
+          <Link to={localizePath("/visa-service-alternative", locale)}>{t("footer.vsVisaService")}</Link>
+          {" · "}
+          <Link to={localizePath("/boundless-vs-citizenpath", locale)}>{t("footer.boundlessVsCitizenpath")}</Link>
+        </p>
 
         <h2 style={{ fontSize: 19, marginTop: 36 }}>{t("latamUsPacket.templatesTitle")}</h2>
         <p style={{ color: "var(--mute)" }}>{t("latamUsPacket.templatesSub")}</p>
@@ -165,12 +355,6 @@ export default function LatamUsPacket() {
 
         <p style={{ marginTop: 8, fontSize: 14, color: "var(--mute)" }}>{t("latamUsPacket.hireHint")}</p>
         <p>
-          <Link to={localizePath("/i-9", locale)}>{t("footer.i9")}</Link>
-          {" · "}
-          <Link to={localizePath("/visa-supporting-documents", locale)}>{t("footer.visaDocs")}</Link>
-          {" · "}
-          <Link to={localizePath("/cobro", locale)}>{t("footer.cobro")}</Link>
-          {" · "}
           <Link to={localizePath("/packets/latam-contractor", locale)}>{t("footer.latamPacket")}</Link>
         </p>
 

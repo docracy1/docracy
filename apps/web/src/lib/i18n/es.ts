@@ -265,6 +265,10 @@ const es: Messages = {
   "footer.vsKita": "vs Kita",
   "footer.vsAlegra": "vs Alegra",
   "footer.vsSiigo": "vs Siigo",
+  "footer.vsBoundless": "vs Boundless",
+  "footer.vsCitizenpath": "vs CitizenPath",
+  "footer.vsVisaService": "vs gestoría de visa",
+  "footer.boundlessVsCitizenpath": "Boundless vs CitizenPath",
   "footer.kitaVsAlegra": "Kita vs Alegra",
   "footer.vsEversign": "vs eversign",
   "footer.vsPandadoc": "vs PandaDoc",
@@ -391,7 +395,7 @@ const es: Messages = {
     "En el plan de pago armas una constancia del año — contratos y cobros — en /es/constancia (inglés: /income-proof). No es un W-2, ni una carta del banco, ni una carta certificada. Los montos son los que tú escribiste.",
   "landing.faq10.q": "Acabo de llegar a EE. UU. desde LATAM — ¿qué uso?",
   "landing.faq10.a":
-    "Firma la oferta que te enviaron (gratis). Firma el I-9 oficial de USCIS — no inspeccionamos documentos ni corremos E-Verify. Para una visa, firmamos el paquete de apoyo (oferta, empleo, poder, referencia, viaje de menor); no presentamos I-129 ni DS-160. Constancia para el arrendador. W-9 solo si eres persona de EE. UU. Empieza en /es/kit-llegar-eeuu.",
+    "Un solo plan ($10/mes): qué hacer, links oficiales de USCIS/CEAC, firma la oferta y el I-9 (no inspeccionamos Listas A/B/C ni corremos E-Verify), y guardamos cada PDF para que lo reabras. Para una visa firmamos documentos de apoyo — no presentamos I-129 ni DS-160. Constancia para el arrendador. Compara Boundless / CitizenPath / gestoría: somos los extras de $10, no el trámite. Empieza en /es/kit-llegar-eeuu.",
   "landing.outcomesTitle": "Después de firmar — la constancia que te piden",
   "landing.outcomesSub":
     "Firmar sigue gratis. El plan de pago es el paquete: una constancia para compartir, cobro por WhatsApp, un archivo fiscal, kits de oficios y contratación LATAM, y pedir un W-9.",
@@ -421,8 +425,8 @@ const es: Messages = {
   "landing.out6.link": "Abrir el kit de solicitud",
   "landing.out7.title": "Documentos para inmigrantes",
   "landing.out7.body":
-    "Firma la oferta y el I-9 oficial. Documentos de apoyo para visa que ya tenemos. Constancia para rentar. No tramitamos la petición ni E-Verify.",
-  "landing.out7.link": "Abrir el kit de inmigrante",
+    "Un plan de $10/mes: I-9 oficial, extras de visa, links oficiales de envío, constancia, cobro — y guardamos cada archivo para que lo abras otra vez. No es Boundless — no tramitamos la petición ni E-Verify.",
+  "landing.out7.link": "Abrir el plan inmigrante",
   "landing.faqTitle": "Preguntas frecuentes",
   "landing.feat1.body":
     "Sube un PDF o pega un enlace de Google Docs, agrega destinatarios y envíalo a firmar en segundos — sin configuración complicada.",
@@ -761,7 +765,7 @@ const es: Messages = {
   "pricing.free.tagline": "Para acuerdos rápidos y puntuales",
   "pricing.goDashboard": "Ir al panel",
   "pricing.intro":
-    "Firmar es gratis — hasta 2 firmantes, sin cuenta. El plan de pago es $10/mes para conservar los PDF hasta el próximo 15 de abril o 13 meses, y pegar tu checkout después de que firmen. No es una tarifa por firma ni un recorte de lo que te paguen.",
+    "Firmar es gratis — hasta 2 firmantes, sin cuenta. El plan de $10/mes conserva los PDF hasta el próximo 15 de abril o 13 meses (los reabres cuando te los pidan), incluye el plan inmigrante (qué hacer + links oficiales + I-9 / constancia / cobro) y pegas tu checkout después de firmar. No es una tarifa por firma ni un recorte.",
   "pricing.dockAria": "Precios de planes",
   "pricing.paid.ctaGet": "Ilimitado — $10/mes",
   "pricing.paid.ctaLogin": "Inicia sesión para mejorar el plan",
@@ -1274,15 +1278,29 @@ const es: Messages = {
   "seo.siigo.title": "Alternativa a Siigo — cobro por WhatsApp, no factura DIAN | Docracy",
   "seo.siigo.description":
     "Alternativa a Siigo cuando necesitas un PDF firmado y tu link de cobro — no una factura electrónica DIAN. $10/mes, 0% del cobro.",
+  "seo.boundless.title": "Alternativa a Boundless (2026) — firma papeles de visa, $10/mes | Docracy",
+  "seo.boundless.description":
+    "Boundless presenta peticiones ante USCIS (precio en su sitio). Docracy es el plan de $10/mes: I-9 oficial, links de envío y cada PDF guardado para que lo reabras. No tramitamos.",
+  "seo.citizenpath.title": "Alternativa a CitizenPath (2026) — documentos de apoyo, no formularios USCIS | Docracy",
+  "seo.citizenpath.description":
+    "CitizenPath prepara formularios USCIS por tu cuenta. Docracy firma los extras que te piden adjuntar — I-9, oferta, poder — y los guarda para que los reabras. $10/mes. No preparamos I-129.",
+  "seo.visaService.title": "Alternativa a gestoría de visa — paquete de $10, no un trámite | Docracy",
+  "seo.visaService.description":
+    "Alternativa a gestoría de visa: un plan de $10/mes — I-9, oferta, links oficiales y cada PDF guardado. No tramitamos la petición. /es/kit-llegar-eeuu.",
   "seoVs.feature": "Función",
   "seoVs.esignCta": "Probar Docracy gratis — sin registro",
   "seoVs.latamCta": "Enviar un cobro — archivo + tu Mercado Pago",
+  "seoVs.immigrantCta": "Desbloquear el plan todo-en-uno — $10/mes",
   "seoVs.esignMidTitle": "Cómo se compara Docracy con {{a}} y {{b}}",
   "seoVs.latamMidTitle": "Docracy vs {{a}} vs {{b}}",
+  "seoVs.immigrantMidTitle": "Docracy vs {{a}} vs {{b}}",
   "seoVs.esignMidBody": "Hecho por un founder para founders — sin complejidad enterprise.",
   "seoVs.latamMidBody": "No timbramos CFDI ni facturas DIAN. Conservamos el PDF firmado y tu checkout.",
+  "seoVs.immigrantMidBody":
+    "Ellos presentan o preparan la petición. Nosotros damos un plan de $10 alrededor: qué hacer, links oficiales, I-9 / oferta / constancia / cobro — y guardamos cada archivo para que lo reabras.",
   "seoVs.esignMidCta": "Probar un acuerdo real — sin registro",
   "seoVs.latamMidCta": "Abrir el formulario de cobro",
+  "seoVs.immigrantMidCta": "Abrir el plan inmigrante",
   "seoVs.more": "Más comparaciones",
   "seoVs.footerTitle": "Precio simple y fijo",
   "seoVs.footerBody": "Gratis hasta 2 firmantes. $10/mes conserva los archivos y te deja cobrar después de firmar. Sin precio por asiento.",
@@ -2192,7 +2210,54 @@ const es: Messages = {
   "alt.related.kita": "Alternativa a Kita",
   "alt.related.alegra": "Alternativa a Alegra",
   "alt.related.siigo": "Alternativa a Siigo",
+  "alt.related.boundless": "Alternativa a Boundless",
+  "alt.related.citizenpath": "Alternativa a CitizenPath",
+  "alt.related.visaService": "Alternativa a gestoría de visa",
   "alt.related.docusign": "Alternativa a DocuSign",
+  "alt.boundless.heroHeadline": "Boundless presenta tu caso. Docracy firma el paquete de alrededor.",
+  "alt.boundless.heroSubheadline":
+    "Ellos preparan y presentan formularios USCIS — el precio está en su sitio. Nosotros firmamos I-9, oferta y extras de visa, te damos los links oficiales y guardamos cada PDF para que lo reabras. $10/mes. No presentamos I-129 ni DS-160.",
+  "alt.boundless.problem":
+    "Boundless es la compra correcta si necesitas que alguien prepare y presente la petición. Eso son cientos o miles — mira su precio; no inventamos un número. Es la compra equivocada si ya tienes abogado, un empleador que presenta, o solo necesitas firmar los extras: I-9, oferta, poder, referencia, constancia para un depa en Houston.",
+  "alt.boundless.solution":
+    "Desbloquea el plan único ($10/mes). Firma el I-9 oficial y las plantillas de apoyo. Guardamos cada PDF para que lo reabras. Los links oficiales de envío están en la misma página. Comparte la constancia. Manda cobro si sigues facturando. Si igual necesitas que Boundless presente, quédate con ellos — adjunta nuestros PDF firmados.",
+  "alt.boundless.c1": "$10/mes vs FAQ Boundless (11 jun 2026): green card matrimonio $699/$1,349; K-1 $1,379/$2,549; B-1/B-2 $195+$185. USCIS aparte.",
+  "alt.boundless.c2":
+    "I-9 oficial + oferta, poder, referencia, arrendamiento — guardamos cada PDF para que lo reabras. No tramitamos la petición.",
+  "alt.boundless.c3": "Mapa de envío: el empleador conserva el I-9; el abogado o el consulado recibe el resto; el DS-160 lo llenas tú en CEAC",
+  "alt.boundless.c4": "Ellos cobran en USD. El plan también es USD $10 en Stripe. Los montos de cobro los etiquetas en MXN/COP/USD — ese dinero no nos llega.",
+  "alt.boundless.c5": "Boundless es mejor si necesitas que ellos presenten. Nosotros somos los extras de $10 alrededor de ese trámite.",
+  "alt.boundless.ctaLabel": "Desbloquear el plan todo-en-uno — $10/mes",
+  "alt.boundless.compareLabel": "Boundless vs CitizenPath vs Docracy",
+  "alt.citizenpath.heroHeadline": "CitizenPath arma el PDF de la petición. Docracy firma lo que te pidieron adjuntar.",
+  "alt.citizenpath.heroSubheadline":
+    "El software DIY de formularios USCIS es otro trabajo. Firmamos I-9, oferta y cartas, te damos los links oficiales y guardamos cada PDF — $10/mes. No preparamos I-129, I-130 ni I-485.",
+  "alt.citizenpath.problem":
+    "CitizenPath te guía por formularios USCIS para que tú presentes. Sirve si quieres DIY más barato que un servicio completo. No sirve si lo que necesitas son los extras firmados: I-9 para el empleador, una oferta, un poder, una constancia que un arrendador en Miami abra.",
+  "alt.citizenpath.solution":
+    "Quédate con CitizenPath (o un abogado) para el PDF de la petición. Desbloquea el plan de Docracy para el paquete de apoyo, los links oficiales y un vault que puedes reabrir. No sustituimos su software y no presentamos.",
+  "alt.citizenpath.c1": "$10/mes vs paquetes que publica CitizenPath: desde $79–$99; I-130 $149; I-485 $279; N-400 $199. USCIS aparte.",
+  "alt.citizenpath.c2":
+    "Firmamos el I-9 oficial y los extras que te piden adjuntar — y los guardamos para que los reabras después",
+  "alt.citizenpath.c3": "No preparamos ni presentamos I-129 / I-130 / I-485 / DS-160",
+  "alt.citizenpath.c4": "Cobran en USD. El plan es USD $10. El cobro lo etiquetas en MXN/COP/USD — Docracy no se lleva ese pago.",
+  "alt.citizenpath.c5": "CitizenPath es mejor cuando necesitas formularios USCIS DIY. Usa ambos si te pidieron extras firmados.",
+  "alt.citizenpath.ctaLabel": "Desbloquear el plan todo-en-uno — $10/mes",
+  "alt.citizenpath.compareLabel": "Boundless vs CitizenPath vs Docracy",
+  "alt.visaService.heroHeadline": "La gestoría presenta el caso. Docracy es el paquete firmado que les entregas.",
+  "alt.visaService.heroSubheadline":
+    "Los tramitadores presentan. Firmamos I-9, oferta, poder, referencia, te damos los links oficiales y guardamos cada PDF para que lo reabras — $10/mes. No sustituimos el trámite.",
+  "alt.visaService.problem":
+    "Una gestoría de visa o un tramitador es la contratación correcta si necesitas que alguien arme y presente la petición. Cobran por caso — a menudo cientos o miles. Es la contratación equivocada si ya tienes esa persona (o un empleador/abogado) y solo necesitas firmar los extras y un lugar que diga a dónde va cada archivo.",
+  "alt.visaService.solution":
+    "Un solo plan es el paquete todo-en-uno: qué hacer, links oficiales, I-9 y plantillas que ya tenemos, constancia, cobro — y guardamos cada archivo. Entrégale los PDF firmados a tu gestoría. No presentamos ante USCIS ni en el consulado.",
+  "alt.visaService.c1": "$10/mes vs gestorías MX que revisamos: ~$900–$3,800 MXN por DS-160/turismo, más $185 USD de State.",
+  "alt.visaService.c2": "I-9 oficial + oferta, empleo, poder, referencia, viaje de menor, arrendamiento",
+  "alt.visaService.c3": "Mapa de quién recibe cada archivo (empleador, retención USCIS, CEAC, arrendador) — no subimos por ti",
+  "alt.visaService.c4": "Honorarios de gestoría: casi siempre MXN (COP en Colombia). MRV de State $185 USD. Nuestro plan es USD $10; las etiquetas de cobro son tuyas.",
+  "alt.visaService.c5": "Contrata una gestoría cuando necesitas que presenten. Usa Docracy cuando necesitas el paquete firmado.",
+  "alt.visaService.ctaLabel": "Desbloquear el plan todo-en-uno — $10/mes",
+  "alt.visaService.compareLabel": "Boundless vs CitizenPath vs Docracy",
   "alt.kita.heroHeadline": "Kita timbra la factura. Docracy manda el archivo y tu checkout.",
   "alt.kita.heroSubheadline":
     "Pega Mercado Pago o PayPal, adjunta el PDF y manda la página de cobro. Nunca nos quedamos el dinero y no timbramos CFDI.",
@@ -2568,7 +2633,7 @@ const es: Messages = {
   "footer.taxYear": "Archivo fiscal",
   "footer.cobro": "Cobra por WhatsApp",
   "footer.latamPacket": "Kit contratista LATAM",
-  "footer.latamUsPacket": "Kit inmigrante",
+  "footer.latamUsPacket": "Plan inmigrante",
   "footer.i9": "Firmar I-9",
   "footer.visaDocs": "Documentos para visa",
   "footer.constancia": "Constancia de ingresos",
@@ -2581,12 +2646,15 @@ const es: Messages = {
   "nav.mega.feature.cobro.desc": "Envía un archivo y tu enlace de Mercado Pago o PayPal — sin firma.",
   "nav.mega.feature.latamPacket.title": "Contrata en LATAM",
   "nav.mega.feature.latamPacket.desc": "NDA, acuerdo de contratista y luego cobro. Para alguien a quien pagas en el extranjero.",
-  "nav.mega.feature.latamUsPacket.title": "Documentos para inmigrantes",
-  "nav.mega.feature.latamUsPacket.desc": "Firma I-9, oferta, papeles de visa y constancia. No tramitamos la petición.",
+  "nav.mega.feature.latamUsPacket.title": "Plan inmigrante",
+  "nav.mega.feature.latamUsPacket.desc": "Qué hacer, links oficiales, I-9 y constancia — guardamos cada PDF. No tramitamos la petición.",
   "plan.taxYearLocker": "Archivo fiscal (CSV para tu contador)",
   "plan.constancia": "Constancia de ingresos (paquete para compartir)",
   "plan.cobro": "Cobro por WhatsApp — archivo + pago, sin firma",
   "plan.latamPacket": "Kit EE. UU. ↔ LATAM (NDA, acuerdo, cobro)",
+  "plan.immigrantPacket": "Plan inmigrante (qué hacer, links oficiales, I-9 / constancia / cobro)",
+  "plan.val.immigrantFree": "Mapa + links oficiales (los PDF se borran a los 9 días)",
+  "plan.val.immigrantPaid": "Paquete entero guardado — reabre hasta el 15 abr. o 13 meses",
   "docs.taxYear.title": "Archivo fiscal (pago)",
   "docs.taxYear.body":
     "Las cuentas de pago abren /es/temporada-1099 (inglés: /1099-season) y descargan un CSV de cada documento completado en un año calendario: título, contrapartes, correos, monto, moneda, URL de pago, pagado/por cobrar, fecha de archivo, URL de la página firmada. No leemos TIN con OCR ni presentamos 1099 ante el IRS. El CSV es un índice de lo que ya enviaste por Docracy.",
@@ -2607,13 +2675,18 @@ const es: Messages = {
   "dash.cobro": "Enviar cobro",
   "dash.constancia": "Constancia",
   "dash.navPacket": "Después de firmar",
+  "dash.migrantChecklist": "Plan inmigrante",
+  "dash.migrantOverviewTitle": "Plan inmigrante — todo en uno",
+  "dash.migrantOverviewSub": "Qué hacer, links oficiales, firma — y cada PDF guardado para reabrirlo. Vault hasta el 15 de abril o 13 meses. No tramitamos la petición.",
+  "dash.corridorI9": "I-9 oficial de USCIS. El empleador lo conserva. No inspeccionamos documentos ni corremos E-Verify.",
+  "dash.corridorVisa": "Oferta, poder, referencia, viaje de menor — documentos de apoyo, no la petición.",
   "latamDesk.seoTitle": "LATAM: cobro, constancia y kits | Docracy",
   "latamDesk.seoDescription":
     "Cobro, constancia, kits y documentos para inmigrantes: I-9 oficial y plantillas de apoyo para visa. No tramitamos la petición ni E-Verify. Firmar sigue gratis.",
   "latamDesk.kicker": "LATAM",
   "latamDesk.heroTitle": "Cobra. Arma tu constancia. Contrata.",
   "latamDesk.heroSub":
-    "También para quien acaba de llegar a EE. UU.: cobro con tu Mercado Pago, una constancia que un arrendador puede abrir, y los kits. Docracy no se lleva el dinero.",
+    "También para quien acaba de llegar a EE. UU.: un plan con qué hacer, links oficiales, cobro con tu Mercado Pago, constancia, y todos los PDF guardados. Docracy no se lleva el dinero.",
   "latamDesk.openKit": "Abrir el kit",
   "taxYear.seoTitle": "Archivo fiscal para tu contador — contratos, cobros y CSV | Docracy",
   "taxYear.seoDescription":
@@ -2742,18 +2815,42 @@ const es: Messages = {
   "latamPacket.howTo2": "Envía el acuerdo de contratista independiente (plantilla gratis).",
   "latamPacket.howTo3": "En el plan de pago, envía cobro con tu Mercado Pago o PayPal — sin otra firma.",
   "latamPacket.howTo4": "Si es persona de EE. UU., usa el kit W-9 del IRS. No publicamos un W-8BEN.",
-  "latamUsPacket.seoTitle": "Firma el I-9 y papeles de visa — kit inmigrante | Docracy",
+  "latamUsPacket.seoTitle": "Plan inmigrante — I-9, links oficiales, todo guardado | Docracy",
   "latamUsPacket.seoDescription":
-    "Firma el I-9 oficial de USCIS, la oferta y documentos de apoyo para visa (poder, referencia, viaje de menor). Constancia para rentar. No tramitamos la petición ni E-Verify.",
-  "latamUsPacket.kicker": "Inmigrantes LATAM → Estados Unidos",
-  "latamUsPacket.heroTitle": "Llegaste. Firma el I-9. Firma el paquete de visa.",
+    "Un solo plan: qué hacer, links oficiales de USCIS/CEAC, firma I-9 y extras de visa, y todos los PDF guardados para cuando los pidas. $10/mes. No es Boundless — no tramitamos la petición.",
+  "latamUsPacket.kicker": "Inmigrantes LATAM → Estados Unidos · plan todo-en-uno",
+  "latamUsPacket.heroTitle": "Un solo plan. Qué hacer, a dónde mandarlo, y todo guardado.",
   "latamUsPacket.heroSub":
-    "El I-9 oficial de USCIS ya está en el catálogo — firma de empleado y empleador. Para una visa firmamos los documentos de apoyo que ya tenemos, no la petición. El plan es cobro si sigues facturando y una constancia que un arrendador en Houston o Miami puede abrir.",
-  "latamUsPacket.ctaPrimary": "Firmar el I-9",
-  "latamUsPacket.ctaSecondary": "Ver documentos para visa",
-  "latamUsPacket.stepsTitle": "Para qué sirve",
+    "I-9 oficial de USCIS, documentos de apoyo para visa, oferta, poder, constancia, cobro — y los links oficiales a dónde va cada archivo. En el plan guardamos el paquete entero para que lo abras otra vez cuando lo pida el arrendador, el empleador o quien presenta. El vault dura hasta el próximo 15 de abril o 13 meses. No tramitamos I-129 ni DS-160 y no corremos E-Verify.",
+  "latamUsPacket.ctaLogin": "Inicia sesión para desbloquear el plan",
+  "latamUsPacket.ctaPaid": "Desbloquear el plan todo-en-uno — $10/mes",
+  "latamUsPacket.ctaOpen": "Abrir la constancia",
+  "latamUsPacket.ctaCobro": "Enviar un cobro",
+  "latamUsPacket.includesTitle": "Qué incluye el plan",
+  "latamUsPacket.includesSub":
+    "No son tres productos. Un plan de $10/mes: el mapa de qué hacer, los links oficiales, y un vault que puedes reabrir.",
+  "latamUsPacket.include1.title": "Qué hacer",
+  "latamUsPacket.include1.body":
+    "Paso a paso: oferta, I-9, extras de visa, constancia, cobro. No tramitamos la petición — te decimos quién sí.",
+  "latamUsPacket.include2.title": "Links oficiales",
+  "latamUsPacket.include2.body":
+    "I-9 de USCIS, CEAC / DS-160, travel.state.gov, W-9 del IRS. Siempre abiertos, también antes de pagar. No subimos nada por ti.",
+  "latamUsPacket.include3.title": "Guardamos todo",
+  "latamUsPacket.include3.body":
+    "Reabre I-9, oferta y constancia desde el panel cuando te los pidan. El plan conserva los PDF hasta el próximo 15 de abril o 13 meses. En gratis se borran a los 9 días.",
+  "latamUsPacket.paidTitle": "Qué desbloquea el plan",
+  "latamUsPacket.paidSub":
+    "Los $10/mes son el paquete inmigrante completo — el mismo plan que el cobro y la constancia, no una cuota extra.",
+  "latamUsPacket.paidItem1":
+    "Guardamos cada PDF completado. Lo abres otra vez desde el panel cuando lo pida el arrendador, el empleador o quien presenta — hasta el próximo 15 de abril o 13 meses.",
+  "latamUsPacket.paidItem2": "Comparte una URL de constancia con un arrendador o banco en EE. UU. — no es un W-2.",
+  "latamUsPacket.paidItem3": "Envía cobro por WhatsApp con tu Mercado Pago o PayPal. Docracy no se lleva el dinero.",
+  "latamUsPacket.paidItem4": "Un solo espacio de trabajo. I-9, oferta, poder y el resto quedan en el mismo vault que puedes reabrir.",
+  "latamUsPacket.freeHint":
+    "El mapa y los links oficiales se leen sin pagar. Firmar el I-9 oficial o una oferta una vez sigue gratis. En gratis los archivos se borran a los 9 días — por eso usar el paquete es el plan.",
+  "latamUsPacket.stepsTitle": "Qué incluye el paquete",
   "latamUsPacket.stepsSub":
-    "Cinco trabajos que ya hacemos. Firmamos el I-9. No inspeccionamos documentos de autorización, no corremos E-Verify y no presentamos I-129 / DS-160.",
+    "Todo esto en una página. Firmamos el I-9. No inspeccionamos documentos de autorización, no corremos E-Verify y no presentamos I-129 / DS-160.",
   "latamUsPacket.step1.title": "Firma (o envía) la oferta o el contrato de empleo",
   "latamUsPacket.step1.body":
     "Si te mandaron un enlace, ábrelo — sin cuenta. Si contratas a alguien que acaba de llegar, envía la oferta o el contrato de empleo gratis.",
@@ -2794,13 +2891,63 @@ const es: Messages = {
     "No. No inventamos formularios del IRS. Si eres persona de EE. UU. para impuestos, usa el kit W-9. Si no, habla con un asesor — no vamos a publicar un W-8BEN falso.",
   "latamUsPacket.faq.5.q": "Sigo cobrando desde México o Colombia. ¿Sirve el cobro?",
   "latamUsPacket.faq.5.a":
-    "Sí. Pegas el checkout que ya tienes. Docracy no se lleva el dinero y no timbra CFDI ni factura DIAN.",
-  "latamUsPacket.howToName": "Cómo usar Docracy al llegar a EE. UU.",
-  "latamUsPacket.howTo1": "Firma la oferta o el contrato de empleo (gratis, sin cuenta) o envía uno desde la plantilla.",
-  "latamUsPacket.howTo2": "Firma el I-9 oficial — empleado y empleador. No inspeccionamos documentos ni corremos E-Verify.",
-  "latamUsPacket.howTo3": "Firma documentos de apoyo para visa que ya tenemos (poder, referencia, viaje de menor). No tramitamos la petición.",
-  "latamUsPacket.howTo4": "En el plan de pago, copia la URL de la constancia para el arrendador. Sigue el cobro si facturas.",
-  "latamUsPacket.howTo5": "Si eres persona de EE. UU., usa el kit W-9. No publicamos un W-8BEN.",
+    "Sí — en el plan de pago. Pegas el checkout que ya tienes. Docracy no se lleva el dinero y no timbra CFDI ni factura DIAN.",
+  "latamUsPacket.faq.6.q": "¿Necesito el plan de pago para usar esto?",
+  "latamUsPacket.faq.6.a":
+    "Para leer el mapa y los links oficiales, no. Para enviar, guardar archivos, compartir la constancia o mandar cobro, sí — $10/mes. Ese es el plan todo-en-uno. En gratis los PDF se borran a los 9 días.",
+  "latamUsPacket.faq.7.q": "¿Esto es Boundless, CitizenPath o una gestoría de visa?",
+  "latamUsPacket.faq.7.a":
+    "No. Ellos presentan o preparan peticiones ante USCIS/State y cobran cientos o miles. Nosotros firmamos el paquete de apoyo, lo guardamos y te decimos a dónde va cada archivo. Compara: /es/alternativa-a-boundless, /es/alternativa-a-citizenpath, /es/alternativa-a-gestoria-de-visa.",
+  "latamUsPacket.faq.8.q": "¿Guardan mis archivos? ¿Puedo abrirlos después?",
+  "latamUsPacket.faq.8.a":
+    "Sí, en el plan. Guardamos el paquete entero — I-9, oferta, extras de visa, constancia, cobro — y reabres cualquier archivo desde el panel cuando te lo pidan. El vault dura hasta el próximo 15 de abril o 13 meses, lo que ocurra más tarde. En una cuenta gratis el PDF se pierde a los 9 días.",
+  "latamUsPacket.sendTitle": "A dónde va cada archivo",
+  "latamUsPacket.sendSub":
+    "En el plan firmamos y conservamos el paquete. Tú (o tu abogado, empleador o arrendador) lo entregas. Los links oficiales se abren en otra pestaña. No subimos nada a USCIS ni a CEAC por ti.",
+  "latamUsPacket.send.offer.title": "Oferta / contrato → empleador",
+  "latamUsPacket.send.offer.body":
+    "Má<fim-middle>ndalo por Docracy al empleador o a quien contratas. Ellos guardan el PDF firmado. No es una petición de visa.",
+  "latamUsPacket.send.offer.cta": "Enviar la oferta",
+  "latamUsPacket.send.i9.title": "I-9 → el empleador lo conserva",
+  "latamUsPacket.send.i9.body":
+    "No mandes el Formulario I-9 a USCIS. El empleador lo retiene. Firmamos las Secciones 1 y 2. Ellos siguen inspeccionando las Listas A/B/C. E-Verify es su cuenta, no la nuestra.",
+  "latamUsPacket.send.i9.cta": "Firmar el I-9",
+  "latamUsPacket.send.i9.official": "Formulario I-9 de USCIS (oficial)",
+  "latamUsPacket.send.visa.title": "PDFs de apoyo para visa → tu abogado o consulado",
+  "latamUsPacket.send.visa.body":
+    "Oferta, empleo, poder, referencia, viaje de menor, arrendamiento. Fírmalos aquí y adjunta los PDF a lo que ya te pidió el abogado o el consulado. No presentamos I-129 ni I-864.",
+  "latamUsPacket.send.visa.cta": "Abrir documentos de apoyo para visa",
+  "latamUsPacket.send.visa.official": "travel.state.gov — visas de EE. UU.",
+  "latamUsPacket.send.ceac.title": "DS-160 / CEAC → Departamento de Estado (tú, no nosotros)",
+  "latamUsPacket.send.ceac.body":
+    "Si te dijeron que completes el DS-160, eso es CEAC. No inventamos ni presentamos ese formulario. Firma las cartas aquí y súbelas donde CEAC o el consulado lo pidan.",
+  "latamUsPacket.send.ceac.official": "CEAC / DS-160 (oficial)",
+  "latamUsPacket.send.uscis.title": "Petición USCIS → quien la presente",
+  "latamUsPacket.send.uscis.body":
+    "I-129, I-485, I-864 y el resto se quedan con Boundless, CitizenPath, una gestoría o un abogado. Solo firmamos los extras que te pidieron adjuntar.",
+  "latamUsPacket.send.uscis.official": "uscis.gov",
+  "latamUsPacket.send.constancia.title": "Constancia → arrendador o banco",
+  "latamUsPacket.send.constancia.body":
+    "Copia la URL del plan y pégala en la solicitud de Houston / Miami / NYC. No es un W-2 ni la CSF del SAT. Algunos arrendadores igual piden estado de cuenta.",
+  "latamUsPacket.send.constancia.cta": "Abrir la constancia",
+  "latamUsPacket.send.cobro.title": "Factura → el cliente por WhatsApp",
+  "latamUsPacket.send.cobro.body":
+    "Si sigues cobrando de MX/CO/EE. UU., manda cobro con tu Mercado Pago o PayPal. Ellos abren el archivo y pagan en tu checkout. Docracy no se lleva el dinero.",
+  "latamUsPacket.send.cobro.cta": "Enviar un cobro",
+  "latamUsPacket.send.w9.title": "W-9 → el pagador en EE. UU. (solo si eres persona de EE. UU.)",
+  "latamUsPacket.send.w9.body":
+    "El pagador guarda el W-9 para los 1099. Formulario oficial del IRS. No publicamos un W-8BEN. Pregunta a un asesor cuál eres.",
+  "latamUsPacket.send.w9.cta": "Abrir el W-9",
+  "latamUsPacket.send.w9.official": "Formulario W-9 del IRS (oficial)",
+  "latamUsPacket.compareTitle": "Vs Boundless, CitizenPath y una gestoría",
+  "latamUsPacket.compareSub":
+    "Ellos presentan o preparan. Boundless y CitizenPath cobran en USD ($699–$2,549 / $79–$279 + USCIS). Gestorías MX: honorarios en MXN (~$900–$3,800) + $185 USD de State. Nuestro plan es USD $10; el cobro lo etiquetas en MXN/COP/USD.",
+  "latamUsPacket.howToName": "Cómo usar el plan inmigrante",
+  "latamUsPacket.howTo1": "Desbloquea el plan ($10/mes) — uno solo: mapa, links oficiales y un vault que puedes reabrir.",
+  "latamUsPacket.howTo2": "Firma I-9, oferta y documentos de apoyo para visa. Los guardamos. El empleador conserva el I-9; el abogado o el consulado recibe el resto.",
+  "latamUsPacket.howTo3": "Sube los PDF de apoyo a CEAC o USCIS solo si quien presenta te lo pidió. Nosotros no los enviamos.",
+  "latamUsPacket.howTo4": "Comparte la URL de la constancia con el arrendador. Manda cobro si sigues facturando.",
+  "latamUsPacket.howTo5": "Si eres persona de EE. UU., manda el W-9 al pagador. No publicamos un W-8BEN.",
   "constancia.seoTitle": "Constancia de ingresos para freelancers — Docracy",
   "constancia.seoDescription":
     "Arma una constancia de ingresos con cobros y contratos firmados. Compártela con el arrendador o el banco. No es la constancia del SAT, ni un W-2, ni carta bancaria. Plan de $10/mes.",
@@ -2896,7 +3043,7 @@ const es: Messages = {
   "dash.corridorTradesTitle": "Paquete de oficio",
   "dash.corridorTrades": "Orden de trabajo, change order, luego cobro. No es un waiver de gravamen estatal.",
   "dash.corridorLatamHire": "NDA, acuerdo de contratista, cobro. No es un W-8BEN.",
-  "dash.corridorLatamUs": "I-9, papeles de visa, cobro y constancia. No tramitamos la petición.",
+  "dash.corridorLatamUs": "Un plan: mapa, links oficiales, I-9, constancia, cobro. Guardamos todo.",
   "dash.corridorTradeTitle": "Docs comerciales LATAM",
   "dash.corridorTrade": "Contrato de compraventa y orden de compra, luego cobro. No es aduana.",
   "footer.tradesPacket": "Kit oficios",

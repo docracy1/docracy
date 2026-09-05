@@ -14,6 +14,10 @@ export const ES_PATH_BY_EN: Record<string, string> = {
   "/kita-alternative": "/es/alternativa-a-kita",
   "/alegra-alternative": "/es/alternativa-a-alegra",
   "/siigo-alternative": "/es/alternativa-a-siigo",
+  "/boundless-alternative": "/es/alternativa-a-boundless",
+  "/citizenpath-alternative": "/es/alternativa-a-citizenpath",
+  "/visa-service-alternative": "/es/alternativa-a-gestoria-de-visa",
+  "/boundless-vs-citizenpath": "/es/boundless-vs-citizenpath",
   "/kita-vs-alegra": "/es/kita-vs-alegra",
   "/kita-vs-siigo": "/es/kita-vs-siigo",
   "/alegra-vs-siigo": "/es/alegra-vs-siigo",
@@ -108,6 +112,9 @@ export type SeoPage =
   | "kitaAlternative"
   | "alegraAlternative"
   | "siigoAlternative"
+  | "boundlessAlternative"
+  | "citizenpathAlternative"
+  | "visaServiceAlternative"
   | "ndaSigning"
   | "clientContracts"
   | "docs"
@@ -141,6 +148,9 @@ export const SEO_EN_PATH: Record<SeoPage, string> = {
   kitaAlternative: "/kita-alternative",
   alegraAlternative: "/alegra-alternative",
   siigoAlternative: "/siigo-alternative",
+  boundlessAlternative: "/boundless-alternative",
+  citizenpathAlternative: "/citizenpath-alternative",
+  visaServiceAlternative: "/visa-service-alternative",
   ndaSigning: "/nda-signing",
   clientContracts: "/client-contracts",
   docs: "/docs",
@@ -172,6 +182,9 @@ export const BILINGUAL_ALT_BY_SLUG: Record<string, { seoPage: SeoPage; catalogKe
   "kita-alternative": { seoPage: "kitaAlternative", catalogKey: "kita" },
   "alegra-alternative": { seoPage: "alegraAlternative", catalogKey: "alegra" },
   "siigo-alternative": { seoPage: "siigoAlternative", catalogKey: "siigo" },
+  "boundless-alternative": { seoPage: "boundlessAlternative", catalogKey: "boundless" },
+  "citizenpath-alternative": { seoPage: "citizenpathAlternative", catalogKey: "citizenpath" },
+  "visa-service-alternative": { seoPage: "visaServiceAlternative", catalogKey: "visaService" },
 };
 
 /** Feature landings with EN/ES URL pairs (content in marketingPages.ts). */

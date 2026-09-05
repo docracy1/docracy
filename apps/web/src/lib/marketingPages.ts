@@ -2143,7 +2143,7 @@ export function getProofOfIncomePageEs(): FeaturePageContent {
       { label: "Casillero temporada 1099", to: "/1099-season" },
       { label: "Kit contratista LATAM", to: "/packets/latam-contractor" },
       { label: "Constancia para rentar en EE. UU.", to: "/proof-of-income-us-rental" },
-      { label: "Kit inmigrante", to: "/packets/latam-to-us" },
+      { label: "Plan inmigrante", to: "/packets/latam-to-us" },
     ],
   };
 }
@@ -2402,7 +2402,7 @@ export function getImmigrantDocumentsPageEs(): FeaturePageContent {
     ctaLabel: "Abrir el kit de inmigrante",
     ctaTo: "/packets/latam-to-us",
     relatedLinks: [
-      { label: "Kit inmigrante", to: "/packets/latam-to-us" },
+      { label: "Plan inmigrante", to: "/packets/latam-to-us" },
       { label: "Firmar I-9", to: "/i-9" },
       { label: "Documentos para visa", to: "/visa-supporting-documents" },
       { label: "Constancia para rentar en EE. UU.", to: "/proof-of-income-us-rental" },
@@ -2501,7 +2501,7 @@ export function getUsRentalIncomeProofPageEs(): FeaturePageContent {
     ctaTo: "/income-proof",
     relatedLinks: [
       { label: "Herramienta de constancia", to: "/income-proof" },
-      { label: "Kit inmigrante", to: "/packets/latam-to-us" },
+      { label: "Plan inmigrante", to: "/packets/latam-to-us" },
       { label: "Documentos para inmigrantes", to: "/immigrant-documents" },
       { label: "Prueba de ingresos (genérica)", to: "/proof-of-income" },
     ],
@@ -2552,7 +2552,7 @@ export function getI9PageEs(): FeaturePageContent {
     ctaTo: "/free-templates/i-9-form",
     relatedLinks: [
       { label: "Plantilla I-9", to: "/free-templates/i-9-form" },
-      { label: "Kit inmigrante", to: "/packets/latam-to-us" },
+      { label: "Plan inmigrante", to: "/packets/latam-to-us" },
       { label: "Documentos para visa", to: "/visa-supporting-documents" },
       { label: "Carta de oferta", to: "/free-templates/offer-letter" },
     ],
@@ -2602,7 +2602,7 @@ export function getVisaSupportingDocumentsPageEs(): FeaturePageContent {
     ctaLabel: "Abrir el kit de inmigrante",
     ctaTo: "/packets/latam-to-us",
     relatedLinks: [
-      { label: "Kit inmigrante", to: "/packets/latam-to-us" },
+      { label: "Plan inmigrante", to: "/packets/latam-to-us" },
       { label: "Firmar I-9", to: "/i-9" },
       { label: "Carta de oferta", to: "/free-templates/offer-letter" },
       { label: "Poder notarial", to: "/free-templates/power-of-attorney" },
@@ -2659,6 +2659,8 @@ export interface AlternativePageContent {
   faqsEs?: Array<{ question: string; answer: string }>;
   /** LATAM compares lead in Spanish (x-default = es). */
   xDefault?: "es";
+  /** Immigrant-corridor compares — header/footer only promote these when locale is es. */
+  audience?: "immigrant";
 }
 
 /** Default FAQs for competitor alternative pages (GEO / rich results). */
@@ -3368,6 +3370,207 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
       },
     ],
   },
+  {
+    slug: "boundless-alternative",
+    competitorName: "Boundless",
+    xDefault: "es",
+    audience: "immigrant",
+    navDesc: "Sign the visa packet — they file the petition.",
+    seoTitle: "Boundless Alternative (2026) — Sign Visa Docs, $10/mo | Docracy",
+    seoDescription:
+      "Boundless files USCIS petitions (see their site for price). Docracy is the $10/mo supporting packet: official I-9, offer, POA, constancia. We don't file.",
+    heroHeadline: "Boundless files your case. Docracy signs the packet around it.",
+    heroSubheadline:
+      "They prepare and file USCIS forms — see their site for price. We sign I-9, offer, visa extras, give you the official send-to links, and save every PDF so you can reopen it. $10/month. We do not file I-129 or DS-160.",
+    problem:
+      "Boundless is the right buy if you need someone to prepare and file a petition. That is hundreds to thousands — check their pricing; we will not invent a number. It is the wrong buy if you already have a lawyer, an employer who files, or you only need the extras signed: I-9, offer letter, POA, reference, constancia for a Houston lease.",
+    solution:
+      "Unlock the one Paid plan ($10/month). Sign the official I-9 and the supporting templates. We save every PDF so you can reopen it. Official send-to links stay on the plan page. Share a constancia URL. Send cobro if you still invoice. If you still need Boundless to file, keep them — attach our signed PDFs.",
+    comparison: [
+      "$10/month for the all-in-one supporting plan. Boundless FAQ (11 Jun 2026): marriage green card $699 / $1,349 Premium; K-1 $1,379 / $2,549; B-1/B-2 $195 + $185 State fee. Government fees extra.",
+      "Official I-9 + offer, POA, reference, lease — we save every PDF so you can reopen it. We don't file the petition.",
+      "Official send-to links: employer keeps I-9; lawyer/consulate gets the rest; you file DS-160 on CEAC",
+      "They bill in USD. Paid is also USD $10 on Stripe. Cobro amounts you label MXN/COP/USD — that money never hits us.",
+      "Boundless is better if you need them to prepare and file. We are the $10 extras around that filing.",
+    ],
+    ctaLabel: "Unlock the all-in-one plan — $10/month",
+    ctaTo: "/packets/latam-to-us",
+    compareTo: "/boundless-vs-citizenpath",
+    compareLabel: "Boundless vs CitizenPath vs Docracy",
+    faqs: [
+      {
+        question: "Is Docracy a Boundless alternative for filing?",
+        answer:
+          "No. Boundless prepares and files USCIS petitions. We sign the supporting packet (I-9, offer, POA, reference, lease), save it so you can reopen it, and tell you where to send each file. Use Boundless if you need them to file. Use Docracy if you already have a filer or only need the extras signed.",
+      },
+      {
+        question: "What does Boundless charge?",
+        answer:
+          "Their FAQ dated 11 June 2026 lists flat service fees: marriage green card $699 Essential / $1,349 Premium; K-1 $1,379 / $2,549; visitor B-1/B-2 $195 plus the $185 State fee; naturalization from $699; EB-1A $8,000–$8,500. USCIS/State fees are extra. If their services page differs, trust that page. We charge $10/month for the supporting packet — not a case fee.",
+      },
+      {
+        question: "Can I use both?",
+        answer:
+          "Yes. Let Boundless (or your attorney) file. Sign the extras here and attach the PDFs. The immigrant kit maps who receives each file.",
+      },
+      {
+        question: "What currency does Boundless charge?",
+        answer:
+          "USD. Their checkout marks priceCurrency USD. A Mexican or Colombian card still pays in dollars — your bank converts and may add a foreign-transaction fee. USCIS fees are also USD; Form G-1450 needs a U.S.-issued card. Docracy Paid is USD $10 on Stripe. Cobro amounts you label (MXN, COP, USD) go to your Mercado Pago or PayPal, not us.",
+      },
+    ],
+    faqsEs: [
+      {
+        question: "¿Docracy es alternativa a Boundless para presentar?",
+        answer:
+          "No. Boundless prepara y presenta peticiones ante USCIS. Nosotros firmamos el paquete de apoyo (I-9, oferta, poder, referencia, arrendamiento), lo guardamos para que lo reabras y te decimos a dónde va cada archivo. Usa Boundless si necesitas que presenten. Usa Docracy si ya tienes quien presente o solo necesitas firmar los extras.",
+      },
+      {
+        question: "¿Cuánto cobra Boundless?",
+        answer:
+          "Su FAQ del 11 de junio de 2026 lista cuotas fijas: green card por matrimonio $699 Essential / $1,349 Premium; K-1 $1,379 / $2,549; visitante B-1/B-2 $195 más $185 de State; naturalización desde $699; EB-1A $8,000–$8,500. Las cuotas de USCIS/State van aparte. Si su página de servicios dice otra cosa, esa manda. Nosotros cobramos $10/mes por el paquete de apoyo — no una cuota de caso.",
+      },
+      {
+        question: "¿Puedo usar los dos?",
+        answer:
+          "Sí. Que Boundless (o tu abogado) presente. Firma los extras aquí y adjunta los PDF. El kit inmigrante mapa quién recibe cada archivo.",
+      },
+      {
+        question: "¿En qué moneda cobra Boundless?",
+        answer:
+          "USD. Su checkout marca priceCurrency USD. Una tarjeta de México o Colombia igual paga en dólares — el banco convierte y puede cobrar comisión internacional. USCIS también cobra en USD; el G-1450 pide tarjeta emitida en EE. UU. El plan de Docracy es USD $10 en Stripe. Los montos de cobro (MXN, COP, USD) van a tu Mercado Pago o PayPal, no a nosotros.",
+      },
+    ],
+  },
+  {
+    slug: "citizenpath-alternative",
+    competitorName: "CitizenPath",
+    xDefault: "es",
+    audience: "immigrant",
+    navDesc: "Supporting docs — not DIY USCIS forms.",
+    seoTitle: "CitizenPath Alternative (2026) — Supporting Docs, Not USCIS Forms | Docracy",
+    seoDescription:
+      "CitizenPath prepares DIY USCIS forms. Docracy signs the extras they ask you to attach — I-9, offer, POA — $10/mo. We don't prepare I-129.",
+    heroHeadline: "CitizenPath prepares the petition PDF. Docracy signs what they told you to attach.",
+    heroSubheadline:
+      "DIY USCIS form software is a different job. We sign I-9, offer, and supporting letters, give you the official links, and save every PDF — $10/month. We don't prepare I-129, I-130, or I-485.",
+    problem:
+      "CitizenPath is built to walk you through USCIS forms and let you file. Useful if you want cheaper DIY than a full-service shop. Useless if what you actually need is the signed extras: I-9 for the employer, an offer letter, a POA, a constancia a Miami landlord will open.",
+    solution:
+      "Keep CitizenPath (or a lawyer) for the petition PDF. Unlock the one Docracy plan for the supporting packet, official send-to links, and a vault you can reopen. We do not replace their form software and we do not file.",
+    comparison: [
+      "$10/month vs CitizenPath packages they publish: from $79–$99; I-130 / I-129F $149; I-485 packet $279; N-400 $199. USCIS fees extra.",
+      "We sign official I-9 and supporting extras they ask you to attach — and we save them so you can reopen later",
+      "We do not prepare or file I-129 / I-130 / I-485 / DS-160",
+      "They bill in USD. Paid is USD $10. Cobro you label in MXN/COP/USD — Docracy never takes that payment.",
+      "CitizenPath is better when you need DIY USCIS forms. Use both if they asked for signed extras.",
+    ],
+    ctaLabel: "Unlock the all-in-one plan — $10/month",
+    ctaTo: "/packets/latam-to-us",
+    compareTo: "/boundless-vs-citizenpath",
+    compareLabel: "Boundless vs CitizenPath vs Docracy",
+    faqs: [
+      {
+        question: "What does CitizenPath charge?",
+        answer:
+          "They publish per-package prices: from $79–$99, I-130 $149, K-1 (I-129F) $149, adjustment of status packet $279, naturalization (N-400) $199. USCIS filing fees are separate (I-485 is $1,440 for most adults). We are $10/month for signed extras — we don't prepare those forms.",
+      },
+      {
+        question: "Will Docracy prepare my I-129 or I-485?",
+        answer: "No. That is CitizenPath (or an attorney). We sign the supporting PDFs they told you to attach.",
+      },
+      {
+        question: "Do you file DS-160?",
+        answer: "No. DS-160 is CEAC (State Department). We link the official site on the immigrant kit. Sign supporting letters here, then upload where CEAC says.",
+      },
+      {
+        question: "What currency does CitizenPath charge?",
+        answer:
+          "USD, same as Boundless. USCIS filing fees are USD. Docracy Paid is USD $10. The cobro you send a client can be labeled MXN or COP because that checkout is yours.",
+      },
+    ],
+    faqsEs: [
+      {
+        question: "¿Cuánto cobra CitizenPath?",
+        answer:
+          "Publican por paquete: desde $79–$99, I-130 $149, K-1 (I-129F) $149, ajuste de estatus $279, naturalización (N-400) $199. Las cuotas de USCIS van aparte (I-485 son $1,440 para la mayoría de adultos). Nosotros $10/mes por los extras firmados — no preparamos esos formularios.",
+      },
+      {
+        question: "¿Docracy prepara mi I-129 o I-485?",
+        answer: "No. Eso es CitizenPath (o un abogado). Firmamos los PDF de apoyo que te pidieron adjuntar.",
+      },
+      {
+        question: "¿Presentan el DS-160?",
+        answer:
+          "No. El DS-160 es CEAC (Departamento de Estado). Enlazamos el sitio oficial en el kit inmigrante. Firma las cartas aquí y súbelas donde CEAC lo pida.",
+      },
+      {
+        question: "¿En qué moneda cobra CitizenPath?",
+        answer:
+          "USD, igual que Boundless. Las cuotas de USCIS son USD. El plan de Docracy es USD $10. El cobro que mandas al cliente lo puedes etiquetar en MXN o COP porque ese checkout es tuyo.",
+      },
+    ],
+  },
+  {
+    slug: "visa-service-alternative",
+    competitorName: "Gestoría de visa",
+    xDefault: "es",
+    audience: "immigrant",
+    navDesc: "Signed packet — they present the trámite.",
+    seoTitle: "Visa Service / Gestoría Alternative — $10 Packet, Not a Filing | Docracy",
+    seoDescription:
+      "Gestoría de visa alternative: one $10/mo plan — I-9, offer, official links, and every PDF saved. We don't file the petition. Spanish-first: /es/kit-llegar-eeuu.",
+    heroHeadline: "A gestoría presents the case. Docracy is the signed packet you hand them.",
+    heroSubheadline:
+      "Tramitadores file. We sign I-9, offer, POA, reference, give you the official links, and save every PDF so you can reopen it — $10/month. Not a substitute for the trámite.",
+    problem:
+      "A gestoría de visa or tramitador is the right hire if you need someone to assemble and present the petition. They charge per case — often hundreds to thousands. It is the wrong hire if you already have that person (or an employer/lawyer) and you only need the extras signed and a place that says where each file goes.",
+    solution:
+      "One Paid plan is the all-in-one package: what to do, official send-to links, I-9 and templates we already ship, constancia, cobro — and we save every file. Give the signed PDFs to your gestoría. We do not present at USCIS or the consulate.",
+    comparison: [
+      "$10/month for the signed extras. MX gestorías we checked publish ~$900–$3,800 MXN for DS-160 / tourist help, plus the $185 USD State fee. Not one company — check theirs.",
+      "Official I-9 + offer, employment, POA, reference, child travel, lease",
+      "Map of who receives each file (employer, USCIS retain, CEAC, landlord) — we don't upload for you",
+      "Gestoría honorarios: usually MXN (COP in Colombia). State MRV $185 USD. Our Paid plan is USD $10; cobro labels are yours.",
+      "Hire a gestoría when you need them to file. Use Docracy when you need the packet signed.",
+    ],
+    ctaLabel: "Unlock the all-in-one plan — $10/month",
+    ctaTo: "/packets/latam-to-us",
+    compareTo: "/boundless-vs-citizenpath",
+    compareLabel: "Boundless vs CitizenPath vs Docracy",
+    faqs: [
+      {
+        question: "What do gestorías charge?",
+        answer:
+          "There is no one price. Mexican shops we checked publish about $900–$3,800 MXN for DS-160 / tourist-visa help (CitaYa $2,000, Visas de Coyoacán $1,200, Super Visas Express $3,800). They bill honorarios in MXN; the $185 State MRV is USD (your bank converts). Colombia shops quote in COP. Boundless and CitizenPath bill their software in USD. Docracy Paid is USD $10; cobro labels are yours.",
+      },
+      {
+        question: "¿Docracy sustituye a una gestoría de visa?",
+        answer:
+          "No. Una gestoría o tramitador presenta. Nosotros firmamos el paquete de apoyo y te decimos a quién mandarlo. Si necesitas que alguien presente, contrátalos. Si ya los tienes, usa esto.",
+      },
+      {
+        question: "Do you submit to the consulate?",
+        answer: "No. Official links on the immigrant kit open CEAC and travel.state.gov. You (or your gestoría) upload.",
+      },
+    ],
+    faqsEs: [
+      {
+        question: "¿Cuánto cobra una gestoría?",
+        answer:
+          "No hay un solo precio. En México, gestoras que revisamos publican unos $900–$3,800 MXN por ayuda con DS-160 / visa de turista (CitaYa $2,000, Visas de Coyoacán $1,200, Super Visas Express $3,800). Los honorarios van en MXN; los $185 de State son USD (el banco convierte). En Colombia cotizan en COP. Boundless y CitizenPath cobran su software en USD. El plan de Docracy es USD $10; las etiquetas de cobro son tuyas.",
+      },
+      {
+        question: "¿Docracy sustituye a una gestoría de visa?",
+        answer:
+          "No. Una gestoría o tramitador presenta. Nosotros firmamos el paquete de apoyo y te decimos a quién mandarlo. Si necesitas que alguien presente, contrátalos. Si ya los tienes, usa esto.",
+      },
+      {
+        question: "¿Envían al consulado?",
+        answer: "No. Los links oficiales del kit abren CEAC y travel.state.gov. Tú (o tu gestoría) subes.",
+      },
+    ],
+  },
 ];
 
 /** One page per competitor: no "connect your account" button anywhere — confirmed via direct
@@ -4051,6 +4254,9 @@ export const IMPORT_GUIDE_PAGES: ImportGuideContent[] = [
 /** Preferred Compare-nav order — majors first; Contractbook + OnlineSignature included whenever
  *  they have pages (required whenever import guides exist). Unknown slugs append alphabetically. */
 const COMPARE_NAV_ORDER = [
+  "boundless-alternative",
+  "citizenpath-alternative",
+  "visa-service-alternative",
   "kita-alternative",
   "alegra-alternative",
   "siigo-alternative",

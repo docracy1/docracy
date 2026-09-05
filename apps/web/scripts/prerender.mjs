@@ -610,6 +610,36 @@ const routes = [
     xDefault: "es",
   },
   {
+    urlPath: "/es/alternativa-a-boundless",
+    outFile: "es/alternativa-a-boundless.html",
+    title: "Alternativa a Boundless (2026) — firma papeles de visa, $10/mes | Docracy",
+    description:
+      "Boundless presenta peticiones ante USCIS (precio en su sitio). Docracy es el paquete de apoyo de $10/mes: I-9 oficial, oferta, poder, constancia. No tramitamos.",
+    locale: "es",
+    alternates: { en: "/boundless-alternative", es: "/es/alternativa-a-boundless" },
+    xDefault: "es",
+  },
+  {
+    urlPath: "/es/alternativa-a-citizenpath",
+    outFile: "es/alternativa-a-citizenpath.html",
+    title: "Alternativa a CitizenPath (2026) — documentos de apoyo, no formularios USCIS | Docracy",
+    description:
+      "CitizenPath prepara formularios USCIS por tu cuenta. Docracy firma los extras que te piden adjuntar — I-9, oferta, poder — $10/mes. No preparamos I-129.",
+    locale: "es",
+    alternates: { en: "/citizenpath-alternative", es: "/es/alternativa-a-citizenpath" },
+    xDefault: "es",
+  },
+  {
+    urlPath: "/es/alternativa-a-gestoria-de-visa",
+    outFile: "es/alternativa-a-gestoria-de-visa.html",
+    title: "Alternativa a gestoría de visa — paquete de $10, no un trámite | Docracy",
+    description:
+      "Alternativa a gestoría de visa: un plan de $10/mes — I-9, oferta, links oficiales y cada PDF guardado. No tramitamos la petición. /es/kit-llegar-eeuu.",
+    locale: "es",
+    alternates: { en: "/visa-service-alternative", es: "/es/alternativa-a-gestoria-de-visa" },
+    xDefault: "es",
+  },
+  {
     urlPath: "/es/firma-de-nda",
     outFile: "es/firma-de-nda.html",
     title: getFeaturePageContent("nda-signing", "es").seoTitle,
@@ -713,9 +743,9 @@ const routes = [
   {
     urlPath: "/packets/latam-to-us",
     outFile: "packets/latam-to-us.html",
-    title: "Sign I-9 & visa supporting docs — immigrant kit | Docracy",
+    title: "Immigrant plan — I-9, official links, saved packet | Docracy",
     description:
-      "Sign the official USCIS I-9, offer letter, and visa supporting docs (POA, reference, child travel). Constancia for a US lease. We don't file petitions or run E-Verify.",
+      "One Paid plan: what to do, official USCIS/CEAC links, sign I-9 and visa extras, and every PDF saved so you can reopen it. $10/mo. Not Boundless — we don't file petitions.",
     locale: "en",
     alternates: { en: "/packets/latam-to-us", es: "/es/kit-llegar-eeuu" },
     xDefault: "es",
@@ -723,9 +753,9 @@ const routes = [
   {
     urlPath: "/es/kit-llegar-eeuu",
     outFile: "es/kit-llegar-eeuu.html",
-    title: "Firma el I-9 y papeles de visa — kit inmigrante | Docracy",
+    title: "Plan inmigrante — I-9, links oficiales, todo guardado | Docracy",
     description:
-      "Firma el I-9 oficial de USCIS, la oferta y documentos de apoyo para visa (poder, referencia, viaje de menor). Constancia para rentar. No tramitamos la petición ni E-Verify.",
+      "Un solo plan: qué hacer, links oficiales de USCIS/CEAC, firma I-9 y extras de visa, y todos los PDF guardados para cuando los pidas. $10/mes. No es Boundless — no tramitamos la petición.",
     locale: "es",
     alternates: { en: "/packets/latam-to-us", es: "/es/kit-llegar-eeuu" },
     xDefault: "es",
@@ -1224,6 +1254,9 @@ const routes = [
       "kita-alternative": { en: "/kita-alternative", es: "/es/alternativa-a-kita" },
       "alegra-alternative": { en: "/alegra-alternative", es: "/es/alternativa-a-alegra" },
       "siigo-alternative": { en: "/siigo-alternative", es: "/es/alternativa-a-siigo" },
+      "boundless-alternative": { en: "/boundless-alternative", es: "/es/alternativa-a-boundless" },
+      "citizenpath-alternative": { en: "/citizenpath-alternative", es: "/es/alternativa-a-citizenpath" },
+      "visa-service-alternative": { en: "/visa-service-alternative", es: "/es/alternativa-a-gestoria-de-visa" },
     }[p.slug];
     return {
       urlPath: `/${p.slug}`,
@@ -1241,11 +1274,11 @@ const routes = [
       outFile: `${p.slug}.html`,
       title: p.seoTitle,
       description: p.seoDescription,
-      ...(p.lane === "latam" && p.es
+      ...((p.lane === "latam" || p.lane === "immigrant") && p.es
         ? { locale: "en", alternates: { en: `/${p.slug}`, es: `/es/${p.slug}` }, xDefault: "es" }
         : {}),
     };
-    if (p.lane !== "latam" || !p.es) return [en];
+    if ((p.lane !== "latam" && p.lane !== "immigrant") || !p.es) return [en];
     return [
       en,
       {

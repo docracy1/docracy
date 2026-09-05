@@ -6925,4 +6925,13 @@ a.hero-latam-cta-btn {
 .packet-step h3 {
   color: var(--ink);
 }
+.packet-includes {
+  margin-top: 16px;
+}
+.packet-includes .dashboard-corridor-card {
+  cursor: default;
+}
+.packet-includes .dashboard-corridor-card:hover {
+  border-color: var(--hairline);
+}
 

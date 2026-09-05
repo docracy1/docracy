@@ -10,15 +10,17 @@ export default function SeoLandingTemplate({ slug }: { slug: string }) {
   const { locale, t } = useI18n();
   const copy = page ? resolveSeoLandingCopy(page, locale) : null;
   const latam = page?.lane === "latam";
+  const immigrant = page?.lane === "immigrant";
+  const bilingual = latam || immigrant;
   const canonicalPath = page
-    ? latam && locale === "es"
+    ? bilingual && locale === "es"
       ? `/es/${page.slug}`
       : `/${page.slug}`
     : undefined;
 
   usePageMeta(copy?.seoTitle || "Docracy", copy?.seoDescription || "", {
     canonicalPath: canonicalPath ?? (page ? `/${page.slug}` : undefined),
-    ...(latam && page
+    ...(bilingual && page
       ? { alternates: { en: `/${page.slug}`, es: `/es/${page.slug}` }, xDefault: "es" as const }
       : {}),
   });
@@ -29,8 +31,14 @@ export default function SeoLandingTemplate({ slug }: { slug: string }) {
     track("landingpage_cta_clicked", { source: `seo:${page.slug}:${placement}` });
   };
 
-  const ctaTo = localizePath(latam ? "/cobro#send" : "/prepare", locale);
-  const editorDemoTo = localizePath(latam ? "/cobro#send" : "/prepare?freeTemplate=mutual-nda", locale);
+  const ctaTo = localizePath(
+    immigrant ? "/packets/latam-to-us" : latam ? "/cobro#send" : "/prepare",
+    locale
+  );
+  const editorDemoTo = localizePath(
+    immigrant ? "/packets/latam-to-us" : latam ? "/cobro#send" : "/prepare?freeTemplate=mutual-nda",
+    locale
+  );
   const pricingTo = localizePath("/pricing", locale);
   const faqs = copy.faqs ?? SEO_FAQS;
   const relatedPages = SEO_LANDING_PAGES.filter(
@@ -43,12 +51,26 @@ export default function SeoLandingTemplate({ slug }: { slug: string }) {
         p.secondaryCompetitor === page.secondaryCompetitor)
   ).slice(0, 3);
 
-  const heroCta = latam ? t("seoVs.latamCta") : t("seoVs.esignCta");
-  const midTitle = latam
-    ? t("seoVs.latamMidTitle", { a: page.primaryCompetitor, b: page.secondaryCompetitor })
-    : t("seoVs.esignMidTitle", { a: page.primaryCompetitor, b: page.secondaryCompetitor });
-  const midBody = latam ? t("seoVs.latamMidBody") : t("seoVs.esignMidBody");
-  const midCta = latam ? t("seoVs.latamMidCta") : t("seoVs.esignMidCta");
+  const heroCta = immigrant
+    ? t("seoVs.immigrantCta")
+    : latam
+      ? t("seoVs.latamCta")
+      : t("seoVs.esignCta");
+  const midTitle = immigrant
+    ? t("seoVs.immigrantMidTitle", { a: page.primaryCompetitor, b: page.secondaryCompetitor })
+    : latam
+      ? t("seoVs.latamMidTitle", { a: page.primaryCompetitor, b: page.secondaryCompetitor })
+      : t("seoVs.esignMidTitle", { a: page.primaryCompetitor, b: page.secondaryCompetitor });
+  const midBody = immigrant
+    ? t("seoVs.immigrantMidBody")
+    : latam
+      ? t("seoVs.latamMidBody")
+      : t("seoVs.esignMidBody");
+  const midCta = immigrant
+    ? t("seoVs.immigrantMidCta")
+    : latam
+      ? t("seoVs.latamMidCta")
+      : t("seoVs.esignMidCta");
 
   return (
     <div>
@@ -116,7 +138,7 @@ export default function SeoLandingTemplate({ slug }: { slug: string }) {
           </Link>
         </div>
 
-        {relatedPages.length > 0 && (
+        {(relatedPages.length > 0 || immigrant) && (
           <div style={{ marginBottom: 40 }}>
             <h2 style={{ fontSize: 20, marginBottom: 12 }}>{t("seoVs.more")}</h2>
             <ul style={{ margin: 0, paddingLeft: 20, lineHeight: 1.9 }}>
@@ -127,6 +149,22 @@ export default function SeoLandingTemplate({ slug }: { slug: string }) {
                   </Link>
                 </li>
               ))}
+              {immigrant ? (
+                <>
+                  <li>
+                    <Link to={localizePath("/boundless-alternative", locale)}>{t("alt.related.boundless")}</Link>
+                  </li>
+                  <li>
+                    <Link to={localizePath("/citizenpath-alternative", locale)}>{t("alt.related.citizenpath")}</Link>
+                  </li>
+                  <li>
+                    <Link to={localizePath("/visa-service-alternative", locale)}>{t("alt.related.visaService")}</Link>
+                  </li>
+                  <li>
+                    <Link to={localizePath("/packets/latam-to-us", locale)}>{t("footer.latamUsPacket")}</Link>
+                  </li>
+                </>
+              ) : null}
             </ul>
           </div>
         )}

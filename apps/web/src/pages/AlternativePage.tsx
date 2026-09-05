@@ -55,14 +55,22 @@ export default function AlternativePage({ slug }: { slug: string }) {
   const faqs = useEsBody && page.faqsEs ? page.faqsEs : (page.faqs ?? defaultAlternativeFaqs(page.competitorName));
   const compareHref = page.compareTo ?? (page.compareBlogSlug ? `/blog/${page.compareBlogSlug}` : null);
 
-  const relatedAlts = [
-    { slug: "kita-alternative", labelKey: "alt.related.kita" },
-    { slug: "alegra-alternative", labelKey: "alt.related.alegra" },
-    { slug: "siigo-alternative", labelKey: "alt.related.siigo" },
-    { slug: "docusign-alternative", labelKey: "alt.related.docusign" },
-    { slug: "hellosign-alternative", labelKey: "alt.related.hellosign" },
-    { slug: "adobe-sign-alternative", labelKey: "alt.related.adobeSign" },
-  ]
+  const relatedAlts = (
+    page.audience === "immigrant"
+      ? [
+          { slug: "boundless-alternative", labelKey: "alt.related.boundless" },
+          { slug: "citizenpath-alternative", labelKey: "alt.related.citizenpath" },
+          { slug: "visa-service-alternative", labelKey: "alt.related.visaService" },
+        ]
+      : [
+          { slug: "kita-alternative", labelKey: "alt.related.kita" },
+          { slug: "alegra-alternative", labelKey: "alt.related.alegra" },
+          { slug: "siigo-alternative", labelKey: "alt.related.siigo" },
+          { slug: "docusign-alternative", labelKey: "alt.related.docusign" },
+          { slug: "hellosign-alternative", labelKey: "alt.related.hellosign" },
+          { slug: "adobe-sign-alternative", labelKey: "alt.related.adobeSign" },
+        ]
+  )
     .filter((r) => r.slug !== slug)
     .map((r) => ({ ...r, label: t(r.labelKey) }));
 
@@ -142,9 +150,15 @@ export default function AlternativePage({ slug }: { slug: string }) {
               <Link to={localizePath(`/${rel.slug}`, locale)}>{rel.label}</Link>
             </li>
           ))}
-          <li style={{ marginBottom: 6 }}>
-            <Link to={localizePath("/free-templates/mutual-nda", locale)}>{t("alt.related.mutualNda")}</Link>
-          </li>
+          {page.audience === "immigrant" ? (
+            <li style={{ marginBottom: 6 }}>
+              <Link to={localizePath("/packets/latam-to-us", locale)}>{t("footer.latamUsPacket")}</Link>
+            </li>
+          ) : (
+            <li style={{ marginBottom: 6 }}>
+              <Link to={localizePath("/free-templates/mutual-nda", locale)}>{t("alt.related.mutualNda")}</Link>
+            </li>
+          )}
           {slug === "eversign-alternative" && (
             <li style={{ marginBottom: 6 }}>
               <Link to={localizePath("/docracy-alternative", locale)}>{t("alt.related.docracyHistory")}</Link>

@@ -197,6 +197,9 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/es/alternativa-a-kita" element={<AlternativePage slug="kita-alternative" />} />
           <Route path="/es/alternativa-a-alegra" element={<AlternativePage slug="alegra-alternative" />} />
           <Route path="/es/alternativa-a-siigo" element={<AlternativePage slug="siigo-alternative" />} />
+          <Route path="/es/alternativa-a-boundless" element={<AlternativePage slug="boundless-alternative" />} />
+          <Route path="/es/alternativa-a-citizenpath" element={<AlternativePage slug="citizenpath-alternative" />} />
+          <Route path="/es/alternativa-a-gestoria-de-visa" element={<AlternativePage slug="visa-service-alternative" />} />
           {IMPORT_GUIDE_PAGES.map((p) => (
             <Route key={p.slug} path={`/import-from-${p.slug}`} element={<ImportGuidePage slug={p.slug} />} />
           ))}
@@ -221,7 +224,7 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           {SEO_LANDING_PAGES.map((page) => (
             <Route key={page.slug} path={`/${page.slug}`} element={<SeoLandingTemplate slug={page.slug} />} />
           ))}
-          {SEO_LANDING_PAGES.filter((page) => page.lane === "latam").map((page) => (
+          {SEO_LANDING_PAGES.filter((page) => page.lane === "latam" || page.lane === "immigrant").map((page) => (
             <Route key={`es-${page.slug}`} path={`/es/${page.slug}`} element={<SeoLandingTemplate slug={page.slug} />} />
           ))}
           {PARTNER_PAGES.map((page) => (

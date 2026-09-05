@@ -17,6 +17,7 @@ export default function Pricing() {
   const t = useT();
   const { locale } = useI18n();
   useSeoMeta("pricing");
+  const planRows = PLAN_ROWS.filter((row) => !row.esOnly || locale === "es");
 
   /** null = logged out (show sticky dock); undefined = loading; Account = signed in (hide dock). */
   const [signedOut, setSignedOut] = useState<boolean | null>(null);
@@ -90,7 +91,7 @@ export default function Pricing() {
               </tr>
             </thead>
             <tbody>
-              {PLAN_ROWS.map((row) => (
+              {planRows.map((row) => (
                 <tr key={row.labelKey}>
                   <td>{t(row.labelKey)}</td>
                   <td>
@@ -145,7 +146,7 @@ export default function Pricing() {
                   {isOpen && (
                     <div id={panelId} className="pricing-mobile-card-body">
                       <ul className="pricing-mobile-features">
-                        {PLAN_ROWS.map((row) => {
+                        {planRows.map((row) => {
                           const value = planValue(row, plan.id);
                           const included = value !== false;
                           return (
