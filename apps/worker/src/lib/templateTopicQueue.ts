@@ -1,4 +1,5 @@
 import type { Env } from "@docracy/shared";
+import { LATAM_JOB_PHRASE_TEMPLATE_PRIORITY_SQL } from "./latamJobPhrasePriority";
 import { TEMPLATE_TOPIC_QUEUE_SEED_SQL } from "./templateTopicQueueSeed";
 
 /** Same shape as migrations/0026_template_topic_queue.sql — IF NOT EXISTS so we don't depend on CI D1:Edit. */
@@ -56,6 +57,7 @@ export async function ensureWeeklyTemplateInfra(env: Env): Promise<void> {
     }
   }
   await db.exec(TEMPLATE_TOPIC_QUEUE_SEED_SQL);
+  await db.exec(LATAM_JOB_PHRASE_TEMPLATE_PRIORITY_SQL);
 }
 
 /** True when /api/marketplace?origin=weekly has nothing to show yet. */

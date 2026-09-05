@@ -166,11 +166,19 @@ async function findOrCreateAccount(
 
   if (existing) {
     ctx.waitUntil(
-      db
-        .prepare(`UPDATE accounts SET last_login_at = ? WHERE id = ?`)
-        .bind(nowIso(), existing.id)
-        .run()
-        .catch((err) => console.error("Auth D1 audit (last_login_at) failed (non-fatal):", err))
+      (async () => {
+        try {
+          await db.prepare(`UPDATE accounts SET last_login_at = ? WHERE id = ?`).bind(nowIso(), existing.id).run();
+          if (locale) {
+            await db
+              .prepare(`UPDATE accounts SET locale = ? WHERE id = ? AND locale IS NULL`)
+              .bind(locale, existing.id)
+              .run();
+          }
+        } catch (err) {
+          console.error("Auth D1 audit (last_login_at / locale) failed (non-fatal):", err);
+        }
+      })()
     );
     return { id: existing.id, isPaid: !!existing.is_paid, isEnterprise: !!existing.is_enterprise };
   }

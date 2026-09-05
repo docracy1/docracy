@@ -3,6 +3,7 @@ import { slugify } from "./blogPosts";
 import { pingIndexNow } from "./indexNow";
 import { listWeeklyOfficial, publishOfficialTemplate } from "./marketplaceTemplates";
 import { renderTemplatePdf, type TemplatePdfBlock } from "./templatePdf";
+import { isLatamJobPhraseTemplate } from "./latamJobPhrasePriority";
 import { ensureWeeklyTemplateInfra, shouldCatchUpWeeklyTemplates } from "./templateTopicQueue";
 import type { Env } from "@docracy/shared";
 
@@ -162,21 +163,29 @@ export function parseAndValidateDraft(raw: string, fallback: TopicRow): DraftedT
     if (!slug) slug = fallback.slug;
 
     if (!title || !seoTitle || !description || !useCase || !definition || !legalSummary) return null;
-    if (keyClauses.length < 4 || fillInFields.length < 4 || chatgptPrompts.length < 2) return null;
+    const jobPhrase = isLatamJobPhraseTemplate(fallback.id);
+    if (keyClauses.length < (jobPhrase ? 3 : 4) || fillInFields.length < (jobPhrase ? 3 : 4) || chatgptPrompts.length < 2) {
+      return null;
+    }
     if (signerLabels.length < 1 || signerLabels.length > 3) return null;
 
     const sections = blocks.filter((b) => b.type === "section");
     const paragraphs = blocks.filter((b) => b.type === "paragraph");
     const fields = blocks.filter((b) => b.type === "field");
     const sigBlocks = blocks.filter((b) => b.type === "signatures");
-    if (sections.length < 5 || paragraphs.length < 8 || fields.length < 4 || sigBlocks.length !== 1) return null;
+    const minSections = jobPhrase ? 3 : 5;
+    const minParagraphs = jobPhrase ? 5 : 8;
+    const minFields = jobPhrase ? 3 : 4;
+    if (sections.length < minSections || paragraphs.length < minParagraphs || fields.length < minFields || sigBlocks.length !== 1) {
+      return null;
+    }
 
     const wordCount = paragraphs
       .map((b) => (b.type === "paragraph" ? b.text : ""))
       .join(" ")
       .split(/\s+/)
       .filter(Boolean).length;
-    if (wordCount < 350) return null;
+    if (wordCount < (jobPhrase ? 200 : 350)) return null;
 
     const sig = sigBlocks[0];
     if (!sig || sig.type !== "signatures") return null;

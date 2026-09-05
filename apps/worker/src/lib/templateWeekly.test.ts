@@ -120,6 +120,44 @@ describe("weekly template FreeTemplate-parity validation", () => {
     });
     expect(parseAndValidateDraft(thin, baseTopic)).toBeNull();
   });
+
+  it("accepts a shorter acknowledgment draft for LATAM job-phrase topics", () => {
+    const words = "Family picks up the acta and files the origin apostille. Docracy does not stamp it. ";
+    const ack = JSON.stringify({
+      title: "Acta Apostille Errand Limited Power of Attorney",
+      seoTitle: "Free Acta Apostille Errand Limited Power of Attorney Template",
+      description: "Narrow POA so family can collect an acta and take it to the origin apostille office.",
+      useCase: "Use when you are in the US and a relative must pick up a birth certificate.",
+      definition: "A limited power of attorney for a named civil-registry and apostille errand.",
+      keyClauses: ["Named errand", "No general authority", "Not an apostille"],
+      fillInFields: ["[Principal]", "[Agent]", "[City]"],
+      legalSummary: "Signing names who may collect the acta. It does not apostille the document.",
+      chatgptPrompts: ["Fill this POA for an acta in Guadalajara.", "Explain that Docracy does not apostille."],
+      signerLabels: ["Principal", "Agent"],
+      blocks: [
+        { type: "section", text: "Parties" },
+        { type: "paragraph", text: words.repeat(8) },
+        { type: "field", label: "Principal: " },
+        { type: "section", text: "Errand" },
+        { type: "paragraph", text: words.repeat(6) },
+        { type: "field", label: "Document: " },
+        { type: "section", text: "Limits" },
+        { type: "paragraph", text: words.repeat(6) },
+        { type: "field", label: "City: " },
+        { type: "paragraph", text: words.repeat(4) },
+        { type: "paragraph", text: words.repeat(4) },
+        {
+          type: "signatures",
+          signers: [
+            { label: "Principal", order: 1 },
+            { label: "Agent", order: 2 },
+          ],
+        },
+      ],
+    });
+    expect(parseAndValidateDraft(ack, { ...baseTopic, id: "ttq_119" })).not.toBeNull();
+    expect(parseAndValidateDraft(ack, baseTopic)).toBeNull();
+  });
 });
 
 describe("template PDF layout (FreeTemplate scheme)", () => {
@@ -161,7 +199,7 @@ describe("weekly template runtime infra", () => {
     const first = (await d1
       .prepare(`SELECT slug FROM template_topic_queue WHERE status = 'queued' ORDER BY sort_order ASC LIMIT 1`)
       .first()) as { slug: string } | null;
-    expect(first?.slug).toBe("residential-lease-addendum");
+    expect(first?.slug).toBe("acta-apostille-errand-limited-poa");
     const acta = (await d1
       .prepare(`SELECT slug FROM template_topic_queue WHERE slug = ?`)
       .bind("acta-apostille-errand-limited-poa")

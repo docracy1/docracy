@@ -221,6 +221,19 @@ for (const c of GENERATED_COUNTRY_CORRIDORS) {
   }
 }
 
+const sitemap = fs.readFileSync(path.join(__dirname, "../public/sitemap.xml"), "utf8");
+for (const loc of [
+  "/es/acta",
+  "/es/cita-consular",
+  "/es/ead-tps",
+  "/es/chip-y-banco",
+  "/es/buscar",
+  "/es/quien-sube-donde",
+  "/es/kit-llegar-eeuu",
+]) {
+  assert.ok(sitemap.includes(`<loc>https://docracy.io${loc}</loc>`), `sitemap missing ${loc}`);
+}
+
 fs.unlinkSync(out);
 fs.unlinkSync(marketingOut);
 console.log("seoLatam.test.mjs: ok");
