@@ -6984,3 +6984,88 @@ a.dashboard-nav-subitem {
   border-color: var(--hairline);
 }
 
+.who-files-disclaimer {
+  margin: 28px 0 0;
+  padding: 12px 14px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--body);
+  background: var(--primary-soft);
+  border-radius: 8px;
+}
+.who-files-progress {
+  margin: 20px 0 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.who-files-jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin: 0 0 8px;
+  font-size: 14px;
+}
+.who-files-group {
+  margin-top: 28px;
+}
+.who-files-group-title {
+  font-size: 18px;
+  margin: 0 0 4px;
+}
+.who-files-row-head {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.who-files-row-head input {
+  margin-top: 6px;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.who-files-row-head h4 {
+  margin: 0;
+  font-size: 17px;
+}
+.who-files-row-head label {
+  cursor: pointer;
+}
+.who-files-body {
+  font-size: 14px;
+  color: var(--mute);
+  margin: 8px 0 0;
+}
+.who-files-wedont {
+  font-size: 13.5px;
+  margin: 8px 0 0;
+}
+.who-files-wedont span {
+  font-weight: 700;
+}
+.who-files-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 12px;
+}
+.who-files-country {
+  margin-top: 16px;
+  padding: 16px 18px;
+}
+.who-files-country p {
+  font-size: 14px;
+  color: var(--mute);
+  margin: 6px 0 10px;
+}
+.who-files-country select {
+  width: 100%;
+  max-width: 420px;
+  padding: 8px 10px;
+  font-size: 14px;
+}
+.who-files-country-out {
+  margin-top: 12px !important;
+  color: var(--body) !important;
+}
+

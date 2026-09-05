@@ -3224,6 +3224,77 @@ const en: Messages = {
   "collectPacket.howTo2": "Send the mutual NDA if you need confidentiality first.",
   "collectPacket.howTo3": "For RFC/CSF, upload their PDF or a cover page.",
   "collectPacket.howTo4": "Share the year with your CPA from the 1099 locker — we do not e-file.",
+  "footer.whoFiles": "Who files where",
+  "dash.corridorWhoFiles": "Mark each PDF: employer, USCIS, CBP, IRS, or your origin. You upload. We don't file.",
+  "whoFiles.seoTitle": "Who Files Where — I-9, USCIS, CEAC, I-94, Apostille | Docracy",
+  "whoFiles.seoDescription":
+    "Checklist: who receives each signed PDF. Employer keeps the I-9. You upload to CEAC, USCIS, CBP, IRS, SSA. Apostille is your origin government. We sign and save. We don't file. $10/month.",
+  "whoFiles.kicker": "You upload · we don't file",
+  "whoFiles.heroTitle": "Who receives this file. You still upload it.",
+  "whoFiles.heroSub":
+    "Mark each item after you deliver it. Official portals open in a new tab. Same $10/month plan signs the extras and keeps the PDFs. We do not file USCIS, DS-160, AR-11, W-7, or an apostille.",
+  "whoFiles.ctaPaid": "Unlock the immigrant plan — $10/month",
+  "whoFiles.ctaLogin": "Sign in to unlock the packet",
+  "whoFiles.ctaOpen": "Open the immigrant plan",
+  "whoFiles.disclaimer":
+    "This is a delivery map, not a filing product. Checkboxes stay on this device. Official links are government sites. Signing an I-9 here is not work authorization and is not E-Verify.",
+  "whoFiles.progress": "{{done}} of {{total}} marked as delivered",
+  "whoFiles.jumpLabel": "Jump to a section",
+  "whoFiles.weDontLabel": "Docracy does not:",
+  "whoFiles.group.employer": "Employer keeps it",
+  "whoFiles.group.file": "You or your filer upload",
+  "whoFiles.group.after": "After you arrive",
+  "whoFiles.group.origin": "Origin government / family",
+  "whoFiles.group.money": "Landlord and clients",
+  "whoFiles.apostillePick": "Your origin apostille / legalization office",
+  "whoFiles.apostillePickHint":
+    "Pick the country you left. The link is that government's page — not us. Cuba is legalization at MINJUS, not an Apostille.",
+  "whoFiles.apostillePickEmpty": "Choose a country…",
+  "whoFiles.everify.title": "E-Verify → the employer (DHS enrolls them)",
+  "whoFiles.everify.body":
+    "If the employer uses E-Verify, they enroll at e-verify.gov after they inspect List A/B/C. Signing Section 1 or 2 here does not create a case.",
+  "whoFiles.everify.official": "e-verify.gov (official)",
+  "whoFiles.weDont.offer": "We don't send this to USCIS. The employer keeps the PDF.",
+  "whoFiles.weDont.i9": "Inspect List A/B/C or run E-Verify. The employer retains the form — do not mail it to USCIS.",
+  "whoFiles.weDont.everify": "Enroll the employer or create an E-Verify case.",
+  "whoFiles.weDont.visa": "File I-129, I-130, I-485, I-864, or a consular packet.",
+  "whoFiles.weDont.ceac": "Invent or submit DS-160. You upload on CEAC.",
+  "whoFiles.weDont.uscis": "File a petition. Boundless, a lawyer, or you use myaccount.uscis.gov.",
+  "whoFiles.weDont.uscisAccount": "Open or recover a USCIS online account.",
+  "whoFiles.weDont.i94": "Retrieve or host the admission record. That is CBP.",
+  "whoFiles.weDont.address": "File AR-11. Use uscis.gov/addresschange — usually the online account.",
+  "whoFiles.weDont.ssn": "File SS-5 or issue a Social Security number.",
+  "whoFiles.weDont.itin": "Prepare or mail W-7. We don't invent that form or ship W-8BEN.",
+  "whoFiles.weDont.w9": "Decide if you are a US person, or invent a W-8BEN.",
+  "whoFiles.weDont.apostille": "Stamp, courier, or legalize. That is SRE, Cancillería, MINJUS, or your foreign ministry.",
+  "whoFiles.weDont.poa": "Apostille the power of attorney. Sign it here; stamp it at origin.",
+  "whoFiles.weDont.child": "Book tickets or talk to CBP about the child.",
+  "whoFiles.weDont.lease": "Notarize the lease or guarantee the landlord accepts the constancia.",
+  "whoFiles.weDont.constancia": "Issue a W-2 or a SAT CSF. This is a Docracy index URL.",
+  "whoFiles.weDont.cobro": "Take the money or stamp CFDI / DIAN. Paste your Mercado Pago or PayPal.",
+  "whoFiles.faq.1.q": "Do you file this with USCIS or CEAC?",
+  "whoFiles.faq.1.a":
+    "No. You (or your lawyer / Boundless / CitizenPath) upload. We sign supporting PDFs and tell you which official tab to open.",
+  "whoFiles.faq.2.q": "Do you run E-Verify or inspect I-9 documents?",
+  "whoFiles.faq.2.a":
+    "No. We sign Sections 1 and 2. The employer inspects List A/B/C and, if they use E-Verify, enrolls at e-verify.gov.",
+  "whoFiles.faq.3.q": "Do you apostille Mexican or Colombian papers?",
+  "whoFiles.faq.3.a":
+    "No. Pick your country in the list — SRE, Cancillería, or the verified .gob page. Cuba is MINJUS legalization, not an Apostille.",
+  "whoFiles.faq.4.q": "Do you submit W-7 or retrieve I-94?",
+  "whoFiles.faq.4.a":
+    "No. ITIN is IRS.gov. I-94 is i94.cbp.dhs.gov. We don't invent W-7 and we don't host the CBP record.",
+  "whoFiles.faq.5.q": "Does marking a box file anything?",
+  "whoFiles.faq.5.a":
+    "No. Checks stay in this browser so you remember what you already delivered. Nothing is sent to a government.",
+  "whoFiles.faq.6.q": "What does the $10/month plan do here?",
+  "whoFiles.faq.6.a":
+    "Sign the extras, keep every PDF past 9 days (vault until next April 15 or 13 months), share a constancia, send cobro. The checklist and official links are readable without Paid.",
+  "whoFiles.howToName": "How to deliver each signed file",
+  "whoFiles.howTo1": "Sign the supporting PDF on Docracy (I-9, offer, POA, lease).",
+  "whoFiles.howTo2": "Open the official portal in the row — USCIS, CEAC, CBP, IRS, SSA, or your origin .gob.",
+  "whoFiles.howTo3": "You upload or the employer keeps it. We do not submit.",
+  "whoFiles.howTo4": "Mark the row when you have delivered it. Unlock Paid to reopen the PDF later.",
 };
 
 export default en;

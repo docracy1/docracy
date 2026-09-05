@@ -224,6 +224,7 @@ const LATAM_OUTCOMES: typeof AFTER_SIGN_OUTCOMES = [
   { icon: "users", titleKey: "footer.moreCountries", bodyKey: "dash.corridorMoreCountries", to: "/latam", linkKey: "latamDesk.openCountry" },
   { icon: "duplicate", titleKey: "footer.immigrantHousing", bodyKey: "dash.corridorHousing", to: "/immigrant-housing", linkKey: "latamDesk.openKit" },
   { icon: "badge", titleKey: "footer.afterArrival", bodyKey: "dash.corridorAfterArrival", to: "/after-arrival", linkKey: "latamDesk.openKit" },
+  { icon: "badge", titleKey: "footer.whoFiles", bodyKey: "dash.corridorWhoFiles", to: "/who-files-where", linkKey: "latamDesk.openKit" },
   { icon: "badge", titleKey: "footer.itin", bodyKey: "dash.corridorItin", to: "/itin", linkKey: "latamDesk.openKit" },
   { icon: "users", titleKey: "landing.out3.title", bodyKey: "landing.out3.body", to: "/packets/latam-contractor", linkKey: "landing.out3.link" },
   { icon: "duplicate", titleKey: "landing.out6.title", bodyKey: "landing.out6.body", to: "/packets/collect", linkKey: "landing.out6.link" },

@@ -1139,6 +1139,12 @@ export default function Dashboard() {
             <NavIcon name="documents" />
             <span>{t("footer.afterArrival")}</span>
           </Link>
+          {locale === "es" ? (
+            <Link to={localizePath("/who-files-where", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
+              <NavIcon name="documents" />
+              <span>{t("footer.whoFiles")}</span>
+            </Link>
+          ) : null}
           <div className="dashboard-nav-group">
             <button
               type="button"
@@ -1486,6 +1492,15 @@ export default function Dashboard() {
                     <Link to="/prepare?ref=dashboard-first-run" className="btn-secondary" style={{ textDecoration: "none" }}>
                       {t("dash.firstRunUpload")}
                     </Link>
+                    {locale === "es" ? (
+                      <Link
+                        to={localizePath("/who-files-where", locale)}
+                        className="btn-secondary"
+                        style={{ textDecoration: "none" }}
+                      >
+                        {t("footer.whoFiles")}
+                      </Link>
+                    ) : null}
                   </div>
                 </div>
               ) : awaitingYouDocs.length === 0 ? (
@@ -1596,6 +1611,12 @@ export default function Dashboard() {
                     {" · "}
                     <Link to={localizePath("/after-arrival", locale)}>{t("footer.afterArrival")}</Link>
                     {" · "}
+                    {locale === "es" ? (
+                      <>
+                        <Link to={localizePath("/who-files-where", locale)}>{t("footer.whoFiles")}</Link>
+                        {" · "}
+                      </>
+                    ) : null}
                     <Link to={localizePath("/itin", locale)}>{t("footer.itin")}</Link>
                     {" · "}
                     <Link to={localizePath("/immigrant-housing", locale)}>{t("footer.immigrantHousing")}</Link>
@@ -2925,6 +2946,11 @@ export default function Dashboard() {
             <Link to={localizePath("/i-9", locale)} onClick={() => setMoreSheetOpen(false)}>
               {t("footer.i9")} · {t("dash.freeHint")}
             </Link>
+            {locale === "es" ? (
+              <Link to={localizePath("/who-files-where", locale)} onClick={() => setMoreSheetOpen(false)}>
+                {t("footer.whoFiles")}
+              </Link>
+            ) : null}
             <Link to={localizePath("/latam", locale)} onClick={() => setMoreSheetOpen(false)}>
               {t("dash.navCountries")}
             </Link>

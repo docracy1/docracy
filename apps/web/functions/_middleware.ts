@@ -79,6 +79,8 @@ const TRACKED_ROUTES = new Set([
   "/es/colombia-a-eeuu",
   "/es/arrendamiento-inmigrante",
   "/es/despues-de-llegar",
+  "/who-files-where",
+  "/es/quien-sube-donde",
   "/es/itin",
   ...GENERATED_COUNTRY_CORRIDORS.map((c) => c.esPath),
   "/packets/latam-to-us",

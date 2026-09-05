@@ -785,6 +785,26 @@ const routes = [
     xDefault: "es",
   },
   {
+    urlPath: "/who-files-where",
+    outFile: "who-files-where.html",
+    title: "Who Files Where — I-9, USCIS, CEAC, I-94, Apostille | Docracy",
+    description:
+      "Checklist: who receives each signed PDF. Employer keeps the I-9. You upload to CEAC, USCIS, CBP, IRS, SSA. Apostille is your origin government. We sign and save. We don't file. $10/month.",
+    locale: "en",
+    alternates: { en: "/who-files-where", es: "/es/quien-sube-donde" },
+    xDefault: "es",
+  },
+  {
+    urlPath: "/es/quien-sube-donde",
+    outFile: "es/quien-sube-donde.html",
+    title: "Quién sube dónde — I-9, USCIS, CEAC, I-94, apostilla | Docracy",
+    description:
+      "Lista: quién recibe cada PDF firmado. El empleador guarda el I-9. Tú subes a CEAC, USCIS, CBP, IRS, SSA. La apostilla es tu gobierno. Firmamos y guardamos. No tramitamos. $10/mes.",
+    locale: "es",
+    alternates: { en: "/who-files-where", es: "/es/quien-sube-donde" },
+    xDefault: "es",
+  },
+  {
     urlPath: "/es/formulario-i-9",
     outFile: "es/formulario-i-9.html",
     title: getFeaturePageContent("i-9", "es").seoTitle,

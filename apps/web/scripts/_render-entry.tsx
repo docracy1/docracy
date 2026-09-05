@@ -36,6 +36,7 @@ import Constancia from "../src/pages/Constancia";
 import Cobro from "../src/pages/Cobro";
 import LatamDesk from "../src/pages/LatamDesk";
 import LatamUsPacket from "../src/pages/LatamUsPacket";
+import WhoFilesWhere from "../src/pages/WhoFilesWhere";
 import Dpa from "../src/pages/Dpa";
 import Privacy from "../src/pages/Privacy";
 import Terms from "../src/pages/Terms";
@@ -111,6 +112,8 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/es/kit-contratista-latam" element={<LatamContractorPacket />} />
           <Route path="/packets/latam-to-us" element={<LatamUsPacket />} />
           <Route path="/es/kit-llegar-eeuu" element={<LatamUsPacket />} />
+          <Route path="/who-files-where" element={<WhoFilesWhere />} />
+          <Route path="/es/quien-sube-donde" element={<WhoFilesWhere />} />
           <Route path="/packets/trades" element={<JobPacket packetId="trades" />} />
           <Route path="/es/kit-oficios" element={<JobPacket packetId="trades" />} />
           <Route path="/packets/latam-trade" element={<JobPacket packetId="latam-trade" />} />

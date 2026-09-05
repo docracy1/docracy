@@ -23,6 +23,7 @@ const ITEMS: Array<{
   { titleKey: "footer.colombiaToUs", bodyKey: "dash.corridorColombia", to: "/colombia-to-us", linkKey: "latamDesk.openKit" },
   { titleKey: "footer.immigrantHousing", bodyKey: "dash.corridorHousing", to: "/immigrant-housing", linkKey: "latamDesk.openKit" },
   { titleKey: "footer.afterArrival", bodyKey: "dash.corridorAfterArrival", to: "/after-arrival", linkKey: "latamDesk.openKit" },
+  { titleKey: "footer.whoFiles", bodyKey: "dash.corridorWhoFiles", to: "/who-files-where", linkKey: "latamDesk.openKit" },
   { titleKey: "footer.itin", bodyKey: "dash.corridorItin", to: "/itin", linkKey: "latamDesk.openKit" },
   { titleKey: "dash.corridorTradeTitle", bodyKey: "dash.corridorTrade", to: "/packets/latam-trade", linkKey: "latamDesk.openKit" },
 ];
