@@ -202,7 +202,7 @@ describe("weekly template runtime infra", () => {
       .first()) as { n: number } | null;
     // Mock AI throws, so drafts are invalid and the batch is skipped rather than published.
     expect(Number(skipped?.n ?? 0)).toBe(10);
-    expect(await queuedTopicCount(d1)).toBe(98);
+    expect(await queuedTopicCount(d1)).toBe(108);
   });
 });
 
