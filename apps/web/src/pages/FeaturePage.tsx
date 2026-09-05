@@ -172,7 +172,13 @@ export default function FeaturePage({ slug }: { slug: string }) {
             {page.relatedLinks.map((l, i) => (
               <span key={l.to}>
                 {i > 0 && " · "}
-                <Link to={localizePath(l.to, locale)}>{l.label}</Link>
+                {/^https?:\/\//i.test(l.to) ? (
+                  <a href={l.to} target="_blank" rel="noopener noreferrer">
+                    {l.label}
+                  </a>
+                ) : (
+                  <Link to={localizePath(l.to, locale)}>{l.label}</Link>
+                )}
               </span>
             ))}
           </p>

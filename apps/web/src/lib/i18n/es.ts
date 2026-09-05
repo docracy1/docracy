@@ -2601,6 +2601,24 @@ const es: Messages = {
     "El Formulario I-9 oficial de USCIS (edición 01/20/25) — firmas de empleado y empleador. No es E-Verify.",
   "tpl.i-9-form.useCase":
     "Úsalo el primer día de un empleado nuevo (o antes) para firmar la Sección 1 (empleado) y la Sección 2 (empleador). Es el formulario real de USCIS. Docracy no inspecciona documentos de las Listas A/B/C y no corre E-Verify.",
+  "tpl.power-of-attorney.name": "Poder notarial",
+  "tpl.power-of-attorney.seoTitle": "Plantilla gratis de poder notarial",
+  "tpl.power-of-attorney.description":
+    "Autoriza a un agente a actuar por ti, con alcance y opción de vigencia.",
+  "tpl.power-of-attorney.useCase":
+    "Úsalo cuando familia o un abogado que sigue en LATAM necesita un poder firmado. Si una escuela, empleador o consulado de EE. UU. también pide apostilla, eso es SRE, Cancillería o tu cancillería — no nosotros.",
+  "tpl.reference-letter.name": "Carta de referencia",
+  "tpl.reference-letter.seoTitle": "Plantilla gratis de carta de referencia",
+  "tpl.reference-letter.description":
+    "Carta de referencia firmada con la relación, el tiempo que se conocen y la recomendación.",
+  "tpl.reference-letter.useCase":
+    "Úsala para darle a un exempleado, inquilino, colega o contratista una referencia firmada y fechada que pueda adjuntar a un paquete de visa o a una solicitud de trabajo. No presentamos la petición.",
+  "tpl.child-travel-consent.name": "Consentimiento de viaje de menor",
+  "tpl.child-travel-consent.seoTitle": "Plantilla gratis de consentimiento de viaje de menor",
+  "tpl.child-travel-consent.description":
+    "Consentimiento para que un menor viaje con un adulto nombrado — fechas, destinos y contactos de emergencia.",
+  "tpl.child-travel-consent.useCase":
+    "Úsalo cuando un padre se queda y el otro viaja con el menor. No reservamos vuelos ni hablamos con CBP. Aerolíneas y consulados ponen sus propias reglas.",
   "tpl.promissory-note.name": "Pagaré",
   "tpl.promissory-note.seoTitle": "Plantilla gratis de pagaré",
   "tpl.promissory-note.description":
@@ -2634,6 +2652,9 @@ const es: Messages = {
   "footer.cobro": "Cobra por WhatsApp",
   "footer.latamPacket": "Kit contratista LATAM",
   "footer.latamUsPacket": "Plan inmigrante",
+  "footer.mexicoToUs": "México → EE. UU.",
+  "footer.colombiaToUs": "Colombia → EE. UU.",
+  "footer.immigrantHousing": "Arrendamiento / constancia",
   "footer.i9": "Firmar I-9",
   "footer.visaDocs": "Documentos para visa",
   "footer.constancia": "Constancia de ingresos",
@@ -2680,6 +2701,9 @@ const es: Messages = {
   "dash.migrantOverviewSub": "Qué hacer, links oficiales, firma — y cada PDF guardado para reabrirlo. Vault hasta el 15 de abril o 13 meses. No tramitamos la petición.",
   "dash.corridorI9": "I-9 oficial de USCIS. El empleador lo conserva. No inspeccionamos documentos ni corremos E-Verify.",
   "dash.corridorVisa": "Oferta, poder, referencia, viaje de menor — documentos de apoyo, no la petición.",
+  "dash.corridorMexico": "El mismo plan. Link oficial de apostilla SRE. No apostillamos ni tramitamos.",
+  "dash.corridorColombia": "El mismo plan. Link oficial de apostilla de Cancillería. No apostillamos ni tramitamos.",
+  "dash.corridorHousing": "Plantilla de arrendamiento o roomie + URL de constancia para el arrendador.",
   "latamDesk.seoTitle": "LATAM: cobro, constancia y kits | Docracy",
   "latamDesk.seoDescription":
     "Cobro, constancia, kits y documentos para inmigrantes: I-9 oficial y plantillas de apoyo para visa. No tramitamos la petición ni E-Verify. Firmar sigue gratis.",
@@ -2939,6 +2963,40 @@ const es: Messages = {
     "El pagador guarda el W-9 para los 1099. Formulario oficial del IRS. No publicamos un W-8BEN. Pregunta a un asesor cuál eres.",
   "latamUsPacket.send.w9.cta": "Abrir el W-9",
   "latamUsPacket.send.w9.official": "Formulario W-9 del IRS (oficial)",
+  "latamUsPacket.send.ssn.title": "SSN → Administración del Seguro Social (tú, no nosotros)",
+  "latamUsPacket.send.ssn.body":
+    "El trabajo suele pedir un número de Seguro Social al llegar. Tramítalo en SSA.gov. No presentamos el SS-5 y no emitimos números.",
+  "latamUsPacket.send.ssn.official": "ssa.gov — solicitar SSN",
+  "latamUsPacket.send.apostille.title": "Apostilla / legalización → tu país de origen",
+  "latamUsPacket.send.apostille.body":
+    "Actas, títulos y poderes a menudo necesitan apostilla antes de que una escuela, empleador o consulado en EE. UU. los acepte. Eso es SRE (México), Cancillería (Colombia) o tu cancillería — no nosotros. El poder lo puedes firmar aquí primero.",
+  "latamUsPacket.send.apostille.official": "HCCH — autoridades de apostilla por país",
+  "latamUsPacket.send.apostilleMx.title": "Apostilla México → SRE (tú, no nosotros)",
+  "latamUsPacket.send.apostilleMx.body":
+    "Actas, títulos y poderes mexicanos los apostilla SRE. El poder lo puedes firmar aquí primero. No timbramos, no enviamos ni legalizamos.",
+  "latamUsPacket.send.apostilleMx.official": "gob.mx/SRE — apostilla y legalización",
+  "latamUsPacket.send.apostilleMx.cta": "Puerta México → EE. UU.",
+  "latamUsPacket.send.apostilleCo.title": "Apostilla Colombia → Cancillería (tú, no nosotros)",
+  "latamUsPacket.send.apostilleCo.body":
+    "Registros civiles y poderes colombianos los apostilla Cancillería. El PDF de apoyo lo puedes firmar aquí primero. No presentamos ante Cancillería ni DIAN.",
+  "latamUsPacket.send.apostilleCo.official": "cancilleria.gov.co — apostilla y legalización",
+  "latamUsPacket.send.apostilleCo.cta": "Puerta Colombia → EE. UU.",
+  "latamUsPacket.send.lease.title": "Arrendamiento / roomie → arrendador",
+  "latamUsPacket.send.lease.body":
+    "Firma el arrendamiento o el acuerdo de roomie aquí y adjunta la URL de la constancia si pidieron prueba de ingresos. No es la CSF del SAT ni un W-2.",
+  "latamUsPacket.send.lease.cta": "Abrir la plantilla de arrendamiento",
+  "latamUsPacket.send.poa.title": "Poder notarial → quien actúa por ti",
+  "latamUsPacket.send.poa.body":
+    "La familia o un abogado que sigue en LATAM puede necesitar un poder firmado. Fírmalo aquí. Si lo piden apostillado, eso es tu país — ver la fila de arriba.",
+  "latamUsPacket.send.poa.cta": "Abrir el poder notarial",
+  "latamUsPacket.send.child.title": "Consentimiento de viaje de menor → aerolínea / consulado / el adulto que viaja",
+  "latamUsPacket.send.child.body":
+    "Un padre se queda; el otro vuela con el menor. Firma el consentimiento aquí. No compramos boletos ni hablamos con CBP.",
+  "latamUsPacket.send.child.cta": "Abrir consentimiento de viaje de menor",
+  "latamUsPacket.tpl.lease": "Arrendamiento / paquete de vivienda",
+  "latamUsPacket.countryTitle": "¿México o Colombia?",
+  "latamUsPacket.countrySub":
+    "El mismo plan de pago. Las páginas de país agregan el link oficial de apostilla de ese origen — nosotros no apostillamos ni tramitamos.",
   "latamUsPacket.compareTitle": "Vs Boundless, CitizenPath y una gestoría",
   "latamUsPacket.compareSub":
     "Ellos presentan o preparan. Boundless y CitizenPath cobran en USD ($699–$2,549 / $79–$279 + USCIS). Gestorías MX: honorarios en MXN (~$900–$3,800) + $185 USD de State. Nuestro plan es USD $10; el cobro lo etiquetas en MXN/COP/USD.",

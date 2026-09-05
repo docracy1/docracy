@@ -1520,6 +1520,9 @@ export default function Dashboard() {
                       { to: localizePath("/packets/latam-to-us", locale), title: t("dash.migrantChecklist"), body: t("dash.corridorLatamUs") },
                       { to: localizePath("/i-9", locale), title: t("footer.i9"), body: t("dash.corridorI9") },
                       { to: localizePath("/visa-supporting-documents", locale), title: t("footer.visaDocs"), body: t("dash.corridorVisa") },
+                      { to: localizePath("/mexico-to-us", locale), title: t("footer.mexicoToUs"), body: t("dash.corridorMexico") },
+                      { to: localizePath("/colombia-to-us", locale), title: t("footer.colombiaToUs"), body: t("dash.corridorColombia") },
+                      { to: localizePath("/immigrant-housing", locale), title: t("footer.immigrantHousing"), body: t("dash.corridorHousing") },
                     ].map((card) => (
                       <Link key={card.to} to={card.to} className="dashboard-corridor-card">
                         <h3>{card.title}</h3>

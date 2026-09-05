@@ -176,6 +176,12 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/es/formulario-i-9" element={<FeaturePage slug="i-9" />} />
           <Route path="/visa-supporting-documents" element={<FeaturePage slug="visa-supporting-documents" />} />
           <Route path="/es/documentos-para-visa" element={<FeaturePage slug="visa-supporting-documents" />} />
+          <Route path="/mexico-to-us" element={<FeaturePage slug="mexico-to-us" />} />
+          <Route path="/es/mexico-a-eeuu" element={<FeaturePage slug="mexico-to-us" />} />
+          <Route path="/colombia-to-us" element={<FeaturePage slug="colombia-to-us" />} />
+          <Route path="/es/colombia-a-eeuu" element={<FeaturePage slug="colombia-to-us" />} />
+          <Route path="/immigrant-housing" element={<FeaturePage slug="immigrant-housing" />} />
+          <Route path="/es/arrendamiento-inmigrante" element={<FeaturePage slug="immigrant-housing" />} />
           <Route path="/proof-of-income" element={<FeaturePage slug="proof-of-income" />} />
           <Route path="/es/prueba-de-ingresos" element={<FeaturePage slug="proof-of-income" />} />
           <Route path="/signed-work-order" element={<FeaturePage slug="signed-work-order" />} />

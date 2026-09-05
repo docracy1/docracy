@@ -18,6 +18,9 @@ const ITEMS: Array<{
   { titleKey: "landing.out3.title", bodyKey: "landing.out3.body", to: "/packets/latam-contractor", linkKey: "landing.out3.link" },
   { titleKey: "landing.out6.title", bodyKey: "landing.out6.body", to: "/packets/collect", linkKey: "landing.out6.link" },
   { titleKey: "landing.out7.title", bodyKey: "landing.out7.body", to: "/packets/latam-to-us", linkKey: "landing.out7.link" },
+  { titleKey: "footer.mexicoToUs", bodyKey: "dash.corridorMexico", to: "/mexico-to-us", linkKey: "latamDesk.openKit" },
+  { titleKey: "footer.colombiaToUs", bodyKey: "dash.corridorColombia", to: "/colombia-to-us", linkKey: "latamDesk.openKit" },
+  { titleKey: "footer.immigrantHousing", bodyKey: "dash.corridorHousing", to: "/immigrant-housing", linkKey: "latamDesk.openKit" },
   { titleKey: "dash.corridorTradeTitle", bodyKey: "dash.corridorTrade", to: "/packets/latam-trade", linkKey: "latamDesk.openKit" },
 ];
 
