@@ -59,6 +59,13 @@
 /es/ya-llegue  /es/despues-de-llegar  301
 /es/despues-de-arribar  /es/despues-de-llegar  301
 /after-you-arrive  /after-arrival  301
+/es/quien-presenta  /es/quien-sube-donde  301
+/es/a-donde-va  /es/quien-sube-donde  301
+/where-each-file-goes  /who-files-where  301
+/who-uploads-where  /who-files-where  301
+/es/busca  /es/buscar  301
+/es/buscador  /es/buscar  301
+/search-latam  /latam-search  301
 /es/numero-itin  /es/itin  301
 /w-7  /itin  301
 /es/w-7  /es/itin  301

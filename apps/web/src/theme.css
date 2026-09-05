@@ -6984,3 +6984,177 @@ a.dashboard-nav-subitem {
   border-color: var(--hairline);
 }
 
+.who-files-disclaimer {
+  margin: 28px 0 0;
+  padding: 12px 14px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--body);
+  background: var(--primary-soft);
+  border-radius: 8px;
+}
+.who-files-progress {
+  margin: 20px 0 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.who-files-jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin: 0 0 8px;
+  font-size: 14px;
+}
+.who-files-group {
+  margin-top: 28px;
+}
+.who-files-group-title {
+  font-size: 18px;
+  margin: 0 0 4px;
+}
+.who-files-row-head {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.who-files-row-head input {
+  margin-top: 6px;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.who-files-row-head h4 {
+  margin: 0;
+  font-size: 17px;
+}
+.who-files-row-head label {
+  cursor: pointer;
+}
+.who-files-body {
+  font-size: 14px;
+  color: var(--mute);
+  margin: 8px 0 0;
+}
+.who-files-wedont {
+  font-size: 13.5px;
+  margin: 8px 0 0;
+}
+.who-files-wedont span {
+  font-weight: 700;
+}
+.who-files-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 12px;
+}
+.who-files-country {
+  margin-top: 16px;
+  padding: 16px 18px;
+}
+.who-files-country p {
+  font-size: 14px;
+  color: var(--mute);
+  margin: 6px 0 10px;
+}
+.who-files-country select {
+  width: 100%;
+  max-width: 420px;
+  padding: 8px 10px;
+  font-size: 14px;
+}
+.who-files-country-out {
+  margin-top: 12px !important;
+  color: var(--body) !important;
+}
+
+.latam-search {
+  margin-top: 20px;
+  text-align: left;
+}
+.latam-search-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.latam-search-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.latam-search-row input[type="search"] {
+  flex: 1 1 220px;
+  min-width: 0;
+  padding: 10px 12px;
+  font-size: 16px;
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+}
+.latam-search-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 0;
+}
+.latam-search-chip {
+  border: 1px solid var(--hairline);
+  background: var(--bg, #fff);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.latam-search-chip:hover {
+  border-color: var(--primary);
+}
+.latam-search-hits {
+  list-style: none;
+  padding: 0;
+  margin: 14px 0 0;
+  display: grid;
+  gap: 10px;
+}
+.latam-search-hit {
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: var(--bg, #fff);
+}
+.latam-search-hit a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.latam-search-hit strong {
+  display: block;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+.latam-search-hit > a span {
+  display: block;
+  font-size: 13px;
+  color: var(--mute);
+  line-height: 1.4;
+}
+.latam-search-hit-meta {
+  margin: 8px 0 0;
+  font-size: 13px;
+}
+.latam-search-hit-meta em {
+  font-style: normal;
+  font-weight: 700;
+}
+.latam-search-empty {
+  font-size: 14px;
+  color: var(--mute);
+}
+.latam-search.kind-honest-no,
+.latam-search-hit.kind-honest-no {
+  background: var(--primary-soft);
+}
+.hero-latam-cta .latam-search {
+  margin: 0 0 18px;
+}
+

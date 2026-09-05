@@ -23,6 +23,10 @@ assert.equal(isLatamLoginIntent("latam-to-us", ""), true);
 assert.equal(isLatamLoginIntent("cobro", ""), true);
 assert.equal(isLatamLoginIntent("", "/es/kit-llegar-eeuu"), true);
 assert.equal(isLatamLoginIntent("", "/es/precios?checkout=1"), true);
+assert.equal(isLatamLoginIntent("who-files-where", ""), true);
+assert.equal(isLatamLoginIntent("", "/es/quien-sube-donde"), true);
+assert.equal(isLatamLoginIntent("latam-search", ""), true);
+assert.equal(isLatamLoginIntent("", "/es/buscar?q=i-9"), true);
 assert.equal(isLatamLoginIntent("prepare-sent", "/dashboard"), false);
 
 assert.equal(

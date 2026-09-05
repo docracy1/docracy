@@ -81,6 +81,9 @@ for (const line of [
   "/venezuela-usa  /venezuela-to-us  301",
   "/es/ya-llegue  /es/despues-de-llegar  301",
   "/es/w-7  /es/itin  301",
+  "/es/quien-presenta  /es/quien-sube-donde  301",
+  "/where-each-file-goes  /who-files-where  301",
+  "/es/busca  /es/buscar  301",
 ]) {
   assert.ok(redirects.includes(line), `missing one-hop redirect: ${line}`);
 }
@@ -116,6 +119,14 @@ assert.ok(
     l.to.startsWith("https://www.cancilleria.gov.co/")
   ),
   "Colombia door must link official Cancillería apostille"
+);
+assert.ok(
+  getFeaturePageContent("after-arrival", "es").relatedLinks.some((l) => l.to === "/who-files-where"),
+  "after-arrival must point at the who-files-where checklist"
+);
+assert.ok(
+  getFeaturePageContent("itin", "es").relatedLinks.some((l) => l.to === "/who-files-where"),
+  "itin must point at the who-files-where checklist"
 );
 
 assert.equal(LATAM_COUNTRY_CORRIDORS.length, 18, "Spanish LATAM catalog (MX+CO handmade + 16 generated)");

@@ -785,6 +785,46 @@ const routes = [
     xDefault: "es",
   },
   {
+    urlPath: "/who-files-where",
+    outFile: "who-files-where.html",
+    title: "Who Files Where — I-9, USCIS, CEAC, I-94, Apostille | Docracy",
+    description:
+      "Checklist: who receives each signed PDF. Employer keeps the I-9. You upload to CEAC, USCIS, CBP, IRS, SSA. Apostille is your origin government. We sign and save. We don't file. $10/month.",
+    locale: "en",
+    alternates: { en: "/who-files-where", es: "/es/quien-sube-donde" },
+    xDefault: "es",
+  },
+  {
+    urlPath: "/es/quien-sube-donde",
+    outFile: "es/quien-sube-donde.html",
+    title: "Quién sube dónde — I-9, USCIS, CEAC, I-94, apostilla | Docracy",
+    description:
+      "Lista: quién recibe cada PDF firmado. El empleador guarda el I-9. Tú subes a CEAC, USCIS, CBP, IRS, SSA. La apostilla es tu gobierno. Firmamos y guardamos. No tramitamos. $10/mes.",
+    locale: "es",
+    alternates: { en: "/who-files-where", es: "/es/quien-sube-donde" },
+    xDefault: "es",
+  },
+  {
+    urlPath: "/latam-search",
+    outFile: "latam-search.html",
+    title: "Search LATAM → US documents — I-9, apostille, I-94 | Docracy",
+    description:
+      "Type I-9, apostille México, I-94, cobro, or ITIN. We route you to the official portal and the PDF we sign. We don't file USCIS, stamp an apostille, or issue CFDI. $10/month.",
+    locale: "en",
+    alternates: { en: "/latam-search", es: "/es/buscar" },
+    xDefault: "es",
+  },
+  {
+    urlPath: "/es/buscar",
+    outFile: "es/buscar.html",
+    title: "Buscar documentos LATAM → EE. UU. — I-9, apostilla, I-94 | Docracy",
+    description:
+      "Escribe I-9, apostilla México, I-94, cobro o ITIN. Te mandamos al portal oficial y al PDF que firmamos. No tramitamos USCIS, no apostillamos ni timbramos CFDI. $10/mes.",
+    locale: "es",
+    alternates: { en: "/latam-search", es: "/es/buscar" },
+    xDefault: "es",
+  },
+  {
     urlPath: "/es/formulario-i-9",
     outFile: "es/formulario-i-9.html",
     title: getFeaturePageContent("i-9", "es").seoTitle,

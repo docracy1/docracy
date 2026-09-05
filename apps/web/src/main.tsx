@@ -58,6 +58,8 @@ const JobPacket = lazy(() => import("./pages/JobPacket"));
 const Cobro = lazy(() => import("./pages/Cobro"));
 const LatamDesk = lazy(() => import("./pages/LatamDesk"));
 const LatamUsPacket = lazy(() => import("./pages/LatamUsPacket"));
+const WhoFilesWhere = lazy(() => import("./pages/WhoFilesWhere"));
+const LatamSearch = lazy(() => import("./pages/LatamSearch"));
 const Dpa = lazy(() => import("./pages/Dpa"));
 const Login = lazy(() => import("./pages/Login"));
 const AuthVerify = lazy(() => import("./pages/AuthVerify"));
@@ -152,6 +154,10 @@ function AppRoutes() {
       <Route path="/es/kit-contratista-latam" element={<LatamContractorPacket />} />
       <Route path="/packets/latam-to-us" element={<LatamUsPacket />} />
       <Route path="/es/kit-llegar-eeuu" element={<LatamUsPacket />} />
+      <Route path="/who-files-where" element={<WhoFilesWhere />} />
+      <Route path="/es/quien-sube-donde" element={<WhoFilesWhere />} />
+      <Route path="/latam-search" element={<LatamSearch />} />
+      <Route path="/es/buscar" element={<LatamSearch />} />
       <Route path="/packets/trades" element={<JobPacket packetId="trades" />} />
       <Route path="/es/kit-oficios" element={<JobPacket packetId="trades" />} />
       <Route path="/packets/latam-trade" element={<JobPacket packetId="latam-trade" />} />

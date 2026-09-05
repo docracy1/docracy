@@ -7,7 +7,9 @@ import { useAutoCheckout } from "../lib/useAutoCheckout";
 import { usePageMeta } from "../lib/usePageMeta";
 import { track } from "../lib/track";
 import { breadcrumbJsonLd, howToJsonLd } from "../lib/productSeo";
+import WhoFilesWhereChecklist from "../components/WhoFilesWhereChecklist";
 import { LATAM_COUNTRY_CORRIDORS } from "../lib/latamCountryCorridors";
+import { WHO_FILES_WHERE_EN } from "../lib/whoFilesWhere";
 
 const FAQ_COUNT = 8;
 
@@ -47,146 +49,6 @@ const STEPS: Array<{ titleKey: string; bodyKey: string; to: string; ctaKey: stri
     bodyKey: "latamUsPacket.step5.body",
     to: "/packets/us-contractor",
     ctaKey: "latamUsPacket.step5.cta",
-  },
-];
-
-const SEND_TO: Array<{
-  titleKey: string;
-  bodyKey: string;
-  officialHref?: string;
-  officialKey?: string;
-  docracyTo?: string;
-  docracyCtaKey?: string;
-}> = [
-  {
-    titleKey: "latamUsPacket.send.offer.title",
-    bodyKey: "latamUsPacket.send.offer.body",
-    docracyTo: "/free-templates/offer-letter",
-    docracyCtaKey: "latamUsPacket.send.offer.cta",
-  },
-  {
-    titleKey: "latamUsPacket.send.i9.title",
-    bodyKey: "latamUsPacket.send.i9.body",
-    officialHref: "https://www.uscis.gov/i-9",
-    officialKey: "latamUsPacket.send.i9.official",
-    docracyTo: "/free-templates/i-9-form",
-    docracyCtaKey: "latamUsPacket.send.i9.cta",
-  },
-  {
-    titleKey: "latamUsPacket.send.visa.title",
-    bodyKey: "latamUsPacket.send.visa.body",
-    officialHref: "https://travel.state.gov/content/travel/en/us-visas.html",
-    officialKey: "latamUsPacket.send.visa.official",
-    docracyTo: "/visa-supporting-documents",
-    docracyCtaKey: "latamUsPacket.send.visa.cta",
-  },
-  {
-    titleKey: "latamUsPacket.send.ceac.title",
-    bodyKey: "latamUsPacket.send.ceac.body",
-    officialHref: "https://ceac.state.gov/genniv/",
-    officialKey: "latamUsPacket.send.ceac.official",
-  },
-  {
-    titleKey: "latamUsPacket.send.uscis.title",
-    bodyKey: "latamUsPacket.send.uscis.body",
-    officialHref: "https://www.uscis.gov/",
-    officialKey: "latamUsPacket.send.uscis.official",
-  },
-  {
-    titleKey: "latamUsPacket.send.constancia.title",
-    bodyKey: "latamUsPacket.send.constancia.body",
-    docracyTo: "/income-proof",
-    docracyCtaKey: "latamUsPacket.send.constancia.cta",
-  },
-  {
-    titleKey: "latamUsPacket.send.cobro.title",
-    bodyKey: "latamUsPacket.send.cobro.body",
-    docracyTo: "/cobro#send",
-    docracyCtaKey: "latamUsPacket.send.cobro.cta",
-  },
-  {
-    titleKey: "latamUsPacket.send.w9.title",
-    bodyKey: "latamUsPacket.send.w9.body",
-    officialHref: "https://www.irs.gov/forms-pubs/about-form-w-9",
-    officialKey: "latamUsPacket.send.w9.official",
-    docracyTo: "/free-templates/w-9-form",
-    docracyCtaKey: "latamUsPacket.send.w9.cta",
-  },
-  {
-    titleKey: "latamUsPacket.send.ssn.title",
-    bodyKey: "latamUsPacket.send.ssn.body",
-    officialHref: "https://www.ssa.gov/ssnumber/",
-    officialKey: "latamUsPacket.send.ssn.official",
-  },
-  {
-    titleKey: "latamUsPacket.send.i94.title",
-    bodyKey: "latamUsPacket.send.i94.body",
-    officialHref: "https://i94.cbp.dhs.gov/I94/#/home",
-    officialKey: "latamUsPacket.send.i94.official",
-    docracyTo: "/after-arrival",
-    docracyCtaKey: "latamUsPacket.send.i94.cta",
-  },
-  {
-    titleKey: "latamUsPacket.send.uscisAccount.title",
-    bodyKey: "latamUsPacket.send.uscisAccount.body",
-    officialHref: "https://myaccount.uscis.gov/",
-    officialKey: "latamUsPacket.send.uscisAccount.official",
-  },
-  {
-    titleKey: "latamUsPacket.send.address.title",
-    bodyKey: "latamUsPacket.send.address.body",
-    officialHref: "https://www.uscis.gov/addresschange",
-    officialKey: "latamUsPacket.send.address.official",
-    docracyTo: "/after-arrival",
-    docracyCtaKey: "latamUsPacket.send.address.cta",
-  },
-  {
-    titleKey: "latamUsPacket.send.itin.title",
-    bodyKey: "latamUsPacket.send.itin.body",
-    officialHref: "https://www.irs.gov/tin/itin/how-to-apply-for-an-itin",
-    officialKey: "latamUsPacket.send.itin.official",
-    docracyTo: "/itin",
-    docracyCtaKey: "latamUsPacket.send.itin.cta",
-  },
-  {
-    titleKey: "latamUsPacket.send.apostille.title",
-    bodyKey: "latamUsPacket.send.apostille.body",
-    officialHref: "https://www.hcch.net/en/instruments/conventions/authorities1/?cid=41",
-    officialKey: "latamUsPacket.send.apostille.official",
-  },
-  {
-    titleKey: "latamUsPacket.send.apostilleMx.title",
-    bodyKey: "latamUsPacket.send.apostilleMx.body",
-    officialHref: "https://www.gob.mx/sre/acciones-y-programas/apostilla-y-legalizacion-de-documentos",
-    officialKey: "latamUsPacket.send.apostilleMx.official",
-    docracyTo: "/mexico-to-us",
-    docracyCtaKey: "latamUsPacket.send.apostilleMx.cta",
-  },
-  {
-    titleKey: "latamUsPacket.send.apostilleCo.title",
-    bodyKey: "latamUsPacket.send.apostilleCo.body",
-    officialHref: "https://www.cancilleria.gov.co/tramites_servicios/apostilla_legalizacion",
-    officialKey: "latamUsPacket.send.apostilleCo.official",
-    docracyTo: "/colombia-to-us",
-    docracyCtaKey: "latamUsPacket.send.apostilleCo.cta",
-  },
-  {
-    titleKey: "latamUsPacket.send.lease.title",
-    bodyKey: "latamUsPacket.send.lease.body",
-    docracyTo: "/free-templates/simple-commercial-lease-agreement",
-    docracyCtaKey: "latamUsPacket.send.lease.cta",
-  },
-  {
-    titleKey: "latamUsPacket.send.poa.title",
-    bodyKey: "latamUsPacket.send.poa.body",
-    docracyTo: "/free-templates/power-of-attorney",
-    docracyCtaKey: "latamUsPacket.send.poa.cta",
-  },
-  {
-    titleKey: "latamUsPacket.send.child.title",
-    bodyKey: "latamUsPacket.send.child.body",
-    docracyTo: "/free-templates/child-travel-consent",
-    docracyCtaKey: "latamUsPacket.send.child.cta",
   },
 ];
 
@@ -392,25 +254,10 @@ export default function LatamUsPacket() {
 
         <h2 style={{ fontSize: 22, marginTop: 40 }}>{t("latamUsPacket.sendTitle")}</h2>
         <p style={{ color: "var(--mute)" }}>{t("latamUsPacket.sendSub")}</p>
-        <ol className="packet-steps">
-          {SEND_TO.map((row, i) => (
-            <li key={row.titleKey} className="card packet-step">
-              <p className="packet-step-num">{t("packet.stepN", { n: i + 1 })}</p>
-              <h3 style={{ marginTop: 0 }}>{t(row.titleKey)}</h3>
-              <p style={{ fontSize: 14, color: "var(--mute)" }}>{t(row.bodyKey)}</p>
-              <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
-                {row.docracyTo && row.docracyCtaKey
-                  ? packetCta(row.docracyTo, t(row.docracyCtaKey), `seo:latam-to-us:send${i + 1}`)
-                  : null}
-                {row.officialHref && row.officialKey ? (
-                  <a href={row.officialHref} target="_blank" rel="noopener noreferrer">
-                    {t(row.officialKey)}
-                  </a>
-                ) : null}
-              </div>
-            </li>
-          ))}
-        </ol>
+        <p style={{ fontSize: 14 }}>
+          <Link to={localizePath(WHO_FILES_WHERE_EN, locale)}>{t("footer.whoFiles")}</Link>
+        </p>
+        <WhoFilesWhereChecklist renderAction={packetCta} sourcePrefix="seo:latam-to-us" />
 
         <h2 style={{ fontSize: 19, marginTop: 36 }}>{t("latamUsPacket.compareTitle")}</h2>
         <p style={{ color: "var(--mute)" }}>{t("latamUsPacket.compareSub")}</p>
@@ -439,6 +286,8 @@ export default function LatamUsPacket() {
           <Link to={localizePath("/immigrant-housing", locale)}>{t("footer.immigrantHousing")}</Link>
           {" · "}
           <Link to={localizePath("/after-arrival", locale)}>{t("footer.afterArrival")}</Link>
+          {" · "}
+          <Link to={localizePath(WHO_FILES_WHERE_EN, locale)}>{t("footer.whoFiles")}</Link>
           {" · "}
           <Link to={localizePath("/itin", locale)}>{t("footer.itin")}</Link>
         </p>

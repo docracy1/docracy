@@ -457,6 +457,7 @@ export function countryFeaturePage(c: LatamCountryCorridor, locale: "en" | "es")
       { label: es ? "Paquete LATAM ($10)" : "LATAM package ($10)", to: "/packets/latam-to-us" },
       { label: apostille, to: c.officialHref },
       { label: es ? "Después de llegar" : "After arrival", to: "/after-arrival" },
+      { label: es ? "Quién sube dónde" : "Who files where", to: "/who-files-where" },
       { label: es ? "Constancia / renta" : "Lease / constancia", to: "/immigrant-housing" },
       { label: es ? "Cobro" : "Cobro", to: "/cobro" },
       { label: es ? "Firmar I-9" : "Sign I-9", to: "/i-9" },

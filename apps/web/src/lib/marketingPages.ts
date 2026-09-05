@@ -1860,6 +1860,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       { label: "Colombia → US", to: "/colombia-to-us" },
       { label: "Lease / constancia", to: "/immigrant-housing" },
       { label: "Sign I-9", to: "/i-9" },
+      { label: "Who files where", to: "/who-files-where" },
     ],
   },
   {
@@ -1909,6 +1910,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       { label: "Mexico → US", to: "/mexico-to-us" },
       { label: "Lease / constancia", to: "/immigrant-housing" },
       { label: "Siigo alternative", to: "/siigo-alternative" },
+      { label: "Who files where", to: "/who-files-where" },
     ],
   },
   {
@@ -1976,6 +1978,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       { title: "USCIS online account", body: "myaccount.uscis.gov — E-COA lives there. Not us." },
       { title: "Change of address", body: "uscis.gov/addresschange. Usually within 10 days. Not a Docracy form." },
       { title: "ITIN if you have no SSN", body: "IRS W-7. We don't invent that form and we don't mail Austin." },
+      { title: "Who files where", body: "Checkable map: employer / USCIS / CBP / IRS / origin .gob. You upload." },
     ],
     useCases: [
       "First week after a visa stamp — I-94 for the employer",
@@ -2003,6 +2006,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       { label: "USCIS account", to: "https://myaccount.uscis.gov/" },
       { label: "Change of address", to: "https://www.uscis.gov/addresschange" },
       { label: "Apply for an ITIN (IRS)", to: "https://www.irs.gov/tin/itin/how-to-apply-for-an-itin" },
+      { label: "Who files where", to: "/who-files-where" },
       { label: "Immigrant plan", to: "/packets/latam-to-us" },
     ],
   },
@@ -2052,6 +2056,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       { label: "SSN (SSA)", to: "https://www.ssa.gov/ssnumber/" },
       { label: "W-9 template", to: "/free-templates/w-9-form" },
       { label: "After arrival", to: "/after-arrival" },
+      { label: "Who files where", to: "/who-files-where" },
     ],
   },
   ...generatedCountryPages("en") as FeaturePageContent[],
@@ -2905,6 +2910,7 @@ export function getMexicoToUsPageEs(): FeaturePageContent {
       { label: "Colombia → EE. UU.", to: "/colombia-to-us" },
       { label: "Arrendamiento / constancia", to: "/immigrant-housing" },
       { label: "Firmar I-9", to: "/i-9" },
+      { label: "Quién sube dónde", to: "/who-files-where" },
     ],
   };
 }
@@ -2957,6 +2963,7 @@ export function getColombiaToUsPageEs(): FeaturePageContent {
       { label: "México → EE. UU.", to: "/mexico-to-us" },
       { label: "Arrendamiento / constancia", to: "/immigrant-housing" },
       { label: "Alternativa a Siigo", to: "/siigo-alternative" },
+      { label: "Quién sube dónde", to: "/who-files-where" },
     ],
   };
 }
@@ -3030,6 +3037,7 @@ export function getAfterArrivalPageEs(): FeaturePageContent {
       { title: "Cuenta USCIS", body: "myaccount.uscis.gov — ahí está el E-COA. No somos nosotros." },
       { title: "Cambio de domicilio", body: "uscis.gov/addresschange. Suele ser en 10 días. No es un formulario de Docracy." },
       { title: "ITIN si no tienes SSN", body: "W-7 del IRS. No inventamos ese formulario y no mandamos nada a Austin." },
+      { title: "Quién sube dónde", body: "Mapa con casillas: empleador / USCIS / CBP / IRS / .gob de origen. Tú lo subes." },
     ],
     useCases: [
       "Primera semana con visa — I-94 para el empleador",
@@ -3057,6 +3065,7 @@ export function getAfterArrivalPageEs(): FeaturePageContent {
       { label: "Cuenta USCIS", to: "https://myaccount.uscis.gov/" },
       { label: "Cambio de domicilio", to: "https://www.uscis.gov/addresschange" },
       { label: "Pedir un ITIN (IRS)", to: "https://www.irs.gov/tin/itin/how-to-apply-for-an-itin" },
+      { label: "Quién sube dónde", to: "/who-files-where" },
       { label: "Plan inmigrante", to: "/packets/latam-to-us" },
     ],
   };
@@ -3109,6 +3118,7 @@ export function getItinPageEs(): FeaturePageContent {
       { label: "SSN (SSA)", to: "https://www.ssa.gov/ssnumber/" },
       { label: "Plantilla W-9", to: "/free-templates/w-9-form" },
       { label: "Después de llegar", to: "/after-arrival" },
+      { label: "Quién sube dónde", to: "/who-files-where" },
     ],
   };
 }
