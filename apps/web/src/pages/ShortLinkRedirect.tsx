@@ -6,7 +6,8 @@ import { seedAttribution } from "../lib/attribution";
  * Short shareable URLs for outreach / social / launches.
  * Prefer these over long UTM strings — attribution is seeded here, then we land on Prepare.
  *
- * Also mirrored in public/_redirects so cold hits get a 302 before the SPA boots.
+ * Also mirrored in public/_redirects and functions/_trackingParams.ts so cold
+ * hits get one 301 to a clean URL (attribution via first-touch cookie).
  */
 const SHORT_LINKS: Record<string, { to: string; source: string; campaign?: string }> = {
   try: { to: "/prepare?freeTemplate=mutual-nda", source: "try" },

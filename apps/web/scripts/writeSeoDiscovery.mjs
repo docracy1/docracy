@@ -38,13 +38,12 @@ const ROBOTS_PREFIX_ALLOWS = [
 ];
 
 const ROBOTS_DISALLOW = `
-# --- App / private / attribution short-links (explicit; longer than CF Allow: /) ---
-Disallow: /login
-Disallow: /dashboard
-Disallow: /prepare
-Disallow: /es/preparar
+# --- Token / API / short-links (explicit; longer than CF Allow: /) ---
+# /prepare /login /dashboard /roadmap /es/preparar stay crawlable so www + ?ref=
+# 301s do not land on a robots-blocked URL (GSC Redirect error). Those shells
+# stay noindex via meta + X-Robots-Tag.
+Disallow: /api/
 Disallow: /bulk-send
-Disallow: /roadmap
 Disallow: /auth/
 Disallow: /admin/
 Disallow: /embed/
@@ -255,8 +254,8 @@ ${unique.map(urlEntry).join("\n")}
 # NOTE: Cloudflare’s dashboard “AI Crawl Control” / Content-Signal managed block is
 # prepended live (User-agent: * + Content-Signal + Allow: /). Google merges both
 # User-agent: * groups and, at equal path length, prefers Allow over Disallow — so
-# the site-level \`Disallow: /\` alone does NOT hide /login, /dashboard, etc. from
-# Googlebot. App routes below use longer explicit Disallow paths so they still win.
+# the site-level \`Disallow: /\` alone does NOT hide token/API paths from
+# Googlebot. Those routes use longer explicit Disallow paths so they still win.
 #
 # Allow rules below are GENERATED from scripts/prerender.mjs (writeSeoDiscovery) —
 # do not hand-edit the Allow list; re-run the web build instead.
