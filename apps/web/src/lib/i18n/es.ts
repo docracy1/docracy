@@ -2619,6 +2619,12 @@ const es: Messages = {
     "Consentimiento para que un menor viaje con un adulto nombrado — fechas, destinos y contactos de emergencia.",
   "tpl.child-travel-consent.useCase":
     "Úsalo cuando un padre se queda y el otro viaja con el menor. No reservamos vuelos ni hablamos con CBP. Aerolíneas y consulados ponen sus propias reglas.",
+  "tpl.roommate-agreement.name": "Acuerdo de roomie",
+  "tpl.roommate-agreement.seoTitle": "Plantilla gratis de acuerdo de roomie",
+  "tpl.roommate-agreement.description":
+    "Parte la renta y los servicios y fija reglas de casa entre coinquilinos.",
+  "tpl.roommate-agreement.useCase":
+    "Úsalo cuando te mudas con un roomie y quieres un reparto firmado de renta y cuentas — aparte del contrato con el arrendador. Adjunta la URL de la constancia si pidieron ingresos.",
   "tpl.promissory-note.name": "Pagaré",
   "tpl.promissory-note.seoTitle": "Plantilla gratis de pagaré",
   "tpl.promissory-note.description":
@@ -2654,7 +2660,10 @@ const es: Messages = {
   "footer.latamUsPacket": "Plan inmigrante",
   "footer.mexicoToUs": "México → EE. UU.",
   "footer.colombiaToUs": "Colombia → EE. UU.",
+  "footer.moreCountries": "Más países LATAM",
   "footer.immigrantHousing": "Arrendamiento / constancia",
+  "footer.afterArrival": "Después de llegar",
+  "footer.itin": "ITIN (W-7 del IRS)",
   "footer.i9": "Firmar I-9",
   "footer.visaDocs": "Documentos para visa",
   "footer.constancia": "Constancia de ingresos",
@@ -2703,7 +2712,11 @@ const es: Messages = {
   "dash.corridorVisa": "Oferta, poder, referencia, viaje de menor — documentos de apoyo, no la petición.",
   "dash.corridorMexico": "El mismo plan. Link oficial de apostilla SRE. No apostillamos ni tramitamos.",
   "dash.corridorColombia": "El mismo plan. Link oficial de apostilla de Cancillería. No apostillamos ni tramitamos.",
+  "dash.corridorMoreCountries":
+    "La misma suscripción de USD $10/mes. Link oficial de apostilla para Panamá, Venezuela y el resto de LATAM en español.",
   "dash.corridorHousing": "Plantilla de arrendamiento o roomie + URL de constancia para el arrendador.",
+  "dash.corridorAfterArrival": "I-94, cuenta USCIS, domicilio, ITIN — links oficiales. No los presentamos.",
+  "dash.corridorItin": "W-7 del IRS si no puedes sacar SSN. No inventamos ni enviamos ese formulario.",
   "latamDesk.seoTitle": "LATAM: cobro, constancia y kits | Docracy",
   "latamDesk.seoDescription":
     "Cobro, constancia, kits y documentos para inmigrantes: I-9 oficial y plantillas de apoyo para visa. No tramitamos la petición ni E-Verify. Firmar sigue gratis.",
@@ -2712,6 +2725,10 @@ const es: Messages = {
   "latamDesk.heroSub":
     "También para quien acaba de llegar a EE. UU.: un plan con qué hacer, links oficiales, cobro con tu Mercado Pago, constancia, y todos los PDF guardados. Docracy no se lleva el dinero.",
   "latamDesk.openKit": "Abrir el kit",
+  "latamDesk.countriesTitle": "Todos los países de LATAM en español",
+  "latamDesk.countriesSub":
+    "La misma suscripción de USD $10/mes — el paquete LATAM ya va incluido. Link oficial de apostilla por origen. No apostillamos ni tramitamos.",
+  "latamDesk.openCountry": "Abrir la puerta del país",
   "taxYear.seoTitle": "Archivo fiscal para tu contador — contratos, cobros y CSV | Docracy",
   "taxYear.seoDescription":
     "Conserva cada archivo del año y descarga un CSV para tu contador. No presentamos ante el SAT, la DIAN ni el IRS. Plan de $10/mes — firmar sigue gratis.",
@@ -2967,6 +2984,25 @@ const es: Messages = {
   "latamUsPacket.send.ssn.body":
     "El trabajo suele pedir un número de Seguro Social al llegar. Tramítalo en SSA.gov. No presentamos el SS-5 y no emitimos números.",
   "latamUsPacket.send.ssn.official": "ssa.gov — solicitar SSN",
+  "latamUsPacket.send.i94.title": "I-94 → CBP (tú, no nosotros)",
+  "latamUsPacket.send.i94.body":
+    "El empleador o la escuela pide el registro de admisión. Lo sacas en el sitio de CBP. No hospedamos el I-94 y no corregimos el historial de viajes.",
+  "latamUsPacket.send.i94.official": "i94.cbp.dhs.gov — I-94 más reciente",
+  "latamUsPacket.send.i94.cta": "Puerta después de llegar",
+  "latamUsPacket.send.uscisAccount.title": "Cuenta USCIS → USCIS (tú, no nosotros)",
+  "latamUsPacket.send.uscisAccount.body":
+    "El E-COA y casi todo el correo del caso viven en myaccount.uscis.gov. No podemos abrir ni recuperar esa cuenta.",
+  "latamUsPacket.send.uscisAccount.official": "myaccount.uscis.gov",
+  "latamUsPacket.send.address.title": "Domicilio nuevo → USCIS (casi siempre en 10 días)",
+  "latamUsPacket.send.address.body":
+    "USCIS.gov/addresschange — casi siempre desde la cuenta en línea. El AR-11 en papel es el respaldo. Cambiar el correo de USPS no basta. No presentamos AR-11.",
+  "latamUsPacket.send.address.official": "uscis.gov/addresschange",
+  "latamUsPacket.send.address.cta": "Puerta después de llegar",
+  "latamUsPacket.send.itin.title": "ITIN → IRS (solo si no puedes sacar SSN)",
+  "latamUsPacket.send.itin.body":
+    "El W-7 está en IRS.gov. Por correo o en un TAC / CAA. Un ITIN no autoriza a trabajar. No inventamos el W-7 y no enviamos W-8BEN.",
+  "latamUsPacket.send.itin.official": "IRS — cómo pedir un ITIN",
+  "latamUsPacket.send.itin.cta": "Puerta ITIN",
   "latamUsPacket.send.apostille.title": "Apostilla / legalización → tu país de origen",
   "latamUsPacket.send.apostille.body":
     "Actas, títulos y poderes a menudo necesitan apostilla antes de que una escuela, empleador o consulado en EE. UU. los acepte. Eso es SRE (México), Cancillería (Colombia) o tu cancillería — no nosotros. El poder lo puedes firmar aquí primero.",
@@ -2994,9 +3030,9 @@ const es: Messages = {
     "Un padre se queda; el otro vuela con el menor. Firma el consentimiento aquí. No compramos boletos ni hablamos con CBP.",
   "latamUsPacket.send.child.cta": "Abrir consentimiento de viaje de menor",
   "latamUsPacket.tpl.lease": "Arrendamiento / paquete de vivienda",
-  "latamUsPacket.countryTitle": "¿México o Colombia?",
+  "latamUsPacket.countryTitle": "¿México, Colombia, Panamá, Venezuela — u otro origen?",
   "latamUsPacket.countrySub":
-    "El mismo plan de pago. Las páginas de país agregan el link oficial de apostilla de ese origen — nosotros no apostillamos ni tramitamos.",
+    "La misma suscripción de USD $10/mes. El paquete LATAM ya va incluido. Las páginas de país agregan el link oficial de apostilla de ese origen — nosotros no apostillamos ni tramitamos.",
   "latamUsPacket.compareTitle": "Vs Boundless, CitizenPath y una gestoría",
   "latamUsPacket.compareSub":
     "Ellos presentan o preparan. Boundless y CitizenPath cobran en USD ($699–$2,549 / $79–$279 + USCIS). Gestorías MX: honorarios en MXN (~$900–$3,800) + $185 USD de State. Nuestro plan es USD $10; el cobro lo etiquetas en MXN/COP/USD.",

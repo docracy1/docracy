@@ -123,7 +123,7 @@ await build({
   format: "cjs",
   logLevel: "warning",
 });
-const { FEATURE_PAGES, ALTERNATIVE_PAGES, EXPLAINER_PAGES, INDUSTRY_PAGES, IMPORT_GUIDE_PAGES, getFeaturePageContent } = require(marketingBundleFile);
+const { FEATURE_PAGES, ALTERNATIVE_PAGES, EXPLAINER_PAGES, INDUSTRY_PAGES, IMPORT_GUIDE_PAGES, getFeaturePageContent, GENERATED_COUNTRY_CORRIDORS } = require(marketingBundleFile);
 fs.unlinkSync(marketingBundleFile);
 
 const partnerPagesBundleFile = path.join(__dirname, "_partnerPages.bundle.cjs");
@@ -166,6 +166,7 @@ const SEO_TEMPLATE_SLUGS = new Set([
   "power-of-attorney",
   "reference-letter",
   "child-travel-consent",
+  "roommate-agreement",
   "promissory-note",
   "letter-of-intent",
   "simple-commercial-lease-agreement",
@@ -242,6 +243,11 @@ const ES_TEMPLATE_META = {
     title: "Plantilla gratis de consentimiento de viaje de menor",
     description:
       "Consentimiento para que un menor viaje con un adulto nombrado. No reservamos vuelos ni hablamos con CBP.",
+  },
+  "roommate-agreement": {
+    title: "Plantilla gratis de acuerdo de roomie",
+    description:
+      "Parte la renta y los servicios y fija reglas de casa entre roomies. No reemplaza el contrato con el arrendador.",
   },
   "promissory-note": {
     title: "Plantilla gratis de pagaré",
@@ -824,6 +830,33 @@ const routes = [
     xDefault: "es",
   },
   {
+    urlPath: "/es/despues-de-llegar",
+    outFile: "es/despues-de-llegar.html",
+    title: getFeaturePageContent("after-arrival", "es").seoTitle,
+    description: getFeaturePageContent("after-arrival", "es").seoDescription,
+    locale: "es",
+    alternates: { en: "/after-arrival", es: "/es/despues-de-llegar" },
+    xDefault: "es",
+  },
+  {
+    urlPath: "/es/itin",
+    outFile: "es/itin.html",
+    title: getFeaturePageContent("itin", "es").seoTitle,
+    description: getFeaturePageContent("itin", "es").seoDescription,
+    locale: "es",
+    alternates: { en: "/itin", es: "/es/itin" },
+    xDefault: "es",
+  },
+  ...GENERATED_COUNTRY_CORRIDORS.map((c) => ({
+    urlPath: c.esPath,
+    outFile: `${c.esPath.replace(/^\//, "")}.html`,
+    title: getFeaturePageContent(c.slug, "es").seoTitle,
+    description: getFeaturePageContent(c.slug, "es").seoDescription,
+    locale: "es",
+    alternates: { en: c.enPath, es: c.esPath },
+    xDefault: "es",
+  })),
+  {
     urlPath: "/docs",
     outFile: "docs.html",
     title: "Docracy Documentation — Setup, API & Features",
@@ -1294,6 +1327,9 @@ const routes = [
       "mexico-to-us": { en: "/mexico-to-us", es: "/es/mexico-a-eeuu" },
       "colombia-to-us": { en: "/colombia-to-us", es: "/es/colombia-a-eeuu" },
       "immigrant-housing": { en: "/immigrant-housing", es: "/es/arrendamiento-inmigrante" },
+      "after-arrival": { en: "/after-arrival", es: "/es/despues-de-llegar" },
+      "itin": { en: "/itin", es: "/es/itin" },
+      ...Object.fromEntries(GENERATED_COUNTRY_CORRIDORS.map((c) => [c.slug, { en: c.enPath, es: c.esPath }])),
       "docusign-alternative": { en: "/docusign-alternative", es: "/es/alternativa-a-docusign" },
       "hellosign-alternative": { en: "/hellosign-alternative", es: "/es/alternativa-a-hellosign" },
       "adobe-sign-alternative": { en: "/adobe-sign-alternative", es: "/es/alternativa-a-adobe-sign" },

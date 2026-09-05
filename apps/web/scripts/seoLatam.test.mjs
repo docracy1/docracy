@@ -75,6 +75,12 @@ for (const line of [
   "/es/de-mexico-a-eeuu  /es/mexico-a-eeuu  301",
   "/es/de-colombia-a-eeuu  /es/colombia-a-eeuu  301",
   "/es/renta-inmigrante  /es/arrendamiento-inmigrante  301",
+  "/es/de-panama-a-eeuu  /es/panama-a-eeuu  301",
+  "/panama-usa  /panama-to-us  301",
+  "/es/de-venezuela-a-eeuu  /es/venezuela-a-eeuu  301",
+  "/venezuela-usa  /venezuela-to-us  301",
+  "/es/ya-llegue  /es/despues-de-llegar  301",
+  "/es/w-7  /es/itin  301",
 ]) {
   assert.ok(redirects.includes(line), `missing one-hop redirect: ${line}`);
 }
@@ -89,8 +95,9 @@ buildSync({
   format: "cjs",
   logLevel: "silent",
 });
-const { FEATURE_PAGES, getFeaturePageContent } = createRequire(import.meta.url)(marketingOut);
-for (const slug of ["mexico-to-us", "colombia-to-us", "immigrant-housing"]) {
+const { FEATURE_PAGES, getFeaturePageContent, LATAM_COUNTRY_CORRIDORS, GENERATED_COUNTRY_CORRIDORS } =
+  createRequire(import.meta.url)(marketingOut);
+for (const slug of ["mexico-to-us", "colombia-to-us", "immigrant-housing", "after-arrival", "itin"]) {
   const en = FEATURE_PAGES.find((p) => p.slug === slug);
   assert.ok(en, `missing FEATURE_PAGES ${slug}`);
   assert.equal(en.xDefault, "es", `${slug} x-default must be Spanish`);
@@ -110,6 +117,42 @@ assert.ok(
   ),
   "Colombia door must link official Cancillería apostille"
 );
+
+assert.equal(LATAM_COUNTRY_CORRIDORS.length, 18, "Spanish LATAM catalog (MX+CO handmade + 16 generated)");
+assert.equal(GENERATED_COUNTRY_CORRIDORS.length, 16);
+assert.ok(!LATAM_COUNTRY_CORRIDORS.some((c) => /brazil|puerto-rico|portugal/i.test(c.slug)));
+assert.equal(new Set(LATAM_COUNTRY_CORRIDORS.map((c) => c.slug)).size, LATAM_COUNTRY_CORRIDORS.length);
+
+const officialBySlug = {
+  "peru-to-us": "https://www.gob.pe/37302-apostilla-y-legalizacion-apostillar-y-legalizar-documentos-digitales",
+  "argentina-to-us": "https://www.cancilleria.gob.ar/es/servicios/apostilla-legalizacion-con-validez-internacional-tad",
+  "chile-to-us": "https://www.consulado.gob.cl/servicios-en-linea/solicitar-apostilla-chilena",
+  "panama-to-us": "https://panamaconecta.gob.pa/servicios",
+  "venezuela-to-us": "https://tramites.saren.gob.ve",
+  "ecuador-to-us": "https://serviciosdigitales.cancilleria.gob.ec",
+  "guatemala-to-us": "https://www.hcch.net/en/instruments/conventions/authorities1/?cid=41",
+};
+
+for (const c of GENERATED_COUNTRY_CORRIDORS) {
+  const en = FEATURE_PAGES.find((p) => p.slug === c.slug);
+  assert.ok(en, `missing FEATURE_PAGES ${c.slug}`);
+  assert.equal(en.xDefault, "es", `${c.slug} x-default must be Spanish`);
+  assert.equal(en.ctaTo, "/packets/latam-to-us", `${c.slug} must convert to the LATAM package`);
+  assert.match(en.ctaLabel, /\$10\/month|subscription/i, `${c.slug} CTA must name the $10 subscription`);
+  assert.match(en.seoDescription, /\$10\/month USD subscription/, `${c.slug} SEO must name the subscription`);
+  const es = getFeaturePageContent(c.slug, "es");
+  assert.ok(es?.seoTitle, `${c.slug} needs Spanish copy`);
+  assert.equal(es.ctaTo, "/packets/latam-to-us");
+  assert.match(es.ctaLabel, /\$10\/mes/, `${c.slug} ES CTA must name $10/mes`);
+  assert.match(es.seoDescription, /suscripción de USD \$10\/mes/, `${c.slug} ES SEO must name the subscription`);
+  assert.ok(
+    es.relatedLinks.some((l) => l.to === c.officialHref),
+    `${c.slug} must link official apostille ${c.officialHref}`
+  );
+  if (officialBySlug[c.slug]) {
+    assert.equal(c.officialHref, officialBySlug[c.slug], `${c.slug} official apostille URL`);
+  }
+}
 
 fs.unlinkSync(out);
 fs.unlinkSync(marketingOut);

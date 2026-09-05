@@ -1522,7 +1522,10 @@ export default function Dashboard() {
                       { to: localizePath("/visa-supporting-documents", locale), title: t("footer.visaDocs"), body: t("dash.corridorVisa") },
                       { to: localizePath("/mexico-to-us", locale), title: t("footer.mexicoToUs"), body: t("dash.corridorMexico") },
                       { to: localizePath("/colombia-to-us", locale), title: t("footer.colombiaToUs"), body: t("dash.corridorColombia") },
+                      { to: localizePath("/latam", locale), title: t("footer.moreCountries"), body: t("dash.corridorMoreCountries") },
                       { to: localizePath("/immigrant-housing", locale), title: t("footer.immigrantHousing"), body: t("dash.corridorHousing") },
+                      { to: localizePath("/after-arrival", locale), title: t("footer.afterArrival"), body: t("dash.corridorAfterArrival") },
+                      { to: localizePath("/itin", locale), title: t("footer.itin"), body: t("dash.corridorItin") },
                     ].map((card) => (
                       <Link key={card.to} to={card.to} className="dashboard-corridor-card">
                         <h3>{card.title}</h3>

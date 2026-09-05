@@ -50,6 +50,7 @@ import SeoLandingTemplate from "../src/components/SeoLandingTemplate";
 import { SEO_LANDING_PAGES } from "../src/lib/seoPages";
 import { PARTNER_PAGES } from "../src/lib/partnerPages";
 import { ALTERNATIVE_PAGES, IMPORT_GUIDE_PAGES } from "../src/lib/marketingPages";
+import { GENERATED_COUNTRY_CORRIDORS } from "../src/lib/latamCountryCorridors";
 
 /** Renders the real app components to static markup for a single path — same components a
  *  browser gets, minus effects (which never run during static rendering, so Header's login-check
@@ -182,6 +183,14 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/es/colombia-a-eeuu" element={<FeaturePage slug="colombia-to-us" />} />
           <Route path="/immigrant-housing" element={<FeaturePage slug="immigrant-housing" />} />
           <Route path="/es/arrendamiento-inmigrante" element={<FeaturePage slug="immigrant-housing" />} />
+          <Route path="/after-arrival" element={<FeaturePage slug="after-arrival" />} />
+          <Route path="/es/despues-de-llegar" element={<FeaturePage slug="after-arrival" />} />
+          <Route path="/itin" element={<FeaturePage slug="itin" />} />
+          <Route path="/es/itin" element={<FeaturePage slug="itin" />} />
+          {GENERATED_COUNTRY_CORRIDORS.flatMap((c) => [
+            <Route key={c.enPath} path={c.enPath} element={<FeaturePage slug={c.slug} />} />,
+            <Route key={c.esPath} path={c.esPath} element={<FeaturePage slug={c.slug} />} />,
+          ])}
           <Route path="/proof-of-income" element={<FeaturePage slug="proof-of-income" />} />
           <Route path="/es/prueba-de-ingresos" element={<FeaturePage slug="proof-of-income" />} />
           <Route path="/signed-work-order" element={<FeaturePage slug="signed-work-order" />} />

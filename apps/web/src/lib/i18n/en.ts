@@ -2553,6 +2553,12 @@ const en: Messages = {
     "Consent for a minor to travel with a named adult — dates, destinations, and emergency contacts.",
   "tpl.child-travel-consent.useCase":
     "Use this when one parent stays behind and the other flies with the child. We do not book tickets or talk to CBP. Airlines and consulates set their own rules.",
+  "tpl.roommate-agreement.name": "Roommate Agreement",
+  "tpl.roommate-agreement.seoTitle": "Free Roommate Agreement Template",
+  "tpl.roommate-agreement.description":
+    "Splits rent and utilities and sets house rules between co-tenants sharing a home.",
+  "tpl.roommate-agreement.useCase":
+    "Use this when you're moving in with a roommate and want a signed split of rent and bills — separate from any lease with the landlord. Attach the constancia URL if they asked for income proof.",
   "tpl.promissory-note.name": "Promissory Note",
   "tpl.promissory-note.seoTitle": "Free Promissory Note Template",
   "tpl.promissory-note.description":
@@ -2588,7 +2594,10 @@ const en: Messages = {
   "footer.latamUsPacket": "Immigrant plan",
   "footer.mexicoToUs": "Mexico → US",
   "footer.colombiaToUs": "Colombia → US",
+  "footer.moreCountries": "More LATAM countries",
   "footer.immigrantHousing": "Lease / constancia",
+  "footer.afterArrival": "After you arrive",
+  "footer.itin": "ITIN (IRS W-7)",
   "footer.i9": "Sign I-9",
   "footer.visaDocs": "Visa supporting docs",
   "footer.constancia": "Income proof / constancia",
@@ -2637,7 +2646,11 @@ const en: Messages = {
   "dash.corridorVisa": "Offer, POA, reference, child travel — supporting docs, not the petition.",
   "dash.corridorMexico": "Same plan. Official SRE apostille link. We don't apostille or file.",
   "dash.corridorColombia": "Same plan. Official Cancillería apostille link. We don't apostille or file.",
+  "dash.corridorMoreCountries":
+    "Same $10/month USD subscription. Official apostille link for Panama, Venezuela, and the rest of Spanish LATAM.",
   "dash.corridorHousing": "Lease or roommate template + constancia URL for the landlord.",
+  "dash.corridorAfterArrival": "I-94, USCIS account, address change, ITIN — official links. We don't file them.",
+  "dash.corridorItin": "IRS W-7 if you cannot get an SSN. We don't invent or mail that form.",
   "latamDesk.seoTitle": "LATAM: cobro, constancia, and contractor kits | Docracy",
   "latamDesk.seoDescription":
     "WhatsApp cobro, constancia, hire in LATAM, and immigrant docs: official I-9 plus visa supporting templates. We don't file petitions or run E-Verify. Signing stays free.",
@@ -2646,6 +2659,10 @@ const en: Messages = {
   "latamDesk.heroSub":
     "The packet for US ↔ LATAM work — including people who just arrived. Cobro on your Mercado Pago, a constancia a US landlord can open, then the kits. Docracy never takes the money.",
   "latamDesk.openKit": "Open the kit",
+  "latamDesk.countriesTitle": "Every Spanish LATAM country",
+  "latamDesk.countriesSub":
+    "Same $10/month USD subscription — the LATAM package is included. Official apostille link per origin. We don't apostille or file.",
+  "latamDesk.openCountry": "Open the country door",
   "taxYear.seoTitle": "1099 Season Locker — Signed W-9s, Contracts & CPA CSV | Docracy",
   "taxYear.seoDescription":
     "Keep every completed contractor file from the tax year and download a CSV for your CPA. Not IRS e-file. Paid $10/mo — signing stays free.",
@@ -2901,6 +2918,25 @@ const en: Messages = {
   "latamUsPacket.send.ssn.body":
     "A job often asks for a Social Security number after you arrive. Apply on SSA.gov. We do not file SS-5 and we do not issue numbers.",
   "latamUsPacket.send.ssn.official": "ssa.gov — apply for an SSN",
+  "latamUsPacket.send.i94.title": "I-94 → CBP (you, not us)",
+  "latamUsPacket.send.i94.body":
+    "Employers and schools ask for the admission record. Retrieve it on CBP's site. We do not host I-94 and we do not fix travel history.",
+  "latamUsPacket.send.i94.official": "i94.cbp.dhs.gov — get most recent I-94",
+  "latamUsPacket.send.i94.cta": "After-arrival door",
+  "latamUsPacket.send.uscisAccount.title": "USCIS online account → USCIS (you, not us)",
+  "latamUsPacket.send.uscisAccount.body":
+    "E-COA and most case mail live in myaccount.uscis.gov. We cannot open or recover that account.",
+  "latamUsPacket.send.uscisAccount.official": "myaccount.uscis.gov",
+  "latamUsPacket.send.address.title": "New address → USCIS (usually within 10 days)",
+  "latamUsPacket.send.address.body":
+    "USCIS.gov/addresschange — usually through the online account. A paper AR-11 is the fallback. Changing USPS mail is not enough. We do not file AR-11.",
+  "latamUsPacket.send.address.official": "uscis.gov/addresschange",
+  "latamUsPacket.send.address.cta": "After-arrival door",
+  "latamUsPacket.send.itin.title": "ITIN → IRS (only if you cannot get an SSN)",
+  "latamUsPacket.send.itin.body":
+    "Form W-7 is on IRS.gov. Mail it or use a TAC / CAA. An ITIN is not work authorization. We do not invent W-7 and we do not ship W-8BEN.",
+  "latamUsPacket.send.itin.official": "IRS — how to apply for an ITIN",
+  "latamUsPacket.send.itin.cta": "ITIN door",
   "latamUsPacket.send.apostille.title": "Apostille / legalization → your origin country",
   "latamUsPacket.send.apostille.body":
     "Birth certificates, degrees, and powers of attorney often need an apostille before a US school, employer, or consulate accepts them. That is SRE (Mexico), Cancillería (Colombia), or your foreign ministry — not us. We can sign the POA here first.",
@@ -2928,9 +2964,9 @@ const en: Messages = {
     "One parent stays behind; the other flies with the child. Sign the consent here. We do not book tickets or talk to CBP.",
   "latamUsPacket.send.child.cta": "Open child travel consent",
   "latamUsPacket.tpl.lease": "Commercial lease / housing packet",
-  "latamUsPacket.countryTitle": "Mexico or Colombia?",
+  "latamUsPacket.countryTitle": "Mexico, Colombia, Panama, Venezuela — or another origin?",
   "latamUsPacket.countrySub":
-    "Same Paid plan. Country pages add the official apostille link for that origin — we still do not apostille or file.",
+    "Same $10/month USD subscription. The LATAM package is included. Country pages add the official apostille link for that origin — we still do not apostille or file.",
   "latamUsPacket.compareTitle": "Vs Boundless, CitizenPath, and a gestoría",
   "latamUsPacket.compareSub":
     "They file or prepare. Boundless and CitizenPath bill in USD ($699–$2,549 / $79–$279 + USCIS). MX gestorías: honorarios in MXN (~$900–$3,800) + $185 USD State. Our Paid plan is USD $10; cobro you label MXN/COP/USD.",

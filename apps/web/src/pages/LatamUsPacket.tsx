@@ -5,6 +5,7 @@ import { localizePath, useI18n } from "../lib/i18n";
 import { usePageMeta } from "../lib/usePageMeta";
 import { track } from "../lib/track";
 import { breadcrumbJsonLd, howToJsonLd } from "../lib/productSeo";
+import { LATAM_COUNTRY_CORRIDORS } from "../lib/latamCountryCorridors";
 
 const FAQ_COUNT = 8;
 
@@ -114,6 +115,36 @@ const SEND_TO: Array<{
     bodyKey: "latamUsPacket.send.ssn.body",
     officialHref: "https://www.ssa.gov/ssnumber/",
     officialKey: "latamUsPacket.send.ssn.official",
+  },
+  {
+    titleKey: "latamUsPacket.send.i94.title",
+    bodyKey: "latamUsPacket.send.i94.body",
+    officialHref: "https://i94.cbp.dhs.gov/I94/#/home",
+    officialKey: "latamUsPacket.send.i94.official",
+    docracyTo: "/after-arrival",
+    docracyCtaKey: "latamUsPacket.send.i94.cta",
+  },
+  {
+    titleKey: "latamUsPacket.send.uscisAccount.title",
+    bodyKey: "latamUsPacket.send.uscisAccount.body",
+    officialHref: "https://myaccount.uscis.gov/",
+    officialKey: "latamUsPacket.send.uscisAccount.official",
+  },
+  {
+    titleKey: "latamUsPacket.send.address.title",
+    bodyKey: "latamUsPacket.send.address.body",
+    officialHref: "https://www.uscis.gov/addresschange",
+    officialKey: "latamUsPacket.send.address.official",
+    docracyTo: "/after-arrival",
+    docracyCtaKey: "latamUsPacket.send.address.cta",
+  },
+  {
+    titleKey: "latamUsPacket.send.itin.title",
+    bodyKey: "latamUsPacket.send.itin.body",
+    officialHref: "https://www.irs.gov/tin/itin/how-to-apply-for-an-itin",
+    officialKey: "latamUsPacket.send.itin.official",
+    docracyTo: "/itin",
+    docracyCtaKey: "latamUsPacket.send.itin.cta",
   },
   {
     titleKey: "latamUsPacket.send.apostille.title",
@@ -390,14 +421,23 @@ export default function LatamUsPacket() {
           <Link to={localizePath("/boundless-vs-citizenpath", locale)}>{t("footer.boundlessVsCitizenpath")}</Link>
         </p>
 
-        <h2 style={{ fontSize: 19, marginTop: 36 }}>{t("latamUsPacket.countryTitle")}</h2>
+        <h2 id="paises" style={{ fontSize: 19, marginTop: 36 }}>{t("latamUsPacket.countryTitle")}</h2>
         <p style={{ color: "var(--mute)" }}>{t("latamUsPacket.countrySub")}</p>
         <p>
-          <Link to={localizePath("/mexico-to-us", locale)}>{t("footer.mexicoToUs")}</Link>
-          {" · "}
-          <Link to={localizePath("/colombia-to-us", locale)}>{t("footer.colombiaToUs")}</Link>
+          {LATAM_COUNTRY_CORRIDORS.map((c, i) => (
+            <span key={c.slug}>
+              {i > 0 ? " · " : null}
+              <Link to={localizePath(c.enPath, locale)}>
+                {locale === "es" ? `${c.countryEs} → EE. UU.` : `${c.countryEn} → US`}
+              </Link>
+            </span>
+          ))}
           {" · "}
           <Link to={localizePath("/immigrant-housing", locale)}>{t("footer.immigrantHousing")}</Link>
+          {" · "}
+          <Link to={localizePath("/after-arrival", locale)}>{t("footer.afterArrival")}</Link>
+          {" · "}
+          <Link to={localizePath("/itin", locale)}>{t("footer.itin")}</Link>
         </p>
 
         <h2 style={{ fontSize: 19, marginTop: 36 }}>{t("latamUsPacket.templatesTitle")}</h2>

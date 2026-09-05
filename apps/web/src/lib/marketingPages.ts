@@ -1,3 +1,7 @@
+import { countryFeaturePage, generatedCountryPages, GENERATED_COUNTRY_CORRIDORS } from "./latamCountryCorridors";
+
+export { GENERATED_COUNTRY_CORRIDORS, LATAM_COUNTRY_CORRIDORS } from "./latamCountryCorridors";
+
 // Data for the batch of narrow-intent landing/explainer pages requested for SEO — kept in one
 // place (like freeTemplates.ts) rather than inline in each page component, since prerender.mjs
 // needs the same title/description strings without importing React.
@@ -1954,6 +1958,103 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       { label: "Roommate agreement", to: "/free-templates/roommate-agreement" },
     ],
   },
+  {
+    slug: "after-arrival",
+    xDefault: "es",
+    seoTitle: "After You Arrive in the US — I-94, USCIS Account, ITIN | Docracy",
+    seoDescription:
+      "After landing: retrieve I-94 on CBP, open a USCIS account, report a new address, apply for an ITIN on IRS.gov. We sign the extras. We don't file AR-11 or W-7.",
+    heroHeadline: "You landed. The next forms are not ours to file.",
+    heroSubheadline:
+      "I-94 is CBP. Address change and the online account are USCIS. ITIN is the IRS. Same $10 plan saves the PDFs you sign here. Spanish first.",
+    problem:
+      "Search mixes Boundless, ‘free I-94 PDF’, and SAT constancia generators. None of them send you to CBP, USCIS, and IRS and then keep the offer and I-9 you already signed.",
+    solution:
+      "Use the official portals yourself. Unlock Paid so the I-9, offer, POA, and constancia stay reopenable. We do not retrieve I-94, we do not file AR-11, and we do not submit W-7.",
+    features: [
+      { title: "I-94 (CBP)", body: "Retrieve it on i94.cbp.dhs.gov. We don't host the record." },
+      { title: "USCIS online account", body: "myaccount.uscis.gov — E-COA lives there. Not us." },
+      { title: "Change of address", body: "uscis.gov/addresschange. Usually within 10 days. Not a Docracy form." },
+      { title: "ITIN if you have no SSN", body: "IRS W-7. We don't invent that form and we don't mail Austin." },
+    ],
+    useCases: [
+      "First week after a visa stamp — I-94 for the employer",
+      "Moved apartments — USCIS wants the new address",
+      "Need a TIN for a 1040-NR and you are not eligible for an SSN",
+    ],
+    faqs: [
+      {
+        question: "Do you retrieve my I-94?",
+        answer: "No. CBP: https://i94.cbp.dhs.gov/I94/#/home",
+      },
+      {
+        question: "Do you file AR-11?",
+        answer: "No. https://www.uscis.gov/addresschange — usually through a USCIS online account.",
+      },
+      {
+        question: "Spanish URL?",
+        answer: "https://docracy.io/es/despues-de-llegar — plan: /es/kit-llegar-eeuu.",
+      },
+    ],
+    ctaLabel: "Unlock the immigrant plan — $10/month",
+    ctaTo: "/packets/latam-to-us",
+    relatedLinks: [
+      { label: "I-94 (CBP official)", to: "https://i94.cbp.dhs.gov/I94/#/home" },
+      { label: "USCIS account", to: "https://myaccount.uscis.gov/" },
+      { label: "Change of address", to: "https://www.uscis.gov/addresschange" },
+      { label: "Apply for an ITIN (IRS)", to: "https://www.irs.gov/tin/itin/how-to-apply-for-an-itin" },
+      { label: "Immigrant plan", to: "/packets/latam-to-us" },
+    ],
+  },
+  {
+    slug: "itin",
+    xDefault: "es",
+    seoTitle: "ITIN vs SSN vs W-9 — Official IRS W-7 Link | Docracy",
+    seoDescription:
+      "ITIN is an IRS number when you cannot get an SSN. Official W-7 is on IRS.gov. We sign W-9 only for US persons. We do not file W-7 or invent that form.",
+    heroHeadline: "ITIN is the IRS. SSN is SSA. W-9 is only for US persons.",
+    heroSubheadline:
+      "If you are not eligible for a Social Security number, the IRS issues an ITIN on Form W-7. We link the official page. We do not prepare or mail W-7.",
+    problem:
+      "Landlords and payers ask for a TIN. People download a random W-7 and think e-sign equals an ITIN. It doesn't.",
+    solution:
+      "Apply on IRS.gov (mail or a Taxpayer Assistance Center / CAA). If you are a US person, sign the official W-9 here. If you need an SSN, that is ssa.gov — not us.",
+    features: [
+      { title: "Official IRS how-to", body: "https://www.irs.gov/tin/itin/how-to-apply-for-an-itin" },
+      { title: "W-7 stays on IRS.gov", body: "About Form W-7: https://www.irs.gov/forms-pubs/about-form-w-7 — we don't ship a substitute." },
+      { title: "W-9 only if you are a US person", body: "Official IRS W-9 is in the catalog. We still don't ship W-8BEN." },
+      { title: "SSN is a different office", body: "ssa.gov/ssnumber. We don't file SS-5." },
+    ],
+    useCases: [
+      "1040-NR and you cannot get an SSN",
+      "Payer asked for a TIN and you are not a US person",
+      "Renew an expired ITIN — still W-7 on IRS.gov",
+    ],
+    faqs: [
+      {
+        question: "Do you file W-7?",
+        answer: "No. https://www.irs.gov/tin/itin/how-to-apply-for-an-itin",
+      },
+      {
+        question: "Is an ITIN work authorization?",
+        answer: "No. Neither is signing an I-9 here. We don't run E-Verify.",
+      },
+      {
+        question: "Spanish URL?",
+        answer: "https://docracy.io/es/itin — plan: /es/kit-llegar-eeuu.",
+      },
+    ],
+    ctaLabel: "Open the immigrant plan",
+    ctaTo: "/packets/latam-to-us",
+    relatedLinks: [
+      { label: "How to apply for an ITIN (IRS)", to: "https://www.irs.gov/tin/itin/how-to-apply-for-an-itin" },
+      { label: "About Form W-7 (IRS)", to: "https://www.irs.gov/forms-pubs/about-form-w-7" },
+      { label: "SSN (SSA)", to: "https://www.ssa.gov/ssnumber/" },
+      { label: "W-9 template", to: "/free-templates/w-9-form" },
+      { label: "After arrival", to: "/after-arrival" },
+    ],
+  },
+  ...generatedCountryPages("en") as FeaturePageContent[],
 ];
 
 export function getNdaSigningPageEs(): FeaturePageContent {
@@ -2910,6 +3011,108 @@ export function getImmigrantHousingPageEs(): FeaturePageContent {
   };
 }
 
+export function getAfterArrivalPageEs(): FeaturePageContent {
+  return {
+    slug: "after-arrival",
+    xDefault: "es",
+    seoTitle: "Después de llegar a EE. UU. — I-94, cuenta USCIS, ITIN | Docracy",
+    seoDescription:
+      "Ya llegaste: saca el I-94 en CBP, abre cuenta USCIS, avisa el domicilio, pide ITIN en IRS.gov. Firmamos los extras. No presentamos AR-11 ni W-7.",
+    heroHeadline: "Ya llegaste. Los siguientes formularios no los presentamos nosotros.",
+    heroSubheadline:
+      "El I-94 es CBP. El domicilio y la cuenta son USCIS. El ITIN es el IRS. El mismo plan de $10 guarda los PDF que firmas aquí. Español primero.",
+    problem:
+      "Google mezcla Boundless, ‘I-94 PDF gratis’ y generadores de constancia SAT. Ninguno te manda a CBP, USCIS e IRS y además guarda la oferta y el I-9 que ya firmaste.",
+    solution:
+      "Usa los portales oficiales tú. Desbloquea el plan para reabrir I-9, oferta, poder y constancia. No bajamos el I-94, no presentamos AR-11 y no enviamos el W-7.",
+    features: [
+      { title: "I-94 (CBP)", body: "Lo sacas en i94.cbp.dhs.gov. No hospedamos el registro." },
+      { title: "Cuenta USCIS", body: "myaccount.uscis.gov — ahí está el E-COA. No somos nosotros." },
+      { title: "Cambio de domicilio", body: "uscis.gov/addresschange. Suele ser en 10 días. No es un formulario de Docracy." },
+      { title: "ITIN si no tienes SSN", body: "W-7 del IRS. No inventamos ese formulario y no mandamos nada a Austin." },
+    ],
+    useCases: [
+      "Primera semana con visa — I-94 para el empleador",
+      "Te mudaste — USCIS quiere la dirección nueva",
+      "Necesitas TIN para un 1040-NR y no calificas para SSN",
+    ],
+    faqs: [
+      {
+        question: "¿Bajan mi I-94?",
+        answer: "No. CBP: https://i94.cbp.dhs.gov/I94/#/home",
+      },
+      {
+        question: "¿Presentan el AR-11?",
+        answer: "No. https://www.uscis.gov/addresschange — casi siempre desde la cuenta USCIS.",
+      },
+      {
+        question: "¿URL en español?",
+        answer: "https://docracy.io/es/despues-de-llegar — plan: /es/kit-llegar-eeuu.",
+      },
+    ],
+    ctaLabel: "Desbloquear el plan inmigrante — $10/mes",
+    ctaTo: "/packets/latam-to-us",
+    relatedLinks: [
+      { label: "I-94 (CBP oficial)", to: "https://i94.cbp.dhs.gov/I94/#/home" },
+      { label: "Cuenta USCIS", to: "https://myaccount.uscis.gov/" },
+      { label: "Cambio de domicilio", to: "https://www.uscis.gov/addresschange" },
+      { label: "Pedir un ITIN (IRS)", to: "https://www.irs.gov/tin/itin/how-to-apply-for-an-itin" },
+      { label: "Plan inmigrante", to: "/packets/latam-to-us" },
+    ],
+  };
+}
+
+export function getItinPageEs(): FeaturePageContent {
+  return {
+    slug: "itin",
+    xDefault: "es",
+    seoTitle: "ITIN vs SSN vs W-9 — link oficial del W-7 | Docracy",
+    seoDescription:
+      "El ITIN lo da el IRS si no puedes sacar SSN. El W-7 oficial está en IRS.gov. Firmamos W-9 solo si eres persona de EE. UU. No presentamos W-7 ni inventamos ese formulario.",
+    heroHeadline: "El ITIN es el IRS. El SSN es SSA. El W-9 solo si eres persona de EE. UU.",
+    heroSubheadline:
+      "Si no calificas para Seguro Social, el IRS emite un ITIN con el W-7. Enlazamos la página oficial. No preparamos ni enviamos el W-7.",
+    problem:
+      "El arrendador o el pagador pide un TIN. La gente baja un W-7 cualquiera y cree que firmarlo en línea es un ITIN. No lo es.",
+    solution:
+      "Pídelo en IRS.gov (correo o TAC / CAA). Si eres persona de EE. UU., firma el W-9 oficial aquí. Si necesitas SSN, eso es ssa.gov — no nosotros.",
+    features: [
+      { title: "Cómo pedir el ITIN (IRS)", body: "https://www.irs.gov/tin/itin/how-to-apply-for-an-itin" },
+      { title: "El W-7 se queda en IRS.gov", body: "https://www.irs.gov/forms-pubs/about-form-w-7 — no enviamos un sustituto." },
+      { title: "W-9 solo si eres persona de EE. UU.", body: "El W-9 oficial está en el catálogo. Seguimos sin W-8BEN." },
+      { title: "El SSN es otra oficina", body: "ssa.gov/ssnumber. No presentamos el SS-5." },
+    ],
+    useCases: [
+      "1040-NR y no puedes sacar SSN",
+      "El pagador pidió TIN y no eres persona de EE. UU.",
+      "Renovar un ITIN vencido — sigue siendo el W-7 en IRS.gov",
+    ],
+    faqs: [
+      {
+        question: "¿Presentan el W-7?",
+        answer: "No. https://www.irs.gov/tin/itin/how-to-apply-for-an-itin",
+      },
+      {
+        question: "¿El ITIN autoriza a trabajar?",
+        answer: "No. Firmar un I-9 aquí tampoco. No corremos E-Verify.",
+      },
+      {
+        question: "¿URL en español?",
+        answer: "https://docracy.io/es/itin — plan: /es/kit-llegar-eeuu.",
+      },
+    ],
+    ctaLabel: "Abrir el plan inmigrante",
+    ctaTo: "/packets/latam-to-us",
+    relatedLinks: [
+      { label: "Cómo pedir un ITIN (IRS)", to: "https://www.irs.gov/tin/itin/how-to-apply-for-an-itin" },
+      { label: "Sobre el Formulario W-7 (IRS)", to: "https://www.irs.gov/forms-pubs/about-form-w-7" },
+      { label: "SSN (SSA)", to: "https://www.ssa.gov/ssnumber/" },
+      { label: "Plantilla W-9", to: "/free-templates/w-9-form" },
+      { label: "Después de llegar", to: "/after-arrival" },
+    ],
+  };
+}
+
 const ES_FEATURE_GETTERS: Record<string, () => FeaturePageContent> = {
   "nda-signing": getNdaSigningPageEs,
   "client-contracts": getClientContractsPageEs,
@@ -2929,6 +3132,11 @@ const ES_FEATURE_GETTERS: Record<string, () => FeaturePageContent> = {
   "mexico-to-us": getMexicoToUsPageEs,
   "colombia-to-us": getColombiaToUsPageEs,
   "immigrant-housing": getImmigrantHousingPageEs,
+  "after-arrival": getAfterArrivalPageEs,
+  "itin": getItinPageEs,
+  ...Object.fromEntries(
+    GENERATED_COUNTRY_CORRIDORS.map((c) => [c.slug, () => countryFeaturePage(c, "es") as FeaturePageContent])
+  ),
 };
 
 /** Locale-aware feature page content — ES routes use Spanish copy. */

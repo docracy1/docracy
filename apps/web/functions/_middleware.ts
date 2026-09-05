@@ -4,6 +4,7 @@
 // JavaScript and would otherwise never be counted at all. Fire-and-forget via ctx.waitUntil so a
 // slow/failing analytics call never delays the actual page response.
 import { FEATURE_PAGES, ALTERNATIVE_PAGES } from "../src/lib/marketingPages";
+import { GENERATED_COUNTRY_CORRIDORS } from "../src/lib/latamCountryCorridors";
 import { SEO_LANDING_PAGES } from "../src/lib/seoPages";
 import {
   fetchIndexShell,
@@ -77,6 +78,9 @@ const TRACKED_ROUTES = new Set([
   "/es/mexico-a-eeuu",
   "/es/colombia-a-eeuu",
   "/es/arrendamiento-inmigrante",
+  "/es/despues-de-llegar",
+  "/es/itin",
+  ...GENERATED_COUNTRY_CORRIDORS.map((c) => c.esPath),
   "/packets/latam-to-us",
   "/es/kit-llegar-eeuu",
   "/latam",
