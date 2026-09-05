@@ -242,6 +242,66 @@ export function foldLatamQuery(q: string): string {
     .trim();
 }
 
+const JOB_NEEDLES: { id: string; needles: string[] }[] = [
+  { id: "acta", needles: ["acta", "nacimiento", "matrimonio", "antecedentes", "renapo", "registro civil", "miregistrocivil"] },
+  { id: "apostille", needles: ["apostilla", "apostille", "legalizacion", "hcch"] },
+  { id: "cita", needles: ["cita", "consular", "ais", "cas", "ustraveldocs", "usvisa"] },
+  { id: "ceac", needles: ["ds-160", "ds160", "ceac"] },
+  { id: "ead", needles: ["ead", "i-765", "i765", "permiso", "tps", "i-821", "i821"] },
+  { id: "phone", needles: ["chip", "esim", "e-sim", "simcard", "banco", "bank"] },
+  { id: "i9", needles: ["i-9", "i9"] },
+  { id: "i94", needles: ["i-94", "i94"] },
+  { id: "itin", needles: ["itin", "w-7", "w7"] },
+  { id: "visa", needles: ["visa", "i-129", "i-130", "i-485", "peticion"] },
+  { id: "cobro", needles: ["cobro"] },
+  { id: "constancia", needles: ["constancia"] },
+];
+
+const ORIGIN_JOBS = new Set(["acta", "apostille"]);
+const FILE_JOBS = new Set(["cita", "ceac", "visa", "ead"]);
+const DROP_OTHER_COUNTRIES = new Set(["apostille", "acta", "visa", "cita", "ceac", "ead", "i9", "i94", "itin", "phone"]);
+
+function queryHasNeedle(q: string, tokens: string[], needle: string): boolean {
+  const n = foldLatamQuery(needle);
+  if (!n) return false;
+  // Whole tokens only — "apostilla".includes("acta") must not count as an acta job.
+  if (n.includes(" ")) return q.includes(n);
+  return tokens.includes(n);
+}
+
+/** Origin country named in the query (México, Colombia, …). Ignores city aliases. */
+export function countryFromLatamQuery(raw: string): string | null {
+  const q = foldLatamQuery(raw);
+  if (!q) return null;
+  const tokens = q.split(" ").filter(Boolean);
+  let best: { slug: string; len: number } | null = null;
+  for (const c of LATAM_COUNTRY_CORRIDORS) {
+    const needles = [
+      foldLatamQuery(c.countryEn),
+      foldLatamQuery(c.countryEs),
+      foldLatamQuery(c.slug.replace(/-to-us$/, "").replace(/-/g, " ")),
+    ];
+    for (const n of new Set(needles)) {
+      if (n.length < 4) continue;
+      if (!queryHasNeedle(q, tokens, n)) continue;
+      if (!best || n.length > best.len) best = { slug: c.slug, len: n.length };
+    }
+  }
+  return best?.slug ?? null;
+}
+
+/** Playbook jobs named in the query (acta, cita, I-765, …). */
+export function jobsFromLatamQuery(raw: string): string[] {
+  const q = foldLatamQuery(raw);
+  if (!q) return [];
+  const tokens = q.split(" ").filter(Boolean);
+  const found: string[] = [];
+  for (const job of JOB_NEEDLES) {
+    if (job.needles.some((n) => queryHasNeedle(q, tokens, n))) found.push(job.id);
+  }
+  return found;
+}
+
 export function searchLatamIndex(raw: string, limit = 8): LatamSearchEntry[] {
   const q = foldLatamQuery(raw);
   const index = latamSearchIndex();
@@ -259,7 +319,12 @@ export function searchLatamIndex(raw: string, limit = 8): LatamSearchEntry[] {
   }
 
   const tokens = q.split(" ").filter(Boolean);
-  const scored = index
+  const countrySlug = countryFromLatamQuery(q);
+  const jobs = jobsFromLatamQuery(q);
+  const originJob = jobs.some((j) => ORIGIN_JOBS.has(j));
+  const fileJob = jobs.some((j) => FILE_JOBS.has(j));
+
+  let scored = index
     .map((entry) => {
       const hay = foldLatamQuery([entry.id, ...entry.aliases].join(" "));
       let score = 0;
@@ -269,12 +334,45 @@ export function searchLatamIndex(raw: string, limit = 8): LatamSearchEntry[] {
         if (entry.aliases.some((a) => foldLatamQuery(a) === tok)) score += 8;
       }
       if (/brazil|brasil|cnj|e apostila/.test(hay + q) && /brazil|brasil/.test(q)) score = 0;
+
+      if (countrySlug) {
+        if (entry.id === `country-${countrySlug}`) score += originJob ? 24 : 10;
+        else if (entry.kind === "country") score = 0;
+      } else if (jobs.some((j) => DROP_OTHER_COUNTRIES.has(j)) && entry.kind === "country") {
+        // "apostilla" / "visa" alone must not dump 18 country cards.
+        score = 0;
+      }
+
+      if (originJob && (entry.id === "playbook-acta" || entry.id === "playbook-apostille")) score += 18;
+      if (fileJob && (entry.id === "playbook-cita" || entry.id === "playbook-ceac" || entry.id === "playbook-ead")) {
+        score += 20;
+      }
+      if (fileJob && entry.kind === "country") score -= 12;
+      if (jobs.includes("i9") && entry.id === "playbook-i9") score += 16;
+      if (jobs.includes("phone") && entry.id === "playbook-phone") score += 16;
+      if (jobs.includes("itin") && entry.id === "playbook-itin") score += 12;
+
       return { entry, score };
     })
     .filter((x) => x.score > 0)
     .sort((a, b) => b.score - a.score || a.entry.id.localeCompare(b.entry.id));
 
-  return scored.slice(0, limit).map((x) => x.entry);
+  if (countrySlug && originJob) {
+    const keep = new Set([`country-${countrySlug}`, "playbook-acta", "playbook-apostille", "door-who"]);
+    scored = scored.filter((x) => keep.has(x.entry.id) || x.entry.kind === "honest-no");
+  } else if (countrySlug && fileJob) {
+    const keep = new Set([
+      "playbook-cita",
+      "playbook-ceac",
+      "playbook-ead",
+      "playbook-visa",
+      "no-file-uscis",
+      `country-${countrySlug}`,
+    ]);
+    scored = scored.filter((x) => keep.has(x.entry.id));
+  }
+
+  return scored.slice(0, countrySlug ? Math.min(limit, 4) : limit).map((x) => x.entry);
 }
 
 export function countrySearchTitle(slug: string, locale: "en" | "es"): string | null {

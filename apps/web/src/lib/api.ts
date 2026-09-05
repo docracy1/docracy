@@ -530,6 +530,26 @@ export async function fetchCobroPrefs(): Promise<{ prefs: { url: string; currenc
   return asJson(res);
 }
 
+export type WhoFilesVault = {
+  done: string[];
+  countrySlug: string;
+  updatedAt: string | null;
+};
+
+export async function fetchWhoFilesVault(): Promise<WhoFilesVault> {
+  const res = await apiFetch("/api/account/who-files-where");
+  return asJson(res);
+}
+
+export async function saveWhoFilesVault(input: { done: string[]; countrySlug: string }): Promise<WhoFilesVault> {
+  const res = await apiFetch("/api/account/who-files-where", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  return asJson(res);
+}
+
 /** Redeem an anonymous create's claimToken onto the signed-in account's dashboard history. */
 export async function claimDocument(
   claimToken: string

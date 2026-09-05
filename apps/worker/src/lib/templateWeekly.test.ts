@@ -157,22 +157,27 @@ describe("weekly template runtime infra", () => {
 
     await ensureWeeklyTemplateInfra(env);
 
-    expect(await queuedTopicCount(d1)).toBe(118);
+    expect(await queuedTopicCount(d1)).toBe(128);
     const first = (await d1
       .prepare(`SELECT slug FROM template_topic_queue WHERE status = 'queued' ORDER BY sort_order ASC LIMIT 1`)
       .first()) as { slug: string } | null;
     expect(first?.slug).toBe("residential-lease-addendum");
+    const acta = (await d1
+      .prepare(`SELECT slug FROM template_topic_queue WHERE slug = ?`)
+      .bind("acta-apostille-errand-limited-poa")
+      .first()) as { slug: string } | null;
+    expect(acta?.slug).toBe("acta-apostille-errand-limited-poa");
   });
 
   it("is idempotent when migration 0026 already applied", async () => {
     const { env, d1 } = makeMockEnv();
     const before = await queuedTopicCount(d1);
-    expect(before).toBe(118);
+    expect(before).toBe(128);
 
     await ensureWeeklyTemplateInfra(env);
     await ensureWeeklyTemplateInfra(env);
 
-    expect(await queuedTopicCount(d1)).toBe(118);
+    expect(await queuedTopicCount(d1)).toBe(128);
   });
 
   it("catch-up is a no-op once a weekly marketplace row exists", async () => {
@@ -190,7 +195,7 @@ describe("weekly template runtime infra", () => {
 
     await runWeeklyTemplateCatchUpIfEmpty(env);
 
-    expect(await queuedTopicCount(d1)).toBe(118);
+    expect(await queuedTopicCount(d1)).toBe(128);
   });
 
   it("catch-up runs a publish batch while the weekly list is empty", async () => {
@@ -202,7 +207,7 @@ describe("weekly template runtime infra", () => {
       .first()) as { n: number } | null;
     // Mock AI throws, so drafts are invalid and the batch is skipped rather than published.
     expect(Number(skipped?.n ?? 0)).toBe(10);
-    expect(await queuedTopicCount(d1)).toBe(108);
+    expect(await queuedTopicCount(d1)).toBe(118);
   });
 });
 

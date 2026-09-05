@@ -3271,8 +3271,11 @@ const en: Messages = {
   "whoFiles.ctaLogin": "Sign in to unlock the packet",
   "whoFiles.ctaOpen": "Open the immigrant plan",
   "whoFiles.disclaimer":
-    "This is a delivery map, not a filing product. Checkboxes stay on this device. Official links are government sites. Signing an I-9 here is not work authorization and is not E-Verify.",
+    "This is a delivery map, not a filing product. Signed-out checks stay on this phone. Signed-in Paid keeps “already delivered” in the same vault as the PDFs. Official links are government sites. Signing an I-9 here is not work authorization and is not E-Verify.",
   "whoFiles.progress": "{{done}} of {{total}} marked as delivered",
+  "whoFiles.vaultLocal": "Checks stay on this phone until you sign in. $10/month puts them in the vault.",
+  "whoFiles.vaultAccount": "Saved on this account. $10/month keeps the list in the vault — not only this phone.",
+  "whoFiles.vaultPaid": "Saved in your $10/month vault. Another phone sees the same checks.",
   "whoFiles.jumpLabel": "Jump to a section",
   "whoFiles.weDontLabel": "Docracy does not:",
   "whoFiles.group.employer": "Employer keeps it",
@@ -3324,15 +3327,15 @@ const en: Messages = {
     "No. ITIN is IRS.gov. I-94 is i94.cbp.dhs.gov. We don't invent W-7 and we don't host the CBP record.",
   "whoFiles.faq.5.q": "Does marking a box file anything?",
   "whoFiles.faq.5.a":
-    "No. Checks stay in this browser so you remember what you already delivered. Nothing is sent to a government.",
+    "No. Nothing is sent to a government. Signed-out checks stay on this phone. After you sign in, the list lives on the account — Paid keeps it in the vault next to the PDFs.",
   "whoFiles.faq.6.q": "What does the $10/month plan do here?",
   "whoFiles.faq.6.a":
-    "Sign the extras, keep every PDF past 9 days (vault until next April 15 or 13 months), share a constancia, send cobro. The checklist and official links are readable without Paid.",
+    "Sign the extras, keep every PDF past 9 days (vault until next April 15 or 13 months), share a constancia, send cobro, and keep “already delivered” on the account so a second phone sees the same map. Official links are readable without Paid.",
   "whoFiles.howToName": "How to deliver each signed file",
   "whoFiles.howTo1": "Sign the supporting PDF on Docracy (I-9, offer, POA, lease).",
   "whoFiles.howTo2": "Open the official portal in the row — USCIS, CEAC, CBP, IRS, SSA, or your origin .gob.",
   "whoFiles.howTo3": "You upload or the employer keeps it. We do not submit.",
-  "whoFiles.howTo4": "Mark the row when you have delivered it. Unlock Paid to reopen the PDF later.",
+  "whoFiles.howTo4": "Mark the row when you have delivered it. Paid keeps that list in the vault, not only this phone.",
   "footer.latamSearch": "Search LATAM docs",
   "latamSearch.seoTitle": "Search LATAM → US documents — I-9, apostille, I-94 | Docracy",
   "latamSearch.seoDescription":

@@ -43,6 +43,7 @@ import {
   totalsByCurrency,
 } from "../lib/constancia";
 import { mintPayerShare } from "../lib/payer";
+import { getWhoFilesVault, parseWhoFilesVault, putWhoFilesVault } from "../lib/whoFilesVault";
 
 type Variables = { account: AccountContext | null };
 const account = new Hono<{ Bindings: Env; Variables: Variables }>();
@@ -685,6 +686,31 @@ account.get("/cobro/prefs", requireAccount, async (c) => {
   const acct = c.get("account")!;
   const prefs = await getCobroPrefs(c.env, acct.workspaceId);
   return c.json({ prefs: prefs ? { url: prefs.url, currency: prefs.currency } : null });
+});
+
+/** Who-files checklist — KV is source of truth for signed-in accounts (same as docs). */
+account.get("/who-files-where", requireAccount, async (c) => {
+  const acct = c.get("account")!;
+  const vault = await getWhoFilesVault(c.env, acct.workspaceId);
+  return c.json({
+    done: vault?.done ?? [],
+    countrySlug: vault?.countrySlug ?? "",
+    updatedAt: vault?.updatedAt ?? null,
+  });
+});
+
+account.put("/who-files-where", requireAccount, async (c) => {
+  const acct = c.get("account")!;
+  let body: unknown;
+  try {
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: "Invalid JSON body" }, 400);
+  }
+  const parsed = parseWhoFilesVault(body);
+  if (!parsed) return c.json({ error: "done must be an array of known row ids" }, 400);
+  const vault = await putWhoFilesVault(c.env, acct.workspaceId, parsed);
+  return c.json({ done: vault.done, countrySlug: vault.countrySlug, updatedAt: vault.updatedAt });
 });
 
 account.post("/cobro/:docId/paid", requirePaidAccount, async (c) => {

@@ -165,7 +165,7 @@ export default function WhoFilesWhere() {
       <div className="container" style={{ maxWidth: 720 }}>
         <p className="who-files-disclaimer">{t("whoFiles.disclaimer")}</p>
         <LatamSearchBox source="who-files-where" compact />
-        <WhoFilesWhereChecklist renderAction={packetCta} sourcePrefix="seo:who-files-where" />
+        <WhoFilesWhereChecklist account={account} renderAction={packetCta} sourcePrefix="seo:who-files-where" />
 
         <p style={{ marginTop: 28, fontSize: 14 }}>
           <Link to={localizePath("/packets/latam-to-us", locale)}>{t("footer.latamUsPacket")}</Link>

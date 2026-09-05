@@ -40,6 +40,26 @@ describe("weekly blog LATAM queue refill", () => {
       .bind("itin-vs-ssn-after-arriving-in-the-us")
       .first()) as { slug: string } | null;
     expect(itin?.slug).toBe("itin-vs-ssn-after-arriving-in-the-us");
+    const acta = (await d1
+      .prepare(`SELECT slug FROM blog_topic_queue WHERE slug = ?`)
+      .bind("acta-de-nacimiento-apostilla-mexico")
+      .first()) as { slug: string } | null;
+    expect(acta?.slug).toBe("acta-de-nacimiento-apostilla-mexico");
+    const cita = (await d1
+      .prepare(`SELECT slug FROM blog_topic_queue WHERE slug = ?`)
+      .bind("cita-consular-ais-cas-ustraveldocs")
+      .first()) as { slug: string } | null;
+    expect(cita?.slug).toBe("cita-consular-ais-cas-ustraveldocs");
+    const ead = (await d1
+      .prepare(`SELECT slug FROM blog_topic_queue WHERE slug = ?`)
+      .bind("permiso-de-trabajo-i-765-ead-tps")
+      .first()) as { slug: string } | null;
+    expect(ead?.slug).toBe("permiso-de-trabajo-i-765-ead-tps");
+    const bank = (await d1
+      .prepare(`SELECT slug FROM blog_topic_queue WHERE slug = ?`)
+      .bind("abrir-cuenta-bancaria-con-itin")
+      .first()) as { slug: string } | null;
+    expect(bank?.slug).toBe("abrir-cuenta-bancaria-con-itin");
   });
 
   it("is idempotent on a migrated database", async () => {
@@ -49,6 +69,6 @@ describe("weekly blog LATAM queue refill", () => {
     await ensureWeeklyBlogInfra(env);
     const after = (await d1.prepare(`SELECT COUNT(*) as n FROM blog_topic_queue`).first()) as { n: number } | null;
     expect(Number(after?.n)).toBe(Number(before?.n));
-    expect(Number(after?.n)).toBeGreaterThanOrEqual(36);
+    expect(Number(after?.n)).toBeGreaterThanOrEqual(44);
   });
 });
