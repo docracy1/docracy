@@ -68,6 +68,13 @@ export default function Trust() {
         US and EU e-signature frameworks — see <a href="#esign-ueta">ESIGN &amp; UETA</a> below.
       </p>
       <p>
+        <strong>Immigrant / LATAM packet:</strong> we sign I-9, offer letters, POAs, and constancia URLs. We
+        do <strong>not</strong> file USCIS or CEAC petitions, book consular appointments, issue or apostille
+        actas, run E-Verify, sell eSIMs, or open bank accounts. Signing an I-9 is not work authorization.
+        Spanish map:{" "}
+        <a href="https://docracy.io/es/kit-llegar-eeuu">docracy.io/es/kit-llegar-eeuu</a>.
+      </p>
+      <p>
         By default, Docracy does <strong>not</strong> verify signer identity. Anyone with a signing link can
         sign as the name on it. The audit trail proves <em>what</em> was signed and <em>when</em>, not{" "}
         <em>who</em> physically signed.

@@ -136,6 +136,14 @@ async function publishOldestDraft(env: Env): Promise<string | null> {
   return draft.slug;
 }
 
+async function markTopicSkipped(env: Env, topicId: string): Promise<void> {
+  const db = requireDb(env);
+  await db
+    .prepare(`UPDATE blog_topic_queue SET status = 'skipped', published_at = ? WHERE id = ?`)
+    .bind(new Date().toISOString(), topicId)
+    .run();
+}
+
 async function markTopicPublished(env: Env, topicId: string, postId: string): Promise<void> {
   const db = requireDb(env);
   await db
@@ -183,34 +191,39 @@ export async function runWeeklyBlogPublish(env: Env): Promise<void> {
     return;
   }
 
-  const topic = await nextQueuedTopic(env);
-  if (!topic) {
-    console.log("Weekly blog: no queued topics left");
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const topic = await nextQueuedTopic(env);
+    if (!topic) {
+      console.log("Weekly blog: no queued topics left");
+      return;
+    }
+
+    const draft = await draftFromTopic(env, topic);
+    if (!draft) {
+      console.error(`Weekly blog: AI draft failed for topic ${topic.slug} — skipping so the queue can move`);
+      await markTopicSkipped(env, topic.id);
+      continue;
+    }
+
+    const slug = await ensureUniqueSlug(env, draft.slug || topic.slug);
+    const created = await createBlogPost(env, {
+      slug,
+      title: draft.title,
+      description: draft.description,
+      body: draft.body,
+      publish: true,
+    });
+    if (!created.ok) {
+      console.error(`Weekly blog: create failed for ${slug}: ${created.error}`);
+      await markTopicSkipped(env, topic.id);
+      continue;
+    }
+
+    await markTopicPublished(env, topic.id, created.id);
+    console.log(`Weekly blog: published ${slug} from topic ${topic.id}`);
+    await pingIndexNow([`/blog/${slug}`]);
     return;
   }
-
-  const draft = await draftFromTopic(env, topic);
-  if (!draft) {
-    console.error(`Weekly blog: AI draft failed for topic ${topic.slug}`);
-    return;
-  }
-
-  const slug = await ensureUniqueSlug(env, draft.slug || topic.slug);
-  const created = await createBlogPost(env, {
-    slug,
-    title: draft.title,
-    description: draft.description,
-    body: draft.body,
-    publish: true,
-  });
-  if (!created.ok) {
-    console.error(`Weekly blog: create failed for ${slug}: ${created.error}`);
-    return;
-  }
-
-  await markTopicPublished(env, topic.id, created.id);
-  console.log(`Weekly blog: published ${slug} from topic ${topic.id}`);
-  await pingIndexNow([`/blog/${slug}`]);
 }
 
 /** XML sitemap fragment listing published D1 posts (for robots.txt second sitemap). */

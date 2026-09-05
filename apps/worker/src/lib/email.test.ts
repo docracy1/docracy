@@ -11,6 +11,8 @@ import {
   sendArchiveNag,
   sendCobroNotice,
   sendOnboardingStep1,
+  sendOnboardingStep3,
+  sendOnboardingStep4,
 } from "./email";
 import { makeMockEnv } from "../test/mockEnv";
 import type { DocState } from "@docracy/shared";
@@ -396,6 +398,27 @@ describe("locale — Spanish translations", () => {
     expect(logged).toContain("Plan inmigrante");
     expect(logged).toContain("/es/kit-llegar-eeuu");
     expect(logged).toContain("Firmas electrónicas gratis, sin registro");
+    expect(logged).toContain("No tramitamos USCIS, apostilla, PAC ni E-Verify");
+  });
+
+  it("sends Spanish day-1 I-9 drip without claiming work authorization", async () => {
+    const { env } = makeMockEnv();
+    const capture = captureDevEmailLog();
+    await sendOnboardingStep3(env, "anna@example.com", "es");
+    const logged = capture.logged();
+    expect(logged).toContain("El I-9 es Sección 1");
+    expect(logged).toContain("/es/formulario-i-9");
+    expect(logged).toContain("no autoriza a trabajar");
+    expect(logged).not.toContain("tramitamos el I-765");
+  });
+
+  it("sends Spanish day-3 vault checkout, not another NDA", async () => {
+    const { env } = makeMockEnv();
+    const capture = captureDevEmailLog();
+    await sendOnboardingStep4(env, "anna@example.com", "es");
+    const logged = capture.logged();
+    expect(logged).toContain("/es/precios?checkout=1");
+    expect(logged).toContain("/es/kit-llegar-eeuu");
   });
 });
 

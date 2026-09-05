@@ -1,5 +1,6 @@
 import type { Env } from "@docracy/shared";
 import { BLOG_TOPIC_QUEUE_LATAM_SEED_SQL } from "./blogTopicQueueSeed";
+import { LATAM_JOB_PHRASE_BLOG_PRIORITY_SQL } from "./latamJobPhrasePriority";
 
 /** Same shape as migrations/0018 — IF NOT EXISTS so CI D1:Edit is not required. */
 const QUEUE_DDL = `
@@ -27,4 +28,5 @@ export async function ensureWeeklyBlogInfra(env: Env): Promise<void> {
   if (!env.DOCRACY_DB) return;
   await env.DOCRACY_DB.exec(QUEUE_DDL);
   await env.DOCRACY_DB.exec(BLOG_TOPIC_QUEUE_LATAM_SEED_SQL);
+  await env.DOCRACY_DB.exec(LATAM_JOB_PHRASE_BLOG_PRIORITY_SQL);
 }

@@ -71,4 +71,13 @@ describe("weekly blog LATAM queue refill", () => {
     expect(Number(after?.n)).toBe(Number(before?.n));
     expect(Number(after?.n)).toBeGreaterThanOrEqual(44);
   });
+
+  it("moves job-phrase topics to the Monday head", async () => {
+    const { env, d1 } = makeMockEnv();
+    await ensureWeeklyBlogInfra(env);
+    const first = (await d1
+      .prepare(`SELECT slug FROM blog_topic_queue WHERE status = 'queued' ORDER BY sort_order ASC, created_at ASC LIMIT 1`)
+      .first()) as { slug: string } | null;
+    expect(first?.slug).toBe("acta-de-nacimiento-apostilla-mexico");
+  });
 });

@@ -1061,6 +1061,12 @@ function templateList(items: string[]): string {
  *  cron sweep at 3 minutes / 24 hours / 2 days / 3 days — each step skipped once the account has
  *  actually sent a document (checked live, not tracked on this email itself). Day-2 (step 2) is a
  *  Docstoc-style soft check-in: free templates + gentle CTA, not a hard sales push. */
+function latamHonestFooter(): string {
+  return `<p style="margin:16px 0 0 0;font-size:13px;color:${MUTED};line-height:1.5;">
+    Firmar es gratis. USD $10/mes guarda el expediente. No tramitamos USCIS, apostilla, PAC ni E-Verify. Firmar un I-9 no autoriza a trabajar.
+  </p>`;
+}
+
 export async function sendOnboardingStep1(env: Env, email: string, locale: Locale = "en"): Promise<void> {
   const subject = locale === "es" ? "Tu primer documento toma 30 segundos" : "Your first document takes 30 seconds";
   const body =
@@ -1068,22 +1074,21 @@ export async function sendOnboardingStep1(env: Env, email: string, locale: Local
       ? `
     ${emailHeadline(`Tu primer documento toma 30 segundos`)}
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
-      Gracias por probar Docracy.io — una forma simple de enviar acuerdos rápidos sin cuentas ni complicaciones.
-    </p>
-    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
-      La mayoría de los usuarios empiezan enviando un documento pequeño. Toma menos de 30 segundos:
+      Firmar un PDF es gratis. El plan de USD $10/mes junta I-9, cobro, constancia y “qué ya entregué”
+      en la misma bóveda — no tramitamos USCIS, apostilla, PAC ni E-Verify.
     </p>
     <p style="margin:12px 0 0 0;font-size:15px;font-weight:bold;color:${INK};">
-      Sube tu primer documento → Agrega campos de firma → Envíalo a tu cliente o equipo → Listo
+      Sube el PDF → Firma → Tú lo subes al portal oficial → Listo
     </p>
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};">
-      Si no tienes un documento listo, empieza por el plan inmigrante o una plantilla:
+      Empieza por el plan inmigrante o una plantilla que ya firmamos:
     </p>
     ${templateList(["Plan inmigrante (I-9, links oficiales, constancia)", "I-9 oficial de USCIS", "Carta de oferta", "Cobro por WhatsApp", "Constancia para el arrendador"])}
     <p style="margin:0;font-size:15px;color:${INK};line-height:1.5;">
       Envía tu primer documento ahora y comprueba lo rápido que es el proceso.
     </p>
     ${ctaButton(`${env.PUBLIC_APP_URL}/es/kit-llegar-eeuu?utm_source=email&utm_medium=onboarding&utm_campaign=step1`, "Abrir el plan inmigrante")}
+    ${latamHonestFooter()}
     <p style="margin:0;font-size:14px;color:${MUTED};">O sube tu propio PDF. Si necesitas ayuda, solo responde este correo.</p>
     ${signOff(locale)}
   `
@@ -1141,6 +1146,7 @@ export async function sendOnboardingStep2(env: Env, email: string, locale: Local
       ¿Te pidieron ingresos para el depa?
       <a href="${env.PUBLIC_APP_URL}/es/constancia?utm_source=email&utm_medium=onboarding&utm_campaign=step2" style="color:${PRIMARY};">Abrir la constancia</a>.
     </p>
+    ${latamHonestFooter()}
     <p style="margin:0;font-size:14px;color:${MUTED};">Si no es el momento, no hay problema — tu cuenta seguirá aquí.</p>
     ${signOff(locale)}
   `
@@ -1170,20 +1176,21 @@ export async function sendOnboardingStep2(env: Env, email: string, locale: Local
 }
 
 export async function sendOnboardingStep3(env: Env, email: string, locale: Locale = "en"): Promise<void> {
-  const subject = locale === "es" ? "Prueba a enviar un documento rápido" : "Try sending one quick document";
+  const subject = locale === "es" ? "El I-9 es Sección 1 — no es permiso de trabajo" : "Try sending one quick document";
   const body =
     locale === "es"
       ? `
-    ${emailHeadline(`Prueba a enviar un documento rápido`)}
+    ${emailHeadline(`El I-9 es Sección 1 — no es permiso de trabajo`)}
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
-      Un recordatorio rápido — puedes enviar tu primer documento cuando quieras. Sin configuración,
-      sin cuentas, sin complicaciones.
+      Firmamos el Formulario I-9 oficial (edición 01/20/25), Sección 1. El empleador inspecciona las
+      Listas A/B/C. No corremos E-Verify. Firmar aquí no autoriza a trabajar.
     </p>
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
-      La mayoría en español empiezan con un I-9, una oferta o un cobro — menos de un minuto.
+      Gratis borra el PDF a los 9 días. USD $10/mes lo deja en la bóveda cuando HR lo pide otra vez.
     </p>
     ${ctaButton(`${env.PUBLIC_APP_URL}/es/formulario-i-9?utm_source=email&utm_medium=onboarding&utm_campaign=step3`, "Abrir el I-9 oficial")}
     <p style="margin:0;font-size:14px;color:${MUTED};">O abre el <a href="${env.PUBLIC_APP_URL}/es/kit-llegar-eeuu?utm_source=email&utm_medium=onboarding&utm_campaign=step3" style="color:${PRIMARY};">plan inmigrante</a> — sigue sin necesitar cuenta para leerlo.</p>
+    ${latamHonestFooter()}
     ${signOff(locale)}
   `
       : `
@@ -1217,7 +1224,9 @@ export async function sendOnboardingStep4(env: Env, email: string, locale: Local
     </p>
     <p style="margin:16px 0 0 0;font-size:15px;color:${INK};">Empieza aquí:</p>
     ${templateList(["Plan inmigrante", "I-9 oficial", "Constancia para rentar", "Cobro por WhatsApp", "México → EE. UU.", "Colombia → EE. UU."])}
-    ${ctaButton(`${env.PUBLIC_APP_URL}/es/kit-llegar-eeuu?utm_source=email&utm_medium=onboarding&utm_campaign=step4`, "Abrir el plan inmigrante")}
+    ${ctaButton(`${env.PUBLIC_APP_URL}/es/precios?checkout=1&utm_source=email&utm_medium=onboarding&utm_campaign=step4`, "Activar la bóveda — $10/mes")}
+    <p style="margin:12px 0 0 0;font-size:14px;color:${MUTED};">O sigue en el <a href="${env.PUBLIC_APP_URL}/es/kit-llegar-eeuu?utm_source=email&utm_medium=onboarding&utm_campaign=step4" style="color:${PRIMARY};">plan inmigrante</a> — firmar una vez sigue gratis.</p>
+    ${latamHonestFooter()}
     <p style="margin:0;font-size:14px;color:${MUTED};">Con gusto te ayudamos si necesitas algo.</p>
     ${signOff(locale)}
   `
@@ -1255,12 +1264,13 @@ export async function sendPreparerLeadStep1(env: Env, email: string, locale: Loc
       ¿Quieres una cuenta gratis para que todos tus documentos vivan en un solo lugar? Sin contraseña — solo
       un enlace mágico a tu correo.
     </p>
-    ${ctaButton(`${env.PUBLIC_APP_URL}/login?utm_source=email&utm_medium=preparer-lead&utm_campaign=step1`, "Crear una cuenta gratis")}
+    ${ctaButton(`${env.PUBLIC_APP_URL}/es/kit-llegar-eeuu?utm_source=email&utm_medium=preparer-lead&utm_campaign=step1`, "Abrir el plan inmigrante")}
     <p style="margin:16px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">
-      ¿Prefieres otro envío rápido primero?
-      <a href="${env.PUBLIC_APP_URL}/try?utm_source=email&utm_medium=preparer-lead&utm_campaign=step1" style="color:${PRIMARY};">Abre un NDA de ejemplo</a>
-      — sigue siendo gratis, sin necesidad de cuenta.
+      El siguiente PDF suele ser un I-9, una constancia o un cobro — no un NDA.
+      <a href="${env.PUBLIC_APP_URL}/login?utm_source=email&utm_medium=preparer-lead&utm_campaign=step1" style="color:${PRIMARY};">Crea una cuenta gratis</a>
+      para que “qué ya entregué” viva en la bóveda, no solo en este teléfono.
     </p>
+    ${latamHonestFooter()}
     <p style="margin:0;font-size:14px;color:${MUTED};">Pediste algunos consejos — responde este correo en cualquier momento para dejar de recibirlos.</p>
     ${signOff(locale)}
   `
@@ -1303,6 +1313,7 @@ export async function sendPreparerLeadStep2(env: Env, email: string, locale: Loc
     </p>
     ${templateList(["Plan inmigrante", "I-9 oficial", "Constancia", "Cobro por WhatsApp"])}
     ${ctaButton(`${env.PUBLIC_APP_URL}/es/kit-llegar-eeuu?utm_source=email&utm_medium=preparer-lead&utm_campaign=step2`, "Abrir el plan inmigrante")}
+    ${latamHonestFooter()}
     <p style="margin:16px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">
       ¿Quieres todos tus envíos en un solo lugar?
       <a href="${env.PUBLIC_APP_URL}/login?utm_source=email&utm_medium=preparer-lead&utm_campaign=step2" style="color:${PRIMARY};">Crea una cuenta gratis</a>
@@ -1345,6 +1356,7 @@ export async function sendPreparerLeadStep3(env: Env, email: string, locale: Loc
     </p>
     ${templateList(["Plan inmigrante — I-9 y extras", "I-9 oficial de USCIS", "Constancia para el arrendador", "Cobro por WhatsApp"])}
     ${ctaButton(`${env.PUBLIC_APP_URL}/es/kit-llegar-eeuu?utm_source=email&utm_medium=preparer-lead&utm_campaign=step3`, "Abrir el plan inmigrante")}
+    ${latamHonestFooter()}
     <p style="margin:16px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">
       O <a href="${env.PUBLIC_APP_URL}/es/plantillas-gratis?utm_source=email&utm_medium=preparer-lead&utm_campaign=step3" style="color:${PRIMARY};">explora las plantillas gratis</a>
       — sigue siendo gratis, sin necesidad de cuenta.
@@ -1381,7 +1393,8 @@ export async function sendPreparerLeadStep4(env: Env, email: string, locale: Loc
       Gratis cubre un envío corto. El plan de USD $10/mes guarda I-9, oferta, constancia y cobro
       (hasta el 15 de abril o 13 meses) y deja el paquete LATAM en la misma suscripción.
     </p>
-    ${ctaButton(`${env.PUBLIC_APP_URL}/es/precios?utm_source=email&utm_medium=preparer-lead&utm_campaign=step4`, "Ver el plan de $10/mes")}
+    ${ctaButton(`${env.PUBLIC_APP_URL}/es/precios?checkout=1&utm_source=email&utm_medium=preparer-lead&utm_campaign=step4`, "Activar la bóveda — $10/mes")}
+    ${latamHonestFooter()}
     <p style="margin:0;font-size:14px;color:${MUTED};">Sin presión — lo gratis sigue siendo gratis.</p>
     ${signOff(locale)}
   `

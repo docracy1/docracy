@@ -108,7 +108,21 @@ function priorityFor(urlPath) {
     urlPath === "/latam-export-documents" ||
     urlPath === "/es/documentos-exportacion" ||
     urlPath === "/request-w9" ||
-    urlPath === "/es/pedir-w9"
+    urlPath === "/es/pedir-w9" ||
+    urlPath === "/acta" ||
+    urlPath === "/es/acta" ||
+    urlPath === "/consular-appointment" ||
+    urlPath === "/es/cita-consular" ||
+    urlPath === "/ead-tps" ||
+    urlPath === "/es/ead-tps" ||
+    urlPath === "/phone-and-bank" ||
+    urlPath === "/es/chip-y-banco" ||
+    urlPath === "/latam-search" ||
+    urlPath === "/es/buscar" ||
+    urlPath === "/who-files-where" ||
+    urlPath === "/es/quien-sube-donde" ||
+    urlPath === "/packets/latam-to-us" ||
+    urlPath === "/es/kit-llegar-eeuu"
   ) {
     return "0.8";
   }
