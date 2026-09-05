@@ -22,6 +22,7 @@ const {
   canonicalPublicLocation,
   firstTouchCookieFromStripped,
   firstTouchSetCookieHeader,
+  shortLinkCanonical,
 } = createRequire(import.meta.url)(out);
 
 const stripped = stripTrackingSearch("?ref=seo-price&freeTemplate=mutual-nda");
@@ -60,6 +61,29 @@ const cookie = firstTouchCookieFromStripped({ ref: "seo-price" });
 assert.ok(cookie);
 assert.ok(firstTouchSetCookieHeader({ ref: "seo-price" }).startsWith("docracy_ft="));
 assert.equal(firstTouchSetCookieHeader({}), null);
+
+const tryLink = shortLinkCanonical(new URL("https://docracy.io/try"));
+assert.equal(tryLink.location, "https://docracy.io/prepare?freeTemplate=mutual-nda");
+assert.equal(tryLink.stripped.ref, "try");
+
+const tryWww = shortLinkCanonical(new URL("https://www.docracy.io/try?utm_source=newsletter"));
+assert.equal(tryWww.location, "https://docracy.io/prepare?freeTemplate=mutual-nda");
+assert.equal(tryWww.stripped.utm_source, "newsletter");
+
+const trySlash = shortLinkCanonical(new URL("https://docracy.io/try/"));
+assert.equal(trySlash.location, "https://docracy.io/prepare?freeTemplate=mutual-nda");
+
+const goPh = shortLinkCanonical(new URL("https://docracy.io/go/ph"));
+assert.equal(goPh.location, "https://docracy.io/prepare?freeTemplate=mutual-nda");
+assert.equal(goPh.stripped.utm_source, "producthunt");
+
+const goGl = shortLinkCanonical(new URL("https://docracy.io/go/gl"));
+assert.equal(goGl.location, "https://docracy.io/mcp");
+
+assert.equal(shortLinkCanonical(new URL("https://docracy.io/pricing")), null);
+
+const localTry = shortLinkCanonical(new URL("http://localhost:5173/try"));
+assert.equal(localTry.location, "http://localhost:5173/prepare?freeTemplate=mutual-nda");
 
 fs.unlinkSync(out);
 console.log("_trackingParams.test.mjs: ok");

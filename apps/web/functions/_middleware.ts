@@ -13,7 +13,7 @@ import {
   staticHtmlExists,
 } from "./_spaShell";
 import { legacyTemplateRedirectTarget } from "../src/lib/templateLegacyRedirects";
-import { canonicalPublicLocation, firstTouchSetCookieHeader } from "./_trackingParams";
+import { canonicalPublicLocation, firstTouchSetCookieHeader, shortLinkCanonical } from "./_trackingParams";
 
 const WORKER_URL = "https://api.docracy.io";
 
@@ -121,10 +121,17 @@ function isTrackedRoute(pathname: string): boolean {
 export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => {
   const url = new URL(context.request.url);
 
-  // One hop: www → apex, drop trailing slash, strip tracking params (ref / utm_* / gclid…).
-  // Keeps freeTemplate, next, send, packet. GSC "alternate + proper canonical" on this site
-  // is almost entirely `?ref=` / www variants of pages that already self-canonicalize.
+  // One hop: short links, www → apex, drop trailing slash, strip tracking params.
+  // Short links MUST run first — otherwise /try?ref=try canonicalizes to /try and
+  // `_redirects` adds a second hop. Keeps freeTemplate, next, send, packet.
   if (context.request.method === "GET" || context.request.method === "HEAD") {
+    const short = shortLinkCanonical(url);
+    if (short) {
+      const headers = new Headers({ Location: short.location });
+      const ft = firstTouchSetCookieHeader(short.stripped);
+      if (ft) headers.set("Set-Cookie", ft);
+      return new Response(null, { status: 301, headers });
+    }
     const canonical = canonicalPublicLocation(url);
     if (canonical) {
       const headers = new Headers({ Location: canonical.location });

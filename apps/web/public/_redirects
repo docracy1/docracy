@@ -72,36 +72,37 @@
 # combined page) — redirect so the URL doesn't 404 if already shared or indexed.
 /import-from-docusign-eversign  /import-from-docusign  301
 
-# Short shareable URLs for outreach / social / launches (avoid ugly UTM strings in posts/DMs).
-# Attribution: query `ref` / `utm_*` is picked up by apps/web/src/lib/attribution.ts on land.
-# SPA fallbacks also exist in React (ShortLinkRedirect) for in-app navigation.
-/try    /prepare?freeTemplate=mutual-nda&ref=try  302
-/nda    /prepare?freeTemplate=mutual-nda&ref=nda  302
-/price  /pricing?ref=price                        302
-/submit       /submit-template?ref=submit         302
-/marketplace  /free-templates?ref=marketplace      302
-/go/ph  /prepare?freeTemplate=mutual-nda&utm_source=producthunt&utm_medium=launch&utm_campaign=launch  302
-/go/hn  /prepare?freeTemplate=mutual-nda&utm_source=hackernews&utm_medium=showhn&utm_campaign=showhn  302
-/go/li  /prepare?freeTemplate=mutual-nda&ref=linkedin  302
-/go/x   /prepare?freeTemplate=mutual-nda&ref=x         302
-/go/dm  /outreach/general?utm_source=outreach&utm_medium=dm&utm_campaign=dm  302
+# Short shareable URLs for outreach / social / launches. Destinations stay clean
+# (no ref/utm) so this file cannot chain with the tracking-param 301. Attribution
+# is the first-touch cookie from functions/_middleware.ts (or ShortLinkRedirect
+# for in-app navigation). Prefer 301 — one hop, same targets as SHORT_LINK_DESTINATIONS.
+/try    /prepare?freeTemplate=mutual-nda  301
+/nda    /prepare?freeTemplate=mutual-nda  301
+/price  /pricing                          301
+/submit       /submit-template            301
+/marketplace  /free-templates             301
+/go/ph  /prepare?freeTemplate=mutual-nda  301
+/go/hn  /prepare?freeTemplate=mutual-nda  301
+/go/li  /prepare?freeTemplate=mutual-nda  301
+/go/x   /prepare?freeTemplate=mutual-nda  301
+/go/dm  /outreach/general                 301
 
 # One per directory listing (see ShortLinkRedirect.tsx's SHORT_LINKS) — replaces the shared /try
 # link every listing used to point at, which made it impossible to tell which directory a click
 # actually came from since they all merged into one "try" attribution bucket.
-/go/si  /prepare?freeTemplate=mutual-nda&utm_source=startupinspire&utm_medium=directory&utm_campaign=listing  302
-/go/ti  /prepare?freeTemplate=mutual-nda&utm_source=techimply&utm_medium=directory&utm_campaign=listing  302
-/go/gl  /mcp?utm_source=glama&utm_medium=directory&utm_campaign=listing  302
-/go/sh  /prepare?freeTemplate=mutual-nda&utm_source=saashub&utm_medium=directory&utm_campaign=listing  302
-/go/at  /prepare?freeTemplate=mutual-nda&utm_source=alternativeto&utm_medium=directory&utm_campaign=listing  302
+/go/si  /prepare?freeTemplate=mutual-nda  301
+/go/ti  /prepare?freeTemplate=mutual-nda  301
+/go/gl  /mcp                              301
+/go/sh  /prepare?freeTemplate=mutual-nda  301
+/go/at  /prepare?freeTemplate=mutual-nda  301
 
 # Persona-matched outreach: each cold-email persona lands on a dedicated /outreach page (why
 # reached out + what it solves + instant try), matched to a template closer to what they'd
 # actually send, instead of everyone hitting the homepage or the generic Mutual NDA.
-/go/dm-fl  /outreach/freelancer?utm_source=outreach&utm_medium=dm&utm_campaign=dm-freelancer  302
-/go/dm-ag  /outreach/agency?utm_source=outreach&utm_medium=dm&utm_campaign=dm-agency  302
-/go/dm-po  /outreach/peopleops?utm_source=outreach&utm_medium=dm&utm_campaign=dm-peopleops  302
-/go/dm-fo  /outreach/founder?utm_source=outreach&utm_medium=dm&utm_campaign=dm-founder  302
+/go/dm-fl  /outreach/freelancer  301
+/go/dm-ag  /outreach/agency      301
+/go/dm-po  /outreach/peopleops   301
+/go/dm-fo  /outreach/founder     301
 
 # Hashed Vite assets must NEVER SPA-fallback to index.html. A stale HTML referencing a retired
 # hash (or a Bot Fight interstitial) would otherwise return text/html 200 for /assets/*.js —
