@@ -60,6 +60,7 @@ import {
 } from "../lib/api";
 import { useNoIndex } from "../lib/useNoIndex";
 import { FREE_TEMPLATES, RECURRING_CATEGORIES } from "../lib/freeTemplates";
+import { LATAM_COUNTRY_CORRIDORS } from "../lib/latamCountryCorridors";
 import { clearPendingClaim, readPendingClaim } from "../lib/pendingClaim";
 import { SignerAttachmentsList } from "../components/SignerAttachmentsList";
 import { track } from "../lib/track";
@@ -378,6 +379,7 @@ export default function Dashboard() {
   >("connector");
   const [documentsExpanded, setDocumentsExpanded] = useState(false);
   const [toolsExpanded, setToolsExpanded] = useState(false);
+  const [countriesExpanded, setCountriesExpanded] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [moreSheetOpen, setMoreSheetOpen] = useState(false);
   const [connections, setConnections] = useState<CloudConnectionSummary[]>([]);
@@ -1117,33 +1119,80 @@ export default function Dashboard() {
           <NavIcon name="templates" />
           <span>{t("dash.templates")}</span>
         </button>
-        {(account.isPaid || locale === "es") && (
-          <div className="dashboard-nav-section">
-            <p className="dashboard-nav-section-label">{t("dash.navPacket")}</p>
-            {locale === "es" ? (
-              <Link to={localizePath("/packets/latam-to-us", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
-                <NavIcon name="documents" />
-                <span>{t("dash.migrantChecklist")}</span>
-              </Link>
-            ) : null}
-            {account.isPaid ? (
-              <>
-                <Link to={`${localizePath("/cobro", locale)}#send`} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
-                  <NavIcon name="send" />
-                  <span>{t("dash.cobro")}</span>
-                </Link>
-                <Link to={localizePath("/1099-season", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
-                  <NavIcon name="badge" />
-                  <span>{t("dash.taxYear")}</span>
-                </Link>
-                <Link to={localizePath("/income-proof", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
-                  <NavIcon name="duplicate" />
-                  <span>{t("dash.constancia")}</span>
-                </Link>
-              </>
-            ) : null}
+        <div className="dashboard-nav-section">
+          <p className="dashboard-nav-section-label">{t("dash.navPacket")}</p>
+          <Link to={localizePath("/packets/latam-to-us", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
+            <NavIcon name="contacts" />
+            <span>
+              {t("dash.latamSub")}
+              {!account.isPaid ? <span className="dashboard-paid-chip">{t("dash.paidHint")}</span> : null}
+            </span>
+          </Link>
+          <Link to={localizePath("/i-9", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
+            <NavIcon name="badge" />
+            <span>
+              {t("footer.i9")}
+              <span className="dashboard-free-chip">{t("dash.freeHint")}</span>
+            </span>
+          </Link>
+          <Link to={localizePath("/after-arrival", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
+            <NavIcon name="documents" />
+            <span>{t("footer.afterArrival")}</span>
+          </Link>
+          <div className="dashboard-nav-group">
+            <button
+              type="button"
+              className="dashboard-nav-item dashboard-nav-group-header"
+              onClick={() => setCountriesExpanded((o) => !o)}
+              aria-expanded={countriesExpanded}
+            >
+              <span className="dashboard-nav-item-main">
+                <NavIcon name="templates" />
+                <span>{t("dash.navCountries")}</span>
+              </span>
+              <span className={`dashboard-nav-chevron${countriesExpanded ? " open" : ""}`}>⌄</span>
+            </button>
+            {countriesExpanded && (
+              <div className="dashboard-nav-subitems">
+                {LATAM_COUNTRY_CORRIDORS.map((c) => (
+                  <Link
+                    key={c.slug}
+                    to={localizePath(c.enPath, locale)}
+                    className="dashboard-nav-subitem"
+                    style={{ textDecoration: "none" }}
+                  >
+                    <span>{locale === "es" ? c.countryEs : c.countryEn}</span>
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
-        )}
+          <Link
+            to={account.isPaid ? `${localizePath("/cobro", locale)}#send` : localizePath("/cobro", locale)}
+            className="dashboard-nav-item"
+            style={{ textDecoration: "none" }}
+          >
+            <NavIcon name="send" />
+            <span>
+              {t("dash.cobro")}
+              {!account.isPaid ? <span className="dashboard-paid-chip">{t("dash.paidHint")}</span> : null}
+            </span>
+          </Link>
+          <Link to={localizePath("/1099-season", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
+            <NavIcon name="badge" />
+            <span>
+              {t("dash.taxYear")}
+              {!account.isPaid ? <span className="dashboard-paid-chip">{t("dash.paidHint")}</span> : null}
+            </span>
+          </Link>
+          <Link to={localizePath("/income-proof", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
+            <NavIcon name="duplicate" />
+            <span>
+              {t("dash.constancia")}
+              {!account.isPaid ? <span className="dashboard-paid-chip">{t("dash.paidHint")}</span> : null}
+            </span>
+          </Link>
+        </div>
         {account.isPaid && (
           <button
             className={`dashboard-nav-item${activeTab === "contacts" ? " active" : ""}`}
@@ -1511,40 +1560,57 @@ export default function Dashboard() {
             )}
 
             <div className="card" style={{ marginTop: 24 }} id="after-they-sign">
-              {locale === "es" ? (
-                <>
                   <h3 style={{ fontSize: 15, marginBottom: 4 }}>{t("dash.migrantOverviewTitle")}</h3>
                   <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 0 }}>{t("dash.migrantOverviewSub")}</p>
-                  <div className="dashboard-corridor-grid">
-                    {[
-                      { to: localizePath("/packets/latam-to-us", locale), title: t("dash.migrantChecklist"), body: t("dash.corridorLatamUs") },
-                      { to: localizePath("/i-9", locale), title: t("footer.i9"), body: t("dash.corridorI9") },
-                      { to: localizePath("/visa-supporting-documents", locale), title: t("footer.visaDocs"), body: t("dash.corridorVisa") },
-                      { to: localizePath("/mexico-to-us", locale), title: t("footer.mexicoToUs"), body: t("dash.corridorMexico") },
-                      { to: localizePath("/colombia-to-us", locale), title: t("footer.colombiaToUs"), body: t("dash.corridorColombia") },
-                      { to: localizePath("/latam", locale), title: t("footer.moreCountries"), body: t("dash.corridorMoreCountries") },
-                      { to: localizePath("/immigrant-housing", locale), title: t("footer.immigrantHousing"), body: t("dash.corridorHousing") },
-                      { to: localizePath("/after-arrival", locale), title: t("footer.afterArrival"), body: t("dash.corridorAfterArrival") },
-                      { to: localizePath("/itin", locale), title: t("footer.itin"), body: t("dash.corridorItin") },
-                    ].map((card) => (
-                      <Link key={card.to} to={card.to} className="dashboard-corridor-card">
-                        <h3>{card.title}</h3>
-                        <p>{card.body}</p>
+                  <p style={{ margin: "0 0 16px" }}>
+                    {account.isPaid ? (
+                      <Link
+                        to={localizePath("/packets/latam-to-us", locale)}
+                        className="btn-primary"
+                        style={{ textDecoration: "none", display: "inline-block" }}
+                      >
+                        {t("dash.latamSubCta")}
                       </Link>
+                    ) : (
+                      <button type="button" className="btn-primary" onClick={onUpgrade} disabled={upgrading}>
+                        {upgrading ? t("common.redirecting") : t("dash.latamSubCta")}
+                      </button>
+                    )}
+                  </p>
+                  <p className="dashboard-country-list">
+                    {LATAM_COUNTRY_CORRIDORS.map((c, i) => (
+                      <span key={c.slug}>
+                        {i > 0 ? " · " : null}
+                        <Link to={localizePath(c.enPath, locale)}>
+                          {locale === "es" ? c.countryEs : c.countryEn}
+                        </Link>
+                      </span>
                     ))}
-                  </div>
-                </>
-              ) : null}
-              <h3 style={{ fontSize: 15, margin: locale === "es" ? "28px 0 4px" : "0 0 4px" }}>{t("dash.corridorEarnTitle")}</h3>
+                  </p>
+                  <p style={{ fontSize: 13, marginTop: 8 }}>
+                    <Link to={localizePath("/i-9", locale)}>{t("footer.i9")}</Link>
+                    {" · "}
+                    <Link to={localizePath("/after-arrival", locale)}>{t("footer.afterArrival")}</Link>
+                    {" · "}
+                    <Link to={localizePath("/itin", locale)}>{t("footer.itin")}</Link>
+                    {" · "}
+                    <Link to={localizePath("/immigrant-housing", locale)}>{t("footer.immigrantHousing")}</Link>
+                    {" · "}
+                    <Link to={localizePath("/visa-supporting-documents", locale)}>{t("footer.visaDocs")}</Link>
+                  </p>
+              <h3 style={{ fontSize: 15, margin: "28px 0 4px" }}>{t("dash.corridorEarnTitle")}</h3>
               <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 0 }}>{t("dash.corridorEarnSub")}</p>
               <div className="dashboard-corridor-grid">
                 {[
-                  { to: localizePath("/income-proof", locale), title: t("dash.constancia"), body: t("dash.corridorConstancia") },
-                  { to: `${localizePath("/cobro", locale)}#send`, title: t("dash.cobro"), body: t("dash.corridorCobro") },
-                  { to: `${localizePath("/income-proof", locale)}#receipts`, title: t("dash.corridorReceiptsTitle"), body: t("dash.corridorReceipts") },
+                  { to: localizePath("/income-proof", locale), title: t("dash.constancia"), body: t("dash.corridorConstancia"), paid: true },
+                  { to: account.isPaid ? `${localizePath("/cobro", locale)}#send` : localizePath("/cobro", locale), title: t("dash.cobro"), body: t("dash.corridorCobro"), paid: true },
+                  { to: account.isPaid ? `${localizePath("/income-proof", locale)}#receipts` : localizePath("/income-proof", locale), title: t("dash.corridorReceiptsTitle"), body: t("dash.corridorReceipts"), paid: true },
                 ].map((card) => (
                   <Link key={card.to} to={card.to} className="dashboard-corridor-card">
-                    <h3>{card.title}</h3>
+                    <h3>
+                      {card.title}
+                      {!account.isPaid && card.paid ? <span className="dashboard-paid-chip">{t("dash.paidHint")}</span> : null}
+                    </h3>
                     <p>{card.body}</p>
                   </Link>
                 ))}
@@ -1553,14 +1619,17 @@ export default function Dashboard() {
               <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 0 }}>{t("dash.corridorPaySub")}</p>
               <div className="dashboard-corridor-grid">
                 {[
-                  { to: localizePath("/1099-season", locale), title: t("dash.taxYear"), body: t("dash.corridorPayer") },
-                  { to: localizePath("/packets/collect", locale), title: t("dash.corridorCollectTitle"), body: t("dash.corridorCollect") },
-                  { to: localizePath("/packets/trades", locale), title: t("dash.corridorTradesTitle"), body: t("dash.corridorTrades") },
-                  { to: localizePath("/packets/latam-contractor", locale), title: t("footer.latamPacket"), body: t("dash.corridorLatamHire") },
-                  { to: localizePath("/packets/latam-trade", locale), title: t("dash.corridorTradeTitle"), body: t("dash.corridorTrade") },
+                  { to: localizePath("/1099-season", locale), title: t("dash.taxYear"), body: t("dash.corridorPayer"), paid: true },
+                  { to: localizePath("/packets/collect", locale), title: t("dash.corridorCollectTitle"), body: t("dash.corridorCollect"), paid: false },
+                  { to: localizePath("/packets/trades", locale), title: t("dash.corridorTradesTitle"), body: t("dash.corridorTrades"), paid: false },
+                  { to: localizePath("/packets/latam-contractor", locale), title: t("footer.latamPacket"), body: t("dash.corridorLatamHire"), paid: false },
+                  { to: localizePath("/packets/latam-trade", locale), title: t("dash.corridorTradeTitle"), body: t("dash.corridorTrade"), paid: false },
                 ].map((card) => (
                   <Link key={card.to} to={card.to} className="dashboard-corridor-card">
-                    <h3>{card.title}</h3>
+                    <h3>
+                      {card.title}
+                      {!account.isPaid && card.paid ? <span className="dashboard-paid-chip">{t("dash.paidHint")}</span> : null}
+                    </h3>
                     <p>{card.body}</p>
                   </Link>
                 ))}
@@ -1613,14 +1682,36 @@ export default function Dashboard() {
             )}
 
             {!account.isPaid && (
-              <div className="card" style={{ marginTop: 24 }}>
-                <h3 style={{ fontSize: 15 }}>{t("dash.upgradeTitle")}</h3>
-                <p>{t("dash.upgradeBody")}</p>
-                {upgradeError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{upgradeError}</p>}
-                <button className="btn-primary" onClick={onUpgrade} disabled={upgrading}>
-                  {upgrading ? t("common.redirecting") : t("common.upgrade")}
-                </button>
-              </div>
+              <>
+                <div className="card" style={{ marginTop: 24 }} id="free-lane">
+                  <h3 style={{ fontSize: 15, marginBottom: 4 }}>{t("dash.freeLaneTitle")}</h3>
+                  <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 0 }}>{t("dash.freeLaneSub")}</p>
+                  <div className="dashboard-corridor-grid">
+                    {[
+                      { to: `${localizePath("/prepare", locale)}?freeTemplate=i-9-form&ref=dashboard-free-lane`, title: t("dash.freeLaneI9"), body: t("dash.freeLaneI9Body") },
+                      { to: `${localizePath("/prepare", locale)}?freeTemplate=offer-letter&ref=dashboard-free-lane`, title: t("dash.freeLaneOffer"), body: t("dash.freeLaneOfferBody") },
+                      { to: `${localizePath("/prepare", locale)}?freeTemplate=mutual-nda&ref=dashboard-free-lane`, title: t("dash.freeLaneNda"), body: t("dash.freeLaneNdaBody") },
+                      { to: `${localizePath("/prepare", locale)}?freeTemplate=roommate-agreement&ref=dashboard-free-lane`, title: t("dash.freeLaneRoommate"), body: t("dash.freeLaneRoommateBody") },
+                    ].map((card) => (
+                      <Link key={card.to} to={card.to} className="dashboard-corridor-card">
+                        <h3>
+                          {card.title}
+                          <span className="dashboard-free-chip">{t("dash.freeHint")}</span>
+                        </h3>
+                        <p>{card.body}</p>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+                <div className="card" style={{ marginTop: 24 }}>
+                  <h3 style={{ fontSize: 15 }}>{t("dash.upgradeTitle")}</h3>
+                  <p>{t("dash.upgradeBody")}</p>
+                  {upgradeError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{upgradeError}</p>}
+                  <button className="btn-primary" onClick={onUpgrade} disabled={upgrading}>
+                    {upgrading ? t("common.redirecting") : t("common.upgrade")}
+                  </button>
+                </div>
+              </>
             )}
           </>
         )}
@@ -2823,6 +2914,28 @@ export default function Dashboard() {
           <div className="dashboard-more-panel">
             <div className="dashboard-more-handle" aria-hidden="true" />
             <p className="dashboard-more-email">{account.email}</p>
+            <Link to={localizePath("/packets/latam-to-us", locale)} onClick={() => setMoreSheetOpen(false)}>
+              {t("dash.latamSub")}
+              {!account.isPaid ? ` · ${t("dash.paidHint")}` : ""}
+            </Link>
+            <Link to={localizePath("/i-9", locale)} onClick={() => setMoreSheetOpen(false)}>
+              {t("footer.i9")} · {t("dash.freeHint")}
+            </Link>
+            <Link to={localizePath("/latam", locale)} onClick={() => setMoreSheetOpen(false)}>
+              {t("dash.navCountries")}
+            </Link>
+            <Link to={localizePath("/cobro", locale)} onClick={() => setMoreSheetOpen(false)}>
+              {t("dash.cobro")}
+              {!account.isPaid ? ` · ${t("dash.paidHint")}` : ""}
+            </Link>
+            <Link to={localizePath("/1099-season", locale)} onClick={() => setMoreSheetOpen(false)}>
+              {t("dash.taxYear")}
+              {!account.isPaid ? ` · ${t("dash.paidHint")}` : ""}
+            </Link>
+            <Link to={localizePath("/income-proof", locale)} onClick={() => setMoreSheetOpen(false)}>
+              {t("dash.constancia")}
+              {!account.isPaid ? ` · ${t("dash.paidHint")}` : ""}
+            </Link>
             <button
               type="button"
               onClick={() => {

@@ -6346,6 +6346,11 @@ a.hero-latam-cta-btn {
   border-left: 2px solid var(--hairline);
 }
 
+a.dashboard-nav-subitem {
+  text-decoration: none;
+  color: inherit;
+}
+
 .dashboard-nav-subitem {
   text-align: left;
   background: none;
@@ -6878,6 +6883,35 @@ a.hero-latam-cta-btn {
   margin: 20px 0 0;
   display: grid;
   gap: 16px;
+}
+
+.dashboard-country-list {
+  font-size: 14px;
+  line-height: 1.8;
+  margin: 0;
+}
+
+.dashboard-paid-chip,
+.dashboard-free-chip {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  padding: 1px 5px;
+  vertical-align: middle;
+}
+
+.dashboard-paid-chip {
+  color: var(--primary);
+  background: var(--primary-soft);
+}
+
+.dashboard-free-chip {
+  color: var(--success, #0a7a3e);
+  background: color-mix(in srgb, var(--success, #0a7a3e) 12%, white);
 }
 
 .dashboard-corridor-grid {
