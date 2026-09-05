@@ -298,10 +298,6 @@ export default function Landing() {
   const [templateCount, setTemplateCount] = useState(FREE_TEMPLATES.length);
   const heroEmailRef = useRef<HTMLInputElement>(null);
   useSeoMeta("home");
-  const faqItems = FAQ_KEYS.map((item) => ({
-    question: t(item.qKey),
-    answer: t(item.aKey),
-  }));
   const reviewsJsonLd = useMemo(() => testimonialsJsonLd((k) => t(k), (k) => t(k)), [t]);
   // Freelance service agreement, not the mutual NDA — most freelancers/SMEs landing on the
   // homepage need to get a client agreement signed, not protect confidential info. NDA stays the
@@ -315,6 +311,10 @@ export default function Landing() {
   const constanciaTo = localizePath("/income-proof", locale);
   const watchTo = localizePath("/how-it-works", locale);
   const latamDoor = locale === "es";
+  const faqItems = FAQ_KEYS.filter((item) => latamDoor || item.qKey !== "landing.faq10.q").map((item) => ({
+    question: t(item.qKey),
+    answer: t(item.aKey),
+  }));
   const cobroSendTo = `${localizePath("/cobro", locale)}#send`;
   const cobroLoginNext = `${localizePath("/cobro", locale)}?send=1`;
   const magicNext = latamDoor ? cobroLoginNext : prepareSampleTo;

@@ -60,6 +60,10 @@ export default function Footer() {
   const compareLinks: FooterLink[] =
     locale === "es"
       ? [
+          { label: t("footer.vsBoundless"), to: "/es/alternativa-a-boundless" },
+          { label: t("footer.vsCitizenpath"), to: "/es/alternativa-a-citizenpath" },
+          { label: t("footer.vsVisaService"), to: "/es/alternativa-a-gestoria-de-visa" },
+          { label: t("footer.boundlessVsCitizenpath"), to: "/es/boundless-vs-citizenpath" },
           { label: t("footer.vsKita"), to: "/es/alternativa-a-kita" },
           { label: t("footer.vsAlegra"), to: "/es/alternativa-a-alegra" },
           { label: t("footer.vsSiigo"), to: "/es/alternativa-a-siigo" },
@@ -95,9 +99,13 @@ export default function Footer() {
     { label: t("footer.templates"), to: localizePath("/free-templates", locale) },
     { label: t("footer.packet"), to: localizePath("/packets/us-contractor", locale) },
     { label: t("footer.latamPacket"), to: localizePath("/packets/latam-contractor", locale) },
-    { label: t("footer.latamUsPacket"), to: localizePath("/packets/latam-to-us", locale) },
-    { label: t("footer.i9"), to: localizePath("/i-9", locale) },
-    { label: t("footer.visaDocs"), to: localizePath("/visa-supporting-documents", locale) },
+    ...(locale === "es"
+      ? [
+          { label: t("footer.latamUsPacket"), to: localizePath("/packets/latam-to-us", locale) },
+          { label: t("footer.i9"), to: localizePath("/i-9", locale) },
+          { label: t("footer.visaDocs"), to: localizePath("/visa-supporting-documents", locale) },
+        ]
+      : []),
     { label: t("footer.tradesPacket"), to: localizePath("/packets/trades", locale) },
     { label: t("footer.latamTradePacket"), to: localizePath("/packets/latam-trade", locale) },
     { label: t("footer.collectPacket"), to: localizePath("/packets/collect", locale) },

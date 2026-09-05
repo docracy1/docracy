@@ -1117,21 +1117,31 @@ export default function Dashboard() {
           <NavIcon name="templates" />
           <span>{t("dash.templates")}</span>
         </button>
-        {account.isPaid && (
+        {(account.isPaid || locale === "es") && (
           <div className="dashboard-nav-section">
             <p className="dashboard-nav-section-label">{t("dash.navPacket")}</p>
-            <Link to={`${localizePath("/cobro", locale)}#send`} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
-              <NavIcon name="send" />
-              <span>{t("dash.cobro")}</span>
-            </Link>
-            <Link to={localizePath("/1099-season", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
-              <NavIcon name="badge" />
-              <span>{t("dash.taxYear")}</span>
-            </Link>
-            <Link to={localizePath("/income-proof", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
-              <NavIcon name="duplicate" />
-              <span>{t("dash.constancia")}</span>
-            </Link>
+            {locale === "es" ? (
+              <Link to={localizePath("/packets/latam-to-us", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
+                <NavIcon name="documents" />
+                <span>{t("dash.migrantChecklist")}</span>
+              </Link>
+            ) : null}
+            {account.isPaid ? (
+              <>
+                <Link to={`${localizePath("/cobro", locale)}#send`} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
+                  <NavIcon name="send" />
+                  <span>{t("dash.cobro")}</span>
+                </Link>
+                <Link to={localizePath("/1099-season", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
+                  <NavIcon name="badge" />
+                  <span>{t("dash.taxYear")}</span>
+                </Link>
+                <Link to={localizePath("/income-proof", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
+                  <NavIcon name="duplicate" />
+                  <span>{t("dash.constancia")}</span>
+                </Link>
+              </>
+            ) : null}
           </div>
         )}
         {account.isPaid && (
@@ -1501,7 +1511,25 @@ export default function Dashboard() {
             )}
 
             <div className="card" style={{ marginTop: 24 }} id="after-they-sign">
-              <h3 style={{ fontSize: 15, marginBottom: 4 }}>{t("dash.corridorEarnTitle")}</h3>
+              {locale === "es" ? (
+                <>
+                  <h3 style={{ fontSize: 15, marginBottom: 4 }}>{t("dash.migrantOverviewTitle")}</h3>
+                  <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 0 }}>{t("dash.migrantOverviewSub")}</p>
+                  <div className="dashboard-corridor-grid">
+                    {[
+                      { to: localizePath("/packets/latam-to-us", locale), title: t("dash.migrantChecklist"), body: t("dash.corridorLatamUs") },
+                      { to: localizePath("/i-9", locale), title: t("footer.i9"), body: t("dash.corridorI9") },
+                      { to: localizePath("/visa-supporting-documents", locale), title: t("footer.visaDocs"), body: t("dash.corridorVisa") },
+                    ].map((card) => (
+                      <Link key={card.to} to={card.to} className="dashboard-corridor-card">
+                        <h3>{card.title}</h3>
+                        <p>{card.body}</p>
+                      </Link>
+                    ))}
+                  </div>
+                </>
+              ) : null}
+              <h3 style={{ fontSize: 15, margin: locale === "es" ? "28px 0 4px" : "0 0 4px" }}>{t("dash.corridorEarnTitle")}</h3>
               <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 0 }}>{t("dash.corridorEarnSub")}</p>
               <div className="dashboard-corridor-grid">
                 {[
@@ -1523,7 +1551,6 @@ export default function Dashboard() {
                   { to: localizePath("/packets/collect", locale), title: t("dash.corridorCollectTitle"), body: t("dash.corridorCollect") },
                   { to: localizePath("/packets/trades", locale), title: t("dash.corridorTradesTitle"), body: t("dash.corridorTrades") },
                   { to: localizePath("/packets/latam-contractor", locale), title: t("footer.latamPacket"), body: t("dash.corridorLatamHire") },
-                  { to: localizePath("/packets/latam-to-us", locale), title: t("footer.latamUsPacket"), body: t("dash.corridorLatamUs") },
                   { to: localizePath("/packets/latam-trade", locale), title: t("dash.corridorTradeTitle"), body: t("dash.corridorTrade") },
                 ].map((card) => (
                   <Link key={card.to} to={card.to} className="dashboard-corridor-card">

@@ -65,12 +65,17 @@ const TRACKED_ROUTES = new Set([
   "/es/alternativa-a-kita",
   "/es/alternativa-a-alegra",
   "/es/alternativa-a-siigo",
+  "/es/alternativa-a-boundless",
+  "/es/alternativa-a-citizenpath",
+  "/es/alternativa-a-gestoria-de-visa",
   "/kita-vs-alegra",
   "/kita-vs-siigo",
   "/alegra-vs-siigo",
   "/es/kita-vs-alegra",
   "/es/kita-vs-siigo",
   "/es/alegra-vs-siigo",
+  "/boundless-vs-citizenpath",
+  "/es/boundless-vs-citizenpath",
   // FeaturePage slugs
   "/simple-agreements",
   "/nda-signing",
@@ -148,6 +153,9 @@ const TRACKED_ROUTES = new Set([
   "/kita-alternative",
   "/alegra-alternative",
   "/siigo-alternative",
+  "/boundless-alternative",
+  "/citizenpath-alternative",
+  "/visa-service-alternative",
 ]);
 
 function isTrackedRoute(route: string): boolean {

@@ -79,7 +79,9 @@ export default function Header() {
 
   const marketplaceTo = localizePath("/free-templates", locale);
 
-  const featureItems = FEATURE_ITEMS.map((f) => ({
+  const visibleFeatures = FEATURE_ITEMS.filter((f) => locale === "es" || f.to !== "/packets/latam-to-us");
+  const visibleComparePages = COMPARE_PAGES.filter((c) => locale === "es" || c.audience !== "immigrant");
+  const featureItems = visibleFeatures.map((f) => ({
     to: localizePath(f.to, locale),
     icon: <NavIcon name={f.icon} />,
     title: t(f.titleKey),
@@ -87,14 +89,17 @@ export default function Header() {
   }));
   // EN-only competitor pages use English labels even when the UI locale is ES (no ES alt routes
   // for the expanded set). localizePath is a no-op for unknown EN paths.
-  const compareItems = COMPARE_PAGES.map((c) => ({
+  const compareItems = visibleComparePages.map((c) => ({
     to: localizePath(`/${c.slug}`, locale),
     icon: <NavIcon name="scale" />,
     title: `vs ${c.competitorName}`,
     description: c.navDesc,
   }));
   const compareNavChildren = [
-    ...COMPARE_PAGES.map((c) => ({ to: localizePath(`/${c.slug}`, locale), label: `vs ${c.competitorName}` })),
+    ...visibleComparePages.map((c) => ({ to: localizePath(`/${c.slug}`, locale), label: `vs ${c.competitorName}` })),
+    ...(locale === "es"
+      ? [{ to: localizePath("/boundless-vs-citizenpath", locale), label: "Boundless vs CitizenPath" }]
+      : []),
     { to: localizePath("/kita-vs-alegra", locale), label: "Kita vs Alegra" },
     { to: localizePath("/kita-vs-siigo", locale), label: "Kita vs Siigo" },
     { to: localizePath("/alegra-vs-siigo", locale), label: "Alegra vs Siigo" },
@@ -132,11 +137,14 @@ export default function Header() {
     { kind: "link", label: t("nav.mega.resource.contact.title"), to: SALES_MAILTO },
   ];
   // Titles-only lists for mobile accordion (no icons/descriptions).
-  const featureMobile = FEATURE_ITEMS.map((f) => ({ to: localizePath(f.to, locale), title: t(f.titleKey) }));
+  const featureMobile = visibleFeatures.map((f) => ({ to: localizePath(f.to, locale), title: t(f.titleKey) }));
   const industryMobile = INDUSTRY_ITEMS.map((i) => ({ to: localizePath(i.to, locale), title: t(i.titleKey) }));
   const useCaseMobile = USE_CASE_ITEMS.map((u) => ({ to: localizePath(u.to, locale), title: t(u.titleKey) }));
   const compareMobile = [
-    ...COMPARE_PAGES.map((c) => ({ to: localizePath(`/${c.slug}`, locale), title: `vs ${c.competitorName}` })),
+    ...visibleComparePages.map((c) => ({ to: localizePath(`/${c.slug}`, locale), title: `vs ${c.competitorName}` })),
+    ...(locale === "es"
+      ? [{ to: localizePath("/boundless-vs-citizenpath", locale), title: "Boundless vs CitizenPath" }]
+      : []),
     { to: localizePath("/kita-vs-alegra", locale), title: "Kita vs Alegra" },
     { to: localizePath("/kita-vs-siigo", locale), title: "Kita vs Siigo" },
     { to: localizePath("/alegra-vs-siigo", locale), title: "Alegra vs Siigo" },

@@ -5,7 +5,7 @@ export interface SeoComparisonRow {
   secondCompetitorValue?: string;
 }
 
-export type SeoLane = "esign" | "latam";
+export type SeoLane = "esign" | "latam" | "immigrant";
 
 export interface SeoLandingCopy {
   seoTitle: string;
@@ -22,7 +22,7 @@ export interface SeoLandingPageContent extends SeoLandingCopy {
   primaryCompetitor: string;
   secondaryCompetitor: string;
   lane: SeoLane;
-  /** Spanish twin for LATAM cobro/factura compares. ES is x-default on those URLs. */
+  /** Spanish twin for LATAM cobro/factura and immigrant compares. ES is x-default on those URLs. */
   es?: SeoLandingCopy;
 }
 
@@ -433,6 +433,171 @@ pushLatamVs(
         docracyValue: "No sustituimos al contador ni a un PAC",
         competitorValue: "No es un firmante ligero — son los libros",
         secondCompetitorValue: "No es un firmante ligero — son los libros",
+      },
+    ],
+  }
+);
+
+const IMMIGRANT_FAQS_EN = [
+  {
+    question: "Does Docracy replace Boundless or CitizenPath?",
+    answer:
+      "No. They file or prepare USCIS/State petitions. We sign the supporting packet (official I-9, offer, POA, reference, lease), keep it on Paid, and tell you where each file goes. Use them to file. Use us for the $10 extras around the filing.",
+  },
+  {
+    question: "Do you file DS-160 or I-129?",
+    answer:
+      "No. DS-160 is CEAC. I-129 and family petitions stay with Boundless, CitizenPath, a gestoría, or an attorney. We do not invent those forms.",
+  },
+  {
+    question: "Why is Docracy $10/month instead of hundreds?",
+    answer:
+      "Different job. They charge for preparing or filing a case. Paid is the vault + signed extras + constancia + cobro. Check their sites for case fees — we will not invent a number.",
+  },
+];
+
+const IMMIGRANT_FAQS_ES = [
+  {
+    question: "¿Docracy sustituye a Boundless o CitizenPath?",
+    answer:
+      "No. Ellos presentan o preparan peticiones ante USCIS/State. Nosotros firmamos el paquete de apoyo (I-9 oficial, oferta, poder, referencia, arrendamiento), lo guardamos en el plan y te decimos a dónde va cada archivo. Úsalos para presentar. Usa esto para los extras de $10 alrededor del trámite.",
+  },
+  {
+    question: "¿Presentan el DS-160 o el I-129?",
+    answer:
+      "No. El DS-160 es CEAC. El I-129 y las peticiones familiares se quedan con Boundless, CitizenPath, una gestoría o un abogado. No inventamos esos formularios.",
+  },
+  {
+    question: "¿Por qué Docracy son $10/mes y no cientos?",
+    answer:
+      "Otro trabajo. Ellos cobran por preparar o presentar un caso. El plan es el vault + extras firmados + constancia + cobro. Mira sus sitios para las cuotas — no inventamos un número.",
+  },
+];
+
+function pushImmigrantVs(
+  a: string,
+  b: string,
+  en: Omit<SeoLandingCopy, "faqs" | "comparisonRows"> & { rows: SeoComparisonRow[] },
+  es: Omit<SeoLandingCopy, "faqs" | "comparisonRows"> & { rows: SeoComparisonRow[] }
+) {
+  const slug = `${slugifyCompetitor(a)}-vs-${slugifyCompetitor(b)}`;
+  SEO_LANDING_PAGES.push({
+    slug,
+    pageType: "vs-competitor",
+    lane: "immigrant",
+    primaryCompetitor: a,
+    secondaryCompetitor: b,
+    seoTitle: en.seoTitle,
+    seoDescription: en.seoDescription,
+    heroHeadline: en.heroHeadline,
+    heroSubheadline: en.heroSubheadline,
+    comparisonRows: en.rows,
+    faqs: IMMIGRANT_FAQS_EN,
+    es: {
+      seoTitle: es.seoTitle,
+      seoDescription: es.seoDescription,
+      heroHeadline: es.heroHeadline,
+      heroSubheadline: es.heroSubheadline,
+      comparisonRows: es.rows,
+      faqs: IMMIGRANT_FAQS_ES,
+    },
+  });
+  SEO_VS_REDIRECTS.push({ from: `/${slugifyCompetitor(b)}-vs-${slugifyCompetitor(a)}`, to: `/${slug}` });
+  SEO_VS_REDIRECTS.push({ from: `/es/${slugifyCompetitor(b)}-vs-${slugifyCompetitor(a)}`, to: `/es/${slug}` });
+}
+
+pushImmigrantVs(
+  "Boundless",
+  "CitizenPath",
+  {
+    seoTitle: "Boundless vs CitizenPath (2026): Filing vs DIY Forms | Docracy",
+    seoDescription:
+      "Boundless vs CitizenPath for US immigration paperwork. They file or prepare petitions. Docracy is the $10/mo supporting packet — I-9, offer, constancia. We don't file.",
+    heroHeadline: "Boundless vs CitizenPath",
+    heroSubheadline:
+      "Boundless is full-service filing. CitizenPath is DIY USCIS forms. Docracy is neither — we sign the $10 packet around the filing and tell you where each file goes.",
+    rows: [
+      {
+        feature: "What they actually do",
+        docracyValue: "Sign official I-9 + visa supporting docs. Vault, constancia, cobro. Where-to-send map.",
+        competitorValue: "Full-service: prepare and file USCIS petitions (attorneys in the loop)",
+        secondCompetitorValue: "DIY USCIS form software — you file the petition they prepared",
+      },
+      {
+        feature: "Who files with USCIS / State",
+        docracyValue: "Never us. Official links to CEAC and uscis.gov. Your lawyer, employer, or you.",
+        competitorValue: "They file (or their attorneys do) — see their site",
+        secondCompetitorValue: "You file the PDF they helped you complete",
+      },
+      {
+        feature: "Price we can state",
+        docracyValue: "Paid $10/month for the supporting packet. Signing a template once is still free.",
+        competitorValue: "FAQ 11 Jun 2026: marriage GC $699 / $1,349; K-1 $1,379 / $2,549; B-1/B-2 $195+$185. USCIS extra.",
+        secondCompetitorValue: "They publish from $79–$99; I-130 $149; I-485 packet $279; N-400 $199. USCIS extra.",
+      },
+      {
+        feature: "I-9 and supporting letters",
+        docracyValue: "Yes — official I-9, offer, employment, POA, reference, child travel, lease",
+        competitorValue: "Petition-focused; not a replacement for employer I-9 retention",
+        secondCompetitorValue: "Form software; they may ask you to attach extras we can sign",
+      },
+      {
+        feature: "After you arrive",
+        docracyValue: "Constancia for a US landlord + WhatsApp cobro if you still invoice MX/CO",
+        competitorValue: "Immigration case status — not income proof or cobro",
+        secondCompetitorValue: "Same — forms, not a vault for landlords or invoices",
+      },
+      {
+        feature: "Best fit",
+        docracyValue: "You already have a filer, or you only need the extras signed and kept",
+        competitorValue: "You need someone to prepare and file the petition",
+        secondCompetitorValue: "You want cheaper DIY USCIS forms and will file yourself",
+      },
+    ],
+  },
+  {
+    seoTitle: "Boundless vs CitizenPath (2026): trámite vs formularios DIY | Docracy",
+    seoDescription:
+      "Boundless vs CitizenPath para papeles de inmigración. Ellos presentan o preparan. Docracy es el paquete de apoyo de $10/mes — I-9, oferta, constancia. No tramitamos.",
+    heroHeadline: "Boundless vs CitizenPath",
+    heroSubheadline:
+      "Boundless es trámite completo. CitizenPath es formularios USCIS DIY. Docracy no es ninguno — firmamos el paquete de $10 alrededor del trámite y te decimos a dónde va cada archivo.",
+    rows: [
+      {
+        feature: "Qué hacen de verdad",
+        docracyValue: "Firmar I-9 oficial + documentos de apoyo. Vault, constancia, cobro. Mapa de envío.",
+        competitorValue: "Servicio completo: preparan y presentan peticiones USCIS (abogados en el circuito)",
+        secondCompetitorValue: "Software DIY de formularios USCIS — tú presentas el PDF que te armaron",
+      },
+      {
+        feature: "Quién presenta ante USCIS / State",
+        docracyValue: "Nunca nosotros. Links oficiales a CEAC y uscis.gov. Tu abogado, empleador o tú.",
+        competitorValue: "Ellos presentan (o sus abogados) — ver su sitio",
+        secondCompetitorValue: "Tú presentas el PDF que te ayudaron a completar",
+      },
+      {
+        feature: "Precio que sí podemos afirmar",
+        docracyValue: "Plan $10/mes por el paquete de apoyo. Firmar una plantilla una vez sigue gratis.",
+        competitorValue: "FAQ 11 jun 2026: green card matrimonio $699 / $1,349; K-1 $1,379 / $2,549; B-1/B-2 $195+$185. USCIS aparte.",
+        secondCompetitorValue: "Publican desde $79–$99; I-130 $149; paquete I-485 $279; N-400 $199. USCIS aparte.",
+      },
+      {
+        feature: "I-9 y cartas de apoyo",
+        docracyValue: "Sí — I-9 oficial, oferta, empleo, poder, referencia, viaje de menor, arrendamiento",
+        competitorValue: "Enfocados en la petición; no sustituyen que el empleador conserve el I-9",
+        secondCompetitorValue: "Software de formularios; pueden pedirte extras que nosotros firmamos",
+      },
+      {
+        feature: "Cuando llegas",
+        docracyValue: "Constancia para el arrendador en EE. UU. + cobro por WhatsApp si sigues facturando MX/CO",
+        competitorValue: "Estatus del caso de inmigración — no prueba de ingresos ni cobro",
+        secondCompetitorValue: "Igual — formularios, no un vault para arrendadores o facturas",
+      },
+      {
+        feature: "Para quién",
+        docracyValue: "Ya tienes quien presente, o solo necesitas firmar y guardar los extras",
+        competitorValue: "Necesitas que alguien prepare y presente la petición",
+        secondCompetitorValue: "Quieres formularios USCIS DIY más baratos y presentarás tú",
       },
     ],
   }
