@@ -193,6 +193,14 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/es/despues-de-llegar" element={<FeaturePage slug="after-arrival" />} />
           <Route path="/itin" element={<FeaturePage slug="itin" />} />
           <Route path="/es/itin" element={<FeaturePage slug="itin" />} />
+          <Route path="/acta" element={<FeaturePage slug="acta" />} />
+          <Route path="/es/acta" element={<FeaturePage slug="acta" />} />
+          <Route path="/consular-appointment" element={<FeaturePage slug="consular-appointment" />} />
+          <Route path="/es/cita-consular" element={<FeaturePage slug="consular-appointment" />} />
+          <Route path="/ead-tps" element={<FeaturePage slug="ead-tps" />} />
+          <Route path="/es/ead-tps" element={<FeaturePage slug="ead-tps" />} />
+          <Route path="/phone-and-bank" element={<FeaturePage slug="phone-and-bank" />} />
+          <Route path="/es/chip-y-banco" element={<FeaturePage slug="phone-and-bank" />} />
           {GENERATED_COUNTRY_CORRIDORS.flatMap((c) => [
             <Route key={c.enPath} path={c.enPath} element={<FeaturePage slug={c.slug} />} />,
             <Route key={c.esPath} path={c.esPath} element={<FeaturePage slug={c.slug} />} />,

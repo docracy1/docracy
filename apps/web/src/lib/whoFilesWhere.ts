@@ -19,6 +19,15 @@ export const OFFICIAL_DESTINATIONS = {
   w7: "https://www.irs.gov/forms-pubs/about-form-w-7",
   w9: "https://www.irs.gov/forms-pubs/about-form-w-9",
   hcch: "https://www.hcch.net/en/instruments/conventions/authorities1/?cid=41",
+  /** Mexico civil-registry platform (gob.mx moved new actas here 1 Aug 2025). */
+  actaMx: "https://www.miregistrocivil.gob.mx/",
+  /** State-contracted AIS appointment host. Country path is chosen on that site. */
+  ais: "https://ais.usvisa-info.com/",
+  i765: "https://www.uscis.gov/i-765",
+  tps: "https://www.uscis.gov/humanitarian/temporary-protected-status",
+  i821: "https://www.uscis.gov/i-821",
+  /** CFPB adult financial-ed hub — we do not open accounts or sell SIMs. */
+  cfpbBank: "https://www.consumerfinance.gov/consumer-tools/educator-tools/adult-financial-education/",
 } as const;
 
 export type WhoFilesGroup = "employer" | "file" | "after" | "origin" | "money";
@@ -96,6 +105,30 @@ export const WHO_FILES_ROWS: readonly WhoFilesRow[] = [
     weDontKey: "whoFiles.weDont.ceac",
     officialHref: OFFICIAL_DESTINATIONS.ceac,
     officialKey: "latamUsPacket.send.ceac.official",
+    docracyTo: "/consular-appointment",
+    docracyCtaKey: "latamUsPacket.send.cita.cta",
+  },
+  {
+    id: "cita",
+    group: "file",
+    titleKey: "latamUsPacket.send.cita.title",
+    bodyKey: "latamUsPacket.send.cita.body",
+    weDontKey: "whoFiles.weDont.cita",
+    officialHref: OFFICIAL_DESTINATIONS.ais,
+    officialKey: "latamUsPacket.send.cita.official",
+    docracyTo: "/consular-appointment",
+    docracyCtaKey: "latamUsPacket.send.cita.cta",
+  },
+  {
+    id: "ead",
+    group: "file",
+    titleKey: "latamUsPacket.send.ead.title",
+    bodyKey: "latamUsPacket.send.ead.body",
+    weDontKey: "whoFiles.weDont.ead",
+    officialHref: OFFICIAL_DESTINATIONS.i765,
+    officialKey: "latamUsPacket.send.ead.official",
+    docracyTo: "/ead-tps",
+    docracyCtaKey: "latamUsPacket.send.ead.cta",
   },
   {
     id: "uscis",
@@ -158,6 +191,17 @@ export const WHO_FILES_ROWS: readonly WhoFilesRow[] = [
     docracyCtaKey: "latamUsPacket.send.itin.cta",
   },
   {
+    id: "phone",
+    group: "after",
+    titleKey: "latamUsPacket.send.phone.title",
+    bodyKey: "latamUsPacket.send.phone.body",
+    weDontKey: "whoFiles.weDont.phone",
+    officialHref: OFFICIAL_DESTINATIONS.cfpbBank,
+    officialKey: "latamUsPacket.send.phone.official",
+    docracyTo: "/phone-and-bank",
+    docracyCtaKey: "latamUsPacket.send.phone.cta",
+  },
+  {
     id: "w9",
     group: "after",
     titleKey: "latamUsPacket.send.w9.title",
@@ -176,6 +220,17 @@ export const WHO_FILES_ROWS: readonly WhoFilesRow[] = [
     weDontKey: "whoFiles.weDont.apostille",
     officialHref: OFFICIAL_DESTINATIONS.hcch,
     officialKey: "latamUsPacket.send.apostille.official",
+  },
+  {
+    id: "acta",
+    group: "origin",
+    titleKey: "latamUsPacket.send.acta.title",
+    bodyKey: "latamUsPacket.send.acta.body",
+    weDontKey: "whoFiles.weDont.acta",
+    officialHref: OFFICIAL_DESTINATIONS.actaMx,
+    officialKey: "latamUsPacket.send.acta.official",
+    docracyTo: "/acta",
+    docracyCtaKey: "latamUsPacket.send.acta.cta",
   },
   {
     id: "poa",

@@ -65,11 +65,11 @@ export default function LatamSearch() {
           <LatamSearchBox source="seo:latam-search" initialQuery={initialQuery} />
           <p style={{ marginTop: 16 }}>
             <Link
-              to={loginWithCheckout(localizePath("/packets/latam-to-us", locale), "latam-search")}
-              className="btn-secondary"
+              to={loginWithCheckout(localizePath("/pricing", locale), "latam-search")}
+              className="btn-primary"
               style={{ textDecoration: "none", display: "inline-block" }}
             >
-              {t("whoFiles.ctaLogin")}
+              {t("pricing.paid.ctaGet")}
             </Link>
           </p>
         </div>
@@ -82,6 +82,14 @@ export default function LatamSearch() {
           <Link to={localizePath("/packets/latam-to-us", locale)}>{t("footer.latamUsPacket")}</Link>
           {" · "}
           <Link to={localizePath("/after-arrival", locale)}>{t("footer.afterArrival")}</Link>
+          {" · "}
+          <Link to={localizePath("/acta", locale)}>{t("footer.acta")}</Link>
+          {" · "}
+          <Link to={localizePath("/consular-appointment", locale)}>{t("footer.cita")}</Link>
+          {" · "}
+          <Link to={localizePath("/ead-tps", locale)}>{t("footer.eadTps")}</Link>
+          {" · "}
+          <Link to={localizePath("/phone-and-bank", locale)}>{t("footer.phoneBank")}</Link>
           {" · "}
           <Link to={localizePath("/cobro", locale)}>{t("footer.cobro")}</Link>
         </p>

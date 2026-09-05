@@ -110,6 +110,10 @@ export default function Footer() {
           { label: t("footer.whoFiles"), to: localizePath("/who-files-where", locale) },
           { label: t("footer.latamSearch"), to: localizePath("/latam-search", locale) },
           { label: t("footer.itin"), to: localizePath("/itin", locale) },
+          { label: t("footer.acta"), to: localizePath("/acta", locale) },
+          { label: t("footer.cita"), to: localizePath("/consular-appointment", locale) },
+          { label: t("footer.eadTps"), to: localizePath("/ead-tps", locale) },
+          { label: t("footer.phoneBank"), to: localizePath("/phone-and-bank", locale) },
           { label: t("footer.i9"), to: localizePath("/i-9", locale) },
           { label: t("footer.visaDocs"), to: localizePath("/visa-supporting-documents", locale) },
         ]

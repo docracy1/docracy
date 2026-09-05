@@ -290,6 +290,14 @@ export default function LatamUsPacket() {
           <Link to={localizePath(WHO_FILES_WHERE_EN, locale)}>{t("footer.whoFiles")}</Link>
           {" · "}
           <Link to={localizePath("/itin", locale)}>{t("footer.itin")}</Link>
+          {" · "}
+          <Link to={localizePath("/acta", locale)}>{t("footer.acta")}</Link>
+          {" · "}
+          <Link to={localizePath("/consular-appointment", locale)}>{t("footer.cita")}</Link>
+          {" · "}
+          <Link to={localizePath("/ead-tps", locale)}>{t("footer.eadTps")}</Link>
+          {" · "}
+          <Link to={localizePath("/phone-and-bank", locale)}>{t("footer.phoneBank")}</Link>
         </p>
 
         <h2 style={{ fontSize: 19, marginTop: 36 }}>{t("latamUsPacket.templatesTitle")}</h2>
