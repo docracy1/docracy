@@ -1523,6 +1523,7 @@ export default function Dashboard() {
                   { to: localizePath("/packets/collect", locale), title: t("dash.corridorCollectTitle"), body: t("dash.corridorCollect") },
                   { to: localizePath("/packets/trades", locale), title: t("dash.corridorTradesTitle"), body: t("dash.corridorTrades") },
                   { to: localizePath("/packets/latam-contractor", locale), title: t("footer.latamPacket"), body: t("dash.corridorLatamHire") },
+                  { to: localizePath("/packets/latam-to-us", locale), title: t("footer.latamUsPacket"), body: t("dash.corridorLatamUs") },
                   { to: localizePath("/packets/latam-trade", locale), title: t("dash.corridorTradeTitle"), body: t("dash.corridorTrade") },
                 ].map((card) => (
                   <Link key={card.to} to={card.to} className="dashboard-corridor-card">

@@ -20,6 +20,33 @@
 /es/factura-por-whatsapp  /es/cobro  301
 /es/cobrar-por-whatsapp   /es/cobro  301
 /es/contratista-mexico    /es/contratar-en-el-extranjero  301
+/es/inmigrantes  /es/documentos-para-inmigrantes  301
+/es/kit-inmigrante  /es/kit-llegar-eeuu  301
+/es/migrar-a-eeuu  /es/llegar-a-estados-unidos  301
+/es/migrar-a-estados-unidos  /es/llegar-a-estados-unidos  301
+/es/llegar-a-eeuu  /es/llegar-a-estados-unidos  301
+/es/documentos-inmigrante  /es/documentos-para-inmigrantes  301
+/es/prueba-de-ingresos-eeuu  /es/constancia-para-rentar  301
+/es/prueba-de-ingresos-estados-unidos  /es/constancia-para-rentar  301
+/es/constancia-para-apartamento  /es/constancia-para-rentar  301
+/es/carta-de-ingresos-usa  /es/constancia-para-rentar  301
+/es/constancia-ingresos-usa  /es/constancia-para-rentar  301
+/move-to-usa  /move-to-us  301
+/arrive-in-us  /packets/latam-to-us  301
+/immigrant-kit  /packets/latam-to-us  301
+/i9  /i-9  301
+/form-i-9  /i-9  301
+/sign-i-9  /i-9  301
+/es/i-9  /es/formulario-i-9  301
+/es/firmar-i-9  /es/formulario-i-9  301
+/es/formulario-i9  /es/formulario-i-9  301
+/visa-documents  /visa-supporting-documents  301
+/visa-packet  /visa-supporting-documents  301
+/visa-supporting  /visa-supporting-documents  301
+/es/visa  /es/documentos-para-visa  301
+/es/documentos-visa  /es/documentos-para-visa  301
+/es/papeles-para-visa  /es/documentos-para-visa  301
+/es/documentos-de-apoyo-visa  /es/documentos-para-visa  301
 /es/w-8ben                /es/kit-contratista-latam  301
 
 # Trades job packet — work order / change order / cobro. Not Jobber, not a lien waiver.

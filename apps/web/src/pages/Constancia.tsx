@@ -15,7 +15,7 @@ import { usePageMeta } from "../lib/usePageMeta";
 import { track } from "../lib/track";
 import { breadcrumbJsonLd, howToJsonLd } from "../lib/productSeo";
 
-const FAQ_COUNT = 5;
+const FAQ_COUNT = 6;
 
 /**
  * ES-lead SEO landing for the income-proof packet, with the Paid share tool below the fold.

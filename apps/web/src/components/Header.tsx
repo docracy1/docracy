@@ -28,6 +28,7 @@ const FEATURE_ITEMS = [
   { to: "/free-templates", icon: "duplicate", titleKey: "nav.mega.feature.templates.title", descKey: "nav.mega.feature.templates.desc" },
   { to: "/packets/us-contractor", icon: "briefcase", titleKey: "nav.mega.feature.packet.title", descKey: "nav.mega.feature.packet.desc" },
   { to: "/packets/latam-contractor", icon: "briefcase", titleKey: "nav.mega.feature.latamPacket.title", descKey: "nav.mega.feature.latamPacket.desc" },
+  { to: "/packets/latam-to-us", icon: "briefcase", titleKey: "nav.mega.feature.latamUsPacket.title", descKey: "nav.mega.feature.latamUsPacket.desc" },
   { to: "/packets/trades", icon: "briefcase", titleKey: "nav.mega.feature.trades.title", descKey: "nav.mega.feature.trades.desc" },
   { to: "/packets/latam-trade", icon: "briefcase", titleKey: "nav.mega.feature.latamTrade.title", descKey: "nav.mega.feature.latamTrade.desc" },
   { to: "/packets/collect", icon: "duplicate", titleKey: "nav.mega.feature.collect.title", descKey: "nav.mega.feature.collect.desc" },

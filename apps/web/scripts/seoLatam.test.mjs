@@ -50,6 +50,10 @@ for (const line of [
   "/es/factura-por-whatsapp  /es/cobro  301",
   "/alegra-vs-kita  /kita-vs-alegra  301",
   "/docracy-vs-kita  /kita-alternative  301",
+  "/i9  /i-9  301",
+  "/es/i-9  /es/formulario-i-9  301",
+  "/visa-documents  /visa-supporting-documents  301",
+  "/es/documentos-visa  /es/documentos-para-visa  301",
 ]) {
   assert.ok(redirects.includes(line), `missing one-hop redirect: ${line}`);
 }

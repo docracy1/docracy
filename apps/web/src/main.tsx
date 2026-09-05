@@ -57,6 +57,7 @@ const TaxYearShare = lazy(() => import("./pages/TaxYearShare"));
 const JobPacket = lazy(() => import("./pages/JobPacket"));
 const Cobro = lazy(() => import("./pages/Cobro"));
 const LatamDesk = lazy(() => import("./pages/LatamDesk"));
+const LatamUsPacket = lazy(() => import("./pages/LatamUsPacket"));
 const Dpa = lazy(() => import("./pages/Dpa"));
 const Login = lazy(() => import("./pages/Login"));
 const AuthVerify = lazy(() => import("./pages/AuthVerify"));
@@ -148,6 +149,8 @@ function AppRoutes() {
       <Route path="/es/kit-contratista" element={<ContractorPacket />} />
       <Route path="/packets/latam-contractor" element={<LatamContractorPacket />} />
       <Route path="/es/kit-contratista-latam" element={<LatamContractorPacket />} />
+      <Route path="/packets/latam-to-us" element={<LatamUsPacket />} />
+      <Route path="/es/kit-llegar-eeuu" element={<LatamUsPacket />} />
       <Route path="/packets/trades" element={<JobPacket packetId="trades" />} />
       <Route path="/es/kit-oficios" element={<JobPacket packetId="trades" />} />
       <Route path="/packets/latam-trade" element={<JobPacket packetId="latam-trade" />} />
@@ -256,6 +259,16 @@ function AppRoutes() {
       <Route path="/es/registros-1099" element={<FeaturePage slug="1099-contractor-records" />} />
       <Route path="/hire-contractor-abroad" element={<FeaturePage slug="hire-contractor-abroad" />} />
       <Route path="/es/contratar-en-el-extranjero" element={<FeaturePage slug="hire-contractor-abroad" />} />
+      <Route path="/immigrant-documents" element={<FeaturePage slug="immigrant-documents" />} />
+      <Route path="/es/documentos-para-inmigrantes" element={<FeaturePage slug="immigrant-documents" />} />
+      <Route path="/move-to-us" element={<FeaturePage slug="move-to-us" />} />
+      <Route path="/es/llegar-a-estados-unidos" element={<FeaturePage slug="move-to-us" />} />
+      <Route path="/proof-of-income-us-rental" element={<FeaturePage slug="proof-of-income-us-rental" />} />
+      <Route path="/es/constancia-para-rentar" element={<FeaturePage slug="proof-of-income-us-rental" />} />
+      <Route path="/i-9" element={<FeaturePage slug="i-9" />} />
+      <Route path="/es/formulario-i-9" element={<FeaturePage slug="i-9" />} />
+      <Route path="/visa-supporting-documents" element={<FeaturePage slug="visa-supporting-documents" />} />
+      <Route path="/es/documentos-para-visa" element={<FeaturePage slug="visa-supporting-documents" />} />
       <Route path="/proof-of-income" element={<FeaturePage slug="proof-of-income" />} />
       <Route path="/es/prueba-de-ingresos" element={<FeaturePage slug="proof-of-income" />} />
       <Route path="/signed-work-order" element={<FeaturePage slug="signed-work-order" />} />

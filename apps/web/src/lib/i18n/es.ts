@@ -389,6 +389,9 @@ const es: Messages = {
   "landing.faq9.q": "¿Cómo pruebo ingresos si no tengo recibos de nómina?",
   "landing.faq9.a":
     "En el plan de pago armas una constancia del año — contratos y cobros — en /es/constancia (inglés: /income-proof). No es un W-2, ni una carta del banco, ni una carta certificada. Los montos son los que tú escribiste.",
+  "landing.faq10.q": "Acabo de llegar a EE. UU. desde LATAM — ¿qué uso?",
+  "landing.faq10.a":
+    "Firma la oferta que te enviaron (gratis). Firma el I-9 oficial de USCIS — no inspeccionamos documentos ni corremos E-Verify. Para una visa, firmamos el paquete de apoyo (oferta, empleo, poder, referencia, viaje de menor); no presentamos I-129 ni DS-160. Constancia para el arrendador. W-9 solo si eres persona de EE. UU. Empieza en /es/kit-llegar-eeuu.",
   "landing.outcomesTitle": "Después de firmar — la constancia que te piden",
   "landing.outcomesSub":
     "Firmar sigue gratis. El plan de pago es el paquete: una constancia para compartir, cobro por WhatsApp, un archivo fiscal, kits de oficios y contratación LATAM, y pedir un W-9.",
@@ -416,6 +419,10 @@ const es: Messages = {
   "landing.out6.body":
     "Reúne un W-9 o NDA enviando la plantilla. Para RFC suben su PDF del SAT — no inventamos el formulario.",
   "landing.out6.link": "Abrir el kit de solicitud",
+  "landing.out7.title": "Documentos para inmigrantes",
+  "landing.out7.body":
+    "Firma la oferta y el I-9 oficial. Documentos de apoyo para visa que ya tenemos. Constancia para rentar. No tramitamos la petición ni E-Verify.",
+  "landing.out7.link": "Abrir el kit de inmigrante",
   "landing.faqTitle": "Preguntas frecuentes",
   "landing.feat1.body":
     "Sube un PDF o pega un enlace de Google Docs, agrega destinatarios y envíalo a firmar en segundos — sin configuración complicada.",
@@ -2523,6 +2530,12 @@ const es: Messages = {
     "El Formulario W-9 oficial del IRS (Rev. marzo 2024) — recopila el ID fiscal de un contratista o proveedor antes de pagarle.",
   "tpl.w-9-form.useCase":
     "Úsalo antes de pagarle a un contratista, freelancer o proveedor para tener su número de identificación fiscal en archivo para el reporte 1099. Es el formulario real y vigente del IRS — no un sustituto redactado por Docracy.",
+  "tpl.i-9-form.name": "Formulario I-9",
+  "tpl.i-9-form.seoTitle": "Formulario I-9 gratis — firma el formulario de USCIS",
+  "tpl.i-9-form.description":
+    "El Formulario I-9 oficial de USCIS (edición 01/20/25) — firmas de empleado y empleador. No es E-Verify.",
+  "tpl.i-9-form.useCase":
+    "Úsalo el primer día de un empleado nuevo (o antes) para firmar la Sección 1 (empleado) y la Sección 2 (empleador). Es el formulario real de USCIS. Docracy no inspecciona documentos de las Listas A/B/C y no corre E-Verify.",
   "tpl.promissory-note.name": "Pagaré",
   "tpl.promissory-note.seoTitle": "Plantilla gratis de pagaré",
   "tpl.promissory-note.description":
@@ -2555,6 +2568,9 @@ const es: Messages = {
   "footer.taxYear": "Archivo fiscal",
   "footer.cobro": "Cobra por WhatsApp",
   "footer.latamPacket": "Kit contratista LATAM",
+  "footer.latamUsPacket": "Kit inmigrante",
+  "footer.i9": "Firmar I-9",
+  "footer.visaDocs": "Documentos para visa",
   "footer.constancia": "Constancia de ingresos",
   "footer.proofOfIncome": "Prueba de ingresos (SEO)",
   "nav.mega.feature.taxYear.title": "Archivo fiscal",
@@ -2565,6 +2581,8 @@ const es: Messages = {
   "nav.mega.feature.cobro.desc": "Envía un archivo y tu enlace de Mercado Pago o PayPal — sin firma.",
   "nav.mega.feature.latamPacket.title": "Contrata en LATAM",
   "nav.mega.feature.latamPacket.desc": "NDA, acuerdo de contratista y luego cobro. Para alguien a quien pagas en el extranjero.",
+  "nav.mega.feature.latamUsPacket.title": "Documentos para inmigrantes",
+  "nav.mega.feature.latamUsPacket.desc": "Firma I-9, oferta, papeles de visa y constancia. No tramitamos la petición.",
   "plan.taxYearLocker": "Archivo fiscal (CSV para tu contador)",
   "plan.constancia": "Constancia de ingresos (paquete para compartir)",
   "plan.cobro": "Cobro por WhatsApp — archivo + pago, sin firma",
@@ -2591,11 +2609,11 @@ const es: Messages = {
   "dash.navPacket": "Después de firmar",
   "latamDesk.seoTitle": "LATAM: cobro, constancia y kits | Docracy",
   "latamDesk.seoDescription":
-    "Cobro por WhatsApp, constancia para compartir, contratar en LATAM y pedir RFC. No es un W-2, ni W-8BEN, ni aduana. Firmar sigue gratis.",
+    "Cobro, constancia, kits y documentos para inmigrantes: I-9 oficial y plantillas de apoyo para visa. No tramitamos la petición ni E-Verify. Firmar sigue gratis.",
   "latamDesk.kicker": "LATAM",
   "latamDesk.heroTitle": "Cobra. Arma tu constancia. Contrata.",
   "latamDesk.heroSub":
-    "Lo que piden en US ↔ LATAM: cobro con tu Mercado Pago, una constancia que pueden abrir, y los kits. Docracy no se lleva el dinero.",
+    "También para quien acaba de llegar a EE. UU.: cobro con tu Mercado Pago, una constancia que un arrendador puede abrir, y los kits. Docracy no se lleva el dinero.",
   "latamDesk.openKit": "Abrir el kit",
   "taxYear.seoTitle": "Archivo fiscal para tu contador — contratos, cobros y CSV | Docracy",
   "taxYear.seoDescription":
@@ -2724,6 +2742,65 @@ const es: Messages = {
   "latamPacket.howTo2": "Envía el acuerdo de contratista independiente (plantilla gratis).",
   "latamPacket.howTo3": "En el plan de pago, envía cobro con tu Mercado Pago o PayPal — sin otra firma.",
   "latamPacket.howTo4": "Si es persona de EE. UU., usa el kit W-9 del IRS. No publicamos un W-8BEN.",
+  "latamUsPacket.seoTitle": "Firma el I-9 y papeles de visa — kit inmigrante | Docracy",
+  "latamUsPacket.seoDescription":
+    "Firma el I-9 oficial de USCIS, la oferta y documentos de apoyo para visa (poder, referencia, viaje de menor). Constancia para rentar. No tramitamos la petición ni E-Verify.",
+  "latamUsPacket.kicker": "Inmigrantes LATAM → Estados Unidos",
+  "latamUsPacket.heroTitle": "Llegaste. Firma el I-9. Firma el paquete de visa.",
+  "latamUsPacket.heroSub":
+    "El I-9 oficial de USCIS ya está en el catálogo — firma de empleado y empleador. Para una visa firmamos los documentos de apoyo que ya tenemos, no la petición. El plan es cobro si sigues facturando y una constancia que un arrendador en Houston o Miami puede abrir.",
+  "latamUsPacket.ctaPrimary": "Firmar el I-9",
+  "latamUsPacket.ctaSecondary": "Ver documentos para visa",
+  "latamUsPacket.stepsTitle": "Para qué sirve",
+  "latamUsPacket.stepsSub":
+    "Cinco trabajos que ya hacemos. Firmamos el I-9. No inspeccionamos documentos de autorización, no corremos E-Verify y no presentamos I-129 / DS-160.",
+  "latamUsPacket.step1.title": "Firma (o envía) la oferta o el contrato de empleo",
+  "latamUsPacket.step1.body":
+    "Si te mandaron un enlace, ábrelo — sin cuenta. Si contratas a alguien que acaba de llegar, envía la oferta o el contrato de empleo gratis.",
+  "latamUsPacket.step1.cta": "Abrir la plantilla de oferta",
+  "latamUsPacket.step2.title": "Firma el I-9 oficial",
+  "latamUsPacket.step2.body":
+    "Formulario I-9 de USCIS (edición 01/20/25) — el formulario real, no un sustituto. El empleado firma la Sección 1, el empleador la Sección 2. No inspeccionamos documentos de las Listas A/B/C y no corremos E-Verify. Quien tiene el enlace puede firmar con el nombre indicado. Ver /trust.",
+  "latamUsPacket.step2.cta": "Abrir el I-9",
+  "latamUsPacket.step3.title": "Documentos de apoyo para visa — no la petición",
+  "latamUsPacket.step3.body":
+    "Oferta, contrato de empleo, poder notarial, carta de referencia, consentimiento de viaje de menor, arrendamiento. No presentamos I-129, DS-160 ni I-864 y no inventamos esos formularios.",
+  "latamUsPacket.step3.cta": "Ver el paquete de visa",
+  "latamUsPacket.step4.title": "Constancia para el arrendador — cobro si sigues facturando",
+  "latamUsPacket.step4.body":
+    "La solicitud de depa en Houston o Miami pide prueba de ingresos. Esto es un índice con fecha de lo que ya completaste aquí — no es W-2. Si sigues cobrando en MX/CO, pega Mercado Pago o PayPal en el cobro.",
+  "latamUsPacket.step4.cta": "Abrir la constancia",
+  "latamUsPacket.step5.title": "Primera temporada fiscal en EE. UU. — solo si eres persona de EE. UU.",
+  "latamUsPacket.step5.body":
+    "Entonces usa el kit W-9 del IRS. No publicamos W-8BEN y no tramitamos ITIN. Pregunta a un asesor cuál eres.",
+  "latamUsPacket.step5.cta": "Abrir el kit de contratista EE. UU.",
+  "latamUsPacket.templatesTitle": "Plantillas que ya tenemos",
+  "latamUsPacket.templatesSub": "I-9 y W-9 oficiales, más los documentos de apoyo que suele pedir un paquete de visa o un arrendador.",
+  "latamUsPacket.tpl.poa": "Poder notarial",
+  "latamUsPacket.tpl.reference": "Carta de referencia",
+  "latamUsPacket.tpl.childTravel": "Consentimiento de viaje de menor",
+  "latamUsPacket.hireHint": "¿Contratas a alguien que sigue en LATAM? Usa el kit de contratación, no esta página.",
+  "latamUsPacket.faq.1.q": "¿Pueden hacer el I-9?",
+  "latamUsPacket.faq.1.a":
+    "Sí — firmamos el Formulario I-9 oficial de USCIS. No inspeccionamos documentos de identidad ni de autorización para trabajar, y no corremos E-Verify. La firma es SES: quien tiene el enlace puede firmar con el nombre indicado. Ver /trust.",
+  "latamUsPacket.faq.2.q": "¿Qué pueden hacer para una visa?",
+  "latamUsPacket.faq.2.a":
+    "Firmamos el paquete de apoyo: oferta, contrato de empleo, I-9, poder notarial, carta de referencia, consentimiento de viaje de menor, arrendamiento. No presentamos I-129, DS-160 ni I-864 y no inventamos esos formularios.",
+  "latamUsPacket.faq.3.q": "¿Un arrendador en EE. UU. acepta la constancia?",
+  "latamUsPacket.faq.3.a":
+    "Algunos sí; otros piden estado de cuenta. Es un índice honesto de contratos y cobros — no una carta certificada ni un W-2.",
+  "latamUsPacket.faq.4.q": "¿Esto es un W-8BEN?",
+  "latamUsPacket.faq.4.a":
+    "No. No inventamos formularios del IRS. Si eres persona de EE. UU. para impuestos, usa el kit W-9. Si no, habla con un asesor — no vamos a publicar un W-8BEN falso.",
+  "latamUsPacket.faq.5.q": "Sigo cobrando desde México o Colombia. ¿Sirve el cobro?",
+  "latamUsPacket.faq.5.a":
+    "Sí. Pegas el checkout que ya tienes. Docracy no se lleva el dinero y no timbra CFDI ni factura DIAN.",
+  "latamUsPacket.howToName": "Cómo usar Docracy al llegar a EE. UU.",
+  "latamUsPacket.howTo1": "Firma la oferta o el contrato de empleo (gratis, sin cuenta) o envía uno desde la plantilla.",
+  "latamUsPacket.howTo2": "Firma el I-9 oficial — empleado y empleador. No inspeccionamos documentos ni corremos E-Verify.",
+  "latamUsPacket.howTo3": "Firma documentos de apoyo para visa que ya tenemos (poder, referencia, viaje de menor). No tramitamos la petición.",
+  "latamUsPacket.howTo4": "En el plan de pago, copia la URL de la constancia para el arrendador. Sigue el cobro si facturas.",
+  "latamUsPacket.howTo5": "Si eres persona de EE. UU., usa el kit W-9. No publicamos un W-8BEN.",
   "constancia.seoTitle": "Constancia de ingresos para freelancers — Docracy",
   "constancia.seoDescription":
     "Arma una constancia de ingresos con cobros y contratos firmados. Compártela con el arrendador o el banco. No es la constancia del SAT, ni un W-2, ni carta bancaria. Plan de $10/mes.",
@@ -2731,13 +2808,13 @@ const es: Messages = {
   "constancia.heroTitle": "La constancia que sí puedes reenviar",
   "constancia.satDisclaimer": "No es la constancia de situación fiscal del SAT, ni un W-2, ni una carta del banco. Es un índice para compartir de archivos que ya completaste aquí.",
   "constancia.heroSub":
-    "Si cobras por PayPal o Mercado Pago, nadie te imprime un recibo de nómina. Junta el año de contratos y cobros en una sola URL. Esta página en español es la principal.",
+    "Si cobras por PayPal o Mercado Pago, nadie te imprime un stub — igual al llegar a EE. UU. Un arrendador en Houston no acepta capturas del chat. Junta el año en una URL. Esta página en español es la principal.",
   "constancia.ctaOpen": "Abrir el paquete de este año",
   "constancia.ctaPaid": "Desbloquear la constancia — $10/mes",
   "constancia.ctaLogin": "Inicia sesión para abrir la constancia",
   "constancia.problemTitle": "El problema",
   "constancia.problem":
-    "El arrendador, el banco o el contador te piden prueba de ingresos. Tienes PDFs en el chat y capturas de PayPal. Nada de eso se ve como un registro que un desconocido acepte.",
+    "El arrendador, el banco o el contador te piden prueba de ingresos — también al rentar en EE. UU. después de migrar. Tienes PDFs en el chat y capturas de PayPal. Nada de eso se ve como un registro que un desconocido acepte.",
   "constancia.solutionTitle": "Qué es esto",
   "constancia.solution":
     "Un índice para compartir de documentos que ya completaste en Docracy ese año: títulos, fechas, nombres que tú escribiste, montos que tú escribiste, enlaces a cada página firmada. No es un W-2, no es una carta del banco, no es un certificado de empleador y no es una declaración ante el SAT ni el IRS.",
@@ -2768,6 +2845,9 @@ const es: Messages = {
   "constancia.faq.5.q": "¿Por qué el español es el idioma principal?",
   "constancia.faq.5.a":
     "Este producto es para quien pide una constancia, sobre todo en EE. UU. y LATAM. /es/constancia es x-default. El inglés está en /income-proof.",
+  "constancia.faq.6.q": "Acabo de llegar a EE. UU. ¿Sirve para rentar un depa?",
+  "constancia.faq.6.a":
+    "Sí — es un uso real. Manda el enlace y di que es tu registro de Docracy, no un W-2. Algunos arrendadores igual piden estado de cuenta. El kit (I-9 + documentos de visa) es /es/kit-llegar-eeuu.",
   "constancia.howToName": "Cómo compartir una constancia de ingresos",
   "constancia.howTo1": "Completa cobros y contratos en Docracy durante el año (el plan de pago conserva los PDF).",
   "constancia.howTo2": "Abre /es/constancia y elige el año.",
@@ -2816,6 +2896,7 @@ const es: Messages = {
   "dash.corridorTradesTitle": "Paquete de oficio",
   "dash.corridorTrades": "Orden de trabajo, change order, luego cobro. No es un waiver de gravamen estatal.",
   "dash.corridorLatamHire": "NDA, acuerdo de contratista, cobro. No es un W-8BEN.",
+  "dash.corridorLatamUs": "I-9, papeles de visa, cobro y constancia. No tramitamos la petición.",
   "dash.corridorTradeTitle": "Docs comerciales LATAM",
   "dash.corridorTrade": "Contrato de compraventa y orden de compra, luego cobro. No es aduana.",
   "footer.tradesPacket": "Kit oficios",

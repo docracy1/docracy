@@ -343,6 +343,9 @@ const en: Messages = {
   "landing.faq9.q": "How do I prove income without pay stubs?",
   "landing.faq9.a":
     "Paid packs the year of signed files and cobros into a shareable constancia at /income-proof (Spanish lead: /es/constancia). Not a W-2, bank letter, or certified income letter. Amounts are what you typed.",
+  "landing.faq10.q": "I just moved to the US from LATAM — what can I use?",
+  "landing.faq10.a":
+    "Sign the offer they sent (free). Sign the official USCIS I-9 — we don't inspect List A/B/C documents or run E-Verify. For a visa, we sign the supporting packet (offer, employment, POA, reference, child travel), we don't file I-129 or DS-160. Constancia for a landlord. W-9 only if you are a US person. Start at /packets/latam-to-us (Spanish: /es/kit-llegar-eeuu).",
   "landing.outcomesTitle": "After they sign — the packet they asked for",
   "landing.outcomesSub":
     "Signing stays free. Paid is the packet: a shareable constancia, WhatsApp cobro, a 1099 CSV, kits for trades and LATAM hire, and a W-9 request.",
@@ -370,6 +373,10 @@ const en: Messages = {
   "landing.out6.body":
     "Collect a W-9 or NDA by sending the template. For RFC they upload their SAT PDF — we do not invent the form.",
   "landing.out6.link": "Open the request kit",
+  "landing.out7.title": "Immigrant paperwork",
+  "landing.out7.body":
+    "Sign the offer and the official I-9. Visa supporting docs we already ship. Constancia for a US lease. We don't file the petition or run E-Verify.",
+  "landing.out7.link": "Open the immigrant kit",
   "landing.compareTitle": "How Docracy compares on price",
   "landing.compareSub": "Docracy's paid plan is one flat fee per workspace, not a per-seat license — add as many teammates as you want at no extra cost.",
   "landing.disclaimer":
@@ -2457,6 +2464,12 @@ const en: Messages = {
     "The official IRS Form W-9 (Rev. March 2024) — collect a contractor or vendor's taxpayer ID before you pay them.",
   "tpl.w-9-form.useCase":
     "Use this before you pay a contractor, freelancer, or vendor so you have their taxpayer identification number on file for 1099 reporting. This is the real, current IRS form — not a Docracy-drafted substitute.",
+  "tpl.i-9-form.name": "I-9 Form",
+  "tpl.i-9-form.seoTitle": "Free I-9 Form — Sign the USCIS Eligibility Form",
+  "tpl.i-9-form.description":
+    "The official USCIS Form I-9 (Edition 01/20/25) — employee and employer signatures. Not E-Verify.",
+  "tpl.i-9-form.useCase":
+    "Use this on or before a new employee's first day so Section 1 (employee) and Section 2 (employer) can be signed. This is the real USCIS form. Docracy does not inspect List A/B/C documents and does not run E-Verify.",
   "tpl.promissory-note.name": "Promissory Note",
   "tpl.promissory-note.seoTitle": "Free Promissory Note Template",
   "tpl.promissory-note.description":
@@ -2489,6 +2502,9 @@ const en: Messages = {
   "footer.taxYear": "1099 season locker",
   "footer.cobro": "Get paid on WhatsApp",
   "footer.latamPacket": "LATAM contractor kit",
+  "footer.latamUsPacket": "Immigrant kit",
+  "footer.i9": "Sign I-9",
+  "footer.visaDocs": "Visa supporting docs",
   "footer.constancia": "Income proof / constancia",
   "footer.proofOfIncome": "Proof of income (SEO)",
   "nav.mega.feature.taxYear.title": "1099 season locker",
@@ -2499,6 +2515,8 @@ const en: Messages = {
   "nav.mega.feature.cobro.desc": "Send a file and your Mercado Pago or PayPal link — no signature required.",
   "nav.mega.feature.latamPacket.title": "Hire in LATAM",
   "nav.mega.feature.latamPacket.desc": "NDA, contractor agreement, then cobro. For someone you pay abroad.",
+  "nav.mega.feature.latamUsPacket.title": "Immigrant docs",
+  "nav.mega.feature.latamUsPacket.desc": "Sign I-9, offer, visa supporting docs, constancia. We don't file the petition.",
   "plan.taxYearLocker": "1099 season locker (CSV for your CPA)",
   "plan.constancia": "Income proof packet (shareable constancia)",
   "plan.cobro": "WhatsApp cobro — pay + file, no signature",
@@ -2525,11 +2543,11 @@ const en: Messages = {
   "dash.navPacket": "Después de firmar",
   "latamDesk.seoTitle": "LATAM: cobro, constancia, and contractor kits | Docracy",
   "latamDesk.seoDescription":
-    "WhatsApp cobro, a shareable constancia, hire in LATAM, and RFC / W-9 collect. Not a W-2, W-8BEN, or customs filing. Signing stays free.",
+    "WhatsApp cobro, constancia, hire in LATAM, and immigrant docs: official I-9 plus visa supporting templates. We don't file petitions or run E-Verify. Signing stays free.",
   "latamDesk.kicker": "LATAM",
   "latamDesk.heroTitle": "Cobra. Prueba ingresos. Contrata.",
   "latamDesk.heroSub":
-    "The packet for US ↔ LATAM work. Cobro on your Mercado Pago, a constancia they can open, then the kits. Docracy never takes the money.",
+    "The packet for US ↔ LATAM work — including people who just arrived. Cobro on your Mercado Pago, a constancia a US landlord can open, then the kits. Docracy never takes the money.",
   "latamDesk.openKit": "Open the kit",
   "taxYear.seoTitle": "1099 Season Locker — Signed W-9s, Contracts & CPA CSV | Docracy",
   "taxYear.seoDescription":
@@ -2658,6 +2676,65 @@ const en: Messages = {
   "latamPacket.howTo2": "Send the independent contractor agreement (free template).",
   "latamPacket.howTo3": "On Paid, send cobro with your Mercado Pago or PayPal link — no extra signature.",
   "latamPacket.howTo4": "Skip this kit if they are a US person — use the IRS W-9 kit instead. We do not ship a W-8BEN.",
+  "latamUsPacket.seoTitle": "Sign I-9 & visa supporting docs — immigrant kit | Docracy",
+  "latamUsPacket.seoDescription":
+    "Sign the official USCIS I-9, offer letter, and visa supporting docs (POA, reference, child travel). Constancia for a US lease. We don't file petitions or run E-Verify.",
+  "latamUsPacket.kicker": "LATAM immigrants → United States",
+  "latamUsPacket.heroTitle": "You arrived. Sign the I-9. Sign the visa packet.",
+  "latamUsPacket.heroSub":
+    "The official USCIS I-9 is already in the catalog — employee + employer signature. For a visa we sign the supporting docs we already ship, not the petition. Paid is cobro if you still invoice, plus a constancia a Houston or Miami landlord can open.",
+  "latamUsPacket.ctaPrimary": "Sign the I-9",
+  "latamUsPacket.ctaSecondary": "Open visa supporting docs",
+  "latamUsPacket.stepsTitle": "What this is for",
+  "latamUsPacket.stepsSub":
+    "Five jobs we already do. We sign I-9. We don't inspect work-authorization documents, run E-Verify, or file I-129 / DS-160.",
+  "latamUsPacket.step1.title": "Sign (or send) the US offer or employment agreement",
+  "latamUsPacket.step1.body":
+    "If they emailed you a link, open it — no account. If you are hiring someone who just arrived, send the free offer letter or employment agreement.",
+  "latamUsPacket.step1.cta": "Open the offer letter template",
+  "latamUsPacket.step2.title": "Sign the official I-9",
+  "latamUsPacket.step2.body":
+    "USCIS Form I-9 (Edition 01/20/25) — the real form, not a substitute. Employee signs Section 1, employer signs Section 2. We don't inspect List A/B/C documents and we don't run E-Verify. Anyone with the link can sign as the name on it. See /trust.",
+  "latamUsPacket.step2.cta": "Open the I-9",
+  "latamUsPacket.step3.title": "Visa supporting docs — not the petition",
+  "latamUsPacket.step3.body":
+    "Offer letter, employment agreement, power of attorney, reference letter, child travel consent, lease. We don't file I-129, DS-160, or I-864 and we don't invent those forms.",
+  "latamUsPacket.step3.cta": "See the visa packet",
+  "latamUsPacket.step4.title": "Constancia for a US landlord — cobro if you still invoice",
+  "latamUsPacket.step4.body":
+    "A Houston or Miami application asks for proof of income. This is a dated index of files you already completed here — not a W-2. If you still collect from MX/CO, paste Mercado Pago or PayPal on cobro.",
+  "latamUsPacket.step4.cta": "Open the income packet",
+  "latamUsPacket.step5.title": "First US tax season — only if you are a US person",
+  "latamUsPacket.step5.body":
+    "Then use the IRS W-9 kit. We do not publish a W-8BEN and we do not file ITIN. Ask a tax advisor which one you are.",
+  "latamUsPacket.step5.cta": "Open the US contractor kit",
+  "latamUsPacket.templatesTitle": "Templates we already have",
+  "latamUsPacket.templatesSub": "Official I-9 and W-9, plus the supporting docs a visa or landlord packet usually asks for.",
+  "latamUsPacket.tpl.poa": "Power of attorney",
+  "latamUsPacket.tpl.reference": "Reference letter",
+  "latamUsPacket.tpl.childTravel": "Child travel consent",
+  "latamUsPacket.hireHint": "Hiring someone still abroad? Use the LATAM hire kit, not this page.",
+  "latamUsPacket.faq.1.q": "Can you do I-9?",
+  "latamUsPacket.faq.1.a":
+    "Yes — we sign the official USCIS Form I-9. We do not inspect identity or work-authorization documents, and we do not run E-Verify. Signing is SES: anyone with the link can sign as the name on it. See /trust.",
+  "latamUsPacket.faq.2.q": "What can you do for a visa?",
+  "latamUsPacket.faq.2.a":
+    "We sign the supporting packet: offer letter, employment agreement, I-9, power of attorney, reference letter, child travel consent, lease. We do not file I-129, DS-160, or I-864 and we do not invent those forms.",
+  "latamUsPacket.faq.3.q": "Will a US landlord accept the constancia?",
+  "latamUsPacket.faq.3.a":
+    "Some will, some will still want a bank statement. It is an honest index of contracts and cobros you already sent here — not a certified letter and not a W-2.",
+  "latamUsPacket.faq.4.q": "Is this a W-8BEN?",
+  "latamUsPacket.faq.4.a":
+    "No. We do not invent IRS forms. If you are a US person for tax, use the W-9 kit. If you are not, talk to a tax advisor — we will not ship a fake W-8BEN.",
+  "latamUsPacket.faq.5.q": "I still get paid from Mexico or Colombia. Does cobro work?",
+  "latamUsPacket.faq.5.a":
+    "Yes. Paste the checkout you already have. Docracy never takes the money and does not stamp CFDI or a DIAN invoice.",
+  "latamUsPacket.howToName": "How to use Docracy after moving to the US",
+  "latamUsPacket.howTo1": "Sign the offer or employment agreement (free, no account) or send one from the template.",
+  "latamUsPacket.howTo2": "Sign the official I-9 — employee and employer. We don't inspect documents or run E-Verify.",
+  "latamUsPacket.howTo3": "Sign visa supporting docs we already ship (POA, reference, child travel). We don't file the petition.",
+  "latamUsPacket.howTo4": "On Paid, copy the constancia URL for a landlord. Keep cobro if you still invoice.",
+  "latamUsPacket.howTo5": "If you are a US person, use the W-9 kit. We do not ship a W-8BEN.",
   "constancia.seoTitle": "Income Proof Packet for Freelancers — Docracy",
   "constancia.seoDescription":
     "Share a year of signed files and cobros as income proof. Not a SAT constancia, W-2, bank letter, or employer certificate. Paid $10/mo — signing stays free.",
@@ -2665,13 +2742,13 @@ const en: Messages = {
   "constancia.heroTitle": "The income packet you can actually forward",
   "constancia.satDisclaimer": "Not a SAT constancia de situación fiscal, W-2, or bank letter. It is a shareable index of files you already completed here.",
   "constancia.heroSub":
-    "If you earn on PayPal or Mercado Pago, nobody prints a stub. Pack the year of signed contracts and cobros into one URL. Spanish is the lead page: /es/constancia.",
+    "If you earn on PayPal or Mercado Pago, nobody prints a stub. Same problem after a move to the US — a Houston landlord will not accept chat screenshots. Pack the year into one URL. Spanish is the lead page: /es/constancia.",
   "constancia.ctaOpen": "Open this year's packet",
   "constancia.ctaPaid": "Unlock the packet — $10/month",
   "constancia.ctaLogin": "Sign in to open the packet",
   "constancia.problemTitle": "The problem",
   "constancia.problem":
-    "A landlord, a bank, or a CPA asks for proof of income. You have PDFs in chat and screenshots of PayPal. None of that looks like a record a stranger will accept.",
+    "A landlord, a bank, or a CPA asks for proof of income — including a US lease after you moved. You have PDFs in chat and screenshots of PayPal. None of that looks like a record a stranger will accept.",
   "constancia.solutionTitle": "What this is",
   "constancia.solution":
     "A shareable index of documents you already completed on Docracy that year: titles, dates, names you typed, amounts you typed, links to each signed page. It is not a W-2, not a bank letter, not an employer certificate, and not a SAT or IRS filing.",
@@ -2702,6 +2779,9 @@ const en: Messages = {
   "constancia.faq.5.q": "Why is the Spanish URL the default?",
   "constancia.faq.5.a":
     "This product is for people who get asked for a constancia, mostly in US + LATAM Spanish. /es/constancia is x-default. English lives at /income-proof.",
+  "constancia.faq.6.q": "I just moved to the US. Is this for a rental application?",
+  "constancia.faq.6.a":
+    "Yes — that is a real use. Send the link and say it is your Docracy record, not a W-2. Some landlords will still want a bank statement. The immigrant kit (I-9 + visa supporting docs) is /packets/latam-to-us.",
   "constancia.howToName": "How to share an income proof packet",
   "constancia.howTo1": "Complete cobros and contracts on Docracy during the year (Paid keeps the PDFs).",
   "constancia.howTo2": "Open /es/constancia or /income-proof and pick the year.",
@@ -2750,6 +2830,7 @@ const en: Messages = {
   "dash.corridorTradesTitle": "Job packet (trades)",
   "dash.corridorTrades": "Work order, change order, then cobro. Not a state-specific lien waiver.",
   "dash.corridorLatamHire": "NDA, contractor agreement, cobro. Not a W-8BEN.",
+  "dash.corridorLatamUs": "I-9, visa supporting docs, cobro, constancia. We don't file the petition.",
   "dash.corridorTradeTitle": "LATAM commercial docs",
   "dash.corridorTrade": "Sales agreement and purchase order, then cobro. Not aduana filing.",
   "footer.tradesPacket": "Trades job packet",
