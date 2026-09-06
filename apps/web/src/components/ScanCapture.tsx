@@ -1,12 +1,21 @@
-import { useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { PDFDocument } from "pdf-lib";
 import { useT } from "../lib/i18n";
 
 type Stage = "capture" | "loading" | "review" | "saving";
 
+/** Longest side, in px, that scanning/cleanup ever operates on. Phone cameras commonly shoot
+ *  4000px+ photos — processing (and holding in memory) several full-resolution canvases at once
+ *  is what was crashing mobile Safari (silently — the tab just gets killed under memory
+ *  pressure, no error, the page resets). 2000px is roughly 200-300 DPI for a letter/A4 page —
+ *  plenty for reading or re-signing — while cutting memory/CPU by 4x+ on a typical photo. */
+const MAX_DIMENSION = 2000;
+
 interface ScannedPage {
   canvas: HTMLCanvasElement;
   detected: boolean;
+  /** Object URL for cheap <img> preview — avoids re-encoding the canvas to base64 on every render. */
+  previewUrl: string;
 }
 
 /** Lazily loads OpenCV.js exactly once and exposes it as the global `cv` jscanify expects —
@@ -52,6 +61,22 @@ function loadImage(objectUrl: string): Promise<HTMLImageElement> {
   });
 }
 
+/** Downscales to MAX_DIMENSION on the longest side before any further processing — the single
+ *  biggest lever on memory use, since every later step (OpenCV contour/warp, contrast pass,
+ *  JPEG encode) scales with this canvas's pixel count. */
+function capResolution(img: HTMLImageElement): { source: HTMLCanvasElement | HTMLImageElement; width: number; height: number } {
+  const { naturalWidth: w, naturalHeight: h } = img;
+  const scale = Math.min(1, MAX_DIMENSION / Math.max(w, h));
+  if (scale >= 1) return { source: img, width: w, height: h };
+  const width = Math.round(w * scale);
+  const height = Math.round(h * scale);
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  canvas.getContext("2d")!.drawImage(img, 0, 0, width, height);
+  return { source: canvas, width, height };
+}
+
 /** Cheap per-channel contrast stretch — runs after perspective correction so the page reads
  *  clearly regardless of the original phone photo's lighting. Skips a full OpenCV threshold
  *  pass (e.g. adaptive/OTSU binarization) since that can wash out color IDs and forms. */
@@ -79,10 +104,12 @@ function autoContrast(canvas: HTMLCanvasElement) {
   ctx.putImageData(imageData, 0, 0);
 }
 
-async function canvasToJpegBytes(canvas: HTMLCanvasElement, quality = 0.85): Promise<Uint8Array> {
-  const dataUrl = canvas.toDataURL("image/jpeg", quality);
-  const res = await fetch(dataUrl);
-  return new Uint8Array(await res.arrayBuffer());
+/** Blob-based, not toDataURL+fetch — a base64 round-trip needs the binary AND a ~33% larger
+ *  string version of it in memory at once, which was another real chunk of the memory spike. */
+function canvasToJpegBlob(canvas: HTMLCanvasElement, quality = 0.85): Promise<Blob> {
+  return new Promise((resolve, reject) => {
+    canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error("toBlob-failed"))), "image/jpeg", quality);
+  });
 }
 
 export interface ScanCaptureProps {
@@ -91,9 +118,9 @@ export interface ScanCaptureProps {
 }
 
 /**
- * Phone-camera document scan: capture → auto-crop/deskew (jscanify + OpenCV.js, lazy-loaded)
- * → review → repeat for multi-page → bundled into a single PDF (pdf-lib) so it flows through
- * the same `onFile` pipeline as a regular PDF upload — no server/API changes needed.
+ * Phone-camera document scan: capture → downscale → auto-crop/deskew (jscanify + OpenCV.js,
+ * lazy-loaded) → review → repeat for multi-page → bundled into a single PDF (pdf-lib) so it
+ * flows through the same `onFile` pipeline as a regular PDF upload — no server/API changes needed.
  */
 export default function ScanCapture({ onDone, onCancel }: ScanCaptureProps) {
   const t = useT();
@@ -103,6 +130,14 @@ export default function ScanCapture({ onDone, onCancel }: ScanCaptureProps) {
   const [pages, setPages] = useState<ScannedPage[]>([]);
   const [pending, setPending] = useState<ScannedPage | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const objectUrlsRef = useRef<Set<string>>(new Set());
+
+  useEffect(() => {
+    const urls = objectUrlsRef.current;
+    return () => {
+      urls.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, []);
 
   const processFile = async (file: File | undefined) => {
     if (!file) return;
@@ -111,12 +146,13 @@ export default function ScanCapture({ onDone, onCancel }: ScanCaptureProps) {
     const objectUrl = URL.createObjectURL(file);
     try {
       const scanner = await loadScanner();
-      const img = await loadImage(objectUrl);
+      const rawImg = await loadImage(objectUrl);
+      const { source, width, height } = capResolution(rawImg);
       let canvas: HTMLCanvasElement;
       let detected = true;
       let extracted: HTMLCanvasElement | null = null;
       try {
-        extracted = scanner.extractPaper(img, img.naturalWidth, img.naturalHeight);
+        extracted = scanner.extractPaper(source, width, height);
       } catch {
         extracted = null;
       }
@@ -125,12 +161,15 @@ export default function ScanCapture({ onDone, onCancel }: ScanCaptureProps) {
       } else {
         detected = false;
         canvas = document.createElement("canvas");
-        canvas.width = img.naturalWidth;
-        canvas.height = img.naturalHeight;
-        canvas.getContext("2d")!.drawImage(img, 0, 0);
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext("2d")!.drawImage(source, 0, 0, width, height);
       }
       autoContrast(canvas);
-      setPending({ canvas, detected });
+      const previewBlob = await canvasToJpegBlob(canvas, 0.85);
+      const previewUrl = URL.createObjectURL(previewBlob);
+      objectUrlsRef.current.add(previewUrl);
+      setPending({ canvas, detected, previewUrl });
       setStage("review");
     } catch {
       setError(t("scan.processError"));
@@ -148,12 +187,23 @@ export default function ScanCapture({ onDone, onCancel }: ScanCaptureProps) {
   };
 
   const retake = () => {
+    if (pending) {
+      URL.revokeObjectURL(pending.previewUrl);
+      objectUrlsRef.current.delete(pending.previewUrl);
+    }
     setPending(null);
     setStage("capture");
   };
 
   const removePage = (index: number) => {
-    setPages((prev) => prev.filter((_, i) => i !== index));
+    setPages((prev) => {
+      const removed = prev[index];
+      if (removed) {
+        URL.revokeObjectURL(removed.previewUrl);
+        objectUrlsRef.current.delete(removed.previewUrl);
+      }
+      return prev.filter((_, i) => i !== index);
+    });
   };
 
   const finish = async () => {
@@ -162,7 +212,8 @@ export default function ScanCapture({ onDone, onCancel }: ScanCaptureProps) {
     try {
       const pdfDoc = await PDFDocument.create();
       for (const page of pages) {
-        const jpegBytes = await canvasToJpegBytes(page.canvas);
+        const jpegBlob = await canvasToJpegBlob(page.canvas);
+        const jpegBytes = new Uint8Array(await jpegBlob.arrayBuffer());
         const jpg = await pdfDoc.embedJpg(jpegBytes);
         const pdfPage = pdfDoc.addPage([page.canvas.width, page.canvas.height]);
         pdfPage.drawImage(jpg, { x: 0, y: 0, width: page.canvas.width, height: page.canvas.height });
@@ -196,7 +247,7 @@ export default function ScanCapture({ onDone, onCancel }: ScanCaptureProps) {
           <div className="scan-review">
             <p className="scan-hint">{pending.detected ? t("scan.reviewHint") : t("scan.noEdgesHint")}</p>
             <div className="scan-review-canvas-wrap">
-              <img alt="" src={pending.canvas.toDataURL("image/jpeg", 0.85)} />
+              <img alt="" src={pending.previewUrl} />
             </div>
             <div className="sign-modal-actions">
               <button className="btn-secondary" type="button" onClick={retake}>
@@ -215,7 +266,7 @@ export default function ScanCapture({ onDone, onCancel }: ScanCaptureProps) {
               <div className="scan-thumbs" role="list">
                 {pages.map((page, i) => (
                   <div className="scan-thumb" role="listitem" key={i}>
-                    <img alt="" src={page.canvas.toDataURL("image/jpeg", 0.6)} />
+                    <img alt="" src={page.previewUrl} />
                     <button
                       type="button"
                       className="scan-thumb-remove"
