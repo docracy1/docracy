@@ -2857,6 +2857,40 @@ a.hero-latam-cta-btn {
   margin-bottom: 4px;
 }
 
+/* Secondary "Scan a document" action under the circle — same tier as the Google Docs strip. */
+.pdf-upload-circle-scan-btn {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--hairline);
+  background: var(--canvas);
+  color: var(--body);
+  font-size: 13px;
+  font-weight: 550;
+  cursor: pointer;
+}
+
+.pdf-upload-circle-scan-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.pdf-upload-circle-scan-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.hero-band .pdf-upload-circle-scan-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.85);
+}
+
 .pdf-upload-circle-gdoc-form {
   display: flex;
   gap: 0;
@@ -5941,6 +5975,99 @@ a.hero-latam-cta-btn {
   height: auto !important;
   max-width: 100%;
   touch-action: none;
+}
+
+/* Phone-camera document scan (ScanCapture.tsx) — reuses the .sig-modal shell above. */
+
+.scan-hint {
+  margin: 0 0 12px;
+  font-size: 14px;
+  color: var(--body);
+}
+
+.scan-review-canvas-wrap {
+  background: #1a2744;
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  max-height: 55vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scan-review-canvas-wrap img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 55vh;
+  object-fit: contain;
+}
+
+.scan-capture-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 14px;
+  border-radius: var(--r-sm);
+  border: 1px dashed var(--hairline);
+  background: var(--surface, #f6f8fc);
+  color: var(--primary);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+}
+
+.scan-capture-btn.is-busy {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.scan-page-count {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: var(--mute);
+  text-align: center;
+}
+
+.scan-thumbs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 2px 2px 12px;
+}
+
+.scan-thumb {
+  position: relative;
+  flex: 0 0 auto;
+  width: 64px;
+  height: 84px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--hairline);
+}
+
+.scan-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.scan-thumb-remove {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 18px;
+  height: 18px;
+  line-height: 16px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(15, 23, 42, 0.65);
+  color: #fff;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0;
 }
 
 /* Guided mobile signing (recipient) — Start / Next field dock */

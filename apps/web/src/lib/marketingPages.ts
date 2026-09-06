@@ -2277,6 +2277,55 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       { label: "Immigrant plan", to: "/packets/latam-to-us" },
     ],
   },
+  {
+    slug: "scan-document",
+    xDefault: "es",
+    seoTitle: "Scan a Document With Your Phone — Free | Docracy",
+    seoDescription:
+      "No scanner, no computer. Take a photo of any paper document — we straighten and clean it up in your browser, then you sign or send it. Free, no account.",
+    heroHeadline: "No scanner. Just your phone.",
+    heroSubheadline:
+      "Take a photo of a paper document — we straighten it, crop it, and clean it up right in your browser. Then sign it or attach it to what you're sending. Free, no account.",
+    problem:
+      "Most paperwork that needs a signature still starts on paper — an employer letter, an ID, a lease, a form someone handed you. A scanner or a computer isn't always around, and most \"free\" scanner apps want an account or a subscription before they'll give you a clean page.",
+    solution:
+      "Docracy's scan tool runs entirely on your phone, in the browser — no app to install, no account, nothing uploaded until you're ready to send. Take the photo, we detect the page edges and straighten it out, and it becomes a normal PDF you can sign or attach like any other document.",
+    features: [
+      { title: "Just your phone camera", body: "No scanner, no app install — works from the same browser you're already in." },
+      { title: "Auto-straighten and crop", body: "Detects the page edges and corrects the angle, even from an imperfect photo." },
+      { title: "Multiple pages", body: "Keep scanning pages into one document before you sign or send it." },
+      { title: "Nothing uploaded until you send", body: "The photo is processed on your device — only the finished PDF leaves it, when you choose." },
+    ],
+    useCases: [
+      "Scanning an ID or employer letter to attach to a document you're signing",
+      "Turning a paper lease or form into a PDF you can actually sign",
+      "Freelancers and small teams who don't have a scanner handy",
+      "Anyone assembling a packet of documents from paper originals",
+    ],
+    faqs: [
+      {
+        question: "Do I need to install an app?",
+        answer: "No. It runs in your phone's browser, right on the document-upload screen — nothing to download.",
+      },
+      {
+        question: "Where does the photo go?",
+        answer:
+          "Nowhere, until you decide to send the finished document. The cleanup happens on your device; we don't see the raw photo.",
+      },
+      {
+        question: "What if it can't detect the page edges?",
+        answer: "You'll get your original photo instead, so you can still use it or retake it — it never blocks you.",
+      },
+    ],
+    ctaLabel: "Try it free",
+    ctaTo: "/prepare",
+    relatedLinks: [
+      { label: "Prepare a document", to: "/prepare" },
+      { label: "Visa supporting documents", to: "/visa-supporting-documents" },
+      { label: "Immigrant kit", to: "/packets/latam-to-us" },
+      { label: "Free templates", to: "/free-templates" },
+    ],
+  },
   ...generatedCountryPages("en") as FeaturePageContent[],
 ];
 
@@ -3571,6 +3620,58 @@ export function getPhoneAndBankPageEs(): FeaturePageContent {
   };
 }
 
+export function getScanDocumentPageEs(): FeaturePageContent {
+  return {
+    slug: "scan-document",
+    xDefault: "es",
+    seoTitle: "Escanea un documento con tu celular — gratis | Docracy",
+    seoDescription:
+      "Sin escáner, sin computadora. Toma una foto de cualquier documento en papel — la enderezamos y limpiamos en tu navegador, y luego firmas o envías. Gratis, sin cuenta.",
+    heroHeadline: "Sin escáner. Solo tu celular.",
+    heroSubheadline:
+      "Toma una foto de un documento en papel — la enderezamos, recortamos y limpiamos ahí mismo en tu navegador. Después la firmas o la adjuntas a lo que estés enviando. Gratis, sin cuenta.",
+    problem:
+      "Mucho de lo que necesitas firmar todavía empieza en papel — una carta del empleador, una identificación, un contrato de arrendamiento, un formulario que te dieron. No siempre hay un escáner o una computadora a la mano, y la mayoría de las apps de escaneo \"gratis\" piden una cuenta o una suscripción antes de darte una página limpia.",
+    solution:
+      "La herramienta de escaneo de Docracy funciona completamente en tu celular, en el navegador — sin instalar nada, sin cuenta, y no se sube nada hasta que decides enviarlo. Tomas la foto, detectamos los bordes de la página y la enderezamos, y se convierte en un PDF normal que puedes firmar o adjuntar como cualquier otro documento.",
+    features: [
+      { title: "Solo la cámara de tu celular", body: "Sin escáner ni app que instalar — funciona desde el mismo navegador que ya estás usando." },
+      { title: "Enderezado y recorte automático", body: "Detecta los bordes de la página y corrige el ángulo, aunque la foto no sea perfecta." },
+      { title: "Varias páginas", body: "Sigue escaneando páginas hasta armar un solo documento antes de firmarlo o enviarlo." },
+      { title: "Nada se sube hasta que envías", body: "La foto se procesa en tu dispositivo — solo el PDF final sale de ahí, cuando tú decides." },
+    ],
+    useCases: [
+      "Escanear una identificación o carta del empleador para adjuntarla a lo que estás firmando",
+      "Convertir un contrato de arrendamiento o formulario en papel en un PDF que puedes firmar",
+      "Freelancers y equipos pequeños que no tienen un escáner a la mano",
+      "Armar un paquete de documentos a partir de originales en papel",
+    ],
+    faqs: [
+      {
+        question: "¿Necesito instalar una app?",
+        answer: "No. Funciona en el navegador de tu celular, en la misma pantalla donde subes el documento — nada que descargar.",
+      },
+      {
+        question: "¿A dónde va la foto?",
+        answer:
+          "A ningún lado, hasta que decides enviar el documento final. La limpieza ocurre en tu dispositivo — no vemos la foto original.",
+      },
+      {
+        question: "¿Y si no detecta los bordes de la página?",
+        answer: "Recibes tu foto original en su lugar, para que aun así puedas usarla o repetirla — nunca te deja bloqueado.",
+      },
+    ],
+    ctaLabel: "Pruébalo gratis",
+    ctaTo: "/prepare",
+    relatedLinks: [
+      { label: "Preparar un documento", to: "/prepare" },
+      { label: "Documentos para visa", to: "/visa-supporting-documents" },
+      { label: "Kit para llegar a EE. UU.", to: "/packets/latam-to-us" },
+      { label: "Plantillas gratis", to: "/free-templates" },
+    ],
+  };
+}
+
 const ES_FEATURE_GETTERS: Record<string, () => FeaturePageContent> = {
   "nda-signing": getNdaSigningPageEs,
   "client-contracts": getClientContractsPageEs,
@@ -3596,6 +3697,7 @@ const ES_FEATURE_GETTERS: Record<string, () => FeaturePageContent> = {
   "consular-appointment": getConsularAppointmentPageEs,
   "ead-tps": getEadTpsPageEs,
   "phone-and-bank": getPhoneAndBankPageEs,
+  "scan-document": getScanDocumentPageEs,
   ...Object.fromEntries(
     GENERATED_COUNTRY_CORRIDORS.map((c) => [c.slug, () => countryFeaturePage(c, "es") as FeaturePageContent])
   ),

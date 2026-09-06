@@ -843,6 +843,15 @@ const routes = [
     xDefault: "es",
   },
   {
+    urlPath: "/es/escanear-documento",
+    outFile: "es/escanear-documento.html",
+    title: getFeaturePageContent("scan-document", "es").seoTitle,
+    description: getFeaturePageContent("scan-document", "es").seoDescription,
+    locale: "es",
+    alternates: { en: "/scan-document", es: "/es/escanear-documento" },
+    xDefault: "es",
+  },
+  {
     urlPath: "/es/mexico-a-eeuu",
     outFile: "es/mexico-a-eeuu.html",
     title: getFeaturePageContent("mexico-to-us", "es").seoTitle,
@@ -1409,6 +1418,7 @@ const routes = [
       "consular-appointment": { en: "/consular-appointment", es: "/es/cita-consular" },
       "ead-tps": { en: "/ead-tps", es: "/es/ead-tps" },
       "phone-and-bank": { en: "/phone-and-bank", es: "/es/chip-y-banco" },
+      "scan-document": { en: "/scan-document", es: "/es/escanear-documento" },
       ...Object.fromEntries(GENERATED_COUNTRY_CORRIDORS.map((c) => [c.slug, { en: c.enPath, es: c.esPath }])),
       "docusign-alternative": { en: "/docusign-alternative", es: "/es/alternativa-a-docusign" },
       "hellosign-alternative": { en: "/hellosign-alternative", es: "/es/alternativa-a-hellosign" },

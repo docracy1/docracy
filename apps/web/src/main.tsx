@@ -276,6 +276,8 @@ function AppRoutes() {
       <Route path="/es/formulario-i-9" element={<FeaturePage slug="i-9" />} />
       <Route path="/visa-supporting-documents" element={<FeaturePage slug="visa-supporting-documents" />} />
       <Route path="/es/documentos-para-visa" element={<FeaturePage slug="visa-supporting-documents" />} />
+      <Route path="/scan-document" element={<FeaturePage slug="scan-document" />} />
+      <Route path="/es/escanear-documento" element={<FeaturePage slug="scan-document" />} />
       <Route path="/mexico-to-us" element={<FeaturePage slug="mexico-to-us" />} />
       <Route path="/es/mexico-a-eeuu" element={<FeaturePage slug="mexico-to-us" />} />
       <Route path="/colombia-to-us" element={<FeaturePage slug="colombia-to-us" />} />

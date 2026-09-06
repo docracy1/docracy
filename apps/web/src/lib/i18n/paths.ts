@@ -59,6 +59,7 @@ export const ES_PATH_BY_EN: Record<string, string> = {
   "/proof-of-income-us-rental": "/es/constancia-para-rentar",
   "/i-9": "/es/formulario-i-9",
   "/visa-supporting-documents": "/es/documentos-para-visa",
+  "/scan-document": "/es/escanear-documento",
   ...Object.fromEntries(LATAM_COUNTRY_CORRIDORS.map((c) => [c.enPath, c.esPath])),
   "/immigrant-housing": "/es/arrendamiento-inmigrante",
   "/after-arrival": "/es/despues-de-llegar",
