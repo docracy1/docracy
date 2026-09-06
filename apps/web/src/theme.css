@@ -5817,7 +5817,10 @@ a.hero-latam-cta-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 40;
+  /* Must beat .cookie-consent-banner (z-index: 9999) — otherwise, on a first visit before the
+   * banner is dismissed, it sits on top of the modal and blocks/intercepts taps on the bottom
+   * action buttons (confirmed: this silently ate the scan tool's "Use these pages" tap). */
+  z-index: 10000;
   padding: 16px;
 }
 

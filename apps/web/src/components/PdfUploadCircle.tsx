@@ -1,4 +1,4 @@
-import { useId, useState, type FormEvent, type ReactNode } from "react";
+import { useEffect, useId, useState, type FormEvent, type ReactNode } from "react";
 import { importGoogleDoc } from "../lib/api";
 import { useT } from "../lib/i18n";
 import { NavIcon } from "./NavIcons";
@@ -49,6 +49,14 @@ export default function PdfUploadCircle({
   const [importing, setImporting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [scanning, setScanning] = useState(false);
+  // `capture="environment"` (used by the scan flow) only means anything on a touch/phone
+  // device — on desktop it just opens a plain file picker, which looks broken since there's no
+  // camera to open. Detected client-side only (not at prerender time) to avoid a hydration
+  // mismatch; the button simply isn't there yet for the one frame before this runs.
+  const [canScan, setCanScan] = useState(false);
+  useEffect(() => {
+    setCanScan(window.matchMedia("(pointer: coarse)").matches);
+  }, []);
 
   const handFile = async (file: File | undefined) => {
     if (!file) return;
@@ -125,19 +133,23 @@ export default function PdfUploadCircle({
         <span className="pdf-upload-circle-sub">{subtitle ?? t("hero.uploadCircleSub")}</span>
       </label>
 
-      <button type="button" className="pdf-upload-circle-scan-btn" onClick={() => setScanning(true)}>
-        <NavIcon name="camera" />
-        {t("uploadCircle.scanDocument")}
-      </button>
+      {canScan && (
+        <>
+          <button type="button" className="pdf-upload-circle-scan-btn" onClick={() => setScanning(true)}>
+            <NavIcon name="camera" />
+            {t("uploadCircle.scanDocument")}
+          </button>
 
-      {scanning && (
-        <ScanCapture
-          onDone={async (file) => {
-            setScanning(false);
-            await handFile(file);
-          }}
-          onCancel={() => setScanning(false)}
-        />
+          {scanning && (
+            <ScanCapture
+              onDone={async (file) => {
+                setScanning(false);
+                await handFile(file);
+              }}
+              onCancel={() => setScanning(false)}
+            />
+          )}
+        </>
       )}
 
       {trustSlot}
