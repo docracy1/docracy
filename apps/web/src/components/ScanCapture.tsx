@@ -283,7 +283,6 @@ export default function ScanCapture({ onDone, onCancel }: ScanCaptureProps) {
             <input
               type="file"
               accept="image/*"
-              capture="environment"
               id={inputId}
               style={{ display: "none" }}
               disabled={stage === "loading"}
