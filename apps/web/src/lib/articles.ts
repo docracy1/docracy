@@ -3886,6 +3886,72 @@ export const ARTICLES: ArticlePost[] = [
       ),
     ],
   },
+
+  {
+    slug: "opentimestamps-bitcoin-proof-how-it-works",
+    title: "How Docracy proves a signed document is untouched — even if Docracy disappears",
+    description:
+      "Every completed document's hash is anchored to Bitcoin via the free OpenTimestamps protocol. Here's exactly how the calendar submission, the .ots proof, and the live block-explorer check actually work.",
+    publishedDate: "2026-09-06",
+    cluster: "Product",
+    blocks: [
+      p(
+        "Most e-signature tools ask you to trust their database. A signed PDF is only as verifiable as the platform that stored it — if the company shuts down, gets acquired, or just has a bad day, the record that a document was really completed goes with it. Docracy anchors every completed document's hash to the Bitcoin blockchain, for free, so that record survives independently of Docracy itself. This post is the technical explanation of how, not the marketing version."
+      ),
+
+      h2("The two-record model"),
+      p(
+        "When a document finishes its signing chain, Docracy computes the SHA-256 hash of the exact final PDF bytes and keeps two separate records of it. The first is a plain lookup in Docracy's own storage — hash → {signerCount, completedAt} — kept indefinitely, even after the source PDF itself is deleted at the end of its retention window. The second is a submission of that same hash to the free, public OpenTimestamps calendar network, which is what this post is actually about."
+      ),
+      link("Try it yourself — verify a document", "/verify"),
+
+      h2("What OpenTimestamps actually does"),
+      p(
+        "OpenTimestamps is an open protocol (RFC-style spec, reference implementation at opentimestamps.org) for anchoring an arbitrary hash to the Bitcoin blockchain without needing a wallet, paying a transaction fee yourself, or running a node. A small number of free calendar servers batch many people's hashes together, periodically commit the resulting Merkle root as a single Bitcoin transaction, and hand back a proof — a `.ots` file — that lets anyone later reconstruct the exact chain of hashing operations from your original hash up to that transaction's Merkle root."
+      ),
+      p(
+        "Docracy submits each completed document's hash to four independent calendars — the two run by the OpenTimestamps project itself (alice.btc.calendar.opentimestamps.org, bob.btc.calendar.opentimestamps.org), Eternity Wall's (finney.calendar.eternitywall.com), and Catallaxy's (btc.calendar.catallaxy.com). This happens as a background step right after signing, not on the signer's critical path — a slow or unreachable calendar can never block document completion."
+      ),
+
+      h2("Why a fresh proof says \"pending\""),
+      p(
+        "A `.ots` proof submitted seconds ago has nothing to verify yet. Calendars don't write a Bitcoin transaction per hash — they batch commits every few hours, so a brand-new proof is a \"pending\" attestation pointing back at the calendar, not yet a real Bitcoin block. This is inherent to the protocol, not a bug: it's the same batching that makes the whole thing free. Anyone checking a proof that's only minutes old — on Docracy or via opentimestamps.org directly — will correctly see it as unconfirmed until the calendar's next batch gets mined."
+      ),
+
+      h2("The part most tools skip: actually checking the block"),
+      p(
+        "Here's where a lot of \"we anchor to Bitcoin\" features stop: they store the `.ots` proof and hand it to you as a download, with instructions to go verify it yourself elsewhere. That's honest, but it's also outsourcing the actual proof to the user. Docracy's own verification page does the check itself, live, against the real chain."
+      ),
+      p(
+        "When you check a document on Docracy's verification page and it has a Bitcoin proof on file, here's what actually happens, in order:"
+      ),
+      list([
+        "Read the stored proof and, if it's still pending, ask the calendar servers again in case it's since been committed",
+        "Extract the resulting Merkle root the proof's own operation chain produces from your document's original hash",
+        "Fetch the actual Bitcoin block at the attested height from a public block explorer (blockchain.info and blockstream.info, independently, so a single explorer being wrong or lying doesn't matter)",
+        "Compare that block's real Merkle root, byte for byte, against what the proof claims",
+      ]),
+      p(
+        "A mismatch there means the proof doesn't actually correspond to a real, mined Bitcoin block with that Merkle root — and the check fails loudly instead of quietly reporting \"confirmed.\" Getting back a confirmed result means a specific, real Bitcoin block, fetched right now from a public explorer, agrees with your exact document's hash. That's a materially stronger claim than \"we have a file that says so.\""
+      ),
+
+      h2("What this proves, and what it doesn't"),
+      p(
+        "A confirmed Bitcoin anchor proves two things: that a document with this exact byte content existed at or before a specific, independently-checkable point in time, and that its content hasn't changed since — flip a single character in a date, a dollar figure, or a signature, and the SHA-256 hash is completely different, so it simply won't match anymore. It does not prove who signed it. Docracy's default signature is a Simple Electronic Signature, not an identity-verified one, and the Bitcoin anchor doesn't change that — it's a tamper-evidence and timestamping guarantee, not an identity guarantee."
+      ),
+      p(
+        "It's also worth being precise about what \"even if Docracy disappears\" really means. The `.ots` proof format and the Bitcoin blockchain it points to are both independent of Docracy — anyone can verify a downloaded proof with the standalone `ots` CLI or opentimestamps.org itself, no Docracy account or API involved. What wouldn't survive Docracy disappearing is the convenience of Docracy's own hosted lookup and its plain hash → completedAt record; the cryptographic anchor itself doesn't depend on us staying up."
+      ),
+
+      h2("Try it on a real document"),
+      p(
+        "The verification page is free, requires no account, and never uploads your file — the SHA-256 hash is computed in your own browser, and only that hash is sent to check against Docracy's records. If the document was completed through Docracy and has a confirmed Bitcoin anchor, you'll see the live block-explorer check happen in real time."
+      ),
+      link("Verify a signed document", "/verify"),
+      link("More on the blockchain timestamp feature", "/blockchain-timestamp"),
+      link("Docracy's trust & security posture", "/trust"),
+    ],
+  },
 ];
 
 export function getArticle(slug: string): ArticlePost | undefined {
