@@ -81,9 +81,9 @@ const en: Messages = {
   "hero.eyebrow": "Sequential e-signatures · AI-assisted",
   "hero.whatsappBadge": "New: Sign via WhatsApp",
   "hero.latamBadge": "LATAM: cobro + constancia",
-  "hero.title": "Stop chasing the invoice.\nGet paid on WhatsApp.",
+  "hero.title": "Sign documents for free.\nNo signup, no hassle.",
   "hero.sub":
-    "Paste Mercado Pago or PayPal, send the PDF, share a constancia a landlord will open. Signing stays free. $10/month is cobro and the year they can open — Docracy never takes a cut.",
+    "Upload a PDF or paste a Google Doc link, add up to two signers, and send — everyone signs with just a link, no account required. It's free for quick agreements; $10/month unlocks unlimited signers, templates, and a team workspace.",
   "hero.badge.legal": "ESIGN & UETA aligned",
   "hero.badge.ssl": "Encrypted · short retention",
   "hero.badge.noSignup": "No signup to sign",
