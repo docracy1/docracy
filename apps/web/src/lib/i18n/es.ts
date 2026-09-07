@@ -341,6 +341,7 @@ const es: Messages = {
   "hero.badge.ssl": "Cifrado · retención corta",
   "hero.badge.noSignup": "Sin registro para firmar",
   "hero.badge.price": "El plan de pago es el paquete · $10/mes",
+  "hero.badge.priceOpen": "Tarifa plana $10/mes, no por asiento",
   "hero.badge.constancia": "Constancia que sí te abren",
   "hero.badge.cobro": "Cobra con tu Mercado Pago",
   "hero.badge.kits": "Contrata · RFC · comercio",

@@ -488,9 +488,9 @@ export default function Landing() {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/trust" onClick={() => track("landingpage_cta_clicked", { source: "hero_badge_ssl" })}>
-                    <FeatureIcon name="shield" />
-                    {t("hero.badge.ssl")}
+                  <Link to="/#compare-price" onClick={() => track("landingpage_cta_clicked", { source: "hero_badge_price" })}>
+                    <FeatureIcon name="badge" />
+                    {t("hero.badge.priceOpen")}
                   </Link>
                 </li>
               </>
