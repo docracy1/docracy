@@ -162,7 +162,7 @@ function angleFor(title, category, norm) {
   }
 
   const context = norm.includes("contract-killer") ? " Based on a popular plain-language freelance web contract style." : "";
-  return `2 signers: ${a}, ${b}. ${title} — ${base} document from the historical docracy.com ${category} library.${context} Placeholders: ${placeholders}. Clauses: ${clauses}.`;
+  return `2 signers: ${a}, ${b}. ${title} — a ${category.toLowerCase()} ${base} document covering ${clauses.split(",")[0]}.${context} Placeholders: ${placeholders}. Clauses: ${clauses}.`;
 }
 
 function tooSimilar(a, b) {

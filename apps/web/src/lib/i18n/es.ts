@@ -1965,7 +1965,8 @@ const es: Messages = {
   "tpl.detail.notFoundTitle": "Plantilla no encontrada | Docracy",
   "tpl.detail.notFoundDesc": "No se pudo encontrar esta plantilla.",
   "tpl.detail.includedTitle": "Qué incluye",
-  "tpl.detail.includedBody": "Un {{name}} listo para usar con campos de firma ya colocados para {{signers}}. Completa los detalles entre corchetes (como [Nombre de la empresa] o [Fecha]) con el editor de texto de Docracy y envíalo a firmar.",
+  "tpl.detail.includedBody": "Un {{name}} listo para usar que cubre {{clauses}}, con campos de firma ya colocados para {{signers}}. Completa los detalles entre corchetes (como [Nombre de la empresa] o [Fecha]) con el editor de texto de Docracy y envíalo a firmar.",
+  "tpl.detail.clausesFallback": "las secciones habituales que este tipo de documento suele necesitar",
   "tpl.detail.disclaimer": "Esta es una plantilla general solo con fines informativos y no constituye asesoramiento legal. Consulta a un abogado calificado para revisarla según tu situación y jurisdicción antes de usarla.",
   "tpl.detail.cta": "Firma esta plantilla ahora",
   "tpl.detail.freeNote": "Gratis hasta 2 firmantes, sin cuenta. ¿Necesitas ilimitado? $10/mes fijos.",
@@ -1979,7 +1980,7 @@ const es: Messages = {
   "tpl.detail.faq1.a":
     "Firmar con Docracy usa una firma electrónica simple (SES), reconocida legalmente para acuerdos comerciales cotidianos bajo leyes como la ESIGN Act de EE. UU. y el reglamento eIDAS de la UE. Esta es una plantilla general, no asesoría legal — para acuerdos de alto riesgo o regulados, consulta a un abogado calificado.",
   "tpl.detail.faq2.q": "¿Quién debe firmar este {{name}}?",
-  "tpl.detail.faq2.a": "Esta plantilla incluye campos de firma para {{signers}} — ya colocados, solo completa los datos y envíalo.",
+  "tpl.detail.faq2.a": "Esta plantilla incluye campos de firma para {{signers}} — ya colocados — además de {{fieldCount}} campos para completar antes de enviarlo.",
   "tpl.detail.faq3.q": "¿Puedo editar este {{name}} antes de enviarlo?",
   "tpl.detail.faq3.a": "Sí — el editor de Docracy te permite editar el texto, agregar o quitar campos de firma, tachar secciones y reordenar páginas antes de enviarlo.",
   "tpl.detail.faq4.q": "¿Necesito una cuenta para enviar este {{name}}?",

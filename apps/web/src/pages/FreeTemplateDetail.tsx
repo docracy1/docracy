@@ -149,7 +149,11 @@ function CommunityTemplateDetail({ slug }: { slug: string }) {
   // Monday-cron rows use the same FreeTemplate detail scheme (definition + useCase + FAQ +
   // official badge). Human community submits stay on the lighter Marketplace layout.
   if (isWeeklyOfficial) {
-    const faqVars = { name, signers };
+    const clauses = template.keyClauses?.length
+      ? template.keyClauses.slice(0, 3).join(", ").toLowerCase()
+      : t("tpl.detail.clausesFallback");
+    const fieldCount = template.fillInFields?.length ?? 0;
+    const faqVars = { name, signers, clauses, fieldCount };
     const faqs = [1, 2, 3, 4].map((n) => ({
       question: t(`tpl.detail.faq${n}.q`, faqVars),
       answer: t(`tpl.detail.faq${n}.a`, faqVars),
@@ -198,7 +202,9 @@ function CommunityTemplateDetail({ slug }: { slug: string }) {
 
         <div className="card" style={{ marginTop: 16 }}>
           <h3 style={{ marginTop: 0 }}>{t("tpl.detail.includedTitle")}</h3>
-          <p style={{ marginBottom: 8 }}>{t("tpl.detail.includedBody", { name: name.toLowerCase(), signers })}</p>
+          <p style={{ marginBottom: 8 }}>
+            {t("tpl.detail.includedBody", { name: name.toLowerCase(), signers, clauses })}
+          </p>
           <p style={{ fontSize: 12, color: "var(--mute)", marginBottom: 0 }}>{t("tpl.detail.disclaimer")}</p>
         </div>
 
@@ -347,8 +353,12 @@ export default function FreeTemplateDetail() {
 
   const signers = template.signerLabels.join(` ${t("common.and")} `);
   const ctaTo = localizePath(`/prepare?freeTemplate=${template.slug}&ref=seo-template-${template.slug}`, locale);
+  const clauses = template.keyClauses?.length
+    ? template.keyClauses.slice(0, 3).join(", ").toLowerCase()
+    : t("tpl.detail.clausesFallback");
+  const fieldCount = template.fillInFields?.length ?? 0;
 
-  const faqVars = { name, signers };
+  const faqVars = { name, signers, clauses, fieldCount };
   const faqs = [1, 2, 3, 4].map((n) => ({
     question: t(`tpl.detail.faq${n}.q`, faqVars),
     answer: t(`tpl.detail.faq${n}.a`, faqVars),
@@ -382,7 +392,9 @@ export default function FreeTemplateDetail() {
 
       <div className="card" style={{ marginTop: 16 }}>
         <h3 style={{ marginTop: 0 }}>{t("tpl.detail.includedTitle")}</h3>
-        <p style={{ marginBottom: 8 }}>{t("tpl.detail.includedBody", { name: name.toLowerCase(), signers })}</p>
+        <p style={{ marginBottom: 8 }}>
+          {t("tpl.detail.includedBody", { name: name.toLowerCase(), signers, clauses })}
+        </p>
         <p style={{ fontSize: 12, color: "var(--mute)", marginBottom: 0 }}>{t("tpl.detail.disclaimer")}</p>
       </div>
 

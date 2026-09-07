@@ -90,11 +90,13 @@ export function expandSpec(spec) {
   })();
 
   const useCase = (() => {
-    const intro = `Use this ${title.toLowerCase()} when you need the same kind of document that appeared in the historical docracy.com ${category} library.`;
+    const clausePreview = parsed.keyClauses.slice(0, 3).join(", ").toLowerCase();
+    const fieldCount = parsed.fillInFields.length;
+    const intro = `This ${title.toLowerCase()} covers ${clausePreview}, with ${fieldCount} placeholder field${fieldCount === 1 ? "" : "s"} to fill in.`;
     return `${intro} ${parsed.body}`.slice(0, 520);
   })();
 
-  const definition = `A ${title.toLowerCase()} is a written ${category.toLowerCase()} document in which the parties set out ${parsed.keyClauses.slice(0, 2).join(" and ").toLowerCase()} before signing. It follows the docracy.com pattern of short, practical templates rather than a full treatise.`;
+  const definition = `A ${title.toLowerCase()} is a written ${category.toLowerCase()} document in which the parties set out ${parsed.keyClauses.slice(0, 2).join(" and ").toLowerCase()} before signing.`;
 
   const legalSummary = `Executing this document creates a signed record of the terms both parties accepted, including ${parsed.keyClauses.slice(0, 4).join(", ").toLowerCase()}. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.`;
 
@@ -108,7 +110,7 @@ export function expandSpec(spec) {
     slug,
     name,
     seoTitle,
-    description: description.length > 20 ? description : `${title} — free template for e-signature, following the docracy.com ${category} category.`,
+    description: description.length > 20 ? description : `${title} — a free, ready-to-sign ${category.toLowerCase()} template.`,
     useCase: useCase.slice(0, 500),
     definition: definition.slice(0, 400),
     keyClauses: parsed.keyClauses,
