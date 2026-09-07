@@ -499,8 +499,9 @@ export default function Landing() {
 
           {/* Trusted-by logos live in the Google Doc band (under the circle, above the email
               form) so they read immediately mid-hero — not a separate strip below the fold.
-              `/es` is the LATAM door: cobro first, no Austrian logo strip, no sign-upload tour. */}
-          {latamDoor ? (
+              `/es` is the LATAM door: cobro search comes first, then the same upload circle as
+              the general door but without the Austrian trust-logo band beneath it. */}
+          {latamDoor && (
             <div className="hero-latam-cta">
               <LatamSearchBox source="hero-es" compact />
               <Link
@@ -512,7 +513,7 @@ export default function Landing() {
               </Link>
               <p className="hero-cta-hint">{t("hero.hintLatam")}</p>
             </div>
-          ) : (
+          )}
           <div className="hero-upload-trust-zone">
             <PdfUploadCircle
               variant="hero"
@@ -520,6 +521,7 @@ export default function Landing() {
               onFile={onHeroFile}
               caption={t("hero.uploadCircleCaption")}
               trustSlot={
+                latamDoor ? undefined : (
                 <div className="trust-logos-band hero-trusted-by hero-trusted-by-gdoc-band">
                   <p className="trust-logos-label">{t("landing.trustedBy")}</p>
                   <div className="trust-logos-viewport">
@@ -555,10 +557,10 @@ export default function Landing() {
                     </div>
                   </div>
                 </div>
+                )
               }
             />
           </div>
-          )}
 
           {heroSent ? (
             <div className="hero-signup-sent" role="status">
