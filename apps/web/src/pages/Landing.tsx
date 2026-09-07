@@ -452,27 +452,49 @@ export default function Landing() {
           </h1>
           <p className="hero-sub">{t("hero.sub")}</p>
           <ul className="hero-trust-badges" aria-label={t("hero.trustAria")}>
-            <li>
-              <Link to={localizePath("/income-proof", locale)} onClick={() => track("landingpage_cta_clicked", { source: "hero_badge_constancia" })}>
-                <FeatureIcon name="duplicate" />
-                {t("hero.badge.constancia")}
-              </Link>
-            </li>
-            <li>
-              <Link to={cobroSendTo} onClick={() => track("landingpage_cta_clicked", { source: "hero_badge_cobro" })}>
-                <FeatureIcon name="send" />
-                {t("hero.badge.cobro")}
-              </Link>
-            </li>
-            <li>
-              <Link
-                to={locale === "es" ? "/es#after-they-sign" : "/#after-they-sign"}
-                onClick={() => track("landingpage_cta_clicked", { source: "hero_badge_kits" })}
-              >
-                <FeatureIcon name="badge" />
-                {t("hero.badge.kits")}
-              </Link>
-            </li>
+            {latamDoor ? (
+              <>
+                <li>
+                  <Link to={localizePath("/income-proof", locale)} onClick={() => track("landingpage_cta_clicked", { source: "hero_badge_constancia" })}>
+                    <FeatureIcon name="duplicate" />
+                    {t("hero.badge.constancia")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to={cobroSendTo} onClick={() => track("landingpage_cta_clicked", { source: "hero_badge_cobro" })}>
+                    <FeatureIcon name="send" />
+                    {t("hero.badge.cobro")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/es#after-they-sign" onClick={() => track("landingpage_cta_clicked", { source: "hero_badge_kits" })}>
+                    <FeatureIcon name="badge" />
+                    {t("hero.badge.kits")}
+                  </Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <Link to="/trust" onClick={() => track("landingpage_cta_clicked", { source: "hero_badge_legal" })}>
+                    <FeatureIcon name="scale" />
+                    {t("hero.badge.legal")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to={prepareTo} onClick={() => track("landingpage_cta_clicked", { source: "hero_badge_noSignup" })}>
+                    <FeatureIcon name="duplicate" />
+                    {t("hero.badge.noSignup")}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/trust" onClick={() => track("landingpage_cta_clicked", { source: "hero_badge_ssl" })}>
+                    <FeatureIcon name="shield" />
+                    {t("hero.badge.ssl")}
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
 
           {/* Trusted-by logos live in the Google Doc band (under the circle, above the email
