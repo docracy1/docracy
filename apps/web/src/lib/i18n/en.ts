@@ -1929,7 +1929,8 @@ const en: Messages = {
   "tpl.detail.notFoundTitle": "Template not found | Docracy",
   "tpl.detail.notFoundDesc": "This template couldn't be found.",
   "tpl.detail.includedTitle": "What's included",
-  "tpl.detail.includedBody": "A ready-to-use {{name}} with signature fields already placed for {{signers}}. Fill in the bracketed details (like [Company Name] or [Date]) using Docracy's built-in text editor, then send it out for signature.",
+  "tpl.detail.includedBody": "A ready-to-use {{name}} covering {{clauses}}, with signature fields already placed for {{signers}}. Fill in the bracketed details (like [Company Name] or [Date]) using Docracy's built-in text editor, then send it out for signature.",
+  "tpl.detail.clausesFallback": "the standard sections this kind of document usually needs",
   "tpl.detail.disclaimer": "This is a general template for informational purposes only and does not constitute legal advice. Consult a qualified attorney to review it for your specific situation and jurisdiction before use.",
   "tpl.detail.cta": "Sign this template now",
   "tpl.detail.freeNote": "Free for up to 2 signers, no account required. Need unlimited? Flat $10/month.",
@@ -1943,7 +1944,7 @@ const en: Messages = {
   "tpl.detail.faq1.a":
     "Signing through Docracy uses a simple electronic signature (SES), which is legally recognized for everyday business agreements under laws like the U.S. ESIGN Act and the EU's eIDAS regulation. This is a general template, not legal advice — for high-stakes or regulated agreements, have a qualified attorney review it for your situation.",
   "tpl.detail.faq2.q": "Who needs to sign this {{name}}?",
-  "tpl.detail.faq2.a": "This template includes signature fields for {{signers}} — already placed, so you just fill in the details and send.",
+  "tpl.detail.faq2.a": "This template includes signature fields for {{signers}} — already placed — plus {{fieldCount}} placeholder fields to fill in before you send it.",
   "tpl.detail.faq3.q": "Can I edit this {{name}} before sending it?",
   "tpl.detail.faq3.a": "Yes — Docracy's editor lets you edit the text, add or remove signature fields, redact sections, and reorder pages before you send it.",
   "tpl.detail.faq4.q": "Do I need an account to send this {{name}}?",
