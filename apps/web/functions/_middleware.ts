@@ -150,6 +150,27 @@ function isTrackedRoute(pathname: string): boolean {
   );
 }
 
+/** Fire-and-forget page_view beacon — extracted so the canonicalPublicLocation redirect below
+ *  can record the ORIGINAL request's tracking query (utm_source=seo-*, ref=, etc.) before that
+ *  query gets stripped by the 301. Without this, a tagged click on a route whose canonical form
+ *  differs only by tracking params (the common case for on-site seo-* CTAs) 301s straight to the
+ *  clean URL and the subsequent request's page_view has an empty query — the click still shows
+ *  up as a page view, but silently drops out of any query-string-based attribution reporting. */
+function recordPageview(context: Parameters<PagesFunction<{ ASSETS: Fetcher }>>[0], pathname: string, search: string) {
+  context.waitUntil(
+    fetch(`${WORKER_URL}/api/analytics/pageview`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "user-agent": context.request.headers.get("user-agent") ?? "",
+        cookie: context.request.headers.get("cookie") ?? "",
+        "x-referrer": context.request.headers.get("referer") ?? "",
+      },
+      body: JSON.stringify({ route: pathname, query: search }),
+    }).catch(() => {})
+  );
+}
+
 export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => {
   const url = new URL(context.request.url);
 
@@ -169,6 +190,7 @@ export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => 
       const headers = new Headers({ Location: canonical.location });
       const ft = firstTouchSetCookieHeader(canonical.stripped);
       if (ft) headers.set("Set-Cookie", ft);
+      if (isTrackedRoute(url.pathname)) recordPageview(context, url.pathname, url.search);
       return new Response(null, { status: 301, headers });
     }
   }
@@ -193,24 +215,7 @@ export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => 
   }
 
   if (isTrackedRoute(url.pathname)) {
-    context.waitUntil(
-      fetch(`${WORKER_URL}/api/analytics/pageview`, {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          "user-agent": context.request.headers.get("user-agent") ?? "",
-          // Forwarded so the worker can see the notrack opt-out cookie (see lib/analytics.ts) —
-          // without this, a browser that's opted out would still get counted here.
-          cookie: context.request.headers.get("cookie") ?? "",
-          // The visitor's previous page (if any) — used for referral_source_detected and the
-          // Traffic funnel. Sent as a custom header rather than relying on this fetch's own Referer
-          // (which would describe this Pages Function calling the worker, not the original visitor).
-          "x-referrer": context.request.headers.get("referer") ?? "",
-        },
-        // Query string so the worker can credit utm_source/utm_campaign on crawler-visible views.
-        body: JSON.stringify({ route: url.pathname, query: url.search }),
-      }).catch(() => {})
-    );
+    recordPageview(context, url.pathname, url.search);
   }
 
   // "Markdown for agents": a request that prefers text/markdown gets the .md sibling of a
