@@ -19,7 +19,24 @@ describe("parsePaymentRequest", () => {
       amount: "150.00",
       currency: "USD",
       url: "https://paypal.me/studio/150",
+      method: "link",
     });
+  });
+
+  it("accepts a crypto method with no url, leaving url blank for the caller to fill in", () => {
+    const result = parsePaymentRequest({ amount: "200", currency: "MXN", method: "crypto" });
+    expect(result.error).toBeUndefined();
+    expect(result.paymentRequest).toEqual({
+      amount: "200",
+      currency: "MXN",
+      url: "",
+      method: "crypto",
+    });
+  });
+
+  it("still validates amount/currency for crypto method", () => {
+    expect(parsePaymentRequest({ amount: "ten", currency: "MXN", method: "crypto" }).error).toMatch(/amount/);
+    expect(parsePaymentRequest({ amount: "200", currency: "JPY", method: "crypto" }).error).toMatch(/currency/);
   });
 
   it("rejects http and javascript URLs", () => {

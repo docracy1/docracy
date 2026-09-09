@@ -253,6 +253,7 @@ describe("POST /api/documents", () => {
       amount: "200.00",
       currency: "MXN",
       url: "https://paypal.me/studio/200",
+      method: "link",
     });
   });
 

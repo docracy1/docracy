@@ -21,6 +21,8 @@ import { PaymentCheckoutLogos } from "../components/IntegrationsBand";
 
 const FAQ_COUNT = 6;
 const CURRENCIES = ["USD", "MXN", "COP", "ARS", "CLP", "PEN", "BRL"] as const;
+const NOWPAYMENTS_REFERRAL_URL =
+  "https://account.nowpayments.io/create-account?link_id=3960711626&utm_source=affiliate_lk&utm_medium=referral";
 
 /**
  * Public SEO landing for WhatsApp cobro (pay + file, no signature). The send form is always
@@ -46,6 +48,7 @@ export default function Cobro() {
   const [amount, setAmount] = useState(draft.amount);
   const [currency, setCurrency] = useState(draft.currency || "USD");
   const [url, setUrl] = useState(draft.url);
+  const [paymentMethod, setPaymentMethod] = useState<"link" | "crypto">(draft.paymentMethod);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sent, setSent] = useState<{ docId: string; statusToken: string } | null>(null);
@@ -85,8 +88,9 @@ export default function Cobro() {
       amount,
       currency,
       url,
+      paymentMethod,
     });
-  }, [title, recipientName, recipientEmail, recipientWhatsapp, amount, currency, url]);
+  }, [title, recipientName, recipientEmail, recipientWhatsapp, amount, currency, url, paymentMethod]);
 
   useEffect(() => {
     if (!wantSend) return;
@@ -140,6 +144,7 @@ export default function Cobro() {
       amount,
       currency,
       url,
+      paymentMethod,
     });
     if (!account) {
       navigate(loginTo);
@@ -165,7 +170,10 @@ export default function Cobro() {
         recipientEmail: recipientEmail.trim() || undefined,
         recipientWhatsapp: recipientWhatsapp.trim() || undefined,
         locale,
-        paymentRequest: { amount: amount.trim(), currency, url: url.trim() },
+        paymentRequest:
+          paymentMethod === "crypto"
+            ? { amount: amount.trim(), currency, url: "", method: "crypto" }
+            : { amount: amount.trim(), currency, url: url.trim(), method: "link" },
       });
       if (packetSlug === LATAM_CONTRACTOR_PACKET_SLUG) {
         markLatamPacketStepSent("cobro");
@@ -251,10 +259,51 @@ export default function Cobro() {
               ))}
             </select>
           </div>
-          <input className="form-input" style={{ marginTop: 8 }} type="url" placeholder={t("cobro.payUrlPh")} value={url} onChange={(e) => setUrl(e.target.value)} aria-label={t("prepare.payUrlAria")} />
-          <PaymentCheckoutLogos />
-          <p style={{ fontSize: 12, color: "var(--mute)", margin: "6px 0 0" }}>{t("cobro.payLogosHint")}</p>
-          <p style={{ fontSize: 12, color: "var(--mute)", marginBottom: 0 }}>{t("cobro.prefsHint")}</p>
+          <p style={{ fontSize: 12, color: "var(--mute)", margin: "10px 0 4px", fontWeight: 600 }}>{t("cobro.methodLabel")}</p>
+          <div style={{ display: "flex", gap: 8 }}>
+            {(["link", "crypto"] as const).map((m) => (
+              <button
+                key={m}
+                type="button"
+                onClick={() => setPaymentMethod(m)}
+                style={{
+                  flex: 1,
+                  textAlign: "left",
+                  padding: "8px 10px",
+                  borderRadius: 8,
+                  border: paymentMethod === m ? "2px solid var(--primary)" : "1px solid var(--hairline)",
+                  background: paymentMethod === m ? "var(--primary-soft)" : "transparent",
+                  cursor: "pointer",
+                }}
+                aria-pressed={paymentMethod === m}
+              >
+                <span style={{ display: "block", fontWeight: 700, fontSize: 13 }}>
+                  {m === "link" ? t("cobro.methodLink") : t("cobro.methodCrypto")}
+                </span>
+                <span style={{ display: "block", fontSize: 11.5, color: "var(--mute)" }}>
+                  {m === "link" ? t("cobro.methodLinkSub") : t("cobro.methodCryptoSub")}
+                </span>
+              </button>
+            ))}
+          </div>
+          {paymentMethod === "link" ? (
+            <>
+              <input className="form-input" style={{ marginTop: 8 }} type="url" placeholder={t("cobro.payUrlPh")} value={url} onChange={(e) => setUrl(e.target.value)} aria-label={t("prepare.payUrlAria")} />
+              <PaymentCheckoutLogos />
+              <p style={{ fontSize: 12, color: "var(--mute)", margin: "6px 0 0" }}>{t("cobro.payLogosHint")}</p>
+              <p style={{ fontSize: 12, color: "var(--mute)", marginBottom: 0 }}>{t("cobro.prefsHint")}</p>
+            </>
+          ) : (
+            <>
+              <p style={{ fontSize: 12, color: "var(--mute)", margin: "8px 0 0" }}>{t("cobro.cryptoHint")}</p>
+              <p style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "var(--mute)", margin: "6px 0 0" }}>
+                {t("sendMoney.poweredBy")}{" "}
+                <a href={NOWPAYMENTS_REFERRAL_URL} target="_blank" rel="noopener noreferrer">
+                  <img src="/integrations/nowpayments.svg" alt="NOWPayments" style={{ height: 12 }} />
+                </a>
+              </p>
+            </>
+          )}
           <p style={{ fontSize: 12, color: "var(--mute)" }}>{t("cobro.formHint")}</p>
           {error && <p style={{ color: "var(--danger)" }}>{error}</p>}
           <button

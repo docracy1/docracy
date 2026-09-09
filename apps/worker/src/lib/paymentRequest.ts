@@ -22,6 +22,10 @@ function isHttpsUrl(raw: string): boolean {
 /**
  * Validates an optional payment-request blob from create-document meta.
  * Missing/empty → undefined (feature off). Partial/invalid → error string.
+ *
+ * method "crypto" skips URL validation entirely — the caller (routes/account.ts) fills `url` in
+ * afterward with a real NOWPayments invoice URL it generates from this same amount/currency, since
+ * that requires an API call this pure-validation function shouldn't make itself.
  */
 export function parsePaymentRequest(raw: unknown): { paymentRequest?: PaymentRequest; error?: string } {
   if (raw == null || raw === "") return {};
@@ -30,17 +34,21 @@ export function parsePaymentRequest(raw: unknown): { paymentRequest?: PaymentReq
   const amount = typeof rec.amount === "string" ? rec.amount.trim() : "";
   const currency = typeof rec.currency === "string" ? rec.currency.trim().toUpperCase() : "";
   const url = typeof rec.url === "string" ? rec.url.trim() : "";
-  if (!amount && !currency && !url) return {};
+  const method: "link" | "crypto" = rec.method === "crypto" ? "crypto" : "link";
+  if (!amount && !currency && !url && method === "link") return {};
   if (!amount || !AMOUNT_RE.test(amount)) {
     return { error: "Payment amount must be a number like 150 or 150.00" };
   }
   if (!(PAYMENT_CURRENCIES as readonly string[]).includes(currency)) {
     return { error: `Payment currency must be one of ${PAYMENT_CURRENCIES.join(", ")}` };
   }
+  if (method === "crypto") {
+    return { paymentRequest: { amount, currency, url: "", method: "crypto" } };
+  }
   if (!isHttpsUrl(url)) {
     return { error: "Payment link must be an https URL you control (PayPal, Stripe, Mercado Pago, …)" };
   }
-  return { paymentRequest: { amount, currency, url } };
+  return { paymentRequest: { amount, currency, url, method: "link" } };
 }
 
 export function formatPaymentLabel(req: PaymentRequest): string {

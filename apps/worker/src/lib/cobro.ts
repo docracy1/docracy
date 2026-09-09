@@ -127,13 +127,17 @@ export interface CreateCobroParams {
   locale?: Locale;
   creatorIp?: string | null;
   ttlDays: number;
+  /** Pre-generated doc id — needed when the caller must know the id before this function runs
+   *  (e.g. a NOWPayments crypto invoice's callback URL embeds the doc id, and that invoice has to
+   *  exist before the document does). Generates one itself when omitted, as before. */
+  docId?: string;
 }
 
 export async function createCobroDocument(
   params: CreateCobroParams
 ): Promise<{ docId: string; statusToken: string }> {
   const { env, ctx, pdfBytes, filename, accountId, preparerEmail, paymentRequest, recipient } = params;
-  const docId = crypto.randomUUID();
+  const docId = params.docId ?? crypto.randomUUID();
   const now = new Date();
   const nowIso = now.toISOString();
   const expiresAt = new Date(now.getTime() + params.ttlDays * 24 * 60 * 60 * 1000).toISOString();

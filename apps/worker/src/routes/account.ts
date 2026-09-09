@@ -12,6 +12,7 @@ import { signToken, hashOpaqueToken } from "@docracy/shared";
 import type { Env, Locale } from "@docracy/shared";
 import { checkRateLimit } from "../lib/ratelimit";
 import { parsePaymentRequest } from "../lib/paymentRequest";
+import { createInvoice, isSuccessfulPaymentStatus, verifyIpn } from "../lib/billingProviders/nowpayments";
 import { normalizeE164 } from "../lib/whatsapp";
 import { resolveTtlDays } from "../lib/docTtl";
 import {
@@ -597,7 +598,7 @@ account.post("/cobro", requirePaidAccount, async (c) => {
     recipientWhatsapp?: string;
     remindEveryDays?: number;
     locale?: Locale;
-    paymentRequest?: { amount: string; currency: string; url: string };
+    paymentRequest?: { amount: string; currency: string; url: string; method?: "link" | "crypto" };
   };
   try {
     meta = JSON.parse(metaRaw);
@@ -633,6 +634,28 @@ account.post("/cobro", requirePaidAccount, async (c) => {
     return c.json({ error: "A payment amount, currency, and https checkout URL are required" }, 400);
   }
 
+  // Crypto cobros need a real NOWPayments invoice generated up front — and that invoice's own
+  // callback URL has to embed the doc id, so the doc id is minted here rather than left to
+  // createCobroDocument's default (which only generates one internally when none is passed in).
+  let cobroDocId: string | undefined;
+  if (parsedPayment.paymentRequest.method === "crypto") {
+    cobroDocId = crypto.randomUUID();
+    const invoice = await createInvoice({
+      env: c.env,
+      orderId: cobroDocId,
+      priceAmount: Number(parsedPayment.paymentRequest.amount),
+      priceCurrency: parsedPayment.paymentRequest.currency,
+      description: title,
+      successUrl: `${c.env.PUBLIC_APP_URL}/dashboard`,
+      cancelUrl: `${c.env.PUBLIC_APP_URL}/dashboard`,
+      ipnCallbackUrl: `${c.env.PUBLIC_WORKER_URL ?? ""}/api/account/cobro/${cobroDocId}/nowpayments-webhook`,
+    });
+    if ("error" in invoice) {
+      return c.json({ error: "Couldn't set up crypto payment for this cobro. Please try again." }, 502);
+    }
+    parsedPayment.paymentRequest.url = invoice.invoiceUrl;
+  }
+
   let remindEveryDays = DEFAULT_COBRO_REMIND_DAYS;
   if (meta.remindEveryDays !== undefined) {
     if (
@@ -660,6 +683,7 @@ account.post("/cobro", requirePaidAccount, async (c) => {
   const { docId, statusToken } = await createCobroDocument({
     env: c.env,
     ctx: c.executionCtx,
+    docId: cobroDocId,
     pdfBytes,
     filename: pdfFile.name || "document.pdf",
     accountId: acct.workspaceId,
@@ -677,9 +701,33 @@ account.post("/cobro", requirePaidAccount, async (c) => {
     ttlDays: ttl.ttlDays,
   });
 
-  await putCobroPrefs(c.env, acct.workspaceId, parsedPayment.paymentRequest.url, parsedPayment.paymentRequest.currency);
+  // Crypto cobros have nothing worth remembering here — the "url" is a one-off generated invoice,
+  // not something to prefill on the next cobro the way a preparer's own pasted link is.
+  if (parsedPayment.paymentRequest.method !== "crypto") {
+    await putCobroPrefs(c.env, acct.workspaceId, parsedPayment.paymentRequest.url, parsedPayment.paymentRequest.currency);
+  }
 
   return c.json({ docId, statusToken });
+});
+
+// Not behind requireAccount/CORS-credentials — NOWPayments calls this server-to-server with no
+// cookies or Origin header, and the signature check inside verifyIpn is the actual authentication.
+// The doc id lives in the URL path itself (each crypto cobro invoice gets its own callback URL),
+// so there's no order_id-based lookup needed the way the subscription webhook has to do.
+account.post("/cobro/:docId/nowpayments-webhook", async (c) => {
+  const docId = c.req.param("docId");
+  const rawBody = await c.req.text();
+  const signature = c.req.header("x-nowpayments-sig");
+  const event = await verifyIpn(rawBody, signature ?? null, c.env);
+  if (event && isSuccessfulPaymentStatus(event.payment_status)) {
+    const doc = await getDoc(c.env, docId);
+    if (doc && doc.kind === "cobro" && !doc.cobroPaidAt) {
+      await markCobroPaid(c.env, doc);
+    }
+  }
+  // Always 200 — a bad signature or a non-terminal status ("waiting"/"confirming") isn't
+  // retry-worthy, same rationale as the subscription crypto-webhook in routes/billing.ts.
+  return c.json({ ok: true });
 });
 
 account.get("/cobro/prefs", requireAccount, async (c) => {

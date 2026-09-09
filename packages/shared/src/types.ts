@@ -232,12 +232,25 @@ export interface DocState {
   cobroPaidAt?: string;
 }
 
-/** Display-only payment ask attached to a document. Amount/currency are labels; `url` is the
- *  sender's own checkout link. Docracy does not charge or receive these funds. */
+/** Payment ask attached to a document. For method "link" (default, absent = "link" for every
+ *  cobro created before this field existed), `url` is the sender's own checkout link
+ *  (PayPal.me, Stripe Payment Link, Mercado Pago) and amount/currency are display-only labels —
+ *  Docracy never charges or receives these funds, and `cobroPaidAt` is only ever set manually by
+ *  the sender.
+ *
+ *  For method "crypto", `url` is a real NOWPayments invoice URL (also directly QR-scannable) that
+ *  Docracy generated from amount/currency via the same NOWPayments account used for crypto
+ *  subscription payments (lib/billingProviders/nowpayments.ts) — and `cobroPaidAt` gets set
+ *  automatically by that invoice's IPN webhook (routes/account.ts's cobro nowpayments-webhook,
+ *  which embeds the doc ID directly in the per-invoice callback URL — no separate correlation
+ *  field needed here), not by a manual click. Docracy still never custodies the funds —
+ *  NOWPayments settles directly to whatever payout destination the sender configured on their own
+ *  NOWPayments account. */
 export interface PaymentRequest {
   amount: string;
   currency: string;
   url: string;
+  method?: "link" | "crypto";
 }
 
 export interface Env {

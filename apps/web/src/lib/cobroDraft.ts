@@ -8,6 +8,7 @@ export type CobroDraft = {
   amount: string;
   currency: string;
   url: string;
+  paymentMethod: "link" | "crypto";
 };
 
 const empty: CobroDraft = {
@@ -18,6 +19,7 @@ const empty: CobroDraft = {
   amount: "",
   currency: "USD",
   url: "",
+  paymentMethod: "link",
 };
 
 export function readCobroDraft(): CobroDraft {
@@ -34,6 +36,7 @@ export function readCobroDraft(): CobroDraft {
       amount: typeof parsed.amount === "string" ? parsed.amount : "",
       currency: typeof parsed.currency === "string" && parsed.currency ? parsed.currency : "USD",
       url: typeof parsed.url === "string" ? parsed.url : "",
+      paymentMethod: parsed.paymentMethod === "crypto" ? "crypto" : "link",
     };
   } catch {
     return { ...empty };

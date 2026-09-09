@@ -53,7 +53,7 @@ export interface CreateDocumentOptions {
    *  free always uses 9. */
   ttlDays?: number;
   /** Paid only — sender's own payment link. Docracy never collects this money. */
-  paymentRequest?: { amount: string; currency: string; url: string };
+  paymentRequest?: { amount: string; currency: string; url: string; method?: "link" | "crypto" };
   smsInvites?: boolean;
   /** Also send signing links via WhatsApp — requires a signed-up account (free: 1/month, paid: 10/month, enterprise: 50/month). */
   whatsappInvites?: boolean;
@@ -513,7 +513,7 @@ export async function createCobro(
     recipientWhatsapp?: string;
     remindEveryDays?: number;
     locale?: Locale;
-    paymentRequest: { amount: string; currency: string; url: string };
+    paymentRequest: { amount: string; currency: string; url: string; method?: "link" | "crypto" };
   }
 ): Promise<{ docId: string; statusToken: string }> {
   const form = new FormData();

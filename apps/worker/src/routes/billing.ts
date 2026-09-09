@@ -143,8 +143,9 @@ billing.post("/crypto-checkout", requireAccount, async (c) => {
 
   const result = await createInvoice({
     env: c.env,
-    accountId: account.id,
-    priceUsd: CRYPTO_PLAN_PRICE_USD,
+    orderId: account.id,
+    priceAmount: CRYPTO_PLAN_PRICE_USD,
+    priceCurrency: "usd",
     description: "Docracy Pro — 1 month",
     successUrl: `${c.env.PUBLIC_APP_URL}/dashboard?checkout=success`,
     cancelUrl: `${c.env.PUBLIC_APP_URL}/dashboard?checkout=cancelled`,

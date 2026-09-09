@@ -8,19 +8,22 @@ export const CRYPTO_PLAN_DAYS = 30;
 
 export interface CreateInvoiceParams {
   env: Env;
-  accountId: string;
-  priceUsd: number;
+  /** Carries whatever id the caller needs to resolve payment back to the right place — an account
+   *  id for subscription checkouts, a document id for cobro — passed through unchanged as
+   *  NOWPayments' order_id, exactly like Stripe's client_reference_id. */
+  orderId: string;
+  priceAmount: number;
+  priceCurrency: string;
   description: string;
   successUrl: string;
   cancelUrl: string;
   ipnCallbackUrl: string;
 }
 
-/** POST /v1/invoice — returns a hosted checkout page URL; the payer picks which cryptocurrency to
- *  pay with there. order_id carries our account id, exactly like Stripe's client_reference_id, so
- *  the IPN webhook below can resolve payment back to the right account with no separate lookup. */
+/** POST /v1/invoice — returns a hosted checkout page URL (also directly QR-scannable); the payer
+ *  picks which cryptocurrency to pay with there. */
 export async function createInvoice(params: CreateInvoiceParams): Promise<{ invoiceUrl: string } | { error: string }> {
-  const { env, accountId, priceUsd, description, successUrl, cancelUrl, ipnCallbackUrl } = params;
+  const { env, orderId, priceAmount, priceCurrency, description, successUrl, cancelUrl, ipnCallbackUrl } = params;
   if (!env.NOWPAYMENTS_API_KEY) return { error: "not_configured" };
 
   const res = await fetch(`${API_BASE}/invoice`, {
@@ -30,9 +33,9 @@ export async function createInvoice(params: CreateInvoiceParams): Promise<{ invo
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      price_amount: priceUsd,
-      price_currency: "usd",
-      order_id: accountId,
+      price_amount: priceAmount,
+      price_currency: priceCurrency.toLowerCase(),
+      order_id: orderId,
       order_description: description,
       success_url: successUrl,
       cancel_url: cancelUrl,
