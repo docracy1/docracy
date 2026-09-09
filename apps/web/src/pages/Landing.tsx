@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useMemo, type FormEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import PricingCalculator from "../components/PricingCalculator";
 import FirstDocumentPrompt from "../components/FirstDocumentPrompt";
 import IntegrationsBand from "../components/IntegrationsBand";
@@ -300,6 +300,7 @@ export default function Landing() {
   const t = useT();
   const { locale } = useI18n();
   const navigate = useNavigate();
+  const location = useLocation();
   const [heroEmail, setHeroEmail] = useState("");
   const [heroEmailStarted, setHeroEmailStarted] = useState(false);
   const [heroSubmitting, setHeroSubmitting] = useState(false);
@@ -338,13 +339,19 @@ export default function Landing() {
   const needsTurnstile = turnstileRequired();
 
   useEffect(() => {
-    if (window.location.hash === "#faq") {
+    // Keyed off location.hash (not just mount) so a same-page hero-badge click — where React
+    // Router keeps this component mounted since the pathname doesn't change — still scrolls,
+    // not just a hash arriving from an external link or a real page navigation.
+    if (location.hash === "#faq") {
       document.getElementById("faq")?.scrollIntoView();
-    }
-    if (window.location.hash === "#watch-how-it-works") {
+    } else if (location.hash === "#watch-how-it-works") {
       navigate(watchTo, { replace: true });
+    } else if (location.hash === "#after-they-sign") {
+      document.getElementById("after-they-sign")?.scrollIntoView();
+    } else if (location.hash === "#compare-price") {
+      document.getElementById("compare-price")?.scrollIntoView();
     }
-  }, [navigate, watchTo]);
+  }, [location.hash, navigate, watchTo]);
 
   // Live library size = static free templates + Marketplace community + weekly cron batch.
   useEffect(() => {
