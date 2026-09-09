@@ -67,7 +67,16 @@ export async function createWidgetSessionUrl(
   env: Env,
   params: { fiatCurrency?: string; email?: string }
 ): Promise<{ widgetUrl: string } | { error: string }> {
-  if (!env.TRANSAK_API_KEY || !env.TRANSAK_API_SECRET) return { error: "not_configured" };
+  if (!env.TRANSAK_API_KEY || !env.TRANSAK_API_SECRET) {
+    // Deliberately not logging the values themselves — just which one(s) are missing/empty, so a
+    // secret that got set to an empty string (distinct from never being set at all) is easy to
+    // spot in `wrangler tail` instead of looking identical to "not configured yet".
+    console.error(
+      `Transak not configured: TRANSAK_API_KEY ${env.TRANSAK_API_KEY ? "present" : "missing/empty"}, ` +
+        `TRANSAK_API_SECRET ${env.TRANSAK_API_SECRET ? "present" : "missing/empty"}`
+    );
+    return { error: "not_configured" };
+  }
   const isStaging = (env.TRANSAK_ENVIRONMENT ?? "STAGING") !== "PRODUCTION";
   const widgetBase = isStaging ? "https://global-stg.transak.com" : "https://global.transak.com";
 
