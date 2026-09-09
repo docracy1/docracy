@@ -181,6 +181,77 @@ describe("POST /api/account/cobro", () => {
     expect(res.status).toBe(400);
   });
 
+  it("'have them sign it first': creates a real pending signing chain, not a completed notice", async () => {
+    const { env, kv } = makeMockEnv();
+    const ctx = makeCtx();
+    const token = await createSession(env, ctx, "acct-paid", "paid@example.com", true, false, null, null);
+    const pdf = await makeValidPdfBytes();
+    const meta = {
+      ...validCobroMeta,
+      fields: [{ id: "f1", signerOrder: 1, page: 0, xFrac: 0.1, yFrac: 0.1, wFrac: 0.2, hFrac: 0.05, type: "signature" }],
+    };
+    const res = await account.request(
+      "/cobro",
+      { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` }, body: buildForm(pdf, meta) },
+      env,
+      ctx
+    );
+    expect(res.status).toBe(200);
+    const body: { docId: string; statusToken: string } = await res.json();
+
+    const stored = JSON.parse(kv._store.get(`doc:${body.docId}`) as string);
+    expect(stored.kind).toBe("cobro");
+    expect(stored.status).toBe("pending");
+    expect(stored.completedAt).toBeNull();
+    expect(stored.signers).toHaveLength(1);
+    expect(stored.signers[0].order).toBe(1);
+    expect(stored.signers[0].email).toBe("ana@estudio.mx");
+    expect(stored.signers[0].linkSentAt).toBeTruthy();
+    expect(stored.fields).toHaveLength(1);
+    expect(stored.paymentRequest.amount).toBe("150.00");
+    expect(stored.cobroRecipient.email).toBe("ana@estudio.mx");
+  });
+
+  it("'have them sign it first' requires a recipient email even if WhatsApp is given", async () => {
+    const { env } = makeMockEnv();
+    const ctx = makeCtx();
+    const token = await createSession(env, ctx, "acct-paid", "paid@example.com", true, false, null, null);
+    const pdf = await makeValidPdfBytes();
+    const meta = {
+      ...validCobroMeta,
+      recipientEmail: "",
+      recipientWhatsapp: "+14155551234",
+      fields: [{ id: "f1", signerOrder: 1, page: 0, xFrac: 0.1, yFrac: 0.1, wFrac: 0.2, hFrac: 0.05, type: "signature" }],
+    };
+    const res = await account.request(
+      "/cobro",
+      { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` }, body: buildForm(pdf, meta) },
+      env,
+      ctx
+    );
+    expect(res.status).toBe(400);
+    const body: { error: string } = await res.json();
+    expect(body.error).toContain("sign it first");
+  });
+
+  it("'have them sign it first' rejects a field positioned outside the document", async () => {
+    const { env } = makeMockEnv();
+    const ctx = makeCtx();
+    const token = await createSession(env, ctx, "acct-paid", "paid@example.com", true, false, null, null);
+    const pdf = await makeValidPdfBytes();
+    const meta = {
+      ...validCobroMeta,
+      fields: [{ id: "f1", signerOrder: 1, page: 0, xFrac: 0.9, yFrac: 0.1, wFrac: 0.5, hFrac: 0.05, type: "signature" }],
+    };
+    const res = await account.request(
+      "/cobro",
+      { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` }, body: buildForm(pdf, meta) },
+      env,
+      ctx
+    );
+    expect(res.status).toBe(400);
+  });
+
   it("rejects http payment URLs", async () => {
     const { env } = makeMockEnv();
     const ctx = makeCtx();

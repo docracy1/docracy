@@ -86,6 +86,13 @@ export interface Signer {
   /** Set once the delayed PIN-delivery send has actually fired, so a reassignment or resend never
    *  double-sends it. Optional/absent means not sent yet. */
   pinSentAt?: string | null;
+  /** AES-GCM-encrypted PIN (see pinCrypto.ts) — never the raw value, and never returned by any API
+   *  response. Held only until it's actually delivered. Needed because pinHash is one-way and the
+   *  hourly sweep in lib/pinDelivery.ts (the reliable delivery path — see that file's comment for
+   *  why a plain in-request delay isn't enough on Workers) runs in a later, separate invocation
+   *  with no access to the original request's raw pin. Cleared the moment pinSentAt is set. Absent
+   *  once delivered or for documents predating this field. */
+  pinPendingEncrypted?: string;
 }
 
 export interface SignerAttachment {

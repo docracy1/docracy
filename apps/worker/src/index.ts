@@ -46,6 +46,7 @@ import { runSpaSmokeAndAlert } from "./lib/spaSmoke";
 import { BLOG_WEEKLY_CRON, runWeeklyBlogPublish, isWeeklyBlogMondayUtc } from "./lib/blogWeekly";
 import { runWeeklyTemplateCatchUpIfEmpty, runWeeklyTemplatePublish } from "./lib/templateWeekly";
 import { reconcileStaleCheckouts } from "./lib/billingReconcile";
+import { runDuePinDeliverySweep } from "./lib/pinDelivery";
 import type { Env } from "@docracy/shared";
 
 const app = new Hono<{ Bindings: Env }>();
@@ -150,6 +151,7 @@ export default {
             runOnboardingEmailSweep(env).catch((err) => console.error("Onboarding email sweep failed:", err)),
             runCompletionEmailSweep(env).catch((err) => console.error("Completion-email sweep failed:", err)),
             reconcileStaleCheckouts(env).catch((err) => console.error("Billing checkout reconcile failed:", err)),
+            runDuePinDeliverySweep(env).catch((err) => console.error("PIN delivery sweep failed:", err)),
           ]);
           // After smoke + email so this AI/PDF batch cannot starve the public Pages probes.
           await runWeeklyTemplateCatchUpIfEmpty(env).catch((err) =>

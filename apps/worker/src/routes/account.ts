@@ -7,9 +7,10 @@ import { sendSigningInvite, sendDocumentVoidedNotice } from "../lib/email";
 import { indexDocumentCreated, indexVoided, indexSignerReassigned, indexInviteSent } from "../lib/index-d1";
 import { deliverWebhookEvent } from "../lib/webhooks";
 import { upsertContact } from "../lib/contacts";
-import { documentClaimKvKey, type DocumentClaimRecord } from "../lib/documentCreation";
+import { createDocumentCore, documentClaimKvKey, type DocumentClaimRecord } from "../lib/documentCreation";
+import { validateFields } from "../lib/fieldValidation";
 import { signToken, hashOpaqueToken } from "@docracy/shared";
-import type { Env, Locale } from "@docracy/shared";
+import type { DocField, Env, Locale } from "@docracy/shared";
 import { checkRateLimit } from "../lib/ratelimit";
 import { parsePaymentRequest } from "../lib/paymentRequest";
 import { createInvoice, isSuccessfulPaymentStatus, verifyIpn } from "../lib/billingProviders/nowpayments";
@@ -587,8 +588,10 @@ account.post("/cobro", requirePaidAccount, async (c) => {
   if (header !== "%PDF-") {
     return c.json({ error: "That file doesn't look like a valid PDF" }, 400);
   }
+  let pageCount: number;
   try {
-    await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
+    const probe = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
+    pageCount = probe.getPageCount();
   } catch {
     return c.json({ error: "That PDF couldn't be read — it may be corrupted" }, 400);
   }
@@ -601,6 +604,10 @@ account.post("/cobro", requirePaidAccount, async (c) => {
     remindEveryDays?: number;
     locale?: Locale;
     paymentRequest?: { amount: string; currency: string; url: string; method?: "link" | "crypto" };
+    /** "Have them sign it first" — a real signing chain via createDocumentCore instead of the
+     *  default no-signature deliverCobroNotice path. Requires recipientEmail (a signing link
+     *  needs a deliverable channel, same as every other document in this app). */
+    fields?: DocField[];
   };
   try {
     meta = JSON.parse(metaRaw);
@@ -628,6 +635,15 @@ account.post("/cobro", requirePaidAccount, async (c) => {
   }
   if (!recipientEmail && !whatsappPhone) {
     return c.json({ error: "Add a recipient email or WhatsApp number" }, 400);
+  }
+
+  const signAndSend = Array.isArray(meta.fields) && meta.fields.length > 0;
+  if (signAndSend && !recipientEmail) {
+    return c.json({ error: "A recipient email is required to have them sign it first" }, 400);
+  }
+  if (signAndSend) {
+    const fieldsError = validateFields(meta.fields, 1, pageCount, [recipientName]);
+    if (fieldsError) return c.json({ error: fieldsError }, 400);
   }
 
   const parsedPayment = parsePaymentRequest(meta.paymentRequest);
@@ -682,26 +698,54 @@ account.post("/cobro", requirePaidAccount, async (c) => {
     reportCobroWhatsappOverage(c.env, c.executionCtx, acct, quota.overageUnits);
   }
 
-  const { docId, statusToken } = await createCobroDocument({
-    env: c.env,
-    ctx: c.executionCtx,
-    docId: cobroDocId,
-    pdfBytes,
-    filename: pdfFile.name || "document.pdf",
-    accountId: acct.workspaceId,
-    preparerEmail: acct.email,
-    title,
-    paymentRequest: parsedPayment.paymentRequest,
-    recipient: {
-      name: recipientName,
-      email: recipientEmail,
-      whatsappPhone: whatsappPhone ?? undefined,
-    },
-    remindEveryDays,
-    locale: meta.locale === "es" ? "es" : "en",
-    creatorIp: ip,
-    ttlDays: ttl.ttlDays,
-  });
+  const locale: Locale = meta.locale === "es" ? "es" : "en";
+  const cobroRecipient = { name: recipientName, email: recipientEmail, whatsappPhone: whatsappPhone ?? undefined };
+
+  // "Have them sign it first" goes through the same createDocumentCore every regular document
+  // uses (real status: "pending", a real signing invite, PIN/reminder machinery) — unlike
+  // createCobroDocument below, which creates the doc pre-completed with no signing chain at all.
+  // The existing pay-after-sign page/emails (Signed.tsx, email.ts's paymentCtaHtml) already key
+  // purely on doc.paymentRequest, not doc.kind, so attaching kind: "cobro" here needs no changes
+  // there — it only affects the dashboard cobro list / reminders / tax-year aggregation, which all
+  // check doc.kind === "cobro" alone (see lib/cobro.ts).
+  const { docId, statusToken } = signAndSend
+    ? await createDocumentCore({
+        env: c.env,
+        ctx: c.executionCtx,
+        docId: cobroDocId,
+        pdfBytes,
+        filename: pdfFile.name || "document.pdf",
+        preparerSigns: false,
+        preparerEmail: acct.email,
+        signers: [{ name: recipientName, email: recipientEmail!, whatsappPhone: whatsappPhone ?? undefined }],
+        fields: meta.fields!,
+        accountId: acct.workspaceId,
+        title,
+        locale,
+        creatorIp: ip,
+        ttlDays: ttl.ttlDays,
+        whatsappInvites: whatsappPhone ? true : undefined,
+        paymentRequest: parsedPayment.paymentRequest,
+        kind: "cobro",
+        cobroRecipient,
+        cobroRemindEveryDays: remindEveryDays,
+      })
+    : await createCobroDocument({
+        env: c.env,
+        ctx: c.executionCtx,
+        docId: cobroDocId,
+        pdfBytes,
+        filename: pdfFile.name || "document.pdf",
+        accountId: acct.workspaceId,
+        preparerEmail: acct.email,
+        title,
+        paymentRequest: parsedPayment.paymentRequest,
+        recipient: cobroRecipient,
+        remindEveryDays,
+        locale,
+        creatorIp: ip,
+        ttlDays: ttl.ttlDays,
+      });
 
   // Crypto cobros have nothing worth remembering here — the "url" is a one-off generated invoice,
   // not something to prefill on the next cobro the way a preparer's own pasted link is.

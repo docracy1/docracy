@@ -520,6 +520,9 @@ export async function createCobro(
     remindEveryDays?: number;
     locale?: Locale;
     paymentRequest: { amount: string; currency: string; url: string; method?: "link" | "crypto" };
+    /** "Have them sign it first" — a real signing chain instead of the default no-signature
+     *  delivery. Requires recipientEmail. See CobroFieldPlacement.tsx. */
+    fields?: DocField[];
   }
 ): Promise<{ docId: string; statusToken: string }> {
   const form = new FormData();

@@ -18,6 +18,9 @@ import { usePageMeta } from "../lib/usePageMeta";
 import { track } from "../lib/track";
 import { breadcrumbJsonLd, howToJsonLd } from "../lib/productSeo";
 import { PaymentCheckoutLogos } from "../components/IntegrationsBand";
+import { SINGLE_SIGNER_FREE_TEMPLATES, loadFreeTemplateAsFile } from "../lib/freeTemplates";
+import CobroFieldPlacement from "../components/CobroFieldPlacement";
+import type { DocField } from "../lib/types";
 
 const FAQ_COUNT = 6;
 const CURRENCIES = ["USD", "MXN", "COP", "ARS", "CLP", "PEN", "BRL"] as const;
@@ -41,6 +44,11 @@ export default function Cobro() {
   const [contacts, setContacts] = useState<ContactSummary[]>([]);
   const [upgrading, setUpgrading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
+  const [pdfBytes, setPdfBytes] = useState<Uint8Array | null>(null);
+  const [signAndSend, setSignAndSend] = useState(false);
+  const [signFields, setSignFields] = useState<DocField[]>([]);
+  const [templateLoading, setTemplateLoading] = useState(false);
+  const [templateError, setTemplateError] = useState<string | null>(null);
   const [title, setTitle] = useState(draft.title);
   const [recipientName, setRecipientName] = useState(draft.recipientName);
   const [recipientEmail, setRecipientEmail] = useState(draft.recipientEmail);
@@ -91,6 +99,29 @@ export default function Cobro() {
       paymentMethod,
     });
   }, [title, recipientName, recipientEmail, recipientWhatsapp, amount, currency, url, paymentMethod]);
+
+  const onFileChosen = async (f: File | null) => {
+    setFile(f);
+    setSignFields([]);
+    setTemplateError(null);
+    setPdfBytes(f ? new Uint8Array(await f.arrayBuffer()) : null);
+  };
+
+  const onTemplateChosen = async (slug: string) => {
+    if (!slug) return;
+    setTemplateLoading(true);
+    setTemplateError(null);
+    try {
+      const { file: templateFile, fields } = await loadFreeTemplateAsFile(slug);
+      setFile(templateFile);
+      setPdfBytes(new Uint8Array(await templateFile.arrayBuffer()));
+      setSignFields(fields);
+    } catch (err) {
+      setTemplateError(err instanceof Error ? err.message : t("common.error"));
+    } finally {
+      setTemplateLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (!wantSend) return;
@@ -161,6 +192,10 @@ export default function Cobro() {
       return;
     }
     if (!file) return;
+    if (signAndSend && !recipientEmail.trim()) {
+      setError(t("cobro.signRequiresEmail"));
+      return;
+    }
     setSubmitting(true);
     setError(null);
     try {
@@ -174,6 +209,7 @@ export default function Cobro() {
           paymentMethod === "crypto"
             ? { amount: amount.trim(), currency, url: "", method: "crypto" }
             : { amount: amount.trim(), currency, url: url.trim(), method: "link" },
+        fields: signAndSend ? signFields : undefined,
       });
       if (packetSlug === LATAM_CONTRACTOR_PACKET_SLUG) {
         markLatamPacketStepSent("cobro");
@@ -218,9 +254,29 @@ export default function Cobro() {
               type="file"
               accept="application/pdf"
               style={{ display: "block", marginTop: 6 }}
-              onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+              onChange={(e) => onFileChosen(e.target.files?.[0] ?? null)}
             />
           </label>
+          <select
+            className="form-input"
+            style={{ marginBottom: 10 }}
+            defaultValue=""
+            aria-label={t("cobro.pickTemplate")}
+            disabled={templateLoading}
+            onChange={(e) => {
+              const slug = e.target.value;
+              e.target.value = "";
+              onTemplateChosen(slug);
+            }}
+          >
+            <option value="">{templateLoading ? t("common.loading") : t("cobro.pickTemplate")}</option>
+            {SINGLE_SIGNER_FREE_TEMPLATES.map((tpl) => (
+              <option key={tpl.slug} value={tpl.slug}>
+                {tpl.name}
+              </option>
+            ))}
+          </select>
+          {templateError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{templateError}</p>}
           {contacts.length > 0 && (
             <select
               className="form-input"
@@ -249,6 +305,44 @@ export default function Cobro() {
             <input className="form-input" type="email" placeholder={t("cobro.emailPh")} value={recipientEmail} onChange={(e) => setRecipientEmail(e.target.value)} aria-label={t("cobro.emailPh")} />
           </div>
           <input className="form-input" style={{ marginTop: 8 }} placeholder={t("cobro.whatsappPh")} value={recipientWhatsapp} onChange={(e) => setRecipientWhatsapp(e.target.value)} aria-label={t("cobro.whatsappPh")} />
+
+          <p style={{ fontSize: 12, color: "var(--mute)", margin: "10px 0 4px", fontWeight: 600 }}>{t("cobro.signModeLabel")}</p>
+          <div style={{ display: "flex", gap: 8 }}>
+            {(
+              [
+                { key: false, label: t("cobro.signModeOff"), sub: t("cobro.signModeOffSub") },
+                { key: true, label: t("cobro.signModeOn"), sub: t("cobro.signModeOnSub") },
+              ] as const
+            ).map((opt) => (
+              <button
+                key={String(opt.key)}
+                type="button"
+                onClick={() => setSignAndSend(opt.key)}
+                style={{
+                  flex: 1,
+                  textAlign: "left",
+                  padding: "8px 10px",
+                  borderRadius: 8,
+                  border: signAndSend === opt.key ? "2px solid var(--primary)" : "1px solid var(--hairline)",
+                  background: signAndSend === opt.key ? "var(--primary-soft)" : "transparent",
+                  cursor: "pointer",
+                }}
+                aria-pressed={signAndSend === opt.key}
+              >
+                <span style={{ display: "block", fontWeight: 700, fontSize: 13 }}>{opt.label}</span>
+                <span style={{ display: "block", fontSize: 11.5, color: "var(--mute)" }}>{opt.sub}</span>
+              </button>
+            ))}
+          </div>
+          {signAndSend && !recipientEmail.trim() && (
+            <p style={{ fontSize: 12, color: "var(--mute)", marginTop: 6 }}>{t("cobro.signRequiresEmail")}</p>
+          )}
+          {signAndSend && pdfBytes && (
+            <div style={{ marginTop: 12 }}>
+              <CobroFieldPlacement pdfBytes={pdfBytes} fields={signFields} onFieldsChange={setSignFields} />
+            </div>
+          )}
+
           <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
             <input className="form-input" style={{ flex: 1 }} inputMode="decimal" placeholder={t("prepare.payAmountPh")} value={amount} onChange={(e) => setAmount(e.target.value)} aria-label={t("prepare.payAmountAria")} />
             <select className="form-input" style={{ width: 88 }} value={currency} onChange={(e) => setCurrency(e.target.value)} aria-label={t("prepare.payCurrencyAria")}>
@@ -311,7 +405,13 @@ export default function Cobro() {
             className="btn-primary"
             style={{ marginTop: 8 }}
             onClick={onSubmit}
-            disabled={submitting || upgrading || (Boolean(account?.isPaid) && !file)}
+            disabled={
+              submitting ||
+              upgrading ||
+              (Boolean(account?.isPaid) &&
+                (!file ||
+                  (signAndSend && (!recipientEmail.trim() || signFields.length === 0))))
+            }
           >
             {submitting || upgrading
               ? account?.isPaid

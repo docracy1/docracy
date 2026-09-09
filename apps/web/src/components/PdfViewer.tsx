@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { useT } from "../lib/i18n";
-import { loadPdf } from "../lib/pdfjs";
 
 export interface PageInfo {
   index: number;
@@ -72,9 +71,15 @@ export default function PdfViewer({ pdfBytes, maxScale = 1.8, renderPageOverlay,
   useEffect(() => {
     if (!containerWidth) return;
     let cancelled = false;
-    let pdfRef: Awaited<ReturnType<typeof loadPdf>> | null = null;
+    // Dynamic, not a top-level import — pdfjs.ts pulls in pdfjs-dist's `?url` worker asset, a
+    // Vite-only import form the static prerender bundle (scripts/prerender.mjs) can't resolve.
+    // Deferring it into this effect (which never runs during SSR) matches TemplateThumbnail.tsx's
+    // existing workaround for the same problem, and now covers every page that renders a PdfViewer
+    // (Cobro.tsx included) instead of requiring each caller to route around it individually.
+    let pdfRef: Awaited<ReturnType<typeof import("../lib/pdfjs")["loadPdf"]>> | null = null;
 
     async function render() {
+      const { loadPdf } = await import("../lib/pdfjs");
       const pdf = await loadPdf(pdfBytes);
       pdfRef = pdf;
       if (cancelled || !containerRef.current) return;

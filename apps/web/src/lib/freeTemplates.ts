@@ -5308,3 +5308,23 @@ FREE_TEMPLATES.push(
 export function getFreeTemplate(slug: string): FreeTemplate | undefined {
   return FREE_TEMPLATES.find((t) => t.slug === slug);
 }
+
+/** Free templates that only ever need one signer — the only ones that map cleanly onto a
+ *  single-recipient flow like Cobro's "have them sign it first" (a two-party NDA's "Party B"
+ *  fields have nowhere sensible to go when there's only one signer at all). */
+export const SINGLE_SIGNER_FREE_TEMPLATES: FreeTemplate[] = FREE_TEMPLATES.filter((t) => t.signerLabels.length === 1);
+
+/** Turns a free template into a real `File` the same way Prepare.tsx's own free-template effect
+ *  does, plus its pre-placed fields — reused by Cobro.tsx so its template picker doesn't need to
+ *  duplicate the fetch-and-wrap logic. Every field's signerOrder is forced to 1 regardless of the
+ *  template's own numbering, since this is only ever called for single-signer templates. */
+export async function loadFreeTemplateAsFile(slug: string): Promise<{ file: File; fields: DocField[] }> {
+  const template = getFreeTemplate(slug);
+  if (!template) throw new Error("Template not found");
+  const res = await fetch(template.pdfPath);
+  if (!res.ok) throw new Error("Couldn't load that template's PDF");
+  const bytes = new Uint8Array(await res.arrayBuffer());
+  const file = new File([bytes as unknown as BlobPart], `${template.name}.pdf`, { type: "application/pdf" });
+  const fields = template.fields.map((f) => ({ ...f, signerOrder: 1 }));
+  return { file, fields };
+}

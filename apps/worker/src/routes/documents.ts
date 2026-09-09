@@ -16,6 +16,7 @@ import { clampAttachmentLimits } from "../lib/signerAttachments";
 import { parsePaymentRequest } from "../lib/paymentRequest";
 import { createInvoice, isSuccessfulPaymentStatus, verifyIpn } from "../lib/billingProviders/nowpayments";
 import { getDoc, putDoc } from "../lib/kv";
+import { validateFields } from "../lib/fieldValidation";
 import type { DocField, Env, Locale } from "@docracy/shared";
 
 interface CreateDocumentBody {
@@ -64,10 +65,8 @@ const MAX_PDF_BYTES = 15 * 1024 * 1024; // 15MB
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_SUBJECT_LENGTH = 150;
 const MAX_MESSAGE_LENGTH = 1000;
-const FIELD_TYPES = new Set(["signature", "initials", "text", "date", "checkbox", "dropdown"]);
 const PIN_RE = /^\d{4,8}$/;
 const FREE_TIER_MAX_CCS = 2;
-const MAX_DROPDOWN_OPTIONS = 20;
 
 type Variables = { account: AccountContext | null };
 const documents = new Hono<{ Bindings: Env; Variables: Variables }>();
@@ -232,45 +231,14 @@ documents.post("/", optionalAccount, async (c) => {
   if (meta.whatsappInvites && !meta.signers.some((s) => s.whatsappPhone?.trim())) {
     return c.json({ error: "WhatsApp is on but no signer has a phone number" }, 400);
   }
-  if (!meta.fields?.every((f) => f.signerOrder >= 1 && f.signerOrder <= meta.signers.length)) {
-    return c.json({ error: "A field is assigned to a signer that doesn't exist" }, 400);
-  }
-  const isFrac = (n: unknown): n is number => typeof n === "number" && n >= 0 && n <= 1;
-  const geometryOk = meta.fields?.every(
-    (f) =>
-      Number.isInteger(f.page) &&
-      f.page >= 0 &&
-      f.page < pageCount &&
-      isFrac(f.xFrac) &&
-      isFrac(f.yFrac) &&
-      isFrac(f.wFrac) &&
-      isFrac(f.hFrac) &&
-      f.xFrac + f.wFrac <= 1 &&
-      f.yFrac + f.hFrac <= 1
+  const fieldsError = validateFields(
+    meta.fields,
+    meta.signers.length,
+    pageCount,
+    meta.signers.map((s) => s.name)
   );
-  if (!geometryOk) {
-    return c.json({ error: "A field is positioned outside the document" }, 400);
-  }
-  const typeOk = meta.fields?.every((f) => f.type === undefined || FIELD_TYPES.has(f.type));
-  if (!typeOk) {
-    return c.json({ error: "A field has an unrecognized type" }, 400);
-  }
-  for (const f of meta.fields ?? []) {
-    if (f.type === "dropdown") {
-      const opts = (f.options ?? []).map((o) => o.trim()).filter(Boolean);
-      if (opts.length < 2) {
-        return c.json({ error: "Dropdown fields need at least two options" }, 400);
-      }
-      if (opts.length > MAX_DROPDOWN_OPTIONS) {
-        return c.json({ error: `Dropdown fields support at most ${MAX_DROPDOWN_OPTIONS} options` }, 400);
-      }
-      f.options = opts;
-    }
-  }
-  const signerOrdersWithFields = new Set(meta.fields.map((f) => f.signerOrder));
-  const unassignedSigner = meta.signers.find((_, i) => !signerOrdersWithFields.has(i + 1));
-  if (unassignedSigner) {
-    return c.json({ error: `${unassignedSigner.name || "A signer"} doesn't have a field placed yet` }, 400);
+  if (fieldsError) {
+    return c.json({ error: fieldsError }, 400);
   }
   if (meta.preparerEmail && !EMAIL_RE.test(meta.preparerEmail.trim())) {
     return c.json({ error: "That doesn't look like a valid email address" }, 400);

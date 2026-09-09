@@ -6,7 +6,8 @@ import { sha256Hex } from "./hash";
 import { deliverWebhookEvent } from "./webhooks";
 import { trackEvent } from "./analytics";
 import { incrementTemplateUsage } from "./templateUsage";
-import { signToken, hashOpaqueToken, generateOpaqueToken } from "@docracy/shared";
+import { signToken, hashOpaqueToken, generateOpaqueToken, encryptPin } from "@docracy/shared";
+import { DEFAULT_COBRO_REMIND_DAYS, nextCobroRemindAt } from "./cobro";
 import type { AuditEvent, CcRecipient, DocField, DocState, Env, Locale, Signer } from "@docracy/shared";
 
 /** Opaque claim tokens let a later signup attach an anonymous send to a dashboard (24h). */
@@ -91,6 +92,13 @@ export interface CreateDocumentCoreParams {
    *  (e.g. a NOWPayments crypto invoice's callback URL embeds the doc id, and that invoice has to
    *  exist before the document does). Generates one itself when omitted, as before. */
   docId?: string;
+  /** Set only by routes/account.ts's "have them sign it first" cobro path — a real signing chain
+   *  (unlike createCobroDocument's no-signature "pay + file" path) that still counts as a cobro
+   *  for the dashboard list, tax-year/1099 aggregation, and payment reminders, all of which key on
+   *  `doc.kind === "cobro"` alone. See lib/cobro.ts for the no-signature path these mirror. */
+  kind?: DocState["kind"];
+  cobroRecipient?: DocState["cobroRecipient"];
+  cobroRemindEveryDays?: number;
 }
 
 export async function createDocumentCore(
@@ -123,6 +131,8 @@ export async function createDocumentCore(
       smsCarrier: s.smsCarrier as Signer["smsCarrier"] | undefined,
       whatsappPhone: s.whatsappPhone?.trim() || undefined,
       pinDeliveryChannel: s.pin ? (s.pinDeliveryChannel as Signer["pinDeliveryChannel"] | undefined) : undefined,
+      // Encrypted, not raw — see Signer.pinPendingEncrypted's doc comment.
+      pinPendingEncrypted: s.pin ? await encryptPin(s.pin, env.TOKEN_SECRET) : undefined,
     }))
   );
 
@@ -187,6 +197,16 @@ export async function createDocumentCore(
     whatsappInvites: params.whatsappInvites || undefined,
     signerAttachments: params.signerAttachments,
     paymentRequest: params.paymentRequest,
+    kind: params.kind,
+    cobroRecipient: params.cobroRecipient,
+    cobroRemindEveryDays: params.kind === "cobro" ? params.cobroRemindEveryDays ?? DEFAULT_COBRO_REMIND_DAYS : undefined,
+    // Anchored to creation, same as createCobroDocument's no-signature path — the reminder sweep
+    // itself already gates on doc.status === "completed" (see cobro.ts's cobroRemindDue), so this
+    // can't fire before the recipient actually signs regardless of how long that takes.
+    cobroNextRemindAt:
+      params.kind === "cobro"
+        ? nextCobroRemindAt(now.getTime(), params.cobroRemindEveryDays ?? DEFAULT_COBRO_REMIND_DAYS)
+        : undefined,
   };
 
   for (const s of signersToInvite) s.linkSentAt = now.toISOString();

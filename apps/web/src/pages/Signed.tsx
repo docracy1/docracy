@@ -59,9 +59,13 @@ export default function Signed() {
   }
 
   const payment = status.paymentRequest;
-  const isCobro = status.kind === "cobro" || status.signers.length === 0;
+  // A "have them sign it first" cobro (see Cobro.tsx) is a real signing chain with real signers —
+  // only the classic no-signature "pay + file" cobro (no signers at all) gets the cobro-flavored
+  // "Pay for this file" framing; a genuinely signed cobro doc reads exactly like any other signed
+  // document, with the same payment CTA below either way.
+  const isNoSignatureCobro = status.kind === "cobro" && status.signers.length === 0;
   const cobroPaid = Boolean(status.cobroPaidAt);
-  const title = status.title?.trim() || (isCobro ? t("signed.cobroUntitled") : t("signed.untitled"));
+  const title = status.title?.trim() || (isNoSignatureCobro ? t("signed.cobroUntitled") : t("signed.untitled"));
   const expiresLabel = status.expiresAt
     ? new Date(status.expiresAt).toLocaleDateString(locale === "es" ? "es-MX" : "en-US", {
         month: "short",
@@ -113,7 +117,7 @@ export default function Signed() {
           )}
         </div>
       )}
-      <h1>{isCobro ? t("signed.cobroTitle") : t("signed.title")}</h1>
+      <h1>{isNoSignatureCobro ? t("signed.cobroTitle") : t("signed.title")}</h1>
       <p style={{ fontSize: 18, fontWeight: 600, marginTop: 0 }}>{title}</p>
       {expiresLabel && (
         <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 0 }}>
@@ -121,7 +125,7 @@ export default function Signed() {
         </p>
       )}
       <div className="card">
-        {!isCobro &&
+        {!isNoSignatureCobro &&
           [...status.signers]
             .sort((a, b) => a.order - b.order)
             .map((s) => (
