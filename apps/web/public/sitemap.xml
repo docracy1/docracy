@@ -5455,6 +5455,16 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/escanear-documento" />
   </url>
   <url>
+    <loc>https://docracy.io/convert-to-crypto</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/send-money-latam</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://docracy.io/peru-to-us</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

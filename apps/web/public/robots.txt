@@ -63,6 +63,7 @@ Allow: /compliance-documentation$
 Allow: /consular-appointment$
 Allow: /contractbook-alternative$
 Allow: /contractor-payment-proof$
+Allow: /convert-to-crypto$
 Allow: /costa-rica-to-us$
 Allow: /create-a-digital-signature$
 Allow: /creative-licensing$
@@ -160,6 +161,7 @@ Allow: /quick-sign$
 Allow: /request-w9$
 Allow: /scan-document$
 Allow: /secure-electronic-signature$
+Allow: /send-money-latam$
 Allow: /seo-agency-contract$
 Allow: /sign-pdf-online$
 Allow: /signeasy-alternative$

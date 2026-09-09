@@ -1519,6 +1519,9 @@ export default function Dashboard() {
                   {upgradingCrypto ? t("common.redirecting") : t("dash.upgradeCrypto")}
                 </button>
               </div>
+              <p style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginTop: 12, marginBottom: 0, fontSize: 11, color: "var(--mute)" }}>
+                {t("sendMoney.poweredBy")} <img src="/integrations/nowpayments.svg" alt="NOWPayments" style={{ height: 12 }} />
+              </p>
             </div>
           </div>
         )}
@@ -1935,6 +1938,9 @@ export default function Dashboard() {
                   >
                     {upgradingCrypto ? t("common.redirecting") : t("dash.upgradeCrypto")}
                   </button>
+                  <p style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 12, marginBottom: 0, fontSize: 11, color: "var(--mute)" }}>
+                    {t("sendMoney.poweredBy")} <img src="/integrations/nowpayments.svg" alt="NOWPayments" style={{ height: 12 }} />
+                  </p>
                 </div>
               </>
             )}

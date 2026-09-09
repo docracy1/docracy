@@ -907,6 +907,7 @@ const es: Messages = {
   "sendMoney.convertTitle": "Convierte tu propio dinero",
   "sendMoney.convertBody": "Compra o vende cripto aquí mismo — esto pone stablecoins en tu propia billetera, a tu ritmo. No es lo mismo que enviar directamente a la cuenta bancaria de otra persona (ve abajo para eso).",
   "sendMoney.convertCta": "Convertir ahora",
+  "sendMoney.poweredBy": "Con tecnología de",
   "sendMoney.converting": "Abriendo…",
   "sendMoney.formTitle": "¿Prefieres que llegue directo a una cuenta bancaria?",
   "sendMoney.emailLabel": "Correo electrónico",

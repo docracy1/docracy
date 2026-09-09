@@ -289,6 +289,10 @@ function AppRoutes() {
       <Route path="/es/arrendamiento-inmigrante" element={<FeaturePage slug="immigrant-housing" />} />
       <Route path="/after-arrival" element={<FeaturePage slug="after-arrival" />} />
       <Route path="/es/despues-de-llegar" element={<FeaturePage slug="after-arrival" />} />
+      <Route path="/convert-to-crypto" element={<FeaturePage slug="convert-to-crypto" />} />
+      <Route path="/es/convertir-a-cripto" element={<FeaturePage slug="convert-to-crypto" />} />
+      <Route path="/send-money-latam" element={<FeaturePage slug="send-money-latam" />} />
+      <Route path="/es/enviar-dinero-latam" element={<FeaturePage slug="send-money-latam" />} />
       <Route path="/itin" element={<FeaturePage slug="itin" />} />
       <Route path="/es/itin" element={<FeaturePage slug="itin" />} />
       <Route path="/acta" element={<FeaturePage slug="acta" />} />

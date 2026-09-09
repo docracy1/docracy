@@ -2326,6 +2326,76 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       { label: "Free templates", to: "/free-templates" },
     ],
   },
+  {
+    slug: "convert-to-crypto",
+    xDefault: "es",
+    seoTitle: "Convert Dollars to Crypto (USDC/USDT) — No Signup | Docracy",
+    seoDescription:
+      "Buy or sell stablecoins directly inside Docracy, powered by Transak — no separate app, no Docracy signup. Your wallet, not ours; we never hold your funds.",
+    heroHeadline: "Turn your dollars into stablecoins — right here",
+    heroSubheadline:
+      "Buy or sell USDC/USDT directly, powered by Transak. No new app, no separate Docracy account — just the same free tool you already use to sign.",
+    problem:
+      "Most crypto exchanges want a full signup, their own app, and days of waiting before you can convert a few hundred dollars.",
+    solution:
+      "Docracy embeds Transak's widget directly. You verify with Transak the first time (not with us — Docracy still needs no signup of its own), then buy or sell in minutes. The crypto lands in a wallet you control; Docracy never holds it.",
+    features: [
+      { title: "Buy and sell, not just buy", body: "Convert dollars into USDC or USDT, or convert crypto back into cash — both directions work in the same widget." },
+      { title: "Your wallet, not ours", body: "Funds go straight to a wallet you control. Docracy never custodies your crypto, and never touches your money." },
+      { title: "No new Docracy account", body: "You verify identity with Transak directly, the same as any regulated payments provider — Docracy itself stays no-signup." },
+    ],
+    useCases: [
+      "Converting savings into a dollar-pegged stablecoin",
+      "Cashing out crypto you already hold, back to your bank",
+      "Trying stablecoins before sending money home to family",
+    ],
+    faqs: [
+      { question: "Does Docracy hold my money?", answer: "No. Transak, a licensed payments partner, processes the conversion — Docracy is not a money transmitter and never custodies funds." },
+      { question: "Is this the same as sending money to my family?", answer: "No — this converts money into your own wallet. To send directly to someone else's bank account, see the send-money waitlist." },
+      { question: "What currencies and countries are supported?", answer: "It depends on Transak's current coverage in your country — the widget shows exactly what's available the moment you open it." },
+    ],
+    ctaLabel: "Convert now",
+    ctaTo: "/send-money",
+    relatedLinks: [
+      { label: "Send money home to Latin America", to: "/send-money-latam" },
+      { label: "Pricing", to: "/pricing" },
+    ],
+  },
+  {
+    slug: "send-money-latam",
+    xDefault: "es",
+    seoTitle: "Send Money to Mexico, Colombia & Latin America — Lower Fees | Docracy",
+    seoDescription:
+      "Send money home to Latin America without losing 5-8% to wire fees. Not live yet — join the waitlist. Docracy never holds your funds.",
+    heroHeadline: "Send money home to Latin America, without the wire fees",
+    heroSubheadline:
+      "Skip the 5-8% cut that banks and Western Union take — send using stablecoin rails instead. Not live yet: join the waitlist and we'll email you when it opens for your country.",
+    problem:
+      "Remittances to Mexico, Colombia, and the rest of Latin America can lose 5-8% to fees — money that should reach family, not a bank's spread.",
+    solution:
+      "We're building a direct-to-bank-account transfer over stablecoin rails, through a licensed payments partner — Docracy will never hold the funds itself. It's not live yet. What is live today: converting your own money into crypto, right now, no waitlist needed.",
+    features: [
+      { title: "Built for the corridors that matter", body: "Mexico, Colombia, Argentina, Brazil, and beyond — the same countries Docracy's Spanish-language tools already serve." },
+      { title: "A licensed partner, not Docracy, moves the money", body: "Docracy is not a money transmitter. A regulated payments partner handles the actual transfer and compliance." },
+      { title: "Already live: convert your own money", body: "While the direct-to-bank feature is on the waitlist, buying or selling stablecoins yourself works today — see Convert to crypto." },
+    ],
+    useCases: [
+      "Sending part of a paycheck home to family each month",
+      "A freelancer converting client payments to send abroad",
+      "Avoiding a bank's wire fee and poor exchange rate",
+    ],
+    faqs: [
+      { question: "Is this live yet?", answer: "Not yet — the waitlist is for the direct-to-bank-account feature. You can already convert your own money to crypto today." },
+      { question: "Will Docracy ever hold my money?", answer: "No. Transfers are processed by a licensed payments partner; Docracy is not a money transmitter." },
+      { question: "How do I get notified when it opens?", answer: "Join the waitlist with your email and country — you'll get an email the moment it's available where you are." },
+    ],
+    ctaLabel: "Join the waitlist",
+    ctaTo: "/send-money",
+    relatedLinks: [
+      { label: "Convert your own money now", to: "/convert-to-crypto" },
+      { label: "Pricing", to: "/pricing" },
+    ],
+  },
   ...generatedCountryPages("en") as FeaturePageContent[],
 ];
 
@@ -3672,6 +3742,82 @@ export function getScanDocumentPageEs(): FeaturePageContent {
   };
 }
 
+export function getConvertToCryptoPageEs(): FeaturePageContent {
+  return {
+    slug: "convert-to-crypto",
+    xDefault: "es",
+    seoTitle: "Convierte Dólares a Cripto (USDC/USDT) — Sin Registro | Docracy",
+    seoDescription:
+      "Compra o vende stablecoins directo en Docracy, con tecnología de Transak — sin otra app, sin cuenta en Docracy. Tu billetera, no la nuestra; nunca tenemos acceso a tu dinero.",
+    heroHeadline: "Convierte tus dólares a stablecoins — aquí mismo",
+    heroSubheadline:
+      "Compra o vende USDC/USDT directamente, con tecnología de Transak. Sin otra app, sin otra cuenta de Docracy — la misma herramienta gratis que ya usas para firmar.",
+    problem:
+      "La mayoría de los exchanges de cripto piden un registro completo, su propia app, y días de espera para convertir unos cientos de dólares.",
+    solution:
+      "Docracy integra el widget de Transak directamente. Verificas tu identidad con Transak la primera vez (no con nosotros — Docracy sigue sin pedir registro), y compras o vendes en minutos. La cripto llega a una billetera que tú controlas; Docracy nunca la tiene.",
+    features: [
+      { title: "Compra y vende, no solo compra", body: "Convierte dólares a USDC o USDT, o convierte cripto de vuelta a efectivo — ambas direcciones funcionan en el mismo widget." },
+      { title: "Tu billetera, no la nuestra", body: "El dinero llega directo a una billetera que tú controlas. Docracy nunca guarda tu cripto ni toca tu dinero." },
+      { title: "Sin cuenta nueva en Docracy", body: "Verificas tu identidad con Transak directamente, igual que con cualquier proveedor de pagos regulado — Docracy sigue sin pedir registro." },
+    ],
+    useCases: [
+      "Convertir ahorros a una stablecoin dolarizada",
+      "Retirar cripto que ya tienes, de vuelta a tu banco",
+      "Probar stablecoins antes de enviar dinero a tu familia",
+    ],
+    faqs: [
+      { question: "¿Docracy tiene acceso a mi dinero?", answer: "No. Transak, un socio de pagos con licencia, procesa la conversión — Docracy no es un transmisor de dinero y nunca tiene acceso a tus fondos." },
+      { question: "¿Esto es lo mismo que enviar dinero a mi familia?", answer: "No — esto convierte dinero en tu propia billetera. Para enviar directo a la cuenta bancaria de otra persona, ve la lista de espera de enviar dinero." },
+      { question: "¿Qué monedas y países están disponibles?", answer: "Depende de la cobertura actual de Transak en tu país — el widget muestra exactamente qué está disponible al abrirlo." },
+    ],
+    ctaLabel: "Convertir ahora",
+    ctaTo: "/send-money",
+    relatedLinks: [
+      { label: "Enviar dinero a Latinoamérica", to: "/es/enviar-dinero-latam" },
+      { label: "Precios", to: "/es/precios" },
+    ],
+  };
+}
+
+export function getSendMoneyLatamPageEs(): FeaturePageContent {
+  return {
+    slug: "send-money-latam",
+    xDefault: "es",
+    seoTitle: "Enviar Dinero a México, Colombia y Latinoamérica — Menos Comisiones | Docracy",
+    seoDescription:
+      "Envía dinero a Latinoamérica sin perder 5-8% en comisiones bancarias. Aún no está disponible — únete a la lista de espera. Docracy nunca tiene acceso a tu dinero.",
+    heroHeadline: "Envía dinero a Latinoamérica, sin las comisiones bancarias",
+    heroSubheadline:
+      "Evita el 5-8% que se quedan los bancos y Western Union — envía usando stablecoins en su lugar. Aún no está disponible: únete a la lista de espera y te avisamos por correo cuando abra en tu país.",
+    problem:
+      "Las remesas a México, Colombia y el resto de Latinoamérica pueden perder 5-8% en comisiones — dinero que debería llegar a tu familia, no al margen del banco.",
+    solution:
+      "Estamos construyendo una transferencia directa a cuenta bancaria usando stablecoins, a través de un socio de pagos con licencia — Docracy nunca tendrá acceso al dinero. Aún no está disponible. Lo que ya funciona hoy: convertir tu propio dinero a cripto, sin lista de espera.",
+    features: [
+      { title: "Hecho para los corredores que importan", body: "México, Colombia, Argentina, Brasil y más — los mismos países que ya sirven las herramientas en español de Docracy." },
+      { title: "Un socio con licencia mueve el dinero, no Docracy", body: "Docracy no es un transmisor de dinero. Un socio de pagos regulado maneja la transferencia y el cumplimiento." },
+      { title: "Ya disponible: convertir tu propio dinero", body: "Mientras la transferencia directa está en lista de espera, comprar o vender stablecoins tú mismo ya funciona hoy — ve Convertir a cripto." },
+    ],
+    useCases: [
+      "Enviar parte de tu sueldo a tu familia cada mes",
+      "Un freelancer que convierte pagos de clientes para enviar al extranjero",
+      "Evitar la comisión y el mal tipo de cambio del banco",
+    ],
+    faqs: [
+      { question: "¿Ya está disponible?", answer: "Todavía no — la lista de espera es para la transferencia directa a cuenta bancaria. Ya puedes convertir tu propio dinero a cripto hoy." },
+      { question: "¿Docracy va a tener acceso a mi dinero?", answer: "No. Las transferencias las procesa un socio de pagos con licencia; Docracy no es un transmisor de dinero." },
+      { question: "¿Cómo me avisan cuando abra?", answer: "Únete a la lista de espera con tu correo y país — te escribimos en cuanto esté disponible donde estás." },
+    ],
+    ctaLabel: "Unirme a la lista de espera",
+    ctaTo: "/send-money",
+    relatedLinks: [
+      { label: "Convierte tu dinero ahora", to: "/es/convertir-a-cripto" },
+      { label: "Precios", to: "/es/precios" },
+    ],
+  };
+}
+
 const ES_FEATURE_GETTERS: Record<string, () => FeaturePageContent> = {
   "nda-signing": getNdaSigningPageEs,
   "client-contracts": getClientContractsPageEs,
@@ -3698,6 +3844,8 @@ const ES_FEATURE_GETTERS: Record<string, () => FeaturePageContent> = {
   "ead-tps": getEadTpsPageEs,
   "phone-and-bank": getPhoneAndBankPageEs,
   "scan-document": getScanDocumentPageEs,
+  "convert-to-crypto": getConvertToCryptoPageEs,
+  "send-money-latam": getSendMoneyLatamPageEs,
   ...Object.fromEntries(
     GENERATED_COUNTRY_CORRIDORS.map((c) => [c.slug, () => countryFeaturePage(c, "es") as FeaturePageContent])
   ),

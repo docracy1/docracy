@@ -67,6 +67,9 @@ export default function SendMoney() {
         <button className="btn-primary" onClick={openConvertWidget} disabled={converting}>
           {converting ? t("sendMoney.converting") : t("sendMoney.convertCta")}
         </button>
+        <p style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 12, marginBottom: 0, fontSize: 12, color: "var(--mute)" }}>
+          {t("sendMoney.poweredBy")} <img src="/integrations/transak.svg" alt="Transak" style={{ height: 14 }} />
+        </p>
       </div>
 
       <div className="card" style={{ marginTop: 16 }}>

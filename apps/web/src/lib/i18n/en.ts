@@ -171,6 +171,7 @@ const en: Messages = {
   "sendMoney.convertTitle": "Convert your own money",
   "sendMoney.convertBody": "Buy or sell crypto right here — this puts stablecoins in your own wallet, at your own pace. It's not the same as sending directly to someone else's bank account (see below for that).",
   "sendMoney.convertCta": "Convert now",
+  "sendMoney.poweredBy": "Powered by",
   "sendMoney.converting": "Opening…",
   "sendMoney.formTitle": "Want it sent straight to a bank account instead?",
   "sendMoney.emailLabel": "Email address",

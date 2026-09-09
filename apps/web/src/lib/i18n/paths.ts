@@ -77,6 +77,8 @@ export const ES_PATH_BY_EN: Record<string, string> = {
   "/latam-export-documents": "/es/documentos-exportacion",
   "/request-w9": "/es/pedir-w9",
   "/send-money": "/es/enviar-dinero",
+  "/convert-to-crypto": "/es/convertir-a-cripto",
+  "/send-money-latam": "/es/enviar-dinero-latam",
 };
 
 export const EN_PATH_BY_ES: Record<string, string> = Object.fromEntries(
