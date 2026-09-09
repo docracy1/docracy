@@ -2397,6 +2397,62 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     ],
   },
   ...generatedCountryPages("en") as FeaturePageContent[],
+  {
+    slug: "sign-and-get-paid",
+    seoTitle: "Create a Contract, Sign It, Get Paid — One Flow | Docracy",
+    seoDescription:
+      "Start from a free template or upload your own contract, get it signed, and attach your PayPal, Stripe, Mercado Pago, or a crypto payment link — one flow, no separate invoicing tool.",
+    heroHeadline: "Create the contract. Get it signed. Get paid. One flow.",
+    heroSubheadline:
+      "Start from a free template or upload the contract you already have, send it for signature, and attach your own checkout — or let Docracy generate a crypto invoice that marks itself paid.",
+    problem:
+      "A freelance deal touches three separate tools: a contract template site, an e-signature tool, and then a fourth message with an invoice link once the work is done — and half the time that last step gets forgotten entirely, so payment slips for weeks.",
+    solution:
+      "Docracy keeps it in one flow. Pick a free contract template (or upload your own PDF or Google Doc), send it for signature — no account required for the other side — and, on a paid account, attach a payment request to the same document: your own PayPal, Stripe, or Mercado Pago link, or a NOWPayments crypto invoice that gets marked paid automatically once it confirms.",
+    features: [
+      { title: "Free contract templates", body: "Dozens of ready-to-fill agreements in the marketplace — service agreements, NDAs, scope of work, and more." },
+      { title: "Or upload your own", body: "Already have a contract from a lawyer or a past client? Upload the PDF or paste a Google Docs link and place fields on it directly." },
+      { title: "Free e-signature", body: "The other side signs from a link — no account, no app download, no password." },
+      { title: "Get paid after they sign", body: "Attach your own checkout link, or let Docracy generate a crypto invoice — paid feature, Docracy never takes a cut either way." },
+      { title: "Auto-tracked crypto payments", body: "Choose crypto and the payment status updates itself once it confirms on-chain — no manual \"mark as paid\" click." },
+    ],
+    useCases: [
+      "New client contract with payment terms attached before work starts",
+      "Freelance service agreement that closes with an invoice link, not a separate email",
+      "Contractor agreement paid in crypto for a client who doesn't use PayPal or Mercado Pago",
+      "Reusable template + payment link for a recurring retainer client",
+    ],
+    faqs: [
+      {
+        question: "Does Docracy take a cut of the payment?",
+        answer: "No. You paste your own PayPal, Stripe, or Mercado Pago checkout, or use the crypto option — either way the money goes straight to you. The $10/month paid plan is how Docracy gets paid, not a percentage of yours.",
+      },
+      {
+        question: "Do I have to use Docracy's contract templates?",
+        answer: "No — upload the contract you already use as a PDF, or paste a Google Docs link, and place signature fields on it directly.",
+      },
+      {
+        question: "Can the other side pay in crypto?",
+        answer: "Yes, if you choose the crypto option when attaching the payment request. Docracy generates a NOWPayments invoice (QR + link) and marks it paid automatically once the payment confirms.",
+      },
+      {
+        question: "Is the payment request required?",
+        answer: "No — it's optional and only available on a paid account. Signing itself stays free for up to 2 people per document.",
+      },
+      {
+        question: "What if I don't need a signature, just a payment page?",
+        answer: "Use cobro instead (/whatsapp-invoice) — pay + file with no signer chain, for work that's already done.",
+      },
+    ],
+    ctaLabel: "Start free — no account required",
+    ctaTo: "/prepare",
+    relatedLinks: [
+      { label: "Browse free templates", to: "/free-templates" },
+      { label: "See pricing", to: "/pricing" },
+      { label: "Freelancer contracts", to: "/freelancer-contracts" },
+      { label: "No signature, just get paid (cobro)", to: "/whatsapp-invoice" },
+    ],
+  },
 ];
 
 export function getNdaSigningPageEs(): FeaturePageContent {

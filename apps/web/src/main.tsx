@@ -247,6 +247,7 @@ function AppRoutes() {
       <Route path="/creative-licensing" element={<FeaturePage slug="creative-licensing" />} />
       <Route path="/music-collaboration-contracts" element={<FeaturePage slug="music-collaboration-contracts" />} />
       <Route path="/freelancer-contracts" element={<FeaturePage slug="freelancer-contracts" />} />
+      <Route path="/sign-and-get-paid" element={<FeaturePage slug="sign-and-get-paid" />} />
       <Route path="/web-design-contract" element={<FeaturePage slug="web-design-contract" />} />
       <Route path="/developer-contracts" element={<FeaturePage slug="developer-contracts" />} />
       <Route path="/llc-legal-templates" element={<FeaturePage slug="llc-legal-templates" />} />
