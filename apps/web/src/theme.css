@@ -7037,7 +7037,8 @@ a.dashboard-nav-subitem {
 }
 
 .dashboard-paid-chip,
-.dashboard-free-chip {
+.dashboard-free-chip,
+.dashboard-new-chip {
   display: inline-block;
   margin-left: 6px;
   font-size: 10px;
@@ -7057,6 +7058,11 @@ a.dashboard-nav-subitem {
 .dashboard-free-chip {
   color: var(--success, #0a7a3e);
   background: color-mix(in srgb, var(--success, #0a7a3e) 12%, white);
+}
+
+.dashboard-new-chip {
+  color: var(--on-accent);
+  background: var(--accent);
 }
 
 .dashboard-corridor-grid {

@@ -87,6 +87,10 @@ export interface CreateDocumentCoreParams {
   signerAttachments?: DocState["signerAttachments"];
   /** Optional sender-owned payment link shown after the chain completes. */
   paymentRequest?: DocState["paymentRequest"];
+  /** Pre-generated doc id — needed when the caller must know the id before this function runs
+   *  (e.g. a NOWPayments crypto invoice's callback URL embeds the doc id, and that invoice has to
+   *  exist before the document does). Generates one itself when omitted, as before. */
+  docId?: string;
 }
 
 export async function createDocumentCore(
@@ -95,7 +99,7 @@ export async function createDocumentCore(
   const { env, ctx, pdfBytes, filename, preparerSigns, preparerEmail, fields, accountId } = params;
   const signingMode = params.signingMode ?? "sequential";
 
-  const docId = crypto.randomUUID();
+  const docId = params.docId ?? crypto.randomUUID();
   const now = new Date();
   const ttlDays = params.ttlDays ?? Number(env.DOC_TTL_DAYS);
   const expiresAt = new Date(now.getTime() + ttlDays * 24 * 60 * 60 * 1000);

@@ -212,6 +212,14 @@ export interface DocState {
    * and never adds a processing fee. Always read via `doc.paymentRequest`.
    */
   paymentRequest?: PaymentRequest;
+  /**
+   * Set only for a non-cobro document whose `paymentRequest.method` is "crypto" — by the
+   * NOWPayments IPN webhook (routes/documents.ts's nowpayments-webhook, which embeds the doc id
+   * in the per-invoice callback URL) once the generated invoice confirms. Method "link" never sets
+   * this — there's nothing to confirm, same as before this field existed. Distinct from cobro's own
+   * `cobroPaidAt` (kind: "cobro" docs always use that field instead — see cobro.ts).
+   */
+  paymentPaidAt?: string;
   /** Set once the "this signed file is about to be deleted" nag has been emailed to the preparer. */
   archiveNagSentAt?: string | null;
   /**

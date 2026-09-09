@@ -1228,7 +1228,11 @@ export default function Dashboard() {
                 <NavIcon name="send" size={16} />
                 <span>
                   {t("dash.cobro")}
-                  {!account.isPaid ? <span className="dashboard-paid-chip">{t("dash.paidHint")}</span> : null}
+                  {!account.isPaid ? (
+                    <span className="dashboard-paid-chip">{t("dash.paidHint")}</span>
+                  ) : (
+                    <span className="dashboard-new-chip">{t("dash.newChip")}</span>
+                  )}
                 </span>
               </Link>
             </div>
@@ -1828,13 +1832,17 @@ export default function Dashboard() {
               <div className="dashboard-corridor-grid">
                 {[
                   { to: localizePath("/income-proof", locale), title: t("dash.constancia"), body: t("dash.corridorConstancia"), paid: true },
-                  { to: account.isPaid ? `${localizePath("/cobro", locale)}#send` : localizePath("/cobro", locale), title: t("dash.cobro"), body: t("dash.corridorCobro"), paid: true },
+                  { to: account.isPaid ? `${localizePath("/cobro", locale)}#send` : localizePath("/cobro", locale), title: t("dash.cobro"), body: t("dash.corridorCobro"), paid: true, isNew: true },
                   { to: account.isPaid ? `${localizePath("/income-proof", locale)}#receipts` : localizePath("/income-proof", locale), title: t("dash.corridorReceiptsTitle"), body: t("dash.corridorReceipts"), paid: true },
                 ].map((card) => (
                   <Link key={card.to} to={card.to} className="dashboard-corridor-card">
                     <h3>
                       {card.title}
-                      {!account.isPaid && card.paid ? <span className="dashboard-paid-chip">{t("dash.paidHint")}</span> : null}
+                      {!account.isPaid && card.paid ? (
+                        <span className="dashboard-paid-chip">{t("dash.paidHint")}</span>
+                      ) : account.isPaid && card.isNew ? (
+                        <span className="dashboard-new-chip">{t("dash.newChip")}</span>
+                      ) : null}
                     </h3>
                     <p>{card.body}</p>
                   </Link>
@@ -2100,6 +2108,11 @@ export default function Dashboard() {
                     )}
                     {doc.kind === "cobro" && doc.cobroPaidAt && (
                       <span style={{ fontSize: 12, color: "var(--mute)" }}>{t("cobro.markedPaidHint")}</span>
+                    )}
+                    {doc.kind !== "cobro" && doc.paymentMethod === "crypto" && (
+                      <span style={{ fontSize: 12, color: doc.paymentPaidAt ? "var(--success)" : "var(--mute)" }}>
+                        {doc.paymentPaidAt ? t("dash.cryptoPaymentPaid") : t("dash.cryptoPaymentPending")}
+                      </span>
                     )}
                     {doc.status === "completed" && (
                       <button

@@ -384,6 +384,10 @@ export interface DocumentSummary {
   signToken: string | null;
   kind?: "cobro";
   cobroPaidAt?: string | null;
+  /** Only set for a non-cobro document with a "get paid after they sign" request — "crypto" means
+   *  paymentPaidAt is tracked (via NOWPayments IPN); "link" never sets paymentPaidAt. */
+  paymentMethod?: "link" | "crypto" | null;
+  paymentPaidAt?: string | null;
 }
 
 export async function fetchMyDocuments(): Promise<{ documents: DocumentSummary[] }> {

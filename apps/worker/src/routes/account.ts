@@ -101,6 +101,8 @@ account.get("/documents", requireAccount, async (c) => {
         signToken: signTok,
         kind: doc?.kind === "cobro" ? "cobro" : undefined,
         cobroPaidAt: doc?.cobroPaidAt ?? null,
+        paymentMethod: doc?.paymentRequest?.method ?? null,
+        paymentPaidAt: doc?.paymentPaidAt ?? null,
       };
     })
   );

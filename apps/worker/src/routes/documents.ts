@@ -14,6 +14,8 @@ import { resolveTtlDays } from "../lib/docTtl";
 import { schedulePreparerLeadEmails } from "../lib/onboardingEmails";
 import { clampAttachmentLimits } from "../lib/signerAttachments";
 import { parsePaymentRequest } from "../lib/paymentRequest";
+import { createInvoice, isSuccessfulPaymentStatus, verifyIpn } from "../lib/billingProviders/nowpayments";
+import { getDoc, putDoc } from "../lib/kv";
 import type { DocField, Env, Locale } from "@docracy/shared";
 
 interface CreateDocumentBody {
@@ -49,8 +51,9 @@ interface CreateDocumentBody {
   whatsappInvites?: boolean;
   /** Paid — require signers to upload attachments before signing. */
   signerAttachments?: { enabled: boolean; maxFiles?: number; maxBytesPerFile?: number };
-  /** Sender's own payment link (PayPal / Stripe / Mercado Pago). Docracy never charges this. */
-  paymentRequest?: { amount: string; currency: string; url: string };
+  /** Sender's own payment link (PayPal / Stripe / Mercado Pago), or a Docracy-generated crypto
+   *  invoice. Docracy never charges/custodies this money either way. */
+  paymentRequest?: { amount: string; currency: string; url: string; method?: "link" | "crypto" };
   /** Set only when these fields were loaded from a saved (paid-tier) template — see
    *  routes/templates.ts's GET /:id, which fires the matching template_started event. Purely for
    *  the Template funnel's template_completed step; never persisted on the resulting document. */
@@ -368,6 +371,29 @@ documents.post("/", optionalAccount, async (c) => {
     );
   }
 
+  // Crypto payment requests need a real NOWPayments invoice generated up front — and that
+  // invoice's own callback URL has to embed the doc id, so the doc id is minted here rather than
+  // left to createDocumentCore's default (which only generates one internally when none is passed
+  // in). Mirrors the same up-front-mint pattern cobro uses (lib/cobro.ts).
+  let paymentDocId: string | undefined;
+  if (parsedPayment.paymentRequest?.method === "crypto") {
+    paymentDocId = crypto.randomUUID();
+    const invoice = await createInvoice({
+      env: c.env,
+      orderId: paymentDocId,
+      priceAmount: Number(parsedPayment.paymentRequest.amount),
+      priceCurrency: parsedPayment.paymentRequest.currency,
+      description: pdfFile.name || "document.pdf",
+      successUrl: `${c.env.PUBLIC_APP_URL}/dashboard`,
+      cancelUrl: `${c.env.PUBLIC_APP_URL}/dashboard`,
+      ipnCallbackUrl: `${c.env.PUBLIC_WORKER_URL ?? ""}/api/documents/${paymentDocId}/nowpayments-webhook`,
+    });
+    if ("error" in invoice) {
+      return c.json({ error: "Couldn't set up crypto payment for this document. Please try again." }, 502);
+    }
+    parsedPayment.paymentRequest.url = invoice.invoiceUrl;
+  }
+
   // WhatsApp is the AES-track channel — gated to signed-up accounts (anonymous senders are
   // rejected outright). Every tier has a real, hard-costed cap now: Meta charges Docracy per
   // message with no free tier of its own. Free hard-stops at FREE_MONTHLY_LIMIT/month, enterprise
@@ -437,6 +463,7 @@ documents.post("/", optionalAccount, async (c) => {
   const { docId, statusToken, claimToken } = await createDocumentCore({
     env: c.env,
     ctx: c.executionCtx,
+    docId: paymentDocId,
     pdfBytes,
     filename: pdfFile.name || "document.pdf",
     preparerSigns: meta.preparerSigns,
@@ -473,6 +500,25 @@ documents.post("/", optionalAccount, async (c) => {
   }
 
   return c.json({ docId, statusToken, ...(claimToken ? { claimToken } : {}) });
+});
+
+// NOWPayments IPN callback for a crypto paymentRequest on a regular (non-cobro) document — the
+// docId is embedded in the per-invoice callback URL set above, so no separate correlation lookup
+// is needed. Mirrors routes/account.ts's cobro nowpayments-webhook, but sets paymentPaidAt instead
+// of cobroPaidAt (cobro docs never come through this route — they have their own).
+documents.post("/:docId/nowpayments-webhook", async (c) => {
+  const docId = c.req.param("docId");
+  const rawBody = await c.req.text();
+  const signature = c.req.header("x-nowpayments-sig");
+  const event = await verifyIpn(rawBody, signature ?? null, c.env);
+  if (event && isSuccessfulPaymentStatus(event.payment_status)) {
+    const doc = await getDoc(c.env, docId);
+    if (doc && doc.kind !== "cobro" && doc.paymentRequest?.method === "crypto" && !doc.paymentPaidAt) {
+      doc.paymentPaidAt = new Date().toISOString();
+      await putDoc(c.env, doc);
+    }
+  }
+  return c.json({ ok: true });
 });
 
 export default documents;

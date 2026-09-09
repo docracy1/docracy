@@ -50,6 +50,8 @@ const WHATSAPP_FREE_MONTHLY_LIMIT = 1;
 const WHATSAPP_PAID_MONTHLY_LIMIT = 10;
 const WHATSAPP_ENTERPRISE_MONTHLY_LIMIT = 50;
 const MAX_PDF_BYTES = 15 * 1024 * 1024;
+const NOWPAYMENTS_REFERRAL_URL =
+  "https://account.nowpayments.io/create-account?link_id=3960711626&utm_source=affiliate_lk&utm_medium=referral";
 
 // Signature/initials are taller to leave room for the auto-printed "email · date" caption text/date
 // fields don't get; text/date are narrower single-line boxes.
@@ -145,6 +147,7 @@ export default function Prepare() {
   const [paymentAmount, setPaymentAmount] = useState("");
   const [paymentCurrency, setPaymentCurrency] = useState("USD");
   const [paymentUrl, setPaymentUrl] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState<"link" | "crypto">("link");
   const [signingMode, setSigningMode] = useState<"sequential" | "parallel">("sequential");
   const [signers, setSigners] = useState<SignerInput[]>([
     { order: 1, name: "", email: "" },
@@ -1018,12 +1021,13 @@ export default function Prepare() {
         smsInvites: smsInvites || undefined,
         whatsappInvites: whatsappInvites || undefined,
         locale,
-        ...(account?.isPaid && paymentAmount.trim() && paymentUrl.trim()
+        ...(account?.isPaid && paymentAmount.trim() && (paymentMethod === "crypto" || paymentUrl.trim())
           ? {
               paymentRequest: {
                 amount: paymentAmount.trim(),
                 currency: paymentCurrency,
-                url: paymentUrl.trim(),
+                url: paymentMethod === "crypto" ? "" : paymentUrl.trim(),
+                method: paymentMethod,
               },
             }
           : {}),
@@ -1751,17 +1755,57 @@ export default function Prepare() {
                         ))}
                       </select>
                     </div>
-                    <input
-                      className="form-input"
-                      style={{ width: "100%" }}
-                      type="url"
-                      placeholder={t("prepare.payUrlPh")}
-                      aria-label={t("prepare.payUrlAria")}
-                      value={paymentUrl}
-                      onChange={(e) => setPaymentUrl(e.target.value)}
-                    />
-                    <PaymentCheckoutLogos />
-                    <p style={{ fontSize: 12, color: "var(--mute)", margin: "6px 0 0" }}>{t("prepare.payLogosHint")}</p>
+                    <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
+                      {(["link", "crypto"] as const).map((m) => (
+                        <button
+                          key={m}
+                          type="button"
+                          onClick={() => setPaymentMethod(m)}
+                          style={{
+                            flex: 1,
+                            textAlign: "left",
+                            padding: "8px 10px",
+                            borderRadius: 8,
+                            border: paymentMethod === m ? "2px solid var(--primary)" : "1px solid var(--hairline)",
+                            background: paymentMethod === m ? "var(--primary-soft)" : "transparent",
+                            cursor: "pointer",
+                          }}
+                          aria-pressed={paymentMethod === m}
+                        >
+                          <span style={{ display: "block", fontWeight: 700, fontSize: 13 }}>
+                            {m === "link" ? t("cobro.methodLink") : t("cobro.methodCrypto")}
+                          </span>
+                          <span style={{ display: "block", fontSize: 11.5, color: "var(--mute)" }}>
+                            {m === "link" ? t("cobro.methodLinkSub") : t("cobro.methodCryptoSub")}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                    {paymentMethod === "link" ? (
+                      <>
+                        <input
+                          className="form-input"
+                          style={{ width: "100%" }}
+                          type="url"
+                          placeholder={t("prepare.payUrlPh")}
+                          aria-label={t("prepare.payUrlAria")}
+                          value={paymentUrl}
+                          onChange={(e) => setPaymentUrl(e.target.value)}
+                        />
+                        <PaymentCheckoutLogos />
+                        <p style={{ fontSize: 12, color: "var(--mute)", margin: "6px 0 0" }}>{t("prepare.payLogosHint")}</p>
+                      </>
+                    ) : (
+                      <>
+                        <p style={{ fontSize: 12, color: "var(--mute)", margin: "0 0 0" }}>{t("cobro.cryptoHint")}</p>
+                        <p style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "var(--mute)", margin: "6px 0 0" }}>
+                          {t("sendMoney.poweredBy")}{" "}
+                          <a href={NOWPAYMENTS_REFERRAL_URL} target="_blank" rel="noopener noreferrer">
+                            <img src="/integrations/nowpayments.svg" alt="NOWPayments" style={{ height: 12 }} />
+                          </a>
+                        </p>
+                      </>
+                    )}
                   </>
                 ) : (
                   <>

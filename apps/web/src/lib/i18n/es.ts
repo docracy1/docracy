@@ -148,6 +148,8 @@ const es: Messages = {
   "dash.statusVoided": "Anulado",
   "dash.statusCobroSent": "Enviado",
   "dash.statusCobroPaid": "Pagado",
+  "dash.cryptoPaymentPaid": "Pago cripto recibido",
+  "dash.cryptoPaymentPending": "Esperando pago cripto",
   "dash.cobroMarkPaid": "Marcar pagado",
   "dash.porCobrar": "Por cobrar",
   "dash.porCobrarEmpty": "No hay cobros abiertos. Envía uno desde cobro por WhatsApp.",
@@ -2582,7 +2584,7 @@ const es: Messages = {
 
   "prepare.payTitle": "Cobra después de que firmen (opcional)",
   "prepare.payHint":
-    "Pega tu URL de PayPal, Stripe Payment Link o Mercado Pago. Docracy nunca cobra este dinero — el plan de $10 es cómo nos pagan a nosotros, no un porcentaje del tuyo.",
+    "Pega tu URL de PayPal, Stripe Payment Link o Mercado Pago, o deja que generemos una factura cripto por ti. Docracy nunca cobra este dinero — el plan de $10 es cómo nos pagan a nosotros, no un porcentaje del tuyo.",
   "prepare.payLocked":
     "El plan de pago ($10/mes) pone tu checkout junto al contrato terminado. Nunca nos llevamos un porcentaje; te quedas el 100% de lo que te paguen.",
   "prepare.payAmountPh": "Monto",
@@ -2787,6 +2789,7 @@ const es: Messages = {
   "signed.cobroPaidHint": "Según el remitente. Docracy no cobró este dinero.",
   "dash.taxYear": "Archivo fiscal",
   "dash.cobro": "Enviar cobro",
+  "dash.newChip": "Nuevo",
   "dash.constancia": "Constancia",
   "dash.usMigration": "Migración a EE. UU.",
   "dash.navLegacy": "Anteriores",
@@ -3248,7 +3251,7 @@ const es: Messages = {
   "dash.corridorPayTitle": "Tú les pagas",
   "dash.corridorPaySub": "Pide W-9, papeles de un trabajo, contrata en el extranjero — y demuéstralo al contador.",
   "dash.corridorConstancia": "Un año de contratos y cobros que puede abrir un arrendador. No es un W-2.",
-  "dash.corridorCobro": "PDF + tu PayPal o Mercado Pago por WhatsApp. Sin firma.",
+  "dash.corridorCobro": "PDF + tu PayPal/Mercado Pago — o cripto, se marca pagado solo — por WhatsApp. Sin firma.",
   "dash.corridorReceiptsTitle": "Adjuntar PDFs de PayPal",
   "dash.corridorReceipts": "Sube un export de PayPal o Mercado Pago a la constancia. Sin login bancario.",
   "dash.corridorPayer": "Comparte el año con tu contador. CSV más una URL. No es e-file.",
