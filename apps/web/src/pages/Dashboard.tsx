@@ -1347,6 +1347,9 @@ export default function Dashboard() {
               {/* Free accounts had NO reachable upgrade path outside whichever tab happened to
                *  render its own conditional "Upgrade to paid" card — this is the one entry point
                *  guaranteed visible from every tab, since the profile menu itself is tab-independent.
+               *  Triggers checkout directly (same as the top plan card's button) rather than just
+               *  switching to the dashboard tab — that used to be a silent no-op whenever the
+               *  account was already on that tab, which read as "the button does nothing".
                *  Not gated by isWorkspaceOwner (unlike the paid Subscription item below): that flag
                *  is only meaningful once teamMembers has loaded, which never happens for a free
                *  account (Team is a paid-only fetch) — and a free account is always its own
@@ -1354,14 +1357,15 @@ export default function Dashboard() {
                *  member's isPaid is inherited from the owner (see lib/billing.ts). */}
               {!account.isPaid && (
                 <button
+                  disabled={upgrading}
                   onClick={(e) => {
                     e.stopPropagation();
-                    setActiveTab("dashboard");
                     setProfileMenuOpen(false);
+                    onUpgrade();
                   }}
                 >
                   <MenuIcon name="subscription" />
-                  {t("common.upgrade")}
+                  {upgrading ? t("common.redirecting") : t("common.upgrade")}
                 </button>
               )}
               {isAdmin && (
