@@ -1433,12 +1433,27 @@ export default function Dashboard() {
               </div>
             </div>
             {!account.isPaid && (
-              <button className="btn-primary" style={{ fontSize: 13, padding: "6px 14px" }} onClick={onUpgrade} disabled={upgrading}>
-                {upgrading ? t("common.redirecting") : t("common.upgrade")}
-              </button>
+              <div style={{ display: "flex", gap: 8 }}>
+                <button className="btn-primary" style={{ fontSize: 13, padding: "6px 14px" }} onClick={onUpgrade} disabled={upgrading}>
+                  {upgrading ? t("common.redirecting") : t("common.upgrade")}
+                </button>
+                <button
+                  className="btn-secondary"
+                  style={{ fontSize: 13, padding: "6px 14px" }}
+                  onClick={onUpgradeCrypto}
+                  disabled={upgradingCrypto}
+                >
+                  {upgradingCrypto ? t("common.redirecting") : t("dash.upgradeCrypto")}
+                </button>
+              </div>
             )}
           </div>
         </div>
+        {(upgradeError || upgradeCryptoError) && (
+          <p style={{ color: "var(--danger)", fontSize: 13, textAlign: "right", marginTop: -12, marginBottom: 16 }}>
+            {upgradeError || upgradeCryptoError}
+          </p>
+        )}
         {checkoutPending && !account.isPaid && (
           <div className="card" style={{ marginBottom: 16, borderColor: "var(--primary)" }}>
             <span>{t("dash.checkoutPending")}</span>
