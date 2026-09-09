@@ -153,7 +153,7 @@ const es: Messages = {
   "dash.cobroMarkPaid": "Marcar pagado",
   "dash.porCobrar": "Por cobrar",
   "dash.porCobrarEmpty": "No hay cobros abiertos. Envía uno desde cobro por WhatsApp.",
-  "dash.porCobrarHint": "Marcas pagado cuando te paguen en tu Mercado Pago o PayPal. Se detienen los avisos.",
+  "dash.porCobrarHint": "Marca pagado tú mismo cuando te paguen en Mercado Pago o PayPal — los cobros cripto se marcan solos. Los avisos se detienen igual.",
   "taxYear.paid": "Pagado",
   "taxYear.unpaid": "Por cobrar",
   "dash.subscription": "Suscripción",

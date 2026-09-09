@@ -731,7 +731,7 @@ const en: Messages = {
   "dash.cobroMarkPaid": "Mark paid",
   "dash.porCobrar": "Unpaid cobros",
   "dash.porCobrarEmpty": "No open cobros. Send one from WhatsApp cobro.",
-  "dash.porCobrarHint": "You mark paid after they pay on your Mercado Pago or PayPal. Reminders stop.",
+  "dash.porCobrarHint": "Mark paid yourself after they pay on your Mercado Pago or PayPal — crypto cobros mark themselves paid. Reminders stop either way.",
   "taxYear.paid": "Paid",
   "taxYear.unpaid": "Unpaid",
   "dash.void": "Void",

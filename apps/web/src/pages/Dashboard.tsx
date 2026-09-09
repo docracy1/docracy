@@ -1755,15 +1755,19 @@ export default function Dashboard() {
                       <Link to={`/status/${doc.statusToken}`} style={{ overflowWrap: "anywhere" }}>
                         {doc.title}
                       </Link>
-                      <button
-                        type="button"
-                        className="btn-secondary"
-                        style={{ padding: "4px 10px", fontSize: 13 }}
-                        disabled={markingPaidDocId === doc.docId}
-                        onClick={() => onMarkCobroPaid(doc)}
-                      >
-                        {markingPaidDocId === doc.docId ? t("common.saving") : t("dash.cobroMarkPaid")}
-                      </button>
+                      {doc.paymentMethod === "crypto" ? (
+                        <span style={{ fontSize: 13, color: "var(--mute)" }}>{t("dash.cryptoPaymentPending")}</span>
+                      ) : (
+                        <button
+                          type="button"
+                          className="btn-secondary"
+                          style={{ padding: "4px 10px", fontSize: 13 }}
+                          disabled={markingPaidDocId === doc.docId}
+                          onClick={() => onMarkCobroPaid(doc)}
+                        >
+                          {markingPaidDocId === doc.docId ? t("common.saving") : t("dash.cobroMarkPaid")}
+                        </button>
+                      )}
                     </div>
                   ))
                 )}
@@ -2096,7 +2100,7 @@ export default function Dashboard() {
                             ? t("dash.statusVoided")
                             : t("dash.statusPending")}
                     </span>
-                    {doc.kind === "cobro" && account.isPaid && !doc.cobroPaidAt && (
+                    {doc.kind === "cobro" && account.isPaid && !doc.cobroPaidAt && doc.paymentMethod !== "crypto" && (
                       <button
                         className="btn-secondary"
                         style={{ fontSize: 12, padding: "4px 8px" }}
@@ -2105,6 +2109,9 @@ export default function Dashboard() {
                       >
                         {markingPaidDocId === doc.docId ? t("common.saving") : t("dash.cobroMarkPaid")}
                       </button>
+                    )}
+                    {doc.kind === "cobro" && !doc.cobroPaidAt && doc.paymentMethod === "crypto" && (
+                      <span style={{ fontSize: 12, color: "var(--mute)" }}>{t("dash.cryptoPaymentPending")}</span>
                     )}
                     {doc.kind === "cobro" && doc.cobroPaidAt && (
                       <span style={{ fontSize: 12, color: "var(--mute)" }}>{t("cobro.markedPaidHint")}</span>

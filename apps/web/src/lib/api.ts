@@ -384,8 +384,10 @@ export interface DocumentSummary {
   signToken: string | null;
   kind?: "cobro";
   cobroPaidAt?: string | null;
-  /** Only set for a non-cobro document with a "get paid after they sign" request — "crypto" means
-   *  paymentPaidAt is tracked (via NOWPayments IPN); "link" never sets paymentPaidAt. */
+  /** How this document's paymentRequest (if any) gets paid — set for both cobro and regular
+   *  documents. For a cobro doc, "crypto" means it auto-marks `cobroPaidAt` (no manual click);
+   *  `paymentPaidAt` below is never used for cobro docs, only for a regular (non-cobro) document's
+   *  crypto request, tracked separately via NOWPayments IPN. "link" never auto-marks anything. */
   paymentMethod?: "link" | "crypto" | null;
   paymentPaidAt?: string | null;
 }
