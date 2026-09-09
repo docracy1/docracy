@@ -5,12 +5,21 @@ const ACCESS_TOKEN_KV_KEY = "transak:accessToken";
 // right on the boundary and getting a token that's valid for the exchange but expires mid-flight.
 const REFRESH_SKEW_MS = 60 * 60 * 1000;
 
+/** Host for the refresh-token (access token exchange) call — confirmed by a direct manual test
+ *  against production ("https://api.transak.com/partners/api/v2/refresh-token" returns a real
+ *  token with production credentials). */
 function authBaseUrl(env: Env): string {
   const isStaging = (env.TRANSAK_ENVIRONMENT ?? "STAGING") !== "PRODUCTION";
-  // Production host inferred from the "-stg" naming convention used elsewhere in Transak's API
-  // (same pattern as the widget host below) — not directly confirmed in their docs. Worth a
-  // one-time check against a real PRODUCTION run before relying on it.
   return isStaging ? "https://api-stg.transak.com" : "https://api.transak.com";
+}
+
+/** Host for the Create Widget URL (session) call — a DIFFERENT subdomain from authBaseUrl above,
+ *  confirmed against Transak's own API reference: "api-gateway-stg.transak.com" (staging) /
+ *  "api-gateway.transak.com" (production). Mixing this up with authBaseUrl was the actual cause
+ *  of an earlier "Authorization Required" 401 even with a valid access token. */
+function widgetSessionBaseUrl(env: Env): string {
+  const isStaging = (env.TRANSAK_ENVIRONMENT ?? "STAGING") !== "PRODUCTION";
+  return isStaging ? "https://api-gateway-stg.transak.com" : "https://api-gateway.transak.com";
 }
 
 interface CachedAccessToken {
@@ -59,13 +68,13 @@ async function getAccessToken(env: Env): Promise<string | null> {
  *  called fresh every time a user opens the "convert your money" widget, never cached (unlike the
  *  access token above, which is deliberately reused across many session calls).
  *
- *  NOT YET VERIFIED against a real PRODUCTION run (only staging docs were reachable while
- *  building this): the production host names (both here and in refreshAccessToken above) are
- *  inferred from the "-stg" naming convention, not directly confirmed. Confirm on first real
- *  production test before relying on it beyond staging. */
+ *  Verified against Transak's own API reference: this call needs `x-api-key` AND `access-token`
+ *  (not just the latter — an earlier version omitted x-api-key and got a 401 "Authorization
+ *  Required" even with a valid token), plus `x-user-ip` — the end user's own IP, not the
+ *  worker's. Docracy never logs or stores this beyond forwarding it in this one request. */
 export async function createWidgetSessionUrl(
   env: Env,
-  params: { fiatCurrency?: string; email?: string }
+  params: { fiatCurrency?: string; email?: string; userIp: string }
 ): Promise<{ widgetUrl: string } | { error: string }> {
   if (!env.TRANSAK_API_KEY || !env.TRANSAK_API_SECRET) {
     // Deliberately not logging the values themselves — just which one(s) are missing/empty, so a
@@ -83,10 +92,12 @@ export async function createWidgetSessionUrl(
   const accessToken = await getAccessToken(env);
   if (!accessToken) return { error: "request_failed" };
 
-  const res = await fetch(`${authBaseUrl(env)}/api/v2/auth/session`, {
+  const res = await fetch(`${widgetSessionBaseUrl(env)}/api/v2/auth/session`, {
     method: "POST",
     headers: {
       "access-token": accessToken,
+      "x-api-key": env.TRANSAK_API_KEY,
+      "x-user-ip": params.userIp,
       "content-type": "application/json",
     },
     body: JSON.stringify({
