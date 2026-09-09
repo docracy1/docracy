@@ -62,7 +62,7 @@ export default function LatamSearch() {
           </p>
           <h1>{t("latamSearch.heroTitle")}</h1>
           <p>{t("latamSearch.heroSub")}</p>
-          <LatamSearchBox source="seo:latam-search" initialQuery={initialQuery} />
+          <LatamSearchBox source="seo:latam-search" initialQuery={initialQuery} showCircle />
           <p style={{ marginTop: 16 }}>
             <Link
               to={loginWithCheckout(localizePath("/pricing", locale), "latam-search")}
