@@ -84,6 +84,10 @@ export async function createWidgetSessionUrl(
       widgetParams: {
         apiKey: env.TRANSAK_API_KEY,
         referrerDomain: new URL(env.PUBLIC_APP_URL).hostname,
+        // Left unset, Transak's widget defaults to BUY only — explicit here so "convert your
+        // money" actually covers both directions (buy crypto with fiat, sell crypto back to
+        // fiat), matching what the page copy promises.
+        productsAvailed: ["BUY", "SELL"],
         ...(params.fiatCurrency ? { fiatCurrency: params.fiatCurrency } : {}),
         ...(params.email ? { email: params.email } : {}),
       },
