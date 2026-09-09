@@ -67,6 +67,9 @@ import { SignerAttachmentsList } from "../components/SignerAttachmentsList";
 import { track } from "../lib/track";
 import type { StatusSigner } from "../lib/types";
 
+const NOWPAYMENTS_REFERRAL_URL =
+  "https://account.nowpayments.io/create-account?link_id=3960711626&utm_source=affiliate_lk&utm_medium=referral";
+
 /** Isolates the profile-menu popup so a render error there (e.g. from unexpected account/team
  *  data shape) shows an inline message instead of silently freezing the whole dashboard — this
  *  subtree only ever mounts on the first click, so any bug in it would otherwise be invisible. */
@@ -1520,7 +1523,10 @@ export default function Dashboard() {
                 </button>
               </div>
               <p style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginTop: 12, marginBottom: 0, fontSize: 11, color: "var(--mute)" }}>
-                {t("sendMoney.poweredBy")} <img src="/integrations/nowpayments.svg" alt="NOWPayments" style={{ height: 12 }} />
+                {t("sendMoney.poweredBy")}{" "}
+                <a href={NOWPAYMENTS_REFERRAL_URL} target="_blank" rel="noopener noreferrer">
+                  <img src="/integrations/nowpayments.svg" alt="NOWPayments" style={{ height: 12 }} />
+                </a>
               </p>
             </div>
           </div>
