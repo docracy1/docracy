@@ -319,6 +319,7 @@ export default function Dashboard() {
   const [upgrading, setUpgrading] = useState(false);
   const [upgradeError, setUpgradeError] = useState<string | null>(null);
   const [upgradingCrypto, setUpgradingCrypto] = useState(false);
+  const [showPaymentChoice, setShowPaymentChoice] = useState(false);
   const [upgradeCryptoError, setUpgradeCryptoError] = useState<string | null>(null);
   const [upgradingEnterprise, setUpgradingEnterprise] = useState(false);
   const [upgradeEnterpriseError, setUpgradeEnterpriseError] = useState<string | null>(null);
@@ -1237,7 +1238,10 @@ export default function Dashboard() {
         {!account.isPaid ? (
           <button
             className="dashboard-nav-item"
-            onClick={() => setActiveTab("dashboard")}
+            onClick={() => {
+              setActiveTab("dashboard");
+              setShowPaymentChoice(true);
+            }}
             style={{ textAlign: "left" }}
           >
             <NavIcon name="contacts" />
@@ -1361,25 +1365,25 @@ export default function Dashboard() {
               {/* Free accounts had NO reachable upgrade path outside whichever tab happened to
                *  render its own conditional "Upgrade to paid" card — this is the one entry point
                *  guaranteed visible from every tab, since the profile menu itself is tab-independent.
-               *  Triggers checkout directly (same as the top plan card's button) rather than just
-               *  switching to the dashboard tab — that used to be a silent no-op whenever the
-               *  account was already on that tab, which read as "the button does nothing".
-               *  Not gated by isWorkspaceOwner (unlike the paid Subscription item below): that flag
-               *  is only meaningful once teamMembers has loaded, which never happens for a free
-               *  account (Team is a paid-only fetch) — and a free account is always its own
-               *  workspace owner anyway, since team membership only exists on paid workspaces and a
-               *  member's isPaid is inherited from the owner (see lib/billing.ts). */}
+               *  Switches to the dashboard tab AND opens the payment-method choice there (Stripe
+               *  vs crypto) in one click — plain setActiveTab alone used to be a silent no-op
+               *  whenever the account was already on that tab, which read as "the button does
+               *  nothing". Not gated by isWorkspaceOwner (unlike the paid Subscription item
+               *  below): that flag is only meaningful once teamMembers has loaded, which never
+               *  happens for a free account (Team is a paid-only fetch) — and a free account is
+               *  always its own workspace owner anyway, since team membership only exists on paid
+               *  workspaces and a member's isPaid is inherited from the owner (see lib/billing.ts). */}
               {!account.isPaid && (
                 <button
-                  disabled={upgrading}
                   onClick={(e) => {
                     e.stopPropagation();
                     setProfileMenuOpen(false);
-                    onUpgrade();
+                    setActiveTab("dashboard");
+                    setShowPaymentChoice(true);
                   }}
                 >
                   <MenuIcon name="subscription" />
-                  {upgrading ? t("common.redirecting") : t("common.upgrade")}
+                  {t("common.upgrade")}
                 </button>
               )}
               {isAdmin && (
@@ -1450,10 +1454,15 @@ export default function Dashboard() {
                 {account.isEnterprise ? t("dash.enterprise") : account.isPaid ? t("dash.paidHint") : t("dash.freeHint")}
               </div>
             </div>
-            {!account.isPaid && (
+            {!account.isPaid && !showPaymentChoice && (
+              <button className="btn-primary" style={{ fontSize: 13, padding: "6px 14px" }} onClick={() => setShowPaymentChoice(true)}>
+                {t("common.upgrade")}
+              </button>
+            )}
+            {!account.isPaid && showPaymentChoice && (
               <div style={{ display: "flex", gap: 8 }}>
                 <button className="btn-primary" style={{ fontSize: 13, padding: "6px 14px" }} onClick={onUpgrade} disabled={upgrading}>
-                  {upgrading ? t("common.redirecting") : t("common.upgrade")}
+                  {upgrading ? t("common.redirecting") : t("dash.payWithCard")}
                 </button>
                 <button
                   className="btn-secondary"

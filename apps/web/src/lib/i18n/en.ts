@@ -690,7 +690,8 @@ const en: Messages = {
   "dash.sentTimes": "— sent {{count}} time",
   "dash.sentTimesPlural": "— sent {{count}} times",
   "dash.upgradeTitle": "Unlock cobro, locker, and constancia — $10/month",
-  "dash.upgradeCrypto": "Pay with crypto instead",
+  "dash.payWithCard": "Pay with card",
+  "dash.upgradeCrypto": "Pay with crypto",
   "dash.checkoutConfirming": "Confirming your subscription…",
   "dash.checkoutPending": "Payment received. If paid features aren't unlocked in a minute, email founder@docracy.io and we'll fix it.",
   "dash.upgradeBody":

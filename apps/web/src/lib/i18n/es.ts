@@ -166,6 +166,7 @@ const es: Messages = {
   "dash.upgradeBody":
     "Lee los playbooks ahora. Enviar cobro, abrir el casillero 1099, compartir la constancia y guardar PDFs más de 9 días son la suscripción de USD $10/mes — el paquete LATAM va incluido. Firmar I-9, NDA, oferta y roomie sigue gratis.",
   "dash.upgradeTitle": "Desbloquea cobro, casillero y constancia — $10/mes",
+  "dash.payWithCard": "Pagar con tarjeta",
   "dash.upgradeCrypto": "Pagar con cripto",
   "dash.planLabel": "Plan",
   "dash.paidHint": "Pago",
