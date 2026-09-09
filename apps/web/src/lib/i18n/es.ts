@@ -2791,6 +2791,7 @@ const es: Messages = {
   "dash.navLegacy": "Anteriores",
   "dash.migrantChecklist": "Paquete LATAM",
   "dash.latamSub": "Suscripción LATAM",
+  "dash.sendMoneyNav": "Enviar dinero",
   "dash.latamSubCta": "Abrir la suscripción LATAM — $10/mes",
   "dash.navCountries": "Países",
   "dash.migrantOverviewTitle": "Paquete LATAM — en la suscripción de $10/mes",

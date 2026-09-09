@@ -1257,6 +1257,14 @@ export default function Dashboard() {
           </Link>
         )}
 
+        {/* /send-money had no nav link anywhere — only reachable via the post-signing completion
+         *  screen's CTA or a direct URL, which made both the waitlist and the live Transak convert
+         *  widget effectively undiscoverable from inside the app. */}
+        <Link to={localizePath("/send-money", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
+          <NavIcon name="send" size={16} />
+          <span>{t("dash.sendMoneyNav")}</span>
+        </Link>
+
         <div className="dashboard-nav-section">
           <p className="dashboard-nav-section-label">{t("dash.navLegacy")}</p>
           {account.isPaid && (
@@ -1454,32 +1462,65 @@ export default function Dashboard() {
                 {account.isEnterprise ? t("dash.enterprise") : account.isPaid ? t("dash.paidHint") : t("dash.freeHint")}
               </div>
             </div>
-            {!account.isPaid && !showPaymentChoice && (
+            {!account.isPaid && (
               <button className="btn-primary" style={{ fontSize: 13, padding: "6px 14px" }} onClick={() => setShowPaymentChoice(true)}>
                 {t("common.upgrade")}
               </button>
             )}
-            {!account.isPaid && showPaymentChoice && (
-              <div style={{ display: "flex", gap: 8 }}>
-                <button className="btn-primary" style={{ fontSize: 13, padding: "6px 14px" }} onClick={onUpgrade} disabled={upgrading}>
+          </div>
+        </div>
+        {showPaymentChoice && !account.isPaid && (
+          <div
+            role="dialog"
+            aria-modal="true"
+            style={{
+              position: "fixed",
+              inset: 0,
+              background: "rgba(0,0,0,0.4)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 1000,
+            }}
+            onClick={() => setShowPaymentChoice(false)}
+          >
+            <div
+              className="card"
+              style={{ maxWidth: 360, width: "90%", padding: 28, textAlign: "center", position: "relative" }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setShowPaymentChoice(false)}
+                aria-label={t("common.dismiss")}
+                style={{
+                  position: "absolute",
+                  top: 10,
+                  right: 12,
+                  background: "none",
+                  border: "none",
+                  fontSize: 20,
+                  color: "var(--mute)",
+                  cursor: "pointer",
+                  lineHeight: 1,
+                }}
+              >
+                ×
+              </button>
+              <h3 style={{ marginTop: 0, marginBottom: 4 }}>{t("dash.upgradeTitle")}</h3>
+              <p style={{ fontSize: 22, fontWeight: 700, margin: "8px 0 20px 0" }}>{t("pricing.paid.monthly")}</p>
+              {(upgradeError || upgradeCryptoError) && (
+                <p style={{ color: "var(--danger)", fontSize: 13, marginBottom: 16 }}>{upgradeError || upgradeCryptoError}</p>
+              )}
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                <button className="btn-primary" onClick={onUpgrade} disabled={upgrading}>
                   {upgrading ? t("common.redirecting") : t("dash.payWithCard")}
                 </button>
-                <button
-                  className="btn-secondary"
-                  style={{ fontSize: 13, padding: "6px 14px" }}
-                  onClick={onUpgradeCrypto}
-                  disabled={upgradingCrypto}
-                >
+                <button className="btn-secondary" onClick={onUpgradeCrypto} disabled={upgradingCrypto}>
                   {upgradingCrypto ? t("common.redirecting") : t("dash.upgradeCrypto")}
                 </button>
               </div>
-            )}
+            </div>
           </div>
-        </div>
-        {(upgradeError || upgradeCryptoError) && (
-          <p style={{ color: "var(--danger)", fontSize: 13, textAlign: "right", marginTop: -12, marginBottom: 16 }}>
-            {upgradeError || upgradeCryptoError}
-          </p>
         )}
         {checkoutPending && !account.isPaid && (
           <div className="card" style={{ marginBottom: 16, borderColor: "var(--primary)" }}>
