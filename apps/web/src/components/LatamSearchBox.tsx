@@ -1,4 +1,4 @@
-import { useMemo, useState, type FormEvent } from "react";
+import { useMemo, useState, type CSSProperties, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { localizePath, useI18n } from "../lib/i18n";
 import { loginWithCheckout } from "../lib/latamCheckout";
@@ -51,8 +51,38 @@ export default function LatamSearchBox({
     navigate(`${localizePath(LATAM_SEARCH_EN, locale)}${next ? `?q=${encodeURIComponent(next)}` : ""}`);
   };
 
+  const chipCount = LATAM_SEARCH_CHIPS.length;
+
   return (
     <div className={`latam-search${compact ? " is-compact" : ""}`}>
+      <div className="latam-search-circle-wrap">
+        <div className="latam-search-circle" aria-hidden="true">
+          <span className="latam-search-circle-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="7" />
+              <path d="M21 21l-4.3-4.3" />
+            </svg>
+          </span>
+          <span className="latam-search-circle-title">{t("latamSearch.label")}</span>
+          <span className="latam-search-circle-sub">{t("latamSearch.circleSub")}</span>
+        </div>
+        <p className="latam-search-chips" aria-label={t("latamSearch.chipsLabel")}>
+          {LATAM_SEARCH_CHIPS.map((chip, idx) => (
+            <button
+              key={chip.q}
+              type="button"
+              className="latam-search-chip"
+              style={{ "--i": idx, "--n": chipCount } as CSSProperties}
+              onClick={() => {
+                setQ(chip.q);
+                track("landingpage_cta_clicked", { source: `${source}:chip` });
+              }}
+            >
+              {t(chip.labelKey)}
+            </button>
+          ))}
+        </p>
+      </div>
       <form className="latam-search-form" onSubmit={onSubmit} role="search">
         <label className="latam-search-label" htmlFor={`latam-search-${source}`}>
           {t("latamSearch.label")}
@@ -74,21 +104,6 @@ export default function LatamSearchBox({
           </button>
         </div>
       </form>
-      <p className="latam-search-chips" aria-label={t("latamSearch.chipsLabel")}>
-        {LATAM_SEARCH_CHIPS.map((chip) => (
-          <button
-            key={chip.q}
-            type="button"
-            className="latam-search-chip"
-            onClick={() => {
-              setQ(chip.q);
-              track("landingpage_cta_clicked", { source: `${source}:chip` });
-            }}
-          >
-            {t(chip.labelKey)}
-          </button>
-        ))}
-      </p>
       {showResults && (!compact || q.trim()) ? (
         <ul className="latam-search-hits">
           {hits.length === 0 && q.trim() ? (
