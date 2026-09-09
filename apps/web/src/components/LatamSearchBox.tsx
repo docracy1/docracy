@@ -1,4 +1,4 @@
-import { useMemo, useState, type CSSProperties, type FormEvent } from "react";
+import { useMemo, useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { localizePath, useI18n } from "../lib/i18n";
 import { loginWithCheckout } from "../lib/latamCheckout";
@@ -33,77 +33,109 @@ export default function LatamSearchBox({
   initialQuery = "",
   compact = false,
   showResults = true,
+  circleIsCta = false,
 }: {
   source: string;
   initialQuery?: string;
   compact?: boolean;
   showResults?: boolean;
+  /** Hero usage: the circle itself is the whole entry point (click it, or a chip, and go
+   *  straight to the full search page) — no separate label/input/submit box underneath it.
+   *  Other pages keep the full inline form + live results. */
+  circleIsCta?: boolean;
 }) {
   const { t, locale } = useI18n();
   const navigate = useNavigate();
   const [q, setQ] = useState(initialQuery);
   const hits = useMemo(() => searchLatamIndex(q, compact ? 6 : 8), [q, compact]);
 
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    const next = q.trim();
-    track("landingpage_cta_clicked", { source: `${source}:submit` });
-    navigate(`${localizePath(LATAM_SEARCH_EN, locale)}${next ? `?q=${encodeURIComponent(next)}` : ""}`);
+  const goToSearch = (query: string) => {
+    navigate(`${localizePath(LATAM_SEARCH_EN, locale)}${query ? `?q=${encodeURIComponent(query)}` : ""}`);
   };
 
-  const chipCount = LATAM_SEARCH_CHIPS.length;
+  const onSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    track("landingpage_cta_clicked", { source: `${source}:submit` });
+    goToSearch(q.trim());
+  };
+
+  const half = Math.ceil(LATAM_SEARCH_CHIPS.length / 2);
+  const chipsAbove = LATAM_SEARCH_CHIPS.slice(0, half);
+  const chipsBelow = LATAM_SEARCH_CHIPS.slice(half);
+
+  const renderChip = (chip: (typeof LATAM_SEARCH_CHIPS)[number]) => (
+    <button
+      key={chip.q}
+      type="button"
+      className="latam-search-chip"
+      onClick={() => {
+        track("landingpage_cta_clicked", { source: `${source}:chip` });
+        if (circleIsCta) {
+          goToSearch(chip.q);
+        } else {
+          setQ(chip.q);
+        }
+      }}
+    >
+      {t(chip.labelKey)}
+    </button>
+  );
 
   return (
     <div className={`latam-search${compact ? " is-compact" : ""}`}>
-      <div className="latam-search-circle-wrap">
-        <div className="latam-search-circle" aria-hidden="true">
-          <span className="latam-search-circle-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="11" cy="11" r="7" />
-              <path d="M21 21l-4.3-4.3" />
-            </svg>
-          </span>
-          <span className="latam-search-circle-title">{t("latamSearch.label")}</span>
-          <span className="latam-search-circle-sub">{t("latamSearch.circleSub")}</span>
-        </div>
-        <p className="latam-search-chips" aria-label={t("latamSearch.chipsLabel")}>
-          {LATAM_SEARCH_CHIPS.map((chip, idx) => (
-            <button
-              key={chip.q}
-              type="button"
-              className="latam-search-chip"
-              style={{ "--i": idx, "--n": chipCount } as CSSProperties}
-              onClick={() => {
-                setQ(chip.q);
-                track("landingpage_cta_clicked", { source: `${source}:chip` });
-              }}
-            >
-              {t(chip.labelKey)}
-            </button>
-          ))}
-        </p>
-      </div>
-      <form className="latam-search-form" onSubmit={onSubmit} role="search">
-        <label className="latam-search-label" htmlFor={`latam-search-${source}`}>
-          {t("latamSearch.label")}
-        </label>
-        <div className="latam-search-row">
-          <input
-            id={`latam-search-${source}`}
-            type="search"
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder={t("latamSearch.placeholder")}
-            autoComplete="off"
-          />
-          <button type="submit" className="btn-primary" aria-label={t("latamSearch.submit")} title={t("latamSearch.submit")}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <circle cx="11" cy="11" r="7" />
-              <path d="M21 21l-4.3-4.3" />
-            </svg>
+      {circleIsCta ? (
+        <div className="latam-search-circle-wrap">
+          <p className="latam-search-chips latam-search-chips-above" aria-hidden="true">
+            {chipsAbove.map(renderChip)}
+          </p>
+          <button
+            type="button"
+            className="latam-search-circle"
+            aria-label={t("latamSearch.submit")}
+            onClick={() => {
+              track("landingpage_cta_clicked", { source: `${source}:circle` });
+              goToSearch("");
+            }}
+          >
+            <span className="latam-search-circle-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="7" />
+                <path d="M21 21l-4.3-4.3" />
+              </svg>
+            </span>
+            <span className="latam-search-circle-title">{t("latamSearch.label")}</span>
+            <span className="latam-search-circle-sub">{t("latamSearch.circleSub")}</span>
           </button>
+          <p className="latam-search-chips" aria-label={t("latamSearch.chipsLabel")}>
+            {chipsBelow.map(renderChip)}
+          </p>
         </div>
-      </form>
+      ) : (
+        <form className="latam-search-form" onSubmit={onSubmit} role="search">
+          <label className="latam-search-label" htmlFor={`latam-search-${source}`}>
+            {t("latamSearch.label")}
+          </label>
+          <div className="latam-search-row">
+            <input
+              id={`latam-search-${source}`}
+              type="search"
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder={t("latamSearch.placeholder")}
+              autoComplete="off"
+            />
+            <button type="submit" className="btn-primary" aria-label={t("latamSearch.submit")} title={t("latamSearch.submit")}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="7" />
+                <path d="M21 21l-4.3-4.3" />
+              </svg>
+            </button>
+          </div>
+          <p className="latam-search-chips" aria-label={t("latamSearch.chipsLabel")}>
+            {LATAM_SEARCH_CHIPS.map(renderChip)}
+          </p>
+        </form>
+      )}
       {showResults && (!compact || q.trim()) ? (
         <ul className="latam-search-hits">
           {hits.length === 0 && q.trim() ? (

@@ -7250,6 +7250,13 @@ a.dashboard-nav-subitem {
   padding: 24px 20px;
   box-sizing: border-box;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 20px 50px rgba(10, 30, 60, 0.22);
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.latam-search-circle:hover {
+  transform: scale(1.02);
+  border-color: var(--accent-hover);
 }
 .latam-search-circle-icon {
   width: 52px;
@@ -7276,32 +7283,16 @@ a.dashboard-nav-subitem {
   font-size: 13px;
   color: var(--mute);
 }
-/* Chips stay a normal wrapped row (identical to the pre-circle layout) until there's enough
-   width to actually orbit them around the circle without collisions or overflow. */
-@media (min-width: 900px) {
-  .latam-search-circle-wrap {
-    width: 460px;
-    height: 460px;
-    margin-bottom: 12px;
-  }
-  .latam-search-circle-wrap .latam-search-chips {
-    position: absolute;
-    inset: 0;
-    margin: 0;
-    flex-wrap: nowrap;
-  }
-  .latam-search-circle-wrap .latam-search-chip {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    /* Evenly spaced around the circle via --i (this chip's index) / --n (chip count) — pure
-       CSS, computed by the browser's layout engine, so this renders correctly even in the
-       prerendered static HTML with no JS executed yet. */
-    transform: rotate(calc(360deg / var(--n) * var(--i))) translate(210px) rotate(calc(-360deg / var(--n) * var(--i)));
-    margin: -18px 0 0 -50px;
-    width: 100px;
-    text-align: center;
-  }
+/* Chips split into two plain centered wrapped rows, one above and one below the circle — a
+   deliberately simple layout (no absolute positioning, no computed math) after an earlier
+   attempt at placing them in a precise ring around the circle scattered unpredictably at some
+   viewport widths. This just works, at every width, by construction. */
+.latam-search-circle-wrap .latam-search-chips {
+  justify-content: center;
+  max-width: 480px;
+}
+.latam-search-circle-wrap .latam-search-chips-above {
+  margin: 0 0 20px;
 }
 
 .latam-search-label {

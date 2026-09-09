@@ -503,7 +503,7 @@ export default function Landing() {
               the general door but without the Austrian trust-logo band beneath it. */}
           {latamDoor && (
             <div className="hero-latam-cta">
-              <LatamSearchBox source="hero-es" compact />
+              <LatamSearchBox source="hero-es" compact circleIsCta />
               <Link
                 to={cobroSendTo}
                 className="hero-signup-btn hero-latam-cta-btn"
