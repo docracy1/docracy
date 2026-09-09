@@ -114,7 +114,7 @@ GOOGLE_LOGIN_CLIENT_ID = "188295326340-ihcrrfutas19lqgu407u3oft7huq5vhl.apps.goo
 
 # --- Transak "convert your money" widget (/send-money) — optional; /api/transak/session 501s until set ---
 # Set with: wrangler secret put TRANSAK_API_KEY   (Partner Dashboard → Developers)
-# Set with: wrangler secret put TRANSAK_ACCESS_TOKEN   (Partner Dashboard → Developers)
+# Set with: wrangler secret put TRANSAK_API_SECRET   (Partner Dashboard → Developers)
 # TRANSAK_ENVIRONMENT is not secret ("STAGING" or "PRODUCTION") — set in [vars] once ready to go live.
 
 # --- Staging: isolated KV/D1/R2 so testing never touches production data ---

@@ -392,10 +392,13 @@ export interface Env {
    *  Widget URL session call (lib/transak.ts) that powers the /send-money "convert your money"
    *  widget. Absent means that route 501s. */
   TRANSAK_API_KEY?: string;
-  /** Transak Partner Dashboard "access token" (Developers tab) — the credential the Create Widget
-   *  URL API's `access-token` header actually expects; distinct from TRANSAK_API_KEY. Set with
-   *  `wrangler secret put TRANSAK_ACCESS_TOKEN`, never committed to wrangler.toml. */
-  TRANSAK_ACCESS_TOKEN?: string;
+  /** Transak Partner Dashboard "API Secret" (Developers tab) — NOT used directly as the Create
+   *  Widget URL API's `access-token` header. Instead lib/transak.ts exchanges it (with
+   *  TRANSAK_API_KEY) for a short-lived (7-day) Partner Access Token via Transak's refresh-token
+   *  endpoint, cached in KV and refreshed only once it's close to expiring — Transak's own docs
+   *  warn against calling that endpoint on every request. Set with `wrangler secret put
+   *  TRANSAK_API_SECRET`, never committed to wrangler.toml. */
+  TRANSAK_API_SECRET?: string;
   /** "STAGING" or "PRODUCTION" — which Transak environment the widget session is created against.
    *  Defaults to "STAGING" when unset, so a deployment with keys configured but this left unset
    *  fails safe (sandbox money, not real transactions) rather than silently going live. */

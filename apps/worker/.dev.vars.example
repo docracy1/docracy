@@ -27,5 +27,5 @@ PUBLIC_CONNECTOR_URL=http://localhost:8788
 # Transak "convert your money" widget (/send-money) — leave unset to have /api/transak/session
 # 501 gracefully. API key + access token from the Partner Dashboard's Developers tab.
 # TRANSAK_API_KEY=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-# TRANSAK_ACCESS_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+# TRANSAK_API_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 # TRANSAK_ENVIRONMENT=STAGING
