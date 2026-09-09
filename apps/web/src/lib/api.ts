@@ -1083,6 +1083,13 @@ export async function fetchAdminAccounts(): Promise<{ accounts: AdminAccount[] }
   return asJson(res);
 }
 
+/** Permanently deletes an account (revokes its API token/cloud connections first) — for clearing
+ *  out spam/test signups. Does not touch that account's documents (D1 is a derived index only). */
+export async function deleteAdminAccount(email: string): Promise<{ ok: true }> {
+  const res = await apiFetch(`/api/admin/accounts/${encodeURIComponent(email)}`, { method: "DELETE" });
+  return asJson(res);
+}
+
 export interface AdminDocumentSigner {
   name: string;
   email: string;

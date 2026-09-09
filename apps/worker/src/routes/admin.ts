@@ -9,7 +9,7 @@ import {
 } from "../lib/analyticsQuery";
 import { NOTRACK_COOKIE_NAME, noTrackCookieOptions } from "../lib/analytics";
 import { requireAdminAccount, type AccountContext } from "../lib/auth";
-import { findAccountIdByEmail, markAccountEnterprise, markAccountPaid } from "../lib/billing";
+import { deleteAccountByEmail, findAccountIdByEmail, markAccountEnterprise, markAccountPaid } from "../lib/billing";
 import { getMarketingRecipientsCount, sendMarketingBroadcast } from "../lib/marketingEmail";
 import type { Env } from "@docracy/shared";
 
@@ -43,6 +43,15 @@ admin.get("/accounts", requireAdminAccount, async (c) => {
       isEnterprise: !!r.is_enterprise,
     })),
   });
+});
+
+// Permanent delete — for clearing out spam/test signups from the "All signups" list. Email is
+// URL-encoded in the path since it's the only identity these accounts have (see /accounts above).
+admin.delete("/accounts/:email", requireAdminAccount, async (c) => {
+  const email = decodeURIComponent(c.req.param("email"));
+  const result = await deleteAccountByEmail(c.env, email);
+  if (!result.ok) return c.json({ error: result.error }, 404);
+  return c.json({ ok: true });
 });
 
 /** Account-linked documents for admin drill-down from the Analytics tiles. Anonymous free-tier

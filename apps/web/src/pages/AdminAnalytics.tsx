@@ -3,6 +3,7 @@ import {
   approveMarketplaceSubmission,
   createBlogPost,
   createRoadmapFeature,
+  deleteAdminAccount,
   deleteBlogPost,
   deleteRoadmapFeature,
   fetchAdminAccounts,
@@ -1246,7 +1247,33 @@ function MarketingEmailCard() {
  *  top: 72px` tuned for sticking to the *page's* scroll under the fixed nav bar; nesting it
  *  inside this card's own `overflow-y: auto` box made it stick 72px into a much shorter box
  *  instead, floating the header over the rows. */
-function AccountMiniList({ title, accounts }: { title: string; accounts: AdminAccount[] }) {
+function DeleteAccountButton({ email, deleting, onDelete }: { email: string; deleting: boolean; onDelete: (email: string) => void }) {
+  return (
+    <button
+      className="btn-secondary"
+      style={{ fontSize: 12, padding: "2px 8px", flexShrink: 0, color: "var(--danger)", borderColor: "var(--danger)" }}
+      disabled={deleting}
+      onClick={() => {
+        if (!confirm(`Permanently delete ${email}? This can't be undone.`)) return;
+        onDelete(email);
+      }}
+    >
+      {deleting ? "Deleting…" : "Delete"}
+    </button>
+  );
+}
+
+function AccountMiniList({
+  title,
+  accounts,
+  deletingEmail,
+  onDelete,
+}: {
+  title: string;
+  accounts: AdminAccount[];
+  deletingEmail: string | null;
+  onDelete: (email: string) => void;
+}) {
   return (
     <div>
       <h4 style={{ fontSize: 13, color: "var(--mute)", marginTop: 0, marginBottom: 8 }}>
@@ -1262,6 +1289,7 @@ function AccountMiniList({ title, accounts }: { title: string; accounts: AdminAc
               style={{
                 display: "flex",
                 justifyContent: "space-between",
+                alignItems: "center",
                 gap: 8,
                 padding: "8px 0",
                 borderBottom: "1px solid var(--hairline)",
@@ -1270,6 +1298,7 @@ function AccountMiniList({ title, accounts }: { title: string; accounts: AdminAc
             >
               <span style={{ overflowWrap: "anywhere" }}>{a.email}</span>
               <span style={{ color: "var(--mute)", flexShrink: 0 }}>{new Date(a.createdAt).toLocaleDateString()}</span>
+              <DeleteAccountButton email={a.email} deleting={deletingEmail === a.email} onDelete={onDelete} />
             </div>
           ))}
         </div>
@@ -1282,12 +1311,27 @@ function AllAccountsCard() {
   const [accounts, setAccounts] = useState<AdminAccount[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showAll, setShowAll] = useState(false);
+  const [deletingEmail, setDeletingEmail] = useState<string | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchAdminAccounts()
       .then((res) => setAccounts(res.accounts))
       .catch((err) => setError(err instanceof Error ? err.message : "Failed to load accounts"));
   }, []);
+
+  const handleDelete = async (email: string) => {
+    setDeleteError(null);
+    setDeletingEmail(email);
+    try {
+      await deleteAdminAccount(email);
+      setAccounts((prev) => prev?.filter((a) => a.email !== email) ?? prev);
+    } catch (err) {
+      setDeleteError(err instanceof Error ? err.message : "Failed to delete account");
+    } finally {
+      setDeletingEmail(null);
+    }
+  };
 
   const free = accounts?.filter((a) => !a.isPaid) ?? [];
   const paid = accounts?.filter((a) => a.isPaid) ?? [];
@@ -1310,13 +1354,14 @@ function AllAccountsCard() {
       </div>
 
       {error && <p style={{ color: "var(--danger)", fontSize: 13 }}>{error}</p>}
+      {deleteError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{deleteError}</p>}
       {!error && accounts && accounts.length === 0 && (
         <p style={{ fontSize: 13, color: "var(--mute)", marginBottom: 0 }}>No signups yet.</p>
       )}
       {!error && accounts && accounts.length > 0 && !showAll && (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 20, marginTop: 16 }}>
-          <AccountMiniList title="Free" accounts={free} />
-          <AccountMiniList title="Paid" accounts={paid} />
+          <AccountMiniList title="Free" accounts={free} deletingEmail={deletingEmail} onDelete={handleDelete} />
+          <AccountMiniList title="Paid" accounts={paid} deletingEmail={deletingEmail} onDelete={handleDelete} />
         </div>
       )}
       {!error && accounts && accounts.length > 0 && showAll && (
@@ -1327,6 +1372,7 @@ function AllAccountsCard() {
               style={{
                 display: "flex",
                 justifyContent: "space-between",
+                alignItems: "center",
                 gap: 8,
                 padding: "8px 0",
                 borderBottom: "1px solid var(--hairline)",
@@ -1338,6 +1384,7 @@ function AllAccountsCard() {
               <span style={{ flexShrink: 0, minWidth: 70, textAlign: "right" }}>
                 {a.isEnterprise ? "Enterprise" : a.isPaid ? "Paid" : "Free"}
               </span>
+              <DeleteAccountButton email={a.email} deleting={deletingEmail === a.email} onDelete={handleDelete} />
             </div>
           ))}
         </div>

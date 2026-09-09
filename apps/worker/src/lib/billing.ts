@@ -107,6 +107,21 @@ export async function findAccountIdByStripeCustomerId(env: Env, customerId: stri
   return row?.id ?? null;
 }
 
+/** Admin-only permanent delete (routes/admin.ts) — revokes the account's API token and cloud
+ *  connections first (same cleanup markAccountPaid(env, id, false) does on a lapsed subscription),
+ *  then removes the accounts row itself. D1 is a derived index only (never source of truth for
+ *  documents — see CLAUDE.md), so this never touches the KV/R2-resident document state; any
+ *  documents this account created just become unlisted in D1's admin drill-down, not deleted. */
+export async function deleteAccountByEmail(env: Env, email: string): Promise<{ ok: true } | { ok: false; error: string }> {
+  if (!env.DOCRACY_DB) return { ok: false, error: "Not available on this deployment yet." };
+  const accountId = await findAccountIdByEmail(env, email);
+  if (!accountId) return { ok: false, error: "No account found with that email." };
+  await revokeApiToken(env, accountId);
+  await deleteConnectionsForAccount(env, accountId);
+  await env.DOCRACY_DB.prepare(`DELETE FROM accounts WHERE id = ?`).bind(accountId).run();
+  return { ok: true };
+}
+
 export async function getStripeCustomerId(env: Env, accountId: string): Promise<string | null> {
   if (!env.DOCRACY_DB) return null;
   const row = await env.DOCRACY_DB.prepare(`SELECT stripe_customer_id FROM accounts WHERE id = ?`)
