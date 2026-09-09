@@ -1231,13 +1231,27 @@ export default function Dashboard() {
           )}
         </div>
 
-        <Link to={localizePath("/packets/latam-to-us", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
-          <NavIcon name="contacts" />
-          <span>
-            {t("dash.latamSub")}
-            {!account.isPaid ? <span className="dashboard-paid-chip">{t("dash.paidHint")}</span> : null}
-          </span>
-        </Link>
+        {/* Free accounts go straight to the plan card (both Stripe + crypto options) rather than
+         *  a marketing-page detour — this is the thing they'd be clicking here to actually do.
+         *  Paid accounts keep browsing the LATAM package content page as before. */}
+        {!account.isPaid ? (
+          <button
+            className="dashboard-nav-item"
+            onClick={() => setActiveTab("dashboard")}
+            style={{ textAlign: "left" }}
+          >
+            <NavIcon name="contacts" />
+            <span>
+              {t("dash.latamSub")}
+              <span className="dashboard-paid-chip">{t("dash.paidHint")}</span>
+            </span>
+          </button>
+        ) : (
+          <Link to={localizePath("/packets/latam-to-us", locale)} className="dashboard-nav-item" style={{ textDecoration: "none" }}>
+            <NavIcon name="contacts" />
+            <span>{t("dash.latamSub")}</span>
+          </Link>
+        )}
 
         <div className="dashboard-nav-section">
           <p className="dashboard-nav-section-label">{t("dash.navLegacy")}</p>
