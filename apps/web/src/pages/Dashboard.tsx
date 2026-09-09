@@ -1422,6 +1422,23 @@ export default function Dashboard() {
       </aside>
 
       <div className="dashboard-content">
+        <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 16 }}>
+          <div className="card" style={{ padding: "10px 16px", display: "flex", alignItems: "center", gap: 14 }}>
+            <div>
+              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--mute)" }}>
+                {t("dash.planLabel")}
+              </div>
+              <div style={{ fontSize: 15, fontWeight: 700, color: "var(--ink)" }}>
+                {account.isEnterprise ? t("dash.enterprise") : account.isPaid ? t("dash.paidHint") : t("dash.freeHint")}
+              </div>
+            </div>
+            {!account.isPaid && (
+              <button className="btn-primary" style={{ fontSize: 13, padding: "6px 14px" }} onClick={onUpgrade} disabled={upgrading}>
+                {upgrading ? t("common.redirecting") : t("common.upgrade")}
+              </button>
+            )}
+          </div>
+        </div>
         {checkoutPending && !account.isPaid && (
           <div className="card" style={{ marginBottom: 16, borderColor: "var(--primary)" }}>
             <span>{t("dash.checkoutPending")}</span>

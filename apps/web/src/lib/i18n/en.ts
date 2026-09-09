@@ -695,6 +695,7 @@ const en: Messages = {
   "dash.checkoutPending": "Payment received. If paid features aren't unlocked in a minute, email founder@docracy.io and we'll fix it.",
   "dash.upgradeBody":
     "Read the playbooks now. Sending cobro, opening the 1099 locker, sharing a constancia URL, and keeping PDFs past 9 days are the $10/month USD subscription — including the LATAM package. Signing I-9, NDA, offer, and roommate stays free.",
+  "dash.planLabel": "Plan",
   "dash.paidHint": "Paid",
   "dash.freeHint": "Free",
   "dash.freeLaneTitle": "Sign for free today",
