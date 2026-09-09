@@ -542,6 +542,22 @@ export default function Sign({
         {showConversionPopup && (
           <SignerConversionPopup onDismiss={() => setConversionDismissed(true)} />
         )}
+        {/* Same gating as the viral card above — skipped for white-labeled workspaces and embedded
+         *  signing. Unlike the viral card, shown regardless of login state: sending money home has
+         *  nothing to do with the Docracy-account funnel. */}
+        {!embedMode && !payload.brandLogoPath && (
+          <div className="card" style={{ marginTop: 16, maxWidth: 420 }}>
+            <p style={{ marginBottom: 12 }}>{t("sendMoney.signerCta")}</p>
+            <Link
+              to={localizePath("/send-money", locale)}
+              className="btn-secondary"
+              style={{ display: "inline-block", textDecoration: "none" }}
+              onClick={() => track("send_money_cta_clicked", { source: "signer_done" })}
+            >
+              {t("sendMoney.signerCtaLink")}
+            </Link>
+          </div>
+        )}
       </div>
     );
   }

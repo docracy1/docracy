@@ -3,6 +3,7 @@ import { requireAccount, requirePaidAccount, type AccountContext } from "../lib/
 import {
   applyPaidCheckout,
   clearPaymentFailed,
+  extendCryptoPaidUntil,
   findAccountIdByStripeCustomerId,
   getStripeCustomerId,
   isAccountPaid,
@@ -16,8 +17,11 @@ import {
   reconcileCheckoutForAccount,
   stripeCustomerHasLiveSubscription,
 } from "../lib/billingReconcile";
+import { createInvoice, isSuccessfulPaymentStatus, verifyIpn, CRYPTO_PLAN_DAYS } from "../lib/billingProviders/nowpayments";
 import { sanitizeAttribution, trackEvent } from "../lib/analytics";
 import type { Env } from "@docracy/shared";
+
+const CRYPTO_PLAN_PRICE_USD = 10;
 
 type Variables = { account: AccountContext | null };
 const billing = new Hono<{ Bindings: Env; Variables: Variables }>();
@@ -123,6 +127,50 @@ billing.post("/checkout", requireAccount, async (c) => {
     attribution,
   });
   return c.json({ url: session.url });
+});
+
+// Crypto payment alternative to /checkout — no card-style auto-debit exists on this rail, so this
+// only ever covers CRYPTO_PLAN_DAYS from whenever it's paid (extendCryptoPaidUntil), not a real
+// recurring subscription. The account (or whoever manages billing) re-runs this each cycle.
+billing.post("/crypto-checkout", requireAccount, async (c) => {
+  if (!c.env.NOWPAYMENTS_API_KEY) {
+    return c.json({ error: "Crypto billing isn't set up on this deployment yet." }, 501);
+  }
+  const account = c.get("account")!;
+  if (account.id !== account.workspaceId) {
+    return c.json({ error: "Ask your workspace owner to manage the subscription." }, 403);
+  }
+
+  const result = await createInvoice({
+    env: c.env,
+    accountId: account.id,
+    priceUsd: CRYPTO_PLAN_PRICE_USD,
+    description: "Docracy Pro — 1 month",
+    successUrl: `${c.env.PUBLIC_APP_URL}/dashboard?checkout=success`,
+    cancelUrl: `${c.env.PUBLIC_APP_URL}/dashboard?checkout=cancelled`,
+    ipnCallbackUrl: `${c.env.PUBLIC_WORKER_URL ?? ""}/api/billing/crypto-webhook`,
+  });
+  if ("error" in result) {
+    return c.json({ error: "Could not start crypto checkout. Please try again." }, 502);
+  }
+  trackEvent(c.env, { event: "checkout_started", route: "billing", userId: account.id, source: "paid" });
+  return c.json({ url: result.invoiceUrl });
+});
+
+// Not behind requireAccount/CORS-credentials — NOWPayments calls this server-to-server with no
+// cookies or Origin header, and the signature check inside verifyIpn is the actual authentication.
+billing.post("/crypto-webhook", async (c) => {
+  const rawBody = await c.req.text();
+  const signature = c.req.header("x-nowpayments-sig");
+  const event = await verifyIpn(rawBody, signature ?? null, c.env);
+  const orderId = event?.order_id;
+  if (event && isSuccessfulPaymentStatus(event.payment_status) && typeof orderId === "string") {
+    await extendCryptoPaidUntil(c.env, orderId, CRYPTO_PLAN_DAYS);
+    trackEvent(c.env, { event: "checkout_completed", route: "billing", userId: orderId, source: "paid" });
+  }
+  // Always 200 — same rationale as the Stripe webhook above: a bad signature or a non-terminal
+  // status ("waiting"/"confirming") isn't retry-worthy.
+  return c.json({ ok: true });
 });
 
 // Not behind requireAccount/CORS-credentials — Stripe calls this server-to-server with no

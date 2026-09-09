@@ -302,6 +302,7 @@ const CLIENT_TRACKABLE_EVENTS = new Set<FunnelEvent>([
   // Client-only: upgrade_clicked fires before /billing/checkout; viral_cta_clicked has no session.
   "upgrade_clicked",
   "viral_cta_clicked",
+  "send_money_cta_clicked",
   "verify_checked",
   "upload_failed",
   "field_error",

@@ -18,3 +18,14 @@ PUBLIC_CONNECTOR_URL=http://localhost:8788
 
 # Turnstile (bot check on the login form) — leave unset to skip verification entirely locally.
 # TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
+
+# Crypto subscription payment (NOWPayments) — leave both unset to have /crypto-checkout 501
+# gracefully. API key from the dashboard's API keys page; IPN secret from Payment settings.
+# NOWPAYMENTS_API_KEY=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+# NOWPAYMENTS_IPN_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+# Transak "convert your money" widget (/send-money) — leave unset to have /api/transak/session
+# 501 gracefully. API key + access token from the Partner Dashboard's Developers tab.
+# TRANSAK_API_KEY=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+# TRANSAK_ACCESS_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+# TRANSAK_ENVIRONMENT=STAGING

@@ -40,6 +40,7 @@ import {
   setWorkspaceSlug,
   startCheckout,
   markCobroPaid,
+  startCryptoCheckout,
   fetchMarketplaceTemplates,
   submitTemplateToMarketplace,
   type MarketplaceSubmission,
@@ -317,6 +318,8 @@ export default function Dashboard() {
   const [error, setError] = useState<string | null>(null);
   const [upgrading, setUpgrading] = useState(false);
   const [upgradeError, setUpgradeError] = useState<string | null>(null);
+  const [upgradingCrypto, setUpgradingCrypto] = useState(false);
+  const [upgradeCryptoError, setUpgradeCryptoError] = useState<string | null>(null);
   const [upgradingEnterprise, setUpgradingEnterprise] = useState(false);
   const [upgradeEnterpriseError, setUpgradeEnterpriseError] = useState<string | null>(null);
   const [managingBilling, setManagingBilling] = useState(false);
@@ -843,6 +846,19 @@ export default function Dashboard() {
     }
   };
 
+  const onUpgradeCrypto = async () => {
+    track("upgrade_clicked", { source: "dashboard_crypto" });
+    setUpgradingCrypto(true);
+    setUpgradeCryptoError(null);
+    try {
+      const { url } = await startCryptoCheckout();
+      window.location.href = url;
+    } catch (err) {
+      setUpgradeCryptoError(err instanceof Error ? err.message : t("common.error"));
+      setUpgradingCrypto(false);
+    }
+  };
+
   const onManageBilling = async () => {
     setManagingBilling(true);
     setManageBillingError(null);
@@ -1328,6 +1344,26 @@ export default function Dashboard() {
                   {t("dash.subscription")}
                 </button>
               )}
+              {/* Free accounts had NO reachable upgrade path outside whichever tab happened to
+               *  render its own conditional "Upgrade to paid" card — this is the one entry point
+               *  guaranteed visible from every tab, since the profile menu itself is tab-independent.
+               *  Not gated by isWorkspaceOwner (unlike the paid Subscription item below): that flag
+               *  is only meaningful once teamMembers has loaded, which never happens for a free
+               *  account (Team is a paid-only fetch) — and a free account is always its own
+               *  workspace owner anyway, since team membership only exists on paid workspaces and a
+               *  member's isPaid is inherited from the owner (see lib/billing.ts). */}
+              {!account.isPaid && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setActiveTab("dashboard");
+                    setProfileMenuOpen(false);
+                  }}
+                >
+                  <MenuIcon name="subscription" />
+                  {t("common.upgrade")}
+                </button>
+              )}
               {isAdmin && (
                 <Link to="/admin/analytics" onClick={() => setProfileMenuOpen(false)}>
                   <MenuIcon name="admin" />
@@ -1364,7 +1400,23 @@ export default function Dashboard() {
             onClick={() => setProfileMenuOpen((o) => !o)}
           >
             <div className="dashboard-avatar">{account.email.slice(0, 2).toUpperCase()}</div>
-            <span style={{ fontSize: 13, color: "var(--body)", overflowWrap: "anywhere" }}>{account.email}</span>
+            <span style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 2, minWidth: 0 }}>
+              <span style={{ fontSize: 13, color: "var(--body)", overflowWrap: "anywhere" }}>{account.email}</span>
+              <span
+                style={{
+                  fontSize: 10,
+                  fontWeight: 700,
+                  letterSpacing: "0.03em",
+                  textTransform: "uppercase",
+                  padding: "1px 7px",
+                  borderRadius: 999,
+                  color: account.isPaid ? "var(--on-accent)" : "var(--mute)",
+                  background: account.isPaid ? "var(--accent)" : "var(--hairline)",
+                }}
+              >
+                {account.isPaid ? t("dash.paidHint") : t("dash.freeHint")}
+              </span>
+            </span>
           </button>
         </div>
       </aside>
@@ -1773,6 +1825,15 @@ export default function Dashboard() {
                   {upgradeError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{upgradeError}</p>}
                   <button className="btn-primary" onClick={onUpgrade} disabled={upgrading}>
                     {upgrading ? t("common.redirecting") : t("common.upgrade")}
+                  </button>
+                  {upgradeCryptoError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{upgradeCryptoError}</p>}
+                  <button
+                    className="btn-secondary"
+                    style={{ marginLeft: 8 }}
+                    onClick={onUpgradeCrypto}
+                    disabled={upgradingCrypto}
+                  >
+                    {upgradingCrypto ? t("common.redirecting") : t("dash.upgradeCrypto")}
                   </button>
                 </div>
               </>

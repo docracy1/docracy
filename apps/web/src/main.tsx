@@ -89,6 +89,7 @@ const TemplateMarketplace = lazy(() => import("./pages/TemplateMarketplace"));
 const SubmitTemplate = lazy(() => import("./pages/SubmitTemplate"));
 const Docs = lazy(() => import("./pages/Docs"));
 const Roadmap = lazy(() => import("./pages/Roadmap"));
+const SendMoney = lazy(() => import("./pages/SendMoney"));
 const Imprint = lazy(() => import("./pages/Imprint"));
 const Uptime = lazy(() => import("./pages/Uptime"));
 const Blog = lazy(() => import("./pages/Blog"));
@@ -225,6 +226,8 @@ function AppRoutes() {
       <Route path="/es/precios" element={<Pricing />} />
       <Route path="/docs" element={<Docs />} />
       <Route path="/roadmap" element={<Roadmap />} />
+      <Route path="/send-money" element={<SendMoney />} />
+      <Route path="/es/enviar-dinero" element={<SendMoney />} />
       <Route path="/es/documentacion" element={<Docs />} />
       <Route path="/imprint" element={<Imprint />} />
       <Route path="/uptime" element={<Uptime />} />

@@ -38,6 +38,7 @@ const SEO_CATALOG_KEY: Record<SeoPage, string> = {
   aiContractDrafting: "aiContractDrafting",
   enterprise: "enterprise",
   integrationsAi: "integrationsAi",
+  sendMoney: "sendMoney",
 };
 
 /** Title + description from `seo.<page>.*` catalogs, with canonical + hreflang for bilingual SEO pages. */

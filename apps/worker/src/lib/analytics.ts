@@ -36,6 +36,7 @@ export type FunnelEvent =
   | "blog_article_loaded"
   | "blog_cta_clicked"
   | "viral_cta_clicked"
+  | "send_money_cta_clicked"
   | "verify_checked"
   // Email
   | "email_sent"

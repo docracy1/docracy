@@ -157,3 +157,12 @@ const MARKETPLACE_SUBMIT_MAX_PER_WINDOW = 3;
 export async function checkMarketplaceSubmitRateLimit(env: Env, ip: string): Promise<boolean> {
   return checkLimit(env, `marketplacesubmit:${ip}`, MARKETPLACE_SUBMIT_MAX_PER_WINDOW, MARKETPLACE_SUBMIT_WINDOW_SECONDS);
 }
+
+const REMIT_WAITLIST_WINDOW_SECONDS = 60 * 60; // 1 hour
+const REMIT_WAITLIST_MAX_PER_WINDOW = 5;
+
+/** Soft per-IP limit on the /send-money waitlist form, same rationale as checkFeedbackRateLimit —
+ *  no account to gate by, so this stops it from mail-bombing FEEDBACK_EMAIL. */
+export async function checkRemitWaitlistRateLimit(env: Env, ip: string): Promise<boolean> {
+  return checkLimit(env, `remitwaitlist:${ip}`, REMIT_WAITLIST_MAX_PER_WINDOW, REMIT_WAITLIST_WINDOW_SECONDS);
+}

@@ -551,6 +551,70 @@ export async function sendReminder(env: Env, doc: DocState, order: number, token
   await send(env, signer.email, subject, emailShell(env.PUBLIC_APP_URL, body, customLogoUrl, locale), { emailType: "reminder" });
 }
 
+/** "day2" (friendly nudge) or "day4" (final warning, one day before lock) — see
+ *  CRYPTO_REMINDER_DAYS (lib/billing.ts). No card network dunning exists behind a crypto payment,
+ *  so this email is the only signal the account gets before findAccountsPastCryptoExpiry freezes it. */
+export async function sendCryptoPaymentReminder(
+  env: Env,
+  email: string,
+  stage: "day2" | "day4",
+  locale: Locale = "en"
+): Promise<void> {
+  const dashboardUrl = `${env.PUBLIC_APP_URL}/dashboard`;
+  const final = stage === "day4";
+  const subject =
+    locale === "es"
+      ? final
+        ? "Última oportunidad: tu cuenta Docracy se bloqueará mañana"
+        : "Recordatorio: tu pago en cripto no se ha completado"
+      : final
+        ? "Last chance: your Docracy account locks tomorrow"
+        : "Reminder: your crypto payment hasn't gone through yet";
+  const headline =
+    locale === "es"
+      ? final
+        ? "Tu cuenta se bloqueará mañana"
+        : "Todavía no hemos recibido tu pago"
+      : final
+        ? "Your account locks tomorrow"
+        : "We haven't received your payment yet";
+  const bodyCopy =
+    locale === "es"
+      ? final
+        ? "Tu plan de pago vence pronto y no hemos recibido tu pago en cripto. Si no lo completas mañana, tu cuenta volverá al plan gratuito."
+        : "Tu plan de pago venció y no hemos recibido tu pago en cripto todavía. Complétalo para seguir disfrutando de tu plan de pago sin interrupciones."
+      : final
+        ? "Your paid plan is about to lapse and we still haven't received your crypto payment. If it's not completed by tomorrow, your account will drop back to the free plan."
+        : "Your paid plan renewal is overdue and we haven't received your crypto payment yet. Complete it to keep your paid plan without interruption.";
+  const body = `
+    ${emailHeadline(headline)}
+    <p style="margin:0;font-size:15px;color:${INK};line-height:1.55;">${bodyCopy}</p>
+    ${ctaButton(dashboardUrl, locale === "es" ? "Ir al panel" : "Go to dashboard")}
+    ${signOff(locale)}
+  `;
+  await send(env, email, subject, emailShell(env.PUBLIC_APP_URL, body), { emailType: `crypto_reminder_${stage}` });
+}
+
+/** Sent once, the moment findAccountsPastCryptoExpiry actually freezes the account — the
+ *  reminders above warn it's coming, this confirms it happened (and how to get back on the paid
+ *  plan), so the account owner never has to guess why paid features suddenly disappeared. */
+export async function sendCryptoAccountLocked(env: Env, email: string, locale: Locale = "en"): Promise<void> {
+  const dashboardUrl = `${env.PUBLIC_APP_URL}/dashboard`;
+  const subject = locale === "es" ? "Tu cuenta Docracy volvió al plan gratuito" : "Your Docracy account is back on the free plan";
+  const headline = locale === "es" ? "Tu cuenta volvió al plan gratuito" : "Your account is back on the free plan";
+  const bodyCopy =
+    locale === "es"
+      ? "No recibimos tu pago en cripto a tiempo, así que tu cuenta volvió al plan gratuito. Puedes volver a pagar en cualquier momento desde tu panel para recuperar el plan de pago."
+      : "We didn't receive your crypto payment in time, so your account has dropped back to the free plan. You can pay again at any time from your dashboard to get the paid plan back.";
+  const body = `
+    ${emailHeadline(headline)}
+    <p style="margin:0;font-size:15px;color:${INK};line-height:1.55;">${bodyCopy}</p>
+    ${ctaButton(dashboardUrl, locale === "es" ? "Ir al panel" : "Go to dashboard")}
+    ${signOff(locale)}
+  `;
+  await send(env, email, subject, emailShell(env.PUBLIC_APP_URL, body), { emailType: "crypto_account_locked" });
+}
+
 /** Quoted title for preparer-facing copy, or a neutral fallback when the doc has no title. */
 function preparerDocLabel(doc: DocState, locale: Locale = "en"): string {
   if (doc.title) return `"${escapeHtml(doc.title)}"`;
@@ -1051,6 +1115,16 @@ export async function sendFeedback(env: Env, fromEmail: string, message: string)
   await send(env, env.FEEDBACK_EMAIL, "Docracy feedback", `<p>From: ${escapeHtml(fromEmail)}</p><p>${body}</p>`, {
     emailType: "feedback",
     replyTo: fromEmail,
+  });
+}
+
+/** One signup from the /send-money (LatAm remittance) waitlist — recipient is FEEDBACK_EMAIL /
+ *  founder@, same as sendFeedback. No product exists yet; this just collects interest/demand. */
+export async function sendRemitWaitlistNotice(env: Env, email: string, country: string): Promise<void> {
+  const body = `<p>Email: ${escapeHtml(email)}</p><p>Country: ${escapeHtml(country)}</p>`;
+  await send(env, env.FEEDBACK_EMAIL, "Docracy send-money waitlist signup", body, {
+    emailType: "remit_waitlist",
+    replyTo: email,
   });
 }
 

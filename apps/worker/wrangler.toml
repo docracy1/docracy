@@ -108,6 +108,15 @@ GOOGLE_LOGIN_CLIENT_ID = "188295326340-ihcrrfutas19lqgu407u3oft7huq5vhl.apps.goo
 # The widget's public sitekey isn't secret — set it as VITE_TURNSTILE_SITE_KEY in apps/web's
 # .env.production and rebuild/redeploy the frontend once the widget exists.
 
+# --- Crypto subscription payment (NOWPayments) — optional; /crypto-checkout 501s until set ---
+# Set with: wrangler secret put NOWPAYMENTS_API_KEY   (dashboard → API keys)
+# Set with: wrangler secret put NOWPAYMENTS_IPN_SECRET   (dashboard → Payment settings)
+
+# --- Transak "convert your money" widget (/send-money) — optional; /api/transak/session 501s until set ---
+# Set with: wrangler secret put TRANSAK_API_KEY   (Partner Dashboard → Developers)
+# Set with: wrangler secret put TRANSAK_ACCESS_TOKEN   (Partner Dashboard → Developers)
+# TRANSAK_ENVIRONMENT is not secret ("STAGING" or "PRODUCTION") — set in [vars] once ready to go live.
+
 # --- Staging: isolated KV/D1/R2 so testing never touches production data ---
 # Deploy with: wrangler deploy --env staging
 # Secrets: wrangler secret put TOKEN_SECRET --env staging (RESEND_API_KEY intentionally left

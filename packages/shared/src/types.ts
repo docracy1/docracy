@@ -379,4 +379,25 @@ export interface Env {
    *  from the signing-invite template — see lib/whatsapp.ts's sendWhatsAppPin). Defaults to
    *  "signing_pin" when unset. */
   WHATSAPP_PIN_TEMPLATE_NAME?: string;
+  /** NOWPayments API key (dashboard → API keys) — lets a paid account pay the subscription in
+   *  crypto instead of via Stripe (routes/billing.ts's /crypto-checkout, lib/billingProviders/
+   *  nowpayments.ts). Absent means that route 501s, same graceful-degradation pattern as
+   *  STRIPE_SECRET_KEY above. */
+  NOWPAYMENTS_API_KEY?: string;
+  /** IPN secret (dashboard → Payment settings) used to verify routes/nowpaymentsWebhook.ts's
+   *  x-nowpayments-sig header (HMAC-SHA512 over the deep-key-sorted body). Absent means that
+   *  webhook always rejects, same degrade-safe pattern as RESEND_WEBHOOK_SECRET. */
+  NOWPAYMENTS_IPN_SECRET?: string;
+  /** Transak Partner Dashboard API key — public-ish per-partner identifier used in the Create
+   *  Widget URL session call (lib/transak.ts) that powers the /send-money "convert your money"
+   *  widget. Absent means that route 501s. */
+  TRANSAK_API_KEY?: string;
+  /** Transak Partner Dashboard "access token" (Developers tab) — the credential the Create Widget
+   *  URL API's `access-token` header actually expects; distinct from TRANSAK_API_KEY. Set with
+   *  `wrangler secret put TRANSAK_ACCESS_TOKEN`, never committed to wrangler.toml. */
+  TRANSAK_ACCESS_TOKEN?: string;
+  /** "STAGING" or "PRODUCTION" — which Transak environment the widget session is created against.
+   *  Defaults to "STAGING" when unset, so a deployment with keys configured but this left unset
+   *  fails safe (sandbox money, not real transactions) rather than silently going live. */
+  TRANSAK_ENVIRONMENT?: string;
 }

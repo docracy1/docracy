@@ -206,3 +206,98 @@ export async function listStaleUnpaidCheckouts(env: Env, minAgeMs = 60_000, limi
     return [];
   }
 }
+
+/** Days past crypto_paid_until before the account is actually frozen — mirrors
+ *  PAYMENT_FAILURE_GRACE_DAYS's role for Stripe, except here it's the only backstop (no card
+ *  network dunning to lean on) and it's paired with reminder emails during the window itself
+ *  (CRYPTO_REMINDER_DAYS below), not just a silent grace period. */
+export const CRYPTO_GRACE_DAYS = 5;
+
+/** Days-past-expiry thresholds at which a reminder email fires, each tagged with the stage name
+ *  used to dedupe in crypto_reminders_sent — every entry here must be < CRYPTO_GRACE_DAYS, or the
+ *  account would already be frozen (and past reminding) before that stage's turn ever comes up. */
+export const CRYPTO_REMINDER_DAYS: { stage: string; afterDays: number }[] = [
+  { stage: "day2", afterDays: 2 },
+  { stage: "day4", afterDays: 4 },
+];
+
+/** Called on each successful NOWPayments invoice payment — extends from the later of "now" or the
+ *  account's current crypto_paid_until, so an early renewal adds on top of remaining time rather
+ *  than resetting it. Also flips is_paid on, same as a Stripe checkout, and clears any reminder
+ *  stages sent for the period that just got paid off, so a future lapse starts its own fresh cycle. */
+export async function extendCryptoPaidUntil(env: Env, accountId: string, days: number): Promise<void> {
+  if (!env.DOCRACY_DB) return;
+  const row = await env.DOCRACY_DB.prepare(`SELECT crypto_paid_until FROM accounts WHERE id = ?`)
+    .bind(accountId)
+    .first<{ crypto_paid_until: string | null }>();
+  const now = Date.now();
+  const currentExpiry = row?.crypto_paid_until ? new Date(row.crypto_paid_until).getTime() : now;
+  const base = Number.isFinite(currentExpiry) && currentExpiry > now ? currentExpiry : now;
+  const nextExpiry = new Date(base + days * 24 * 60 * 60 * 1000).toISOString();
+  await env.DOCRACY_DB.prepare(`UPDATE accounts SET crypto_paid_until = ?, crypto_reminders_sent = NULL WHERE id = ?`)
+    .bind(nextExpiry, accountId)
+    .run();
+  await markAccountPaid(env, accountId, true);
+}
+
+interface CryptoGraceAccount {
+  id: string;
+  email: string;
+  locale: string | null;
+  cryptoPaidUntil: string;
+  remindersSent: string[];
+}
+
+/** Every still-paid, crypto-billed account currently past its due date but still inside the
+ *  CRYPTO_GRACE_DAYS window — what the daily reminder sweep (lib/paymentFreeze.ts) iterates to
+ *  decide which stage (if any) is due next for each one. */
+export async function findAccountsInCryptoGraceWindow(env: Env): Promise<CryptoGraceAccount[]> {
+  if (!env.DOCRACY_DB) return [];
+  const now = new Date();
+  const graceCutoff = new Date(now.getTime() - CRYPTO_GRACE_DAYS * 24 * 60 * 60 * 1000).toISOString();
+  const rows = await env.DOCRACY_DB.prepare(
+    `SELECT id, email, locale, crypto_paid_until, crypto_reminders_sent FROM accounts
+     WHERE is_paid = 1 AND crypto_paid_until IS NOT NULL AND crypto_paid_until <= ? AND crypto_paid_until > ?`
+  )
+    .bind(now.toISOString(), graceCutoff)
+    .all<{ id: string; email: string; locale: string | null; crypto_paid_until: string; crypto_reminders_sent: string | null }>();
+  return rows.results.map((r) => ({
+    id: r.id,
+    email: r.email,
+    locale: r.locale,
+    cryptoPaidUntil: r.crypto_paid_until,
+    remindersSent: r.crypto_reminders_sent ? (JSON.parse(r.crypto_reminders_sent) as string[]) : [],
+  }));
+}
+
+/** Appends one stage tag ("day2"/"day4") to crypto_reminders_sent — read-modify-write is safe here
+ *  since this only ever runs from the single daily cron sweep, never concurrently per account. */
+export async function markCryptoReminderSent(env: Env, accountId: string, stage: string): Promise<void> {
+  if (!env.DOCRACY_DB) return;
+  const row = await env.DOCRACY_DB.prepare(`SELECT crypto_reminders_sent FROM accounts WHERE id = ?`)
+    .bind(accountId)
+    .first<{ crypto_reminders_sent: string | null }>();
+  const existing: string[] = row?.crypto_reminders_sent ? JSON.parse(row.crypto_reminders_sent) : [];
+  if (existing.includes(stage)) return;
+  await env.DOCRACY_DB.prepare(`UPDATE accounts SET crypto_reminders_sent = ? WHERE id = ?`)
+    .bind(JSON.stringify([...existing, stage]), accountId)
+    .run();
+}
+
+/** Accounts whose crypto-paid coverage has been lapsed for more than CRYPTO_GRACE_DAYS — the daily
+ *  cron backstop (lib/paymentFreeze.ts) that downgrades them, mirroring
+ *  findAccountsPastPaymentFailureGrace for Stripe. Only touches accounts that actually have a
+ *  crypto_paid_until set (Stripe-only accounts have it NULL and are never matched here — their
+ *  expiry is Stripe's own subscription lifecycle, not this column). */
+export async function findAccountsPastCryptoExpiry(
+  env: Env
+): Promise<{ id: string; email: string; locale: string | null }[]> {
+  if (!env.DOCRACY_DB) return [];
+  const cutoff = new Date(Date.now() - CRYPTO_GRACE_DAYS * 24 * 60 * 60 * 1000).toISOString();
+  const rows = await env.DOCRACY_DB.prepare(
+    `SELECT id, email, locale FROM accounts WHERE is_paid = 1 AND crypto_paid_until IS NOT NULL AND crypto_paid_until <= ?`
+  )
+    .bind(cutoff)
+    .all<{ id: string; email: string; locale: string | null }>();
+  return rows.results;
+}

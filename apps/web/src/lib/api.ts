@@ -357,6 +357,14 @@ export async function startCheckout(plan?: "paid" | "enterprise"): Promise<{ url
   return asJson(res);
 }
 
+/** Returns a NOWPayments-hosted invoice URL to redirect the browser to — pays one month
+ *  (CRYPTO_PLAN_DAYS) in crypto. No card-style auto-debit exists on this rail, so unlike
+ *  startCheckout this has to be called again manually each cycle. */
+export async function startCryptoCheckout(): Promise<{ url: string }> {
+  const res = await apiFetch("/api/billing/crypto-checkout", { method: "POST" });
+  return asJson(res);
+}
+
 /** Returns the Stripe-hosted Customer Portal URL, where a paid account can cancel or manage
  *  their own subscription. */
 export async function openBillingPortal(): Promise<{ url: string }> {
@@ -1238,6 +1246,27 @@ export async function voteRoadmapFeature(id: string, vote: "yes" | "no"): Promis
 /** Admin-only — same shape as the public list, minus myVote (no single "voter" to check against). */
 export async function fetchAdminRoadmapFeatures(): Promise<{ features: RoadmapFeature[] }> {
   const res = await apiFetch("/api/admin/roadmap");
+  return asJson(res);
+}
+
+/** Waitlist signup for the not-yet-built LatAm send-money/convert feature — no account needed. */
+export async function submitRemitWaitlist(email: string, country: string): Promise<{ ok: true }> {
+  const res = await apiFetch("/api/remit-waitlist", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, country }),
+  });
+  return asJson(res);
+}
+
+/** One-time, single-use Transak widget session URL (expires in 5 minutes) — powers the "convert
+ *  your money" widget on /send-money. No account needed. */
+export async function createTransakSession(fiatCurrency?: string): Promise<{ widgetUrl: string }> {
+  const res = await apiFetch("/api/transak/session", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ fiatCurrency }),
+  });
   return asJson(res);
 }
 

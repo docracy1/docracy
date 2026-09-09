@@ -199,6 +199,14 @@ const LATAM_JOB_PHRASE_QUEUE_MIGRATION_SQL = readFileSync(
   fileURLToPath(new URL("../../migrations/0031_latam_job_phrase_queues.sql", import.meta.url).toString()),
   "utf-8"
 );
+const CRYPTO_PAID_UNTIL_MIGRATION_SQL = readFileSync(
+  fileURLToPath(new URL("../../migrations/0032_crypto_paid_until.sql", import.meta.url).toString()),
+  "utf-8"
+);
+const CRYPTO_REMINDERS_MIGRATION_SQL = readFileSync(
+  fileURLToPath(new URL("../../migrations/0033_crypto_reminders.sql", import.meta.url).toString()),
+  "utf-8"
+);
 
 // sql.js's default WASM build doesn't compile in the FTS5 extension. It's swapped for a plain
 // table here — full-text MATCH queries aren't exercised by anything built in this pass anyway
@@ -236,7 +244,9 @@ const TEST_MIGRATION_SQL =
   BLOG_TOPIC_QUEUE_MIGRATION_SQL +
   BLOG_TOPIC_QUEUE_REFILL_MIGRATION_SQL +
   LATAM_BLOG_TEMPLATE_QUEUE_MIGRATION_SQL +
-  LATAM_JOB_PHRASE_QUEUE_MIGRATION_SQL;
+  LATAM_JOB_PHRASE_QUEUE_MIGRATION_SQL +
+  CRYPTO_PAID_UNTIL_MIGRATION_SQL +
+  CRYPTO_REMINDERS_MIGRATION_SQL;
 
 // sql.js's WASM module only needs loading once per test run; each test still gets its own
 // fresh in-memory `SQL.Database()` instance below.
