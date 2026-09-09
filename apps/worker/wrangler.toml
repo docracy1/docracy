@@ -55,6 +55,9 @@ FREE_TIER_MAX_SIGNERS = "2"
 DOC_TTL_DAYS = "9"
 DOC_TTL_MAX_DAYS = "500"
 FEEDBACK_EMAIL = "founder@docracy.io"
+# Only the account's Transak Developers page showed one API key/secret pair, and it's confirmed
+# production — so the widget calls Transak's production API, not the staging sandbox default.
+TRANSAK_ENVIRONMENT = "PRODUCTION"
 # Comma-separated allow-list for GET /api/admin/analytics — everyone else gets a 401, including
 # paid customers. Not a secret (just email addresses), but keep it to founders/admins only.
 ADMIN_EMAILS = "rl@relacon.at"
