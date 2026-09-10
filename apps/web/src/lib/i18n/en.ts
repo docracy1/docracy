@@ -404,6 +404,16 @@ const en: Messages = {
   "landing.faq10.q": "I just moved to the US from LATAM — what can I use?",
   "landing.faq10.a":
     "One Paid plan ($10/month): what to do, official USCIS/CEAC links, sign the offer and I-9 (we don't inspect List A/B/C or run E-Verify), and we save every PDF so you can reopen it. Visa extras we sign — we don't file I-129 or DS-160. Constancia for a landlord. Compare Boundless / CitizenPath / gestoría: we are the $10 extras, not the filing. Start at /es/kit-llegar-eeuu.",
+  "landing.legacy.stat1.num": "500,000+",
+  "landing.legacy.stat1.label": "registered users at its peak",
+  "landing.legacy.stat2.num": "25,000+",
+  "landing.legacy.stat2.label": "free templates in its library",
+  "landing.legacy.stat3.num": "2019",
+  "landing.legacy.stat3.label": "acquired by eversign",
+  "landing.legacy.stat4.num": "2011",
+  "landing.legacy.stat4.label": "the year it all started",
+  "landing.legacy.note": "The original Docracy.com, before its 2019 acquisition by eversign — not this product's numbers, and not the same company.",
+  "landing.legacy.learnMore": "What happened to the original Docracy →",
   "landing.outcomesTitle": "After they sign — the packet they asked for",
   "landing.outcomesSub":
     "Signing stays free. Paid is the packet: a shareable constancia, WhatsApp cobro, a 1099 CSV, kits for trades and LATAM hire, and a W-9 request.",

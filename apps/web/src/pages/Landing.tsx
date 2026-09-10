@@ -704,6 +704,55 @@ export default function Landing() {
         <div className="core-features-inner">
           <h2 style={{ fontSize: 26, marginBottom: 8, textAlign: "center" }}>{t(latamDoor ? "latamDesk.heroTitle" : "landing.outcomesTitle")}</h2>
           <p style={{ textAlign: "center", maxWidth: 560, margin: "0 auto" }}>{t(latamDoor ? "latamDesk.heroSub" : "landing.outcomesSub")}</p>
+
+          <div className="legacy-stat-bar" style={{ marginTop: 32 }}>
+            <div className="legacy-stat">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="9" cy="8" r="3" />
+                <path d="M3.5 19.5c0-3 2.5-5.5 5.5-5.5s5.5 2.5 5.5 5.5" />
+                <circle cx="17" cy="9" r="2.25" />
+                <path d="M15.5 14.2c2.3.4 4 2.4 4 5.3" />
+              </svg>
+              <span>
+                <span className="legacy-stat-num">{t("landing.legacy.stat1.num")}</span>
+                <span className="legacy-stat-label">{t("landing.legacy.stat1.label")}</span>
+              </span>
+            </div>
+            <div className="legacy-stat">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <rect x="8" y="8" width="12" height="13" rx="1.5" />
+                <path d="M4 15V4.5A1.5 1.5 0 0 1 5.5 3H15" />
+              </svg>
+              <span>
+                <span className="legacy-stat-num">{t("landing.legacy.stat2.num")}</span>
+                <span className="legacy-stat-label">{t("landing.legacy.stat2.label")}</span>
+              </span>
+            </div>
+            <div className="legacy-stat">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M12.5 2.5L4 14h6l-1 7.5L20 10h-6l-1.5-7.5z" />
+              </svg>
+              <span>
+                <span className="legacy-stat-num">{t("landing.legacy.stat3.num")}</span>
+                <span className="legacy-stat-label">{t("landing.legacy.stat3.label")}</span>
+              </span>
+            </div>
+            <div className="legacy-stat">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 7v5l3.5 2" />
+              </svg>
+              <span>
+                <span className="legacy-stat-num">{t("landing.legacy.stat4.num")}</span>
+                <span className="legacy-stat-label">{t("landing.legacy.stat4.label")}</span>
+              </span>
+            </div>
+          </div>
+          <p className="legacy-stat-note">
+            {t("landing.legacy.note")}{" "}
+            <Link to={localizePath("/docracy-alternative", locale)}>{t("landing.legacy.learnMore")}</Link>
+          </p>
+
           <div className="core-features-grid">
             {(latamDoor ? LATAM_OUTCOMES : AFTER_SIGN_OUTCOMES).map((f) => (
               <div key={f.titleKey + f.to} className="core-feature-card">

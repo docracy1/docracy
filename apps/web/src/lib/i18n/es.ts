@@ -428,6 +428,16 @@ const es: Messages = {
   "landing.faq10.q": "Acabo de llegar a EE. UU. desde LATAM — ¿qué uso?",
   "landing.faq10.a":
     "Un solo plan ($10/mes): qué hacer, links oficiales de USCIS/CEAC, firma la oferta y el I-9 (no inspeccionamos Listas A/B/C ni corremos E-Verify), y guardamos cada PDF para que lo reabras. Para una visa firmamos documentos de apoyo — no presentamos I-129 ni DS-160. Constancia para el arrendador. Compara Boundless / CitizenPath / gestoría: somos los extras de $10, no el trámite. Empieza en /es/kit-llegar-eeuu.",
+  "landing.legacy.stat1.num": "500,000+",
+  "landing.legacy.stat1.label": "usuarios registrados en su mejor momento",
+  "landing.legacy.stat2.num": "25,000+",
+  "landing.legacy.stat2.label": "plantillas gratis en su biblioteca",
+  "landing.legacy.stat3.num": "2019",
+  "landing.legacy.stat3.label": "adquirida por eversign",
+  "landing.legacy.stat4.num": "2011",
+  "landing.legacy.stat4.label": "el año en que todo empezó",
+  "landing.legacy.note": "La Docracy.com original, antes de su adquisición por eversign en 2019 — no son los números de este producto, ni la misma empresa.",
+  "landing.legacy.learnMore": "Qué pasó con la Docracy original →",
   "landing.outcomesTitle": "Después de firmar — la constancia que te piden",
   "landing.outcomesSub":
     "Firmar sigue gratis. El plan de pago es el paquete: una constancia para compartir, cobro por WhatsApp, un archivo fiscal, kits de oficios y contratación LATAM, y pedir un W-9.",
