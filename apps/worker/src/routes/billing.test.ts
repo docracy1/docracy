@@ -577,3 +577,145 @@ describe("POST /api/billing/portal", () => {
     expect(callInit.body as string).toContain("customer=cus_1");
   });
 });
+
+/** Deep-key-sorted-JSON HMAC-SHA512 over `body`, matching lib/billingProviders/nowpayments.ts's
+ *  verifyIpn exactly, so tests can produce a signature NOWPayments' webhook handler will accept. */
+async function signIpnBody(secret: string, body: Record<string, unknown>): Promise<string> {
+  const sortKeysDeep = (value: unknown): unknown => {
+    if (Array.isArray(value)) return value.map(sortKeysDeep);
+    if (value !== null && typeof value === "object") {
+      const sorted: Record<string, unknown> = {};
+      for (const key of Object.keys(value as Record<string, unknown>).sort()) {
+        sorted[key] = sortKeysDeep((value as Record<string, unknown>)[key]);
+      }
+      return sorted;
+    }
+    return value;
+  };
+  const sortedJson = JSON.stringify(sortKeysDeep(body));
+  const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(secret), { name: "HMAC", hash: "SHA-512" }, false, ["sign"]);
+  const sig = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(sortedJson));
+  return Array.from(new Uint8Array(sig))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+describe("POST /api/billing/crypto-checkout", () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  it("charges the flat monthly price with a bare order_id when there's no accrued overage", async () => {
+    const { env, d1 } = makeMockEnv({ NOWPAYMENTS_API_KEY: "np_test_x" });
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid) VALUES (?, ?, ?, 1)`)
+      .bind("acct-1", "anna@example.com", new Date().toISOString())
+      .run();
+    const ctx = makeCtx();
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", true, false, null, null);
+    const fetchSpy = vi
+      .spyOn(global, "fetch")
+      .mockResolvedValue(new Response(JSON.stringify({ invoice_url: "https://nowpayments.io/invoice/abc" }), { status: 200 }));
+
+    const res = await billing.request(
+      "/crypto-checkout",
+      { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } },
+      env,
+      ctx
+    );
+
+    expect(res.status).toBe(200);
+    const callBody = JSON.parse((fetchSpy.mock.calls[0][1] as RequestInit).body as string);
+    expect(callBody.order_id).toBe("acct-1");
+    expect(callBody.price_amount).toBe(10);
+  });
+
+  it("adds a crypto-paid account's accrued WhatsApp overage on top of the flat price, encoded into order_id", async () => {
+    const { env, d1 } = makeMockEnv({ NOWPAYMENTS_API_KEY: "np_test_x" });
+    await d1
+      .prepare(
+        `INSERT INTO accounts (id, email, created_at, is_paid, crypto_paid_until, crypto_whatsapp_overage_cents) VALUES (?, ?, ?, 1, ?, ?)`
+      )
+      .bind("acct-1", "anna@example.com", new Date().toISOString(), new Date().toISOString(), 150)
+      .run();
+    const ctx = makeCtx();
+    const token = await createSession(env, ctx, "acct-1", "anna@example.com", true, false, null, null);
+    const fetchSpy = vi
+      .spyOn(global, "fetch")
+      .mockResolvedValue(new Response(JSON.stringify({ invoice_url: "https://nowpayments.io/invoice/abc" }), { status: 200 }));
+
+    const res = await billing.request(
+      "/crypto-checkout",
+      { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${token}` } },
+      env,
+      ctx
+    );
+
+    expect(res.status).toBe(200);
+    const callBody = JSON.parse((fetchSpy.mock.calls[0][1] as RequestInit).body as string);
+    expect(callBody.order_id).toBe("acct-1:ov150");
+    expect(callBody.price_amount).toBe(11.5);
+    expect(callBody.order_description).toContain("$1.50 WhatsApp overage");
+  });
+});
+
+describe("POST /api/billing/crypto-webhook", () => {
+  afterEach(() => vi.restoreAllMocks());
+
+  it("extends crypto_paid_until and settles the exact overage amount encoded in order_id", async () => {
+    const { env, d1 } = makeMockEnv({ NOWPAYMENTS_IPN_SECRET: "ipn_secret_x" });
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid, crypto_whatsapp_overage_cents) VALUES (?, ?, ?, 1, ?)`)
+      .bind("acct-1", "anna@example.com", new Date().toISOString(), 150)
+      .run();
+
+    const payload = { order_id: "acct-1:ov150", payment_status: "finished" };
+    const signature = await signIpnBody("ipn_secret_x", payload);
+
+    const res = await billing.request(
+      "/crypto-webhook",
+      {
+        method: "POST",
+        headers: { "x-nowpayments-sig": signature, "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      },
+      env,
+      MOCK_CTX
+    );
+    expect(res.status).toBe(200);
+
+    const row = (await d1
+      .prepare(`SELECT crypto_paid_until, crypto_whatsapp_overage_cents FROM accounts WHERE id = ?`)
+      .bind("acct-1")
+      .first()) as { crypto_paid_until: string | null; crypto_whatsapp_overage_cents: number } | null;
+    expect(row?.crypto_paid_until).toBeTruthy();
+    expect(row?.crypto_whatsapp_overage_cents).toBe(0);
+  });
+
+  it("doesn't wipe out overage accrued after the settled invoice was created", async () => {
+    const { env, d1 } = makeMockEnv({ NOWPAYMENTS_IPN_SECRET: "ipn_secret_x" });
+    // 150 cents were captured into this invoice's order_id, but another 75 cents of overage
+    // accrued from a later document send before the payment actually completed.
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid, crypto_whatsapp_overage_cents) VALUES (?, ?, ?, 1, ?)`)
+      .bind("acct-1", "anna@example.com", new Date().toISOString(), 225)
+      .run();
+
+    const payload = { order_id: "acct-1:ov150", payment_status: "finished" };
+    const signature = await signIpnBody("ipn_secret_x", payload);
+
+    await billing.request(
+      "/crypto-webhook",
+      {
+        method: "POST",
+        headers: { "x-nowpayments-sig": signature, "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      },
+      env,
+      MOCK_CTX
+    );
+
+    const row = (await d1.prepare(`SELECT crypto_whatsapp_overage_cents FROM accounts WHERE id = ?`).bind("acct-1").first()) as {
+      crypto_whatsapp_overage_cents: number;
+    } | null;
+    expect(row?.crypto_whatsapp_overage_cents).toBe(75);
+  });
+});

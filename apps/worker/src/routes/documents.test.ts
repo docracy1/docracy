@@ -798,4 +798,37 @@ describe("POST /api/documents", () => {
     expect(meterBody).toContain(`${encodeURIComponent("payload[value]")}=3`);
     fetchSpy.mockRestore();
   });
+
+  it("accrues overage in cents for a crypto-paid account (no Stripe customer id) instead of dropping it", async () => {
+    const { env, d1 } = makeMockEnv({
+      STRIPE_SECRET_KEY: "sk_test_x",
+      STRIPE_WHATSAPP_METER_NAME: "whatsapp_overage",
+    });
+    const ctx = makeCtx();
+    const sessionToken = await createSession(env, ctx, "acct-crypto", "crypto@example.com", true, false, null, null);
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid, crypto_paid_until) VALUES (?, ?, ?, 1, ?)`)
+      .bind("acct-crypto", "crypto@example.com", new Date().toISOString(), new Date().toISOString())
+      .run();
+    const pdf = await makeValidPdfBytes();
+    const meta = { ...validMeta, whatsappInvites: true, ...makeWhatsappSigners(13) }; // 10 included + 3 overage
+    const ctxWithFlush = makeCtx();
+    vi.useFakeTimers();
+    const res = await documents.request(
+      "/",
+      { method: "POST", headers: { Cookie: `${SESSION_COOKIE_NAME}=${sessionToken}` }, body: buildForm(pdf, meta) },
+      env,
+      ctxWithFlush
+    );
+    expect(res.status).toBe(200);
+    const flushed = ctxWithFlush.flush();
+    await vi.advanceTimersByTimeAsync(30_000);
+    await flushed;
+    vi.useRealTimers();
+
+    const row = (await d1.prepare(`SELECT crypto_whatsapp_overage_cents FROM accounts WHERE id = ?`).bind("acct-crypto").first()) as {
+      crypto_whatsapp_overage_cents: number;
+    } | null;
+    expect(row?.crypto_whatsapp_overage_cents).toBe(150); // 3 units * $0.50
+  });
 });

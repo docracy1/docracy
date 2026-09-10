@@ -1,14 +1,18 @@
 import { describe, it, expect } from "vitest";
 import {
+  accrueCryptoWhatsappOverageCents,
   clearPaymentFailed,
   findAccountIdByEmail,
   findAccountIdByStripeCustomerId,
   findAccountsPastPaymentFailureGrace,
+  getCryptoWhatsappOverageCents,
   getStripeCustomerId,
+  isCryptoPaidAccount,
   markAccountEnterprise,
   markAccountPaid,
   markPaymentFailed,
   setStripeCustomerId,
+  settleCryptoWhatsappOverageCents,
 } from "./billing";
 import { issueApiToken, hasApiToken } from "./apiTokens";
 import { makeMockEnv } from "../test/mockEnv";
@@ -292,5 +296,64 @@ describe("stripe customer id linking", () => {
     await expect(setStripeCustomerId(env, "acct-1", "cus_1")).resolves.toBeUndefined();
     expect(await getStripeCustomerId(env, "acct-1")).toBeNull();
     expect(await findAccountIdByStripeCustomerId(env, "cus_1")).toBeNull();
+  });
+});
+
+describe("crypto WhatsApp overage accrual", () => {
+  async function insertCryptoAccount(d1: ReturnType<typeof makeMockEnv>["d1"], id: string) {
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid, crypto_paid_until) VALUES (?, ?, ?, 1, ?)`)
+      .bind(id, `${id}@example.com`, new Date().toISOString(), new Date().toISOString())
+      .run();
+  }
+
+  it("identifies a crypto-paid account by its crypto_paid_until column", async () => {
+    const { env, d1 } = makeMockEnv();
+    await insertCryptoAccount(d1, "acct-crypto");
+    await d1
+      .prepare(`INSERT INTO accounts (id, email, created_at, is_paid, stripe_customer_id) VALUES (?, ?, ?, 1, ?)`)
+      .bind("acct-stripe", "acct-stripe@example.com", new Date().toISOString(), "cus_1")
+      .run();
+
+    expect(await isCryptoPaidAccount(env, "acct-crypto")).toBe(true);
+    expect(await isCryptoPaidAccount(env, "acct-stripe")).toBe(false);
+  });
+
+  it("accrues overage cents onto the running balance across multiple calls", async () => {
+    const { env, d1 } = makeMockEnv();
+    await insertCryptoAccount(d1, "acct-crypto");
+
+    await accrueCryptoWhatsappOverageCents(env, "acct-crypto", 150);
+    await accrueCryptoWhatsappOverageCents(env, "acct-crypto", 75);
+
+    expect(await getCryptoWhatsappOverageCents(env, "acct-crypto")).toBe(225);
+  });
+
+  it("ignores a non-positive accrual", async () => {
+    const { env, d1 } = makeMockEnv();
+    await insertCryptoAccount(d1, "acct-crypto");
+
+    await accrueCryptoWhatsappOverageCents(env, "acct-crypto", 0);
+    await accrueCryptoWhatsappOverageCents(env, "acct-crypto", -50);
+
+    expect(await getCryptoWhatsappOverageCents(env, "acct-crypto")).toBe(0);
+  });
+
+  it("settles a balance down toward zero, never below", async () => {
+    const { env, d1 } = makeMockEnv();
+    await insertCryptoAccount(d1, "acct-crypto");
+    await accrueCryptoWhatsappOverageCents(env, "acct-crypto", 100);
+
+    await settleCryptoWhatsappOverageCents(env, "acct-crypto", 150);
+
+    expect(await getCryptoWhatsappOverageCents(env, "acct-crypto")).toBe(0);
+  });
+
+  it("degrades gracefully with no DOCRACY_DB bound", async () => {
+    const { env } = makeMockEnv({ DOCRACY_DB: undefined });
+    await expect(accrueCryptoWhatsappOverageCents(env, "acct-1", 100)).resolves.toBeUndefined();
+    await expect(settleCryptoWhatsappOverageCents(env, "acct-1", 100)).resolves.toBeUndefined();
+    expect(await getCryptoWhatsappOverageCents(env, "acct-1")).toBe(0);
+    expect(await isCryptoPaidAccount(env, "acct-1")).toBe(false);
   });
 });

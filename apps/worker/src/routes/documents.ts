@@ -5,8 +5,8 @@ import { createDocumentCore } from "../lib/documentCreation";
 import { isSmsCarrier, normalizeUsPhone } from "../lib/sms";
 import { normalizeE164 } from "../lib/whatsapp";
 import { consumeWhatsappQuota, consumeWhatsappQuotaWithOverage, ENTERPRISE_MONTHLY_LIMIT, FREE_MONTHLY_LIMIT, PAID_MONTHLY_LIMIT } from "../lib/whatsappQuota";
-import { reportWhatsappOverageUsage, whatsappOverageConfigured } from "../lib/whatsappOverage";
-import { getStripeCustomerId } from "../lib/billing";
+import { reportWhatsappOverageUsage, whatsappOverageConfigured, WHATSAPP_OVERAGE_PRICE_CENTS } from "../lib/whatsappOverage";
+import { getStripeCustomerId, accrueCryptoWhatsappOverageCents } from "../lib/billing";
 import { NOTRACK_COOKIE_NAME, trackEvent } from "../lib/analytics";
 import { checkRateLimit, checkInviteRateLimit } from "../lib/ratelimit";
 import { isAdminEmail, optionalAccount, type AccountContext } from "../lib/auth";
@@ -401,10 +401,13 @@ documents.post("/", optionalAccount, async (c) => {
             )
           );
         } else {
-          // Shouldn't happen for a real paid account (every checkout sets this), but billing
-          // silently going uncollected is worse than a loud log — never blocks the send either way.
-          console.error(
-            `WhatsApp overage: paid account ${account.workspaceId} has no Stripe customer id — ${overageUnits} unit(s) not billed`
+          // Crypto-paid accounts have no Stripe customer id — accrue the overage in cents instead
+          // of dropping it, so it gets added to the flat renewal price at their next
+          // /api/billing/crypto-checkout (see lib/billing.ts's accrueCryptoWhatsappOverageCents).
+          c.executionCtx.waitUntil(
+            accrueCryptoWhatsappOverageCents(c.env, account.workspaceId, overageUnits * WHATSAPP_OVERAGE_PRICE_CENTS).catch((err) =>
+              console.error(`WhatsApp crypto overage accrual failed for account ${account.workspaceId} (non-fatal):`, err)
+            )
           );
         }
       }

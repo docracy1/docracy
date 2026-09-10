@@ -4,6 +4,12 @@ import type { Env } from "@docracy/shared";
 // email.ts's RESEND_TIMEOUT_MS.
 const METER_TIMEOUT_MS = 8000;
 
+/** $0.50/unit — matches whatever rate STRIPE_WHATSAPP_OVERAGE_PRICE_ID is configured for on the
+ *  Stripe side. Used to price the same overage in cents for a crypto-paid account, which has no
+ *  Stripe metered subscription item to bill against (see accrueCryptoWhatsappOverageCents in
+ *  lib/billing.ts and routes/documents.ts's overage branch). */
+export const WHATSAPP_OVERAGE_PRICE_CENTS = 50;
+
 /**
  * Reports `units` of WhatsApp-signer overage to Stripe's Billing Meter Events API, so it bills at
  * whatever per-unit rate STRIPE_WHATSAPP_OVERAGE_PRICE_ID is configured for ($0.50/unit) against

@@ -255,6 +255,52 @@ export async function extendCryptoPaidUntil(env: Env, accountId: string, days: n
   await markAccountPaid(env, accountId, true);
 }
 
+/** Whether this account pays via crypto rather than Stripe — used to decide, when a paid account
+ *  goes over its included WhatsApp allowance, whether to bill it the Stripe metered-usage way or
+ *  accrue it toward the next crypto renewal invoice (see lib/whatsappOverage.ts). */
+export async function isCryptoPaidAccount(env: Env, accountId: string): Promise<boolean> {
+  if (!env.DOCRACY_DB) return false;
+  const row = await env.DOCRACY_DB.prepare(`SELECT crypto_paid_until FROM accounts WHERE id = ?`)
+    .bind(accountId)
+    .first<{ crypto_paid_until: string | null }>();
+  return !!row?.crypto_paid_until;
+}
+
+/** Adds `cents` to a crypto-paid account's running WhatsApp-overage balance — called when that
+ *  account goes past its included monthly allowance and has no Stripe customer id to meter usage
+ *  against. Collected at the account's next crypto renewal (see routes/billing.ts's
+ *  /crypto-checkout, which adds this balance on top of the flat monthly price) rather than any
+ *  other way, since NOWPayments has no auto-debit to charge outside of a checkout the account
+ *  itself initiates. */
+export async function accrueCryptoWhatsappOverageCents(env: Env, accountId: string, cents: number): Promise<void> {
+  if (!env.DOCRACY_DB || cents <= 0) return;
+  await env.DOCRACY_DB.prepare(`UPDATE accounts SET crypto_whatsapp_overage_cents = crypto_whatsapp_overage_cents + ? WHERE id = ?`)
+    .bind(cents, accountId)
+    .run();
+}
+
+/** Current unpaid WhatsApp-overage balance for a crypto-paid account, in cents. */
+export async function getCryptoWhatsappOverageCents(env: Env, accountId: string): Promise<number> {
+  if (!env.DOCRACY_DB) return 0;
+  const row = await env.DOCRACY_DB.prepare(`SELECT crypto_whatsapp_overage_cents FROM accounts WHERE id = ?`)
+    .bind(accountId)
+    .first<{ crypto_whatsapp_overage_cents: number | null }>();
+  return row?.crypto_whatsapp_overage_cents ?? 0;
+}
+
+/** Subtracts `cents` (floored at 0) from the running balance once that exact amount has actually
+ *  been paid — called from the crypto webhook with the overage amount captured at invoice-creation
+ *  time, not the current balance, so overage accrued *after* the invoice was created (but before it
+ *  was paid) isn't wiped out along with it. */
+export async function settleCryptoWhatsappOverageCents(env: Env, accountId: string, cents: number): Promise<void> {
+  if (!env.DOCRACY_DB || cents <= 0) return;
+  await env.DOCRACY_DB.prepare(
+    `UPDATE accounts SET crypto_whatsapp_overage_cents = MAX(0, crypto_whatsapp_overage_cents - ?) WHERE id = ?`
+  )
+    .bind(cents, accountId)
+    .run();
+}
+
 interface CryptoGraceAccount {
   id: string;
   email: string;

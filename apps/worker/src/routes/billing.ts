@@ -5,11 +5,13 @@ import {
   clearPaymentFailed,
   extendCryptoPaidUntil,
   findAccountIdByStripeCustomerId,
+  getCryptoWhatsappOverageCents,
   getStripeCustomerId,
   isAccountPaid,
   markAccountPaid,
   markPaymentFailed,
   persistCheckoutSession,
+  settleCryptoWhatsappOverageCents,
 } from "../lib/billing";
 import { verifyAndExtract } from "../lib/billingProviders/stripe";
 import {
@@ -141,12 +143,26 @@ billing.post("/crypto-checkout", requireAccount, async (c) => {
     return c.json({ error: "Ask your workspace owner to manage the subscription." }, 403);
   }
 
+  // A crypto-paid account that went over its included monthly WhatsApp allowance (see
+  // lib/whatsappQuota.ts) has no Stripe customer id to meter usage against, so that overage
+  // accrues in cents (lib/billing.ts's accrueCryptoWhatsappOverageCents) and rides along on the
+  // next renewal invoice instead — the overage amount actually invoiced is encoded into order_id
+  // (rather than re-read from the account at webhook time) so a payment only ever settles exactly
+  // what it billed, even if more overage accrues while this invoice is still pending.
+  const overageCents = await getCryptoWhatsappOverageCents(c.env, account.id);
+  const priceAmount = Math.round((CRYPTO_PLAN_PRICE_USD + overageCents / 100) * 100) / 100;
+  const orderId = overageCents > 0 ? `${account.id}:ov${overageCents}` : account.id;
+  const description =
+    overageCents > 0
+      ? `Docracy Pro — 1 month + $${(overageCents / 100).toFixed(2)} WhatsApp overage`
+      : "Docracy Pro — 1 month";
+
   const result = await createInvoice({
     env: c.env,
-    orderId: account.id,
-    priceAmount: CRYPTO_PLAN_PRICE_USD,
+    orderId,
+    priceAmount,
     priceCurrency: "usd",
-    description: "Docracy Pro — 1 month",
+    description,
     successUrl: `${c.env.PUBLIC_APP_URL}/dashboard?checkout=success`,
     cancelUrl: `${c.env.PUBLIC_APP_URL}/dashboard?checkout=cancelled`,
     ipnCallbackUrl: `${c.env.PUBLIC_WORKER_URL ?? ""}/api/billing/crypto-webhook`,
@@ -164,10 +180,20 @@ billing.post("/crypto-webhook", async (c) => {
   const rawBody = await c.req.text();
   const signature = c.req.header("x-nowpayments-sig");
   const event = await verifyIpn(rawBody, signature ?? null, c.env);
-  const orderId = event?.order_id;
-  if (event && isSuccessfulPaymentStatus(event.payment_status) && typeof orderId === "string") {
-    await extendCryptoPaidUntil(c.env, orderId, CRYPTO_PLAN_DAYS);
-    trackEvent(c.env, { event: "checkout_completed", route: "billing", userId: orderId, source: "paid" });
+  const rawOrderId = event?.order_id;
+  if (event && isSuccessfulPaymentStatus(event.payment_status) && typeof rawOrderId === "string") {
+    // order_id is either a bare accountId or "accountId:ovNNN" when the invoice also carried a
+    // captured WhatsApp-overage amount (see /crypto-checkout above) — settle exactly that amount,
+    // not whatever the account's running balance happens to be now.
+    const [accountId, overageSuffix] = rawOrderId.split(":ov");
+    await extendCryptoPaidUntil(c.env, accountId, CRYPTO_PLAN_DAYS);
+    if (overageSuffix) {
+      const overageCents = Number(overageSuffix);
+      if (Number.isFinite(overageCents) && overageCents > 0) {
+        await settleCryptoWhatsappOverageCents(c.env, accountId, overageCents);
+      }
+    }
+    trackEvent(c.env, { event: "checkout_completed", route: "billing", userId: accountId, source: "paid" });
   }
   // Always 200 — same rationale as the Stripe webhook above: a bad signature or a non-terminal
   // status ("waiting"/"confirming") isn't retry-worthy.
