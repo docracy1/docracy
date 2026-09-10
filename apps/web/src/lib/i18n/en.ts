@@ -1265,9 +1265,9 @@ const en: Messages = {
     "Prefer a no-code automation instead of an AI assistant? The same paid account works with Zapier: trigger a Zap on Document Created, Signer Signed, or Document Completed, or send a saved template out for signature as an action. The integration isn't in Zapier's public directory yet, so use the direct connect link below rather than searching for \"Docracy\" in Zapier — same API key as above, used as the \"API Key\" field instead of the full connector URL.",
   "mcp.zapierLinkLabel": "Connect Docracy in Zapier",
   "mcp.zapierTitle": "Automate with Zapier",
-  "seo.home.title": "Docracy — Stop Chasing the Invoice. Get Paid on WhatsApp.",
+  "seo.home.title": "Docracy — Free E-Signatures, No Account Needed",
   "seo.home.description":
-    "Paste Mercado Pago or PayPal, send the PDF on WhatsApp, share a constancia. Signing stays free. $10/month is cobro — Docracy never takes a cut.",
+    "Sign contracts free — up to 2 signers, no account required. Upload a PDF or start from a free template, send for signature in seconds. Paid is $10/month flat, not per seat.",
   "seo.video.name": "How Docracy works — sign documents in under a minute",
   "seo.video.description":
     "A short walkthrough of Docracy: upload a PDF, place signature fields, email signing links, and download the signed document — free for up to two signers, no account needed.",
