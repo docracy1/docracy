@@ -1249,25 +1249,27 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
   },
   {
     slug: "hire-contractor-abroad",
-    seoTitle: "Hire a Contractor Abroad — NDA, Agreement & WhatsApp Pay | Docracy",
+    seoTitle: "Hire a Contractor Abroad — Cross-Border Agreement & WhatsApp Pay | Docracy",
     seoDescription:
-      "Paper a LATAM or overseas contractor: free NDA and independent contractor agreement, then get paid on WhatsApp. Not a W-8BEN. EN + Spanish.",
+      "Paper a LATAM or overseas contractor: free NDA and a real cross-border contractor agreement — Wise/crypto/wire payment terms, IP assignment across borders — then get paid on WhatsApp. Not a W-8BEN. EN + Spanish.",
     heroHeadline: "Hire abroad without inventing a W-8BEN.",
     heroSubheadline:
-      "Mutual NDA and contractor agreement are free templates. Then Paid cobro sends your Mercado Pago or PayPal link on WhatsApp. US persons still need the IRS W-9 kit.",
+      "Mutual NDA and a cross-border contractor agreement are free templates — with real clauses for Wise, crypto, or wire payment and cross-border IP assignment, not just a domestic template with a different name. Then Paid cobro sends your Mercado Pago or PayPal link on WhatsApp. US persons still need the IRS W-9 kit.",
     problem:
-      "US kits assume a W-9. Overseas contractors are not US persons. Fake W-8BEN PDFs are how companies get in trouble.",
+      "US contractor templates assume a W-9 and a US bank account. Overseas contractors are neither — and a generic domestic agreement doesn't say how a cross-border payment actually gets made, or whether the IP assignment even holds up under the contractor's own country's law.",
     solution:
-      "Docracy's LATAM corridor is honest: NDA, contractor agreement, then cobro. No invented IRS form. Spanish URLs included.",
+      "Docracy's LATAM corridor is honest and specific: NDA, then a contractor agreement that actually names Wise, crypto, and wire transfer as payment options and writes the IP assignment to survive foreign law, then cobro. No invented IRS form. Spanish URLs included.",
     features: [
-      { title: "Free NDA + agreement", body: "Existing marketplace templates, one PDF at a time." },
+      { title: "Cross-border contractor agreement", body: "Real clauses for Wise, crypto, or wire payment — not a generic US template." },
+      { title: "IP assignment that travels", body: "Written to hold up under the contractor's own country's law, with a moral-rights waiver." },
       { title: "WhatsApp cobro", body: "Paid: file + your checkout, no extra signature." },
       { title: "Spanish surface", body: "/es/kit-contratista-latam and /es/cobro." },
       { title: "US kit still exists", body: "W-9 path stays at /packets/us-contractor." },
     ],
     useCases: [
-      "US startups hiring engineers in Mexico or Colombia",
-      "Agencies paying LATAM designers over Mercado Pago",
+      "US startups hiring engineers in Mexico or Colombia, paid in USDC or by Wise",
+      "Agencies paying LATAM designers over Mercado Pago or wire transfer",
+      "A LatAm professional who wants their own IP and payment terms in writing before starting remote work for a foreign client",
       "Anyone who was about to Google a free W-8BEN and sign it blindly",
     ],
     faqs: [
@@ -1282,12 +1284,22 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       {
         question: "Do you have a W-8BEN template?",
         answer:
-          "No. We do not invent IRS forms. This kit is NDA + contractor agreement + your checkout. US persons use the W-9 kit instead.",
+          "No. We do not invent IRS forms. This kit is NDA + cross-border contractor agreement + your checkout. US persons use the W-9 kit instead.",
       },
       {
         question: "Can I hire a contractor in Mexico or Colombia?",
         answer:
-          "Yes — send the NDA and agreement in English or Spanish, then cobro with Mercado Pago or PayPal. Not employment or visa advice.",
+          "Yes — send the NDA and cross-border contractor agreement in English or Spanish, then cobro with Mercado Pago, PayPal, or a crypto invoice. Not employment or visa advice.",
+      },
+      {
+        question: "How do I actually pay someone abroad under this agreement?",
+        answer:
+          "The contractor agreement itself has a payment-method table for wire transfer, Wise, or crypto — you fill in the account/address details before signing, so it's spelled out in the contract, not left to a side conversation.",
+      },
+      {
+        question: "Does the IP assignment actually work if the contractor is abroad?",
+        answer:
+          "The clause is written to assign IP to the fullest extent the contractor's own country's law allows, and has the contractor waive moral rights where legally possible — it's not a guarantee every jurisdiction treats IP assignment identically, but it's real cross-border language, not a domestic clause with the country name changed.",
       },
       {
         question: "Is the whole kit free?",
@@ -1297,6 +1309,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     ctaLabel: "Open the LATAM contractor kit",
     ctaTo: "/packets/latam-contractor",
     relatedLinks: [
+      { label: "Cross-border contractor agreement template", to: "/free-templates/cross-border-contractor-agreement" },
       { label: "US contractor kit (W-9)", to: "/packets/us-contractor" },
       { label: "WhatsApp cobro", to: "/cobro" },
       { label: "1099 season locker", to: "/1099-season" },
@@ -1954,6 +1967,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     ctaLabel: "Open the immigrant plan",
     ctaTo: "/packets/latam-to-us",
     relatedLinks: [
+      { label: "No credit history? Get an international guarantor", to: "/international-lease-guarantor" },
       { label: "Constancia", to: "/income-proof" },
       { label: "Constancia for a US rental", to: "/proof-of-income-us-rental" },
       { label: "Lease template", to: "/free-templates/simple-commercial-lease-agreement" },
@@ -2453,6 +2467,62 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
       { label: "No signature, just get paid (cobro)", to: "/whatsapp-invoice" },
     ],
   },
+  {
+    slug: "international-lease-guarantor",
+    xDefault: "es",
+    seoTitle: "International Lease Guarantor — Rent a US Apartment With No Credit History | Docracy",
+    seoDescription:
+      "Free Lease Guaranty Agreement letting a relative or company abroad legally guarantee your US lease — for renters with no US credit history or Social Security Number.",
+    heroHeadline: "No US credit history? A guarantor abroad can still get you the keys.",
+    heroSubheadline:
+      "A free Lease Guaranty Agreement — the guarantor signs directly with the landlord, consents to US jurisdiction, and is on the hook for rent if you're not. No notary, no fabricated credit report.",
+    problem:
+      "You just arrived, you don't have a US credit score or a Social Security Number yet, and the landlord wants one anyway. Standard US lease paperwork has no place for a guarantor who lives in another country.",
+    solution:
+      "Sign a Lease Guaranty Agreement: a relative or company back home guarantees your rent directly to the landlord, with a maximum liability cap if they want one, and consents to US jurisdiction so the guaranty actually means something to a US property manager. Add an advance-rent option if the landlord wants extra assurance.",
+    features: [
+      { title: "Free guaranty template", body: "Guarantor and landlord sign directly — no notary required by Docracy." },
+      { title: "Liability cap, optional", body: "State a maximum guaranteed amount so it isn't open-ended." },
+      { title: "Built for a guarantor abroad", body: "Consent to US jurisdiction and an agent for service of process." },
+      { title: "Advance-payment option", body: "Pairs with an upfront rent payment in lieu of a US credit check." },
+      { title: "Honest limit", body: "We don't notarize and we don't guarantee any specific landlord accepts it." },
+    ],
+    useCases: [
+      "A newly arrived immigrant with no US credit history or SSN",
+      "A remote worker or student whose family abroad wants to back their lease",
+      "A landlord who will accept a guarantor in lieu of a standard credit check",
+    ],
+    faqs: [
+      {
+        question: "Will every landlord accept this?",
+        answer: "No. Some still want a credit check, a bank letter, or additional verification — this gives you something concrete to offer, not a guarantee of acceptance.",
+      },
+      {
+        question: "Does the guarantor have to be a US person?",
+        answer: "No — the agreement is written for a guarantor abroad, with a consent-to-jurisdiction clause so a US landlord has real recourse.",
+      },
+      {
+        question: "Can the guarantor's liability be capped?",
+        answer: "Yes — state a Maximum Guaranteed Amount in the agreement, or leave it blank for an uncapped guaranty.",
+      },
+      {
+        question: "Is this the same as a co-signer on the lease itself?",
+        answer: "It's a separate guaranty agreement between the guarantor and the landlord, referencing the lease — not a signature on the lease document itself.",
+      },
+      {
+        question: "Do I still need proof of income?",
+        answer: "Possibly — pair this with Docracy's income-proof constancia if the landlord wants a record of your own payment history too.",
+      },
+    ],
+    ctaLabel: "Get the free guaranty template",
+    ctaTo: "/free-templates/lease-guaranty-agreement",
+    relatedLinks: [
+      { label: "Lease Guaranty Agreement template", to: "/free-templates/lease-guaranty-agreement" },
+      { label: "Immigrant housing packet", to: "/immigrant-housing" },
+      { label: "Income proof / constancia", to: "/income-proof" },
+      { label: "Immigrant plan — $10/month", to: "/packets/latam-to-us" },
+    ],
+  },
 ];
 
 export function getNdaSigningPageEs(): FeaturePageContent {
@@ -2659,25 +2729,27 @@ export function getContractorRecordsPageEs(): FeaturePageContent {
 export function getHireAbroadPageEs(): FeaturePageContent {
   return {
     slug: "hire-contractor-abroad",
-    seoTitle: "Contratar en el extranjero — NDA, acuerdo y cobro por WhatsApp | Docracy",
+    seoTitle: "Contratar en el extranjero — Contrato transfronterizo y cobro por WhatsApp | Docracy",
     seoDescription:
-      "Documenta un contratista en LATAM o el extranjero: NDA y acuerdo gratis, luego cobra por WhatsApp. No es un W-8BEN. EN + español.",
+      "Documenta un contratista en LATAM o el extranjero: NDA gratis y un contrato transfronterizo real — pago por Wise/cripto/transferencia, cesión de propiedad intelectual entre países — luego cobra por WhatsApp. No es un W-8BEN. EN + español.",
     heroHeadline: "Contrata en el extranjero sin inventar un W-8BEN.",
     heroSubheadline:
-      "El NDA mutuo y el acuerdo de contratista son plantillas gratis. Luego el cobro de pago envía tu Mercado Pago o PayPal por WhatsApp. Las personas de EE. UU. siguen el kit W-9 del IRS.",
+      "El NDA mutuo y un contrato de contratista transfronterizo son plantillas gratis — con cláusulas reales para pago por Wise, cripto o transferencia bancaria y cesión de propiedad intelectual entre países, no solo una plantilla doméstica con otro nombre. Luego el cobro de pago envía tu Mercado Pago o PayPal por WhatsApp. Las personas de EE. UU. siguen el kit W-9 del IRS.",
     problem:
-      "Los kits de EE. UU. asumen un W-9. Los contratistas en el extranjero no son personas de EE. UU. Un PDF falso de W-8BEN es cómo las empresas se meten en problemas.",
+      "Los contratos de EE. UU. asumen un W-9 y una cuenta bancaria estadounidense. Los contratistas en el extranjero no tienen ninguna de las dos — y un acuerdo doméstico genérico no dice cómo se hace realmente el pago transfronterizo, ni si la cesión de propiedad intelectual se sostiene bajo la ley del país del contratista.",
     solution:
-      "El corredor LATAM de Docracy es honesto: NDA, acuerdo de contratista y luego cobro. Sin formulario inventado del IRS. URLs en español incluidas.",
+      "El corredor LATAM de Docracy es honesto y específico: NDA, luego un contrato de contratista que sí nombra Wise, cripto y transferencia bancaria como métodos de pago y redacta la cesión de propiedad intelectual para sostenerse bajo ley extranjera, y luego cobro. Sin formulario inventado del IRS. URLs en español incluidas.",
     features: [
-      { title: "NDA + acuerdo gratis", body: "Plantillas existentes del marketplace, un PDF a la vez." },
+      { title: "Contrato transfronterizo", body: "Cláusulas reales para pago por Wise, cripto o transferencia — no una plantilla genérica de EE. UU." },
+      { title: "Propiedad intelectual que viaja", body: "Redactada para sostenerse bajo la ley del país del contratista, con renuncia de derechos morales." },
       { title: "Cobro por WhatsApp", body: "Pago: archivo + tu checkout, sin firma extra." },
       { title: "Superficie en español", body: "/es/kit-contratista-latam y /es/cobro." },
       { title: "El kit de EE. UU. sigue existiendo", body: "La ruta W-9 está en /es/kit-contratista." },
     ],
     useCases: [
-      "Startups de EE. UU. que contratan ingenieros en México o Colombia",
-      "Agencias que pagan diseñadores LATAM por Mercado Pago",
+      "Startups de EE. UU. que contratan ingenieros en México o Colombia, pagados en USDC o por Wise",
+      "Agencias que pagan diseñadores LATAM por Mercado Pago o transferencia bancaria",
+      "Un profesional latinoamericano que quiere sus términos de pago y propiedad intelectual por escrito antes de empezar a trabajar remoto para un cliente extranjero",
       "Quien iba a googlear un W-8BEN gratis y firmarlo a ciegas",
     ],
     faqs: [
@@ -2692,21 +2764,32 @@ export function getHireAbroadPageEs(): FeaturePageContent {
       {
         question: "¿Tienen plantilla de W-8BEN?",
         answer:
-          "No. No inventamos formularios del IRS. Este kit es NDA + acuerdo + tu checkout. Personas de EE. UU. usan el kit W-9.",
+          "No. No inventamos formularios del IRS. Este kit es NDA + contrato transfronterizo + tu checkout. Personas de EE. UU. usan el kit W-9.",
       },
       {
         question: "¿Puedo contratar un freelancer en México o Colombia?",
         answer:
-          "Sí — envía el NDA y el acuerdo en inglés o español, luego cobro con Mercado Pago o PayPal. No es asesoría laboral ni de visas.",
+          "Sí — envía el NDA y el contrato transfronterizo en inglés o español, luego cobro con Mercado Pago, PayPal o una factura cripto. No es asesoría laboral ni de visas.",
+      },
+      {
+        question: "¿Cómo pago realmente a alguien en el extranjero con este contrato?",
+        answer:
+          "El contrato mismo tiene una tabla de método de pago para transferencia bancaria, Wise o cripto — completas los datos de cuenta/dirección antes de firmar, así queda en el contrato, no en una conversación aparte.",
+      },
+      {
+        question: "¿La cesión de propiedad intelectual funciona si el contratista está en el extranjero?",
+        answer:
+          "La cláusula está redactada para ceder la propiedad intelectual al máximo que permita la ley del país del contratista, y hace que el contratista renuncie a derechos morales donde sea legalmente posible — no es garantía de que toda jurisdicción trate la cesión igual, pero es lenguaje transfronterizo real, no una cláusula doméstica con el nombre del país cambiado.",
       },
       {
         question: "¿El kit entero es gratis?",
-        answer: "Firmar el NDA y el acuerdo es gratis. El cobro por WhatsApp / enlaces de pago es el plan de $10/mes.",
+        answer: "Firmar el NDA y el contrato es gratis. El cobro por WhatsApp / enlaces de pago es el plan de $10/mes.",
       },
     ],
     ctaLabel: "Abrir el kit contratista LATAM",
     ctaTo: "/packets/latam-contractor",
     relatedLinks: [
+      { label: "Plantilla de contrato transfronterizo", to: "/free-templates/cross-border-contractor-agreement" },
       { label: "Kit de contratista en EE. UU. (W-9)", to: "/packets/us-contractor" },
       { label: "Cobro por WhatsApp", to: "/cobro" },
       { label: "Casillero temporada 1099", to: "/1099-season" },
@@ -3403,6 +3486,7 @@ export function getImmigrantHousingPageEs(): FeaturePageContent {
     ctaLabel: "Abrir el plan inmigrante",
     ctaTo: "/packets/latam-to-us",
     relatedLinks: [
+      { label: "¿Sin historial crediticio? Consigue un garante internacional", to: "/es/garante-internacional-arrendamiento" },
       { label: "Constancia", to: "/income-proof" },
       { label: "Constancia para rentar", to: "/proof-of-income-us-rental" },
       { label: "Plantilla de arrendamiento", to: "/free-templates/simple-commercial-lease-agreement" },
@@ -3874,6 +3958,65 @@ export function getSendMoneyLatamPageEs(): FeaturePageContent {
   };
 }
 
+export function getInternationalLeaseGuarantorPageEs(): FeaturePageContent {
+  return {
+    slug: "international-lease-guarantor",
+    xDefault: "es",
+    seoTitle: "Garante Internacional para Arrendamiento — Renta en EE. UU. Sin Historial Crediticio | Docracy",
+    seoDescription:
+      "Contrato de garantía de arrendamiento gratis: un familiar o empresa en el extranjero garantiza legalmente tu renta en EE. UU. — para quienes no tienen historial crediticio ni número de seguro social.",
+    heroHeadline: "¿Sin historial crediticio en EE. UU.? Un garante en el extranjero puede conseguirte las llaves.",
+    heroSubheadline:
+      "Un Contrato de Garantía de Arrendamiento gratis — el garante firma directamente con el arrendador, consiente a la jurisdicción de EE. UU., y responde por la renta si tú no puedes. Sin notario, sin historial crediticio inventado.",
+    problem:
+      "Acabas de llegar, todavía no tienes historial crediticio ni número de seguro social en EE. UU., y el arrendador lo pide de todas formas. Los contratos de arrendamiento estándar de EE. UU. no tienen espacio para un garante que vive en otro país.",
+    solution:
+      "Firma un Contrato de Garantía de Arrendamiento: un familiar o empresa en tu país garantiza tu renta directamente al arrendador, con un límite de responsabilidad si lo quieren, y consiente a la jurisdicción de EE. UU. para que la garantía realmente signifique algo para un administrador de propiedades en EE. UU. Agrega un pago de renta por adelantado si el arrendador quiere más seguridad.",
+    features: [
+      { title: "Plantilla de garantía gratis", body: "El garante y el arrendador firman directamente — no requiere notario de nuestra parte." },
+      { title: "Límite de responsabilidad, opcional", body: "Indica un monto máximo garantizado para que no quede abierto." },
+      { title: "Pensado para un garante en el extranjero", body: "Consentimiento a la jurisdicción de EE. UU. y un agente para notificaciones." },
+      { title: "Opción de pago adelantado", body: "Se combina con un pago de renta por adelantado en lugar de un historial crediticio en EE. UU." },
+      { title: "Límite honesto", body: "No notariamos y no garantizamos que un arrendador específico lo acepte." },
+    ],
+    useCases: [
+      "Un inmigrante recién llegado sin historial crediticio ni SSN en EE. UU.",
+      "Un trabajador remoto o estudiante cuya familia en el extranjero quiere respaldar su arrendamiento",
+      "Un arrendador que acepta un garante en lugar de una verificación de crédito estándar",
+    ],
+    faqs: [
+      {
+        question: "¿Todo arrendador lo va a aceptar?",
+        answer: "No. Algunos igual piden verificación de crédito, carta bancaria u otra verificación — esto te da algo concreto que ofrecer, no una garantía de aceptación.",
+      },
+      {
+        question: "¿El garante tiene que ser una persona de EE. UU.?",
+        answer: "No — el contrato está redactado para un garante en el extranjero, con una cláusula de consentimiento a la jurisdicción para que un arrendador en EE. UU. tenga un recurso real.",
+      },
+      {
+        question: "¿Se puede limitar la responsabilidad del garante?",
+        answer: "Sí — indica un Monto Máximo Garantizado en el contrato, o déjalo en blanco para una garantía sin límite.",
+      },
+      {
+        question: "¿Es lo mismo que un co-firmante en el arrendamiento?",
+        answer: "Es un contrato de garantía separado entre el garante y el arrendador, que hace referencia al arrendamiento — no una firma en el documento del arrendamiento mismo.",
+      },
+      {
+        question: "¿Todavía necesito comprobante de ingresos?",
+        answer: "Posiblemente — combina esto con la constancia de ingresos de Docracy si el arrendador también quiere un historial de tus propios pagos.",
+      },
+    ],
+    ctaLabel: "Obtener la plantilla de garantía gratis",
+    ctaTo: "/free-templates/lease-guaranty-agreement",
+    relatedLinks: [
+      { label: "Plantilla de garantía de arrendamiento", to: "/free-templates/lease-guaranty-agreement" },
+      { label: "Paquete de vivienda para inmigrantes", to: "/immigrant-housing" },
+      { label: "Constancia de ingresos", to: "/income-proof" },
+      { label: "Plan inmigrante — $10/mes", to: "/packets/latam-to-us" },
+    ],
+  };
+}
+
 const ES_FEATURE_GETTERS: Record<string, () => FeaturePageContent> = {
   "nda-signing": getNdaSigningPageEs,
   "client-contracts": getClientContractsPageEs,
@@ -3902,6 +4045,7 @@ const ES_FEATURE_GETTERS: Record<string, () => FeaturePageContent> = {
   "scan-document": getScanDocumentPageEs,
   "convert-to-crypto": getConvertToCryptoPageEs,
   "send-money-latam": getSendMoneyLatamPageEs,
+  "international-lease-guarantor": getInternationalLeaseGuarantorPageEs,
   ...Object.fromEntries(
     GENERATED_COUNTRY_CORRIDORS.map((c) => [c.slug, () => countryFeaturePage(c, "es") as FeaturePageContent])
   ),

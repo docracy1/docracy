@@ -62,6 +62,7 @@ export const ES_PATH_BY_EN: Record<string, string> = {
   "/scan-document": "/es/escanear-documento",
   ...Object.fromEntries(LATAM_COUNTRY_CORRIDORS.map((c) => [c.enPath, c.esPath])),
   "/immigrant-housing": "/es/arrendamiento-inmigrante",
+  "/international-lease-guarantor": "/es/garante-internacional-arrendamiento",
   "/after-arrival": "/es/despues-de-llegar",
   "/who-files-where": "/es/quien-sube-donde",
   "/latam-search": "/es/buscar",

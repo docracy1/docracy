@@ -981,20 +981,20 @@ export interface ContractRisk {
   detail: string;
 }
 
-export async function explainDocument(text: string): Promise<{ explanation: string }> {
+export async function explainDocument(text: string, locale?: Locale): Promise<{ explanation: string }> {
   const res = await apiFetch("/api/account/ai/explain", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text }),
+    body: JSON.stringify({ text, locale }),
   });
   return asJson(res);
 }
 
-export async function analyzeDocumentRisks(text: string): Promise<{ risks: ContractRisk[] }> {
+export async function analyzeDocumentRisks(text: string, locale?: Locale): Promise<{ risks: ContractRisk[] }> {
   const res = await apiFetch("/api/account/ai/risks", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text }),
+    body: JSON.stringify({ text, locale }),
   });
   return asJson(res);
 }

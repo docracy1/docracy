@@ -710,7 +710,7 @@ export default function Prepare() {
     setExplanation(null);
     try {
       const text = await extractDocumentText(pdfBytes, totalPages);
-      const { explanation: result } = await explainDocument(text);
+      const { explanation: result } = await explainDocument(text, locale);
       setExplanation(result);
     } catch (err) {
       setExplainError(err instanceof Error ? err.message : t("prepare.explainError"));
@@ -726,7 +726,7 @@ export default function Prepare() {
     setRisks(null);
     try {
       const text = await extractDocumentText(pdfBytes, totalPages);
-      const { risks: result } = await analyzeDocumentRisks(text);
+      const { risks: result } = await analyzeDocumentRisks(text, locale);
       setRisks(result);
     } catch (err) {
       setRisksError(err instanceof Error ? err.message : t("prepare.risksError"));

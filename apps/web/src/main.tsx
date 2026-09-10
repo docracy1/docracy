@@ -288,6 +288,8 @@ function AppRoutes() {
       <Route path="/es/colombia-a-eeuu" element={<FeaturePage slug="colombia-to-us" />} />
       <Route path="/immigrant-housing" element={<FeaturePage slug="immigrant-housing" />} />
       <Route path="/es/arrendamiento-inmigrante" element={<FeaturePage slug="immigrant-housing" />} />
+      <Route path="/international-lease-guarantor" element={<FeaturePage slug="international-lease-guarantor" />} />
+      <Route path="/es/garante-internacional-arrendamiento" element={<FeaturePage slug="international-lease-guarantor" />} />
       <Route path="/after-arrival" element={<FeaturePage slug="after-arrival" />} />
       <Route path="/es/despues-de-llegar" element={<FeaturePage slug="after-arrival" />} />
       <Route path="/convert-to-crypto" element={<FeaturePage slug="convert-to-crypto" />} />

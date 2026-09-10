@@ -27,7 +27,7 @@ export default function LatamContractorPacket() {
   const startTo =
     firstUnsent.kind === "cobro"
       ? latamCobroPath(locale)
-      : latamPacketPreparePath(firstUnsent.slug as "mutual-nda" | "independent-contractor-agreement", locale);
+      : latamPacketPreparePath(firstUnsent.slug as "mutual-nda" | "cross-border-contractor-agreement", locale);
 
   usePageMeta(t("latamPacket.seoTitle"), t("latamPacket.seoDescription"), {
     canonicalPath: locale === "es" ? "/es/kit-contratista-latam" : "/packets/latam-contractor",

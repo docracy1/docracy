@@ -177,7 +177,7 @@ export default function PrepareSent() {
           const to =
             next.kind === "cobro"
               ? latamCobroPath(locale)
-              : latamPacketPreparePath(next.slug as "mutual-nda" | "independent-contractor-agreement", locale);
+              : latamPacketPreparePath(next.slug as "mutual-nda" | "cross-border-contractor-agreement", locale);
           const label = next.kind === "cobro" ? t("latamPacket.cobroStepTitle") : t(`tpl.${next.slug}.name`);
           return (
             <div className="card" style={{ marginTop: 20, borderColor: "var(--primary)" }}>

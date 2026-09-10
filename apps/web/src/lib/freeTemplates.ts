@@ -5301,6 +5301,110 @@ FREE_TEMPLATES.push(
       { id: "ft3", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.8380808080808083, wFrac: 0.16, hFrac: 0.04, type: "date" },
     ],
   },
+  {
+    slug: "lease-guaranty-agreement",
+    name: "Lease Guaranty Agreement",
+    seoTitle: "Free International Lease Guarantor Template (No SSN / Credit History)",
+    description:
+      "Lets a guarantor abroad — a relative or company with no U.S. credit history — legally guarantee a U.S. " +
+      "residential lease, so a landlord has recourse without requiring a U.S. credit check.",
+    useCase:
+      "Use this when a tenant has no U.S. credit history or Social Security Number and a landlord wants a " +
+      "guarantor on file instead of (or in addition to) an advance rent payment. The guarantor signs directly " +
+      "with the landlord, consents to U.S. jurisdiction, and is on the hook for rent and damages if the tenant " +
+      "isn't.",
+    signerLabels: ["Guarantor", "Landlord"],
+    pdfPath: "/free-templates/lease-guaranty-agreement.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 2, xFrac: 0.284140522875817, yFrac: 0.29078282828282837, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 2, xFrac: 0.15376960784313726, yFrac: 0.38616161616161626, wFrac: 0.16, hFrac: 0.04, type: "date" },
+      { id: "ft2", signerOrder: 2, page: 2, xFrac: 0.27284722222222224, yFrac: 0.4564646464646466, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft3", signerOrder: 2, page: 2, xFrac: 0.15376960784313726, yFrac: 0.5518434343434345, wFrac: 0.16, hFrac: 0.04, type: "date" },
+    ],
+    recurringCategory: "Real Estate",
+    featured: true,
+    definition:
+      "A lease guaranty agreement is a contract in which a third party (the guarantor) promises a landlord " +
+      "they will personally cover a tenant's rent and lease obligations if the tenant fails to, without the " +
+      "guarantor being a tenant themselves.",
+    keyClauses: [
+      "Guaranty of the tenant's rent, fees, and damages — enforceable directly against the guarantor",
+      "Optional maximum guaranteed dollar amount, so liability isn't open-ended",
+      "Advance rent payment option, in lieu of a standard U.S. credit check",
+      "Consent to U.S. jurisdiction and an agent for service of process for a guarantor abroad",
+      "Waiver of notice and defenses, so the landlord doesn't have to chase the tenant first",
+    ],
+    fillInFields: [
+      "[Guarantor Name & Address]",
+      "[Landlord / Property Manager]",
+      "[Tenant Name]",
+      "[Property Address]",
+      "[Lease Date and Term]",
+      "[Maximum Guaranteed Amount, if capped]",
+    ],
+    legalSummary:
+      "Signing this agreement makes the guarantor personally liable for the tenant's rent and lease " +
+      "obligations, up to any stated cap, for as long as the lease runs. It does not obligate the landlord to " +
+      "accept the tenant or waive any other requirement — some landlords may still ask for additional " +
+      "verification.",
+    chatgptPrompts: [
+      "Generate a filled Lease Guaranty Agreement for a guarantor in Mexico backing their nephew's apartment lease in Texas.",
+      "Explain what a landlord can and can't do to a guarantor under this Lease Guaranty Agreement.",
+      "Adjust this Lease Guaranty Agreement to cap the guarantor's liability at three months' rent.",
+    ],
+  },
+  {
+    slug: "cross-border-contractor-agreement",
+    name: "Cross-Border Independent Contractor Agreement",
+    seoTitle: "Free Cross-Border Contractor Agreement Template (Wise / Crypto / Wire)",
+    description:
+      "An independent contractor agreement built for hiring across borders — payment by wire, Wise, or crypto, " +
+      "plus an IP assignment clause written to hold up under the contractor's own country's law.",
+    useCase:
+      "Use this when a U.S. (or any) company hires a remote contractor in another country, or a LatAm " +
+      "professional works remotely for a foreign client, and you need the payment method and IP ownership " +
+      "spelled out — not just a generic domestic contractor template.",
+    signerLabels: ["Company", "Contractor"],
+    pdfPath: "/free-templates/cross-border-contractor-agreement.pdf",
+    fields: [
+      { id: "ft0", signerOrder: 1, page: 2, xFrac: 0.2798562091503268, yFrac: 0.2401515151515152, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft1", signerOrder: 1, page: 2, xFrac: 0.15376960784313726, yFrac: 0.3355303030303032, wFrac: 0.16, hFrac: 0.04, type: "date" },
+      { id: "ft2", signerOrder: 2, page: 2, xFrac: 0.28725980392156863, yFrac: 0.4058333333333335, wFrac: 0.26, hFrac: 0.07, type: "signature" },
+      { id: "ft3", signerOrder: 2, page: 2, xFrac: 0.15376960784313726, yFrac: 0.5012121212121214, wFrac: 0.16, hFrac: 0.04, type: "date" },
+    ],
+    recurringCategory: "Consulting",
+    featured: true,
+    definition:
+      "A cross-border independent contractor agreement is a contract between a company and a contractor in " +
+      "different countries that defines scope, cross-border payment method, and how intellectual property " +
+      "created under the engagement is assigned across jurisdictions.",
+    keyClauses: [
+      "Scope of work and deliverables",
+      "Cross-border payment method — international wire, Wise, or cryptocurrency, with fee responsibility",
+      "Independent contractor status, with each party responsible for its own country's tax obligations",
+      "IP assignment written to hold up under the contractor's own country's law, including a moral-rights waiver",
+      "Arbitration instead of litigation, since arbitration awards are easier to enforce across borders",
+    ],
+    fillInFields: [
+      "[Company Name]",
+      "[Contractor Name]",
+      "[Contractor's Country of Residence]",
+      "[Description of Services]",
+      "[Payment Rate/Amount and Currency]",
+      "[Payment Method — Wire / Wise / Crypto]",
+      "[Governing State/Country]",
+    ],
+    legalSummary:
+      "This agreement establishes the contractor as self-employed (not an employee), specifies exactly how " +
+      "they get paid across a border, and assigns the resulting work product's IP to the company to the " +
+      "fullest extent the contractor's home country allows. Disputes go to arbitration rather than court, " +
+      "since that's generally easier to enforce internationally.",
+    chatgptPrompts: [
+      "Generate a filled Cross-Border Independent Contractor Agreement for a US startup hiring a developer in Colombia, paid in USDC.",
+      "Explain this Cross-Border Independent Contractor Agreement's IP assignment clause in plain language for the contractor.",
+      "Adjust this agreement's payment terms to pay the contractor half up front and half on delivery via Wise.",
+    ],
+  },
   ...LEGACY_BATCH_TEMPLATES,
   ...LEGACY_BATCH_2_TEMPLATES,
 );

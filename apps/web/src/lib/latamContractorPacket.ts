@@ -6,12 +6,12 @@ export type LatamPacketStepKind = "template" | "cobro";
 
 export const LATAM_CONTRACTOR_PACKET_STEPS = [
   { slug: "mutual-nda", kind: "template" as const, step: 1 },
-  { slug: "independent-contractor-agreement", kind: "template" as const, step: 2 },
+  { slug: "cross-border-contractor-agreement", kind: "template" as const, step: 2 },
   { slug: "cobro", kind: "cobro" as const, step: 3 },
 ] as const;
 
 export type LatamPacketTemplateSlug = (typeof LATAM_CONTRACTOR_PACKET_STEPS)[number]["slug"] &
-  ("mutual-nda" | "independent-contractor-agreement");
+  ("mutual-nda" | "cross-border-contractor-agreement");
 
 const STORAGE_KEY = "docracy_packet_latam-contractor";
 

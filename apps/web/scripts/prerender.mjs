@@ -1419,6 +1419,7 @@ const routes = [
       "ead-tps": { en: "/ead-tps", es: "/es/ead-tps" },
       "phone-and-bank": { en: "/phone-and-bank", es: "/es/chip-y-banco" },
       "scan-document": { en: "/scan-document", es: "/es/escanear-documento" },
+      "international-lease-guarantor": { en: "/international-lease-guarantor", es: "/es/garante-internacional-arrendamiento" },
       ...Object.fromEntries(GENERATED_COUNTRY_CORRIDORS.map((c) => [c.slug, { en: c.enPath, es: c.esPath }])),
       "docusign-alternative": { en: "/docusign-alternative", es: "/es/alternativa-a-docusign" },
       "hellosign-alternative": { en: "/hellosign-alternative", es: "/es/alternativa-a-hellosign" },

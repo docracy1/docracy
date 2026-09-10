@@ -1970,6 +1970,16 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://docracy.io/free-templates/lease-guaranty-agreement</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/free-templates/cross-border-contractor-agreement</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://docracy.io/free-templates/30-day-move-out-notice</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -5591,6 +5601,19 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/cuba-to-us" />
     <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/cuba-a-eeuu" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/cuba-a-eeuu" />
+  </url>
+  <url>
+    <loc>https://docracy.io/sign-and-get-paid</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://docracy.io/international-lease-guarantor</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/international-lease-guarantor" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/garante-internacional-arrendamiento" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/garante-internacional-arrendamiento" />
   </url>
   <url>
     <loc>https://docracy.io/eversign-alternative</loc>

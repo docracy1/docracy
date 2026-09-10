@@ -6949,6 +6949,245 @@ const TEMPLATES = [
   },
 ];
 
+TEMPLATES.push(
+  {
+    slug: "lease-guaranty-agreement",
+    title: "LEASE GUARANTY AGREEMENT",
+    signerLabels: ["Guarantor", "Landlord"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Guarantor: ", blank: TEXT_BLANK },
+      { type: "field", label: "Guarantor Address: ", blank: TEXT_BLANK },
+      { type: "field", label: "Landlord / Property Manager: ", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "Tenant (under the Lease): ", blank: TEXT_BLANK },
+      { type: "field", label: "Property Address: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Underlying Lease" },
+      {
+        type: "paragraph",
+        text:
+          "This Guaranty relates to a residential lease agreement (the \"Lease\") between the Landlord and the " +
+          "Tenant for the Property described above.",
+      },
+      { type: "field", label: "Lease Date: ", blank: DATE_BLANK },
+      { type: "field", label: "Lease Term End Date: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Guaranty of Obligations" },
+      {
+        type: "paragraph",
+        text:
+          "The Guarantor unconditionally and irrevocably guarantees to the Landlord the full and timely " +
+          "performance of all of the Tenant's obligations under the Lease, including payment of rent, late " +
+          "fees, utility charges the Tenant is responsible for, and damages beyond normal wear and tear. This " +
+          "is a guaranty of payment and performance, not merely of collection — the Landlord may enforce this " +
+          "Guaranty directly against the Guarantor without first pursuing the Tenant.",
+      },
+
+      { type: "section", text: "Maximum Guaranteed Amount" },
+      { type: "field", label: "Maximum Guaranteed Amount (leave blank if uncapped): ", blank: TEXT_BLANK },
+      {
+        type: "paragraph",
+        text:
+          "If a Maximum Guaranteed Amount is stated above, the Guarantor's total liability under this Guaranty " +
+          "shall not exceed that amount, exclusive of the Landlord's reasonable costs of enforcement.",
+      },
+
+      { type: "section", text: "Term of Guaranty" },
+      {
+        type: "paragraph",
+        text:
+          "This Guaranty remains in effect for the full term of the Lease, including any renewal or extension " +
+          "the Guarantor has separately consented to in writing, and continues until all of the Tenant's " +
+          "obligations under the Lease have been fully satisfied.",
+      },
+
+      { type: "section", text: "Advance Payment in Lieu of Credit History" },
+      {
+        type: "paragraph",
+        text:
+          "The parties acknowledge that, because the Tenant may not have a U.S. credit history or Social " +
+          "Security Number, the Guarantor's undertaking under this Guaranty — together with any advance rent " +
+          "payment stated below — is intended to substitute for a standard U.S. credit check.",
+      },
+      { type: "field", label: "Advance Rent Payment (months, if any): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Consent to Jurisdiction and Service of Process" },
+      {
+        type: "paragraph",
+        text:
+          "Because the Guarantor may reside outside the United States, the Guarantor consents to the personal " +
+          "jurisdiction of the courts of the state where the Property is located for any dispute arising from " +
+          "this Guaranty, and waives any objection that such courts are an inconvenient forum. The Guarantor " +
+          "appoints the person or address stated below as agent for service of process.",
+      },
+      { type: "field", label: "Agent for Service of Process (name/address): ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Waiver of Notice and Defenses" },
+      {
+        type: "paragraph",
+        text:
+          "The Guarantor waives notice of acceptance of this Guaranty, notice of the Tenant's default, and any " +
+          "requirement that the Landlord first pursue remedies against the Tenant before enforcing this " +
+          "Guaranty against the Guarantor.",
+      },
+
+      { type: "section", text: "Governing Law" },
+      {
+        type: "paragraph",
+        text: `This Guaranty shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles.`,
+      },
+
+      { type: "section", text: "Dispute Resolution" },
+      {
+        type: "paragraph",
+        text:
+          "The parties agree to first attempt to resolve any dispute arising from this Guaranty through " +
+          "good-faith negotiation. If unresolved within 30 days, either party may pursue mediation or binding " +
+          "arbitration before resorting to litigation.",
+      },
+
+      { type: "section", text: "Entire Agreement" },
+      {
+        type: "paragraph",
+        text:
+          "This Guaranty constitutes the entire understanding between the parties regarding its subject matter " +
+          "and supersedes all prior discussions, agreements, or representations, whether written or oral.",
+      },
+
+      { type: "section", text: "Severability" },
+      {
+        type: "paragraph",
+        text:
+          "If any provision of this Guaranty is found invalid or unenforceable, the remaining provisions " +
+          "shall continue in full force and effect.",
+      },
+
+      { type: "section", text: "Signatures" },
+      {
+        type: "signatures",
+        signers: [
+          { label: "Guarantor", order: 1 },
+          { label: "Landlord", order: 2 },
+        ],
+      },
+    ],
+  },
+  {
+    slug: "cross-border-contractor-agreement",
+    title: "CROSS-BORDER INDEPENDENT CONTRACTOR AGREEMENT",
+    signerLabels: ["Company", "Contractor"],
+    blocks: [
+      { type: "section", text: "Parties" },
+      { type: "field", label: "Company: ", blank: TEXT_BLANK },
+      { type: "field", label: "Contractor: ", blank: TEXT_BLANK, gapBefore: 12 },
+      { type: "field", label: "Contractor's Country of Residence: ", blank: TEXT_BLANK },
+      { type: "field", label: "Start Date: ", blank: DATE_BLANK },
+
+      { type: "section", text: "Scope of Work" },
+      { type: "field", label: "Description of Services: ", blank: TEXT_BLANK },
+      { type: "field", label: "Deliverables: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Payment Terms" },
+      { type: "field", label: "Payment Rate/Amount: ", blank: TEXT_BLANK },
+      { type: "field", label: "Currency: ", blank: TEXT_BLANK },
+      { type: "field", label: "Payment Schedule: ", blank: TEXT_BLANK },
+      {
+        type: "paragraph",
+        text:
+          "The parties will use one or more of the following cross-border payment methods, completed below:",
+      },
+      {
+        type: "table",
+        widths: [0.42, 0.58],
+        headers: ["Payment Method", "Account / Address Details"],
+        rows: [
+          ["International Wire Transfer", TEXT_BLANK],
+          ["Wise (TransferWise)", TEXT_BLANK],
+          ["Cryptocurrency (specify network)", TEXT_BLANK],
+        ],
+      },
+      {
+        type: "paragraph",
+        text:
+          "Unless otherwise agreed in writing, each party is responsible for any transfer, conversion, or " +
+          "network fees charged by its own bank, payment provider, or blockchain network.",
+      },
+
+      { type: "section", text: "Independent Contractor Status" },
+      {
+        type: "paragraph",
+        text:
+          "The Contractor is engaged as an independent contractor, not an employee, agent, or partner of the " +
+          "Company. The Contractor is solely responsible for complying with the tax registration, reporting, " +
+          "and payment obligations of the Contractor's own country of residence, and for any obligations " +
+          "arising under the laws of the Company's country. Nothing in this Agreement creates an employment, " +
+          "partnership, or agency relationship.",
+      },
+
+      { type: "section", text: "Intellectual Property Assignment (Cross-Border)" },
+      {
+        type: "paragraph",
+        text:
+          "The Contractor assigns to the Company all right, title, and interest — including all intellectual " +
+          "property rights, worldwide — in any work product, code, designs, or other materials created under " +
+          "this Agreement, to the fullest extent permitted under the laws of the Contractor's country of " +
+          "residence. Where local law does not permit full assignment of certain rights, including moral " +
+          "rights, the Contractor waives those rights to the fullest extent legally possible and agrees not to " +
+          "assert them against the Company. The Contractor agrees to sign any further documents reasonably " +
+          "requested by the Company to perfect this assignment under local law.",
+      },
+
+      { type: "section", text: "Confidentiality" },
+      {
+        type: "paragraph",
+        text:
+          "The Contractor agrees to keep any non-public information encountered during the engagement " +
+          "confidential, both during and after the term of this Agreement.",
+      },
+
+      { type: "section", text: "Termination" },
+      { type: "field", label: "Notice Period (days): ", blank: TEXT_BLANK },
+      {
+        type: "paragraph",
+        text: "Either party may terminate this Agreement by providing the other party written notice of the length stated above.",
+      },
+
+      { type: "section", text: "Governing Law and Dispute Resolution" },
+      {
+        type: "paragraph",
+        text: `This Agreement shall be governed by the laws of the State/Country of ${TEXT_BLANK}, without regard to its conflict-of-law principles. Given the cross-border nature of this engagement, the parties agree that any dispute not resolved through good-faith negotiation within 30 days shall be resolved by binding arbitration rather than litigation, as arbitration awards are generally easier to enforce across borders.`,
+      },
+      { type: "field", label: "Arbitration Venue/Rules: ", blank: TEXT_BLANK },
+
+      { type: "section", text: "Entire Agreement" },
+      {
+        type: "paragraph",
+        text:
+          "This Agreement constitutes the entire understanding between the parties regarding its subject " +
+          "matter and supersedes all prior discussions, agreements, or representations, whether written or " +
+          "oral.",
+      },
+
+      { type: "section", text: "Severability" },
+      {
+        type: "paragraph",
+        text:
+          "If any provision of this Agreement is found invalid or unenforceable, the remaining provisions " +
+          "shall continue in full force and effect.",
+      },
+
+      { type: "section", text: "Signatures" },
+      {
+        type: "signatures",
+        signers: [
+          { label: "Company", order: 1 },
+          { label: "Contractor", order: 2 },
+        ],
+      },
+    ],
+  }
+);
+
 fs.mkdirSync(outDir, { recursive: true });
 
 for (const t of TEMPLATES) {

@@ -21,7 +21,7 @@ export default function AiContractAnalysis() {
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: [1, 2, 3, 4].map((n) => ({
+    mainEntity: [1, 2, 3, 4, 5].map((n) => ({
       "@type": "Question",
       name: t(`aiAnalysis.faq.q${n}`),
       acceptedAnswer: { "@type": "Answer", text: t(`aiAnalysis.faq.a${n}`) },
@@ -71,6 +71,10 @@ export default function AiContractAnalysis() {
             <h3>{t("aiAnalysis.feat.detect.title")}</h3>
             <p>{t("aiAnalysis.feat.detect.body")}</p>
           </div>
+          <div className="core-feature-card">
+            <h3>{t("aiAnalysis.feat.bilingual.title")}</h3>
+            <p>{t("aiAnalysis.feat.bilingual.body")}</p>
+          </div>
         </div>
       </div>
 
@@ -97,7 +101,7 @@ export default function AiContractAnalysis() {
 
       <div className="container" style={{ maxWidth: 720, paddingTop: 40, paddingBottom: 16 }}>
         <h2 style={{ fontSize: 22, marginTop: 0 }}>{t("aiAnalysis.faqTitle")}</h2>
-        {[1, 2, 3, 4].map((n) => (
+        {[1, 2, 3, 4, 5].map((n) => (
           <details key={n} className="faq-item" style={{ marginTop: 12 }}>
             <summary style={{ fontWeight: 700, cursor: "pointer" }}>{t(`aiAnalysis.faq.q${n}`)}</summary>
             <p style={{ margin: "8px 0 0", color: "var(--body)" }}>{t(`aiAnalysis.faq.a${n}`)}</p>

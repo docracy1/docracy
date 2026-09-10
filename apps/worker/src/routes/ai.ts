@@ -3,7 +3,7 @@ import { requirePaidAccount, type AccountContext } from "../lib/auth";
 import { explainContract, analyzeContractRisks } from "../lib/aiDocument";
 import { draftAgreementContent, buildAgreementPdf } from "../lib/aiGenerate";
 import { bytesToBase64 } from "../lib/base64";
-import type { Env } from "@docracy/shared";
+import type { Env, Locale } from "@docracy/shared";
 
 // Raw input cap before the AI helpers themselves truncate further for the model's context — this
 // just rejects an obviously-abusive payload outright rather than silently truncating a 10MB blob.
@@ -18,17 +18,21 @@ function readText(body: { text?: string }): string | null {
   return text.length > 0 && text.length <= MAX_TEXT_LENGTH ? text : null;
 }
 
+function readLocale(body: { locale?: string }): Locale {
+  return body.locale === "es" ? "es" : "en";
+}
+
 ai.post("/explain", requirePaidAccount, async (c) => {
-  let body: { text?: string };
+  let body: { text?: string; locale?: string };
   try {
-    body = await c.req.json<{ text?: string }>();
+    body = await c.req.json<{ text?: string; locale?: string }>();
   } catch {
     return c.json({ error: "Invalid request body" }, 400);
   }
   const text = readText(body);
   if (!text) return c.json({ error: "No document text to explain" }, 400);
 
-  const explanation = await explainContract(c.env, text);
+  const explanation = await explainContract(c.env, text, readLocale(body));
   if (!explanation) {
     return c.json({ error: "Couldn't generate an explanation right now — try again in a moment." }, 502);
   }
@@ -36,16 +40,16 @@ ai.post("/explain", requirePaidAccount, async (c) => {
 });
 
 ai.post("/risks", requirePaidAccount, async (c) => {
-  let body: { text?: string };
+  let body: { text?: string; locale?: string };
   try {
-    body = await c.req.json<{ text?: string }>();
+    body = await c.req.json<{ text?: string; locale?: string }>();
   } catch {
     return c.json({ error: "Invalid request body" }, 400);
   }
   const text = readText(body);
   if (!text) return c.json({ error: "No document text to analyze" }, 400);
 
-  const risks = await analyzeContractRisks(c.env, text);
+  const risks = await analyzeContractRisks(c.env, text, readLocale(body));
   if (risks === null) {
     return c.json({ error: "Couldn't analyze this document right now — try again in a moment." }, 502);
   }

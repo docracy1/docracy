@@ -119,6 +119,7 @@ Allow: /import-google-doc$
 Allow: /imprint$
 Allow: /income-proof$
 Allow: /integrations/ai-assistants$
+Allow: /international-lease-guarantor$
 Allow: /itin$
 Allow: /kita-alternative$
 Allow: /kita-vs-alegra$
@@ -163,6 +164,7 @@ Allow: /scan-document$
 Allow: /secure-electronic-signature$
 Allow: /send-money-latam$
 Allow: /seo-agency-contract$
+Allow: /sign-and-get-paid$
 Allow: /sign-pdf-online$
 Allow: /signeasy-alternative$
 Allow: /signed-work-order$

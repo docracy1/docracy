@@ -1502,6 +1502,9 @@ const en: Messages = {
   "aiAnalysis.feat.detect.title": "AI Auto-Detect",
   "aiAnalysis.feat.detect.body":
     "The same AI pass that reads your contract can also find where the signature and date fields belong, so you don't place them by hand.",
+  "aiAnalysis.feat.bilingual.title": "Actually bilingual",
+  "aiAnalysis.feat.bilingual.body":
+    "Switch the site to Spanish before running the explainer or risk check, and the AI's own answer comes back in Spanish — not just the buttons around it.",
   "aiAnalysis.howTitle": "How it fits into sending a document",
   "aiAnalysis.how.1": "Upload your contract or start from a free template.",
   "aiAnalysis.how.2": "Open the explainer or risk check before you send — read the summary, review flagged clauses.",
@@ -1523,6 +1526,9 @@ const en: Messages = {
   "aiAnalysis.faq.q4": "What kind of documents does it work on?",
   "aiAnalysis.faq.a4":
     "Any PDF you upload (or Google Doc — paste the link) — NDAs, service agreements, offer letters, vendor contracts — or one of Docracy's own free templates.",
+  "aiAnalysis.faq.q5": "Can I get the explanation in Spanish?",
+  "aiAnalysis.faq.a5":
+    "Yes — switch the site to Spanish before you run the explainer or risk check. The AI's own output comes back in Spanish, not just the page around it.",
   "aiAnalysis.footerCta": "See what your next contract actually says.",
 
   "esignSoftware.eyebrow": "Buyer's guide",
@@ -2008,6 +2014,14 @@ const en: Messages = {
   "tpl.independent-contractor-agreement.seoTitle": "Free Independent Contractor Agreement Template (1099 Agreement)",
   "tpl.independent-contractor-agreement.description": "Defines scope, pay, and IP ownership for a company hiring an independent contractor (1099 worker) — not an employee.",
   "tpl.independent-contractor-agreement.useCase": "Use this when you're bringing on a contractor for ongoing or project-based work and need to spell out that they're not an employee, who owns the resulting work product, and how they get paid.",
+  "tpl.cross-border-contractor-agreement.name": "Cross-Border Independent Contractor Agreement",
+  "tpl.cross-border-contractor-agreement.seoTitle": "Free Cross-Border Contractor Agreement Template (Wise / Crypto / Wire)",
+  "tpl.cross-border-contractor-agreement.description": "An independent contractor agreement built for hiring across borders — payment by wire, Wise, or crypto, plus an IP assignment clause written to hold up under the contractor's own country's law.",
+  "tpl.cross-border-contractor-agreement.useCase": "Use this when a U.S. (or any) company hires a remote contractor in another country, or a LatAm professional works remotely for a foreign client, and you need the payment method and IP ownership spelled out — not just a generic domestic contractor template.",
+  "tpl.lease-guaranty-agreement.name": "Lease Guaranty Agreement",
+  "tpl.lease-guaranty-agreement.seoTitle": "Free International Lease Guarantor Template (No SSN / Credit History)",
+  "tpl.lease-guaranty-agreement.description": "Lets a guarantor abroad — a relative or company with no U.S. credit history — legally guarantee a U.S. residential lease, so a landlord has recourse without requiring a U.S. credit check.",
+  "tpl.lease-guaranty-agreement.useCase": "Use this when a tenant has no U.S. credit history or Social Security Number and a landlord wants a guarantor on file instead of (or in addition to) an advance rent payment.",
   "tpl.offer-letter.name": "Offer Letter",
   "tpl.offer-letter.seoTitle": "Free Employment Offer Letter Template (Job Offer Letter)",
   "tpl.offer-letter.description": "A straightforward job offer letter covering title, pay, start date, and at-will employment terms.",

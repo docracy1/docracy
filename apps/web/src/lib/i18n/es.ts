@@ -1564,6 +1564,9 @@ const es: Messages = {
   "aiAnalysis.feat.detect.title": "Auto-detección con IA",
   "aiAnalysis.feat.detect.body":
     "El mismo análisis de IA que lee tu contrato también puede encontrar dónde van los campos de firma y fecha, para que no los coloques a mano.",
+  "aiAnalysis.feat.bilingual.title": "De verdad bilingüe",
+  "aiAnalysis.feat.bilingual.body":
+    "Cambia el sitio a español antes de correr la explicación o el análisis de riesgo, y la respuesta misma de la IA llega en español — no solo los botones alrededor.",
   "aiAnalysis.howTitle": "Cómo encaja al enviar un documento",
   "aiAnalysis.how.1": "Sube tu contrato o empieza desde una plantilla gratis.",
   "aiAnalysis.how.2": "Abre la explicación o el análisis de riesgo antes de enviar — lee el resumen, revisa las cláusulas marcadas.",
@@ -1585,6 +1588,9 @@ const es: Messages = {
   "aiAnalysis.faq.q4": "¿En qué tipo de documentos funciona?",
   "aiAnalysis.faq.a4":
     "Cualquier PDF que subas (o Google Doc — pega el enlace) — NDAs, acuerdos de servicio, cartas de oferta, contratos con proveedores — o una de las plantillas gratis de Docracy.",
+  "aiAnalysis.faq.q5": "¿Puedo obtener la explicación en español?",
+  "aiAnalysis.faq.a5":
+    "Sí — cambia el sitio a español antes de correr la explicación o el análisis de riesgo. La respuesta misma de la IA llega en español, no solo la página alrededor.",
   "aiAnalysis.footerCta": "Descubre lo que realmente dice tu próximo contrato.",
 
   "esignSoftware.eyebrow": "Guía de compra",
@@ -2043,6 +2049,14 @@ const es: Messages = {
   "tpl.independent-contractor-agreement.seoTitle": "Plantilla gratis de contratista (1099)",
   "tpl.independent-contractor-agreement.description": "Define alcance, pago y propiedad intelectual cuando una empresa contrata a un contratista independiente (1099) — no un empleado.",
   "tpl.independent-contractor-agreement.useCase": "Úsalo cuando incorporas a un contratista para trabajo continuo o por proyecto y necesitas dejar claro que no es empleado, quién es dueño del trabajo resultante y cómo se le paga.",
+  "tpl.cross-border-contractor-agreement.name": "Contrato de contratista independiente transfronterizo",
+  "tpl.cross-border-contractor-agreement.seoTitle": "Plantilla gratis de contrato transfronterizo (Wise / Cripto / Transferencia)",
+  "tpl.cross-border-contractor-agreement.description": "Un contrato de contratista independiente pensado para contratar a través de fronteras — pago por transferencia bancaria, Wise o cripto, más una cláusula de cesión de propiedad intelectual redactada para sostenerse bajo la ley del país del contratista.",
+  "tpl.cross-border-contractor-agreement.useCase": "Úsalo cuando una empresa (de EE. UU. o de cualquier país) contrata a un contratista remoto en otro país, o un profesional latinoamericano trabaja remoto para un cliente extranjero, y necesitas dejar claro el método de pago y la propiedad del trabajo — no solo un contrato genérico doméstico.",
+  "tpl.lease-guaranty-agreement.name": "Contrato de garantía de arrendamiento",
+  "tpl.lease-guaranty-agreement.seoTitle": "Plantilla gratis de garante internacional de arrendamiento (sin SSN / historial crediticio)",
+  "tpl.lease-guaranty-agreement.description": "Permite que un garante en el extranjero — un familiar o una empresa sin historial crediticio en EE. UU. — garantice legalmente un contrato de arrendamiento en EE. UU., para que el arrendador tenga a quién recurrir sin exigir historial crediticio estadounidense.",
+  "tpl.lease-guaranty-agreement.useCase": "Úsalo cuando el inquilino no tiene historial crediticio ni número de seguro social en EE. UU. y el arrendador quiere un garante registrado, en lugar de (o además de) un pago de renta por adelantado.",
   "tpl.offer-letter.name": "Carta de oferta",
   "tpl.offer-letter.seoTitle": "Plantilla gratis de carta de oferta de empleo",
   "tpl.offer-letter.description": "Una carta de oferta de empleo directa que cubre puesto, salario, fecha de inicio y términos de empleo a voluntad.",
