@@ -46,6 +46,14 @@ export interface FreeTemplate {
    *  filled NDA using this template for a freelancer in Germany." 2-3 per template. Required on
    *  every new template. */
   chatgptPrompts?: string[];
+  /** Colloquial (not formal/academic) Spanish rewrite of `legalSummary`, for a reader who may have
+   *  low literacy or no legal background. Only present for the curated SEO_TEMPLATE_SLUGS (see
+   *  apps/web/src/lib/i18n/paths.ts) translated so far — falls back to the English `legalSummary`
+   *  everywhere else. Generated via apps/worker/src/lib/templateTranslate.ts, reviewed by hand. */
+  legalSummaryEs?: string;
+  /** Colloquial Spanish paraphrase of each `keyClauses` entry, same order/count. Same
+   *  curated-slugs-only availability as `legalSummaryEs`. */
+  keyClausesEs?: string[];
 }
 
 /** Display order for the Template Library's "Recurring templates" section (Dashboard.tsx's
@@ -132,6 +140,16 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
       "confidential information from disclosure to third parties and to use it only for the stated " +
       "business purpose. It typically remains in effect for a set period after signing, and breach can " +
       "expose sensitive information or create liability, damages, or grounds for injunctive relief.",
+    legalSummaryEs:
+      "Al firmar este acuerdo, tú y la otra persona prometen guardar en secreto la información que se compartan y usarla solo para lo que acordaron, sin contársela a nadie más. Este compromiso dura un tiempo después de firmar, y si alguien lo rompe, puede meterse en problemas legales o tener que pagar por el daño causado.",
+    keyClausesEs: [
+      "Qué se considera información secreta",
+      "Lo que cada persona se compromete a hacer",
+      "Para qué se puede usar la información y qué no cuenta como secreto",
+      "Cuánto tiempo dura la obligación de guardar el secreto",
+      "Qué hacer con los documentos secretos al terminar (devolverlos o destruirlos)",
+      "Qué pasa si alguien cuenta el secreto sin permiso",
+    ],
     chatgptPrompts: [
       "Generate a filled Mutual NDA using this template for two startups discussing a potential partnership.",
       "Explain what information this Mutual NDA does and doesn't cover before I share our product roadmap.",
@@ -180,6 +198,16 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
       "protections. It defines what work must be delivered, how and when payment is made, and " +
       "typically assigns ownership of the resulting work product to the hiring company once payment is " +
       "complete.",
+    legalSummaryEs:
+      "Este contrato deja claro que trabajas por tu cuenta, no como empleado, así que tú te encargas de tus propios impuestos y beneficios. También dice exactamente qué trabajo debes entregar, cuándo y cómo te pagan, y que una vez que te paguen completo, el trabajo pasa a ser propiedad de la empresa que te contrató.",
+    keyClausesEs: [
+      "Qué trabajo tienes que entregar",
+      "Cómo y cuándo te pagan",
+      "Aclaración de que trabajas por tu cuenta, no como empleado",
+      "Quién es dueño del trabajo que entregas",
+      "Compromiso de guardar secretos de la empresa",
+      "Cómo se puede terminar el contrato",
+    ],
     chatgptPrompts: [
       "Generate a filled Independent Contractor Agreement for a freelance software developer building a website.",
       "Explain the key risks in this Independent Contractor Agreement before I sign it as the contractor.",
@@ -223,6 +251,16 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
       "start date, and generally establishes an at-will employment relationship rather than a " +
       "fixed-term contract. It is usually not a comprehensive employment contract, so detailed " +
       "policies and benefits are often addressed in separate documents.",
+    legalSummaryEs:
+      "Al firmar esta carta, aceptas el puesto, el sueldo y la fecha de inicio que se mencionan, y por lo general el trabajo queda \"a voluntad\", es decir, sin un plazo fijo. Esta carta no cubre todos los detalles del empleo — las políticas y beneficios completos suelen venir en otros documentos aparte.",
+    keyClausesEs: [
+      "Puesto de trabajo y a quién le reportas",
+      "Resumen del sueldo y beneficios",
+      "Fecha de inicio y lugar de trabajo",
+      "Aviso de que el empleo es \"a voluntad\" (sin plazo fijo)",
+      "Condiciones antes de empezar (revisión de antecedentes, referencias)",
+      "Fecha límite para aceptar la oferta",
+    ],
     chatgptPrompts: [
       "Generate a filled Offer Letter for a full-time marketing coordinator role.",
       "Explain the difference between this Offer Letter and a full employment contract.",
@@ -267,6 +305,16 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
       "employer's expectations for remote work, including availability, security, and equipment use. " +
       "It does not itself create new employment terms, but a signed acknowledgment can support the " +
       "employer's ability to enforce these expectations and address violations.",
+    legalSummaryEs:
+      "Al firmar esta política, dejas constancia de que leíste y aceptaste las reglas de la empresa para trabajar desde casa, como estar disponible, cuidar la seguridad de la información y usar bien el equipo. Esto no cambia tu contrato de trabajo, pero le da a la empresa una prueba de que aceptaste seguir estas reglas.",
+    keyClausesEs: [
+      "Quién puede trabajar remoto y el horario esperado",
+      "Cuándo debes estar disponible y cómo comunicarte",
+      "Qué equipo te da la empresa o debes usar",
+      "Cómo cuidar la seguridad de la información",
+      "Cómo debe ser tu espacio de trabajo en casa",
+      "Confirmación de que aceptas seguir estas reglas",
+    ],
     chatgptPrompts: [
       "Generate a filled Remote Work Policy for a 20-person hybrid company.",
       "Suggest security clauses to add to this Remote Work Policy for employees handling customer data.",
@@ -313,6 +361,16 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
       "typically specifies that ownership of the final work transfers to the client only upon full " +
       "payment. It also sets expectations around revisions and what happens if either party ends the " +
       "project before completion.",
+    legalSummaryEs:
+      "Este acuerdo dice exactamente qué debes entregar como freelancer, cuándo y por cuánto dinero, y aclara que el trabajo final pasa a ser del cliente solo cuando te paguen completo. También explica cuántas correcciones incluye el trabajo y qué pasa si alguna de las dos partes quiere terminar el proyecto antes de acabarlo.",
+    keyClausesEs: [
+      "Qué incluye el proyecto y qué debes entregar",
+      "Cuánto y cuándo te pagan",
+      "Cuántas correcciones o cambios están incluidos",
+      "Cuándo pasa el trabajo a ser del cliente",
+      "Compromiso de guardar secretos",
+      "Qué pasa si se cancela el proyecto antes de terminar",
+    ],
     chatgptPrompts: [
       "Generate a filled Freelance Service Agreement for a logo design project.",
       "Explain how the revision limit in this Freelance Service Agreement protects the freelancer.",
@@ -354,6 +412,16 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
       "Signing a one-way NDA legally obligates only the receiving party to protect and limit the use " +
       "of information shared by the disclosing party. The disclosing party takes on no reciprocal " +
       "confidentiality duty, since the agreement assumes information flows in one direction only.",
+    legalSummaryEs:
+      "Al firmar este acuerdo, solo la persona que recibe la información secreta se compromete a protegerla y usarla solo para lo acordado. La persona que comparte la información no tiene ese mismo compromiso, porque este acuerdo asume que el secreto va en una sola dirección.",
+    keyClausesEs: [
+      "Qué se considera información secreta",
+      "Lo que se compromete a hacer quien recibe la información",
+      "Para qué se puede usar y qué no cuenta como secreto",
+      "Cuánto tiempo dura el compromiso de guardar el secreto",
+      "Qué hacer con los documentos al terminar",
+      "Qué pasa si se rompe el acuerdo",
+    ],
     chatgptPrompts: [
       "Generate a filled One-Way NDA for sharing financial information with a potential investor.",
       "Explain why a One-Way NDA is more appropriate than a Mutual NDA for interviewing a job candidate.",
@@ -398,6 +466,16 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
       "for the stated term in exchange for rent, while defining who is responsible for maintenance and " +
       "repairs. It also sets out the conditions under which the deposit is held or returned and how " +
       "the lease may end or renew.",
+    legalSummaryEs:
+      "Este contrato de renta le da al inquilino el derecho de usar el local comercial durante el tiempo acordado a cambio de la renta, y aclara quién se encarga del mantenimiento y las reparaciones. También explica cuándo se devuelve el depósito y cómo termina o se renueva el contrato.",
+    keyClausesEs: [
+      "Descripción del local que se renta",
+      "Cuánto es la renta y cómo se paga",
+      "Cuánto dura el contrato y cómo se puede renovar",
+      "Condiciones del depósito de garantía",
+      "Quién se encarga del mantenimiento y las reparaciones",
+      "Para qué se puede usar el local",
+    ],
     chatgptPrompts: [
       "Generate a filled Simple Commercial Lease Agreement for a small retail storefront.",
       "Explain the maintenance responsibilities this Commercial Lease Agreement assigns to the tenant versus the landlord.",
@@ -486,6 +564,16 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
       "provide and the compensation owed in exchange, distinguishing the relationship from employment. " +
       "It typically also establishes that recommendations, reports, or other work product produced " +
       "under the engagement belong to the hiring company.",
+    legalSummaryEs:
+      "Este acuerdo dice qué tipo de asesoría vas a dar como consultor y cuánto te van a pagar por eso, dejando claro que no eres empleado de la empresa. También establece que los informes, recomendaciones o cualquier trabajo que hagas pasan a ser propiedad de la empresa que te contrató.",
+    keyClausesEs: [
+      "Qué tipo de asesoría vas a dar",
+      "Cuánto y cómo te van a pagar",
+      "Compromiso de guardar secretos",
+      "De quién son las recomendaciones y el trabajo que entregas",
+      "Cuánto dura el acuerdo y cómo se renueva",
+      "Cómo se puede terminar el acuerdo",
+    ],
     chatgptPrompts: [
       "Generate a filled Consulting Agreement for a part-time business strategy advisor.",
       "Explain how this Consulting Agreement differs from an Independent Contractor Agreement.",
@@ -530,6 +618,16 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
       "pricing and quality standards, and obligates the buyer to pay according to the agreed terms. It " +
       "also sets out delivery expectations and what recourse either party has if goods are late, " +
       "defective, or payment is missed.",
+    legalSummaryEs:
+      "Este acuerdo obliga al proveedor a entregar los productos o servicios acordados, con el precio y la calidad pactados, y obliga al comprador a pagar como se acordó. También dice cuándo debe llegar la entrega y qué se puede hacer si algo llega tarde, dañado, o si no se paga a tiempo.",
+    keyClausesEs: [
+      "Qué productos o servicios se van a entregar",
+      "Precio y forma de pago",
+      "Cuándo y cómo se hace la entrega",
+      "Qué calidad se espera y el derecho a revisar lo entregado",
+      "Cuánto dura el acuerdo y cómo se renueva",
+      "Qué pasa si alguien no cumple, y cómo se puede terminar el acuerdo",
+    ],
     chatgptPrompts: [
       "Generate a filled Vendor Agreement for a business purchasing packaging supplies on a monthly basis.",
       "Explain the quality standards and inspection rights in this Vendor Agreement.",
@@ -575,6 +673,16 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
       "final pay or severance owed, and often includes the employee's release of legal claims against " +
       "the employer in exchange for the agreed compensation. It also typically confirms ongoing " +
       "obligations that survive employment, such as confidentiality.",
+    legalSummaryEs:
+      "Al firmar este acuerdo, quedan por escrito los términos de tu salida del trabajo, incluyendo el pago final o la liquidación que te corresponde. Normalmente también incluye que tú aceptas no demandar a la empresa a cambio de ese pago, y que ciertos compromisos, como guardar secretos, siguen aplicando después de irte.",
+    keyClausesEs: [
+      "Pago final y beneficios que no usaste",
+      "Términos de la liquidación (si aplica)",
+      "Devolución de cosas de la empresa",
+      "Tu acuerdo de no demandar a la empresa",
+      "Compromiso de guardar secretos y no hablar mal de la empresa",
+      "Compromisos que siguen después de irte (como seguir guardando secretos)",
+    ],
     chatgptPrompts: [
       "Generate a filled Separation Agreement for an employee being laid off with two weeks of severance.",
       "Explain what a release of claims in this Separation Agreement means for the departing employee.",
@@ -708,6 +816,16 @@ export const FREE_TEMPLATES: FreeTemplate[] = [
       "once the agreed price is paid, and records the condition the goods were sold in. It also fixes " +
       "who bears responsibility for the item during delivery and what remedies, if any, apply if the " +
       "goods don't match the agreed description.",
+    legalSummaryEs:
+      "Al firmar este acuerdo, el producto pasa a ser del comprador una vez que se paga el precio acordado, y queda registrado en qué condición se vendió. También aclara quién es responsable del producto durante la entrega y qué se puede hacer si el producto no es como se describió.",
+    keyClausesEs: [
+      "Descripción del producto que se vende",
+      "Precio y forma de pago",
+      "Cuándo y cómo se entrega",
+      "En qué condición está el producto y si tiene garantía",
+      "Cuándo pasa a ser dueño el comprador",
+      "Quién es responsable si el producto se daña o se pierde durante la entrega",
+    ],
     chatgptPrompts: [
       "Fill in this Sales Agreement for selling a used forklift to a business buyer.",
       "Explain what warranty language, if any, this Sales Agreement includes for the buyer.",
@@ -806,6 +924,16 @@ FREE_TEMPLATES.push(
       "Signing this agreement formalizes the employment relationship, obligating the employer to pay " +
       "the agreed compensation and the employee to perform the described duties. It also sets out " +
       "confidentiality expectations and the conditions and notice required to end the employment.",
+    legalSummaryEs:
+      "Al firmar este contrato, tu empleador se compromete a pagarte lo acordado y tú te comprometes a hacer las tareas descritas. También explica qué información debes mantener en secreto y cómo se puede terminar el trabajo, incluyendo el aviso previo necesario.",
+    keyClausesEs: [
+      "Puesto y tareas que vas a hacer",
+      "Sueldo y cuándo te pagan",
+      "Horario y lugar de trabajo",
+      "Beneficios y días libres pagados",
+      "Compromiso de guardar secretos de la empresa",
+      "Cómo y con cuánto aviso se puede terminar el trabajo",
+    ],
     chatgptPrompts: [
       "Fill out this Employment Agreement for a full-time marketing coordinator hire.",
       "Explain the confidentiality and termination clauses in this Employment Agreement in plain language.",
@@ -1598,6 +1726,16 @@ FREE_TEMPLATES.push(
       "stated principal plus any interest according to the agreed schedule. It gives the lender " +
       "documented evidence of the loan's terms and provides a basis for pursuing repayment if the " +
       "borrower defaults.",
+    legalSummaryEs:
+      "Al firmar este pagaré, prometes por escrito devolver el dinero prestado más los intereses acordados, según el plazo establecido. Esto le da a quien prestó el dinero una prueba clara del préstamo, y una base legal para reclamar el pago si no se cumple.",
+    keyClausesEs: [
+      "Cuánto dinero se prestó",
+      "Tasa de interés",
+      "Cómo y cuándo se debe pagar",
+      "Fecha límite para pagar todo",
+      "Qué pasa si no se paga a tiempo",
+      "Si se puede pagar antes de tiempo sin penalización",
+    ],
     chatgptPrompts: [
       "Generate a filled Promissory Note using this template for a personal loan between friends.",
       "Explain how the interest rate and repayment schedule interact in this Promissory Note.",
@@ -1798,6 +1936,16 @@ FREE_TEMPLATES.push(
       "Signing a roommate agreement creates a private arrangement among co-tenants for splitting rent, " +
       "utilities, and responsibilities, and for handling situations like a roommate moving out early. " +
       "It does not replace or modify the lease with the landlord, who is generally not a party to it.",
+    legalSummaryEs:
+      "Al firmar este acuerdo entre compañeros de cuarto, quedan claras las reglas para repartir la renta, los servicios y las tareas de la casa, y qué pasa si alguien se va antes de tiempo. Este acuerdo es solo entre ustedes — no cambia ni reemplaza el contrato de renta con el dueño del lugar.",
+    keyClausesEs: [
+      "Cómo se reparte la renta y los servicios",
+      "Cuánto puso cada quien del depósito y cómo se devuelve",
+      "Reglas de la casa y espacios compartidos",
+      "Reglas sobre visitas",
+      "Aviso necesario para mudarse",
+      "Cómo resolver problemas entre compañeros de cuarto",
+    ],
     chatgptPrompts: [
       "Generate a filled Roommate Agreement using this template for two roommates splitting rent 50/50.",
       "Explain what a roommate agreement covers that a lease with the landlord doesn't.",
@@ -2001,6 +2149,16 @@ FREE_TEMPLATES.push(
       "the core transaction terms remain non-binding until a definitive agreement is signed. It " +
       "signals serious intent to negotiate but does not by itself obligate either party to complete " +
       "the deal.",
+    legalSummaryEs:
+      "Al firmar esta carta de intención, dejan por escrito que están de acuerdo en negociar un trato bajo ciertos términos, aunque solo algunas partes (como la confidencialidad) son obligatorias de verdad. Muestra que ambas partes van en serio, pero no obliga a nadie a cerrar el trato hasta que se firme el contrato final.",
+    keyClausesEs: [
+      "Resumen del trato que se está proponiendo",
+      "Términos principales propuestos (precio, forma del trato, tiempos)",
+      "Compromiso de guardar secretos",
+      "Periodo en que no se puede negociar con nadie más",
+      "Aclaración de que no es obligatorio, excepto ciertas partes",
+      "Hasta cuándo es válida esta carta",
+    ],
     chatgptPrompts: [
       "Generate a filled Letter of Intent using this template for the proposed sale of a small business.",
       "Explain which parts of a letter of intent are actually binding versus non-binding.",
@@ -2160,6 +2318,16 @@ FREE_TEMPLATES.push(
       "authority. Requirements for making a power of attorney valid, such as witnesses or " +
       "notarization, vary significantly by jurisdiction, so the specific formalities needed should be " +
       "confirmed separately before relying on the document.",
+    legalSummaryEs:
+      "Al firmar este poder, le das permiso a la persona que nombras para que actúe en tu nombre, ya sea para algo específico o para manejar tus asuntos financieros en general. Los requisitos para que este documento sea válido — como testigos o un notario — cambian según el país o estado, así que es importante confirmarlos antes de usarlo.",
+    keyClausesEs: [
+      "Quién eres tú y quién es la persona que autorizas",
+      "Para qué cosas le das permiso de actuar",
+      "Si el poder sigue válido si tú ya no puedes decidir por ti mismo",
+      "Cuándo empieza y cuánto dura el poder",
+      "Si la persona debe rendir cuentas o recibe pago por hacerlo",
+      "Cómo cancelar el poder y qué testigos o notario se necesitan",
+    ],
     chatgptPrompts: [
       "Explain what a power of attorney actually authorizes before I sign one.",
       "Generate a filled Power of Attorney using this template limited to managing my bank accounts while I travel.",
@@ -2217,6 +2385,16 @@ FREE_TEMPLATES.push(
       "indicated otherwise, so the business can accurately report payments made to them, such as on a " +
       "1099. It does not itself create a payment obligation — it only supplies the tax information " +
       "needed for reporting.",
+    legalSummaryEs:
+      "Al firmar el formulario W-9 completo, confirmas que el número de identificación fiscal que diste es correcto, para que la empresa pueda reportar bien los pagos que te hace (por ejemplo, en un 1099). Este formulario no te obliga a nada de dinero — solo le da a la empresa la información fiscal que necesita.",
+    keyClausesEs: [
+      "Tu nombre y el nombre de tu negocio (si aplica)",
+      "Tipo de clasificación fiscal",
+      "Códigos de exención, si aplican",
+      "Tu dirección",
+      "Tu número de identificación fiscal (SSN o EIN)",
+      "Certificación y firma",
+    ],
     chatgptPrompts: [
       "Explain what information I need to have ready before filling out a W-9 form.",
       "Explain the difference between filling out a W-9 as an individual versus as an LLC.",
@@ -2271,6 +2449,16 @@ FREE_TEMPLATES.push(
       "or shortly after hire. It does not itself grant work authorization; both the employee and " +
       "employer attest, under penalty of perjury, that the information and document review are " +
       "accurate and were completed properly.",
+    legalSummaryEs:
+      "Al llenar y firmar el Formulario I-9, se crea un registro oficial que demuestra que el empleador revisó documentos válidos que prueban tu identidad y tu permiso para trabajar. Este formulario no te da permiso de trabajo por sí solo — tanto tú como el empleador declaran, bajo juramento, que la información y la revisión de documentos son correctas.",
+    keyClausesEs: [
+      "Sección 1: tus datos y declaración de tu estatus migratorio o de ciudadanía",
+      "Sección 2: revisión del empleador de tus documentos de identidad y permiso de trabajo",
+      "Listas A, B y C de documentos que se aceptan",
+      "Certificación del empleador y tu primer día de trabajo",
+      "Sección para revalidar si tu permiso de trabajo va a vencer",
+      "Anexo B para casos de recontratación o revalidación",
+    ],
     chatgptPrompts: [
       "Explain what information and documents I need to complete Section 1 of this I-9 form as a new hire.",
       "What are the acceptable List A, B, and C documents for I-9 Section 2 verification?",
@@ -4981,6 +5169,16 @@ FREE_TEMPLATES.push(
       "about the subject, which the subject can share with third parties such as prospective employers " +
       "or landlords. It does not create any ongoing legal obligation between the writer and the " +
       "subject, but the writer may be responsible for the accuracy of the statements made in it.",
+    legalSummaryEs:
+      "Al firmar esta carta, dejas por escrito y con fecha tu opinión sincera sobre la persona, para que ella la pueda mostrar a futuros empleadores o dueños de propiedades. Esta carta no te compromete a nada más adelante, pero sí eres responsable de que lo que escribiste sea verdad.",
+    keyClausesEs: [
+      "Cómo conoces a la persona",
+      "Desde cuándo la conoces",
+      "Ejemplos concretos que respaldan tu recomendación",
+      "Tu opinión general y recomendación",
+      "Tu contacto por si quieren preguntarte algo más",
+      "Firma y fecha",
+    ],
     chatgptPrompts: [
       "Generate a filled Reference Letter using this template for a former employee applying to a new job.",
       "Explain what I should and shouldn't include when writing a Reference Letter for a former tenant.",

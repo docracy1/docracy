@@ -9,6 +9,7 @@ import { useLocation } from "react-router-dom";
 import { apiUrl, fetchMarketplaceTemplate, type MarketplaceTemplateDetail } from "../lib/api";
 import TemplateThumbnail from "../components/TemplateThumbnail";
 import TrustSection from "../components/TrustSection";
+import ListenButton from "../components/ListenButton";
 
 /** The 4 optional LLM/ChatGPT-optimization sections (key clauses, fill-in fields, legal summary,
  *  suggested prompts) — shared between the static Docracy-authored branch and the community
@@ -19,11 +20,16 @@ function SeoTemplateSections({
   fillInFields,
   legalSummary,
   chatgptPrompts,
+  speakLocale = "en",
 }: {
   keyClauses?: string[] | null;
   fillInFields?: string[] | null;
   legalSummary?: string | null;
   chatgptPrompts?: string[] | null;
+  /** Which language `legalSummary` is actually written in, so ListenButton picks a matching voice —
+   *  distinct from the app's UI locale, since a curated slug's Spanish summary is only used when
+   *  `legalSummaryEs` was translated (see FreeTemplate.legalSummaryEs). */
+  speakLocale?: "en" | "es";
 }) {
   const t = useT();
   return (
@@ -62,7 +68,10 @@ function SeoTemplateSections({
 
       {legalSummary && (
         <div className="card" style={{ marginTop: 16 }}>
-          <h3 style={{ marginTop: 0 }}>{t("tpl.detail.legalSummaryTitle")}</h3>
+          <h3 style={{ marginTop: 0, display: "flex", alignItems: "center" }}>
+            {t("tpl.detail.legalSummaryTitle")}
+            <ListenButton text={legalSummary} lang={speakLocale} />
+          </h3>
           <p style={{ margin: 0 }}>{legalSummary}</p>
         </div>
       )}
@@ -317,6 +326,11 @@ export default function FreeTemplateDetail() {
   const seoTitle = useEsCopy ? t(`tpl.${slug}.seoTitle`) : template?.seoTitle;
   const description = useEsCopy ? t(`tpl.${slug}.description`) : template?.description;
   const useCase = useEsCopy ? t(`tpl.${slug}.useCase`) : template?.useCase;
+  // Only the curated slugs translated so far (see freeTemplates.ts's legalSummaryEs/keyClausesEs
+  // doc comments) have Spanish text — everything else falls back to the English original.
+  const hasEsSummary = useEsCopy && !!template?.legalSummaryEs;
+  const legalSummary = hasEsSummary ? template!.legalSummaryEs : template?.legalSummary;
+  const keyClauses = useEsCopy && template?.keyClausesEs?.length ? template.keyClausesEs : template?.keyClauses;
 
   usePageMeta(
     template ? `${seoTitle} | Docracy` : t("tpl.detail.notFoundTitle"),
@@ -353,8 +367,8 @@ export default function FreeTemplateDetail() {
 
   const signers = template.signerLabels.join(` ${t("common.and")} `);
   const ctaTo = localizePath(`/prepare?freeTemplate=${template.slug}&ref=seo-template-${template.slug}`, locale);
-  const clauses = template.keyClauses?.length
-    ? template.keyClauses.slice(0, 3).join(", ").toLowerCase()
+  const clauses = keyClauses?.length
+    ? keyClauses.slice(0, 3).join(", ").toLowerCase()
     : t("tpl.detail.clausesFallback");
   const fieldCount = template.fillInFields?.length ?? 0;
 
@@ -399,9 +413,10 @@ export default function FreeTemplateDetail() {
       </div>
 
       <SeoTemplateSections
-        keyClauses={template.keyClauses}
+        keyClauses={keyClauses}
         fillInFields={template.fillInFields}
-        legalSummary={template.legalSummary}
+        legalSummary={legalSummary}
+        speakLocale={useEsCopy ? "es" : "en"}
       />
 
       <Link

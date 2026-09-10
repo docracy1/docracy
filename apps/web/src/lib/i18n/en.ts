@@ -2002,6 +2002,8 @@ const en: Messages = {
   "tpl.detail.keyClausesTitle": "Key clauses",
   "tpl.detail.fillInTitle": "What you'll fill in",
   "tpl.detail.legalSummaryTitle": "Legal summary",
+  "tpl.detail.listen": "Listen",
+  "tpl.detail.listenStop": "Stop",
   "tpl.detail.promptsTitle": "Try it with an AI assistant",
   "tpl.detail.promptsIntro": "Paste one of these into ChatGPT, Claude, or your assistant of choice:",
   "tpl.detail.faqTitle": "FAQ",

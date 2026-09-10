@@ -838,6 +838,15 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
     ],
     legalSummary:
       "Executing this document creates a signed record of the terms both parties accepted, including identification of parties and effective date, scope and purpose of the document, obligations of each party, term, termination, or completion. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
+    legalSummaryEs:
+      "Al firmar este documento, quedan por escrito los términos que ambos padres o tutores aceptaron: quiénes son, desde cuándo aplica, para qué sirve, qué debe hacer cada quien, y hasta cuándo dura. Esto ayuda a dejar todo claro y con evidencia, pero no reemplaza el consejo de un abogado si lo necesitas.",
+    keyClausesEs: [
+      "Quiénes son los padres o tutores y desde cuándo aplica",
+      "Para qué sirve este documento",
+      "Qué debe hacer cada padre o tutor",
+      "Hasta cuándo dura el permiso",
+      "Qué leyes aplican y que este documento es el acuerdo completo",
+    ],
     chatgptPrompts: [
       "Fill this Child Travel Consent Letter template for my situation using the placeholders in the document.",
       "Explain the key clauses in this Child Travel Consent Letter before I send it for signature.",

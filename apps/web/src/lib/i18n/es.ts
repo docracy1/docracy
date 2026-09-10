@@ -2038,6 +2038,8 @@ const es: Messages = {
   "tpl.detail.keyClausesTitle": "Cláusulas clave",
   "tpl.detail.fillInTitle": "Lo que vas a completar",
   "tpl.detail.legalSummaryTitle": "Resumen legal",
+  "tpl.detail.listen": "Escuchar",
+  "tpl.detail.listenStop": "Detener",
   "tpl.detail.promptsTitle": "Pruébalo con un asistente de IA",
   "tpl.detail.promptsIntro": "Copia uno de estos en ChatGPT, Claude o tu asistente favorito:",
   "tpl.detail.faqTitle": "Preguntas frecuentes",

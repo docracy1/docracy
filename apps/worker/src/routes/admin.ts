@@ -11,6 +11,7 @@ import { NOTRACK_COOKIE_NAME, noTrackCookieOptions } from "../lib/analytics";
 import { requireAdminAccount, type AccountContext } from "../lib/auth";
 import { deleteAccountByEmail, findAccountIdByEmail, markAccountEnterprise, markAccountPaid } from "../lib/billing";
 import { getMarketingRecipientsCount, sendMarketingBroadcast } from "../lib/marketingEmail";
+import { translateTemplateSummary } from "../lib/templateTranslate";
 import type { Env } from "@docracy/shared";
 
 type Variables = { account: AccountContext | null };
@@ -203,6 +204,34 @@ admin.post("/marketing-email/send", requireAdminAccount, async (c) => {
   if (!html) return c.json({ error: "Body is required" }, 400);
 
   const result = await sendMarketingBroadcast(c.env, subject, html);
+  return c.json(result);
+});
+
+interface TranslateTemplateSummaryBody {
+  title?: string;
+  legalSummary?: string;
+  keyClauses?: string[];
+}
+
+// One-off backfill tool for the curated SEO_TEMPLATE_SLUGS colloquial-Spanish summaries (see
+// apps/web/src/lib/freeTemplates.ts's legalSummaryEs/keyClausesEs) — called by hand per slug, not
+// wired into any cron. Output is reviewed and pasted into freeTemplates.ts, not auto-applied.
+admin.post("/translate-template-summary", requireAdminAccount, async (c) => {
+  let body: TranslateTemplateSummaryBody;
+  try {
+    body = await c.req.json<TranslateTemplateSummaryBody>();
+  } catch {
+    return c.json({ error: "Invalid request body" }, 400);
+  }
+  const title = body.title?.trim();
+  const legalSummary = body.legalSummary?.trim();
+  const keyClauses = Array.isArray(body.keyClauses) ? body.keyClauses.filter((s) => typeof s === "string" && s.trim()) : [];
+  if (!title || !legalSummary || keyClauses.length === 0) {
+    return c.json({ error: "title, legalSummary, and keyClauses are required" }, 400);
+  }
+
+  const result = await translateTemplateSummary(c.env, { title, legalSummary, keyClauses });
+  if (!result) return c.json({ error: "Translation failed or didn't validate — try again" }, 502);
   return c.json(result);
 });
 
