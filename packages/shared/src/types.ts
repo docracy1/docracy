@@ -93,6 +93,18 @@ export interface Signer {
    *  with no access to the original request's raw pin. Cleared the moment pinSentAt is set. Absent
    *  once delivered or for documents predating this field. */
   pinPendingEncrypted?: string;
+  /** Set once the *signer themselves* has confirmed a fresh, single-use code Docracy generated
+   *  and sent to whatsappPhone — see lib/whatsappVerify.ts. Distinct from pinSentAt/pinHash above:
+   *  those prove the signer received a code the *preparer* chose in advance for this number: this
+   *  proves the signer controls the number right now, at their own request. Optional/self-service —
+   *  never blocks completing signing, it only strengthens the AES-track evidence trail (see
+   *  Trust.tsx) for whoever chooses to use it. */
+  whatsappVerifiedAt?: string | null;
+  /** HMAC-SHA256 hex digest of the current self-verification code (authToken.ts's
+   *  hashOpaqueToken — never the raw code), plus its expiry. Cleared the moment
+   *  whatsappVerifiedAt is set, or once expired. Absent means no verification is in flight. */
+  whatsappVerifyHash?: string;
+  whatsappVerifyExpiresAt?: string;
 }
 
 export interface SignerAttachment {
@@ -124,7 +136,8 @@ export type AuditEventType =
   | "attachment_uploaded"
   | "whatsapp_delivered"
   | "whatsapp_read"
-  | "pin_sent";
+  | "pin_sent"
+  | "whatsapp_verified";
 
 /**
  * One entry in a document's append-only event log — this is what gives an anonymous, no-account

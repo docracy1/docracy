@@ -139,6 +139,16 @@ export async function checkTeamInviteRateLimit(env: Env, email: string): Promise
   return checkLimit(env, `teaminvite:${email.toLowerCase()}`, TEAM_INVITE_MAX_PER_WINDOW, TEAM_INVITE_WINDOW_SECONDS);
 }
 
+const WHATSAPP_VERIFY_REQUEST_WINDOW_SECONDS = 60 * 60; // 1 hour
+const WHATSAPP_VERIFY_REQUEST_MAX_PER_WINDOW = 3;
+
+/** Tighter than checkTokenAccessRateLimit: each request sends a real WhatsApp message (real cost,
+ *  real quota), unlike a plain read. Confirm-side brute-force protection reuses
+ *  checkPinAttemptRateLimit above — same shape of secret (a short numeric code), same token key. */
+export async function checkWhatsappVerifyRequestRateLimit(env: Env, token: string): Promise<boolean> {
+  return checkLimit(env, `wverify:${token}`, WHATSAPP_VERIFY_REQUEST_MAX_PER_WINDOW, WHATSAPP_VERIFY_REQUEST_WINDOW_SECONDS);
+}
+
 const ADMIN_LOGIN_WINDOW_SECONDS = 60 * 60; // 1 hour
 const ADMIN_LOGIN_MAX_PER_WINDOW = 10;
 

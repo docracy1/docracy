@@ -913,6 +913,15 @@ const es: Messages = {
   "sign.pinBody":
     "Este documento tiene un PIN extra en tu enlace de firma. Ingrésalo para continuar.",
   "sign.pinPlaceholder": "PIN",
+  "sign.whatsappVerifyTitle": "Verifica tu número de WhatsApp (opcional)",
+  "sign.whatsappVerifyBody":
+    "Recibe un código de un solo uso por WhatsApp y confírmalo aquí — esto agrega una prueba más fuerte de que controlas este número al registro de auditoría del documento firmado. Si lo omites, igual puedes firmar.",
+  "sign.whatsappSendCode": "Enviarme un código",
+  "sign.whatsappSending": "Enviando…",
+  "sign.whatsappCodePlaceholder": "Código de 6 dígitos",
+  "sign.whatsappConfirm": "Confirmar",
+  "sign.whatsappVerifying": "Verificando…",
+  "sign.whatsappVerified": "Número de WhatsApp verificado",
   "sendMoney.title": "Envía dinero a casa",
   "sendMoney.subtitle": "Olvídate de las comisiones bancarias — convierte y envía dinero a México, Colombia y el resto de Latinoamérica usando stablecoins, a un mejor tipo de cambio que un banco o Western Union.",
   "sendMoney.body": "Estamos construyendo esto como una función de Docracy para la comunidad latinoamericana a la que ya servimos — firma tus contratos y facturas, y luego envía el dinero sin perder 5-8% en comisiones. Todavía no está disponible: únete a la lista de espera y te avisaremos por correo en cuanto abra en tu país.",

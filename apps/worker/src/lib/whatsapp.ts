@@ -120,6 +120,24 @@ export async function sendWhatsAppPin(env: Env, doc: DocState, signerOrder: numb
   await sendWhatsAppTemplate(env, to, templateName, whatsappTemplateLang(env, doc), "pin_code", pin, `${doc.docId}:${signerOrder}:pin`);
 }
 
+/**
+ * Sends a fresh, signer-requested verification code — see lib/whatsappVerify.ts for the request/
+ * confirm flow this backs. Reuses the same approved "signing_pin" template as sendWhatsAppPin
+ * above (same {{1}} = code shape to Meta's reviewer, just a different meaning to the signer), so
+ * this doesn't need its own template submitted/approved. ":verify" suffix keeps this receipt
+ * distinct from both the signing-link and preparer-set-PIN receipts in routes/whatsappWebhook.ts.
+ */
+export async function sendWhatsAppVerificationCode(env: Env, doc: DocState, signerOrder: number, code: string): Promise<void> {
+  const signer = doc.signers.find((s) => s.order === signerOrder);
+  if (!signer?.whatsappPhone) return;
+
+  const to = normalizeE164(signer.whatsappPhone);
+  if (!to) return;
+
+  const templateName = env.WHATSAPP_PIN_TEMPLATE_NAME || "signing_pin";
+  await sendWhatsAppTemplate(env, to, templateName, whatsappTemplateLang(env, doc), "pin_code", code, `${doc.docId}:${signerOrder}:verify`);
+}
+
 /** Canonical forwardable URL for the signed PDF (+ pay CTA when the sender attached a checkout). */
 export function signedPageUrl(appUrl: string, token: string, locale: Locale = "en"): string {
   const path = locale === "es" ? `/es/firmado/${token}` : `/signed/${token}`;

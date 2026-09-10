@@ -17,7 +17,7 @@ import {
   sendSignerDeclinedNotice,
 } from "../lib/email";
 import { recordViewedOnce, indexSignerSigned, indexInviteSent, indexCompleted, indexVoided } from "../lib/index-d1";
-import { checkTokenAccessRateLimit, checkPinAttemptRateLimit } from "../lib/ratelimit";
+import { checkTokenAccessRateLimit, checkPinAttemptRateLimit, checkWhatsappVerifyRequestRateLimit } from "../lib/ratelimit";
 import { sha256Hex } from "../lib/hash";
 import { recordVerification, recordOtsProof } from "../lib/verification";
 import { stampHash } from "../lib/opentimestamps";
@@ -29,6 +29,7 @@ import { trackEvent, NOTRACK_COOKIE_NAME } from "../lib/analytics";
 import { getWorkspaceSlug, getLogoObject, hasCustomLogo, logoPath } from "../lib/branding";
 import { authenticateDocToken } from "../lib/docTokenAuth";
 import { sendWhatsAppCompletedReceipts } from "../lib/whatsapp";
+import { requestWhatsappVerification, confirmWhatsappVerification } from "../lib/whatsappVerify";
 import { signToken } from "@docracy/shared";
 import {
   attachmentLimits,
@@ -431,6 +432,9 @@ sign.get("/sign/:token", async (c) => {
           })),
         }
       : undefined,
+    whatsappVerify: viewedSigner?.whatsappPhone
+      ? { available: true, verifiedAt: viewedSigner.whatsappVerifiedAt ?? null }
+      : undefined,
     status: statusPayload(doc),
     brandLogoPath,
     brandWorkspaceSlug,
@@ -465,6 +469,48 @@ sign.post("/sign/:token/unlock", async (c) => {
 
   const unlockToken = await issueUnlockToken(c.env, doc.docId, verified.order);
   return c.json({ unlockToken });
+});
+
+// Self-service, signer-initiated — never a hard gate on completing signing (see
+// Signer.whatsappVerifiedAt's doc comment). A distinct pair of endpoints from /unlock above: that
+// one checks a PIN the *preparer* set in advance, these two let the *signer* prove they currently
+// control the WhatsApp number on file, at their own request.
+sign.post("/sign/:token/whatsapp-verify/request", async (c) => {
+  const token = c.req.param("token");
+  if (!(await checkWhatsappVerifyRequestRateLimit(c.env, token))) {
+    return c.json({ error: "Too many requests. Please try again later." }, 429);
+  }
+
+  const auth = await authenticateDocToken(c.env, token);
+  if (!auth) return c.json({ error: "Invalid or tampered link" }, 403);
+  const { verified, doc } = auth;
+
+  const result = await requestWhatsappVerification(c.env, doc.docId, verified.order);
+  if (!result.ok) return c.json({ error: result.error }, 400);
+  return c.json({ ok: true });
+});
+
+sign.post("/sign/:token/whatsapp-verify/confirm", async (c) => {
+  const token = c.req.param("token");
+  if (!(await checkPinAttemptRateLimit(c.env, token))) {
+    return c.json({ error: "Too many attempts. Please try again later." }, 429);
+  }
+
+  const auth = await authenticateDocToken(c.env, token);
+  if (!auth) return c.json({ error: "Invalid or tampered link" }, 403);
+  const { verified, doc } = auth;
+
+  let body: { code?: string };
+  try {
+    body = await c.req.json<{ code?: string }>();
+  } catch {
+    return c.json({ error: "Invalid request body" }, 400);
+  }
+  if (!body.code) return c.json({ error: "Enter the code you received" }, 400);
+
+  const result = await confirmWhatsappVerification(c.env, doc.docId, verified.order, body.code);
+  if (!result.ok) return c.json({ error: result.error }, 400);
+  return c.json({ ok: true });
 });
 
 sign.post("/sign/:token/attachments", async (c) => {

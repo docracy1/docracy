@@ -103,6 +103,9 @@ export interface SignPayload {
   status: StatusPayload;
   brandLogoPath?: string | null;
   brandWorkspaceSlug?: string | null;
+  /** Present only when this signer has a WhatsApp number on file — self-service, optional
+   *  strengthening of the AES-track evidence trail (see Trust.tsx). Never blocks signing. */
+  whatsappVerify?: { available: boolean; verifiedAt: string | null };
 }
 
 export async function fetchSignView(token: string, unlockToken?: string): Promise<SignPayload> {
@@ -117,6 +120,20 @@ export async function unlockSign(token: string, pin: string): Promise<{ unlockTo
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ pin }),
+  });
+  return asJson(res);
+}
+
+export async function requestWhatsappVerify(token: string): Promise<{ ok: true }> {
+  const res = await apiFetch(`/api/sign/${token}/whatsapp-verify/request`, { method: "POST" });
+  return asJson(res);
+}
+
+export async function confirmWhatsappVerify(token: string, code: string): Promise<{ ok: true }> {
+  const res = await apiFetch(`/api/sign/${token}/whatsapp-verify/confirm`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ code }),
   });
   return asJson(res);
 }

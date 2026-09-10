@@ -4,7 +4,17 @@ import FieldInputSheet from "../components/FieldInputSheet";
 import PdfViewer from "../components/PdfViewer";
 import SignatureCaptureModal from "../components/SignatureCaptureModal";
 import SignerConversionPopup from "../components/SignerConversionPopup";
-import { apiUrl, declineSign, fetchMe, fetchSignView, submitSignature, unlockSign, uploadSignAttachment } from "../lib/api";
+import {
+  apiUrl,
+  confirmWhatsappVerify,
+  declineSign,
+  fetchMe,
+  fetchSignView,
+  requestWhatsappVerify,
+  submitSignature,
+  unlockSign,
+  uploadSignAttachment,
+} from "../lib/api";
 import { track } from "../lib/track";
 import { useNoIndex } from "../lib/useNoIndex";
 import type { SignPayload } from "../lib/api";
@@ -115,6 +125,12 @@ export default function Sign({
   const [uploadingAttachment, setUploadingAttachment] = useState(false);
   const [attachmentError, setAttachmentError] = useState<string | null>(null);
   const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
+  const [whatsappCodeRequested, setWhatsappCodeRequested] = useState(false);
+  const [whatsappRequesting, setWhatsappRequesting] = useState(false);
+  const [whatsappCodeInput, setWhatsappCodeInput] = useState("");
+  const [whatsappVerifying, setWhatsappVerifying] = useState(false);
+  const [whatsappError, setWhatsappError] = useState<string | null>(null);
+  const [whatsappVerifiedNow, setWhatsappVerifiedNow] = useState(false);
   const [conversionDismissed, setConversionDismissed] = useState(false);
   const [copiedSigned, setCopiedSigned] = useState(false);
   const postTargetOrigin = allowedOrigins?.[0] || "*";
@@ -198,6 +214,34 @@ export default function Sign({
       setPinError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
       setUnlocking(false);
+    }
+  };
+
+  const onRequestWhatsappCode = async () => {
+    if (!token) return;
+    setWhatsappRequesting(true);
+    setWhatsappError(null);
+    try {
+      await requestWhatsappVerify(token);
+      setWhatsappCodeRequested(true);
+    } catch (err) {
+      setWhatsappError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setWhatsappRequesting(false);
+    }
+  };
+
+  const onConfirmWhatsappCode = async () => {
+    if (!token || !whatsappCodeInput.trim()) return;
+    setWhatsappVerifying(true);
+    setWhatsappError(null);
+    try {
+      await confirmWhatsappVerify(token, whatsappCodeInput.trim());
+      setWhatsappVerifiedNow(true);
+    } catch (err) {
+      setWhatsappError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setWhatsappVerifying(false);
     }
   };
 
@@ -843,6 +887,50 @@ export default function Sign({
           {attachmentError && <p style={{ color: "var(--danger)", fontSize: 13 }}>{attachmentError}</p>}
           {uploadingAttachment && <p style={{ fontSize: 13 }}>{t("sign.uploading")}</p>}
         </div>
+      )}
+
+      {payload.whatsappVerify?.available && !payload.whatsappVerify.verifiedAt && !whatsappVerifiedNow && (
+        <div className="card" style={{ marginTop: 16, padding: "12px 14px" }}>
+          <p style={{ fontSize: 13, fontWeight: 700, margin: 0 }}>{t("sign.whatsappVerifyTitle")}</p>
+          <p style={{ fontSize: 12.5, color: "var(--mute)", marginTop: 4, marginBottom: 10 }}>
+            {t("sign.whatsappVerifyBody")}
+          </p>
+          {!whatsappCodeRequested ? (
+            <button
+              type="button"
+              className="btn-secondary"
+              disabled={whatsappRequesting}
+              onClick={onRequestWhatsappCode}
+            >
+              {whatsappRequesting ? t("sign.whatsappSending") : t("sign.whatsappSendCode")}
+            </button>
+          ) : (
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <input
+                className="form-input"
+                style={{ maxWidth: 140 }}
+                inputMode="numeric"
+                placeholder={t("sign.whatsappCodePlaceholder")}
+                value={whatsappCodeInput}
+                onChange={(e) => setWhatsappCodeInput(e.target.value)}
+                aria-label={t("sign.whatsappCodePlaceholder")}
+              />
+              <button
+                type="button"
+                className="btn-secondary"
+                disabled={!whatsappCodeInput.trim() || whatsappVerifying}
+                onClick={onConfirmWhatsappCode}
+              >
+                {whatsappVerifying ? t("sign.whatsappVerifying") : t("sign.whatsappConfirm")}
+              </button>
+            </div>
+          )}
+          {whatsappError && <p style={{ color: "var(--danger)", fontSize: 12.5, marginTop: 8 }}>{whatsappError}</p>}
+        </div>
+      )}
+
+      {(payload.whatsappVerify?.verifiedAt || whatsappVerifiedNow) && (
+        <p style={{ fontSize: 12.5, color: "var(--success)", marginTop: 16 }}>✓ {t("sign.whatsappVerified")}</p>
       )}
 
       <label

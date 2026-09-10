@@ -93,6 +93,15 @@ export default function Trust() {
         certification. For contracts that require a QES or a fully identity-verified signature, use a
         compliance-grade provider.
       </p>
+      <p>
+        That PIN step proves a message reached the phone number the preparer typed in — it does not prove the
+        number belongs to the named signer, since the preparer chose it in advance. Signers on a WhatsApp
+        link can additionally request a one-time code sent to that same number and enter it back themselves;
+        once accepted, the audit trail distinguishes <strong>phone number on file</strong> (preparer-asserted,
+        the baseline above) from <strong>phone number verified</strong> (the signer confirmed a fresh code at
+        their own request). This self-verification step is optional and never blocks completing a signature —
+        it only strengthens the evidence trail for signers who choose to use it.
+      </p>
 
       <h2 id="esign-ueta" style={{ fontSize: 19, marginTop: 28 }}>
         ESIGN Act &amp; UETA (United States)

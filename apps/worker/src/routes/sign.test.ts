@@ -5,6 +5,7 @@ import sign from "./sign";
 import { getDoc, putDoc } from "../lib/kv";
 import { makeMockEnv, makeValidPdfBytes } from "../test/mockEnv";
 import { signToken, hashOpaqueToken } from "@docracy/shared";
+import { resetRateLimitMemoryForTests } from "../lib/ratelimit";
 import type { DocState } from "@docracy/shared";
 
 // Only needed on requests that reach document completion (recordVerification's background
@@ -653,5 +654,104 @@ describe("PIN-gated signing links", () => {
       env
     );
     expect(res.status).toBe(400);
+  });
+});
+
+describe("self-service WhatsApp verification", () => {
+  let env: Awaited<ReturnType<typeof makeMockEnv>>["env"];
+  let r2: ReturnType<typeof makeMockEnv>["r2"];
+  let docId: string;
+
+  beforeEach(async () => {
+    // seedDoc's docId/signerOrder/secret are identical across every test in this file (no
+    // linkNonce), so signToken produces the exact same token string each time — without this,
+    // the ratelimit module's in-memory fallback (a module-level singleton, not reset by
+    // makeMockEnv()) would let one test's requests count against the next test's limit.
+    resetRateLimitMemoryForTests();
+    const mock = makeMockEnv();
+    env = mock.env;
+    r2 = mock.r2;
+    docId = await seedDoc(env, r2);
+    const doc = await getDoc(env, docId);
+    doc!.signers[0].whatsappPhone = "+14155551234";
+    await putDoc(env, doc!);
+  });
+
+  afterEach(() => vi.restoreAllMocks());
+
+  it("GET /sign reports whatsappVerify.available without verifiedAt before any code is confirmed", async () => {
+    const token1 = await signToken(docId, 1, env.TOKEN_SECRET);
+    const res = await sign.request(`/sign/${token1}`, {}, env);
+    const body: any = await res.json();
+    expect(body.whatsappVerify).toEqual({ available: true, verifiedAt: null });
+  });
+
+  it("GET /sign reports whatsappVerify as undefined for a signer with no whatsappPhone", async () => {
+    const token2 = await signToken(docId, 2, env.TOKEN_SECRET);
+    const res = await sign.request(`/sign/${token2}`, {}, env);
+    const body: any = await res.json();
+    expect(body.whatsappVerify).toBeUndefined();
+  });
+
+  it("requests a code, then confirms it and sets whatsappVerifiedAt", async () => {
+    const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+    const token1 = await signToken(docId, 1, env.TOKEN_SECRET);
+
+    const requestRes = await sign.request(`/sign/${token1}/whatsapp-verify/request`, { method: "POST" }, env);
+    expect(requestRes.status).toBe(200);
+
+    const logged = logSpy.mock.calls.map((c) => c.join(" ")).join("\n");
+    const match = logged.match(/pin_code=(\d{6})/);
+    expect(match).toBeTruthy();
+    const code = match![1];
+
+    const confirmRes = await sign.request(
+      `/sign/${token1}/whatsapp-verify/confirm`,
+      { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code }) },
+      env
+    );
+    expect(confirmRes.status).toBe(200);
+
+    const doc = await getDoc(env, docId);
+    expect(doc?.signers[0].whatsappVerifiedAt).toBeTruthy();
+
+    const viewRes = await sign.request(`/sign/${token1}`, {}, env);
+    const viewBody: any = await viewRes.json();
+    expect(viewBody.whatsappVerify.verifiedAt).toBeTruthy();
+  });
+
+  it("rejects the wrong code", async () => {
+    const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+    const token1 = await signToken(docId, 1, env.TOKEN_SECRET);
+    await sign.request(`/sign/${token1}/whatsapp-verify/request`, { method: "POST" }, env);
+    const logged = logSpy.mock.calls.map((c) => c.join(" ")).join("\n");
+    const code = logged.match(/pin_code=(\d{6})/)![1];
+    const wrongCode = code === "000000" ? "111111" : "000000";
+
+    const res = await sign.request(
+      `/sign/${token1}/whatsapp-verify/confirm`,
+      { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code: wrongCode }) },
+      env
+    );
+    expect(res.status).toBe(400);
+  });
+
+  it("rate-limits repeated code requests", async () => {
+    vi.spyOn(console, "log").mockImplementation(() => {});
+    const token1 = await signToken(docId, 1, env.TOKEN_SECRET);
+    for (let i = 0; i < 3; i++) {
+      const res = await sign.request(`/sign/${token1}/whatsapp-verify/request`, { method: "POST" }, env);
+      expect(res.status).toBe(200);
+    }
+    const blocked = await sign.request(`/sign/${token1}/whatsapp-verify/request`, { method: "POST" }, env);
+    expect(blocked.status).toBe(429);
+  });
+
+  it("does not gate a plain GET /sign or completing signing on WhatsApp verification", async () => {
+    const token1 = await signToken(docId, 1, env.TOKEN_SECRET);
+    const res = await sign.request(`/sign/${token1}`, {}, env);
+    expect(res.status).toBe(200);
+    const body: any = await res.json();
+    expect(body.pdfBase64).toBeTruthy();
   });
 });
