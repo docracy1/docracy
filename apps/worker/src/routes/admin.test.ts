@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import admin from "./admin";
 import { makeMockEnv } from "../test/mockEnv";
 import { createSession, SESSION_COOKIE_NAME } from "../lib/auth";
@@ -358,5 +358,89 @@ describe("POST /api/admin/marketing-email/send", () => {
     const body: { sent: number; failed: number } = await res.json();
     expect(body.sent).toBe(1);
     expect(body.failed).toBe(0);
+  });
+});
+
+describe("POST /api/admin/drain-template-queue", () => {
+  it("rejects an unauthenticated request", async () => {
+    const { env } = makeMockEnv();
+    const res = await admin.request("/drain-template-queue", { method: "POST" }, env, MOCK_CTX);
+    expect(res.status).toBe(401);
+  });
+
+  it("rejects a signed-in account that isn't on the admin allow-list", async () => {
+    const { env } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com" });
+    const headers = await sessionCookie(env, "notadmin@example.com");
+    const res = await admin.request("/drain-template-queue", { method: "POST", headers }, env, MOCK_CTX);
+    expect(res.status).toBe(401);
+  });
+
+  it("501s without Workers AI configured", async () => {
+    const { env, d1 } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com" });
+    // @ts-expect-error simulating a deployment without the AI binding
+    env.AI = undefined;
+    const headers = await sessionCookie(env, "admin@example.com");
+    await d1
+      .prepare(
+        `INSERT INTO template_topic_queue (id, slug, title, category, angle, status, sort_order, created_at) VALUES (?, ?, ?, ?, ?, 'queued', 1, ?)`
+      )
+      .bind("ttq_test", "sample-slug", "Sample Template", "Consulting", "test brief", new Date().toISOString())
+      .run();
+
+    const res = await admin.request("/drain-template-queue", postJson({}, headers), env, MOCK_CTX);
+    expect(res.status).toBe(501);
+  });
+
+  it("drains a batch, marking invalid AI drafts as skipped, and reports the before/after diff", async () => {
+    const { env, d1 } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com" });
+    const headers = await sessionCookie(env, "admin@example.com");
+    // runWeeklyTemplatePublish's own ensureWeeklyTemplateInfra() re-seeds the ~128 real
+    // template_topic_queue rows (migration 0026 and friends) on every call if they're ever
+    // missing, so tests work with that real seed data present rather than fighting it.
+    const before = (await d1.prepare(`SELECT COUNT(*) as n FROM template_topic_queue WHERE status = 'queued'`).first()) as {
+      n: number;
+    };
+    expect(before.n).toBeGreaterThan(0);
+    // Too thin to pass parseAndValidateDraft — guarantees a deterministic "skipped" outcome for
+    // every row this batch touches, without needing a full FreeTemplate-parity mock response.
+    vi.spyOn(env.AI, "run").mockResolvedValue({ response: JSON.stringify({ title: "Sample Template" }) });
+
+    const res = await admin.request("/drain-template-queue", postJson({ batches: 1 }, headers), env, MOCK_CTX);
+    expect(res.status).toBe(200);
+    const body: {
+      batchesRun: number;
+      before: Record<string, number>;
+      after: Record<string, number>;
+      published: number;
+      skipped: number;
+    } = await res.json();
+    // One batch = up to WEEKLY_TEMPLATE_BATCH (10) topics processed.
+    expect(body.skipped).toBe(10);
+    expect(body.published).toBe(0);
+    expect((body.after.queued ?? 0)).toBe(body.before.queued - 10);
+  });
+
+  it("stops looping once the queue is fully drained instead of making unnecessary AI calls", async () => {
+    const { env, d1 } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com" });
+    const headers = await sessionCookie(env, "admin@example.com");
+    // Park the real seed rows out of 'queued' — ensureWeeklyTemplateInfra's reseed is INSERT OR
+    // IGNORE, so it won't resurrect existing rows back to 'queued' just because their status
+    // changed, unlike a DELETE (which would make them look "missing" and get reinserted fresh).
+    await d1.prepare(`UPDATE template_topic_queue SET status = 'published' WHERE status = 'queued'`).run();
+    for (let i = 0; i < 3; i++) {
+      await d1
+        .prepare(
+          `INSERT INTO template_topic_queue (id, slug, title, category, angle, status, sort_order, created_at) VALUES (?, ?, ?, ?, ?, 'queued', ?, ?)`
+        )
+        .bind(`ttq_early_stop_${i}`, `early-stop-slug-${i}`, `Early Stop ${i}`, "Consulting", "test brief", i, new Date().toISOString())
+        .run();
+    }
+    const aiSpy = vi.spyOn(env.AI, "run").mockResolvedValue({ response: JSON.stringify({ title: "Sample Template" }) });
+
+    // 2 batches = room for up to 20 topics, but only the 3 rows just inserted are 'queued' — once
+    // they're all marked skipped, the loop's own "anything left?" check should stop it well short.
+    const res = await admin.request("/drain-template-queue", postJson({ batches: 2 }, headers), env, MOCK_CTX);
+    expect(res.status).toBe(200);
+    expect(aiSpy).toHaveBeenCalledTimes(3);
   });
 });

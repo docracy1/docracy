@@ -12,6 +12,7 @@ import { requireAdminAccount, type AccountContext } from "../lib/auth";
 import { deleteAccountByEmail, findAccountIdByEmail, markAccountEnterprise, markAccountPaid } from "../lib/billing";
 import { getMarketingRecipientsCount, sendMarketingBroadcast } from "../lib/marketingEmail";
 import { translateTemplateSummary } from "../lib/templateTranslate";
+import { runWeeklyTemplatePublish } from "../lib/templateWeekly";
 import type { Env } from "@docracy/shared";
 
 type Variables = { account: AccountContext | null };
@@ -233,6 +234,54 @@ admin.post("/translate-template-summary", requireAdminAccount, async (c) => {
   const result = await translateTemplateSummary(c.env, { title, legalSummary, keyClauses });
   if (!result) return c.json({ error: "Translation failed or didn't validate — try again" }, 502);
   return c.json(result);
+});
+
+interface DrainTemplateQueueBody {
+  batches?: number;
+}
+
+const MAX_DRAIN_BATCHES = 20;
+
+async function queueStatusCounts(env: Env): Promise<Record<string, number>> {
+  if (!env.DOCRACY_DB) return {};
+  const { results } = await env.DOCRACY_DB.prepare(`SELECT status, COUNT(*) as n FROM template_topic_queue GROUP BY status`).all<{
+    status: string;
+    n: number;
+  }>();
+  return Object.fromEntries(results.map((r) => [r.status, r.n]));
+}
+
+// Manual catch-up trigger for the Monday template cron (lib/templateWeekly.ts) — same
+// runWeeklyTemplatePublish the cron itself calls, just invoked repeatedly on demand instead of
+// waiting a batch (WEEKLY_TEMPLATE_BATCH = 10) per Monday. Used to drain a large one-time backlog
+// (e.g. requeued legacy-batch titles) over a focused session rather than months of cron cycles.
+admin.post("/drain-template-queue", requireAdminAccount, async (c) => {
+  if (!c.env.DOCRACY_DB) return c.json({ error: "Not available on this deployment yet." }, 501);
+  if (!c.env.AI) return c.json({ error: "Workers AI isn't bound on this deployment." }, 501);
+
+  let body: DrainTemplateQueueBody = {};
+  try {
+    body = await c.req.json<DrainTemplateQueueBody>();
+  } catch {
+    // Empty body is fine — batches defaults below.
+  }
+  const batches = Math.min(Math.max(1, Math.floor(body.batches ?? 1)), MAX_DRAIN_BATCHES);
+
+  const before = await queueStatusCounts(c.env);
+  for (let i = 0; i < batches; i++) {
+    const remainingBefore = await queueStatusCounts(c.env);
+    if (!remainingBefore.queued) break; // nothing left to drain — stop early rather than no-op calls
+    await runWeeklyTemplatePublish(c.env);
+  }
+  const after = await queueStatusCounts(c.env);
+
+  return c.json({
+    batchesRun: batches,
+    before,
+    after,
+    published: (after.published ?? 0) - (before.published ?? 0),
+    skipped: (after.skipped ?? 0) - (before.skipped ?? 0),
+  });
 });
 
 export default admin;
