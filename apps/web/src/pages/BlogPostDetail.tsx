@@ -7,7 +7,6 @@ import { fetchBlogPost, type DynamicBlogPostDetail } from "../lib/api";
 import { usePageMeta } from "../lib/usePageMeta";
 import { track } from "../lib/track";
 import { blogAlternativePath, blogTemplatePath } from "../lib/blogSeo";
-import { isoUploadDate } from "../lib/howItWorksVideo";
 import { localizePath, useI18n, useT } from "../lib/i18n";
 import { BlogHeroArt, CompetitorHeroArt, gradientForSlug, topicForCluster, type BlogTopic } from "../components/BlogHeroArt";
 import TrustSection from "../components/TrustSection";
@@ -202,7 +201,7 @@ function slugifyHeading(text: string): string {
     .slice(0, 80);
 }
 
-function ArticleBlocks({ blocks, uploadDate }: { blocks: ArticleBlock[]; uploadDate: string }) {
+function ArticleBlocks({ blocks }: { blocks: ArticleBlock[] }) {
   const toc = blocks.filter((b): b is Extract<ArticleBlock, { type: "h2" }> => b.type === "h2");
 
   return (
@@ -261,28 +260,11 @@ function ArticleBlocks({ blocks, uploadDate }: { blocks: ArticleBlock[]; uploadD
           );
         }
         if (block.type === "video") {
-          const videoJsonLd = {
-            "@context": "https://schema.org",
-            "@type": "VideoObject",
-            name: block.title,
-            description: block.title,
-            thumbnailUrl: [`https://img.youtube.com/vi/${block.youtubeId}/maxresdefault.jpg`],
-            uploadDate: isoUploadDate(uploadDate),
-            embedUrl: `https://www.youtube-nocookie.com/embed/${block.youtubeId}`,
-            contentUrl: `https://www.youtube.com/watch?v=${block.youtubeId}`,
-            publisher: {
-              "@type": "Organization",
-              name: "Docracy",
-              url: "https://docracy.io",
-              logo: {
-                "@type": "ImageObject",
-                url: "https://docracy.io/docracy-seal-icon.png",
-              },
-            },
-          };
+          // Deliberately no VideoObject JSON-LD here: this is an article page, not a dedicated
+          // watch page, and Google's video indexer flagged it as "isn't on a watch page" when it
+          // carried that markup. The embed itself is unaffected — only the schema was removed.
           return (
             <div key={i} style={{ margin: "20px 0" }}>
-              <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(videoJsonLd) }} />
               <div style={{ position: "relative", paddingBottom: "56.25%", height: 0 }}>
                 <iframe
                   src={`https://www.youtube-nocookie.com/embed/${block.youtubeId}`}
@@ -402,7 +384,7 @@ export default function BlogPostDetail() {
         <h1>{article.title}</h1>
         <BlogHero slug={article.slug} topic={topicForCluster(article.cluster)} />
         <BlogByline date={article.publishedDate} />
-        <ArticleBlocks blocks={article.blocks} uploadDate={article.publishedDate} />
+        <ArticleBlocks blocks={article.blocks} />
         <TrustSection />
         <BlogCta slug={article.slug} />
       </div>

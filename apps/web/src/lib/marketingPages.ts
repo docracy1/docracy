@@ -26,12 +26,12 @@ export interface FeaturePageContent {
   ctaLabel: string;
   ctaTo: string;
   relatedLinks: Array<{ label: string; to: string }>;
-  /** Optional YouTube video ID (youtube-nocookie embed + VideoObject JSON-LD). */
+  /** Optional YouTube video ID for an embedded demo iframe — deliberately no VideoObject JSON-LD
+   *  here: this is a marketing page, not a dedicated watch page, and Google's video indexer
+   *  flagged it as "isn't on a watch page" when it carried that markup. */
   youtubeId?: string;
-  /** Accessible iframe / VideoObject title; defaults to heroHeadline when omitted. */
+  /** Accessible iframe title; defaults to heroHeadline when omitted. */
   youtubeTitle?: string;
-  /** Required with youtubeId — VideoObject uploadDate (YYYY-MM-DD or ISO DateTime). */
-  youtubeUploadDate?: string;
   /** When set, hreflang x-default points at this locale (constancia keyword pages are ES-lead). */
   xDefault?: "en" | "es";
 }
@@ -318,7 +318,6 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     ],
     youtubeId: "LvnzCbPBRqY",
     youtubeTitle: "Sign documents via WhatsApp — Docracy demo",
-    youtubeUploadDate: "2026-08-08",
     faqs: [
       {
         question: "How does WhatsApp signing work?",
