@@ -237,10 +237,17 @@ admin.post("/translate-template-summary", requireAdminAccount, async (c) => {
 });
 
 interface DrainTemplateQueueBody {
-  batches?: number;
+  limit?: number;
 }
 
-const MAX_DRAIN_BATCHES = 20;
+// A single WEEKLY_TEMPLATE_BATCH-sized run (10 topics, each a real AI draft + PDF render) risks
+// outliving Cloudflare's own edge request-duration limit when triggered on demand — confirmed live
+// in production (a "batches" request that looped runWeeklyTemplatePublish() internally got cut off
+// mid-run with an HTML edge-timeout page instead of JSON). So each admin-triggered call processes
+// at most this many topics and returns quickly; draining a large backlog means calling this route
+// many times from outside (see marketing/seo-research/queue-legacy-batch-redraft.mjs's companion
+// drain loop), not looping inside one request.
+const MAX_DRAIN_LIMIT = 3;
 
 async function queueStatusCounts(env: Env): Promise<Record<string, number>> {
   if (!env.DOCRACY_DB) return {};
@@ -252,9 +259,10 @@ async function queueStatusCounts(env: Env): Promise<Record<string, number>> {
 }
 
 // Manual catch-up trigger for the Monday template cron (lib/templateWeekly.ts) — same
-// runWeeklyTemplatePublish the cron itself calls, just invoked repeatedly on demand instead of
-// waiting a batch (WEEKLY_TEMPLATE_BATCH = 10) per Monday. Used to drain a large one-time backlog
-// (e.g. requeued legacy-batch titles) over a focused session rather than months of cron cycles.
+// runWeeklyTemplatePublish the cron itself calls, just invoked on demand with a smaller per-call
+// topic limit instead of waiting a batch (WEEKLY_TEMPLATE_BATCH = 10) per Monday. Used to drain a
+// large one-time backlog (e.g. requeued legacy-batch titles) over a focused session rather than
+// months of cron cycles.
 admin.post("/drain-template-queue", requireAdminAccount, async (c) => {
   if (!c.env.DOCRACY_DB) return c.json({ error: "Not available on this deployment yet." }, 501);
   if (!c.env.AI) return c.json({ error: "Workers AI isn't bound on this deployment." }, 501);
@@ -263,20 +271,16 @@ admin.post("/drain-template-queue", requireAdminAccount, async (c) => {
   try {
     body = await c.req.json<DrainTemplateQueueBody>();
   } catch {
-    // Empty body is fine — batches defaults below.
+    // Empty body is fine — limit defaults below.
   }
-  const batches = Math.min(Math.max(1, Math.floor(body.batches ?? 1)), MAX_DRAIN_BATCHES);
+  const limit = Math.min(Math.max(1, Math.floor(body.limit ?? MAX_DRAIN_LIMIT)), MAX_DRAIN_LIMIT);
 
   const before = await queueStatusCounts(c.env);
-  for (let i = 0; i < batches; i++) {
-    const remainingBefore = await queueStatusCounts(c.env);
-    if (!remainingBefore.queued) break; // nothing left to drain — stop early rather than no-op calls
-    await runWeeklyTemplatePublish(c.env);
-  }
+  if (before.queued) await runWeeklyTemplatePublish(c.env, limit);
   const after = await queueStatusCounts(c.env);
 
   return c.json({
-    batchesRun: batches,
+    limit,
     before,
     after,
     published: (after.published ?? 0) - (before.published ?? 0),

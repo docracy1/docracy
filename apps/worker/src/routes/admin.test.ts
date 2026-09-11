@@ -391,7 +391,7 @@ describe("POST /api/admin/drain-template-queue", () => {
     expect(res.status).toBe(501);
   });
 
-  it("drains a batch, marking invalid AI drafts as skipped, and reports the before/after diff", async () => {
+  it("processes at most MAX_DRAIN_LIMIT (3) topics per call, marking invalid AI drafts as skipped", async () => {
     const { env, d1 } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com" });
     const headers = await sessionCookie(env, "admin@example.com");
     // runWeeklyTemplatePublish's own ensureWeeklyTemplateInfra() re-seeds the ~128 real
@@ -402,45 +402,55 @@ describe("POST /api/admin/drain-template-queue", () => {
     };
     expect(before.n).toBeGreaterThan(0);
     // Too thin to pass parseAndValidateDraft — guarantees a deterministic "skipped" outcome for
-    // every row this batch touches, without needing a full FreeTemplate-parity mock response.
+    // every row this call touches, without needing a full FreeTemplate-parity mock response.
     vi.spyOn(env.AI, "run").mockResolvedValue({ response: JSON.stringify({ title: "Sample Template" }) });
 
-    const res = await admin.request("/drain-template-queue", postJson({ batches: 1 }, headers), env, MOCK_CTX);
+    // Requesting more than MAX_DRAIN_LIMIT should clamp down to it — a single
+    // WEEKLY_TEMPLATE_BATCH-sized (10-topic) call is exactly what risked outliving Cloudflare's
+    // edge request-duration limit in production, which is why this route caps per-call work at all.
+    const res = await admin.request("/drain-template-queue", postJson({ limit: 999 }, headers), env, MOCK_CTX);
     expect(res.status).toBe(200);
     const body: {
-      batchesRun: number;
+      limit: number;
       before: Record<string, number>;
       after: Record<string, number>;
       published: number;
       skipped: number;
     } = await res.json();
-    // One batch = up to WEEKLY_TEMPLATE_BATCH (10) topics processed.
-    expect(body.skipped).toBe(10);
+    expect(body.limit).toBe(3);
+    expect(body.skipped).toBe(3);
     expect(body.published).toBe(0);
-    expect((body.after.queued ?? 0)).toBe(body.before.queued - 10);
+    expect(body.after.queued ?? 0).toBe(body.before.queued - 3);
   });
 
-  it("stops looping once the queue is fully drained instead of making unnecessary AI calls", async () => {
+  it("honors a smaller explicit limit and is a no-op when nothing is queued", async () => {
     const { env, d1 } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com" });
     const headers = await sessionCookie(env, "admin@example.com");
     // Park the real seed rows out of 'queued' — ensureWeeklyTemplateInfra's reseed is INSERT OR
     // IGNORE, so it won't resurrect existing rows back to 'queued' just because their status
     // changed, unlike a DELETE (which would make them look "missing" and get reinserted fresh).
     await d1.prepare(`UPDATE template_topic_queue SET status = 'published' WHERE status = 'queued'`).run();
-    for (let i = 0; i < 3; i++) {
-      await d1
-        .prepare(
-          `INSERT INTO template_topic_queue (id, slug, title, category, angle, status, sort_order, created_at) VALUES (?, ?, ?, ?, ?, 'queued', ?, ?)`
-        )
-        .bind(`ttq_early_stop_${i}`, `early-stop-slug-${i}`, `Early Stop ${i}`, "Consulting", "test brief", i, new Date().toISOString())
-        .run();
-    }
+    await d1
+      .prepare(
+        `INSERT INTO template_topic_queue (id, slug, title, category, angle, status, sort_order, created_at) VALUES (?, ?, ?, ?, ?, 'queued', 1, ?)`
+      )
+      .bind("ttq_early_stop_0", "early-stop-slug-0", "Early Stop 0", "Consulting", "test brief", new Date().toISOString())
+      .run();
     const aiSpy = vi.spyOn(env.AI, "run").mockResolvedValue({ response: JSON.stringify({ title: "Sample Template" }) });
 
-    // 2 batches = room for up to 20 topics, but only the 3 rows just inserted are 'queued' — once
-    // they're all marked skipped, the loop's own "anything left?" check should stop it well short.
-    const res = await admin.request("/drain-template-queue", postJson({ batches: 2 }, headers), env, MOCK_CTX);
+    // An explicit limit below MAX_DRAIN_LIMIT is honored as-is (not rounded up to the cap), and
+    // with only one row actually queued, exactly one AI call is made regardless of the limit.
+    const res = await admin.request("/drain-template-queue", postJson({ limit: 1 }, headers), env, MOCK_CTX);
     expect(res.status).toBe(200);
-    expect(aiSpy).toHaveBeenCalledTimes(3);
+    const body: { limit: number } = await res.json();
+    expect(body.limit).toBe(1);
+    expect(aiSpy).toHaveBeenCalledTimes(1);
+
+    // Now nothing is queued at all — the route should skip calling runWeeklyTemplatePublish
+    // entirely rather than making a pointless AI-bound request.
+    aiSpy.mockClear();
+    const res2 = await admin.request("/drain-template-queue", postJson({ limit: 1 }, headers), env, MOCK_CTX);
+    expect(res2.status).toBe(200);
+    expect(aiSpy).not.toHaveBeenCalled();
   });
 });

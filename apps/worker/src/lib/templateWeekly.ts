@@ -273,11 +273,15 @@ async function markTopicSkipped(env: Env, topicId: string): Promise<void> {
 }
 
 /**
- * Monday job: publish up to WEEKLY_TEMPLATE_BATCH FreeTemplate-quality Marketplace templates
- * (origin=weekly) from template_topic_queue, using the same PDF layout + SEO catalog scheme as
- * apps/web/src/lib/freeTemplates.ts.
+ * Monday job: publish up to `limit` (default WEEKLY_TEMPLATE_BATCH) FreeTemplate-quality
+ * Marketplace templates (origin=weekly) from template_topic_queue, using the same PDF layout +
+ * SEO catalog scheme as apps/web/src/lib/freeTemplates.ts. `limit` exists for the admin
+ * drain-template-queue route (routes/admin.ts) to request a smaller per-call count than the
+ * Monday cron's default — each topic's AI draft + PDF render can take long enough that
+ * WEEKLY_TEMPLATE_BATCH-at-once risks the request outliving Cloudflare's own edge request-duration
+ * limit when triggered on demand instead of from a scheduled event.
  */
-export async function runWeeklyTemplatePublish(env: Env): Promise<void> {
+export async function runWeeklyTemplatePublish(env: Env, limit: number = WEEKLY_TEMPLATE_BATCH): Promise<void> {
   if (!env.DOCRACY_DB) {
     console.log("Weekly templates: skipped (no D1)");
     return;
@@ -289,7 +293,7 @@ export async function runWeeklyTemplatePublish(env: Env): Promise<void> {
 
   await ensureWeeklyTemplateInfra(env);
 
-  const topics = await nextQueuedTopics(env, WEEKLY_TEMPLATE_BATCH);
+  const topics = await nextQueuedTopics(env, limit);
   if (topics.length === 0) {
     console.log("Weekly templates: no queued topics left");
     return;
