@@ -13,6 +13,7 @@ import { deleteAccountByEmail, findAccountIdByEmail, markAccountEnterprise, mark
 import { getMarketingRecipientsCount, sendMarketingBroadcast } from "../lib/marketingEmail";
 import { translateTemplateSummary } from "../lib/templateTranslate";
 import { runWeeklyTemplatePublish } from "../lib/templateWeekly";
+import { DAILY_DRAIN_BUDGET, getDrainBudgetRemaining, recordDrainBudgetUsage } from "../lib/adminDrainBudget";
 import type { Env } from "@docracy/shared";
 
 type Variables = { account: AccountContext | null };
@@ -261,9 +262,25 @@ const MAX_DRAIN_LIMIT = 3;
 // often from outside while driving a large backlog by hand) is exactly what exhausted the account's
 // D1 free-tier daily row-read quota in production once and took real user logins down with it.
 // Never add a full-table status query back into this route's hot path.
+//
+// Also enforces a hard daily topic budget (see lib/adminDrainBudget.ts) — the real fix above stops
+// this route from being wasteful per call, but a big one-time backlog is still real, legitimate D1
+// work at scale, and doing enough of it in a single day is what actually exhausted the account's
+// quota and broke production logins (twice). This makes that structurally impossible to repeat: a
+// large backlog now has to be drained across multiple UTC days no matter how it's driven.
 admin.post("/drain-template-queue", requireAdminAccount, async (c) => {
   if (!c.env.DOCRACY_DB) return c.json({ error: "Not available on this deployment yet." }, 501);
   if (!c.env.AI) return c.json({ error: "Workers AI isn't bound on this deployment." }, 501);
+
+  const remaining = await getDrainBudgetRemaining(c.env);
+  if (remaining <= 0) {
+    return c.json(
+      {
+        error: `Daily admin-drain budget (${DAILY_DRAIN_BUDGET} topics) already used today. Try again after 00:00 UTC.`,
+      },
+      429
+    );
+  }
 
   let body: DrainTemplateQueueBody = {};
   try {
@@ -271,10 +288,11 @@ admin.post("/drain-template-queue", requireAdminAccount, async (c) => {
   } catch {
     // Empty body is fine — limit defaults below.
   }
-  const limit = Math.min(Math.max(1, Math.floor(body.limit ?? MAX_DRAIN_LIMIT)), MAX_DRAIN_LIMIT);
+  const limit = Math.min(Math.max(1, Math.floor(body.limit ?? MAX_DRAIN_LIMIT)), MAX_DRAIN_LIMIT, remaining);
 
   const result = await runWeeklyTemplatePublish(c.env, limit);
-  return c.json(result);
+  await recordDrainBudgetUsage(c.env, result.attempted);
+  return c.json({ ...result, dailyBudgetRemaining: remaining - result.attempted });
 });
 
 // One-off lookup for retiring the now-redundant static entries in

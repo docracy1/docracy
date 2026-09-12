@@ -457,4 +457,50 @@ describe("POST /api/admin/drain-template-queue", () => {
     expect(body2.queueWasEmpty).toBe(true);
     expect(aiSpy).not.toHaveBeenCalled();
   });
+
+  it("reports remaining daily drain budget and decrements it in KV after a normal call", async () => {
+    const { env } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com" });
+    const headers = await sessionCookie(env, "admin@example.com");
+    vi.spyOn(env.AI, "run").mockResolvedValue({ response: JSON.stringify({ title: "Sample Template" }) });
+
+    const res = await admin.request("/drain-template-queue", postJson({ limit: 2 }, headers), env, MOCK_CTX);
+    expect(res.status).toBe(200);
+    const body: { attempted: number; dailyBudgetRemaining: number } = await res.json();
+    expect(body.attempted).toBe(2);
+    // DAILY_DRAIN_BUDGET (100) minus the 2 topics this call attempted.
+    expect(body.dailyBudgetRemaining).toBe(98);
+
+    const todayKey = `admin-drain-budget:${new Date().toISOString().slice(0, 10)}`;
+    expect(await env.DOCRACY_KV.get(todayKey)).toBe("2");
+  });
+
+  it("returns 429 without calling Workers AI once today's drain budget is exhausted", async () => {
+    const { env } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com" });
+    const headers = await sessionCookie(env, "admin@example.com");
+    const todayKey = `admin-drain-budget:${new Date().toISOString().slice(0, 10)}`;
+    await env.DOCRACY_KV.put(todayKey, "100");
+    const aiSpy = vi.spyOn(env.AI, "run").mockResolvedValue({ response: JSON.stringify({ title: "Sample Template" }) });
+
+    const res = await admin.request("/drain-template-queue", postJson({ limit: 1 }, headers), env, MOCK_CTX);
+    expect(res.status).toBe(429);
+    const body: { error: string } = await res.json();
+    expect(body.error).toMatch(/daily admin-drain budget/i);
+    expect(aiSpy).not.toHaveBeenCalled();
+  });
+
+  it("clamps the effective limit to whichever of MAX_DRAIN_LIMIT, the requested limit, or the remaining budget is smallest", async () => {
+    const { env } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com" });
+    const headers = await sessionCookie(env, "admin@example.com");
+    const todayKey = `admin-drain-budget:${new Date().toISOString().slice(0, 10)}`;
+    // Only 2 topics left in today's budget, even though MAX_DRAIN_LIMIT (3) and the requested
+    // limit (999) would both allow more — the smallest of the three must win.
+    await env.DOCRACY_KV.put(todayKey, "98");
+    vi.spyOn(env.AI, "run").mockResolvedValue({ response: JSON.stringify({ title: "Sample Template" }) });
+
+    const res = await admin.request("/drain-template-queue", postJson({ limit: 999 }, headers), env, MOCK_CTX);
+    expect(res.status).toBe(200);
+    const body: { attempted: number; dailyBudgetRemaining: number } = await res.json();
+    expect(body.attempted).toBe(2);
+    expect(body.dailyBudgetRemaining).toBe(0);
+  });
 });
