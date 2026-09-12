@@ -272,6 +272,15 @@ async function markTopicSkipped(env: Env, topicId: string): Promise<void> {
     .run();
 }
 
+export interface WeeklyPublishResult {
+  attempted: number;
+  published: number;
+  skipped: number;
+  /** True once this call found nothing queued to do — a cheap signal from the same query that
+   *  already ran (nextQueuedTopics), not a fresh COUNT(*) scan. */
+  queueWasEmpty: boolean;
+}
+
 /**
  * Monday job: publish up to `limit` (default WEEKLY_TEMPLATE_BATCH) FreeTemplate-quality
  * Marketplace templates (origin=weekly) from template_topic_queue, using the same PDF layout +
@@ -280,15 +289,23 @@ async function markTopicSkipped(env: Env, topicId: string): Promise<void> {
  * Monday cron's default — each topic's AI draft + PDF render can take long enough that
  * WEEKLY_TEMPLATE_BATCH-at-once risks the request outliving Cloudflare's own edge request-duration
  * limit when triggered on demand instead of from a scheduled event.
+ *
+ * Returns a result summary instead of void so callers (the admin drain route in particular) never
+ * need their own separate before/after D1 queries just to report what happened — a real incident:
+ * that route's own full-table `GROUP BY` status count, run twice per call, plus frequent external
+ * polling of the same query, was enough on its own to exhaust the account's D1 free-tier daily row-
+ * read quota and take production logins down until the next UTC day. This return value is the fix —
+ * every number here falls out of work this function was already doing internally, at no extra cost.
  */
-export async function runWeeklyTemplatePublish(env: Env, limit: number = WEEKLY_TEMPLATE_BATCH): Promise<void> {
+export async function runWeeklyTemplatePublish(env: Env, limit: number = WEEKLY_TEMPLATE_BATCH): Promise<WeeklyPublishResult> {
+  const empty: WeeklyPublishResult = { attempted: 0, published: 0, skipped: 0, queueWasEmpty: true };
   if (!env.DOCRACY_DB) {
     console.log("Weekly templates: skipped (no D1)");
-    return;
+    return empty;
   }
   if (!env.AI) {
     console.log("Weekly templates: skipped (no Workers AI)");
-    return;
+    return empty;
   }
 
   await ensureWeeklyTemplateInfra(env);
@@ -296,7 +313,7 @@ export async function runWeeklyTemplatePublish(env: Env, limit: number = WEEKLY_
   const topics = await nextQueuedTopics(env, limit);
   if (topics.length === 0) {
     console.log("Weekly templates: no queued topics left");
-    return;
+    return empty;
   }
 
   let published = 0;
@@ -359,6 +376,7 @@ export async function runWeeklyTemplatePublish(env: Env, limit: number = WEEKLY_
     await pingIndexNow(publishedPaths);
   }
   console.log(`Weekly templates: published ${published}/${topics.length} this run`);
+  return { attempted: topics.length, published, skipped: topics.length - published, queueWasEmpty: false };
 }
 
 /**

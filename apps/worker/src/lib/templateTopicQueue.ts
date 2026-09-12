@@ -44,6 +44,14 @@ function isDuplicateColumnError(err: unknown): boolean {
   return /duplicate column/i.test(msg);
 }
 
+// Per-isolate cache so a warm isolate serving several calls in quick succession (the admin
+// drain-template-queue route, in particular) doesn't re-run the full DDL/seed batch every single
+// time — each run re-attempts a ~130-row INSERT OR IGNORE plus 8 ALTER TABLE attempts, real D1
+// read/write cost that's pure waste once this isolate has already ensured the infra exists. A cold
+// isolate (new deploy, idle timeout, different colo) still runs it fresh, which is exactly the
+// "don't depend on migrations having been applied" safety net this function exists for.
+let infraEnsuredThisIsolate = false;
+
 /**
  * Production CI often cannot `wrangler d1 migrations apply` (token lacks D1:Edit).
  * The Worker binding can still write D1, so the Monday/hourly jobs create the queue
@@ -51,6 +59,7 @@ function isDuplicateColumnError(err: unknown): boolean {
  */
 export async function ensureWeeklyTemplateInfra(env: Env): Promise<void> {
   if (!env.DOCRACY_DB) return;
+  if (infraEnsuredThisIsolate) return;
   const db = env.DOCRACY_DB;
   await db.prepare(QUEUE_TABLE_DDL).run();
   await db.prepare(QUEUE_INDEX_DDL).run();
@@ -71,6 +80,12 @@ export async function ensureWeeklyTemplateInfra(env: Env): Promise<void> {
   // Each line here is already a complete, self-contained single-line UPDATE statement, so it's
   // genuinely compatible with db.exec()'s newline-splitting behavior — left as-is.
   await db.exec(LATAM_JOB_PHRASE_TEMPLATE_PRIORITY_SQL);
+  infraEnsuredThisIsolate = true;
+}
+
+/** Test-only: reset the per-isolate cache between test cases. */
+export function resetWeeklyTemplateInfraCacheForTests(): void {
+  infraEnsuredThisIsolate = false;
 }
 
 /** True when /api/marketplace?origin=weekly has nothing to show yet. */

@@ -1,8 +1,15 @@
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import { parseAndValidateDraft, runWeeklyTemplateCatchUpIfEmpty } from "./templateWeekly";
 import { renderTemplatePdf, TEXT_BLANK } from "./templatePdf";
-import { ensureWeeklyTemplateInfra, shouldCatchUpWeeklyTemplates } from "./templateTopicQueue";
+import { ensureWeeklyTemplateInfra, resetWeeklyTemplateInfraCacheForTests, shouldCatchUpWeeklyTemplates } from "./templateTopicQueue";
 import { makeMockEnv } from "../test/mockEnv";
+
+// ensureWeeklyTemplateInfra now caches "already ensured" per isolate (see templateTopicQueue.ts) to
+// avoid redundant D1 reads/writes on every call — a module-level flag, so it must be reset between
+// tests even though each test gets its own fresh mock D1 via makeMockEnv().
+beforeEach(() => {
+  resetWeeklyTemplateInfraCacheForTests();
+});
 
 const baseTopic = {
   id: "ttq_test",

@@ -249,20 +249,18 @@ interface DrainTemplateQueueBody {
 // drain loop), not looping inside one request.
 const MAX_DRAIN_LIMIT = 3;
 
-async function queueStatusCounts(env: Env): Promise<Record<string, number>> {
-  if (!env.DOCRACY_DB) return {};
-  const { results } = await env.DOCRACY_DB.prepare(`SELECT status, COUNT(*) as n FROM template_topic_queue GROUP BY status`).all<{
-    status: string;
-    n: number;
-  }>();
-  return Object.fromEntries(results.map((r) => [r.status, r.n]));
-}
-
 // Manual catch-up trigger for the Monday template cron (lib/templateWeekly.ts) — same
 // runWeeklyTemplatePublish the cron itself calls, just invoked on demand with a smaller per-call
 // topic limit instead of waiting a batch (WEEKLY_TEMPLATE_BATCH = 10) per Monday. Used to drain a
 // large one-time backlog (e.g. requeued legacy-batch titles) over a focused session rather than
 // months of cron cycles.
+//
+// Deliberately does NOT run its own before/after `SELECT ... GROUP BY status` queue-status scan —
+// runWeeklyTemplatePublish's return value already carries everything this route reports, at zero
+// extra D1 cost. That redundant scan (run twice per call here, plus polled directly and far more
+// often from outside while driving a large backlog by hand) is exactly what exhausted the account's
+// D1 free-tier daily row-read quota in production once and took real user logins down with it.
+// Never add a full-table status query back into this route's hot path.
 admin.post("/drain-template-queue", requireAdminAccount, async (c) => {
   if (!c.env.DOCRACY_DB) return c.json({ error: "Not available on this deployment yet." }, 501);
   if (!c.env.AI) return c.json({ error: "Workers AI isn't bound on this deployment." }, 501);
@@ -275,17 +273,8 @@ admin.post("/drain-template-queue", requireAdminAccount, async (c) => {
   }
   const limit = Math.min(Math.max(1, Math.floor(body.limit ?? MAX_DRAIN_LIMIT)), MAX_DRAIN_LIMIT);
 
-  const before = await queueStatusCounts(c.env);
-  if (before.queued) await runWeeklyTemplatePublish(c.env, limit);
-  const after = await queueStatusCounts(c.env);
-
-  return c.json({
-    limit,
-    before,
-    after,
-    published: (after.published ?? 0) - (before.published ?? 0),
-    skipped: (after.skipped ?? 0) - (before.skipped ?? 0),
-  });
+  const result = await runWeeklyTemplatePublish(c.env, limit);
+  return c.json(result);
 });
 
 export default admin;

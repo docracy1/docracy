@@ -410,17 +410,19 @@ describe("POST /api/admin/drain-template-queue", () => {
     // edge request-duration limit in production, which is why this route caps per-call work at all.
     const res = await admin.request("/drain-template-queue", postJson({ limit: 999 }, headers), env, MOCK_CTX);
     expect(res.status).toBe(200);
-    const body: {
-      limit: number;
-      before: Record<string, number>;
-      after: Record<string, number>;
-      published: number;
-      skipped: number;
-    } = await res.json();
-    expect(body.limit).toBe(3);
+    // The response is runWeeklyTemplatePublish's own result object verbatim — no separate
+    // before/after queue-status scan (that redundant full-table read is what exhausted the
+    // account's D1 free-tier daily row-read quota in production; never add it back).
+    const body: { attempted: number; published: number; skipped: number; queueWasEmpty: boolean } = await res.json();
+    expect(body.attempted).toBe(3);
     expect(body.skipped).toBe(3);
     expect(body.published).toBe(0);
-    expect(body.after.queued ?? 0).toBe(body.before.queued - 3);
+    expect(body.queueWasEmpty).toBe(false);
+
+    const after = (await d1.prepare(`SELECT COUNT(*) as n FROM template_topic_queue WHERE status = 'queued'`).first()) as {
+      n: number;
+    };
+    expect(after.n).toBe(before.n - 3);
   });
 
   it("honors a smaller explicit limit and is a no-op when nothing is queued", async () => {
@@ -442,15 +444,17 @@ describe("POST /api/admin/drain-template-queue", () => {
     // with only one row actually queued, exactly one AI call is made regardless of the limit.
     const res = await admin.request("/drain-template-queue", postJson({ limit: 1 }, headers), env, MOCK_CTX);
     expect(res.status).toBe(200);
-    const body: { limit: number } = await res.json();
-    expect(body.limit).toBe(1);
+    const body: { attempted: number } = await res.json();
+    expect(body.attempted).toBe(1);
     expect(aiSpy).toHaveBeenCalledTimes(1);
 
-    // Now nothing is queued at all — the route should skip calling runWeeklyTemplatePublish
-    // entirely rather than making a pointless AI-bound request.
+    // Now nothing is queued at all — runWeeklyTemplatePublish's own nextQueuedTopics returns empty
+    // and it bails out before ever calling the AI, so no pointless AI-bound request happens.
     aiSpy.mockClear();
     const res2 = await admin.request("/drain-template-queue", postJson({ limit: 1 }, headers), env, MOCK_CTX);
     expect(res2.status).toBe(200);
+    const body2: { queueWasEmpty: boolean } = await res2.json();
+    expect(body2.queueWasEmpty).toBe(true);
     expect(aiSpy).not.toHaveBeenCalled();
   });
 });
