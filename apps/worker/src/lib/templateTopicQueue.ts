@@ -56,11 +56,29 @@ let infraEnsuredThisIsolate = false;
  * Production CI often cannot `wrangler d1 migrations apply` (token lacks D1:Edit).
  * The Worker binding can still write D1, so the Monday/hourly jobs create the queue
  * and add missing marketplace_templates columns themselves.
+ *
+ * Cron Triggers rarely reuse a warm isolate the way a busy HTTP route does, so
+ * infraEnsuredThisIsolate alone barely helps the hourly catch-up job — it was still paying the
+ * full DDL/seed cost (a ~130-row INSERT OR IGNORE conflict-check plus 8 ALTER attempts) on close to
+ * every single hourly firing, 24 times a day, which meaningfully added to the D1 free-tier daily
+ * read-quota exhaustion this function's cost has already caused once. So this now also does one
+ * genuinely cheap `SELECT 1 ... LIMIT 1` (reads at most one row, regardless of table size) before
+ * falling back to the heavy path — once the table has ever been seeded (by a migration or a prior
+ * run), every later call anywhere skips straight past all of it.
  */
 export async function ensureWeeklyTemplateInfra(env: Env): Promise<void> {
   if (!env.DOCRACY_DB) return;
   if (infraEnsuredThisIsolate) return;
   const db = env.DOCRACY_DB;
+  try {
+    const existing = await db.prepare(`SELECT 1 FROM template_topic_queue LIMIT 1`).first();
+    if (existing) {
+      infraEnsuredThisIsolate = true;
+      return;
+    }
+  } catch {
+    // Table genuinely doesn't exist yet (or some other read error) — fall through to create it.
+  }
   await db.prepare(QUEUE_TABLE_DDL).run();
   await db.prepare(QUEUE_INDEX_DDL).run();
   for (const sql of MARKETPLACE_COLUMN_ALTERS) {
