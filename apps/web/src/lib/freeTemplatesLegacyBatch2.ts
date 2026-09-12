@@ -894,46 +894,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
     ],
   },
   {
-    slug: "tax-prep-authorization",
-    name: "Tax Preparer Authorization Letter",
-    seoTitle: "Free Tax Preparer Authorization Letter Template",
-    description:
-      "Authorize preparer to discuss return with tax authority (general letter, not IRS 2848 facsimile).",
-    useCase:
-      "This tax preparer authorization letter covers identification of parties and effective date, scope and purpose of the document, obligations of each party, with 4 placeholder fields to fill in. Authorize preparer to discuss return with tax authority (general letter, not IRS 2848 facsimile).",
-    signerLabels: ["Taxpayer", "Preparer"],
-    pdfPath: "/free-templates/tax-prep-authorization.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 0, xFrac: 0.27485784313725486, yFrac: 0.56729797979798, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 0, xFrac: 0.15376960784313726, yFrac: 0.6626767676767679, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 0, xFrac: 0.27282843137254903, yFrac: 0.7329797979797983, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 0, xFrac: 0.15376960784313726, yFrac: 0.8283585858585861, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Power of Attorney",
-    definition:
-      "A tax preparer authorization letter is a written power of attorney document in which the parties set out identification of parties and effective date and scope and purpose of the document before signing..",
-    keyClauses: [
-      "Identification of parties and effective date",
-      "Scope and purpose of the document",
-      "Obligations of each party",
-      "Term, termination, or completion",
-      "Governing law and entire agreement"
-    ],
-    fillInFields: [
-      "[Party A Name]",
-      "[Party B Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including identification of parties and effective date, scope and purpose of the document, obligations of each party, term, termination, or completion. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Tax Preparer Authorization Letter template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Tax Preparer Authorization Letter before I send it for signature.",
-      "Adapt this Tax Preparer Authorization Letter for a power of attorney use case with different payment or term details."
-    ],
-  },
-  {
     slug: "banking-inquiry-authorization",
     name: "Banking Inquiry Authorization",
     seoTitle: "Free Banking Inquiry Authorization Template",
@@ -1374,46 +1334,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
     ],
   },
   {
-    slug: "one-way-nda-interview",
-    name: "One-Way Interview NDA",
-    seoTitle: "Free One-Way Interview NDA Template",
-    description:
-      "One-Way Interview NDA for non-disclosure — parties, scope, and signatures ready for free e-signature.",
-    useCase:
-      "This one-way interview nda covers identification of parties and effective date, scope and purpose of the document, obligations of each party, with 4 placeholder fields to fill in. Short one-way NDA for job interviews. Narrow confidential info, short term.",
-    signerLabels: ["Company", "Candidate"],
-    pdfPath: "/free-templates/one-way-nda-interview.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.2798562091503268, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.2853807189542483, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Non-Disclosure",
-    definition:
-      "A one-way interview nda is a written non-disclosure document in which the parties set out identification of parties and effective date and scope and purpose of the document before signing..",
-    keyClauses: [
-      "Identification of parties and effective date",
-      "Scope and purpose of the document",
-      "Obligations of each party",
-      "Term, termination, or completion",
-      "Governing law and entire agreement"
-    ],
-    fillInFields: [
-      "[Party A Name]",
-      "[Party B Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including identification of parties and effective date, scope and purpose of the document, obligations of each party, term, termination, or completion. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this One-Way Interview NDA template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this One-Way Interview NDA before I send it for signature.",
-      "Adapt this One-Way Interview NDA for a non-disclosure use case with different payment or term details."
-    ],
-  },
-  {
     slug: "mutual-nda-partnership",
     name: "Mutual NDA for Partnership Talks",
     seoTitle: "Free Mutual NDA for Partnership Talks Template",
@@ -1494,46 +1414,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
     ],
   },
   {
-    slug: "nda-amendment",
-    name: "NDA Amendment",
-    seoTitle: "Free NDA Amendment Template",
-    description:
-      "NDA Amendment for non-disclosure — parties, scope, and signatures ready for free e-signature.",
-    useCase:
-      "This nda amendment covers identification of parties and effective date, scope and purpose of the document, obligations of each party, with 4 placeholder fields to fill in. 2 signers. Amend an existing NDA dated [Date]. What changes; rest remains.",
-    signerLabels: ["Party A", "Party B"],
-    pdfPath: "/free-templates/nda-amendment.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.26134722222222223, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.26134722222222223, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Non-Disclosure",
-    definition:
-      "A nda amendment is a written non-disclosure document in which the parties set out identification of parties and effective date and scope and purpose of the document before signing..",
-    keyClauses: [
-      "Identification of parties and effective date",
-      "Scope and purpose of the document",
-      "Obligations of each party",
-      "Term, termination, or completion",
-      "Governing law and entire agreement"
-    ],
-    fillInFields: [
-      "[Party A Name]",
-      "[Party B Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including identification of parties and effective date, scope and purpose of the document, obligations of each party, term, termination, or completion. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this NDA Amendment template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this NDA Amendment before I send it for signature.",
-      "Adapt this NDA Amendment for a non-disclosure use case with different payment or term details."
-    ],
-  },
-  {
     slug: "residual-knowledge-carveout-ack",
     name: "Residuals Clause Acknowledgment",
     seoTitle: "Free Residuals Clause Acknowledgment Template",
@@ -1571,46 +1451,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
       "Fill this Residuals Clause Acknowledgment template for my situation using the placeholders in the document.",
       "Explain the key clauses in this Residuals Clause Acknowledgment before I send it for signature.",
       "Adapt this Residuals Clause Acknowledgment for a non-disclosure use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "beta-tester-nda",
-    name: "Beta Tester NDA",
-    seoTitle: "Free Beta Tester NDA Template",
-    description:
-      "NDA + feedback license for beta software.",
-    useCase:
-      "This beta tester nda covers identification of parties and effective date, scope and purpose of the document, obligations of each party, with 4 placeholder fields to fill in. NDA + feedback license for beta software. No compensation unless stated.",
-    signerLabels: ["Company", "Tester"],
-    pdfPath: "/free-templates/beta-tester-nda.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.2798562091503268, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.25073039215686277, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Non-Disclosure",
-    definition:
-      "A beta tester nda is a written non-disclosure document in which the parties set out identification of parties and effective date and scope and purpose of the document before signing..",
-    keyClauses: [
-      "Identification of parties and effective date",
-      "Scope and purpose of the document",
-      "Obligations of each party",
-      "Term, termination, or completion",
-      "Governing law and entire agreement"
-    ],
-    fillInFields: [
-      "[Party A Name]",
-      "[Party B Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including identification of parties and effective date, scope and purpose of the document, obligations of each party, term, termination, or completion. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Beta Tester NDA template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Beta Tester NDA before I send it for signature.",
-      "Adapt this Beta Tester NDA for a non-disclosure use case with different payment or term details."
     ],
   },
   {
@@ -1971,46 +1811,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
       "Fill this Probationary Period Acknowledgment template for my situation using the placeholders in the document.",
       "Explain the key clauses in this Probationary Period Acknowledgment before I send it for signature.",
       "Adapt this Probationary Period Acknowledgment for a employment use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "moonlighting-disclosure",
-    name: "Outside Employment Disclosure",
-    seoTitle: "Free Outside Employment Disclosure Template",
-    description:
-      "Outside Employment Disclosure for employment — parties, scope, and signatures ready for free e-signature.",
-    useCase:
-      "This outside employment disclosure covers identification of parties and effective date, scope and purpose of the document, obligations of each party, with 4 placeholder fields to fill in. 2 signers. Employee discloses other jobs; employer consent/conflict rules.",
-    signerLabels: ["Party A", "Party B"],
-    pdfPath: "/free-templates/moonlighting-disclosure.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 0, xFrac: 0.26134722222222223, yFrac: 0.6875000000000003, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 0, xFrac: 0.15376960784313726, yFrac: 0.7828787878787882, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.26134722222222223, yFrac: 0.06060606060606061, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Employment",
-    definition:
-      "A outside employment disclosure is a written employment document in which the parties set out identification of parties and effective date and scope and purpose of the document before signing..",
-    keyClauses: [
-      "Identification of parties and effective date",
-      "Scope and purpose of the document",
-      "Obligations of each party",
-      "Term, termination, or completion",
-      "Governing law and entire agreement"
-    ],
-    fillInFields: [
-      "[Party A Name]",
-      "[Party B Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including identification of parties and effective date, scope and purpose of the document, obligations of each party, term, termination, or completion. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Outside Employment Disclosure template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Outside Employment Disclosure before I send it for signature.",
-      "Adapt this Outside Employment Disclosure for a employment use case with different payment or term details."
     ],
   },
   {
@@ -2454,46 +2254,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
     ],
   },
   {
-    slug: "photography-session-contract",
-    name: "Photography Session Contract",
-    seoTitle: "Free Photography Session Contract Template",
-    description:
-      "Session date, fee, deliverables count, usage license, cancellation.",
-    useCase:
-      "This photography session contract covers identification of parties and effective date, scope and purpose of the document, obligations of each party, with 4 placeholder fields to fill in. Session date, fee, deliverables count, usage license, cancellation.",
-    signerLabels: ["Photographer", "Client"],
-    pdfPath: "/free-templates/photography-session-contract.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.31320996732026146, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.24776143790849672, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A photography session contract is a written consulting document in which the parties set out identification of parties and effective date and scope and purpose of the document before signing..",
-    keyClauses: [
-      "Identification of parties and effective date",
-      "Scope and purpose of the document",
-      "Obligations of each party",
-      "Term, termination, or completion",
-      "Governing law and entire agreement"
-    ],
-    fillInFields: [
-      "[Party A Name]",
-      "[Party B Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including identification of parties and effective date, scope and purpose of the document, obligations of each party, term, termination, or completion. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Photography Session Contract template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Photography Session Contract before I send it for signature.",
-      "Adapt this Photography Session Contract for a consulting use case with different payment or term details."
-    ],
-  },
-  {
     slug: "wedding-photography-addendum",
     name: "Wedding Photography Timeline Addendum",
     seoTitle: "Free Wedding Photography Timeline Addendum Template",
@@ -2731,46 +2491,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
       "Fill this Short Independent Contractor Agreement template for my situation using the placeholders in the document.",
       "Explain the key clauses in this Short Independent Contractor Agreement before I send it for signature.",
       "Adapt this Short Independent Contractor Agreement for a consulting use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "consulting-expense-policy",
-    name: "Consulting Expense Reimbursement Terms",
-    seoTitle: "Free Consulting Expense Reimbursement Terms Template",
-    description:
-      "Consulting Expense Reimbursement Terms for consulting — parties, scope, and signatures ready for free e-signature.",
-    useCase:
-      "This consulting expense reimbursement terms covers identification of parties and effective date, scope and purpose of the document, obligations of each party, with 4 placeholder fields to fill in. 2 signers. What expenses are reimbursable, caps, receipt rules.",
-    signerLabels: ["Party A", "Party B"],
-    pdfPath: "/free-templates/consulting-expense-policy.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.26134722222222223, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.26134722222222223, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A consulting expense reimbursement terms is a written consulting document in which the parties set out identification of parties and effective date and scope and purpose of the document before signing..",
-    keyClauses: [
-      "Identification of parties and effective date",
-      "Scope and purpose of the document",
-      "Obligations of each party",
-      "Term, termination, or completion",
-      "Governing law and entire agreement"
-    ],
-    fillInFields: [
-      "[Party A Name]",
-      "[Party B Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including identification of parties and effective date, scope and purpose of the document, obligations of each party, term, termination, or completion. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Consulting Expense Reimbursement Terms template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Consulting Expense Reimbursement Terms before I send it for signature.",
-      "Adapt this Consulting Expense Reimbursement Terms for a consulting use case with different payment or term details."
     ],
   },
   {
@@ -3134,46 +2854,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
     ],
   },
   {
-    slug: "convertible-note-extension",
-    name: "Convertible Note Extension",
-    seoTitle: "Free Convertible Note Extension Template",
-    description:
-      "Convertible Note Extension for funding — parties, scope, and signatures ready for free e-signature.",
-    useCase:
-      "This convertible note extension covers identification of parties and effective date, scope and purpose of the document, obligations of each party, with 4 placeholder fields to fill in. 2 signers. Extend maturity of a convertible note. New date, otherwise unchanged.",
-    signerLabels: ["Party A", "Party B"],
-    pdfPath: "/free-templates/convertible-note-extension.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 0, xFrac: 0.26134722222222223, yFrac: 0.6367424242424244, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 0, xFrac: 0.15376960784313726, yFrac: 0.7321212121212123, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.26134722222222223, yFrac: 0.06060606060606061, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Funding",
-    definition:
-      "A convertible note extension is a written funding document in which the parties set out identification of parties and effective date and scope and purpose of the document before signing..",
-    keyClauses: [
-      "Identification of parties and effective date",
-      "Scope and purpose of the document",
-      "Obligations of each party",
-      "Term, termination, or completion",
-      "Governing law and entire agreement"
-    ],
-    fillInFields: [
-      "[Party A Name]",
-      "[Party B Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including identification of parties and effective date, scope and purpose of the document, obligations of each party, term, termination, or completion. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Convertible Note Extension template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Convertible Note Extension before I send it for signature.",
-      "Adapt this Convertible Note Extension for a funding use case with different payment or term details."
-    ],
-  },
-  {
     slug: "investor-update-nda",
     name: "Investor Update Confidentiality",
     seoTitle: "Free Investor Update Confidentiality Template",
@@ -3291,46 +2971,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
       "Fill this Capital Call Notice Acknowledgment template for my situation using the placeholders in the document.",
       "Explain the key clauses in this Capital Call Notice Acknowledgment before I send it for signature.",
       "Adapt this Capital Call Notice Acknowledgment for a funding use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "grant-funds-acknowledgment",
-    name: "Grant Funds Use Acknowledgment",
-    seoTitle: "Free Grant Funds Use Acknowledgment Template",
-    description:
-      "Acknowledge permitted use of grant funds and reporting.",
-    useCase:
-      "This grant funds use acknowledgment covers identification of parties and effective date, scope and purpose of the document, obligations of each party, with 4 placeholder fields to fill in. Acknowledge permitted use of grant funds and reporting.",
-    signerLabels: ["Grantor", "Grantee"],
-    pdfPath: "/free-templates/grant-funds-acknowledgment.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 0, xFrac: 0.2632450980392157, yFrac: 0.6367424242424244, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 0, xFrac: 0.15376960784313726, yFrac: 0.7321212121212123, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.2674354575163399, yFrac: 0.06060606060606061, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Funding",
-    definition:
-      "A grant funds use acknowledgment is a written funding document in which the parties set out identification of parties and effective date and scope and purpose of the document before signing..",
-    keyClauses: [
-      "Identification of parties and effective date",
-      "Scope and purpose of the document",
-      "Obligations of each party",
-      "Term, termination, or completion",
-      "Governing law and entire agreement"
-    ],
-    fillInFields: [
-      "[Party A Name]",
-      "[Party B Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including identification of parties and effective date, scope and purpose of the document, obligations of each party, term, termination, or completion. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Grant Funds Use Acknowledgment template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Grant Funds Use Acknowledgment before I send it for signature.",
-      "Adapt this Grant Funds Use Acknowledgment for a funding use case with different payment or term details."
     ],
   },
   {
@@ -4458,47 +4098,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
     ],
   },
   {
-    slug: "contract-for-mobile-application-development-services",
-    name: "Contract FOR Mobile Application Development Services",
-    seoTitle: "Free Contract FOR Mobile Application Development Services Template",
-    description:
-      "Contract FOR Mobile Application Development Services — a free consulting template covering scope of work and milestones, client approvals, payment tied to deliverables.",
-    useCase:
-      "This contract for mobile application development services covers scope of work and milestones, client approvals, payment tied to deliverables, with 4 placeholder fields to fill in. Contract FOR Mobile Application Development Services Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: scope of work and milestones, client approvals, paym",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/contract-for-mobile-application-development-services.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A contract for mobile application development services is a written consulting document in which the parties set out scope of work and milestones and client approvals before signing..",
-    keyClauses: [
-      "scope of work and milestones",
-      "client approvals",
-      "payment tied to deliverables",
-      "IP ownership on final payment",
-      "warranty window",
-      "change process"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including scope of work and milestones, client approvals, payment tied to deliverables, ip ownership on final payment. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Contract FOR Mobile Application Development Services template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Contract FOR Mobile Application Development Services before I send it for signature.",
-      "Adapt this Contract FOR Mobile Application Development Services for a consulting use case with different payment or term details."
-    ],
-  },
-  {
     slug: "branding-identity-contract",
     name: "Branding Identity Contract",
     seoTitle: "Free Branding Identity Contract Template",
@@ -4581,211 +4180,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
     ],
   },
   {
-    slug: "designer-sample-contract",
-    name: "Designer Sample Contract",
-    seoTitle: "Free Designer Sample Contract Template",
-    description:
-      "Designer Sample Contract — a free consulting template covering scope of work and milestones, client approvals, payment tied to deliverables.",
-    useCase:
-      "This designer sample contract covers scope of work and milestones, client approvals, payment tied to deliverables, with 4 placeholder fields to fill in. Designer Sample Contract Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: scope of work and milestones, client approvals, payment tied to deliverables, IP ownership on final payment, warranty window, change pro",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/designer-sample-contract.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A designer sample contract is a written consulting document in which the parties set out scope of work and milestones and client approvals before signing..",
-    keyClauses: [
-      "scope of work and milestones",
-      "client approvals",
-      "payment tied to deliverables",
-      "IP ownership on final payment",
-      "warranty window",
-      "change process"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including scope of work and milestones, client approvals, payment tied to deliverables, ip ownership on final payment. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Designer Sample Contract template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Designer Sample Contract before I send it for signature.",
-      "Adapt this Designer Sample Contract for a consulting use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "web-design-contract",
-    name: "WEB Design Contract",
-    seoTitle: "Free WEB Design Contract Template",
-    description:
-      "WEB Design Contract — a free consulting template covering scope of work and milestones, client approvals, payment tied to deliverables.",
-    useCase:
-      "This web design contract covers scope of work and milestones, client approvals, payment tied to deliverables, with 4 placeholder fields to fill in. WEB Design Contract Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: scope of work and milestones, client approvals, payment tied to deliverables, IP ownership on final payment, warranty window, change process.",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/web-design-contract.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A web design contract is a written consulting document in which the parties set out scope of work and milestones and client approvals before signing..",
-    keyClauses: [
-      "scope of work and milestones",
-      "client approvals",
-      "payment tied to deliverables",
-      "IP ownership on final payment",
-      "warranty window",
-      "change process"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including scope of work and milestones, client approvals, payment tied to deliverables, ip ownership on final payment. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this WEB Design Contract template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this WEB Design Contract before I send it for signature.",
-      "Adapt this WEB Design Contract for a consulting use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "band-performance-contract",
-    name: "Band Performance Contract",
-    seoTitle: "Free Band Performance Contract Template",
-    description:
-      "Band Performance Contract — a free consulting template covering parties and purpose, scope of obligations, payment or consideration if any.",
-    useCase:
-      "This band performance contract covers parties and purpose, scope of obligations, payment or consideration if any, with 4 placeholder fields to fill in. Band Performance Contract Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: parties and purpose, scope of obligations, payment or consideration if any, term and termination, general provisions, signatures.",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/band-performance-contract.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A band performance contract is a written consulting document in which the parties set out parties and purpose and scope of obligations before signing..",
-    keyClauses: [
-      "parties and purpose",
-      "scope of obligations",
-      "payment or consideration if any",
-      "term and termination",
-      "general provisions",
-      "signatures"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including parties and purpose, scope of obligations, payment or consideration if any, term and termination. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Band Performance Contract template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Band Performance Contract before I send it for signature.",
-      "Adapt this Band Performance Contract for a consulting use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "agreement-for-design-services-interactive-web-works-ful",
-    name: "Agreement FOR Design Services Interactive WEB Works FUL",
-    seoTitle: "Free Agreement FOR Design Services Interactive WEB Works FUL Template",
-    description:
-      "Agreement FOR Design Services Interactive WEB Works FUL — a free consulting template covering scope of work and milestones, client approvals, payment tied to deliverables.",
-    useCase:
-      "This agreement for design services interactive web works ful covers scope of work and milestones, client approvals, payment tied to deliverables, with 4 placeholder fields to fill in. Agreement FOR Design Services Interactive WEB Works FUL Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: scope of work and milestones, client approv",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/agreement-for-design-services-interactive-web-works-ful.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A agreement for design services interactive web works ful is a written consulting document in which the parties set out scope of work and milestones and client approvals before signing..",
-    keyClauses: [
-      "scope of work and milestones",
-      "client approvals",
-      "payment tied to deliverables",
-      "IP ownership on final payment",
-      "warranty window",
-      "change process"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including scope of work and milestones, client approvals, payment tied to deliverables, ip ownership on final payment. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Agreement FOR Design Services Interactive WEB Works FUL template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Agreement FOR Design Services Interactive WEB Works FUL before I send it for signature.",
-      "Adapt this Agreement FOR Design Services Interactive WEB Works FUL for a consulting use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "web-support-agreement",
-    name: "WEB Support Agreement",
-    seoTitle: "Free WEB Support Agreement Template",
-    description:
-      "WEB Support Agreement — a free consulting template covering scope of work and milestones, client approvals, payment tied to deliverables.",
-    useCase:
-      "This web support agreement covers scope of work and milestones, client approvals, payment tied to deliverables, with 4 placeholder fields to fill in. WEB Support Agreement Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: scope of work and milestones, client approvals, payment tied to deliverables, IP ownership on final payment, warranty window, change process.",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/web-support-agreement.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A web support agreement is a written consulting document in which the parties set out scope of work and milestones and client approvals before signing..",
-    keyClauses: [
-      "scope of work and milestones",
-      "client approvals",
-      "payment tied to deliverables",
-      "IP ownership on final payment",
-      "warranty window",
-      "change process"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including scope of work and milestones, client approvals, payment tied to deliverables, ip ownership on final payment. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this WEB Support Agreement template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this WEB Support Agreement before I send it for signature.",
-      "Adapt this WEB Support Agreement for a consulting use case with different payment or term details."
-    ],
-  },
-  {
     slug: "design-and-development-contract",
     name: "Design AND Development Contract",
     seoTitle: "Free Design AND Development Contract Template",
@@ -4827,47 +4221,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
     ],
   },
   {
-    slug: "contract-for-event-photography-services",
-    name: "Contract FOR Event Photography Services",
-    seoTitle: "Free Contract FOR Event Photography Services Template",
-    description:
-      "Contract FOR Event Photography Services — a free consulting template covering session or event date, fee and deliverables, usage license scope.",
-    useCase:
-      "This contract for event photography services covers session or event date, fee and deliverables, usage license scope, with 4 placeholder fields to fill in. Contract FOR Event Photography Services Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: session or event date, fee and deliverables, usage license scope, cancellation policy, liab",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/contract-for-event-photography-services.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A contract for event photography services is a written consulting document in which the parties set out session or event date and fee and deliverables before signing..",
-    keyClauses: [
-      "session or event date",
-      "fee and deliverables",
-      "usage license scope",
-      "cancellation policy",
-      "liability limits",
-      "payment schedule"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including session or event date, fee and deliverables, usage license scope, cancellation policy. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Contract FOR Event Photography Services template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Contract FOR Event Photography Services before I send it for signature.",
-      "Adapt this Contract FOR Event Photography Services for a consulting use case with different payment or term details."
-    ],
-  },
-  {
     slug: "artist-management-contract",
     name: "Artist Management Contract",
     seoTitle: "Free Artist Management Contract Template",
@@ -4906,47 +4259,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
       "Fill this Artist Management Contract template for my situation using the placeholders in the document.",
       "Explain the key clauses in this Artist Management Contract before I send it for signature.",
       "Adapt this Artist Management Contract for a consulting use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "license-of-rights-for-photography",
-    name: "License OF Rights FOR Photography",
-    seoTitle: "Free License OF Rights FOR Photography Template",
-    description:
-      "License OF Rights FOR Photography — a free intellectual property template covering licensed or assigned work described, grant scope and territory, restrictions.",
-    useCase:
-      "This license of rights for photography covers licensed or assigned work described, grant scope and territory, restrictions, with 4 placeholder fields to fill in. License OF Rights FOR Photography Placeholders: [Licensor Name], [Licensee Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: licensed or assigned work described, grant scope and territory, restrictions, fees or conside",
-    signerLabels: ["Licensor", "Licensee"],
-    pdfPath: "/free-templates/license-of-rights-for-photography.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 0, xFrac: 0.27074264705882356, yFrac: 0.7468434343434346, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 0, xFrac: 0.15376960784313726, yFrac: 0.8422222222222224, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.2749330065359477, yFrac: 0.06060606060606061, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Intellectual Property",
-    definition:
-      "A license of rights for photography is a written intellectual property document in which the parties set out licensed or assigned work described and grant scope and territory before signing..",
-    keyClauses: [
-      "licensed or assigned work described",
-      "grant scope and territory",
-      "restrictions",
-      "fees or consideration",
-      "ownership and credit",
-      "termination"
-    ],
-    fillInFields: [
-      "[Licensor Name]",
-      "[Licensee Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including licensed or assigned work described, grant scope and territory, restrictions, fees or consideration. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this License OF Rights FOR Photography template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this License OF Rights FOR Photography before I send it for signature.",
-      "Adapt this License OF Rights FOR Photography for a intellectual property use case with different payment or term details."
     ],
   },
   {
@@ -5029,47 +4341,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
       "Fill this Licensing Contract TO Merchandise Images template for my situation using the placeholders in the document.",
       "Explain the key clauses in this Licensing Contract TO Merchandise Images before I send it for signature.",
       "Adapt this Licensing Contract TO Merchandise Images for a sale and purchase use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "website-identity-design-contract",
-    name: "Website Identity Design Contract",
-    seoTitle: "Free Website Identity Design Contract Template",
-    description:
-      "Website Identity Design Contract — a free consulting template covering scope of work and milestones, client approvals, payment tied to deliverables.",
-    useCase:
-      "This website identity design contract covers scope of work and milestones, client approvals, payment tied to deliverables, with 4 placeholder fields to fill in. Website Identity Design Contract Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: scope of work and milestones, client approvals, payment tied to deliverables, IP ownership on final payment, war",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/website-identity-design-contract.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A website identity design contract is a written consulting document in which the parties set out scope of work and milestones and client approvals before signing..",
-    keyClauses: [
-      "scope of work and milestones",
-      "client approvals",
-      "payment tied to deliverables",
-      "IP ownership on final payment",
-      "warranty window",
-      "change process"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including scope of work and milestones, client approvals, payment tied to deliverables, ip ownership on final payment. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Website Identity Design Contract template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Website Identity Design Contract before I send it for signature.",
-      "Adapt this Website Identity Design Contract for a consulting use case with different payment or term details."
     ],
   },
   {
@@ -5236,88 +4507,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
     ],
   },
   {
-    slug: "technology-consulting-contract",
-    name: "Technology Consulting Contract",
-    seoTitle: "Free Technology Consulting Contract Template",
-    description:
-      "Technology Consulting Contract — a free consulting template covering parties and purpose, scope of obligations, payment or consideration if any.",
-    useCase:
-      "This technology consulting contract covers parties and purpose, scope of obligations, payment or consideration if any, with 4 placeholder fields to fill in. Technology Consulting Contract Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: parties and purpose, scope of obligations, payment or consideration if any, term and termination, general provisions, ",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/technology-consulting-contract.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A technology consulting contract is a written consulting document in which the parties set out parties and purpose and scope of obligations before signing..",
-    keyClauses: [
-      "parties and purpose",
-      "scope of obligations",
-      "payment or consideration if any",
-      "term and termination",
-      "general provisions",
-      "signatures"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including parties and purpose, scope of obligations, payment or consideration if any, term and termination. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Technology Consulting Contract template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Technology Consulting Contract before I send it for signature.",
-      "Adapt this Technology Consulting Contract for a consulting use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "hourly-contract-template-web-app",
-    name: "Hourly Contract Template WEB APP",
-    seoTitle: "Free Hourly Contract Template WEB APP Template",
-    description:
-      "Hourly Contract Template WEB APP — a free consulting template covering scope of work and milestones, client approvals, payment tied to deliverables.",
-    useCase:
-      "This hourly contract template web app covers scope of work and milestones, client approvals, payment tied to deliverables, with 4 placeholder fields to fill in. Hourly Contract Template WEB APP Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: scope of work and milestones, client approvals, payment tied to deliverables, IP ownership on final payment, war",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/hourly-contract-template-web-app.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A hourly contract template web app is a written consulting document in which the parties set out scope of work and milestones and client approvals before signing..",
-    keyClauses: [
-      "scope of work and milestones",
-      "client approvals",
-      "payment tied to deliverables",
-      "IP ownership on final payment",
-      "warranty window",
-      "change process"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including scope of work and milestones, client approvals, payment tied to deliverables, ip ownership on final payment. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Hourly Contract Template WEB APP template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Hourly Contract Template WEB APP before I send it for signature.",
-      "Adapt this Hourly Contract Template WEB APP for a consulting use case with different payment or term details."
-    ],
-  },
-  {
     slug: "designer-contract",
     name: "Designer Contract",
     seoTitle: "Free Designer Contract Template",
@@ -5400,47 +4589,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
     ],
   },
   {
-    slug: "ui-ux-design-development-contract",
-    name: "UI UX Design Development Contract",
-    seoTitle: "Free UI UX Design Development Contract Template",
-    description:
-      "UI UX Design Development Contract — a free consulting template covering scope of work and milestones, client approvals, payment tied to deliverables.",
-    useCase:
-      "This ui ux design development contract covers scope of work and milestones, client approvals, payment tied to deliverables, with 4 placeholder fields to fill in. UI UX Design Development Contract Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: scope of work and milestones, client approvals, payment tied to deliverables, IP ownership on final payment, ",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/ui-ux-design-development-contract.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A ui ux design development contract is a written consulting document in which the parties set out scope of work and milestones and client approvals before signing..",
-    keyClauses: [
-      "scope of work and milestones",
-      "client approvals",
-      "payment tied to deliverables",
-      "IP ownership on final payment",
-      "warranty window",
-      "change process"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including scope of work and milestones, client approvals, payment tied to deliverables, ip ownership on final payment. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this UI UX Design Development Contract template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this UI UX Design Development Contract before I send it for signature.",
-      "Adapt this UI UX Design Development Contract for a consulting use case with different payment or term details."
-    ],
-  },
-  {
     slug: "content-production-agreement",
     name: "Content Production Agreement",
     seoTitle: "Free Content Production Agreement Template",
@@ -5520,88 +4668,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
       "Fill this Consulting Services Contract Hourly template for my situation using the placeholders in the document.",
       "Explain the key clauses in this Consulting Services Contract Hourly before I send it for signature.",
       "Adapt this Consulting Services Contract Hourly for a consulting use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "website-design-contract",
-    name: "Website Design Contract",
-    seoTitle: "Free Website Design Contract Template",
-    description:
-      "Website Design Contract — a free consulting template covering scope of work and milestones, client approvals, payment tied to deliverables.",
-    useCase:
-      "This website design contract covers scope of work and milestones, client approvals, payment tied to deliverables, with 4 placeholder fields to fill in. Website Design Contract Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: scope of work and milestones, client approvals, payment tied to deliverables, IP ownership on final payment, warranty window, change proces",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/website-design-contract.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A website design contract is a written consulting document in which the parties set out scope of work and milestones and client approvals before signing..",
-    keyClauses: [
-      "scope of work and milestones",
-      "client approvals",
-      "payment tied to deliverables",
-      "IP ownership on final payment",
-      "warranty window",
-      "change process"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including scope of work and milestones, client approvals, payment tied to deliverables, ip ownership on final payment. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Website Design Contract template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Website Design Contract before I send it for signature.",
-      "Adapt this Website Design Contract for a consulting use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "business-coaching-agreement",
-    name: "Business Coaching Agreement",
-    seoTitle: "Free Business Coaching Agreement Template",
-    description:
-      "Business Coaching Agreement — a free consulting template covering parties and purpose, scope of obligations, payment or consideration if any.",
-    useCase:
-      "This business coaching agreement covers parties and purpose, scope of obligations, payment or consideration if any, with 4 placeholder fields to fill in. Business Coaching Agreement Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: parties and purpose, scope of obligations, payment or consideration if any, term and termination, general provisions, signature",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/business-coaching-agreement.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A business coaching agreement is a written consulting document in which the parties set out parties and purpose and scope of obligations before signing..",
-    keyClauses: [
-      "parties and purpose",
-      "scope of obligations",
-      "payment or consideration if any",
-      "term and termination",
-      "general provisions",
-      "signatures"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including parties and purpose, scope of obligations, payment or consideration if any, term and termination. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Business Coaching Agreement template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Business Coaching Agreement before I send it for signature.",
-      "Adapt this Business Coaching Agreement for a consulting use case with different payment or term details."
     ],
   },
   {
@@ -5973,88 +5039,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
     ],
   },
   {
-    slug: "confidential-information-and-invention-agreement-for-em",
-    name: "Confidential Information AND Invention Agreement FOR EM",
-    seoTitle: "Free Confidential Information AND Invention Agreement FOR EM Template",
-    description:
-      "Confidential Information AND Invention Agreement FOR EM — a free non-disclosure template covering definition of confidential information, permitted use, exclusions.",
-    useCase:
-      "This confidential information and invention agreement for em covers definition of confidential information, permitted use, exclusions, with 4 placeholder fields to fill in. Confidential Information AND Invention Agreement FOR EM Placeholders: [Disclosing Party Name], [Receiving Party Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: definition of confidential",
-    signerLabels: ["Disclosing Party", "Receiving Party"],
-    pdfPath: "/free-templates/confidential-information-and-invention-agreement-for-em.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.3344248366013072, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.3313055555555555, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Non-Disclosure",
-    definition:
-      "A confidential information and invention agreement for em is a written non-disclosure document in which the parties set out definition of confidential information and permitted use before signing..",
-    keyClauses: [
-      "definition of confidential information",
-      "permitted use",
-      "exclusions",
-      "term and survival",
-      "return or destroy materials",
-      "remedies"
-    ],
-    fillInFields: [
-      "[Disclosing Party Name]",
-      "[Receiving Party Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including definition of confidential information, permitted use, exclusions, term and survival. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Confidential Information AND Invention Agreement FOR EM template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Confidential Information AND Invention Agreement FOR EM before I send it for signature.",
-      "Adapt this Confidential Information AND Invention Agreement FOR EM for a non-disclosure use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "digital-forensics-investigation-contract",
-    name: "Digital Forensics Investigation Contract",
-    seoTitle: "Free Digital Forensics Investigation Contract Template",
-    description:
-      "Digital Forensics Investigation Contract — a free consulting template covering parties and purpose, scope of obligations, payment or consideration if any.",
-    useCase:
-      "This digital forensics investigation contract covers parties and purpose, scope of obligations, payment or consideration if any, with 4 placeholder fields to fill in. Digital Forensics Investigation Contract Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: parties and purpose, scope of obligations, payment or consideration if any, term and ter",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/digital-forensics-investigation-contract.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A digital forensics investigation contract is a written consulting document in which the parties set out parties and purpose and scope of obligations before signing..",
-    keyClauses: [
-      "parties and purpose",
-      "scope of obligations",
-      "payment or consideration if any",
-      "term and termination",
-      "general provisions",
-      "signatures"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including parties and purpose, scope of obligations, payment or consideration if any, term and termination. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Digital Forensics Investigation Contract template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Digital Forensics Investigation Contract before I send it for signature.",
-      "Adapt this Digital Forensics Investigation Contract for a consulting use case with different payment or term details."
-    ],
-  },
-  {
     slug: "illustration-publication-contract-illustration-castle-u",
     name: "Illustration Publication Contract Illustration Castle U",
     seoTitle: "Free Illustration Publication Contract Illustration Castle U Template",
@@ -6093,129 +5077,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
       "Fill this Illustration Publication Contract Illustration Castle U template for my situation using the placeholders in the document.",
       "Explain the key clauses in this Illustration Publication Contract Illustration Castle U before I send it for signature.",
       "Adapt this Illustration Publication Contract Illustration Castle U for a consulting use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "development-agreement-for-hourly-work",
-    name: "Development Agreement FOR Hourly Work",
-    seoTitle: "Free Development Agreement FOR Hourly Work Template",
-    description:
-      "Development Agreement FOR Hourly Work — a free consulting template covering scope of work and milestones, client approvals, payment tied to deliverables.",
-    useCase:
-      "This development agreement for hourly work covers scope of work and milestones, client approvals, payment tied to deliverables, with 4 placeholder fields to fill in. Development Agreement FOR Hourly Work Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: scope of work and milestones, client approvals, payment tied to deliverables, IP ownership on fin",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/development-agreement-for-hourly-work.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A development agreement for hourly work is a written consulting document in which the parties set out scope of work and milestones and client approvals before signing..",
-    keyClauses: [
-      "scope of work and milestones",
-      "client approvals",
-      "payment tied to deliverables",
-      "IP ownership on final payment",
-      "warranty window",
-      "change process"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including scope of work and milestones, client approvals, payment tied to deliverables, ip ownership on final payment. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Development Agreement FOR Hourly Work template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Development Agreement FOR Hourly Work before I send it for signature.",
-      "Adapt this Development Agreement FOR Hourly Work for a consulting use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "freelance-developer-contract",
-    name: "Freelance Developer Contract",
-    seoTitle: "Free Freelance Developer Contract Template",
-    description:
-      "Freelance Developer Contract — a free consulting template covering parties and purpose, scope of obligations, payment or consideration if any.",
-    useCase:
-      "This freelance developer contract covers parties and purpose, scope of obligations, payment or consideration if any, with 4 placeholder fields to fill in. Freelance Developer Contract Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: parties and purpose, scope of obligations, payment or consideration if any, term and termination, general provisions, signat",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/freelance-developer-contract.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A freelance developer contract is a written consulting document in which the parties set out parties and purpose and scope of obligations before signing..",
-    keyClauses: [
-      "parties and purpose",
-      "scope of obligations",
-      "payment or consideration if any",
-      "term and termination",
-      "general provisions",
-      "signatures"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including parties and purpose, scope of obligations, payment or consideration if any, term and termination. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Freelance Developer Contract template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Freelance Developer Contract before I send it for signature.",
-      "Adapt this Freelance Developer Contract for a consulting use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "web-design-branding-and-web-development-contract",
-    name: "WEB Design Branding AND WEB Development Contract",
-    seoTitle: "Free WEB Design Branding AND WEB Development Contract Template",
-    description:
-      "WEB Design Branding AND WEB Development Contract — a free consulting template covering scope of work and milestones, client approvals, payment tied to deliverables.",
-    useCase:
-      "This web design branding and web development contract covers scope of work and milestones, client approvals, payment tied to deliverables, with 4 placeholder fields to fill in. WEB Design Branding AND WEB Development Contract Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: scope of work and milestones, client approvals, payment tied to ",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/web-design-branding-and-web-development-contract.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A web design branding and web development contract is a written consulting document in which the parties set out scope of work and milestones and client approvals before signing..",
-    keyClauses: [
-      "scope of work and milestones",
-      "client approvals",
-      "payment tied to deliverables",
-      "IP ownership on final payment",
-      "warranty window",
-      "change process"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including scope of work and milestones, client approvals, payment tied to deliverables, ip ownership on final payment. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this WEB Design Branding AND WEB Development Contract template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this WEB Design Branding AND WEB Development Contract before I send it for signature.",
-      "Adapt this WEB Design Branding AND WEB Development Contract for a consulting use case with different payment or term details."
     ],
   },
   {
@@ -6342,47 +5203,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
     ],
   },
   {
-    slug: "merchandise-sale-and-purchase-agreement-wholesale",
-    name: "Merchandise Sale AND Purchase Agreement Wholesale",
-    seoTitle: "Free Merchandise Sale AND Purchase Agreement Wholesale Template",
-    description:
-      "Merchandise Sale AND Purchase Agreement Wholesale — a free sale and purchase template covering goods or services described, price and payment, delivery or pickup.",
-    useCase:
-      "This merchandise sale and purchase agreement wholesale covers goods or services described, price and payment, delivery or pickup, with 4 placeholder fields to fill in. Merchandise Sale AND Purchase Agreement Wholesale Placeholders: [Buyer Name], [Seller Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: goods or services described, price and payment, delivery o",
-    signerLabels: ["Buyer", "Seller"],
-    pdfPath: "/free-templates/merchandise-sale-and-purchase-agreement-wholesale.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 0, xFrac: 0.248437908496732, yFrac: 0.7113636363636366, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 0, xFrac: 0.15376960784313726, yFrac: 0.8067424242424245, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.24776143790849672, yFrac: 0.06060606060606061, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Sale and Purchase",
-    definition:
-      "A merchandise sale and purchase agreement wholesale is a written sale and purchase document in which the parties set out goods or services described and price and payment before signing..",
-    keyClauses: [
-      "goods or services described",
-      "price and payment",
-      "delivery or pickup",
-      "risk of loss",
-      "returns or deposits",
-      "warranties disclaimer if as-is"
-    ],
-    fillInFields: [
-      "[Buyer Name]",
-      "[Seller Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including goods or services described, price and payment, delivery or pickup, risk of loss. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Merchandise Sale AND Purchase Agreement Wholesale template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Merchandise Sale AND Purchase Agreement Wholesale before I send it for signature.",
-      "Adapt this Merchandise Sale AND Purchase Agreement Wholesale for a sale and purchase use case with different payment or term details."
-    ],
-  },
-  {
     slug: "asset-purchase-agreement",
     name: "Asset Purchase Agreement",
     seoTitle: "Free Asset Purchase Agreement Template",
@@ -6462,47 +5282,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
       "Fill this Common Stock Purchase Agreement With Vesting template for my situation using the placeholders in the document.",
       "Explain the key clauses in this Common Stock Purchase Agreement With Vesting before I send it for signature.",
       "Adapt this Common Stock Purchase Agreement With Vesting for a funding use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "website-services-agreement",
-    name: "Website Services Agreement",
-    seoTitle: "Free Website Services Agreement Template",
-    description:
-      "Website Services Agreement — a free consulting template covering scope of work and milestones, client approvals, payment tied to deliverables.",
-    useCase:
-      "This website services agreement covers scope of work and milestones, client approvals, payment tied to deliverables, with 4 placeholder fields to fill in. Website Services Agreement Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: scope of work and milestones, client approvals, payment tied to deliverables, IP ownership on final payment, warranty window, chan",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/website-services-agreement.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A website services agreement is a written consulting document in which the parties set out scope of work and milestones and client approvals before signing..",
-    keyClauses: [
-      "scope of work and milestones",
-      "client approvals",
-      "payment tied to deliverables",
-      "IP ownership on final payment",
-      "warranty window",
-      "change process"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including scope of work and milestones, client approvals, payment tied to deliverables, ip ownership on final payment. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Website Services Agreement template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Website Services Agreement before I send it for signature.",
-      "Adapt this Website Services Agreement for a consulting use case with different payment or term details."
     ],
   },
   {
@@ -6670,47 +5449,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
     ],
   },
   {
-    slug: "hacker-employment-contract",
-    name: "Hacker Employment Contract",
-    seoTitle: "Free Hacker Employment Contract Template",
-    description:
-      "Hacker Employment Contract — a free employment template covering role or policy referenced, acknowledgment of receipt, at-will or term if applicable.",
-    useCase:
-      "This hacker employment contract covers role or policy referenced, acknowledgment of receipt, at-will or term if applicable, with 4 placeholder fields to fill in. Hacker Employment Contract Placeholders: [Employer Name], [Employee Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: role or policy referenced, acknowledgment of receipt, at-will or term if applicable, employee obligations, employer policies may chang",
-    signerLabels: ["Employer", "Employee"],
-    pdfPath: "/free-templates/hacker-employment-contract.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 0, xFrac: 0.27814624183006537, yFrac: 0.6875000000000003, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 0, xFrac: 0.15376960784313726, yFrac: 0.7828787878787882, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.2823366013071895, yFrac: 0.06060606060606061, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Employment",
-    definition:
-      "A hacker employment contract is a written employment document in which the parties set out role or policy referenced and acknowledgment of receipt before signing..",
-    keyClauses: [
-      "role or policy referenced",
-      "acknowledgment of receipt",
-      "at-will or term if applicable",
-      "employee obligations",
-      "employer policies may change",
-      "signatures"
-    ],
-    fillInFields: [
-      "[Employer Name]",
-      "[Employee Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including role or policy referenced, acknowledgment of receipt, at-will or term if applicable, employee obligations. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Hacker Employment Contract template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Hacker Employment Contract before I send it for signature.",
-      "Adapt this Hacker Employment Contract for a employment use case with different payment or term details."
-    ],
-  },
-  {
     slug: "letter-of-agreement-the-tank",
     name: "Letter OF Agreement THE Tank",
     seoTitle: "Free Letter OF Agreement THE Tank Template",
@@ -6749,47 +5487,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
       "Fill this Letter OF Agreement THE Tank template for my situation using the placeholders in the document.",
       "Explain the key clauses in this Letter OF Agreement THE Tank before I send it for signature.",
       "Adapt this Letter OF Agreement THE Tank for a consulting use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "hackathon-agreement-to-collaboration",
-    name: "Hackathon Agreement TO Collaboration",
-    seoTitle: "Free Hackathon Agreement TO Collaboration Template",
-    description:
-      "Hackathon Agreement TO Collaboration — a free consulting template covering parties and purpose, scope of obligations, payment or consideration if any.",
-    useCase:
-      "This hackathon agreement to collaboration covers parties and purpose, scope of obligations, payment or consideration if any, with 4 placeholder fields to fill in. Hackathon Agreement TO Collaboration Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: parties and purpose, scope of obligations, payment or consideration if any, term and termination, ge",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/hackathon-agreement-to-collaboration.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A hackathon agreement to collaboration is a written consulting document in which the parties set out parties and purpose and scope of obligations before signing..",
-    keyClauses: [
-      "parties and purpose",
-      "scope of obligations",
-      "payment or consideration if any",
-      "term and termination",
-      "general provisions",
-      "signatures"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including parties and purpose, scope of obligations, payment or consideration if any, term and termination. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Hackathon Agreement TO Collaboration template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Hackathon Agreement TO Collaboration before I send it for signature.",
-      "Adapt this Hackathon Agreement TO Collaboration for a consulting use case with different payment or term details."
     ],
   },
   {
@@ -6834,47 +5531,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
     ],
   },
   {
-    slug: "agreement-for-design-services-interactive-web-works-exc",
-    name: "Agreement FOR Design Services Interactive WEB Works EXC",
-    seoTitle: "Free Agreement FOR Design Services Interactive WEB Works EXC Template",
-    description:
-      "Agreement FOR Design Services Interactive WEB Works EXC — a free consulting template covering scope of work and milestones, client approvals, payment tied to deliverables.",
-    useCase:
-      "This agreement for design services interactive web works exc covers scope of work and milestones, client approvals, payment tied to deliverables, with 4 placeholder fields to fill in. Agreement FOR Design Services Interactive WEB Works EXC Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: scope of work and milestones, client approv",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/agreement-for-design-services-interactive-web-works-exc.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A agreement for design services interactive web works exc is a written consulting document in which the parties set out scope of work and milestones and client approvals before signing..",
-    keyClauses: [
-      "scope of work and milestones",
-      "client approvals",
-      "payment tied to deliverables",
-      "IP ownership on final payment",
-      "warranty window",
-      "change process"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including scope of work and milestones, client approvals, payment tied to deliverables, ip ownership on final payment. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Agreement FOR Design Services Interactive WEB Works EXC template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Agreement FOR Design Services Interactive WEB Works EXC before I send it for signature.",
-      "Adapt this Agreement FOR Design Services Interactive WEB Works EXC for a consulting use case with different payment or term details."
-    ],
-  },
-  {
     slug: "contribution-agreement-for-360-music-deal",
     name: "Contribution Agreement FOR 360 Music Deal",
     seoTitle: "Free Contribution Agreement FOR 360 Music Deal Template",
@@ -6913,47 +5569,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
       "Fill this Contribution Agreement FOR 360 Music Deal template for my situation using the placeholders in the document.",
       "Explain the key clauses in this Contribution Agreement FOR 360 Music Deal before I send it for signature.",
       "Adapt this Contribution Agreement FOR 360 Music Deal for a intellectual property use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "release-of-lien-ppdd",
-    name: "Release OF Lien Ppdd",
-    seoTitle: "Free Release OF Lien Ppdd Template",
-    description:
-      "Release OF Lien Ppdd — a free real estate template covering parties and property address, term and rent or license fee, use restrictions.",
-    useCase:
-      "This release of lien ppdd covers parties and property address, term and rent or license fee, use restrictions, with 4 placeholder fields to fill in. Release OF Lien Ppdd Placeholders: [Landlord Name], [Tenant Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: parties and property address, term and rent or license fee, use restrictions, maintenance duties, default notice, governing law.",
-    signerLabels: ["Landlord", "Tenant"],
-    pdfPath: "/free-templates/release-of-lien-ppdd.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.27284722222222224, yFrac: 0.06060606060606061, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.2559730392156863, yFrac: 0.22628787878787882, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.3216666666666668, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Real Estate",
-    definition:
-      "A release of lien ppdd is a written real estate document in which the parties set out parties and property address and term and rent or license fee before signing..",
-    keyClauses: [
-      "parties and property address",
-      "term and rent or license fee",
-      "use restrictions",
-      "maintenance duties",
-      "default notice",
-      "governing law"
-    ],
-    fillInFields: [
-      "[Landlord Name]",
-      "[Tenant Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including parties and property address, term and rent or license fee, use restrictions, maintenance duties. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Release OF Lien Ppdd template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Release OF Lien Ppdd before I send it for signature.",
-      "Adapt this Release OF Lien Ppdd for a real estate use case with different payment or term details."
     ],
   },
   {
@@ -7528,47 +6143,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
       "Fill this Assignment AND Transfer Agreement template for my situation using the placeholders in the document.",
       "Explain the key clauses in this Assignment AND Transfer Agreement before I send it for signature.",
       "Adapt this Assignment AND Transfer Agreement for a consulting use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "pancake-web-site-maintenance-contract",
-    name: "Pancake WEB Site Maintenance Contract",
-    seoTitle: "Free Pancake WEB Site Maintenance Contract Template",
-    description:
-      "Pancake WEB Site Maintenance Contract — a free consulting template covering scope of work and milestones, client approvals, payment tied to deliverables.",
-    useCase:
-      "This pancake web site maintenance contract covers scope of work and milestones, client approvals, payment tied to deliverables, with 4 placeholder fields to fill in. Pancake WEB Site Maintenance Contract Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: scope of work and milestones, client approvals, payment tied to deliverables, IP ownership on fin",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/pancake-web-site-maintenance-contract.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A pancake web site maintenance contract is a written consulting document in which the parties set out scope of work and milestones and client approvals before signing..",
-    keyClauses: [
-      "scope of work and milestones",
-      "client approvals",
-      "payment tied to deliverables",
-      "IP ownership on final payment",
-      "warranty window",
-      "change process"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including scope of work and milestones, client approvals, payment tied to deliverables, ip ownership on final payment. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Pancake WEB Site Maintenance Contract template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Pancake WEB Site Maintenance Contract before I send it for signature.",
-      "Adapt this Pancake WEB Site Maintenance Contract for a consulting use case with different payment or term details."
     ],
   },
   {
@@ -8228,47 +6802,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
     ],
   },
   {
-    slug: "vps-hosting-agreement",
-    name: "VPS Hosting Agreement",
-    seoTitle: "Free VPS Hosting Agreement Template",
-    description:
-      "VPS Hosting Agreement — a free consulting template covering parties and purpose, scope of obligations, payment or consideration if any.",
-    useCase:
-      "This vps hosting agreement covers parties and purpose, scope of obligations, payment or consideration if any, with 4 placeholder fields to fill in. VPS Hosting Agreement Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: parties and purpose, scope of obligations, payment or consideration if any, term and termination, general provisions, signatures.",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/vps-hosting-agreement.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A vps hosting agreement is a written consulting document in which the parties set out parties and purpose and scope of obligations before signing..",
-    keyClauses: [
-      "parties and purpose",
-      "scope of obligations",
-      "payment or consideration if any",
-      "term and termination",
-      "general provisions",
-      "signatures"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including parties and purpose, scope of obligations, payment or consideration if any, term and termination. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this VPS Hosting Agreement template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this VPS Hosting Agreement before I send it for signature.",
-      "Adapt this VPS Hosting Agreement for a consulting use case with different payment or term details."
-    ],
-  },
-  {
     slug: "pet-agreement",
     name: "PET Agreement",
     seoTitle: "Free PET Agreement Template",
@@ -8348,47 +6881,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
       "Fill this Agreement FOR Design Services Three Dimensional Works F template for my situation using the placeholders in the document.",
       "Explain the key clauses in this Agreement FOR Design Services Three Dimensional Works F before I send it for signature.",
       "Adapt this Agreement FOR Design Services Three Dimensional Works F for a employment use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "commercial-property-lease-ppdd",
-    name: "Commercial Property Lease Ppdd",
-    seoTitle: "Free Commercial Property Lease Ppdd Template",
-    description:
-      "Commercial Property Lease Ppdd — a free real estate template covering parties and property address, term and rent or license fee, use restrictions.",
-    useCase:
-      "This commercial property lease ppdd covers parties and property address, term and rent or license fee, use restrictions, with 4 placeholder fields to fill in. Commercial Property Lease Ppdd Placeholders: [Landlord Name], [Tenant Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: parties and property address, term and rent or license fee, use restrictions, maintenance duties, default notice, governing ",
-    signerLabels: ["Landlord", "Tenant"],
-    pdfPath: "/free-templates/commercial-property-lease-ppdd.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.27284722222222224, yFrac: 0.06060606060606061, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.2559730392156863, yFrac: 0.22628787878787882, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.3216666666666668, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Real Estate",
-    definition:
-      "A commercial property lease ppdd is a written real estate document in which the parties set out parties and property address and term and rent or license fee before signing..",
-    keyClauses: [
-      "parties and property address",
-      "term and rent or license fee",
-      "use restrictions",
-      "maintenance duties",
-      "default notice",
-      "governing law"
-    ],
-    fillInFields: [
-      "[Landlord Name]",
-      "[Tenant Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including parties and property address, term and rent or license fee, use restrictions, maintenance duties. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Commercial Property Lease Ppdd template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Commercial Property Lease Ppdd before I send it for signature.",
-      "Adapt this Commercial Property Lease Ppdd for a real estate use case with different payment or term details."
     ],
   },
   {
@@ -8512,47 +7004,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
       "Fill this Code Foremen Plain English Contract template for my situation using the placeholders in the document.",
       "Explain the key clauses in this Code Foremen Plain English Contract before I send it for signature.",
       "Adapt this Code Foremen Plain English Contract for a consulting use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "contract-of-freelance-services-with-fields",
-    name: "Contract OF Freelance Services With Fields",
-    seoTitle: "Free Contract OF Freelance Services With Fields Template",
-    description:
-      "Contract OF Freelance Services With Fields — a free consulting template covering parties and purpose, scope of obligations, payment or consideration if any.",
-    useCase:
-      "This contract of freelance services with fields covers parties and purpose, scope of obligations, payment or consideration if any, with 4 placeholder fields to fill in. Contract OF Freelance Services With Fields Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: parties and purpose, scope of obligations, payment or consideration if any, term a",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/contract-of-freelance-services-with-fields.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A contract of freelance services with fields is a written consulting document in which the parties set out parties and purpose and scope of obligations before signing..",
-    keyClauses: [
-      "parties and purpose",
-      "scope of obligations",
-      "payment or consideration if any",
-      "term and termination",
-      "general provisions",
-      "signatures"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including parties and purpose, scope of obligations, payment or consideration if any, term and termination. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Contract OF Freelance Services With Fields template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Contract OF Freelance Services With Fields before I send it for signature.",
-      "Adapt this Contract OF Freelance Services With Fields for a consulting use case with different payment or term details."
     ],
   },
   {
@@ -8720,47 +7171,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
     ],
   },
   {
-    slug: "route-66-shipping-policy-and-disclaimer",
-    name: "Route 66 Shipping Policy AND Disclaimer",
-    seoTitle: "Free Route 66 Shipping Policy AND Disclaimer Template",
-    description:
-      "Route 66 Shipping Policy AND Disclaimer — a free consulting template covering parties and purpose, scope of obligations, payment or consideration if any.",
-    useCase:
-      "This route 66 shipping policy and disclaimer covers parties and purpose, scope of obligations, payment or consideration if any, with 4 placeholder fields to fill in. Route 66 Shipping Policy AND Disclaimer Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: parties and purpose, scope of obligations, payment or consideration if any, term and termin",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/route-66-shipping-policy-and-disclaimer.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A route 66 shipping policy and disclaimer is a written consulting document in which the parties set out parties and purpose and scope of obligations before signing..",
-    keyClauses: [
-      "parties and purpose",
-      "scope of obligations",
-      "payment or consideration if any",
-      "term and termination",
-      "general provisions",
-      "signatures"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including parties and purpose, scope of obligations, payment or consideration if any, term and termination. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Route 66 Shipping Policy AND Disclaimer template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Route 66 Shipping Policy AND Disclaimer before I send it for signature.",
-      "Adapt this Route 66 Shipping Policy AND Disclaimer for a consulting use case with different payment or term details."
-    ],
-  },
-  {
     slug: "illustrator-artist-contract",
     name: "Illustrator Artist Contract",
     seoTitle: "Free Illustrator Artist Contract Template",
@@ -8881,47 +7291,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
       "Fill this Barebones Contracting Agreement template for my situation using the placeholders in the document.",
       "Explain the key clauses in this Barebones Contracting Agreement before I send it for signature.",
       "Adapt this Barebones Contracting Agreement for a consulting use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "software-development-agreement",
-    name: "Software Development Agreement",
-    seoTitle: "Free Software Development Agreement Template",
-    description:
-      "Software Development Agreement — a free consulting template covering scope of work and milestones, client approvals, payment tied to deliverables.",
-    useCase:
-      "This software development agreement covers scope of work and milestones, client approvals, payment tied to deliverables, with 4 placeholder fields to fill in. Software Development Agreement Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: scope of work and milestones, client approvals, payment tied to deliverables, IP ownership on final payment, warranty ",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/software-development-agreement.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A software development agreement is a written consulting document in which the parties set out scope of work and milestones and client approvals before signing..",
-    keyClauses: [
-      "scope of work and milestones",
-      "client approvals",
-      "payment tied to deliverables",
-      "IP ownership on final payment",
-      "warranty window",
-      "change process"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including scope of work and milestones, client approvals, payment tied to deliverables, ip ownership on final payment. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Software Development Agreement template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Software Development Agreement before I send it for signature.",
-      "Adapt this Software Development Agreement for a consulting use case with different payment or term details."
     ],
   },
   {
@@ -9048,88 +7417,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
     ],
   },
   {
-    slug: "basic-non-exclusive-software-licencing-agreement",
-    name: "Basic NON Exclusive Software Licencing Agreement",
-    seoTitle: "Free Basic NON Exclusive Software Licencing Agreement Template",
-    description:
-      "Basic NON Exclusive Software Licencing Agreement — a free consulting template covering scope of work and milestones, client approvals, payment tied to deliverables.",
-    useCase:
-      "This basic non exclusive software licencing agreement covers scope of work and milestones, client approvals, payment tied to deliverables, with 4 placeholder fields to fill in. Basic NON Exclusive Software Licencing Agreement Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: scope of work and milestones, client approvals, payment tied to ",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/basic-non-exclusive-software-licencing-agreement.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A basic non exclusive software licencing agreement is a written consulting document in which the parties set out scope of work and milestones and client approvals before signing..",
-    keyClauses: [
-      "scope of work and milestones",
-      "client approvals",
-      "payment tied to deliverables",
-      "IP ownership on final payment",
-      "warranty window",
-      "change process"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including scope of work and milestones, client approvals, payment tied to deliverables, ip ownership on final payment. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Basic NON Exclusive Software Licencing Agreement template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Basic NON Exclusive Software Licencing Agreement before I send it for signature.",
-      "Adapt this Basic NON Exclusive Software Licencing Agreement for a consulting use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "cancellation-agreement",
-    name: "Cancellation Agreement",
-    seoTitle: "Free Cancellation Agreement Template",
-    description:
-      "Cancellation Agreement — a free consulting template covering parties and purpose, scope of obligations, payment or consideration if any.",
-    useCase:
-      "This cancellation agreement covers parties and purpose, scope of obligations, payment or consideration if any, with 4 placeholder fields to fill in. Cancellation Agreement Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: parties and purpose, scope of obligations, payment or consideration if any, term and termination, general provisions, signatures.",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/cancellation-agreement.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A cancellation agreement is a written consulting document in which the parties set out parties and purpose and scope of obligations before signing..",
-    keyClauses: [
-      "parties and purpose",
-      "scope of obligations",
-      "payment or consideration if any",
-      "term and termination",
-      "general provisions",
-      "signatures"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including parties and purpose, scope of obligations, payment or consideration if any, term and termination. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Cancellation Agreement template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Cancellation Agreement before I send it for signature.",
-      "Adapt this Cancellation Agreement for a consulting use case with different payment or term details."
-    ],
-  },
-  {
     slug: "acknowledgement-of-receipt-of-stock-and-consent-form",
     name: "Acknowledgement OF Receipt OF Stock AND Consent Form",
     seoTitle: "Free Acknowledgement OF Receipt OF Stock AND Consent Form Template",
@@ -9168,47 +7455,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
       "Fill this Acknowledgement OF Receipt OF Stock AND Consent Form template for my situation using the placeholders in the document.",
       "Explain the key clauses in this Acknowledgement OF Receipt OF Stock AND Consent Form before I send it for signature.",
       "Adapt this Acknowledgement OF Receipt OF Stock AND Consent Form for a funding use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "agreement-for-design-services-print-works-limited-licen",
-    name: "Agreement FOR Design Services Print Works Limited Licen",
-    seoTitle: "Free Agreement FOR Design Services Print Works Limited Licen Template",
-    description:
-      "Agreement FOR Design Services Print Works Limited Licen — a free consulting template covering scope of work and milestones, client approvals, payment tied to deliverables.",
-    useCase:
-      "This agreement for design services print works limited licen covers scope of work and milestones, client approvals, payment tied to deliverables, with 4 placeholder fields to fill in. Agreement FOR Design Services Print Works Limited Licen Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: scope of work and milestones, client approv",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/agreement-for-design-services-print-works-limited-licen.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A agreement for design services print works limited licen is a written consulting document in which the parties set out scope of work and milestones and client approvals before signing..",
-    keyClauses: [
-      "scope of work and milestones",
-      "client approvals",
-      "payment tied to deliverables",
-      "IP ownership on final payment",
-      "warranty window",
-      "change process"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including scope of work and milestones, client approvals, payment tied to deliverables, ip ownership on final payment. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Agreement FOR Design Services Print Works Limited Licen template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Agreement FOR Design Services Print Works Limited Licen before I send it for signature.",
-      "Adapt this Agreement FOR Design Services Print Works Limited Licen for a consulting use case with different payment or term details."
     ],
   },
   {
@@ -9375,47 +7621,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
     ],
   },
   {
-    slug: "intellectual-property-assignment-agreement",
-    name: "Intellectual Property Assignment Agreement",
-    seoTitle: "Free Intellectual Property Assignment Agreement Template",
-    description:
-      "Intellectual Property Assignment Agreement — a free intellectual property template covering licensed or assigned work described, grant scope and territory, restrictions.",
-    useCase:
-      "This intellectual property assignment agreement covers licensed or assigned work described, grant scope and territory, restrictions, with 4 placeholder fields to fill in. Intellectual Property Assignment Agreement Placeholders: [Licensor Name], [Licensee Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: licensed or assigned work described, grant scope and territory, re",
-    signerLabels: ["Licensor", "Licensee"],
-    pdfPath: "/free-templates/intellectual-property-assignment-agreement.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 0, xFrac: 0.27074264705882356, yFrac: 0.7468434343434346, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 0, xFrac: 0.15376960784313726, yFrac: 0.8422222222222224, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.2749330065359477, yFrac: 0.06060606060606061, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Intellectual Property",
-    definition:
-      "A intellectual property assignment agreement is a written intellectual property document in which the parties set out licensed or assigned work described and grant scope and territory before signing..",
-    keyClauses: [
-      "licensed or assigned work described",
-      "grant scope and territory",
-      "restrictions",
-      "fees or consideration",
-      "ownership and credit",
-      "termination"
-    ],
-    fillInFields: [
-      "[Licensor Name]",
-      "[Licensee Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including licensed or assigned work described, grant scope and territory, restrictions, fees or consideration. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Intellectual Property Assignment Agreement template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Intellectual Property Assignment Agreement before I send it for signature.",
-      "Adapt this Intellectual Property Assignment Agreement for a intellectual property use case with different payment or term details."
-    ],
-  },
-  {
     slug: "keep-it-cali-contract",
     name: "Keep IT Cali Contract",
     seoTitle: "Free Keep IT Cali Contract Template",
@@ -9495,47 +7700,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
       "Fill this Tenant Response Letter TO Dispute Damages template for my situation using the placeholders in the document.",
       "Explain the key clauses in this Tenant Response Letter TO Dispute Damages before I send it for signature.",
       "Adapt this Tenant Response Letter TO Dispute Damages for a real estate use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "agreement-for-design-services-print-works-full-assignme",
-    name: "Agreement FOR Design Services Print Works Full Assignme",
-    seoTitle: "Free Agreement FOR Design Services Print Works Full Assignme Template",
-    description:
-      "Agreement FOR Design Services Print Works Full Assignme — a free consulting template covering scope of work and milestones, client approvals, payment tied to deliverables.",
-    useCase:
-      "This agreement for design services print works full assignme covers scope of work and milestones, client approvals, payment tied to deliverables, with 4 placeholder fields to fill in. Agreement FOR Design Services Print Works Full Assignme Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: scope of work and milestones, client approv",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/agreement-for-design-services-print-works-full-assignme.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A agreement for design services print works full assignme is a written consulting document in which the parties set out scope of work and milestones and client approvals before signing..",
-    keyClauses: [
-      "scope of work and milestones",
-      "client approvals",
-      "payment tied to deliverables",
-      "IP ownership on final payment",
-      "warranty window",
-      "change process"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including scope of work and milestones, client approvals, payment tied to deliverables, ip ownership on final payment. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Agreement FOR Design Services Print Works Full Assignme template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Agreement FOR Design Services Print Works Full Assignme before I send it for signature.",
-      "Adapt this Agreement FOR Design Services Print Works Full Assignme for a consulting use case with different payment or term details."
     ],
   },
   {
@@ -9703,47 +7867,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
     ],
   },
   {
-    slug: "contract-for-web-design",
-    name: "Contract FOR WEB Design",
-    seoTitle: "Free Contract FOR WEB Design Template",
-    description:
-      "Contract FOR WEB Design — a free consulting template covering scope of work and milestones, client approvals, payment tied to deliverables.",
-    useCase:
-      "This contract for web design covers scope of work and milestones, client approvals, payment tied to deliverables, with 4 placeholder fields to fill in. Contract FOR WEB Design Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: scope of work and milestones, client approvals, payment tied to deliverables, IP ownership on final payment, warranty window, change proces",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/contract-for-web-design.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A contract for web design is a written consulting document in which the parties set out scope of work and milestones and client approvals before signing..",
-    keyClauses: [
-      "scope of work and milestones",
-      "client approvals",
-      "payment tied to deliverables",
-      "IP ownership on final payment",
-      "warranty window",
-      "change process"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including scope of work and milestones, client approvals, payment tied to deliverables, ip ownership on final payment. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Contract FOR WEB Design template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Contract FOR WEB Design before I send it for signature.",
-      "Adapt this Contract FOR WEB Design for a consulting use case with different payment or term details."
-    ],
-  },
-  {
     slug: "lottery-pool-agreement",
     name: "Lottery Pool Agreement",
     seoTitle: "Free Lottery Pool Agreement Template",
@@ -9782,47 +7905,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
       "Fill this Lottery Pool Agreement template for my situation using the placeholders in the document.",
       "Explain the key clauses in this Lottery Pool Agreement before I send it for signature.",
       "Adapt this Lottery Pool Agreement for a consulting use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "cleaning-company-contract",
-    name: "Cleaning Company Contract",
-    seoTitle: "Free Cleaning Company Contract Template",
-    description:
-      "Cleaning Company Contract — a free consulting template covering parties and purpose, scope of obligations, payment or consideration if any.",
-    useCase:
-      "This cleaning company contract covers parties and purpose, scope of obligations, payment or consideration if any, with 4 placeholder fields to fill in. Cleaning Company Contract Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: parties and purpose, scope of obligations, payment or consideration if any, term and termination, general provisions, signatures.",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/cleaning-company-contract.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A cleaning company contract is a written consulting document in which the parties set out parties and purpose and scope of obligations before signing..",
-    keyClauses: [
-      "parties and purpose",
-      "scope of obligations",
-      "payment or consideration if any",
-      "term and termination",
-      "general provisions",
-      "signatures"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including parties and purpose, scope of obligations, payment or consideration if any, term and termination. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Cleaning Company Contract template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Cleaning Company Contract before I send it for signature.",
-      "Adapt this Cleaning Company Contract for a consulting use case with different payment or term details."
     ],
   },
   {
@@ -10072,47 +8154,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
     ],
   },
   {
-    slug: "technology-assignment-agreement",
-    name: "Technology Assignment Agreement",
-    seoTitle: "Free Technology Assignment Agreement Template",
-    description:
-      "Technology Assignment Agreement — a free consulting template covering parties and purpose, scope of obligations, payment or consideration if any.",
-    useCase:
-      "This technology assignment agreement covers parties and purpose, scope of obligations, payment or consideration if any, with 4 placeholder fields to fill in. Technology Assignment Agreement Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: parties and purpose, scope of obligations, payment or consideration if any, term and termination, general provision",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/technology-assignment-agreement.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A technology assignment agreement is a written consulting document in which the parties set out parties and purpose and scope of obligations before signing..",
-    keyClauses: [
-      "parties and purpose",
-      "scope of obligations",
-      "payment or consideration if any",
-      "term and termination",
-      "general provisions",
-      "signatures"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including parties and purpose, scope of obligations, payment or consideration if any, term and termination. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Technology Assignment Agreement template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Technology Assignment Agreement before I send it for signature.",
-      "Adapt this Technology Assignment Agreement for a consulting use case with different payment or term details."
-    ],
-  },
-  {
     slug: "resignation-letter-for-company-secretary",
     name: "Resignation Letter FOR Company Secretary",
     seoTitle: "Free Resignation Letter FOR Company Secretary Template",
@@ -10192,88 +8233,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
       "Fill this Action BY Written Consent OF Incorporator template for my situation using the placeholders in the document.",
       "Explain the key clauses in this Action BY Written Consent OF Incorporator before I send it for signature.",
       "Adapt this Action BY Written Consent OF Incorporator for a consulting use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "photo-session-agreement",
-    name: "Photo Session Agreement",
-    seoTitle: "Free Photo Session Agreement Template",
-    description:
-      "Photo Session Agreement — a free consulting template covering session or event date, fee and deliverables, usage license scope.",
-    useCase:
-      "This photo session agreement covers session or event date, fee and deliverables, usage license scope, with 4 placeholder fields to fill in. Photo Session Agreement Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: session or event date, fee and deliverables, usage license scope, cancellation policy, liability limits, payment schedule.",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/photo-session-agreement.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A photo session agreement is a written consulting document in which the parties set out session or event date and fee and deliverables before signing..",
-    keyClauses: [
-      "session or event date",
-      "fee and deliverables",
-      "usage license scope",
-      "cancellation policy",
-      "liability limits",
-      "payment schedule"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including session or event date, fee and deliverables, usage license scope, cancellation policy. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Photo Session Agreement template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Photo Session Agreement before I send it for signature.",
-      "Adapt this Photo Session Agreement for a consulting use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "licensing-contract-for-use-of-original-artwork-on-websi",
-    name: "Licensing Contract FOR USE OF Original Artwork ON Websi",
-    seoTitle: "Free Licensing Contract FOR USE OF Original Artwork ON Websi Template",
-    description:
-      "Licensing Contract FOR USE OF Original Artwork ON Websi — a free consulting template covering scope of work and milestones, client approvals, payment tied to deliverables.",
-    useCase:
-      "This licensing contract for use of original artwork on websi covers scope of work and milestones, client approvals, payment tied to deliverables, with 4 placeholder fields to fill in. Licensing Contract FOR USE OF Original Artwork ON Websi Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: scope of work and milestones, client approv",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/licensing-contract-for-use-of-original-artwork-on-websi.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A licensing contract for use of original artwork on websi is a written consulting document in which the parties set out scope of work and milestones and client approvals before signing..",
-    keyClauses: [
-      "scope of work and milestones",
-      "client approvals",
-      "payment tied to deliverables",
-      "IP ownership on final payment",
-      "warranty window",
-      "change process"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including scope of work and milestones, client approvals, payment tied to deliverables, ip ownership on final payment. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Licensing Contract FOR USE OF Original Artwork ON Websi template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Licensing Contract FOR USE OF Original Artwork ON Websi before I send it for signature.",
-      "Adapt this Licensing Contract FOR USE OF Original Artwork ON Websi for a consulting use case with different payment or term details."
     ],
   },
   {
@@ -10481,47 +8440,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
     ],
   },
   {
-    slug: "lease-agreement-for-renting-out-residential-flat-proper",
-    name: "Lease Agreement FOR Renting OUT Residential Flat Proper",
-    seoTitle: "Free Lease Agreement FOR Renting OUT Residential Flat Proper Template",
-    description:
-      "Lease Agreement FOR Renting OUT Residential Flat Proper — a free real estate template covering parties and property address, term and rent or license fee, use restrictions.",
-    useCase:
-      "This lease agreement for renting out residential flat proper covers parties and property address, term and rent or license fee, use restrictions, with 4 placeholder fields to fill in. Lease Agreement FOR Renting OUT Residential Flat Proper Placeholders: [Landlord Name], [Tenant Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: parties and property address, term and rent or li",
-    signerLabels: ["Landlord", "Tenant"],
-    pdfPath: "/free-templates/lease-agreement-for-renting-out-residential-flat-proper.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.27284722222222224, yFrac: 0.06060606060606061, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.2559730392156863, yFrac: 0.22628787878787882, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.3216666666666668, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Real Estate",
-    definition:
-      "A lease agreement for renting out residential flat proper is a written real estate document in which the parties set out parties and property address and term and rent or license fee before signing..",
-    keyClauses: [
-      "parties and property address",
-      "term and rent or license fee",
-      "use restrictions",
-      "maintenance duties",
-      "default notice",
-      "governing law"
-    ],
-    fillInFields: [
-      "[Landlord Name]",
-      "[Tenant Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including parties and property address, term and rent or license fee, use restrictions, maintenance duties. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Lease Agreement FOR Renting OUT Residential Flat Proper template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Lease Agreement FOR Renting OUT Residential Flat Proper before I send it for signature.",
-      "Adapt this Lease Agreement FOR Renting OUT Residential Flat Proper for a real estate use case with different payment or term details."
-    ],
-  },
-  {
     slug: "real-estate-brokerage-agreement-exclusive",
     name: "Real Estate Brokerage Agreement Exclusive",
     seoTitle: "Free Real Estate Brokerage Agreement Exclusive Template",
@@ -10683,47 +8601,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
       "Fill this Software Engineering Employment Contract template for my situation using the placeholders in the document.",
       "Explain the key clauses in this Software Engineering Employment Contract before I send it for signature.",
       "Adapt this Software Engineering Employment Contract for a employment use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "innovators-patent-agreement-ipa",
-    name: "Innovators Patent Agreement IPA",
-    seoTitle: "Free Innovators Patent Agreement IPA Template",
-    description:
-      "Innovators Patent Agreement IPA — a free intellectual property template covering licensed or assigned work described, grant scope and territory, restrictions.",
-    useCase:
-      "This innovators patent agreement ipa covers licensed or assigned work described, grant scope and territory, restrictions, with 4 placeholder fields to fill in. Innovators Patent Agreement IPA Placeholders: [Licensor Name], [Licensee Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: licensed or assigned work described, grant scope and territory, restrictions, fees or consideration",
-    signerLabels: ["Licensor", "Licensee"],
-    pdfPath: "/free-templates/innovators-patent-agreement-ipa.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 0, xFrac: 0.27074264705882356, yFrac: 0.7468434343434346, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 0, xFrac: 0.15376960784313726, yFrac: 0.8422222222222224, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.2749330065359477, yFrac: 0.06060606060606061, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.1559848484848486, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Intellectual Property",
-    definition:
-      "A innovators patent agreement ipa is a written intellectual property document in which the parties set out licensed or assigned work described and grant scope and territory before signing..",
-    keyClauses: [
-      "licensed or assigned work described",
-      "grant scope and territory",
-      "restrictions",
-      "fees or consideration",
-      "ownership and credit",
-      "termination"
-    ],
-    fillInFields: [
-      "[Licensor Name]",
-      "[Licensee Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including licensed or assigned work described, grant scope and territory, restrictions, fees or consideration. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Innovators Patent Agreement IPA template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Innovators Patent Agreement IPA before I send it for signature.",
-      "Adapt this Innovators Patent Agreement IPA for a intellectual property use case with different payment or term details."
     ],
   },
   {
@@ -11014,88 +8891,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
     ],
   },
   {
-    slug: "life-recovery-coaching-agreement",
-    name: "Life Recovery Coaching Agreement",
-    seoTitle: "Free Life Recovery Coaching Agreement Template",
-    description:
-      "Life Recovery Coaching Agreement — a free consulting template covering parties and purpose, scope of obligations, payment or consideration if any.",
-    useCase:
-      "This life recovery coaching agreement covers parties and purpose, scope of obligations, payment or consideration if any, with 4 placeholder fields to fill in. Life Recovery Coaching Agreement Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: parties and purpose, scope of obligations, payment or consideration if any, term and termination, general provis",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/life-recovery-coaching-agreement.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A life recovery coaching agreement is a written consulting document in which the parties set out parties and purpose and scope of obligations before signing..",
-    keyClauses: [
-      "parties and purpose",
-      "scope of obligations",
-      "payment or consideration if any",
-      "term and termination",
-      "general provisions",
-      "signatures"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including parties and purpose, scope of obligations, payment or consideration if any, term and termination. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Life Recovery Coaching Agreement template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Life Recovery Coaching Agreement before I send it for signature.",
-      "Adapt this Life Recovery Coaching Agreement for a consulting use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "it-system-and-services-acquisition-policy",
-    name: "IT System AND Services Acquisition Policy",
-    seoTitle: "Free IT System AND Services Acquisition Policy Template",
-    description:
-      "IT System AND Services Acquisition Policy — a free consulting template covering parties and purpose, scope of obligations, payment or consideration if any.",
-    useCase:
-      "This it system and services acquisition policy covers parties and purpose, scope of obligations, payment or consideration if any, with 4 placeholder fields to fill in. IT System AND Services Acquisition Policy Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: parties and purpose, scope of obligations, payment or consideration if any, term and ",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/it-system-and-services-acquisition-policy.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A it system and services acquisition policy is a written consulting document in which the parties set out parties and purpose and scope of obligations before signing..",
-    keyClauses: [
-      "parties and purpose",
-      "scope of obligations",
-      "payment or consideration if any",
-      "term and termination",
-      "general provisions",
-      "signatures"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including parties and purpose, scope of obligations, payment or consideration if any, term and termination. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this IT System AND Services Acquisition Policy template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this IT System AND Services Acquisition Policy before I send it for signature.",
-      "Adapt this IT System AND Services Acquisition Policy for a consulting use case with different payment or term details."
-    ],
-  },
-  {
     slug: "photo-release",
     name: "Photo Release",
     seoTitle: "Free Photo Release Template",
@@ -11134,47 +8929,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
       "Fill this Photo Release template for my situation using the placeholders in the document.",
       "Explain the key clauses in this Photo Release before I send it for signature.",
       "Adapt this Photo Release for a real estate use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "app-development-team-license-agreement",
-    name: "APP Development Team License Agreement",
-    seoTitle: "Free APP Development Team License Agreement Template",
-    description:
-      "APP Development Team License Agreement — a free consulting template covering scope of work and milestones, client approvals, payment tied to deliverables.",
-    useCase:
-      "This app development team license agreement covers scope of work and milestones, client approvals, payment tied to deliverables, with 4 placeholder fields to fill in. APP Development Team License Agreement Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: scope of work and milestones, client approvals, payment tied to deliverables, IP ownership on ",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/app-development-team-license-agreement.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A app development team license agreement is a written consulting document in which the parties set out scope of work and milestones and client approvals before signing..",
-    keyClauses: [
-      "scope of work and milestones",
-      "client approvals",
-      "payment tied to deliverables",
-      "IP ownership on final payment",
-      "warranty window",
-      "change process"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including scope of work and milestones, client approvals, payment tied to deliverables, ip ownership on final payment. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this APP Development Team License Agreement template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this APP Development Team License Agreement before I send it for signature.",
-      "Adapt this APP Development Team License Agreement for a consulting use case with different payment or term details."
     ],
   },
   {
@@ -11503,47 +9257,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
       "Fill this Unglue IT Library License Agreement template for my situation using the placeholders in the document.",
       "Explain the key clauses in this Unglue IT Library License Agreement before I send it for signature.",
       "Adapt this Unglue IT Library License Agreement for a consulting use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "business-development-agreement",
-    name: "Business Development Agreement",
-    seoTitle: "Free Business Development Agreement Template",
-    description:
-      "Business Development Agreement — a free consulting template covering scope of work and milestones, client approvals, payment tied to deliverables.",
-    useCase:
-      "This business development agreement covers scope of work and milestones, client approvals, payment tied to deliverables, with 4 placeholder fields to fill in. Business Development Agreement Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: scope of work and milestones, client approvals, payment tied to deliverables, IP ownership on final payment, warranty ",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/business-development-agreement.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A business development agreement is a written consulting document in which the parties set out scope of work and milestones and client approvals before signing..",
-    keyClauses: [
-      "scope of work and milestones",
-      "client approvals",
-      "payment tied to deliverables",
-      "IP ownership on final payment",
-      "warranty window",
-      "change process"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including scope of work and milestones, client approvals, payment tied to deliverables, ip ownership on final payment. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Business Development Agreement template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Business Development Agreement before I send it for signature.",
-      "Adapt this Business Development Agreement for a consulting use case with different payment or term details."
     ],
   },
   {
@@ -11916,47 +9629,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
     ],
   },
   {
-    slug: "letter-to-ask-a-business-to-block-information-on-a-new",
-    name: "Letter TO ASK A Business TO Block Information ON A NEW",
-    seoTitle: "Free Letter TO ASK A Business TO Block Information ON A NEW Template",
-    description:
-      "Letter TO ASK A Business TO Block Information ON A NEW — a free consulting template covering parties and purpose, scope of obligations, payment or consideration if any.",
-    useCase:
-      "This letter to ask a business to block information on a new covers parties and purpose, scope of obligations, payment or consideration if any, with 4 placeholder fields to fill in. Letter TO ASK A Business TO Block Information ON A NEW Placeholders: [Declarant Name], [Recipient Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: parties and purpose, scope of obligations, payment",
-    signerLabels: ["Declarant", "Recipient"],
-    pdfPath: "/free-templates/letter-to-ask-a-business-to-block-information-on-a-new.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.27995016339869283, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.27805228758169936, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A letter to ask a business to block information on a new is a written consulting document in which the parties set out parties and purpose and scope of obligations before signing..",
-    keyClauses: [
-      "parties and purpose",
-      "scope of obligations",
-      "payment or consideration if any",
-      "term and termination",
-      "general provisions",
-      "signatures"
-    ],
-    fillInFields: [
-      "[Declarant Name]",
-      "[Recipient Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including parties and purpose, scope of obligations, payment or consideration if any, term and termination. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Letter TO ASK A Business TO Block Information ON A NEW template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Letter TO ASK A Business TO Block Information ON A NEW before I send it for signature.",
-      "Adapt this Letter TO ASK A Business TO Block Information ON A NEW for a consulting use case with different payment or term details."
-    ],
-  },
-  {
     slug: "assignment-and-83-b-election",
     name: "Assignment AND 83 B Election",
     seoTitle: "Free Assignment AND 83 B Election Template",
@@ -12080,47 +9752,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
     ],
   },
   {
-    slug: "statutory-advance-directive-in-conformance-with-west-vi",
-    name: "Statutory Advance Directive IN Conformance With West VI",
-    seoTitle: "Free Statutory Advance Directive IN Conformance With West VI Template",
-    description:
-      "Statutory Advance Directive IN Conformance With West VI — a free consulting template covering parties and purpose, scope of obligations, payment or consideration if any.",
-    useCase:
-      "This statutory advance directive in conformance with west vi covers parties and purpose, scope of obligations, payment or consideration if any, with 4 placeholder fields to fill in. Statutory Advance Directive IN Conformance With West VI Placeholders: [Declarant Name], [Recipient Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: parties and purpose, scope of obligations, paym",
-    signerLabels: ["Declarant", "Recipient"],
-    pdfPath: "/free-templates/statutory-advance-directive-in-conformance-with-west-vi.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.27995016339869283, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.27805228758169936, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A statutory advance directive in conformance with west vi is a written consulting document in which the parties set out parties and purpose and scope of obligations before signing..",
-    keyClauses: [
-      "parties and purpose",
-      "scope of obligations",
-      "payment or consideration if any",
-      "term and termination",
-      "general provisions",
-      "signatures"
-    ],
-    fillInFields: [
-      "[Declarant Name]",
-      "[Recipient Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including parties and purpose, scope of obligations, payment or consideration if any, term and termination. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Statutory Advance Directive IN Conformance With West VI template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Statutory Advance Directive IN Conformance With West VI before I send it for signature.",
-      "Adapt this Statutory Advance Directive IN Conformance With West VI for a consulting use case with different payment or term details."
-    ],
-  },
-  {
     slug: "array-of-stars-freelance-agreement",
     name: "Array OF Stars Freelance Agreement",
     seoTitle: "Free Array OF Stars Freelance Agreement Template",
@@ -12203,47 +9834,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
     ],
   },
   {
-    slug: "notabot-media-services-agreement",
-    name: "Notabot Media Services Agreement",
-    seoTitle: "Free Notabot Media Services Agreement Template",
-    description:
-      "Notabot Media Services Agreement — a free consulting template covering parties and purpose, scope of obligations, payment or consideration if any.",
-    useCase:
-      "This notabot media services agreement covers parties and purpose, scope of obligations, payment or consideration if any, with 4 placeholder fields to fill in. Notabot Media Services Agreement Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: parties and purpose, scope of obligations, payment or consideration if any, term and termination, general provis",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/notabot-media-services-agreement.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A notabot media services agreement is a written consulting document in which the parties set out parties and purpose and scope of obligations before signing..",
-    keyClauses: [
-      "parties and purpose",
-      "scope of obligations",
-      "payment or consideration if any",
-      "term and termination",
-      "general provisions",
-      "signatures"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including parties and purpose, scope of obligations, payment or consideration if any, term and termination. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Notabot Media Services Agreement template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Notabot Media Services Agreement before I send it for signature.",
-      "Adapt this Notabot Media Services Agreement for a consulting use case with different payment or term details."
-    ],
-  },
-  {
     slug: "minutes-of-special-meeting-of-the-shareholders-ppdd",
     name: "Minutes OF Special Meeting OF THE Shareholders Ppdd",
     seoTitle: "Free Minutes OF Special Meeting OF THE Shareholders Ppdd Template",
@@ -12282,47 +9872,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
       "Fill this Minutes OF Special Meeting OF THE Shareholders Ppdd template for my situation using the placeholders in the document.",
       "Explain the key clauses in this Minutes OF Special Meeting OF THE Shareholders Ppdd before I send it for signature.",
       "Adapt this Minutes OF Special Meeting OF THE Shareholders Ppdd for a funding use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "web-development-contractor-agreement",
-    name: "WEB Development Contractor Agreement",
-    seoTitle: "Free WEB Development Contractor Agreement Template",
-    description:
-      "WEB Development Contractor Agreement — a free consulting template covering scope of work and milestones, client approvals, payment tied to deliverables.",
-    useCase:
-      "This web development contractor agreement covers scope of work and milestones, client approvals, payment tied to deliverables, with 4 placeholder fields to fill in. WEB Development Contractor Agreement Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: scope of work and milestones, client approvals, payment tied to deliverables, IP ownership on final ",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/web-development-contractor-agreement.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A web development contractor agreement is a written consulting document in which the parties set out scope of work and milestones and client approvals before signing..",
-    keyClauses: [
-      "scope of work and milestones",
-      "client approvals",
-      "payment tied to deliverables",
-      "IP ownership on final payment",
-      "warranty window",
-      "change process"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including scope of work and milestones, client approvals, payment tied to deliverables, ip ownership on final payment. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this WEB Development Contractor Agreement template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this WEB Development Contractor Agreement before I send it for signature.",
-      "Adapt this WEB Development Contractor Agreement for a consulting use case with different payment or term details."
     ],
   },
   {
@@ -12449,88 +9998,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
     ],
   },
   {
-    slug: "comic-book-writer-work-agreement",
-    name: "Comic Book Writer Work Agreement",
-    seoTitle: "Free Comic Book Writer Work Agreement Template",
-    description:
-      "Comic Book Writer Work Agreement — a free consulting template covering parties and purpose, scope of obligations, payment or consideration if any.",
-    useCase:
-      "This comic book writer work agreement covers parties and purpose, scope of obligations, payment or consideration if any, with 4 placeholder fields to fill in. Comic Book Writer Work Agreement Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: parties and purpose, scope of obligations, payment or consideration if any, term and termination, general provis",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/comic-book-writer-work-agreement.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A comic book writer work agreement is a written consulting document in which the parties set out parties and purpose and scope of obligations before signing..",
-    keyClauses: [
-      "parties and purpose",
-      "scope of obligations",
-      "payment or consideration if any",
-      "term and termination",
-      "general provisions",
-      "signatures"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including parties and purpose, scope of obligations, payment or consideration if any, term and termination. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Comic Book Writer Work Agreement template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Comic Book Writer Work Agreement before I send it for signature.",
-      "Adapt this Comic Book Writer Work Agreement for a consulting use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "software-development-and-license-agreement",
-    name: "Software Development AND License Agreement",
-    seoTitle: "Free Software Development AND License Agreement Template",
-    description:
-      "Software Development AND License Agreement — a free consulting template covering scope of work and milestones, client approvals, payment tied to deliverables.",
-    useCase:
-      "This software development and license agreement covers scope of work and milestones, client approvals, payment tied to deliverables, with 4 placeholder fields to fill in. Software Development AND License Agreement Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: scope of work and milestones, client approvals, payment tied to deliverables, IP o",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/software-development-and-license-agreement.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A software development and license agreement is a written consulting document in which the parties set out scope of work and milestones and client approvals before signing..",
-    keyClauses: [
-      "scope of work and milestones",
-      "client approvals",
-      "payment tied to deliverables",
-      "IP ownership on final payment",
-      "warranty window",
-      "change process"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including scope of work and milestones, client approvals, payment tied to deliverables, ip ownership on final payment. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Software Development AND License Agreement template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Software Development AND License Agreement before I send it for signature.",
-      "Adapt this Software Development AND License Agreement for a consulting use case with different payment or term details."
-    ],
-  },
-  {
     slug: "design-contract-between-michael-meulstee-and-creative-m",
     name: "Design Contract Between Michael Meulstee AND Creative M",
     seoTitle: "Free Design Contract Between Michael Meulstee AND Creative M Template",
@@ -12569,47 +10036,6 @@ export const LEGACY_BATCH_2_TEMPLATES: FreeTemplate[] = [
       "Fill this Design Contract Between Michael Meulstee AND Creative M template for my situation using the placeholders in the document.",
       "Explain the key clauses in this Design Contract Between Michael Meulstee AND Creative M before I send it for signature.",
       "Adapt this Design Contract Between Michael Meulstee AND Creative M for a consulting use case with different payment or term details."
-    ],
-  },
-  {
-    slug: "hourly-contract-freelance-design",
-    name: "Hourly Contract Freelance Design",
-    seoTitle: "Free Hourly Contract Freelance Design Template",
-    description:
-      "Hourly Contract Freelance Design — a free consulting template covering scope of work and milestones, client approvals, payment tied to deliverables.",
-    useCase:
-      "This hourly contract freelance design covers scope of work and milestones, client approvals, payment tied to deliverables, with 4 placeholder fields to fill in. Hourly Contract Freelance Design Placeholders: [Client Name], [Service Provider Name], [Effective Date], [Governing State/Jurisdiction]. Clauses: scope of work and milestones, client approvals, payment tied to deliverables, IP ownership on final payment, war",
-    signerLabels: ["Client", "Service Provider"],
-    pdfPath: "/free-templates/hourly-contract-freelance-design.pdf",
-    fields: [
-      { id: "lb20", signerOrder: 1, page: 1, xFrac: 0.24776143790849672, yFrac: 0.12133838383838387, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb21", signerOrder: 1, page: 1, xFrac: 0.15376960784313726, yFrac: 0.21671717171717184, wFrac: 0.16, hFrac: 0.04, type: "date" },
-      { id: "lb22", signerOrder: 2, page: 1, xFrac: 0.33784477124183004, yFrac: 0.28702020202020206, wFrac: 0.26, hFrac: 0.07, type: "signature" },
-      { id: "lb23", signerOrder: 2, page: 1, xFrac: 0.15376960784313726, yFrac: 0.38239898989898996, wFrac: 0.16, hFrac: 0.04, type: "date" }
-    ],
-    recurringCategory: "Consulting",
-    definition:
-      "A hourly contract freelance design is a written consulting document in which the parties set out scope of work and milestones and client approvals before signing..",
-    keyClauses: [
-      "scope of work and milestones",
-      "client approvals",
-      "payment tied to deliverables",
-      "IP ownership on final payment",
-      "warranty window",
-      "change process"
-    ],
-    fillInFields: [
-      "[Client Name]",
-      "[Service Provider Name]",
-      "[Effective Date]",
-      "[Governing State/Jurisdiction]"
-    ],
-    legalSummary:
-      "Executing this document creates a signed record of the terms both parties accepted, including scope of work and milestones, client approvals, payment tied to deliverables, ip ownership on final payment. It helps establish expectations and a paper trail but does not replace advice from a qualified attorney in your jurisdiction.",
-    chatgptPrompts: [
-      "Fill this Hourly Contract Freelance Design template for my situation using the placeholders in the document.",
-      "Explain the key clauses in this Hourly Contract Freelance Design before I send it for signature.",
-      "Adapt this Hourly Contract Freelance Design for a consulting use case with different payment or term details."
     ],
   },
   {

@@ -277,4 +277,17 @@ admin.post("/drain-template-queue", requireAdminAccount, async (c) => {
   return c.json(result);
 });
 
+// One-off lookup for retiring the now-redundant static entries in
+// apps/web/src/lib/freeTemplatesLegacyBatch2.ts once their slug has a richer dynamic replacement —
+// scoped to just the 0035-seeded rows (id LIKE 'ttqlb2_%') so it never reads the pre-existing rows
+// that predate that migration. A targeted read of only the (small) published subset, not a full-
+// table scan — safe to call after the read-quota incident this route family caused once already.
+admin.get("/legacy-batch-redraft-published-slugs", requireAdminAccount, async (c) => {
+  if (!c.env.DOCRACY_DB) return c.json({ error: "Not available on this deployment yet." }, 501);
+  const { results } = await c.env.DOCRACY_DB.prepare(
+    `SELECT slug FROM template_topic_queue WHERE id LIKE 'ttqlb2_%' AND status = 'published' ORDER BY slug ASC`
+  ).all<{ slug: string }>();
+  return c.json({ slugs: results.map((r) => r.slug) });
+});
+
 export default admin;
