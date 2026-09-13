@@ -30,6 +30,10 @@ import { getWorkspaceSlug, getLogoObject, hasCustomLogo, logoPath } from "../lib
 import { authenticateDocToken } from "../lib/docTokenAuth";
 import { sendWhatsAppCompletedReceipts } from "../lib/whatsapp";
 import { requestWhatsappVerification, confirmWhatsappVerification } from "../lib/whatsappVerify";
+import { resolveAccount, SESSION_COOKIE_NAME } from "../lib/auth";
+import { daysBetween } from "../lib/reminders";
+import { anonymousStatusAccessDays } from "../lib/docTtl";
+import { schedulePreparerLeadEmails } from "../lib/onboardingEmails";
 import { signToken } from "@docracy/shared";
 import {
   attachmentLimits,
@@ -141,6 +145,21 @@ function statusPayload(doc: Awaited<ReturnType<typeof getDoc>>) {
     kind: doc.kind,
     cobroPaidAt: doc.cobroPaidAt,
   };
+}
+
+/**
+ * Soft signup gate: once a fully-anonymous document (doc.accountId is null — a logged-in
+ * preparer's own docs are never gated) has been completed for anonymousStatusAccessDays, the web
+ * status/download view requires SOME docracy account to be logged in (not necessarily one linked
+ * to this document — just proof an account exists, since that's the durable, remarketable contact
+ * docracy otherwise never gets from this document at all). Email delivery of the signed PDF at
+ * completion time (sendCompletionEmails) is completely unaffected — this only gates re-visiting
+ * the web page afterward. Never true for a still-pending document: someone who still needs to add
+ * their signature must never be blocked by this.
+ */
+function requiresAccountForContinuedAccess(env: Env, doc: DocState): boolean {
+  if (doc.status !== "completed" || !doc.completedAt || doc.accountId) return false;
+  return daysBetween(doc.completedAt, Date.now()) >= anonymousStatusAccessDays(env);
 }
 
 async function attachmentDownloadResponse(
@@ -264,6 +283,11 @@ sign.get("/status/:token", async (c) => {
   if (!auth) return c.json({ error: "Invalid or tampered link" }, 403);
   const { verified, doc } = auth;
 
+  if (requiresAccountForContinuedAccess(c.env, doc)) {
+    const account = await resolveAccount(c.env, getCookie(c, SESSION_COOKIE_NAME));
+    if (!account) return c.json({ error: "account_required" }, 403);
+  }
+
   return c.json({
     ...statusPayload(doc),
     canVoid: verified.order === 0,
@@ -282,6 +306,11 @@ sign.get("/status/:token/download", async (c) => {
   if (!auth) return c.json({ error: "Invalid or tampered link" }, 403);
   const { doc } = auth;
   if (doc.status !== "completed") return c.json({ error: "This document hasn't been fully signed yet" }, 409);
+
+  if (requiresAccountForContinuedAccess(c.env, doc)) {
+    const account = await resolveAccount(c.env, getCookie(c, SESSION_COOKIE_NAME));
+    if (!account) return c.json({ error: "account_required" }, 403);
+  }
 
   const pdfObj = await c.env.DOCRACY_DOCS.get(`docs/${doc.docId}/final.pdf`);
   if (!pdfObj) return c.json({ error: "Signed document is missing" }, 404);
@@ -657,9 +686,9 @@ sign.post("/sign/:token", async (c) => {
     }
   }
 
-  let body: { values: FieldValue[]; consent?: boolean };
+  let body: { values: FieldValue[]; consent?: boolean; marketingOptIn?: boolean };
   try {
-    body = await c.req.json<{ values: FieldValue[]; consent?: boolean }>();
+    body = await c.req.json<{ values: FieldValue[]; consent?: boolean; marketingOptIn?: boolean }>();
   } catch {
     return c.json({ error: "Invalid request body" }, 400);
   }
@@ -893,6 +922,18 @@ sign.post("/sign/:token", async (c) => {
         uploadCompletedDocument(c.env, freshDoc.accountId, freshDoc.docId, `${freshDoc.docId}.pdf`, finalBytes)
       );
     }
+  }
+
+  // Opt-in only, mirroring routes/documents.ts's preparerMarketingOptIn — the signer's email is
+  // already known (it's how the invite was sent), so no re-entry is needed here, just the
+  // checkbox. Tagged "signer_optin" so runOnboardingEmailSweep sends signer-appropriate drip copy
+  // instead of the preparer one (see lib/onboardingEmails.ts's LEAD_SENDERS).
+  if (body.marketingOptIn && signer.email) {
+    c.executionCtx.waitUntil(
+      schedulePreparerLeadEmails(c.env, signer.email, "signer_optin", freshDoc.locale).catch((err) =>
+        console.error("Signer lead scheduling failed (non-fatal):", err)
+      )
+    );
   }
 
   return c.json({ ok: true, status: statusPayload(freshDoc) });

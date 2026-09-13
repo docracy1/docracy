@@ -8,6 +8,9 @@ import {
   sendPreparerLeadStep2,
   sendPreparerLeadStep3,
   sendPreparerLeadStep4,
+  sendSignerLeadStep1,
+  sendSignerLeadStep2,
+  sendSignerLeadStep3,
 } from "./email";
 
 const MINUTE = 60 * 1000;
@@ -34,12 +37,24 @@ const STEPS: Step[] = [
   { column: "step1_sent_at", delayMs: 3 * MINUTE, send: sendOnboardingStep1 },
 ];
 
-/** Same cadence as account onboarding, but content assumes the recipient already sent a document. */
-const LEAD_STEPS: Step[] = [
-  { column: "step4_sent_at", delayMs: 3 * DAY, send: sendPreparerLeadStep4 },
-  { column: "step2_sent_at", delayMs: 2 * DAY, send: sendPreparerLeadStep2 },
-  { column: "step3_sent_at", delayMs: 24 * HOUR, send: sendPreparerLeadStep3 },
-  { column: "step1_sent_at", delayMs: 3 * MINUTE, send: sendPreparerLeadStep1 },
+type LeadSend = (env: Env, email: string, locale?: Locale) => Promise<void>;
+
+interface LeadStep {
+  column: "step1_sent_at" | "step2_sent_at" | "step3_sent_at" | "step4_sent_at";
+  delayMs: number;
+  /** Content differs by how this lead opted in — a signer never "sent" anything, so the copy
+   *  pitches becoming a sender instead of "thanks for sending" (see email.ts's
+   *  sendSignerLeadStep1-3). Step 4's pricing pitch is generic enough to share verbatim. */
+  senders: Record<string, LeadSend>;
+}
+
+/** Same cadence for every source (preparer or signer opt-in); which function actually sends is
+ *  looked up per-row by the onboarding_leads.source column at send time (see the sweep below). */
+const LEAD_STEPS: LeadStep[] = [
+  { column: "step4_sent_at", delayMs: 3 * DAY, senders: { preparer_optin: sendPreparerLeadStep4, signer_optin: sendPreparerLeadStep4 } },
+  { column: "step2_sent_at", delayMs: 2 * DAY, senders: { preparer_optin: sendPreparerLeadStep2, signer_optin: sendSignerLeadStep2 } },
+  { column: "step3_sent_at", delayMs: 24 * HOUR, senders: { preparer_optin: sendPreparerLeadStep3, signer_optin: sendSignerLeadStep3 } },
+  { column: "step1_sent_at", delayMs: 3 * MINUTE, senders: { preparer_optin: sendPreparerLeadStep1, signer_optin: sendSignerLeadStep1 } },
 ];
 
 /** Called once, right after a brand-new account row is inserted (see auth.ts) — everything here
@@ -97,6 +112,7 @@ interface PendingRow {
 interface LeadRow {
   email: string;
   locale: Locale | null;
+  source: string;
 }
 
 async function hasSentAnyDocument(env: Env, accountId: string): Promise<boolean> {
@@ -154,7 +170,7 @@ export async function runOnboardingEmailSweep(env: Env): Promise<void> {
   for (const step of LEAD_STEPS) {
     const cutoff = new Date(now - step.delayMs).toISOString();
     const rows = await env.DOCRACY_DB.prepare(
-      `SELECT email, locale FROM onboarding_leads WHERE ${step.column} IS NULL AND opted_in_at <= ?`
+      `SELECT email, locale, source FROM onboarding_leads WHERE ${step.column} IS NULL AND opted_in_at <= ?`
     )
       .bind(cutoff)
       .all<LeadRow>();
@@ -168,8 +184,9 @@ export async function runOnboardingEmailSweep(env: Env): Promise<void> {
         handledLeads.add(row.email);
         continue;
       }
+      const send = step.senders[row.source] ?? step.senders.preparer_optin;
       try {
-        await step.send(env, row.email, row.locale ?? undefined);
+        await send(env, row.email, row.locale ?? undefined);
         await env.DOCRACY_DB.prepare(`UPDATE onboarding_leads SET ${step.column} = ? WHERE email = ?`)
           .bind(new Date().toISOString(), row.email)
           .run();

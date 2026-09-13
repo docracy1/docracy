@@ -890,6 +890,8 @@ const es: Messages = {
   "sign.typeFailed": "No se pudo crear la firma. Inténtalo de nuevo o dibújala.",
   "sign.consent":
     "Confirmo que soy la persona a quien se envió este enlace, y que al hacer clic en \"Completar firma\" estoy aplicando mi firma electrónica a este documento — de forma consistente con la ESIGN Act y UETA de EE. UU.",
+  "sign.marketingOptIn":
+    "Envíame algunos consejos — y cómo enviar mis propios documentos gratis (opcional; responde en cualquier momento para dejar de recibirlos).",
   "sign.continue": "Continuar",
   "sign.dateField": "Fecha",
   "sign.decline": "Rechazar",
@@ -1007,6 +1009,9 @@ const es: Messages = {
   "status.dontLoseLink": "Guarda este envío en tu panel",
   "status.dontLoseLinkSub":
     "Crea una cuenta gratis y adjuntaremos este documento a tu historial — sin contraseña. Conserva este enlace de estado como respaldo.",
+  "status.gate.headline": "Crea una cuenta gratis para seguir viendo este documento",
+  "status.gate.body":
+    "Este documento se firmó por completo hace unos días. El PDF firmado ya se envió por correo a todos los involucrados — crear una cuenta gratis (sin contraseña, solo un enlace mágico) es la única forma de seguir viéndolo o descargándolo aquí.",
   "status.download": "Descargar PDF firmado",
   "status.openSignedPage": "Abrir página firmada + pago",
   "status.copySignedLink": "Copiar enlace firmado + pago",

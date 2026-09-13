@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { scheduleOnboardingEmails, schedulePreparerLeadEmails, runOnboardingEmailSweep } from "./onboardingEmails";
 import { makeMockEnv } from "../test/mockEnv";
 
@@ -163,6 +163,16 @@ describe("schedulePreparerLeadEmails", () => {
     expect(row?.step1_sent_at).toBeNull();
   });
 
+  it("tags a signer's opt-in with source=signer_optin so the sweep sends signer-specific content", async () => {
+    const { env, d1 } = makeMockEnv();
+    await schedulePreparerLeadEmails(env, "signer@example.com", "signer_optin");
+
+    const row = (await d1.prepare(`SELECT source FROM onboarding_leads WHERE email = ?`).bind("signer@example.com").first()) as {
+      source: string;
+    };
+    expect(row.source).toBe("signer_optin");
+  });
+
   it("does not start a lead drip for an address that already has an account", async () => {
     const { env, d1 } = makeMockEnv();
     await insertAccount(d1, "acct-1", "preparer@example.com");
@@ -234,5 +244,44 @@ describe("runOnboardingEmailSweep leads", () => {
     expect(row.step4_sent_at).toBeNull();
     expect(row.step1_sent_at).toBeNull();
     expect(row.step3_sent_at).toBeNull();
+  });
+
+  it("sends signer-specific content (not the preparer 'thanks for sending' copy) for a signer_optin lead", async () => {
+    const { env, d1 } = makeMockEnv();
+    const optedInAt = new Date(Date.now() - 4 * MINUTE).toISOString();
+    await d1
+      .prepare(`INSERT INTO onboarding_leads (email, source, opted_in_at) VALUES (?, ?, ?)`)
+      .bind("signer@example.com", "signer_optin", optedInAt)
+      .run();
+    const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+
+    await runOnboardingEmailSweep(env);
+
+    const logged = logSpy.mock.calls.map((call) => String(call[0])).join("\n");
+    expect(logged).toContain("to=signer@example.com");
+    expect(logged).toMatch(/you just signed|ya firmaste/i);
+    expect(logged).not.toMatch(/thanks for sending|gracias por enviarlo/i);
+    logSpy.mockRestore();
+
+    const row = (await d1.prepare(`SELECT step1_sent_at FROM onboarding_leads WHERE email = ?`).bind("signer@example.com").first()) as {
+      step1_sent_at: string | null;
+    };
+    expect(row.step1_sent_at).not.toBeNull();
+  });
+
+  it("falls back to preparer content for an unrecognized lead source", async () => {
+    const { env, d1 } = makeMockEnv();
+    const optedInAt = new Date(Date.now() - 4 * MINUTE).toISOString();
+    await d1
+      .prepare(`INSERT INTO onboarding_leads (email, source, opted_in_at) VALUES (?, ?, ?)`)
+      .bind("mystery@example.com", "some_future_source", optedInAt)
+      .run();
+
+    await runOnboardingEmailSweep(env);
+
+    const row = (await d1.prepare(`SELECT step1_sent_at FROM onboarding_leads WHERE email = ?`).bind("mystery@example.com").first()) as {
+      step1_sent_at: string | null;
+    };
+    expect(row.step1_sent_at).not.toBeNull();
   });
 });

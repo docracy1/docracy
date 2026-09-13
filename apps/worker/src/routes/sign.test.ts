@@ -6,6 +6,7 @@ import { getDoc, putDoc } from "../lib/kv";
 import { makeMockEnv, makeValidPdfBytes } from "../test/mockEnv";
 import { signToken, hashOpaqueToken } from "@docracy/shared";
 import { resetRateLimitMemoryForTests } from "../lib/ratelimit";
+import { createSession, SESSION_COOKIE_NAME } from "../lib/auth";
 import type { DocState } from "@docracy/shared";
 
 // Only needed on requests that reach document completion (recordVerification's background
@@ -359,6 +360,128 @@ describe("sign routes", () => {
       env
     );
     expect(res.status).toBe(409);
+  });
+});
+
+describe("soft signup gate on completed documents", () => {
+  async function seedCompletedDoc(
+    env: Awaited<ReturnType<typeof makeMockEnv>>["env"],
+    r2: ReturnType<typeof makeMockEnv>["r2"],
+    opts: { completedDaysAgo: number; accountId?: string | null }
+  ) {
+    const docId = await seedDoc(env, r2);
+    const doc = await getDoc(env, docId);
+    doc!.status = "completed";
+    doc!.completedAt = new Date(Date.now() - opts.completedDaysAgo * 24 * 60 * 60 * 1000).toISOString();
+    if (opts.accountId !== undefined) doc!.accountId = opts.accountId;
+    await putDoc(env, doc!);
+    await r2.put(`docs/${docId}/final.pdf`, await makeValidPdfBytes());
+    return docId;
+  }
+
+  it("blocks the status page and download for an anonymous document completed past the access window", async () => {
+    const { env, r2 } = makeMockEnv();
+    const docId = await seedCompletedDoc(env, r2, { completedDaysAgo: 4 });
+    const token = await signToken(docId, 1, env.TOKEN_SECRET);
+
+    const statusRes = await sign.request(`/status/${token}`, {}, env);
+    expect(statusRes.status).toBe(403);
+    const statusBody: { error: string } = await statusRes.json();
+    expect(statusBody.error).toBe("account_required");
+
+    const downloadRes = await sign.request(`/status/${token}/download`, {}, env);
+    expect(downloadRes.status).toBe(403);
+    const downloadBody: { error: string } = await downloadRes.json();
+    expect(downloadBody.error).toBe("account_required");
+  });
+
+  it("allows continued access once ANY account is logged in, not necessarily one linked to the doc", async () => {
+    const { env, r2 } = makeMockEnv();
+    const docId = await seedCompletedDoc(env, r2, { completedDaysAgo: 4 });
+    const token = await signToken(docId, 1, env.TOKEN_SECRET);
+    const sessionToken = await createSession(env, MOCK_CTX, "acct-1", "someone@example.com", false, false, null, null);
+    const cookieHeader = { Cookie: `${SESSION_COOKIE_NAME}=${sessionToken}` };
+
+    const statusRes = await sign.request(`/status/${token}`, { headers: cookieHeader }, env);
+    expect(statusRes.status).toBe(200);
+
+    const downloadRes = await sign.request(`/status/${token}/download`, { headers: cookieHeader }, env);
+    expect(downloadRes.status).toBe(200);
+  });
+
+  it("does not gate a document still inside the free access window", async () => {
+    const { env, r2 } = makeMockEnv();
+    const docId = await seedCompletedDoc(env, r2, { completedDaysAgo: 1 });
+    const token = await signToken(docId, 1, env.TOKEN_SECRET);
+
+    const res = await sign.request(`/status/${token}`, {}, env);
+    expect(res.status).toBe(200);
+  });
+
+  it("never gates a document that isn't fully signed yet, however old", async () => {
+    const { env, r2 } = makeMockEnv();
+    const docId = await seedDoc(env, r2);
+    const doc = await getDoc(env, docId);
+    doc!.createdAt = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+    await putDoc(env, doc!);
+    const token = await signToken(docId, 2, env.TOKEN_SECRET);
+
+    const res = await sign.request(`/status/${token}`, {}, env);
+    expect(res.status).toBe(200);
+  });
+
+  it("never gates a document already linked to an account", async () => {
+    const { env, r2 } = makeMockEnv();
+    const docId = await seedCompletedDoc(env, r2, { completedDaysAgo: 10, accountId: "acct-owner" });
+    const token = await signToken(docId, 1, env.TOKEN_SECRET);
+
+    const res = await sign.request(`/status/${token}`, {}, env);
+    expect(res.status).toBe(200);
+  });
+});
+
+describe("signer marketing opt-in", () => {
+  it("schedules a signer lead when the signer opts in at submission time", async () => {
+    const { env, r2 } = makeMockEnv();
+    const docId = await seedDoc(env, r2);
+    const token = await signToken(docId, 1, env.TOKEN_SECRET);
+
+    const res = await sign.request(
+      `/sign/${token}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ values: [{ fieldId: "f1", value: TINY_PNG }], consent: true, marketingOptIn: true }),
+      },
+      env,
+      MOCK_CTX
+    );
+    expect(res.status).toBe(200);
+
+    const lead = await env.DOCRACY_DB!.prepare(`SELECT source FROM onboarding_leads WHERE email = ?`)
+      .bind("anna@example.com")
+      .first<{ source: string }>();
+    expect(lead?.source).toBe("signer_optin");
+  });
+
+  it("does not schedule a lead when the signer does not opt in", async () => {
+    const { env, r2 } = makeMockEnv();
+    const docId = await seedDoc(env, r2);
+    const token = await signToken(docId, 1, env.TOKEN_SECRET);
+
+    await sign.request(
+      `/sign/${token}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ values: [{ fieldId: "f1", value: TINY_PNG }], consent: true }),
+      },
+      env,
+      MOCK_CTX
+    );
+
+    const lead = await env.DOCRACY_DB!.prepare(`SELECT 1 FROM onboarding_leads WHERE email = ?`).bind("anna@example.com").first();
+    expect(lead).toBeNull();
   });
 });
 

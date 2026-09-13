@@ -14,6 +14,7 @@ export default function Status() {
   const { token } = useParams<{ token: string }>();
   const [status, setStatus] = useState<StatusPayload | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [accountRequired, setAccountRequired] = useState(false);
   const [voiding, setVoiding] = useState(false);
   const [voidError, setVoidError] = useState<string | null>(null);
   const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
@@ -25,7 +26,13 @@ export default function Status() {
     if (!token) return;
     fetchStatus(token)
       .then(setStatus)
-      .catch((err) => setError(err.message));
+      .catch((err) => {
+        if (err instanceof Error && err.message === "account_required") {
+          setAccountRequired(true);
+        } else {
+          setError(err.message);
+        }
+      });
   }, [token]);
 
   useEffect(() => {
@@ -49,6 +56,25 @@ export default function Status() {
       setVoiding(false);
     }
   };
+
+  if (accountRequired) {
+    return (
+      <div className="container">
+        <h1>{t("status.gate.headline")}</h1>
+        <p>{t("status.gate.body")}</p>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 16 }}>
+          <Link
+            to={`/login?ref=status-gate&next=${encodeURIComponent("/dashboard")}`}
+            className="btn-primary"
+            style={{ textDecoration: "none" }}
+            onClick={() => track("viral_cta_clicked", { source: "status_gate" })}
+          >
+            {t("status.createAccount")}
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   if (error) {
     return (

@@ -111,6 +111,7 @@ export default function Sign({
   const [guidedMode, setGuidedMode] = useState(false);
   const [guidedStarted, setGuidedStarted] = useState(false);
   const [consented, setConsented] = useState(false);
+  const [signerMarketingOptIn, setSignerMarketingOptIn] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [declining, setDeclining] = useState(false);
   const [done, setDone] = useState(false);
@@ -438,7 +439,8 @@ export default function Sign({
           value: f.type === "date" && values[f.id] ? new Date(`${values[f.id]}T00:00:00`).toLocaleDateString() : values[f.id],
         })),
         consented,
-        unlockToken ?? undefined
+        unlockToken ?? undefined,
+        signerMarketingOptIn
       );
       setFinalStatus(result.status);
       setDone(true);
@@ -944,6 +946,18 @@ export default function Sign({
           style={{ marginTop: 2 }}
         />
         <span>{t("sign.consent")}</span>
+      </label>
+
+      <label
+        style={{ display: "flex", gap: 8, alignItems: "flex-start", marginTop: 10, fontSize: 13 }}
+      >
+        <input
+          type="checkbox"
+          checked={signerMarketingOptIn}
+          onChange={(e) => setSignerMarketingOptIn(e.target.checked)}
+          style={{ marginTop: 2 }}
+        />
+        <span>{t("sign.marketingOptIn")}</span>
       </label>
 
       <div

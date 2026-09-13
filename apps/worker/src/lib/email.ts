@@ -1492,6 +1492,117 @@ export async function sendPreparerLeadStep4(env: Env, email: string, locale: Loc
   });
 }
 
+/** Same LEAD_STEPS cadence and onboarding_leads infra as the preparer drip above, but this
+ *  recipient just signed something someone else sent them — content pitches becoming a sender,
+ *  never "thanks for sending" (see lib/onboardingEmails.ts's LEAD_SENDERS lookup by source). */
+export async function sendSignerLeadStep1(env: Env, email: string, locale: Locale = "en"): Promise<void> {
+  const subject = locale === "es" ? "Ya firmaste — ¿y si tú envías el próximo?" : "You're signed — need to send one yourself?";
+  const body =
+    locale === "es"
+      ? `
+    ${emailHeadline(`Ya firmaste con Docracy`)}
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      Recibiste este documento porque alguien más lo envió con Docracy.io. Si alguna vez necesitas
+      enviar el tuyo — un contrato, un acuerdo, una carta — es gratis y el firmante nunca necesita cuenta.
+    </p>
+    ${ctaButton(`${env.PUBLIC_APP_URL}/try?utm_source=email&utm_medium=signer-lead&utm_campaign=step1`, "Enviar un documento gratis")}
+    <p style="margin:16px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">
+      ¿Quieres una cuenta gratis para llevar todos tus envíos en un solo lugar?
+      <a href="${env.PUBLIC_APP_URL}/login?utm_source=email&utm_medium=signer-lead&utm_campaign=step1" style="color:${PRIMARY};">Crea una cuenta gratis</a>
+      — sin contraseña, solo un enlace mágico.
+    </p>
+    <p style="margin:0;font-size:14px;color:${MUTED};">Pediste algunos consejos — responde este correo en cualquier momento para dejar de recibirlos.</p>
+    ${signOff(locale)}
+  `
+      : `
+    ${emailHeadline(`You just signed with Docracy`)}
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      You got that document because someone else sent it with Docracy.io. If you ever need to send
+      your own — a contract, an agreement, a letter — it's free, and whoever you send it to never
+      needs an account either.
+    </p>
+    ${ctaButton(`${env.PUBLIC_APP_URL}/try?utm_source=email&utm_medium=signer-lead&utm_campaign=step1`, "Send a document free")}
+    <p style="margin:16px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">
+      Want a free account so every document you send lives in one place?
+      <a href="${env.PUBLIC_APP_URL}/login?utm_source=email&utm_medium=signer-lead&utm_campaign=step1" style="color:${PRIMARY};">Create a free account</a>
+      — no password, just a magic link.
+    </p>
+    <p style="margin:0;font-size:14px;color:${MUTED};">You asked for a few tips — reply anytime to stop them.</p>
+    ${signOff(locale)}
+  `;
+  await send(env, email, subject, emailShell(env.PUBLIC_APP_URL, body, undefined, locale), {
+    emailType: "signer_lead_step1",
+    replyTo: env.FEEDBACK_EMAIL,
+  });
+}
+
+export async function sendSignerLeadStep2(env: Env, email: string, locale: Locale = "en"): Promise<void> {
+  const subject = locale === "es" ? "¿Necesitas enviar un documento?" : "Need to send a document of your own?";
+  const body =
+    locale === "es"
+      ? `
+    ${emailHeadline(`¿Necesitas enviar un documento?`)}
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      Docracy sigue siendo gratis para enviar contratos, acuerdos y cartas — el firmante nunca
+      necesita cuenta ni instala nada.
+    </p>
+    ${templateList(["NDA mutuo", "Acuerdo de contratista", "Carta de oferta", "Acuerdo de servicios freelance"])}
+    ${ctaButton(`${env.PUBLIC_APP_URL}/es/plantillas-gratis?utm_source=email&utm_medium=signer-lead&utm_campaign=step2`, "Ver plantillas gratis")}
+    <p style="margin:0;font-size:14px;color:${MUTED};">Pediste algunos consejos — responde este correo en cualquier momento para dejar de recibirlos.</p>
+    ${signOff(locale)}
+  `
+      : `
+    ${emailHeadline(`Need to send a document of your own?`)}
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      Docracy is still free for sending contracts, agreements, and letters — whoever you send it to
+      never needs an account or to install anything either.
+    </p>
+    ${templateList(["Mutual NDA", "Independent contractor agreement", "Offer letter", "Freelance service agreement"])}
+    ${ctaButton(`${env.PUBLIC_APP_URL}/free-templates?utm_source=email&utm_medium=signer-lead&utm_campaign=step2`, "Browse free templates")}
+    <p style="margin:0;font-size:14px;color:${MUTED};">You asked for a few tips — reply anytime to stop them.</p>
+    ${signOff(locale)}
+  `;
+  await send(env, email, subject, emailShell(env.PUBLIC_APP_URL, body, undefined, locale), {
+    emailType: "signer_lead_step2",
+    replyTo: env.FEEDBACK_EMAIL,
+  });
+}
+
+export async function sendSignerLeadStep3(env: Env, email: string, locale: Locale = "en"): Promise<void> {
+  const subject = locale === "es" ? "Empieza desde una plantilla gratis" : "Start from a free template";
+  const body =
+    locale === "es"
+      ? `
+    ${emailHeadline(`Empieza desde una plantilla gratis`)}
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      Plantillas listas para llenar y enviar — sin reconstruir los campos desde cero.
+    </p>
+    ${ctaButton(`${env.PUBLIC_APP_URL}/es/plantillas-gratis?utm_source=email&utm_medium=signer-lead&utm_campaign=step3`, "Explorar plantillas gratis")}
+    <p style="margin:16px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">
+      O <a href="${env.PUBLIC_APP_URL}/try?utm_source=email&utm_medium=signer-lead&utm_campaign=step3" style="color:${PRIMARY};">envía un NDA de muestra</a>
+      — sigue siendo gratis, sin necesidad de cuenta.
+    </p>
+    ${signOff(locale)}
+  `
+      : `
+    ${emailHeadline(`Start from a free template`)}
+    <p style="margin:16px 0 0 0;font-size:15px;color:${INK};line-height:1.5;">
+      Ready-to-fill templates for the agreements people send most often — no rebuilding fields from
+      scratch.
+    </p>
+    ${ctaButton(`${env.PUBLIC_APP_URL}/free-templates?utm_source=email&utm_medium=signer-lead&utm_campaign=step3`, "Browse all free templates")}
+    <p style="margin:16px 0 0 0;font-size:14px;color:${MUTED};line-height:1.5;">
+      Or <a href="${env.PUBLIC_APP_URL}/try?utm_source=email&utm_medium=signer-lead&utm_campaign=step3" style="color:${PRIMARY};">send a sample NDA</a>
+      — still free, still no account required.
+    </p>
+    ${signOff(locale)}
+  `;
+  await send(env, email, subject, emailShell(env.PUBLIC_APP_URL, body, undefined, locale), {
+    emailType: "signer_lead_step3",
+    replyTo: env.FEEDBACK_EMAIL,
+  });
+}
+
 /** Admin-composed broadcast (see lib/marketingEmail.ts) — the only email type sent to someone who
  *  isn't mid-signing-flow, so it's the only one gated on an explicit opt-in rather than being
  *  implied by using the product. `bodyHtml` already has the required unsubscribe/postal-address

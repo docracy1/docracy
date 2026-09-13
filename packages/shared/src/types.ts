@@ -311,6 +311,9 @@ export interface Env {
   /** Max custom retention a paid account may set at create time (days). Defaults to 500
    *  (tax-year vault ceiling) when unset. */
   DOC_TTL_MAX_DAYS?: string;
+  /** How many days after completion an anonymous document's web status/download page stays
+   *  viewable with no account. Defaults to 3 when unset. See docTtl.ts. */
+  ANONYMOUS_STATUS_ACCESS_DAYS?: string;
   FEEDBACK_EMAIL: string;
   /** Absent until a real Stripe account exists — billing routes must degrade gracefully (501),
    *  never throw, when these are unset. See lib/billing.ts. */

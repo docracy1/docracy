@@ -12,6 +12,17 @@ export function maxTtlDays(env: Env): number {
   return Number.isFinite(n) && n >= 1 ? n : PAID_TTL_MAX_DAYS_FALLBACK;
 }
 
+/** How many days after completion an anonymous (no doc.accountId) document's status page and PDF
+ *  stay viewable on the web with no account at all — env ANONYMOUS_STATUS_ACCESS_DAYS, default 3.
+ *  Deliberately shorter than defaultTtlDays (9): the document, its email delivery, and its full KV/
+ *  R2 TTL are completely unaffected — this only gates the web status/download view, and only once
+ *  fully signed, never an in-progress signature. See requiresAccountForContinuedAccess in
+ *  routes/sign.ts. */
+export function anonymousStatusAccessDays(env: Env): number {
+  const n = Number(env.ANONYMOUS_STATUS_ACCESS_DAYS);
+  return Number.isFinite(n) && n >= 1 ? n : 3;
+}
+
 /**
  * Resolves how long a new document should live.
  * - Free / anonymous: always the default (ignores any client-supplied value).

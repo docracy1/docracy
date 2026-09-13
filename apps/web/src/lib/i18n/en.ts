@@ -205,6 +205,8 @@ const en: Messages = {
   "sign.signed": "Signed",
   "sign.consent":
     "I confirm that I'm the person this link was sent to, and that clicking \"Complete signing\" is my electronic signature on this document — consistent with the U.S. ESIGN Act and UETA.",
+  "sign.marketingOptIn":
+    "Email me a few tips — and how to send my own documents for free (optional; reply anytime to stop).",
   "common.loading": "Loading…",
   "common.error": "Something went wrong",
   "footer.tagline": "Free, no-signup e-signatures that disappear once the chain is done.",
@@ -875,6 +877,9 @@ const en: Messages = {
   "status.seePaidPlans": "See paid plans",
   "status.dontLoseLink": "Save this send to your dashboard",
   "status.dontLoseLinkSub": "Create a free account and we'll attach this document to your history — no password needed. Keep this status link as a backup.",
+  "status.gate.headline": "Create a free account to keep viewing this document",
+  "status.gate.body":
+    "This document was fully signed a few days ago. The signed PDF was already emailed to everyone involved — creating a free account (no password, just a magic link) is the only way to keep viewing or re-downloading it here.",
   "sent.title": "On its way",
   "sent.titleFallback": "Sent",
   "sent.fallbackBody": "Your document was created. Check your email for status updates.",

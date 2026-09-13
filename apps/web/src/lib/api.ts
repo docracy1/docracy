@@ -142,12 +142,13 @@ export async function submitSignature(
   token: string,
   values: Array<{ fieldId: string; value: string }>,
   consent: boolean,
-  unlockToken?: string
+  unlockToken?: string,
+  marketingOptIn?: boolean
 ): Promise<{ ok: true; status: StatusPayload }> {
   const res = await apiFetch(`/api/sign/${token}`, {
     method: "POST",
     headers: { "Content-Type": "application/json", ...(unlockToken ? { "X-Sign-Unlock": unlockToken } : {}) },
-    body: JSON.stringify({ values, consent }),
+    body: JSON.stringify({ values, consent, ...(marketingOptIn ? { marketingOptIn: true } : {}) }),
   });
   return asJson(res);
 }
