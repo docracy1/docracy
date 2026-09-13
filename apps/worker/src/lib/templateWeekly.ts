@@ -5,11 +5,18 @@ import { listWeeklyOfficial, publishOfficialTemplate } from "./marketplaceTempla
 import { renderTemplatePdf, type TemplatePdfBlock } from "./templatePdf";
 import { isLatamJobPhraseTemplate } from "./latamJobPhrasePriority";
 import { ensureWeeklyTemplateInfra, shouldCatchUpWeeklyTemplates } from "./templateTopicQueue";
+import { getDrainBudgetRemaining, recordDrainBudgetUsage } from "./adminDrainBudget";
 import type { Env } from "@docracy/shared";
 
 const DEFAULT_MODEL = "@cf/meta/llama-3.1-8b-instruct-fp8";
 /** How many full FreeTemplate-quality docs to publish each Monday. */
 export const WEEKLY_TEMPLATE_BATCH = 10;
+/** How many queued topics runHourlyLegacyBatchDrain processes per hourly cron firing. Safe to run
+ *  much larger than the admin route's MAX_DRAIN_LIMIT (3): a Cron Trigger has no HTTP client
+ *  waiting on it, so it never risks the edge request-duration 524 that caps on-demand calls. The
+ *  real ceiling on how fast this can go is the shared daily KV budget (adminDrainBudget.ts), not
+ *  this number. */
+export const HOURLY_LEGACY_DRAIN_BATCH = 15;
 
 const RECURRING_CATEGORIES = [
   "Real Estate",
@@ -431,4 +438,29 @@ export async function runWeeklyTemplateCatchUpIfEmpty(env: Env): Promise<void> {
   }
   console.log("Weekly templates: weekly list empty — running publish catch-up");
   await runWeeklyTemplatePublish(env);
+}
+
+/**
+ * Hourly automatic drain of whatever's left in template_topic_queue (the legacy-batch-2 redraft
+ * backlog, at the time this was added) — runs unattended from the hourly cron instead of someone
+ * manually clicking a browser through the admin route one topic at a time. Shares the exact same
+ * KV daily budget as the admin drain-template-queue route (adminDrainBudget.ts): both draw from one
+ * number, so total drain volume for the day — automatic plus any manual admin calls — can never
+ * exceed DAILY_DRAIN_BUDGET regardless of which path drove it. No-op, cheaply, once the budget is
+ * exhausted or the queue is empty.
+ */
+export async function runHourlyLegacyBatchDrain(env: Env): Promise<WeeklyPublishResult> {
+  const empty: WeeklyPublishResult = { attempted: 0, published: 0, skipped: 0, queueWasEmpty: true, skips: [] };
+  if (!env.DOCRACY_DB || !env.AI) return empty;
+
+  const remaining = await getDrainBudgetRemaining(env);
+  if (remaining <= 0) {
+    console.log("Weekly templates: hourly drain skipped (daily budget exhausted)");
+    return { ...empty, queueWasEmpty: false };
+  }
+
+  const limit = Math.min(HOURLY_LEGACY_DRAIN_BATCH, remaining);
+  const result = await runWeeklyTemplatePublish(env, limit);
+  await recordDrainBudgetUsage(env, result.attempted);
+  return result;
 }

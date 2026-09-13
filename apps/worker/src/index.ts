@@ -44,7 +44,7 @@ import { runOnboardingEmailSweep } from "./lib/onboardingEmails";
 import { runCompletionEmailSweep } from "./lib/completionEmails";
 import { runSpaSmokeAndAlert } from "./lib/spaSmoke";
 import { BLOG_WEEKLY_CRON, runWeeklyBlogPublish, isWeeklyBlogMondayUtc } from "./lib/blogWeekly";
-import { runWeeklyTemplateCatchUpIfEmpty, runWeeklyTemplatePublish } from "./lib/templateWeekly";
+import { runHourlyLegacyBatchDrain, runWeeklyTemplateCatchUpIfEmpty, runWeeklyTemplatePublish } from "./lib/templateWeekly";
 import { reconcileStaleCheckouts } from "./lib/billingReconcile";
 import { runDuePinDeliverySweep } from "./lib/pinDelivery";
 import type { Env } from "@docracy/shared";
@@ -157,6 +157,10 @@ export default {
           await runWeeklyTemplateCatchUpIfEmpty(env).catch((err) =>
             console.error("Weekly template catch-up failed:", err)
           );
+          // Unattended continuation of whatever's left in template_topic_queue (the legacy-batch-2
+          // redraft backlog) — up to HOURLY_LEGACY_DRAIN_BATCH per firing, hard-capped for the day
+          // by the same KV budget the admin drain-template-queue route uses (adminDrainBudget.ts).
+          await runHourlyLegacyBatchDrain(env).catch((err) => console.error("Hourly legacy batch drain failed:", err));
         })()
       );
       return;

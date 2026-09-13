@@ -1,5 +1,11 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { parseAndValidateDraft, runWeeklyTemplateCatchUpIfEmpty, validateDraftWithReason } from "./templateWeekly";
+import {
+  parseAndValidateDraft,
+  runHourlyLegacyBatchDrain,
+  runWeeklyTemplateCatchUpIfEmpty,
+  validateDraftWithReason,
+} from "./templateWeekly";
+import { DAILY_DRAIN_BUDGET, getDrainBudgetUsed } from "./adminDrainBudget";
 import { renderTemplatePdf, TEXT_BLANK } from "./templatePdf";
 import { ensureWeeklyTemplateInfra, resetWeeklyTemplateInfraCacheForTests, shouldCatchUpWeeklyTemplates } from "./templateTopicQueue";
 import { makeMockEnv } from "../test/mockEnv";
@@ -282,6 +288,33 @@ describe("weekly template runtime infra", () => {
     // Mock AI throws, so drafts are invalid and the batch is skipped rather than published.
     expect(Number(skipped?.n ?? 0)).toBe(10);
     expect(await queuedTopicCount(d1)).toBe(511);
+  });
+});
+
+describe("runHourlyLegacyBatchDrain", () => {
+  it("drains up to HOURLY_LEGACY_DRAIN_BATCH topics and records the same daily budget the admin route uses", async () => {
+    const { env, d1 } = makeMockEnv();
+
+    const result = await runHourlyLegacyBatchDrain(env);
+
+    expect(result.attempted).toBe(15);
+    expect(await getDrainBudgetUsed(env)).toBe(15);
+    expect(await queuedTopicCount(d1)).toBe(521 - 15);
+  });
+
+  it("clamps to whatever daily budget remains and is a no-op once it's exhausted", async () => {
+    const { env } = makeMockEnv();
+    const todayKey = `admin-drain-budget:${new Date().toISOString().slice(0, 10)}`;
+    await env.DOCRACY_KV.put(todayKey, String(DAILY_DRAIN_BUDGET - 5));
+
+    const result = await runHourlyLegacyBatchDrain(env);
+    expect(result.attempted).toBe(5);
+    expect(await getDrainBudgetUsed(env)).toBe(DAILY_DRAIN_BUDGET);
+
+    const secondRun = await runHourlyLegacyBatchDrain(env);
+    expect(secondRun.attempted).toBe(0);
+    expect(secondRun.published).toBe(0);
+    expect(secondRun.skipped).toBe(0);
   });
 });
 

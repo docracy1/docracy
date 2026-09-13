@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import admin from "./admin";
 import { makeMockEnv } from "../test/mockEnv";
 import { createSession, SESSION_COOKIE_NAME } from "../lib/auth";
+import { DAILY_DRAIN_BUDGET } from "../lib/adminDrainBudget";
 import type { Env } from "@docracy/shared";
 
 const MOCK_CTX = { waitUntil: () => {}, passThroughOnException: () => {} } as unknown as ExecutionContext;
@@ -467,8 +468,8 @@ describe("POST /api/admin/drain-template-queue", () => {
     expect(res.status).toBe(200);
     const body: { attempted: number; dailyBudgetRemaining: number } = await res.json();
     expect(body.attempted).toBe(2);
-    // DAILY_DRAIN_BUDGET (100) minus the 2 topics this call attempted.
-    expect(body.dailyBudgetRemaining).toBe(98);
+    // DAILY_DRAIN_BUDGET minus the 2 topics this call attempted.
+    expect(body.dailyBudgetRemaining).toBe(DAILY_DRAIN_BUDGET - 2);
 
     const todayKey = `admin-drain-budget:${new Date().toISOString().slice(0, 10)}`;
     expect(await env.DOCRACY_KV.get(todayKey)).toBe("2");
@@ -478,7 +479,7 @@ describe("POST /api/admin/drain-template-queue", () => {
     const { env } = makeMockEnv({ ADMIN_EMAILS: "admin@example.com" });
     const headers = await sessionCookie(env, "admin@example.com");
     const todayKey = `admin-drain-budget:${new Date().toISOString().slice(0, 10)}`;
-    await env.DOCRACY_KV.put(todayKey, "100");
+    await env.DOCRACY_KV.put(todayKey, String(DAILY_DRAIN_BUDGET));
     const aiSpy = vi.spyOn(env.AI, "run").mockResolvedValue({ response: JSON.stringify({ title: "Sample Template" }) });
 
     const res = await admin.request("/drain-template-queue", postJson({ limit: 1 }, headers), env, MOCK_CTX);
@@ -494,7 +495,7 @@ describe("POST /api/admin/drain-template-queue", () => {
     const todayKey = `admin-drain-budget:${new Date().toISOString().slice(0, 10)}`;
     // Only 2 topics left in today's budget, even though MAX_DRAIN_LIMIT (3) and the requested
     // limit (999) would both allow more — the smallest of the three must win.
-    await env.DOCRACY_KV.put(todayKey, "98");
+    await env.DOCRACY_KV.put(todayKey, String(DAILY_DRAIN_BUDGET - 2));
     vi.spyOn(env.AI, "run").mockResolvedValue({ response: JSON.stringify({ title: "Sample Template" }) });
 
     const res = await admin.request("/drain-template-queue", postJson({ limit: 999 }, headers), env, MOCK_CTX);
