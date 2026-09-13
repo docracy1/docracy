@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { parseAndValidateDraft, runWeeklyTemplateCatchUpIfEmpty } from "./templateWeekly";
+import { parseAndValidateDraft, runWeeklyTemplateCatchUpIfEmpty, validateDraftWithReason } from "./templateWeekly";
 import { renderTemplatePdf, TEXT_BLANK } from "./templatePdf";
 import { ensureWeeklyTemplateInfra, resetWeeklyTemplateInfraCacheForTests, shouldCatchUpWeeklyTemplates } from "./templateTopicQueue";
 import { makeMockEnv } from "../test/mockEnv";
@@ -164,6 +164,32 @@ describe("weekly template FreeTemplate-parity validation", () => {
     });
     expect(parseAndValidateDraft(ack, { ...baseTopic, id: "ttq_119" })).not.toBeNull();
     expect(parseAndValidateDraft(ack, baseTopic)).toBeNull();
+  });
+
+  it("tags the specific rejection reason instead of just failing", () => {
+    expect(validateDraftWithReason("not json at all", baseTopic).reason).toBe("no-json-object-found");
+    expect(validateDraftWithReason("{ this is not valid json }", baseTopic).reason).toBe("json-parse-error");
+
+    const missingSeo = JSON.stringify({ title: "X" });
+    expect(validateDraftWithReason(missingSeo, baseTopic).reason).toBe("missing-core-seo-fields");
+
+    const tooFewSections = JSON.parse(richDraftJson());
+    tooFewSections.blocks = tooFewSections.blocks.filter((b: { type: string }) => b.type !== "section");
+    expect(validateDraftWithReason(JSON.stringify(tooFewSections), baseTopic).reason).toBe("too-few-sections");
+
+    const thinWords = JSON.parse(richDraftJson());
+    thinWords.blocks = thinWords.blocks.map((b: { type: string; text?: string }) =>
+      b.type === "paragraph" ? { ...b, text: "Short." } : b
+    );
+    expect(validateDraftWithReason(JSON.stringify(thinWords), baseTopic).reason).toBe("word-count-too-low");
+
+    const wrongOrder = JSON.parse(richDraftJson());
+    wrongOrder.blocks = wrongOrder.blocks.map((b: { type: string; signers?: unknown[] }) =>
+      b.type === "signatures" ? { type: "signatures", signers: [{ label: "Provider", order: 2 }, { label: "Client", order: 1 }] } : b
+    );
+    expect(validateDraftWithReason(JSON.stringify(wrongOrder), baseTopic).reason).toBe("signer-order-mismatch");
+
+    expect(validateDraftWithReason(richDraftJson(), baseTopic).reason).toBeNull();
   });
 });
 

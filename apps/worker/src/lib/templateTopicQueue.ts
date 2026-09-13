@@ -21,7 +21,8 @@ CREATE TABLE IF NOT EXISTS template_topic_queue (
   published_template_id TEXT,
   sort_order INTEGER NOT NULL DEFAULT 0,
   created_at TEXT NOT NULL,
-  published_at TEXT
+  published_at TEXT,
+  skip_reason TEXT
 )`;
 const QUEUE_INDEX_DDL = `
 CREATE INDEX IF NOT EXISTS idx_template_topic_queue_status_order

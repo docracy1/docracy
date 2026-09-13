@@ -123,78 +123,101 @@ function isBlock(raw: unknown): raw is TemplatePdfBlock {
   return false;
 }
 
-/** Exported for unit tests — enforces FreeTemplate-parity richness. */
-export function parseAndValidateDraft(raw: string, fallback: TopicRow): DraftedTemplate | null {
+export interface DraftValidationResult {
+  draft: DraftedTemplate | null;
+  /** Short machine-readable tag for which check first rejected the draft — null on success.
+   *  Exists so a multi-day drain (the 88% skip rate seen on the legacy-batch-2 redraft) can be
+   *  diagnosed in aggregate from D1 (see skip_reason column, migration 0036) instead of only from
+   *  whoever happened to be tailing live logs at the time. */
+  reason: string | null;
+}
+
+/** Enforces FreeTemplate-parity richness; returns *why* a draft was rejected alongside the usual
+ *  pass/fail so callers can record it. Exported for unit tests. */
+export function validateDraftWithReason(raw: string, fallback: TopicRow): DraftValidationResult {
+  const fail = (reason: string): DraftValidationResult => ({ draft: null, reason });
   const match = raw.match(/\{[\s\S]*\}/);
-  if (!match) return null;
+  if (!match) return fail("no-json-object-found");
+  let parsed: Record<string, unknown>;
   try {
-    const parsed = JSON.parse(sanitizeJsonStringNewlines(match[0])) as Record<string, unknown>;
-    const title = typeof parsed.title === "string" ? parsed.title.trim().slice(0, 100) : "";
-    const seoTitle =
-      typeof parsed.seoTitle === "string"
-        ? parsed.seoTitle.trim().slice(0, 120)
-        : title
-          ? `Free ${title.replace(/\bTemplate\b/i, "").trim()} Template`
-          : "";
-    const description = typeof parsed.description === "string" ? parsed.description.trim().slice(0, 200) : "";
-    const useCase = typeof parsed.useCase === "string" ? parsed.useCase.trim().slice(0, 600) : "";
-    const definition = typeof parsed.definition === "string" ? parsed.definition.trim().slice(0, 500) : "";
-    const legalSummary = typeof parsed.legalSummary === "string" ? parsed.legalSummary.trim().slice(0, 800) : "";
-    const keyClauses = Array.isArray(parsed.keyClauses)
-      ? parsed.keyClauses.filter((x): x is string => typeof x === "string" && x.trim().length > 0).map((s) => s.trim().slice(0, 120))
-      : [];
-    const fillInFields = Array.isArray(parsed.fillInFields)
-      ? parsed.fillInFields.filter((x): x is string => typeof x === "string" && x.trim().length > 0).map((s) => s.trim().slice(0, 80))
-      : [];
-    const chatgptPrompts = Array.isArray(parsed.chatgptPrompts)
-      ? parsed.chatgptPrompts.filter((x): x is string => typeof x === "string" && x.trim().length > 0).map((s) => s.trim().slice(0, 240))
-      : [];
-    const signerLabels = Array.isArray(parsed.signerLabels)
-      ? parsed.signerLabels.filter((x): x is string => typeof x === "string" && x.trim().length > 0).map((s) => s.trim().slice(0, 40))
-      : [];
-    const blocks = Array.isArray(parsed.blocks) ? parsed.blocks.filter(isBlock) : [];
+    parsed = JSON.parse(sanitizeJsonStringNewlines(match[0])) as Record<string, unknown>;
+  } catch {
+    // By far the most likely cause in practice: a genuinely rich draft (900 words of prose plus
+    // ~20-30 JSON blocks of surrounding structure) can overrun the 4096 max_tokens cap on
+    // draftFromTopic's AI call and get cut off mid-object — this looks identical to a model just
+    // writing malformed JSON, so this reason tag can't tell the two apart on its own.
+    return fail("json-parse-error");
+  }
+  const title = typeof parsed.title === "string" ? parsed.title.trim().slice(0, 100) : "";
+  const seoTitle =
+    typeof parsed.seoTitle === "string"
+      ? parsed.seoTitle.trim().slice(0, 120)
+      : title
+        ? `Free ${title.replace(/\bTemplate\b/i, "").trim()} Template`
+        : "";
+  const description = typeof parsed.description === "string" ? parsed.description.trim().slice(0, 200) : "";
+  const useCase = typeof parsed.useCase === "string" ? parsed.useCase.trim().slice(0, 600) : "";
+  const definition = typeof parsed.definition === "string" ? parsed.definition.trim().slice(0, 500) : "";
+  const legalSummary = typeof parsed.legalSummary === "string" ? parsed.legalSummary.trim().slice(0, 800) : "";
+  const keyClauses = Array.isArray(parsed.keyClauses)
+    ? parsed.keyClauses.filter((x): x is string => typeof x === "string" && x.trim().length > 0).map((s) => s.trim().slice(0, 120))
+    : [];
+  const fillInFields = Array.isArray(parsed.fillInFields)
+    ? parsed.fillInFields.filter((x): x is string => typeof x === "string" && x.trim().length > 0).map((s) => s.trim().slice(0, 80))
+    : [];
+  const chatgptPrompts = Array.isArray(parsed.chatgptPrompts)
+    ? parsed.chatgptPrompts.filter((x): x is string => typeof x === "string" && x.trim().length > 0).map((s) => s.trim().slice(0, 240))
+    : [];
+  const signerLabels = Array.isArray(parsed.signerLabels)
+    ? parsed.signerLabels.filter((x): x is string => typeof x === "string" && x.trim().length > 0).map((s) => s.trim().slice(0, 40))
+    : [];
+  const blocks = Array.isArray(parsed.blocks) ? parsed.blocks.filter(isBlock) : [];
 
-    const category =
-      typeof parsed.category === "string" && RECURRING_CATEGORIES.includes(parsed.category as (typeof RECURRING_CATEGORIES)[number])
-        ? parsed.category
-        : fallback.category;
+  const category =
+    typeof parsed.category === "string" && RECURRING_CATEGORIES.includes(parsed.category as (typeof RECURRING_CATEGORIES)[number])
+      ? parsed.category
+      : fallback.category;
 
-    let slug = slugify(typeof parsed.slug === "string" ? parsed.slug : fallback.slug || title);
-    if (!slug) slug = fallback.slug;
+  let slug = slugify(typeof parsed.slug === "string" ? parsed.slug : fallback.slug || title);
+  if (!slug) slug = fallback.slug;
 
-    if (!title || !seoTitle || !description || !useCase || !definition || !legalSummary) return null;
-    const jobPhrase = isLatamJobPhraseTemplate(fallback.id);
-    if (keyClauses.length < (jobPhrase ? 3 : 4) || fillInFields.length < (jobPhrase ? 3 : 4) || chatgptPrompts.length < 2) {
-      return null;
-    }
-    if (signerLabels.length < 1 || signerLabels.length > 3) return null;
+  if (!title || !seoTitle || !description || !useCase || !definition || !legalSummary) {
+    return fail("missing-core-seo-fields");
+  }
+  const jobPhrase = isLatamJobPhraseTemplate(fallback.id);
+  if (keyClauses.length < (jobPhrase ? 3 : 4)) return fail("too-few-key-clauses");
+  if (fillInFields.length < (jobPhrase ? 3 : 4)) return fail("too-few-fill-in-fields");
+  if (chatgptPrompts.length < 2) return fail("too-few-chatgpt-prompts");
+  if (signerLabels.length < 1 || signerLabels.length > 3) return fail("invalid-signer-label-count");
 
-    const sections = blocks.filter((b) => b.type === "section");
-    const paragraphs = blocks.filter((b) => b.type === "paragraph");
-    const fields = blocks.filter((b) => b.type === "field");
-    const sigBlocks = blocks.filter((b) => b.type === "signatures");
-    const minSections = jobPhrase ? 3 : 5;
-    const minParagraphs = jobPhrase ? 5 : 8;
-    const minFields = jobPhrase ? 3 : 4;
-    if (sections.length < minSections || paragraphs.length < minParagraphs || fields.length < minFields || sigBlocks.length !== 1) {
-      return null;
-    }
+  const sections = blocks.filter((b) => b.type === "section");
+  const paragraphs = blocks.filter((b) => b.type === "paragraph");
+  const fields = blocks.filter((b) => b.type === "field");
+  const sigBlocks = blocks.filter((b) => b.type === "signatures");
+  const minSections = jobPhrase ? 3 : 5;
+  const minParagraphs = jobPhrase ? 5 : 8;
+  const minFields = jobPhrase ? 3 : 4;
+  if (sections.length < minSections) return fail("too-few-sections");
+  if (paragraphs.length < minParagraphs) return fail("too-few-paragraphs");
+  if (fields.length < minFields) return fail("too-few-fields");
+  if (sigBlocks.length !== 1) return fail("signature-block-count-mismatch");
 
-    const wordCount = paragraphs
-      .map((b) => (b.type === "paragraph" ? b.text : ""))
-      .join(" ")
-      .split(/\s+/)
-      .filter(Boolean).length;
-    if (wordCount < (jobPhrase ? 200 : 350)) return null;
+  const wordCount = paragraphs
+    .map((b) => (b.type === "paragraph" ? b.text : ""))
+    .join(" ")
+    .split(/\s+/)
+    .filter(Boolean).length;
+  if (wordCount < (jobPhrase ? 200 : 350)) return fail("word-count-too-low");
 
-    const sig = sigBlocks[0];
-    if (!sig || sig.type !== "signatures") return null;
-    if (sig.signers.length !== signerLabels.length) return null;
-    for (let i = 0; i < signerLabels.length; i++) {
-      if (sig.signers[i]!.order !== i + 1) return null;
-    }
+  const sig = sigBlocks[0];
+  if (!sig || sig.type !== "signatures") return fail("missing-signature-block");
+  if (sig.signers.length !== signerLabels.length) return fail("signer-count-mismatch");
+  for (let i = 0; i < signerLabels.length; i++) {
+    if (sig.signers[i]!.order !== i + 1) return fail("signer-order-mismatch");
+  }
 
-    return {
+  return {
+    draft: {
       title,
       seoTitle,
       description,
@@ -208,13 +231,17 @@ export function parseAndValidateDraft(raw: string, fallback: TopicRow): DraftedT
       category,
       blocks,
       slug: slug.slice(0, 80),
-    };
-  } catch {
-    return null;
-  }
+    },
+    reason: null,
+  };
 }
 
-async function draftFromTopic(env: Env, topic: TopicRow): Promise<DraftedTemplate | null> {
+/** Exported for unit tests — enforces FreeTemplate-parity richness. */
+export function parseAndValidateDraft(raw: string, fallback: TopicRow): DraftedTemplate | null {
+  return validateDraftWithReason(raw, fallback).draft;
+}
+
+async function draftFromTopic(env: Env, topic: TopicRow): Promise<DraftValidationResult> {
   try {
     const result = await env.AI.run((env.WORKERS_AI_MODEL || DEFAULT_MODEL) as keyof AiModels, {
       temperature: 0.35,
@@ -234,11 +261,11 @@ async function draftFromTopic(env: Env, topic: TopicRow): Promise<DraftedTemplat
       ],
     });
     const raw = (result as { response?: string }).response?.trim();
-    if (!raw) return null;
-    return parseAndValidateDraft(raw, topic);
+    if (!raw) return { draft: null, reason: "empty-ai-response" };
+    return validateDraftWithReason(raw, topic);
   } catch (err) {
     console.error("Weekly template AI draft failed:", err);
-    return null;
+    return { draft: null, reason: "ai-call-threw" };
   }
 }
 
@@ -264,11 +291,11 @@ async function markTopicPublished(env: Env, topicId: string, templateId: string)
     .run();
 }
 
-async function markTopicSkipped(env: Env, topicId: string): Promise<void> {
+async function markTopicSkipped(env: Env, topicId: string, reason: string): Promise<void> {
   const db = requireDb(env);
   await db
-    .prepare(`UPDATE template_topic_queue SET status = 'skipped', published_at = ? WHERE id = ?`)
-    .bind(new Date().toISOString(), topicId)
+    .prepare(`UPDATE template_topic_queue SET status = 'skipped', published_at = ?, skip_reason = ? WHERE id = ?`)
+    .bind(new Date().toISOString(), reason, topicId)
     .run();
 }
 
@@ -279,6 +306,10 @@ export interface WeeklyPublishResult {
   /** True once this call found nothing queued to do — a cheap signal from the same query that
    *  already ran (nextQueuedTopics), not a fresh COUNT(*) scan. */
   queueWasEmpty: boolean;
+  /** slug + reason for every topic skipped this call — same tag stored in the topic's own
+   *  skip_reason column, surfaced here too so a manual admin drain call sees it immediately
+   *  without a separate D1 query. */
+  skips: { slug: string; reason: string }[];
 }
 
 /**
@@ -298,7 +329,7 @@ export interface WeeklyPublishResult {
  * every number here falls out of work this function was already doing internally, at no extra cost.
  */
 export async function runWeeklyTemplatePublish(env: Env, limit: number = WEEKLY_TEMPLATE_BATCH): Promise<WeeklyPublishResult> {
-  const empty: WeeklyPublishResult = { attempted: 0, published: 0, skipped: 0, queueWasEmpty: true };
+  const empty: WeeklyPublishResult = { attempted: 0, published: 0, skipped: 0, queueWasEmpty: true, skips: [] };
   if (!env.DOCRACY_DB) {
     console.log("Weekly templates: skipped (no D1)");
     return empty;
@@ -318,11 +349,16 @@ export async function runWeeklyTemplatePublish(env: Env, limit: number = WEEKLY_
 
   let published = 0;
   const publishedPaths: string[] = [];
+  const skips: { slug: string; reason: string }[] = [];
+  const skip = async (topic: TopicRow, reason: string, detail?: unknown) => {
+    console.error(`Weekly templates: skipping ${topic.slug} (${reason})`, detail ?? "");
+    await markTopicSkipped(env, topic.id, reason);
+    skips.push({ slug: topic.slug, reason });
+  };
   for (const topic of topics) {
-    const draft = await draftFromTopic(env, topic);
+    const { draft, reason } = await draftFromTopic(env, topic);
     if (!draft) {
-      console.error(`Weekly templates: thin/invalid AI draft for ${topic.slug} — skipping`);
-      await markTopicSkipped(env, topic.id);
+      await skip(topic, reason ?? "unknown");
       continue;
     }
 
@@ -330,16 +366,14 @@ export async function runWeeklyTemplatePublish(env: Env, limit: number = WEEKLY_
     try {
       pdf = await renderTemplatePdf(draft.title.toUpperCase(), draft.blocks);
     } catch (err) {
-      console.error(`Weekly templates: PDF render failed for ${topic.slug}:`, err);
-      await markTopicSkipped(env, topic.id);
+      await skip(topic, "pdf-render-failed", err);
       continue;
     }
 
     // Every signer must have a signature field (same rule as marketplace submit).
     const signerOrders = new Set(pdf.fields.filter((f) => f.type === "signature").map((f) => f.signerOrder));
     if (signerOrders.size !== draft.signerLabels.length) {
-      console.error(`Weekly templates: missing signature fields for ${topic.slug}`);
-      await markTopicSkipped(env, topic.id);
+      await skip(topic, "missing-signature-fields");
       continue;
     }
 
@@ -361,8 +395,7 @@ export async function runWeeklyTemplatePublish(env: Env, limit: number = WEEKLY_
       chatgptPrompts: draft.chatgptPrompts,
     });
     if (!created.ok) {
-      console.error(`Weekly templates: publish failed for ${topic.slug}: ${created.error}`);
-      await markTopicSkipped(env, topic.id);
+      await skip(topic, "publish-failed", created.error);
       continue;
     }
 
@@ -376,7 +409,7 @@ export async function runWeeklyTemplatePublish(env: Env, limit: number = WEEKLY_
     await pingIndexNow(publishedPaths);
   }
   console.log(`Weekly templates: published ${published}/${topics.length} this run`);
-  return { attempted: topics.length, published, skipped: topics.length - published, queueWasEmpty: false };
+  return { attempted: topics.length, published, skipped: topics.length - published, queueWasEmpty: false, skips };
 }
 
 /**
