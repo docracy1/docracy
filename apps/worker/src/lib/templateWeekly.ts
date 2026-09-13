@@ -142,10 +142,11 @@ export function validateDraftWithReason(raw: string, fallback: TopicRow): DraftV
   try {
     parsed = JSON.parse(sanitizeJsonStringNewlines(match[0])) as Record<string, unknown>;
   } catch {
-    // By far the most likely cause in practice: a genuinely rich draft (900 words of prose plus
-    // ~20-30 JSON blocks of surrounding structure) can overrun the 4096 max_tokens cap on
-    // draftFromTopic's AI call and get cut off mid-object — this looks identical to a model just
-    // writing malformed JSON, so this reason tag can't tell the two apart on its own.
+    // Most likely cause in practice: a genuinely rich draft (900 words of prose plus ~20-30 JSON
+    // blocks of surrounding structure) overruns draftFromTopic's AI call's max_tokens cap and gets
+    // cut off mid-object — this looks identical to a model just writing malformed JSON, so this
+    // reason tag can't tell the two apart on its own. Confirmed as a real, frequent cause in
+    // production (2 of the first 3 skips), which is why that cap was raised from 4096 to 8192.
     return fail("json-parse-error");
   }
   const title = typeof parsed.title === "string" ? parsed.title.trim().slice(0, 100) : "";
@@ -245,7 +246,10 @@ async function draftFromTopic(env: Env, topic: TopicRow): Promise<DraftValidatio
   try {
     const result = await env.AI.run((env.WORKERS_AI_MODEL || DEFAULT_MODEL) as keyof AiModels, {
       temperature: 0.35,
-      max_tokens: 4096,
+      // 4096 was cutting off genuinely rich, on-target drafts mid-JSON before their closing brace
+      // (2 of the first 3 real production skips were json-parse-error, not thin content) — raised
+      // so a full 450-900 word draft plus its ~25-block JSON scaffolding has room to actually finish.
+      max_tokens: 8192,
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         {
