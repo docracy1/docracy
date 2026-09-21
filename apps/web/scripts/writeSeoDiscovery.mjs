@@ -37,11 +37,61 @@ const ROBOTS_PREFIX_ALLOWS = [
   "Allow: /docracy-seal-icon.png$",
 ];
 
-const ROBOTS_DISALLOW = `
-# --- Token / API / short-links (explicit; longer than CF Allow: /) ---
-# /prepare /login /dashboard /roadmap /es/preparar stay crawlable so www + ?ref=
-# 301s do not land on a robots-blocked URL (GSC Redirect error). Those shells
-# stay noindex via meta + X-Robots-Tag.
+// App-shell pages that are real client-side routes (not prerendered — see routes[] below), but
+// still need to stay crawlable so 301s and query-string variants (?ref=, ?freeTemplate=) landing
+// on them don't hit the catch-all Disallow: / (a GSC "Blocked by robots.txt" error). No trailing
+// `$`: these are prefix Allows on purpose, so ?query strings are covered too — the whole reason
+// this list exists. The pages themselves stay noindex via meta + X-Robots-Tag regardless.
+const ROBOTS_APP_SHELL_ALLOWS = ["Allow: /prepare", "Allow: /login", "Allow: /dashboard", "Allow: /roadmap"];
+
+// Redirect *sources* that must stay explicitly Disallowed (short/outreach links, never meant to be
+// indexed) even though they appear in public/_redirects — excluded from the auto-derived allow list
+// below so this file keeps saying what it means instead of silently allow-listing them too.
+const REDIRECT_SOURCES_TO_KEEP_BLOCKED = [
+  /^\/go\//,
+  /^\/try$/,
+  /^\/nda$/,
+  /^\/price$/,
+  /^\/submit$/,
+  /^\/marketplace$/,
+];
+
+/**
+ * Every 301/302/200 redirect *source* in public/_redirects must itself be crawlable, or Googlebot
+ * can never fetch it to learn where it points — that's exactly what caused a slow, silently-growing
+ * "Blocked by robots.txt" backlog (GSC Coverage report, confirmed 2026-09-21): dozens of keyword-
+ * alias and A-vs-B-twin redirect sources had no matching Allow rule, so they fell through to the
+ * catch-all Disallow: / below. Deriving this from the actual _redirects file (instead of hand-
+ * maintaining a parallel list) means it can't drift out of sync with it again.
+ */
+function redirectSourceAllows(publicDir) {
+  const redirectsPath = path.join(publicDir, "_redirects");
+  if (!fs.existsSync(redirectsPath)) return "";
+  const lines = fs.readFileSync(redirectsPath, "utf8").split("\n");
+  const sources = new Set();
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+    const [source] = trimmed.split(/\s+/);
+    if (!source?.startsWith("/") || source.includes("*")) continue;
+    if (REDIRECT_SOURCES_TO_KEEP_BLOCKED.some((re) => re.test(source))) continue;
+    sources.add(source);
+  }
+  return [...sources]
+    .sort()
+    .map((p) => `Allow: ${p}$`)
+    .join("\n");
+}
+
+function robotsDisallow(publicDir) {
+  return `
+# --- App-shell routes that must stay crawlable for redirects/?query variants to resolve ---
+${ROBOTS_APP_SHELL_ALLOWS.join("\n")}
+
+# --- Redirect sources from public/_redirects (auto-derived — see redirectSourceAllows) ---
+${redirectSourceAllows(publicDir)}
+
+# --- Token / API / short-links (explicit; longer than the allows above) ---
 Disallow: /api/
 Disallow: /bulk-send
 Disallow: /auth/
@@ -63,13 +113,14 @@ Disallow: /submit$
 Disallow: /marketplace$
 Disallow: /prepare/sent
 
-# Catch-all for crawlers that don't get Cloudflare's managed Allow: /
+# Catch-all — anything not explicitly allowed above stays hidden from crawlers.
 Disallow: /
 
 Sitemap: https://docracy.io/sitemap.xml
 Sitemap: https://api.docracy.io/api/blog-posts/sitemap.xml
 Sitemap: https://api.docracy.io/api/marketplace/sitemap.xml
 `.trim();
+}
 
 /** EN/ES pairs Bing/Yandex must see. `Allow: /es/` already covers Spanish; EN needs an exact Allow
  *  because of the catch-all `Disallow: /`. Used by writeSeoDiscovery fallback + ensureLatamSitemap. */
@@ -372,11 +423,10 @@ ${unique.map(urlEntry).join("\n")}
 
   const robots = `# robots.txt for https://docracy.io
 #
-# NOTE: Cloudflare’s dashboard “AI Crawl Control” / Content-Signal managed block is
-# prepended live (User-agent: * + Content-Signal + Allow: /). Google merges both
-# User-agent: * groups and, at equal path length, prefers Allow over Disallow — so
-# the site-level \`Disallow: /\` alone does NOT hide token/API paths from
-# Googlebot. Those routes use longer explicit Disallow paths so they still win.
+# Everything not explicitly Allowed below falls to the catch-all \`Disallow: /\` at the very end —
+# there is no other rule (managed or otherwise) rescuing an unlisted path, confirmed by fetching
+# this file live as Googlebot. So every path real users or crawlers can legitimately land on
+# (a redirect source, an app-shell route with a ?query variant) needs its own explicit Allow here.
 #
 # Allow rules below are GENERATED from scripts/prerender.mjs (writeSeoDiscovery) —
 # do not hand-edit the Allow list; re-run the web build instead.
@@ -387,7 +437,7 @@ User-agent: *
 ${ROBOTS_PREFIX_ALLOWS.join("\n")}
 ${robotsAllowForRoutes(unique)}
 
-${ROBOTS_DISALLOW}
+${robotsDisallow(publicDir)}
 `;
 
   for (const dir of [distDir, publicDir]) {

@@ -1,10 +1,9 @@
 # robots.txt for https://docracy.io
 #
-# NOTE: Cloudflare’s dashboard “AI Crawl Control” / Content-Signal managed block is
-# prepended live (User-agent: * + Content-Signal + Allow: /). Google merges both
-# User-agent: * groups and, at equal path length, prefers Allow over Disallow — so
-# the site-level `Disallow: /` alone does NOT hide token/API paths from
-# Googlebot. Those routes use longer explicit Disallow paths so they still win.
+# Everything not explicitly Allowed below falls to the catch-all `Disallow: /` at the very end —
+# there is no other rule (managed or otherwise) rescuing an unlisted path, confirmed by fetching
+# this file live as Googlebot. So every path real users or crawlers can legitimately land on
+# (a redirect source, an app-shell route with a ?query variant) needs its own explicit Allow here.
 #
 # Allow rules below are GENERATED from scripts/prerender.mjs (writeSeoDiscovery) —
 # do not hand-edit the Allow list; re-run the web build instead.
@@ -197,10 +196,191 @@ Allow: /who-files-where$
 Allow: /yousign-alternative$
 Allow: /zoho-sign-alternative$
 
-# --- Token / API / short-links (explicit; longer than CF Allow: /) ---
-# /prepare /login /dashboard /roadmap /es/preparar stay crawlable so www + ?ref=
-# 301s do not land on a robots-blocked URL (GSC Redirect error). Those shells
-# stay noindex via meta + X-Robots-Tag.
+# --- App-shell routes that must stay crawlable for redirects/?query variants to resolve ---
+Allow: /prepare
+Allow: /login
+Allow: /dashboard
+Allow: /roadmap
+
+# --- Redirect sources from public/_redirects (auto-derived — see redirectSourceAllows) ---
+Allow: /1099$
+Allow: /1099-nec$
+Allow: /acta-nacimiento$
+Allow: /after-you-arrive$
+Allow: /alegra-vs-kita$
+Allow: /argentina-usa$
+Allow: /arrive-in-us$
+Allow: /bolivia-usa$
+Allow: /boundless$
+Allow: /carta-de-ingresos$
+Allow: /certificado-de-origen$
+Allow: /certificate-of-origin$
+Allow: /change-order$
+Allow: /chile-usa$
+Allow: /cita-consular$
+Allow: /citizen-path$
+Allow: /citizenpath$
+Allow: /citizenpath-vs-boundless$
+Allow: /colombia-usa$
+Allow: /commercial-invoice-packet$
+Allow: /constancia$
+Allow: /constancia-de-ingresos$
+Allow: /costa-rica-usa$
+Allow: /cuba-usa$
+Allow: /docracy-vs-alegra$
+Allow: /docracy-vs-boundless$
+Allow: /docracy-vs-citizenpath$
+Allow: /docracy-vs-kita$
+Allow: /docracy-vs-siigo$
+Allow: /docusign-vs-pandadoc$
+Allow: /dominican-republic-usa$
+Allow: /ecuador-usa$
+Allow: /el-salvador-usa$
+Allow: /es/a-donde-va$
+Allow: /es/acta-nacimiento$
+Allow: /es/alegra-vs-kita$
+Allow: /es/boundless$
+Allow: /es/busca$
+Allow: /es/buscador$
+Allow: /es/carta-de-ingresos$
+Allow: /es/carta-de-ingresos-usa$
+Allow: /es/certificado-de-origen$
+Allow: /es/change-order$
+Allow: /es/chip$
+Allow: /es/cita$
+Allow: /es/citizen-path$
+Allow: /es/citizenpath$
+Allow: /es/citizenpath-vs-boundless$
+Allow: /es/cobrar-por-whatsapp$
+Allow: /es/colombia-estados-unidos$
+Allow: /es/comprobante-de-pago$
+Allow: /es/constancia-ingresos-usa$
+Allow: /es/constancia-para-apartamento$
+Allow: /es/contratista-mexico$
+Allow: /es/de-argentina-a-eeuu$
+Allow: /es/de-bolivia-a-eeuu$
+Allow: /es/de-chile-a-eeuu$
+Allow: /es/de-colombia-a-eeuu$
+Allow: /es/de-costa-rica-a-eeuu$
+Allow: /es/de-cuba-a-eeuu$
+Allow: /es/de-ecuador-a-eeuu$
+Allow: /es/de-el-salvador-a-eeuu$
+Allow: /es/de-guatemala-a-eeuu$
+Allow: /es/de-honduras-a-eeuu$
+Allow: /es/de-mexico-a-eeuu$
+Allow: /es/de-nicaragua-a-eeuu$
+Allow: /es/de-panama-a-eeuu$
+Allow: /es/de-paraguay-a-eeuu$
+Allow: /es/de-peru-a-eeuu$
+Allow: /es/de-republica-dominicana-a-eeuu$
+Allow: /es/de-uruguay-a-eeuu$
+Allow: /es/de-venezuela-a-eeuu$
+Allow: /es/depa-houston$
+Allow: /es/despues-de-arribar$
+Allow: /es/docracy-vs-alegra$
+Allow: /es/docracy-vs-boundless$
+Allow: /es/docracy-vs-citizenpath$
+Allow: /es/docracy-vs-kita$
+Allow: /es/docracy-vs-siigo$
+Allow: /es/documentos-de-apoyo-visa$
+Allow: /es/documentos-inmigrante$
+Allow: /es/documentos-visa$
+Allow: /es/esim$
+Allow: /es/factura-por-whatsapp$
+Allow: /es/factura-whatsapp$
+Allow: /es/firmar-i-9$
+Allow: /es/formulario-i9$
+Allow: /es/gestoria-de-visa$
+Allow: /es/i-765$
+Allow: /es/i-9$
+Allow: /es/inmigrantes$
+Allow: /es/kit-inmigrante$
+Allow: /es/llegar-a-eeuu$
+Allow: /es/mexico-estados-unidos$
+Allow: /es/migrar-a-eeuu$
+Allow: /es/migrar-a-estados-unidos$
+Allow: /es/numero-itin$
+Allow: /es/orden-de-trabajo$
+Allow: /es/packing-list$
+Allow: /es/papeles-para-visa$
+Allow: /es/pedir-rfc$
+Allow: /es/permiso-de-trabajo$
+Allow: /es/prueba-de-ingresos-eeuu$
+Allow: /es/prueba-de-ingresos-estados-unidos$
+Allow: /es/quien-presenta$
+Allow: /es/renta-inmigrante$
+Allow: /es/siigo-vs-alegra$
+Allow: /es/siigo-vs-kita$
+Allow: /es/tps$
+Allow: /es/visa$
+Allow: /es/visa-gestoria$
+Allow: /es/w-7$
+Allow: /es/w-8ben$
+Allow: /es/ya-llegue$
+Allow: /esim$
+Allow: /eversign-vs-docusign$
+Allow: /eversign-vs-hellosign$
+Allow: /eversign-vs-pandadoc$
+Allow: /form-i-9$
+Allow: /freelancer-income-proof$
+Allow: /gestoria-de-visa$
+Allow: /get-paid-whatsapp$
+Allow: /guatemala-usa$
+Allow: /hellosign-vs-docusign$
+Allow: /hellosign-vs-pandadoc$
+Allow: /hire-in-colombia$
+Allow: /hire-in-mexico$
+Allow: /honduras-usa$
+Allow: /i-765$
+Allow: /i9$
+Allow: /immigrant-kit$
+Allow: /immigrant-lease$
+Allow: /import-from-docusign-eversign$
+Allow: /mercado-pago-invoice$
+Allow: /mexico-usa$
+Allow: /move-to-usa$
+Allow: /nicaragua-usa$
+Allow: /packing-list$
+Allow: /panama-usa$
+Allow: /paraguay-usa$
+Allow: /pay-stubs-alternative$
+Allow: /paypal-whatsapp$
+Allow: /pedir-rfc$
+Allow: /peru-usa$
+Allow: /proof-of-income-letter$
+Allow: /prove-i-paid$
+Allow: /search-latam$
+Allow: /send-invoice-whatsapp$
+Allow: /send-me-your-w9$
+Allow: /sign-i-9$
+Allow: /signed-change-order$
+Allow: /signnow-vs-docusign$
+Allow: /signnow-vs-eversign$
+Allow: /signnow-vs-hellosign$
+Allow: /signnow-vs-pandadoc$
+Allow: /siigo-vs-alegra$
+Allow: /siigo-vs-kita$
+Allow: /tax-year$
+Allow: /templates$
+Allow: /tps$
+Allow: /uruguay-usa$
+Allow: /venezuela-usa$
+Allow: /visa-documents$
+Allow: /visa-gestoria$
+Allow: /visa-packet$
+Allow: /visa-supporting$
+Allow: /w-7$
+Allow: /w-8ben$
+Allow: /w-9-archive$
+Allow: /w9-request$
+Allow: /whatsapp-invoice$
+Allow: /whatsapp-pay$
+Allow: /where-each-file-goes$
+Allow: /who-uploads-where$
+Allow: /work-order-packet$
+Allow: /work-permit$
+
+# --- Token / API / short-links (explicit; longer than the allows above) ---
 Disallow: /api/
 Disallow: /bulk-send
 Disallow: /auth/
@@ -222,7 +402,7 @@ Disallow: /submit$
 Disallow: /marketplace$
 Disallow: /prepare/sent
 
-# Catch-all for crawlers that don't get Cloudflare's managed Allow: /
+# Catch-all — anything not explicitly allowed above stays hidden from crawlers.
 Disallow: /
 
 Sitemap: https://docracy.io/sitemap.xml
