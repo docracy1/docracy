@@ -4329,6 +4329,7 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
     solution:
       "Docracy keeps the path short: upload or start from a free template, place fields, send. Up to 2 signers are free forever with no account for anyone; paid is a flat $10/mo workspace when you need more.",
     comparison: [
+            "No airSlate seat tiers or plan gates to unlock basic signing",
             "Free for up to 2 signers — no account for sender or signer",
             "Flat $10/month paid plan — not per seat",
             "WhatsApp signing links — SignNow doesn't offer this; Docracy includes 1 free/month",
@@ -4354,13 +4355,13 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
     solution:
       "Docracy is signing-only: free ≤2 signers, no accounts, WhatsApp delivery, flat $10/mo paid — without requiring a Zoho org.",
     comparison: [
+            "No Zoho org or suite subscription required for senders or signers",
             "Free for up to 2 signers — no account for sender or signer",
             "Flat $10/month paid plan — not per seat",
             "WhatsApp signing links — Zoho Sign doesn't offer this; Docracy includes 1 free/month",
             "AI-assisted field placement on paid accounts",
             "Sequential or parallel signing built in",
-            "Honest limit: not for ID-verified enterprise / QES workflows",
-            "No Zoho org required for senders or signers"
+            "Honest limit: not for ID-verified enterprise / QES workflows"
     ],
     ctaLabel: "Try free — send a sample NDA",
     ctaTo: "/prepare?freeTemplate=mutual-nda&ref=seo-zoho-sign-alternative",
@@ -4380,6 +4381,7 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
     solution:
       "Docracy stays SES-honest and fast: free for two-party docs, no account required, flat paid workspace pricing when you outgrow free.",
     comparison: [
+            "No enterprise compliance/procurement stack required for a simple NDA",
             "Free for up to 2 signers — no account for sender or signer",
             "Flat $10/month paid plan — not per seat",
             "WhatsApp signing links — OneSpan Sign doesn't offer this; Docracy includes 1 free/month",
@@ -4429,6 +4431,7 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
     solution:
       "Docracy removes the account step for everyday docs: free ≤2 signers, flat $10/mo paid, WhatsApp delivery included.",
     comparison: [
+            "No developer-plan shopping — works the same for a solo sender as a team",
             "Free for up to 2 signers — no account for sender or signer",
             "Flat $10/month paid plan — not per seat",
             "WhatsApp signing links — BoldSign doesn't offer this; Docracy includes 1 free/month",
@@ -4454,6 +4457,7 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
     solution:
       "Docracy keeps ≤2 signers free forever with no accounts, then a single flat paid workspace price.",
     comparison: [
+            "No volume-based upgrade prompts once you leave the smallest plan tier",
             "Free for up to 2 signers — no account for sender or signer",
             "Flat $10/month paid plan — not per seat",
             "WhatsApp signing links — SignRequest doesn't offer this; Docracy includes 1 free/month",
@@ -4479,13 +4483,13 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
     solution:
       "Docracy is deliberately SES-focused and fast: free two-party docs, no accounts, WhatsApp delivery, flat $10/mo paid.",
     comparison: [
+            "Honest SES positioning — we do not pretend to be QES, unlike Yousign's higher-assurance tiers",
             "Free for up to 2 signers — no account for sender or signer",
             "Flat $10/month paid plan — not per seat",
             "WhatsApp signing links — Yousign doesn't offer this; Docracy includes 1 free/month",
             "AI-assisted field placement on paid accounts",
             "Sequential or parallel signing built in",
-            "Honest limit: not for ID-verified enterprise / QES workflows",
-            "Honest SES positioning — we do not pretend to be QES"
+            "Honest limit: not for ID-verified enterprise / QES workflows"
     ],
     ctaLabel: "Try free — send a sample NDA",
     ctaTo: "/prepare?freeTemplate=mutual-nda&ref=seo-yousign-alternative",
@@ -4505,6 +4509,7 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
     solution:
       "Docracy is a focused signing product: free ≤2 signers, no accounts, flat paid workspace pricing.",
     comparison: [
+            "No Nitro PDF-suite seat required just to get a signature",
             "Free for up to 2 signers — no account for sender or signer",
             "Flat $10/month paid plan — not per seat",
             "WhatsApp signing links — Nitro Sign doesn't offer this; Docracy includes 1 free/month",
@@ -4530,6 +4535,7 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
     solution:
       "Docracy skips Google-account assumptions: email/SMS/WhatsApp delivery, no account for ≤2-signer docs, flat $10/mo paid.",
     comparison: [
+            "No Google account required for either side — works the same outside the Google ecosystem",
             "Free for up to 2 signers — no account for sender or signer",
             "Flat $10/month paid plan — not per seat",
             "WhatsApp signing links — DocHub doesn't offer this; Docracy includes 1 free/month",
@@ -4555,6 +4561,7 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
     solution:
       "Docracy is browser-native for senders and signers: free ≤2 signers, WhatsApp links, flat paid pricing.",
     comparison: [
+            "No app install for signers — works in any phone browser",
             "Free for up to 2 signers — no account for sender or signer",
             "Flat $10/month paid plan — not per seat",
             "WhatsApp signing links — SignEasy doesn't offer this; Docracy includes 1 free/month",
@@ -4580,6 +4587,7 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
     solution:
       "Docracy covers the light path: free two-party docs, no accounts, WhatsApp delivery, flat $10/mo paid.",
     comparison: [
+            "No mid-market feature bundle to pay for — just the signing chain itself",
             "Free for up to 2 signers — no account for sender or signer",
             "Flat $10/month paid plan — not per seat",
             "WhatsApp signing links — Blueink doesn't offer this; Docracy includes 1 free/month",
@@ -4605,13 +4613,13 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
     solution:
       "Upload a PDF to Docracy and send — free ≤2 signers, no Box seats, WhatsApp optional delivery.",
     comparison: [
+            "No Box storage plan or content-cloud seat required",
             "Free for up to 2 signers — no account for sender or signer",
             "Flat $10/month paid plan — not per seat",
             "WhatsApp signing links — Box Sign doesn't offer this; Docracy includes 1 free/month",
             "AI-assisted field placement on paid accounts",
             "Sequential or parallel signing built in",
-            "Honest limit: not for ID-verified enterprise / QES workflows",
-            "No Box storage plan required"
+            "Honest limit: not for ID-verified enterprise / QES workflows"
     ],
     ctaLabel: "Try free — send a sample NDA",
     ctaTo: "/prepare?freeTemplate=mutual-nda&ref=seo-box-sign-alternative",
@@ -4631,13 +4639,13 @@ export const ALTERNATIVE_PAGES: AlternativePageContent[] = [
     solution:
       "Docracy is the signing step only: free ≤2 signers, no accounts, flat $10/mo paid, WhatsApp delivery.",
     comparison: [
+            "No sales-room or content engagement suite required — just the signature",
             "Free for up to 2 signers — no account for sender or signer",
             "Flat $10/month paid plan — not per seat",
             "WhatsApp signing links — GetAccept doesn't offer this; Docracy includes 1 free/month",
             "AI-assisted field placement on paid accounts",
             "Sequential or parallel signing built in",
-            "Honest limit: not for ID-verified enterprise / QES workflows",
-            "No sales-room or content engagement suite required"
+            "Honest limit: not for ID-verified enterprise / QES workflows"
     ],
     ctaLabel: "Try free — send a sample NDA",
     ctaTo: "/prepare?freeTemplate=mutual-nda&ref=seo-getaccept-alternative",
