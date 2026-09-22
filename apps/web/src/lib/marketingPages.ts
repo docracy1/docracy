@@ -6106,6 +6106,11 @@ export interface IndustryPageContent {
   honestLimit?: string;
   ctaLabel: string;
   ctaTo: string;
+  /** Real, industry-specific FAQs — not a generated/templated block (see 2026-09-22 audit: the
+   *  old generator produced near-identical Q&A across all 14 industries). Each entry should ask
+   *  something an actual searcher in that industry would ask, grounded in this page's own
+   *  painPoints/honestLimit, not a generic "is it free" reworded per slug. */
+  faqs: { question: string; answer: string }[];
 }
 
 export const INDUSTRY_PAGES: IndustryPageContent[] = [
@@ -6135,6 +6140,23 @@ export const INDUSTRY_PAGES: IndustryPageContent[] = [
     ],
     ctaLabel: "Send your first client agreement",
     ctaTo: "/prepare?ref=seo-industry-freelancers",
+    faqs: [
+      {
+        question: "Does my client need to create an account to sign?",
+        answer:
+          "No — a client opens the signing link and signs on any device, no Docracy account and nothing to install. You only need an account yourself if you want your sent documents saved for next time.",
+      },
+      {
+        question: "How is this different from DocuSign or PandaDoc for a solo freelancer?",
+        answer:
+          "Those tools are priced for teams — per seat or per envelope, often with a minimum seat count. Docracy's free tier covers a client agreement or NDA outright for two-party signing, and the paid tier is a flat $10/month total, not per client or per document.",
+      },
+      {
+        question: "Can I also get paid through Docracy, not just get things signed?",
+        answer:
+          "Signing and getting paid are separate on purpose — once the agreement's signed, a paid account can send a cobro (the PDF plus your PayPal or Mercado Pago link) over WhatsApp. Docracy never touches the money; it just carries the link.",
+      },
+    ],
   },
   {
     slug: "creative-agencies",
@@ -6155,6 +6177,23 @@ export const INDUSTRY_PAGES: IndustryPageContent[] = [
     relevantTemplates: ["contractor-onboarding-agreement", "scope-of-work", "client-contract", "service-agreement"],
     ctaLabel: "Send a scope of work",
     ctaTo: "/prepare?ref=seo-industry-creative-agencies",
+    faqs: [
+      {
+        question: "Can I reuse the same onboarding contract for every new freelancer?",
+        answer:
+          "Yes — save a contractor onboarding agreement or client contract as a template once (a paid feature) and reuse it for every new hire or client, changing only the names and terms each time.",
+      },
+      {
+        question: "What happens if the scope changes mid-project?",
+        answer:
+          "Send a short change-order document through the same free signing flow — it doesn't need to be a whole new contract, just a signed, timestamped record of what changed.",
+      },
+      {
+        question: "Does a freelancer need an account to sign onboarding paperwork?",
+        answer:
+          "No — send the link, they sign, done. An account is only useful on the agency side, to keep a history of everyone you've onboarded.",
+      },
+    ],
   },
   {
     slug: "real-estate",
@@ -6183,6 +6222,23 @@ export const INDUSTRY_PAGES: IndustryPageContent[] = [
     ],
     ctaLabel: "Send a lease or vendor agreement",
     ctaTo: "/prepare?ref=seo-industry-real-estate",
+    faqs: [
+      {
+        question: "Can I use Docracy to close on a property sale?",
+        answer:
+          "No — that's exactly what the honest limit above covers. Property closings, title transfer, and anything requiring notarization need a title company or a notarized, identity-verified signing service. Docracy is for the everyday paperwork of managing a property: leases, subleases, and vendor work.",
+      },
+      {
+        question: "Is a roommate agreement actually legally enforceable?",
+        answer:
+          "It can be, depending on your state and what's in it — it won't override a lease you're not a party to, but it creates a clear, signed record of the rent split and house rules, which is usually what's actually in dispute.",
+      },
+      {
+        question: "Do I need a new lease template for every tenant?",
+        answer:
+          "No — start from the same lease or sublease template each time and just change the tenant, dates, and terms. There's no per-document fee on the free tier for two-party signing.",
+      },
+    ],
   },
   {
     slug: "construction",
@@ -6203,6 +6259,22 @@ export const INDUSTRY_PAGES: IndustryPageContent[] = [
     relevantTemplates: ["construction-contract", "work-order", "contractor-onboarding-agreement", "liability-waiver", "purchase-order"],
     ctaLabel: "Send a work order",
     ctaTo: "/prepare?ref=seo-industry-construction",
+    faqs: [
+      {
+        question: "Can I sign a work order from my phone on the job site?",
+        answer:
+          "Yes — the signing page works in any phone browser, no app to download, and it's built to be quick enough to fill in and send between jobs.",
+      },
+      {
+        question: "Does a subcontractor need to create an account?",
+        answer: "No — send them the onboarding agreement link, they sign, no account needed on their end.",
+      },
+      {
+        question: "How do I handle a change order that comes up mid-job?",
+        answer:
+          "Send it as its own short signed document — a changed price, materials, or timeline needs its own timestamp and signature, separate from the original contract.",
+      },
+    ],
   },
   {
     slug: "small-business",
@@ -6223,6 +6295,22 @@ export const INDUSTRY_PAGES: IndustryPageContent[] = [
     relevantTemplates: ["vendor-agreement", "employee-onboarding-agreement", "client-contract", "bill-of-sale", "cash-receipt", "sales-agreement"],
     ctaLabel: "Send a vendor agreement",
     ctaTo: "/prepare?ref=seo-industry-small-business",
+    faqs: [
+      {
+        question: "Can I use this for a one-time equipment sale, not an ongoing vendor relationship?",
+        answer:
+          "Yes — a bill of sale is a one-off document; there's no subscription needed to send a single one for free between two parties.",
+      },
+      {
+        question: "Do new hires need an account to sign onboarding paperwork?",
+        answer: "No — send the onboarding agreement link, they sign on their own device, no account required.",
+      },
+      {
+        question: "Is a signed cash receipt actually useful for my books?",
+        answer:
+          "Yes — it gives you and your accountant a timestamped, signed record of a cash transaction, which a text message or verbal confirmation doesn't.",
+      },
+    ],
   },
   {
     slug: "hr",
@@ -6252,6 +6340,22 @@ export const INDUSTRY_PAGES: IndustryPageContent[] = [
     ],
     ctaLabel: "Send an offer letter",
     ctaTo: "/prepare?ref=seo-industry-hr",
+    faqs: [
+      {
+        question: "Can I use Docracy for I-9 verification?",
+        answer:
+          "No — see the honest limit above. Our I-9 template is fillable, but federal law requires an in-person document inspection Docracy can't do; use it alongside your existing I-9 process, not instead of it.",
+      },
+      {
+        question: "How fast can an offer letter go out and come back signed?",
+        answer:
+          "As fast as you can fill in the template and send the link — most candidates sign within minutes, no account needed on their end.",
+      },
+      {
+        question: "Can I reuse the same separation agreement template for every departure?",
+        answer: "Yes, on a paid account — save it once and reuse it, changing only the specifics each time.",
+      },
+    ],
   },
   {
     slug: "legal",
@@ -6281,6 +6385,22 @@ export const INDUSTRY_PAGES: IndustryPageContent[] = [
     ],
     ctaLabel: "Send an NDA",
     ctaTo: "/prepare?ref=seo-industry-legal",
+    faqs: [
+      {
+        question: "Can I use Docracy for a document that needs a Qualified Electronic Signature?",
+        answer:
+          "No — see the honest limit above. Docracy's signatures are simple electronic signatures (SES), not QES, and we're not a Qualified Trust Service Provider. For matters that specifically require QES or notarization, use a provider licensed for that.",
+      },
+      {
+        question: "Does Docracy replace my practice-management system?",
+        answer:
+          "No — it only handles getting a document signed. Matter tracking, billing, and client management still live in whatever practice-management tool you already use.",
+      },
+      {
+        question: "Can a client sign an NDA before we've had our first call?",
+        answer: "Yes — send the link, they sign with no account, and you can have it back before the call even starts.",
+      },
+    ],
   },
   {
     slug: "sales",
@@ -6301,6 +6421,22 @@ export const INDUSTRY_PAGES: IndustryPageContent[] = [
     relevantTemplates: ["sales-agreement", "purchase-order", "referral-agreement", "installment-agreement", "bill-of-sale"],
     ctaLabel: "Send a sales agreement",
     ctaTo: "/prepare?ref=seo-industry-sales",
+    faqs: [
+      {
+        question: "Can a prospect sign while they're still on the call with me?",
+        answer:
+          "Yes — the free tier needs no account on their end, so you can send the link mid-call and often get it signed before you hang up.",
+      },
+      {
+        question: "Does this replace my CRM's e-sign add-on?",
+        answer:
+          "It can for two-party deals — Docracy doesn't plug directly into most CRMs yet (Zapier connects the two), but it removes the need to wait on a locked add-on for a simple signature.",
+      },
+      {
+        question: "Can I track a referral agreement the same way as a sales agreement?",
+        answer: "Yes — it's the same free signing flow regardless of which template you start from.",
+      },
+    ],
   },
   {
     slug: "recruiting",
@@ -6329,6 +6465,23 @@ export const INDUSTRY_PAGES: IndustryPageContent[] = [
     ],
     ctaLabel: "Send an offer letter",
     ctaTo: "/prepare?ref=seo-industry-recruiting",
+    faqs: [
+      {
+        question: "Does Docracy run background checks or verify identity?",
+        answer:
+          "No — see the honest limit above. It only handles the signature on offer letters and placement paperwork, not screening or identity verification.",
+      },
+      {
+        question: "How fast can I get an accepted offer signed and locked in?",
+        answer:
+          "As fast as you can send the link — no account is needed for the candidate to sign, so most offers come back the same day.",
+      },
+      {
+        question: "Are non-compete acknowledgments enforceable everywhere?",
+        answer:
+          "Enforceability depends on your state — some restrict or ban non-competes outright. Docracy handles the signature; whether the terms themselves hold up is a question for employment counsel.",
+      },
+    ],
   },
   {
     slug: "consulting",
@@ -6355,6 +6508,22 @@ export const INDUSTRY_PAGES: IndustryPageContent[] = [
     ],
     ctaLabel: "Send a consulting agreement",
     ctaTo: "/prepare?ref=seo-industry-consulting",
+    faqs: [
+      {
+        question: "Can a client sign a change order without a whole new contract?",
+        answer:
+          "Yes — send a short, signed change order documenting what changed. It doesn't need to restate the original agreement.",
+      },
+      {
+        question: "Does a subcontracted specialist need an account?",
+        answer: "No — send them the agreement link, they sign, no account required on their side.",
+      },
+      {
+        question: "Can I tie signed terms to milestone or retainer billing?",
+        answer:
+          "The payment-terms template lets you spell out milestone or retainer terms in the signed document itself — actual invoicing still happens through your own billing process.",
+      },
+    ],
   },
   {
     slug: "developers",
@@ -6377,6 +6546,22 @@ export const INDUSTRY_PAGES: IndustryPageContent[] = [
     relevantTemplates: ["independent-contractor-agreement", "freelance-service-agreement", "mutual-nda", "non-compete-non-solicitation-agreement"],
     ctaLabel: "Send a contractor agreement",
     ctaTo: "/prepare?ref=seo-industry-developers",
+    faqs: [
+      {
+        question: "Does the contractor agreement assign IP or code ownership to the client?",
+        answer:
+          "Not by default — see the honest limit above. Add explicit IP-assignment language to the document yourself before sending, or use a lawyer-drafted contract if that's central to the engagement.",
+      },
+      {
+        question: "Can I get an NDA signed before sharing repo access?",
+        answer: "Yes — send it first, no account needed for the other side to sign, then share access once it's back.",
+      },
+      {
+        question: "Is this worth it for just one contract a month between gigs?",
+        answer:
+          "That's exactly the case it's built for — the free tier covers occasional two-party signing without a subscription sized for a full-time team.",
+      },
+    ],
   },
   {
     slug: "startups",
@@ -6399,6 +6584,22 @@ export const INDUSTRY_PAGES: IndustryPageContent[] = [
     relevantTemplates: ["llc-operating-agreement", "partnership-agreement", "promissory-note", "mutual-nda", "letter-of-intent"],
     ctaLabel: "Send a founder agreement",
     ctaTo: "/prepare?ref=seo-industry-startups",
+    faqs: [
+      {
+        question: "Can I use Docracy for a SAFE or an equity round?",
+        answer:
+          "Not yet — see the honest limit above. There's no dedicated SAFE or cap-table template, and this isn't legal advice on structuring a raise. Have a lawyer draft or review anything with real equity terms.",
+      },
+      {
+        question: "Is a co-founder agreement actually binding without a lawyer?",
+        answer:
+          "It's a real, signed, timestamped record of what was agreed, which carries real weight — but for anything with equity splits or vesting, have a lawyer review it before it's the final version.",
+      },
+      {
+        question: "Can an advisor sign an NDA before seeing the deck?",
+        answer: "Yes — no account needed on their end, so you can send it right before the meeting.",
+      },
+    ],
   },
   {
     slug: "photographers",
@@ -6421,6 +6622,22 @@ export const INDUSTRY_PAGES: IndustryPageContent[] = [
     relevantTemplates: ["service-agreement", "client-contract", "payment-terms-agreement", "liability-waiver"],
     ctaLabel: "Send a shoot agreement",
     ctaTo: "/prepare?ref=seo-industry-photographers",
+    faqs: [
+      {
+        question: "Does the client contract cover model releases or image usage rights?",
+        answer:
+          "Not directly — see the honest limit above. These templates cover booking and payment; add model-release/usage language separately if the shoot needs it.",
+      },
+      {
+        question: "Does a client need an account to sign before the shoot?",
+        answer: "No — send the link, they sign on their phone, no account or app needed.",
+      },
+      {
+        question: "Can I require a signed deposit before I block off the date?",
+        answer:
+          "Yes — the payment-terms template lets you spell out deposit and milestone terms as part of the signed agreement itself.",
+      },
+    ],
   },
   {
     slug: "personal",
@@ -6443,5 +6660,21 @@ export const INDUSTRY_PAGES: IndustryPageContent[] = [
     relevantTemplates: ["roommate-agreement", "loan-agreement", "power-of-attorney", "liability-waiver", "authorization-form"],
     ctaLabel: "Send a roommate agreement",
     ctaTo: "/prepare?ref=seo-industry-personal",
+    faqs: [
+      {
+        question: "Can I use this for a power of attorney that needs to be notarized?",
+        answer:
+          "Docracy covers the signature and audit trail, not notarization — see the honest limit above. Check your state's specific requirements; many POAs need a notary regardless of how they're signed.",
+      },
+      {
+        question: "Is a signed loan agreement between friends actually enforceable?",
+        answer:
+          "It creates a real, timestamped record of the terms both people agreed to, which holds up far better than a text message if there's ever a disagreement — though enforceability in practice depends on your local small-claims rules.",
+      },
+      {
+        question: "Does the other person need to make an account to sign?",
+        answer: "No — they open the link and sign, no account or app required.",
+      },
+    ],
   },
 ];
