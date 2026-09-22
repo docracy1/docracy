@@ -49,10 +49,11 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
       "Every job type (roofing, remodeling, HVAC) reuses the same contract structure with different numbers",
     ],
     whyDocracy:
-      "Docracy sits next to BuilderPrime as the signing step: save your standard estimate or work-order template once, " +
-      "then reuse it for every job. Send it by WhatsApp for an on-the-spot signature — phone-bound and PIN-protected " +
-      "so it's clear who actually signed — or by email/SMS when that fits better. The homeowner never creates an account; " +
-      "you keep every signed document and its audit trail under yours.",
+      "The estimate you just built in BuilderPrime still needs a signature, and the homeowner is standing right " +
+      "there — not back at a desk checking email. Send it over WhatsApp for a phone-bound, PIN-protected signature " +
+      "on the spot, or by email/SMS when that fits better. Save the estimate or work-order structure once as a " +
+      "template so every job starts from the same clean document; the homeowner never creates an account, and you " +
+      "keep the signed file plus its audit trail.",
     features: [
       { title: "Reusable job templates", body: "Save your standard work order or service agreement once, reuse it for every estimate." },
       { title: "WhatsApp delivery with a PIN", body: "Phone-bound, PIN-protected signing — a stronger signal than an emailed PDF that anyone could sign." },
@@ -79,10 +80,10 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
       "Every rep re-creates the same quote/agreement structure instead of reusing one saved template",
     ],
     whyDocracy:
-      "Docracy is the external signing step your Salesforce workflow hands off to: save your standard quote or " +
-      "service agreement once as a reusable template, then send it for signature by email or WhatsApp the moment a " +
-      "deal is ready to close. The prospect signs without creating an account; you keep the signed PDF and a full " +
-      "delivery/read audit trail on your side.",
+      "A deal moves toward 'closed-won' in Salesforce, and the signature is still the one step that happens " +
+      "somewhere else entirely. Save your quote or service-agreement structure as a reusable template, then send it " +
+      "the moment the deal's ready — by email or WhatsApp, whichever the prospect actually checks. No account is " +
+      "required on their end, and a full delivery/read audit trail comes back to you automatically.",
     features: [
       { title: "Reusable quote templates", body: "Save your standard agreement structure once, reuse it for every opportunity." },
       { title: "WhatsApp delivery", body: "Reach mobile-first prospects on the channel they actually check." },
@@ -109,10 +110,11 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
       "Customers drop off when a simple approval turns into a full account signup",
     ],
     whyDocracy:
-      "Docracy works as the signing step your CRM or workflow tool hands off to. Automate it with the Zapier " +
-      "connector — \"when a deal reaches this stage, send the agreement\" — or send manually when you need to. " +
-      "Save your quote, vendor, or purchase-order template once and reuse it across every deal; the person signing " +
-      "never needs an account on your platform or Docracy's.",
+      "Whatever CRM or workflow tool tracks the deal, the actual signature usually happens somewhere else — that's " +
+      "the gap Docracy fills. Wire it into your process with the Zapier connector (\"when a deal reaches this " +
+      "stage, send the agreement\"), or send manually when that's easier. A saved quote, vendor, or purchase-order " +
+      "template means nobody's rebuilding the same document from scratch, and the person signing never needs an " +
+      "account on either platform.",
     features: [
       { title: "Zapier connector", body: "Trigger a signing request automatically from a CRM stage change or workflow event." },
       { title: "Reusable templates", body: "One saved template per document type — quotes, vendor terms, purchase orders." },
@@ -141,10 +143,10 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
       "Confirming who actually approved a change matters when it's disputed later",
     ],
     whyDocracy:
-      "Docracy delivers a signing link on the same channel your team already uses — SMS via carrier gateway, or a " +
-      "WhatsApp message with a phone-bound, PIN-protected link — so the customer signs without ever leaving the " +
-      "conversation or creating an account. A saved authorization or service-agreement template means agents send " +
-      "the same clean document every time, not a rebuilt PDF.",
+      "Asking a customer to leave the conversation and create an account just to sign something is exactly the " +
+      "moment a ticket stalls. Docracy drops a signing link straight into the same SMS or WhatsApp thread instead — " +
+      "phone-bound and PIN-protected — so they sign without ever switching tools. A saved authorization or " +
+      "service-agreement template keeps every agent sending the same clean document instead of rebuilding one.",
     features: [
       { title: "SMS delivery", body: "Signing links sent via carrier email-to-SMS gateway — no separate SMS platform needed." },
       { title: "WhatsApp delivery with PIN", body: "Stronger than a plain link: phone-bound and PIN-verified." },
@@ -170,9 +172,10 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
       "A staffing team needs proof of exactly when a candidate accepted, not just that a PDF exists somewhere",
     ],
     whyDocracy:
-      "Docracy meets candidates on WhatsApp — phone-bound and PIN-protected, so it's clear the actual candidate " +
-      "signed, not just whoever had the link. Save an offer letter or onboarding-agreement template once per role " +
-      "type and reuse it for every hire; a full audit trail records exactly when it was delivered, opened, and signed.",
+      "A candidate you just screened over WhatsApp shouldn't have to switch to email to sign the offer. Docracy " +
+      "meets them on the same channel — phone-bound and PIN-protected, so it's clear the actual candidate signed, " +
+      "not just whoever had the link. Save one offer-letter or onboarding template per role and reuse it for every " +
+      "hire, with a full audit trail of exactly when it was delivered, opened, and signed.",
     features: [
       { title: "Offer letter & onboarding templates", body: "Save once per role type, reuse for every candidate." },
       { title: "WhatsApp-native signing", body: "Phone-bound, PIN-protected delivery — stronger than an emailed PDF." },
@@ -199,10 +202,10 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
       "Proving a specific person acknowledged a specific policy version matters for compliance review",
     ],
     whyDocracy:
-      "Docracy adds the missing signed step: save an SOP or code-of-conduct acknowledgment as a reusable template " +
-      "once per course or policy, then send it to a student or trainee to sign in under a minute — no account " +
-      "needed on their end. For a whole cohort, send it to everyone at once with parallel signing; a full audit " +
-      "trail shows exactly who acknowledged what, and when.",
+      "\"Marked complete\" in a training platform or LMS isn't the same as a signed acknowledgment — that's the " +
+      "step Docracy adds. Save an SOP or code-of-conduct template once per course, then send it to a student or " +
+      "trainee to sign in under a minute, no account required. For a whole cohort, send it to everyone at once with " +
+      "parallel signing, and get a full audit trail of exactly who acknowledged what, and when.",
     features: [
       { title: "Acknowledgment templates", body: "Code-of-conduct and acceptable-use templates ready to reuse per course." },
       { title: "Parallel signing for cohorts", body: "Send the same document to an entire class or team at once." },
@@ -228,9 +231,10 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
       "Clients don't want to create an account just to approve one document",
     ],
     whyDocracy:
-      "Docracy takes whatever PDF you export — a finished agreement drafted in Evernote, a design brief or model " +
-      "release exported from Canva — and turns it into a signable document in one upload. The person approving it " +
-      "signs from a link, no account required; you keep a timestamped record that they actually did.",
+      "Wherever the draft actually lives — a finished agreement in Evernote, a design brief or release form built " +
+      "in Canva — getting it approved still means one more step. Export it as a PDF and Docracy turns it into a " +
+      "signable document in a single upload; whoever's approving it signs from a link with no account needed, and " +
+      "you keep a timestamped record that they actually did.",
     features: [
       { title: "Any PDF, any source", body: "Upload directly — no integration required to get started." },
       { title: "Model release & approval templates", body: "Ready-made templates for design and creative sign-off." },
@@ -256,10 +260,10 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
       "Every job reuses the same estimate structure but gets typed out fresh each time",
     ],
     whyDocracy:
-      "Docracy sends the signed estimate straight to a customer's phone — over WhatsApp, phone-bound and " +
-      "PIN-protected, or by SMS — while your crew is already on-site. Save your standard service-agreement " +
-      "template once and reuse it for every move; a full audit trail protects both sides if the details of what " +
-      "was agreed are ever disputed later.",
+      "The crew's already on-site, and the estimate needs a signature before the truck leaves — not after. Send " +
+      "it straight to the customer's phone over WhatsApp, phone-bound and PIN-protected, or by SMS. Save your " +
+      "standard service-agreement structure once and reuse it for every move, with a full audit trail protecting " +
+      "both sides if the details are ever disputed later.",
     features: [
       { title: "WhatsApp & SMS delivery", body: "Reach customers on the channel they're actually using, mid-move." },
       { title: "Reusable estimate template", body: "One saved template, reused for every job." },
@@ -285,9 +289,10 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
       "Staff and contractors need a fast, mobile-friendly way to sign — many aren't at a desk",
     ],
     whyDocracy:
-      "Docracy handles the administrative side: staffing agreements, onboarding paperwork, and authorization forms, " +
-      "sent by email, SMS, or WhatsApp and signed without an account. Save a template once per role or engagement " +
-      "type and reuse it across your staffing pool; a full audit trail records delivery, viewing, and signature.",
+      "Staffing agreements, onboarding paperwork, and authorization forms are the administrative layer Docracy is " +
+      "built for — sent by email, SMS, or WhatsApp and signed without an account on either end. Save one template " +
+      "per role or engagement type and reuse it across your whole staffing pool, with a full audit trail recording " +
+      "delivery, viewing, and signature.",
     features: [
       { title: "Onboarding templates", body: "Reusable staffing-agreement and onboarding templates." },
       { title: "Mobile-first signing", body: "WhatsApp and SMS delivery for staff who aren't at a desk." },
@@ -317,10 +322,10 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
       "Onboarding every contractor into a portal just to get a signature is more friction than the job justifies",
     ],
     whyDocracy:
-      "Docracy lets you standardize a vendor-agreement or work-order template once, then reuse it across every " +
-      "site and contractor. Send it over WhatsApp or SMS for a fast on-site signature, phone-bound and " +
-      "PIN-protected — no portal, no account for the contractor. Every site's paperwork lands in the same " +
-      "structure, with its own audit trail.",
+      "Every site ending up with its own slightly different version of the same vendor agreement is exactly the " +
+      "problem one standardized template fixes. Save it once, reuse it across every site and contractor, and send " +
+      "it over WhatsApp or SMS for a fast, phone-bound, PIN-protected signature — no portal, no account to set up. " +
+      "Each site's paperwork lands in the same structure, with its own audit trail.",
     features: [
       { title: "One template, every site", body: "Standardize vendor and work-order paperwork across your whole portfolio." },
       { title: "WhatsApp & SMS delivery", body: "On-site contractors sign from their phone — no portal required." },
@@ -346,9 +351,10 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
       "Vendor and courier agreements need to be standardized without slowing anyone down",
     ],
     whyDocracy:
-      "Docracy's signers never need an account — a courier or recipient signs a delivery confirmation from a link " +
-      "in seconds, phone-bound and PIN-protected if it's delivered over WhatsApp. Save a delivery-confirmation or " +
-      "vendor-agreement template once and reuse it across your whole fleet.",
+      "A courier or recipient standing at the door isn't going to sit through an account signup, so Docracy " +
+      "doesn't ask for one — they sign a delivery confirmation from a link in seconds, phone-bound and " +
+      "PIN-protected when it's sent over WhatsApp. Save a delivery-confirmation or vendor-agreement template once " +
+      "and reuse it across your whole fleet.",
     features: [
       { title: "No account for couriers or recipients", body: "Sign from a link — nothing to install or register." },
       { title: "WhatsApp & SMS delivery", body: "Fast, mobile-first signing for delivery and courier workflows." },
@@ -374,10 +380,11 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
       "Vendor NDAs need a real audit trail, not just an emailed PDF and an honor system",
     ],
     whyDocracy:
-      "Docracy works as a lightweight signing layer next to whatever you already have on SharePoint or your " +
-      "intranet: link out to Docracy for the signature step on an acceptable-use policy, code-of-conduct document, " +
-      "or vendor NDA, then keep the signed PDF and a full delivery/read audit trail for security review. Send to " +
-      "an entire team at once with parallel signing.",
+      "A full enterprise e-signature suite is its own procurement project — Docracy is meant to sit next to " +
+      "whatever you already run on SharePoint or your intranet instead. Link out to it for the signature step on " +
+      "an acceptable-use policy, code-of-conduct document, or vendor NDA, and keep the signed PDF plus a full " +
+      "delivery/read audit trail for security review. Send to an entire team at once with parallel signing when " +
+      "the whole org needs to sign the same thing.",
     features: [
       { title: "Acknowledgment templates", body: "Acceptable-use and code-of-conduct templates ready to reuse." },
       { title: "Org-wide parallel signing", body: "Send the same policy to an entire team or department at once." },
@@ -404,10 +411,10 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
       "Clients drop off between \"yes, let's do it\" and actually getting a contract signed",
     ],
     whyDocracy:
-      "Docracy gives event vendors and local service businesses a saved template for their standard contract — a " +
-      "photography agreement, model release, or service quote — sent for signature the moment a client says yes. " +
-      "No account required on the client's side; WhatsApp delivery works well for clients you're already " +
-      "texting with about the booking.",
+      "The moment between a client saying yes and actually getting a contract signed is exactly where bookings " +
+      "fall through. Save your standard photography agreement, model release, or service quote as a template, " +
+      "then send it for signature the second they say yes — no account required, and WhatsApp delivery works well " +
+      "for clients you're already texting with about the booking.",
     features: [
       { title: "Photography & event templates", body: "Ready-made contracts for common event and creative-services bookings." },
       { title: "WhatsApp delivery", body: "Send the contract in the same conversation you're already having with a client." },
@@ -1037,8 +1044,9 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
     honestLimit:
       "A handful of German contracts require strict written form (Schriftform, § 126 BGB), which under § 126a BGB can only be satisfied by a " +
       "Qualified Electronic Signature (QES) — examples include employment terminations, guarantees given by private individuals, residential " +
-      "leases over a year, and consumer credit agreements. Docracy is not a Qualified Trust Service Provider and doesn't issue QES, so those " +
-      "need a certified QTSP or a wet-ink signature. Real estate transfers require notarization regardless of signature method.",
+      "leases over a year, and consumer credit agreements. For those specific cases, only a certified Qualified Trust Service Provider (QTSP) " +
+      "or a wet-ink signature will satisfy the requirement — Docracy doesn't offer QES. Real estate transfers require notarization regardless " +
+      "of signature method.",
     relevantTemplates: ["mutual-nda", "freelance-service-agreement", "consulting-agreement"],
     ctaLabel: "Try free — send a sample freelance agreement",
     ctaTo: "/prepare?freeTemplate=freelance-service-agreement&ref=partner-germany",
@@ -1070,9 +1078,9 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
       { title: "Audit trail as proof", body: "Delivery, read, and signature timestamps kept alongside the signed document." },
     ],
     honestLimit:
-      "The standard signature is a Simple Electronic Signature with no identity verification — fine for most everyday agreements, but Docracy " +
-      "is not a Qualified Trust Service Provider and doesn't issue a Qualified Electronic Signature (QES), which some specific German contracts " +
-      "legally require instead.",
+      "The default here is a Simple Electronic Signature with no identity verification — the right fit for most everyday agreements. A small " +
+      "number of German contracts require a Qualified Electronic Signature (QES) by law instead; since Docracy isn't a Qualified Trust Service " +
+      "Provider, those specific cases need a certified QTSP.",
     relevantTemplates: ["mutual-nda", "service-agreement", "freelance-service-agreement"],
     ctaLabel: "Try free — send a sample NDA",
     ctaTo: "/prepare?freeTemplate=mutual-nda&ref=partner-digital-unterschreiben",
