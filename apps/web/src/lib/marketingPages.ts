@@ -45,17 +45,61 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     heroSubheadline:
       "Built for quick, low-stakes documents — no subscriptions, no complexity, no setup. Perfect for NDAs, client contracts, onboarding docs, and one-off deals.",
     problem:
-      "Most e-signature tools are built for enterprise workflows. If you only need to send a few simple agreements, they slow you down with accounts, onboarding, and bloated features.",
+      "Most e-signature tools assume you're signing a lot of documents, all the time — so they front-load an " +
+      "account, a workspace, and a pile of enterprise features before you've sent a single thing. If what you " +
+      "actually need is to get one NDA or one-off agreement signed today, that setup is pure overhead: a login " +
+      "screen standing between you and the thing you actually came to do.",
     solution:
-      "Docracy.io gives you a clean, lightweight signing flow designed for fast, simple documents. Upload → send → sign → done.",
+      "Docracy skips straight to the part that matters: upload a PDF or start from a free template, place the " +
+      "signature fields, and send. The person signing opens a link and signs — no account, no software to install " +
+      "— and you get back a completed, timestamped PDF. Free covers up to two signers; a flat $10/month paid plan " +
+      "adds unlimited signers, reusable templates, and team access once you outgrow that.",
     features: [
-      { title: "Simple document sending", body: "Upload and send agreements instantly." },
-      { title: "Clean signing experience", body: "Recipients sign without accounts or friction." },
-      { title: "AI-assisted field placement", body: "Signature fields placed automatically — on a paid account." },
-      { title: "One-off agreements", body: "Perfect for quick, personal documents — free, no account needed." },
-      { title: "Secure storage", body: "Encrypted, safe, and fully traceable." },
+      {
+        title: "Upload and send in under a minute",
+        body: "Drop in any PDF you already have, or start from one of 700+ free templates, and send it out for signature the same minute you open the tab.",
+      },
+      {
+        title: "No account for whoever's signing",
+        body: "Recipients open the emailed link, review the document, and sign — nothing to install, nothing to register for, on any device.",
+      },
+      {
+        title: "AI-assisted field placement",
+        body: "Upload a document and Docracy finds where the signature, date, and initial fields go automatically — on a paid account.",
+      },
+      {
+        title: "Free for one-off, two-party deals",
+        body: "Splitting a bill, selling something, settling a favor — sign it free, no account, and it's gone once the chain is done.",
+      },
+      {
+        title: "Encrypted, timestamped storage",
+        body: "Every completed document is encrypted and comes with a delivery, view, and signature audit trail you can point to later.",
+      },
     ],
-    useCases: ["NDAs for freelancers", "Client contracts", "HR onboarding documents", "Vendor agreements", "Simple personal deals"],
+    useCases: [
+      "A freelancer sending a quick NDA before a discovery call",
+      "Two people splitting a security deposit or a one-time expense",
+      "A landlord and tenant agreeing to a short lease amendment",
+      "A one-off vendor or service agreement that doesn't justify a subscription",
+      "Any two-party agreement you'd otherwise just email back and forth as an attachment",
+    ],
+    faqs: [
+      {
+        question: "Do I need to create an account to send or sign a document?",
+        answer:
+          "Signing is always free with no account required for the person signing. If you're the one sending documents regularly, an account just gives you somewhere to keep a history of what you've sent.",
+      },
+      {
+        question: "How many signers can sign for free?",
+        answer:
+          "Up to two people per document, for free, forever. Need more signers, saved templates, or team access? That's a flat $10/month — never per seat.",
+      },
+      {
+        question: "Are these signatures legally binding?",
+        answer:
+          "Docracy's signing flow is designed to support the U.S. ESIGN Act and UETA for everyday agreements. It doesn't verify who's actually behind the keyboard — see /trust for exactly what that does and doesn't cover.",
+      },
+    ],
     ctaLabel: "Start free — no account required",
     ctaTo: "/prepare",
     relatedLinks: [
@@ -166,20 +210,61 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
     heroHeadline: "Sign onboarding documents fast — without enterprise complexity.",
     heroSubheadline: "Perfect for HR teams, small businesses, and contractors.",
     problem:
-      "Onboarding documents often get stuck in slow workflows: email attachments, missing signatures, confusing tools, and manual follow-ups.",
+      "Onboarding paperwork tends to move slower than everything else around a new hire — an offer letter goes " +
+      "out as an email attachment, gets signed (or half-signed) days later, and by the time HR notices a policy " +
+      "acknowledgment never came back, the new hire has already started. Most e-signature tools built for this " +
+      "don't help much either: they're priced and packaged for a full HRIS rollout, not for a small team that just " +
+      "needs three documents signed before day one.",
     solution:
-      "Docracy.io gives HR teams a clean, fast signing flow for onboarding documents — no accounts, no friction, no bloated features.",
+      "Docracy handles the signature step directly: save an offer letter, policy acknowledgment, or onboarding " +
+      "agreement as a reusable template once, then send it to a new hire the moment it's needed. They sign from a " +
+      "link with no account to create, and HR keeps a timestamped record — delivery, viewing, and signature — for " +
+      "every document, without needing an HRIS or a per-seat licensing agreement.",
     features: [
-      { title: "Simple onboarding document sending", body: "Upload offer letters, policies, or agreements and send them in seconds." },
-      { title: "AI-assisted field placement", body: "Signature and date fields placed automatically — on a paid account." },
       {
         title: "Reusable onboarding templates",
-        body: "Save your standard onboarding paperwork once and reuse it for every new hire — on a paid account.",
+        body: "Save your standard offer letter, policy acknowledgment, or onboarding agreement once and reuse it for every new hire — on a paid account.",
       },
-      { title: "Secure audit trail", body: "Every document gets a timestamped record of who signed and when." },
-      { title: "Team access for HR workflows", body: "Invite HR teammates to share templates under one paid workspace." },
+      {
+        title: "No account for new hires",
+        body: "A new hire opens the link, reads the document, and signs — nothing to register for on their end, even before their first day.",
+      },
+      {
+        title: "AI-assisted field placement",
+        body: "Upload your own offer letter or policy PDF and Docracy places the signature and date fields automatically — on a paid account.",
+      },
+      {
+        title: "A real audit trail per hire",
+        body: "Delivery, view, and signature timestamps for every document — useful if a start date, policy version, or acknowledgment is ever in question.",
+      },
+      {
+        title: "Shared templates for the whole HR team",
+        body: "Invite teammates to a shared workspace so everyone on HR sends the same up-to-date paperwork, not five slightly different versions.",
+      },
     ],
-    useCases: ["New hire agreements", "Policy acknowledgements", "Compliance forms", "Contractor onboarding", "Internal approvals"],
+    useCases: [
+      "Sending a signed offer letter the same day a candidate accepts",
+      "Collecting a remote-work policy or code-of-conduct acknowledgment before day one",
+      "Getting a contractor onboarding agreement signed before a new contractor starts billable work",
+      "Standardizing onboarding paperwork across multiple hiring managers",
+      "Keeping a signed, dated record of every policy update an employee has acknowledged",
+    ],
+    faqs: [
+      {
+        question: "Does a new hire need to create an account to sign onboarding paperwork?",
+        answer:
+          "No — they open the link from their email and sign. An account is only useful on the HR side, to save templates and keep a history of who's signed what.",
+      },
+      {
+        question: "Can I reuse the same offer letter or policy template for every hire?",
+        answer: "Yes, on a paid account — save it once and reuse it, just filling in the specifics for each new hire.",
+      },
+      {
+        question: "Does this replace our HRIS or onboarding software?",
+        answer:
+          "No — Docracy only handles the signature step. Background checks, benefits enrollment, and payroll still need your existing HR tools; Docracy just gets the paperwork signed.",
+      },
+    ],
     ctaLabel: "Send onboarding documents",
     ctaTo: "/prepare?freeTemplate=offer-letter",
     relatedLinks: [
