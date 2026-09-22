@@ -28,12 +28,57 @@ export interface SeoLandingPageContent extends SeoLandingCopy {
 
 const COMPETITORS = ["PandaDoc", "DocuSign", "HelloSign", "Eversign", "SignNow"];
 
+/** Stable, well-known positioning per competitor — not pricing (that goes stale), just what
+ *  each product actually is. Used so every A-vs-B page says something true and specific about
+ *  *these two* tools, instead of the old shared table that was byte-identical across all 10
+ *  pairs (see 2026-09-22 landing-page audit). */
+const COMPETITOR_PROFILES: Record<string, { builtFor: string; blurb: string }> = {
+  PandaDoc: {
+    builtFor: "Proposals & quotes with e-signature attached",
+    blurb: "PandaDoc leans into proposal and quote documents with signing bundled in, more sales tool than pure e-sign app",
+  },
+  DocuSign: {
+    builtFor: "Enterprise e-signature standard, deep add-on catalog",
+    blurb:
+      "DocuSign is the best-known enterprise e-signature brand, with add-ons like identity verification and notarization built for large, regulated organizations",
+  },
+  HelloSign: {
+    builtFor: "Dropbox's developer-first e-sign API",
+    blurb:
+      "HelloSign (Dropbox Sign) is positioned as a lighter, API-first alternative to a full enterprise suite — popular for teams embedding signing into their own product",
+  },
+  Eversign: {
+    builtFor: "Budget e-signature tool for small teams",
+    blurb:
+      "Eversign markets itself as a cheaper small-team alternative to DocuSign — it acquired the original Docracy.com in 2019 and absorbed its user base",
+  },
+  SignNow: {
+    builtFor: "One piece of airSlate's document-workflow suite",
+    blurb:
+      "SignNow is owned by airSlate and sold less as a standalone e-signature app than as one part of a broader forms-and-workflow-automation platform",
+  },
+};
+
 type VsPageMeta = Pick<
   SeoLandingPageContent,
   "seoTitle" | "seoDescription" | "heroHeadline" | "heroSubheadline"
 >;
 
-/** High-intent pairs get tighter SERP copy; everything else uses the default template. */
+/** Built from each pair's real, stable positioning (COMPETITOR_PROFILES) rather than one
+ *  generic sentence with names swapped in. VS_PAGE_OVERRIDES below still wins for the two
+ *  highest-intent pairs that earned hand-tuned SERP copy. */
+function defaultPairCopy(comp1: string, comp2: string): VsPageMeta {
+  const p1 = COMPETITOR_PROFILES[comp1];
+  const p2 = COMPETITOR_PROFILES[comp2];
+  return {
+    seoTitle: `${comp1} vs ${comp2} (2026): Which E-Sign Tool Fits? | Docracy`,
+    seoDescription: `${p1.blurb}, while ${p2.blurb.charAt(0).toLowerCase()}${p2.blurb.slice(1)}. Here's how the two compare, plus a free flat-rate option for two-party signing.`,
+    heroHeadline: `${comp1} vs ${comp2}`,
+    heroSubheadline: `${p1.blurb}. ${p2.blurb}. Here's how they actually differ — and a simpler flat-rate option if you just need a document signed.`,
+  };
+}
+
+/** High-intent pairs get tighter, hand-tuned SERP copy; everything else uses defaultPairCopy(). */
 const VS_PAGE_OVERRIDES: Record<string, VsPageMeta> = {
   "hellosign-vs-signnow": {
     seoTitle: "HelloSign vs SignNow (2026): Pricing & Features | Docracy",
@@ -56,8 +101,10 @@ const VS_PAGE_OVERRIDES: Record<string, VsPageMeta> = {
 // Deliberately no invented per-competitor pricing figures — those go stale and we'd be
 // guessing. Rows describe the well-known per-seat/enterprise-onboarding pattern both
 // tools share, contrasted with Docracy's flat/free model, which we do control and can
-// state precisely — honest, but leaning into the comparisons that favor Docracy.
-const COMPARISON_ROWS: SeoComparisonRow[] = [
+// state precisely — honest, but leaning into the comparisons that favor Docracy. Shared
+// across all 10 pairs on purpose (it's true of every pair); buildPairComparisonRows()
+// below prepends a row specific to *this* pair so the table isn't identical page to page.
+const SHARED_COMPARISON_ROWS: SeoComparisonRow[] = [
   {
     feature: "Pricing model",
     docracyValue: "Free for up to 2 signers, forever. Flat $10/mo for unlimited — never per-seat.",
@@ -96,6 +143,18 @@ const COMPARISON_ROWS: SeoComparisonRow[] = [
   },
 ];
 
+function buildPairComparisonRows(comp1: string, comp2: string): SeoComparisonRow[] {
+  return [
+    {
+      feature: "What it's built for",
+      docracyValue: "Fast two-party signing — not a proposal, workflow, or enterprise suite",
+      competitorValue: COMPETITOR_PROFILES[comp1].builtFor,
+      secondCompetitorValue: COMPETITOR_PROFILES[comp2].builtFor,
+    },
+    ...SHARED_COMPARISON_ROWS,
+  ];
+}
+
 export const SEO_FAQS: { question: string; answer: string }[] = [
   {
     question: "Do I need to create an account to sign a document with Docracy?",
@@ -132,21 +191,18 @@ for (let i = 0; i < COMPETITORS.length; i++) {
     const reverseSlug = `${slugifyCompetitor(comp2)}-vs-${slugifyCompetitor(comp1)}`;
 
     const override = VS_PAGE_OVERRIDES[canonicalSlug];
+    const defaultCopy = defaultPairCopy(comp1, comp2);
     SEO_LANDING_PAGES.push({
       slug: canonicalSlug,
       pageType: "vs-competitor",
       lane: "esign",
       primaryCompetitor: comp1,
       secondaryCompetitor: comp2,
-      seoTitle: override?.seoTitle ?? `${comp1} vs ${comp2}: which is right for you? | Docracy`,
-      seoDescription:
-        override?.seoDescription ??
-        `Comparing ${comp1} and ${comp2}? See how they stack up, and how Docracy's flat pricing and no-signup signing compares to both.`,
-      heroHeadline: override?.heroHeadline ?? `${comp1} vs ${comp2}`,
-      heroSubheadline:
-        override?.heroSubheadline ??
-        `Both are solid e-signature tools built around per-seat pricing. Here's how they compare, and a simpler flat-rate option to consider.`,
-      comparisonRows: COMPARISON_ROWS,
+      seoTitle: override?.seoTitle ?? defaultCopy.seoTitle,
+      seoDescription: override?.seoDescription ?? defaultCopy.seoDescription,
+      heroHeadline: override?.heroHeadline ?? defaultCopy.heroHeadline,
+      heroSubheadline: override?.heroSubheadline ?? defaultCopy.heroSubheadline,
+      comparisonRows: buildPairComparisonRows(comp1, comp2),
     });
 
     SEO_VS_REDIRECTS.push({ from: `/${reverseSlug}`, to: `/${canonicalSlug}` });
