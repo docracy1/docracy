@@ -49,6 +49,7 @@ import { reconcileStaleCheckouts } from "./lib/billingReconcile";
 import { runDuePinDeliverySweep } from "./lib/pinDelivery";
 import type { Env } from "@docracy/shared";
 import { isWiseSyncHour, runWiseSync } from "./lib/wiseSync";
+import { isDailySweepHour } from "./lib/cronSchedule";
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -119,10 +120,9 @@ app.route("/api/webhooks/whatsapp", whatsappWebhook);
 // Hourly cron runs onboarding drip + completion nudges, a Stripe checkout reconcile for unpaid
 // accounts whose Checkout Session already completed (missed webhook), and a weekly-template
 // catch-up when /api/marketplace?origin=weekly is still empty (D1 migrations often never apply
-// in CI). Daily cron runs reminders/cleanup/health, and on Mondays (UTC) also publishes one
-// queued SEO blog post plus up to 10 FreeTemplate-quality Marketplace templates (docracy.com
-// taxonomy). Branch on event.cron so the hourly schedule does not re-fire daily sweeps. (No
-// separate Monday cron — account trigger limit.)
+// in CI). In the 08 UTC hour the same trigger runs the daily sweeps instead (reminders/cleanup/health,
+// and on Mondays (UTC) one queued SEO blog post plus up to 10 FreeTemplate-quality Marketplace
+// templates, docracy.com taxonomy) — one trigger only, account limit (src/lib/cronSchedule.ts).
 // Offset to :07, not :00 — see wrangler.toml's [triggers] comment for why (thundering-herd 522s
 // observed right at the hour mark). Must exactly match the hourly entry in wrangler.toml's crons.
 const HOURLY_CRON = "7 * * * *";
@@ -135,7 +135,8 @@ export default {
       return;
     }
 
-    if (event.cron === HOURLY_CRON) {
+    // The former "22 8 * * *" trigger still takes the daily path if it ever fires (e.g. during a rollout).
+    if (event.cron === HOURLY_CRON && !isDailySweepHour(event.scheduledTime)) {
       // The owner's Wise dashboard rides this trigger every 6 hours (own waitUntil, so it cannot delay the sweeps).
       if (isWiseSyncHour(event.scheduledTime)) {
         ctx.waitUntil(runWiseSync(env).catch((err) => console.error("Wise sync failed:", err)));
@@ -171,7 +172,8 @@ export default {
       return;
     }
 
-    // Daily path (and any unmatched cron string — keep previous behavior for safety).
+    // Daily path: the hourly trigger in the 08 UTC hour (never a Wise sync hour, see cronSchedule.test.ts),
+    // and any unmatched cron string — keep previous behavior.
     if (isWeeklyBlogMondayUtc(new Date()) || event.cron === BLOG_WEEKLY_CRON) {
       ctx.waitUntil(runWeeklyBlogPublish(env).catch((err) => console.error("Weekly blog publish failed:", err)));
       ctx.waitUntil(runWeeklyTemplatePublish(env).catch((err) => console.error("Weekly template publish failed:", err)));

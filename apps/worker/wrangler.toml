@@ -3,17 +3,17 @@ main = "src/index.ts"
 compatibility_date = "2024-12-01"
 compatibility_flags = ["nodejs_compat"]
 
-# Daily reminder/cleanup/health (~08:22 UTC) plus Monday SEO blog publish and 10 FreeTemplate-quality
-# Marketplace templates (docracy.com taxonomy) inside that handler, and hourly onboarding/completion
-# nudges + SPA smoke (Sign in / Start free) + empty weekly-template catch-up, offset to :07.
-# (Account cron-trigger limit — avoid a third schedule; SPA smoke rides the hourly cron.)
+# One trigger (owner decision 24.10.2026, account at the free plan's 5 cron triggers; the freed slot goes to
+# the RELACON lead worker). Hourly at :07: onboarding/completion nudges + SPA smoke (Sign in / Start free) +
+# empty weekly-template catch-up; in the 08 UTC hour the daily path instead (reminder/cleanup/health, plus the
+# Monday SEO blog publish and 10 FreeTemplate-quality Marketplace templates) — src/lib/cronSchedule.ts.
 # Deliberately NOT on the hour/half-hour: "0 * * * *" is the single most common cron schedule in
 # existence, and the SPA smoke check used to fire a genuine (retry-confirmed) 522 within ~1 second
 # of the exact hour mark when it self-fetched api.docracy.io — platform thundering-herd plus
 # in-invocation contention. Auth shape is now in-process; cron still offset past :00 as belt-and-
 # suspenders for the remaining public Pages probes.
 [triggers]
-crons = ["22 8 * * *", "7 * * * *"]
+crons = ["7 * * * *"]
 
 # The owner's Wise cash-flow dashboard (separate worker) has no cron of its own any more: the account is at the
 # free plan's 5 cron triggers (owner decision 24.10.2026). The hourly cron calls its sync every 6 hours through

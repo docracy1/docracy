@@ -51,7 +51,7 @@ Lightweight catalogs — no i18next. Locales: `en` | `es` (US Spanish, tú-form)
 
 ## Weekly SEO blog + templates (Monday cron)
 
-Daily Worker cron `22 8 * * *` (UTC, ~08:22 — offset past the hour for thundering-herd reasons) calls on Mondays:
+Daily Worker sweeps run in the 08 UTC hour of the single hourly cron `7 * * * *` (~08:07, `src/lib/cronSchedule.ts`; the separate `22 8 * * *` trigger was dropped 24.10.2026 for the account's 5-trigger limit) and call on Mondays:
 
 1. `runWeeklyBlogPublish` (`apps/worker/src/lib/blogWeekly.ts`):
    - Publish oldest **draft** in `blog_posts` if any (admin-prepared).
