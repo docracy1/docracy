@@ -15,6 +15,13 @@ compatibility_flags = ["nodejs_compat"]
 [triggers]
 crons = ["22 8 * * *", "7 * * * *"]
 
+# The owner's Wise cash-flow dashboard (separate worker) has no cron of its own any more: the account is at the
+# free plan's 5 cron triggers (owner decision 24.10.2026). The hourly cron calls its sync every 6 hours through
+# this binding (src/lib/wiseSync.ts). Production only.
+[[services]]
+binding = "WISE"
+service = "wise-cashflow-dashboard"
+
 [[kv_namespaces]]
 binding = "DOCRACY_KV"
 id = "981eb8f0eace4d29bedb6b664a546c74"

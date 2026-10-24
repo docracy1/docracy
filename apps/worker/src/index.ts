@@ -48,6 +48,7 @@ import { runHourlyLegacyBatchDrain, runWeeklyTemplateCatchUpIfEmpty, runWeeklyTe
 import { reconcileStaleCheckouts } from "./lib/billingReconcile";
 import { runDuePinDeliverySweep } from "./lib/pinDelivery";
 import type { Env } from "@docracy/shared";
+import { isWiseSyncHour, runWiseSync } from "./lib/wiseSync";
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -135,6 +136,10 @@ export default {
     }
 
     if (event.cron === HOURLY_CRON) {
+      // The owner's Wise dashboard rides this trigger every 6 hours (own waitUntil, so it cannot delay the sweeps).
+      if (isWiseSyncHour(event.scheduledTime)) {
+        ctx.waitUntil(runWiseSync(env).catch((err) => console.error("Wise sync failed:", err)));
+      }
       // SPA smoke must finish before onboarding/completion sweeps. They share one cron invocation
       // (account trigger limit — see wrangler.toml); concurrent waitUntil used to starve the smoke
       // check's public Pages fetches of subrequest/CPU budget and produced false 522 alerts on the

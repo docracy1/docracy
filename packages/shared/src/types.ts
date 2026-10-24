@@ -287,6 +287,13 @@ export interface Env {
   /** Only bound in apps/worker (writer) and apps/connector (reader) once the D1 phase lands. */
   DOCRACY_DB?: D1Database;
   TOKEN_SECRET: string;
+  /** Service binding to the owner's Wise cash-flow dashboard (separate worker, not part of docracy). It has no cron
+   *  of its own any more — the account is at the free plan's 5 cron triggers (owner decision 24.10.2026) — so the
+   *  hourly cron here runs its sync every 6 hours (lib/wiseSync.ts). Production only; absent in staging. */
+  WISE?: Fetcher;
+  /** "user:password" of the Wise dashboard's Basic auth, for that sync call. Set with:
+   *  `wrangler secret put WISE_DASHBOARD_AUTH`. Without it the sync is skipped. */
+  WISE_DASHBOARD_AUTH?: string;
   RESEND_API_KEY?: string;
   /** Signing secret for Resend's outbound webhooks (email.opened/clicked/bounced — see
    *  routes/resendWebhook.ts), in Resend's "whsec_..." Svix format. Absent until manually copied
