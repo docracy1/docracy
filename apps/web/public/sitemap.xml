@@ -641,6 +641,30 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/documentos-para-visa" />
   </url>
   <url>
+    <loc>https://docracy.io/es/garante-internacional-arrendamiento</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/international-lease-guarantor" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/garante-internacional-arrendamiento" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/international-lease-guarantor" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/convertir-a-cripto</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/convert-to-crypto" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/convertir-a-cripto" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/convert-to-crypto" />
+  </url>
+  <url>
+    <loc>https://docracy.io/es/enviar-dinero-latam</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/send-money-latam" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/enviar-dinero-latam" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/send-money-latam" />
+  </url>
+  <url>
     <loc>https://docracy.io/es/escanear-documento</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -5153,11 +5177,17 @@
     <loc>https://docracy.io/convert-to-crypto</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/convert-to-crypto" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/convertir-a-cripto" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/convertir-a-cripto" />
   </url>
   <url>
     <loc>https://docracy.io/send-money-latam</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://docracy.io/send-money-latam" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://docracy.io/es/enviar-dinero-latam" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://docracy.io/es/enviar-dinero-latam" />
   </url>
   <url>
     <loc>https://docracy.io/peru-to-us</loc>

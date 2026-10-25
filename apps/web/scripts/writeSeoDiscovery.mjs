@@ -16,7 +16,9 @@ const HOW_IT_WORKS_VIDEO = {
 
 const ROBOTS_PREFIX_ALLOWS = [
   "Allow: /$",
+  "Allow: /?",
   "Allow: /es$",
+  "Allow: /es?",
   "Allow: /es/",
   "Allow: /free-templates",
   "Allow: /blog",
@@ -394,9 +396,13 @@ function robotsAllowForRoutes(routes) {
   ]) {
     exact.add(p);
   }
+  // Each page is allowed both bare (`$`-anchored) and with a query string (`?` prefix): every
+  // internal/partner link carries ?ref=, and the site 301s those to the clean URL — but Googlebot
+  // has to be allowed to fetch the ?ref= URL first to ever see that 301. With only the `$` rule,
+  // GSC validation of "Blocked by robots.txt" kept failing on /pricing?ref=..., /packets/...?ref=...
   return [...exact]
     .sort()
-    .map((p) => `Allow: ${p}$`)
+    .flatMap((p) => [`Allow: ${p}$`, `Allow: ${p}?`])
     .join("\n");
 }
 
