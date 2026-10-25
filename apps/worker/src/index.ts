@@ -137,10 +137,10 @@ export default {
 
     // The former "22 8 * * *" trigger still takes the daily path if it ever fires (e.g. during a rollout).
     if (event.cron === HOURLY_CRON && !isDailySweepHour(event.scheduledTime)) {
-      // The owner's Wise dashboard rides this trigger every 6 hours (own waitUntil, so it cannot delay the sweeps).
-      if (isWiseSyncHour(event.scheduledTime)) {
-        ctx.waitUntil(runWiseSync(env).catch((err) => console.error("Wise sync failed:", err)));
-      }
+      // The owner's Wise dashboard rides this trigger every 6 hours. Awaited at the end of the handler, not in
+      // waitUntil: its /api/sync answers only when the whole sync is done, and from waitUntil the call was cut off
+      // (25.10.2026: both runs "clientDisconnected" on the dashboard, nothing written).
+      const wiseSync = isWiseSyncHour(event.scheduledTime);
       // SPA smoke must finish before onboarding/completion sweeps. They share one cron invocation
       // (account trigger limit — see wrangler.toml); concurrent waitUntil used to starve the smoke
       // check's public Pages fetches of subrequest/CPU budget and produced false 522 alerts on the
@@ -169,6 +169,7 @@ export default {
           await runHourlyLegacyBatchDrain(env).catch((err) => console.error("Hourly legacy batch drain failed:", err));
         })()
       );
+      if (wiseSync) await runWiseSync(env).catch((err) => console.error("Wise sync failed:", err));
       return;
     }
 
