@@ -19,6 +19,15 @@ describe("Wise dashboard sync on the hourly cron", () => {
     expect(calls).toHaveLength(1);
   });
 
+  it("trims a trailing newline from the secret and skips a value without user:password", async () => {
+    const calls: { init?: RequestInit }[] = [];
+    const WISE = { fetch: async (_url: string, init?: RequestInit) => (calls.push({ init }), new Response("{}", { status: 200 })) };
+    await runWiseSync({ WISE, WISE_DASHBOARD_AUTH: "u:p\n" } as unknown as Env);
+    expect((calls[0]?.init?.headers as Record<string, string>).authorization).toBe(`Basic ${btoa("u:p")}`);
+    await runWiseSync({ WISE, WISE_DASHBOARD_AUTH: "onlypassword" } as unknown as Env);
+    expect(calls).toHaveLength(1);
+  });
+
   it("throws on a failed sync so the cron logs it", async () => {
     const WISE = { fetch: async () => new Response("no", { status: 401 }) };
     await expect(runWiseSync({ WISE, WISE_DASHBOARD_AUTH: "u:p" } as unknown as Env)).rejects.toThrow("401");
