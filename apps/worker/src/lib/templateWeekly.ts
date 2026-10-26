@@ -16,7 +16,7 @@ export const WEEKLY_TEMPLATE_BATCH = 10;
  *  waiting on it, so it never risks the edge request-duration 524 that caps on-demand calls. The
  *  real ceiling on how fast this can go is the shared daily KV budget (adminDrainBudget.ts), not
  *  this number. */
-export const HOURLY_LEGACY_DRAIN_BATCH = 15;
+export const HOURLY_LEGACY_DRAIN_BATCH = 5;
 
 const RECURRING_CATEGORIES = [
   "Real Estate",
@@ -249,7 +249,10 @@ export function parseAndValidateDraft(raw: string, fallback: TopicRow): DraftedT
   return validateDraftWithReason(raw, fallback).draft;
 }
 
-async function draftFromTopic(env: Env, topic: TopicRow): Promise<DraftValidationResult> {
+/** The AI call itself failed (quota, outage) — says nothing about the topic, so the topic must stay queued. */
+const TRANSIENT_AI_REASONS = new Set(["ai-call-threw", "empty-ai-response"]);
+
+async function draftFromTopic(env: Env, topic: TopicRow): Promise<DraftValidationResult & { aiError?: string }> {
   try {
     const result = await env.AI.run((env.WORKERS_AI_MODEL || DEFAULT_MODEL) as keyof AiModels, {
       temperature: 0.35,
@@ -272,11 +275,11 @@ async function draftFromTopic(env: Env, topic: TopicRow): Promise<DraftValidatio
       ],
     });
     const raw = (result as { response?: string }).response?.trim();
-    if (!raw) return { draft: null, reason: "empty-ai-response" };
+    if (!raw) return { draft: null, reason: "empty-ai-response", aiError: "empty response" };
     return validateDraftWithReason(raw, topic);
   } catch (err) {
     console.error("Weekly template AI draft failed:", err);
-    return { draft: null, reason: "ai-call-threw" };
+    return { draft: null, reason: "ai-call-threw", aiError: err instanceof Error ? err.message : String(err) };
   }
 }
 
@@ -321,6 +324,8 @@ export interface WeeklyPublishResult {
    *  skip_reason column, surfaced here too so a manual admin drain call sees it immediately
    *  without a separate D1 query. */
   skips: { slug: string; reason: string }[];
+  /** Set when the run stopped early because the Workers AI call failed (the remaining topics stay queued). */
+  aiError?: string;
 }
 
 /**
@@ -366,8 +371,18 @@ export async function runWeeklyTemplatePublish(env: Env, limit: number = WEEKLY_
     await markTopicSkipped(env, topic.id, reason);
     skips.push({ slug: topic.slug, reason });
   };
+  let processed = 0;
+  let aiError: string | undefined;
   for (const topic of topics) {
-    const { draft, reason } = await draftFromTopic(env, topic);
+    const { draft, reason, aiError: draftAiError } = await draftFromTopic(env, topic);
+    if (!draft && reason && TRANSIENT_AI_REASONS.has(reason)) {
+      // A failed AI call (daily Workers AI quota, outage) is not the topic's fault: leave it queued and
+      // stop — marking it skipped here is what silently burned ~100 good topics on 13-14.09.2026.
+      aiError = draftAiError ?? reason;
+      console.error(`Weekly templates: Workers AI failed on ${topic.slug} — stopping this run, topic stays queued: ${aiError}`);
+      break;
+    }
+    processed += 1;
     if (!draft) {
       await skip(topic, reason ?? "unknown");
       continue;
@@ -419,8 +434,8 @@ export async function runWeeklyTemplatePublish(env: Env, limit: number = WEEKLY_
   if (publishedPaths.length > 0) {
     await pingIndexNow(publishedPaths);
   }
-  console.log(`Weekly templates: published ${published}/${topics.length} this run`);
-  return { attempted: topics.length, published, skipped: topics.length - published, queueWasEmpty: false, skips };
+  console.log(`Weekly templates: published ${published}/${processed} this run${aiError ? " (stopped early: AI error)" : ""}`);
+  return { attempted: processed, published, skipped: processed - published, queueWasEmpty: false, skips, ...(aiError ? { aiError } : {}) };
 }
 
 /**

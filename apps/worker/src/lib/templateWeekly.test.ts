@@ -1,14 +1,19 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
+  HOURLY_LEGACY_DRAIN_BATCH,
   parseAndValidateDraft,
   runHourlyLegacyBatchDrain,
   runWeeklyTemplateCatchUpIfEmpty,
+  runWeeklyTemplatePublish,
   validateDraftWithReason,
 } from "./templateWeekly";
 import { DAILY_DRAIN_BUDGET, getDrainBudgetUsed } from "./adminDrainBudget";
 import { renderTemplatePdf, TEXT_BLANK } from "./templatePdf";
 import { ensureWeeklyTemplateInfra, resetWeeklyTemplateInfraCacheForTests, shouldCatchUpWeeklyTemplates } from "./templateTopicQueue";
 import { makeMockEnv } from "../test/mockEnv";
+
+// A well-formed but too-thin draft: the AI call succeeds, the richness gate rejects it.
+const THIN_DRAFT = { response: JSON.stringify({ title: "Sample Template" }) };
 
 // ensureWeeklyTemplateInfra now caches "already ensured" per isolate (see templateTopicQueue.ts) to
 // avoid redundant D1 reads/writes on every call — a module-level flag, so it must be reset between
@@ -280,35 +285,51 @@ describe("weekly template runtime infra", () => {
 
   it("catch-up runs a publish batch while the weekly list is empty", async () => {
     const { env, d1 } = makeMockEnv();
+    vi.spyOn(env.AI, "run").mockResolvedValue(THIN_DRAFT);
     await runWeeklyTemplateCatchUpIfEmpty(env);
 
     const skipped = (await d1
       .prepare(`SELECT COUNT(*) as n FROM template_topic_queue WHERE status = 'skipped'`)
       .first()) as { n: number } | null;
-    // Mock AI throws, so drafts are invalid and the batch is skipped rather than published.
+    // Thin drafts fail the richness gate, so the batch is skipped rather than published.
     expect(Number(skipped?.n ?? 0)).toBe(10);
     expect(await queuedTopicCount(d1)).toBe(511);
+  });
+
+  it("leaves topics queued and stops the run when the Workers AI call itself fails", async () => {
+    const { env, d1 } = makeMockEnv();
+    vi.spyOn(env.AI, "run").mockRejectedValue(new Error("3036: daily free allocation of neurons exceeded"));
+
+    const result = await runWeeklyTemplatePublish(env, 10);
+
+    expect(result.attempted).toBe(0);
+    expect(result.skipped).toBe(0);
+    expect(result.aiError).toMatch(/neurons/);
+    expect(await queuedTopicCount(d1)).toBe(521);
+    expect(env.AI.run).toHaveBeenCalledTimes(1);
   });
 });
 
 describe("runHourlyLegacyBatchDrain", () => {
   it("drains up to HOURLY_LEGACY_DRAIN_BATCH topics and records the same daily budget the admin route uses", async () => {
     const { env, d1 } = makeMockEnv();
+    vi.spyOn(env.AI, "run").mockResolvedValue(THIN_DRAFT);
 
     const result = await runHourlyLegacyBatchDrain(env);
 
-    expect(result.attempted).toBe(15);
-    expect(await getDrainBudgetUsed(env)).toBe(15);
-    expect(await queuedTopicCount(d1)).toBe(521 - 15);
+    expect(result.attempted).toBe(HOURLY_LEGACY_DRAIN_BATCH);
+    expect(await getDrainBudgetUsed(env)).toBe(HOURLY_LEGACY_DRAIN_BATCH);
+    expect(await queuedTopicCount(d1)).toBe(521 - HOURLY_LEGACY_DRAIN_BATCH);
   });
 
   it("clamps to whatever daily budget remains and is a no-op once it's exhausted", async () => {
     const { env } = makeMockEnv();
+    vi.spyOn(env.AI, "run").mockResolvedValue(THIN_DRAFT);
     const todayKey = `admin-drain-budget:${new Date().toISOString().slice(0, 10)}`;
-    await env.DOCRACY_KV.put(todayKey, String(DAILY_DRAIN_BUDGET - 5));
+    await env.DOCRACY_KV.put(todayKey, String(DAILY_DRAIN_BUDGET - 3));
 
     const result = await runHourlyLegacyBatchDrain(env);
-    expect(result.attempted).toBe(5);
+    expect(result.attempted).toBe(3);
     expect(await getDrainBudgetUsed(env)).toBe(DAILY_DRAIN_BUDGET);
 
     const secondRun = await runHourlyLegacyBatchDrain(env);
