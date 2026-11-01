@@ -71,12 +71,20 @@ export function isEmbedPath(pathname: string): boolean {
   return pathname === "/embed" || pathname.startsWith("/embed/");
 }
 
-/** True for a path that names a file (has an extension) but is not an HTML page. */
+// Real static file types only. A generic "has a dot" test is wrong here: signing tokens look like
+// payload.nonce.signature, so the signature of /sign/:token, /status/:token or /signed/:token reads
+// as a file extension whenever it happens to contain no "-" or "_". Those routes must keep the SPA.
+const STATIC_FILE_EXTENSIONS = new Set([
+  "txt", "xml", "json", "md", "csv", "pdf", "doc", "docx", "zip",
+  "png", "jpg", "jpeg", "gif", "svg", "webp", "avif", "ico",
+  "css", "js", "mjs", "map", "woff", "woff2", "ttf", "otf",
+  "mp3", "mp4", "webm", "vtt", "webmanifest",
+]);
+
+/** True for a path that names a static file of a known non-HTML type. */
 export function isNonHtmlFilePath(pathname: string): boolean {
   const m = /\.([a-z0-9]+)$/i.exec(pathname);
-  if (!m) return false;
-  const ext = m[1].toLowerCase();
-  return ext !== "html" && ext !== "htm";
+  return m !== null && STATIC_FILE_EXTENSIONS.has(m[1].toLowerCase());
 }
 
 type Rewriter = { on(selector: string, handlers: { element(el: { setAttribute(n: string, v: string): void }): void }): Rewriter; transform(r: Response): Response };

@@ -36,6 +36,15 @@ assert.equal(isNonHtmlFilePath("/pricing"), false);
 assert.equal(isNonHtmlFilePath("/pricing.html"), false);
 assert.equal(isNonHtmlFilePath("/.well-known/security.txt"), true);
 
+// Signing tokens contain dots: their last part must never be read as a file extension.
+const TOKEN = "eyJkb2MiOiJhYmMifQ.bm9uY2U.Q2hlY2tzdW1Ed2VsdmVCeXRlc0hlcmVBbmRNb3JlQnl0ZXM";
+for (const route of ["/sign/", "/status/", "/signed/", "/es/firmado/", "/embed/sign/", "/income-proof/", "/1099-season/"]) {
+  assert.equal(isNonHtmlFilePath(route + TOKEN), false, route);
+  assert.equal(isNonHtmlFilePath(route + "abc.def"), false, route);
+  const res = applySecurityHeaders(new Request("https://docracy.io" + route + TOKEN), new Response("<html></html>", { status: 200, headers: { "content-type": "text/html" } }), nonce);
+  assert.equal(res.status, 200, route + " must keep the SPA shell");
+}
+
 const html = () => new Response("<html></html>", { status: 200, headers: { "content-type": "text/html; charset=utf-8" } });
 
 // HTML page: full header set, DENY, nonce policy.
