@@ -66,6 +66,11 @@ jobs:
         # Best-effort — a transient IndexNow outage shouldn't fail an otherwise-successful deploy.
         run: npm run submit:indexnow || true
         working-directory: apps/web
+      - name: Submit sitemaps to Google Search Console
+        # Needs the service account key (GSC_SERVICE_ACCOUNT_FILE or ~/.config/docracy/gsc-service-account.json);
+        # without it the script only prints a note. Never fails the deploy.
+        run: npm run submit:gsc || true
+        working-directory: apps/web
       - name: Run weekly content catch-up
         # Same jobs as the 08:22 UTC cron. Fires on Monday, workflow_dispatch, or when
         # origin=weekly is still empty. The Worker hourly cron is the path that does not
