@@ -1,8 +1,9 @@
-import { useEffect, useId, useState, type FormEvent, type ReactNode } from "react";
+import { Suspense, lazy, useEffect, useId, useState, type FormEvent, type ReactNode } from "react";
 import { importGoogleDoc } from "../lib/api";
 import { useT } from "../lib/i18n";
 import { NavIcon } from "./NavIcons";
-import ScanCapture from "./ScanCapture";
+// Loaded on demand: the scanner brings pdf-lib along, which nothing else on a first visit needs.
+const ScanCapture = lazy(() => import("./ScanCapture"));
 
 const MAX_PDF_BYTES = 15 * 1024 * 1024;
 
@@ -141,13 +142,15 @@ export default function PdfUploadCircle({
           </button>
 
           {scanning && (
-            <ScanCapture
-              onDone={async (file) => {
-                setScanning(false);
-                await handFile(file);
-              }}
-              onCancel={() => setScanning(false)}
-            />
+            <Suspense fallback={null}>
+              <ScanCapture
+                onDone={async (file) => {
+                  setScanning(false);
+                  await handFile(file);
+                }}
+                onCancel={() => setScanning(false)}
+              />
+            </Suspense>
           )}
         </>
       )}

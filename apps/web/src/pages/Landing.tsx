@@ -8,11 +8,11 @@ import DetectMockup from "../components/DetectMockup";
 import PdfUploadCircle from "../components/PdfUploadCircle";
 import { fetchMarketplaceTemplates, fetchWeeklyTemplates, requestMagicLink } from "../lib/api";
 import { track } from "../lib/track";
-import { FREE_TEMPLATES } from "../lib/freeTemplates";
+import { FEATURED_TEMPLATES, FREE_TEMPLATE_COUNT } from "../lib/featuredTemplates";
 import { localizePath, useI18n, useT } from "../lib/i18n";
 import { useSeoMeta } from "../lib/useSeoMeta";
 import { setPendingUploadFile } from "../lib/pendingUpload";
-import { TemplateCard } from "./FreeTemplates";
+import { TemplateCard } from "../components/TemplateCard";
 import { TESTIMONIALS, testimonialsJsonLd } from "../lib/testimonials";
 import LatamSearchBox from "../components/LatamSearchBox";
 
@@ -176,7 +176,8 @@ function HeroDecorPhoto({
       className={`hero-decor-card hero-decor-photo ${className}${crop ? " is-cropped" : ""}`}
       style={{ transform: `rotate(${rotate}deg)` }}
     >
-      <img src={src} alt={alt} />
+      {/* The CSS box is 92 x 112; the attributes give the browser the aspect ratio before load. */}
+      <img src={src} alt={alt} width={92} height={112} loading="lazy" decoding="async" />
     </div>
   );
 }
@@ -284,10 +285,8 @@ const HOW_IT_WORKS_KEYS: Array<{ titleKey: string; bodyKey: string }> = [
   { titleKey: "how.s4.title", bodyKey: "how.s4.body" },
 ];
 
-// These 4 are shown here purely as a representative sample — same underlying FREE_TEMPLATES
-// data /free-templates itself reads, so the count and list can't drift out of sync.
-const FEATURED_TEMPLATE_SLUGS = ["mutual-nda", "independent-contractor-agreement", "offer-letter", "freelance-service-agreement"];
-const FEATURED_TEMPLATES = FREE_TEMPLATES.filter((tmpl) => FEATURED_TEMPLATE_SLUGS.includes(tmpl.slug));
+// Four templates as a sample, copied from the catalog in lib/featuredTemplates.ts (test-guarded) so
+// the eager landing bundle does not carry the full template data.
 
 const AI_FEATURE_KEYS: Array<{ titleKey: string; bodyKey: string }> = [
   { titleKey: "landing.ai1.title", bodyKey: "landing.ai1.body" },
@@ -309,7 +308,7 @@ export default function Landing() {
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [turnstileResetKey, setTurnstileResetKey] = useState(0);
   const [pendingSubmit, setPendingSubmit] = useState(false);
-  const [templateCount, setTemplateCount] = useState(FREE_TEMPLATES.length);
+  const [templateCount, setTemplateCount] = useState(FREE_TEMPLATE_COUNT);
   const heroEmailRef = useRef<HTMLInputElement>(null);
   useSeoMeta("home");
   const reviewsJsonLd = useMemo(() => testimonialsJsonLd((k) => t(k), (k) => t(k)), [t]);
@@ -361,10 +360,10 @@ export default function Landing() {
       fetchWeeklyTemplates(50).then((res) => res.templates.length),
     ])
       .then(([community, weekly]) => {
-        if (!cancelled) setTemplateCount(FREE_TEMPLATES.length + community + weekly);
+        if (!cancelled) setTemplateCount(FREE_TEMPLATE_COUNT + community + weekly);
       })
       .catch(() => {
-        /* keep FREE_TEMPLATES.length fallback */
+        /* keep FREE_TEMPLATE_COUNT fallback */
       });
     return () => {
       cancelled = true;
