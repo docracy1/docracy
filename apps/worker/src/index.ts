@@ -63,6 +63,30 @@ app.use(
   })
 );
 
+// Security headers on every response (1.11.2026). The API answers JSON, PDFs and a few small HTML
+// pages (unsubscribe); nothing here is meant to be framed. The CSP applies to text responses only:
+// a PDF opened directly in the browser keeps the viewer's own defaults.
+app.use("*", async (c, next) => {
+  await next();
+  const h = c.res.headers;
+  h.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
+  h.set("X-Content-Type-Options", "nosniff");
+  h.set("X-Frame-Options", "DENY");
+  h.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  h.set("Permissions-Policy", "camera=(), microphone=(), geolocation=(), payment=()");
+  const contentType = h.get("content-type") ?? "";
+  if (!h.has("Content-Security-Policy")) {
+    if (contentType.includes("text/html")) {
+      h.set(
+        "Content-Security-Policy",
+        "default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; form-action 'self'; base-uri 'none'; frame-ancestors 'none'"
+      );
+    } else if (contentType.includes("application/json") || contentType.includes("text/plain")) {
+      h.set("Content-Security-Policy", "default-src 'none'; frame-ancestors 'none'");
+    }
+  }
+});
+
 // An unset TOKEN_SECRET would otherwise silently become the string "undefined" wherever it's
 // used to sign/verify links — every link would still "work" but with a predictable, guessable
 // key. Fail loudly instead of shipping that quietly.

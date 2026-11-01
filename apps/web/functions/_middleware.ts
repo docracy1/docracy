@@ -16,6 +16,7 @@ import {
 } from "./_spaShell";
 import { legacyTemplateRedirectTarget } from "../src/lib/templateLegacyRedirects";
 import { canonicalPublicLocation, firstTouchSetCookieHeader, shortLinkCanonical } from "./_trackingParams";
+import { applySecurityHeaders, newNonce } from "./_securityHeaders";
 
 const WORKER_URL = "https://api.docracy.io";
 
@@ -171,7 +172,15 @@ function recordPageview(context: Parameters<PagesFunction<{ ASSETS: Fetcher }>>[
   );
 }
 
+/** Every response leaves through applySecurityHeaders(): common security headers everywhere, a
+ *  Content Security Policy with a fresh nonce on HTML (see _securityHeaders.ts). */
 export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => {
+  const nonce = newNonce();
+  const response = await handle(context);
+  return applySecurityHeaders(context.request, response, nonce);
+};
+
+const handle: PagesFunction<{ ASSETS: Fetcher }> = async (context) => {
   const url = new URL(context.request.url);
 
   // One hop: short links, www → apex, drop trailing slash, strip tracking params.

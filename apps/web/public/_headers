@@ -17,8 +17,13 @@
 # frame-src also allows www.youtube-nocookie.com for embedded videos on blog / feature pages (see the
 # "video" ArticleBlock type in lib/articles.ts) — the nocookie domain skips ad-tracking cookies
 # until the viewer actually plays the video.
+# X-Frame-Options and Permissions-Policy added 1.11.2026. functions/_middleware.ts sets the same
+# headers on every response it builds (Function responses never get this file), and replaces the
+# CSP below on HTML with a nonce-based one. This file stays the rule set for static non-HTML files.
 /*
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(self), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://www.clarity.ms https://scripts.clarity.ms https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://challenges.cloudflare.com https://www.clarity.ms https://scripts.clarity.ms https://t.clarity.ms https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'self' https://challenges.cloudflare.com https://www.youtube-nocookie.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'
 
 # Vite-built assets are content-hashed (index-<hash>.js), but deliberately NOT marked `immutable`
@@ -44,6 +49,10 @@
 /*.html
   Cache-Control: public, max-age=0, must-revalidate
 
+# Self-hosted Inter (public/fonts). Not content-hashed: a changed font gets a new file name.
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
 # Favicons: short cache so a bad prior response (e.g. SPA HTML for /favicon.ico) can recover,
 # and so ?v= cache-bust query bumps take effect quickly across browsers.
 /favicon.ico
@@ -64,4 +73,5 @@
 # Embedded signing must be iframe-able. Omit X-Frame-Options here so only CSP frame-ancestors *
 # applies (Cloudflare Pages may not honor ALLOWALL, and DENY from /* would block embeds).
 /embed/*
+  ! X-Frame-Options
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://challenges.cloudflare.com; frame-src 'self' https://challenges.cloudflare.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors *

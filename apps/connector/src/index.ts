@@ -3,8 +3,25 @@ import { buildFreeServer, buildPaidServer } from "./paidTools";
 import { resolvePaidAccountId } from "./tokenAuth";
 import type { ConnectorEnv as Env } from "./types";
 
+/** Security headers on every answer of the MCP endpoint (JSON and event streams, never framed). */
+function withSecurityHeaders(response: Response): Response {
+  const out = new Response(response.body, response);
+  out.headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
+  out.headers.set("X-Content-Type-Options", "nosniff");
+  out.headers.set("X-Frame-Options", "DENY");
+  out.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  out.headers.set("Content-Security-Policy", "default-src 'none'; frame-ancestors 'none'");
+  return out;
+}
+
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+    return withSecurityHeaders(await handle(request, env, ctx));
+  },
+};
+
+async function handle(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+  {
     // mcp.docracy.io serves no browsable pages — /mcp is an MCP protocol endpoint, not a page
     // meant for search indexing (find_documents still 401s without a valid API key). Without this,
     // Cloudflare's own default robots.txt permits Googlebot to crawl the domain, which then reports
@@ -26,5 +43,5 @@ export default {
     const server = buildPaidServer(env, accountId);
     const handler = createMcpHandler(server, { route: "/mcp" });
     return handler(request, env, ctx);
-  },
-};
+  }
+}

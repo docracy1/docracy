@@ -22,11 +22,12 @@
     "test:connector": "npm run test --workspace apps/connector",
     "test:shared": "npm run test --workspace packages/shared",
     "test:zapier": "npm run test --workspace apps/zapier",
-    "test": "npm run test:shared && npm run test:worker && npm run test:connector && npm run test:zapier",
+    "test": "npm run test:shared && npm run test:worker && npm run test:connector && npm run test:zapier && npm run test:web",
     "typecheck:worker": "npm run typecheck --workspace apps/worker",
     "typecheck:connector": "npm run typecheck --workspace apps/connector",
     "typecheck:shared": "npm run typecheck --workspace packages/shared",
     "typecheck:web": "npm run build --workspace apps/web",
-    "typecheck": "npm run typecheck:shared && npm run typecheck:worker && npm run typecheck:connector && npm run typecheck:web"
+    "typecheck": "npm run typecheck:shared && npm run typecheck:worker && npm run typecheck:connector && npm run typecheck:web",
+    "test:web": "npm run test --workspace apps/web"
   }
 }
