@@ -37,7 +37,7 @@ export interface PartnerPageContent {
 export const PARTNER_PAGES: PartnerPageContent[] = [
   {
     slug: "builderprime",
-    seoTitle: "Docracy for BuilderPrime — Sign Estimates & Contracts on the Spot",
+    seoTitle: "Docracy for BuilderPrime: Sign Estimates on the Spot",
     seoDescription:
       "Send BuilderPrime estimates and contracts for signature over WhatsApp or email — reusable templates, phone-bound PIN verification, and a full audit trail.",
     heroHeadline: "Get BuilderPrime estimates signed before you leave the job site.",
@@ -98,7 +98,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "crm-tools",
-    seoTitle: "Docracy for CRM & Workflow Tools — Sign Without Leaving Your Process",
+    seoTitle: "Docracy for CRM & Workflow Tools: Sign Inside Your Process",
     seoDescription:
       "Add a fast, WhatsApp-native signing step to your CRM or workflow tool — amoCRM, Pipefy, Kartra, and more. Reusable templates, no account for signers.",
     heroHeadline: "Your CRM tracks the deal. Docracy handles the signature.",
@@ -131,7 +131,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "helpdesk-support",
-    seoTitle: "Docracy for Help Desk & Support Teams — Sign in the Same Thread",
+    seoTitle: "Docracy for Help Desk Teams: Sign in the Same Thread",
     seoDescription:
       "Send authorization forms and service agreements over SMS or WhatsApp, in the same thread your customer is already in — Freshdesk, Textline, Zipwhip, and more.",
     heroHeadline: "Don't send customers to a new tool to sign something.",
@@ -160,7 +160,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "staffing-recruiting",
-    seoTitle: "Docracy for Staffing & Recruiting — Offer Letters Candidates Actually Sign",
+    seoTitle: "Docracy for Staffing & Recruiting: Offer Letters Signed",
     seoDescription:
       "Send offer letters and onboarding paperwork over WhatsApp or email — reusable templates for staffing and recruiting teams. No account required for candidates.",
     heroHeadline: "Candidates you reach on WhatsApp shouldn't have to sign by email.",
@@ -190,7 +190,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "sop-training",
-    seoTitle: "Docracy for SOPs, Training & Online Courses — Signed Acknowledgments",
+    seoTitle: "Docracy for SOPs & Training: Signed Acknowledgments",
     seoDescription:
       "Add signed SOP and code-of-conduct acknowledgments to your training platform or LMS — Trainual, Moodle, EditRepublic, and more.",
     heroHeadline: "Every SOP or course completion should end with a signed acknowledgment.",
@@ -219,7 +219,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "productivity-tools",
-    seoTitle: "Docracy for Notes, Docs & Design Tools — Turn Drafts Into Signed PDFs",
+    seoTitle: "Docracy for Notes & Design Tools: Drafts to Signed PDFs",
     seoDescription:
       "Turn an Evernote draft or Canva design brief into a signable PDF in one upload — no separate account for whoever's approving it.",
     heroHeadline: "Your draft is done. Getting it signed shouldn't be a separate project.",
@@ -248,7 +248,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "moving-companies",
-    seoTitle: "Docracy for Moving Companies — Sign Estimates the Day of the Move",
+    seoTitle: "Docracy for Moving Companies: Estimates Signed on Move Day",
     seoDescription:
       "Get moving estimates signed by WhatsApp or SMS while the crew is on-site — reusable templates, phone-bound PIN verification, and a full audit trail.",
     heroHeadline: "Get the estimate signed before the truck leaves.",
@@ -277,7 +277,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "healthcare",
-    seoTitle: "Docracy for Healthcare & Care Staffing — Fast Onboarding Paperwork",
+    seoTitle: "Docracy for Healthcare Staffing: Fast Onboarding Papers",
     seoDescription:
       "Sign staffing agreements and onboarding paperwork for healthcare and care organizations — WhatsApp-native delivery, reusable templates. Not for clinical patient records.",
     heroHeadline: "Onboarding paperwork for healthcare staffing, without an enterprise compliance program.",
@@ -310,7 +310,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "facility-management",
-    seoTitle: "Docracy for Facility & Property Management — One Vendor Template, Every Site",
+    seoTitle: "Docracy for Property Management: One Vendor Template",
     seoDescription:
       "Standardize vendor agreements and work orders across every site, and get them signed by contractors over WhatsApp — no portal to onboard them into.",
     heroHeadline: "One vendor agreement template. Every site. No portal to manage.",
@@ -339,7 +339,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "delivery-logistics",
-    seoTitle: "Docracy for Delivery & Logistics — Signed Confirmations at the Door",
+    seoTitle: "Docracy for Delivery & Logistics: Signed at the Door",
     seoDescription:
       "Get delivery confirmations and courier agreements signed at the door or in the vehicle — no account required for couriers or recipients.",
     heroHeadline: "A signature at the door shouldn't require an account.",
@@ -368,7 +368,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "enterprise-it",
-    seoTitle: "Docracy for Enterprise IT & Security Teams — Lightweight Acknowledgment Signing",
+    seoTitle: "Docracy for IT & Security Teams: Acknowledgment Signing",
     seoDescription:
       "Get acceptable-use policies, code-of-conduct acknowledgments, and vendor NDAs signed across your org — a lightweight signing layer next to SharePoint or your intranet.",
     heroHeadline: "Policy acknowledgments across the org, without a CLM procurement project.",
@@ -399,7 +399,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "local-services",
-    seoTitle: "Docracy for Events & Local Service Businesses — Quotes Clients Actually Sign",
+    seoTitle: "Docracy for Events & Local Services: Quotes Signed",
     seoDescription:
       "Send event vendor contracts, photography agreements, and local service quotes for a fast signature — reusable templates, no account required for clients.",
     heroHeadline: "A client who wants to say yes shouldn't have to create an account first.",
@@ -431,7 +431,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "germany-eu",
-    seoTitle: "Docracy for the German & EU Market — eIDAS-Minded E-Signatures",
+    seoTitle: "Docracy for the German & EU Market: eIDAS-Minded E-Sign",
     seoDescription:
       "E-signatures built with EU eIDAS in mind — a simple electronic signature by default, and a WhatsApp-verified track designed to meet the Advanced Electronic Signature (AES) standard.",
     heroHeadline: "Digitale Unterschriften, gedacht für den EU-Markt.",
@@ -467,7 +467,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "aircall",
-    seoTitle: "Docracy for Aircall — Send the Agreement Before the Call Goes Cold",
+    seoTitle: "Docracy for Aircall: Agreement Sent Before the Call Cools",
     seoDescription:
       "Turn an Aircall sales or support call into a signed agreement in minutes — WhatsApp-native signing, reusable templates, no account required for the signer.",
     heroHeadline: "You just hung up on Aircall. Get it signed while it's still fresh.",
@@ -501,7 +501,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "amocrm",
-    seoTitle: "Docracy for amoCRM — Sign the Deal Without Leaving the Pipeline",
+    seoTitle: "Docracy for amoCRM: Sign Deals Inside the Pipeline",
     seoDescription:
       "Close amoCRM deals faster with a WhatsApp-native signing step built for phone-first customers — reusable templates, no account required to sign.",
     heroHeadline: "The deal card moved to 'won' in amoCRM. Now get it signed.",
@@ -532,7 +532,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "crosstrax",
-    seoTitle: "Docracy for Crosstrax — Sign Engagement Letters Before the Case Starts",
+    seoTitle: "Docracy for Crosstrax: Engagement Letters Signed Early",
     seoDescription:
       "Get investigation engagement letters and client authorization forms signed before work begins — WhatsApp-native signing, no account required for clients.",
     heroHeadline: "The case is open in Crosstrax. Get the engagement letter signed first.",
@@ -563,7 +563,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "pipefy",
-    seoTitle: "Docracy for Pipefy — Turn an Approval Phase Into a Real Signature",
+    seoTitle: "Docracy for Pipefy: Approval Phase With a Real Signature",
     seoDescription:
       "When a Pipefy card hits its approval phase, send a real signature instead of a checkbox — reusable templates, no account required for the signer.",
     heroHeadline: "The card hit 'Approval' in Pipefy. Make it an actual signature.",
@@ -594,7 +594,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "freshdesk",
-    seoTitle: "Docracy for Freshdesk — Close the Ticket, Not Just Reply to It",
+    seoTitle: "Docracy for Freshdesk: Close the Ticket With a Signature",
     seoDescription:
       "Send a refund waiver or authorization form for signature right from a Freshdesk reply — no customer portal account, no separate e-signature tool holding up your SLA clock.",
     heroHeadline: "The ticket's stuck on \"waiting for signature.\" Fix that from inside the reply.",
@@ -626,7 +626,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "bullhorn",
-    seoTitle: "Docracy for Bullhorn — Lock In the Placement Before It Slips",
+    seoTitle: "Docracy for Bullhorn: Lock In the Placement Early",
     seoDescription:
       "Get offer letters and contractor agreements signed by WhatsApp or SMS the moment a candidate accepts — before a competing agency's paperwork gets there first.",
     heroHeadline: "The candidate said yes. Now get it signed before another agency reaches them.",
@@ -658,7 +658,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "akken",
-    seoTitle: "Docracy for AkkenCloud — Paperwork Signed Before the First Shift",
+    seoTitle: "Docracy for AkkenCloud: Paperwork Signed Before Shift One",
     seoDescription:
       "Get contractor agreements and onboarding paperwork signed on a worker's phone before their first shift — reusable templates for staffing agencies running on AkkenCloud.",
     heroHeadline: "The shift starts tomorrow. The paperwork can't still be pending.",
@@ -690,7 +690,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "trainual",
-    seoTitle: "Docracy for Trainual — Signed Acknowledgments for SOPs & Policies",
+    seoTitle: "Docracy for Trainual: Signed SOP and Policy Acknowledgments",
     seoDescription:
       "Trainual tracks who finished a course; it doesn't collect a signature. Send the acknowledgment as a real signed document after the SOP is marked complete.",
     heroHeadline: "\"Marked complete\" in Trainual isn't a signature.",
@@ -728,7 +728,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "moodle",
-    seoTitle: "Docracy for Moodle — Signed Statements for Courses & Cohorts",
+    seoTitle: "Docracy for Moodle: Signed Statements for Courses",
     seoDescription:
       "Moodle can track quiz attempts and grades, but it has no e-signature. Collect a real signed academic integrity or lab safety statement per course.",
     heroHeadline: "Moodle can grade an assignment. It can't collect a signature.",
@@ -765,7 +765,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "online-courses",
-    seoTitle: "Docracy for Online Course Creators — Signed Waivers & Agreements",
+    seoTitle: "Docracy for Course Creators: Signed Waivers & Agreements",
     seoDescription:
       "Cohort-based courses on EditRepublic and similar platforms rarely have built-in e-signature. Collect a signed waiver or code of conduct before day one.",
     heroHeadline: "Before a cohort starts, get it in writing.",
@@ -803,7 +803,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "evernote",
-    seoTitle: "Docracy for Evernote — Turn a Drafted Proposal Into a Signed PDF",
+    seoTitle: "Docracy for Evernote: Drafted Proposal to Signed PDF",
     seoDescription:
       "Finish a proposal or scope of work in Evernote, export it as a PDF, and get it signed the same day — sequential signing, no account required for the client.",
     heroHeadline: "The proposal's finished in Evernote. Getting it signed is still a separate step.",
@@ -833,7 +833,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "canva",
-    seoTitle: "Docracy for Canva — Get a Designed Proposal or Release Form Signed",
+    seoTitle: "Docracy for Canva: Designed Proposals, Signed",
     seoDescription:
       "Export your Canva proposal, contract, or model release as a PDF and get it signed without losing the design — no account required for the signer.",
     heroHeadline: "The design's done in Canva. Signing it shouldn't flatten it into a plain form.",
@@ -864,7 +864,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "smartmoving",
-    seoTitle: "Docracy for SmartMoving — Sign Change Orders Before the Crew Leaves",
+    seoTitle: "Docracy for SmartMoving: Change Orders Signed On-Site",
     seoDescription:
       "Get SmartMoving estimates and day-of change orders signed on the truck — WhatsApp delivery, phone-bound PIN verification, and a reusable template for every job.",
     heroHeadline: "The SmartMoving estimate is set. Get the change order signed before the crew moves on.",
@@ -895,7 +895,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "nhsp",
-    seoTitle: "Docracy for NHS Professionals — Bank Worker Paperwork Signed Between Shifts",
+    seoTitle: "Docracy for NHS Professionals: Paperwork Between Shifts",
     seoDescription:
       "Get bank-staff authorization and compliance paperwork signed between shifts, not just during office hours — WhatsApp delivery, no account required for NHSP bank workers.",
     heroHeadline: "A bank shift starts at 6am. The paperwork shouldn't wait for office hours.",
@@ -926,7 +926,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "dentco",
-    seoTitle: "Docracy for Dentco — Work Orders Signed Off On-Site, Every Property",
+    seoTitle: "Docracy for Dentco: Work Orders Signed Off On-Site",
     seoDescription:
       "Get work orders and service agreements signed by property managers across every site Dentco services — one reusable template, no portal for the client to log into.",
     heroHeadline: "The repair's done. Get the property manager's sign-off before you're back in the van.",
@@ -957,7 +957,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "hungrypanda",
-    seoTitle: "Docracy for Hungrypanda — Onboard Riders & Restaurant Partners by Phone",
+    seoTitle: "Docracy for Hungrypanda: Onboard Riders by Phone",
     seoDescription:
       "Get rider agreements and restaurant partnership terms signed before a first delivery or menu goes live — signed from a phone, no account required, any market.",
     heroHeadline: "Before a rider's first delivery or a restaurant's first order, get the agreement signed.",
@@ -988,7 +988,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "barracuda",
-    seoTitle: "Docracy for Barracuda Networks Admins — Sign Off Your Security Rollout",
+    seoTitle: "Docracy for Barracuda Admins: Sign Off the Security Rollout",
     seoDescription:
       "Just deployed Barracuda Email Protection, Backup, or Security Awareness Training? Get every employee's acknowledgment signed and tracked, with a real audit trail.",
     heroHeadline: "You rolled out Barracuda. Now get everyone to sign off on it.",
@@ -1018,7 +1018,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "germany",
-    seoTitle: "Docracy for German Businesses & Freiberufler — Sign Contracts Fast",
+    seoTitle: "Docracy for German Businesses: Sign Contracts Fast",
     seoDescription:
       "NDAs, freelance agreements, and consulting contracts signed the same day — built for German Freiberufler and GmbHs, without routing through enterprise procurement.",
     heroHeadline: "Most contracts in Germany don't need a wet signature. Yours doesn't either.",
@@ -1054,7 +1054,7 @@ export const PARTNER_PAGES: PartnerPageContent[] = [
   },
   {
     slug: "digital-unterschreiben",
-    seoTitle: "Digital Unterschreiben — How to Actually Sign a Document Online",
+    seoTitle: "Digital Unterschreiben: Sign a Document Online",
     seoDescription:
       "Skip the jargon: upload a PDF, send a link, and get it signed digitally today — no account needed for the other side, with an audit trail as proof.",
     heroHeadline: "Digital unterschreiben, without the detour through legal jargon first.",

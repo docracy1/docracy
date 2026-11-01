@@ -176,6 +176,8 @@ export default function Footer() {
     { label: t("footer.roadmap"), to: "/roadmap" },
     { label: t("footer.imprint"), to: "/imprint" },
     { label: t("footer.trust"), to: "/trust" },
+    // Sister product of RELACON GmbH: Austrian company register data.
+    { label: "firmenbuchdaten.at", to: "https://firmenbuchdaten.at", external: true },
     {
       label: t("footer.contactSales"),
       to: "mailto:sales@docracy.io?subject=Docracy%20inquiry",

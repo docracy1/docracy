@@ -2579,7 +2579,7 @@ const en: Messages = {
   "integrationsAi.linkDrafting": "AI contract drafting →",
   "integrationsAi.linkEnterprise": "Enterprise →",
   "integrationsAi.linkDocs": "Docs →",
-  "packet.seoTitle": "Free US Contractor Kit — NDA, W-9 & Independent Contractor Agreement",
+  "packet.seoTitle": "Free US Contractor Kit: NDA, W-9 and Contractor Agreement",
   "packet.seoDescription":
     "Onboard a US contractor with free NDA, IRS W-9, and contractor agreement. Sign online, no account. Paid adds your PayPal or Mercado Pago link.",
   "packet.kicker": "US contractors",

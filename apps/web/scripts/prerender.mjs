@@ -87,7 +87,10 @@ await build({
   format: "cjs",
   logLevel: "warning",
 });
-const { ensureMetaDescription } = require(seoMetaBundleFile);
+const { ensureMetaDescription, normalizeSeoTitle } = require(seoMetaBundleFile);
+// Titles the house-style normalizer had to cut (over 60 characters after the dash rules) are
+// listed at the end of the build so a clumsy cut can be fixed at the source.
+const shortenedTitles = [];
 fs.unlinkSync(seoMetaBundleFile);
 
 const blogBundleFile = path.join(__dirname, "_blog.bundle.cjs");
@@ -291,7 +294,7 @@ const routes = [
     // to change copy), so withMeta() below is a no-op on those two fields for this route alone.
     urlPath: "/",
     outFile: "index.html",
-    title: "Docracy — Stop Chasing the Invoice. Get Paid on WhatsApp.",
+    title: "Docracy: Stop Chasing the Invoice. Get Paid on WhatsApp.",
     description:
       "Paste Mercado Pago or PayPal, send the PDF on WhatsApp, share a constancia. Signing stays free. $10/month is cobro — Docracy never takes a cut.",
     locale: "en",
@@ -534,7 +537,7 @@ const routes = [
   {
     urlPath: "/es/como-funciona",
     outFile: "es/como-funciona.html",
-    title: "Cómo funciona Docracy — firma documentos en menos de un minuto",
+    title: "Cómo funciona Docracy: firma documentos en un minuto",
     description:
       "Un recorrido breve de Docracy: sube un PDF, coloca campos de firma, envía enlaces por correo y descarga el documento firmado — gratis hasta dos firmantes, sin cuenta.",
     locale: "es",
@@ -1119,7 +1122,7 @@ const routes = [
   {
     urlPath: "/es/marketplace-de-plantillas",
     outFile: "es/marketplace-de-plantillas.html",
-    title: "Marketplace de Docracy — Plantillas legales y de negocio gratis",
+    title: "Marketplace de Docracy: plantillas legales y de negocio",
     description:
       "Plantillas de documentos gratis, revisadas por Docracy y compartidas por la comunidad. Encuentra una " +
       "plantilla, complétala y envíala para firma — gratis, sin necesidad de cuenta.",
@@ -1179,7 +1182,7 @@ const routes = [
   {
     urlPath: "/packets/us-contractor",
     outFile: "packets/us-contractor.html",
-    title: "Free US Contractor Kit — NDA, W-9 & Independent Contractor Agreement",
+    title: "Free US Contractor Kit: NDA, W-9 and Contractor Agreement",
     description:
       "Onboard a US contractor with free NDA, IRS W-9, and contractor agreement. Sign online, no account. Paid adds your PayPal or Mercado Pago link.",
     locale: "en",
@@ -1550,7 +1553,9 @@ function writeIndexNowKey() {
 
 function withMeta(html, { title, description, urlPath, locale = "en", alternates, image, watchPage = false, xDefault }) {
   const canonical = `${SITE}${urlPath === "/" ? "/" : urlPath}`;
-  const safeTitle = escapeXml(title);
+  const seoTitle = normalizeSeoTitle(title);
+  if (seoTitle.length < title.replace(/\s+/g, " ").trim().length - 3) shortenedTitles.push([urlPath, title, seoTitle]);
+  const safeTitle = escapeXml(seoTitle);
   const safeDescription = escapeXml(ensureMetaDescription(description));
   // Use function replacers — string replacements treat `$10` in copy as a capture-group token.
   let out = html
@@ -1616,4 +1621,8 @@ writeBlogFeed();
 writeIndexNowKey();
 writeSeoDiscovery(routes, { distDir, publicDir: path.join(root, "public") });
 
+if (shortenedTitles.length) {
+  console.log(`\nTitles shortened to 60 characters (${shortenedTitles.length}):`);
+  for (const [urlPath, from, to] of shortenedTitles) console.log(`  ${urlPath}\n    ${from}\n    -> ${to}`);
+}
 console.log(`Done — ${routes.length} routes prerendered.`);

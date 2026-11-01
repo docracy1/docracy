@@ -437,7 +437,13 @@ ${unique.map(urlEntry).join("\n")}
 # Allow rules below are GENERATED from scripts/prerender.mjs (writeSeoDiscovery) —
 # do not hand-edit the Allow list; re-run the web build instead.
 
+# AI crawlers share this group with everyone else: public pages allowed, the signed-in area,
+# tokens and the API stay disallowed below.
 User-agent: *
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ClaudeBot
+User-agent: PerplexityBot
 
 # --- Public marketing / SEO (generated from prerender routes) ---
 ${ROBOTS_PREFIX_ALLOWS.join("\n")}

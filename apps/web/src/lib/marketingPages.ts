@@ -1333,7 +1333,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
   },
   {
     slug: "hire-contractor-abroad",
-    seoTitle: "Hire a Contractor Abroad — Cross-Border Agreement & WhatsApp Pay | Docracy",
+    seoTitle: "Hire a Contractor Abroad: Cross-Border Agreement & Pay | Docracy",
     seoDescription:
       "Paper a LATAM or overseas contractor: free NDA and a real cross-border contractor agreement — Wise/crypto/wire payment terms, IP assignment across borders — then get paid on WhatsApp. Not a W-8BEN. EN + Spanish.",
     heroHeadline: "Hire abroad without inventing a W-8BEN.",
@@ -2554,7 +2554,7 @@ export const FEATURE_PAGES: FeaturePageContent[] = [
   {
     slug: "international-lease-guarantor",
     xDefault: "es",
-    seoTitle: "International Lease Guarantor — Rent a US Apartment With No Credit History | Docracy",
+    seoTitle: "International Lease Guarantor: Rent in the US With No Credit | Docracy",
     seoDescription:
       "Free Lease Guaranty Agreement letting a relative or company abroad legally guarantee your US lease — for renters with no US credit history or Social Security Number.",
     heroHeadline: "No US credit history? A guarantor abroad can still get you the keys.",
@@ -2813,7 +2813,7 @@ export function getContractorRecordsPageEs(): FeaturePageContent {
 export function getHireAbroadPageEs(): FeaturePageContent {
   return {
     slug: "hire-contractor-abroad",
-    seoTitle: "Contratar en el extranjero — Contrato transfronterizo y cobro por WhatsApp | Docracy",
+    seoTitle: "Contratar en el extranjero: contrato y cobro por WhatsApp | Docracy",
     seoDescription:
       "Documenta un contratista en LATAM o el extranjero: NDA gratis y un contrato transfronterizo real — pago por Wise/cripto/transferencia, cesión de propiedad intelectual entre países — luego cobra por WhatsApp. No es un W-8BEN. EN + español.",
     heroHeadline: "Contrata en el extranjero sin inventar un W-8BEN.",
@@ -4046,7 +4046,7 @@ export function getInternationalLeaseGuarantorPageEs(): FeaturePageContent {
   return {
     slug: "international-lease-guarantor",
     xDefault: "es",
-    seoTitle: "Garante Internacional para Arrendamiento — Renta en EE. UU. Sin Historial Crediticio | Docracy",
+    seoTitle: "Garante internacional: rentar en EE. UU. sin historial | Docracy",
     seoDescription:
       "Contrato de garantía de arrendamiento gratis: un familiar o empresa en el extranjero garantiza legalmente tu renta en EE. UU. — para quienes no tienen historial crediticio ni número de seguro social.",
     heroHeadline: "¿Sin historial crediticio en EE. UU.? Un garante en el extranjero puede conseguirte las llaves.",

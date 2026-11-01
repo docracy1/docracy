@@ -43,6 +43,10 @@ import Privacy from "../src/pages/Privacy";
 import Terms from "../src/pages/Terms";
 import Uptime from "../src/pages/Uptime";
 import FeaturePage from "../src/pages/FeaturePage";
+import Developers from "../src/pages/Developers";
+import AiContractDrafting from "../src/pages/AiContractDrafting";
+import Enterprise from "../src/pages/Enterprise";
+import IntegrationsAiAssistants from "../src/pages/IntegrationsAiAssistants";
 import AlternativePage from "../src/pages/AlternativePage";
 import ExplainerPage from "../src/pages/ExplainerPage";
 import ImportGuidePage from "../src/pages/ImportGuidePage";
@@ -137,6 +141,23 @@ function renderPath(targetPath: string, locale: Locale = "en"): string {
           <Route path="/uptime" element={<Uptime />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPostDetail />} />
+          <Route path="/developers" element={<Developers />} />
+          <Route path="/es/desarrolladores" element={<Developers />} />
+          <Route path="/solutions/ai-contract-drafting" element={<AiContractDrafting />} />
+          <Route path="/es/soluciones/redaccion-contratos-ia" element={<AiContractDrafting />} />
+          <Route path="/enterprise" element={<Enterprise />} />
+          <Route path="/es/empresas" element={<Enterprise />} />
+          <Route path="/integrations/ai-assistants" element={<IntegrationsAiAssistants />} />
+          <Route path="/es/integraciones/asistentes-ia" element={<IntegrationsAiAssistants />} />
+          <Route path="/sign-and-get-paid" element={<FeaturePage slug="sign-and-get-paid" />} />
+          <Route path="/scan-document" element={<FeaturePage slug="scan-document" />} />
+          <Route path="/es/escanear-documento" element={<FeaturePage slug="scan-document" />} />
+          <Route path="/international-lease-guarantor" element={<FeaturePage slug="international-lease-guarantor" />} />
+          <Route path="/es/garante-internacional-arrendamiento" element={<FeaturePage slug="international-lease-guarantor" />} />
+          <Route path="/convert-to-crypto" element={<FeaturePage slug="convert-to-crypto" />} />
+          <Route path="/es/convertir-a-cripto" element={<FeaturePage slug="convert-to-crypto" />} />
+          <Route path="/send-money-latam" element={<FeaturePage slug="send-money-latam" />} />
+          <Route path="/es/enviar-dinero-latam" element={<FeaturePage slug="send-money-latam" />} />
           <Route path="/simple-agreements" element={<FeaturePage slug="simple-agreements" />} />
           <Route path="/nda-signing" element={<FeaturePage slug="nda-signing" />} />
           <Route path="/es/firma-de-nda" element={<FeaturePage slug="nda-signing" />} />

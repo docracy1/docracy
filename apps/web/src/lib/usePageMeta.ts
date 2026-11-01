@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { ensureMetaDescription } from "./seoMeta";
+import { ensureMetaDescription, normalizeSeoTitle } from "./seoMeta";
 import { track } from "./track";
 
 const SITE = "https://docracy.io";
@@ -33,8 +33,9 @@ function setMetaBySelector(selector: string, content: string) {
 /** Sets document.title, meta description, and optional canonical/hreflang/og for a route.
  *  Restores title + description on unmount. Client-only — prerender.mjs injects the same fields
  *  into static HTML because useEffect never runs during static rendering. */
-export function usePageMeta(title: string, description: string, options: PageMetaOptions = {}) {
+export function usePageMeta(rawTitle: string, description: string, options: PageMetaOptions = {}) {
   const { canonicalPath, alternates, xDefault = "en" } = options;
+  const title = normalizeSeoTitle(rawTitle);
   const metaDescription = ensureMetaDescription(description);
 
   useEffect(() => {

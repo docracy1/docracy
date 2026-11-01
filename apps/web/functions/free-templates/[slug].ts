@@ -1,5 +1,5 @@
 import { fetchIndexShell, sanitizeForNoIndex, staticHtmlExists } from "../_spaShell";
-import { ensureMetaDescription } from "../../src/lib/seoMeta";
+import { ensureMetaDescription, normalizeSeoTitle } from "../../src/lib/seoMeta";
 
 const WORKER_URL = "https://api.docracy.io";
 const SITE = "https://docracy.io";
@@ -57,7 +57,7 @@ export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => 
     });
   }
 
-  const title = `${tpl.seoTitle || tpl.title} | Docracy`;
+  const title = normalizeSeoTitle(`${tpl.seoTitle || tpl.title} | Docracy`);
   const description = ensureMetaDescription(
     (tpl.description || tpl.useCase || tpl.definition || tpl.title).slice(0, 300)
   );

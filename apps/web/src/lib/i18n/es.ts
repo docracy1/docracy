@@ -1420,7 +1420,7 @@ const es: Messages = {
   "seo.mcp.title": "Servidor MCP para plantillas legales y estado de firma | Docracy",
   "seo.mcp.description":
     "Conecta Claude, ChatGPT, agentes tipo Gemini o Cursor a Docracy vía MCP: listar plantillas, redactar desde estándares, check_status (gratis) y find_documents (pago).",
-  "seo.ai.title": "Firmas electrónicas con IA y plantillas de confianza para agentes | Docracy",
+  "seo.ai.title": "Firmas electrónicas con IA y plantillas para agentes | Docracy",
   "seo.ai.description":
     "Usa la IA de Docracy para colocar campos, explicar contratos, marcar riesgos y generar PDFs — más herramientas MCP para que los asistentes redacten desde plantillas legales abiertas y consulten el estado de firma.",
   "seo.esignUeta.title": "Firmas electrónicas ESIGN Act y UETA | Docracy",
@@ -1445,7 +1445,7 @@ const es: Messages = {
   "seo.docracyAlternative.title": "¿Qué pasó con Docracy? | Docracy",
   "seo.docracyAlternative.description":
     "El Docracy.com original fue adquirido por eversign en 2019 y descontinuado. Este Docracy es un producto separado, creado de forma independiente — no afiliado a eversign ni al equipo original.",
-  "seo.templateMarketplace.title": "Marketplace de Docracy — Plantillas legales y de negocio gratis",
+  "seo.templateMarketplace.title": "Marketplace de Docracy: plantillas legales y de negocio",
   "seo.templateMarketplace.description":
     "Plantillas de documentos gratis, revisadas por Docracy y compartidas por la comunidad. Encuentra una plantilla, complétala y envíala para firma — gratis, sin necesidad de cuenta.",
   "seo.submitTemplate.title": "Envía una plantilla al Marketplace de Docracy — Gratis",

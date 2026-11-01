@@ -1,5 +1,5 @@
 import { fetchIndexShell, sanitizeForNoIndex, staticHtmlExists } from "../_spaShell";
-import { ensureMetaDescription } from "../../src/lib/seoMeta";
+import { ensureMetaDescription, normalizeSeoTitle } from "../../src/lib/seoMeta";
 
 const WORKER_URL = "https://api.docracy.io";
 const SITE = "https://docracy.io";
@@ -68,7 +68,7 @@ export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => 
     });
   }
 
-  const title = `${post.title} | Docracy`;
+  const title = normalizeSeoTitle(`${post.title} | Docracy`);
   const description = ensureMetaDescription((post.description || post.title).slice(0, 300));
   const canonical = `${SITE}/blog/${encodeURIComponent(slug)}`;
   const date = (post.publishedAt ?? post.createdAt).slice(0, 10);
