@@ -79,10 +79,14 @@ marketplaceAccount.get("/submissions", requirePaidAccount, async (c) => {
 // Mounted at /api/marketplace — public, no auth.
 export const marketplacePublic = new Hono<{ Bindings: Env; Variables: Variables }>();
 
+// Slugs the Pages middleware 301s to a canonical template (web/src/lib/templateLegacyRedirects.json).
+// The worker cannot read that map, and a sitemap must not list a URL that redirects.
+const SITEMAP_REDIRECTED_SLUGS = new Set(["agreement-for-design-services-print-works-limited-license"]);
+
 marketplacePublic.get("/sitemap.xml", async (c) => {
   let rows: Array<{ slug: string; lastmod: string }> = [];
   try {
-    rows = await listWeeklyOfficialForSitemap(c.env);
+    rows = (await listWeeklyOfficialForSitemap(c.env)).filter((r) => !SITEMAP_REDIRECTED_SLUGS.has(r.slug));
   } catch (err) {
     console.error("marketplace sitemap failed:", err instanceof Error ? err.message : err);
   }

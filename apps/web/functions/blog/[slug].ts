@@ -58,7 +58,7 @@ export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => 
     // Do NOT fall through to `/* /index.html 200` — that serves the prerendered homepage
     // (soft-404 / duplicate canonical `/` in GSC). Return a real 404 shell instead.
     const shell = await fetchIndexShell(context.env, context.request, url);
-    const html = sanitizeForNoIndex(shell, "Post not found — Docracy");
+    const html = sanitizeForNoIndex(shell, "Post not found | Docracy");
     return new Response(html, {
       status: 404,
       headers: {

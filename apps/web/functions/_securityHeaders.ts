@@ -20,7 +20,7 @@ export function newNonce(): string {
 }
 
 export const PERMISSIONS_POLICY =
-  "camera=(self), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()";
+  "camera=(self), microphone=(), geolocation=(), payment=(), usb=()";
 
 export const HSTS = "max-age=31536000; includeSubDomains; preload";
 

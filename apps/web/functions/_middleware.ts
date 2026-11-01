@@ -297,7 +297,7 @@ const handle: PagesFunction<{ ASSETS: Fetcher }> = async (context) => {
         });
       }
       // Unknown URL — real 404 (not homepage HTML as 200).
-      const html = sanitizeForNoIndex(shell, "Page not found — Docracy");
+      const html = sanitizeForNoIndex(shell, "Page not found | Docracy");
       return new Response(html, {
         status: 404,
         headers: {

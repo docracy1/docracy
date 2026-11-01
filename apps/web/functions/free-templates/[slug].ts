@@ -47,7 +47,7 @@ export const onRequest: PagesFunction<{ ASSETS: Fetcher }> = async (context) => 
     if (hasStatic) return context.next();
 
     const shell = await fetchIndexShell(context.env, context.request, url);
-    const html = sanitizeForNoIndex(shell, "Template not found — Docracy");
+    const html = sanitizeForNoIndex(shell, "Template not found | Docracy");
     return new Response(html, {
       status: 404,
       headers: {
