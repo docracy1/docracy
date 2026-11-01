@@ -7540,3 +7540,79 @@ a.dashboard-nav-subitem {
   text-align: center;
 }
 
+
+/* Mobile pass at 375 px (1.11.2026): the pricing dock ran past the right edge on every
+   marketing page, several labels sat under 12 px, inputs under 16 px zoom the page on iOS, and
+   inline links were 15 to 21 px high. Padding on an inline link widens the tap area without
+   moving the line. */
+@media (max-width: 760px) {
+  /* The dock rows are grid items: without min-width 0 a row grows to its content and runs past
+     the screen instead of letting the price shrink. */
+  .mobile-pricing-dock-bar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .mobile-pricing-dock .pricing-sticky-col {
+    min-width: 0;
+    gap: 8px;
+  }
+  .mobile-pricing-dock .pricing-sticky-name {
+    flex: 0 0 auto;
+    min-width: 52px;
+    font-size: 12px;
+  }
+  .mobile-pricing-dock .pricing-sticky-price {
+    flex: 1 1 0;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .mobile-pricing-dock .pricing-sticky-note {
+    font-size: 12px;
+    max-width: none;
+    overflow: visible;
+  }
+  .mobile-pricing-dock .pricing-sticky-cta {
+    flex: 0 0 auto;
+    min-width: 0;
+  }
+
+  .hero-trusted-by-gdoc-band .trust-logos-label,
+  .pdf-upload-circle-or,
+  .hero-band .pdf-upload-circle-or,
+  .pdf-upload-circle-gdoc-hint,
+  .hero-band .pdf-upload-circle-gdoc-hint,
+  .pdf-upload-circle-hero .pdf-upload-circle-caption,
+  .template-tile-tag,
+  .plan-popular {
+    font-size: 12px;
+  }
+  .hero-band .pdf-upload-circle-gdoc {
+    max-width: 300px;
+  }
+  .hero-band .pdf-upload-circle-gdoc-form button {
+    font-size: 12px;
+    min-height: 28px;
+  }
+
+  input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="range"]):not([type="color"]),
+  select,
+  textarea,
+  .hero-band .pdf-upload-circle-gdoc-form input {
+    font-size: 16px;
+  }
+
+  .hero-trust-badges a {
+    min-height: 24px;
+  }
+  .hero-secondary-link {
+    display: inline-block;
+    padding: 2px 0;
+  }
+  a:not([class]) {
+    padding-block: 5px;
+  }
+  .site-footer-col a {
+    padding: 3px 0;
+  }
+}
