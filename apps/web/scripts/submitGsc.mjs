@@ -6,7 +6,7 @@
  * the docracy.io property (the owner's click). Its JSON key lives OUTSIDE the repository:
  *   ~/.config/docracy/gsc-service-account.json   (or GSC_SERVICE_ACCOUNT_FILE=/path/to/key.json)
  * Property: GSC_SITE; without it the domain property "sc-domain:docracy.io" is tried first, then the
- * URL-prefix property "https://docracy.io/".
+ * URL-prefix property "https://docracy.io/" (the verified one since 2.11.2026, HTML file in public/).
  *
  * Without the key the script says so and exits 0: a missing key must never fail a deploy.
  * Run on its own: node scripts/submitGsc.mjs
@@ -55,8 +55,11 @@ async function main() {
   }
   const { access_token: token } = await tokenRes.json();
   for (const site of SITES) {
+    // A URL-prefix property only takes sitemaps on its own host (others answer HTTP 400). The
+    // api.docracy.io sitemaps reach Google through the Sitemap: lines in robots.txt instead.
+    const sitemaps = site.startsWith("sc-domain:") ? SITEMAPS : SITEMAPS.filter((m) => m.startsWith(site));
     let submitted = 0;
-    for (const sitemap of SITEMAPS) {
+    for (const sitemap of sitemaps) {
       const url = `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(site)}/sitemaps/${encodeURIComponent(sitemap)}`;
       const res = await fetch(url, { method: "PUT", headers: { authorization: `Bearer ${token}` } });
       // 204 = submitted. 403 usually means the service account is not a user of this property (or it does not exist).
@@ -66,7 +69,7 @@ async function main() {
       if (res.ok) submitted++;
       else break;
     }
-    if (submitted === SITEMAPS.length) return;
+    if (submitted === sitemaps.length) return;
   }
 }
 
