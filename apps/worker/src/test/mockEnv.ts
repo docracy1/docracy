@@ -309,8 +309,12 @@ function createMockD1() {
   return {
     prepare: (sql: string) => makeStatement(sql),
     batch: async (stmts: ReturnType<typeof makeStatement>[]) => Promise.all(stmts.map((s) => s.run())),
+    // Real D1 .exec() runs each line as its own statement, so a multi-line statement fails there.
+    // The mock does the same, so tests catch it (the Monday blog job broke on this for two months).
     exec: async (sql: string) => {
-      db.run(sql);
+      for (const line of sql.split("\n")) {
+        if (line.trim()) db.run(line);
+      }
     },
     _db: db,
   };
