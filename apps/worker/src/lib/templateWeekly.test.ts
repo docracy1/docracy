@@ -2,10 +2,12 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   HOURLY_LEGACY_DRAIN_BATCH,
   parseAndValidateDraft,
+  runCappedWeeklyTemplatePublish,
   runHourlyLegacyBatchDrain,
   runWeeklyTemplateCatchUpIfEmpty,
   runWeeklyTemplatePublish,
   validateDraftWithReason,
+  weekStartUtc,
 } from "./templateWeekly";
 import { DAILY_DRAIN_BUDGET, getDrainBudgetUsed } from "./adminDrainBudget";
 import { renderTemplatePdf, TEXT_BLANK } from "./templatePdf";
@@ -336,6 +338,69 @@ describe("runHourlyLegacyBatchDrain", () => {
     expect(secondRun.attempted).toBe(0);
     expect(secondRun.published).toBe(0);
     expect(secondRun.skipped).toBe(0);
+  });
+});
+
+describe("weekly publish cap", () => {
+  const MONDAY = new Date("2026-11-02T08:07:00.000Z");
+
+  async function markPublished(d1: ReturnType<typeof makeMockEnv>["d1"], count: number, at: string) {
+    const { results } = await d1
+      .prepare(`SELECT id FROM template_topic_queue WHERE status = 'queued' ORDER BY sort_order LIMIT ?`)
+      .bind(count)
+      .all();
+    for (const row of results as Array<{ id: string }>) {
+      await d1
+        .prepare(`UPDATE template_topic_queue SET status = 'published', published_at = ? WHERE id = ?`)
+        .bind(at, row.id)
+        .run();
+    }
+  }
+
+  it("starts the publishing week on Monday 00:00 UTC", () => {
+    expect(weekStartUtc(MONDAY)).toBe("2026-11-02T00:00:00.000Z");
+    expect(weekStartUtc(new Date("2026-11-01T23:59:00.000Z"))).toBe("2026-10-26T00:00:00.000Z");
+    expect(weekStartUtc(new Date("2026-11-08T12:00:00.000Z"))).toBe("2026-11-02T00:00:00.000Z");
+  });
+
+  it("does not touch the queue once the week has its 10 templates", async () => {
+    const { env, d1 } = makeMockEnv();
+    await ensureWeeklyTemplateInfra(env);
+    await markPublished(d1, 10, "2026-11-02T03:00:00.000Z");
+    const before = await queuedTopicCount(d1);
+    const ai = vi.spyOn(env.AI, "run").mockResolvedValue(THIN_DRAFT);
+
+    const result = await runCappedWeeklyTemplatePublish(env, 5, MONDAY);
+
+    expect(result).toMatchObject({ attempted: 0, published: 0, queueWasEmpty: false });
+    expect(ai).not.toHaveBeenCalled();
+    expect(await queuedTopicCount(d1)).toBe(before);
+  });
+
+  it("stops at the cap mid-run and leaves the other topics queued", async () => {
+    const { env, d1 } = makeMockEnv();
+    await ensureWeeklyTemplateInfra(env);
+    await markPublished(d1, 8, "2026-11-02T03:00:00.000Z");
+    const before = await queuedTopicCount(d1);
+    vi.spyOn(env.AI, "run").mockResolvedValue({ response: richDraftJson() });
+
+    const result = await runCappedWeeklyTemplatePublish(env, 5, MONDAY);
+
+    expect(result.published).toBe(2);
+    expect(result.attempted).toBe(2);
+    expect(await queuedTopicCount(d1)).toBe(before - 2);
+  });
+
+  it("does not count templates from earlier weeks", async () => {
+    const { env, d1 } = makeMockEnv();
+    await ensureWeeklyTemplateInfra(env);
+    await markPublished(d1, 10, "2026-11-01T23:00:00.000Z");
+    const ai = vi.spyOn(env.AI, "run").mockResolvedValue(THIN_DRAFT);
+
+    const result = await runCappedWeeklyTemplatePublish(env, 3, MONDAY);
+
+    expect(result.attempted).toBe(3);
+    expect(ai).toHaveBeenCalledTimes(3);
   });
 });
 

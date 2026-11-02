@@ -9,7 +9,9 @@ import { getDrainBudgetRemaining, recordDrainBudgetUsage } from "./adminDrainBud
 import type { Env } from "@docracy/shared";
 
 const DEFAULT_MODEL = "@cf/meta/llama-3.1-8b-instruct-fp8";
-/** How many full FreeTemplate-quality docs to publish each Monday. */
+/** How many full FreeTemplate-quality docs to publish each week, and how many topics the Monday run
+ *  attempts. Most drafts fail the richness gate, so one Monday run alone usually falls short; the
+ *  hourly drain tops the week up to this number and then stops (runCappedWeeklyTemplatePublish). */
 export const WEEKLY_TEMPLATE_BATCH = 10;
 /** How many queued topics runHourlyLegacyBatchDrain processes per hourly cron firing. Safe to run
  *  much larger than the admin route's MAX_DRAIN_LIMIT (3): a Cron Trigger has no HTTP client
@@ -344,7 +346,11 @@ export interface WeeklyPublishResult {
  * read quota and take production logins down until the next UTC day. This return value is the fix —
  * every number here falls out of work this function was already doing internally, at no extra cost.
  */
-export async function runWeeklyTemplatePublish(env: Env, limit: number = WEEKLY_TEMPLATE_BATCH): Promise<WeeklyPublishResult> {
+export async function runWeeklyTemplatePublish(
+  env: Env,
+  limit: number = WEEKLY_TEMPLATE_BATCH,
+  maxPublished: number = Number.POSITIVE_INFINITY
+): Promise<WeeklyPublishResult> {
   const empty: WeeklyPublishResult = { attempted: 0, published: 0, skipped: 0, queueWasEmpty: true, skips: [] };
   if (!env.DOCRACY_DB) {
     console.log("Weekly templates: skipped (no D1)");
@@ -374,6 +380,7 @@ export async function runWeeklyTemplatePublish(env: Env, limit: number = WEEKLY_
   let processed = 0;
   let aiError: string | undefined;
   for (const topic of topics) {
+    if (published >= maxPublished) break;
     const { draft, reason, aiError: draftAiError } = await draftFromTopic(env, topic);
     if (!draft && reason && TRANSIENT_AI_REASONS.has(reason)) {
       // A failed AI call (daily Workers AI quota, outage) is not the topic's fault: leave it queued and
@@ -438,6 +445,38 @@ export async function runWeeklyTemplatePublish(env: Env, limit: number = WEEKLY_
   return { attempted: processed, published, skipped: processed - published, queueWasEmpty: false, skips, ...(aiError ? { aiError } : {}) };
 }
 
+/** Monday 00:00 UTC of the week containing `now`, the start of the publishing week. */
+export function weekStartUtc(now: Date): string {
+  const daysSinceMonday = (now.getUTCDay() + 6) % 7;
+  return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - daysSinceMonday)).toISOString();
+}
+
+/**
+ * Unattended publishing, held to WEEKLY_TEMPLATE_BATCH published templates per week. Without this cap
+ * the hourly drain walked the whole queue: 99 topics reset on 26.10.2026 were gone in about 20 hours,
+ * and the Monday runs after that had nothing left. The admin drain route stays uncapped on purpose:
+ * a person asked for it, and it has its own daily budget.
+ */
+export async function runCappedWeeklyTemplatePublish(
+  env: Env,
+  attempts: number = WEEKLY_TEMPLATE_BATCH,
+  now: Date = new Date()
+): Promise<WeeklyPublishResult> {
+  if (!env.DOCRACY_DB) return runWeeklyTemplatePublish(env, attempts);
+  await ensureWeeklyTemplateInfra(env);
+  const row = await env.DOCRACY_DB.prepare(
+    `SELECT COUNT(*) AS n FROM template_topic_queue WHERE status = 'published' AND published_at >= ?`
+  )
+    .bind(weekStartUtc(now))
+    .first<{ n: number }>();
+  const remaining = WEEKLY_TEMPLATE_BATCH - Number(row?.n ?? 0);
+  if (remaining <= 0) {
+    console.log(`Weekly templates: weekly cap of ${WEEKLY_TEMPLATE_BATCH} reached, nothing to do`);
+    return { attempted: 0, published: 0, skipped: 0, queueWasEmpty: false, skips: [] };
+  }
+  return runWeeklyTemplatePublish(env, attempts, remaining);
+}
+
 /**
  * Hourly backfill: if no origin=weekly Marketplace rows exist yet (migrations never applied,
  * Monday cron missed, or AI skipped the first batch), create the queue and publish one batch.
@@ -452,7 +491,7 @@ export async function runWeeklyTemplateCatchUpIfEmpty(env: Env): Promise<void> {
     return;
   }
   console.log("Weekly templates: weekly list empty — running publish catch-up");
-  await runWeeklyTemplatePublish(env);
+  await runCappedWeeklyTemplatePublish(env);
 }
 
 /**
@@ -475,7 +514,7 @@ export async function runHourlyLegacyBatchDrain(env: Env): Promise<WeeklyPublish
   }
 
   const limit = Math.min(HOURLY_LEGACY_DRAIN_BATCH, remaining);
-  const result = await runWeeklyTemplatePublish(env, limit);
+  const result = await runCappedWeeklyTemplatePublish(env, limit);
   await recordDrainBudgetUsage(env, result.attempted);
   return result;
 }

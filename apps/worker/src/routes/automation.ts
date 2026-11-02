@@ -4,7 +4,7 @@ import { requireAutomationToken } from "../lib/auth";
 import { runWeeklyBlogPublish } from "../lib/blogWeekly";
 import { createBlogPost, slugify } from "../lib/blogPosts";
 import { submitTemplate } from "../lib/marketplaceTemplates";
-import { runWeeklyTemplatePublish } from "../lib/templateWeekly";
+import { runCappedWeeklyTemplatePublish } from "../lib/templateWeekly";
 import type { DocField, Env } from "@docracy/shared";
 
 const MAX_TITLE_LENGTH = 100;
@@ -23,7 +23,7 @@ automation.post("/run-weekly-content", requireAutomationToken, async (c) => {
   c.executionCtx.waitUntil(
     Promise.all([
       runWeeklyBlogPublish(c.env).catch((err) => console.error("Weekly blog publish failed:", err)),
-      runWeeklyTemplatePublish(c.env).catch((err) => console.error("Weekly template publish failed:", err)),
+      runCappedWeeklyTemplatePublish(c.env).catch((err) => console.error("Weekly template publish failed:", err)),
     ])
   );
   return c.json({ ok: true, started: true });

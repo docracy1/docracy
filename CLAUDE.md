@@ -61,6 +61,7 @@ Daily Worker sweeps run in the 08 UTC hour of the single hourly cron `7 * * * *`
    - Draft **FreeTemplate-parity** JSON (full SEO catalog + multi-section PDF blocks — not thin).
    - Render with the same PDF layout standard as `generateFreeTemplatePdfs.mjs`, publish as approved Marketplace rows with `origin='weekly'`.
    - Thin/invalid AI drafts are marked `skipped` and do not publish.
+   - The hourly cron tops the week up to 10 published templates, then stops (`runCappedWeeklyTemplatePublish`, week starts Monday 00:00 UTC). Without the cap it emptied the queue within a day.
 
 Local test: `curl "http://127.0.0.1:8787/__scheduled?cron=22+8+*+*+*"` on a Monday, or temporarily force the Monday branch.
 

@@ -44,7 +44,7 @@ import { runOnboardingEmailSweep } from "./lib/onboardingEmails";
 import { runCompletionEmailSweep } from "./lib/completionEmails";
 import { runSpaSmokeAndAlert } from "./lib/spaSmoke";
 import { BLOG_WEEKLY_CRON, runWeeklyBlogPublish, isWeeklyBlogMondayUtc } from "./lib/blogWeekly";
-import { runHourlyLegacyBatchDrain, runWeeklyTemplateCatchUpIfEmpty, runWeeklyTemplatePublish } from "./lib/templateWeekly";
+import { runCappedWeeklyTemplatePublish, runHourlyLegacyBatchDrain, runWeeklyTemplateCatchUpIfEmpty } from "./lib/templateWeekly";
 import { reconcileStaleCheckouts } from "./lib/billingReconcile";
 import { runDuePinDeliverySweep } from "./lib/pinDelivery";
 import type { Env } from "@docracy/shared";
@@ -201,7 +201,7 @@ export default {
     // and any unmatched cron string — keep previous behavior.
     if (isWeeklyBlogMondayUtc(new Date()) || event.cron === BLOG_WEEKLY_CRON) {
       ctx.waitUntil(runWeeklyBlogPublish(env).catch((err) => console.error("Weekly blog publish failed:", err)));
-      ctx.waitUntil(runWeeklyTemplatePublish(env).catch((err) => console.error("Weekly template publish failed:", err)));
+      ctx.waitUntil(runCappedWeeklyTemplatePublish(env).catch((err) => console.error("Weekly template publish failed:", err)));
     }
 
     ctx.waitUntil(runReminderSweep(env));
