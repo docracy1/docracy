@@ -15,6 +15,11 @@ describe("security headers on API responses", () => {
     expect(res.headers.get("Referrer-Policy")).toBe("strict-origin-when-cross-origin");
     expect(res.headers.get("Permissions-Policy")).toContain("camera=()");
     expect(res.headers.get("Content-Security-Policy")).toBe("default-src 'none'; frame-ancestors 'none'");
+    // The sitemaps served here must stay readable for crawlers; everything else stays closed.
+    const body = await res.text();
+    expect(body).toContain("Allow: /api/blog-posts/sitemap.xml$");
+    expect(body).toContain("Allow: /api/marketplace/sitemap.xml$");
+    expect(body.trim().endsWith("Disallow: /")).toBe(true);
   });
 
   it("keeps protected routes closed and still sets the headers on a 401", async () => {

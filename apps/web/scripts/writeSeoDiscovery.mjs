@@ -26,6 +26,9 @@ const ROBOTS_PREFIX_ALLOWS = [
   "Allow: /industry/",
   "Allow: /for/",
   "Allow: /videos/",
+  // The sitemap itself: without this the catch-all Disallow below kept Google from reading it
+  // ("Couldn't fetch" in Search Console since 15.09.2026).
+  "Allow: /sitemap.xml$",
   "Allow: /llms.txt$",
   "Allow: /llms-full.txt$",
   "Allow: /auth.md$",

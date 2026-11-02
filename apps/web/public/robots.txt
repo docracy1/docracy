@@ -28,6 +28,7 @@ Allow: /import-from-
 Allow: /industry/
 Allow: /for/
 Allow: /videos/
+Allow: /sitemap.xml$
 Allow: /llms.txt$
 Allow: /llms-full.txt$
 Allow: /auth.md$

@@ -101,7 +101,13 @@ app.use("/api/*", async (c, next) => {
 // returning 401/404 for unauthenticated or bare requests). Without this, Cloudflare's own default
 // robots.txt permits Googlebot to crawl the domain, which then reports those API responses as
 // indexing errors in Search Console for a page that was never meant to be indexed.
-app.get("/robots.txt", (c) => c.text("User-agent: *\nDisallow: /\n"));
+// The two sitemaps served here (listed in docracy.io/robots.txt) stay readable; a blanket Disallow kept
+// Google from fetching them.
+app.get("/robots.txt", (c) =>
+  c.text(
+    "User-agent: *\nAllow: /api/blog-posts/sitemap.xml$\nAllow: /api/marketplace/sitemap.xml$\nDisallow: /\n"
+  )
+);
 
 app.route("/api/documents", documents);
 app.route("/api", sign);
