@@ -39,6 +39,7 @@ Allow: /favicon-32.png$
 Allow: /apple-touch-icon.png$
 Allow: /og-image.png$
 Allow: /docracy-seal-icon.png$
+Allow: /google41f4d8c71ccc1767
 Allow: /1099-contractor-records$
 Allow: /1099-contractor-records?
 Allow: /1099-season$

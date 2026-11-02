@@ -37,6 +37,8 @@ const ROBOTS_PREFIX_ALLOWS = [
   "Allow: /apple-touch-icon.png$",
   "Allow: /og-image.png$",
   "Allow: /docracy-seal-icon.png$",
+  // Search Console ownership file for https://docracy.io/ (keep it, or the property loses verification).
+  "Allow: /google41f4d8c71ccc1767",
 ];
 
 // App-shell pages that are real client-side routes (not prerendered — see routes[] below), but
