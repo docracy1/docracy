@@ -18,6 +18,7 @@ The protocols are drafts reconstructed from public register data (see sources be
 - Financial year 01.01–31.12; first reporting period 18.01.2023–31.12.2023.
 - Premium Accounting OÜ confirmed as statutory contact person; registered address Kotkapoja tn 2a-10, Tallinn.
 - Product development financed from share capital and shareholder financing; § 176 net-asset monitoring.
+- Cash need Q4 2023 – Q3 2024: approx. 50 000 EUR, covered by the founding shareholder (equity or loan); two-month cash reserve, monthly cash review.
 - Board member serves without remuneration; no employees.
 - Annual report 2023 to be filed in Q1 2024 (filed 06.03.2024).
 
@@ -26,6 +27,7 @@ The protocols are drafts reconstructed from public register data (see sources be
 - Name change xosign OÜ → swipesign OÜ and amended articles (16.08.2024) confirmed; rebranding of all documents and notifications to bank, tax authority, partners.
 - Transfer of the sole share (10 000 EUR) to RELACON OÜ on 20.08.2024 recorded in the list of shareholders; beneficial owner remains Reinhold Lackner; related-party transactions to be documented at arm's length.
 - Shareholder equity contribution without share capital increase (~72.5 kEUR) accepted and to be recorded in equity.
+- Cash need Q4 2024 – Q3 2025: approx. 200 000 EUR for the product rebuild; financing commitment of up to 220 000 EUR requested from RELACON OÜ as monthly short-term loan tranches; § 176 risk flagged.
 - Annual report 2024 to be filed by Q1 2025 (filed 10.03.2025).
 
 **2025 (30.09.2025)**
@@ -33,6 +35,7 @@ The protocols are drafts reconstructed from public register data (see sources be
 - Amended articles registered 12.03.2025 confirmed.
 - Net assets negative → board convenes the sole shareholder under § 176 of the Commercial Code and proposes: going concern, shareholder financing/subordination commitment, conversion of shareholder receivables into equity.
 - Financing from RELACON OÜ to be documented in written agreements; quarterly review of external development spend.
+- Cash need Q4 2025 – Q3 2026: approx. 65 000 EUR (45 000 EUR in Q4 2025, then burn cut to max. 8 000 EUR/month); covered by RELACON OÜ, up to 70 000 EUR additional financing.
 - Annual report 2025 to disclose negative net assets, § 176 measures and going-concern assessment (filed 19.06.2026).
 
 **2026 (27.10.2026)**
@@ -41,6 +44,7 @@ The protocols are drafts reconstructed from public register data (see sources be
 - Division of responsibilities between the two board members; joint consent for financing, related-party agreements, hiring and commitments above 10 000 EUR.
 - First employee (Q3 2026) and Q4 2026 operating plan approved.
 - Proposal to convert shareholder receivables into equity in 2027 and renewed 12-month financing commitment from RELACON OÜ.
+- Cash need Q4 2026 – Q3 2027: spending approx. 90 000–110 000 EUR (about 60 % payroll) against budgeted revenue 30 000–40 000 EUR → net cash need approx. 65 000 EUR, covered by at least 70 000 EUR new funding from RELACON OÜ; payroll paid first, two-month reserve, monthly rolling forecast.
 - Annual report 2026 to be filed before 30.06.2027, signed by both board members.
 
 ## Source data (as of 05.11.2026)
@@ -114,3 +118,4 @@ Declared VAT-taxable turnover in 2025 (216 kEUR) is far above the revenue in the
 - **§ 176 shareholder decision** (2025/2026) and the **financing/subordination commitment** by RELACON OÜ are drafted as proposals/decisions and must match the actual shareholder resolutions.
 - **Explanation of the 2025 VAT-taxable turnover** (reverse-charge purchases) is an interpretation of the Tax Board data.
 - **Quarterly loss figures** quoted for 2025 are Inforegister estimates, not accounting data.
+- **Cash-need figures** in each protocol are board-level estimates derived from the register data (annual results, current assets, liabilities and quarterly declared turnover as a proxy for spending); the 2026/2027 revenue and payroll budget is an assumption. Replace with the actual cash plans if they exist.

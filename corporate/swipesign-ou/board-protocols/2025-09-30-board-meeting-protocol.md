@@ -29,8 +29,9 @@ The Management Board consists of one member. The sole member is present, so the 
 3. Business activity and financial position (year to date)
 4. Net assets below the statutory threshold (§ 176 Commercial Code) – convening the shareholder and proposed measures
 5. Financing by the shareholder, cost control and going concern
-6. Contact person, registered address, remuneration of the board
-7. Preparation of the annual report 2025
+6. Cash need for the next twelve months
+7. Contact person, registered address, remuneration of the board
+8. Preparation of the annual report 2025
 
 ## 3. Discussion and resolutions
 
@@ -80,14 +81,29 @@ Votes: for 1, against 0, abstained 0. Adopted.
 - (d) maintain timely filing of VAT returns and payment of all taxes so that the company keeps a clean tax record (currently no arrears).
 Votes: for 1, against 0, abstained 0. Adopted.
 
-### 3.6 Contact person, address and remuneration
+### 3.6 Cash need for the next twelve months
 
-**Resolution 6.** The board confirms Premium Accounting OÜ (registry code 14683511) as the statutory contact person and Kotkapoja tn 2a-10, 10615 Tallinn as the registered address. The Member of the Management Board continues to serve without remuneration; no employment contracts are concluded in 2025.
+The chair presented the liquidity position and the cash requirement until 30.09.2026:
+
+- Free cash is minimal: current assets are expected at roughly 5 000 EUR at 31.12.2025 (actual per the later annual report: 4 637 EUR). All spending in 2025 has been funded by monthly drawdowns of short-term shareholder financing, which will stand at approximately 214 000 EUR at year-end.
+- Q4 2025 spending is planned at about 45 000 EUR (declared VAT-taxable turnover Q4 2025, largely purchased services: 43 546 EUR). From Q1 2026 the external development programme is wound down and monthly spending is reduced to approximately **3 000–8 000 EUR**.
+- The **cash need for Q4 2025 – Q3 2026 is approximately 60 000–70 000 EUR** (about 45 000 EUR in Q4 2025 and about 20 000 EUR in the first three quarters of 2026), before any revenue from paid plans. Revenue in this period is expected to cover only a small part of the costs.
+
+**Resolution 6.** The board:
+- (a) approves the cash plan for Q4 2025 – Q3 2026 with an estimated cash need of approximately 65 000 EUR;
+- (b) resolves that the cash need is covered by the sole shareholder RELACON OÜ under the existing financing arrangement, increased by up to 70 000 EUR, and that the shareholder's written financing and subordination commitment (resolution 4(b)) shall explicitly cover this amount and period;
+- (c) resolves to reduce the monthly cash burn from Q1 2026 to no more than 8 000 EUR by ending external development contracts, consolidating hosting and software subscriptions and keeping the board unpaid;
+- (d) requires a monthly cash-flow report to the shareholder; any cost commitment above 5 000 EUR outside the cash plan requires prior consent of the shareholder.
 Votes: for 1, against 0, abstained 0. Adopted.
 
-### 3.7 Annual report 2025
+### 3.7 Contact person, address and remuneration
 
-**Resolution 7.** The board shall prepare the annual report for 01.01.2025–31.12.2025 with a management report that discloses the negative net assets, the measures decided under § 176 of the Commercial Code, the shareholder's financing commitment and the going-concern assessment, and submit it for approval by the shareholder and to the Commercial Register before the statutory deadline of 30.06.2026.
+**Resolution 7.** The board confirms Premium Accounting OÜ (registry code 14683511) as the statutory contact person and Kotkapoja tn 2a-10, 10615 Tallinn as the registered address. The Member of the Management Board continues to serve without remuneration; no employment contracts are concluded in 2025.
+Votes: for 1, against 0, abstained 0. Adopted.
+
+### 3.8 Annual report 2025
+
+**Resolution 8.** The board shall prepare the annual report for 01.01.2025–31.12.2025 with a management report that discloses the negative net assets, the measures decided under § 176 of the Commercial Code, the shareholder's financing commitment and the going-concern assessment, and submit it for approval by the shareholder and to the Commercial Register before the statutory deadline of 30.06.2026.
 Votes: for 1, against 0, abstained 0. Adopted.
 
 ## 4. Closing

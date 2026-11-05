@@ -27,8 +27,9 @@ The Management Board consists of one member. The sole member is present, so the 
 2. First financial year, accounting and reporting arrangements
 3. Statutory contact person and registered address
 4. Business activity, product development and financial position (year to date)
-5. Remuneration of the Management Board
-6. Preparation of the annual report for the first financial year
+5. Cash need for the next twelve months
+6. Remuneration of the Management Board
+7. Preparation of the annual report for the first financial year
 
 ## 3. Discussion and resolutions
 
@@ -70,14 +71,28 @@ The chair reported on the first months of operation:
 **Resolution 4.** The board approves the continuation of product development in 2023 and 2024 and resolves to finance operations from the share capital and, if needed, from shareholder financing. The board will monitor net assets so that they remain above the thresholds of § 176 of the Commercial Code; if net assets fall below half of the share capital, a shareholders' meeting shall be convened without delay.
 Votes: for 1, against 0, abstained 0. Adopted.
 
-### 3.5 Remuneration of the Management Board
+### 3.5 Cash need for the next twelve months
 
-**Resolution 5.** The Member of the Management Board performs his duties without remuneration until the shareholder decides otherwise. No employment contracts are concluded in 2023.
+The chair presented the liquidity position and the cash requirement until 30.09.2024:
+
+- Cash at the start of operations consisted of the paid-in share capital of 10 000 EUR. After the start-up and development costs of 2023 (expected full-year loss of approx. 9 600 EUR) the company will enter 2024 with only a few hundred euros of free cash.
+- Planned spending for Q4 2023 and the first three quarters of 2024 (external development, hosting and software, accounting and contact-person service, state fees) is estimated at **55 000–65 000 EUR**. Sales revenue in the same period is expected at no more than 10 000–15 000 EUR, as the product is launched during 2024.
+- The resulting **cash need is approximately 50 000 EUR**, with a peak in the second and third quarter of 2024. The company has no credit lines or bank loans.
+
+**Resolution 5.** The board:
+- (a) approves the cash plan for Q4 2023 – Q3 2024 with an estimated cash need of approximately 50 000 EUR;
+- (b) resolves to cover the cash need from the founding shareholder (as equity contribution or shareholder loan, to be agreed in writing with the shareholder before the funds are needed), since the company has no bank financing;
+- (c) requires that a minimum cash reserve covering two months of fixed costs is maintained at all times and that the board reviews the cash position monthly; if the actual cash need exceeds the plan by more than 20 %, the shareholder shall be informed immediately.
 Votes: for 1, against 0, abstained 0. Adopted.
 
-### 3.6 Annual report for the first financial year
+### 3.6 Remuneration of the Management Board
 
-**Resolution 6.** The board shall prepare the annual report for the period 18.01.2023–31.12.2023 and submit it to the shareholder for approval and to the Commercial Register well before the statutory deadline of 30.06.2024 (target: Q1 2024). An audit or review is not required for the company's size category.
+**Resolution 6.** The Member of the Management Board performs his duties without remuneration until the shareholder decides otherwise. No employment contracts are concluded in 2023.
+Votes: for 1, against 0, abstained 0. Adopted.
+
+### 3.7 Annual report for the first financial year
+
+**Resolution 7.** The board shall prepare the annual report for the period 18.01.2023–31.12.2023 and submit it to the shareholder for approval and to the Commercial Register well before the statutory deadline of 30.06.2024 (target: Q1 2024). An audit or review is not required for the company's size category.
 Votes: for 1, against 0, abstained 0. Adopted.
 
 ## 4. Closing

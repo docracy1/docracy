@@ -27,8 +27,9 @@ The Management Board consists of one member. The sole member is present, so the 
 2. Change of business name xosign OÜ → swipesign OÜ and amended articles of association (16.08.2024)
 3. Transfer of the sole share to RELACON OÜ (20.08.2024) – new shareholder, list of shareholders, beneficial owner
 4. Business activity and financial position (year to date), financing of development
-5. Statutory contact person, registered address, remuneration of the board
-6. Preparation of the annual report 2024
+5. Cash need for the next twelve months
+6. Statutory contact person, registered address, remuneration of the board
+7. Preparation of the annual report 2024
 
 ## 3. Discussion and resolutions
 
@@ -74,14 +75,29 @@ The chair reported on the year to date:
 - (c) will continue to monitor net assets against § 176 of the Commercial Code and convene the shareholder immediately should net assets fall below half of the share capital.
 Votes: for 1, against 0, abstained 0. Adopted.
 
-### 3.5 Contact person, address and remuneration
+### 3.5 Cash need for the next twelve months
 
-**Resolution 5.** The board confirms Premium Accounting OÜ (registry code 14683511) as the statutory contact person and Kotkapoja tn 2a-10, 10615 Tallinn as the registered address. The Member of the Management Board continues to serve without remuneration; no employment contracts are concluded in 2024.
+The chair presented the liquidity position and the cash requirement until 30.09.2025:
+
+- Free cash at year-end 2024 is expected at roughly 20 000–25 000 EUR (total current assets at 31.12.2024 per the later annual report: 26 008 EUR), after the shareholder's equity contribution received in 2024.
+- The 2025 plan foresees a rebuild of the product and a go-to-market push carried out mainly by external developers and service providers, with monthly spending rising to **18 000–23 000 EUR** (approx. 55 000–70 000 EUR per quarter). Sales revenue during the rebuild is expected to stay low.
+- The **cash need for Q4 2024 – Q3 2025 is approximately 200 000 EUR**, net of expected revenue and the opening cash balance. This cannot be covered from operations or from the share capital.
+
+**Resolution 5.** The board:
+- (a) approves the cash plan for Q4 2024 – Q3 2025 with an estimated cash need of approximately 200 000 EUR;
+- (b) resolves to request from the sole shareholder RELACON OÜ a financing commitment of up to 220 000 EUR, to be drawn down in monthly tranches as short-term shareholder loans under a written framework agreement at arm's-length terms; the drawdowns are to be recorded as short-term liabilities and disclosed as related-party transactions;
+- (c) notes that this financing will take net assets below the thresholds of § 176 of the Commercial Code in the course of 2025 unless part of it is provided as equity, and resolves to put the matter on the agenda of the next board meeting and to the shareholder in good time;
+- (d) requires a monthly cash-flow report to the shareholder and a cash reserve covering at least one month of planned spending.
 Votes: for 1, against 0, abstained 0. Adopted.
 
-### 3.6 Annual report 2024
+### 3.6 Contact person, address and remuneration
 
-**Resolution 6.** The board shall prepare the annual report for 01.01.2024–31.12.2024, including the required disclosure of the change of name, the change of shareholder and related-party transactions, and submit it for approval by the shareholder RELACON OÜ and to the Commercial Register by the end of Q1 2025 (statutory deadline 30.06.2025).
+**Resolution 6.** The board confirms Premium Accounting OÜ (registry code 14683511) as the statutory contact person and Kotkapoja tn 2a-10, 10615 Tallinn as the registered address. The Member of the Management Board continues to serve without remuneration; no employment contracts are concluded in 2024.
+Votes: for 1, against 0, abstained 0. Adopted.
+
+### 3.7 Annual report 2024
+
+**Resolution 7.** The board shall prepare the annual report for 01.01.2024–31.12.2024, including the required disclosure of the change of name, the change of shareholder and related-party transactions, and submit it for approval by the shareholder RELACON OÜ and to the Commercial Register by the end of Q1 2025 (statutory deadline 30.06.2025).
 Votes: for 1, against 0, abstained 0. Adopted.
 
 ## 4. Closing

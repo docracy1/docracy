@@ -30,8 +30,9 @@ Both members of the Management Board are present; the board is quorate and may a
 3. Division of responsibilities between the board members
 4. Business activity and financial position (year to date); first employee
 5. Measures to restore net assets and financing in 2026–2027
-6. Contact person, registered address, remuneration of the board
-7. Preparation of the annual report 2026
+6. Cash need for the next twelve months
+7. Contact person, registered address, remuneration of the board
+8. Preparation of the annual report 2026
 
 ## 3. Discussion and resolutions
 
@@ -89,14 +90,29 @@ Net assets remain negative (−209 581 EUR at 31.12.2025, expected around −220
 - (c) continue to disclose the net-asset position, the related-party financing and the going-concern assessment in the management report of the annual report 2026.
 Votes: for 2, against 0, abstained 0. Adopted.
 
-### 3.6 Contact person, address and remuneration
+### 3.6 Cash need for the next twelve months
 
-**Resolution 6.** The board confirms Premium Accounting OÜ (registry code 14683511) as the statutory contact person and Kotkapoja tn 2a-10, 10615 Tallinn as the registered address and the address of the contact person. Both Members of the Management Board serve without remuneration until the shareholder decides otherwise.
+The board discussed the liquidity position and the cash requirement until 30.09.2027:
+
+- The cost base was reduced sharply in 2026 (declared VAT-taxable turnover, largely purchased services, Q1 8 323 EUR and Q2 3 030 EUR). Q3 2026 spending rose again to about 23 000 EUR with the restart of commercial activity and the hiring of the first employee.
+- From Q4 2026 the company carries monthly payroll and labour taxes for one employee in addition to hosting, software, accounting and contact-person costs. Planned spending for Q4 2026 – Q3 2027 is approximately **90 000–110 000 EUR**, of which roughly 60 % is payroll-related.
+- Revenue from paid plans and partner channels is budgeted at 30 000–40 000 EUR for the same period. The **net cash need for Q4 2026 – Q3 2027 is therefore approximately 60 000–70 000 EUR**, with free cash at the start of the period of only a few thousand euros and shareholder-group liabilities of about 214 000 EUR.
+
+**Resolution 6.** The board:
+- (a) approves the cash plan for Q4 2026 – Q3 2027 with an estimated net cash need of approximately 65 000 EUR;
+- (b) resolves to cover the cash need through the sole shareholder RELACON OÜ: the renewed financing commitment under resolution 5(b) shall cover at least 70 000 EUR of new funding plus the subordination of the existing receivables, and the conversion of shareholder receivables into equity under resolution 5(a) shall be timed so that net assets are restored before the approval of the annual report 2026;
+- (c) resolves that payroll and taxes are always paid first from available cash and that a cash reserve of at least two months of payroll and fixed costs is maintained; hiring of further employees requires a shareholder-confirmed funding source;
+- (d) assigns Reinhold Lackner to prepare a monthly rolling 12-month cash-flow forecast for the shareholder and Alejandro Soto Coronado to report monthly on revenue against budget; if revenue falls more than 25 % below budget for two consecutive months, the board shall revise the cash plan and inform the shareholder.
 Votes: for 2, against 0, abstained 0. Adopted.
 
-### 3.7 Annual report 2026
+### 3.7 Contact person, address and remuneration
 
-**Resolution 7.** The board shall prepare the annual report for 01.01.2026–31.12.2026 and submit it for approval by the shareholder and to the Commercial Register before the statutory deadline of 30.06.2027. The report is signed by both board members.
+**Resolution 7.** The board confirms Premium Accounting OÜ (registry code 14683511) as the statutory contact person and Kotkapoja tn 2a-10, 10615 Tallinn as the registered address and the address of the contact person. Both Members of the Management Board serve without remuneration until the shareholder decides otherwise.
+Votes: for 2, against 0, abstained 0. Adopted.
+
+### 3.8 Annual report 2026
+
+**Resolution 8.** The board shall prepare the annual report for 01.01.2026–31.12.2026 and submit it for approval by the shareholder and to the Commercial Register before the statutory deadline of 30.06.2027. The report is signed by both board members.
 Votes: for 2, against 0, abstained 0. Adopted.
 
 ## 4. Closing
