@@ -275,6 +275,17 @@ const handle: PagesFunction<{ ASSETS: Fetcher }> = async (context) => {
   ) {
     const hasPage = await staticHtmlExists(context.env, url.origin, url.pathname);
     if (!hasPage) {
+      if (!isSpaAppPath(url.pathname)) {
+        // `_redirects` is only evaluated by the asset layer behind context.next(), and a redirect
+        // source never has a prerendered HTML file — so without this pass-through every rule in
+        // public/_redirects (/templates, /1099, the A-vs-B twins, legacy /es/ aliases, ...) came
+        // back as the 404 below instead of its 301. Only a redirect is let through; the SPA
+        // catch-all `/* /index.html 200` for a truly unknown URL is still replaced by the real 404.
+        const fallthrough = await context.next();
+        if (fallthrough.status >= 300 && fallthrough.status < 400) {
+          return fallthrough;
+        }
+      }
       const shell = await fetchIndexShell(context.env, context.request, url);
       if (isSpaAppPath(url.pathname)) {
         // Never ship a dead empty shell (no Vite module) — fall through to the SPA rewrite so
