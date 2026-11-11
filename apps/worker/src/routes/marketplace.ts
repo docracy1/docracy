@@ -79,9 +79,13 @@ marketplaceAccount.get("/submissions", requirePaidAccount, async (c) => {
 // Mounted at /api/marketplace — public, no auth.
 export const marketplacePublic = new Hono<{ Bindings: Env; Variables: Variables }>();
 
-// Slugs the Pages middleware 301s to a canonical template (web/src/lib/templateLegacyRedirects.json).
-// The worker cannot read that map, and a sitemap must not list a URL that redirects.
-const SITEMAP_REDIRECTED_SLUGS = new Set(["agreement-for-design-services-print-works-limited-license"]);
+// Slugs that 301 to a canonical template, through the Pages middleware (web/src/lib/templateLegacyRedirects.json)
+// or apps/web/public/_redirects. The worker cannot read either, and a sitemap must not list a URL that redirects.
+const SITEMAP_REDIRECTED_SLUGS = new Set([
+  "agreement-for-design-services-print-works-limited-license",
+  // 11.11.2026: duplicate of technology-consulting-agreement (_redirects).
+  "technology-consulting-contract",
+]);
 
 marketplacePublic.get("/sitemap.xml", async (c) => {
   let rows: Array<{ slug: string; lastmod: string }> = [];
