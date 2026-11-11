@@ -4,6 +4,10 @@
 # without the duplication.
 /templates  /free-templates  301
 
+# Two template pages competed for "technology consulting agreement" (Search Console, 11.11.2026: positions 36 and
+# 88). The agreement page carries the full template; the contract page from the legacy catalog had 40 words.
+/free-templates/technology-consulting-contract  /free-templates/technology-consulting-agreement  301
+
 # Keyword aliases for the 1099 locker and WhatsApp cobro landings (one canonical each).
 /1099          /1099-season  301
 /tax-year      /1099-season  301
