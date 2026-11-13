@@ -52,6 +52,25 @@ export default function Privacy() {
         IP addresses, cookies, or any other identifier alongside this — it's not linked to you, and it isn't
         used for advertising or shared with any ad network.
       </p>
+      <p>
+        To see how long visitors stay, we also run our own cookieless visitor count on the public pages. For each page
+        view we store: the day and time, the page address (without query parameters), the kind of page, the website you
+        came from (only its domain name, e.g. google.com, or a utm_source tag), the device class (mobile, tablet,
+        desktop, from the window width), the country (from Cloudflare), whether the network is a data centre or a regular
+        internet provider (one word, derived from the network number Cloudflare reports; the number itself is not
+        stored), how many seconds the page was visible, and a visitor code. The visitor code is a one-way hash of the
+        day, a secret value, your IP address and your browser's user-agent string, cut to 16 characters; it changes
+        every day, so we can tell page views of the same day apart but cannot follow anyone across days or identify
+        them. Your IP address itself is never stored. No cookie is set and nothing is written to your browser's
+        storage for this, which is why it runs without a consent banner. Signing, status and other links that contain
+        a personal token are never counted, nor are known bots, our own admins, or browsers that send Do Not Track or
+        Global Privacy Control. The rows are kept for 180 days and then deleted automatically. Legal basis: our
+        legitimate interest in understanding how the site is used (Art. 6(1)(f) GDPR).
+      </p>
+      <p>
+        Google Analytics and Microsoft Clarity are only loaded if you click Accept in the cookie banner; if you
+        decline or ignore it, they are not loaded.
+      </p>
 
       <h3>{t("privacy.thirdParties")}</h3>
       <p>

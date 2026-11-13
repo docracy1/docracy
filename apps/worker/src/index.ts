@@ -38,6 +38,7 @@ import { runArchiveNagSweep } from "./lib/archiveNag";
 import { runCobroRemindSweep } from "./lib/cobro";
 import { reconcileD1Index } from "./lib/index-d1";
 import { runExpiredDocCleanup } from "./lib/cleanup";
+import { cleanupVisitorCount } from "./lib/visitorCountDb";
 import { runHealthCheckAndAlert } from "./lib/healthcheck";
 import { runCryptoReminderSweep, runPaymentFreezeSweep } from "./lib/paymentFreeze";
 import { runOnboardingEmailSweep } from "./lib/onboardingEmails";
@@ -215,6 +216,7 @@ export default {
     ctx.waitUntil(runCobroRemindSweep(env).catch((err) => console.error("Cobro remind sweep failed:", err)));
     ctx.waitUntil(reconcileD1Index(env).catch((err) => console.error("D1 reconciliation sweep failed:", err)));
     ctx.waitUntil(runExpiredDocCleanup(env).catch((err) => console.error("Expired doc cleanup sweep failed:", err)));
+    ctx.waitUntil(cleanupVisitorCount(env).catch((err) => console.error("Visitor count cleanup failed:", err)));
     ctx.waitUntil(runHealthCheckAndAlert(env).catch((err) => console.error("Healthcheck sweep failed:", err)));
     ctx.waitUntil(runPaymentFreezeSweep(env).catch((err) => console.error("Payment freeze sweep failed:", err)));
     ctx.waitUntil(runCryptoReminderSweep(env).catch((err) => console.error("Crypto reminder sweep failed:", err)));

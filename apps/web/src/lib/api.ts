@@ -1071,6 +1071,55 @@ export interface TrafficSourceRow {
 /** `humansOnly` drops rows from classified bot user agents out of the funnel step counts — see
  *  queryFunnelStepCounts in the worker for why the unfiltered numbers mislead on any funnel that
  *  pairs a server-side page load with a client-side click. */
+/** Cookieless visitor count (worker lib/visitorCountDb.ts) — D1, independent of Analytics Engine. */
+export interface VisitorKindStats {
+  kind: string;
+  visitors: number;
+  pageviews: number;
+  timed: number;
+  avgSeconds: number | null;
+  entries: number;
+  bounces: number;
+  secondPage: number;
+  avgVisitSeconds: number | null;
+}
+
+export interface VisitorCountryStats {
+  country: string;
+  visitors: number;
+  pageviews: number;
+  dc: number;
+  isp: number;
+  unknownNet: number;
+  visits: number;
+  bounces: number;
+}
+
+export interface VisitorCount {
+  value: string;
+  visitors: number;
+  pageviews: number;
+}
+
+export interface VisitorOverview {
+  days: number;
+  first: string;
+  today: string;
+  saltConfigured: boolean;
+  totals: { visitors: number; pageviews: number; visits: number; bounces: number; secondPage: number; timed: number; avgSeconds: number | null };
+  daily: { day: string; visitors: number; pageviews: number }[];
+  kinds: VisitorKindStats[];
+  countries: VisitorCountryStats[];
+  pages: (VisitorCount & { kind: string })[];
+  sources: VisitorCount[];
+  devices: VisitorCount[];
+}
+
+export async function fetchAdminVisitors(days: number): Promise<VisitorOverview> {
+  const res = await apiFetch(`/api/admin/visitors?days=${days}`);
+  return asJson(res);
+}
+
 export async function fetchAdminAnalytics(
   days: number,
   humansOnly = false

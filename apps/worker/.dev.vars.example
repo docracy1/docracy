@@ -29,3 +29,6 @@ PUBLIC_CONNECTOR_URL=http://localhost:8788
 # TRANSAK_API_KEY=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 # TRANSAK_API_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 # TRANSAK_ENVIRONMENT=STAGING
+# Salt of the cookieless visitor count (lib/visitorCount.ts). Without it no page view is counted.
+# Local dev skips counting on localhost anyway; set any value to test the /api/analytics/visit endpoint.
+VISITOR_HASH_SALT=dev-visitor-salt

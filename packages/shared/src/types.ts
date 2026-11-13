@@ -376,6 +376,9 @@ export interface Env {
    *  until manually created in the Cloudflare dashboard; the admin analytics route degrades to a
    *  clear "not configured" response rather than failing when this is unset. */
   CF_ANALYTICS_API_TOKEN?: string;
+  /** Secret salt of the cookieless visitor count (apps/worker/src/lib/visitorCount.ts): goes into the daily visitor
+   *  hash with day, IP and user agent. Absent means no page view is counted (no weak hash without it). */
+  VISITOR_HASH_SALT?: string;
   /** Legacy alias for CF_ANALYTICS_API_TOKEN — some deployments set this shorter name instead. */
   CF_API_TOKEN?: string;
   /** Paid-plan cloud-storage connectors (lib/cloudConnectors.ts). Each provider's OAuth app

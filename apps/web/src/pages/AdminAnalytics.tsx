@@ -15,6 +15,7 @@ import {
   fetchAdminMarketplacePending,
   fetchAdminMarketplacePreview,
   fetchAdminRoadmapFeatures,
+  fetchAdminVisitors,
   fetchMarketingRecipientsCount,
   grantEnterprise,
   rejectMarketplaceSubmission,
@@ -31,6 +32,7 @@ import {
   type FunnelStepRow,
   type AttributionRow,
   type TrafficSourceRow,
+  type VisitorOverview,
 } from "../lib/api";
 import { base64ToBytes } from "../lib/base64";
 import { usePageMeta } from "../lib/usePageMeta";
@@ -1661,8 +1663,227 @@ function ErrorsCard({ stepsByEvent }: { stepsByEvent: Map<string, FunnelStepRow>
   );
 }
 
+// ---------------------------------------------------------------------------------------------------------------
+// Visitors: the cookieless count in D1 (worker lib/visitorCountDb.ts). Its own fetch, independent of Analytics Engine.
+
+const KIND_LABEL: Record<string, string> = {
+  home: "Home",
+  landing: "SEO / feature landings",
+  template: "Template page",
+  templates: "Template index",
+  blog: "Blog",
+  prepare: "Prepare (upload & send)",
+  pricing: "Pricing",
+  docs: "Docs / developers / MCP",
+  legal: "Trust / legal",
+  login: "Login",
+};
+
+function pct(part: number, whole: number): string {
+  return whole > 0 ? `${Math.round((part / whole) * 100)}%` : "—";
+}
+
+function secs(value: number | null): string {
+  if (value === null) return "—";
+  const s = Math.round(value);
+  return s < 60 ? `${s}s` : `${Math.floor(s / 60)}m ${String(s % 60).padStart(2, "0")}s`;
+}
+
+const TABLE_STYLE = { width: "100%", minWidth: "auto" } as const;
+
+function VisitorsCard({ days }: { days: number }) {
+  const [data, setData] = useState<VisitorOverview | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    setData(null);
+    setError(null);
+    fetchAdminVisitors(days)
+      .then((res) => !cancelled && setData(res))
+      .catch((err) => !cancelled && setError(err instanceof Error ? err.message : "Failed to load visitors"));
+    return () => {
+      cancelled = true;
+    };
+  }, [days]);
+
+  if (error) {
+    return (
+      <div className="card" style={{ borderColor: "var(--danger)", color: "var(--danger)", marginBottom: 16 }}>
+        {error}
+      </div>
+    );
+  }
+  if (!data) return <p style={{ color: "var(--mute)" }}>Loading…</p>;
+  const { totals } = data;
+
+  return (
+    <>
+      <p style={{ fontSize: 13, color: "var(--mute)", marginTop: 0 }}>
+        Own cookieless count since {data.first}: one row per public page view, a visitor is a daily hash (IP + browser +
+        secret salt, new every day), so a returning visitor counts once per day. A visit ends after 30 minutes without a
+        page view. Bots, admins, Do Not Track / GPC and signing links are not counted. Time on page is the visible time
+        the browser reports on leaving, else the gap to the next page.
+        {!data.saltConfigured && (
+          <strong style={{ color: "var(--danger)" }}> VISITOR_HASH_SALT is not set — nothing is being counted.</strong>
+        )}
+      </p>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 12, marginBottom: 24 }}>
+        <StatTile label="Visitors" value={String(totals.visitors)} sub="distinct daily hashes" />
+        <StatTile label="Page views" value={String(totals.pageviews)} sub={`${totals.visits} visits`} />
+        <StatTile label="Avg. time on page" value={secs(totals.avgSeconds)} sub={`${totals.timed} page views measured`} />
+        <StatTile label="Bounce rate" value={pct(totals.bounces, totals.visits)} sub="visits with one page only" />
+        <StatTile label="Second page" value={pct(totals.secondPage, totals.visits)} sub="visits with 2+ pages" />
+      </div>
+
+      <div className="card" style={{ marginBottom: 16 }}>
+        <h3 style={{ marginTop: 0, fontSize: 15 }}>By kind of page</h3>
+        <p style={{ fontSize: 12, color: "var(--mute)", marginTop: -4, marginBottom: 12 }}>
+          Visitors / views / time count every page view of that kind. Entries, bounce rate, second page and visit length
+          count the visits that <em>started</em> on that kind of page.
+        </p>
+        <div className="plan-table-scroll" style={{ overflowX: "auto" }}>
+          <table className="plan-table plan-table-static" style={TABLE_STYLE}>
+            <thead>
+              <tr>
+                <th style={{ textAlign: "left" }}>Kind</th>
+                <th>Visitors</th>
+                <th>Views</th>
+                <th>Avg. time on page</th>
+                <th>Entries</th>
+                <th>Bounce rate</th>
+                <th>Second page</th>
+                <th>Avg. visit</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.kinds.map((k) => (
+                <tr key={k.kind}>
+                  <td style={{ textAlign: "left" }}>{KIND_LABEL[k.kind] ?? k.kind}</td>
+                  <td>{k.visitors}</td>
+                  <td>{k.pageviews}</td>
+                  <td title={`${k.timed} measured`}>{secs(k.avgSeconds)}</td>
+                  <td>{k.entries}</td>
+                  <td>{pct(k.bounces, k.entries)}</td>
+                  <td>{pct(k.secondPage, k.entries)}</td>
+                  <td>{secs(k.avgVisitSeconds)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="card" style={{ marginBottom: 16 }}>
+        <h3 style={{ marginTop: 0, fontSize: 15 }}>Countries and kind of network</h3>
+        <p style={{ fontSize: 12, color: "var(--mute)", marginTop: -4, marginBottom: 12 }}>
+          Data centre = cloud / hosting network by Cloudflare's ASN (often scripts and scrapers that pass as browsers);
+          ISP = home, mobile or office line. Only measured, nothing is filtered.
+        </p>
+        <div className="plan-table-scroll" style={{ overflowX: "auto" }}>
+          <table className="plan-table plan-table-static" style={TABLE_STYLE}>
+            <thead>
+              <tr>
+                <th style={{ textAlign: "left" }}>Country</th>
+                <th>Visitors</th>
+                <th>Views</th>
+                <th>Data centre</th>
+                <th>ISP</th>
+                <th>Unknown</th>
+                <th>Bounce rate</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.countries.map((c) => (
+                <tr key={c.country}>
+                  <td style={{ textAlign: "left" }}>{c.country}</td>
+                  <td>{c.visitors}</td>
+                  <td>{c.pageviews}</td>
+                  <td>
+                    {c.dc} <span style={{ color: "var(--mute)" }}>({pct(c.dc, c.visitors)})</span>
+                  </td>
+                  <td>{c.isp}</td>
+                  <td>{c.unknownNet}</td>
+                  <td>{pct(c.bounces, c.visits)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: 16 }}>
+        <div className="card">
+          <h3 style={{ marginTop: 0, fontSize: 15 }}>Top pages</h3>
+          <table className="plan-table plan-table-static" style={TABLE_STYLE}>
+            <thead>
+              <tr>
+                <th style={{ textAlign: "left" }}>Path</th>
+                <th>Visitors</th>
+                <th>Views</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.pages.map((p) => (
+                <tr key={p.value}>
+                  <td style={{ textAlign: "left", wordBreak: "break-all" }}>{p.value}</td>
+                  <td>{p.visitors}</td>
+                  <td>{p.pageviews}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="card">
+          <h3 style={{ marginTop: 0, fontSize: 15 }}>Sources and devices</h3>
+          <table className="plan-table plan-table-static" style={TABLE_STYLE}>
+            <thead>
+              <tr>
+                <th style={{ textAlign: "left" }}>Source</th>
+                <th>Visitors</th>
+                <th>Views</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[...data.sources, ...data.devices.map((d) => ({ ...d, value: `device: ${d.value}` }))].map((r) => (
+                <tr key={r.value}>
+                  <td style={{ textAlign: "left" }}>{r.value}</td>
+                  <td>{r.visitors}</td>
+                  <td>{r.pageviews}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="card">
+          <h3 style={{ marginTop: 0, fontSize: 15 }}>By day</h3>
+          <table className="plan-table plan-table-static" style={TABLE_STYLE}>
+            <thead>
+              <tr>
+                <th style={{ textAlign: "left" }}>Day</th>
+                <th>Visitors</th>
+                <th>Views</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.daily.map((d) => (
+                <tr key={d.day}>
+                  <td style={{ textAlign: "left" }}>{d.day}</td>
+                  <td>{d.visitors}</td>
+                  <td>{d.pageviews}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </>
+  );
+}
+
 const ADMIN_SECTIONS = [
   "analytics",
+  "visitors",
   "growth",
   "blog",
   "marketplace",
@@ -1678,6 +1899,7 @@ const ADMIN_SECTIONS = [
 type AdminSection = (typeof ADMIN_SECTIONS)[number];
 const ADMIN_SECTION_LABEL: Record<AdminSection, string> = {
   analytics: "Analytics",
+  visitors: "Visitors",
   growth: "Growth",
   blog: "Blog posts",
   marketplace: "Marketplace",
@@ -1819,6 +2041,7 @@ export default function AdminAnalytics() {
               Analytics Engine call below, so they must render regardless of whether that call
               succeeded. Every other section reads rows/totals/stepsByEvent from that call and
               only makes sense once it has resolved. */}
+          {section === "visitors" && <VisitorsCard days={days} />}
           {section === "blog" && <BlogPostsCard />}
           {section === "marketplace" && <MarketplaceReviewCard />}
           {section === "roadmap" && <RoadmapCard />}
@@ -1831,7 +2054,7 @@ export default function AdminAnalytics() {
             </>
           )}
 
-          {section !== "blog" && section !== "signups" && (
+          {section !== "blog" && section !== "signups" && section !== "visitors" && (
             <>
               {loading && <p style={{ color: "var(--mute)" }}>Loading…</p>}
               {error && (

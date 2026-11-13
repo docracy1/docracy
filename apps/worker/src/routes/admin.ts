@@ -8,6 +8,7 @@ import {
   formatAnalyticsFailure,
 } from "../lib/analyticsQuery";
 import { NOTRACK_COOKIE_NAME, noTrackCookieOptions } from "../lib/analytics";
+import { visitorOverview } from "../lib/visitorCountDb";
 import { requireAdminAccount, type AccountContext } from "../lib/auth";
 import { deleteAccountByEmail, findAccountIdByEmail, markAccountEnterprise, markAccountPaid } from "../lib/billing";
 import { getMarketingRecipientsCount, sendMarketingBroadcast } from "../lib/marketingEmail";
@@ -167,6 +168,21 @@ admin.get("/analytics", requireAdminAccount, async (c) => {
     attribution: attribution.data,
     trafficSources: trafficSources.data,
   });
+});
+
+// Cookieless visitor count (lib/visitorCountDb.ts, D1 analytics_events): visitors, time on page, bounces and
+// second pages per kind of page, countries with kind of network. Independent of Analytics Engine.
+admin.get("/visitors", requireAdminAccount, async (c) => {
+  const days = Math.min(180, Math.max(1, Number(c.req.query("days")) || 30));
+  if (!c.env.DOCRACY_DB) return c.json({ error: "D1 binding missing" }, 501);
+  try {
+    const overview = await visitorOverview(c.env.DOCRACY_DB, { today: new Date().toISOString().slice(0, 10), days });
+    return c.json({ ...overview, saltConfigured: !!c.env.VISITOR_HASH_SALT });
+  } catch (e) {
+    const message = e instanceof Error ? e.message : String(e);
+    if (/no such table/i.test(message)) return c.json({ error: "Table analytics_events missing: apply migration 0037_visitor_count.sql." }, 501);
+    throw e;
+  }
 });
 
 // Always-on for admins: founders (ADMIN_EMAILS), Claude, and Cursor are excluded from funnel

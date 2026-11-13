@@ -118,6 +118,7 @@ import {
 import { captureAttribution, purgeStoredBlockedAttribution, stripBlockedAttributionParams } from "./lib/attribution";
 import { LocaleProvider } from "./lib/i18n";
 import LocalePathSync from "./components/LocalePathSync";
+import VisitorCounter from "./components/VisitorCounter";
 
 // Before first render so the first funnel event already carries the channel that brought them.
 purgeStoredBlockedAttribution();
@@ -385,6 +386,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 element={
                   <>
                     <LocalePathSync />
+                    <VisitorCounter />
                     <Header />
                     <AppRoutes />
                     <Footer />

@@ -4,6 +4,19 @@ import { trackEvent, NOTRACK_COOKIE_NAME, isExcludedAgent, sanitizeAttribution, 
 import { checkTrackEventRateLimit } from "../lib/ratelimit";
 import { isAdminEmail, resolveAccount, SESSION_COOKIE_NAME } from "../lib/auth";
 import type { FunnelEvent } from "../lib/analytics";
+import {
+  cleanPath,
+  countryCode,
+  deviceOf,
+  isUntracked,
+  isVisitorBot,
+  netKind,
+  pageKindOf,
+  sourceOf,
+  tooMany,
+  visitorHash,
+} from "../lib/visitorCount";
+import { insertPageview, recordSeconds } from "../lib/visitorCountDb";
 import type { Env } from "@docracy/shared";
 import type { Context } from "hono";
 
@@ -354,6 +367,108 @@ analytics.post("/track", async (c) => {
   });
 
   return c.json({ ok: true });
+});
+
+// ---------------------------------------------------------------------------------------------------------------
+// Cookieless visitor count (lib/visitorCount.ts, migration 0037): one row per public page view in D1, so visitors,
+// time on page, bounces and second pages can be counted per kind of page. Bodies come as text/plain (a CORS-simple
+// request, no preflight, works from sendBeacon) and are parsed here. Counting must never disturb a page: every
+// failure, a missing table included, ends in an empty 204.
+
+const MAX_VISIT_BODY = 2000;
+
+/** Only our own pages may send views; another site posting here is ignored. */
+function fromOwnSite(c: Context<{ Bindings: Env }>): boolean {
+  const origin = c.req.header("origin");
+  if (!origin) return false;
+  try {
+    const app = new URL(c.env.PUBLIC_APP_URL);
+    const from = new URL(origin);
+    return from.protocol === app.protocol && (from.host === app.host || from.host === `www.${app.host}`);
+  } catch {
+    return false;
+  }
+}
+
+async function visitBody(c: Context<{ Bindings: Env }>): Promise<Record<string, unknown> | null> {
+  try {
+    const raw = await c.req.text();
+    if (!raw || raw.length > MAX_VISIT_BODY) return null;
+    const parsed: unknown = JSON.parse(raw);
+    return parsed && typeof parsed === "object" ? (parsed as Record<string, unknown>) : null;
+  } catch {
+    return null;
+  }
+}
+
+/** The cheap reasons not to count, before anything is looked up: consent signals, bots, other sites, no salt. */
+function visitSkipped(c: Context<{ Bindings: Env }>): boolean {
+  if (c.req.header("dnt") === "1" || c.req.header("sec-gpc") === "1") return true;
+  if (getCookie(c, NOTRACK_COOKIE_NAME) === "1") return true;
+  if (isVisitorBot(c.req.header("user-agent") ?? "")) return true;
+  return !fromOwnSite(c) || !c.env.DOCRACY_DB || !c.env.VISITOR_HASH_SALT;
+}
+
+function cfOf(c: Context<{ Bindings: Env }>): { country?: unknown; asn?: unknown; asOrganization?: unknown } {
+  return ((c.req.raw as Request & { cf?: Record<string, unknown> }).cf ?? {}) as { country?: unknown; asn?: unknown; asOrganization?: unknown };
+}
+
+function visitorOf(c: Context<{ Bindings: Env }>, day: string): Promise<string> {
+  return visitorHash(day, c.env.VISITOR_HASH_SALT!, c.req.header("CF-Connecting-IP") ?? "local", c.req.header("user-agent") ?? "");
+}
+
+/** POST /api/analytics/visit — one page view. 200 {id} when counted (the browser keeps the id in memory only, to
+ *  report the visible time on leaving), else 204. */
+analytics.post("/visit", async (c) => {
+  if (visitSkipped(c)) return c.body(null, 204);
+  const body = await visitBody(c);
+  const path = cleanPath(body?.path);
+  if (!body || !path || isUntracked(path)) return c.body(null, 204);
+  // Our own admins are not counted, also on public pages; the session is only looked up when there is one.
+  const session = getCookie(c, SESSION_COOKIE_NAME);
+  if (session) {
+    const account = await resolveAccount(c.env, session).catch(() => null);
+    if (account && isAdminEmail(c.env, account.email)) return c.body(null, 204);
+  }
+  const now = new Date();
+  if (tooMany(c.req.header("CF-Connecting-IP") ?? "local", now.getTime())) return c.body(null, 204);
+
+  const day = now.toISOString().slice(0, 10);
+  const userAgent = c.req.header("user-agent") ?? "";
+  const cf = cfOf(c);
+  try {
+    const id = await insertPageview(c.env.DOCRACY_DB!, {
+      day,
+      ts: Math.floor(now.getTime() / 1000),
+      path,
+      kind: pageKindOf(path),
+      source: sourceOf(body.utmSource, body.referrer),
+      device: deviceOf(userAgent, body.width),
+      country: countryCode(cf.country ?? c.req.header("CF-IPCountry")),
+      net: netKind(cf.asn, cf.asOrganization),
+      visitor: await visitorOf(c, day),
+    });
+    return id === null ? c.body(null, 204) : c.json({ id });
+  } catch (e) {
+    console.error("[visit]", e instanceof Error ? e.message : e);
+    return c.body(null, 204);
+  }
+});
+
+/** POST /api/analytics/visit/end — visible seconds of a page view counted above; always 204. */
+analytics.post("/visit/end", async (c) => {
+  if (visitSkipped(c)) return c.body(null, 204);
+  const body = await visitBody(c);
+  const id = Number(body?.id);
+  const seconds = Number(body?.seconds);
+  if (!Number.isSafeInteger(id) || id <= 0 || !Number.isFinite(seconds) || seconds < 0) return c.body(null, 204);
+  const day = new Date().toISOString().slice(0, 10);
+  try {
+    await recordSeconds(c.env.DOCRACY_DB!, id, await visitorOf(c, day), day, seconds);
+  } catch (e) {
+    console.error("[visit/end]", e instanceof Error ? e.message : e);
+  }
+  return c.body(null, 204);
 });
 
 export default analytics;
