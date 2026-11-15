@@ -244,7 +244,8 @@ for (const loc of [
   "/who-files-where",
   "/acta",
 ]) {
-  assert.ok(sitemap.includes(`<loc>https://docracy.io${loc}</loc>`), `sitemap missing ${loc}`);
+  // Off focus since 15.11.2026 (src/lib/offFocus.ts): online and allowed in robots.txt, but not in the sitemap.
+  assert.ok(!sitemap.includes(`<loc>https://docracy.io${loc}</loc>`), `off-focus page still in the sitemap: ${loc}`);
 }
 for (const p of ["/acta", "/itin", "/latam-search", "/who-files-where", "/after-arrival", "/i-9", "/packets/latam-to-us", "/mexico-to-us"]) {
   assert.ok(robots.includes(`Allow: ${p}$`), `committed robots missing Allow: ${p}$`);
