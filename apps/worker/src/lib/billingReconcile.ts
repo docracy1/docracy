@@ -1,6 +1,7 @@
 import type { Env } from "@docracy/shared";
 import {
   applyPaidCheckout,
+  CHECKOUT_HEAL_WINDOW_MS,
   getCheckoutSessionId,
   getStripeCustomerId,
   isAccountPaid,
@@ -12,6 +13,8 @@ const LIVE_SUB_STATUSES = new Set(["active", "trialing", "past_due", "unpaid", "
 
 export interface StripeCheckoutSession {
   id?: string;
+  /** Unix seconds. */
+  created?: number;
   status?: string;
   payment_status?: string;
   client_reference_id?: string | null;
@@ -21,6 +24,12 @@ export interface StripeCheckoutSession {
 
 interface StripeSubscriptionList {
   data?: Array<{ status?: string }>;
+}
+
+/** Only a session from the last 48 h can heal a missed webhook; an old paid session says nothing
+ *  about today (the subscription may be cancelled, refunded or frozen since). */
+export function isCheckoutSessionRecent(session: StripeCheckoutSession, now = Date.now()): boolean {
+  return typeof session.created === "number" && now - session.created * 1000 <= CHECKOUT_HEAL_WINDOW_MS;
 }
 
 export function isCheckoutSessionPaid(session: StripeCheckoutSession): boolean {
@@ -70,6 +79,7 @@ export async function applySessionIfPaid(
   session: StripeCheckoutSession
 ): Promise<boolean> {
   if (!isCheckoutSessionPaid(session)) return false;
+  if (!isCheckoutSessionRecent(session)) return false;
   if (session.client_reference_id && session.client_reference_id !== accountId) return false;
   return applyPaidCheckout(env, {
     accountId,

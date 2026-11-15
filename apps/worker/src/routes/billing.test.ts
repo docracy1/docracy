@@ -205,7 +205,7 @@ async function signWebhook(rawBody: string, secret: string): Promise<string> {
 }
 
 describe("POST /api/billing/webhook", () => {
-  it("always responds ok, even for an invalid signature", async () => {
+  it("answers 400 for a signature that does not verify, so Stripe shows and retries it", async () => {
     const { env } = makeMockEnv();
     const res = await billing.request(
       "/webhook",
@@ -213,7 +213,7 @@ describe("POST /api/billing/webhook", () => {
       env,
       MOCK_CTX
     );
-    expect(res.status).toBe(200);
+    expect(res.status).toBe(400);
   });
 
   it("marks the account paid for a validly-signed checkout.session.completed event", async () => {
@@ -474,6 +474,7 @@ describe("POST /api/billing/reconcile", () => {
       new Response(
         JSON.stringify({
           id: "cs_test_1",
+          created: Math.floor(Date.now() / 1000),
           status: "complete",
           payment_status: "paid",
           client_reference_id: "acct-1",

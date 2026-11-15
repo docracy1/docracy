@@ -25,6 +25,10 @@ export async function markAccountPaid(env: Env, accountId: string, paid: boolean
     .bind(paid ? 1 : 0, paid ? new Date().toISOString() : null, paid ? 1 : 0, paid ? 1 : 0, accountId)
     .run();
   if (!paid) {
+    // Forget the old Checkout Session: the hourly heal (billingReconcile.ts) upgrades unpaid
+    // accounts whose stored session is paid, and a cancelled or frozen account would otherwise be
+    // re-upgraded within the hour (docracy 15.11.2026: cancelled subscription healed back to paid).
+    await clearCheckoutSession(env, accountId);
     await revokeApiToken(env, accountId);
     // A lapsed account keeps no standing OAuth grant to its cloud storage connectors — same
     // posture as revoking the API token above, and the only place this needs to happen now that
@@ -137,6 +141,25 @@ function isDuplicateColumnError(err: unknown): boolean {
 
 /** CI often cannot apply D1 migrations (token lacks D1:Edit). Checkout persist/reconcile add the
  *  columns themselves so a missed webhook can still be healed without waiting on wrangler. */
+/** Removes the stored Checkout Session of an account (called on every downgrade). */
+export async function clearCheckoutSession(env: Env, accountId: string): Promise<void> {
+  if (!env.DOCRACY_DB) return;
+  try {
+    await env.DOCRACY_DB.prepare(
+      `UPDATE accounts SET stripe_checkout_session_id = NULL, stripe_checkout_created_at = NULL WHERE id = ?`
+    )
+      .bind(accountId)
+      .run();
+  } catch (err) {
+    // Columns are added lazily (ensureCheckoutSessionColumns); without them there is nothing to clear.
+    console.log(`Billing: clearCheckoutSession skipped (${err instanceof Error ? err.message : err})`);
+  }
+}
+
+/** A Checkout Session expires 24 h after creation, so a missed webhook is healed within this window
+ *  or not at all; older sessions are never read as proof of payment. */
+export const CHECKOUT_HEAL_WINDOW_MS = 48 * 60 * 60 * 1000;
+
 export async function ensureCheckoutSessionColumns(env: Env): Promise<void> {
   if (!env.DOCRACY_DB) return;
   for (const sql of [
@@ -210,10 +233,10 @@ export async function listStaleUnpaidCheckouts(env: Env, minAgeMs = 60_000, limi
     const { results } = await env.DOCRACY_DB.prepare(
       `SELECT id, email, stripe_checkout_session_id, stripe_customer_id FROM accounts
        WHERE is_paid = 0 AND stripe_checkout_session_id IS NOT NULL AND stripe_checkout_created_at IS NOT NULL
-         AND stripe_checkout_created_at <= ?
+         AND stripe_checkout_created_at <= ? AND stripe_checkout_created_at >= ?
        ORDER BY stripe_checkout_created_at ASC LIMIT ?`
     )
-      .bind(cutoff, limit)
+      .bind(cutoff, new Date(Date.now() - CHECKOUT_HEAL_WINDOW_MS).toISOString(), limit)
       .all<PendingCheckoutRow>();
     return results;
   } catch (err) {

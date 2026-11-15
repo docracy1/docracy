@@ -13,7 +13,7 @@ import {
   persistCheckoutSession,
   settleCryptoWhatsappOverageCents,
 } from "../lib/billing";
-import { verifyAndExtract } from "../lib/billingProviders/stripe";
+import { verifyAndExtract, verifyStripeSignature } from "../lib/billingProviders/stripe";
 import {
   alertIfCheckoutDidNotUpgrade,
   reconcileCheckoutForAccount,
@@ -205,6 +205,12 @@ billing.post("/crypto-webhook", async (c) => {
 billing.post("/webhook", async (c) => {
   const rawBody = await c.req.text();
   const signature = c.req.header("Stripe-Signature") ?? null;
+  // A signature that does not verify answers 400 so the failure shows in Stripe's delivery log and
+  // Stripe retries (15.11.2026: a 200 here hid missed webhooks). Ignored event types still get 200.
+  if (!(await verifyStripeSignature(rawBody, signature, c.env))) {
+    console.error("Stripe webhook: signature did not verify");
+    return c.json({ error: "invalid_signature" }, 400);
+  }
   const result = await verifyAndExtract(rawBody, signature, c.env);
   if (result?.type === "checkout_completed") {
     const upgraded = await applyPaidCheckout(c.env, {
@@ -238,8 +244,7 @@ billing.post("/webhook", async (c) => {
     const accountId = await findAccountIdByStripeCustomerId(c.env, result.customerId);
     if (accountId) await clearPaymentFailed(c.env, accountId);
   }
-  // Always 200: Stripe retries (and eventually disables the endpoint) on non-2xx responses, and
-  // "signature didn't verify" / "not an event type we act on" aren't retry-worthy conditions.
+  // 200 for every verified event, also the types we do not act on: those are not retry-worthy.
   return c.json({ ok: true });
 });
 

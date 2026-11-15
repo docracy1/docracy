@@ -54,25 +54,30 @@ function parseSignatureHeader(header: string): { timestamp: string; signatures: 
  * billing.ts's findAccountIdByStripeCustomerId, since the subscription payload has no
  * client_reference_id of its own.
  */
-export async function verifyAndExtract(
-  rawBody: string,
-  signatureHeader: string | null,
-  env: Env
-): Promise<StripeWebhookResult | null> {
-  if (!env.STRIPE_WEBHOOK_SECRET || !signatureHeader) return null;
+/** True when the Stripe-Signature header is fresh and signs this body with STRIPE_WEBHOOK_SECRET. */
+export async function verifyStripeSignature(rawBody: string, signatureHeader: string | null, env: Env): Promise<boolean> {
+  if (!env.STRIPE_WEBHOOK_SECRET || !signatureHeader) return false;
 
   const parsed = parseSignatureHeader(signatureHeader);
-  if (!parsed) return null;
+  if (!parsed) return false;
 
   const eventAgeSeconds = Math.abs(Date.now() / 1000 - Number(parsed.timestamp));
-  if (eventAgeSeconds > REPLAY_TOLERANCE_SECONDS) return null;
+  if (eventAgeSeconds > REPLAY_TOLERANCE_SECONDS) return false;
 
   const key = await hmacKey(env.STRIPE_WEBHOOK_SECRET);
   const signedPayload = new TextEncoder().encode(`${parsed.timestamp}.${rawBody}`);
   const anyValid = await Promise.all(
     parsed.signatures.map((sig) => crypto.subtle.verify("HMAC", key, hexToBytes(sig), signedPayload).catch(() => false))
   );
-  if (!anyValid.some(Boolean)) return null;
+  return anyValid.some(Boolean);
+}
+
+export async function verifyAndExtract(
+  rawBody: string,
+  signatureHeader: string | null,
+  env: Env
+): Promise<StripeWebhookResult | null> {
+  if (!(await verifyStripeSignature(rawBody, signatureHeader, env))) return null;
 
   let event: { type?: string; data?: { object?: Record<string, unknown> } };
   try {
