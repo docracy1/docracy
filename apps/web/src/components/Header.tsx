@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { fetchMe, logout } from "../lib/api";
 import { localizePath, useI18n, useT } from "../lib/i18n";
 import { track } from "../lib/track";
+import { isOffFocus, onFocus } from "../lib/offFocus";
 import LanguageSwitcher from "./LanguageSwitcher";
 import NavMegaMenu from "./NavMegaMenu";
 import NavListMenu, { type NavListEntry } from "./NavListMenu";
@@ -79,8 +80,9 @@ export default function Header() {
 
   const marketplaceTo = localizePath("/free-templates", locale);
 
-  const visibleFeatures = FEATURE_ITEMS.filter((f) => locale === "es" || f.to !== "/packets/latam-to-us");
-  const visibleComparePages = COMPARE_PAGES.filter((c) => locale === "es" || c.audience !== "immigrant");
+  // Signing first (owner 15.11.2026): no off-focus pages and no AI/MCP entry in the menu (scripts live on at their URLs).
+  const visibleFeatures = FEATURE_ITEMS.filter((f) => !isOffFocus(f.to) && f.to !== "/ai");
+  const visibleComparePages = COMPARE_PAGES.filter((c) => c.audience !== "immigrant" && !isOffFocus(`/${c.slug}`));
   const featureItems = visibleFeatures.map((f) => ({
     to: localizePath(f.to, locale),
     icon: <NavIcon name={f.icon} />,
@@ -95,7 +97,7 @@ export default function Header() {
     title: `vs ${c.competitorName}`,
     description: c.navDesc,
   }));
-  const compareNavChildren = [
+  const compareNavChildren = onFocus([
     ...visibleComparePages.map((c) => ({ to: localizePath(`/${c.slug}`, locale), label: `vs ${c.competitorName}` })),
     ...(locale === "es"
       ? [{ to: localizePath("/boundless-vs-citizenpath", locale), label: "Boundless vs CitizenPath" }]
@@ -108,7 +110,7 @@ export default function Header() {
       to: `/import-from-${g.slug}`,
       label: `Import from ${g.competitorName}`,
     })),
-  ];
+  ]);
   // LimeWire-style More: important points first; Industry / Use cases / Compare expand in place.
   const moreListEntries: NavListEntry[] = [
     {

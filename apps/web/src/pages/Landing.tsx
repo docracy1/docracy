@@ -323,7 +323,8 @@ export default function Landing() {
   const templatesTo = localizePath("/free-templates", locale);
   const constanciaTo = localizePath("/income-proof", locale);
   const watchTo = localizePath("/how-it-works", locale);
-  const latamDoor = locale === "es";
+  // Signing first in both languages (owner 15.11.2026): /es no longer opens the cobro/constancia door.
+  const latamDoor = false;
   const faqItems = FAQ_KEYS.filter((item) => latamDoor || item.qKey !== "landing.faq10.q").map((item) => ({
     question: t(item.qKey),
     answer: t(item.aKey),
@@ -663,14 +664,6 @@ export default function Landing() {
             >
               {t("hero.orTemplates")}
             </Link>
-            <span className="hero-cta-row-sep">·</span>
-            <Link
-              to={constanciaTo}
-              className="hero-secondary-link"
-              onClick={() => track("landingpage_cta_clicked", { source: "hero_open_constancia" })}
-            >
-              {t("hero.orConstancia")}
-            </Link>
               </>
             )}
           </div>
@@ -749,7 +742,7 @@ export default function Landing() {
           </div>
           <p className="legacy-stat-note">
             {t("landing.legacy.note")}{" "}
-            <Link to={localizePath("/docracy-alternative", locale)}>{t("landing.legacy.learnMore")}</Link>
+            <Link to={localizePath("/about", locale)}>{t("landing.legacy.learnMore")}</Link>
           </p>
 
           <div className="core-features-grid">
@@ -800,49 +793,7 @@ export default function Landing() {
           that Feature #1 leads instead — same visual position, without wrecking the grid. */}
       {!latamDoor && <FirstDocumentPrompt source="features" />}
 
-      <IntegrationsBand learnMoreTo="/mcp" />
-
-      <div className="spotlight-band">
-        <div className="spotlight-inner">
-          <h2 style={{ fontSize: 24, marginBottom: 6 }}>{t("landing.aiTitle")}</h2>
-          <p style={{ marginTop: 0, marginBottom: 0, maxWidth: 640 }}>
-            {t("landing.aiSub")}
-          </p>
-
-          <div className="spotlight-split">
-            <div className="accent-list">
-              {AI_FEATURE_KEYS.map((f) => (
-                <div key={f.titleKey} className="accent-item">
-                  <h3 style={{ fontSize: 15, marginBottom: 3 }}>{t(f.titleKey)}</h3>
-                  <p style={{ margin: 0, fontSize: 13.5 }}>{t(f.bodyKey)}</p>
-                </div>
-              ))}
-              <div className="accent-item is-mcp">
-                <h3 style={{ fontSize: 15, marginBottom: 3 }}>{t("landing.aiMcp.title")}</h3>
-                <p style={{ margin: 0, fontSize: 13.5 }}>
-                  {t("landing.aiMcp.body")}
-                </p>
-              </div>
-            </div>
-            <div className="doc-mockup-glow">
-              <div className="doc-mockup-card">
-                <DetectMockup />
-              </div>
-            </div>
-          </div>
-
-          <div style={{ marginTop: 24 }}>
-            <Link
-              to="/login"
-              className="btn-primary btn-lg"
-              style={{ display: "inline-block", textDecoration: "none" }}
-              onClick={() => track("landingpage_cta_clicked", { source: "paid_plan_signin" })}
-            >
-              {t("landing.aiCta")}
-            </Link>
-          </div>
-        </div>
-      </div>
+      {/* Integrations and the AI/MCP spotlight left the home page (owner 15.11.2026): /mcp and /ai stay online. */}
 
       <div className="audience-band">
         <div className="audience-inner">

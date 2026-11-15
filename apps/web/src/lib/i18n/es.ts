@@ -297,7 +297,7 @@ const es: Messages = {
   "hero.b2": "Flujo simple para equipos",
   "hero.b3": "Almacenamiento cifrado con retención corta y automática",
   "hero.b4": "Firmas SES pensadas para respaldar la ESIGN Act, UETA y eIDAS",
-  "hero.eyebrow": "Firmas en secuencia · Con IA",
+  "hero.eyebrow": "Firma electrónica gratis · sin cuenta para firmar",
   "hero.hint": "Sin tarjeta · enlace mágico para una cuenta gratis, o empieza sin cuenta abajo.",
   "hero.uploadCircleTitle": "Sube tu primer documento",
   "hero.uploadCircleSub": "Empieza a firmar ahora · gratis · sin registro",
@@ -341,7 +341,7 @@ const es: Messages = {
   "hero.orConstancia": "o arma una constancia",
   "hero.watchHow": "Mira cómo funciona (30 seg)",
   "hero.sub":
-    "Pega tu Mercado Pago o PayPal, manda el PDF y arma la constancia que te pide el arrendador. Firmar sigue gratis. $10 al mes es cobrar y probar el año — Docracy no se queda un peso.",
+    "Sube un PDF o empieza con una plantilla de contrato gratis. Hasta 2 personas firman gratis y nadie necesita cuenta para firmar. Si quieres historial, plantillas reutilizables y más firmantes, son $10 al mes por todo tu espacio de trabajo, no por persona.",
   "hero.badge.legal": "Alineado con ESIGN y UETA",
   "hero.badge.ssl": "Cifrado · retención corta",
   "hero.badge.noSignup": "Sin registro para firmar",
@@ -353,7 +353,7 @@ const es: Messages = {
   "hero.trustAria": "Por qué empezar con Docracy",
   "hero.whatsappBadge": "Nuevo: firma por WhatsApp",
   "hero.latamBadge": "LATAM: cobro y constancia",
-  "hero.title": "Basta de perseguir el pago.\nCobra por WhatsApp.",
+  "hero.title": "Envía un acuerdo para firmar en dos minutos.\nGratis para acuerdos simples.",
   "how.s1.body": "Agrega el PDF que quieres firmar (o pega un enlace de Google Docs), o empieza desde una plantilla gratis.",
   "how.s1.title": "Subir",
   "how.s2.body":
