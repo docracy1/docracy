@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { localizePath, useI18n, useT } from "../lib/i18n";
+import { onFocus } from "../lib/offFocus";
 
 type FooterLink = {
   label: string;
@@ -42,7 +43,7 @@ function FooterCol({ heading, links }: { heading: string; links: FooterLink[] })
   return (
     <div className="site-footer-col">
       <h4>{heading}</h4>
-      <FooterLinkList links={links} />
+      <FooterLinkList links={onFocus(links)} />
     </div>
   );
 }

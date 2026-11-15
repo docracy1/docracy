@@ -6,6 +6,7 @@ import { createRequire } from "node:module";
 import { htmlToMarkdown } from "./htmlToMarkdown.mjs";
 import { INDEXNOW_KEY } from "./indexNowKey.mjs";
 import { writeSeoDiscovery } from "./writeSeoDiscovery.mjs";
+import { isOffFocus, OFF_FOCUS_ROBOTS } from "./offFocus.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "..");
@@ -1602,7 +1603,9 @@ function withMeta(html, { title, description, urlPath, locale = "en", alternates
 
 for (const route of routes) {
   const bodyMarkup = renderPath(route.urlPath, route.locale ?? "en");
-  const html = withMeta(shell, route).replace('<div id="root"></div>', `<div id="root">${bodyMarkup}</div>`);
+  let html = withMeta(shell, route).replace('<div id="root"></div>', `<div id="root">${bodyMarkup}</div>`);
+  // Pages outside the signing focus stay online but leave the index (scripts/offFocus.mjs).
+  if (isOffFocus(route.urlPath)) html = html.replace(/\s*<meta\s+name="robots"[^>]*>/gi, "").replace("</head>", `    ${OFF_FOCUS_ROBOTS}\n  </head>`);
   const outPath = path.join(distDir, route.outFile);
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
   fs.writeFileSync(outPath, html);

@@ -3,6 +3,7 @@
  * can't drift from the pages we actually ship. Called at the end of prerender.mjs.
  */
 import fs from "node:fs";
+import { isOffFocus } from "./offFocus.mjs";
 import path from "node:path";
 
 const SITE = "https://docracy.io";
@@ -199,6 +200,7 @@ export function ensureLatamDiscovery(publicDir) {
   const missing = [];
   for (const pair of LATAM_SITEMAP_PAIRS) {
     for (const p of new Set([pair.en, pair.es])) {
+      if (isOffFocus(p)) continue; // scripts/offFocus.mjs: online, but not in the sitemap
       if (!xml.includes(`<loc>${SITE}${p}</loc>`)) {
         missing.push(latamSitemapEntry(p, pair));
       }
@@ -424,11 +426,13 @@ export function writeSeoDiscovery(routes, { distDir, publicDir }) {
     unique.push(r);
   }
 
+  // noindex pages stay crawlable (robots.txt below) but leave the sitemap (scripts/offFocus.mjs).
+  const indexed = unique.filter((r) => !isOffFocus(r.urlPath));
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml"
         xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-${unique.map(urlEntry).join("\n")}
+${indexed.map(urlEntry).join("\n")}
 </urlset>
 `;
 
@@ -462,5 +466,5 @@ ${robotsDisallow(publicDir)}
     fs.writeFileSync(path.join(dir, "sitemap.xml"), sitemap);
     fs.writeFileSync(path.join(dir, "robots.txt"), robots);
   }
-  console.log(`seo-discovery: wrote sitemap.xml (${unique.length} urls) + robots.txt → dist/ and public/`);
+  console.log(`seo-discovery: wrote sitemap.xml (${indexed.length} urls, ${unique.length - indexed.length} off-focus left out) + robots.txt → dist/ and public/`);
 }
